@@ -39,7 +39,7 @@ public interface ICharcoalManager {
 	 * Remove a wall associated with the given block. Not guaranteed to work depending on how {@link ICharcoalPileWall} is implemented.
 	 * {@link #removeWall(IBlockState)} is preferred.
 	 *
-	 * @return true if wall was removed.
+	 * @return true if the wall was removed.
 	 */
 	boolean removeWall(Block block);
 
