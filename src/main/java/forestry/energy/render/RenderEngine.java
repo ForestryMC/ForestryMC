@@ -120,7 +120,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		float tfactor = step / 16;
 
 		float[] angle = {0, 0, 0};
-		float[] translate = {orientation.getFrontOffsetX(), orientation.getFrontOffsetY(), orientation.getFrontOffsetZ()};
+		float[] translate = {orientation.getXOffset(), orientation.getYOffset(), orientation.getZOffset()};
 
 		switch (orientation) {
 			case EAST:

@@ -79,7 +79,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[stack.getItemDamage()];
 		return "item.for.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
 	}

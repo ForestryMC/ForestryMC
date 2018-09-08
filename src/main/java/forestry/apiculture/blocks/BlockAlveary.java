@@ -244,7 +244,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-			String resourceDomain = Block.REGISTRY.getNameForObject(state.getBlock()).getResourceDomain();
+			String resourceDomain = Block.REGISTRY.getNameForObject(state.getBlock()).getNamespace();
 			String resourceLocation = "apiculture/alveary_" + type;
 			String propertyString = getPropertyString(state.getProperties());
 			return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);

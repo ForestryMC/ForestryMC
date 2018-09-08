@@ -48,10 +48,10 @@ public class ModelCrate implements IModel {
 		if(registryName == null){
 			return null;
 		}
-		String containedName = registryName.getResourcePath().replace("crated.", "");
+		String containedName = registryName.getPath().replace("crated.", "");
 		ResourceLocation location = new ResourceLocation(CUSTOM_CRATES + containedName);
 		IModel model;
-		if(!ModelUtil.resourceExists(new ResourceLocation(location.getResourceDomain(), "models/" + location.getResourcePath() + ".json"))){
+		if(!ModelUtil.resourceExists(new ResourceLocation(location.getNamespace(), "models/" + location.getPath() + ".json"))){
 			return null;
 		}
 		try{

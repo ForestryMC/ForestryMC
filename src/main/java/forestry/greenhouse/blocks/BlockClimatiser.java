@@ -122,7 +122,7 @@ public class BlockClimatiser extends Block implements IBlockWithMeta, ISpriteReg
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.SOLID;
 	}
 

@@ -57,7 +57,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			BlockPos pos = data.readBlockPos();
-			EnumFacing facing = EnumFacing.getFront(data.readShort());
+			EnumFacing facing = EnumFacing.byIndex(data.readShort());
 			short index = data.readShort();
 			boolean active = data.readBoolean();
 			IAllele allele;

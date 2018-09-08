@@ -50,14 +50,14 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
+	public String getTranslationKey(ItemStack itemstack) {
 		Block block = getBlock();
 		if (block instanceof IBlockWithMeta) {
 			IBlockWithMeta blockMeta = (IBlockWithMeta) block;
 			int meta = itemstack.getMetadata();
-			return block.getUnlocalizedName() + "." + blockMeta.getNameFromMeta(meta);
+			return block.getTranslationKey() + "." + blockMeta.getNameFromMeta(meta);
 		}
-		return block.getUnlocalizedName();
+		return block.getTranslationKey();
 	}
 
 	@Override

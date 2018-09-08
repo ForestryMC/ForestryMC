@@ -116,12 +116,12 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNBT.hasNoTags()) {
+		if (genomeNBT.isEmpty()) {
 			return null;
 		}
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		if (chromosomesNBT.hasNoTags()) {
+		if (chromosomesNBT.isEmpty()) {
 			return null;
 		}
 
@@ -147,12 +147,12 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNBT.hasNoTags()) {
+		if (genomeNBT.isEmpty()) {
 			return null;
 		}
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		if (chromosomesNBT.hasNoTags()) {
+		if (chromosomesNBT.isEmpty()) {
 			return null;
 		}
 
@@ -170,7 +170,7 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genomeNbt = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNbt.hasNoTags()) {
+		if (genomeNbt.isEmpty()) {
 			Log.error("Got a genetic item with no genome, setting it to a default value.");
 			genomeNbt = new NBTTagCompound();
       

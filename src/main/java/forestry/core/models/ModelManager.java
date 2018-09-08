@@ -104,7 +104,7 @@ public class ModelManager implements IModelManager {
 	public ModelResourceLocation getModelLocation(Item item) {
 		ResourceLocation resourceLocation = ItemStackUtil.getItemNameFromRegistry(item);
 		Preconditions.checkNotNull(resourceLocation);
-		String itemName = resourceLocation.getResourcePath();
+		String itemName = resourceLocation.getPath();
 		return getModelLocation(itemName);
 	}
 

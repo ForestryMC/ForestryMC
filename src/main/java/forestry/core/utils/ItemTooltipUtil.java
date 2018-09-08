@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemTooltipUtil {
 	@SideOnly(Side.CLIENT)
 	public static void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		String unlocalizedName = stack.getUnlocalizedName();
+		String unlocalizedName = stack.getTranslationKey();
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
 			String tooltipInfo = Translator.translateToLocal(tooltipKey);
@@ -47,7 +47,7 @@ public class ItemTooltipUtil {
 		List<String> tooltip = stack.getTooltip(player, flag);
 		for (int i = 0; i < tooltip.size(); ++i) {
 			if (i == 0) {
-				tooltip.set(i, stack.getRarity().rarityColor + tooltip.get(i));
+				tooltip.set(i, stack.getRarity().color + tooltip.get(i));
 			} else {
 				tooltip.set(i, TextFormatting.GRAY + tooltip.get(i));
 			}

@@ -44,7 +44,7 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			BlockPos pos = data.readBlockPos();
-			EnumFacing facing = EnumFacing.getFront(data.readShort());
+			EnumFacing facing = EnumFacing.byIndex(data.readShort());
 			IFilterRuleType rule = AlleleManager.filterRegistry.getRuleOrDefault(data.readShort());
 			IFilterLogic logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
 			if(logic != null) {

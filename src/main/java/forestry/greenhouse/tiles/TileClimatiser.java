@@ -192,7 +192,7 @@ public class TileClimatiser extends TileForestry implements IActivatable, IStrea
 	@Override
 	public String getUnlocalizedTitle() {
 		Block block = getBlockType();
-		String blockUnlocalizedName = block.getUnlocalizedName();
+		String blockUnlocalizedName = block.getTranslationKey();
 		if (block instanceof BlockClimatiser) {
 			blockUnlocalizedName += '.' + ((BlockClimatiser) block).getNameFromMeta(getBlockMetadata());
 		}

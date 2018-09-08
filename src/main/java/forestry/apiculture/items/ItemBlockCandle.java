@@ -38,8 +38,8 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
-		String value = getBlock().getUnlocalizedName();
+	public String getTranslationKey(ItemStack itemStack) {
+		String value = getBlock().getTranslationKey();
 		if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(BlockCandle.colourTagName)) {
 			value = value + ".dyed";
 		}

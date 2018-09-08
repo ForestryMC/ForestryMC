@@ -380,7 +380,7 @@ public class Bee extends IndividualLiving implements IBee {
 				rarity = EnumRarity.COMMON;
 			}
 
-			String generationString = rarity.rarityColor + Translator.translateToLocalFormatted("for.gui.beealyzer.generations", generation);
+			String generationString = rarity.color + Translator.translateToLocalFormatted("for.gui.beealyzer.generations", generation);
 			list.add(generationString);
 		}
 

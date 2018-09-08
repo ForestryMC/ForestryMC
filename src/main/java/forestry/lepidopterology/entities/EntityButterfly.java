@@ -283,7 +283,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
     }
 
 	private int getFluidDepth(BlockPos pos) {
-		Chunk chunk = world.getChunkFromBlockCoords(pos);
+		Chunk chunk = world.getChunk(pos);
 		int xx = pos.getX() & 15;
 		int zz = pos.getZ() & 15;
 		int depth = 0;

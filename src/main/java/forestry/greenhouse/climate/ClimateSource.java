@@ -241,7 +241,7 @@ public abstract class ClimateSource<O extends IClimateSourceOwner> implements IC
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		NBTTagCompound sourceData = nbt.getCompoundTag("Source");
-		if (sourceData.hasNoTags()) {
+		if (sourceData.isEmpty()) {
 			return;
 		}
 		state = ClimateStates.INSTANCE.create(sourceData, ClimateStateType.EXTENDED);

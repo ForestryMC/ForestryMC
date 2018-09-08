@@ -74,7 +74,7 @@ public class ItemGreenhouseScreen extends ItemForestry implements IColoredItem {
 			return null;
 		}
 		NBTTagCompound compound = nbtTagCompound.getCompoundTag(GREENHOUSE_KEY);
-		if (compound.hasNoTags()) {
+		if (compound.isEmpty()) {
 			return null;
 		}
 		return NBTUtil.getPosFromTag(compound);

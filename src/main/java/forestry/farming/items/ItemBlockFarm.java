@@ -57,7 +57,7 @@ public class ItemBlockFarm extends ItemBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
-		return super.getUnlocalizedName(itemstack) + "." + itemstack.getItemDamage();
+	public String getTranslationKey(ItemStack itemstack) {
+		return super.getTranslationKey(itemstack) + "." + itemstack.getItemDamage();
 	}
 }

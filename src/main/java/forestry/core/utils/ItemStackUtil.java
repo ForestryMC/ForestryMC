@@ -384,7 +384,7 @@ public abstract class ItemStackUtil {
 		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().isEmpty()) {
 			return true;
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
@@ -458,7 +458,7 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() != null && !base.getTagCompound().isEmpty()) {
 			if (!ItemStack.areItemStacksEqual(base, comparison)) {
 				return false;
 			}
@@ -478,7 +478,7 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().isEmpty()) {
 			// tool uses meta for damage
 			return true;
 		} else {

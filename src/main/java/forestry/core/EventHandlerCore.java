@@ -122,7 +122,7 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void lootLoad(LootTableLoadEvent event) {
-		if (!event.getName().getResourceDomain().equals("minecraft")
+		if (!event.getName().getNamespace().equals("minecraft")
 				&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
 			return;
 		}
@@ -130,8 +130,8 @@ public class EventHandlerCore {
 		Set<String> lootPoolNames = ModuleManager.getLootPoolNames();
 
 		for (String lootTableFile : ModuleManager.getLootTableFiles()) {
-			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getResourcePath() + "/" + lootTableFile);
-			URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getResourceDomain() + "/loot_tables/" + resourceLocation.getResourcePath() + ".json");
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getPath() + "/" + lootTableFile);
+			URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() + ".json");
 			if (url != null) {
 				LootTable forestryChestAdditions = event.getLootTableManager().getLootTableFromLocation(resourceLocation);
 				if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {

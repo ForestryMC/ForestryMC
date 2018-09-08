@@ -60,7 +60,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public File getForestryRoot() {
-		return Minecraft.getMinecraft().mcDataDir;
+		return Minecraft.getMinecraft().gameDir;
 	}
 
 	@Override

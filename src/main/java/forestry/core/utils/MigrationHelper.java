@@ -132,11 +132,11 @@ public class MigrationHelper {
 		for (RegistryEvent.MissingMappings.Mapping<Block> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
 
-			String resourcePath = resourceLocation.getResourcePath();
+			String resourcePath = resourceLocation.getPath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
 			} else if (blockRemappings.containsKey(resourcePath)) {
-				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), blockRemappings.get(resourcePath));
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getNamespace(), blockRemappings.get(resourcePath));
 				if (ForgeRegistries.BLOCKS.containsKey(remappedResourceLocation)) {
 					Block remappedBlock = ForgeRegistries.BLOCKS.getValue(remappedResourceLocation);
 					if (remappedBlock != null && remappedBlock != Blocks.AIR) {
@@ -152,11 +152,11 @@ public class MigrationHelper {
 		for (RegistryEvent.MissingMappings.Mapping<Item> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
 
-			String resourcePath = resourceLocation.getResourcePath();
+			String resourcePath = resourceLocation.getPath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
 			} else if (itemRemappings.containsKey(resourcePath)) {
-				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), itemRemappings.get(resourcePath));
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getNamespace(), itemRemappings.get(resourcePath));
 				if (ForgeRegistries.ITEMS.containsKey(remappedResourceLocation)) {
 					Item remappedItem = ForgeRegistries.ITEMS.getValue(remappedResourceLocation);
 					if (remappedItem != null && remappedItem != Items.AIR) {

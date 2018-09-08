@@ -80,7 +80,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 		double d1 = pos.getY();
 		double d2 = pos.getZ();
 
-		if (this.blockMaterial == Material.WATER) {
+		if (this.material == Material.WATER) {
 			int i = stateIn.getValue(LEVEL);
 
 			if (i > 0 && i < 8) {
@@ -92,7 +92,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			}
 		}
 
-		if (this.blockMaterial == Material.LAVA && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && !worldIn.getBlockState(pos.up()).isOpaqueCube()) {
+		if (this.material == Material.LAVA && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && !worldIn.getBlockState(pos.up()).isOpaqueCube()) {
 			if (rand.nextInt(100) == 0) {
 				double d8 = d0 + rand.nextFloat();
 				double d4 = d1 + stateIn.getBoundingBox(worldIn, pos).maxY;

@@ -26,8 +26,8 @@ public enum ModelLoaderCrate implements ICustomModelLoader {
 			return false;
 		}
 		ModelResourceLocation location = (ModelResourceLocation) modelLocation;
-		return location.getResourceDomain().equals(Constants.MOD_ID)
-			&& location.getResourcePath().equals("crate-filled")
+		return location.getNamespace().equals(Constants.MOD_ID)
+			&& location.getPath().equals("crate-filled")
 			&& !location.getVariant().equals("inventory");
 	}
 

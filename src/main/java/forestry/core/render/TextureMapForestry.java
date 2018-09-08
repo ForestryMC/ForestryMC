@@ -52,7 +52,7 @@ public class TextureMapForestry extends TextureMap {
 		for (Map.Entry<String, TextureAtlasSprite> entry : this.mapRegisteredSprites.entrySet()) {
 			TextureAtlasSprite textureatlassprite = entry.getValue();
 			ResourceLocation resourcelocation = this.getResourceLocation(textureatlassprite);
-			bar.step(resourcelocation.getResourcePath());
+			bar.step(resourcelocation.getPath());
 			IResource iresource = null;
 
 			if (textureatlassprite.hasCustomLoader(resourceManager, resourcelocation)) {
@@ -166,6 +166,6 @@ public class TextureMapForestry extends TextureMap {
 
 	private ResourceLocation getResourceLocation(TextureAtlasSprite p_184396_1_) {
 		ResourceLocation resourcelocation = new ResourceLocation(p_184396_1_.getIconName());
-		return new ResourceLocation(resourcelocation.getResourceDomain(), String.format("%s/%s%s", this.basePath, resourcelocation.getResourcePath(), ".png"));
+		return new ResourceLocation(resourcelocation.getNamespace(), String.format("%s/%s%s", this.basePath, resourcelocation.getPath(), ".png"));
 	}
 }

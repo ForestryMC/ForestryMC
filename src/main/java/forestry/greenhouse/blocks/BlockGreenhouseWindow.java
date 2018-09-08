@@ -147,7 +147,7 @@ public class BlockGreenhouseWindow extends Block implements IBlockRotatable, ITi
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 

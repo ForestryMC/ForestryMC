@@ -85,7 +85,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

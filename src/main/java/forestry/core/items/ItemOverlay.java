@@ -74,12 +74,12 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
-			return super.getUnlocalizedName(stack);
+			return super.getTranslationKey(stack);
 		}
 
-		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getUid();
+		return super.getTranslationKey(stack) + "." + overlays[stack.getItemDamage()].getUid();
 	}
 
 	@Override

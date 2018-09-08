@@ -143,7 +143,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 			if (rarity == null) {
 				rarity = EnumRarity.COMMON;
 			}
-			toolTip.add(fluidType.getLocalizedName(getFluid()), rarity.rarityColor);
+			toolTip.add(fluidType.getLocalizedName(getFluid()), rarity.color);
 			amount = getFluid().amount;
 		}
 		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", amount, getCapacity());

@@ -78,7 +78,7 @@ public class ItemMinecartBeehouse extends ItemMinecart implements IItemModelRegi
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
 			return "item.forestry.unknown";
 		} else {

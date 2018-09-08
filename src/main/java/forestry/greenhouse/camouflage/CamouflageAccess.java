@@ -73,7 +73,7 @@ public class CamouflageAccess implements ICamouflageAccess {
 		if (camouflageBlock.isEmpty() || Block.getBlockFromItem(camouflageBlock.getItem()) == Blocks.AIR) {
 			return false;
 		}
-		String modId = camouflageBlock.getItem().getRegistryName().getResourceDomain();
+		String modId = camouflageBlock.getItem().getRegistryName().getNamespace();
 		if (blacklistedMods.contains(modId)) {
 			return true;
 		}

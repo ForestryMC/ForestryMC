@@ -125,8 +125,8 @@ public abstract class BlockUtil {
 	 */
 	@Nullable
 	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-		startVec = startVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
-		endVec = endVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
+		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
+		endVec = endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
 		Vec3d vec32 = startVec.getIntermediateWithXValue(endVec, minX);
 		Vec3d vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
 		Vec3d vec34 = startVec.getIntermediateWithYValue(endVec, minY);
@@ -213,7 +213,7 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new RayTraceResult(minHit.addVector(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
+			return new RayTraceResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
 		}
 	}
 

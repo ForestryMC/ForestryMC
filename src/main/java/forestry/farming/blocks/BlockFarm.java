@@ -174,7 +174,7 @@ public class BlockFarm extends BlockStructure {
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

@@ -32,7 +32,7 @@ public class PlanterStateMapper extends ForestryStateMapper {
 				LinkedHashMap<IProperty<?>, Comparable<?>> properties = Maps.newLinkedHashMap(state.getProperties());
 				properties.remove(BlockPlanter.MANUAL);
 				ResourceLocation blockLocation = Block.REGISTRY.getNameForObject(block);
-				String s = String.format("%s:%s", blockLocation.getResourceDomain(), blockLocation.getResourcePath());
+				String s = String.format("%s:%s", blockLocation.getNamespace(), blockLocation.getPath());
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(properties)));
 			}
 		}

@@ -89,7 +89,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

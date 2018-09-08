@@ -28,12 +28,12 @@ public class DatabaseHelper {
 		try {
 			String name = itemStack.getDisplayName();
 			if (name == null || name.isEmpty()) {
-				name = itemStack.getItem().getUnlocalizedName(itemStack);
+				name = itemStack.getItem().getTranslationKey(itemStack);
 			}
 			return name == null ? "Null" : name;
 		}catch( final Exception errA ) {
 			try {
-				String name = itemStack.getUnlocalizedName();
+				String name = itemStack.getTranslationKey();
 				return name == null ? "Null" : name;
 			} catch( final Exception errB ) {
 				return "Exception";

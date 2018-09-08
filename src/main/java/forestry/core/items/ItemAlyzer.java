@@ -60,6 +60,6 @@ public class ItemAlyzer extends ItemWithGui {
 		if(compound != null){
 			charges = compound.getInteger("Charges");
 		}
-		tooltip.add(TextFormatting.GOLD + Translator.translateToLocalFormatted(stack.getUnlocalizedName() + ".charges", charges));
+		tooltip.add(TextFormatting.GOLD + Translator.translateToLocalFormatted(stack.getTranslationKey() + ".charges", charges));
 	}
 }

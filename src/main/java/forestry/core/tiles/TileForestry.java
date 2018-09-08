@@ -191,7 +191,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
-		return world.isBlockIndirectlyGettingPowered(getPos()) > 0;
+		return world.getRedstonePowerFromNeighbors(getPos()) > 0;
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -210,7 +210,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	 */
 	@Override
 	public String getUnlocalizedTitle() {
-		String blockUnlocalizedName = getBlockType().getUnlocalizedName();
+		String blockUnlocalizedName = getBlockType().getTranslationKey();
 		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
 	}
 
