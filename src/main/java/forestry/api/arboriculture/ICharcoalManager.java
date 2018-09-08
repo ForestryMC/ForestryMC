@@ -36,6 +36,22 @@ public interface ICharcoalManager {
 	void registerWall(ICharcoalPileWall wall);
 
 	/**
+	 * Remove a wall associated with the given block. Not guaranteed to work depending on how {@link ICharcoalPileWall} is implemented.
+	 * {@link #removeWall(IBlockState)} is preferred.
+	 *
+	 * @return true if the wall was removed.
+	 */
+	boolean removeWall(Block block);
+
+	/**
+	 * Remove a wall that {@link ICharcoalPileWall#matches(IBlockState)} the given blockstate.
+	 *
+	 * @param state the blockstate to remove.
+	 * @return true if the wall was removed.
+	 */
+	boolean removeWall(IBlockState state);
+
+	/**
 	 * @return A collection with all registered charcoal pile walls.
 	 */
 	Collection<ICharcoalPileWall> getWalls();
