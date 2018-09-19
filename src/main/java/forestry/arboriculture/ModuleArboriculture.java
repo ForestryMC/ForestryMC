@@ -84,7 +84,7 @@ import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
-import forestry.arboriculture.items.ItemGrafter;
+import forestry.api.arboriculture.IToolGrafter;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.models.WoodTextureManager;
@@ -507,7 +507,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 			EntityPlayer player = event.getHarvester();
 			if (player != null) {
 				ItemStack harvestingTool = player.getHeldItemMainhand();
-				if (harvestingTool.getItem() instanceof ItemGrafter) {
+				if (harvestingTool.getItem() instanceof IToolGrafter) {
 					if (event.getDrops().isEmpty()) {
 						World world = event.getWorld();
 						Item itemDropped = block.getItemDropped(state, world.rand, 3);

@@ -39,37 +39,33 @@ public class LocalizedConfiguration extends Configuration {
 	}
 
 	public boolean getBooleanLocalized(String category, String name, boolean defaultValue) {
+		return getBooleanLocalizedFormatted(category, name, defaultValue, "");
+	}
+
+	public boolean getBooleanLocalizedFormatted(String category, String name, boolean defaultValue, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
-		String comment = "";
-		if (Translator.canTranslateToLocal(commentKey)) {
-			comment = Translator.translateToLocal(commentKey);
-		}
+		String comment = Translator.translateToLocalFormatted(commentKey, args);
 		return getBoolean(name, category, defaultValue, comment, langKey);
 	}
 
 	public String getStringLocalized(String category, String name, String defaultValue) {
-		String langKey = "for.config." + category + '.' + name;
-		String commentKey = langKey + '.' + "comment";
-		String comment = "";
-		if (Translator.canTranslateToLocal(commentKey)) {
-			comment = Translator.translateToLocal(commentKey);
-		}
-		return getString(name, category, defaultValue, comment, langKey);
+		return getStringLocalized(category, name, defaultValue, new String[0]);
 	}
 
 	public String getStringLocalized(String category, String name, String defaultValue, String[] validValues) {
+		return getStringLocalizedFormatted(category, name, defaultValue, validValues, "");
+	}
+
+	public String getStringLocalizedFormatted(String category, String name, String defaultValue, String[] validValues, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
-		String comment = "";
-		if (Translator.canTranslateToLocal(commentKey)) {
-			comment = Translator.translateToLocal(commentKey);
-		}
+		String comment = Translator.translateToLocalFormatted(commentKey, args);
 
 		Property prop = this.get(category, name, defaultValue);
 		prop.setValidValues(validValues);
 		prop.setLanguageKey(langKey);
-		prop.setComment(comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
+		prop.setComment(comment + getValidOptions(prop));
 		return prop.getString();
 	}
 
@@ -115,43 +111,55 @@ public class LocalizedConfiguration extends Configuration {
 	}
 
 	public String[] getStringListLocalized(String category, String name, String[] defaultValue, String[] validValues) {
+		return getStringListLocalizedFormatted(category, name, defaultValue, validValues, "");
+	}
+
+	public String[] getStringListLocalizedFormatted(String category, String name, String[] defaultValue, String[] validValues, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
-		String comment = "";
-		if (Translator.canTranslateToLocal(commentKey)) {
-			comment = Translator.translateToLocal(commentKey);
-		}
+		String comment = Translator.translateToLocalFormatted(commentKey, args);
 
 		Property prop = this.get(category, name, defaultValue);
 		prop.setLanguageKey(langKey);
 		prop.setValidValues(validValues);
-		prop.setComment(comment + " [default: " + Arrays.toString(defaultValue) + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
+		prop.setComment(comment + getValidOptions(prop));
 		return prop.getStringList();
 	}
 
+	private String getValidOptions(Property prop) {
+		String defautValue = prop.isList() ? Arrays.toString(prop.getDefaults()) : prop.getDefault();
+		String ret = " [default: " + defautValue + "]";
+		if (prop.getValidValues().length != 0) {
+			ret += " [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+		}
+		return ret;
+	}
+
 	public float getFloatLocalized(String category, String name, float defaultValue, float minValue, float maxValue) {
+		return getFloatLocalizedFormatted(category, name, defaultValue, minValue, maxValue, "");
+	}
+
+	public float getFloatLocalizedFormatted(String category, String name, float defaultValue, float minValue, float maxValue, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
-		String comment = "";
-		if (Translator.canTranslateToLocal(commentKey)) {
-			comment = Translator.translateToLocal(commentKey);
-		}
+		String comment = Translator.translateToLocalFormatted(commentKey, args);
 		return getFloat(name, category, defaultValue, minValue, maxValue, comment, langKey);
 	}
 
 	public int getIntLocalized(String category, String name, int defaultValue, int minValue, int maxValue) {
+		return getIntLocalizedFormatted(category, name, defaultValue, minValue, maxValue, "");
+	}
+
+	public int getIntLocalizedFormatted(String category, String name, int defaultValue, int minValue, int maxValue, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
-		String comment = "";
-		if (Translator.canTranslateToLocal(commentKey)) {
-			comment = Translator.translateToLocal(commentKey);
-		}
+		String comment = Translator.translateToLocalFormatted(commentKey, args);
 		return getInt(name, category, defaultValue, minValue, maxValue, comment, langKey);
 	}
 
-	public void addCategoryCommentLocalized(String category){
+	public void addCategoryCommentLocalized(String category) {
 		String langKey = "for.config." + category + '.' + "category_comment";
-		setCategoryComment(category, WordUtils.wrap(Translator.translateToLocal(langKey),100));
+		setCategoryComment(category, WordUtils.wrap(Translator.translateToLocal(langKey), 100));
 	}
 
 }

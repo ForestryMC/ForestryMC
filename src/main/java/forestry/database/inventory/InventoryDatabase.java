@@ -6,8 +6,8 @@ import net.minecraft.util.EnumFacing;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.inventory.InventoryAdapterTile;
-import forestry.database.tiles.TileDatabase;
 import forestry.core.utils.GeneticsUtil;
+import forestry.database.tiles.TileDatabase;
 
 public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 	public InventoryDatabase(TileDatabase tile) {

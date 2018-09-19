@@ -1,7 +1,5 @@
 package forestry.database.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;

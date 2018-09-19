@@ -3,8 +3,8 @@ package forestry.database.blocks;
 import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
-import forestry.database.tiles.TileDatabase;
 import forestry.core.tiles.TileForestry;
+import forestry.database.tiles.TileDatabase;
 
 public enum BlockTypeDatabase implements IBlockTypeCustom {
 	DATABASE(TileDatabase.class, "database");

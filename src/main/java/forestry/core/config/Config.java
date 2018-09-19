@@ -42,6 +42,7 @@ import forestry.apiculture.HiveConfig;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
+import forestry.factory.ModuleFactory;
 import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {
@@ -391,6 +392,7 @@ public class Config {
 
 		energyDisplayMode = configCommon.getEnumLocalized("power.display", "mode", EnergyDisplayMode.RF, EnergyDisplayMode.values());
 
+		ModuleFactory.loadMachineConfig(configCommon);
 
 		configCommon.save();
 	}

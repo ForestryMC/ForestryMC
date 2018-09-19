@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package forestry.storage.compat;
+package forestry.storage.models;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

@@ -34,6 +34,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -340,6 +341,13 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	public static float getSecondSerumChance() {
 		return secondSerumChance;
+	}
+
+	@SubscribeEvent
+	public void onEntityTravelToDimension(EntityTravelToDimensionEvent event){
+		if(event.getEntity() instanceof EntityButterfly){
+			event.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent

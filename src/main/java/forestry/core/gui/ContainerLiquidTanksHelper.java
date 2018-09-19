@@ -10,23 +10,26 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.api.core.IToolPipette;
-import forestry.core.network.packets.PacketPipetteClick;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IToolPipette;
+import forestry.core.network.packets.PacketPipetteClick;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.utils.NetworkUtil;
 
 public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
@@ -62,7 +65,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 				if (liquidAmount > 0) {
 					if (tank instanceof FluidTank) {
-						FluidStack fillAmount = ((FluidTank) tank).drainInternal(Fluid.BUCKET_VOLUME, false);
+						FluidStack fillAmount = ((FluidTank) tank).drainInternal(Fluid.BUCKET_VOLUME, true);
 						int filled = fluidHandlerItem.fill(fillAmount, true);
 						tank.drain(filled, true);
 						player.inventory.setItemStack(fluidHandlerItem.getContainer());
@@ -73,7 +76,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, false);
 				if (potential != null) {
 					if (tank instanceof FluidTank) {
-						int fill = ((FluidTank) tank).fillInternal(potential, true);
+						int fill = tank.fill(potential, true);
 						fluidHandlerItem.drain(fill, true);
 						player.inventory.setItemStack(fluidHandlerItem.getContainer());
 						player.updateHeldItem();

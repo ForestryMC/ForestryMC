@@ -101,6 +101,15 @@ public abstract class BlockUtil {
 		return false;
 	}
 
+	public static boolean isBreakableBlock(World world, BlockPos pos){
+		IBlockState blockState = world.getBlockState(pos);
+		return isBreakableBlock(blockState, world, pos);
+	}
+
+	public static boolean isBreakableBlock(IBlockState blockState, World world, BlockPos pos){
+		return blockState.getBlockHardness(world, pos) >= 0.0F;
+	}
+
 	public static boolean isReplaceableBlock(IBlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		return block.isReplaceable(world, pos) && !(block instanceof BlockStaticLiquid);

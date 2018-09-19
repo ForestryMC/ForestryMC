@@ -11,8 +11,12 @@
 package forestry.factory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.BlockDirt.DirtType;
@@ -50,6 +54,7 @@ import forestry.core.circuits.Circuits;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemElectronTube;
@@ -58,6 +63,7 @@ import forestry.core.items.ItemRegistryFluids;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.OreDictUtil;
+import forestry.core.utils.datastructures.DummyMap;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.blocks.BlockRegistryFactory;
@@ -78,6 +84,9 @@ import forestry.storage.ModuleCrates;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.factory.description", lootTable = "factory")
 public class ModuleFactory extends BlankForestryModule {
+
+	public static final Map<String, Boolean> MACHINE_ENABLED = Maps.newHashMap();
+
 	@Nullable
 	private static BlockRegistryFactory blocks;
 
@@ -88,14 +97,14 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		RecipeManagers.carpenterManager = new CarpenterRecipeManager();
-		RecipeManagers.centrifugeManager = new CentrifugeRecipeManager();
-		RecipeManagers.fabricatorManager = new FabricatorRecipeManager();
-		RecipeManagers.fabricatorSmeltingManager = new FabricatorSmeltingRecipeManager();
-		RecipeManagers.fermenterManager = new FermenterRecipeManager();
-		RecipeManagers.moistenerManager = new MoistenerRecipeManager();
-		RecipeManagers.squeezerManager = new SqueezerRecipeManager();
-		RecipeManagers.stillManager = new StillRecipeManager();
+		RecipeManagers.carpenterManager = machineEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
+		RecipeManagers.centrifugeManager = machineEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
+		RecipeManagers.fabricatorManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
+		RecipeManagers.fabricatorSmeltingManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
+		RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
+		RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
+		RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
+		RecipeManagers.stillManager = machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
 
 		setupFuelManager();
 	}
@@ -115,9 +124,9 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	private static void setupFuelManager() {
-		FuelManager.fermenterFuel = new ItemStackMap<>();
-		FuelManager.moistenerResource = new ItemStackMap<>();
-		FuelManager.rainSubstrate = new ItemStackMap<>();
+		FuelManager.fermenterFuel = machineEnabled(MachineUIDs.FERMENTER) ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.moistenerResource = machineEnabled(MachineUIDs.MOISTENER) ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.rainSubstrate = machineEnabled(MachineUIDs.RAINMAKER) ? new ItemStackMap<>() : new DummyMap<>();
 		FuelManager.bronzeEngineFuel = new FluidMap<>();
 		FuelManager.copperEngineFuel = new ItemStackMap<>();
 		FuelManager.generatorFuel = new FluidMap<>();
@@ -565,4 +574,17 @@ public class ModuleFactory extends BlankForestryModule {
 			ChipsetManager.solderManager.addRecipe(layout, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.machineEfficiencyUpgrade1);
 		}
 	}
+
+	public static void loadMachineConfig(LocalizedConfiguration config) {
+		List<String> enabled = Arrays.asList(config.getStringListLocalized("machines", "enabled", MachineUIDs.ALL.toArray(new String[0]), MachineUIDs.ALL.toArray(new String[0])));
+		for (String machineID : MachineUIDs.ALL) {
+			MACHINE_ENABLED.put(machineID, enabled.contains(machineID));
+		}
+	}
+
+	public static boolean machineEnabled(String machineName) {
+		Boolean ret = MACHINE_ENABLED.get(machineName);
+		return ret != null && ret;
+	}
 }
+

@@ -85,7 +85,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 					break;
 				}
 
-				if (isAcceptedSoil(soilState)) {
+				if (!BlockUtil.isBreakableBlock(soilState, world, pos) || isAcceptedSoil(soilState)) {
 					continue;
 				}
 
