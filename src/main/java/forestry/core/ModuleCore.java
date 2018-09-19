@@ -57,7 +57,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.Fluids;
 import forestry.core.genetics.alleles.AlleleFactory;
-import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemRegistryCore;
@@ -147,15 +146,12 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public void doInit() {
 
-		AlleleHelper alleleHelper = AlleleHelper.getInstance();
 		BlockRegistryCore blocks = getBlocks();
 
 		blocks.analyzer.init();
 		blocks.escritoire.init();
 
 		ForestryModEnvWarningCallable.register();
-
-		alleleHelper.init();
 
 		Proxies.render.initRendering();
 	}
