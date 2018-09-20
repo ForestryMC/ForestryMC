@@ -45,8 +45,8 @@ public class AlleleHelper implements IAlleleHelper {
 	public static AlleleHelper getInstance() {
 		if (instance == null) {
 			instance = new AlleleHelper();
+			instance.init();
 		}
-		instance.init();
 		return instance;
 	}
 
