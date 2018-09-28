@@ -107,7 +107,7 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isBreakableBlock(IBlockState blockState, World world, BlockPos pos){
-		return blockState.getBlockHardness(world, pos) < 0.0F;
+		return blockState.getBlockHardness(world, pos) >= 0.0F;
 	}
 
 	public static boolean isReplaceableBlock(IBlockState blockState, World world, BlockPos pos) {

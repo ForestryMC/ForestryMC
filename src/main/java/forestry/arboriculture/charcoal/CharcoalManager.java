@@ -29,6 +29,21 @@ public class CharcoalManager implements ICharcoalManager {
 	}
 
 	@Override
+	public boolean removeWall(Block block) {
+		return removeWall(block.getDefaultState());
+	}
+
+	@Override
+	public boolean removeWall(IBlockState state) {
+		for(ICharcoalPileWall wall : walls) {
+			if(wall.matches(state)) {
+				return walls.remove(wall);
+			}
+		}
+		return false;
+	}
+
+	@Override
 	public Collection<ICharcoalPileWall> getWalls() {
 		return walls;
 	}
