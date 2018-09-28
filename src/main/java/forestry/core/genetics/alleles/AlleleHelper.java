@@ -45,11 +45,12 @@ public class AlleleHelper implements IAlleleHelper {
 	public static AlleleHelper getInstance() {
 		if (instance == null) {
 			instance = new AlleleHelper();
+			instance.init();
 		}
 		return instance;
 	}
 
-	public void init() {
+	private void init() {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			createAlleles(EnumAllele.Fertility.class, EnumBeeChromosome.FERTILITY);
 			createAlleles(EnumAllele.Flowering.class, EnumBeeChromosome.FLOWERING);
