@@ -72,7 +72,6 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 			return;
 		}
 		EntityItem dummyItem = dummyItem(world);
-		dummyItem.world = world;
 		float renderScale = 1.0f;
 
 		GlStateManager.pushMatrix();
