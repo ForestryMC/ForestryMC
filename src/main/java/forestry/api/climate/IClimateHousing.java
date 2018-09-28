@@ -37,5 +37,7 @@ public interface IClimateHousing extends IErrorLogicSource, ILocatable, IClimate
 	 */
 	IClimateTransformer getTransformer();
 
+	float getChangeForState(ClimateType type, IClimateManipulator manipulator);
+
 	void markNetworkUpdate();
 }

@@ -7,13 +7,23 @@ package forestry.api.climate;
 
 public interface IClimateManipulator {
 
+	IClimateState getCurrent();
+
+	IClimateState getStart();
+
+	IClimateState getTarget();
+
+	boolean allowsBackwards();
+
+	IClimateState getDefault();
+
+	ClimateType getType();
+
 	IClimateState addChange(boolean simulated);
 
 	IClimateState removeChange(boolean simulated);
 
 	boolean canAdd();
-
-	void setAllowBackwards();
 
 	void finish();
 }

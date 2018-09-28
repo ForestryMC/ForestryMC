@@ -34,7 +34,6 @@ import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateManipulator;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
-import forestry.api.climate.TransformerProperties;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -58,17 +57,17 @@ import forestry.core.tiles.TilePowered;
 import forestry.energy.EnergyManager;
 
 public class TileHabitatformer extends TilePowered implements IClimateHousing, IClimatised, ILiquidTankTile {
-	private static final String LOGIC_NBT_KEY = "Logic";
+	private static final String TRANSFORMER_KEY = "Transformer";
 
 	//The logic that handles the climate  changes.
-	private final ClimateTransformer logic;
+	private final ClimateTransformer transformer;
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 
 	public TileHabitatformer() {
 		super(1200, 8000);
-		this.logic = new ClimateTransformer(this);
+		this.transformer = new ClimateTransformer(this);
 		setInternalInventory(new InventoryHabitatformer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
 		tankManager = new TankManager(this, resourceTank);
@@ -83,13 +82,13 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 
 	@Override
 	public void onRemoval() {
-		logic.removeTransformer();
+		transformer.removeTransformer();
 	}
 
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
-		logic.addTransformer();
+		transformer.update();
 		if (updateOnInterval(20)) {
 			// Check if we have suitable items waiting in the item slot
 			FluidHelper.drainContainers(tankManager, this, 0);
@@ -107,8 +106,8 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	@Override
 	protected boolean workCycle() {
 		IErrorLogic errorLogic = getErrorLogic();
-		IClimateState currentState = logic.getCurrent();
-		IClimateState changedState = logic.getTarget().subtract(currentState);
+		IClimateState currentState = transformer.getCurrent();
+		IClimateState changedState = transformer.getTarget().subtract(currentState);
 		IClimateState difference = getClimateDifference();
 		cachedStack = null;
 		if (difference.getHumidity() != 0.0F) {
@@ -121,7 +120,7 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	}
 
 	private void updateHumidity(IErrorLogic errorLogic, IClimateState changedState) {
-		IClimateManipulator manipulator = logic.createManipulator(ClimateType.HUMIDITY, this::getClimateChange);
+		IClimateManipulator manipulator = transformer.createManipulator(ClimateType.HUMIDITY).build();
 		if (manipulator.canAdd()) {
 			errorLogic.setCondition(false, EnumErrorCode.WRONG_RESOURCE);
 			int currentCost = getFluidCost(changedState);
@@ -153,8 +152,7 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	}
 
 	private void updateTemperature(IErrorLogic errorLogic, IClimateState changedState) {
-		IClimateManipulator manipulator = logic.createManipulator(ClimateType.TEMPERATURE, this::getClimateChange);
-		manipulator.setAllowBackwards();
+		IClimateManipulator manipulator = transformer.createManipulator(ClimateType.TEMPERATURE).setAllowBackwards().build();
 		EnergyManager energyManager = getEnergyManager();
 		int currentCost = getEnergyCost(changedState);
 		if (energyManager.extractEnergy(currentCost, true) > 0) {
@@ -191,14 +189,14 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	}
 
 	private float getCostModifier() {
-		return 1.0F + ((logic.getArea() / 36F) * Config.habitatformerAreaCostModifier);
+		return 1.0F + (transformer.getAreaModifier() * Config.habitatformerAreaCostModifier);
 	}
 
 	private float getSpeedModifier() {
-		return 1.0F + ((logic.getArea() / 36F) * Config.habitatformerAreaSpeedModifier);
+		return 1.0F + (transformer.getAreaModifier() * Config.habitatformerAreaSpeedModifier);
 	}
 
-	private float getClimateChange(ClimateType type, TransformerProperties info) {
+	public float getChangeForState(ClimateType type, IClimateManipulator manipulator) {
 		if (type == ClimateType.HUMIDITY) {
 			FluidStack fluid = resourceTank.getFluid();
 			if (fluid != null) {
@@ -219,8 +217,8 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	}
 
 	private IClimateState getClimateDifference() {
-		IClimateState defaultState = logic.getDefault();
-		IClimateState targetedState = logic.getTarget();
+		IClimateState defaultState = transformer.getDefault();
+		IClimateState targetedState = transformer.getTarget();
 		return targetedState.subtract(defaultState);
 	}
 
@@ -257,31 +255,31 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 
 	@Override
 	public float getExactTemperature() {
-		return logic.getCurrent().getTemperature();
+		return transformer.getCurrent().getTemperature();
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return logic.getCurrent().getHumidity();
+		return transformer.getCurrent().getHumidity();
 	}
 
-	/* Methods - Implement IGreenhouseHousing */
+	/* Methods - Implement IClimateHousing */
 	@Override
 	public IClimateTransformer getTransformer() {
-		return logic;
+		return transformer;
 	}
 
 	/* Methods - Implement IStreamableGui */
 	@Override
 	public void writeGuiData(PacketBufferForestry data) {
 		super.writeGuiData(data);
-		logic.writeData(data);
+		transformer.writeData(data);
 	}
 
 	@Override
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
-		logic.readData(data);
+		transformer.readData(data);
 	}
 
 	/* Methods - SAVING & LOADING */
@@ -291,7 +289,7 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 
 		tankManager.writeToNBT(data);
 
-		data.setTag(LOGIC_NBT_KEY, logic.writeToNBT(new NBTTagCompound()));
+		data.setTag(TRANSFORMER_KEY, transformer.writeToNBT(new NBTTagCompound()));
 
 		return data;
 	}
@@ -302,9 +300,9 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 
 		tankManager.readFromNBT(data);
 
-		if (data.hasKey(LOGIC_NBT_KEY)) {
-			NBTTagCompound nbtTag = data.getCompoundTag(LOGIC_NBT_KEY);
-			logic.readFromNBT(nbtTag);
+		if (data.hasKey(TRANSFORMER_KEY)) {
+			NBTTagCompound nbtTag = data.getCompoundTag(TRANSFORMER_KEY);
+			transformer.readFromNBT(nbtTag);
 		}
 	}
 
@@ -313,7 +311,7 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		tankManager.writeData(data);
-		logic.writeData(data);
+		transformer.writeData(data);
 	}
 
 	@Override
@@ -321,7 +319,7 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
-		logic.readData(data);
+		transformer.readData(data);
 	}
 
 	@Nullable
@@ -331,7 +329,7 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
 		}
 		if (capability == ClimateCapabilities.CLIMATE_TRANSFORMER) {
-			return ClimateCapabilities.CLIMATE_TRANSFORMER.cast(logic);
+			return ClimateCapabilities.CLIMATE_TRANSFORMER.cast(transformer);
 		}
 		return super.getCapability(capability, facing);
 	}

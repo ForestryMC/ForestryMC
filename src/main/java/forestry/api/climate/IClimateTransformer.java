@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import java.util.function.BiFunction;
-
 import forestry.api.core.ILocatable;
 
 /**
@@ -20,7 +18,7 @@ import forestry.api.core.ILocatable;
  * the range or the circular state of the transformer.
  */
 public interface IClimateTransformer extends ILocatable {
-	void addTransformer();
+	void update();
 
 	void removeTransformer();
 
@@ -55,6 +53,8 @@ public interface IClimateTransformer extends ILocatable {
 	 */
 	int getArea();
 
+	float getAreaModifier();
+
 	/**
 	 * @return The targeted state of this transformer.
 	 */
@@ -85,17 +85,9 @@ public interface IClimateTransformer extends ILocatable {
 	IClimateState getDefault();
 
 	/**
-	 * @return An object that contains all relevant information about this logic.
-	 */
-	TransformerProperties createProperties();
-
-	/**
 	 * A helper interface that can be usd to manipulate the state of this logic.
-	 *
-	 * @param type The climate type that can be manipulated with the manipulator.
-	 * @param changeSupplier A supplier that supplies the change value that should be applied to the state of this logic.
 	 *
 	 * @return A helper interface that can be usd to manipulate the state of this logic.
 	 */
-	IClimateManipulator createManipulator(ClimateType type, BiFunction<ClimateType, TransformerProperties, Float> changeSupplier);
+	IClimateManipulatorBuilder createManipulator(ClimateType type);
 }
