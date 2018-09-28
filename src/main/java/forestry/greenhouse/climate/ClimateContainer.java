@@ -12,9 +12,9 @@ package forestry.greenhouse.climate;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,7 +41,7 @@ import forestry.greenhouse.api.climate.IClimateModifier;
 import forestry.greenhouse.api.climate.IClimateSource;
 
 public class ClimateContainer implements IClimateContainer, IStreamable {
-	
+
 	protected final IClimateHousing parent;
 	protected final Set<IClimateSource> sources;
 	protected final Supplier<Boolean> canWork;
@@ -52,7 +52,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	protected IClimateState boundaryDown;
 	protected double sizeModifier;
 	private NBTTagCompound modifierData;
-	
+
 	/**
 	 * Creates an empty region.
 	 */
@@ -62,7 +62,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 
 	public ClimateContainer(IClimateHousing parent, Supplier<Boolean> canWork) {
 		this.parent = parent;
-		this.sources = new HashSet<>();
+		this.sources = ConcurrentHashMap.newKeySet();
 		this.delay = 20;
 		this.state = parent.getDefaultClimate().copy();
 		this.modifierData = new NBTTagCompound();
@@ -72,7 +72,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		this.canWork = canWork;
 		this.sizeModifier = 1.0D;
 	}
-	
+
 	@Override
 	public IClimateHousing getParent() {
 		return parent;
@@ -130,12 +130,12 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		boundaryUp = parent.getDefaultClimate().add(ClimateStates.of(temperatureBoundaryUp, humidityBoundaryUp));
 		boundaryDown = parent.getDefaultClimate().remove(ClimateStates.of(temperatureBoundaryDown, humidityBoundaryDown));
 	}
-	
+
 	@Override
 	public IClimateState getBoundaryDown() {
 		return boundaryDown;
 	}
-	
+
 	@Override
 	public IClimateState getBoundaryUp() {
 		return boundaryUp;
@@ -155,12 +155,12 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		targetedState = ForestryAPI.states.create(nbt.getCompoundTag("Target"));
 		modifierData = nbt.getCompoundTag("modifierData");
 	}
-	
+
 	@Override
 	public void setTargetedState(IClimateState state) {
 		this.targetedState = state;
 	}
-	
+
 	@Override
 	public IClimateState getTargetedState() {
 		return targetedState;
@@ -169,7 +169,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
-	
+
 	/**
 	 * @return The ticks between updates.
 	 */
@@ -188,23 +188,19 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 
 	@Override
 	public void addClimateSource(IClimateSource source) {
-		if (!sources.contains(source)) {
-			sources.add(source);
-		}
+		sources.add(source);
 	}
 
 	@Override
 	public void removeClimateSource(IClimateSource source) {
-		if (sources.contains(source)) {
-			sources.remove(source);
-		}
+		sources.remove(source);
 	}
 
 	@Override
 	public Collection<IClimateSource> getClimateSources() {
 		return sources;
 	}
-	
+
 	@Override
 	public void writeData(PacketBufferForestry data) {
 		data.writeClimateState(state);
@@ -222,12 +218,12 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		targetedState = data.readClimateState();
 		modifierData = data.readCompoundTag();
 	}
-	
+
 	@Override
 	public IClimateState getState() {
 		return state;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof IClimateContainer)){
@@ -240,7 +236,7 @@ public class ClimateContainer implements IClimateContainer, IStreamable {
 		}
 		return this.parent.getCoordinates().equals(parent.getCoordinates());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return parent.getCoordinates().hashCode();
