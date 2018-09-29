@@ -201,7 +201,11 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		return charcoalAmount / 6;
+		float ret = charcoalAmount / 6;
+		if (ret > 0F) {
+			ret += 9F;    //base charcoal drop amount for ash block, calculated here instead so invalid walls son't still drop charcoal
+		}
+		return Math.min(ret, 15.0F);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing) {
@@ -210,7 +214,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 
 		BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos(pos);
 		testPos.move(facing);
-		while(!world.isAirBlock(testPos)) {
+		while (!world.isAirBlock(testPos)) {
 			testPos.move(facing);
 			IBlockState state = world.getBlockState(testPos);
 			for (ICharcoalPileWall wall : walls) {
@@ -219,7 +223,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 				}
 			}
 		}
-		return 1;
+		return 0;
 	}
 
 	@SideOnly(Side.CLIENT)
