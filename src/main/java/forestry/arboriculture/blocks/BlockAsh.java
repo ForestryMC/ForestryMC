@@ -71,6 +71,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 		Random rand = world instanceof World ? ((World) world).rand : new Random();
 		int amount = state.getValue(AMOUNT);
 		if (amount > 0) {
+			amount += 9;
 			amount += rand.nextInt(1 + fortune);
 			drops.add(new ItemStack(Items.COAL, amount, 1));
 			drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(amount / 4)));

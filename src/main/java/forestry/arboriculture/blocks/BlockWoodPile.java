@@ -201,11 +201,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		float ret = charcoalAmount / 6;
-		if (ret > 0F) {
-			ret += 9F;    //base charcoal drop amount for ash block, calculated here instead so invalid walls won't still drop charcoal
-		}
-		return Math.min(ret, 15.0F);
+		return Math.min(charcoalAmount / 6, 15.0F);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing) {
