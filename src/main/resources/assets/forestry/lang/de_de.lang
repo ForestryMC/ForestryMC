@@ -5,9 +5,6 @@
 death.engine.clockwork.player=%1$s wurde von einer losen Feder erstochen. %2$s war der nachlässige Uhrmacher.
 death.engine.clockwork=%1$s wurde von einer losen Feder erstochen.
 
-for.beverage.effect.alcoholic=Alkoholisch
-for.beverage.effect.antidote=Gegengift
-
 for.chat.cannotmemorizeagain=Du hast dir diese Information bereits gemerkt.
 for.chat.memorizednote=Du merkst dir die Notiz und entsorgst das zerknüllte Stück Papier.
 for.chat.memorizednote2=Du fühlst dich zuversichtlicher, %1$s mit %2$s zu kreuzen, um %3$s zu erhalten!
@@ -24,16 +21,16 @@ for.chat.command.forestry.version.desc=- %s : Versionsinformationen
 for.chat.command.forestry.version.help=Gibt die aktuelle Version aus
 for.chat.command.forestry.version.format=Format: /%s
 
-for.chat.command.forestry.plugins.desc=- %s : Liste der Forestry-Plugins
-for.chat.command.forestry.plugins.help=Listet alle Forestry-Plugins auf. Grüne sind aktiv, rote deaktiviert.
-for.chat.command.forestry.plugins.format=Format: /%s
+for.chat.command.forestry.modules.desc=- %s : Liste an Forestry-Modulen
+for.chat.command.forestry.modules.help=Liste aller Forestry-Module. Grün heißt aktiv, rot heißt inaktiv.
+for.chat.command.forestry.modules.format=Format: /%s
 
-for.chat.command.forestry.plugins.info.desc= - %s : Informationen zu einem bestimmten Plugin
-for.chat.command.forestry.plugins.info.help=Gibt Infomationen zu einem bestimmten Plugin aus
-for.chat.command.forestry.plugins.info.format=Format: /%s <Plugin-Name>
+for.chat.command.forestry.modules.info.desc=- %s : Infos über ein bestimmtes Modul
+for.chat.command.forestry.modules.info.help=Liefert Infos zu einem bestimmten Modul
+for.chat.command.forestry.modules.info.format=Format /%s <Modulname>
 
 for.chat.help=Gib '%s' für Hilfe ein.
-for.chat.plugins.error=Keine Informationen für das Plugin %s verfügbar.
+for.chat.modules.error=Keine Infos für Modul %s verfügbar.
 for.chat.version=Forestry %1$s für Minecraft %2$s (Aktuell: %3$s).
 
 for.circuit.dampener.1=Feuerdämpfer
@@ -58,6 +55,14 @@ for.circuit.machine.speed.boost.2.description.1=Erhöht Geschwindigkeit um 25%
 for.circuit.machine.speed.boost.2.description.2=Erhöht Energieverbrauch um 10%
 for.circuit.machine.efficiency.1=Maschineneffizienz
 for.circuit.machine.efficiency.1.description.1=Verringert Energieverbrauch um 10%
+for.circuit.climatiser.temperature.1=Temperatur-Boost I
+for.circuit.climatiser.temperature.1.description.1=Erhöht Reichweite und Änderungsrate um 12,5%
+for.circuit.climatiser.temperature.2=Temperatur-Boost II
+for.circuit.climatiser.temperature.2.description.1=Erhöht Reichweite und Änderungsrate um 25%
+for.circuit.climatiser.humidity.1=Feuchtigkeits-Boost I
+for.circuit.climatiser.humidity.1.description.1=Erhöht Reichweite und Änderungsrate um 12,5%
+for.circuit.climatiser.humidity.2=Feuchtigkeits-Boost II
+for.circuit.climatiser.humidity.2.description.1=Erhöht Reichweite und Änderungsrate um 25%
 
 for.circuit.layout.dummy.name=Nicht verfügbar
 for.circuit.layout.dummy.usage=Nichts
@@ -73,6 +78,9 @@ for.circuit.layout.farms.manual.usage=Manuelle Farmen
 
 for.circuit.layout.machine.upgrade.name=Maschinen-Upgrade
 for.circuit.layout.machine.upgrade.usage=Maschinen mit Sockeln
+
+for.circuit.layout.greenhouse.climatiser.name=Klimaanlage
+for.circuit.layout.greenhouse.climatiser.usage=Klimaanlagen
 
 for.flowers.cacti=Kakteen
 for.flowers.end=Ender
@@ -93,6 +101,7 @@ fluid.juice=Fruchtsaft
 fluid.short.mead=Met
 fluid.milk=Milch
 fluid.seed.oil=Samenkernöl
+
 tile.forestry.fluid.bio.ethanol.name=Ethanol
 tile.forestry.fluid.biomass.name=Biomasse
 tile.forestry.fluid.glass.name=Flüssigglas
@@ -129,6 +138,14 @@ for.gui.beealyzer.natural=Natürlicher Ursprung
 for.gui.beealyzer.produce=Mögliche Produkte
 for.gui.beealyzer.specialty=Mögliche Spezialitäten
 
+for.gui.database.tab.active_species.name=Aktive Spezies
+for.gui.database.tab.inactive_species.name=Inaktive Speizes
+for.gui.database.tab.products.name=Produkte
+for.gui.database.tab.mutations.name=Mutationen
+for.gui.database.mutations.further=Weitere Mutationen
+for.gui.database.mutations.resultant=Resultierende Mutationen
+for.gui.database.support=Dieses Individuum hat aktuell keinen Datenbankeintrag.
+
 for.gui.blank=Leer
 for.gui.cave=Höhle
 for.gui.climate=Klima
@@ -145,9 +162,7 @@ for.gui.drones=Dronen
 for.gui.effect=Effekt
 for.gui.empty=Leer
 for.gui.emptysocket=Leerer Steckplatz
-for.gui.empty.slot.camouflage.multiblock.default=Standard-Tarnslot
-for.gui.empty.slot.camouflage.multiblock.glass=Glas-Tarnslot
-for.gui.empty.slot.camouflage.multiblock.door=Türen-Tarnslot
+for.gui.empty.slot.camouflage.multiblock=Multiblock-Tarnslot
 for.gui.empty.slot.camouflage=Tarnslot
 for.gui.socket.remove=Mit Lötkolben entfernbar
 for.gui.energy=Energie
@@ -235,21 +250,6 @@ for.gui.noeffect=Kein Effekt
 for.gui.owner=Besitzer
 for.gui.page=Seite
 
-for.gui.pipe.filter.anything=Alles
-for.gui.pipe.filter.bee=Alle Bienen
-for.gui.pipe.filter.cave=Höhlenbewohner
-for.gui.pipe.filter.closed=Geschlossen
-for.gui.pipe.filter.drone=Dronen
-for.gui.pipe.filter.flyer=Starke Flieger
-for.gui.pipe.filter.item=Gegenstände
-for.gui.pipe.filter.nocturnal=Nachtaktive
-for.gui.pipe.filter.princess=Prinzessinnen
-for.gui.pipe.filter.pure_breed=Reinrassige
-for.gui.pipe.filter.pure_cave=Reinrassige Höhlenbewohner
-for.gui.pipe.filter.pure_flyer=Reinrassig starke Flieger
-for.gui.pipe.filter.pure_nocturnal=Reinrassig nachtaktive
-for.gui.pipe.filter.queen=Königinnen
-
 for.gui.plains=Ebenen
 for.gui.princesses=Prinz.
 for.gui.produce=Produktion
@@ -259,6 +259,9 @@ for.gui.solder.north=N
 for.gui.solder.south=S
 for.gui.solder.east=O
 for.gui.solder.west=W
+
+forestry.allele.true=Ja
+forestry.allele.false=Nein
 
 forestry.allele.average=Durschschnittlich
 forestry.allele.gigantic=Gigantisches
@@ -467,7 +470,7 @@ item.for.cart.apiary.name=Bienenkorbwaggon
 
 item.for.bee_combs.cocoa.name=Schokowabe
 item.for.bee_combs.darkened.name=Gedunkelte Wabe
-item.for.bee_combs.dripping.name=Tropfende Wabe
+item.for.bee_combs.dripping.name=Triefende Wabe
 item.for.bee_combs.frozen.name=Gefrorene Wabe
 item.for.bee_combs.honey.name=Honigwabe
 item.for.bee_combs.irradiated.name=Verstrahlte Wabe
@@ -484,9 +487,6 @@ item.for.bee_combs.stringy.name=Zähe Wabe
 item.for.bee_combs.wheaten.name=Weizenartige Wabe
 
 item.for.beeswax.name=Bienenwachs
-
-item.for.beverage.meadCurative.name=Heilsamer Met
-item.for.beverage.meadShort.name=Met
 
 item.for.biome_finder.name=Habitatsucher
 item.for.bituminous_peat.name=Pechartiger Torf
@@ -551,6 +551,7 @@ item.for.honeydew.name=Honigtau
 
 item.for.portable_alyzer.name=Tragbarer Analysierer
 item.for.portable_alyzer.tooltip=Tragbares Genanalysegerät für Bienen, Bäume und Schmetterlinge.
+item.for.portable_alyzer.charges=Ladungen: %s
 
 item.for.honey_drop.charged.name=Aufgeladener Tropfen
 item.for.honey_drop.honey.name=Honigtropfen
@@ -630,6 +631,7 @@ item.for.thermionic_tubes.emerald.name=Elektronenröhre (Smaragd)
 item.for.thermionic_tubes.apatite.name=Elektronenröhre (Apatit)
 item.for.thermionic_tubes.lapis.name=Elektronenröhre (Lapislazuli)
 item.for.thermionic_tubes.ender.name=Elektronenröhre (Ender)
+item.for.thermionic_tubes.orchid.name=Elektronenröhre (Orchideen)
 item.for.thermionic_tubes.tooltip=Kann Leiterplatten programmieren.
 
 item.for.capsule.empty.name=Wachskapsel
@@ -652,6 +654,8 @@ itemGroup.agriculture=Ackerbau
 
 tile.for.analyzer.name=Analysierer
 tile.for.escritoire.name=Schreibtisch
+
+tile.for.database.name=Datenbank
 
 tile.for.engine_electrical.name=Elektromotor
 tile.for.engine_electrical.tooltip=Wandelt EU in RF um.
@@ -689,9 +693,30 @@ tile.for.resource_storage.copper.name=Kupferblock
 tile.for.resource_storage.tin.name=Zinnblock
 tile.for.resource_storage.bronze.name=Bronzeblock
 
+tile.for.ash_brick.name=Ascheziegel
+tile.for.ash_stairs.name=Ascheziegeltreppe
+
 tile.for.humus.name=Humus
 tile.for.bog_earth.bog_earth.name=Moorerde
 tile.for.bog_earth.peat.name=Torf
+
+tile.for.bee_combs.cocoa.name=Schokowabenblock
+tile.for.bee_combs.darkened.name=Gedunkelter Wabenblock
+tile.for.bee_combs.dripping.name=Triefender Wabenblock
+tile.for.bee_combs.frozen.name=Gefrorener Wabenblock
+tile.for.bee_combs.honey.name=Honigwabenblock
+tile.for.bee_combs.irradiated.name=Verstrahlter Wabenblock
+tile.for.bee_combs.mellow.name=Lieblicher Wabenblock
+tile.for.bee_combs.mossy.name=Moosiger Wabenblock
+tile.for.bee_combs.mysterious.name=Mysteriöser Wabenblock
+tile.for.bee_combs.omega.name=Omegawabenblock
+tile.for.bee_combs.parched.name=Ausgedörrter Wabenblock
+tile.for.bee_combs.powdery.name=Pulvriger Wabenblock
+tile.for.bee_combs.reddened.name=Geröteter Wabenblock
+tile.for.bee_combs.silky.name=Seidiger Wabenblock
+tile.for.bee_combs.simmering.name=Schwelender Wabenblock
+tile.for.bee_combs.stringy.name=Zäher Wabenblock
+tile.for.bee_combs.wheaten.name=Weizenartiger Wabenblock
 
 item.for.adventurer_bag.name=Abenteurerrucksack
 item.for.adventurer_bag_t2.name=Gewobener Abenteurerrucksack
@@ -826,6 +851,14 @@ for.errors.no_fertilizer.desc=Kein Dünger
 for.errors.no_fertilizer.help=Diese Pflanzen benötigen Dünger zum Wachsen.
 for.errors.no_liquid.desc=Kein Wasser
 for.errors.no_liquid.help=Aufgrund von langer Trockenheit mangelt es den Pflanzen an Wasser
+
+# GREENHOUSE
+for.errors.not_closed.desc=Dach nicht geschlossen
+for.errors.not_closed.help=Das Dach des Gewächshauses ist nicht geschlossen.
+for.errors.not_loaded.desc=Nicht geladen
+for.errors.not_loaded.help=Ein Chunk des Gewächshauses ist nicht geladen.
+for.errors.too_large.desc=Zu groß
+for.errors.too_large.help=Das Gewächshaus ist zu groß für seinen Controller, oder an einer Stelle nicht geschlossen.
 
 ####################
 # APICULTURE
@@ -1076,6 +1109,26 @@ tile.for.candle.stump.name=Nicht brennende Kerze
 tile.for.stump.name=Kerzenstumpf
 
 ####################
+# BOOK
+####################
+item.for.book_forester.name=Försterhandbuch
+
+for.gui.book.element.crafting=Produktion
+for.gui.book.about.title=Über das Buch
+for.gui.book.about=§oDas hier zu findende Wissen wurde von Binnie gesammelt und zusammengestellt, und repräsentiert die Überreste von Beekeeping 101 und dem Försteralmanach, zwei Büchern eines verrückten Imkers, der nur als 'Sir' Sengir bekannt ist.§r
+for.gui.book.about.author=| Binnie, Editor
+for.gui.book.categories=Kategorien
+
+for.gui.book.category.core.title=Kernfunktionen
+for.gui.book.category.lepidopterology.title=Lepidopterologie
+for.gui.book.category.mail.title=Post
+for.gui.book.category.greenhouse.title=Gewächshaus (WIP)
+for.gui.book.category.beekeeping.title=Bienenzucht
+for.gui.book.category.arboriculture.title=Baumzucht
+for.gui.book.category.farming.title=Ackerbau
+for.gui.book.category.genetics.title=Genetik
+
+####################
 # MULTIBLOCK
 ####################
 
@@ -1099,8 +1152,11 @@ for.multiblock.farm.error.needPlainBand=Die Farm braucht auf der dritten Ebene g
 for.multiblock.farm.error.needPlainInterior=Die Farm braucht im Inneren gewöhnliche Farmblöcke.
 for.multiblock.farm.error.needGearbox=Die Farm benötigt eine Getriebebox, um Energie zu erhalten und zu funktionieren.
 
-for.multiblock.greenhouse.error.space.closed=Das Gewächshaus muss einen Bereich vollständig umschließen. Einige Blöcke fehlen.
-for.multiblock.greenhouse.error.climatecontrol.toomany=Das Gewächshaus darf nur eine Klimabox enthalten.
+for.multiblock.greenhouse.error.needPlainOnTop=Das Gewächshaus muss oben aus normalen Gewächshausblöcken bestehen.
+for.multiblock.greenhouse.error.needPlainInterior=Das Gewächshaus muss innen aus normalen Gewächshausblöcken bestehen.
+for.multiblock.greenhouse.error.space.notclosed=Das Gewächshaus muss geschlossen sein. Irgendwo fehlen für Wände taugliche Blöcke.
+for.multiblock.greenhouse.error.space.unloaded=Ein Teil des Gewächshauses ist in einem nicht geladenen Chunk. Alle Chunks um das Gewächshaus herum müssen geladen sein.
+for.multiblock.greenhouse.error.needSpace=Das Gewächshaus darf nicht in Reichweite anderer Gewächshäuser stehen.
 
 for.multiblock.alveary.type=Bienenstock
 for.multiblock.farm.type=Farm
@@ -1197,7 +1253,9 @@ for.trees.grammar.pile.type=Holzstoß
 for.trees.grammar.pile=%TYPE (%SPECIES)
 
 tile.for.wood_pile.name=Holzstoß
+tile.for.wood_pile_decorative.name=Dekorativer Holzstoß
 tile.for.loam.name=Lehmerde
+tile.for.ash_block.name=Ascheblock
 tile.for.charcoal.name=Holzkohleblock
 
 for.trees.hybrid=Hybrid: %PRIMARY-%SECONDARY
@@ -1291,24 +1349,22 @@ tile.for.pods.0.name=Kakaoschote
 ####################
 # FARMING
 ####################
+for.farm.grammar.manual=%s (Manuell)
+for.farm.grammar.managed=%s (Automatisch)
 
-for.circuit.managedArboreal=Baumschule
-for.circuit.managedCereal=Getreidefeld
-for.circuit.managedInfernal=Infernalisches Feld
-for.circuit.managedPeat=Torfmoor
-for.circuit.managedShroom=Pilzfeld
-for.circuit.managedVegetable=Gemüsefeld
-for.circuit.managedEnder=Enderfarm
-for.circuit.manualCereal=Manuelles Getreidefeld
-for.circuit.manualCocoa=Manuelles Kakaofeld
-for.circuit.manualGourd=Kürbisbeet
-for.circuit.manualOrchard=Obstgarten
-for.circuit.manualPeat=Manuelles Torfmoor
-for.circuit.manualPoales=Manuelles Zuckerrohrfeld
-for.circuit.manualRubber=Kautschukplantage
-for.circuit.manualShroom=Pilzgarten
-for.circuit.manualSucculent=Manuelles Kaktuszucht
-for.circuit.manualVegetable=Manuelles Gemüsebeet
+for.farm.arboretum=Baumschule
+for.farm.crops=Getreidefeld
+for.farm.shroom=Pilzgarten
+for.farm.succulent=Sukkulentenfarm
+for.farm.peat=Torfmoor
+for.farm.infernal=Höllenfarm
+for.farm.reed=Zuckerrohrfeld
+for.farm.orchard=Obstgarten
+for.farm.gourd=Kürbisbeet
+for.farm.cocoa=Kakaofarm
+for.farm.ender=Enderfarm
+for.farm.orchid=Orchideenfarm
+for.farm.rubber=Kautschukplantage
 
 for.gui.farm.title=Farm
 for.gui.hydr.heat=Durch Hitze
@@ -1350,29 +1406,84 @@ tile.for.mushroom.0.name=Pilz
 tile.for.mushroom.1.name=Pilz
 
 ####################
+# CULTIVATION
+####################
+tile.for.arboretum.name=Baumschule
+tile.for.arboretum.tooltip=Baumfarm
+tile.for.farm_crops.name=Farm
+tile.for.farm_crops.tooltip=Getreidefeld
+tile.for.farm_mushroom.name=Pilzgarten
+tile.for.farm_nether.name=Höllenfarm
+tile.for.farm_nether.tooltip=Netherwarzenfarm
+tile.for.farm_gourd.name=Kürbisbeet
+tile.for.farm_gourd.tooltip=Für Melonen und Kürbisse
+tile.for.farm_ender.name=Enderfarm
+tile.for.farm_ender.tooltip=Für Choruspflanzen und Enderlilien
+tile.for.peat_bog.name=Torfmoor
+tile.for.peat_bog.tooltip=Torffarm
+tile.for.plantation.name=Kautschukfarm
+
+item.for.flexible_casing.name=Flexibles Gehäuse
+
+tile.for.planter.manual=%s (Manuell)
+tile.for.planter.managed=%s (Automatisch)
+
+for.gui.planter.north=N
+for.gui.planter.south=S
+for.gui.planter.east=O
+for.gui.planter.west=W
+
+####################
 # GREENHOUSE
 ####################
 for.gui.greenhouse.title=Gewächshaus
-for.gui.greenhouse.nursery.title=Gewächshaus-Schmetterlingsluke
+for.gui.greenhouse.hygroregulator.title=Gewächshaus-Hygroregulator
 
 tile.for.greenhouse.tooltip=Multiblock: 5x5x5 - 64x150x64  (Hohl) mit beliebigem Dach, das nicht größer als der Grundriss sein darf.
 tile.for.greenhouse.camouflage.tooltip=Dieser Block kann getarnt werden, das heißt, du kannst ändern, wie der Block aussieht.
 tile.for.greenhouse.plain.name=Gewächshausblock
-tile.for.greenhouse.glass.name=Gewächshausglas
 tile.for.greenhouse.gearbox.name=Gewächshausgetriebebox
-tile.for.greenhouse.hatch_output.name=Gewächshaus-Ausgangsluke
-tile.for.greenhouse.hatch_input.name=Gewächshaus-Eingangsluke
-tile.for.greenhouse.nursery.name=Gewächshaus-Schmetterlingsluke
-tile.for.greenhouse.valve.name=Gewächshaus-Durchlassventil
-tile.for.greenhouse.fan.name=Ventilator (Gewächshaus)
-tile.for.greenhouse.heater.name=Heizung (Gewächshaus)
-tile.for.greenhouse.dehumidifier.name=Luftentfeuchter (Gewächshaus)
-tile.for.greenhouse.humidifier.name=Luftbefeuchter (Gewächshaus)
 tile.for.greenhouse.control.name=Gewächshauskontrolle
-tile.for.greenhouse.door.name=Gewächshaustür
-tile.for.greenhouse.climate_control.name=Gewächshaus-Klimabox
+tile.for.greenhouse.screen.name=Gewächshausbildschirm
 tile.for.greenhouse.window_up.name=Gewächshaus-Dachfenster
 tile.for.greenhouse.window.name=Gewächshausfenster
+tile.for.climatiser.fan.name=Gewächshausventilator
+tile.for.climatiser.heater.name=Gewächshausheizung
+tile.for.climatiser.dehumidifier.name=Gewächshaus-Luftentfeuchter
+tile.for.climatiser.humidifier.name=Gewächshaus-Luftbefeuchter
+tile.for.climatiser.hygro.name=Gewächshaus-Hygroregulator
+
+item.for.greenhouse_screen.name=Tragbarer Gewächshausbildschirm
+
+for.gui.modifier.sources.range.up=Reichweite hoch: %s
+for.gui.modifier.sources.range.down=Reichweite runter: %s
+for.gui.modifier.sources.change=Änderung: %s
+for.gui.modifier.rain=Regen: %s
+for.gui.modifier.time=Zeit: %s
+for.gui.modifier.altitude=Höhe: %s
+for.gui.modifier.title=Modifikatoren
+for.gui.sources=Klimaquellen: %s
+for.gui.modifier.weather.title=Wetter
+for.gui.modifier.time.title=Zeit
+for.gui.modifier.altitude.title=Höhe
+for.gui.modifier.sources.title=Klimaquellen
+
+for.message.greenhouse_screen.fail=Dieses Item funktioniert nur verbunden mit einem Gewächshaus
+for.message.greenhouse_screen.position=Dieses Item ist nun mit einem Gewächshaus verbunden
+for.message.greenhouse_screen.preview.active=Vorschaumodus aktiv
+for.message.greenhouse_screen.preview.inactive=Vorschaumodus inaktiv
+for.message.greenhouse_screen.center=Du hast die Mitte des Gewächshauses auf diese Koordinaten gesetzt
+for.message.greenhouse_screen.away=Du bist zu weit vom Gewächshaus entfernt, um das Item zu benutzen
+for.message.greenhouse_screen.notassembled=Du kannst dieses Item nur mit einem vollständigen Gewächshaus verbinden.
+
+for.greenhouse_screen.mode=Vorschaumodus: %s
+for.greenhouse_screen.mode.active=Aktiv
+for.greenhouse_screen.mode.inactive=Inaktiv
+for.greenhouse_screen.state=Status: %s
+for.greenhouse_screen.state.linked=Verbunden mit der Position (%s, %s, %s)
+for.greenhouse_screen.state.fail=Nicht verbunden
+for.greenhouse_screen.temperature=Temperatur: %s
+for.greenhouse_screen.humidity=Feuchtigkeit:%s
 
 ####################
 # LEPIDOPTEROLOGY
@@ -1385,6 +1496,7 @@ for.chat.command.forestry.butterfly.format=Format: /%s <Sub-Befehl>
 for.chat.command.forestry.butterfly.kill.desc=- %s: Alle Schmetterlinge töten
 for.chat.command.forestry.butterfly.kill.help=Tötet alle Schmetterlinge in geladenen Chunks
 for.chat.command.forestry.butterfly.kill.format=Format: /%s [<dimensions#>]
+for.chat.command.forestry.butterfly.kill.response=%d Schmetterling(e) getötet
 
 for.butterflies.hybrid=Hybrid: %PRIMARY-%SECONDARY
 
@@ -1431,9 +1543,11 @@ for.butterflies.species.pieridae.postillion=Postillon
 for.butterflies.species.pieridae.reseda=Resedafalter
 for.butterflies.species.pieridae.springAzure=Faulbaum-Bläuling
 for.butterflies.species.saturniidae.atlas=Atlasspinner
+for.butterflies.species.bombycidae.bombyxMori=Seidenspinner
 
 for.gui.loot.butterfly=Mögliche Schmetterlingsausbeute
 for.gui.loot.caterpillar=Mögliche Raupenausbeute
+for.gui.loot.cocoon=Mögliche Kokonausbeute
 
 for.lepidopterology.effect.none=Nichts
 
@@ -1494,47 +1608,89 @@ item.for.catalogue.tooltip=Enthält alle verfügbaren Angebote von Handelsstatio
 
 item.PipeItemsPropolis.name=Bienenrohr
 
-####################
-# PLUGINS
-####################
-for.plugin.core.description=Grundlegende Mechaniken für Forestry. Von allen Plugins benötigt.
-for.plugin.fluids.description=Beinhaltet Flüssigkeiten, Flüssigkeitsblöcke sowie Flüssigkeitscontainer.
-for.plugin.apiculture.description=Beinhaltet Bienen, Bienenzucht und Bienenprodukte. Beeinflust Weltgenerierung.
-for.plugin.arboriculture.description=Beinhaltet zusätzliche Baumspezies und ihre Produkte.
-for.plugin.energy.description=Beinhaltet verschiedene RF-Motoren.
-for.plugin.factory.description=Beinhaltet unterschiedliche Maschinen zur Fertigung, Herstellung und Verarbeitung von Produkten.
-for.plugin.farming.description=Beinhaltet automatisches Farmen und Ernten einer Vielzahl von Produkten.
-for.plugin.food.description=Beinhaltet Nahrungsmittel.
-for.plugin.lepidopterology.description=Schmetterlinge. Schick.
-for.plugin.mail.description=Beinhaltet Forestry's Post- und Handelssystem.
-for.plugin.storage.description=Beinhaltet Rucksäcke und Kisten.
-for.plugin.greenhouse.description=Beinhaltet ein Gewächshaus.
+tile.for.genetic_filter.name=Genfilter
+tile.for.genetic_filter.0.name=Genfilter
 
-for.plugin.buildcraft6.description=Kompatibilitätsplugin für BuildCraft 6.
-for.plugin.pipes.description=Beinhaltet das Bienenrohr wenn das Bienenzucht-Plugin aktiviert und BuildCraft 6 präsent ist.
-for.plugin.ic2.description=Kompatibilitätsplugin für IC2. Beinhaltet den Elektromotor und Generator für Energieumwandlung.
-for.plugin.natura.description=Kompatibilitätsplugin für Natura. Erlaubt Natura-Setzlinge in Farmen.
-for.plugin.ee2.description=Kompatibilitätsplugin für Equivalent Exchange 2. Aktiviert die Omega-Gattung von Bienen. Benötigt das Bienenzucht-Plugin.
-for.plugin.ee3.description=Kompatibilitätsplugin für Equivalent Exchange 3.
-for.plugin.farmcraftory.description=Kompatibilitätsplugin für FarmCraftory. Erlaubt Feldfrüchte in Farmen.
-for.plugin.biomesoplenty.description=Kompatibilitätsplugin für Biomes O' Plenty. Erlaubt BoP-Setzlinge in Farmen.
-for.plugin.extrautilities.description=Kompatibilitätsplugin für Extra Utilities. Erlaubt Enderlilien in Farmen.
-for.plugin.harvestcraft.description=Kompatibilitätsplugin für HarvestCraft. Erlaubt Pflanzen und Bäume von HarvestCraft in Farmen.
-for.plugin.magicalcrops.description=Kompatibilitätsplugin für Magical Crops.
-for.plugin.chisel.description=Kompatibilitätsplugin für Chisel. Erlaubt das Lagern der generierten Blöcke in Rucksäcken.
-for.plugin.plantmegapack.description=Kompatibilitätsplugin für Plant Mega Pack.
-for.plugin.witchery.description=Kompatibilitätsplugin für Witchery.
-for.plugin.agricraft.description=Kompatibilitätsplugin für AgriCraft.
-for.plugin.enderIO.description=Kompatibilitätsplugin für EnderIO.
-for.plugin.immersiveengineering.description=Kompatibilitätsplugin für Immersive Engineering.
-for.plugin.growthcraft.description=Kompatibilitätsplugin für GrowthCraft.
-for.plugin.erebus.description=Kompatibilitätsplugin für Erebus.
-for.plugin.rotarycraft.description=Kompatibilitätsplugin für RotaryCraft.
-for.plugin.actuallyadditions.description=Kompatibilitätsplugin für Actually Additions.
+for.gui.filter.seletion=Filterauswahl
+
+for.gui.filter.forestry.default.anything=Alles
+for.gui.filter.forestry.default.closed=Geschlossen
+for.gui.filter.forestry.default.item=Items
+for.gui.filter.forestry.default.cave=Höhlenbewohner
+for.gui.filter.forestry.default.flyer=Robuste Flieger
+for.gui.filter.forestry.default.nocturnal=Nachtaktiv
+for.gui.filter.forestry.default.pure_breed=Reinzucht
+for.gui.filter.forestry.default.pure_cave=Reine Höhlenbewohner
+for.gui.filter.forestry.default.pure_flyer=Reine Flieger
+for.gui.filter.forestry.default.pure_nocturnal=Rein Nachtaktiv
+
+for.gui.filter.forestry.apiculture.bee=Alle Bienen
+for.gui.filter.forestry.apiculture.queen=Königin
+for.gui.filter.forestry.apiculture.drone=Drohnen
+for.gui.filter.forestry.apiculture.princess=Prinzessinnen
+
+for.gui.filter.forestry.arboriculture.tree=Alle Bäume
+for.gui.filter.forestry.arboriculture.sapling=Setzlinge
+for.gui.filter.forestry.arboriculture.pollen=Pollen
+
+for.gui.filter.forestry.lepidopterology.flutter=Alle Schmetterlinge
+for.gui.filter.forestry.lepidopterology.butterfly=Schmetterlinge
+for.gui.filter.forestry.lepidopterology.caterpillar=Raupen
+for.gui.filter.forestry.lepidopterology.serum=Seren
+for.gui.filter.forestry.lepidopterology.cocoon=Kokons
+
+####################
+# MODULES
+####################
+for.module.apiculture.description=Beinhaltet Bienen, Bienenzucht und Bienenprodukte. Beeinflust Weltgenerierung.
+for.module.arboriculture.description=Beinhaltet zusätzliche Baumspezies und ihre Produkte.
+for.module.backpacks.description=Beinaltet Rucksäcke.
+for.module.book.description=Beinhaltet ein Handbuch, welches Infos zu allen anderen Modulen enthält.
+for.module.charcoal.description=Beinhaltet Holzstöße, Lehmerde und Holzkohleproduktion.
+for.module.core.description=Grundlegende Mechaniken für Forestry. Von allen Modulen benötigt.
+for.module.crates.description=Beinhaltet Kisten.
+for.module.cultivation.description=Beinhaltet automatische Farmen für alle möglichen Dinge.
+for.module.database.description=Beinhaltet einen neuen Lagerblock für Bienen, Bäume und Schmetterlinge.
+for.module.energy.description=Beinhaltet verschiedene RF-Motoren.
+for.module.factory.description=Beinhaltet unterschiedliche Maschinen zur Fertigung, Herstellung und Verarbeitung von Produkten.
+for.module.farming.description=Beinhaltet automatisches Farmen und Ernten einer Vielzahl von Produkten in Form von Multiblöcken.
+for.module.fluids.description=Beinhaltet Flüssigkeiten, Flüssigkeitsblöcke sowie Flüssigkeitscontainer.
+for.module.food.description=Beinhaltet Nahrungsmittel.
+for.module.greenhouse.description=Beinhaltet ein Gewächshaus.
+for.module.lepidopterology.description=Schmetterlinge. Schick.
+for.module.mail.description=Beinhaltet Forestry's Post- und Handelssystem.
+for.module.sorting.description=Beinhaltet einen Filter, um Items nach ihrer Genetik sortieren zu können.
+for.module.worktable.description=Beinhaltet eine Wekbank, welche acht Rezepte speichern kann.
+
+for.module.actuallyadditions.description=Kompatibilitätsmodul für Actually Additions.
+for.module.betterwithmods.description=Kompatibilitätsmodul für Better With Mods. Ermöglicht Hanfzucht in Farmen.
+for.module.buildcraft6.description=Kompatibilitätsmodul für BuildCraft 6.
+for.module.biomesoplenty.description=Kompatibilitätsmodul für Biomes O' Plenty. Erlaubt BoP-Setzlinge in Farmen.
+for.module.enderIO.description=Kompatibilitätsmodul für EnderIO.
+for.module.extrautilities.description=Kompatibilitätsmodul für Extra Utilities. Erlaubt Enderlilien in Farmen.
+for.module.harvestcraft.description=Kompatibilitätsmodul für HarvestCraft. Erlaubt Pflanzen und Bäume von HarvestCraft in Farmen.
+for.module.ic2.description=Kompatibilitätsmodul für IC2. Beinhaltet den Elektromotor und Generator für Energieumwandlung.
+for.module.immersiveengineering.description=Kompatibilitätsmodul für Immersive Engineering.
+for.module.mysticalagriculture.description=Kompatibilitätsmodul für Mystical Agriculture. Erlaubt Pflanzen von Mystical Agriculture in Farmen.
+for.module.natura.description=Kompatibilitätsmodul für Natura. Erlaubt Natura-Setzlinge in Farmen.
+for.module.roots.description=Kompatibilitätsmodul für Roots.
+for.module.rustic.description=Kompatibilitätsmodul für Rustic.
+for.module.techreborn.description=Kompatibilitätsmodul für Tech Reborn. Erlaubt Kautschuksammlung in Farmen
 
 ####################
 # CONFIG FILES
 ####################
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1793,3 +1949,4 @@ for.jei.farming.germlings=Setzling
 for.jei.farming.products=Produkte
 for.jei.charcoal.pile.name=Holzkohlehaufen
 for.jei.chance=Chance: %s
+for.jei.fortune=Die Menge an diesem Item wird durch die Verzauberung "Glück" beeinflusst.
