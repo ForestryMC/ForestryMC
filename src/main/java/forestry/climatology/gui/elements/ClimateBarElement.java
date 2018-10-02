@@ -23,7 +23,7 @@ import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.gui.events.GuiEvent;
-import forestry.climatology.gui.GuiHabitatformer;
+import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
@@ -43,7 +43,7 @@ public class ClimateBarElement extends GuiElement {
 
 		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (GuiScreen.isCtrlKeyDown()) {
-				GuiHabitatformer former = (GuiHabitatformer) getWindow().getGui();
+				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				IClimateState climateState = former.getClimate();
 				IClimateState newState = climateState.toImmutable().setClimate(type, transformer.getDefault().getTemperature());
 				former.setClimate(newState);
@@ -56,7 +56,7 @@ public class ClimateBarElement extends GuiElement {
 		addSelfEventHandler(GuiEvent.UpEvent.class, event -> {
 			if (dragging) {
 				dragging = false;
-				GuiHabitatformer former = (GuiHabitatformer) getWindow().getGui();
+				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				former.sendClimateUpdate();
 			}
 		});
@@ -75,7 +75,7 @@ public class ClimateBarElement extends GuiElement {
 		handleMouse(mouseX - getX(), mouseY - getY());
 
 		GlStateManager.enableAlpha();
-		GuiHabitatformer gui = (GuiHabitatformer) getWindow().getGui();
+		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 		textureManager.bindTexture(gui.textureFile);
 
@@ -122,7 +122,7 @@ public class ClimateBarElement extends GuiElement {
 		}
 		final float quotient = MathHelper.clamp((mouseX - 1) / (float) (width - 3), 0.0F, 1.0F);
 		final float value = MAX_VALUE * quotient;
-		GuiHabitatformer former = (GuiHabitatformer) getWindow().getGui();
+		GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 		IClimateState climateState = former.getClimate();
 
 		IClimateState newState = climateState.toImmutable().setClimate(type, value);

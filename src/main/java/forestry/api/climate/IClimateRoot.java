@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public interface IClimateRoot {
 
 	/**
-	 * @return the lister at the given position in the given world if there is any.
+	 * @return the listener at the given position in the given world if there is any.
 	 */
 	@Nullable
 	IClimateListener getListener(World world, BlockPos pos);

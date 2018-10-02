@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.climatology.blocks;
 
-import forestry.climatology.tiles.TileHabitatformer;
+import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 
 public enum BlockTypeClimatology implements IBlockTypeCustom {
-	HABITAT_FORMER(TileHabitatformer.class, "habitat_former");
+	HABITAT_FORMER(TileHabitatFormer.class, "habitat_former");
 
 	private final IMachineProperties machineProperties;
 

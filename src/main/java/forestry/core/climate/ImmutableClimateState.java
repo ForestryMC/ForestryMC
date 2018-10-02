@@ -42,7 +42,7 @@ class ImmutableClimateState implements IClimateState {
 
 	@Override
 	public IClimateState copy() {
-		return copy(false);
+		return this;
 	}
 
 	@Override

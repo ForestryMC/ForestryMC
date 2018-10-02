@@ -30,7 +30,7 @@ import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.ForestryAPI;
 import forestry.api.gui.events.GuiEvent;
-import forestry.climatology.gui.GuiHabitatformer;
+import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
 import forestry.core.gui.elements.GuiElement;
@@ -103,7 +103,7 @@ public class HabitatSelectionElement extends ElementGroup {
 			this.climate = climate;
 			addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 				IClimateState climateState = climate.climateState;
-				GuiHabitatformer former = (GuiHabitatformer) getWindow().getGui();
+				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				former.setClimate(climateState);
 				former.sendClimateUpdate();
 			});

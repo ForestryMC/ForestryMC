@@ -14,9 +14,11 @@ import forestry.api.climate.IWorldClimateHolder;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.network.packets.PacketClimatePlayer;
 import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 
 public class ClimateHandlerServer {
 
+	private static final TickHelper tickHelper = new TickHelper();
 	private static IClimateState previousState = ClimateStateHelper.INSTANCE.absent();
 
 	@SubscribeEvent
@@ -29,8 +31,7 @@ public class ClimateHandlerServer {
 		BlockPos pos = player.getPosition();
 		IWorldClimateHolder worldClimateHolder = ClimateManager.climateRoot.getWorldClimate(world);
 		IClimateState climateState = worldClimateHolder.getState(pos);
-		if (world.getTotalWorldTime() % 100 == 0
-			&& !climateState.equals(previousState)) {
+		if (tickHelper.updateOnInterval(100) && !climateState.equals(previousState)) {
 			ClimateHandlerServer.previousState = climateState;
 			NetworkUtil.sendToPlayer(new PacketClimatePlayer(climateState), player);
 		}

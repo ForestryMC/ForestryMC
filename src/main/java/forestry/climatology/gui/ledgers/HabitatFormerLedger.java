@@ -20,10 +20,10 @@ import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.utils.Translator;
 
-public class HabitatformerLedger extends Ledger {
+public class HabitatFormerLedger extends Ledger {
 	private final IClimateTransformer transformer;
 
-	public HabitatformerLedger(LedgerManager manager, IClimateTransformer climateLogic) {
+	public HabitatFormerLedger(LedgerManager manager, IClimateTransformer climateLogic) {
 		super(manager, "habitatformer");
 		maxHeight = 96;
 		this.transformer = climateLogic;

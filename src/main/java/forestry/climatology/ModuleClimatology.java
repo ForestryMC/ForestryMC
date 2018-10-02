@@ -27,7 +27,7 @@ import forestry.climatology.blocks.BlockRegistryClimatology;
 import forestry.climatology.items.ItemRegistryClimatology;
 import forestry.climatology.network.PacketRegistryClimatology;
 import forestry.climatology.proxy.ProxyClimatology;
-import forestry.climatology.tiles.TileHabitatformer;
+import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.circuits.EnumCircuitBoardType;
@@ -73,7 +73,7 @@ public class ModuleClimatology extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		proxy.preInti();
+		proxy.preInit();
 
 		// Capabilities
 		CapabilityManager.INSTANCE.register(IClimateListener.class, new NullStorage<>(), () -> FakeClimateListener.INSTANCE);
@@ -82,7 +82,7 @@ public class ModuleClimatology extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		TileUtil.registerTile(TileHabitatformer.class, "habitatformer");
+		TileUtil.registerTile(TileHabitatFormer.class, "habitatformer");
 	}
 
 	@Override

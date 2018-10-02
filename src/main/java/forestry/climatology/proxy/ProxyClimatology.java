@@ -12,6 +12,6 @@ package forestry.climatology.proxy;
 
 public class ProxyClimatology {
 
-	public void preInti() {
+	public void preInit() {
 	}
 }

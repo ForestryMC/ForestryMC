@@ -26,7 +26,7 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.book.items.ItemForesterBook;
-import forestry.climatology.tiles.TileHabitatformer;
+import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.tiles.TileAnalyzer;
@@ -98,7 +98,7 @@ public class GuiIdRegistry {
 				TileFarm.class,
 
 				//Climatology
-				TileHabitatformer.class,
+				TileHabitatFormer.class,
 
 				//Sorting Module
 				TileGeneticFilter.class,

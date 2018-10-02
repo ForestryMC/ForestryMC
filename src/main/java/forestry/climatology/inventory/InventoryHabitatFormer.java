@@ -15,13 +15,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
-import forestry.climatology.tiles.TileHabitatformer;
+import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.inventory.InventoryAdapterTile;
 
-public class InventoryHabitatformer extends InventoryAdapterTile<TileHabitatformer> {
+public class InventoryHabitatFormer extends InventoryAdapterTile<TileHabitatFormer> {
 	public static final short SLOT_INPUT = 0;
 
-	public InventoryHabitatformer(TileHabitatformer tile) {
+	public InventoryHabitatFormer(TileHabitatFormer tile) {
 		super(tile, 1, "Items");
 	}
 

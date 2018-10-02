@@ -27,9 +27,9 @@ import forestry.api.gui.events.ElementEvent;
 import forestry.climatology.gui.elements.ClimateBarElement;
 import forestry.climatology.gui.elements.HabitatSelectionElement;
 import forestry.climatology.gui.elements.SpeciesSelectionElement;
-import forestry.climatology.gui.ledgers.HabitatformerLedger;
+import forestry.climatology.gui.ledgers.HabitatFormerLedger;
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
-import forestry.climatology.tiles.TileHabitatformer;
+import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiForestryTitled;
@@ -44,7 +44,7 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
 @SideOnly(Side.CLIENT)
-public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> implements IScrollable {
+public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> implements IScrollable {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png");
 	//Drawables
 	private static final Drawable TEMPERATURE_FIELD = new Drawable(TEXTURE, 204, 22, 52, 12);
@@ -53,7 +53,7 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 	private static final Drawable CIRCLE_ENABLED_BUTTON = new Drawable(TEXTURE, 238, 110, 18, 18);
 	private static final Drawable CIRCLE_DISABLED_BUTTON = new Drawable(TEXTURE, 220, 110, 18, 18);
 
-	private final TileHabitatformer tile;
+	private final TileHabitatFormer tile;
 	private final IClimateTransformer transformer;
 	private final ElementGroup selectionPage;
 	private final ScrollBarElement rangeBar;
@@ -63,8 +63,8 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 	private TextEditElement temperatureEdit;
 	private TextEditElement humidityEdit;
 
-	public GuiHabitatformer(EntityPlayer player, TileHabitatformer tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", new ContainerHabitatformer(player.inventory, tile), tile);
+	public GuiHabitatFormer(EntityPlayer player, TileHabitatFormer tile) {
+		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", new ContainerHabitatFormer(player.inventory, tile), tile);
 		this.transformer = tile.getTransformer();
 		this.tile = tile;
 		this.ySize = 233;
@@ -160,12 +160,12 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 		addErrorLedger(tile);
 		addPowerLedger(tile.getEnergyManager());
 		addHintLedger("habitatformer");
-		ledgerManager.add(new HabitatformerLedger(ledgerManager, tile.getTransformer()));
+		ledgerManager.add(new HabitatFormerLedger(ledgerManager, tile.getTransformer()));
 	}
 
 	@Override
 	public void onScroll(int value) {
-		NetworkUtil.sendToServer(new PacketGuiSelectRequest(ContainerHabitatformer.REQUEST_ID_RANGE, value));
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(ContainerHabitatFormer.REQUEST_ID_RANGE, value));
 		transformer.setRange(value);
 	}
 
@@ -183,7 +183,7 @@ public class GuiHabitatformer extends GuiForestryTitled<ContainerHabitatformer> 
 
 		private void onButtonPressed() {
 			transformer.setCircular(!transformer.isCircular());
-			NetworkUtil.sendToServer(new PacketGuiSelectRequest(ContainerHabitatformer.REQUEST_ID_CIRCLE, transformer.isCircular() ? 1 : 0));
+			NetworkUtil.sendToServer(new PacketGuiSelectRequest(ContainerHabitatFormer.REQUEST_ID_CIRCLE, transformer.isCircular() ? 1 : 0));
 		}
 
 		@Override

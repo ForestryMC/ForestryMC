@@ -38,9 +38,9 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IHygroregulatorRecipe;
-import forestry.climatology.gui.ContainerHabitatformer;
-import forestry.climatology.gui.GuiHabitatformer;
-import forestry.climatology.inventory.InventoryHabitatformer;
+import forestry.climatology.gui.ContainerHabitatFormer;
+import forestry.climatology.gui.GuiHabitatFormer;
+import forestry.climatology.inventory.InventoryHabitatFormer;
 import forestry.core.climate.ClimateTransformer;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -56,7 +56,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.energy.EnergyManager;
 
-public class TileHabitatformer extends TilePowered implements IClimateHousing, IClimatised, ILiquidTankTile {
+public class TileHabitatFormer extends TilePowered implements IClimateHousing, IClimatised, ILiquidTankTile {
 	private static final String TRANSFORMER_KEY = "Transformer";
 
 	//The logic that handles the climate  changes.
@@ -65,10 +65,10 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 
-	public TileHabitatformer() {
+	public TileHabitatFormer() {
 		super(1200, 8000);
 		this.transformer = new ClimateTransformer(this);
-		setInternalInventory(new InventoryHabitatformer(this));
+		setInternalInventory(new InventoryHabitatFormer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
 		tankManager = new TankManager(this, resourceTank);
 		setTicksPerWorkCycle(10);
@@ -230,12 +230,12 @@ public class TileHabitatformer extends TilePowered implements IClimateHousing, I
 	@Override
 	@SideOnly(Side.CLIENT)
 	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiHabitatformer(player, this);
+		return new GuiHabitatFormer(player, this);
 	}
 
 	@Override
 	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerHabitatformer(player.inventory, this);
+		return new ContainerHabitatFormer(player.inventory, this);
 	}
 
 	@Override

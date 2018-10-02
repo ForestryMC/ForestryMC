@@ -22,8 +22,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
-import forestry.climatology.inventory.InventoryHabitatformer;
-import forestry.climatology.tiles.TileHabitatformer;
+import forestry.climatology.inventory.InventoryHabitatFormer;
+import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.gui.ContainerLiquidTanksHelper;
 import forestry.core.gui.ContainerTile;
@@ -32,7 +32,7 @@ import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 
-public class ContainerHabitatformer extends ContainerTile<TileHabitatformer> implements IContainerLiquidTanks, IGuiSelectable {
+public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> implements IContainerLiquidTanks, IGuiSelectable {
 
 	//Selection Request Ids
 	static final int REQUEST_ID_CIRCLE = 0;
@@ -46,13 +46,13 @@ public class ContainerHabitatformer extends ContainerTile<TileHabitatformer> imp
 	private boolean previousCircular;
 
 	//Container Helper
-	private final ContainerLiquidTanksHelper<TileHabitatformer> helper;
+	private final ContainerLiquidTanksHelper<TileHabitatFormer> helper;
 
-	public ContainerHabitatformer(InventoryPlayer playerInventory, TileHabitatformer tile) {
+	public ContainerHabitatFormer(InventoryPlayer playerInventory, TileHabitatFormer tile) {
 		super(tile, playerInventory, 8, 151);
 
 		this.helper = new ContainerLiquidTanksHelper<>(tile);
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryHabitatformer.SLOT_INPUT, 129, 38));
+		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryHabitatFormer.SLOT_INPUT, 129, 38));
 	}
 
 	@Override

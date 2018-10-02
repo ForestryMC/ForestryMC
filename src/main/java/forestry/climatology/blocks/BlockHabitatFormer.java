@@ -27,15 +27,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IModelManager;
-import forestry.climatology.tiles.TileHabitatformer;
+import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.render.MachineStateMapper;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileUtil;
 
-public class BlockHabitatformer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
-	public BlockHabitatformer() {
+public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
+	public BlockHabitatFormer() {
 		super(BlockTypeClimatology.HABITAT_FORMER);
 
 		setHardness(1.0f);
@@ -57,7 +57,7 @@ public class BlockHabitatformer extends BlockBase<BlockTypeClimatology> implemen
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		TileHabitatformer former = TileUtil.getTile(worldIn, pos, TileHabitatformer.class);
+		TileHabitatFormer former = TileUtil.getTile(worldIn, pos, TileHabitatFormer.class);
 		if (former != null) {
 			ParticleRender.addClimateParticles(worldIn, pos, rand, former.getTemperature(), former.getHumidity());
 		}
@@ -74,7 +74,7 @@ public class BlockHabitatformer extends BlockBase<BlockTypeClimatology> implemen
 		if (worldIn == null || pos == null) {
 			return 0x912237;
 		}
-		TileHabitatformer former = TileUtil.getTile(worldIn, pos, TileHabitatformer.class);
+		TileHabitatFormer former = TileUtil.getTile(worldIn, pos, TileHabitatFormer.class);
 		if (former != null) {
 			EnumTemperature temperature = former.getTemperature();
 			return temperature.color;

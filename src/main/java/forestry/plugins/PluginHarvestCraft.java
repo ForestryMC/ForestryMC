@@ -196,7 +196,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 		Fluid seedOil = Fluids.SEED_OIL.getFluid();
 		for (String berryName : berries) {
 			ItemStack berry = getItemStack(berryName + "item");
-			ItemStack berrySeed = getItemStack( berryName + "seeditem");
+			ItemStack berrySeed = getItemStack(berryName + "seeditem");
 			Block berryBlock = getBlock("pam" + berryName + "crop");
 			if (berry != null && juice != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, berry, new FluidStack(juice, juiceAmount));
@@ -355,7 +355,7 @@ public class PluginHarvestCraft extends CompatPlugin {
 			}
 		}
 
-		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemStack hcHoneyItem = getItemStack("honeyitem");
 			FluidStack honey = Fluids.FOR_HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			if (hcHoneyItem != null && honey != null) {
@@ -368,5 +368,4 @@ public class PluginHarvestCraft extends CompatPlugin {
 			}
 		}
 	}
-
 }

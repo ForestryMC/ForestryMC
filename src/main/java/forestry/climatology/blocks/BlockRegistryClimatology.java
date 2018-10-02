@@ -15,10 +15,10 @@ import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryClimatology extends BlockRegistry {
 
-	public final BlockHabitatformer habitatformer;
+	public final BlockHabitatFormer habitatformer;
 
 	public BlockRegistryClimatology() {
-		habitatformer = new BlockHabitatformer();
+		habitatformer = new BlockHabitatFormer();
 		registerBlock(habitatformer, new ItemBlockForestry<>(habitatformer), "habitatformer");
 	}
 

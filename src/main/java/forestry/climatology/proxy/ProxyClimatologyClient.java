@@ -21,8 +21,8 @@ import forestry.climatology.PreviewHandlerClient;
 public class ProxyClimatologyClient extends ProxyClimatology {
 
 	@Override
-	public void preInti() {
-		MinecraftForge.EVENT_BUS.register(PreviewHandlerClient.INSTANCE);
+	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(new PreviewHandlerClient());
 	}
 
 }
