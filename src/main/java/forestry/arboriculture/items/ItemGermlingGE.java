@@ -184,17 +184,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, x, y, z);
 
-			if (checkPollinatable == null) {
-				return false;
-			}
-
-			if (!checkPollinatable.canMateWith(tree)) {
+			if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
 				return false;
 			}
 
 			IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(player.getGameProfile(), world, x, y, z);
 
-			if (!pollinatable.canMateWith(tree)) {
+			if (pollinatable == null || !pollinatable.canMateWith(tree)) {
 				return false;
 			}
 
