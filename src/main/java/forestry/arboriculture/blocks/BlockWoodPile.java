@@ -210,7 +210,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 
 		BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos(pos);
 		testPos.move(facing);
-		while (!world.isAirBlock(testPos)) {
+		while (!world.isAirBlock(testPos) && world.isBlockLoaded(testPos)) {
 			testPos.move(facing);
 			IBlockState state = world.getBlockState(testPos);
 			for (ICharcoalPileWall wall : walls) {
