@@ -14,23 +14,18 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.IModelManager;
 import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IColoredBlock;
-import forestry.core.render.MachineStateMapper;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileUtil;
 
@@ -40,18 +35,6 @@ public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implemen
 
 		setHardness(1.0f);
 		setHarvestLevel("pickaxe", 0);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new MachineStateMapper<>(blockType, "habitatformer/"));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "habitatformer/base");
 	}
 
 	@SideOnly(Side.CLIENT)

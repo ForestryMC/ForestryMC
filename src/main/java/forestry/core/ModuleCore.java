@@ -310,14 +310,10 @@ public class ModuleCore extends BlankForestryModule {
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
-			RecipeManagers.carpenterManager.addRecipe(50, Fluids.BIOMASS.getFluid(500), ItemStack.EMPTY, items.craftingMaterial.getCamouflagedPaneling(8),
-					"Y#R", "BPB", "R#Y",
-					'#', OreDictUtil.PLANK_WOOD,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'P', OreDictUtil.PULP_WOOD,
-					'R', OreDictUtil.DYE_RED,
-					'B', OreDictUtil.DYE_BLUE,
-					'Y', OreDictUtil.DYE_YELLOW);
+			FluidStack biomass = Fluids.BIOMASS.getFluid(150);
+			if(biomass != null) {
+				RecipeManagers.squeezerManager.addRecipe(8, items.craftingMaterial.getCamouflagedPaneling(1), biomass);
+			}
 		} else {
 			// Portable ANALYZER
 			RecipeUtil.addRecipe("portable_alyzer", items.portableAlyzer.getItemStack(),
@@ -328,15 +324,10 @@ public class ModuleCore extends BlankForestryModule {
 					'X', OreDictUtil.INGOT_TIN,
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
-			// Camouflaged Paneling
-			RecipeUtil.addRecipe("camoflaged_paneling", items.craftingMaterial.getCamouflagedPaneling(8),
-					"WWW",
-					"YBR",
-					"WWW",
-					'W', OreDictUtil.PLANK_WOOD,
-					'Y', OreDictUtil.DYE_YELLOW,
-					'B', OreDictUtil.DYE_BLUE,
-					'R', OreDictUtil.DYE_RED);
+			if(Fluids.BIOMASS.getFluid() != null) {
+				RecipeUtil.addRecipe("camouflaged_paneling", ModuleFluids.getItems().getContainer(EnumContainerType.CAPSULE, Fluids.BIOMASS),
+					items.craftingMaterial.getCamouflagedPaneling(1));
+			}
 		}
 
 		// ANALYZER

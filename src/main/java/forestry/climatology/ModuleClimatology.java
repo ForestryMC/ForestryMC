@@ -17,12 +17,15 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraftforge.fml.common.SidedProxy;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.modules.ForestryModule;
+import forestry.api.recipes.RecipeManagers;
 import forestry.climatology.blocks.BlockRegistryClimatology;
 import forestry.climatology.items.ItemRegistryClimatology;
 import forestry.climatology.network.PacketRegistryClimatology;
@@ -42,8 +45,9 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
-@ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CLIMATOLOGY, name = "Greenhouse", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")
+@ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CLIMATOLOGY, name = "Climatology", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")
 public class ModuleClimatology extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
@@ -82,7 +86,7 @@ public class ModuleClimatology extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		TileUtil.registerTile(TileHabitatFormer.class, "habitatformer");
+		TileUtil.registerTile(TileHabitatFormer.class, "habitat_former");
 	}
 
 	@Override
@@ -90,7 +94,7 @@ public class ModuleClimatology extends BlankForestryModule {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryClimatology blockRegistry = getBlocks();
 
-		RecipeUtil.addRecipe("habitatformer", new ItemStack(blockRegistry.habitatformer),
+		RecipeUtil.addRecipe("habitat_former", new ItemStack(blockRegistry.habitatformer),
 			"GRG",
 			"TST",
 			"BCB",
@@ -100,6 +104,25 @@ public class ModuleClimatology extends BlankForestryModule {
 			'R', OreDictUtil.DUST_REDSTONE,
 			'C', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC),
 			'T', coreItems.tubes.get(EnumElectronTube.IRON, 1));
+		if(ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)){
+			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, getItems().habitatScreen.getItemStack(),
+				"IPI",
+				"IPI",
+				"GDG",
+				'G', OreDictUtil.GEAR_BRONZE,
+				'P', OreDictUtil.PANE_GLASS,
+				'I', OreDictUtil.INGOT_BRONZE,
+				'D', OreDictUtil.GEM_DIAMOND);
+		}else {
+			RecipeUtil.addRecipe("habitat_screen", getItems().habitatScreen.getItemStack(),
+				"IPI",
+				"IPI",
+				"GDG",
+				'G', OreDictUtil.GEAR_BRONZE,
+				'P', OreDictUtil.PANE_GLASS,
+				'I', OreDictUtil.INGOT_BRONZE,
+				'D', OreDictUtil.GEM_DIAMOND);
+		}
 	}
 
 	@Override

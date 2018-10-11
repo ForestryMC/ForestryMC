@@ -19,7 +19,7 @@ public class BlockRegistryClimatology extends BlockRegistry {
 
 	public BlockRegistryClimatology() {
 		habitatformer = new BlockHabitatFormer();
-		registerBlock(habitatformer, new ItemBlockForestry<>(habitatformer), "habitatformer");
+		registerBlock(habitatformer, new ItemBlockForestry<>(habitatformer), "habitat_former");
 	}
 
 }

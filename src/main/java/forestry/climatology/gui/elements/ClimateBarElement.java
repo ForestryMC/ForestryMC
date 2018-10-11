@@ -64,9 +64,9 @@ public class ClimateBarElement extends GuiElement {
 			IClimateState targetedState = transformer.getTarget();
 			IClimateState state = transformer.getCurrent();
 			IClimateState defaultState = transformer.getDefault();
-			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
-			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
-			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitatformer.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
+			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitat_former.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
+			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
+			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
 		});
 	}
 

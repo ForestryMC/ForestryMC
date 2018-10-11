@@ -27,7 +27,6 @@ import forestry.api.gui.events.ElementEvent;
 import forestry.climatology.gui.elements.ClimateBarElement;
 import forestry.climatology.gui.elements.HabitatSelectionElement;
 import forestry.climatology.gui.elements.SpeciesSelectionElement;
-import forestry.climatology.gui.ledgers.HabitatFormerLedger;
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.config.Constants;
@@ -77,21 +76,21 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		rangeBar = window.add(new ScrollBarElement(10, 17, 12, 58, SCROLLBAR_SLIDER))
 			.setParameters(this, 1, 16, 1);
 		rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
-			tooltip.add(Translator.translateToLocal("for.gui.habitatformer.climate.range"));
-			tooltip.add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.gui.habitatformer.climate.range.blocks", rangeBar.getValue()));
+			tooltip.add(Translator.translateToLocal("for.gui.habitat_former.climate.range"));
+			tooltip.add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()));
 		});
 		window.add(new CircleButton(30, 37));
 
 		selectionPage = window.pane(8, 86, 164, 56);
 		selectionPage.add(new SpeciesSelectionElement(135, 22, transformer));
-		selectionPage.label(Translator.translateToLocal("for.gui.habitatformer.climate.habitats"), GuiElementAlignment.TOP_CENTER).setLocation(17, 3);
+		selectionPage.label(Translator.translateToLocal("for.gui.habitat_former.climate.habitats"), GuiElementAlignment.TOP_CENTER).setLocation(17, 3);
 		selectionPage.add(new HabitatSelectionElement(67, 12, transformer));
-		selectionPage.label(Translator.translateToLocal("for.gui.habitatformer.climate.temperature"), GuiElementAlignment.TOP_CENTER).setLocation(-49, 5);
+		selectionPage.label(Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), GuiElementAlignment.TOP_CENTER).setLocation(-49, 5);
 		selectionPage.drawable(7, 15, TEMPERATURE_FIELD);
 		temperatureEdit = selectionPage.add(new TextEditElement(9, 17, 50, 10).setMaxLength(3));
 		temperatureEdit.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> setClimate(ClimateType.TEMPERATURE, temperatureEdit.getValue()));
 		selectionPage.drawable(7, 39, HUMIDITY_FIELD);
-		selectionPage.label(Translator.translateToLocal("for.gui.habitatformer.climate.humidity"), GuiElementAlignment.TOP_CENTER).setLocation(-49, 30);
+		selectionPage.label(Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), GuiElementAlignment.TOP_CENTER).setLocation(-49, 30);
 		humidityEdit = selectionPage.add(new TextEditElement(9, 41, 50, 10).setMaxLength(3));
 		humidityEdit.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> setClimate(ClimateType.HUMIDITY, humidityEdit.getValue()));
 	}
@@ -118,8 +117,8 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
-		drawCenteredString(Translator.translateToLocal("for.gui.habitatformer.climate.temperature"), xSize / 2, 23);
-		drawCenteredString(Translator.translateToLocal("for.gui.habitatformer.climate.humidity"), xSize / 2, 47);
+		drawCenteredString(Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), xSize / 2, 23);
+		drawCenteredString(Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), xSize / 2, 47);
 	}
 
 	private void drawCenteredString(String text, int x, int y) {
@@ -160,8 +159,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		addClimateLedger(tile);
 		addErrorLedger(tile);
 		addPowerLedger(tile.getEnergyManager());
-		addHintLedger("habitatformer");
-		ledgerManager.add(new HabitatFormerLedger(ledgerManager, tile.getTransformer()));
+		addHintLedger("habitat_former");
 	}
 
 	@Override
@@ -179,7 +177,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 
 		private CircleButton(int xPos, int yPos) {
 			super(xPos, yPos, 18, 18, CIRCLE_DISABLED_BUTTON, CIRCLE_ENABLED_BUTTON, button -> ((CircleButton) button).onButtonPressed());
-			addTooltip((tooltip, element, mouseX, mouseY) -> tooltip.add(Translator.translateToLocal("for.gui.habitatformer.climate.circle." + (transformer.isCircular() ? "enabled" : "disabled"))));
+			addTooltip((tooltip, element, mouseX, mouseY) -> tooltip.add(Translator.translateToLocal("for.gui.habitat_former.climate.circle." + (transformer.isCircular() ? "enabled" : "disabled"))));
 		}
 
 		private void onButtonPressed() {

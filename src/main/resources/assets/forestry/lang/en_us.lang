@@ -1124,7 +1124,7 @@ for.gui.book.categories=Categories
 for.gui.book.category.core.title=Core
 for.gui.book.category.lepidopterology.title=Lepidopterology
 for.gui.book.category.mail.title=Mail
-for.gui.book.category.habitatformer.title=Habitat Former
+for.gui.book.category.habitat_former.title=Habitat Former
 for.gui.book.category.beekeeping.title=Beekeeping
 for.gui.book.category.arboriculture.title=Arboriculture
 for.gui.book.category.farming.title=Farming
@@ -1448,30 +1448,27 @@ tile.for.climatiser.hygro.name=Greenhouse Hygroregulator
 ####################
 # CLIMATOLAGY
 ####################
-tile.for.habitatformer.name=Habitat Former
-tile.for.habitatformer_hygroregulator.name=Habitat Former Hygroregulator
-tile.for.habitatformer_heater.name=Habitat Former Heater
-tile.for.habitatformer_fan.name=Habitatformer Fan
+tile.for.habitat_former.name=Habitat Former
 
-item.for.habitat_screen.name=Portable Habitat Screen
+item.for.habitat_screen.name=Habitat Screen
 
-for.gui.habitatformer.climate.target=Targeted: %s
-for.gui.habitatformer.climate.value=Value: %s
-for.gui.habitatformer.climate.default=Default: %s
-for.gui.habitatformer.climate.temperature=Temperature
-for.gui.habitatformer.climate.humidity=Humidity
-for.gui.habitatformer.climate.habitats=Habitats
-for.gui.habitatformer.climate.selection=Selection
-for.gui.habitatformer.climate.range=Range
-for.gui.habitatformer.climate.range.blocks=%s Blocks
-for.gui.habitatformer.climate.circle.enabled=Circular Mode Enabled
-for.gui.habitatformer.climate.circle.disabled=Circular Mode Disabled
-for.gui.habitatformer.climate.preview.enabled=Preview Mode Enabled
-for.gui.habitatformer.climate.preview.disabled=Preview Mode Disabled
-for.gui.habitatformer=Habitat Former
-for.gui.habitatformer.range=Range
-for.gui.habitatformer.resources=Resources
-for.gui.habitatformer.speed=Speed
+for.gui.habitat_former.climate.target=Targeted: %s
+for.gui.habitat_former.climate.value=Value: %s
+for.gui.habitat_former.climate.default=Default: %s
+for.gui.habitat_former.climate.temperature=Temperature
+for.gui.habitat_former.climate.humidity=Humidity
+for.gui.habitat_former.climate.habitats=Habitats
+for.gui.habitat_former.climate.selection=Selection
+for.gui.habitat_former.climate.range=Range
+for.gui.habitat_former.climate.range.blocks=%s Blocks
+for.gui.habitat_former.climate.circle.enabled=Circular Mode Enabled
+for.gui.habitat_former.climate.circle.disabled=Circular Mode Disabled
+for.gui.habitat_former.climate.preview.enabled=Preview Mode Enabled
+for.gui.habitat_former.climate.preview.disabled=Preview Mode Disabled
+for.gui.habitat_former=Habitat Former
+for.gui.habitat_former.range=Range
+for.gui.habitat_former.resources=Resources
+for.gui.habitat_former.speed=Speed
 
 for.habitat_screen.mode.active=Preview Mode: Active
 for.habitat_screen.mode.inactive=Preview Mode: Inactive
