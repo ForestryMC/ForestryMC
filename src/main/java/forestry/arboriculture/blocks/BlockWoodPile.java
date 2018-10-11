@@ -201,7 +201,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		return charcoalAmount / 6;
+		return Math.min(charcoalAmount / 6, 15.0F);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing) {
@@ -210,7 +210,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 
 		BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos(pos);
 		testPos.move(facing);
-		while(!world.isAirBlock(testPos)) {
+		while (!world.isAirBlock(testPos) && world.isBlockLoaded(testPos)) {
 			testPos.move(facing);
 			IBlockState state = world.getBlockState(testPos);
 			for (ICharcoalPileWall wall : walls) {
@@ -219,7 +219,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 				}
 			}
 		}
-		return 1;
+		return 0;
 	}
 
 	@SideOnly(Side.CLIENT)
