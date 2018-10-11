@@ -31,6 +31,7 @@ public class ClimateHandlerServer {
 		BlockPos pos = player.getPosition();
 		IWorldClimateHolder worldClimateHolder = ClimateManager.climateRoot.getWorldClimate(world);
 		IClimateState climateState = worldClimateHolder.getState(pos);
+		tickHelper.onTick();
 		if (tickHelper.updateOnInterval(100) && !climateState.equals(previousState)) {
 			ClimateHandlerServer.previousState = climateState;
 			NetworkUtil.sendToPlayer(new PacketClimatePlayer(climateState), player);

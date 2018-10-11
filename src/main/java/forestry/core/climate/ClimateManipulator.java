@@ -25,10 +25,11 @@ public class ClimateManipulator implements IClimateManipulator {
 	private final ClimateType type;
 
 	private ClimateManipulator(IClimateState targetedState, IClimateState defaultState, IClimateState currentState, BiFunction<ClimateType, IClimateManipulator, Float> changeSupplier, Consumer<IClimateState> onFinish, boolean backwards, ClimateType type) {
+		IClimateState current = currentState.isPresent() ? currentState : defaultState;
 		this.targetedState = targetedState;
 		this.defaultState = defaultState;
-		this.currentState = currentState.copy(true);
-		this.startState = currentState;
+		this.currentState = current.copy(true);
+		this.startState = current;
 		this.changeSupplier = changeSupplier;
 		this.onFinish = onFinish;
 		this.backwards = backwards;

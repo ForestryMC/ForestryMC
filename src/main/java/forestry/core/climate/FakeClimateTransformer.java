@@ -54,6 +54,16 @@ public class FakeClimateTransformer implements IClimateTransformer {
 	}
 
 	@Override
+	public float getCostModifier() {
+		return 0.0F;
+	}
+
+	@Override
+	public float getSpeedModifier() {
+		return 0.0F;
+	}
+
+	@Override
 	public IClimateState getTarget() {
 		return ClimateStateHelper.INSTANCE.absent();
 	}

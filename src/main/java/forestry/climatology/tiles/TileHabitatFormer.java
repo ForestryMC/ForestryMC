@@ -42,7 +42,6 @@ import forestry.climatology.gui.ContainerHabitatFormer;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.inventory.InventoryHabitatFormer;
 import forestry.core.climate.ClimateTransformer;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -66,7 +65,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	private final TankManager tankManager;
 
 	public TileHabitatFormer() {
-		super(1200, 8000);
+		super(1200, 10000);
 		this.transformer = new ClimateTransformer(this);
 		setInternalInventory(new InventoryHabitatFormer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
@@ -181,28 +180,21 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (recipe == null) {
 			return 0;
 		}
-		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * getCostModifier() * recipe.getResource().amount);
+		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().amount);
 	}
 
 	private int getEnergyCost(IClimateState state) {
-		return Math.round((1.0F + MathHelper.abs(state.getTemperature())) * getCostModifier());
+		return Math.round((1.0F + MathHelper.abs(state.getTemperature())) * transformer.getCostModifier());
 	}
 
-	private float getCostModifier() {
-		return 1.0F + (transformer.getAreaModifier() * Config.habitatformerAreaCostModifier);
-	}
-
-	private float getSpeedModifier() {
-		return 1.0F + (transformer.getAreaModifier() * Config.habitatformerAreaSpeedModifier);
-	}
-
+	@Override
 	public float getChangeForState(ClimateType type, IClimateManipulator manipulator) {
 		if (type == ClimateType.HUMIDITY) {
 			FluidStack fluid = resourceTank.getFluid();
 			if (fluid != null) {
 				IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(fluid);
 				if (recipe != null) {
-					return recipe.getHumidChange() / getSpeedModifier();
+					return recipe.getHumidChange() / transformer.getSpeedModifier();
 				}
 			}
 		}
@@ -213,7 +205,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 				fluidChange = recipe.getTempChange();
 			}
 		}
-		return (0.05F + fluidChange) * 0.5F / getSpeedModifier();
+		return (0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
 	}
 
 	private IClimateState getClimateDifference() {

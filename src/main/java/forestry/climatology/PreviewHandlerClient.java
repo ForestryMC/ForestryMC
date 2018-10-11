@@ -49,17 +49,17 @@ public class PreviewHandlerClient {
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent tickEvent) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(player == null){
+		if (player == null) {
 			return;
 		}
 		World world = player.world;
 		tickHelper.onTick();
-		if(tickHelper.updateOnInterval(100)){
+		if (tickHelper.updateOnInterval(100)) {
 			ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-			if(stack.isEmpty()
+			if (stack.isEmpty()
 				|| stack.getItem() != ModuleClimatology.getItems().habitatScreen
 				|| !ItemHabitatScreen.isValid(stack, player.world)
-				|| !ItemHabitatScreen.isPreviewModeActive(stack)){
+				|| !ItemHabitatScreen.isPreviewModeActive(stack)) {
 				renderer.clearPreview();
 				return;
 			}
@@ -70,7 +70,7 @@ public class PreviewHandlerClient {
 				return;
 			}
 			IClimateTransformer transformer = TileUtil.getInterface(world, currentPos, ClimateCapabilities.CLIMATE_TRANSFORMER, null);
-			if(transformer == null){
+			if (transformer == null) {
 				renderer.clearPreview();
 				return;
 			}
@@ -83,7 +83,7 @@ public class PreviewHandlerClient {
 		renderer.clearPreview();
 	}
 
-	private class PreviewRenderer{
+	private class PreviewRenderer {
 		private final Set<BlockPos> previewPositions = new HashSet<>();
 		private final AxisAlignedBB boundingBox = Block.FULL_BLOCK_AABB.shrink(0.125F);
 		private boolean addedToBus = false;
@@ -113,13 +113,13 @@ public class PreviewHandlerClient {
 			previewOrigin = centerPosition;
 			this.range = range;
 			this.circular = circular;
-			if(!addedToBus){
+			if (!addedToBus) {
 				addedToBus = true;
 				MinecraftForge.EVENT_BUS.register(this);
 			}
 		}
 
-		public boolean isPreviewOrigin(BlockPos pos){
+		public boolean isPreviewOrigin(BlockPos pos) {
 			return pos.equals(previewOrigin);
 		}
 
@@ -145,7 +145,7 @@ public class PreviewHandlerClient {
 
 		@SubscribeEvent
 		public void onWorldRenderLast(RenderWorldLastEvent event) {
-			if(previewPositions.isEmpty()){
+			if (previewPositions.isEmpty()) {
 				return;
 			}
 			float partialTicks = event.getPartialTicks();

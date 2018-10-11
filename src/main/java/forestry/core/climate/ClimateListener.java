@@ -58,7 +58,6 @@ public class ClimateListener implements IClimateListener {
 		if (cachedState.isPresent() && tickHelper.updateOnInterval(20)) {
 			World worldObj = getWorldObj();
 			BlockPos coordinates = getCoordinates();
-			//ParticleRender.addClimateParticles(worldObj, coordinates, worldObj.rand, this);
 			ParticleRender.addTransformParticles(worldObj, coordinates, worldObj.rand);
 		}
 		if (needsClimateUpdate) {

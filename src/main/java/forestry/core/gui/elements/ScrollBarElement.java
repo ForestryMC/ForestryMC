@@ -30,6 +30,7 @@ public class ScrollBarElement extends ElementGroup {
 	private int minValue;
 	private int maxValue;
 	private int step;
+	private boolean initialised = false;
 
 	public ScrollBarElement(int xPos, int yPos, int width, int height, Drawable sliderTexture) {
 		super(xPos, yPos, width, height);
@@ -67,7 +68,9 @@ public class ScrollBarElement extends ElementGroup {
 		this.maxValue = maxValue;
 		this.step = step;
 
-		setValue(currentValue);
+		if(initialised) {
+			setValue(currentValue);
+		}
 		return this;
 	}
 
@@ -81,6 +84,7 @@ public class ScrollBarElement extends ElementGroup {
 	}
 
 	public ScrollBarElement setValue(int value) {
+		initialised = true;
 		currentValue = MathHelper.clamp(value, minValue, maxValue);
 		if (listener != null) {
 			listener.onScroll(currentValue);

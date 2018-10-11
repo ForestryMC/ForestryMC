@@ -17,10 +17,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+import com.mojang.realmsclient.dto.Backup;
+
 import forestry.api.climate.ClimateManager;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateManipulator;
 import forestry.api.climate.IClimateManipulatorBuilder;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
@@ -35,7 +36,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 
 	private static final String CURRENT_STATE_KEY = "Current";
 
-	private static final String BACKUP_KEY = "Backup";
 	private static final String STATE_KEY = "State";
 	private static final String TARGETED_STATE_KEY = "Target";
 	private static final String CIRCULAR_KEY = "Circular";
@@ -90,7 +90,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 			worldClimate.updateTransformer(this);
 			addedToWorld = true;
 		}
-		backup.update();
 	}
 
 	/* Climate Holders */
@@ -108,7 +107,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		nbt.setTag(TARGETED_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new NBTTagCompound(), targetedState));
 		nbt.setBoolean(CIRCULAR_KEY, circular);
 		nbt.setInteger(RANGE_KEY, range);
-		nbt.setTag(BACKUP_KEY, backup.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
 
@@ -118,7 +116,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		targetedState = ClimateManager.stateHelper.create(nbt.getCompoundTag(TARGETED_STATE_KEY));
 		circular = nbt.getBoolean(CIRCULAR_KEY);
 		range = nbt.getInteger(RANGE_KEY);
-		backup = new Backup(nbt.getCompoundTag(BACKUP_KEY));
+		onAreaChange(range, circular);
 	}
 
 	@Override
@@ -139,7 +137,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		data.writeClimateState(defaultState);
 		data.writeBoolean(circular);
 		data.writeVarInt(range);
-		backup.writeData(data);
+		onAreaChange(range, circular);
 	}
 
 	@Override
@@ -149,7 +147,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		defaultState = data.readClimateState();
 		circular = data.readBoolean();
 		range = data.readVarInt();
-		backup = new Backup(data);
 	}
 
 	@Override
@@ -163,7 +160,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		if(!state.equals(currentState)) {
 			this.currentState = state;
 			housing.markNetworkUpdate();
-			if(getWorldObj() != null) {
+			if(addedToWorld) {
 				IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
 				worldClimate.updateTransformer(this);
 			}
@@ -186,11 +183,12 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		return defaultState;
 	}
 
-	public void setCircular(boolean circular) {
-		if(this.circular != circular) {
-			this.circular = circular;
+	public void setCircular(boolean value) {
+		if(this.circular != value) {
+			this.circular = value;
+			onAreaChange(range, !value);
 			housing.markNetworkUpdate();
-			if (getWorldObj() != null) {
+			if (addedToWorld) {
 				IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
 				worldClimate.updateTransformer(this);
 			}
@@ -205,26 +203,61 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	@Override
 	public void setRange(int value) {
 		if(value != range) {
-			if(!backup.apply(value, circular)){
-				backup = new Backup(currentState, range, circular);
-			}
+			int oldRange = range;
 			this.range = MathHelper.clamp(value, 1, 16);
-			if (circular) {
-				this.area = Math.round(this.range * this.range * 2.0F * (float) Math.PI);
-			} else {
-				this.area = (range * 2 + 1) * (range * 2 + 1);
-			}
+			onAreaChange(oldRange, circular);
+			/*if(currentState.isPresent() && defaultState.isPresent()){
+				IClimateState delta = currentState.subtract(defaultState);
+				IClimateState scaledState = delta.multiply(getSpeedModifier());
+				if(!backup.apply2(value, circular)){
+					backup = new Backup(currentState, oldRange, circular);
+				}
+			}*/
 			housing.markNetworkUpdate();
-			if (getWorldObj() != null) {
+			if (addedToWorld) {
 				IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
 				worldClimate.updateTransformer(this);
 			}
 		}
 	}
 
+	private void onAreaChange(int range, boolean circular){
+		int prevArea = area;
+		this.area = computeArea(range, circular);
+		if(addedToWorld && area != prevArea) {
+			int areaDelta = Math.abs(area - prevArea);
+			float speedDelta = calculateSpeedModifier(areaDelta);
+			IClimateState deltaState = currentState.subtract(defaultState);
+			IClimateState scaledDelta = deltaState.multiply( area > prevArea ? (1.0F / speedDelta) : speedDelta);
+			setCurrent(scaledDelta.add(defaultState));
+		}
+	}
+
+	private static int computeArea(int range, boolean circular){
+		return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI) : (range * 2 + 1) * (range * 2 + 1);
+	}
+
 	@Override
 	public float getAreaModifier(){
-		return area / 36F;
+		return calculateAreaModifier(area);
+	}
+
+	@Override
+	public float getCostModifier() {
+		return 1.0F + (getAreaModifier() * Config.habitatformerAreaCostModifier);
+	}
+
+	@Override
+	public float getSpeedModifier() {
+		return calculateSpeedModifier(area);
+	}
+
+	private static float calculateSpeedModifier(float area){
+		return 1.0F + (calculateAreaModifier(area) * Config.habitatformerAreaSpeedModifier);
+	}
+
+	private static float calculateAreaModifier(float area){
+		return area / 36.0F;
 	}
 
 	@Override
@@ -245,76 +278,5 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	@Override
 	public World getWorldObj() {
 		return housing.getWorldObj();
-	}
-
-	private class Backup implements INbtWritable{
-		private final IClimateState state;
-		private final int range;
-		private final boolean circular;
-
-		public Backup(IClimateState state, int range, boolean circular) {
-			this.state = state.copy(true);
-			this.range = range;
-			this.circular = circular;
-		}
-
-		public Backup(NBTTagCompound compound) {
-			state = ClimateStateHelper.INSTANCE.create(compound.getCompoundTag(STATE_KEY), true);
-			range = compound.getInteger(RANGE_KEY);
-			circular = compound.getBoolean(CIRCULAR_KEY);
-		}
-
-		public Backup(PacketBufferForestry data) {
-			state = data.readClimateState();
-			range = data.readVarInt();
-			circular = data.readBoolean();
-		}
-
-		public Backup() {
-			state = ClimateStateHelper.INSTANCE.absent();
-			range = -1;
-			circular = false;
-		}
-
-		@Override
-		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-			nbt.setTag(STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new NBTTagCompound(), state));
-			nbt.setInteger(RANGE_KEY, range);
-			nbt.setBoolean(CIRCULAR_KEY, circular);
-			return nbt;
-		}
-
-		public void writeData(PacketBufferForestry data) {
-			data.writeClimateState(state);
-			data.writeVarInt(range);
-			data.writeBoolean(circular);
-		}
-
-		public boolean apply(int range, boolean circular){
-			if(!state.isPresent()){
-				return false;
-			}
-			if(range > this.range || !this.circular && circular){
-				backup = new Backup(state, range, circular);
-			}
-			if(range == this.range && circular == this.circular) {
-				setCurrent(state);
-			}
-			return true;
-		}
-
-		public void update(){
-			if(!state.isPresent()){
-				return;
-			}
-			for(ClimateType type : ClimateType.values()) {
-				IClimateManipulator manipulator = createManipulator(type)
-					.setCurrent(state)
-					.setOnFinish(climateState -> state.setClimate(type, climateState.getClimate(type)))
-					.setAllowBackwards().build();
-				manipulator.removeChange(false);
-				manipulator.finish();
-			}
-		}
 	}
 }

@@ -120,7 +120,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 		}
 		if (!world.isRemote) {
 			IClimateState state;
-			IClimateState climateState = ClimateRoot.getInstance().getTransformerState(world, pos);
+			IClimateState climateState = ClimateRoot.getInstance().getState(world, pos);
 			if (climateState.isPresent()) {
 				state = climateState;
 				if (!state.isPresent()) {

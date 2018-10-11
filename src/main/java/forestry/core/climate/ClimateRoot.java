@@ -50,7 +50,7 @@ public class ClimateRoot implements IClimateManager {
 	}
 
 	@Override
-	public IClimateState getTransformerState(World world, BlockPos pos) {
+	public IClimateState getState(World world, BlockPos pos) {
 		IWorldClimateHolder climateHolder = getWorldClimate(world);
 		return climateHolder.getState(pos);
 	}

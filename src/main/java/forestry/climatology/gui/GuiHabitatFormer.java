@@ -77,9 +77,9 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		rangeBar = window.add(new ScrollBarElement(10, 17, 12, 58, SCROLLBAR_SLIDER))
 			.setParameters(this, 1, 16, 1);
 		rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
-				tooltip.add(Translator.translateToLocal("for.gui.habitatformer.climate.range"));
-				tooltip.add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.gui.habitatformer.climate.range.blocks", rangeBar.getValue()));
-			});
+			tooltip.add(Translator.translateToLocal("for.gui.habitatformer.climate.range"));
+			tooltip.add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.gui.habitatformer.climate.range.blocks", rangeBar.getValue()));
+		});
 		window.add(new CircleButton(30, 37));
 
 		selectionPage = window.pane(8, 86, 164, 56);
@@ -95,6 +95,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		humidityEdit = selectionPage.add(new TextEditElement(9, 41, 50, 10).setMaxLength(3));
 		humidityEdit.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> setClimate(ClimateType.HUMIDITY, humidityEdit.getValue()));
 	}
+
 	@Override
 	public void updateScreen() {
 		super.updateScreen();

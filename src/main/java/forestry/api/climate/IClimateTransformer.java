@@ -18,12 +18,19 @@ import forestry.api.core.ILocatable;
  * the range or the circular state of the transformer.
  */
 public interface IClimateTransformer extends ILocatable {
+	/**
+	 * Updates the transformer and adds it to the world at the first time this method gets called.
+	 */
 	void update();
 
+	/**
+	 * Removes the transformer from the world. Called at the moment that the block that contains the transformer gets
+	 * removed / harvested.
+	 */
 	void removeTransformer();
 
 	/**
-	 * @return The parent of this container.
+	 * @return The parent of this transformer.
 	 */
 	IClimateHousing getHousing();
 
@@ -53,7 +60,26 @@ public interface IClimateTransformer extends ILocatable {
 	 */
 	int getArea();
 
+	/**
+	 * @return A modifier that is calculated with the help of the area size and is used by
+	 * {@link #getCostModifier()} and {@link #getSpeedModifier()} to multiply the cost and the speed based on the
+	 * size of the area that the transformer transforms.
+	 */
 	float getAreaModifier();
+
+	/**
+	 * @return A modifier that gets used to scale the cost of the habitat former based on the size of the area
+	 * it transforms.
+	 * @see #getAreaModifier()
+	 */
+	float getCostModifier();
+
+	/**
+	 * @return A modifier that gets used to scale the speed of the habitat former based on the size of the area
+	 * it transforms.
+	 * @see #getAreaModifier()
+	 */
+	float getSpeedModifier();
 
 	/**
 	 * @return The targeted state of this transformer.
@@ -62,7 +88,7 @@ public interface IClimateTransformer extends ILocatable {
 
 	/**
 	 * Sets the targeted state of this transformer.
-	 *
+	 * <p>
 	 * The state automatically gets clamped between 0.0F and 2.0F and transformed into a immutable {@link IClimateState}.
 	 */
 	void setTarget(IClimateState target);
@@ -74,7 +100,7 @@ public interface IClimateTransformer extends ILocatable {
 
 	/**
 	 * Sets the current value of the transformer.
-	 *
+	 * <p>
 	 * The state automatically gets clamped between 0.0F and 2.0F and transformed into a immutable {@link IClimateState}.
 	 */
 	void setCurrent(IClimateState state);

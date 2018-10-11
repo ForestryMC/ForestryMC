@@ -92,9 +92,6 @@ for.circuit.layout.farms.manual.usage=Manual Farms
 for.circuit.layout.machine.upgrade.name=Machine Upgrade
 for.circuit.layout.machine.upgrade.usage=Socketed Machines
 
-for.circuit.layout.habitatformer.name=Habitatformer
-for.circuit.layout.habitatformer.usage=Habitatformers
-
 for.flowers.cacti=Cacti
 for.flowers.end=End
 for.flowers.gourd=Gourds
@@ -1127,7 +1124,7 @@ for.gui.book.categories=Categories
 for.gui.book.category.core.title=Core
 for.gui.book.category.lepidopterology.title=Lepidopterology
 for.gui.book.category.mail.title=Mail
-for.gui.book.category.habitatformer.title=Habitatformer
+for.gui.book.category.habitatformer.title=Habitat Former
 for.gui.book.category.beekeeping.title=Beekeeping
 for.gui.book.category.arboriculture.title=Arboriculture
 for.gui.book.category.farming.title=Farming
@@ -1451,9 +1448,9 @@ tile.for.climatiser.hygro.name=Greenhouse Hygroregulator
 ####################
 # CLIMATOLAGY
 ####################
-tile.for.habitatformer.name=Habitatformer
-tile.for.habitatformer_hygroregulator.name=Habitatformer Hygroregulator
-tile.for.habitatformer_heater.name=Habitatformer Heater
+tile.for.habitatformer.name=Habitat Former
+tile.for.habitatformer_hygroregulator.name=Habitat Former Hygroregulator
+tile.for.habitatformer_heater.name=Habitat Former Heater
 tile.for.habitatformer_fan.name=Habitatformer Fan
 
 item.for.habitat_screen.name=Portable Habitat Screen
@@ -1471,7 +1468,7 @@ for.gui.habitatformer.climate.circle.enabled=Circular Mode Enabled
 for.gui.habitatformer.climate.circle.disabled=Circular Mode Disabled
 for.gui.habitatformer.climate.preview.enabled=Preview Mode Enabled
 for.gui.habitatformer.climate.preview.disabled=Preview Mode Disabled
-for.gui.habitatformer=Habitatformer
+for.gui.habitatformer=Habitat Former
 for.gui.habitatformer.range=Range
 for.gui.habitatformer.resources=Resources
 for.gui.habitatformer.speed=Speed
@@ -1488,12 +1485,12 @@ for.habitat_screen.status.nostate=No State Found
 for.hints.formergui.tag=Click and done!
 for.hints.formergui.desc=You can use the habitat buttons, the two climate bars in the upper center or the two text fields to change the targeted climate.
 for.hints.formerresources.tag=What do you need?
-for.hints.formerresources.desc=The habitatformer uses energy to alter its temperature. And fluids like lava, water or crushed ice to alter its humidity and a small amount of its temperature.
+for.hints.formerresources.desc=The habitat former uses energy to alter its temperature. And fluids like lava, water or crushed ice to alter its humidity and a small amount of its temperature.
 for.hints.formersettings.tag=Everything you want
 for.hints.formersettings.desc=Additional to the other options you can use the slot next to the habitat buttons to change the targeted climate to the preferred climate of a bee. Simply click with a bee on it.
 
 for.errors.wrong_resource.desc=Wrong Resource
-for.errors.wrong_resource.help=The habitatformer cannot reach the targeted humidity with the inserted fluid.
+for.errors.wrong_resource.help=The habitat former cannot reach the targeted humidity with the inserted fluid.
 ####################
 # LEPIDOPTEROLOGY
 ####################

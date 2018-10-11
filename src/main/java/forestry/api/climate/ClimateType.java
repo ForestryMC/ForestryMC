@@ -7,6 +7,9 @@ package forestry.api.climate;
 
 import java.util.Locale;
 
+/**
+ * This enum contains the two climate types that forestry uses.
+ */
 public enum ClimateType {
 	TEMPERATURE, HUMIDITY;
 
