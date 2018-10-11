@@ -12,7 +12,7 @@
 				]
 			},
 			{
-				"text": "The Still is a machine capable of refining Biomass into Biofuel, at a 10:3 ratio (for every 10 Biomass buckets processed you get 3 Biofuel buckets)."
+				"text": "The Still is a machine capable of refining Biomass into Ethanol, at a 10:3 ratio (for every 10 Biomass buckets processed you get 3 Ethanol buckets)."
 			}
 		], 
 		[
@@ -20,7 +20,7 @@
 				"text": "If you have Buildcraft installed, you can do the same process in a Refinery, for a 4:1 ratio."
 			},
 			{
-				"text": "Biofuel can then be used in the Bio Generator for generating EU for IndustrialCraft² machines, or as fuel for Buildcraft's Combustion Engine. It cannot be used as a fuel for the Biogas Engine!",
+				"text": "Ethanol can then be used in the Bio Generator for generating EU for IndustrialCraft² machines, or as fuel for Buildcraft's Combustion Engine. It cannot be used as a fuel for the Biogas Engine!",
 				"paragraph": true
 			},
 			{
