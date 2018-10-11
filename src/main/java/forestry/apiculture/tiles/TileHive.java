@@ -126,16 +126,15 @@ public class TileHive extends TileEntity implements ITickable, IHiveTile, IActiv
 			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
 				if (calmTime == 0) {
 					if (canWork) {
-						if (world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful) {
+						if (angry && ModuleApiculture.hiveDamageOnAttack && (world.getWorldInfo().getDifficulty() != EnumDifficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful)) {
 							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
 							List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox, beeTargetPredicate);
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								EntityLivingBase entity = entities.get(0);
-								if (entity.isInsideOfMaterial(Material.WATER) && !ModuleApiculture.hivesDamageUnderwater) {
-									return;
+								if ((entity instanceof EntityPlayer || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInsideOfMaterial(Material.WATER) || ModuleApiculture.hivesDamageUnderwater)) {
+									attack(entity, 2);
 								}
-								attack(entity, 2);
 							}
 						}
 						beeLogic.doWork();

@@ -13,10 +13,12 @@ package forestry.arboriculture;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
@@ -52,10 +54,12 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.Forestry;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
@@ -84,7 +88,6 @@ import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
-import forestry.api.arboriculture.IToolGrafter;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.models.WoodTextureManager;
@@ -99,6 +102,7 @@ import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.items.ItemRegistryCore;
@@ -115,6 +119,8 @@ import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
+
+	private static final String CONFIG_CATEGORY = "arboriculture";
 
 	@SuppressWarnings("NullableProblems")
 	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
@@ -265,6 +271,18 @@ public class ModuleArboriculture extends BlankForestryModule {
 					new VillagerArboristTrades.GivePollenForEmeralds(new EntityVillager.PriceInfo(5, 20), new EntityVillager.PriceInfo(1, 1), EnumGermlingType.SAPLING, 10)
 			);
 		}
+
+		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
+
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+		if (!Objects.equals(config.getLoadedConfigVersion(), config.getDefinedConfigVersion())) {
+			boolean deleted = configFile.delete();
+			if (deleted) {
+				config = new LocalizedConfiguration(configFile, "1.0.0");
+			}
+		}
+		TreeConfig.parse(config);
+		config.save();
 	}
 
 	@Override
@@ -550,9 +568,10 @@ public class ModuleArboriculture extends BlankForestryModule {
 			}
 			return true;
 		} else if (message.key.equals("blacklist-trees-dimension")) {
+			String treeUID = message.getNBTValue().getString("treeUID");
 			int[] dims = message.getNBTValue().getIntArray("dimensions");
 			for(int dim : dims) {
-				Config.blacklistTreeDim(dim);
+				TreeConfig.blacklistTreeDim(treeUID, dim);
 			}
 			return true;
 		}
