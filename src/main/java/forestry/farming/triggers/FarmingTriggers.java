@@ -13,8 +13,9 @@ package forestry.farming.triggers;
 import java.util.Arrays;
 import java.util.List;
 
-import buildcraft.api.statements.ITriggerExternal;
 import forestry.core.triggers.Trigger;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class FarmingTriggers {
 	public static Trigger lowResourceLiquid50;

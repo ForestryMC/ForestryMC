@@ -1,7 +1,5 @@
 package forestry.book.gui;
 
-import java.io.IOException;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;

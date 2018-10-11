@@ -1,25 +1,24 @@
-/*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
 package forestry.core.climate;
 
-import forestry.api.greenhouse.IClimateHousing;
-import forestry.greenhouse.api.climate.IClimateContainer;
-import forestry.greenhouse.api.climate.IClimateFactory;
-import forestry.greenhouse.climate.ClimateContainer;
+import forestry.api.climate.IClimateFactory;
+import forestry.api.climate.IClimateHousing;
+import forestry.api.climate.IClimateListener;
+import forestry.api.climate.IClimateTransformer;
+import forestry.api.core.ILocatable;
 
-public class ClimateFactory implements IClimateFactory{
+public class ClimateFactory implements IClimateFactory {
+	public static final IClimateFactory INSTANCE = new ClimateFactory();
 
-	@Override
-	public IClimateContainer createContainer(IClimateHousing climatedRegion) {
-		return new ClimateContainer(climatedRegion);
+	private ClimateFactory() {
 	}
 
+	@Override
+	public IClimateTransformer createTransformer(IClimateHousing housing) {
+		return new ClimateTransformer(housing);
+	}
+
+	@Override
+	public IClimateListener createListener(ILocatable locatable) {
+		return new ClimateListener(locatable);
+	}
 }

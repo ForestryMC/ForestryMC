@@ -43,7 +43,7 @@ public abstract class Ledger {
 	private static final ResourceLocation ledgerTextureRight = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger.png");
 	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger_left.png");
 
-	private final LedgerManager manager;
+	protected final LedgerManager manager;
 
 	private final int fontColorHeader;
 	private final int fontColorText;

@@ -55,6 +55,7 @@ public class TankElement extends GuiElement {
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
 		if (background != null) {
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(0, 0);
@@ -124,6 +125,7 @@ public class TankElement extends GuiElement {
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.disableAlpha();
 	}
 
 	@Override

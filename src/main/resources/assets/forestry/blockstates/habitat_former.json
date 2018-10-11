@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "forestry:habitat_former", "y": 180 },
+		"facing=east": { "model": "forestry:habitat_former", "y": -90 },
+		"facing=south": { "model": "forestry:habitat_former" },
+		"facing=west": { "model": "forestry:habitat_former", "y": 90 }
+	}
+}

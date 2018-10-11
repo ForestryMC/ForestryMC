@@ -1,11 +1,13 @@
 package forestry.energy.compat.mj;
 
-import buildcraft.api.mj.IMjConnector;
-import forestry.core.config.Constants;
-import forestry.energy.EnergyManager;
+import javax.annotation.Nonnull;
+
 import net.minecraftforge.fml.common.Optional;
 
-import javax.annotation.Nonnull;
+import forestry.core.config.Constants;
+import forestry.energy.EnergyManager;
+
+import buildcraft.api.mj.IMjConnector;
 
 @Optional.Interface(iface = "buildcraft.api.mj.IMjConnector", modid = Constants.BCLIB_MOD_ID)
 public class MjConnectorWrapper implements IMjConnector {

@@ -12,6 +12,15 @@ package forestry.factory.network.packets;
 
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
@@ -21,13 +30,6 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileUtil;
 import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileFabricator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketRecipeTransferUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;

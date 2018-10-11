@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import buildcraft.api.tools.IToolWrench;
-import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,7 +19,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.Optional;
+
+import forestry.core.config.Constants;
+
+import buildcraft.api.tools.IToolWrench;
 
 @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = Constants.BCLIB_MOD_ID)
 public class ItemWrench extends ItemForestry implements IToolWrench {

@@ -1,7 +1,6 @@
 package forestry.sorting.network.packets;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;

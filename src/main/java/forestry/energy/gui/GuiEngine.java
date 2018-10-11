@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import forestry.core.config.Config;
 import net.minecraft.inventory.Container;
 
+import forestry.core.config.Config;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManagerForestry;

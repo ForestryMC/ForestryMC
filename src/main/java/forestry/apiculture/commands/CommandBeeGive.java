@@ -16,6 +16,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -26,14 +34,6 @@ import forestry.api.genetics.IAllele;
 import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
-import forestry.core.commands.TemplateNotFoundException;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 
 public class CommandBeeGive extends SubCommand {
 

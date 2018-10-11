@@ -44,4 +44,8 @@ public class RecipeManagers {
 	 * Allows you to add smelting recipes to the fabricator. See {@link IFabricatorSmeltingManager} for details.
 	 */
 	public static IFabricatorSmeltingManager fabricatorSmeltingManager;
+	/**
+	 * Allows you to add recipes to the hygroregulator and habitatformer. See {@link IHygroregulatorManager} for details.
+	 */
+	public static IHygroregulatorManager hygroregulatorManager;
 }

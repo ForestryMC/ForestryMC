@@ -54,7 +54,6 @@ import forestry.core.owner.OwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.VectUtil;
 import forestry.cultivation.gui.ContainerPlanter;
@@ -494,13 +493,13 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getCoordinates();
-		return ClimateUtil.getTemperature(getWorldObj(), coords);
+		return world.getBiome(coords).getTemperature(coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getCoordinates();
-		return ClimateUtil.getHumidity(getWorldObj(), coords);
+		return world.getBiome(coords).getRainfall();
 	}
 
 	@Override

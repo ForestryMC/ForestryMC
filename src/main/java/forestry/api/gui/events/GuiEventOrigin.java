@@ -3,9 +3,13 @@ package forestry.api.gui.events;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 
+@SideOnly(Side.CLIENT)
 public enum GuiEventOrigin {
 	ANY{
 		@Override

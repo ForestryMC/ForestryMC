@@ -23,6 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.core.ClimateHandlerClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
@@ -44,6 +45,7 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandlerClient());
+		MinecraftForge.EVENT_BUS.register(new ClimateHandlerClient());
 	}
 	
 	@Override

@@ -3,8 +3,12 @@ package forestry.api.gui.events;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.gui.IGuiElement;
 
+@SideOnly(Side.CLIENT)
 public final class GuiEventHandler<E extends GuiElementEvent> implements Consumer<E> {
 	private final Consumer<E> handlerAction;
 	private final Class<? super E> eventClass;

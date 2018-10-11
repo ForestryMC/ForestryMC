@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
@@ -20,10 +24,6 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPacketClient {
 	private final String layoutUid;

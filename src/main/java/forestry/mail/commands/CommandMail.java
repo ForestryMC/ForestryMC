@@ -12,13 +12,6 @@
  */
 package forestry.mail.commands;
 
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.ITradeStationInfo;
-import forestry.api.mail.PostManager;
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.SubCommand;
-import forestry.core.utils.StringUtil;
-import forestry.mail.MailAddress;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +20,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
+import forestry.api.mail.PostManager;
+import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.SubCommand;
+import forestry.core.utils.StringUtil;
+import forestry.mail.MailAddress;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

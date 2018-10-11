@@ -1,14 +1,19 @@
 package forestry.core.render;
 
+import com.google.common.collect.Maps;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.Maps;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public abstract class ForestryStateMapper implements IStateMapper {
 
 	protected final Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();

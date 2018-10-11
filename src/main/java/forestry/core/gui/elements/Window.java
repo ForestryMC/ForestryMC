@@ -64,6 +64,11 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 				setFocusedElement(null);
 			}
 		});
+		this.addEventHandler(GuiEvent.DownEvent.class, event -> {
+			this.setDraggedElement(mousedOverElement, event.getButton());
+			this.setFocusedElement(mousedOverElement);
+		});
+		this.addEventHandler(GuiEvent.UpEvent.class, event -> setDraggedElement(null));
 	}
 
 	@Override
@@ -241,7 +246,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 
 	@Override
 	public List<String> getTooltip(int mouseX, int mouseY) {
-		List<String> tooltip = new ArrayList<>(getTooltip());
+		List<String> tooltip = new ArrayList<>();
 		Deque<IGuiElement> queue = this.calculateMousedOverElements();
 		while (!queue.isEmpty()) {
 			IGuiElement element = queue.removeFirst();
@@ -315,6 +320,11 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 	@Override
 	public int getGuiTop() {
 		return gui.getGuiTop();
+	}
+
+	@Override
+	public G getGui() {
+		return gui;
 	}
 
 	@Override

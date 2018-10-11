@@ -13,19 +13,21 @@ import net.minecraft.world.biome.Biome;
  * This enum concerns humidity.
  */
 public enum EnumHumidity {
-	ARID("Arid"),
-	NORMAL("Normal"),
+	ARID("Arid", 0xaad0db),
+	NORMAL("Normal", 0x4b7bff),
 	/**
 	 * matches {@link Biome#isHighHumidity()}
 	 */
-	DAMP("Damp");
+	DAMP("Damp", 0x6e56b3);
 
 	public static final EnumHumidity[] VALUES = values();
 	
 	public final String name;
+	public final int color;
 
-	EnumHumidity(String name) {
+	EnumHumidity(String name, int color) {
 		this.name = name;
+		this.color = color;
 	}
 
 	public String getName() {

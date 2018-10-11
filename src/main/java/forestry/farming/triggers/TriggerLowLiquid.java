@@ -12,13 +12,15 @@ package forestry.farming.triggers;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fluids.IFluidTank;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
 import forestry.core.fluids.ITankManager;
 import forestry.core.triggers.Trigger;
 import forestry.farming.tiles.TileFarmHatch;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerLowLiquid extends Trigger {
 

@@ -49,132 +49,132 @@ public class PluginHarvestCraft extends CompatPlugin {
 	public void registerRecipes() {
 		boolean farmingModuleEnabled = ModuleHelper.isEnabled(ForestryModuleUids.FARMING);
 		ImmutableList<String> berries = ImmutableList.of(
-				"cranberry",
-				"blackberry",
-				"blueberry",
-				"raspberry",
-				"strawberry"
+			"cranberry",
+			"blackberry",
+			"blueberry",
+			"raspberry",
+			"strawberry"
 		);
 
 		ImmutableList<String> fruits = ImmutableList.of(
-				"pineapple",
-				"cactusfruit",
-				"cantaloupe",
-				"grape",
-				"kiwi",
-				"chilipepper"
+			"pineapple",
+			"cactusfruit",
+			"cantaloupe",
+			"grape",
+			"kiwi",
+			"chilipepper"
 		);
 
 		ImmutableList<String> treeFruits = ImmutableList.of(
-				"banana",
-				"dragonfruit",
-				"lemon",
-				"lime",
-				"mango",
-				"orange",
-				"papaya",
-				"peach",
-				"pear",
-				"plum",
-				"pomegranate",
-				"starfruit",
-				"apricot",
-				"date",
-				"fig",
-				"grapefruit",
-				"persimmon",
-				"avocado",
-				"coconut",
-				"durian"
+			"banana",
+			"dragonfruit",
+			"lemon",
+			"lime",
+			"mango",
+			"orange",
+			"papaya",
+			"peach",
+			"pear",
+			"plum",
+			"pomegranate",
+			"starfruit",
+			"apricot",
+			"date",
+			"fig",
+			"grapefruit",
+			"persimmon",
+			"avocado",
+			"coconut",
+			"durian"
 		);
 
 		ImmutableList<String> trees = ImmutableList.of(
-				"nutmeg",
-				"olive",
-				"peppercorn"
+			"nutmeg",
+			"olive",
+			"peppercorn"
 		);
 
 		ImmutableList<String> treesSpecial = ImmutableList.of(
-				"cinnamon",
-				"maple",
-				"paperbark",
-				"vanillabean",
-				"apple" // to prevent apples from getting double registered
+			"cinnamon",
+			"maple",
+			"paperbark",
+			"vanillabean",
+			"apple" // to prevent apples from getting double registered
 		);
 
 		ImmutableList<String> herbs = ImmutableList.of(
-				"garlic"
+			"garlic"
 		);
 
 		ImmutableList<String> spices = ImmutableList.of(
-				"ginger",
-				"spiceleaf"
-				//"mustardseed" Mustard is inconsistent and annoying.
+			"ginger",
+			"spiceleaf"
+			//"mustardseed" Mustard is inconsistent and annoying.
 		);
 
 		ImmutableList<String> vegetables = ImmutableList.of(
-				"asparagus",
-				"bean",
-				"beet",
-				"broccoli",
-				"cauliflower",
-				"celery",
-				"leek",
-				"lettuce",
-				"onion",
-				"parsnip",
-				"radish",
-				"rutabaga",
-				"scallion",
-				"soybean",
-				"sweetpotato",
-				"turnip",
-				"whitemushroom",
-				"artichoke",
-				"bellpepper",
-				"brusselsprout",
-				"cabbage",
-				"corn",
-				"cucumber",
-				"eggplant",
-				"okra",
-				"peas",
-				"rhubarb",
-				"seaweed",
-				"tomato",
-				"wintersquash",
-				"zucchini",
-				"bambooshoot",
-				"spinach"
+			"asparagus",
+			"bean",
+			"beet",
+			"broccoli",
+			"cauliflower",
+			"celery",
+			"leek",
+			"lettuce",
+			"onion",
+			"parsnip",
+			"radish",
+			"rutabaga",
+			"scallion",
+			"soybean",
+			"sweetpotato",
+			"turnip",
+			"whitemushroom",
+			"artichoke",
+			"bellpepper",
+			"brusselsprout",
+			"cabbage",
+			"corn",
+			"cucumber",
+			"eggplant",
+			"okra",
+			"peas",
+			"rhubarb",
+			"seaweed",
+			"tomato",
+			"wintersquash",
+			"zucchini",
+			"bambooshoot",
+			"spinach"
 		);
 
 		ImmutableList<String> grains = ImmutableList.of(
-				"barley",
-				"oats",
-				"rye"
+			"barley",
+			"oats",
+			"rye"
 		);
 
 		ImmutableList<String> cropNuts = ImmutableList.of(
-				"peanut"
+			"peanut"
 		);
 
 		ImmutableList<String> nuts = ImmutableList.of(
-				"walnut",
-				"almond",
-				"cashew",
-				"chestnut",
-				"pecan",
-				"pistachio",
-				"cherry" //Cherries in forestry make seed oil
+			"walnut",
+			"almond",
+			"cashew",
+			"chestnut",
+			"pecan",
+			"pistachio",
+			"cherry" //Cherries in forestry make seed oil
 		);
 
 		ImmutableList.Builder<String> genericCropsBuilder = ImmutableList.builder();
 		genericCropsBuilder.add(
-				"cotton",
-				"rice",
-				"tealeaf",
-				"coffeebean",
-				"candleberry"
+			"cotton",
+			"rice",
+			"tealeaf",
+			"coffeebean",
+			"candleberry"
 		);
 		genericCropsBuilder.addAll(herbs);
 		genericCropsBuilder.addAll(spices);
@@ -368,5 +368,4 @@ public class PluginHarvestCraft extends CompatPlugin {
 			}
 		}
 	}
-
 }

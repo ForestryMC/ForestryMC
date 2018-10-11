@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;

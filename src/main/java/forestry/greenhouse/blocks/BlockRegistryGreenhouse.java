@@ -22,15 +22,15 @@ public class BlockRegistryGreenhouse extends BlockRegistry {
 
 	public BlockRegistryGreenhouse() {
 		greenhouseBlock = new BlockGreenhouse();
-		registerBlock(greenhouseBlock, new ItemBlockForestry(greenhouseBlock), "greenhouse");
+		registerBlock(greenhouseBlock, new ItemBlockForestry<>(greenhouseBlock), "greenhouse");
 		climatiserBlock = new BlockClimatiser();
-		registerBlock(climatiserBlock, new ItemBlockForestry(climatiserBlock), "climatiser");
+		registerBlock(climatiserBlock, new ItemBlockForestry<>(climatiserBlock), "climatiser");
 
-		window = new BlockGreenhouseWindow(false);
-		registerBlock(window, new ItemBlockForestry(window), "greenhouse.window");
+		window = new BlockGreenhouseWindow();
+		registerBlock(window, new ItemBlockForestry<>(window), "greenhouse.window");
 
-		roofWindow = new BlockGreenhouseWindow(true);
-		registerBlock(roofWindow, new ItemBlockForestry(roofWindow), "greenhouse.window_up");
+		roofWindow = new BlockGreenhouseWindow();
+		registerBlock(roofWindow, new ItemBlockForestry<>(roofWindow), "greenhouse.window_up");
 	}
 
 }

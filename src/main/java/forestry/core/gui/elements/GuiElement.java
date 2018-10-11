@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IGuiElement;
+import forestry.api.gui.ITooltipSupplier;
 import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.ElementEvent;
 import forestry.api.gui.events.GuiElementEvent;
@@ -29,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 public class GuiElement extends Gui implements IGuiElement {
 	/* Attributes - Final */
 	//Tooltip of the element
-	protected final List<String> tooltip = new ArrayList<>();
+	private final List<ITooltipSupplier> tooltipSuppliers = new ArrayList<>();
 	//Event handler of this element
 	private final Collection<Consumer<? extends GuiElementEvent>> eventHandlers = new ArrayList<>();
 	/* Attributes - State*/
@@ -259,9 +260,7 @@ public class GuiElement extends Gui implements IGuiElement {
 		if(!isVisible()){
 			return false;
 		}
-		int x = getX();
-		int y = getY();
-		return mouseX >= 0 && mouseX <= getWidth() + 0 && mouseY >= 0 && mouseY <= getHeight() + 0;
+		return mouseX >= 0 && mouseX < getWidth() && mouseY >= 0 && mouseY < getHeight();
 	}
 
 	@Override
@@ -298,7 +297,7 @@ public class GuiElement extends Gui implements IGuiElement {
 
 	@Override
 	public boolean isVisible() {
-		return visible;
+		return visible && (parent == null || parent.isVisible());
 	}
 
 	@Override
@@ -330,34 +329,46 @@ public class GuiElement extends Gui implements IGuiElement {
 
 	@Override
 	public List<String> getTooltip(int mouseX, int mouseY) {
-		return tooltip;
+		List<String> lines = new ArrayList<>();
+		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
+		return lines;
 	}
 
 	@Override
 	public IGuiElement addTooltip(String line) {
-		tooltip.add(line);
+		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.add(line));
 		return this;
 	}
 
 	@Override
 	public IGuiElement addTooltip(Collection<String> lines) {
-		tooltip.addAll(lines);
+		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.addAll(lines));
+		return this;
+	}
+
+	@Override
+	public IGuiElement addTooltip(ITooltipSupplier supplier) {
+		tooltipSuppliers.add(supplier);
 		return this;
 	}
 
 	@Override
 	public boolean hasTooltip() {
-		return !tooltip.isEmpty();
+		return !tooltipSuppliers.isEmpty();
 	}
 
 	@Override
 	public void clearTooltip() {
-		tooltip.clear();
+		tooltipSuppliers.clear();
 	}
 
 	@Override
 	public List<String> getTooltip() {
-		return tooltip;
+		int mouseX = getWindow().getRelativeMouseX(this);
+		int mouseY = getWindow().getRelativeMouseY(this);
+		List<String> lines = new ArrayList<>();
+		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
+		return lines;
 	}
 
 	/* Events */

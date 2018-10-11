@@ -10,17 +10,30 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.climate.ClimateManager;
 import forestry.api.climate.IClimateControlled;
+import forestry.api.climate.IClimateListener;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -36,21 +49,12 @@ import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
+	private final IClimateListener listener;
 
 	private float tempChange = 0.0f;
 	private float humidChange = 0.0f;
@@ -68,6 +72,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		super(world, AlvearyMultiblockSizeLimits.instance);
 		this.inventory = new InventoryBeeHousing(9);
 		this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
+		this.listener = ClimateManager.climateFactory.createListener(this);
 
 		this.beeModifiers.add(new AlvearyBeeModifier());
 	}
@@ -89,6 +94,11 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		} else {
 			return FakeInventoryAdapter.instance();
 		}
+	}
+
+	@Override
+	public IClimateListener getClimateListener() {
+		return listener;
 	}
 
 	@Override
@@ -283,6 +293,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
 			}
 		}
+		listener.updateClientSide(false);
 	}
 
 	@Override
@@ -336,14 +347,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public float getExactTemperature() {
-		BlockPos coords = getReferenceCoord();
-		return ClimateUtil.getTemperature(getWorldObj(), coords) + tempChange;
+		return listener.getExactTemperature() + tempChange;
 	}
 
 	@Override
 	public float getExactHumidity() {
-		BlockPos coords = getReferenceCoord();
-		return ClimateUtil.getHumidity(getWorldObj(), coords) + humidChange;
+		return listener.getExactHumidity() + humidChange;
 	}
 
 	@Override
@@ -400,7 +409,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		float temperature = ClimateUtil.getTemperature(world, getReferenceCoord());
+		float temperature = listener.getExactTemperature();
 
 		tempChange += change;
 		tempChange = Math.max(boundaryDown - temperature, tempChange);
@@ -409,7 +418,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
-		float humidity = ClimateUtil.getHumidity(world, getReferenceCoord());
+		float humidity = listener.getExactHumidity();
 
 		humidChange += change;
 		humidChange = Math.max(boundaryDown - humidity, humidChange);

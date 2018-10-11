@@ -31,8 +31,8 @@ import forestry.database.tiles.TileDatabase;
 
 public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implements IScrollable {
 	/* Attributes - Constants */
-	private static ResourceLocation CREATIVE_TABS = new ResourceLocation(Constants.TEXTURE_PATH_GUI + "/container/creative_inventory/tabs.png");
-	private static Drawable SCROLLBAR_SLIDER = new Drawable(CREATIVE_TABS, 232, 0, 12, 15);
+	private static final ResourceLocation CREATIVE_TABS = new ResourceLocation(Constants.TEXTURE_PATH_GUI + "/container/creative_inventory/tabs.png");
+	private static final Drawable SCROLLBAR_SLIDER = new Drawable(CREATIVE_TABS, 232, 0, 12, 15);
 	/*  Attributes - Final */
 	public final TileDatabase tile;
 	private final ArrayList<WidgetDatabaseSlot> slots;

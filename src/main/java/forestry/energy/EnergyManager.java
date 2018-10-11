@@ -1,10 +1,15 @@
 package forestry.energy;
 
-import buildcraft.api.mj.IMjConnector;
-import buildcraft.api.mj.IMjPassiveProvider;
-import buildcraft.api.mj.IMjReadable;
-import buildcraft.api.mj.IMjReceiver;
-import buildcraft.api.mj.IMjRedstoneReceiver;
+import javax.annotation.Nullable;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.config.Config;
@@ -21,18 +26,15 @@ import forestry.energy.compat.tesla.TeslaConsumerWrapper;
 import forestry.energy.compat.tesla.TeslaHelper;
 import forestry.energy.compat.tesla.TeslaHolderWrapper;
 import forestry.energy.compat.tesla.TeslaProducerWrapper;
+
+import buildcraft.api.mj.IMjConnector;
+import buildcraft.api.mj.IMjPassiveProvider;
+import buildcraft.api.mj.IMjReadable;
+import buildcraft.api.mj.IMjReceiver;
+import buildcraft.api.mj.IMjRedstoneReceiver;
 import net.darkhax.tesla.api.ITeslaConsumer;
 import net.darkhax.tesla.api.ITeslaHolder;
 import net.darkhax.tesla.api.ITeslaProducer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
 
 public class EnergyManager extends EnergyStorage implements IStreamable, INbtReadable, INbtWritable {
 	private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;

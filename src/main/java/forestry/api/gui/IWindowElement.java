@@ -3,6 +3,7 @@ package forestry.api.gui;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,6 +58,8 @@ public interface IWindowElement extends IElementGroup {
 	int getGuiLeft();
 
 	int getGuiTop();
+
+	GuiScreen getGui();
 
 	TextureManager getTextureManager();
 

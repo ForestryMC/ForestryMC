@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Stack;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -21,18 +27,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Stack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitBoard;
@@ -53,6 +52,8 @@ import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;

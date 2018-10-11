@@ -1,10 +1,11 @@
 package forestry.energy.compat.mj;
 
-import buildcraft.api.mj.IMjReceiver;
-import forestry.core.config.Constants;
-import forestry.energy.EnergyManager;
 import net.minecraftforge.fml.common.Optional;
 
+import forestry.core.config.Constants;
+import forestry.energy.EnergyManager;
+
+import buildcraft.api.mj.IMjReceiver;
 import static java.lang.Math.min;
 
 @Optional.Interface(iface = "buildcraft.api.mj.IMjReceiver", modid = Constants.BCLIB_MOD_ID)

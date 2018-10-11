@@ -12,7 +12,6 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 
-import forestry.api.core.ForestryAPI;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +19,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+
+import forestry.api.core.ForestryAPI;
 
 public abstract class EntityUtil {
 	@Nullable

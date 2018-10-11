@@ -11,7 +11,6 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
@@ -61,7 +60,6 @@ import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
@@ -545,12 +543,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(world.getBiome(pos), world, pos);
+		return EnumTemperature.getFromBiome(getBiome(), pos);
 	}
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
+		return EnumHumidity.getFromValue(getBiome().getRainfall());
 	}
 
 

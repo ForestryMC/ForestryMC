@@ -10,13 +10,19 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.common.Optional;
-
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.fml.common.Optional;
+
+import forestry.api.modules.ForestryModule;
+import forestry.core.config.Constants;
+import forestry.core.utils.ModUtil;
+import forestry.modules.BlankForestryModule;
+import forestry.modules.ForestryModuleUids;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -24,11 +30,6 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerInternalSided;
 import buildcraft.api.statements.ITriggerProvider;
 import buildcraft.api.statements.StatementManager;
-import forestry.api.modules.ForestryModule;
-import forestry.core.config.Constants;
-import forestry.core.utils.ModUtil;
-import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = ForestryCompatPlugins.ID, moduleID = ForestryModuleUids.BUILDCRAFT_STATEMENTS, name = "BuildCraft 6 Statements", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.buildcraft6.description")
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)

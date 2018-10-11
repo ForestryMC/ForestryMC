@@ -40,7 +40,6 @@ public class ProxyCommon {
 	}
 	
 	public void registerEventHandlers(){
-		
 	}
 
 	public File getForestryRoot() {
