@@ -214,6 +214,16 @@ public class ClimateListener implements IClimateListener {
 		return this.world;
 	}
 
+	@Override
+	public void markLocatableDirty() {
+		this.world = null;
+		this.pos = null;
+		World worldObj = getWorldObj();
+		if (!worldObj.isRemote) {
+			updateState(true);
+		}
+	}
+
 	private void initLocation() {
 		if ((this.locationProvider instanceof ILocatable)) {
 			ILocatable provider = (ILocatable) this.locationProvider;

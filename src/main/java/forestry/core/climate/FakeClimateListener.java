@@ -83,4 +83,8 @@ public class FakeClimateListener implements IClimateListener {
 	public World getWorldObj() {
 		return null;
 	}
+
+	@Override
+	public void markLocatableDirty() {
+	}
 }

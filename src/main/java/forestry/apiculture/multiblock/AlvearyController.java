@@ -54,8 +54,8 @@ import forestry.core.utils.Translator;
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
+	private final IClimateListener listener;
 
-	private IClimateListener listener;
 	private float tempChange = 0.0f;
 	private float humidChange = 0.0f;
 
@@ -94,6 +94,11 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		} else {
 			return FakeInventoryAdapter.instance();
 		}
+	}
+
+	@Override
+	public IClimateListener getClimateListener() {
+		return listener;
 	}
 
 	@Override
@@ -347,7 +352,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public float getExactHumidity() {
-		return listener.getExactTemperature() + humidChange;
+		return listener.getExactHumidity() + humidChange;
 	}
 
 	@Override

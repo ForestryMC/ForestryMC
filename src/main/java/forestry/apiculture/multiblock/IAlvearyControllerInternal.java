@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import forestry.api.climate.IClimateListener;
 import forestry.api.multiblock.IAlvearyController;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.IMultiblockControllerInternal;
@@ -19,6 +20,8 @@ import forestry.core.tiles.IClimatised;
 
 public interface IAlvearyControllerInternal extends IAlvearyController, IMultiblockControllerInternal, IClimatised, IOwnedTile, IStreamableGui {
 	IInventoryAdapter getInternalInventory();
+
+	IClimateListener getClimateListener();
 
 	int getHealthScaled(int i);
 }

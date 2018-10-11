@@ -61,4 +61,6 @@ public interface IClimateListener extends ILocatable, IClimateProvider {
 	 * Sends a packet to the given players.
 	 */
 	void syncToClient(EntityPlayerMP player);
+
+	void markLocatableDirty();
 }
