@@ -53,12 +53,14 @@ public class ClimateListener implements IClimateListener {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void updateClientSide() {
-		tickHelper.onTick();
-		if (cachedState.isPresent() && tickHelper.updateOnInterval(20)) {
-			World worldObj = getWorldObj();
-			BlockPos coordinates = getCoordinates();
-			ParticleRender.addTransformParticles(worldObj, coordinates, worldObj.rand);
+	public void updateClientSide(boolean spawnParticles) {
+		if(spawnParticles) {
+			tickHelper.onTick();
+			if (cachedState.isPresent() && tickHelper.updateOnInterval(20)) {
+				World worldObj = getWorldObj();
+				BlockPos coordinates = getCoordinates();
+				ParticleRender.addTransformParticles(worldObj, coordinates, worldObj.rand);
+			}
 		}
 		if (needsClimateUpdate) {
 			if (locationProvider instanceof Entity) {

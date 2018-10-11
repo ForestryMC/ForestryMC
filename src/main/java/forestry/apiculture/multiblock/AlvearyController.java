@@ -31,7 +31,9 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.climate.ClimateManager;
 import forestry.api.climate.IClimateControlled;
+import forestry.api.climate.IClimateListener;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -53,6 +55,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 
+	private IClimateListener listener;
 	private float tempChange = 0.0f;
 	private float humidChange = 0.0f;
 
@@ -69,6 +72,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		super(world, AlvearyMultiblockSizeLimits.instance);
 		this.inventory = new InventoryBeeHousing(9);
 		this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
+		this.listener = ClimateManager.climateFactory.createListener(this);
 
 		this.beeModifiers.add(new AlvearyBeeModifier());
 	}
@@ -284,6 +288,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
 			}
 		}
+		listener.updateClientSide(false);
 	}
 
 	@Override
@@ -337,13 +342,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public float getExactTemperature() {
-		BlockPos coords = getReferenceCoord();
-		return getBiome().getTemperature(coords) + tempChange;
+		return listener.getExactTemperature() + tempChange;
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return getBiome().getRainfall() + humidChange;
+		return listener.getExactTemperature() + humidChange;
 	}
 
 	@Override
@@ -400,7 +404,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		float temperature = getBiome().getTemperature(getReferenceCoord());
+		float temperature = listener.getExactTemperature();
 
 		tempChange += change;
 		tempChange = Math.max(boundaryDown - temperature, tempChange);
@@ -409,7 +413,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 
 	@Override
 	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
-		float humidity = getBiome().getRainfall();
+		float humidity = listener.getExactHumidity();
 
 		humidChange += change;
 		humidChange = Math.max(boundaryDown - humidity, humidChange);

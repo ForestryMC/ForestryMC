@@ -152,7 +152,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 				doPollenFX(world, getPos().getX(), getPos().getY(), getPos().getZ());
 			}
 		}
-		climateListener.updateClientSide();
+		climateListener.updateClientSide(true);
 	}
 
 	@SideOnly(Side.CLIENT)

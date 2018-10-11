@@ -40,9 +40,11 @@ public interface IClimateListener extends ILocatable, IClimateProvider {
 
 	/**
 	 * Updates the listener on the client side.
+	 *
+	 * @param spawnParticles If the listener should spawn particles around its location.
 	 */
 	@SideOnly(Side.CLIENT)
-	void updateClientSide();
+	void updateClientSide(boolean spawnParticles);
 
 	/**
 	 * Sets the cached state to the given state.

@@ -28,7 +28,7 @@ public class FakeClimateListener implements IClimateListener {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void updateClientSide() {
+	public void updateClientSide(boolean spawnParticles) {
 
 	}
 
