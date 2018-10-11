@@ -93,10 +93,6 @@ public class Config {
 	public static boolean enableVillagers = true;
 	public static boolean generateTrees = true;
 	public static float generateTreesAmount = 1.0F;
-	public static Set<Integer> blacklistedTreeDims = new HashSet<>();
-	public static Set<Integer> whitelistedTreeDims = new HashSet<>();
-	public static Set<BiomeDictionary.Type> blacklistedTreeTypes = new HashSet<>();
-	public static Set<Biome> blacklistedTreeBiomes = new HashSet<>();
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -182,14 +178,6 @@ public class Config {
 		return enableMagicalCropsSupport;
 	}
 
-	public static void blacklistTreeDim(int dimID) {
-		blacklistedTreeDims.add(dimID);
-	}
-
-	public static void whitelistTreeDim(int dimID) {
-		whitelistedTreeDims.add(dimID);
-	}
-
 	public static void blacklistOreDim(int dimID) {
 		blacklistedOreDims.add(dimID);
 	}
@@ -203,20 +191,6 @@ public class Config {
 			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
 		}
 		return false;
-	}
-
-	public static boolean isValidTreeDim(int dimID) {        //blacklist has priority
-		if (blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
-			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
-		}
-		return false;
-	}
-
-	public static boolean isValidTreeBiome(Biome biome) {
-		if (blacklistedTreeBiomes.contains(biome)) {
-			return false;
-		}
-		return !BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
 	}
 
 	public static void load(Side side) {
@@ -299,23 +273,6 @@ public class Config {
 		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
 
 		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "treeFrequency", generateTreesAmount, 0.0F, 10.0F);
-
-		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedTreeDims.add(dimId);
-		}
-		for (int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedTreeDims.add(dimId);
-		}
-		for (String entry : configCommon.get("world.generate.trees", "biomeblacklist", new String[0]).getStringList()) {
-			BiomeDictionary.Type type = BiomeDictionary.Type.getType(entry);
-			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
-			if (type != null) {
-				blacklistedTreeTypes.add(type);
-			} else if (biome != null) {
-				blacklistedTreeBiomes.add(biome);
-			}
-		}
-
 
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
 		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);

@@ -39,6 +39,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.arboriculture.TreeConfig;
 import forestry.arboriculture.commands.TreeGenHelper;
 import forestry.core.config.Config;
 import forestry.core.utils.BlockUtil;
@@ -55,7 +56,7 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
-		if (!Config.isValidTreeDim(world.provider.getDimension()) || Config.generateTreesAmount == 0) {
+		if (Config.generateTreesAmount == 0 || !TreeConfig.isValidDimension(null, world.provider.getDimension())) {
 			return;
 		}
 		if (biomeCache.isEmpty()) {
@@ -67,12 +68,12 @@ public class TreeDecorator {
 
 			BlockPos pos = new BlockPos(x, 0, z);
 			Biome biome = world.getBiome(pos);
-			if (!Config.isValidTreeBiome(biome)) {
-				continue;
-			}
-
 			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 			for (ITree tree : trees) {
+				String treeUID = tree.getGenome().getPrimary().getUID();
+				if(!TreeConfig.isValidDimension(treeUID, world.provider.getDimension())){
+					continue;
+				}
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();
 				if (species.getRarity() * Config.generateTreesAmount >= rand.nextFloat()) {
 					pos = getValidPos(world, x, z, tree);
@@ -135,23 +136,14 @@ public class TreeDecorator {
 			IAllele[] template = TreeManager.treeRoot.getTemplate(species);
 			ITreeGenome genome = TreeManager.treeRoot.templateAsGenome(template);
 			ITree tree = TreeManager.treeRoot.getTree(world, genome);
+			String treeUID = genome.getPrimary().getUID();
 			IGrowthProvider growthProvider = species.getGrowthProvider();
 			for (Biome biome : Biome.REGISTRY) {
 				Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
-				if (growthProvider.isBiomeValid(tree, biome)) {
+				if (growthProvider.isBiomeValid(tree, biome) && TreeConfig.isValidBiome(treeUID, biome)) {
 					trees.add(tree);
 				}
 			}
-		}
-	}
-
-	private static final class BiomeCache {
-		protected final Biome biome;
-		protected final List<ITree> validTrees;
-
-		public BiomeCache(Biome biome, List<ITree> validTrees) {
-			this.biome = biome;
-			this.validTrees = validTrees;
 		}
 	}
 }
