@@ -11,6 +11,7 @@
 package forestry.apiculture.genetics;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.IBeeFactory;
 import forestry.api.genetics.IClassification;
@@ -35,7 +36,6 @@ public class BeeFactory implements IBeeFactory {
 		Preconditions.checkNotNull(unlocalizedName);
 		Preconditions.checkNotNull(unlocalizedDescription);
 		Preconditions.checkNotNull(branch);
-		Preconditions.checkNotNull(binomial);
 
 		return new AlleleBeeSpecies(modId, uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, primaryColor, secondaryColor);
 	}

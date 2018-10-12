@@ -21,7 +21,7 @@ public interface IBeeFactory {
 	 * @param unlocalizedName        Unlocalized name for this species
 	 * @param unlocalizedDescription Unlocalized description for this species
 	 * @param branch                 Classification of this species
-	 * @param binomial               Binomial name of the species sans genus ("Apis"). "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun names or null.
+	 * @param binomial               Binomial name of the species sans genus ("Apis"). "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun names.
 	 * @param primaryColor           The outline color of this species
 	 * @param secondaryColor         The body color of this species
 	 * @return a new bee species allele.
