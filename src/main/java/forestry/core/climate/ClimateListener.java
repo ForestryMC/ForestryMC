@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,15 +41,19 @@ public class ClimateListener implements IClimateListener {
 	private IClimateState cachedState = AbsentClimateState.INSTANCE;
 	private IClimateState cachedClientState = AbsentClimateState.INSTANCE;
 	@SideOnly(Side.CLIENT)
-	private TickHelper tickHelper = new TickHelper();
+	private TickHelper tickHelper;
 	@SideOnly(Side.CLIENT)
-	protected boolean needsClimateUpdate = true;
+	protected boolean needsClimateUpdate;
 	//The total world time at the moment the cached state has been updated
 	private long cacheTime = 0;
 	private long lastUpdate = 0;
 
 	public ClimateListener(Object locationProvider) {
 		this.locationProvider = locationProvider;
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+			tickHelper = new TickHelper();
+			needsClimateUpdate = true;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
