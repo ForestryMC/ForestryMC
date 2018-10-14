@@ -614,6 +614,10 @@ public abstract class InventoryUtil {
 	}
 
 	/* NBT */
+
+	/**
+	 * The database has an inventory large enough that int must be used here instead of byte
+	 */
 	public static void readFromNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
 		if (!nbttagcompound.hasKey(inventory.getName())) {
 			return;
@@ -623,7 +627,7 @@ public abstract class InventoryUtil {
 
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
-			int index = nbttagcompound2.getByte("Slot");
+			int index = nbttagcompound2.getInteger("Slot");
 			inventory.setInventorySlotContents(index, new ItemStack(nbttagcompound2));
 		}
 	}
@@ -633,7 +637,7 @@ public abstract class InventoryUtil {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {
 				NBTTagCompound nbttagcompound2 = new NBTTagCompound();
-				nbttagcompound2.setByte("Slot", (byte) i);
+				nbttagcompound2.setInteger("Slot", i);
 				inventory.getStackInSlot(i).writeToNBT(nbttagcompound2);
 				nbttaglist.appendTag(nbttagcompound2);
 			}
