@@ -617,7 +617,8 @@ public abstract class InventoryUtil {
 
 	/**
 	 * The database has an inventory large enough that int must be used here instead of byte
-	 */
+	 * TODO in 1.13 - remove migrations from this.
+	 * */
 	public static void readFromNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
 		if (!nbttagcompound.hasKey(inventory.getName())) {
 			return;
@@ -627,7 +628,13 @@ public abstract class InventoryUtil {
 
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
 			NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
-			int index = nbttagcompound2.getInteger("Slot");
+			int index;
+			//type of byte tag is 1
+			if(nbttagcompound2.hasKey("Slot", 1)) {
+				index = nbttagcompound2.getByte("Slot");
+			} else {
+				index = nbttagcompound2.getInteger("Slot");
+			}
 			inventory.setInventorySlotContents(index, new ItemStack(nbttagcompound2));
 		}
 	}
