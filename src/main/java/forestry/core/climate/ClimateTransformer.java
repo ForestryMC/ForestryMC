@@ -17,8 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import com.mojang.realmsclient.dto.Backup;
-
 import forestry.api.climate.ClimateManager;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateHousing;
@@ -49,9 +47,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	private IClimateState currentState;
 	//The climate state of the biome that is located at the position of this tile.
 	private IClimateState defaultState;
-	//A backup of the state before the last change of a area state (range or circular). Slowly moves back to the default state.
-	//Is used if the player changes back to the old area state.
-	private Backup backup = new Backup();
 	//The range of the habitatformer in blocks in one direction.
 	private int range;
 	//The area of the former in blocks.
@@ -206,13 +201,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 			int oldRange = range;
 			this.range = MathHelper.clamp(value, 1, 16);
 			onAreaChange(oldRange, circular);
-			/*if(currentState.isPresent() && defaultState.isPresent()){
-				IClimateState delta = currentState.subtract(defaultState);
-				IClimateState scaledState = delta.multiply(getSpeedModifier());
-				if(!backup.apply2(value, circular)){
-					backup = new Backup(currentState, oldRange, circular);
-				}
-			}*/
 			housing.markNetworkUpdate();
 			if (addedToWorld) {
 				IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
