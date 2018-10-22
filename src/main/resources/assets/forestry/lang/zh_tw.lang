@@ -5,9 +5,6 @@
 death.engine.clockwork.player=%1$s被散落的彈簧片刺中了。%2$s是個粗心大意的發條匠。
 death.engine.clockwork=%1$s被散落的彈簧片刺中了。
 
-for.beverage.effect.alcoholic=酗酒
-for.beverage.effect.antidote=解毒
-
 for.chat.cannotmemorizeagain=您已經記住了相關內容。
 for.chat.memorizednote=您記錄了筆記並扔掉了皺巴巴的小紙片。
 for.chat.memorizednote2=您對讓%1$s和%2$s雜交出%3$s更熟悉了！
@@ -24,16 +21,16 @@ for.chat.command.forestry.version.desc=- %s ：版本資訊
 for.chat.command.forestry.version.help=顯示目前版本
 for.chat.command.forestry.version.format=格式： /%s
 
-for.chat.command.forestry.plugins.desc=- %s ：林業插件列表
-for.chat.command.forestry.plugins.help=列出目前的林業插件。綠色為已啟用的，紅色為停用的。
-for.chat.command.forestry.plugins.format=格式: /%s
+for.chat.command.forestry.modules.desc=- %s ：林業插件列表
+for.chat.command.forestry.modules.help=列出目前的林業插件。綠色為已啟用的，紅色為停用的。
+for.chat.command.forestry.modules.format=格式: /%s
 
-for.chat.command.forestry.plugins.info.desc=- %s : 林業插件資訊
-for.chat.command.forestry.plugins.info.help=顯示林業插件的資訊
-for.chat.command.forestry.plugins.info.format=格式: /%s <plugin-name>
+for.chat.command.forestry.modules.info.desc=- %s : 林業插件資訊
+for.chat.command.forestry.modules.info.help=顯示林業插件的資訊
+for.chat.command.forestry.modules.info.format=格式: /%s <plugin-name>
 
 for.chat.help=輸入'%s'檢視說明。
-for.chat.plugins.error=插件%s沒有說明可顯示。
+for.chat.modules.error=插件%s沒有說明可顯示。
 for.chat.version=林業%1$s適用於Minecraft%2$s (最新版本: %3$s)。
 
 for.circuit.dampener.1=阻尼
@@ -78,7 +75,7 @@ for.flowers.cacti=仙人掌
 for.flowers.end=終界
 for.flowers.gourd=葫蘆
 for.flowers.jungle=叢林
-for.flowers.mushroom=蘑菇
+for.flowers.mushrooms=蘑菇
 for.flowers.nether=地獄
 for.flowers.vanilla=鮮花
 for.flowers.wheat=小麥
@@ -93,6 +90,7 @@ fluid.juice=果汁
 fluid.short.mead=蜂蜜酒
 fluid.milk=牛奶
 fluid.seed.oil=種子油
+
 tile.forestry.fluid.bio.ethanol.name=乙醇
 tile.forestry.fluid.biomass.name=生物質
 tile.forestry.fluid.glass.name=液態玻璃
@@ -129,6 +127,14 @@ for.gui.beealyzer.natural=自然捕捉
 for.gui.beealyzer.produce=可能的產物
 for.gui.beealyzer.specialty=可能的專長
 
+for.gui.database.tab.active_species.name=顯性物種
+for.gui.database.tab.inactive_species.name=隱性物種
+for.gui.database.tab.products.name=產物
+for.gui.database.tab.mutations.name=變異
+for.gui.database.mutations.further=變異途徑
+for.gui.database.mutations.resultant=變異組成
+for.gui.database.support=此個體目前尚未整合到本資料庫。
+
 for.gui.blank=空白
 for.gui.cave=穴居性
 for.gui.climate=溫度
@@ -145,9 +151,7 @@ for.gui.drones=雄蜂
 for.gui.effect=特殊效果
 for.gui.empty=空
 for.gui.emptysocket=空插槽
-for.gui.empty.slot.camouflage.multiblock.default=Default Multiblock Camouflage Slot
-for.gui.empty.slot.camouflage.multiblock.glass=Glass Multiblock Camouflage Slot
-for.gui.empty.slot.camouflage.multiblock.door=Door Multiblock Camouflage Slot
+for.gui.empty.slot.camouflage.multiblock=Multiblock Camouflage Slot
 for.gui.empty.slot.camouflage=Camouflage Slot
 for.gui.socket.remove=可用電烙鐵拆卸
 for.gui.energy=能量
@@ -235,21 +239,6 @@ for.gui.noeffect=無效果
 for.gui.owner=所有者
 for.gui.page=頁面
 
-for.gui.pipe.filter.anything=任意物品
-for.gui.pipe.filter.bee=任意蜜蜂
-for.gui.pipe.filter.cave=穴居蜂
-for.gui.pipe.filter.closed=已關閉
-for.gui.pipe.filter.drone=雄蜂
-for.gui.pipe.filter.flyer=強壯飛蜂
-for.gui.pipe.filter.item=物品
-for.gui.pipe.filter.nocturnal=夜行蜜蜂
-for.gui.pipe.filter.princess=公主蜂
-for.gui.pipe.filter.pure_breed=純種蜜蜂
-for.gui.pipe.filter.pure_cave=純種穴居蜂
-for.gui.pipe.filter.pure_flyer=純種飛蜂
-for.gui.pipe.filter.pure_nocturnal=純種夜行蜜蜂
-for.gui.pipe.filter.queen=蜂后
-
 for.gui.plains=平原
 for.gui.princesses=公主蜂
 for.gui.produce=產物
@@ -259,6 +248,9 @@ for.gui.solder.north=北
 for.gui.solder.south=南
 for.gui.solder.east=東
 for.gui.solder.west=西
+
+forestry.allele.true=是
+forestry.allele.false=否
 
 forestry.allele.average=平均
 forestry.allele.gigantic=巨大
@@ -398,7 +390,7 @@ for.hints.shortmead.tag=能量飲料！
 for.hints.usesofash.desc=灰燼可以用來加工廢料，也可以用來精煉瀝青質泥炭。
 for.hints.usesofash.tag=善用您的灰燼哦！
 
-for.item.crated.grammar=裝箱的
+for.item.crated.grammar=裝箱的%s
 for.item.crated.unknown=裝箱的未知物品
 
 for.no=否
@@ -485,9 +477,6 @@ item.for.bee_combs.wheaten.name=麥香蜂巢
 
 item.for.beeswax.name=蜜蠟
 
-item.for.beverage.meadCurative.name=蜂蜜藥酒
-item.for.beverage.meadShort.name=小瓶蜂蜜酒
-
 item.for.biome_finder.name=生物群系定位儀
 item.for.bituminous_peat.name=瀝青質泥炭
 item.for.broken_bronze_pickaxe.name=損壞的鎬
@@ -551,6 +540,7 @@ item.for.honeydew.name=蜂蜜汁
 
 item.for.portable_alyzer.name=可攜式分析儀
 item.for.portable_alyzer.tooltip=手持式基因分析儀，用於蜜蜂、樹苗與蝴蝶。
+item.for.portable_alyzer.charges=%s 格電力
 
 item.for.honey_drop.charged.name=帶電蜂蜜滴
 item.for.honey_drop.honey.name=蜂蜜滴
@@ -630,6 +620,7 @@ item.for.thermionic_tubes.emerald.name=綠寶石真空管
 item.for.thermionic_tubes.apatite.name=磷灰石真空管
 item.for.thermionic_tubes.lapis.name=青金石真空管
 item.for.thermionic_tubes.ender.name=終界真空管
+item.for.thermionic_tubes.orchid.name=蘭花真空管
 item.for.thermionic_tubes.tooltip=用來安裝至電路板
 
 item.for.capsule.empty.name=石蠟膠囊
@@ -652,6 +643,8 @@ itemGroup.agriculture=林業|農業
 
 tile.for.analyzer.name=分析儀
 tile.for.escritoire.name=寫字檯
+
+tile.for.database.name=資料庫
 
 tile.for.engine_electrical.name=電動引擎
 tile.for.engine_electrical.tooltip=轉換 EU 為 RF 。
@@ -689,9 +682,30 @@ tile.for.resource_storage.copper.name=銅塊
 tile.for.resource_storage.tin.name=錫塊
 tile.for.resource_storage.bronze.name=青銅塊
 
+tile.for.ash_brick.name=灰燼磚
+tile.for.ash_stairs.name=灰燼磚階梯
+
 tile.for.humus.name=腐殖土
 tile.for.bog_earth.bog_earth.name=沼澤泥
 tile.for.bog_earth.peat.name=泥炭
+
+tile.for.bee_combs.cocoa.name=可可蜂巢
+tile.for.bee_combs.darkened.name=暗黑蜂巢
+tile.for.bee_combs.dripping.name=滴水蜂巢
+tile.for.bee_combs.frozen.name=凍結蜂巢
+tile.for.bee_combs.honey.name=蜂蜜蜂巢
+tile.for.bee_combs.irradiated.name=輻射蜂巢
+tile.for.bee_combs.mellow.name=醇厚蜂巢
+tile.for.bee_combs.mossy.name=苔蘚蜂巢
+tile.for.bee_combs.mysterious.name=神秘蜂巢
+tile.for.bee_combs.omega.name=終結蜂巢
+tile.for.bee_combs.parched.name=炎熱蜂巢
+tile.for.bee_combs.powdery.name=粉末蜂巢
+tile.for.bee_combs.reddened.name=泛紅蜂巢
+tile.for.bee_combs.silky.name=絲滑蜂巢
+tile.for.bee_combs.simmering.name=激化蜂巢
+tile.for.bee_combs.stringy.name=纖維蜂巢
+tile.for.bee_combs.wheaten.name=麥香蜂巢
 
 item.for.adventurer_bag.name=冒險家背包
 item.for.adventurer_bag_t2.name=冒險家編織背包
@@ -1076,6 +1090,26 @@ tile.for.candle.stump.name=蠟燭(熄滅)
 tile.for.stump.name=蠟燭
 
 ####################
+# BOOK
+####################
+item.for.book_forester.name=林務員手冊
+
+for.gui.book.element.crafting=合成
+for.gui.book.about.title=關於本書
+for.gui.book.about=§o這些知識片段是由Binnie取得及編著，並呈現了一位以Sengir先生為世人所知的瘋狂養蜂家所著的 [養蜂入門] 以及 [林務員年鑑] 所留下的內容。§r
+for.gui.book.about.author=| 編者，Binnie
+for.gui.book.categories=類別
+
+for.gui.book.category.core.title=核心
+for.gui.book.category.lepidopterology.title=鱗翅學
+for.gui.book.category.mail.title=郵件
+for.gui.book.category.habitat_former.title=棲息地塑造器
+for.gui.book.category.beekeeping.title=養蜂
+for.gui.book.category.arboriculture.title=樹木栽培
+for.gui.book.category.farming.title=農業
+for.gui.book.category.genetics.title=遺傳學
+
+####################
 # MULTIBLOCK
 ####################
 
@@ -1083,12 +1117,12 @@ for.multiblock.error.notConnected=多重方塊沒有連接到控制方塊。這�
 for.multiblock.error.invalid.interior=(%s) - Block is not valid for use in the machine's interior.
 for.multiblock.error.invalid.part=A multiblock part is incompatible with this type (%s).
 for.multiblock.error.small=多重方塊太小。大小必須至少為%dx%dx%d。
-for.multiblock.error.large.x=The multiblock is too large, it may be at most %d blocks wide.
-for.multiblock.error.large.y=The multiblock is too large, it may be at most %d blocks high.
-for.multiblock.error.large.z=The multiblock is too large, it may be at most %d blocks deep.
-for.multiblock.error.small.x=The multiblock is too small, it must be at least %d blocks wide.
-for.multiblock.error.small.y=The multiblock is too small, it must be at least %d blocks high.
-for.multiblock.error.small.z=The multiblock is too small, it must be at least %d blocks deep.
+for.multiblock.error.large.x=多重方塊太大，它最多只能是%d格寬。
+for.multiblock.error.large.y=多重方塊太大，它最多只能是%d格高。
+for.multiblock.error.large.z=多重方塊太大，它最多只能是%d格深。
+for.multiblock.error.small.x=多重方塊太小，它最少必須是%d格寬。
+for.multiblock.error.small.y=多重方塊太小，它最少必須是%d格高。
+for.multiblock.error.small.z=多重方塊太小，它最少必須是%d格深。
 
 for.multiblock.alveary.error.needSlabs=The Alveary must have wooden slabs on top.
 for.multiblock.alveary.error.needSpace=The alveary needs space around the top for the bees to enter and exit.
@@ -1099,12 +1133,8 @@ for.multiblock.farm.error.needPlainBand=The Farm must have plain farm blocks for
 for.multiblock.farm.error.needPlainInterior=The Farm must have plain farm blocks for the interior.
 for.multiblock.farm.error.needGearbox=The farm must have a gearbox to accept power and do work.
 
-for.multiblock.greenhouse.error.space.closed=The Greenhouse must fully enclose an area. Some blocks are missing or they are not connected to the other greenhouse blocks.
-for.multiblock.greenhouse.error.butterflyhatch.toomany=The Greenhouse can only have one butterfly hatch.
-
 for.multiblock.alveary.type=Alveary
 for.multiblock.farm.type=Farm
-for.multiblock.greenhouse.type=Greenhouse
 
 ####################
 # ARBORICULTURE
@@ -1197,7 +1227,9 @@ for.trees.grammar.pile.type=木材量
 for.trees.grammar.pile=%SPECIES%TYPE
 
 tile.for.wood_pile.name=Wood Pile
+tile.for.wood_pile_decorative.name=裝飾用木材堆
 tile.for.loam.name=Loam
+tile.for.ash_block.name=灰燼磚
 tile.for.charcoal.name=Block of Charcoal
 
 for.trees.hybrid=%PRIMARY-%SECONDARY雜交種
@@ -1291,24 +1323,22 @@ tile.for.pods.0.name=豆莢
 ####################
 # FARMING
 ####################
+for.farm.grammar.manual=手動%s
+for.farm.grammar.managed=自管%s
 
-for.circuit.managedArboreal=林場
-for.circuit.managedCereal=穀物農場
-for.circuit.managedInfernal=地獄農場
-for.circuit.managedPeat=泥炭田
-for.circuit.managedShroom=蘑菇農場
-for.circuit.managedVegetable=蔬菜農場
-for.circuit.managedEnder=終界農場
-for.circuit.manualCereal=穀物農場
-for.circuit.manualCocoa=可可種植園
-for.circuit.manualGourd=瓜田
-for.circuit.manualOrchard=果園
-for.circuit.manualPeat=泥炭田
-for.circuit.manualPoales=甘蔗農場
-for.circuit.manualRubber=橡膠種植園
-for.circuit.manualShroom=蘑菇農場
-for.circuit.manualSucculent=仙人掌農場
-for.circuit.manualVegetable=蔬菜農場
+for.farm.arboretum=植物園
+for.farm.crops=作物農場
+for.farm.shroom=蘑菇農場
+for.farm.succulent=仙人掌農場
+for.farm.peat=泥炭田
+for.farm.infernal=地獄農場
+for.farm.reed=甘蔗農場
+for.farm.orchard=果園
+for.farm.gourd=瓜田
+for.farm.cocoa=可可種植園
+for.farm.ender=終界農場
+for.farm.orchid=蘭花園
+for.farm.rubber=橡膠種植園
 
 for.gui.farm.title=農場
 for.gui.hydr.heat=基於溫度
@@ -1350,29 +1380,93 @@ tile.for.mushroom.0.name=蘑菇
 tile.for.mushroom.1.name=蘑菇
 
 ####################
+# CULTIVATION
+####################
+tile.for.arboretum.name=植物園
+tile.for.arboretum.tooltip=樹木農場
+tile.for.farm_crops.name=農場
+tile.for.farm_crops.tooltip=作物農場
+tile.for.farm_mushroom.name=蘑菇農場
+tile.for.farm_nether.name=地獄農場
+tile.for.farm_nether.tooltip=地獄疙瘩農場
+tile.for.farm_gourd.name=瓜田
+tile.for.farm_gourd.tooltip=種植西瓜和南瓜的農場
+tile.for.farm_ender.name=終界農場
+tile.for.farm_ender.tooltip=種植歌萊花和終界百合的農場
+tile.for.peat_bog.name=泥炭田
+tile.for.peat_bog.tooltip=泥炭農場
+tile.for.plantation.name=橡膠農場
+
+item.for.flexible_casing.name=靈活部件
+
+tile.for.planter.manual=%s (手動)
+tile.for.planter.managed=%s (自管)
+
+for.gui.planter.north=北
+for.gui.planter.south=南
+for.gui.planter.east=東
+for.gui.planter.west=西
+
+####################
 # GREENHOUSE
 ####################
-for.gui.greenhouse.title=溫室
-
-tile.for.greenhouse.tooltip=多重方塊： 5x5x5 - 64x150x64 (空心) with a custom roof, that is not bigger than the base.
-tile.for.greenhouse.camouflage.tooltip=這個方塊可以偽裝，這表示你可以調整此方塊的外觀。
+tile.for.greenhouse.deprecated1=此物品已被棄用
+tile.for.greenhouse.deprecated2=放置在合成欄位以取回一些資源
 tile.for.greenhouse.plain.name=溫室方塊
-tile.for.greenhouse.glass.name=溫室玻璃
 tile.for.greenhouse.gearbox.name=溫室工具箱
-tile.for.greenhouse.hatch_output.name=溫室輸出口
-tile.for.greenhouse.hatch_input.name=溫室輸入口
-tile.for.greenhouse.butterfly_hatch.name=溫室蝴蝶巢
-tile.for.greenhouse.valve.name=溫室閥門
-tile.for.greenhouse.fan.name=溫室風扇
-tile.for.greenhouse.heater.name=溫室加熱器
-tile.for.greenhouse.dehumidifier.name=溫室除濕機
-tile.for.greenhouse.humidifier.name=溫室加濕機
 tile.for.greenhouse.control.name=溫室控制器
-tile.for.greenhouse.door.name=溫室門
-tile.for.greenhouse.climate_control.name=溫室天氣控制器
+tile.for.greenhouse.screen.name=溫室螢幕
 tile.for.greenhouse.window_up.name=溫室屋頂窗戶
 tile.for.greenhouse.window.name=溫室窗戶
+tile.for.climatiser.fan.name=溫室風扇
+tile.for.climatiser.heater.name=溫室加熱器
+tile.for.climatiser.dehumidifier.name=溫室除濕器
+tile.for.climatiser.humidifier.name=溫室加濕器
+tile.for.climatiser.hygro.name=溫室保濕器
 
+####################
+# CLIMATOLAGY
+####################
+tile.for.habitat_former.name=棲息地塑造器
+
+item.for.habitat_screen.name=棲息地顯示幕
+
+for.gui.habitat_former.climate.target=目標值： %s
+for.gui.habitat_former.climate.value=當前值： %s
+for.gui.habitat_former.climate.default=環境值： %s
+for.gui.habitat_former.climate.temperature=溫度
+for.gui.habitat_former.climate.humidity=濕度
+for.gui.habitat_former.climate.habitats=棲息地
+for.gui.habitat_former.climate.selection=選擇
+for.gui.habitat_former.climate.range=範圍
+for.gui.habitat_former.climate.range.blocks=%s格方塊
+for.gui.habitat_former.climate.circle.enabled=循環模式啟用
+for.gui.habitat_former.climate.circle.disabled=循環模式停用
+for.gui.habitat_former.climate.preview.enabled=預覽模式啟用
+for.gui.habitat_former.climate.preview.disabled=預覽模式停用
+for.gui.habitat_former=棲息地塑造器
+for.gui.habitat_former.range=範圍
+for.gui.habitat_former.resources=資源
+for.gui.habitat_former.speed=速度
+
+for.habitat_screen.mode.active=預覽模式： 啟用
+for.habitat_screen.mode.inactive=預覽模式： 停用
+for.habitat_screen.state.linked=位置 '%s, %s, %s', 維度 '%s'
+for.habitat_screen.state.fail=未連結
+for.habitat_screen.temperature=溫度： %s
+for.habitat_screen.humidity=濕度： %s
+for.habitat_screen.status.state=溫度： %s，濕度： %s
+for.habitat_screen.status.nostate=沒有找到狀態
+
+for.hints.formergui.tag=點一下完成！
+for.hints.formergui.desc=你可以使用棲息地按鈕、位於上方中間的那兩個氣候調整桿，或那兩個文字輸入框來改變目標氣候。
+for.hints.formerresources.tag=你需要什麼？
+for.hints.formerresources.desc=棲息地塑造器使用能量來改變溫度。使用像岩漿、水或碎冰來改變溼度和少量的溫度。
+for.hints.formersettings.tag=所有你想要的東西
+for.hints.formersettings.desc=除了其他選項之外，你可以使用棲息地按鈕旁邊的凹槽來將目標氣候改變成蜜蜂偏好的氣候。只要用一隻蜜蜂在上面點一下。
+
+for.errors.wrong_resource.desc=錯誤的資源
+for.errors.wrong_resource.help=棲息地塑造器無法藉由放入的液體來達到目標的濕度。
 ####################
 # LEPIDOPTEROLOGY
 ####################
@@ -1384,6 +1478,7 @@ for.chat.command.forestry.butterfly.format=格式： /%s <sub-command>
 for.chat.command.forestry.butterfly.kill.desc=- %s ： 殺死全部蝴蝶。
 for.chat.command.forestry.butterfly.kill.help=殺死已載入資料塊內的全部蝴蝶。
 for.chat.command.forestry.butterfly.kill.format=格式： /%s [<dimension#>]
+for.chat.command.forestry.butterfly.kill.response=殺死了%d隻蝴蝶
 
 for.butterflies.hybrid=混血蝶：%PRIMARY-%SECONDARY
 
@@ -1430,9 +1525,11 @@ for.butterflies.species.pieridae.postillion=紋黃蝶
 for.butterflies.species.pieridae.reseda=東方綠斑粉蝶
 for.butterflies.species.pieridae.springAzure=冬青小灰蝶
 for.butterflies.species.saturniidae.atlas=烏柏巨蠶蛾
+for.butterflies.species.bombycidae.bombyxMori=蠶蛾
 
 for.gui.loot.butterfly=蝴蝶可能的產物
 for.gui.loot.caterpillar=毛毛蟲可能的產物
+for.gui.loot.cocoon=繭可能的產物
 
 for.lepidopterology.effect.none=無效果
 
@@ -1471,7 +1568,7 @@ for.chat.mail.not.mailable=信件不符合郵寄要求。
 for.chat.mail.not.postpaid=信件郵資不足。
 for.chat.mail.no.mailbox=收件人沒有郵箱。
 for.chat.mail.ok=可貿易。
-for.chat.mail.response.not.mailable=貿易站無法回信，您需要郵箱。
+for.chat.mail.response.not.mailable.format=貿易站無法回信，您需要郵箱。
 for.chat.mail.wrongstacksize=一次只能寫一封信。
 
 for.gui.mail.address.copy=使用
@@ -1493,42 +1590,74 @@ item.for.catalogue.tooltip=列出所有可用的貿易。
 
 item.PipeItemsPropolis.name=養蜂家管線
 
-####################
-# PLUGINS
-####################
-for.plugin.core.description=林業核心插件，是其他插件的前置插件。
-for.plugin.fluids.description=添加流體，流體方塊以及流體容器的插件。
-for.plugin.apiculture.description=添加蜜蜂，養蜂系統和蜜蜂產物的插件，會影響世界生成。
-for.plugin.arboriculture.description=添加更多樹木以及相關產物的插件。
-for.plugin.energy.description=添加一些使用RF能量的引擎的插件。
-for.plugin.factory.description=添加各種各樣的機器，以合成，生產和加工各種產品的插件。
-for.plugin.farming.description=添加了自動化農場和收穫設備的插件，可以產出各種各樣的產物。
-for.plugin.food.description=添加食物的插件。
-for.plugin.lepidopterology.description=蝴蝶插件。璀璨奪目。
-for.plugin.mail.description=添加林業交易和郵寄系統的插件。
-for.plugin.storage.description=添加背包和板條箱的插件。
+tile.for.genetic_filter.name=基因過濾器
+tile.for.genetic_filter.0.name=基因過濾器
 
-for.plugin.buildcraft6.description=BC6兼容插件。
-for.plugin.pipes.description=如果同時安裝了BC6且養蜂插件已啟用，則添加養蜂家管線的插件。
-for.plugin.ic2.description=IC2兼容插件。添加電力引擎和新的發電機用來進行能源轉換。
-for.plugin.natura.description=Natura兼容插件。啟用後農場能夠支持Natura的樹苗。
-for.plugin.ee2.description=等價交換2兼容插件。啟用後開啟蜜蜂的終結分支。需要啟用前置的養蜂插件。
-for.plugin.ee3.description=等價交換3兼容插件。
-for.plugin.farmcraftory.description=牧場物語FarmCraftory兼容插件。添加作物和蔬菜的自動化農場支持。
-for.plugin.biomesoplenty.description=更多生物群系Biomes O Plenty兼容插件。啟用後農場能夠支持BoP的樹苗。
-for.plugin.extrautilities.description=更多實用設備Extra Utilities兼容插件。啟用後農場能夠支持終界百合。
-for.plugin.harvestcraft.description=潘馬斯的豐收HarvestCraft兼容插件。啟用後農場能夠支持HarvestCraft的植物和樹苗。
-for.plugin.magicalcrops.description=魔法農作物Magical Crops兼容插件。
-for.plugin.chisel.description=鑿子Chisel兼容插件。添加生成方塊背包支持。
-for.plugin.plantmegapack.description=Plant Mega Pack兼容插件。
-for.plugin.witchery.description=巫術Witchery兼容插件。
-for.plugin.agricraft.description=AgriCraft兼容插件。
-for.plugin.enderIO.description=EnderIO兼容插件。
-for.plugin.immersiveengineering.description=Immersive Engineering兼容插件。
-for.plugin.growthcraft.description=GrowthCraft兼容插件
-for.plugin.erebus.description=Erebus兼容插件
-for.plugin.rotarycraft.description=RotaryCraft兼容插件
-for.plugin.actuallyadditions.description=Actually Additions兼容插件
+for.gui.filter.seletion=過濾器選擇
+
+for.gui.filter.forestry.default.anything=任何
+for.gui.filter.forestry.default.closed=關閉
+for.gui.filter.forestry.default.item=物品
+for.gui.filter.forestry.default.cave=穴居性
+for.gui.filter.forestry.default.flyer=飛行耐受性
+for.gui.filter.forestry.default.nocturnal=夜行性
+for.gui.filter.forestry.default.pure_breed=純種
+for.gui.filter.forestry.default.pure_cave=純穴居性
+for.gui.filter.forestry.default.pure_flyer=純飛行耐受性
+for.gui.filter.forestry.default.pure_nocturnal=純夜行性
+
+for.gui.filter.forestry.apiculture.bee=任何蜜蜂
+for.gui.filter.forestry.apiculture.queen=蜂后
+for.gui.filter.forestry.apiculture.drone=雄蜂
+for.gui.filter.forestry.apiculture.princess=公主蜂
+
+for.gui.filter.forestry.arboriculture.tree=任何樹
+for.gui.filter.forestry.arboriculture.sapling=樹苗
+for.gui.filter.forestry.arboriculture.pollen=花粉
+
+for.gui.filter.forestry.lepidopterology.flutter=任何蝴蝶
+for.gui.filter.forestry.lepidopterology.butterfly=蝴蝶
+for.gui.filter.forestry.lepidopterology.caterpillar=毛毛蟲
+for.gui.filter.forestry.lepidopterology.serum=血清
+for.gui.filter.forestry.lepidopterology.cocoon=繭
+
+####################
+# MODULES
+####################
+for.module.apiculture.description=添加蜜蜂、養蜂系統和蜜蜂產物的插件，會影響世界生成。
+for.module.arboriculture.description=添加更多樹木以及相關產物的插件。
+for.module.backpacks.description=添加背包的插件。
+for.module.book.description=添加一本包含了所有其他模組資訊的指導手冊的插件。
+for.module.charcoal.description=添加木材堆、壤土，以及一個木炭的製造方法的插件。
+for.module.core.description=林業插件的核心插件，是其他插件的前置插件。
+for.module.crates.description=添加箱子的插件。
+for.module.cultivation.description=添加能產生多樣產物的自動化農場的插件。
+for.module.database.description=添加一種新的蜜蜂、樹木和蝴蝶的儲存方塊的插件。
+for.module.energy.description=添加一些使用RF能量的引擎的插件。
+for.module.factory.description=添加各種各樣的機器，以合成、生產和加工各種產品的插件。
+for.module.farming.description=添加了自動化農場和收穫設備的插件，可以產出各種各樣的產物。
+for.module.fluids.description=添加流體、流體方塊以及流體容器的插件。
+for.module.food.description=添加食物的插件。
+for.module.greenhouse.description=添加一個溫室多重方塊的插件。
+for.module.lepidopterology.description=蝴蝶插件。璀璨奪目。
+for.module.mail.description=添加林業交易和郵寄系統的插件。
+for.module.sorting.description=添加以遺傳物質排序物品的篩選器的插件。
+for.module.worktable.description=添加一個能儲存8個合成配方的工作台的插件。
+
+for.module.actuallyadditions.description=Actually Additions 兼容插件。
+for.module.betterwithmods.description=Better With Mods 兼容插件。啟用後農場能夠支持大麻。
+for.module.buildcraft6.description=BuildCraft(BC6) 兼容插件。目前版本為7.99。
+for.module.biomesoplenty.description=更多生物群系(Biomes O Plenty) 兼容插件。啟用後農場能夠支持BoP的樹苗。
+for.module.enderIO.description=EnderIO 兼容插件。
+for.module.extrautilities.description=更多實用設備(Extra Utilities) 兼容插件。啟用後農場能夠支持終界百合和紅蘭花。
+for.module.harvestcraft.description=潘馬斯的豐收(HarvestCraft) 兼容插件。啟用後農場能夠支持 HarvestCraft 的植物和樹苗。
+for.module.ic2.description=工業模組(IC2) 兼容插件。添加電力引擎和新的發電機用來進行能源轉換。
+for.module.immersiveengineering.description=沉浸工程(Immersive Engineering) 兼容插件。
+for.module.mysticalagriculture.description=Mystical Agriculture 兼容插件。啟用後農場能夠支持 Mystical Agriculture 的作物。
+for.module.natura.description=Natura 兼容插件。啟用後農場能夠支持 Natura 的樹苗。
+for.module.roots.description=Roots 兼容插件。
+for.module.rustic.description=Rustic 兼容插件。
+for.module.techreborn.description=Tech reborn 兼容插件。啟用後能從橡膠樹採集橡膠。
 
 ####################
 # CONFIG FILES
@@ -1553,14 +1682,27 @@ for.config.world.generate.ore.copper=生成銅
 for.config.world.generate.ore.copper.comment=在世界中生成銅礦。
 for.config.world.generate.ore.tin=生成錫
 for.config.world.generate.ore.tin.comment=在世界中生成錫礦。
+for.config.world.generate.ore.dimBlacklist=礦石生成維度黑名單
+for.config.world.generate.ore.dimBlacklist.comment=停用指定維度中所有礦石的生成。每行輸入一個維度ID。
 
 for.config.world.generate.beehives.amount=蜂巢生成數量
 for.config.world.generate.beehives.amount.comment=設定在世界中生成多少蜂巢。
 for.config.world.generate.beehives.debug=偵錯蜂巢生成
 for.config.world.generate.beehives.debug.comment=強制蜂巢生成於所有可生成的位置。(這會毀掉您的世界，只對開發者有用)
+for.config.world.generate.beehives.dimBlacklist=蜂巢生成維度黑名單
+for.config.world.generate.beehives.dimBlacklist.comment=停用指定維度中所有蜂巢的生成。每行輸入一個維度ID。
+for.config.world.generate.beehives.blacklist.category_comment=停用指定生態系中指定蜂巢的生成。只需要加入生態系ID或名稱到蜂巢的屬性。每一個ID或名稱必須在獨自的一行中。全域(global)類型可以用來將一個生態系加入所有蜂巢的生成黑名單。
 
 for.config.world.generate.villagers=生成村民
 for.config.world.generate.villagers.comment=生成林業村民與他們的住家。
+
+for.config.world.generate.trees=是否在世界中生成林業模組特有的樹木
+for.config.world.generate.trees.comment=這適用於所有維度。
+for.config.world.generate.trees.dimBlacklist=樹木生成維度黑名單
+for.config.world.generate.trees.dimBlacklist.comment=停用指定維度中所有樹木的生成。每行輸入一個維度ID。
+for.config.world.generate.trees.treeFrequency=樹木生成頻率
+for.config.world.generate.trees.treeFrequency.comment=林業模組生成特有樹木的頻率
+for.config.world.generate.trees.biomeblacklist.comment=這會將指定生態系加入所有樹木生成的黑名單。每行輸入一個維度ID。更多資訊請見蜂巢生態系黑名單。
 
 for.config.crafting=合成設定
 for.config.crafting.bronze=合成青銅
@@ -1594,18 +1736,42 @@ for.config.tweaks.permissions.comment=對林業機器啟用限制存取功能。
 for.config.tweaks.version.check=版本檢查
 for.config.tweaks.version.check.comment=啟用更新與版本檢查訊息。
 
+for.config.tweaks.humus.degradeDelimiter=腐植質降解分隔刻度
+for.config.tweaks.humus.degradeDelimiter.comment=設定腐植質在變成沙之前有幾個階段。
+
 for.config.tweaks.farms.size=農場大小
 for.config.tweaks.farms.size.comment=調整農場大小倍率。
+for.config.tweaks.farms.fertilizer=農場肥料
+for.config.tweaks.farms.fertilizer.comment=設定多方塊農場和栽培場的倍率。所有栽培場皆使用兩倍的肥料。
 for.config.tweaks.farms.square=方形農場
 for.config.tweaks.farms.square.comment=使農場從菱形改為方形。
 for.config.tweaks.farms.enderlily=EnderLily 農場支援
 for.config.tweaks.farms.enderlily.comment=對 ExtraUtilities 的 Ender-lily 種子啟用農場支援。
+for.config.tweaks.farms.redorchid=紅蘭花農場支援
+for.config.tweaks.farms.redorchid.comment=對 ExtraUtilities 模組的紅蘭花啟用農場支援。
 for.config.tweaks.farms.magicalcrops=Magical Crops 農場支援
 for.config.tweaks.farms.magicalcrops.comment=對 Magical Crops 啟用農場支援。
+
+for.config.tweaks.cultivation.extend=栽培場大小
+for.config.tweaks.cultivation.extend.comment=設定所有栽培場使用的農地大小。
+for.config.tweaks.cultivation.ring=環形栽培場
+for.config.tweaks.cultivation.ring.comment=使栽培場使用像舊農場那樣的環形佈局。環形佈局的農地大小總是小一格方塊。
+for.config.tweaks.cultivation.ring_size=內圈大小
+for.config.tweaks.cultivation.ring_size.comment=設定環形佈局的內圈大小。
+
+for.config.tweaks.capsule.capsulePickup=膠囊拾取
+for.config.tweaks.capsule.capsulePickup.comment=啟用讓罐子與膠囊能夠從世界拾取流體的功能。
+for.config.tweaks.capsule.capsuleReuseable=可重複使用的膠囊
+for.config.tweaks.capsule.capsuleReuseable.comment=膠囊在被倒空後不再被消耗。
+
+for.config.tweaks.book.spawn=林務員手冊
+for.config.tweaks.book.spawn.comment=第一次進入世界的玩家會得到一本林務員手冊。
 
 for.config.genetics=基因
 for.config.genetics.pollinate.vanilla.trees=原生樹葉授粉
 for.config.genetics.pollinate.vanilla.trees.comment=允許蜜蜂、蝴蝶與玩家可直接對原生樹葉授粉。停用時，原生樹種必須先被分析後才可授粉。
+for.config.genetics.analyzerblock.energy.use=分析儀方塊能量使用
+for.config.genetics.analyzerblock.energy.use.comment=每個工作週期中分析儀方塊的能量使用。
 for.config.genetics.research.boost.multiplier=Research Mutation Multiplier
 for.config.genetics.research.boost.multiplier.comment=Multiplies the chance of a mutation when it has been discovered in the Escritoire.
 for.config.genetics.research.boost.max.percent=Research Mutation Max
@@ -1639,6 +1805,23 @@ for.config.beekeeping.flowers.accepted=Accepted Flowers
 for.config.beekeeping.flowers.accepted.comment=Accepted flowers allow bees to work. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.
 for.config.beekeeping.flowers.plantable=Plantable Flowers
 for.config.beekeeping.flowers.plantable.comment=Plantable flowers are placed by bees. All plantable flowers are automatically accepted flowers. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.
+for.config.beekeeping.flowers.spawn=最大花朵生成
+for.config.beekeeping.flowers.spawn.comment=蜂巢隨時間能在附近生成的最大花朵數量。
+for.config.beekeeping.ticks.work=每週期刻數
+for.config.beekeeping.ticks.work.comment=每個蜜蜂工作週期的刻數量。
+for.config.beekeeping.hivedamage.peaceful=和平模式蜂巢傷害
+for.config.beekeeping.hivedamage.peaceful.comment=蜜蜂是否能傷害一位在和平模式中遊玩的玩家。
+for.config.beekeeping.hivedamage.underwater=水下蜂巢傷害
+for.config.beekeeping.hivedamage.underwater.comment=蜜蜂是否能傷害一位在水中的玩家。
+for.config.beekeeping.hivedamage.onlyOnAttack=防禦蜂巢傷害
+for.config.beekeeping.hivedamage.onlyOnAttack.comment=蜜蜂只有在玩家開始摧毀蜂巢時才會攻擊玩家。
+for.config.beekeeping.hivedamage.onlyPlayers=玩家蜂巢傷害
+for.config.beekeeping.hivedamage.onlyPlayers.comment=蜜蜂是否能夠傷害玩家以外的其他實體。
+for.config.beekeeping.self.pollination=樹葉自花授粉
+for.config.beekeeping.self.pollination.comment=如果為true，蜜蜂將會將葉子與自己授粉以加快得到同型合子基因。
+for.config.beekeeping.ignoble.decay=混血種衰退
+for.config.beekeeping.ignoble.decay.comment=混血種蜜蜂最後是否會自然滅亡。
+
 
 for.config.species.blacklist=Species Blacklist
 for.config.species.blacklist.comment=Add species to blacklist identified by their uid, one per line.
@@ -1646,15 +1829,31 @@ for.config.species.blacklist.comment=Add species to blacklist identified by thei
 for.config.butterfly.alleles.rarity=Get the butterfly spawn rarity by their uid, one per line.
 for.config.butterfly.entities.spawn.limit=Butterfly Spawn Limit
 for.config.butterfly.entities.spawn.limit.comment=Butterflies will stop natural spawning once this limit is reached.
+for.config.butterfly.entities.spawn.leaves=從樹葉生成蝴蝶
+for.config.butterfly.entities.spawn.leaves.comment=蝴蝶是否應該從樹葉中生成。
 for.config.butterfly.entities.maximum=Butterfly Maximum
 for.config.butterfly.entities.maximum.comment=New butterflies will stay in item form and will not take flight once this limit is reached.
 for.config.butterfly.entities.maxDistance=Maximum Distance To Home
 for.config.butterfly.entities.maxDistance.comment=Butterflies will fly home if they are too far away from it.
 for.config.butterfly.entities.pollination=Butterfly Pollination
 for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate leaves.
+for.config.butterfly.cocoons.generate=產生蝴蝶繭
+for.config.butterfly.cocoons.generate.comment=容納蝴蝶的繭是否應該在世界中生成。
+for.config.butterfly.cocoons.amount=蝴蝶繭生成頻率
+for.config.butterfly.cocoons.amount.comment=蝴蝶繭生成的頻率。
+for.config.butterfly.cocoons.serum=血清掉落機率
+for.config.butterfly.cocoons.serum.comment=繭掉落血清的頻率。
+for.config.butterfly.cocoons.second.serum=第二次血清掉落機率
+for.config.butterfly.cocoons.second.serum.comment=繭掉落第二個血清的頻率。
+for.config.butterfly.alleles.loot=從繭掉落的物品。格式為 'modid:name:meta;chance'
 
 for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
+
+for.config.crates.items.accepted.comment=已加入的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
+for.config.crates.items.rejected.comment=已黑名單的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
+for.config.crates.oredict.accepted.comment=已加入的礦物字典。格式為 'oreDictName'。也可以使用正規表達式。更多資訊請見背包設定。
+for.config.crates.oredict.rejected.comment=已黑名單的礦物字典。格式為 'oreDictName'。也可以使用正規表達式。更多資訊請見背包設定。
 
 for.config.gamemode=遊戲模式
 
@@ -1693,6 +1892,19 @@ for.config.gamemode.squeezer.liquid.apple.comment=modifies the amount of juice s
 for.config.gamemode.squeezer.mulch.apple.comment=modifies the chance of mulch per squeezed apple.
 
 for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
+
+for.config.power.types.rf=Redstone Flux (RF)
+for.config.power.types.rf.comment=啟用 RF 能量支援。
+for.config.power.types.mj=Minecraft Joule (MJ)
+for.config.power.types.mj.comment=啟用 MJ 能量支援。
+for.config.power.types.tesla=Tesla (特斯拉)
+for.config.power.types.tesla.comment=啟用 Tesla 能量支援
+for.config.power.display.mode=能量顯示模式
+for.config.power.display.mode.comment=格式化的能量將會被顯示在引擎/機器的介面中。
+
+for.config.machines.enabled=啟用機器
+for.config.machines.enabled.comment=已啟用的機器列表。注意： 如果你改變了這個選項，某些事可能無法進行。
+
 
 ###################################
 # CUSTOM BEE AND TREE SPECIES NAMES
@@ -1803,7 +2015,12 @@ for.jei.description.lepidopterist_bag=Extra inventory that automatically picks u
 ####################
 for.jei.rainmaker.causes.rain=造雨
 for.jei.rainmaker.stops.rain=止雨
-for.jei.rainmaker.speed=速度：%s
-for.jei.rainmaker.duration=時間：%s ticks
-tile.for.charcoal.pile.wall.name=木炭堆
-for.jei.chance=機率：%s
+for.jei.rainmaker.speed=速度： %s
+for.jei.rainmaker.duration=時間： %s刻
+for.jei.farming.name=農業
+for.jei.farming.soil=土壤
+for.jei.farming.germlings=幼體
+for.jei.farming.products=產物
+for.jei.charcoal.pile.name=木炭堆
+for.jei.chance=機率： %s
+for.jei.fortune=此物品的數量受幸運附魔的影響。
