@@ -461,7 +461,7 @@ item.for.bee_combs.cocoa.name=可可蜂巢
 item.for.bee_combs.darkened.name=暗黑蜂巢
 item.for.bee_combs.dripping.name=滴水蜂巢
 item.for.bee_combs.frozen.name=凍結蜂巢
-item.for.bee_combs.honey.name=蜜蜂蜂巢
+item.for.bee_combs.honey.name=蜂蜜蜂巢
 item.for.bee_combs.irradiated.name=輻射蜂巢
 item.for.bee_combs.mellow.name=醇厚蜂巢
 item.for.bee_combs.mossy.name=苔蘚蜂巢
@@ -477,7 +477,7 @@ item.for.bee_combs.wheaten.name=麥香蜂巢
 
 item.for.beeswax.name=蜜蠟
 
-item.for.biome_finder.name=生物群系定位儀
+item.for.biome_finder.name=棲息地定位儀
 item.for.bituminous_peat.name=瀝青質泥炭
 item.for.broken_bronze_pickaxe.name=損壞的鎬
 item.for.broken_bronze_shovel.name=損壞的鏟
@@ -489,10 +489,10 @@ item.for.can.grammar=%s罐
 
 item.for.carton.name=紙板箱
 
-item.for.circuitboard.basic.name=小型電路板
-item.for.circuitboard.enhanced.name=中型電路板
-item.for.circuitboard.intricate.name=先進電路板
-item.for.circuitboard.refined.name=大型電路板
+item.for.circuitboard.basic.name=基礎電路板
+item.for.circuitboard.enhanced.name=增強電路板
+item.for.circuitboard.intricate.name=複雜電路板
+item.for.circuitboard.refined.name=精製電路板
 item.for.circuitboard.tooltip.singular=可連接 %s 個真空管。
 item.for.circuitboard.tooltip.plural=可連接 %s 個真空管。
 
@@ -502,7 +502,7 @@ item.for.crafting_material.ice_shard.name=碎冰
 item.for.crafting_material.pulsating_dust.name=脈動之塵
 item.for.crafting_material.pulsating_mesh.name=脈動網格
 item.for.crafting_material.scented_paneling.name=飄香鑲板
-item.for.crafting_material.camouflaged_paneling.name=偽裝板
+item.for.crafting_material.camouflaged_paneling.name=偽裝鑲板
 item.for.crafting_material.silk_wisp.name=絲縷
 item.for.crafting_material.woven_silk.name=絲綢
 
@@ -536,7 +536,7 @@ item.for.gear_tin.name=錫齒輪
 
 item.for.hardened_machine.name=強化部件
 
-item.for.honeydew.name=蜂蜜汁
+item.for.honeydew.name=蜜露
 
 item.for.portable_alyzer.name=可攜式分析儀
 item.for.portable_alyzer.tooltip=手持式基因分析儀，用於蜜蜂、樹苗與蝴蝶。
@@ -557,7 +557,7 @@ item.for.ingot_bronze.name=青銅錠
 item.for.ingot_copper.name=銅錠
 item.for.ingot_tin.name=錫錠
 
-item.for.iodine_capsule.name=碘酒膠囊
+item.for.iodine_capsule.name=碘膠囊
 item.for.iodine_capsule.tooltip=對造雨機使用來造雨。
 item.for.kit_pickaxe.name=鎬子應急袋
 item.for.kit_shovel.name=鏟子應急袋
@@ -569,7 +569,7 @@ item.for.naturalist_helmet.name=眼鏡
 item.for.naturalist_helmet.tooltip=戴著就能看到已授粉的葉子，和多方塊構造的錯誤。
 item.for.oak_stick.name=浸漬木棍
 item.for.peat.name=泥炭
-item.for.phosphor.name=螢光粉
+item.for.phosphor.name=磷光粉
 item.for.pipette.name=移液管
 
 item.for.pollen.crystalline.name=結晶花粉
@@ -578,7 +578,7 @@ item.for.pollen.normal.name=花粉
 item.for.propolis.normal.name=蜂膠
 item.for.propolis.pulsating.name=脈動蜂膠
 item.for.propolis.silky.name=絲滑蜂膠
-item.for.propolis.sticky.name=粘性蜂膠
+item.for.propolis.sticky.name=黏性蜂膠
 
 item.for.refractory.empty.name=耐火膠囊
 item.for.refractory.grammar=耐火%s膠囊
