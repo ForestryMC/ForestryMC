@@ -151,8 +151,8 @@ for.gui.drones=雄蜂
 for.gui.effect=特殊效果
 for.gui.empty=空
 for.gui.emptysocket=空插槽
-for.gui.empty.slot.camouflage.multiblock=Multiblock Camouflage Slot
-for.gui.empty.slot.camouflage=Camouflage Slot
+for.gui.empty.slot.camouflage.multiblock=多方塊偽裝槽
+for.gui.empty.slot.camouflage=偽裝槽
 for.gui.socket.remove=可用電烙鐵拆卸
 for.gui.energy=能量
 for.gui.environment=環境
@@ -323,7 +323,7 @@ for.gui.warm=溫暖
 for.gui.water=水域
 for.gui.worker=工蜂
 
-for.gui.camouflage_spray_can=Camouflage Spray Can
+for.gui.camouflage_spray_can=偽裝噴霧罐
 
 for.hints.apiaristsuit.desc=全副武裝讓您遠離蜜蜂帶來的各種負面狀態。
 for.hints.apiaristsuit.tag=養蜂套裝！
@@ -418,7 +418,7 @@ for.mutation.condition.humidity.range=需要濕度介於 %LOW 與 %HIGH。
 for.mutation.condition.humidity.single=需要濕度為 %s。
 for.mutation.condition.temperature.range=需要溫度介於 %LOW 與 %HIGH。
 for.mutation.condition.temperature.single=需要溫度為 %s。
-for.mutation.condition.resource=Requires %s as a foundation.
+for.mutation.condition.resource=需要 %s 作為基礎。
 for.mutation.condition.date=發生於 %START 與 %END。
 
 for.storage.backpack.mode.locked=(已鎖定)
@@ -633,7 +633,7 @@ item.for.wood_pulp.name=木漿
 item.for.wrench.name=扳手
 item.for.wrench.tooltip=按住Shift使用來旋轉方塊。
 
-item.for.camouflage_spray_can.name=Camouflage Spray Can
+item.for.camouflage_spray_can.name=偽裝噴霧罐
 
 itemGroup.apiculture=林業|養蜂
 itemGroup.arboriculture=林業|植樹
@@ -749,13 +749,13 @@ for.errors.not_lucid.help=需要更亮的環境來進行操作。
 for.errors.not_night.desc=不是夜晚
 for.errors.not_night.help=操作需要在夜晚進行。
 for.errors.too_hot.desc=過於炎熱
-for.errors.too_hot.help=The bees are melting in the heat here and unable to work. Use a Habitat Locator to find a cooler climate.
+for.errors.too_hot.help=這些蜜蜂熱壞了而無法工作。使用棲息地定位儀來找到一個涼爽一點的氣候。
 for.errors.too_cold.desc=過於寒冷
-for.errors.too_cold.help=The bees are huddled together to survive the freezing cold here. Use a Habitat Locator to find a warmer climate.
+for.errors.too_cold.help=這些蜜蜂為了熬過刺骨的寒冷而擠成一團。使用棲息地定位儀來找到一個溫暖一點的氣候。
 for.errors.too_humid.desc=過於潮濕
-for.errors.too_humid.help=The climate here has made the bees' wings too damp to fly. Use a Habitat Locator to find a dryer climate.
+for.errors.too_humid.help=這裡的氣候讓蜜蜂們的翅膀過於潮濕而難以飛行。使用棲息地定位儀來找到一個乾燥一點的氣候。
 for.errors.too_arid.desc=過於乾燥
-for.errors.too_arid.help=The dry climate here has made the bees parched and unable to work. Use a Habitat Locator to find a wetter climate.
+for.errors.too_arid.help=這裡的氣候讓蜜蜂們過於乾渴而無法工作。使用棲息地定位儀來找到一個潮濕一點的氣候。
 
 # MACHINES
 for.errors.no_power.desc=無能量
@@ -768,10 +768,10 @@ for.errors.no_recipe.desc=無合成公式
 for.errors.no_recipe.help=未發現與提供的資源匹配的合成公式。
 for.errors.no_resource.desc=缺乏資源
 for.errors.no_resource.help=需要更多的資源來進行操作。
-for.errors.no_resource_inventory.desc=Inventory needs resources
-for.errors.no_resource_inventory.help=Resources need to be added to the machine's inventory to begin crafting this recipe.
-for.errors.no_resource_liquid.desc=Missing liquid resources
-for.errors.no_resource_liquid.help=More liquid resources need to be supplied for operation.
+for.errors.no_resource_inventory.desc=內部空間需要資源
+for.errors.no_resource_inventory.help=資源需要被加到機器的內部空間以開始製作此配方。
+for.errors.no_resource_liquid.desc=缺乏液體資源
+for.errors.no_resource_liquid.help=需要更多的液體資源來進行操作。
 for.errors.no_space.desc=無內部空間
 for.errors.no_space.help=清空該機器的儲物空間。
 for.errors.no_space_tank.desc=儲液槽無空間
@@ -1114,8 +1114,8 @@ for.gui.book.category.genetics.title=遺傳學
 ####################
 
 for.multiblock.error.notConnected=多重方塊沒有連接到控制方塊。這可能是因為網路延遲，或是錯誤。如果這個問題持續存在，試著打破並重新放置方塊。
-for.multiblock.error.invalid.interior=(%s) - Block is not valid for use in the machine's interior.
-for.multiblock.error.invalid.part=A multiblock part is incompatible with this type (%s).
+for.multiblock.error.invalid.interior=(%s) - 該方塊不是用於機器內部的有效方塊。
+for.multiblock.error.invalid.part=多重方塊的一部分並不與此類型相容 (%s)。
 for.multiblock.error.small=多重方塊太小。大小必須至少為%dx%dx%d。
 for.multiblock.error.large.x=多重方塊太大，它最多只能是%d格寬。
 for.multiblock.error.large.y=多重方塊太大，它最多只能是%d格高。
@@ -1124,17 +1124,17 @@ for.multiblock.error.small.x=多重方塊太小，它最少必須是%d格寬。
 for.multiblock.error.small.y=多重方塊太小，它最少必須是%d格高。
 for.multiblock.error.small.z=多重方塊太小，它最少必須是%d格深。
 
-for.multiblock.alveary.error.needSlabs=The Alveary must have wooden slabs on top.
-for.multiblock.alveary.error.needSpace=The alveary needs space around the top for the bees to enter and exit.
-for.multiblock.alveary.error.needPlainOnTop=The Alveary must have plain alveary blocks for the top level.
-for.multiblock.alveary.error.needPlainInterior=The Alveary must have plain alveary blocks for the interior.
+for.multiblock.alveary.error.needSlabs=蜂箱組必須有木板在頂部。
+for.multiblock.alveary.error.needSpace=蜂箱組需要有頂部周圍的空間讓蜜蜂進出。
+for.multiblock.alveary.error.needPlainOnTop=蜂箱組在最上層必須使用普通的蜂箱組方塊。
+for.multiblock.alveary.error.needPlainInterior=蜂箱組在內部必須使用普通的蜂箱組方塊。
 
-for.multiblock.farm.error.needPlainBand=The Farm must have plain farm blocks for the third level.
-for.multiblock.farm.error.needPlainInterior=The Farm must have plain farm blocks for the interior.
-for.multiblock.farm.error.needGearbox=The farm must have a gearbox to accept power and do work.
+for.multiblock.farm.error.needPlainBand=農場在第三層必須使用普通的農場方塊。
+for.multiblock.farm.error.needPlainInterior=農場在內部必須使用普通的農場方塊。
+for.multiblock.farm.error.needGearbox=農場必須有一個用來接收能量和進行工作的齒輪箱。
 
-for.multiblock.alveary.type=Alveary
-for.multiblock.farm.type=Farm
+for.multiblock.alveary.type=蜂箱組
+for.multiblock.farm.type=農場
 
 ####################
 # ARBORICULTURE
@@ -1226,11 +1226,11 @@ for.trees.grammar.leaves=%SPECIES%TYPE
 for.trees.grammar.pile.type=木材量
 for.trees.grammar.pile=%SPECIES%TYPE
 
-tile.for.wood_pile.name=Wood Pile
+tile.for.wood_pile.name=木材堆
 tile.for.wood_pile_decorative.name=裝飾用木材堆
-tile.for.loam.name=Loam
+tile.for.loam.name=壤土
 tile.for.ash_block.name=灰燼磚
-tile.for.charcoal.name=Block of Charcoal
+tile.for.charcoal.name=木炭磚
 
 for.trees.hybrid=%PRIMARY-%SECONDARY雜交種
 
@@ -1772,39 +1772,39 @@ for.config.genetics.pollinate.vanilla.trees=原生樹葉授粉
 for.config.genetics.pollinate.vanilla.trees.comment=允許蜜蜂、蝴蝶與玩家可直接對原生樹葉授粉。停用時，原生樹種必須先被分析後才可授粉。
 for.config.genetics.analyzerblock.energy.use=分析儀方塊能量使用
 for.config.genetics.analyzerblock.energy.use.comment=每個工作週期中分析儀方塊的能量使用。
-for.config.genetics.research.boost.multiplier=Research Mutation Multiplier
-for.config.genetics.research.boost.multiplier.comment=Multiplies the chance of a mutation when it has been discovered in the Escritoire.
-for.config.genetics.research.boost.max.percent=Research Mutation Max
-for.config.genetics.research.boost.max.percent.comment=The maximum percentage boost that can be applied by researching a mutation in the Escritoire.
+for.config.genetics.research.boost.multiplier=研究變異倍率
+for.config.genetics.research.boost.multiplier.comment=加成它在寫字檯中被發現變異的機率。
+for.config.genetics.research.boost.max.percent=最大研究變異
+for.config.genetics.research.boost.max.percent.comment=能夠被應用在寫字檯研究變異的最大機率加成。
 
 for.config.difficulty=難度
 for.config.difficulty.game.mode=遊戲模式
-for.config.difficulty.game.mode.comment=設定您偏好的遊戲模式。當不同於伺服器時可能會在製作公式上產生錯誤的假象。
-for.config.difficulty.recreate.definitions=Recreate Definitions
-for.config.difficulty.recreate.definitions.comment=Forces recreation of the game mode definitions in config/forestry/gamemodes.
+for.config.difficulty.game.mode.comment=設定您偏好的遊戲模式。當不同於伺服器時可能會在配方上產生錯誤的假象。
+for.config.difficulty.recreate.definitions=重新創造定義
+for.config.difficulty.recreate.definitions.comment=強制重新創造在 設定/林業模組/遊戲模式 中的遊戲模式定義。
 
 for.config.structures=建築物
 for.config.structures.disabled=停用建築物
-for.config.structures.disabled.comment=List specific structures to disable them.
+for.config.structures.disabled.comment=列出特定的建築以停用它們。
 
-for.config.farm.fertilizers.items=Add fertilizers to forestry. An entry have to looks like this modID:itemName:MetaData;fertilizerValue. You need to seperate every entry in a sererate line.
+for.config.farm.fertilizers.items=加入肥料到林業模組。每個條目必須看起來像這樣 'modID:itemName:MetaData;fertilizerValue'。你需要把每一個條目分開到分別的一行。你無法移除自動產生的條目，你只能將它們的值設成0來停用它們。
 
 for.config.fluids=液體
-for.config.fluids.enable.format=Enables %s fluid.
-for.config.fluid.blocks=Fluid Blocks
-for.config.fluid.blocks.enable.format=Enables %s in-world fluid block.
+for.config.fluids.enable.format=啟用%s流體。
+for.config.fluid.blocks=流體方塊
+for.config.fluid.blocks.enable.format=啟用世界中的%s液體方塊。
 
 for.config.debug.enabled=偵錯模式
-for.config.debug.enabled.comment=Enable Debug mode (only useful to developers).
+for.config.debug.enabled.comment=啟用偵錯模式(只對開發者有用)。
 
-for.config.beekeeping.mode=Beekeeping Mode
-for.config.beekeeping.mode.comment=Change the beekeeping mode.
-for.config.beekeeping.second.princess=Second Princess Chance
-for.config.beekeeping.second.princess.comment=Percent chance of a second princess drop, for limited/skyblock maps.
-for.config.beekeeping.flowers.accepted=Accepted Flowers
-for.config.beekeeping.flowers.accepted.comment=Accepted flowers allow bees to work. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.
-for.config.beekeeping.flowers.plantable=Plantable Flowers
-for.config.beekeeping.flowers.plantable.comment=Plantable flowers are placed by bees. All plantable flowers are automatically accepted flowers. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.
+for.config.beekeeping.mode=養蜂模式
+for.config.beekeeping.mode.comment=改變養蜂模式。
+for.config.beekeeping.second.princess=第二次公主蜂機會
+for.config.beekeeping.second.princess.comment=掉落第二隻公主蜂的百分機率。(為了一些限定/空島生存地圖使用)
+for.config.beekeeping.flowers.accepted=可接受花朵
+for.config.beekeeping.flowers.accepted.comment=可接受花朵允許蜜蜂工作。格式為 'modid:name:meta'，每行一筆。通配 metadata 的格式為 'modid:name'。
+for.config.beekeeping.flowers.plantable=可種植花朵
+for.config.beekeeping.flowers.plantable.comment=可種植花朵能夠被蜜蜂放置。所有可種植花朵自動為可接受花朵。格式是 'modid:name:meta'，每行一筆。通配 metadata 的格式為 'modid:name'。
 for.config.beekeeping.flowers.spawn=最大花朵生成
 for.config.beekeeping.flowers.spawn.comment=蜂巢隨時間能在附近生成的最大花朵數量。
 for.config.beekeeping.ticks.work=每週期刻數
@@ -1823,20 +1823,20 @@ for.config.beekeeping.ignoble.decay=混血種衰退
 for.config.beekeeping.ignoble.decay.comment=混血種蜜蜂最後是否會自然滅亡。
 
 
-for.config.species.blacklist=Species Blacklist
-for.config.species.blacklist.comment=Add species to blacklist identified by their uid, one per line.
+for.config.species.blacklist=物種黑名單
+for.config.species.blacklist.comment=根據指定的UID將物種加到黑名單，每行一筆。
 
-for.config.butterfly.alleles.rarity=Get the butterfly spawn rarity by their uid, one per line.
-for.config.butterfly.entities.spawn.limit=Butterfly Spawn Limit
-for.config.butterfly.entities.spawn.limit.comment=Butterflies will stop natural spawning once this limit is reached.
+for.config.butterfly.alleles.rarity=根據指定的UID取得蝴蝶生成稀有度，每行一筆。
+for.config.butterfly.entities.spawn.limit=蝴蝶生成限制
+for.config.butterfly.entities.spawn.limit.comment=一旦達到這個限制，蝴蝶將會停止自然生成。
 for.config.butterfly.entities.spawn.leaves=從樹葉生成蝴蝶
 for.config.butterfly.entities.spawn.leaves.comment=蝴蝶是否應該從樹葉中生成。
-for.config.butterfly.entities.maximum=Butterfly Maximum
-for.config.butterfly.entities.maximum.comment=New butterflies will stay in item form and will not take flight once this limit is reached.
-for.config.butterfly.entities.maxDistance=Maximum Distance To Home
-for.config.butterfly.entities.maxDistance.comment=Butterflies will fly home if they are too far away from it.
-for.config.butterfly.entities.pollination=Butterfly Pollination
-for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate leaves.
+for.config.butterfly.entities.maximum=蝴蝶最大值
+for.config.butterfly.entities.maximum.comment=一旦達到這個限制，新的蝴蝶將會維持物品型態並且不進行飛行。
+for.config.butterfly.entities.maxDistance=最大離家距離
+for.config.butterfly.entities.maxDistance.comment=如果離家太遠，蝴蝶將會飛回家。
+for.config.butterfly.entities.pollination=蝴蝶授粉
+for.config.butterfly.entities.pollination.comment=允許蝴蝶為葉子授粉。
 for.config.butterfly.cocoons.generate=產生蝴蝶繭
 for.config.butterfly.cocoons.generate.comment=容納蝴蝶的繭是否應該在世界中生成。
 for.config.butterfly.cocoons.amount=蝴蝶繭生成頻率
@@ -1847,8 +1847,8 @@ for.config.butterfly.cocoons.second.serum=第二次血清掉落機率
 for.config.butterfly.cocoons.second.serum.comment=繭掉落第二個血清的頻率。
 for.config.butterfly.alleles.loot=從繭掉落的物品。格式為 'modid:name:meta;chance'
 
-for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
-for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
+for.config.backpacks.item.stacks.format=在這裡以 'modid:name:meta' 的格式為%s的背包添加物品堆疊。通配 metadata 的格式為 'modid:name'。
+for.config.backpacks.ore.dict.format=在這裡以 'oreDictName' 的格式為%s的背包添加礦物字典名稱。也可以使用正規表達式。
 
 for.config.crates.items.accepted.comment=已加入的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
 for.config.crates.items.rejected.comment=已黑名單的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
@@ -1857,41 +1857,41 @@ for.config.crates.oredict.rejected.comment=已黑名單的礦物字典。格式�
 
 for.config.gamemode=遊戲模式
 
-for.config.gamemode.energy.demand.modifier.comment=Modifies the energy required to activate machines, as well as the max amount of energy stored and accepted.
-for.config.gamemode.farms.fertilizer.modifier.value.comment=Modifies the time a piece of fertilizer lasts in a farm.
+for.config.gamemode.energy.demand.modifier.comment=變更啟動機器所需要的能量以及最大接收量和儲存量。
+for.config.gamemode.farms.fertilizer.modifier.value.comment=變更一份肥料在農場中的持續時間。
 
-for.config.gamemode.fuel.ethanol.generator.comment=modifies the energy provided by ethanol in a Bio Generator.
-for.config.gamemode.fuel.ethanol.combustion.comment=modifies the energy provided by ethanol in Buildcraft Combustion Engines.
-for.config.gamemode.fuel.biomass.generator.comment=modifies the energy provided by Biomass in a Bio Generator.
-for.config.gamemode.fuel.biomass.biogas.comment=modifies the energy provided by Biomass in Biogas Engines.
+for.config.gamemode.fuel.ethanol.generator.comment=變更乙醇在生物質引擎中提供的能量。
+for.config.gamemode.fuel.ethanol.combustion.comment=變更乙醇在BC內燃引擎中提供的能量。
+for.config.gamemode.fuel.biomass.generator.comment=變更生物質在生物質引擎中提供的能量。
+for.config.gamemode.fuel.biomass.biogas.comment=變更生物質在生物燃油引擎中提供的能量。
 
-for.config.gamemode.recipe.output.fertilizer.apatite.comment=amount of fertilizer yielded by the recipe using apatite.
-for.config.gamemode.recipe.output.fertilizer.ash.comment=amount of fertilizer yielded by the recipe using ash.
-for.config.gamemode.recipe.output.compost.wheat.comment=amount of compost yielded by the recipe using wheat.
-for.config.gamemode.recipe.output.compost.ash.comment=amount of compost yielded by the recipe using ash.
-for.config.gamemode.recipe.output.humus.fertilizer.comment=amount of humus yielded by the recipe using fertilizer.
-for.config.gamemode.recipe.output.humus.compost.comment=amount of humus yielded by the recipe using compost.
-for.config.gamemode.recipe.output.bogearth.bucket.comment=amount of bog earth yielded by the recipe using buckets.
-for.config.gamemode.recipe.output.bogearth.can.comment=amount of bog earth yielded by the recipes using cans, cells or capsules.
-for.config.gamemode.recipe.output.can.comment=amount yielded by the recipe for tin cans.
-for.config.gamemode.recipe.output.capsule.comment=amount yielded by the recipe for wax capsules.
-for.config.gamemode.recipe.output.refractory.comment=amount yielded by the recipe for refractory capsules.
+for.config.gamemode.recipe.output.fertilizer.apatite.comment=使用磷灰石當作配方的肥料產量。
+for.config.gamemode.recipe.output.fertilizer.ash.comment=使用灰燼當作配方的肥料產量。
+for.config.gamemode.recipe.output.compost.wheat.comment=使用小麥當作配方的堆肥產量。
+for.config.gamemode.recipe.output.compost.ash.comment=使用灰燼當作配方的堆肥產量。
+for.config.gamemode.recipe.output.humus.fertilizer.comment=使用肥料當作配方的腐植土產量。
+for.config.gamemode.recipe.output.humus.compost.comment=使用堆肥當作配方的腐植土產量。
+for.config.gamemode.recipe.output.bogearth.bucket.comment=使用水桶當作配方的沼澤泥產量。
+for.config.gamemode.recipe.output.bogearth.can.comment=使用罐子、單元罐或膠囊當作配方的沼澤泥產量。
+for.config.gamemode.recipe.output.can.comment=使用鋁罐當作配方的產量。
+for.config.gamemode.recipe.output.capsule.comment=使用石蠟膠囊當作配方的產量。
+for.config.gamemode.recipe.output.refractory.comment=使用耐火石蠟膠囊當作配方的產量。
 
-for.config.gamemode.fermenter.cycles.fertilizer.comment=modifies the amount of cycles fertilizer can keep a fermenter going.
-for.config.gamemode.fermenter.cycles.compost.comment=modifies the amount of cycles compost can keep a fermenter going.
-for.config.gamemode.fermenter.value.fertilizer.comment=modifies the amount of biomass per cycle a fermenter will produce using fertilizer.
-for.config.gamemode.fermenter.value.compost.comment=modifies the amount of biomass per cycle a fermenter will produce using compost.
-for.config.gamemode.fermenter.yield.sapling.comment=modifies the base amount of biomass a sapling will yield in a fermenter, affected by sappiness trait.
-for.config.gamemode.fermenter.yield.cactus.comment=modifies the amount of biomass a piece of cactus will yield in a fermenter.
-for.config.gamemode.fermenter.yield.wheat.comment=modifies the amount of biomass a piece of wheat will yield in a fermenter.
-for.config.gamemode.fermenter.yield.cane.comment=modifies the amount of biomass a piece of sugar cane will yield in a fermenter.
-for.config.gamemode.fermenter.yield.mushroom.comment=modifies the amount of biomass a mushroom will yield in a fermenter.
+for.config.gamemode.fermenter.cycles.fertilizer.comment=變更肥料能讓發酵機運轉的循環次數。
+for.config.gamemode.fermenter.cycles.compost.comment=變更堆肥能讓發酵機運轉的循環次數。
+for.config.gamemode.fermenter.value.fertilizer.comment=變更發酵機使用肥料時每個循環的生物質產量。
+for.config.gamemode.fermenter.value.compost.comment=變更發酵機使用堆肥時每個循環的生物質產量。
+for.config.gamemode.fermenter.yield.sapling.comment=變更一株樹苗在發酵機中能產生的基本生物質量，受多汁特性影響。
+for.config.gamemode.fermenter.yield.cactus.comment=變更一片仙人掌在發酵機中能產生的生物質量。
+for.config.gamemode.fermenter.yield.wheat.comment=變更一把小麥在發酵機中能產生的生物質量。
+for.config.gamemode.fermenter.yield.cane.comment=變更一段甘蔗在發酵機中能產生的生物質量。
+for.config.gamemode.fermenter.yield.mushroom.comment=變更一朵蘑菇在發酵機中能產生的生物質量。
 
-for.config.gamemode.squeezer.liquid.seed.comment=modifies the amount of seed oil squeezed from a single seed. other sources are based off this.
-for.config.gamemode.squeezer.liquid.apple.comment=modifies the amount of juice squeezed from a single apple. other sources are based off this.
-for.config.gamemode.squeezer.mulch.apple.comment=modifies the chance of mulch per squeezed apple.
+for.config.gamemode.squeezer.liquid.seed.comment=變更能從單個種子榨取出的種子油量。其他來源將以此作為基準。
+for.config.gamemode.squeezer.liquid.apple.comment=變更能從單個蘋果榨取出的果汁量。其他來源將以此作為基準。
+for.config.gamemode.squeezer.mulch.apple.comment=變更每個壓榨的蘋果產生覆蓋戍的機率。
 
-for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
+for.config.gamemode.energy.engine.clockwork.comment=啟用發條引擎。
 
 for.config.power.types.rf=Redstone Flux (RF)
 for.config.power.types.rf.comment=啟用 RF 能量支援。
@@ -1973,42 +1973,42 @@ for.config.machines.enabled.comment=已啟用的機器列表。注意： 如果�
 ####################
 for.jei.description.frames=將林業框架放置到蜂箱內來增加蜜蜂產能並減少混血種的基因衰退。
 for.jei.description.apiarist.suit=養蜂套裝中的每個部位都可保護穿著者，減低來自蜜蜂的負面影響。完整套裝可提供全面保護。
-for.jei.description.habitat_locator=The Habitat Locator searches for the closest ideal habitat for a bee. When it has located a spot, it will point the way there. When the current location is ideal, it will spin steadily.
+for.jei.description.habitat_locator=棲息地定位儀能夠為一隻蜜蜂搜尋最接近的理想棲地。當它定位出了一個地點時，它會指出那邊的方向。當目前的地點理想時，它會穩定的轉動。
 for.jei.description.scoop=捕蜂網可用來打碎野生蜂巢，並收集裡面的蜜蜂。它也可以使用右鍵來捕捉蝴蝶。
 for.jei.description.imprinter=只用於創造模式。可製造所有種類的混種蜜蜂。
 
-for.jei.description.infuser=Used to infuse Mead with Pollen Clusters and create Curative Mead.
+for.jei.description.infuser=用來將蜂蜜酒注入花粉以製成蜂蜜藥酒。
 
-for.jei.description.chipsets=Circuit Boards can be fitted with Electron Tubes by using a Soldering Iron. Once complete, they can be placed in the sockets on machine guis. Use a Soldering Iron to remove them from a socket.
-for.jei.description.soldering_iron=Right click with the Soldering Iron in hand to open the soldering gui. There, you can select the type of circuit to make and attach Electron Tubes to Circuit Boards. Can be used to remove a circuit board from a socket.
-for.jei.description.thermionic_tubes=Electron Tubes can be attached to Circuit Boards using a Soldering Iron. They have many purposes displayed on the tooltip, which depend on the circuit type selected in the Soldering Iron. Once soldered, they cannot be removed from a Circuit Board.
-for.jei.description.humus=Rich soil that can grow plants and doesn't require water. Degrades into sand over time.
-for.jei.description.bog_earth=Slowly turns into peat if left to soak near water for a while.
-for.jei.description.analyzer=Block version of the Portable Genetic Analyzer. Requires power and liquid honey.
-for.jei.description.escritoire=Play a matching mini-game to research bee, tree, and butterfly mutations. Gives research notes that boost mutation rates, and other rewards.
-for.jei.description.pipette=Can pick up small amounts of liquid. In Forestry GUIs, you can hold a pipette and click the tanks to fill or drain them directly.
-for.jei.description.kit_shovel=A stackable package that contains a bronze shovel. Use it in your hand to open.
-for.jei.description.kit_pickaxe=A stackable package that contains a bronze pickaxe. Use it in your hand to open.
-for.jei.description.fertilizer_compound=Rich fertilizer. Can be used as bonemeal on crops and saplings. Required in order to run a Forestry farm.
+for.jei.description.chipsets=電路板能用電烙鐵裝上真空管。一旦完成，它們能夠被放進機器使用者介面上的插槽。使用電烙鐵來將它們從插槽移除。
+for.jei.description.soldering_iron=手中拿著電烙鐵點擊右鍵來開啟焊接使用者介面。在那裡，你能夠選擇要製作的電路類型並把真空管接到電路板上。能被用來從插槽上移除電路板。
+for.jei.description.thermionic_tubes=真空管能夠被電烙鐵連接到電路板。它們依照在電烙鐵中選擇的電路類型有許多種用途(顯示在提示上)。一旦焊接上，它們將無法從電路板被移除。
+for.jei.description.humus=能夠培養植物而不需要水的肥沃土讓。會慢慢降解成沙子。
+for.jei.description.bog_earth=放著吸收附近的水一陣子後會慢慢轉變成泥炭。
+for.jei.description.analyzer=方塊版本的可攜式分析儀。需要能量和液態蜂蜜。
+for.jei.description.escritoire=進行一個小遊戲來研究蜜蜂、樹木和蝴蝶的變異。能提供增加變異機率的研究筆記以及其他獎勵。
+for.jei.description.pipette=能夠拾取少量的液體。在林業模組使用者介面中，你可以拿著移液管然後點擊水箱以直接裝滿或排空他們。
+for.jei.description.kit_shovel=一個裝著青銅鏟的可堆疊包裹。在手中使用以打開。
+for.jei.description.kit_pickaxe=一個裝著青銅鎬的可堆疊包裹。在手中使用以打開。
+for.jei.description.fertilizer_compound=肥沃的肥料。能夠像骨粉那樣使用在作物和樹苗上。經營林業模組農場必要的。
 
-for.jei.description.raintank=Collects water when it rains. Can automatically output water from the bottom side.
-for.jei.description.worktable=Advanced crafting table with an inventory. Remembers up to 9 recipes. Has the ability to choose the crafting result when there is a recipe conflict.
+for.jei.description.raintank=下雨時能夠收集雨水。能夠自動從底部輸出水。
+for.jei.description.worktable=附有儲存空間的進階工作台。能記住最多9個配方。具有在合成表衝突時選擇合成結果的能力。
 
-for.jei.description.grafter=Guarantees a sapling drop when breaking Forestry leaves. Has a very limited number of uses.
-for.jei.description.grafter_proven=Guarantees a sapling drop when breaking Forestry leaves. They can only be purchased from villagers.
+for.jei.description.grafter=在破壞林業模組的樹葉時保證必定有一個樹苗的掉落。只有非常有限的使用次數。
+for.jei.description.grafter_proven=在破壞林業模組的樹葉時保證必定有一個樹苗的掉落。此物品只能向村民購買。
 
-for.jei.description.mailbox=Allows players to send letters to trade stations and other players. Opening any mailbox will show the player their own mail.
-for.jei.description.trade_station=An automatic mailbox that lets players set up a trading deal.
-for.jei.description.stamp_collector=Creative-only. Collects all the stamps used by mailing letters. Useful for servers with a stamp economy.
+for.jei.description.mailbox=允許玩家傳送信件到貿易站和其他玩家。開啟任何信箱將會展示出該玩家自己的信件。
+for.jei.description.trade_station=一個能讓玩家發起交易的自動化信箱。
+for.jei.description.stamp_collector=創造模式限定。蒐集所有被用在信件上的郵票。在使用郵票經濟的伺服器上很有用。
 
-for.jei.description.adventurer_bag=Extra inventory that can hold whatever is set in the configs in /config/forestry/backpacks.cfg
-for.jei.description.builder_bag=Extra inventory that automatically picks up building-related items.
-for.jei.description.digger_bag=Extra inventory that automatically picks up dirt, cobble, and other low-value mining-related items.
-for.jei.description.forester_bag=Extra inventory that automatically picks up plants and related items.
-for.jei.description.hunter_bag=Extra inventory that automatically picks up mob drops and related items.
-for.jei.description.miner_bag=Extra inventory that automatically picks up ores and valuable mining-related items.
-for.jei.description.apiarist_bag=Extra inventory that automatically picks up bees.
-for.jei.description.lepidopterist_bag=Extra inventory that automatically picks up butterflies.
+for.jei.description.adventurer_bag=能夠容納任何設定在 /config/forestry/backpacks.cfg 中物品的額外背包。
+for.jei.description.builder_bag=會自動撿起建造相關物品的額外背包。
+for.jei.description.digger_bag=會自動撿起泥土、鵝卵石及其他低價值挖礦相關物品的額外背包。
+for.jei.description.forester_bag=會自動撿起植物及相關物品的額外背包。
+for.jei.description.hunter_bag=會自動撿起生物掉落物及相關物品的額外背包。
+for.jei.description.miner_bag=會自動撿起礦石及貴重挖礦相關物品的額外背包。
+for.jei.description.apiarist_bag=會自動撿起蜜蜂的額外背包。
+for.jei.description.lepidopterist_bag=會自動撿起蝴蝶的額外背包。
 
 ####################
 # JEI Recipes
