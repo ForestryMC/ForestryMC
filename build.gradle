@@ -48,7 +48,7 @@ sourceSets {
 
 repositories {
 	maven {
-		url 'http://maven.epoxide.xyz'
+		url 'http://maven.mcmoddev.com'
 	}
 	maven {
 		url "http://dvs1.progwml6.com/files/maven"

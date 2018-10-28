@@ -65,7 +65,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	
 	public void validate(World world) {
 		recipes = RecipeUtil.findMatchingRecipes(craftMatrix, world);
-		if (selectedRecipe > recipes.size()) {
+		if (selectedRecipe >= recipes.size()) {
 			selectedRecipe = 0;
 		}
 	}
