@@ -74,9 +74,8 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Random rand = world instanceof World ? ((World) world).rand : new Random();
-		int amount = state.getValue(AMOUNT);
+		int amount = startAmount + state.getValue(AMOUNT);
 		if (amount > 0) {
-			amount += startAmount;
 			amount += rand.nextInt(1 + fortune);
 			drops.add(new ItemStack(Items.COAL, amount, 1));
 			drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(amount / 4)));
