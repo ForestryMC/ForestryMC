@@ -1767,6 +1767,11 @@ for.config.tweaks.capsule.capsulePickup.comment=Enables the function that cans a
 for.config.tweaks.capsule.capsuleReuseable=Reuseable Capsules
 for.config.tweaks.capsule.capsuleReuseable.comment=Capsules are no longer consumed after being emptied.
 
+for.config.tweaks.charcoal.amount.base=Amount Base
+for.config.tweaks.charcoal.amount.base.comment=The base amount that the wood pile will drop if the wall blocks are no registered pile waal blocks.
+for.config.tweaks.charcoal.check.range=Wall Check Range
+for.config.tweaks.charcoal.check.range.comment=Sets the amount of blocks that the wood pile will check if it is a valid charcoal pile wall block.
+
 for.config.tweaks.book.spawn=Forester's Manual
 for.config.tweaks.book.spawn.comment=Players who enter the world for the first time get a Forester's Manual.
 

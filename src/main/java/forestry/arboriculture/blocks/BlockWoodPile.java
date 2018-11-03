@@ -36,6 +36,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.ModuleCharcoal;
+import forestry.core.config.Config;
 
 public class BlockWoodPile extends Block implements IItemModelRegister, IStateMapperRegister {
 
@@ -143,7 +144,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 				if (state.getValue(AGE) < 7) {
 					world.setBlockState(pos, state.withProperty(AGE, state.getValue(AGE) + 1), 2);
 				} else {
-					IBlockState ashState = ModuleCharcoal.getBlocks().getAshState(Math.round(9 + getCharcoalAmount(world, pos)));
+					IBlockState ashState = ModuleCharcoal.getBlocks().getAshState(Math.round(Config.charcoalAmountBase + getCharcoalAmount(world, pos)));
 					world.setBlockState(pos, ashState, 2);
 				}
 			}
@@ -205,7 +206,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		return Math.max(Math.min(charcoalAmount / 6, 54.0F), -9);
+		return Math.max(Math.min(charcoalAmount / 6, 63.0F - Config.charcoalAmountBase), -Config.charcoalAmountBase);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing) {
@@ -215,7 +216,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos(pos);
 		testPos.move(facing);
 		int i = 0;
-		while (i <= 15 && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)){
+		while (i < Config.charcoalWallCheckRange && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)){
 			IBlockState state = world.getBlockState(testPos);
 			for (ICharcoalPileWall wall : walls) {
 				if (wall.matches(state)) {

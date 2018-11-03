@@ -146,6 +146,11 @@ public class Config {
 	public static boolean enableTesla = true;
 	public static EnergyDisplayMode energyDisplayMode = EnergyDisplayMode.RF;
 
+	// Charcoal
+	public static int charcoalAmountBase = 8;
+	public static int charcoalWallCheckRange = 16;
+
+
 	public static boolean isStructureEnabled(String uid) {
 		return !Config.disabledStructures.contains(uid);
 	}
@@ -327,6 +332,9 @@ public class Config {
 		habitatformerRange = configCommon.getIntLocalized("tweaks.habitatformer", "range", habitatformerRange, 1, 100);
 		habitatformerAreaCostModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "resources", habitatformerAreaCostModifier, 0F, 5.0F);
 		habitatformerAreaSpeedModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "speed", habitatformerAreaSpeedModifier, 0F, 5.0F);
+
+		charcoalAmountBase = configCommon.getIntLocalized("tweaks.charcoal", "amount.base", charcoalAmountBase, 0, 63);
+		charcoalWallCheckRange = configCommon.getIntLocalized("tweaks.charcoal", "check.range", charcoalWallCheckRange, 1, 32);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
