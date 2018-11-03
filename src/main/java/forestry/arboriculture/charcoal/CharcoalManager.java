@@ -1,5 +1,7 @@
 package forestry.arboriculture.charcoal;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -15,11 +17,15 @@ public class CharcoalManager implements ICharcoalManager {
 
 	@Override
 	public void registerWall(Block block, int amount) {
+		Preconditions.checkNotNull(block, "block must not be null.");
+		Preconditions.checkArgument(amount >= 0, "amount must be bigger or at least zero.");
 		walls.add(new CharcoalPileWall(block, amount));
 	}
 
 	@Override
 	public void registerWall(IBlockState blockState, int amount) {
+		Preconditions.checkNotNull(blockState, "block state must not be null.");
+		Preconditions.checkArgument(amount >= 0, "amount must be bigger or at least zero.");
 		walls.add(new CharcoalPileWall(blockState, amount));
 	}
 
