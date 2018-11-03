@@ -49,7 +49,6 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		setHardness(1.5f);
 		setCreativeTab(Tabs.tabArboriculture);
 		setSoundType(SoundType.WOOD);
-		setTickRandomly(true);
 	}
 
 	@Override
