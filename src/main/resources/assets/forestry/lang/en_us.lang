@@ -450,7 +450,10 @@ item.for.apiarist_helmet.name=Apiarist's Hat
 item.for.apiarist_legs.name=Apiarist's Pants
 
 item.for.ash.name=Ash
-tile.for.pile_ash.name=Ash Pile
+tile.for.ash_block_0.name=Ash Block
+tile.for.ash_block_1.name=Ash Block
+tile.for.ash_block_2.name=Ash Block
+tile.for.ash_block_3.name=Ash Block
 
 item.for.habitat_locator.name=Habitat Locator
 

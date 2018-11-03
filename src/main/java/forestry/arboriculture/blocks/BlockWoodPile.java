@@ -48,6 +48,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		setHardness(1.5f);
 		setCreativeTab(Tabs.tabArboriculture);
 		setSoundType(SoundType.WOOD);
+		setTickRandomly(true);
 	}
 
 	@Override
@@ -142,8 +143,8 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 				if (state.getValue(AGE) < 7) {
 					world.setBlockState(pos, state.withProperty(AGE, state.getValue(AGE) + 1), 2);
 				} else {
-					IBlockState ashState = ModuleCharcoal.getBlocks().ash.getDefaultState();
-					world.setBlockState(pos, ashState.withProperty(BlockAsh.AMOUNT, Math.round(getCharcoalAmount(world, pos))), 2);
+					IBlockState ashState = ModuleCharcoal.getBlocks().getAshState(Math.round(9 + getCharcoalAmount(world, pos)));
+					world.setBlockState(pos, ashState, 2);
 				}
 			}
 			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
@@ -204,7 +205,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		return Math.min(charcoalAmount / 6, 15.0F);
+		return Math.max(Math.min(charcoalAmount / 6, 54.0F), -9);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing) {
@@ -213,14 +214,16 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 
 		BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos(pos);
 		testPos.move(facing);
-		while (world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)) {
-			testPos.move(facing);
+		int i = 0;
+		while (i <= 15 && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)){
 			IBlockState state = world.getBlockState(testPos);
 			for (ICharcoalPileWall wall : walls) {
 				if (wall.matches(state)) {
 					return wall.getCharcoalAmount();
 				}
 			}
+			testPos.move(facing);
+			i++;
 		}
 		return 0;
 	}

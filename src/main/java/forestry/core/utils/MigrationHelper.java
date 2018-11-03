@@ -60,7 +60,8 @@ public class MigrationHelper {
 		blockRemappings.put("pile_dirt", "loam");
 		itemRemappings.put("pile_wood", "wood_pile");
 		blockRemappings.put("pile_wood", "wood_pile");
-		blockRemappings.put("pile_ash", "ash_block");
+		blockRemappings.put("pile_ash", "ash_block_0");
+		blockRemappings.put("ash_block", "ash_block_0");
 
 		//Apiculture
 		addTileRemappingName("Alveary", "alveary_plain");

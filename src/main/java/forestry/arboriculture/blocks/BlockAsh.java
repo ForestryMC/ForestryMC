@@ -9,7 +9,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,15 +28,19 @@ import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.core.ModuleCore;
+import forestry.core.config.Constants;
 
 public class BlockAsh extends Block implements IStateMapperRegister, IItemModelRegister {
 
 	public static final PropertyInteger AMOUNT = PropertyInteger.create("amount", 0, 15);
 
-	public BlockAsh() {
+	private final int startAmount;
+
+	public BlockAsh(int startAmount) {
 		super(Material.GROUND, MapColor.BLACK);
 		setSoundType(SoundType.SAND);
 		setHarvestLevel("shovel", 0);
+		this.startAmount = startAmount;
 	}
 
 	@Override
@@ -71,7 +76,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 		Random rand = world instanceof World ? ((World) world).rand : new Random();
 		int amount = state.getValue(AMOUNT);
 		if (amount > 0) {
-			amount += 9;
+			amount += startAmount;
 			amount += rand.nextInt(1 + fortune);
 			drops.add(new ItemStack(Items.COAL, amount, 1));
 			drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(amount / 4)));
@@ -81,7 +86,13 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AMOUNT).build());
+		ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return new ModelResourceLocation(Constants.MOD_ID + ":ash_block","normal");
+			}
+		});
 	}
+
 
 }
