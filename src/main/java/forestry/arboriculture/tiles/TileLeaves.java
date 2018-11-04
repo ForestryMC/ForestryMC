@@ -208,9 +208,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			checkFruit = true;
 		}
 
-		if(checkFruit && world != null && !world.isRemote){
+		if(tree.canBearFruit() && checkFruit && world != null && !world.isRemote){
 			IFruitProvider fruitProvider = genome.getFruitProvider();
-			isFruitLeaf = fruitProvider.isFruitLeaf(genome, world, getPos());
+			if(fruitProvider.isFruitLeaf(genome, world, getPos())){
+				isFruitLeaf = fruitProvider.getFruitChance(genome, world, getPos()) >= world.rand.nextFloat();
+			}
 		}
 
 		if (isFruitLeaf) {

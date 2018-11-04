@@ -424,13 +424,13 @@ public class EnumAllele {
 	}
 
 	public enum Yield implements IAlleleValue<Float> {
-		LOWEST(0.3f, true),
-		LOWER(0.4f, true),
-		LOW(0.5f, true),
-		AVERAGE(0.6f, true),
-		HIGH(0.75f),
-		HIGHER(0.9f),
-		HIGHEST(1.0f);
+		LOWEST(0.025f, true),
+		LOWER(0.05f, true),
+		LOW(0.1f, true),
+		AVERAGE(0.2f, true),
+		HIGH(0.3f),
+		HIGHER(0.35f),
+		HIGHEST(0.4f);
 
 		private final float value;
 		private final boolean dominant;

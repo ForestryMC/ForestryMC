@@ -91,8 +91,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 
 	@Override
 	public boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
-		float yieldModifier = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
-		return genome.getYield() * yieldModifier > world.rand.nextFloat();
+		return true;
 	}
 
 	@Override

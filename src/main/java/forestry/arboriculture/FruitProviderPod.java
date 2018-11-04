@@ -81,7 +81,7 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	@Override
 	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, Random rand, BlockPos pos) {
-		if (rand.nextFloat() > genome.getYield()) {
+		if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
 			return false;
 		}
 
