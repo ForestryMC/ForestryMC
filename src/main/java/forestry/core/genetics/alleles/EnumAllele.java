@@ -429,7 +429,7 @@ public class EnumAllele {
 		LOW(0.5f, true),
 		AVERAGE(0.6f, true),
 		HIGH(0.75f),
-		HIGHER(0.98f),
+		HIGHER(0.9f),
 		HIGHEST(1.0f);
 
 		private final float value;

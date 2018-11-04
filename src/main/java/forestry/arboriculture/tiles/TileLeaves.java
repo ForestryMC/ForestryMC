@@ -76,7 +76,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private IButterfly caterpillar;
 
 	private boolean isFruitLeaf;
-	private boolean checkFruit = false;
+	private boolean checkFruit = true;
 	private boolean isPollinatedState;
 	private int ripeningTime;
 	private short ripeningPeriod = Short.MAX_VALUE - 1;
@@ -196,33 +196,31 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return false;
 	}
 
-	public void markFuitDirty(){
-		checkFruit = true;
-	}
-
 	@Override
 	public void setTree(ITree tree) {
+		ITree oldTree = getTree();
 		super.setTree(tree);
 
 		ITreeGenome genome = tree.getGenome();
 		species = genome.getPrimary();
 
-		if((world == null || !world.isRemote) && checkFruit){
-			if(tree.canBearFruit()){
-				IFruitProvider fruitProvider = genome.getFruitProvider();
-				isFruitLeaf = fruitProvider.isFruitLeaf(genome, world, getPos());
-			}else{
-				isFruitLeaf = false;
-			}
-			checkFruit = false;
+		if(oldTree != null && !tree.equals(oldTree)){
+			checkFruit = true;
+		}
+
+		if(checkFruit && world != null && !world.isRemote){
+			IFruitProvider fruitProvider = genome.getFruitProvider();
+			isFruitLeaf = fruitProvider.isFruitLeaf(genome, world, getPos());
 		}
 
 		if (isFruitLeaf) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
-			fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
+			if(world != null && world.isRemote) {
+				fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
+			}
 
 			ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
-		} else {
+		} else if (world != null && world.isRemote) {
 			fruitSprite = null;
 		}
 
