@@ -46,6 +46,9 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	public static final int FOLIAGE_COLOR_INDEX = 0;
 	public static final int FRUIT_COLOR_INDEX = 2;
 
+	public static final int DECAYABLE_FLAG = 4;
+	public static final int CHECK_DECAY_FLAG = 8;
+
 	@Nullable
 	protected abstract ITree getTree(IBlockAccess world, BlockPos pos);
 

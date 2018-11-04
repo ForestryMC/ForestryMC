@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.util.Constants;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,7 +56,6 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.apiculture.ModuleApiculture;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.network.PacketBufferForestry;
@@ -76,6 +76,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private IButterfly caterpillar;
 
 	private boolean isFruitLeaf;
+	private boolean checkFruit = false;
 	private boolean isPollinatedState;
 	private int ripeningTime;
 	private short ripeningPeriod = Short.MAX_VALUE - 1;
@@ -99,6 +100,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		ripeningTime = nbttagcompound.getShort("RT");
 		damage = nbttagcompound.getInteger("ENC");
+		isFruitLeaf = nbttagcompound.getBoolean("FL");
+		checkFruit = !nbttagcompound.hasKey("FL", Constants.NBT.TAG_ANY_NUMERIC);
 
 		if (nbttagcompound.hasKey("CATER")) {
 			maturationTime = nbttagcompound.getInteger("CATMAT");
@@ -118,6 +121,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		nbtTagCompound.setInteger("RT", getRipeningTime());
 		nbtTagCompound.setInteger("ENC", damage);
+		nbtTagCompound.setBoolean("FL", isFruitLeaf);
 
 		if (caterpillar != null) {
 			nbtTagCompound.setInteger("CATMAT", maturationTime);
@@ -192,6 +196,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return false;
 	}
 
+	public void markFuitDirty(){
+		checkFruit = true;
+	}
+
 	@Override
 	public void setTree(ITree tree) {
 		super.setTree(tree);
@@ -199,22 +207,22 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		ITreeGenome genome = tree.getGenome();
 		species = genome.getPrimary();
 
-		if (tree.canBearFruit()) {
-			IFruitProvider fruitProvider = genome.getFruitProvider();
-
-			isFruitLeaf = fruitProvider.isFruitLeaf(genome, world, getPos());
-			if (isFruitLeaf) {
-				// Hardcoded because vanilla oak trees don't show fruits.
-				if (species == TreeDefinition.Oak.getGenome().getPrimary() && fruitProvider == AlleleFruits.fruitApple.getProvider()) {
-					fruitSprite = null;
-				} else {
-					fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
-				}
-
-				ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
+		if((world == null || !world.isRemote) && checkFruit){
+			if(tree.canBearFruit()){
+				IFruitProvider fruitProvider = genome.getFruitProvider();
+				isFruitLeaf = fruitProvider.isFruitLeaf(genome, world, getPos());
+			}else{
+				isFruitLeaf = false;
 			}
+			checkFruit = false;
+		}
+
+		if (isFruitLeaf) {
+			IFruitProvider fruitProvider = genome.getFruitProvider();
+			fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
+
+			ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
 		} else {
-			isFruitLeaf = false;
 			fruitSprite = null;
 		}
 

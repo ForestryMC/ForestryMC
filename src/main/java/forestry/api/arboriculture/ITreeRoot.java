@@ -82,7 +82,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable {
 	@Override
 	IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive);
 
-	boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float sappiness, BlockPos pos);
+	boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float yield, BlockPos pos);
 
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static forestry.api.arboriculture.EnumFruitFamily.*;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -15,12 +17,14 @@ import forestry.api.genetics.IAllele;
 import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
 import forestry.arboriculture.FruitProviderPod.EnumPodType;
-import forestry.arboriculture.FruitProviderRandom;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.core.items.ItemFruit.EnumFruit;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
+
+import static forestry.api.arboriculture.EnumFruitFamily.JUNGLE;
+import static forestry.api.arboriculture.EnumFruitFamily.NONE;
+import static forestry.api.arboriculture.EnumFruitFamily.NUX;
+import static forestry.api.arboriculture.EnumFruitFamily.POMES;
+import static forestry.api.arboriculture.EnumFruitFamily.PRUNES;
 
 public class AlleleFruits {
 	public static final IAlleleFruit fruitNone;
@@ -42,8 +46,8 @@ public class AlleleFruits {
 
 		fruitAlleles = Arrays.asList(
 				fruitNone = new AlleleFruit("none", new FruitProviderNone("for.fruits.none", NONE)),
-				fruitApple = new AlleleFruit("apple", new FruitProviderRandom("for.fruits.apple", POMES, new ItemStack(Items.APPLE), 1.0f)
-						.setColour(new Color(0xff2e2e))
+				fruitApple = new AlleleFruit("apple", new FruitProviderRipening("for.fruits.apple", POMES, new ItemStack(Items.APPLE), 1.0f)
+						.setColours(new Color(0xff2e2e), new Color(0xE3F49C))
 						.setOverlay("pomes")),
 				fruitCocoa = new AlleleFruit("cocoa", new FruitProviderPod("for.fruits.cocoa", JUNGLE, EnumPodType.COCOA, cocoaBean)),
 				// .setColours(0xecdca5, 0xc4d24a), true)

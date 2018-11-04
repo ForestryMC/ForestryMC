@@ -2,10 +2,11 @@ package forestry.core.genetics.alleles;
 
 import java.util.Locale;
 
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
-import net.minecraft.util.math.Vec3i;
 
 public class EnumAllele {
 	public enum Fertility implements IAlleleValue<Integer> {
@@ -423,13 +424,13 @@ public class EnumAllele {
 	}
 
 	public enum Yield implements IAlleleValue<Float> {
-		LOWEST(0.025f, true),
-		LOWER(0.05f, true),
-		LOW(0.1f, true),
-		AVERAGE(0.2f, true),
-		HIGH(0.3f),
-		HIGHER(0.35f),
-		HIGHEST(0.4f);
+		LOWEST(0.3f, true),
+		LOWER(0.4f, true),
+		LOW(0.5f, true),
+		AVERAGE(0.6f, true),
+		HIGH(0.75f),
+		HIGHER(0.98f),
+		HIGHEST(1.0f);
 
 		private final float value;
 		private final boolean dominant;

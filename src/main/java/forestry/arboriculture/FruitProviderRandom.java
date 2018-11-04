@@ -28,6 +28,7 @@ import forestry.api.genetics.IFruitFamily;
 /**
  * Simple fruit provider which drops from any leaf block according to yield and either marks all leave blocks as fruit leaves or none.
  */
+@Deprecated
 public class FruitProviderRandom extends FruitProviderNone {
 	private final Map<ItemStack, Float> products = new HashMap<>();
 	private int colour = 0xffffff;

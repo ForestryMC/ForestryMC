@@ -96,8 +96,8 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState()
 				.withProperty(getVariant(), getTreeType(meta))
-				.withProperty(DECAYABLE, (meta & 4) == 0)
-				.withProperty(CHECK_DECAY, (meta & 8) > 0);
+				.withProperty(DECAYABLE, (meta & DECAYABLE_FLAG) == 0)
+				.withProperty(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
 	}
 
 	@Override
@@ -105,11 +105,11 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		int i = damageDropped(state);
 
 		if (!state.getValue(DECAYABLE)) {
-			i |= 4;
+			i |= DECAYABLE_FLAG;
 		}
 
 		if (state.getValue(CHECK_DECAY)) {
-			i |= 8;
+			i |= CHECK_DECAY_FLAG;
 		}
 
 		return i;

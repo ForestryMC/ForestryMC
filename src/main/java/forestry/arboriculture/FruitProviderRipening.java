@@ -64,13 +64,18 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-
-		float stage = getRipeningStage(ripeningTime);
-		if (stage >= 0.5f) {
+		// Only test for yield if 'ripeningTime' == MAX_VALUE because that means it is a default leaf
+		if(ripeningTime == Integer.MAX_VALUE){
 			float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
 			for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
-				if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage) {
+				if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f) {
+					product.add(entry.getKey().copy());
+				}
+			}
+		}else{
+			for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+				if (world.rand.nextFloat() <= entry.getValue()) {
 					product.add(entry.getKey().copy());
 				}
 			}
@@ -86,7 +91,8 @@ public class FruitProviderRipening extends FruitProviderNone {
 
 	@Override
 	public boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
-		return true;
+		float yieldModifier = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
+		return genome.getYield() * yieldModifier > world.rand.nextFloat();
 	}
 
 	@Override

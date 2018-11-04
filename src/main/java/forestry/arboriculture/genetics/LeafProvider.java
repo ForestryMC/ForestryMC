@@ -1,5 +1,7 @@
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -9,11 +11,9 @@ import forestry.api.genetics.IAllele;
 import forestry.arboriculture.ModuleArboriculture;
 
 public class LeafProvider implements ILeafProvider {
-	
-	private IAlleleTreeSpecies treeSpecies;
-	
-	public LeafProvider() {
-	}
+
+	@Nullable
+	private IAlleleTreeSpecies treeSpecies = null;
 	
 	@Override
 	public void init(IAlleleTreeSpecies treeSpecies) {

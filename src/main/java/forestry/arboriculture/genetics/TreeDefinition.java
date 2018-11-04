@@ -1020,6 +1020,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			if (owner != null) {
 				tileLeaves.getOwnerHandler().setOwner(owner);
 			}
+			tileLeaves.markFuitDirty();
 			tileLeaves.setTree(new Tree(genome));
 
 			world.markBlockRangeForRenderUpdate(pos, pos);

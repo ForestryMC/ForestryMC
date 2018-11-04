@@ -50,16 +50,16 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	private ITreeGenome genome = defaultGenome;
 	private IAlleleFruit allele = defaultAllele;
 	private short maturity;
-	private float sappiness;
+	private float yield;
 
 	public TileFruitPod() {
 
 	}
 
-	public void setProperties(ITreeGenome genome, IAlleleFruit allele, float sappiness) {
+	public void setProperties(ITreeGenome genome, IAlleleFruit allele, float yield) {
 		this.genome = genome;
 		this.allele = allele;
-		this.sappiness = sappiness;
+		this.yield = yield;
 		markDirty();
 	}
 
@@ -76,7 +76,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		}
 
 		maturity = nbttagcompound.getShort("MT");
-		sappiness = nbttagcompound.getFloat("SP");
+		yield = nbttagcompound.getFloat("SP");
 	}
 
 	@Override
@@ -84,13 +84,13 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		nbttagcompound = super.writeToNBT(nbttagcompound);
 		nbttagcompound.setString("UID", allele.getUID());
 		nbttagcompound.setShort("MT", maturity);
-		nbttagcompound.setFloat("SP", sappiness);
+		nbttagcompound.setFloat("SP", yield);
 		return nbttagcompound;
 	}
 
 	/* UPDATING */
 	public void onBlockTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if (canMature() && rand.nextFloat() <= sappiness) {
+		if (canMature() && rand.nextFloat() <= yield) {
 			addRipeness(0.5f);
 		}
 	}
