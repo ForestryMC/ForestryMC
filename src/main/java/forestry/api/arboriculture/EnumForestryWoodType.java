@@ -9,51 +9,49 @@ import java.util.Locale;
 import java.util.Random;
 
 public enum EnumForestryWoodType implements IWoodType {
-	LARCH(4),
-	TEAK(4),
-	ACACIA(4),
-	LIME(4),
-	CHESTNUT(4),
-	WENGE(4),
-	BAOBAB(4),
-	SEQUOIA(3, 4.0f),
+	LARCH,
+	TEAK,
+	ACACIA,
+	LIME,
+	CHESTNUT,
+	WENGE,
+	BAOBAB,
+	SEQUOIA(4.0f),
 
-	KAPOK(4),
-	EBONY(4),
-	MAHOGANY(4),
-	BALSA(4, 1.0f),
-	WILLOW(4),
-	WALNUT(4),
-	GREENHEART(4, 7.5f),
-	CHERRY(4),
+	KAPOK,
+	EBONY,
+	MAHOGANY,
+	BALSA(1.0f),
+	WILLOW,
+	WALNUT,
+	GREENHEART(7.5f),
+	CHERRY,
 
-	MAHOE(4),
-	POPLAR(4),
-	PALM(4),
-	PAPAYA(4),
-	PINE(4, 3.0f),
-	PLUM(4),
-	MAPLE(4),
-	CITRUS(4),
+	MAHOE,
+	POPLAR,
+	PALM,
+	PAPAYA,
+	PINE(3.0f),
+	PLUM,
+	MAPLE,
+	CITRUS,
 
-	GIGANTEUM(3, 4.0f),
-	IPE(4),
-	PADAUK(4),
-	COCOBOLO(4),
-	ZEBRAWOOD(4);
+	GIGANTEUM(4.0f),
+	IPE,
+	PADAUK,
+	COCOBOLO,
+	ZEBRAWOOD;
 
 	public static final float DEFAULT_HARDNESS = 2.0f;
 	public static final EnumForestryWoodType[] VALUES = values();
 
-	private final int carbonization;
 	private final float hardness;
 
-	EnumForestryWoodType(int carbonization) {
-		this(carbonization, DEFAULT_HARDNESS);
+	EnumForestryWoodType() {
+		this(DEFAULT_HARDNESS);
 	}
 
-	EnumForestryWoodType(int carbonization, float hardness) {
-		this.carbonization = carbonization;
+	EnumForestryWoodType(float hardness) {
 		this.hardness = hardness;
 	}
 
@@ -86,23 +84,6 @@ public enum EnumForestryWoodType implements IWoodType {
 			meta = 0;
 		}
 		return VALUES[meta];
-	}
-
-	@Override
-	public int getCarbonization() {
-		return carbonization;
-	}
-
-	@Override
-	public float getCharcoalChance(int numberOfCharcoal) {
-		if (numberOfCharcoal == 3) {
-			return 0.75F;
-		} else if (numberOfCharcoal == 4) {
-			return 0.5F;
-		} else if (numberOfCharcoal == 5) {
-			return 0.25F;
-		}
-		return 0.15F;
 	}
 
 	@Override

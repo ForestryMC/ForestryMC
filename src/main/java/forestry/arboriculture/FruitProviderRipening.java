@@ -22,7 +22,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
@@ -64,20 +63,9 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-		// Only test for yield if 'ripeningTime' == MAX_VALUE because that means it is a default leaf
-		if(ripeningTime == Integer.MAX_VALUE){
-			float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
-
-			for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
-				if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f) {
-					product.add(entry.getKey().copy());
-				}
-			}
-		}else{
-			for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
-				if (world.rand.nextFloat() <= entry.getValue()) {
-					product.add(entry.getKey().copy());
-				}
+		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+			if (world.rand.nextFloat() <= entry.getValue()) {
+				product.add(entry.getKey().copy());
 			}
 		}
 

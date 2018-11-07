@@ -31,16 +31,17 @@ import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.core.IModelBaker;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
-import forestry.arboriculture.blocks.BlockDefaultLeaves;
+import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
+import forestry.arboriculture.blocks.PropertyTreeTypeFruit;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 
 @SideOnly(Side.CLIENT)
-public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, ModelDefaultLeaves.Key> {
-	public ModelDefaultLeaves() {
-		super(BlockDefaultLeaves.class);
+public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeavesFruit, ModelDefaultLeavesFruit.Key> {
+	public ModelDefaultLeavesFruit() {
+		super(BlockDefaultLeavesFruit.class);
 	}
 
 	public static class Key {
@@ -71,25 +72,25 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 	}
 
 	@Override
-	protected ModelDefaultLeaves.Key getInventoryKey(ItemStack stack) {
+	protected ModelDefaultLeavesFruit.Key getInventoryKey(ItemStack stack) {
 		Block block = Block.getBlockFromItem(stack.getItem());
-		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
-		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		return new Key(bBlock.getTreeType(stack.getMetadata()), Proxies.render.fancyGraphicsEnabled());
+		Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "ItemStack must be for default fruit leaves.");
+		BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
+		return new Key(bBlock.getTreeType(stack.getMetadata()).definition, Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected ModelDefaultLeaves.Key getWorldKey(IBlockState state) {
+	protected ModelDefaultLeavesFruit.Key getWorldKey(IBlockState state) {
 		Block block = state.getBlock();
-		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "state must be for default leaves.");
-		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		TreeDefinition treeDefinition = bBlock.getTreeDefinition(state);
-		Preconditions.checkNotNull(treeDefinition);
-		return new ModelDefaultLeaves.Key(treeDefinition, Proxies.render.fancyGraphicsEnabled());
+		Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "state must be for default fruit leaves.");
+		BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
+		PropertyTreeTypeFruit.LeafVariant leafVariant = bBlock.getLeafVariant(state);
+		Preconditions.checkNotNull(leafVariant);
+		return new ModelDefaultLeavesFruit.Key(leafVariant.definition, Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected void bakeBlock(BlockDefaultLeaves block, Key key, IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDefaultLeavesFruit block, Key key, IModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 
@@ -103,12 +104,19 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		// Render the plain leaf block.
 		baker.addBlockModel(null, leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
+		// Render overlay for fruit leaves.
+		ResourceLocation fruitSpriteLocation = genome.getFruitProvider().getDecorativeSprite();
+		if (fruitSpriteLocation != null) {
+			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
+			baker.addBlockModel(null, fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
+		}
+
 		// Set the particle sprite
 		baker.setParticleSprite(leafSprite);
 	}
 
 	@Override
-	protected IBakedModel bakeModel(IBlockState state, Key key, BlockDefaultLeaves block) {
+	protected IBakedModel bakeModel(IBlockState state, Key key, BlockDefaultLeavesFruit block) {
 		IModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, key, baker, false);

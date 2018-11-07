@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Random;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
@@ -36,6 +37,7 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
+import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
@@ -119,6 +121,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void registerMutations() {
 			// vanilla
+		}
+
+		@Override
+		public boolean hasFruitLeaves() {
+			return true;
 		}
 	},
 	DarkOak(TreeBranchDefinition.QUERCUS, "darkOak", "velutina", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.DARK_OAK) {
@@ -219,6 +226,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		protected void registerMutations() {
 			registerMutation(Lime, Cherry, 10);
 		}
+
+		@Override
+		public boolean hasFruitLeaves() {
+			return true;
+		}
 	},
 	Chestnut(TreeBranchDefinition.CASTANEA, "sweetChestnut", "sativa", true, EnumLeafType.DECIDUOUS, new Color(0x5ea107), new Color(0xb0c648), EnumForestryWoodType.CHESTNUT) {
 		@Override
@@ -247,6 +259,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Walnut, Lime, 10);
 			registerMutation(Walnut, Cherry, 10);
 		}
+
+		@Override
+		public boolean hasFruitLeaves() {
+			return true;
+		}
 	},
 	Cherry(TreeBranchDefinition.PRUNUS, "hillCherry", "serrulata", true, EnumLeafType.DECIDUOUS, new Color(0xe691da), new Color(0xe63e59), EnumForestryWoodType.CHERRY) {
 		@Override
@@ -274,6 +291,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			registerMutation(Lime, Oak, 10);
 			registerMutation(Lime, Birch, 10);
 		}
+
+		@Override
+		public boolean hasFruitLeaves() {
+			return true;
+		}
 	},
 	Lemon(TreeBranchDefinition.CITRUS, "lemon", "limon", true, EnumLeafType.DECIDUOUS, new Color(0x88af54), new Color(0xa3b850), EnumForestryWoodType.CITRUS) {
 		@Override
@@ -299,6 +321,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		protected void registerMutations() {
 			registerMutation(Lime, Cherry, 5);
 		}
+
+		@Override
+		public boolean hasFruitLeaves() {
+			return true;
+		}
 	},
 	Plum(TreeBranchDefinition.PRUNUS, "plum", "domestica", true, EnumLeafType.DECIDUOUS, new Color(0x589246), new Color(0xa3b850), EnumForestryWoodType.PLUM) {
 		@Override
@@ -323,6 +350,11 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void registerMutations() {
 			registerMutation(Lemon, Cherry, 5);
+		}
+
+		@Override
+		public boolean hasFruitLeaves() {
+			return true;
 		}
 	},
 	Maple(TreeBranchDefinition.ACER, "sugarMaple", "saccharum", true, EnumLeafType.MAPLE, new Color(0xd4f425), new Color(0x619a3c), EnumForestryWoodType.MAPLE) {
@@ -988,6 +1020,10 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	protected abstract void registerMutations();
 
+	public boolean hasFruitLeaves(){
+		return false;
+	}
+
 	@Override
 	public boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing) {
 		AlleleBoolean fireproofAllele = (AlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
@@ -1000,9 +1036,20 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@Override
 	public boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos) {
+		return setLeaves(genome, world, owner, pos, world.rand);
+	}
+
+	@Override
+	public boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
 		if (owner == null && genome.matchesTemplateGenome()) {
+			IFruitProvider fruitProvider = genome.getFruitProvider();
 			String speciesUid = genome.getPrimary().getUID();
-			IBlockState defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(speciesUid);
+			IBlockState defaultLeaves;
+			if(fruitProvider.isFruitLeaf(genome, world, pos) && rand.nextFloat() <= fruitProvider.getFruitChance(genome, world, pos)){
+				defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(speciesUid);
+			}else{
+				defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(speciesUid);
+			}
 			return world.setBlockState(pos, defaultLeaves);
 		} else {
 			IBlockState leaves = ModuleArboriculture.getBlocks().leaves.getDefaultState();

@@ -43,6 +43,15 @@ public interface IFruitProvider {
 	 */
 	int getDecorativeColor();
 
+	/**
+	 * Determines if fruit block of this provider is considered a leaf block.
+	 *
+	 * @param genome The genome of the tree of the pod / leaves block.
+	 * @param world The world in that the pod / leaves block is located.
+	 * @param pos The position of the pod / leaves block.
+	 *
+	 * @return True if this provider provides a fruit leaf for the given genome at the given position.
+	 */
 	boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos);
 
 	/**
@@ -85,8 +94,6 @@ public interface IFruitProvider {
 	 *
 	 * @param genome The genome of the tree of the leaves / pod.
 	 * @param ripeningTime The repining time of the block. From 0 to {@link #getRipeningPeriod()}.
-	 *                     In the case of leaves Integer.MAX_VALUE means that the leaves block is a default / world gen block
-	 *                     and needs an additional yield check.
 	 */
 	NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime);
 

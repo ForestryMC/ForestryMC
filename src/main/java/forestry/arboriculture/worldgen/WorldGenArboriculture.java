@@ -47,7 +47,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		}
 
 		GameProfile owner = getOwner(world, pos);
-		TreeBlockTypeLeaf leaf = new TreeBlockTypeLeaf(tree, owner);
+		TreeBlockTypeLeaf leaf = new TreeBlockTypeLeaf(tree, owner, rand);
 		TreeBlockTypeLog wood = new TreeBlockTypeLog(tree);
 
 		preGenerate(world, rand, pos);

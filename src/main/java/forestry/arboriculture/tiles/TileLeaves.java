@@ -145,7 +145,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		if (!checkedForConversionToDefaultLeaves) {
 			if (shouldConvertToDefaultLeaves()) {
-				IBlockState defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
+				IBlockState defaultLeaves;
+				if(isFruitLeaf) {
+					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
+				}else{
+					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(primary.getUID());
+				}
 				worldIn.setBlockState(getPos(), defaultLeaves);
 				return;
 			}
