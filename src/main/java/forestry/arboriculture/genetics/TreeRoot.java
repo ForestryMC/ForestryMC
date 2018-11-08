@@ -248,7 +248,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float sappiness, BlockPos pos) {
+	public boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
 		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
 
 		EnumFacing facing = BlockUtil.getValidPodFacing(world, pos);
@@ -266,7 +266,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 						TileFruitPod pod = TileUtil.getTile(world, pos, TileFruitPod.class);
 						if (pod != null) {
-							pod.setProperties(genome, allele, sappiness);
+							pod.setProperties(genome, allele, yield);
 							world.markBlockRangeForRenderUpdate(pos, pos);
 							return true;
 						} else {

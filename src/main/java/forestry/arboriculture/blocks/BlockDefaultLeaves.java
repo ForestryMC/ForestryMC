@@ -25,7 +25,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
@@ -57,7 +56,7 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		return blocks;
 	}
 
-	private final int blockNumber;
+	protected final int blockNumber;
 
 	public BlockDefaultLeaves(int blockNumber) {
 		this.blockNumber = blockNumber;
@@ -96,8 +95,8 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState()
 				.withProperty(getVariant(), getTreeType(meta))
-				.withProperty(DECAYABLE, (meta & 4) == 0)
-				.withProperty(CHECK_DECAY, (meta & 8) > 0);
+				.withProperty(DECAYABLE, (meta & DECAYABLE_FLAG) == 0)
+				.withProperty(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
 	}
 
 	@Override
@@ -105,11 +104,11 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		int i = damageDropped(state);
 
 		if (!state.getValue(DECAYABLE)) {
-			i |= 4;
+			i |= DECAYABLE_FLAG;
 		}
 
 		if (state.getValue(CHECK_DECAY)) {
-			i |= 8;
+			i |= CHECK_DECAY_FLAG;
 		}
 
 		return i;
@@ -139,14 +138,6 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 			if (sapling != null) {
 				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
 			}
-		}
-
-		// Add fruits
-		ITreeGenome genome = tree.getGenome();
-		IFruitProvider fruitProvider = genome.getFruitProvider();
-		if (fruitProvider.isFruitLeaf(genome, world, pos)) {
-			NonNullList<ItemStack> produceStacks = tree.produceStacks(world, pos, Integer.MAX_VALUE);
-			drops.addAll(produceStacks);
 		}
 	}
 
@@ -195,10 +186,6 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		}
 		ITreeGenome genome = treeDefinition.getGenome();
 
-		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
-			IFruitProvider fruitProvider = genome.getFruitProvider();
-			return fruitProvider.getDecorativeColor();
-		}
 		ILeafSpriteProvider spriteProvider = genome.getPrimary().getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}

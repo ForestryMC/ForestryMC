@@ -5,6 +5,7 @@ import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.IWoodType;
 
+@Deprecated
 public class WoodProviderFactory {
 	public static IWoodProvider create(IWoodType woodType) {
 		if (woodType instanceof EnumVanillaWoodType) {

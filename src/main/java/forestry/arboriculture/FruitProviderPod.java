@@ -69,11 +69,11 @@ public class FruitProviderPod extends FruitProviderNone {
 		}
 
 		if (ripeningTime >= 2) {
-			NonNullList<ItemStack> drops = NonNullList.create();
+			NonNullList<ItemStack> products = NonNullList.create();
 			for (ItemStack aDrop : this.drops.keySet()) {
-				drops.add(aDrop.copy());
+				products.add(aDrop.copy());
 			}
-			return drops;
+			return products;
 		}
 
 		return NonNullList.create();
@@ -81,8 +81,7 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	@Override
 	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, Random rand, BlockPos pos) {
-
-		if (rand.nextFloat() > genome.getSappiness()) {
+		if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
 			return false;
 		}
 
@@ -90,7 +89,7 @@ public class FruitProviderPod extends FruitProviderNone {
 			return BlockUtil.tryPlantCocoaPod(world, pos);
 		} else {
 			IAlleleFruit activeAllele = (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS);
-			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getSappiness(), pos);
+			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getYield(), pos);
 		}
 	}
 

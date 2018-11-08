@@ -22,7 +22,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
@@ -64,15 +63,9 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-
-		float stage = getRipeningStage(ripeningTime);
-		if (stage >= 0.5f) {
-			float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
-
-			for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
-				if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage) {
-					product.add(entry.getKey().copy());
-				}
+		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+			if (world.rand.nextFloat() <= entry.getValue()) {
+				product.add(entry.getKey().copy());
 			}
 		}
 

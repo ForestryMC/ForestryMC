@@ -66,6 +66,8 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 	public final BlockForestryLeaves leaves;
 	public final List<BlockDefaultLeaves> leavesDefault;
 	public final Map<String, IBlockState> speciesToLeavesDefault;
+	public final List<BlockDefaultLeavesFruit> leavesDefaultFruit;
+	public final Map<String, IBlockState> speciesToLeavesDefaultFruit;
 	public final List<BlockDecorativeLeaves> leavesDecorative;
 	private final Map<String, ItemStack> speciesToLeavesDecorative;
 	public final Map<String, BlockFruitPod> podsMap;
@@ -253,6 +255,21 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			}
 		}
 
+		leavesDefaultFruit = BlockDefaultLeavesFruit.create();
+		speciesToLeavesDefaultFruit = new HashMap<>();
+		for (BlockDefaultLeavesFruit leaves : leavesDefaultFruit) {
+			registerBlock(leaves, new ItemBlockLeaves(leaves), "leaves.default.fruit." + leaves.getBlockNumber());
+			registerOreDictWildcard(OreDictUtil.TREE_LEAVES, leaves);
+
+			PropertyTreeTypeFruit treeType = leaves.getVariant();
+			for (PropertyTreeTypeFruit.LeafVariant variant : treeType.getAllowedValues()) {
+				Preconditions.checkNotNull(variant);
+				String speciesUid = variant.definition.getUID();
+				IBlockState blockState = leaves.getDefaultState().withProperty(treeType, variant);
+				speciesToLeavesDefaultFruit.put(speciesUid, blockState);
+			}
+		}
+
 		leavesDecorative = BlockDecorativeLeaves.create();
 		speciesToLeavesDecorative = new HashMap<>();
 		for (BlockDecorativeLeaves leaves : leavesDecorative) {
@@ -292,6 +309,10 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 
 	public IBlockState getDefaultLeaves(String speciesUid) {
 		return speciesToLeavesDefault.get(speciesUid);
+	}
+
+	public IBlockState getDefaultLeavesFruit(String speciesUid) {
+		return speciesToLeavesDefaultFruit.get(speciesUid);
 	}
 
 	@Nullable
