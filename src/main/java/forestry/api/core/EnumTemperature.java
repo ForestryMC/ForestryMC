@@ -23,7 +23,7 @@ public enum EnumTemperature {
 	NORMAL("Normal", "habitats/plains", 0xffd013), WARM("Warm", "habitats/jungle", 0xfb8a24), HOT("Hot", "habitats/desert", 0xd61439), HELLISH("Hellish", "habitats/nether", 0x81032d);
 
 	public static EnumTemperature[] VALUES = values();
-	
+
 	public final String name;
 	public final String iconIndex;
 	public final int color;

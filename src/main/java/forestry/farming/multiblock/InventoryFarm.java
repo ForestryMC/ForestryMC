@@ -212,7 +212,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		}
 
 		int fertilizerValue = ForestryAPI.farmRegistry.getFertilizeValue(fertilizerStack);
-		if(fertilizerValue > 0){
+		if (fertilizerValue > 0) {
 			return fertilizerValue * FERTILIZER_MODIFIER;
 		}
 		return 0;

@@ -1,7 +1,8 @@
 package forestry.core.genetics.alleles;
 
-import forestry.core.utils.Translator;
 import org.apache.commons.lang3.text.WordUtils;
+
+import forestry.core.utils.Translator;
 
 /**
  * Alleles that have a category with several values inherit from this class.

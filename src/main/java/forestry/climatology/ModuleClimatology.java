@@ -104,7 +104,7 @@ public class ModuleClimatology extends BlankForestryModule {
 			'R', OreDictUtil.DUST_REDSTONE,
 			'C', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC),
 			'T', coreItems.tubes.get(EnumElectronTube.IRON, 1));
-		if(ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)){
+		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, getItems().habitatScreen.getItemStack(),
 				"IPI",
 				"IPI",
@@ -113,7 +113,7 @@ public class ModuleClimatology extends BlankForestryModule {
 				'P', OreDictUtil.PANE_GLASS,
 				'I', OreDictUtil.INGOT_BRONZE,
 				'D', OreDictUtil.GEM_DIAMOND);
-		}else {
+		} else {
 			RecipeUtil.addRecipe("habitat_screen", getItems().habitatScreen.getItemStack(),
 				"IPI",
 				"IPI",

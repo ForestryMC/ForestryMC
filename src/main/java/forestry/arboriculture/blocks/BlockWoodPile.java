@@ -123,7 +123,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		if (state.getValue(IS_ACTIVE)) {
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				BlockPos position = pos.offset(facing);
-				if(!world.isBlockLoaded(position)){
+				if (!world.isBlockLoaded(position)) {
 					continue;
 				}
 				IBlockState blockState = world.getBlockState(position);
@@ -215,7 +215,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos(pos);
 		testPos.move(facing);
 		int i = 0;
-		while (i < Config.charcoalWallCheckRange && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)){
+		while (i < Config.charcoalWallCheckRange && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)) {
 			IBlockState state = world.getBlockState(testPos);
 			for (ICharcoalPileWall wall : walls) {
 				if (wall.matches(state)) {

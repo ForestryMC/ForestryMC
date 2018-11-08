@@ -13,7 +13,10 @@ package forestry.arboriculture.commands;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
@@ -21,7 +24,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
-import net.minecraft.world.World;
 
 public class TreeStatsSaveHelper implements IStatsSaveHelper {
 

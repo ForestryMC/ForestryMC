@@ -45,7 +45,7 @@ public class PluginBuildCraftFuels extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		ICoolantManager coolantManager = BuildcraftFuelRegistry.coolant;
-		if(coolantManager != null) {
+		if (coolantManager != null) {
 			FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
 			ICoolant waterCoolant = coolantManager.getCoolant(water);
 			Fluid ice = Fluids.ICE.getFluid();

@@ -372,8 +372,8 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private static boolean checkBiomeHazard(IBeeGenome genome, EnumTemperature biomeTemperature, EnumHumidity biomeHumidity) {
 		IAlleleBeeSpecies species = genome.getPrimary();
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
-				species.getTemperature(), genome.getToleranceTemp(),
-				species.getHumidity(), genome.getToleranceHumid());
+			species.getTemperature(), genome.getToleranceTemp(),
+			species.getHumidity(), genome.getToleranceHumid());
 	}
 
 	@Override

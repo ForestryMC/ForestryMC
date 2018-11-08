@@ -71,7 +71,7 @@ public class TreeDecorator {
 			Set<ITree> trees = biomeCache.computeIfAbsent(biome.getRegistryName(), k -> new HashSet<>());
 			for (ITree tree : trees) {
 				String treeUID = tree.getGenome().getPrimary().getUID();
-				if(!TreeConfig.isValidDimension(treeUID, world.provider.getDimension())){
+				if (!TreeConfig.isValidDimension(treeUID, world.provider.getDimension())) {
 					continue;
 				}
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();

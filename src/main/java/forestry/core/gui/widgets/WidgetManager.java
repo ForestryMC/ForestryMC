@@ -82,7 +82,7 @@ public class WidgetManager {
 	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
 		boolean hasToStop = false;
 		for (Widget slot : widgets) {
-			hasToStop|=slot.handleMouseRelease(mouseX- gui.getGuiLeft(), mouseY - gui.getGuiTop(), eventType);
+			hasToStop |= slot.handleMouseRelease(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop(), eventType);
 		}
 		return hasToStop;
 	}

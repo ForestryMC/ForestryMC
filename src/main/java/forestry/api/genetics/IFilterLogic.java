@@ -44,7 +44,7 @@ public interface IFilterLogic extends INbtWritable, INbtReadable {
 
 	INetworkHandler getNetworkHandler();
 
-	interface INetworkHandler{
+	interface INetworkHandler {
 		/**
 		 * Sends the data of the logic to the client of all players that have the gui currently open.
 		 *

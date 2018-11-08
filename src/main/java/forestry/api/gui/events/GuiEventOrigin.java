@@ -11,28 +11,28 @@ import forestry.api.gui.IGuiElement;
 
 @SideOnly(Side.CLIENT)
 public enum GuiEventOrigin {
-	ANY{
+	ANY {
 		@Override
 		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
 			return true;
 		}
 	},
-	SELF{
+	SELF {
 		@Override
 		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
 			return element == origin;
 		}
 	},
-	PARENT{
+	PARENT {
 		@Override
 		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
 			return element != null && element.getParent() == origin;
 		}
 	},
-	DIRECT_CHILD{
+	DIRECT_CHILD {
 		@Override
 		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
-			if(element == null || !(element instanceof IElementGroup)){
+			if (element == null || !(element instanceof IElementGroup)) {
 				return false;
 			}
 			Collection<IGuiElement> elements = ((IElementGroup) element).getElements();

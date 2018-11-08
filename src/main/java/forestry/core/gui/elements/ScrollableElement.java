@@ -17,34 +17,34 @@ public class ScrollableElement extends ElementGroup implements IScrollable {
 
 	public ScrollableElement(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
-		addSelfEventHandler(GuiEvent.WheelEvent.class, event->{
+		addSelfEventHandler(GuiEvent.WheelEvent.class, event -> {
 			//movePercentage(event.getDWheel());
 		});
 	}
 
 	public int getInvisibleArea() {
 		step = (12 * 0.5F);
-		if(content == null){
+		if (content == null) {
 			return 0;
 		}
 		return (int) ((content.getHeight() - height) / (step));
 	}
 
-	protected void movePercentage(float percentage){
+	protected void movePercentage(float percentage) {
 		scrollPercentage = (percentage * step);
 	}
 
 	@Override
 	public void onScroll(int value) {
 		scrollPercentage = (value * step);
-		if(content != null){
+		if (content != null) {
 			content.setOffset(0, -((int) scrollPercentage));
 		}
 	}
 
 	public void setContent(@Nullable IGuiElement content) {
 		this.content = content;
-		if(content != null){
+		if (content != null) {
 			content.setCroppedZone(this, 0, 0, width, height);
 		}
 	}

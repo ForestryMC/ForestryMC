@@ -71,7 +71,7 @@ public class GuiElement extends Gui implements IGuiElement {
 	}
 
 	@Override
-	public void onCreation(){
+	public void onCreation() {
 		//Default-Implementation
 	}
 
@@ -113,12 +113,12 @@ public class GuiElement extends Gui implements IGuiElement {
 
 	@Override
 	public final void draw(int mouseX, int mouseY) {
-		if(!isVisible()){
+		if (!isVisible()) {
 			return;
 		}
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(getX(), getY(), 0.0F);
-		if(isCropped()){
+		if (isCropped()) {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			Minecraft mc = Minecraft.getMinecraft();
 			ScaledResolution res = new ScaledResolution(mc);
@@ -132,7 +132,7 @@ public class GuiElement extends Gui implements IGuiElement {
 
 		drawElement(mouseX, mouseY);
 
-		if(isCropped()){
+		if (isCropped()) {
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		}
 
@@ -242,7 +242,7 @@ public class GuiElement extends Gui implements IGuiElement {
 		return cropHeight;
 	}
 
-	public boolean isCropped(){
+	public boolean isCropped() {
 		return cropElement != null && cropWidth >= 0 && cropHeight >= 0;
 	}
 
@@ -257,7 +257,7 @@ public class GuiElement extends Gui implements IGuiElement {
 
 	@Override
 	public boolean isMouseOver(int mouseX, int mouseY) {
-		if(!isVisible()){
+		if (!isVisible()) {
 			return false;
 		}
 		return mouseX >= 0 && mouseX < getWidth() && mouseY >= 0 && mouseY < getHeight();
@@ -380,8 +380,8 @@ public class GuiElement extends Gui implements IGuiElement {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void receiveEvent(GuiElementEvent event) {
-		for(Consumer<? extends GuiElementEvent> eventHandler : eventHandlers){
-			((Consumer<GuiElementEvent>)eventHandler).accept(event);
+		for (Consumer<? extends GuiElementEvent> eventHandler : eventHandlers) {
+			((Consumer<GuiElementEvent>) eventHandler).accept(event);
 		}
 	}
 

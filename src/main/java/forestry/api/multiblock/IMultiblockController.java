@@ -6,10 +6,9 @@
 package forestry.api.multiblock;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Collection;
 
 /**
  * IMultiblockController is used to handle the assembly of Multiblocks.
@@ -36,7 +35,7 @@ public interface IMultiblockController {
 	 */
 	@Nullable
 	String getLastValidationError();
-	
+
 	@Nullable
 	BlockPos getLastValidationErrorPosition();
 

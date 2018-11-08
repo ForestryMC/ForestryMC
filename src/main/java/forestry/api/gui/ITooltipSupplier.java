@@ -10,7 +10,7 @@ import java.util.Collection;
 @FunctionalInterface
 public interface ITooltipSupplier {
 
-	default boolean hasTooltip(){
+	default boolean hasTooltip() {
 		return true;
 	}
 

@@ -23,8 +23,8 @@ public interface IClimateHelper {
 	 * @return true if both temperature and humidity fit the given constraints.
 	 */
 	boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity,
-						   EnumTemperature baseTemp, EnumTolerance tolTemp,
-						   EnumHumidity baseHumid, EnumTolerance tolHumid);
+		EnumTemperature baseTemp, EnumTolerance tolTemp,
+		EnumHumidity baseHumid, EnumTolerance tolHumid);
 
 	boolean isWithinLimits(EnumTemperature temperature, EnumTemperature baseTemp, EnumTolerance tolTemp);
 
@@ -33,7 +33,7 @@ public interface IClimateHelper {
 	/**
 	 * Gets a collection of humidities which fit the given parameters.
 	 *
-	 * @param preferred  Base humidity from which to measure.
+	 * @param preferred Base humidity from which to measure.
 	 * @param tolerance Tolerance to apply to the base humidity.
 	 * @return A collection of humidities which fall within the given parameters.
 	 */
@@ -42,7 +42,7 @@ public interface IClimateHelper {
 	/**
 	 * Gets a collection of temperatures which fit the given parameters.
 	 *
-	 * @param preferred  Base temperature from which to measure.
+	 * @param preferred Base temperature from which to measure.
 	 * @param tolerance Tolerance to apply to the base temperatures.
 	 * @return A collection of temperatures which fall within the given parameters.
 	 */

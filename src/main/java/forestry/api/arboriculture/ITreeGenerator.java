@@ -28,7 +28,7 @@ public interface ITreeGenerator {
 	@Deprecated
 	boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos);
 
-	default boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos, Random rand){
+	default boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
 		return setLeaves(genome, world, owner, pos);
 	}
 }

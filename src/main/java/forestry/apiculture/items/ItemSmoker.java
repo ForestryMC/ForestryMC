@@ -74,7 +74,7 @@ public class ItemSmoker extends ItemForestry {
 		} else {
 			handOffset = look.crossProduct(new Vec3d(0, -1, 0));
 		}
-		
+
 		Vec3d lookDistance = new Vec3d(look.x * distance, look.y * distance, look.z * distance);
 		Vec3d scaledOffset = handOffset.scale(1.0 / distance);
 		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
@@ -82,7 +82,7 @@ public class ItemSmoker extends ItemForestry {
 		if (world.isRemote) {
 			ParticleRender.addEntitySmokeFX(world, smokePos.x, smokePos.y + 1, smokePos.z);
 		}
-		
+
 		BlockPos blockPos = new BlockPos(smokePos.x, smokePos.y + 1, smokePos.z);
 		TileUtil.actOnTile(world, blockPos, IHiveTile.class, IHiveTile::calmBees);
 	}

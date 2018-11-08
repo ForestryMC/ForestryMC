@@ -68,18 +68,18 @@ import forestry.plugins.PluginTechReborn;
  * @author SirSengir
  */
 @Mod(
-		modid = Constants.MOD_ID,
-		name = Constants.MOD_NAME,
-		version = Constants.VERSION,
-		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.12.2,1.13.0)",
-		dependencies = "required-after:forge@[14.23.4.2749,);"
-				+ "after:jei@[4.7.8.91,);"
-				+ "after:" + PluginIC2.MOD_ID + ";"
-				+ "after:" + PluginNatura.MOD_ID + ";"
-				+ "after:toughasnails;"
-				+ "after:" + PluginTechReborn.MOD_ID + ";"
-				+ "after:" + PluginBuildCraftFuels.MOD_ID + ";")
+	modid = Constants.MOD_ID,
+	name = Constants.MOD_NAME,
+	version = Constants.VERSION,
+	guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
+	acceptedMinecraftVersions = "[1.12.2,1.13.0)",
+	dependencies = "required-after:forge@[14.23.4.2749,);"
+		+ "after:jei@[4.7.8.91,);"
+		+ "after:" + PluginIC2.MOD_ID + ";"
+		+ "after:" + PluginNatura.MOD_ID + ";"
+		+ "after:toughasnails;"
+		+ "after:" + PluginTechReborn.MOD_ID + ";"
+		+ "after:" + PluginBuildCraftFuels.MOD_ID + ";")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")
@@ -92,7 +92,7 @@ public class Forestry {
 		ForestryAPI.instance = this;
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
-		ClimateManager.climateRoot = ForestryAPI.climateManager= ClimateRoot.getInstance();
+		ClimateManager.climateRoot = ForestryAPI.climateManager = ClimateRoot.getInstance();
 		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
 		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
 		EnumErrorCode.init();

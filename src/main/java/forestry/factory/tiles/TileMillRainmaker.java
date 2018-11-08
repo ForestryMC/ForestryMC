@@ -12,11 +12,6 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 
-import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.RainSubstrate;
-import forestry.core.render.ParticleRender;
-import forestry.core.tiles.TileMill;
-import forestry.factory.inventory.InventoryRainmaker;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -24,6 +19,12 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.RainSubstrate;
+import forestry.core.render.ParticleRender;
+import forestry.core.tiles.TileMill;
+import forestry.factory.inventory.InventoryRainmaker;
 
 public class TileMillRainmaker extends TileMill {
 	private int duration;

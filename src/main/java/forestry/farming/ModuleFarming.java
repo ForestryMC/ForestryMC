@@ -137,17 +137,17 @@ public class ModuleFarming extends BlankForestryModule {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
-		
+
 		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
 		}
 
 		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), BlockCrops.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), BlockCrops.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), BlockCrops.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BlockBeetroot.BEETROOT_AGE, 3, 0));
+			new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), BlockCrops.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), BlockCrops.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), BlockCrops.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BlockBeetroot.BEETROOT_AGE, 3, 0));
 
 		IBlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
@@ -224,7 +224,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", mushroomFarm, true);
 		mushroomFarm.registerSoil(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState());
 		mushroomFarm.registerSoil(new ItemStack(Blocks.DIRT, 1, 2),
-				Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
+			Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
 
 		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
 		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
@@ -297,39 +297,39 @@ public class ModuleFarming extends BlankForestryModule {
 			control.setTagCompound(compound);
 
 			RecipeUtil.addRecipe("farm_basic_" + block.getUid(), basic,
-					"I#I",
-					"WCW",
-					'#', block.getBase(),
-					'W', "slabWood",
-					'C', coreItems.tubes.get(EnumElectronTube.TIN, 1),
-					'I', "ingotCopper");
+				"I#I",
+				"WCW",
+				'#', block.getBase(),
+				'W', "slabWood",
+				'C', coreItems.tubes.get(EnumElectronTube.TIN, 1),
+				'I', "ingotCopper");
 
 			RecipeUtil.addRecipe("farm_gearbox_" + block.getUid(), gearbox,
-					" # ",
-					"TTT",
-					'#', basic,
-					'T', "gearTin");
+				" # ",
+				"TTT",
+				'#', basic,
+				'T', "gearTin");
 
 			RecipeUtil.addRecipe("farm_hatch_" + block.getUid(), hatch,
-					" # ",
-					"TDT",
-					'#', basic,
-					'T', "gearTin",
-					'D', OreDictUtil.TRAPDOOR_WOOD);
+				" # ",
+				"TDT",
+				'#', basic,
+				'T', "gearTin",
+				'D', OreDictUtil.TRAPDOOR_WOOD);
 
 			RecipeUtil.addRecipe("farm_valve_" + block.getUid(), valve,
-					" # ",
-					"XTX",
-					'#', basic,
-					'T', "gearTin",
-					'X', "blockGlass");
+				" # ",
+				"XTX",
+				'#', basic,
+				'T', "gearTin",
+				'X', "blockGlass");
 
 			RecipeUtil.addRecipe("farm_control_" + block.getUid(), control,
-					" # ",
-					"XTX",
-					'#', basic,
-					'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1),
-					'X', "dustRedstone");
+				" # ",
+				"XTX",
+				'#', basic,
+				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1),
+				'X', "dustRedstone");
 		}
 
 		// Circuits
@@ -372,7 +372,7 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	public void postInit() {
 		IFarmProperties orchardFarm = FarmRegistry.getInstance().getProperties(ForestryFarmIdentifier.ORCHARD);
-		if(orchardFarm != null && ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+		if (orchardFarm != null && ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			ITreeRoot treeRoot = TreeManager.treeRoot;
 			if (treeRoot != null) {
 				for (ITree tree : treeRoot.getIndividualTemplates()) {

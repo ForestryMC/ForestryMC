@@ -123,7 +123,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
-					AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
+				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
 
 			textLayout.newLine();
 
@@ -136,7 +136,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine(16);
 
 			guiAlyzer.drawRow(Translator.translateToLocal("for.gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
-					AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
+				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
 
 			textLayout.newLine();
 
@@ -215,7 +215,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 		if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			IBee bee = BeeManager.beeRoot.getMember(itemStack);
-			if (bee	== null) {
+			if (bee == null) {
 				return;
 			}
 

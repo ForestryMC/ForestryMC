@@ -14,13 +14,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.lepidopterology.blocks.PropertyCocoon;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
 
 public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon {
 	public static final PropertyCocoon COCOON = new PropertyCocoon("cocoon");
@@ -52,7 +53,7 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 	@Override
 	public ModelResourceLocation getCocoonItemModel(int age) {
 		return new ModelResourceLocation(
-				Constants.MOD_ID + ":lepidopterology/cocoons/cocoon_" + name + "_" + getAgeKey(age), "inventory");
+			Constants.MOD_ID + ":lepidopterology/cocoons/cocoon_" + name + "_" + getAgeKey(age), "inventory");
 	}
 
 	@Override

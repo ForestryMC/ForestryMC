@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import com.google.common.base.Optional;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.common.base.Optional;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;

@@ -5,6 +5,6 @@ package forestry.farming.compat;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import forestry.core.utils.FieldsAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import forestry.core.utils.FieldsAreNonnullByDefault;

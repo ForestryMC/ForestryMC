@@ -118,7 +118,7 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 			NonNullList<ItemStack> stacks = itemMap.get(chr);
 			if (stacks != null) {
 				input.set(x, stacks);
-				if(oreMap.get(chr) != null){
+				if (oreMap.get(chr) != null) {
 					oreDicts.set(x, oreMap.get(chr));
 				}
 			}
@@ -135,11 +135,11 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 	public int getHeight() {
 		return height;
 	}
-	
+
 	public NonNullList<NonNullList<ItemStack>> getRawIngredients() {
 		return input;
 	}
-	
+
 	@Override
 	public NonNullList<String> getOreDicts() {
 		return oreDicts;
@@ -157,21 +157,21 @@ public class ShapedRecipeCustom extends ShapedOreRecipe implements IDescriptiveR
 				if (checkMatch(inv, x, y, false)) {
 					return true;
 				}
-				
+
 				if (mirrored && checkMatch(inv, x, y, true)) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public boolean isDynamic() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
 		for (int x = 0; x < inv.getWidth(); x++) {

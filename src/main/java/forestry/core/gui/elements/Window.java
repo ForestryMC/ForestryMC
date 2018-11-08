@@ -81,7 +81,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 		return this;
 	}
 
-	public void init(int guiLeft, int guiTop){
+	public void init(int guiLeft, int guiTop) {
 		setLocation(guiLeft, guiTop);
 	}
 
@@ -211,7 +211,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 
 	private Collection<IGuiElement> getQueuedElements(final IGuiElement element) {
 		List<IGuiElement> widgets = new ArrayList<>();
-		if(element instanceof IElementGroup) {
+		if (element instanceof IElementGroup) {
 			IElementGroup group = (IElementGroup) element;
 			boolean addChildren = true;
 			if (element.isCropped()) {
@@ -258,7 +258,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 	}
 
 	/* Mouse */
-	public void setMousePosition(int mouseX, int mouseY){
+	public void setMousePosition(int mouseX, int mouseY) {
 		float dx = (float) mouseX - (float) this.mouseX;
 		float dy = (float) mouseY - (float) this.mouseY;
 		if (dx != 0.0f || dy != 0.0f) {
@@ -268,7 +268,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 				postEvent(new GuiEvent.MoveEvent(this, dx, dy), GuiEventDestination.ALL);
 			}
 		}
-		if(mouseX != this.mouseX || mouseY != this.mouseY){
+		if (mouseX != this.mouseX || mouseY != this.mouseY) {
 			this.mouseX = mouseX;
 			this.mouseY = mouseY;
 			setMousedOverElement(calculateMousedOverElement());
@@ -287,7 +287,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 
 	@Override
 	public int getRelativeMouseX(@Nullable IGuiElement element) {
-		if(element == null){
+		if (element == null) {
 			return mouseX;
 		}
 		return mouseX - element.getAbsoluteX();
@@ -295,7 +295,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 
 	@Override
 	public int getRelativeMouseY(@Nullable IGuiElement element) {
-		if(element == null){
+		if (element == null) {
 			return mouseY;
 		}
 		return mouseY - element.getAbsoluteY();

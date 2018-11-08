@@ -15,17 +15,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import forestry.api.apiculture.IBee;
-import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
-import forestry.apiculture.render.TextureHabitatLocator;
-import forestry.core.utils.NetworkUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
 import net.minecraftforge.common.BiomeDictionary;
+
+import forestry.api.apiculture.IBee;
+import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
+import forestry.apiculture.render.TextureHabitatLocator;
+import forestry.core.utils.NetworkUtil;
 
 public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;

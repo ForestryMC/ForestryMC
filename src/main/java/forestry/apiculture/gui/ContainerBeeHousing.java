@@ -28,7 +28,7 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 
 		tile.getBeekeepingLogic().clearCachedValues();
 		IClimateListener listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-		if(listener != null && player.player instanceof EntityPlayerMP){
+		if (listener != null && player.player instanceof EntityPlayerMP) {
 			listener.syncToClient((EntityPlayerMP) player.player);
 		}
 	}

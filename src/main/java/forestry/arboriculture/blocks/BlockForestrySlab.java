@@ -132,7 +132,7 @@ public abstract class BlockForestrySlab<T extends Enum<T> & IWoodType> extends B
 	}
 
 	@Override
-	public String getUnlocalizedName(int meta) {
+	public String getTranslationKey(int meta) {
 		T woodType = getWoodType(meta);
 		return WoodHelper.getDisplayName(this, woodType);
 	}

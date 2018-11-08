@@ -33,7 +33,7 @@ public interface IFruitProvider {
 	/**
 	 * Returns the color of the fruit spite based on the ripening time of the fruit.
 	 *
-	 * @param genome The genome of the tree of the pod / leaves block.
+	 * @param genome       The genome of the tree of the pod / leaves block.
 	 * @param ripeningTime The ripening time of the leaves / pod block. From 0 to {@link #getRipeningPeriod()}.
 	 */
 	int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime);
@@ -47,9 +47,8 @@ public interface IFruitProvider {
 	 * Determines if fruit block of this provider is considered a leaf block.
 	 *
 	 * @param genome The genome of the tree of the pod / leaves block.
-	 * @param world The world in that the pod / leaves block is located.
-	 * @param pos The position of the pod / leaves block.
-	 *
+	 * @param world  The world in that the pod / leaves block is located.
+	 * @param pos    The position of the pod / leaves block.
 	 * @return True if this provider provides a fruit leaf for the given genome at the given position.
 	 */
 	boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos);
@@ -58,12 +57,11 @@ public interface IFruitProvider {
 	 * The chance that this leaves contains fruits or the chance that a pod block spawns.
 	 *
 	 * @param genome The genome of the tree of the pod / leaves block.
-	 *
 	 * @return The chance that this leaves contains fruits or the chance that a pod block spawns.
 	 */
-	default float getFruitChance(ITreeGenome genome, World world, BlockPos pos){
+	default float getFruitChance(ITreeGenome genome, World world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
-		if(treeRoot == null){
+		if (treeRoot == null) {
 			return 0.0F;
 		}
 		float yieldModifier = treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1.0F);
@@ -92,7 +90,7 @@ public interface IFruitProvider {
 	/**
 	 * Returns all drops of this block if you harvest it.
 	 *
-	 * @param genome The genome of the tree of the leaves / pod.
+	 * @param genome       The genome of the tree of the leaves / pod.
 	 * @param ripeningTime The repining time of the block. From 0 to {@link #getRipeningPeriod()}.
 	 */
 	NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime);

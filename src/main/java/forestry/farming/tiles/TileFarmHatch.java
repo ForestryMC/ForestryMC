@@ -92,11 +92,13 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+	}
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
+	}
 
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)

@@ -58,14 +58,14 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	 */
 
 	private static final LoadingCache<NBTTagCompound, BeeGenome> beeGenomeCache = CacheBuilder.newBuilder()
-			.maximumSize(128)
-			.expireAfterAccess(1, TimeUnit.MINUTES)
-			.build(new CacheLoader<NBTTagCompound, BeeGenome>() {
-				@Override
-				public BeeGenome load(NBTTagCompound tagCompound) {
-					return new BeeGenome(tagCompound);
-				}
-			});
+		.maximumSize(128)
+		.expireAfterAccess(1, TimeUnit.MINUTES)
+		.build(new CacheLoader<NBTTagCompound, BeeGenome>() {
+			@Override
+			public BeeGenome load(NBTTagCompound tagCompound) {
+				return new BeeGenome(tagCompound);
+			}
+		});
 
 	public static BeeGenome fromNBT(NBTTagCompound nbtTagCompound) {
 		return beeGenomeCache.getUnchecked(nbtTagCompound);

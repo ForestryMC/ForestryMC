@@ -190,8 +190,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
-					.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.005F);
+				.addFruitFamily(EnumFruitFamily.PRUNES)
+				.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.005F);
 		}
 
 		@Override
@@ -208,8 +208,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
-					.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES);
+				.addFruitFamily(EnumFruitFamily.PRUNES)
+				.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
 		@Override
@@ -241,8 +241,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
-					.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES);
+				.addFruitFamily(EnumFruitFamily.PRUNES)
+				.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
 		@Override
@@ -274,7 +274,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.0015F);
+				.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.0015F);
 		}
 
 		@Override
@@ -306,7 +306,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES);
+				.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
 		@Override
@@ -336,7 +336,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -366,7 +366,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.0025F);
+				.addFruitFamily(EnumFruitFamily.POMES).setRarity(0.0025F);
 		}
 
 		@Override
@@ -577,7 +577,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.PRUNES);
+				.addFruitFamily(EnumFruitFamily.PRUNES);
 		}
 
 		@Override
@@ -601,7 +601,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.PRUNES).setRarity(0.0005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.addFruitFamily(EnumFruitFamily.PRUNES).setRarity(0.0005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -672,7 +672,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX);
+				.addFruitFamily(EnumFruitFamily.NUX);
 		}
 
 		@Override
@@ -694,7 +694,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.ARID);
+				.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.ARID);
 		}
 
 		@Override
@@ -738,7 +738,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.0005F).setHumidity(EnumHumidity.DAMP).setTemperature(EnumTemperature.WARM);
+				.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.0005F).setHumidity(EnumHumidity.DAMP).setTemperature(EnumTemperature.WARM);
 		}
 
 		@Override
@@ -783,7 +783,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.0005F).setHumidity(EnumHumidity.DAMP).setTemperature(EnumTemperature.WARM);
+				.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.0005F).setHumidity(EnumHumidity.DAMP).setTemperature(EnumTemperature.WARM);
 		}
 
 		@Override
@@ -806,7 +806,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.HOT).setHumidity(EnumHumidity.DAMP);
+				.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.HOT).setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -831,8 +831,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.POMES)
-					.addFruitFamily(EnumFruitFamily.PRUNES).setRarity(0.000005F).setTemperature(EnumTemperature.WARM);
+				.addFruitFamily(EnumFruitFamily.POMES)
+				.addFruitFamily(EnumFruitFamily.PRUNES).setRarity(0.000005F).setTemperature(EnumTemperature.WARM);
 		}
 
 		@Override
@@ -856,9 +856,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.NUX)
-					.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES)
-					.setRarity(0.0025F).setHumidity(EnumHumidity.DAMP);
+				.addFruitFamily(EnumFruitFamily.PRUNES)
+				.addFruitFamily(EnumFruitFamily.POMES)
+				.setRarity(0.0025F).setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -871,14 +871,14 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void registerMutations() {
 			registerMutation(Oak, Birch, 10)
-					.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
-					.restrictHumidity(EnumHumidity.DAMP);
+				.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
+				.restrictHumidity(EnumHumidity.DAMP);
 			registerMutation(Oak, Lime, 10)
-					.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
-					.restrictHumidity(EnumHumidity.DAMP);
+				.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
+				.restrictHumidity(EnumHumidity.DAMP);
 			registerMutation(Lime, Birch, 10)
-					.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
-					.restrictHumidity(EnumHumidity.DAMP);
+				.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
+				.restrictHumidity(EnumHumidity.DAMP);
 		}
 	},
 	Sipiri(TreeBranchDefinition.CHLOROCARDIUM, "sipiri", "rodiei", true, EnumLeafType.DECIDUOUS, new Color(0x678911), new Color(0x79a175), EnumForestryWoodType.GREENHEART) {
@@ -890,7 +890,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE).setRarity(0.0025F).setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -903,8 +903,8 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void registerMutations() {
 			registerMutation(Kapok, Mahogony, 10)
-					.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
-					.restrictHumidity(EnumHumidity.DAMP);
+				.restrictTemperature(EnumTemperature.WARM, EnumTemperature.HOT)
+				.restrictHumidity(EnumHumidity.DAMP);
 		}
 	},
 	Papaya(TreeBranchDefinition.CARICA, "papaya", "papaya", true, EnumLeafType.PALM, new Color(0x6d9f58), new Color(0x75E675), EnumForestryWoodType.PAPAYA) {
@@ -916,7 +916,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -941,7 +941,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.JUNGLE)
-					.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.addFruitFamily(EnumFruitFamily.NUX).setRarity(0.005F).setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -967,7 +967,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 		@Override
 		protected void setSpeciesProperties(IAlleleTreeSpeciesBuilder treeSpecies) {
 			treeSpecies.addFruitFamily(EnumFruitFamily.PRUNES)
-					.addFruitFamily(EnumFruitFamily.POMES);
+				.addFruitFamily(EnumFruitFamily.POMES);
 		}
 
 		@Override
@@ -1020,7 +1020,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	protected abstract void registerMutations();
 
-	public boolean hasFruitLeaves(){
+	public boolean hasFruitLeaves() {
 		return false;
 	}
 
@@ -1045,9 +1045,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 			IFruitProvider fruitProvider = genome.getFruitProvider();
 			String speciesUid = genome.getPrimary().getUID();
 			IBlockState defaultLeaves;
-			if(fruitProvider.isFruitLeaf(genome, world, pos) && rand.nextFloat() <= fruitProvider.getFruitChance(genome, world, pos)){
+			if (fruitProvider.isFruitLeaf(genome, world, pos) && rand.nextFloat() <= fruitProvider.getFruitChance(genome, world, pos)) {
 				defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(speciesUid);
-			}else{
+			} else {
 				defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(speciesUid);
 			}
 			return world.setBlockState(pos, defaultLeaves);

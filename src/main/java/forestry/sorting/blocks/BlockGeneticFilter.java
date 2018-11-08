@@ -96,14 +96,14 @@ public class BlockGeneticFilter extends BlockForestry implements IItemModelRegis
 	@Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
 		RayTraceResult result = rayTrace(pos, start, end, BOX_CENTER);
-		if(result != null){
+		if (result != null) {
 			result.subHit = 0;
 			return result;
 		}
 		TileGeneticFilter geneticFilter = TileUtil.getTile(worldIn, pos, TileGeneticFilter.class);
-		if(geneticFilter != null) {
+		if (geneticFilter != null) {
 			for (EnumFacing facing : EnumFacing.VALUES) {
-				if(geneticFilter.isConnected(facing)) {
+				if (geneticFilter.isConnected(facing)) {
 					result = rayTrace(pos, start, end, BOX_FACES[facing.ordinal()]);
 					if (result != null) {
 						result.subHit = 1 + facing.ordinal();
@@ -119,9 +119,9 @@ public class BlockGeneticFilter extends BlockForestry implements IItemModelRegis
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, BOX_CENTER);
 		TileGeneticFilter geneticFilter = TileUtil.getTile(worldIn, pos, TileGeneticFilter.class);
-		if(geneticFilter != null) {
+		if (geneticFilter != null) {
 			for (EnumFacing facing : EnumFacing.VALUES) {
-				if(geneticFilter.isConnected(facing)){
+				if (geneticFilter.isConnected(facing)) {
 					addCollisionBoxToList(pos, entityBox, collidingBoxes, BOX_FACES[facing.ordinal()]);
 				}
 			}
@@ -137,9 +137,9 @@ public class BlockGeneticFilter extends BlockForestry implements IItemModelRegis
 		}
 		AxisAlignedBB aabb = FULL_BLOCK_AABB;
 		int sub = trace.subHit;
-		if(sub == 0){
+		if (sub == 0) {
 			aabb = BOX_CENTER;
-		}else if(sub < 1 + 6){
+		} else if (sub < 1 + 6) {
 			aabb = BOX_FACES[sub - 1];
 		}
 		return aabb.offset(pos);

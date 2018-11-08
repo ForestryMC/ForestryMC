@@ -99,7 +99,7 @@ public class ModuleDatabase extends BlankForestryModule {
 	}
 
 	private String getIngredientName(Object o) {
-		return o instanceof ItemStack ? ((ItemStack) o).getItem().getRegistryName().getResourcePath() : o.toString();
+		return o instanceof ItemStack ? ((ItemStack) o).getItem().getRegistryName().getPath() : o.toString();
 	}
 
 	@Override

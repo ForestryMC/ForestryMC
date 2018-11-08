@@ -5,12 +5,14 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 
 /**
  * Basic species allele.

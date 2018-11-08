@@ -266,7 +266,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 		bindTexture(textureFile);
 	}
 
-	protected void drawBackground(){
+	protected void drawBackground() {
 		bindTexture(textureFile);
 
 		//int x = (width - xSize) / 2;

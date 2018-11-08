@@ -11,9 +11,11 @@
 package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.network.PacketBuffer;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
-import net.minecraft.network.PacketBuffer;
 
 public class FakeErrorLogic implements IErrorLogic {
 

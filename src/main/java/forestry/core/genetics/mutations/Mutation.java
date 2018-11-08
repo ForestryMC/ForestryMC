@@ -187,7 +187,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 			.add("first", species0)
 			.add("second", species1)
 			.add("result", template[0]);
-		if(!specialConditions.isEmpty()){
+		if (!specialConditions.isEmpty()) {
 			stringHelper.add("conditions", getSpecialConditions());
 		}
 		return stringHelper.toString();

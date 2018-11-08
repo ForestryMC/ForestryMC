@@ -201,14 +201,18 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	/* IPowerHandler */
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		if (capability == CAPABILITY_HAS_WORK) return true;
+		if (capability == CAPABILITY_HAS_WORK) {
+			return true;
+		}
 		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@Nullable
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if (capability == CAPABILITY_HAS_WORK) return CAPABILITY_HAS_WORK.cast(new HasWorkWrapper(this));
+		if (capability == CAPABILITY_HAS_WORK) {
+			return CAPABILITY_HAS_WORK.cast(new HasWorkWrapper(this));
+		}
 		T energyCapability = energyManager.getCapability(capability);
 		if (energyCapability != null) {
 			return energyCapability;

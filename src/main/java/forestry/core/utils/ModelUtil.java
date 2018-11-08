@@ -48,12 +48,12 @@ public class ModelUtil {
 
 	private static final Map<ResourceLocation, ModelBlockDefinition> blockDefinitions = Maps.newHashMap();
 
-	public static boolean resourceExists(ResourceLocation location){
+	public static boolean resourceExists(ResourceLocation location) {
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
-		try{
+		try {
 			resourceManager.getResource(location);
 			return true;
-		}catch (IOException e){
+		} catch (IOException e) {
 			return false;
 		}
 	}
@@ -84,8 +84,8 @@ public class ModelUtil {
 	}
 
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
-		ResourceLocation file = new ResourceLocation(location.getResourceDomain(),
-				location.getResourcePath() + ".json");
+		ResourceLocation file = new ResourceLocation(location.getNamespace(),
+			location.getPath() + ".json");
 		IResource iresource = Minecraft.getMinecraft().getResourceManager().getResource(file);
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8));
 	}
@@ -94,7 +94,7 @@ public class ModelUtil {
 		try {
 			ResourceLocation resourcelocation = getBlockstateLocation(location);
 			return blockDefinitions.computeIfAbsent(resourcelocation,
-					k -> loadMultipartMBD(location, resourcelocation));
+				k -> loadMultipartMBD(location, resourcelocation));
 		} catch (Exception exception) {
 			Log.error("Failed to getModelBlockDefinition", exception);
 		}
@@ -102,8 +102,8 @@ public class ModelUtil {
 	}
 
 	private static ResourceLocation getBlockstateLocation(ResourceLocation location) {
-		return new ResourceLocation(location.getResourceDomain(),
-				"blockstates/" + location.getResourcePath() + ".json");
+		return new ResourceLocation(location.getNamespace(),
+			"blockstates/" + location.getPath() + ".json");
 	}
 
 	private static ModelBlockDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
@@ -131,8 +131,8 @@ public class ModelUtil {
 			definition = ModelBlockDefinition.parseFromReader(new InputStreamReader(inputStream, Charsets.UTF_8), location);
 		} catch (Exception exception) {
 			throw new RuntimeException("Encountered an exception when loading model definition of \'" + location
-					+ "\' from: \'" + resource.getResourceLocation() + "\' in resourcepack: \'"
-					+ resource.getResourcePackName() + "\'", exception);
+				+ "\' from: \'" + resource.getResourceLocation() + "\' in resourcepack: \'"
+				+ resource.getResourcePackName() + "\'", exception);
 		} finally {
 			IOUtils.closeQuietly(inputStream);
 		}

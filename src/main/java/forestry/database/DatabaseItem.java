@@ -13,7 +13,7 @@ public class DatabaseItem {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof DatabaseItem)){
+		if (!(obj instanceof DatabaseItem)) {
 			return false;
 		}
 		DatabaseItem other = (DatabaseItem) obj;

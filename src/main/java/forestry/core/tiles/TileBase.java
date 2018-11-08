@@ -33,7 +33,7 @@ public abstract class TileBase extends TileForestry {
 	public String getUnlocalizedTitle() {
 		Block block = getBlockType();
 		if (block instanceof BlockBase) {
-			return block.getUnlocalizedName() + ".name";
+			return block.getTranslationKey() + ".name";
 		}
 		return super.getUnlocalizedTitle();
 	}

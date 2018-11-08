@@ -13,11 +13,6 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import forestry.core.blocks.IBlockRotatable;
-import forestry.core.blocks.IBlockWithMeta;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,8 +22,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.blocks.IBlockRotatable;
+import forestry.core.blocks.IBlockWithMeta;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemBlockForestry<B extends Block> extends ItemBlock {
 
@@ -50,14 +52,14 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
+	public String getTranslationKey(ItemStack itemstack) {
 		Block block = getBlock();
 		if (block instanceof IBlockWithMeta) {
 			IBlockWithMeta blockMeta = (IBlockWithMeta) block;
 			int meta = itemstack.getMetadata();
-			return block.getUnlocalizedName() + "." + blockMeta.getNameFromMeta(meta);
+			return block.getTranslationKey() + "." + blockMeta.getNameFromMeta(meta);
 		}
-		return block.getUnlocalizedName();
+		return block.getTranslationKey();
 	}
 
 	@Override

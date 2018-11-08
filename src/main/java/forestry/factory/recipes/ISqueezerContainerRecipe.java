@@ -12,8 +12,9 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
-import forestry.api.recipes.ISqueezerRecipe;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.recipes.ISqueezerRecipe;
 
 public interface ISqueezerContainerRecipe {
 	ItemStack getEmptyContainer();

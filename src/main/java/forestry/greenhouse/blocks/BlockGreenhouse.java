@@ -88,7 +88,7 @@ public class BlockGreenhouse extends Block implements IItemModelRegister, IBlock
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.SOLID;
 	}
 

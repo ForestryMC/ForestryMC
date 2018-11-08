@@ -42,8 +42,8 @@ public class CharcoalManager implements ICharcoalManager {
 
 	@Override
 	public boolean removeWall(IBlockState state) {
-		for(ICharcoalPileWall wall : walls) {
-			if(wall.matches(state)) {
+		for (ICharcoalPileWall wall : walls) {
+			if (wall.matches(state)) {
 				return walls.remove(wall);
 			}
 		}

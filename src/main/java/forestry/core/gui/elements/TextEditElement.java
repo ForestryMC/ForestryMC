@@ -30,7 +30,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 		});
 		this.addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			IWindowElement windowElement = getWindow();
-			this.field.mouseClicked(windowElement.getRelativeMouseX(this),windowElement.getRelativeMouseY(this), event.getButton());
+			this.field.mouseClicked(windowElement.getRelativeMouseX(this), windowElement.getRelativeMouseY(this), event.getButton());
 		});
 		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> {
 			this.field.setFocused(true);
@@ -40,12 +40,12 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 		});
 	}
 
-	public TextEditElement setMaxLength(int maxLength){
+	public TextEditElement setMaxLength(int maxLength) {
 		field.setMaxStringLength(maxLength);
 		return this;
 	}
 
-	public TextEditElement setValidator(Predicate<String> validator){
+	public TextEditElement setValidator(Predicate<String> validator) {
 		field.setValidator(validator::test);
 		return this;
 	}
@@ -57,7 +57,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 
 	@Override
 	public void setValue(String value) {
-		if(!field.getText().equals(value)) {
+		if (!field.getText().equals(value)) {
 			field.setText(value);
 		}
 	}

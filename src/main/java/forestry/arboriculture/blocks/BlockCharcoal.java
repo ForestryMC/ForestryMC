@@ -14,7 +14,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 
 public class BlockCharcoal extends Block implements IItemModelRegister {
-	
+
 	public BlockCharcoal() {
 		super(Material.ROCK, MapColor.BLACK);
 		setHardness(5.0F);

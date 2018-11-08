@@ -38,11 +38,13 @@ public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+	}
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
+	}
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override

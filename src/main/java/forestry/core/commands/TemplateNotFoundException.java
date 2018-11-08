@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import forestry.api.genetics.IAlleleSpecies;
 import net.minecraft.command.CommandException;
+
+import forestry.api.genetics.IAlleleSpecies;
 
 public class TemplateNotFoundException extends CommandException {
 

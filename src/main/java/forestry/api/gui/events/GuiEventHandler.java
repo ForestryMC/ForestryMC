@@ -37,7 +37,7 @@ public final class GuiEventHandler<E extends GuiElementEvent> implements Consume
 
 	@Override
 	public final void accept(E e) {
-		if(canHandle(e)) {
+		if (canHandle(e)) {
 			handlerAction.accept(e);
 		}
 	}

@@ -17,12 +17,12 @@ public class FarmingInfoRecipeMaker {
 
 	public static List<FarmingInfoRecipeWrapper> getRecipes() {
 		List<FarmingInfoRecipeWrapper> recipes = new ArrayList<>();
-		for(CircuitRecipe circuitRecipe : SolderManager.getRecipes()){
+		for (CircuitRecipe circuitRecipe : SolderManager.getRecipes()) {
 			ICircuit circuit = circuitRecipe.getCircuit();
-			if(circuit instanceof IFarmCircuit){
+			if (circuit instanceof IFarmCircuit) {
 				IFarmCircuit farmCircuit = (IFarmCircuit) circuit;
 				IFarmLogic logic = farmCircuit.getFarmLogic();
-				if(logic.isManual()) {
+				if (logic.isManual()) {
 					IFarmProperties properties = logic.getProperties();
 					recipes.add(new FarmingInfoRecipeWrapper(circuitRecipe.getResource(), properties, circuit));
 				}

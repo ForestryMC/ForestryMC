@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import forestry.core.network.IForestryPacketHandlerClient;
-import forestry.core.network.PacketBufferForestry;
 import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
 
 @SideOnly(Side.CLIENT)
 public class PacketHandlerDummyClient extends PacketHandlerDummy implements IForestryPacketHandlerClient {

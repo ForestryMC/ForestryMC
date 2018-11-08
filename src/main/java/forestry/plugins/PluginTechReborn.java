@@ -104,9 +104,9 @@ public class PluginTechReborn extends CompatPlugin {
 	@Optional.Method(modid = MOD_ID)
 	public void registerRecipes() {
 		RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY,
-				Fluids.GLASS.getFluid(500),
-				ModuleCore.items.tubes.get(EnumElectronTube.RUBBER, 4),
-				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
+			Fluids.GLASS.getFluid(500),
+			ModuleCore.items.tubes.get(EnumElectronTube.RUBBER, 4),
+			new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
@@ -133,6 +133,6 @@ public class PluginTechReborn extends CompatPlugin {
 
 	public static boolean rubberItemsSuccess() {
 		return ItemStackUtil.getItemFromRegistry("techreborn:rubber_wood") != null
-				&& !new ItemStack(ItemStackUtil.getItemFromRegistry("techreborn:part"), 1, 31).isEmpty();
+			&& !new ItemStack(ItemStackUtil.getItemFromRegistry("techreborn:part"), 1, 31).isEmpty();
 	}
 }

@@ -11,6 +11,7 @@
 package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 

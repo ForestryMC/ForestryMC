@@ -10,13 +10,9 @@
  ******************************************************************************/
 package forestry.mail;
 
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.PostManager;
-import forestry.core.utils.NetworkUtil;
-import forestry.mail.gui.GuiMailboxInfo;
-import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -24,13 +20,19 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
+import forestry.core.utils.NetworkUtil;
+import forestry.mail.gui.GuiMailboxInfo;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+
 public class EventHandlerMailAlert {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
 		if (event.phase == Phase.END &&
-				Minecraft.getMinecraft().world != null &&
-				GuiMailboxInfo.instance.hasPOBoxInfo()) {
+			Minecraft.getMinecraft().world != null &&
+			GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render();
 		}
 	}

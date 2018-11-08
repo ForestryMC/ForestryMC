@@ -39,6 +39,6 @@ public class TileFarmCrops extends TilePlanter {
 			new ItemStack(Items.POTATO),
 			new ItemStack(Items.CARROT),
 			new ItemStack(Items.BEETROOT)
-	);
+		);
 	}
 }

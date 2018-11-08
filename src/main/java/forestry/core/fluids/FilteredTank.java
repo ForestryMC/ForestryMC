@@ -15,16 +15,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.utils.Translator;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.text.TextFormatting;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -65,7 +68,7 @@ public class FilteredTank extends StandardTank {
 
 	private boolean fluidMatchesFilter(FluidStack resource) {
 		return resource != null && resource.getFluid() != null &&
-				filters.contains(resource.getFluid().getName());
+			filters.contains(resource.getFluid().getName());
 	}
 
 	@Override
@@ -86,7 +89,7 @@ public class FilteredTank extends StandardTank {
 					rarity = EnumRarity.COMMON;
 				}
 				FluidStack filterFluidStack = FluidRegistry.getFluidStack(fluidFilter.getName(), 0);
-				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.rarityColor);
+				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.color);
 			}
 		} else {
 			toolTip.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");

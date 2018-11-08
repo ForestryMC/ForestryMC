@@ -51,9 +51,9 @@ public class BlockRegistryApiculture extends BlockRegistry {
 		registerBlock(candle, new ItemBlockCandle(candle), "candle");
 		stump = new BlockStump();
 		registerBlock(stump, new ItemBlockForestry<>(stump), "stump");
-		
+
 		beeCombs = BlockHoneyComb.create();
-		for(int i = 0;i < beeCombs.length;i++){
+		for (int i = 0; i < beeCombs.length; i++) {
 			BlockHoneyComb block = beeCombs[i];
 			registerBlock(block, new ItemBlockHoneyComb(block), "bee_combs_" + i);
 		}

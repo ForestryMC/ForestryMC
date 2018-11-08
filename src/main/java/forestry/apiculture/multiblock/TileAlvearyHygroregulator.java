@@ -141,7 +141,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
-				super.hasCapability(capability, facing);
+			super.hasCapability(capability, facing);
 	}
 
 	@Override

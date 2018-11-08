@@ -99,13 +99,13 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 	public boolean getTickRandomly() {
 		return true;
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		MushroomType type = state.getValue(VARIANT);
 		drops.add(type.getDrop());
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		return super.canPlaceBlockAt(worldIn, pos) && this.canBlockStay(worldIn, pos, this.getDefaultState());

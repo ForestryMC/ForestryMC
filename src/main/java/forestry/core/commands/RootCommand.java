@@ -16,12 +16,13 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import forestry.core.config.Constants;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+
+import forestry.core.config.Constants;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

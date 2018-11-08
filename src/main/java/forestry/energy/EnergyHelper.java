@@ -115,6 +115,6 @@ public class EnergyHelper {
 		}
 
 		return TeslaHelper.isEnergyReceiver(tile, side) ||
-				MjHelper.isEnergyReceiver(tile, side);
+			MjHelper.isEnergyReceiver(tile, side);
 	}
 }

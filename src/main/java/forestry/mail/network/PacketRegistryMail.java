@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.mail.network;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
@@ -19,8 +22,6 @@ import forestry.mail.network.packets.PacketLetterTextSet;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketRegistryMail implements IPacketRegistry {
 	@Override

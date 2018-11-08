@@ -58,16 +58,16 @@ public class AIAvoidPlayers extends EntityAIBase {
 		}
 
 		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-				new Vec3d(player.posX, player.posY, player.posZ));
+			new Vec3d(player.posX, player.posY, player.posZ));
 
 		if (randomTarget == null) {
 			return false;
 		}
-		
+
 		if (player.getDistanceSq(randomTarget.x, randomTarget.y, randomTarget.z) < player.getDistance(mob)) {
 			return false;
 		}
-		
+
 		path = pathNavigator.getPathToXYZ(randomTarget.x, randomTarget.y, randomTarget.z);
 		return path != null;
 	}

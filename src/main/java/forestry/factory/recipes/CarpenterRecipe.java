@@ -10,14 +10,17 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.ShapedRecipeCustom;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipe implements ICarpenterRecipe {
 

@@ -65,74 +65,74 @@ public class GuiIdRegistry {
 
 	static {
 		registerGuiHandlers(GuiType.Tile, Arrays.asList(
-				//Apiculture Module
-				TileAlveary.class,
-				TileAlvearyHygroregulator.class,
-				TileAlvearySieve.class,
-				TileApiary.class,
-				TileBeeHouse.class,
+			//Apiculture Module
+			TileAlveary.class,
+			TileAlvearyHygroregulator.class,
+			TileAlvearySieve.class,
+			TileApiary.class,
+			TileBeeHouse.class,
 
-				//Core Module
-				TileAnalyzer.class,
-				TileEscritoire.class,
-				TileNaturalistChest.class,
+			//Core Module
+			TileAnalyzer.class,
+			TileEscritoire.class,
+			TileNaturalistChest.class,
 
-				//Worktable Module
-				TileWorktable.class,
+			//Worktable Module
+			TileWorktable.class,
 
-				//Database Module
-				TileDatabase.class,
+			//Database Module
+			TileDatabase.class,
 
-				//Factory Module
-				TileBottler.class,
-				TileCarpenter.class,
-				TileCentrifuge.class,
-				TileFabricator.class,
-				TileFermenter.class,
-				TileMoistener.class,
-				TileSqueezer.class,
-				TileStill.class,
-				TileRaintank.class,
+			//Factory Module
+			TileBottler.class,
+			TileCarpenter.class,
+			TileCentrifuge.class,
+			TileFabricator.class,
+			TileFermenter.class,
+			TileMoistener.class,
+			TileSqueezer.class,
+			TileStill.class,
+			TileRaintank.class,
 
-				//Farm Module
-				TileFarm.class,
+			//Farm Module
+			TileFarm.class,
 
-				//Climatology
-				TileHabitatFormer.class,
+			//Climatology
+			TileHabitatFormer.class,
 
-				//Sorting Module
-				TileGeneticFilter.class,
+			//Sorting Module
+			TileGeneticFilter.class,
 
-				//Cultivation Module
-				TilePlanter.class,
+			//Cultivation Module
+			TilePlanter.class,
 
-				//Power Module
-				TileEngineBiogas.class,
-				TileEngineElectric.class,
-				TileEnginePeat.class,
-				TileEuGenerator.class,
+			//Power Module
+			TileEngineBiogas.class,
+			TileEngineElectric.class,
+			TileEnginePeat.class,
+			TileEuGenerator.class,
 
-				//Mail Module
-				TileMailbox.class,
-				TileStampCollector.class,
-				TileTrader.class
+			//Mail Module
+			TileMailbox.class,
+			TileStampCollector.class,
+			TileTrader.class
 		));
 
 		registerGuiHandlers(GuiType.Item, Arrays.asList(
-				ItemBackpack.class,
-				ItemBackpackNaturalist.class,
-				ItemAlyzer.class,
-				ItemCatalogue.class,
-				ItemHabitatLocator.class,
-				ItemImprinter.class,
-				ItemLetter.class,
-				ItemSolderingIron.class,
-				ItemForesterBook.class
+			ItemBackpack.class,
+			ItemBackpackNaturalist.class,
+			ItemAlyzer.class,
+			ItemCatalogue.class,
+			ItemHabitatLocator.class,
+			ItemImprinter.class,
+			ItemLetter.class,
+			ItemSolderingIron.class,
+			ItemForesterBook.class
 		));
 
 		registerGuiHandlers(GuiType.Entity, Arrays.asList(
-				EntityMinecartApiary.class,
-				EntityMinecartBeehouse.class
+			EntityMinecartApiary.class,
+			EntityMinecartBeehouse.class
 		));
 	}
 

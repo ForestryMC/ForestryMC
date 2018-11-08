@@ -114,7 +114,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
 			}
 		}
-		if(capability == ClimateCapabilities.CLIMATE_LISTENER){
+		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
 			IClimateListener listener = getMultiblockLogic().getController().getClimateListener();
 			return ClimateCapabilities.CLIMATE_LISTENER.cast(listener);
 		}

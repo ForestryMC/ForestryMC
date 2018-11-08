@@ -38,7 +38,7 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 		this.delegate = delegate;
 		this.ySize = 190;
 
-		for(int i = 0;i < 2;i++) {
+		for (int i = 0; i < 2; i++) {
 			Slot queenSlot = container.getForestrySlot(1 + i);
 			if (queenSlot instanceof SlotWatched) {
 				SlotWatched watched = (SlotWatched) queenSlot;
@@ -59,8 +59,8 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	@Override
 	protected void drawSelectedSlot(int selectedSlot) {
 		Slot slot = container.getForestrySlot(1 + selectedSlot);
-		if(slot != null){
-			SELECTED_COMB_SLOT.draw(guiLeft + slot.xPos -3, guiTop + slot.yPos - 3);
+		if (slot != null) {
+			SELECTED_COMB_SLOT.draw(guiLeft + slot.xPos - 3, guiTop + slot.yPos - 3);
 		}
 	}
 

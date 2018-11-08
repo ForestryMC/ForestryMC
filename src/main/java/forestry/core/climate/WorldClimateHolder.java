@@ -62,13 +62,13 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	public void readFromNBT(NBTTagCompound nbt) {
 		transformers.clear();
 		NBTTagList transformerData = nbt.getTagList(TRANSFORMERS_KEY, Constants.NBT.TAG_COMPOUND);
-		for(int i = 0;i<transformerData.tagCount();i++){
+		for (int i = 0; i < transformerData.tagCount(); i++) {
 			NBTTagCompound tagCompound = transformerData.getCompoundTagAt(i);
 			TransformerData data = new TransformerData(tagCompound);
 			transformers.put(data.position, data);
 		}
 		NBTTagList chunkData = nbt.getTagList(CHUNK_KEY, Constants.NBT.TAG_COMPOUND);
-		for(int i = 0;i < chunkData.tagCount();i++){
+		for (int i = 0; i < chunkData.tagCount(); i++) {
 			NBTTagCompound tagCompound = chunkData.getCompoundTagAt(i);
 			long pos = tagCompound.getLong(POS_KEY);
 			long[] chunkTransformers = NBTUtilForestry.getLongArray(tagCompound.getTag(TRANSFORMERS_DATA_KEY));
@@ -79,13 +79,13 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		NBTTagList transformerData = new NBTTagList();
-		for(Map.Entry<Long, TransformerData> entry : transformers.entrySet()){
+		for (Map.Entry<Long, TransformerData> entry : transformers.entrySet()) {
 			TransformerData data = entry.getValue();
 			transformerData.appendTag(data.writeToNBT(new NBTTagCompound()));
 		}
 		compound.setTag(TRANSFORMERS_KEY, transformerData);
 		NBTTagList chunkData = new NBTTagList();
-		for(Map.Entry<Long, long[]> entry : transformersByChunk.entrySet()){
+		for (Map.Entry<Long, long[]> entry : transformersByChunk.entrySet()) {
 			NBTTagCompound tagCompound = new NBTTagCompound();
 			tagCompound.setLong(POS_KEY, entry.getKey());
 			tagCompound.setTag(TRANSFORMERS_DATA_KEY, new NBTTagLongArray(entry.getValue()));
@@ -104,14 +104,14 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	public void addTransformer(long chunkPos, long transformerPos) {
 		long[] oldData = transformersByChunk.get(chunkPos);
 		long[] newData;
-		if(oldData != null) {
+		if (oldData != null) {
 			for (long pos : oldData) {
 				if (pos == transformerPos) {
 					return;
 				}
 			}
 			newData = Arrays.copyOf(oldData, oldData.length + 1);
-		}else{
+		} else {
 			newData = new long[1];
 		}
 		newData[newData.length - 1] = transformerPos;
@@ -123,15 +123,15 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	@Override
 	public void removeTransformer(long chunkPos, long transformerPos) {
 		long[] oldData = transformersByChunk.get(chunkPos);
-		if(oldData == null){
+		if (oldData == null) {
 			return;
 		}
-		for(long pos : oldData){
-			if(pos == transformerPos){
-				if(oldData.length == 1){
+		for (long pos : oldData) {
+			if (pos == transformerPos) {
+				if (oldData.length == 1) {
 					transformersByChunk.remove(chunkPos);
 					chunkUpdates.remove(chunkPos);
-				}else{
+				} else {
 					long[] newData = Arrays.copyOf(oldData, oldData.length - 1);
 					transformersByChunk.put(chunkPos, newData);
 				}
@@ -142,8 +142,8 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 		}
 	}
 
-	private void markChunkUpdate(long chunkPos){
-		if(world != null){
+	private void markChunkUpdate(long chunkPos) {
+		if (world != null) {
 			chunkUpdates.put(chunkPos, world.getTotalWorldTime());
 		}
 	}
@@ -153,39 +153,39 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 		BlockPos position = transformer.getCoordinates();
 		long longPos = position.toLong();
 		TransformerData data = transformers.get(longPos);
-		if(data != null){
+		if (data != null) {
 			boolean needChunkUpdate = data.range != transformer.getRange() || data.circular != transformer.isCircular() || data.chunks.length == 0;
 			boolean needClimateUpdate = !data.climateState.equals(transformer.getCurrent());
 			data.climateState = transformer.getCurrent().toImmutable();
-			if(needChunkUpdate){
+			if (needChunkUpdate) {
 				data.circular = transformer.isCircular();
 				data.range = transformer.getRange();
 				data.chunks = updateTransformerChunks(transformer, needClimateUpdate);
-			}else if(needClimateUpdate) {
-				for(long chunkPos : data.chunks){
+			} else if (needClimateUpdate) {
+				for (long chunkPos : data.chunks) {
 					markChunkUpdate(chunkPos);
 				}
 			}
-		}else{
+		} else {
 			long[] transformerChunks = updateTransformerChunks(transformer, false);
 			transformers.put(longPos, new TransformerData(longPos, transformer.getCurrent().toImmutable(), transformer.getRange(), transformer.isCircular(), transformerChunks));
 		}
 		setDirty(true);
 	}
 
-	private long[] updateTransformerChunks(IClimateTransformer transformer, boolean forceDirty){
+	private long[] updateTransformerChunks(IClimateTransformer transformer, boolean forceDirty) {
 		BlockPos transformerPos = transformer.getCoordinates();
 		long longPos = transformerPos.toLong();
 		int range = transformer.getRange();
 		Set<Long> chunkSet = new HashSet<>();
-		for(int x = transformerPos.getX() - range;x <= transformerPos.getX() + range;x+=16){
-			for(int z = transformerPos.getZ() - range;z <= transformerPos.getZ() + range;z+=16){
+		for (int x = transformerPos.getX() - range; x <= transformerPos.getX() + range; x += 16) {
+			for (int z = transformerPos.getZ() - range; z <= transformerPos.getZ() + range; z += 16) {
 				int chunkX = x >> 4;
 				int chunkZ = z >> 4;
 				long chunkPos = ChunkPos.asLong(chunkX, chunkZ);
 				addTransformer(chunkPos, longPos);
 				chunkSet.add(chunkPos);
-				if(forceDirty){
+				if (forceDirty) {
 					markChunkUpdate(chunkPos);
 				}
 			}
@@ -200,14 +200,14 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 		setDirty(true);
 	}
 
-	private void removeTransformerChunks(IClimateTransformer transformer){
+	private void removeTransformerChunks(IClimateTransformer transformer) {
 		BlockPos transformerPos = transformer.getCoordinates();
 		long longPos = transformerPos.toLong();
 		TransformerData data = transformers.get(longPos);
-		if(data == null){
+		if (data == null) {
 			return;
 		}
-		for(long chunkPos : data.chunks){
+		for (long chunkPos : data.chunks) {
 			removeTransformer(chunkPos, longPos);
 		}
 	}
@@ -226,7 +226,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	public boolean isPositionInTransformerRange(long position, Position2D blockPos) {
 		BlockPos pos = BlockPos.fromLong(position);
 		int range = getRange(position);
-		if(isCircular(position)) {
+		if (isCircular(position)) {
 			double distance = Math.round(blockPos.getDistance(pos));
 			return range > 0.0F && distance <= range;
 		}
@@ -236,7 +236,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	@Override
 	public IClimateState getState(BlockPos pos) {
 		long chunkPos = ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4);
-		if(!transformersByChunk.containsKey(chunkPos)){
+		if (!transformersByChunk.containsKey(chunkPos)) {
 			return ClimateStateHelper.INSTANCE.absent();
 		}
 		double transformerCount = 0;

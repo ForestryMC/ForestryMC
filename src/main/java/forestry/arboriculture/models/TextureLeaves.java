@@ -14,13 +14,15 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import forestry.api.arboriculture.EnumLeafType;
-import forestry.core.config.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.EnumLeafType;
+import forestry.core.config.Constants;
 
 public class TextureLeaves {
 	private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<>(EnumLeafType.class);

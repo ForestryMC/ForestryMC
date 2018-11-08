@@ -215,7 +215,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 		if (classificationMap.containsKey(branch.getUID())) {
 			throw new RuntimeException(String.format("Could not add new classification '%s', because the key is already taken by %s.", branch.getUID(),
-					classificationMap.get(branch.getUID())));
+				classificationMap.get(branch.getUID())));
 		}
 
 		classificationMap.put(branch.getUID(), branch);

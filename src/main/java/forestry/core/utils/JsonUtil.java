@@ -18,7 +18,7 @@ public class JsonUtil {
 
 	public static ItemStack deserializeItemStack(JsonObject object, ItemStack fallback, boolean logError) {
 		if (!object.has("item")) {
-			if(logError) {
+			if (logError) {
 				Log.error("Unsupported icon type, currently only items are supported (add 'item' key)");
 			}
 			return fallback;
@@ -29,8 +29,8 @@ public class JsonUtil {
 			ItemStack stack = new ItemStack(item, 1, meta);
 			stack.setTagCompound(JsonUtils.readNBT(object, "nbt"));
 			return stack;
-		}catch (JsonSyntaxException e){
-			if(logError) {
+		} catch (JsonSyntaxException e) {
+			if (logError) {
 				Log.trace("Filed to parse item.", e);
 			}
 			return fallback;

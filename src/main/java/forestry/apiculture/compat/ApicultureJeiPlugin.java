@@ -47,22 +47,22 @@ public class ApicultureJeiPlugin implements IModPlugin {
 		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry, "frames",
-				items.frameImpregnated,
-				items.frameProven,
-				items.frameUntreated
+			items.frameImpregnated,
+			items.frameProven,
+			items.frameUntreated
 		);
 
 		JeiUtil.addDescription(registry, "apiarist.suit",
-				items.apiaristBoots,
-				items.apiaristChest,
-				items.apiaristHat,
-				items.apiaristLegs
+			items.apiaristBoots,
+			items.apiaristChest,
+			items.apiaristHat,
+			items.apiaristLegs
 		);
 
 		JeiUtil.addDescription(registry,
-				items.habitatLocator,
-				items.scoop,
-				items.imprinter
+			items.habitatLocator,
+			items.scoop,
+			items.imprinter
 		);
 	}
 }

@@ -10,14 +10,14 @@ import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
 
 public class ButterflyUtils {
-	
+
 	static boolean attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
 		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
 		Log.trace("Spawned a butterfly '{}' at {}/{}/{}.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		return entityLiving != null;
 	}
-	
-	public static boolean spawnButterfly(IButterfly butterfly, World world, BlockPos pos){
+
+	public static boolean spawnButterfly(IButterfly butterfly, World world, BlockPos pos) {
 		if (world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
@@ -31,8 +31,8 @@ public class ButterflyUtils {
 		}
 		return false;
 	}
-	
-	public static boolean spawnButterflyWithoutCheck(IButterfly butterfly, World world, BlockPos pos){
+
+	public static boolean spawnButterflyWithoutCheck(IButterfly butterfly, World world, BlockPos pos) {
 		if (world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
@@ -43,5 +43,5 @@ public class ButterflyUtils {
 		return false;
 	}
 
-	
+
 }

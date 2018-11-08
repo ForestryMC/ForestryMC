@@ -64,7 +64,9 @@ public class TeslaHelper {
 	}
 
 	public static boolean isTeslaCapability(Capability<?> capability) {
-		if (!isLoaded()) return false;
+		if (!isLoaded()) {
+			return false;
+		}
 		return capability == TESLA_CONSUMER || capability == TESLA_HOLDER || capability == TESLA_PRODUCER;
 	}
 }

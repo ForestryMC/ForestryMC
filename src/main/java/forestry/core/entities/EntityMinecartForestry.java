@@ -100,7 +100,7 @@ public abstract class EntityMinecartForestry extends EntityMinecart implements I
 	@Override
 	public String getUnlocalizedTitle() {
 		ItemStack cartItem = getCartItem();
-		return cartItem.getUnlocalizedName() + ".name";
+		return cartItem.getTranslationKey() + ".name";
 	}
 
 	@Override

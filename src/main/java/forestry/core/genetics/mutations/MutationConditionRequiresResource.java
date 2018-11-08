@@ -14,13 +14,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.climate.IClimateProvider;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IMutationCondition;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -29,7 +22,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.climate.IClimateProvider;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IMutationCondition;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Translator;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 

@@ -47,7 +47,7 @@ public class ProxyClient extends ProxyCommon {
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandlerClient());
 		MinecraftForge.EVENT_BUS.register(new ClimateHandlerClient());
 	}
-	
+
 	@Override
 	public void registerBlock(Block block) {
 		ModelManager.getInstance().registerBlockClient(block);
@@ -62,7 +62,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public File getForestryRoot() {
-		return Minecraft.getMinecraft().mcDataDir;
+		return Minecraft.getMinecraft().gameDir;
 	}
 
 	@Override

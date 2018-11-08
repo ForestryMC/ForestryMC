@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleCategorized;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEffect {
 

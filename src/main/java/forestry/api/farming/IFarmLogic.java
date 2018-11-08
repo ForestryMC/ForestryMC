@@ -22,7 +22,7 @@ import forestry.api.core.ForestryAPI;
 
 /**
  * The IFarmLogic is used by farm blocks and multi-blocks to cultivate and harvest crops and plants.
- *
+ * <p>
  * Every farm block has only ony one logic a multi-block farm has four, one for every direction.
  */
 public interface IFarmLogic {
@@ -35,7 +35,6 @@ public interface IFarmLogic {
 
 	/**
 	 * @param hydrationModifier A modifier that depends on the weather and the biome of the farm.
-	 *
 	 * @return The amount of water that the {@link IFarmHousing} automatically removes after this logic cultivated
 	 * a block or harvested a crop.
 	 */
@@ -55,9 +54,8 @@ public interface IFarmLogic {
 	/**
 	 * Collects all items that are laying on the ground and are in the {@link IFarmHousing#getArea()} of the farm.
 	 *
-	 * @param world The world of the farm.
+	 * @param world       The world of the farm.
 	 * @param farmHousing The farm that uses this logic.
-	 *
 	 * @return A collection that contains all items that were collected.
 	 */
 	NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing);
@@ -65,12 +63,12 @@ public interface IFarmLogic {
 	/**
 	 * Tries to cultivate one or more blocks at the given position and with the given extent.
 	 *
-	 * @param world The world of the farm.
+	 * @param world       The world of the farm.
 	 * @param farmHousing The farm that uses this logic.
-	 * @param pos The position at that the logic should start to cultivate.
-	 * @param direction The direction of the extension.
-	 * @param extent How many blocks this logic has to cultivate after it cultivated the block at the given position.
-	 *               The positions of the next blocks are having a offset in the given direction.
+	 * @param pos         The position at that the logic should start to cultivate.
+	 * @param direction   The direction of the extension.
+	 * @param extent      How many blocks this logic has to cultivate after it cultivated the block at the given position.
+	 *                    The positions of the next blocks are having a offset in the given direction.
 	 * @return True if the logic has cultivated any block.
 	 */
 	boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent);
@@ -78,11 +76,11 @@ public interface IFarmLogic {
 	/**
 	 * Tries to harvest one or more blocks at the given position and with the given extent.
 	 *
-	 * @param world The world of the farm.
-	 * @param pos The position at that the logic should start to harvest.
+	 * @param world     The world of the farm.
+	 * @param pos       The position at that the logic should start to harvest.
 	 * @param direction The direction of the extension.
-	 * @param extent How many blocks this logic tries to harvest after it has tried to harvested the block at the given position.
-	 *               The positions of the next blocks are having a offset in the given direction.
+	 * @param extent    How many blocks this logic tries to harvest after it has tried to harvested the block at the given position.
+	 *                  The positions of the next blocks are having a offset in the given direction.
 	 * @return True if the logic has cultivated any block.
 	 */
 	Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent);
@@ -90,17 +88,16 @@ public interface IFarmLogic {
 	/**
 	 * Returns the {@link IFarmProperties} that created this logic.
 	 *
-	 * @since Forestry 5.8
-	 *
 	 * @return Returns the {@link IFarmProperties} that created this logic. Returns a fake instance from
 	 * {@link IFarmRegistry#createFakeInstance(IFarmLogic)} if the logic is older that Forestry 5.8.
 	 * TODO: Remove "default" from this method in 1.13
+	 * @since Forestry 5.8
 	 */
-	default IFarmProperties getProperties(){
+	default IFarmProperties getProperties() {
 		return ForestryAPI.farmRegistry.createFakeInstance(this);
 	}
 
-	default boolean isManual(){
+	default boolean isManual() {
 		return false;
 	}
 
@@ -110,7 +107,7 @@ public interface IFarmLogic {
 	 * TODO Remove this method in 1.13
 	 */
 	@Deprecated
-	default IFarmLogic setManual(boolean manual){
+	default IFarmLogic setManual(boolean manual) {
 		return this;
 	}
 
@@ -119,11 +116,11 @@ public interface IFarmLogic {
 	 * with {@link IFarmProperties#registerSoil(ItemStack, IBlockState, boolean)}.
 	 */
 	@Deprecated
-	default void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData){
+	default void addSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
 		//
 	}
 
-	default String getUnlocalizedName(){
+	default String getUnlocalizedName() {
 		return "";
 	}
 
@@ -133,13 +130,14 @@ public interface IFarmLogic {
 	String getName();
 
 	/* GUI ONLY */
+
 	/**
 	 * @deprecated No longer needed because mc always uses the same map for blocks and items.
 	 * TODO remove this method in 1.13
 	 */
 	@Deprecated
 	@SideOnly(Side.CLIENT)
-	default ResourceLocation getTextureMap(){
+	default ResourceLocation getTextureMap() {
 		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 

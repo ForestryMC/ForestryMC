@@ -35,7 +35,7 @@ public abstract class ItemRegistry {
 			Log.error("Name must be lowercase");
 		}
 
-		item.setUnlocalizedName("for." + name);
+		item.setTranslationKey("for." + name);
 		item.setRegistryName(name);
 
 		MigrationHelper.addItemName(name);

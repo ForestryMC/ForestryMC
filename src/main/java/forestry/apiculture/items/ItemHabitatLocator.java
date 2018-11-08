@@ -75,7 +75,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
-		
+
 		Minecraft minecraft = Minecraft.getMinecraft();
 		if (world != null && minecraft.player != null) {
 			EntityPlayerSP player = minecraft.player;
@@ -83,7 +83,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getRainfall());
-			
+
 			list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.getBiomeName());
 			list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
 			list.add(Translator.translateToLocal("for.gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));

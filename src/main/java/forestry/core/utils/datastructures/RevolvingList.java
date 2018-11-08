@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
-
-import com.google.common.base.Preconditions;
 
 /**
  * @param <T>

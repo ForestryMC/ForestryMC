@@ -79,7 +79,7 @@ public class ModuleFluids extends BlankForestryModule {
 				fluidBlock = forestryFluid.makeBlock();
 				if (fluidBlock != null) {
 					String name = "fluid." + forestryFluid.getTag();
-					fluidBlock.setUnlocalizedName("forestry." + name);
+					fluidBlock.setTranslationKey("forestry." + name);
 					fluidBlock.setRegistryName(name);
 					ForgeRegistries.BLOCKS.register(fluidBlock);
 
@@ -95,8 +95,8 @@ public class ModuleFluids extends BlankForestryModule {
 			} else {
 				ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(fluidBlock);
 				Log.warning("Pre-existing {} fluid block detected, deferring to {}:{}, "
-						+ "this may cause issues if the server/client have different mod load orders, "
-						+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), resourceLocation.getResourceDomain(), resourceLocation.getResourcePath(), fluid.getName());
+					+ "this may cause issues if the server/client have different mod load orders, "
+					+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), resourceLocation.getNamespace(), resourceLocation.getPath(), fluid.getName());
 			}
 		}
 	}
@@ -158,23 +158,23 @@ public class ModuleFluids extends BlankForestryModule {
 				continue;
 			}
 			RecipeUtil.addRecipe("cake_" + containerType.getName(), new ItemStack(Items.CAKE),
-					"AAA",
-					"BEB",
-					"CCC",
-					'A', items.getContainer(containerType, milk),
-					'B', Items.SUGAR,
-					'C', Items.WHEAT,
-					'E', Items.EGG);
+				"AAA",
+				"BEB",
+				"CCC",
+				'A', items.getContainer(containerType, milk),
+				'B', Items.SUGAR,
+				'C', Items.WHEAT,
+				'E', Items.EGG);
 		}
 	}
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public void registerTextures(TextureStitchEvent.Pre event){
+	public void registerTextures(TextureStitchEvent.Pre event) {
 		TextureMap map = event.getMap();
-		for(Fluids fluids : Fluids.values()) {
+		for (Fluids fluids : Fluids.values()) {
 			Fluid fluid = fluids.getFluid();
-			if(fluid != null) {
+			if (fluid != null) {
 				map.registerSprite(fluid.getStill());
 				map.registerSprite(fluid.getFlowing());
 			}

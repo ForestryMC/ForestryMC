@@ -113,7 +113,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return removed;
 	}
 
-	public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack){
+	public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
 		}

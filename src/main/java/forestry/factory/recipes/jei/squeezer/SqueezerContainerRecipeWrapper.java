@@ -2,11 +2,14 @@ package forestry.factory.recipes.jei.squeezer;
 
 import java.util.Collections;
 
-import forestry.factory.recipes.ISqueezerContainerRecipe;
-import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import forestry.factory.recipes.ISqueezerContainerRecipe;
+
+import mezz.jei.api.ingredients.IIngredients;
 
 public class SqueezerContainerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerContainerRecipe> {
 	private final ItemStack filledContainer;

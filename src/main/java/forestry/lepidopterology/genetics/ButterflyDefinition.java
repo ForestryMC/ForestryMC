@@ -83,7 +83,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -101,7 +101,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -117,7 +117,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -186,7 +186,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -200,7 +200,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -214,7 +214,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -234,7 +234,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
@@ -277,7 +277,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
 			species.setTemperature(EnumTemperature.WARM)
-					.setHumidity(EnumHumidity.DAMP);
+				.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override

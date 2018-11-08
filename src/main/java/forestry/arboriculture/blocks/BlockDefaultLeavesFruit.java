@@ -68,9 +68,9 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		this.blockNumber = blockNumber;
 		PropertyTreeTypeFruit variant = getVariant();
 		setDefaultState(this.blockState.getBaseState()
-				.withProperty(variant, variant.getFirstType())
-				.withProperty(CHECK_DECAY, false)
-				.withProperty(DECAYABLE, true));
+			.withProperty(variant, variant.getFirstType())
+			.withProperty(CHECK_DECAY, false)
+			.withProperty(DECAYABLE, true));
 	}
 
 	@Override
@@ -82,17 +82,17 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack mainHand = player.getHeldItem(EnumHand.MAIN_HAND);
 		ItemStack offHand = player.getHeldItem(EnumHand.OFF_HAND);
-		if(mainHand.isEmpty() && offHand.isEmpty()){
+		if (mainHand.isEmpty() && offHand.isEmpty()) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			ITree tree = getTree(world, pos);
-			if(tree == null){
+			if (tree == null) {
 				return false;
 			}
 			IFruitProvider fruitProvider = tree.getGenome().getFruitProvider();
 			NonNullList<ItemStack> products = tree.produceStacks(world, pos, fruitProvider.getRipeningPeriod());
 			world.setBlockState(pos, ModuleArboriculture.getBlocks().getDefaultLeaves(tree.getIdent()), 2);
-			for(ItemStack fruit : products) {
+			for (ItemStack fruit : products) {
 				ItemHandlerHelper.giveItemToPlayer(player, fruit);
 			}
 			return true;
@@ -198,7 +198,7 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	/* RENDERING */
 	@Override
 	public final boolean isOpaqueCube(IBlockState state) {
-		if(!Proxies.render.fancyGraphicsEnabled()){
+		if (!Proxies.render.fancyGraphicsEnabled()) {
 			PropertyTreeTypeFruit.LeafVariant treeDefinition = state.getValue(getVariant());
 			return !TreeDefinition.Willow.equals(treeDefinition.definition);
 		}
@@ -221,9 +221,9 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 		PropertyTreeTypeFruit.LeafVariant variant = getLeafVariant(state);
 		TreeDefinition treeDefinition;
-		if(variant != null) {
+		if (variant != null) {
 			treeDefinition = variant.definition;
-		}else{
+		} else {
 			treeDefinition = TreeDefinition.Oak;
 		}
 		ITreeGenome genome = treeDefinition.getGenome();

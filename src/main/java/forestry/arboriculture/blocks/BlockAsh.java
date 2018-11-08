@@ -76,7 +76,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 		Random rand = world instanceof World ? ((World) world).rand : new Random();
 		int amount = startAmount + state.getValue(AMOUNT);
 		if (amount > 0) {
-			if(fortune > 0) {
+			if (fortune > 0) {
 				amount += rand.nextInt(1 + fortune);
 			}
 			drops.add(new ItemStack(Items.COAL, amount, 1));
@@ -90,7 +90,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 		ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return new ModelResourceLocation(Constants.MOD_ID + ":ash_block","normal");
+				return new ModelResourceLocation(Constants.MOD_ID + ":ash_block", "normal");
 			}
 		});
 	}

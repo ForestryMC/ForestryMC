@@ -64,7 +64,7 @@ public class ClimateRoot implements IClimateManager {
 	public IWorldClimateHolder getWorldClimate(World world) {
 		MapStorage storage = world.getPerWorldStorage();
 		WorldClimateHolder holder = (WorldClimateHolder) storage.getOrLoadData(WorldClimateHolder.class, WorldClimateHolder.NAME);
-		if(holder == null){
+		if (holder == null) {
 			holder = new WorldClimateHolder(WorldClimateHolder.NAME);
 
 			storage.setData(WorldClimateHolder.NAME, holder);

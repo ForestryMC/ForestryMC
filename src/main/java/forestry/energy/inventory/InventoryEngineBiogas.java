@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.energy.inventory;
 
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.energy.tiles.TileEngineBiogas;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.energy.tiles.TileEngineBiogas;
 
 public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas> {
 	public static final short SLOT_CAN = 0;

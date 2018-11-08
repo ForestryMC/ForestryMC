@@ -124,7 +124,7 @@ public class ModuleCultivation extends BlankForestryModule {
 			'C', coreItems.flexibleCasing,
 			'B', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC));
 
-		for(BlockPlanter planter : getBlocks().getPlanters()){
+		for (BlockPlanter planter : getBlocks().getPlanters()) {
 			RecipeUtil.addShapelessRecipe(planter.blockType.getName() + "_manual_managed", planter.get(true), planter.get(false));
 			RecipeUtil.addShapelessRecipe(planter.blockType.getName() + "_managed_manual", planter.get(false), planter.get(true));
 		}

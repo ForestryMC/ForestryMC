@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 public class InventoryBeeHousing extends InventoryAdapterRestricted implements IBeeHousingInventory {
 	public static final int SLOT_QUEEN = 0;

@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import forestry.api.circuits.ICircuitSocketType;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.circuits.ICircuitSocketType;
 
 public interface ISocketable {
 	int getSocketCount();

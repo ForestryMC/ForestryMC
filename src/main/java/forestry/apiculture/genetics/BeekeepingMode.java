@@ -90,7 +90,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
 		return queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) &&
-				rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
+			rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
 	}
 
 	@Override
@@ -143,8 +143,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 		@Override
 		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
-			if(this.speedModifier>16.0f)
-			{
+			if (this.speedModifier > 16.0f) {
 				return 16.0f;
 			}
 			return this.speedModifier;

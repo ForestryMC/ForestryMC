@@ -134,12 +134,12 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	public String getLastValidationError() {
 		return null;
 	}
-	
+
 	@Override
 	public BlockPos getLastValidationErrorPosition() {
 		return null;
 	}
-	
+
 	@Override
 
 	public Collection<IMultiblockComponent> getComponents() {

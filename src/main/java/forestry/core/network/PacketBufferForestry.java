@@ -116,7 +116,7 @@ public class PacketBufferForestry extends PacketBuffer {
 		}
 		return enumValues[ordinal];
 	}
-	
+
 	public void writeStreamable(@Nullable Object object) {
 		if (object != null && object instanceof IStreamable) {
 			IStreamable streamable = (IStreamable) object;
@@ -170,21 +170,21 @@ public class PacketBufferForestry extends PacketBuffer {
 		T create(PacketBufferForestry data) throws IOException;
 	}
 
-	public void writeClimateState(IClimateState climateState){
-		if(climateState.isPresent()) {
+	public void writeClimateState(IClimateState climateState) {
+		if (climateState.isPresent()) {
 			writeBoolean(true);
 			writeFloat(climateState.getTemperature());
 			writeFloat(climateState.getHumidity());
 			writeBoolean(climateState.isMutable());
-		}else{
+		} else {
 			writeBoolean(false);
 		}
 	}
 
-	public IClimateState readClimateState(){
-		if(readBoolean()){
+	public IClimateState readClimateState() {
+		if (readBoolean()) {
 			return ClimateStateHelper.of(readFloat(), readFloat(), readBoolean());
-		}else{
+		} else {
 			return AbsentClimateState.INSTANCE;
 		}
 	}

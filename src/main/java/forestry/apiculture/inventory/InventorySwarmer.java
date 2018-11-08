@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.ItemStackUtil;
-import net.minecraft.item.ItemStack;
 
 public class InventorySwarmer extends InventoryAdapterTile<TileAlvearySwarmer> {
 	public InventorySwarmer(TileAlvearySwarmer alvearySwarmer) {

@@ -12,10 +12,10 @@ public interface ICroppable {
 	 * Sets the cropped zone of this element and the element the zone is relative to.
 	 *
 	 * @param cropElement The element the zone is relative to.
-	 * @param cropX The x start coordinate of the zone.
-	 * @param cropY The y start coordinate of the zone.
-	 * @param cropWidth The width of the zone.
-	 * @param cropHeight The height of the zone.
+	 * @param cropX       The x start coordinate of the zone.
+	 * @param cropY       The y start coordinate of the zone.
+	 * @param cropWidth   The width of the zone.
+	 * @param cropHeight  The height of the zone.
 	 */
 	void setCroppedZone(@Nullable IGuiElement cropElement, int cropX, int cropY, int cropWidth, int cropHeight);
 

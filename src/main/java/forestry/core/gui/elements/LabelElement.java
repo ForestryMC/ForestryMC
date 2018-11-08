@@ -47,7 +47,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 	public ILabelElement setStyle(ITextStyle style) {
 		this.style = style;
 		this.text = GuiElementUtil.getFormattedString(style, rawText);
-		if(textLength){
+		if (textLength) {
 			boolean uni = FONT_RENDERER.getUnicodeFlag();
 			FONT_RENDERER.setUnicodeFlag(style.isUnicode());
 			setWidth(FONT_RENDERER.getStringWidth(this.text));
@@ -70,7 +70,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 	public ILabelElement setText(String text) {
 		this.rawText = text;
 		this.text = GuiElementUtil.getFormattedString(style, text);
-		if(textLength){
+		if (textLength) {
 			boolean uni = FONT_RENDERER.getUnicodeFlag();
 			FONT_RENDERER.setUnicodeFlag(style.isUnicode());
 			setWidth(FONT_RENDERER.getStringWidth(this.text));

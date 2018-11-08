@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import net.minecraft.inventory.IInventory;
+
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.IFilterSlotDelegate;
-import net.minecraft.inventory.IInventory;
 
 public abstract class ContainerBeeHelper {
 	public static <T extends IInventory & IFilterSlotDelegate> void addSlots(ContainerForestry container, T inventory, boolean hasFrames) {

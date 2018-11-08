@@ -27,7 +27,7 @@ public class ButtonElement extends GuiElement {
 		textures[0] = disabledDrawable;
 		textures[1] = enabledDrawable;
 		textures[2] = mouseOverDrawable;
-			addSelfEventHandler(GuiEvent.DownEvent.class, event ->{
+		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}
@@ -42,7 +42,7 @@ public class ButtonElement extends GuiElement {
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
 		}
-		addSelfEventHandler(GuiEvent.DownEvent.class, event ->{
+		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}
@@ -57,7 +57,7 @@ public class ButtonElement extends GuiElement {
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(textureSets.getTexture(), textureSets.getX(), textureSets.getY() + textureSets.getHeight() * i, textureSets.getWidth(), textureSets.getHeight());
 		}
-		addSelfEventHandler(GuiEvent.DownEvent.class, event ->{
+		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}

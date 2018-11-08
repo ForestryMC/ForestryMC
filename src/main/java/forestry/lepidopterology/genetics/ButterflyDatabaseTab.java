@@ -50,7 +50,7 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 
 		database.addLine(Translator.translateToLocal("for.gui.lifespan"), EnumButterflyChromosome.LIFESPAN);
 
-		database.addLine(Translator.translateToLocal("for.gui.speed"),EnumButterflyChromosome.SPEED);
+		database.addLine(Translator.translateToLocal("for.gui.speed"), EnumButterflyChromosome.SPEED);
 
 		database.addLine(Translator.translateToLocal("for.gui.metabolism"), (IAlleleInteger allele, Boolean a) -> GenericRatings.rateMetabolism(allele.getValue()), EnumButterflyChromosome.METABOLISM);
 
@@ -59,7 +59,7 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 		database.addLine(Translator.translateToLocal("for.gui.flowers"), EnumButterflyChromosome.FLOWER_PROVIDER);
 		database.addLine(Translator.translateToLocal("for.gui.effect"), EnumButterflyChromosome.EFFECT);
 
-		Function<Boolean, String> toleranceText = a ->{
+		Function<Boolean, String> toleranceText = a -> {
 			IAlleleSpecies species = a ? primarySpecies : secondarySpecies;
 			return AlleleManager.climateHelper.toDisplay(species.getTemperature());
 		};

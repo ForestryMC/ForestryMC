@@ -35,6 +35,7 @@ public class MigrationHelper {
 	private static Map<String, String> tileRemappings = new HashMap<>();
 
 	private static Set<String> ignoredMappings = new HashSet<>();
+
 	static {
 		//Greenhouse
 		ignoredMappings.add("greenhouse.sprinkler");
@@ -107,7 +108,7 @@ public class MigrationHelper {
 		add(itemName, itemRemappings);
 	}
 
-	public static void addTileName(String tileName){
+	public static void addTileName(String tileName) {
 		add(tileName, tileRemappings);
 	}
 
@@ -123,11 +124,11 @@ public class MigrationHelper {
 		for (RegistryEvent.MissingMappings.Mapping<Block> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
 
-			String resourcePath = resourceLocation.getResourcePath();
+			String resourcePath = resourceLocation.getPath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
 			} else if (blockRemappings.containsKey(resourcePath)) {
-				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), blockRemappings.get(resourcePath));
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getNamespace(), blockRemappings.get(resourcePath));
 				if (ForgeRegistries.BLOCKS.containsKey(remappedResourceLocation)) {
 					Block remappedBlock = ForgeRegistries.BLOCKS.getValue(remappedResourceLocation);
 					if (remappedBlock != null && remappedBlock != Blocks.AIR) {
@@ -143,11 +144,11 @@ public class MigrationHelper {
 		for (RegistryEvent.MissingMappings.Mapping<Item> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
 
-			String resourcePath = resourceLocation.getResourcePath();
+			String resourcePath = resourceLocation.getPath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
 			} else if (itemRemappings.containsKey(resourcePath)) {
-				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), itemRemappings.get(resourcePath));
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getNamespace(), itemRemappings.get(resourcePath));
 				if (ForgeRegistries.ITEMS.containsKey(remappedResourceLocation)) {
 					Item remappedItem = ForgeRegistries.ITEMS.getValue(remappedResourceLocation);
 					if (remappedItem != null && remappedItem != Items.AIR) {
@@ -159,8 +160,8 @@ public class MigrationHelper {
 	}
 
 	@Nullable
-	public static String getRemappedTileName(String resourcePath){
-		if(tileRemappings.containsKey(resourcePath)){
+	public static String getRemappedTileName(String resourcePath) {
+		if (tileRemappings.containsKey(resourcePath)) {
 			return Constants.MOD_ID + ":" + tileRemappings.get(resourcePath);
 		}
 		return null;

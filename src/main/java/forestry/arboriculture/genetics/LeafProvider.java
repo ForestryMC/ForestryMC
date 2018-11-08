@@ -14,7 +14,7 @@ public class LeafProvider implements ILeafProvider {
 
 	@Nullable
 	private IAlleleTreeSpecies treeSpecies = null;
-	
+
 	@Override
 	public void init(IAlleleTreeSpecies treeSpecies) {
 		this.treeSpecies = treeSpecies;
@@ -23,7 +23,7 @@ public class LeafProvider implements ILeafProvider {
 	@Override
 	public ItemStack getDecorativeLeaves() {
 		IAllele allele = treeSpecies;
-		if(allele == null){
+		if (allele == null) {
 			allele = TreeDefinition.Oak.getTemplate()[EnumTreeChromosome.SPECIES.ordinal()];
 		}
 		return ModuleArboriculture.getBlocks().getDecorativeLeaves(allele.getUID());

@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import forestry.core.gui.IContainerCrafting;
 import net.minecraft.inventory.IInventory;
+
+import forestry.core.gui.IContainerCrafting;
 
 /**
  * Informs the passed container of slot changes. Contains a dummy itemstack.

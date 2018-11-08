@@ -1,16 +1,18 @@
 package forestry.core.models;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,9 +30,9 @@ public abstract class ModelBlockCustomCached<B extends Block, K> extends ModelBl
 			modelBlockCached.onClearCaches();
 		}
 	}
-	
-	protected void onClearCaches(){
-		
+
+	protected void onClearCaches() {
+
 	}
 
 	protected ModelBlockCustomCached(Class<B> blockClass) {

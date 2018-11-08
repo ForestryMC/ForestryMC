@@ -55,8 +55,8 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
 		Block block = state.getBlock();
 		return block instanceof BlockLeaves ||
-				state.getMaterial() == Material.LEAVES ||
-				super.canHarvestBlock(state, stack);
+			state.getMaterial() == Material.LEAVES ||
+			super.canHarvestBlock(state, stack);
 	}
 
 	@Override

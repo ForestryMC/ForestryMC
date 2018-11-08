@@ -6,7 +6,8 @@ import java.util.Set;
 
 public class MachineUIDs {
 
-	private MachineUIDs() {}
+	private MachineUIDs() {
+	}
 
 	public static final String BOTTLER = "bottler";
 	public static final String CARPENTER = "carpenter";
@@ -20,5 +21,5 @@ public class MachineUIDs {
 	public static final String STILL = "still";
 
 	public static final Set<String> ALL = Sets.newHashSet(BOTTLER, CARPENTER, CENTRIFUGE, FABRICATOR,
-			FERMENTER, MOISTENER, RAINMAKER, RAINTANK, SQUEEZER, STILL);
+		FERMENTER, MOISTENER, RAINMAKER, RAINTANK, SQUEEZER, STILL);
 }

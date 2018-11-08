@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
+
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.item.ItemStack;
 
 public class CentrifugeRecipeWrapper extends ForestryRecipeWrapper<ICentrifugeRecipe> {
 	public CentrifugeRecipeWrapper(ICentrifugeRecipe recipe) {

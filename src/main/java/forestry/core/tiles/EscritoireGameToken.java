@@ -11,7 +11,6 @@
 package forestry.core.tiles;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,7 +47,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	private State state = State.UNREVEALED;
 
-	public EscritoireGameToken(PacketBufferForestry data) throws IOException {
+	public EscritoireGameToken(PacketBufferForestry data) {
 		readData(data);
 	}
 

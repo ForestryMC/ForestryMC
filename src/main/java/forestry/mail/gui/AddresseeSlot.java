@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.client.renderer.GlStateManager;
+
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.tooltips.ToolTip;
@@ -18,7 +20,6 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.client.renderer.GlStateManager;
 
 public class AddresseeSlot extends Widget {
 

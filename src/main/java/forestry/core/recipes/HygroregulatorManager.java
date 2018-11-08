@@ -22,7 +22,7 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 
 	@Nullable
 	public static IHygroregulatorRecipe findMatchingRecipe(FluidStack liquid) {
-		if(liquid.amount <= 0) {
+		if (liquid.amount <= 0) {
 			return null;
 		}
 		for (IHygroregulatorRecipe recipe : recipes) {

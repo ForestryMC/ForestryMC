@@ -111,27 +111,29 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 
 	public boolean hasCapability(Capability<?> capability) {
 		return Config.enableRF && capability == CapabilityEnergy.ENERGY ||
-				Config.enableTesla && hasTeslaCapability(capability) ||
-				Config.enableMJ && hasMjCapability(capability);
+			Config.enableTesla && hasTeslaCapability(capability) ||
+			Config.enableMJ && hasMjCapability(capability);
 	}
 
 	private boolean hasTeslaCapability(Capability<?> capability) {
 		return capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract() ||
-				capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive() ||
-				capability == TeslaHelper.TESLA_HOLDER;
+			capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive() ||
+			capability == TeslaHelper.TESLA_HOLDER;
 	}
 
 	private boolean hasMjCapability(Capability<?> capability) {
 		return capability == MjHelper.CAP_READABLE ||
-				capability == MjHelper.CAP_CONNECTOR ||
-				capability == MjHelper.CAP_PASSIVE_PROVIDER && externalMode.canExtract() ||
-				capability == MjHelper.CAP_REDSTONE_RECEIVER && externalMode.canReceive() ||
-				capability == MjHelper.CAP_RECEIVER && externalMode.canReceive();
+			capability == MjHelper.CAP_CONNECTOR ||
+			capability == MjHelper.CAP_PASSIVE_PROVIDER && externalMode.canExtract() ||
+			capability == MjHelper.CAP_REDSTONE_RECEIVER && externalMode.canReceive() ||
+			capability == MjHelper.CAP_RECEIVER && externalMode.canReceive();
 	}
 
 	@Nullable
 	public <T> T getCapability(Capability<T> capability) {
-		if (!hasCapability(capability)) return null;
+		if (!hasCapability(capability)) {
+			return null;
+		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			IEnergyStorage energyStorage = new EnergyStorageWrapper(this, externalMode);
 			return CapabilityEnergy.ENERGY.cast(energyStorage);

@@ -102,14 +102,14 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		entityIn.motionX *= 0.4D;
 		entityIn.motionZ *= 0.4D;
 	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		if(!Proxies.render.fancyGraphicsEnabled()){
+		if (!Proxies.render.fancyGraphicsEnabled()) {
 			TreeDefinition treeDefinition = state.getValue(getVariant());
 			return !TreeDefinition.Willow.equals(treeDefinition);
 		}
@@ -129,7 +129,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED; // fruit overlays require CUTOUT_MIPPED, even in Fast graphics
 	}
 
@@ -167,7 +167,7 @@ public abstract class BlockDecorativeLeaves extends Block implements IItemModelR
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-	
+
 	}
 
 	@Override

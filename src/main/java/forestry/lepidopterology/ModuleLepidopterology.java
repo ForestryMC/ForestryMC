@@ -166,7 +166,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 		ResourceLocation butterflyResourceLocation = new ResourceLocation(Constants.MOD_ID, "butterflyGE");
 		EntityUtil.registerEntity(butterflyResourceLocation, EntityButterfly.class, "butterflyGE", 0, 0x000000,
-				0xffffff, 50, 1, true);
+			0xffffff, 50, 1, true);
 
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
@@ -181,7 +181,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		}
 
 		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS,
-				"before:minecraft:shapeless");
+			"before:minecraft:shapeless");
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	@Override
 	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-			boolean hasVillageGenerated) {
+		boolean hasVillageGenerated) {
 		if (generateCocoons) {
 			if (generateCocoonsAmount > 0.0) {
 				CocoonDecorator.decorateCocoons(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
@@ -217,15 +217,15 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
 		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
 		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
-				spawnButterflysFromLeaves);
+			spawnButterflysFromLeaves);
 
 		generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
 		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
-				0.0f, 10.0f);
+			0.0f, 10.0f);
 
 		serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
 		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
-				100.0f);
+			100.0f);
 
 		parseRarity(config);
 		parseCooconLoots(config);
@@ -314,7 +314,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		ForgeRegistries.RECIPES.register(new MatingRecipe());
 
 		RecipeUtil.addRecipe("butterfly_chest", blocks.butterflyChest, " # ", "XYX", "XXX", '#', "blockGlass", 'X',
-				new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE), 'Y', "chestWood");
+			new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE), 'Y', "chestWood");
 	}
 
 	@Override
@@ -351,8 +351,8 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	}
 
 	@SubscribeEvent
-	public void onEntityTravelToDimension(EntityTravelToDimensionEvent event){
-		if(event.getEntity() instanceof EntityButterfly){
+	public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
+		if (event.getEntity() instanceof EntityButterfly) {
 			event.setCanceled(true);
 		}
 	}

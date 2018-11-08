@@ -53,34 +53,34 @@ public abstract class Genome implements IGenome {
 			IChromosome chromosome = chromosomes[i];
 			if (chromosome == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Missing chromosome '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+					"Missing chromosome '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			IAllele primary = chromosome.getPrimaryAllele();
 			if (primary == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Missing primary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+					"Missing primary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			IAllele secondary = chromosome.getSecondaryAllele();
 			if (secondary == null) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Missing secondary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+					"Missing secondary allele for '%s'.\n%s", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			Class<? extends IAllele> chromosomeAlleleClass = chromosomeType.getAlleleClass();
 			if (!chromosomeAlleleClass.isAssignableFrom(primary.getClass())) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Incorrect type for primary allele '%s'.\n%s.", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+					"Incorrect type for primary allele '%s'.\n%s.", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			if (!chromosomeAlleleClass.isAssignableFrom(secondary.getClass())) {
 				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " +
-						"Incorrect type for secondary allele '%s'.\n%s.", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+					"Incorrect type for secondary allele '%s'.\n%s.", getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 		}
@@ -116,12 +116,12 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNBT.hasNoTags()) {
+		if (genomeNBT.isEmpty()) {
 			return null;
 		}
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		if (chromosomesNBT.hasNoTags()) {
+		if (chromosomesNBT.isEmpty()) {
 			return null;
 		}
 
@@ -137,7 +137,7 @@ public abstract class Genome implements IGenome {
 	}
 
 	/**
-	 *  Quickly gets the species without loading the whole genome.
+	 * Quickly gets the species without loading the whole genome.
 	 */
 	@Nullable
 	public static IAllele getSpeciesDirectly(ItemStack itemStack, IChromosomeType chromosomeType, boolean active) {
@@ -147,12 +147,12 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNBT.hasNoTags()) {
+		if (genomeNBT.isEmpty()) {
 			return null;
 		}
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
-		if (chromosomesNBT.hasNoTags()) {
+		if (chromosomesNBT.isEmpty()) {
 			return null;
 		}
 
@@ -170,11 +170,11 @@ public abstract class Genome implements IGenome {
 		}
 
 		NBTTagCompound genomeNbt = nbtTagCompound.getCompoundTag("Genome");
-		if (genomeNbt.hasNoTags()) {
+		if (genomeNbt.isEmpty()) {
 			Log.error("Got a genetic item with no genome, setting it to a default value.");
 			genomeNbt = new NBTTagCompound();
-      
-      
+
+
 			IAllele[] defaultTemplate = speciesRoot.getDefaultTemplate();
 			IGenome genome = speciesRoot.templateAsGenome(defaultTemplate);
 			genome.writeToNBT(genomeNbt);
@@ -212,9 +212,9 @@ public abstract class Genome implements IGenome {
 		return chromosomes;
 	}
 
-	public static IAllele getAllele(ItemStack itemStack, IChromosomeType type, boolean active){
+	public static IAllele getAllele(ItemStack itemStack, IChromosomeType type, boolean active) {
 		IAllele allele = getSpeciesDirectly(itemStack, type, active);
-		if(allele == null){
+		if (allele == null) {
 			IChromosome chromosome = getChromosome(itemStack, type, type.getSpeciesRoot());
 			allele = active ? chromosome.getActiveAllele() : chromosome.getInactiveAllele();
 		}
@@ -222,9 +222,9 @@ public abstract class Genome implements IGenome {
 	}
 
 	@Nullable
-	public static <A extends IAllele> A getAllele(ItemStack itemStack, IChromosomeType type, boolean active, Class<? extends A> alleleClass){
+	public static <A extends IAllele> A getAllele(ItemStack itemStack, IChromosomeType type, boolean active, Class<? extends A> alleleClass) {
 		IAllele allele = getAllele(itemStack, type, active);
-		if(alleleClass.isInstance(allele)){
+		if (alleleClass.isInstance(allele)) {
 			return alleleClass.cast(allele);
 		}
 		return null;

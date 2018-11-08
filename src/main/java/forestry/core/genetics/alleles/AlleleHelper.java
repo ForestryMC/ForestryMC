@@ -59,22 +59,22 @@ public class AlleleHelper implements IAlleleHelper {
 
 		if (ModuleHelper.anyEnabled(ForestryModuleUids.APICULTURE, ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			createAlleles(EnumAllele.Speed.class,
-					EnumBeeChromosome.SPEED,
-					EnumButterflyChromosome.SPEED
+				EnumBeeChromosome.SPEED,
+				EnumButterflyChromosome.SPEED
 			);
 			createAlleles(EnumAllele.Lifespan.class,
-					EnumBeeChromosome.LIFESPAN,
-					EnumButterflyChromosome.LIFESPAN
+				EnumBeeChromosome.LIFESPAN,
+				EnumButterflyChromosome.LIFESPAN
 			);
 			createAlleles(EnumAllele.Tolerance.class,
-					EnumBeeChromosome.TEMPERATURE_TOLERANCE,
-					EnumBeeChromosome.HUMIDITY_TOLERANCE,
-					EnumButterflyChromosome.TEMPERATURE_TOLERANCE,
-					EnumButterflyChromosome.HUMIDITY_TOLERANCE
+				EnumBeeChromosome.TEMPERATURE_TOLERANCE,
+				EnumBeeChromosome.HUMIDITY_TOLERANCE,
+				EnumButterflyChromosome.TEMPERATURE_TOLERANCE,
+				EnumButterflyChromosome.HUMIDITY_TOLERANCE
 			);
 			createAlleles(EnumAllele.Flowers.class,
-					EnumBeeChromosome.FLOWER_PROVIDER,
-					EnumButterflyChromosome.FLOWER_PROVIDER
+				EnumBeeChromosome.FLOWER_PROVIDER,
+				EnumButterflyChromosome.FLOWER_PROVIDER
 			);
 		}
 
@@ -95,9 +95,9 @@ public class AlleleHelper implements IAlleleHelper {
 		for (int i = 1; i <= 10; i++) {
 			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
 			AlleleManager.alleleRegistry.registerAllele(alleleInteger,
-					EnumTreeChromosome.GIRTH,
-					EnumButterflyChromosome.METABOLISM,
-					EnumButterflyChromosome.FERTILITY
+				EnumTreeChromosome.GIRTH,
+				EnumButterflyChromosome.METABOLISM,
+				EnumButterflyChromosome.FERTILITY
 			);
 			integers.put(i, alleleInteger);
 		}
@@ -108,12 +108,12 @@ public class AlleleHelper implements IAlleleHelper {
 		booleans.put(false, new AlleleBoolean(modId, "bool", false, false));
 		for (IAlleleBoolean alleleBoolean : booleans.values()) {
 			AlleleManager.alleleRegistry.registerAllele(alleleBoolean,
-					EnumBeeChromosome.NEVER_SLEEPS,
-					EnumBeeChromosome.TOLERATES_RAIN,
-					EnumBeeChromosome.CAVE_DWELLING,
-					EnumButterflyChromosome.NOCTURNAL,
-					EnumButterflyChromosome.TOLERANT_FLYER,
-					EnumButterflyChromosome.FIRE_RESIST
+				EnumBeeChromosome.NEVER_SLEEPS,
+				EnumBeeChromosome.TOLERATES_RAIN,
+				EnumBeeChromosome.CAVE_DWELLING,
+				EnumButterflyChromosome.NOCTURNAL,
+				EnumButterflyChromosome.TOLERANT_FLYER,
+				EnumButterflyChromosome.FIRE_RESIST
 			);
 		}
 		alleleMaps.put(Boolean.class, booleans);

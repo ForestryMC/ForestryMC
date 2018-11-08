@@ -22,17 +22,17 @@ public class FilterRegistry implements IFilterRegistry {
 
 	@Override
 	public void registerFilter(IFilterRuleType rule) {
-		if(!filterByID.isEmpty()){
+		if (!filterByID.isEmpty()) {
 			return;
 		}
 		filterByName.put(rule.getUID(), rule);
 	}
 
-	public void init(){
+	public void init() {
 		List<IFilterRuleType> rules = new LinkedList<>();
 		rules.addAll(filterByName.values());
 		rules.sort(FILTER_COMPARATOR);
-		for(int i = 0;i < rules.size();i++) {
+		for (int i = 0; i < rules.size(); i++) {
 			IFilterRuleType rule = rules.get(i);
 			filterIDByName.put(rule.getUID(), i);
 			filterByID.put(i, rule);

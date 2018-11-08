@@ -40,7 +40,7 @@ public final class TreeGenHelper {
 		} else {
 			pos = BlockUtil.getNextReplaceableUpPos(world, pos);
 		}
-		if(pos == null){
+		if (pos == null) {
 			return false;
 		}
 
@@ -54,7 +54,7 @@ public final class TreeGenHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean generateTree(ITree tree, World world, BlockPos pos) {
 		WorldGenerator gen = tree.getTreeGenerator(world, pos, true);
 

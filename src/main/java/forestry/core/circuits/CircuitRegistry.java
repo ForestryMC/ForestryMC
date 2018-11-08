@@ -100,7 +100,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 	@Override
 	@Nullable
 	public ICircuit getCircuit(String uid) {
-		if(deprecatedCircuits.containsKey(uid)){
+		if (deprecatedCircuits.containsKey(uid)) {
 			return deprecatedCircuits.get(uid);
 		}
 		return circuitMap.get(uid);

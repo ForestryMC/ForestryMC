@@ -64,7 +64,7 @@ public class CreativeTabForestry extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getIconItemStack() {
+	public ItemStack getIcon() {
 		Item iconItem;
 		switch (icon) {
 			case 1:
@@ -87,7 +87,7 @@ public class CreativeTabForestry extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
-		return getIconItemStack();
+	public ItemStack createIcon() {
+		return getIcon();
 	}
 }

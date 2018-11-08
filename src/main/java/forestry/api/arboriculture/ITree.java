@@ -9,18 +9,21 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividual;
-import forestry.api.world.ITreeGenData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividual;
+import forestry.api.world.ITreeGenData;
 
 public interface ITree extends IIndividual, ITreeGenData {
 

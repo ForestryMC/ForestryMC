@@ -43,7 +43,7 @@ public class WidgetDatabaseSlot extends Widget {
 		this.isEmpty = false;
 	}
 
-	public void update(int xPos, int yPos, int databaseIndex, boolean isEmpty){
+	public void update(int xPos, int yPos, int databaseIndex, boolean isEmpty) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.databaseIndex = databaseIndex;
@@ -64,12 +64,12 @@ public class WidgetDatabaseSlot extends Widget {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		manager.minecraft.renderEngine.bindTexture(TEXTURE_LOCATION);
 		Drawable texture = SLOT;
-		if(isSelected()){
+		if (isSelected()) {
 			texture = SLOT_SELECTED;
 		}
 		texture.draw(startX + xPos - 3, startY + yPos - 3);
 		ItemStack itemStack = getItemStack();
-		if(!itemStack.isEmpty()){
+		if (!itemStack.isEmpty()) {
 			Minecraft minecraft = Minecraft.getMinecraft();
 			TextureManager textureManager = minecraft.getTextureManager();
 			textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -77,12 +77,12 @@ public class WidgetDatabaseSlot extends Widget {
 			GuiUtil.drawItemStack(manager.gui, itemStack, startX + xPos, startY + yPos);
 			RenderHelper.disableStandardItemLighting();
 		}
-		if(mouseOver){
+		if (mouseOver) {
 			drawMouseOver();
 		}
 	}
 
-	private void drawMouseOver(){
+	private void drawMouseOver() {
 		GlStateManager.disableDepth();
 		GlStateManager.colorMask(true, true, true, false);
 		manager.gui.drawGradientRect(xPos, yPos, xPos + width, yPos + height, -2130706433, -2130706433);
@@ -97,28 +97,28 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-		if(mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getItemStack().isEmpty()){
+		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getItemStack().isEmpty()) {
 			return;
 		}
 		GuiDatabase gui = (GuiDatabase) manager.gui;
 		DatabaseItem item = gui.getItem(databaseIndex);
-		if(item == null){
+		if (item == null) {
 			return;
 		}
 
-		if(GuiScreen.isCtrlKeyDown() && mouseButton == 0){
+		if (GuiScreen.isCtrlKeyDown() && mouseButton == 0) {
 			gui.analyzer.setSelectedSlot(databaseIndex);
 			return;
 		}
 
 		ignoreMouseUp = true;
 		byte flags = 0;
-		if(GuiScreen.isShiftKeyDown()){
+		if (GuiScreen.isShiftKeyDown()) {
 			flags |= PacketExtractItem.SHIFT;
 		}
-		if(mouseButton == 1){
+		if (mouseButton == 1) {
 			flags |= PacketExtractItem.HALF;
-		}else if(mouseButton == 2 && manager.minecraft.player.capabilities.isCreativeMode){
+		} else if (mouseButton == 2 && manager.minecraft.player.capabilities.isCreativeMode) {
 			flags |= PacketExtractItem.CLONE;
 		}
 		NetworkUtil.sendToServer(new PacketExtractItem(item.invIndex, flags));
@@ -126,16 +126,16 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
-		if(!isMouseOver(mouseX, mouseY)
+		if (!isMouseOver(mouseX, mouseY)
 			|| ignoreMouseUp
 			|| eventType != 0 && eventType != 1
-			|| manager.minecraft.player.inventory.getItemStack().isEmpty()){
+			|| manager.minecraft.player.inventory.getItemStack().isEmpty()) {
 			ignoreMouseUp = false;
 			return false;
 		}
 		GuiDatabase gui = (GuiDatabase) manager.gui;
 		DatabaseItem item = gui.getItem(databaseIndex);
-		if(item == null){
+		if (item == null) {
 			return false;
 		}
 
@@ -154,21 +154,21 @@ public class WidgetDatabaseSlot extends Widget {
 		return tip;
 	}
 
-	public boolean isSelected(){
-		if(!isEmpty){
+	public boolean isSelected() {
+		if (!isEmpty) {
 			return false;
 		}
-		DatabaseItem slotItem = ((GuiDatabase)manager.gui).getItem(databaseIndex);
-		DatabaseItem selectedItem = ((GuiDatabase)manager.gui).getSelectedItem();
+		DatabaseItem slotItem = ((GuiDatabase) manager.gui).getItem(databaseIndex);
+		DatabaseItem selectedItem = ((GuiDatabase) manager.gui).getSelectedItem();
 		return slotItem != null && slotItem.equals(selectedItem);
 	}
 
-	public ItemStack getItemStack(){
-		if(!isEmpty){
+	public ItemStack getItemStack() {
+		if (!isEmpty) {
 			return ItemStack.EMPTY;
 		}
-		DatabaseItem item = ((GuiDatabase)manager.gui).getItem(databaseIndex);
-		if(item == null){
+		DatabaseItem item = ((GuiDatabase) manager.gui).getItem(databaseIndex);
+		if (item == null) {
 			return ItemStack.EMPTY;
 		}
 		return item.itemStack;

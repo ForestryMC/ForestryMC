@@ -34,7 +34,7 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 	public void registerRecipes() {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
 			ImmutableList<String> cropNames = getCropNames();
-			if(cropNames.isEmpty()){
+			if (cropNames.isEmpty()) {
 				return;
 			}
 			IFarmRegistry farmRegistry = ForestryAPI.farmRegistry;
@@ -50,7 +50,7 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 					farmRegistry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(seeds, block, BlockCrops.AGE, 7, 0));
 				}
 			}
-			for(int i = 1;i <= 5;i++){
+			for (int i = 1; i <= 5; i++) {
 				ItemStack seeds = getItemStack("tier" + i + "_inferium_seeds");
 				Block block = getBlock("tier" + i + "_inferium_crop");
 				if (seeds != null && seedOil != null) {
@@ -63,20 +63,20 @@ public class PluginMysticalAgriculture extends CompatPlugin {
 		}
 	}
 
-	private ImmutableList<String> getCropNames(){
+	private ImmutableList<String> getCropNames() {
 		try {
 			Class<?> typeEnum = Class.forName("com.blakebr0.mysticalagriculture.lib.CropType$Type");
-			if(typeEnum.getEnumConstants() == null){
+			if (typeEnum.getEnumConstants() == null) {
 				return ImmutableList.of();
 			}
 			ImmutableList.Builder<String> builder = new ImmutableList.Builder<>();
-			for(Object obj : typeEnum.getEnumConstants()){
-				if(obj instanceof IStringSerializable){
+			for (Object obj : typeEnum.getEnumConstants()) {
+				if (obj instanceof IStringSerializable) {
 					builder.add(((IStringSerializable) obj).getName());
 				}
 			}
 			return builder.build();
-		}catch (ClassNotFoundException e){
+		} catch (ClassNotFoundException e) {
 			Log.error("Failed to find the class ('com.blakebr0.mysticalagriculture.lib.CropType$Type') that contains the crop types of 'Mystical Agriculture'.");
 			return ImmutableList.of();
 		}

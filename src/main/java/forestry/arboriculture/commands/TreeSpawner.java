@@ -17,14 +17,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import forestry.core.commands.SpeciesNotFoundException;
-import forestry.core.commands.TemplateNotFoundException;
 
 public class TreeSpawner implements ITreeSpawner {
 
 	@Override
-	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) throws SpeciesNotFoundException, TemplateNotFoundException {
+	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) throws SpeciesNotFoundException {
 		Vec3d look = player.getLookVec();
-		
+
 		int x = (int) Math.round(player.posX + 3 * look.x);
 		int y = (int) Math.round(player.posY);
 		int z = (int) Math.round(player.posZ + 3 * look.z);

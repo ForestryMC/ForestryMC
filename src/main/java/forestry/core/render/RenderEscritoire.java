@@ -37,10 +37,10 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 	private EntityItem dummyEntityItem;
 	private long lastTick;
 
-	private EntityItem dummyItem(World world){
-		if(dummyEntityItem == null){
+	private EntityItem dummyItem(World world) {
+		if (dummyEntityItem == null) {
 			dummyEntityItem = new EntityItem(world);
-		}else{
+		} else {
 			dummyEntityItem.world = world;
 		}
 		return dummyEntityItem;

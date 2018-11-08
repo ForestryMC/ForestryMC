@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.mail.tiles.TileStampCollector;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiStampCollector extends GuiForestry<ContainerStampCollector> {
 	private final TileStampCollector tile;

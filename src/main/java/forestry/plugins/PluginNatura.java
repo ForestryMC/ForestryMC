@@ -106,11 +106,11 @@ public class PluginNatura extends BlankForestryModule {
 		boolean hasMushroom = blueLargeGlowshroomBlock != null && greenLargeGlowshroomBlock != null && purpleLargeGlowshroomBlock != null;
 		ForgeRegistries.ITEMS.forEach(item -> {
 			final ResourceLocation registryName = item.getRegistryName();
-			if (registryName == null || !registryName.getResourceDomain().equals(MOD_ID)) {
+			if (registryName == null || !registryName.getNamespace().equals(MOD_ID)) {
 				return;
 			}
 
-			final String itemName = registryName.getResourcePath();
+			final String itemName = registryName.getPath();
 
 			if (itemName.matches("^.*_sapling\\d?$")) {
 				consumeSubItems(item, "saplings", saplings);
@@ -167,7 +167,7 @@ public class PluginNatura extends BlankForestryModule {
 
 			if (itemName.matches("^edibles|.*fruit_item|soups$")) {
 				complexConsumeSubItems(item, "edibles", subitem -> {
-					final String subItemName = subitem.getUnlocalizedName();
+					final String subItemName = subitem.getTranslationKey();
 					if (subItemName.matches("^.*berry$")) {
 						berries.add(subitem);
 						return;
@@ -204,7 +204,7 @@ public class PluginNatura extends BlankForestryModule {
 
 			if (itemName.matches("^materials$")) {
 				complexConsumeSubItems(item, "materials", subitem -> {
-					final String subItemName = subitem.getUnlocalizedName();
+					final String subItemName = subitem.getTranslationKey();
 
 					if (subItemName.matches("^.*(barley|cotton)$")) {
 						crops.add(subitem);
@@ -227,14 +227,14 @@ public class PluginNatura extends BlankForestryModule {
 		// Fallback if item is not returned in sub items
 		if (subItems.isEmpty()) {
 			final ItemStack itemStack = new ItemStack(item, 1);
-			final String subItemName = itemStack.getUnlocalizedName();
+			final String subItemName = itemStack.getTranslationKey();
 			Log.info("[PluginNatura] Adding '{}' to list of {}", subItemName, groupName);
 			consumer.accept(itemStack);
 			return;
 		}
 
 		subItems.forEach(itemStack -> {
-			final String subItemName = itemStack.getUnlocalizedName();
+			final String subItemName = itemStack.getTranslationKey();
 			Log.info("[PluginNatura] Adding '{}' to list of {}", subItemName, groupName);
 			consumer.accept(itemStack);
 		});
@@ -246,7 +246,7 @@ public class PluginNatura extends BlankForestryModule {
 			NonNullList<ItemStack> edibleSubItems = NonNullList.create();
 			edibleItem.getSubItems(CreativeTabs.SEARCH, edibleSubItems);
 			for (ItemStack edibleSubItem : edibleSubItems) {
-				if (edibleSubItem.getUnlocalizedName().endsWith("potashapple")) {
+				if (edibleSubItem.getTranslationKey().endsWith("potashapple")) {
 					return edibleSubItem;
 
 				}
@@ -323,21 +323,21 @@ public class PluginNatura extends BlankForestryModule {
 
 		crops.forEach(crop -> {
 			RecipeUtil.addFermenterRecipes(crop, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-			if (crop.getUnlocalizedName().matches("^.*cotton$")) {
+			if (crop.getTranslationKey().matches("^.*cotton$")) {
 				return;
 			}
 
 			int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
 			if (compostWheatAmount > 0) {
 				ItemStack compostWheat = coreItems.fertilizerCompound.getItemStack(compostWheatAmount);
-				RecipeUtil.addRecipe(compostWheat.getUnlocalizedName(), compostWheat, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', crop);
+				RecipeUtil.addRecipe(compostWheat.getTranslationKey(), compostWheat, " X ", "X#X", " X ", '#', Blocks.DIRT, 'X', crop);
 			}
 			FuelManager.moistenerResource.put(crop, new MoistenerFuel(crop, coreItems.mouldyWheat.getItemStack(), 0, 300));
 		});
 	}
 
 
-	/* 
+	/*
 	 * Register soils required by Natura trees. Must run in postInit(), after core PluginFarming has registered FarmingLogic instances
 	 */
 	@Override
@@ -348,7 +348,7 @@ public class PluginNatura extends BlankForestryModule {
 		if (farmArboreal != null) {
 			farmArboreal.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState());
 		}
-		if(mushroomFarm != null){
+		if (mushroomFarm != null) {
 			mushroomFarm.registerSoil(new ItemStack(Blocks.NETHERRACK), Blocks.NETHERRACK.getDefaultState());
 			mushroomFarm.registerSoil(new ItemStack(Blocks.SOUL_SAND), Blocks.SOUL_SAND.getDefaultState());
 		}

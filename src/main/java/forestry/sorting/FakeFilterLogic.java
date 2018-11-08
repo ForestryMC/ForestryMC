@@ -78,7 +78,8 @@ public final class FakeFilterLogic implements IFilterLogic {
 
 	@Override
 	public INetworkHandler getNetworkHandler() {
-		return (l, s, p)->{ };
+		return (l, s, p) -> {
+		};
 	}
 
 	@Override

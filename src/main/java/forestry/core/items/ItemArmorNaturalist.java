@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -58,7 +59,7 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 	public boolean hasColor(ItemStack itemstack) {
 		return false;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
@@ -71,13 +72,13 @@ public class ItemArmorNaturalist extends ItemArmor implements IItemModelRegister
 			@Override
 			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 				return capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-						armorType == EntityEquipmentSlot.HEAD;
+					armorType == EntityEquipmentSlot.HEAD;
 			}
 
 			@Override
 			public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 				if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-						armorType == EntityEquipmentSlot.HEAD) {
+					armorType == EntityEquipmentSlot.HEAD) {
 					return capability.getDefaultInstance();
 				}
 				return null;

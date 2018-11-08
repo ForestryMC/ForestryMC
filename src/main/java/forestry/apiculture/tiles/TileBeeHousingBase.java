@@ -135,7 +135,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	@Nullable
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if(capability == ClimateCapabilities.CLIMATE_LISTENER){
+		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
 			return ClimateCapabilities.CLIMATE_LISTENER.cast(climateListener);
 		}
 		return super.getCapability(capability, facing);

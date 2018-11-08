@@ -143,7 +143,7 @@ public class TankElement extends GuiElement {
 			if (rarity == null) {
 				rarity = EnumRarity.COMMON;
 			}
-			toolTip.add(rarity.rarityColor + fluidType.getLocalizedName(fluidStack));
+			toolTip.add(rarity.color + fluidType.getLocalizedName(fluidStack));
 			amount = fluidStack.amount;
 		}
 		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", amount, tankInfo.capacity);

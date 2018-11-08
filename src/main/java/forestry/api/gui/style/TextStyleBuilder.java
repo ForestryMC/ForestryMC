@@ -2,7 +2,7 @@ package forestry.api.gui.style;
 
 import java.util.function.IntSupplier;
 
-public final class TextStyleBuilder{
+public final class TextStyleBuilder {
 	private IntSupplier color;
 	private boolean bold;
 	private boolean italic;
@@ -12,16 +12,16 @@ public final class TextStyleBuilder{
 	private boolean shadow;
 	private boolean unicode;
 
-	public TextStyleBuilder(){
+	public TextStyleBuilder() {
 		this(0xFFFFFF, false, false, false, false, false, false, false);
 	}
 
-	public TextStyleBuilder(ITextStyle style){
+	public TextStyleBuilder(ITextStyle style) {
 		this(style.getColor(), style.isBold(), style.isItalic(), style.isUnderlined(), style.isStrikethrough(), style.isObfuscated(), style.isShadow(), style.isUnicode());
 	}
 
 	public TextStyleBuilder(int color, boolean bold, boolean italic, boolean underlined, boolean strikethrough, boolean obfuscated, boolean shadow, boolean unicode) {
-		this(()->color, bold, italic, underlined, strikethrough, obfuscated, shadow, unicode);
+		this(() -> color, bold, italic, underlined, strikethrough, obfuscated, shadow, unicode);
 	}
 
 	public TextStyleBuilder(IntSupplier color, boolean bold, boolean italic, boolean underlined, boolean strikethrough, boolean obfuscated, boolean shadow, boolean unicode) {
@@ -80,7 +80,7 @@ public final class TextStyleBuilder{
 		return this;
 	}
 
-	public ITextStyle build(){
+	public ITextStyle build() {
 		return new ImmutableTextStyle(color, bold, italic, underlined, strikethrough, obfuscated, shadow, unicode);
 	}
 }

@@ -30,7 +30,7 @@ public class PacketClimateUpdate extends ForestryPacket implements IForestryPack
 
 	private BlockPos pos;
 	private ClimateTransformer container;
-	
+
 	public PacketClimateUpdate(BlockPos pos, ClimateTransformer container) {
 		this.pos = pos;
 		this.container = container;
@@ -52,11 +52,11 @@ public class PacketClimateUpdate extends ForestryPacket implements IForestryPack
 		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
 			BlockPos position = data.readBlockPos();
 			IClimateHousing housing = TileUtil.getTile(player.world, position, IClimateHousing.class);
-			if(housing == null){
+			if (housing == null) {
 				return;
 			}
 			IClimateTransformer transformer = housing.getTransformer();
-			if(transformer instanceof IStreamable){
+			if (transformer instanceof IStreamable) {
 				IStreamable streamable = (IStreamable) transformer;
 				streamable.readData(data);
 			}

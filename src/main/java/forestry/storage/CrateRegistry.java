@@ -50,7 +50,7 @@ public class CrateRegistry implements ICrateRegistry {
 		}
 
 		ItemCrated crate = new ItemCrated(stack, oreDictName);
-		crate.setUnlocalizedName(crateName);
+		crate.setTranslationKey(crateName);
 		crate.setRegistryName(crateName);
 
 		MigrationHelper.addItemName(crateName);

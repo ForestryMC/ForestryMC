@@ -12,13 +12,14 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.DamageSource;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.DamageSource;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
 	private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");

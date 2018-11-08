@@ -8,9 +8,10 @@ package forestry.api.mail;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 public interface IPostRegistry {
 

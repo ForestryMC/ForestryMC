@@ -145,8 +145,8 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 	}
 
 	public boolean plantGermling(IFarmable germling, EntityPlayer player, BlockPos pos) {
-		for(FarmDirection direction : FarmDirection.values()){
-			if(plantGermling(germling, player, pos, direction)){
+		for (FarmDirection direction : FarmDirection.values()) {
+			if (plantGermling(germling, player, pos, direction)) {
 				return true;
 			}
 		}

@@ -15,17 +15,18 @@ public interface IFarmRegistry {
 
 	/**
 	 * Registers farming logic in registry under given identifier
-	 * @param identifier Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-	 * @param logic corresponding instance of logic
 	 *
+	 * @param identifier Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
+	 * @param logic      corresponding instance of logic
 	 * @deprecated Since Forestry 5.8. Use {@link #registerLogic(String, BiFunction, String...)} or
-	 *             {@link #registerLogic(String, IFarmProperties)}.
+	 * {@link #registerLogic(String, IFarmProperties)}.
 	 */
 	@Deprecated
 	void registerLogic(String identifier, IFarmLogic logic);
 
 	/**
 	 * Registers farming logic in registry
+	 *
 	 * @since Forestry 5.8
 	 */
 	IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance);
@@ -33,8 +34,8 @@ public interface IFarmRegistry {
 	/**
 	 * Registers farming logic in registry under given identifier
 	 *
-	 * @param identifier Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-	 * @param logicFactory factory that creates the corresponding instance of logic
+	 * @param identifier           Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
+	 * @param logicFactory         factory that creates the corresponding instance of logic
 	 * @param farmablesIdentifiers Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
 	 * @since Forestry 5.8
 	 */
@@ -46,30 +47,29 @@ public interface IFarmRegistry {
 	 * Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
 	 */
 	void registerFarmables(String identifier, IFarmable... farmable);
-	
+
 	Collection<IFarmable> getFarmables(String identifier);
 
 	IFarmableInfo getFarmableInfo(String identifier);
-	
+
 	/**
 	 * Can be used to create a simple version of a farm logic, like the vanilla vegetable or wheat farm logic.
 	 *
 	 * @return Null if the farming plugin is not active.
-	 *
 	 * @deprecated Since Forestry 5.8. Use {@link #createCropLogic(IFarmProperties, boolean, ISimpleFarmLogic)} instead.
 	 */
 	@Nullable
 	@Deprecated
-	default IFarmLogic createLogic(ISimpleFarmLogic simpleFarmLogic){
+	default IFarmLogic createLogic(ISimpleFarmLogic simpleFarmLogic) {
 		return null;
 	}
-	
+
 	/**
 	 * @param itemStack the fertilizer itemstack
-	 * @param value The value of the fertilizer. The value of the forestry fertilizer is 500.
+	 * @param value     The value of the fertilizer. The value of the forestry fertilizer is 500.
 	 */
 	void registerFertilizer(ItemStack itemStack, int value);
-	
+
 	/**
 	 * @return The value of the fertilizer
 	 */
@@ -97,5 +97,5 @@ public interface IFarmRegistry {
 	 */
 	@Nullable
 	IFarmProperties getProperties(String identifier);
-	
+
 }

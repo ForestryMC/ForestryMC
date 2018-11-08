@@ -55,7 +55,7 @@ public class LedgerManager {
 		}
 	}
 
-	public void clear(){
+	public void clear() {
 		this.ledgers.clear();
 	}
 
@@ -207,7 +207,7 @@ public class LedgerManager {
 
 	}
 
-	public boolean hasOpenedLedger(){
+	public boolean hasOpenedLedger() {
 		for (Ledger ledger : ledgers) {
 			if (ledger.isOpen()) {
 				return true;

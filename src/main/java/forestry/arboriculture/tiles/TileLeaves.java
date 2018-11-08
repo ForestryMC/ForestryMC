@@ -146,9 +146,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (!checkedForConversionToDefaultLeaves) {
 			if (shouldConvertToDefaultLeaves()) {
 				IBlockState defaultLeaves;
-				if(isFruitLeaf) {
+				if (isFruitLeaf) {
 					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
-				}else{
+				} else {
 					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(primary.getUID());
 				}
 				worldIn.setBlockState(getPos(), defaultLeaves);
@@ -209,20 +209,20 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		ITreeGenome genome = tree.getGenome();
 		species = genome.getPrimary();
 
-		if(oldTree != null && !tree.equals(oldTree)){
+		if (oldTree != null && !tree.equals(oldTree)) {
 			checkFruit = true;
 		}
 
-		if(tree.canBearFruit() && checkFruit && world != null && !world.isRemote){
+		if (tree.canBearFruit() && checkFruit && world != null && !world.isRemote) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
-			if(fruitProvider.isFruitLeaf(genome, world, getPos())){
+			if (fruitProvider.isFruitLeaf(genome, world, getPos())) {
 				isFruitLeaf = fruitProvider.getFruitChance(genome, world, getPos()) >= world.rand.nextFloat();
 			}
 		}
 
 		if (isFruitLeaf) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
-			if(world != null && world.isRemote) {
+			if (world != null && world.isRemote) {
 				fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
 			}
 
@@ -318,8 +318,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (individual instanceof ITree) {
 			ITree tree = getTree();
 			return tree != null &&
-					tree.getMate() == null &&
-					(ModuleApiculture.doSelfPollination ||!tree.isGeneticEqual(individual));
+				tree.getMate() == null &&
+				(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
 		}
 		return false;
 	}
@@ -374,7 +374,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
-		
+
 		byte leafState = 0;
 		boolean hasFruit = hasFruit();
 

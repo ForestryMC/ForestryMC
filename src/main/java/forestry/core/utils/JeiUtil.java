@@ -40,7 +40,7 @@ public class JeiUtil {
 	}
 
 	public static void addDescription(IModRegistry registry, Item item) {
-		String resourcePath = item.getRegistryName().getResourcePath();
+		String resourcePath = item.getRegistryName().getPath();
 		addDescription(registry, item, resourcePath);
 	}
 

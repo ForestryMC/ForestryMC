@@ -33,6 +33,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -218,7 +219,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IFruitProvider provider = getGenome().getFruitProvider();
 		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
 		return suitable.contains(provider.getFamily()) &&
-				provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
+			provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
 	}
 
 	/* INFORMATION */

@@ -20,7 +20,7 @@ public class PlanterProperties<T extends TilePlanter> extends MachineProperties<
 	public void registerModel(Item item, IModelManager manager) {
 		ResourceLocation itemNameFromRegistry = ItemStackUtil.getItemNameFromRegistry(item);
 		Preconditions.checkNotNull(itemNameFromRegistry, "No registry name for item");
-		String identifier = itemNameFromRegistry.getResourcePath();
+		String identifier = itemNameFromRegistry.getPath();
 		manager.registerItemModel(item, 0, identifier);
 		manager.registerItemModel(item, 1, identifier);
 	}

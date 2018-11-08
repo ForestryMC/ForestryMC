@@ -50,7 +50,7 @@ public class ClimateListener implements IClimateListener {
 
 	public ClimateListener(Object locationProvider) {
 		this.locationProvider = locationProvider;
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			tickHelper = new TickHelper();
 			needsClimateUpdate = true;
 		}
@@ -59,7 +59,7 @@ public class ClimateListener implements IClimateListener {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateClientSide(boolean spawnParticles) {
-		if(spawnParticles) {
+		if (spawnParticles) {
 			tickHelper.onTick();
 			if (cachedState.isPresent() && tickHelper.updateOnInterval(20)) {
 				World worldObj = getWorldObj();

@@ -44,7 +44,7 @@ public class ModuleCharcoal extends BlankForestryModule {
 	@Override
 	public void postInit() {
 		ICharcoalManager manager = TreeManager.charcoalManager;
-		if(manager != null) {
+		if (manager != null) {
 			manager.registerWall(Blocks.CLAY, 3);
 			manager.registerWall(getBlocks().loam, 4);
 			manager.registerWall(Blocks.END_STONE, 6);
@@ -67,10 +67,10 @@ public class ModuleCharcoal extends BlankForestryModule {
 
 		//Charcoal
 		RecipeUtil.addRecipe("charcoal_block", blocks.charcoal,
-				"###",
-				"###",
-				"###",
-				'#', new ItemStack(Items.COAL, 1, 1));
+			"###",
+			"###",
+			"###",
+			'#', new ItemStack(Items.COAL, 1, 1));
 		RecipeUtil.addShapelessRecipe("charcoal", new ItemStack(Items.COAL, 9, 1), blocks.charcoal);
 
 		//Dirt Pile Block

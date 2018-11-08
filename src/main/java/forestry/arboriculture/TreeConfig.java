@@ -33,8 +33,8 @@ public class TreeConfig {
 
 	public static void parse(LocalizedConfiguration config) {
 		GLOBAL.parseConfig(config);
-		for(IAllele treeAllele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.SPECIES)){
-			if(!(treeAllele instanceof IAlleleTreeSpecies)){
+		for (IAllele treeAllele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.SPECIES)) {
+			if (!(treeAllele instanceof IAlleleTreeSpecies)) {
 				continue;
 			}
 			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) treeAllele;
@@ -42,26 +42,26 @@ public class TreeConfig {
 		}
 	}
 
-	private TreeConfig(String treeName){
+	private TreeConfig(String treeName) {
 		this.treeName = treeName;
 	}
 
-	private TreeConfig parseConfig(LocalizedConfiguration config){
+	private TreeConfig parseConfig(LocalizedConfiguration config) {
 		for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new int[0]).getIntList()) {
 			blacklistedDimensions.add(dimId);
 		}
 		for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new int[0]).getIntList()) {
 			whitelistedDimensions.add(dimId);
 		}
-		for(String typeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "types", new String[0]).getStringList()){
+		for (String typeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "types", new String[0]).getStringList()) {
 			blacklistedBiomeTypes.add(BiomeDictionary.Type.getType(typeName));
 		}
-		for(String biomeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "names", new String[0]).getStringList()){
+		for (String biomeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "names", new String[0]).getStringList()) {
 			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
-			if(biome != null) {
+			if (biome != null) {
 				blacklistedBiomes.add(biome);
-			}else{
-				Log.error("Failed to identify biome for the config property for the tree with the uid '"+ treeName + "'. No biome is registered under the registry name '"+ biomeName + "'.");
+			} else {
+				Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName + "'. No biome is registered under the registry name '" + biomeName + "'.");
 			}
 		}
 		return this;
@@ -69,7 +69,7 @@ public class TreeConfig {
 
 	public static void blacklistTreeDim(@Nullable String treeUID, int dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		if(treeUID == null){
+		if (treeUID == null) {
 			treeConfig = GLOBAL;
 		}
 		treeConfig.blacklistedDimensions.add(dimID);
@@ -77,7 +77,7 @@ public class TreeConfig {
 
 	public static void whitelistTreeDim(@Nullable String treeUID, int dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		if(treeUID == null){
+		if (treeUID == null) {
 			treeConfig = GLOBAL;
 		}
 		treeConfig.whitelistedDimensions.add(dimID);
@@ -88,7 +88,7 @@ public class TreeConfig {
 		return GLOBAL.isValidDimension(dimID) && (treeConfig == null || treeConfig.isValidDimension(dimID));
 	}
 
-	private boolean isValidDimension(int dimID){ //blacklist has priority
+	private boolean isValidDimension(int dimID) { //blacklist has priority
 		if (blacklistedDimensions.isEmpty() || !blacklistedDimensions.contains(dimID)) {
 			return whitelistedDimensions.isEmpty() || whitelistedDimensions.contains(dimID);
 		}
@@ -100,7 +100,7 @@ public class TreeConfig {
 		return GLOBAL.isValidBiome(biome) && (treeConfig == null || treeConfig.isValidBiome(biome));
 	}
 
-	private boolean isValidBiome(Biome biome){
+	private boolean isValidBiome(Biome biome) {
 		if (blacklistedBiomes.contains(biome)) {
 			return false;
 		}

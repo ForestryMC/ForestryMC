@@ -148,8 +148,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		EntityUtil.spawnEntity(entityItem.world,
-				new EntityButterfly(entityItem.world, butterfly, entityItem.getPosition()), entityItem.posX,
-				entityItem.posY, entityItem.posZ);
+			new EntityButterfly(entityItem.world, butterfly, entityItem.getPosition()), entityItem.posX,
+			entityItem.posY, entityItem.posZ);
 		if (!entityItem.getItem().isEmpty()) {
 			entityItem.getItem().shrink(1);
 		} else {
@@ -175,7 +175,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 					if (allele instanceof IAlleleButterflyCocoon) {
 						for (int age = 0; age < 3; age++) {
 							ModelBakery.registerItemVariants(this,
-									((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
+								((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
 						}
 					}
 				}
@@ -210,7 +210,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
-			float hitX, float hitY, float hitZ) {
+		float hitX, float hitY, float hitZ) {
 		if (world.isRemote) {
 			return EnumActionResult.PASS;
 		}
@@ -243,7 +243,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 				nursery.setCaterpillar(flutter);
 
 				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK,
-						PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+					PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 				NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 				if (!player.capabilities.isCreativeMode) {
@@ -306,7 +306,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 		IButterfly individual = ButterflyManager.butterflyRoot.getMember(itemstack);
 		String customKey = "for.butterflies.custom." + type.getName() + "."
-				+ individual.getGenome().getPrimary().getUnlocalizedName().replace("butterflies.species.", "");
+			+ individual.getGenome().getPrimary().getUnlocalizedName().replace("butterflies.species.", "");
 		if (Translator.canTranslateToLocal(customKey)) {
 			return Translator.translateToLocal(customKey);
 		}

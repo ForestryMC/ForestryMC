@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import forestry.api.genetics.IAlleleArea;
 import net.minecraft.util.math.Vec3i;
+
+import forestry.api.genetics.IAlleleArea;
 
 public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 

@@ -104,7 +104,7 @@ public class ModelManager implements IModelManager {
 	public ModelResourceLocation getModelLocation(Item item) {
 		ResourceLocation resourceLocation = ItemStackUtil.getItemNameFromRegistry(item);
 		Preconditions.checkNotNull(resourceLocation);
-		String itemName = resourceLocation.getResourcePath();
+		String itemName = resourceLocation.getPath();
 		return getModelLocation(itemName);
 	}
 
@@ -179,21 +179,21 @@ public class ModelManager implements IModelManager {
 			}
 		}
 	}
-	
+
 	public IModelState getDefaultBlockState() {
-		if(defaultBlockState == null){
+		if (defaultBlockState == null) {
 			defaultBlockState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/block/block"));
 		}
 		return defaultBlockState;
 	}
-	
+
 	public IModelState getDefaultItemState() {
-		if(defaultItemState == null){
+		if (defaultItemState == null) {
 			defaultItemState = ModelUtil.loadModelState(new ResourceLocation("minecraft:models/item/generated"));
 		}
 		return defaultItemState;
 	}
-	
+
 	public void registerCustomBlockModel(BlockModelEntry index) {
 		customBlockModels.add(index);
 		if (index.addStateMapper) {
@@ -205,7 +205,7 @@ public class ModelManager implements IModelManager {
 	public void registerCustomModel(ModelEntry index) {
 		customModels.add(index);
 	}
-	
+
 	public void onBakeModels(ModelBakeEvent event) {
 		//register custom models
 		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();

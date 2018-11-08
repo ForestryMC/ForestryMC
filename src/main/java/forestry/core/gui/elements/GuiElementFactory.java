@@ -87,11 +87,11 @@ public class GuiElementFactory implements IGuiElementFactory {
 		}
 	}
 
-	public final ITextStyle getStateStyle(boolean dominant){
+	public final ITextStyle getStateStyle(boolean dominant) {
 		return dominant ? DOMINANT_STYLE : RECESSIVE_STYLE;
 	}
 
-	public final ITextStyle getGuiStyle(){
+	public final ITextStyle getGuiStyle() {
 		return GUI_STYLE;
 	}
 

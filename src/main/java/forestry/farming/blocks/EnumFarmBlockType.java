@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import forestry.core.config.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.config.Constants;
 
 public enum EnumFarmBlockType implements IStringSerializable {
 	PLAIN,
@@ -39,14 +41,14 @@ public enum EnumFarmBlockType implements IStringSerializable {
 	public static void registerSprites() {
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
 		sprites = Arrays.asList(
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/plain")),
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/reverse")),
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/top")),
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/band")),
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/gears")),
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/hatch")),
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/valve")),
-				map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/control"))
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/plain")),
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/reverse")),
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/top")),
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/band")),
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/gears")),
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/hatch")),
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/valve")),
+			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/control"))
 		);
 	}
 

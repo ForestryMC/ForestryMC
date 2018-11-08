@@ -123,7 +123,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	}
 
 	@Nullable
-	public static IResource getResource(String path){
+	public static IResource getResource(String path) {
 		IResource resource;
 		if (!path.contains(":")) {
 			Language currentLanguage = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
@@ -169,7 +169,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		entryNames.forEach(entry -> createEntry(entries, category, entry));
 	}
 
-	private void createEntry(Map<String, EntryData> entries, BookCategory category, String entry){
+	private void createEntry(Map<String, EntryData> entries, BookCategory category, String entry) {
 		EntryData data = entries.get(entry);
 		if (data != null) {
 			IBookEntryBuilder builder = category.createEntry(entry);
@@ -201,7 +201,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	}
 
 	@Nullable
-	private <T> T fromJson( String location, Class<T> classOfT, @Nullable T fallback) {
+	private <T> T fromJson(String location, Class<T> classOfT, @Nullable T fallback) {
 		IResource resource = getResource(location);
 		if (resource == null) {
 			return fallback;

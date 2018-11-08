@@ -44,7 +44,7 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleSpecies;
 
 public class AlleleButterflySpecies extends AlleleSpecies
-		implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
+	implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
 	private final String texture;
 	private final Color serumColour;
 	private float rarity = 0.1f;
@@ -57,8 +57,8 @@ public class AlleleButterflySpecies extends AlleleSpecies
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
 
 	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
-			String modID, String texturePath, boolean isDominant, IClassification branch, String binomial,
-			Color serumColour) {
+		String modID, String texturePath, boolean isDominant, IClassification branch, String binomial,
+		Color serumColour) {
 		super(modID, uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 		this.serumColour = serumColour;
 
@@ -156,7 +156,7 @@ public class AlleleButterflySpecies extends AlleleSpecies
 
 	@Override
 	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual,
-			int bountyLevel) {
+		int bountyLevel) {
 		ItemStack serum = getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM);
 		NonNullList<ItemStack> bounty = NonNullList.create();
 		bounty.add(serum);

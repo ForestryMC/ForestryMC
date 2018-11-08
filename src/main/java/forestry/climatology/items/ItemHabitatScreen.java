@@ -68,7 +68,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			return null;
 		}
 		NBTTagCompound compound = nbtTagCompound.getCompoundTag(POSITION_KEY);
-		if (compound.hasNoTags()) {
+		if (compound.isEmpty()) {
 			return null;
 		}
 		return NBTUtil.getPosFromTag(compound);

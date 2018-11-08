@@ -32,7 +32,7 @@ public interface ITreeGenData {
 	@Deprecated
 	boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos);
 
-	default boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos, Random random){
+	default boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos, Random random) {
 		return setLeaves(world, owner, pos);
 	}
 

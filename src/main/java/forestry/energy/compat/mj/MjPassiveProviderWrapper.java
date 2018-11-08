@@ -17,7 +17,9 @@ public class MjPassiveProviderWrapper extends MjConnectorWrapper implements IMjP
 	public long extractPower(long min, long max, boolean simulate) {
 		int max1 = MjHelper.microToRf(max);
 		int actualMin = energyManager.extractEnergy(max1, true);
-		if (actualMin < min) return 0;
+		if (actualMin < min) {
+			return 0;
+		}
 		return MjHelper.rfToMicro(energyManager.extractEnergy(max1, simulate));
 	}
 }

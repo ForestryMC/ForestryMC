@@ -28,7 +28,7 @@ import forestry.core.utils.Translator;
 
 @SideOnly(Side.CLIENT)
 public class BeeDatabaseTab implements IDatabaseTab<IBee> {
-	private static final ITextStyle BINOMIAL = new TextStyleBuilder().color(()-> ColourProperties.INSTANCE.get("gui.beealyzer.binomial")).build();
+	private static final ITextStyle BINOMIAL = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.beealyzer.binomial")).build();
 
 	private final DatabaseMode mode;
 
@@ -54,7 +54,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
 		container.addLine(Translator.translateToLocal("for.gui.species"), EnumBeeChromosome.SPECIES);
 
-		Function<Boolean, String> toleranceText = a ->{
+		Function<Boolean, String> toleranceText = a -> {
 			IAlleleSpecies species = a ? primarySpecies : secondarySpecies;
 			return AlleleManager.climateHelper.toDisplay(species.getTemperature());
 		};
@@ -79,14 +79,14 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 		String no = Translator.translateToLocal("for.no");
 
 		String diurnal, nocturnal;
-		if(mode == DatabaseMode.ACTIVE) {
+		if (mode == DatabaseMode.ACTIVE) {
 			if (bee.getGenome().getNeverSleeps()) {
 				nocturnal = diurnal = yes;
 			} else {
 				nocturnal = bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 				diurnal = !bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 			}
-		}else {
+		} else {
 			if (((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue()) {
 				nocturnal = diurnal = yes;
 			} else {

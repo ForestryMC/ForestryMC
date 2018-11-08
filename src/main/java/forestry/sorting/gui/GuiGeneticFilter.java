@@ -36,14 +36,14 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		this.tile = tile;
 
 		for (int i = 0; i < 6; i++) {
-			EnumFacing facing = EnumFacing.getFront(i);
+			EnumFacing facing = EnumFacing.byIndex(i);
 			widgetManager.add(new RuleWidget(widgetManager, 8 + 36, 18 + i * 18, facing, this));
 		}
 
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				for (int k = 0; k < 2; k++) {
-					widgetManager.add(new SpeciesWidget(widgetManager, 44 + 36 + j * 45 + k * 18, 18 + i * 18, EnumFacing.getFront(i), j, k == 0, this));
+					widgetManager.add(new SpeciesWidget(widgetManager, 44 + 36 + j * 45 + k * 18, 18 + i * 18, EnumFacing.byIndex(i), j, k == 0, this));
 				}
 			}
 		}
@@ -158,7 +158,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		return tile;
 	}
 
-	public IFilterLogic getLogic(){
+	public IFilterLogic getLogic() {
 		return tile.getLogic();
 	}
 }

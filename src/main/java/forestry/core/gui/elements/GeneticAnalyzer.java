@@ -93,7 +93,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 				rightButton.onPressed();
 			} else if ((keyCode == Keyboard.KEY_UP || keyCode == Keyboard.KEY_LEFT) && leftButton.isEnabled()) {
 				leftButton.onPressed();
-			} else if(keyCode == Keyboard.KEY_RETURN && analyzeButton.isEnabled()){
+			} else if (keyCode == Keyboard.KEY_RETURN && analyzeButton.isEnabled()) {
 				analyzeButton.onPressed();
 			}
 		});

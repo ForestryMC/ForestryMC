@@ -29,7 +29,7 @@ public class ButterflyPlugin extends DatabasePlugin<IButterfly> {
 		super(new ButterflyDatabaseTab(DatabaseMode.ACTIVE),
 			new ButterflyDatabaseTab(DatabaseMode.INACTIVE),
 			new ButterflyProductsTab(),
-			new MutationsTab(()->ButterflyDefinition.Glasswing.getMemberStack(EnumFlutterType.COCOON)));
+			new MutationsTab(() -> ButterflyDefinition.Glasswing.getMemberStack(EnumFlutterType.COCOON)));
 		NonNullList<ItemStack> butterflyList = NonNullList.create();
 		ModuleLepidopterology.getItems().butterflyGE.addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {

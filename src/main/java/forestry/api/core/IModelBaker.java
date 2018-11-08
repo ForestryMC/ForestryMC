@@ -17,6 +17,7 @@ import net.minecraftforge.common.model.IModelState;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 /**
  * A model baker to make custom models
  *

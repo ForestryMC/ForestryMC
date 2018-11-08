@@ -48,7 +48,7 @@ public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implemen
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

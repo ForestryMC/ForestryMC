@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.core.genetics.IGeneticDefinition;
-import net.minecraft.item.ItemStack;
 
 public interface ITreeDefinition extends IGeneticDefinition {
 	@Override

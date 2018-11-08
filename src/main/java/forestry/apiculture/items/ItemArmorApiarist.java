@@ -40,7 +40,7 @@ import forestry.core.config.Constants;
 public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 
 	public static final ArmorMaterial APIARIST_ARMOR = EnumHelper.addArmorMaterial("APIARIST_ARMOR", "forestry:textures/items", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F)
-			.setRepairItem(ModuleCore.getItems().craftingMaterial.getWovenSilk());
+		.setRepairItem(ModuleCore.getItems().craftingMaterial.getWovenSilk());
 
 	public ItemArmorApiarist(EntityEquipmentSlot equipmentSlotIn) {
 		super(APIARIST_ARMOR, 0, equipmentSlotIn);
@@ -84,7 +84,7 @@ public class ItemArmorApiarist extends ItemArmor implements IItemModelRegister {
 				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
 					return capability.getDefaultInstance();
 				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-						armorType == EntityEquipmentSlot.HEAD) {
+					armorType == EntityEquipmentSlot.HEAD) {
 					return capability.getDefaultInstance();
 				}
 				return null;

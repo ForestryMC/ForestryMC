@@ -57,7 +57,7 @@ public abstract class ContainerForestry extends Container {
 		addSlotToContainer(new Slot(playerInventory, slot, x, y));
 	}
 
-	protected void addSlot(InventoryPlayer playerInventory, int slot, int x, int y){
+	protected void addSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
 		addSlotToContainer(new Slot(playerInventory, slot, x, y));
 	}
 
@@ -93,8 +93,8 @@ public abstract class ContainerForestry extends Container {
 		return super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 	}
 
-	public Slot getForestrySlot(int slot){
-		return getSlot(PLAYER_INV_SLOTS  + slot);
+	public Slot getForestrySlot(int slot) {
+		return getSlot(PLAYER_INV_SLOTS + slot);
 	}
 
 
@@ -104,8 +104,7 @@ public abstract class ContainerForestry extends Container {
 			return ItemStack.EMPTY;
 		}
 
-		if (transferCount < 64)
-		{
+		if (transferCount < 64) {
 			transferCount++;
 			return SlotUtil.transferStackInSlot(inventorySlots, player, slotIndex);
 		}

@@ -21,7 +21,7 @@ public enum EnumHumidity {
 	DAMP("Damp", 0x6e56b3);
 
 	public static final EnumHumidity[] VALUES = values();
-	
+
 	public final String name;
 	public final int color;
 

@@ -20,16 +20,16 @@ public abstract class WoodTexture {
 
 	private WoodTexture() {
 	}
-	
+
 	abstract ImmutableMap<String, String> getLocations(String kindName);
-	
+
 	static class SimpleTexture extends WoodTexture {
 		private final ImmutableMap<String, String> locations;
 
 		public SimpleTexture(ImmutableMap<String, String> locations) {
 			this.locations = locations;
 		}
-		
+
 		@Override
 		ImmutableMap<String, String> getLocations(String kindName) {
 			return locations;
@@ -42,15 +42,15 @@ public abstract class WoodTexture {
 		public TextureMap(ImmutableMap<String, SimpleTexture> textures) {
 			this.textures = textures;
 		}
-		
+
 		@Override
 		ImmutableMap<String, String> getLocations(String kindName) {
 			SimpleTexture texture = textures.get(kindName);
-			if(texture == null){
+			if (texture == null) {
 				return ImmutableMap.of();
 			}
 			return texture.getLocations(kindName);
 		}
 	}
-	
+
 }

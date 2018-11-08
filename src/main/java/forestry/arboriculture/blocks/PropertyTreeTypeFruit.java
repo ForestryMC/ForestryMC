@@ -31,11 +31,11 @@ public class PropertyTreeTypeFruit extends PropertyHelper<PropertyTreeTypeFruit.
 	private static List<LeafVariant> definitions = null;
 
 	public static List<LeafVariant> getDefinitions() {
-		if(definitions == null){
+		if (definitions == null) {
 			definitions = new ArrayList<>();
 			int metadata = 0;
-			for(TreeDefinition definition : TreeDefinition.VALUES){
-				if(definition.hasFruitLeaves()){
+			for (TreeDefinition definition : TreeDefinition.VALUES) {
+				if (definition.hasFruitLeaves()) {
 					definitions.add(new LeafVariant(definition, metadata++));
 				}
 			}
@@ -43,7 +43,7 @@ public class PropertyTreeTypeFruit extends PropertyHelper<PropertyTreeTypeFruit.
 		return definitions;
 	}
 
-	public static LeafVariant getVariant(int metadata){
+	public static LeafVariant getVariant(int metadata) {
 		return getDefinitions().get(metadata);
 	}
 
@@ -76,14 +76,12 @@ public class PropertyTreeTypeFruit extends PropertyHelper<PropertyTreeTypeFruit.
 	}
 
 	@Override
-	public Collection<LeafVariant> getAllowedValues()
-	{
+	public Collection<LeafVariant> getAllowedValues() {
 		return this.allowedValues;
 	}
 
 	@Override
-	public Optional<LeafVariant> parseValue(String value)
-	{
+	public Optional<LeafVariant> parseValue(String value) {
 		return Optional.fromNullable(this.nameToValue.get(value));
 	}
 
@@ -91,24 +89,18 @@ public class PropertyTreeTypeFruit extends PropertyHelper<PropertyTreeTypeFruit.
 	 * Get the name for the given value.
 	 */
 	@Override
-	public String getName(LeafVariant value)
-	{
+	public String getName(LeafVariant value) {
 		return value.definition.getName();
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
-		{
+		if (this == o) {
 			return true;
-		}
-		else if (o instanceof PropertyTreeTypeFruit && super.equals(o))
-		{
-			PropertyTreeTypeFruit property = (PropertyTreeTypeFruit)o;
+		} else if (o instanceof PropertyTreeTypeFruit && super.equals(o)) {
+			PropertyTreeTypeFruit property = (PropertyTreeTypeFruit) o;
 			return this.allowedValues.equals(property.allowedValues) && this.nameToValue.equals(property.nameToValue);
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}

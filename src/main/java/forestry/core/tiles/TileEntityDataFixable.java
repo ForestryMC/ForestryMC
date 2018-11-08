@@ -17,10 +17,10 @@ public class TileEntityDataFixable implements IFixableData {
 		String oldName = compound.getString("id").replace("minecraft:", "");
 		if (oldName.startsWith("forestry.")) {
 			String remappedName = MigrationHelper.getRemappedTileName(oldName);
-			if(remappedName != null){
+			if (remappedName != null) {
 				Log.debug("Replaced old Tile Entity name '{}' with the remapped name '{}'.", oldName, remappedName);
 				compound.setString("id", remappedName);
-			}else{
+			} else {
 				Log.error("Failed to find remapped name for the Tile Entity with the name {}.", oldName);
 			}
 		}

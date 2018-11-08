@@ -72,11 +72,11 @@ public abstract class NBTUtilForestry {
 		return new NBTList<>(nbtList);
 	}
 
-	public static long[] getLongArray(NBTBase nbt){
-		if(!(nbt instanceof NBTTagLongArray)){
+	public static long[] getLongArray(NBTBase nbt) {
+		if (!(nbt instanceof NBTTagLongArray)) {
 			return new long[0];
 		}
-		return ObfuscationReflectionHelper.getPrivateValue(NBTTagLongArray.class, (NBTTagLongArray)nbt, 0);
+		return ObfuscationReflectionHelper.getPrivateValue(NBTTagLongArray.class, (NBTTagLongArray) nbt, 0);
 	}
 
 	public static class NBTList<T extends NBTBase> extends ForwardingList<T> {

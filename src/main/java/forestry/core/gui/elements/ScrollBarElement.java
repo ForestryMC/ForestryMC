@@ -47,7 +47,7 @@ public class ScrollBarElement extends ElementGroup {
 
 		int offset = hasBorder ? 1 : 0;
 
-		interactionField = new ElementGroup(offset, offset, hasBorder ? width - 2 : width, hasBorder ? height - 2: height);
+		interactionField = new ElementGroup(offset, offset, hasBorder ? width - 2 : width, hasBorder ? height - 2 : height);
 		isScrolling = false;
 		wasClicked = false;
 		visible = true;
@@ -68,7 +68,7 @@ public class ScrollBarElement extends ElementGroup {
 		this.maxValue = maxValue;
 		this.step = step;
 
-		if(initialised) {
+		if (initialised) {
 			setValue(currentValue);
 		}
 		return this;
@@ -89,7 +89,7 @@ public class ScrollBarElement extends ElementGroup {
 		if (listener != null) {
 			listener.onScroll(currentValue);
 		}
-		if(vertical){
+		if (vertical) {
 			int offset;
 			if (value >= maxValue) {
 				offset = interactionField.getWidth() - slider.width;
@@ -99,7 +99,7 @@ public class ScrollBarElement extends ElementGroup {
 				offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getWidth() - slider.width));
 			}
 			slider.setXPosition(offset);
-		}else {
+		} else {
 			int offset;
 			if (value >= maxValue) {
 				offset = interactionField.getHeight() - slider.height;
@@ -154,7 +154,7 @@ public class ScrollBarElement extends ElementGroup {
 		//Clicked on the slider and scrolling
 		if (this.isScrolling) {
 			int range = maxValue - minValue;
-			float value = (float) (pos - initialMouseClick) / (float) (vertical ? (interactionField.getWidth() - slider.width)  : (interactionField.getHeight() - slider.height));
+			float value = (float) (pos - initialMouseClick) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
 			value *= (float) range;
 			if (value < (float) step / 2f) {
 				setValue(minValue);

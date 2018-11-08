@@ -16,7 +16,7 @@ public interface IFarmableInfo {
 	 */
 	String getIdentifier();
 
-	default void addGermlings(ItemStack... germlings){
+	default void addGermlings(ItemStack... germlings) {
 		addGermlings(Arrays.asList(germlings));
 	}
 
@@ -27,7 +27,7 @@ public interface IFarmableInfo {
 	 */
 	Collection<ItemStack> getGermlings();
 
-	default void addProducts(ItemStack... products){
+	default void addProducts(ItemStack... products) {
 		addProducts(Arrays.asList(products));
 	}
 

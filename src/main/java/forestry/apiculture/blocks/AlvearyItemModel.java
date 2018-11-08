@@ -1,10 +1,12 @@
 package forestry.apiculture.blocks;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import net.minecraft.item.Item;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
 
 public class AlvearyItemModel implements IItemModelRegister {
 	private final BlockAlveary blockAlveary;

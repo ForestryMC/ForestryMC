@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.arboriculture.IWoodType;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
 	public ItemBlockWood(B block) {
@@ -29,7 +30,7 @@ public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForest
 		IWoodType woodType = wood.getWoodType(meta);
 		return WoodHelper.getDisplayName(wood, woodType);
 	}
-	
+
 	@Override
 	public int getItemBurnTime(ItemStack itemStack) {
 		B block = getBlock();

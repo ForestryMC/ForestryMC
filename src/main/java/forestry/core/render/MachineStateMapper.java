@@ -47,7 +47,7 @@ public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializ
 				IBlockState state = block.getDefaultState().withProperty(BlockBase.FACING, facing);
 				LinkedHashMap<IProperty<?>, Comparable<?>> linkedhashmap = Maps.newLinkedHashMap(state.getProperties());
 				ResourceLocation blockLocation = Block.REGISTRY.getNameForObject(block);
-				String s = String.format("%s:%s", blockLocation.getResourceDomain(), (directory != null ? directory : "") + blockLocation.getResourcePath());
+				String s = String.format("%s:%s", blockLocation.getNamespace(), (directory != null ? directory : "") + blockLocation.getPath());
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
 			}
 		}

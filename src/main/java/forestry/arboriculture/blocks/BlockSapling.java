@@ -89,7 +89,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
@@ -157,7 +157,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 			drops.add(drop);
 		}
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);

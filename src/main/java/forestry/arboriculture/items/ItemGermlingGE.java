@@ -129,9 +129,9 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			IAlleleTreeSpecies treeSpecies;
-			if(!stack.hasTagCompound()){
+			if (!stack.hasTagCompound()) {
 				treeSpecies = TreeDefinition.Oak.getGenome().getPrimary();
-			}else{
+			} else {
 				treeSpecies = getSpecies(stack);
 			}
 			return treeSpecies.getGermlingModel(type);
@@ -218,7 +218,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 		return tree.getGenome().getSappiness() * 10;
 	}
-	
+
 	@Override
 	public int getItemBurnTime(ItemStack itemStack) {
 		return 100;

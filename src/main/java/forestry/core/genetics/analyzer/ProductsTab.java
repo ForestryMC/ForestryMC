@@ -25,14 +25,14 @@ public class ProductsTab extends DatabaseTab {
 	public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
 		Collection<ItemStack> products = getProducts(individual);
-		if(!products.isEmpty()) {
+		if (!products.isEmpty()) {
 			container.label(Translator.translateToLocal("for.gui.beealyzer.produce"), GuiElementAlignment.TOP_CENTER);
 			products.forEach(product -> groupHelper.add(new ItemElement(0, 0, product)));
 			groupHelper.finish();
 		}
 
 		Collection<ItemStack> specialties = getSpecialties(individual);
-		if(specialties.isEmpty()){
+		if (specialties.isEmpty()) {
 			return;
 		}
 
@@ -41,22 +41,22 @@ public class ProductsTab extends DatabaseTab {
 		groupHelper.finish();
 	}
 
-	private Collection<ItemStack> getSpecialties(IIndividual individual){
-		if(individual instanceof IBee){
+	private Collection<ItemStack> getSpecialties(IIndividual individual) {
+		if (individual instanceof IBee) {
 			IBee bee = (IBee) individual;
 			return bee.getSpecialtyList();
-		}else if(individual instanceof ITree){
+		} else if (individual instanceof ITree) {
 			ITree tree = (ITree) individual;
 			return tree.getSpecialties().keySet();
 		}
 		return Collections.emptyList();
 	}
 
-	private Collection<ItemStack> getProducts(IIndividual individual){
-		if(individual instanceof IBee){
+	private Collection<ItemStack> getProducts(IIndividual individual) {
+		if (individual instanceof IBee) {
 			IBee bee = (IBee) individual;
 			return bee.getProduceList();
-		}else if(individual instanceof ITree){
+		} else if (individual instanceof ITree) {
 			ITree tree = (ITree) individual;
 			return tree.getProducts().keySet();
 		}

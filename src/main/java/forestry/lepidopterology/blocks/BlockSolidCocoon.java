@@ -52,7 +52,7 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 		setSoundType(SoundType.GROUND);
 		setCreativeTab(null);
 		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault)
-				.withProperty(AlleleButterflyCocoon.AGE, 0));
+			.withProperty(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon != null) {
 			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-					.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
+				.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
 		}
 		return super.getActualState(state, world, pos);
 	}
@@ -96,7 +96,7 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
-			boolean willHarvest) {
+		boolean willHarvest) {
 		if (canHarvestBlock(world, pos, player)) {
 			TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
 				NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
@@ -126,12 +126,12 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 			worldIn.setBlockToAir(pos);
 		}
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-	
+
 	}
-	
+
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		return BlockCocoon.BOUNDING_BOX;

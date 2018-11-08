@@ -69,7 +69,7 @@ public class ForestryAPI {
 	 * A registry for register fertilizers, {@link IFarmable}s and {@link ISimpleFarmLogic}s
 	 */
 	public static IFarmRegistry farmRegistry;
-	
+
 	/**
 	 * The currently active {@link IGameMode}.
 	 */

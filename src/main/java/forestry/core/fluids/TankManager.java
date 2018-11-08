@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,8 +21,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IForestryPacketClient;
@@ -32,17 +46,6 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NBTUtilForestry.NBTList;
 import forestry.core.utils.NetworkUtil;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -329,7 +332,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 	private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
 		return tank.canFill() &&
-				tank.fill(fluidStack, false) > 0;
+			tank.fill(fluidStack, false) > 0;
 	}
 
 	private static boolean tankCanDrain(StandardTank tank) {
@@ -342,6 +345,6 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 	private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
 		return Fluids.areEqual(tank.getFluidType(), fluidStack) &&
-				tankCanDrain(tank);
+			tankCanDrain(tank);
 	}
 }

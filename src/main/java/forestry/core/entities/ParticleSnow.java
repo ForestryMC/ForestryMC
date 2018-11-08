@@ -59,7 +59,7 @@ public class ParticleSnow extends Particle {
 			renderParticle(buffer, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale, partialTicks);
 		}
 	}
-	
+
 	private void renderParticle(BufferBuilder buffer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV, float maxV, float scale, float timeStep) {
 		int i = this.getBrightnessForRender(timeStep);
 		int j = i >> 16 & 65535;

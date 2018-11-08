@@ -304,27 +304,27 @@ public class ModuleCore extends BlankForestryModule {
 			// / CARPENTER
 			// Portable ANALYZER
 			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
-					"X#X", "X#X", "RDR",
-					'#', OreDictUtil.PANE_GLASS,
-					'X', OreDictUtil.INGOT_TIN,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'D', OreDictUtil.GEM_DIAMOND);
+				"X#X", "X#X", "RDR",
+				'#', OreDictUtil.PANE_GLASS,
+				'X', OreDictUtil.INGOT_TIN,
+				'R', OreDictUtil.DUST_REDSTONE,
+				'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
 			FluidStack biomass = Fluids.BIOMASS.getFluid(150);
-			if(biomass != null) {
+			if (biomass != null) {
 				RecipeManagers.squeezerManager.addRecipe(8, items.craftingMaterial.getCamouflagedPaneling(1), biomass);
 			}
 		} else {
 			// Portable ANALYZER
 			RecipeUtil.addRecipe("portable_alyzer", items.portableAlyzer.getItemStack(),
-					"X#X",
-					"X#X",
-					"RDR",
-					'#', OreDictUtil.PANE_GLASS,
-					'X', OreDictUtil.INGOT_TIN,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'D', OreDictUtil.GEM_DIAMOND);
-			if(Fluids.BIOMASS.getFluid() != null) {
+				"X#X",
+				"X#X",
+				"RDR",
+				'#', OreDictUtil.PANE_GLASS,
+				'X', OreDictUtil.INGOT_TIN,
+				'R', OreDictUtil.DUST_REDSTONE,
+				'D', OreDictUtil.GEM_DIAMOND);
+			if (Fluids.BIOMASS.getFluid() != null) {
 				RecipeUtil.addRecipe("camouflaged_paneling", ModuleFluids.getItems().getContainer(EnumContainerType.CAPSULE, Fluids.BIOMASS),
 					items.craftingMaterial.getCamouflagedPaneling(1));
 			}
@@ -332,12 +332,12 @@ public class ModuleCore extends BlankForestryModule {
 
 		// ANALYZER
 		RecipeUtil.addRecipe("analyzer", blocks.analyzer,
-				"XTX",
-				" Y ",
-				"X X",
-				'Y', items.sturdyCasing,
-				'T', items.portableAlyzer,
-				'X', OreDictUtil.INGOT_BRONZE);
+			"XTX",
+			" Y ",
+			"X X",
+			'Y', items.sturdyCasing,
+			'T', items.portableAlyzer,
+			'X', OreDictUtil.INGOT_BRONZE);
 
 		// Manure and Fertilizer
 		int compostWheatAmount = ForestryAPI.activeMode.getIntegerSetting("recipe.output.compost.wheat");
@@ -437,31 +437,31 @@ public class ModuleCore extends BlankForestryModule {
 		}
 
 		RecipeUtil.addRecipe("ash_brick", blocks.ashBrick,
-				"A#A",
-				"# #",
-				"A#A",
-				'#', Items.BRICK,
-				'A', OreDictUtil.DUST_ASH);
+			"A#A",
+			"# #",
+			"A#A",
+			'#', Items.BRICK,
+			'A', OreDictUtil.DUST_ASH);
 		RecipeUtil.addRecipe("ash_stairs", blocks.ashStairs,
-				true,
-				"#  ",
-				"## ",
-				"###",
-				'#', Items.BRICK);
+			true,
+			"#  ",
+			"## ",
+			"###",
+			'#', Items.BRICK);
 
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-					items.craftingMaterial.getSilkWisp(), 0.15f
+				items.craftingMaterial.getSilkWisp(), 0.15f
 			));
 		}
 
 		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
-		if(hygroManager != null) {
+		if (hygroManager != null) {
 			hygroManager.addRecipe(new FluidStack(FluidRegistry.WATER, 1), 1, -0.005f, 0.01f);
 			hygroManager.addRecipe(new FluidStack(FluidRegistry.LAVA, 1), 10, 0.005f, -0.01f);
-			if(Fluids.ICE.getFluid() != null){
-				hygroManager.addRecipe(Fluids.ICE.getFluid(1),10, -0.01f, 0.02f);
+			if (Fluids.ICE.getFluid() != null) {
+				hygroManager.addRecipe(Fluids.ICE.getFluid(1), 10, -0.01f, 0.02f);
 			}
 		}
 	}

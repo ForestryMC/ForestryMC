@@ -102,9 +102,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		}
 		return parent;
 	}
-	
+
 	@Nullable
-	protected EnumHand getHand(){
+	protected EnumHand getHand() {
 		for (EnumHand hand : EnumHand.values()) {
 			ItemStack held = player.getHeldItem(hand);
 			if (isSameItemInventory(held, parent)) {
@@ -166,7 +166,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		return Integer.toString(i, Character.MAX_RADIX);
 	}
 
-	protected void onWriteNBT(NBTTagCompound nbt){
+	protected void onWriteNBT(NBTTagCompound nbt) {
 	}
 
 	public void onSlotClick(int slotIndex, EntityPlayer player) {

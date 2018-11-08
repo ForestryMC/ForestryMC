@@ -52,7 +52,7 @@ public class GuiUtil {
 		List<String> lines = toolTips.getLines();
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
-			if(provider == null || provider.isRelativeToGui()) {
+			if (provider == null || provider.isRelativeToGui()) {
 				GlStateManager.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
 			ScaledResolution scaledresolution = new ScaledResolution(gui.getMC());
@@ -72,9 +72,9 @@ public class GuiUtil {
 			}
 			int mX = mouseX;
 			int mY = mouseY;
-			if(provider.isRelativeToGui()){
-				mX-=gui.getGuiLeft();
-				mY-=gui.getGuiTop();
+			if (provider.isRelativeToGui()) {
+				mX -= gui.getGuiLeft();
+				mY -= gui.getGuiTop();
 			}
 			ToolTip tips = provider.getToolTip(mX, mY);
 			if (tips == null) {

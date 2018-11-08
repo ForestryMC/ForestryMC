@@ -8,12 +8,14 @@ package forestry.api.apiculture;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.ISpeciesRoot;
 
 public interface IBeeRoot extends ISpeciesRoot {
 

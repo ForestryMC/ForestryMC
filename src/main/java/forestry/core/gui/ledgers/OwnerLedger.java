@@ -12,12 +12,14 @@ package forestry.core.gui.ledgers;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  * Ledger displaying ownership information

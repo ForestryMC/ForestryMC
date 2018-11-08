@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.energy.proxy;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.tiles.TileEngine;
 import forestry.energy.render.RenderEngine;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)

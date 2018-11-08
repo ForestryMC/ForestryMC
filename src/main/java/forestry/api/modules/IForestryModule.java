@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
  * Defines a Forestry module.
  * Any class implementing this interface and annotated by {@link ForestryModule} to be loaded by
  * the model manager of Forestry.
- *
  */
 public interface IForestryModule {
 	default boolean isAvailable() {
@@ -34,14 +33,14 @@ public interface IForestryModule {
 	/**
 	 * The ForestryModule.moduleID()s of any other modules this module depends on.
 	 */
-	default Set<ResourceLocation> getDependencyUids(){
+	default Set<ResourceLocation> getDependencyUids() {
 		return Collections.emptySet();
 	}
 
 	/**
 	 * Can be used to setup the api.
 	 * Will only be called if the module is active if not {@link #disabledSetupAPI()} will be called.
-	 *
+	 * <p>
 	 * Must be called by the mod that registers the container.
 	 */
 	default void setupAPI() {
@@ -49,7 +48,7 @@ public interface IForestryModule {
 
 	/**
 	 * Called to setup the api if this module is disabled in the config or has missing dependencies.
-	 *
+	 * <p>
 	 * Must be called by the mod that registers the container.
 	 */
 	default void disabledSetupAPI() {
@@ -57,7 +56,7 @@ public interface IForestryModule {
 
 	/**
 	 * Can be used to register items and blocks. Called before {@link #preInit()}.
-	 *
+	 * <p>
 	 * Must be called by the mod that registers the container.
 	 */
 	default void registerItemsAndBlocks() {
@@ -81,17 +80,17 @@ public interface IForestryModule {
 	/**
 	 * Can be used to register recipes. Called after {@link #doInit()}.
 	 */
-	default void registerRecipes(){
+	default void registerRecipes() {
 	}
 
-	default void addLootPoolNames(Set<String> lootPoolNames){
+	default void addLootPoolNames(Set<String> lootPoolNames) {
 	}
 
-	default void postInit(){
+	default void postInit() {
 	}
 
 	@Nullable
-	default ICommand[] getConsoleCommands(){
+	default ICommand[] getConsoleCommands() {
 		return null;
 	}
 }

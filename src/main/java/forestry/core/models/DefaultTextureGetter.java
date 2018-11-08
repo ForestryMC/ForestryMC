@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import javax.annotation.Nullable;
-
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class DefaultTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {
 
 	public static final Function<ResourceLocation, TextureAtlasSprite> INSTANCE = new DefaultTextureGetter();
-	
+
 	@Override
 	public TextureAtlasSprite apply(@Nullable ResourceLocation location) {
 		Preconditions.checkNotNull(location);

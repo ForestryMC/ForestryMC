@@ -152,10 +152,10 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	@Override
 	public void setCurrent(IClimateState state) {
 		state = ClimateStateHelper.INSTANCE.clamp(state.toImmutable());
-		if(!state.equals(currentState)) {
+		if (!state.equals(currentState)) {
 			this.currentState = state;
 			housing.markNetworkUpdate();
-			if(addedToWorld) {
+			if (addedToWorld) {
 				IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
 				worldClimate.updateTransformer(this);
 			}
@@ -179,7 +179,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	}
 
 	public void setCircular(boolean value) {
-		if(this.circular != value) {
+		if (this.circular != value) {
 			this.circular = value;
 			onAreaChange(range, !value);
 			housing.markNetworkUpdate();
@@ -197,7 +197,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 
 	@Override
 	public void setRange(int value) {
-		if(value != range) {
+		if (value != range) {
 			int oldRange = range;
 			this.range = MathHelper.clamp(value, 1, 16);
 			onAreaChange(oldRange, circular);
@@ -209,24 +209,24 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		}
 	}
 
-	private void onAreaChange(int range, boolean circular){
+	private void onAreaChange(int range, boolean circular) {
 		int prevArea = area;
 		this.area = computeArea(range, circular);
-		if(addedToWorld && area != prevArea) {
+		if (addedToWorld && area != prevArea) {
 			int areaDelta = Math.abs(area - prevArea);
 			float speedDelta = calculateSpeedModifier(areaDelta);
 			IClimateState deltaState = currentState.subtract(defaultState);
-			IClimateState scaledDelta = deltaState.multiply( area > prevArea ? (1.0F / speedDelta) : speedDelta);
+			IClimateState scaledDelta = deltaState.multiply(area > prevArea ? (1.0F / speedDelta) : speedDelta);
 			setCurrent(scaledDelta.add(defaultState));
 		}
 	}
 
-	private static int computeArea(int range, boolean circular){
+	private static int computeArea(int range, boolean circular) {
 		return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI) : (range * 2 + 1) * (range * 2 + 1);
 	}
 
 	@Override
-	public float getAreaModifier(){
+	public float getAreaModifier() {
 		return calculateAreaModifier(area);
 	}
 
@@ -240,11 +240,11 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 		return calculateSpeedModifier(area);
 	}
 
-	private static float calculateSpeedModifier(float area){
+	private static float calculateSpeedModifier(float area) {
 		return 1.0F + (calculateAreaModifier(area) * Config.habitatformerAreaSpeedModifier);
 	}
 
-	private static float calculateAreaModifier(float area){
+	private static float calculateAreaModifier(float area) {
 		return area / 36.0F;
 	}
 

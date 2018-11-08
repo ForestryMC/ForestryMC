@@ -115,12 +115,12 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound, IClimateState state) {
-		if(state.isPresent()) {
+		if (state.isPresent()) {
 			compound.setBoolean(ABSENT_NBT_KEY, false);
 			compound.setFloat(TEMPERATURE_NBT_KEY, state.getTemperature());
 			compound.setFloat(HUMIDITY_NBT_KEY, state.getHumidity());
 			compound.setBoolean(MUTABLE_NBT_KEY, state instanceof MutableClimateState);
-		}else {
+		} else {
 			compound.setBoolean(ABSENT_NBT_KEY, true);
 		}
 		return compound;
@@ -133,12 +133,12 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 
 	@Override
 	public IClimateState clamp(IClimateState climateState) {
-		if(!climateState.isPresent()){
+		if (!climateState.isPresent()) {
 			return absent();
 		}
 		float temp = climateState.getTemperature();
 		float humid = climateState.getHumidity();
-		if(temp > 2.0F || temp < 0.0F || humid > 2.0F || humid < 0.0F){
+		if (temp > 2.0F || temp < 0.0F || humid > 2.0F || humid < 0.0F) {
 			temp = MathHelper.clamp(temp, 0.0F, 2.0F);
 			return climateState.setClimate(MathHelper.clamp(temp, 0.0F, 2.0F), MathHelper.clamp(humid, 0.0F, 2.0F));
 		}

@@ -46,7 +46,7 @@ public class BlockRegistryCharcoal extends BlockRegistry {
 		};
 		registerBlock(woodPileDecorative, itemBlockWoodPileDecorative, "wood_pile_decorative");
 
-		for(int i = 0;i < 4;i++) {
+		for (int i = 0; i < 4; i++) {
 			BlockAsh ashBlock = new BlockAsh(i * 16);
 			ash[i] = ashBlock;
 			registerBlock(ashBlock, new ItemBlockForestry<>(ashBlock), "ash_block_" + i);
@@ -56,8 +56,8 @@ public class BlockRegistryCharcoal extends BlockRegistry {
 		registerBlock(loam, new ItemBlockForestry<>(loam), "loam");
 	}
 
-	public IBlockState getAshState(int amount){
-		if(amount > 63){
+	public IBlockState getAshState(int amount) {
+		if (amount > 63) {
 			amount = 63;
 		}
 		int i = amount / 16;

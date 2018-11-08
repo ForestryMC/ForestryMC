@@ -35,15 +35,15 @@ public class ContainerAnalyzerProviderHelper {
 
 		ItemInventoryAlyzer alyzerInventory = null;
 		int analyzerIndex = -1;
-		for(int i = 0;i < playerInventory.getSizeInventory();i++){
+		for (int i = 0; i < playerInventory.getSizeInventory(); i++) {
 			ItemStack stack = playerInventory.getStackInSlot(i);
-			if(stack.isEmpty() || stack.getItem() != ModuleCore.getItems().portableAlyzer){
+			if (stack.isEmpty() || stack.getItem() != ModuleCore.getItems().portableAlyzer) {
 				continue;
 			}
 			analyzerIndex = i;
 			alyzerInventory = new ItemInventoryAlyzer(playerInventory.player, stack);
 			Slot slot = container.getSlotFromInventory(playerInventory, i);
-			if(slot instanceof SlotLockable){
+			if (slot instanceof SlotLockable) {
 				SlotLockable lockable = (SlotLockable) slot;
 				lockable.lock();
 			}
@@ -52,24 +52,24 @@ public class ContainerAnalyzerProviderHelper {
 		this.analyzerIndex = analyzerIndex;
 		this.alyzerInventory = alyzerInventory;
 
-		if(alyzerInventory != null) {
+		if (alyzerInventory != null) {
 			container.addSlotToContainer(new SlotAnalyzer(alyzerInventory, ItemInventoryAlyzer.SLOT_ENERGY, -110, 20));
 		}
 	}
 
 	@Nullable
-	public Slot getAnalyzerSlot(){
-		if(alyzerInventory == null){
+	public Slot getAnalyzerSlot() {
+		if (alyzerInventory == null) {
 			return null;
 		}
 		return container.getSlotFromInventory(alyzerInventory, 0);
 	}
 
 	public void analyzeSpecimen(int selectedSlot) {
-		if(selectedSlot < 0 || alyzerInventory == null){
+		if (selectedSlot < 0 || alyzerInventory == null) {
 			return;
 		}
-		Slot specimenSlot = container.getForestrySlot( selectedSlot);
+		Slot specimenSlot = container.getForestrySlot(selectedSlot);
 		ItemStack specimen = specimenSlot.getStack();
 		if (specimen.isEmpty()) {
 			return;

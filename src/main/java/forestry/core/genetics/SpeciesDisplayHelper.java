@@ -27,7 +27,7 @@ public class SpeciesDisplayHelper implements ISpeciesDisplayHelper {
 	@Override
 	public ItemStack getDisplayStack(IAlleleSpecies species, ISpeciesType type) {
 		ItemStack stack = iconStacks.get(type, species.getUID());
-		if(stack == null){
+		if (stack == null) {
 			stack = root.getMemberStack(species, type);
 			iconStacks.put(type, species.getUID(), stack);
 		}

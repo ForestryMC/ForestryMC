@@ -6,10 +6,6 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.worldgen.ITreeBlockType;
-import forestry.arboriculture.worldgen.TreeBlockType;
-import forestry.core.utils.VectUtil;
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -17,6 +13,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
+import forestry.api.world.ITreeGenData;
+import forestry.arboriculture.worldgen.ITreeBlockType;
+import forestry.arboriculture.worldgen.TreeBlockType;
+import forestry.core.utils.VectUtil;
 
 public class WorldGenHelper {
 
@@ -108,16 +109,16 @@ public class WorldGenHelper {
 	 * Returns a list of trunk top coordinates
 	 */
 	public static Set<BlockPos> generateTreeTrunk(
-			World world,
-			Random rand,
-			ITreeBlockType wood,
-			BlockPos startPos,
-			int height,
-			int girth,
-			int yStart,
-			float vinesChance,
-			@Nullable EnumFacing leanDirection,
-			float leanScale
+		World world,
+		Random rand,
+		ITreeBlockType wood,
+		BlockPos startPos,
+		int height,
+		int girth,
+		int yStart,
+		float vinesChance,
+		@Nullable EnumFacing leanDirection,
+		float leanScale
 	) {
 		Set<BlockPos> treeTops = new HashSet<>();
 
@@ -129,8 +130,8 @@ public class WorldGenHelper {
 		int leanZ = 0;
 
 		if (leanDirection != null) {
-			leanX = leanDirection.getFrontOffsetX();
-			leanZ = leanDirection.getFrontOffsetZ();
+			leanX = leanDirection.getXOffset();
+			leanZ = leanDirection.getZOffset();
 		}
 
 		for (int x = 0; x < girth; x++) {
@@ -253,8 +254,8 @@ public class WorldGenHelper {
 
 			BlockPos branchStart = startPos;
 
-			int offsetX = branchDirection.getFrontOffsetX();
-			int offsetZ = branchDirection.getFrontOffsetZ();
+			int offsetX = branchDirection.getXOffset();
+			int offsetZ = branchDirection.getZOffset();
 			if (offsetX > 0) {
 				branchStart = branchStart.add(girth - 1, 0, 0);
 			}

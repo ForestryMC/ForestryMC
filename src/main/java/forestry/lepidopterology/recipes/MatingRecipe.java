@@ -100,18 +100,18 @@ public class MatingRecipe implements IRecipe {
 		}
 		return aitemstack;
 	}
-	
+
 	@Override
 	public IRecipe setRegistryName(ResourceLocation name) {
 		throw new IllegalStateException();
 	}
-	
+
 	@Nullable
 	@Override
 	public ResourceLocation getRegistryName() {
 		return new ResourceLocation(Constants.MOD_ID, "butterflyMating");
 	}
-	
+
 	@Override
 	public Class<IRecipe> getRegistryType() {
 		return IRecipe.class;

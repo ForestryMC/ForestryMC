@@ -31,7 +31,7 @@ public class GuiWindow extends GuiScreen implements IGuiSizable {
 		addElements();
 	}
 
-	protected void addElements(){
+	protected void addElements() {
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class GuiWindow extends GuiScreen implements IGuiSizable {
 		window.draw(mouseX, mouseY);
 	}
 
-	protected void drawTooltips(int mouseX, int mouseY){
+	protected void drawTooltips(int mouseX, int mouseY) {
 		InventoryPlayer playerInv = mc.player.inventory;
 
 		if (playerInv.getItemStack().isEmpty()) {
@@ -78,7 +78,7 @@ public class GuiWindow extends GuiScreen implements IGuiSizable {
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	protected void keyTyped(char typedChar, int keyCode) {
 		if (keyCode == 1) {
 			this.mc.displayGuiScreen(null);
 

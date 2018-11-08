@@ -84,10 +84,10 @@ public class PluginExtraUtilities extends CompatPlugin {
 
 	@Override
 	public void registerRecipes() {
-		if(Circuits.farmOrchidManaged != null) {
+		if (Circuits.farmOrchidManaged != null) {
 			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
 			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
-			if(layoutManaged == null || layoutManual == null){
+			if (layoutManaged == null || layoutManual == null) {
 				return;
 			}
 			ChipsetManager.solderManager.addRecipe(layoutManaged, ModuleCore.getItems().tubes.get(EnumElectronTube.ORCHID, 1), Circuits.farmOrchidManaged);
@@ -95,7 +95,7 @@ public class PluginExtraUtilities extends CompatPlugin {
 		}
 	}
 
-	private void registerFarmable(Block plantBlock, Item plantItem, ItemStack product, String identifier){
+	private void registerFarmable(Block plantBlock, Item plantItem, ItemStack product, String identifier) {
 		IProperty<Integer> growthProperty = BlockUtil.getProperty(plantBlock, "growth", Integer.class);
 		if (growthProperty == null) {
 			Log.error("Could not find the growth property of {}.", plantBlock.getLocalizedName());

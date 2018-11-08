@@ -45,14 +45,14 @@ public class ModuleSorting extends BlankForestryModule {
 	public void setupAPI() {
 		AlleleManager.filterRegistry = new FilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
 	public void disabledSetupAPI() {
 		AlleleManager.filterRegistry = new DummyFilterRegistry();
 
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), ()->FakeFilterLogic.INSTANCE);
+		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_api", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"PGP",
@@ -78,7 +78,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'B', OreDictUtil.GEAR_BRONZE,
 				'P', ModuleApiculture.getItems().propolis);
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			RecipeUtil.addRecipe("genetic_filter_arb", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"FGF",
@@ -89,7 +89,7 @@ public class ModuleSorting extends BlankForestryModule {
 				'B', OreDictUtil.GEAR_BRONZE,
 				'F', OreDictUtil.FRUIT_FORESTRY);
 		}
-		if(ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
 			RecipeUtil.addRecipe("genetic_filter_lep", new ItemStack(getBlocks().filter, 2),
 				"WDW",
 				"FGF",
@@ -105,6 +105,6 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		TileUtil.registerTile(TileGeneticFilter.class, "genetic_filter");
-		((FilterRegistry)AlleleManager.filterRegistry).init();
+		((FilterRegistry) AlleleManager.filterRegistry).init();
 	}
 }

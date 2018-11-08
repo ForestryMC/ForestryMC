@@ -69,9 +69,9 @@ public interface ISpeciesRoot {
 	IIndividual getMember(ItemStack stack);
 
 	IIndividual getMember(NBTTagCompound compound);
-	
+
 	<O, I extends IIndividual> void registerTranslator(Object translatorKey, IIndividualTranslator<I, O> translator);
-	
+
 	@Nullable
 	<O, I extends IIndividual> IIndividualTranslator<I, O> getTranslator(Object translatorKey);
 
@@ -86,17 +86,17 @@ public interface ISpeciesRoot {
 	 */
 	ISpeciesType getIconType();
 
-	default ISpeciesType[] getTypes(){
+	default ISpeciesType[] getTypes() {
 		return new ISpeciesType[0];
 	}
 
 	ItemStack getMemberStack(IIndividual individual, ISpeciesType type);
 
-	default ItemStack getMemberStack(IAlleleSpecies species, ISpeciesType type){
+	default ItemStack getMemberStack(IAlleleSpecies species, ISpeciesType type) {
 		return getMemberStack(getTemplate(species), type);
 	}
 
-	default ItemStack getMemberStack(IAllele[] template, ISpeciesType type){
+	default ItemStack getMemberStack(IAllele[] template, ISpeciesType type) {
 		return getMemberStack(templateAsIndividual(template), type);
 	}
 
@@ -165,7 +165,7 @@ public interface ISpeciesRoot {
 	 *
 	 * @param position 0 = first parent, 1 = second parent, 2 = result
 	 */
-	default ISpeciesType getTypeForMutation(int position){
+	default ISpeciesType getTypeForMutation(int position) {
 		return getIconType();
 	}
 
@@ -233,11 +233,12 @@ public interface ISpeciesRoot {
 
 	/**
 	 * Plugin to add information for the handheld genetic analyzer and the database.
+	 *
 	 * @since 5.7
 	 */
 	@Nullable
 	@SideOnly(Side.CLIENT)
-	default IDatabasePlugin getSpeciesPlugin(){
+	default IDatabasePlugin getSpeciesPlugin() {
 		return null;
 	}
 }

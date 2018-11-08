@@ -54,11 +54,11 @@ public enum WoodModelLoader implements ICustomModelLoader {
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
 		if (!(modelLocation instanceof ModelResourceLocation)
-				|| !modelLocation.getResourceDomain().equals(Constants.MOD_ID)
-				|| !modelLocation.getResourcePath().contains("arboriculture")) {
+			|| !modelLocation.getNamespace().equals(Constants.MOD_ID)
+			|| !modelLocation.getPath().contains("arboriculture")) {
 			return false;
 		}
-		String path = modelLocation.getResourcePath();
+		String path = modelLocation.getPath();
 		for (String validFile : validFiles) {
 			if (path.endsWith(validFile)) {
 				return true;
@@ -76,8 +76,8 @@ public enum WoodModelLoader implements ICustomModelLoader {
 			return new SimpleModel(variant, variants);
 		} catch (MissingVariantException e) {
 			if (definition.hasMultipartData()) {
-				return new MultipartModel(new ResourceLocation(variant.getResourceDomain(), variant.getResourcePath()),
-						definition.getMultipartData());
+				return new MultipartModel(new ResourceLocation(variant.getNamespace(), variant.getPath()),
+					definition.getMultipartData());
 			}
 			throw e;
 		}

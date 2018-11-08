@@ -38,7 +38,7 @@ public class SlotCrafter extends Slot {
 	 * The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset.
 	 */
 	private int amountCrafted;
-	
+
 	public SlotCrafter(EntityPlayer player, InventoryCraftingForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
 		super(craftingDisplay, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
@@ -73,7 +73,7 @@ public class SlotCrafter extends Slot {
 			stack.onCrafting(this.player.world, this.player, this.amountCrafted);
 			net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerCraftingEvent(this.player, stack, craftMatrix);
 		}
-		
+
 		this.amountCrafted = 0;
 		IRecipe irecipe = crafter.getRecipeUsed();
 		if (irecipe != null && !irecipe.isDynamic()) {

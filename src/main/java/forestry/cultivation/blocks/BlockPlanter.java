@@ -42,7 +42,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		if(blockType == BlockTypePlanter.FARM_ENDER){
+		if (blockType == BlockTypePlanter.FARM_ENDER) {
 			for (int i = 0; i < 3; ++i) {
 				ParticleRender.addPortalFx(worldIn, pos, rand);
 			}
@@ -57,7 +57,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		if(state.getValue(MANUAL)){
+		if (state.getValue(MANUAL)) {
 			return 8 + state.getValue(FACING).ordinal();
 		}
 		return state.getValue(FACING).ordinal();
@@ -66,7 +66,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		TileEntity tile = super.createNewTileEntity(world, 0);
-		if(tile instanceof TilePlanter){
+		if (tile instanceof TilePlanter) {
 			TilePlanter planter = (TilePlanter) tile;
 			planter.setManual(state.getValue(MANUAL));
 		}
@@ -85,7 +85,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
@@ -97,16 +97,16 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-		for(byte i = 0;i < 2;i++){
+		for (byte i = 0; i < 2; i++) {
 			items.add(get(i == 1));
 		}
 	}
 
-	public static boolean isManual(ItemStack stack){
+	public static boolean isManual(ItemStack stack) {
 		return stack.getMetadata() == 1;
 	}
 
-	public ItemStack get(boolean isManual){
+	public ItemStack get(boolean isManual) {
 		return new ItemStack(this, 1, isManual ? 1 : 0);
 	}
 }

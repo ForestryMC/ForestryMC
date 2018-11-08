@@ -118,8 +118,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 		if (!connectedParts.add(part)) {
 			Log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. " +
-							"If you encounter odd behavior, please tear down the machine and rebuild it.",
-					world.isRemote ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord);
+					"If you encounter odd behavior, please tear down the machine and rebuild it.",
+				world.isRemote ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord);
 		}
 
 		MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
@@ -253,8 +253,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		if (!connectedParts.remove(part)) {
 			BlockPos partCoords = part.getCoordinates();
 			Log.warning("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. " +
-							"If you encounter anomalies, please tear down the reactor and rebuild it.",
-					world.isRemote ? "CLIENT" : "SERVER", part.hashCode(), partCoords.getX(), partCoords.getY(), partCoords.getZ());
+					"If you encounter anomalies, please tear down the reactor and rebuild it.",
+				world.isRemote ? "CLIENT" : "SERVER", part.hashCode(), partCoords.getX(), partCoords.getY(), partCoords.getZ());
 		}
 
 		if (connectedParts.isEmpty()) {
@@ -278,7 +278,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		}
 		return lastValidationException.getMessage();
 	}
-	
+
 	@Override
 	public BlockPos getLastValidationErrorPosition() {
 		if (lastValidationException == null) {
@@ -446,7 +446,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			// If this returns true, the server has changed its internal data. 
 			// If our chunks are loaded (they should be), we must mark our chunks as dirty.
 			if (minimumCoord != null && maximumCoord != null &&
-					world.isAreaLoaded(minimumCoord, maximumCoord)) {
+				world.isAreaLoaded(minimumCoord, maximumCoord)) {
 				int minChunkX = minimumCoord.getX() >> 4;
 				int minChunkZ = minimumCoord.getZ() >> 4;
 				int maxChunkX = maximumCoord.getX() >> 4;
@@ -455,7 +455,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 				for (int x = minChunkX; x <= maxChunkX; x++) {
 					for (int z = minChunkZ; z <= maxChunkZ; z++) {
 						// Ensure that we save our data, even if the our save delegate is in has no TEs.
-						Chunk chunkToSave = this.world.getChunkFromChunkCoords(x, z);
+						Chunk chunkToSave = this.world.getChunk(x, z);
 						chunkToSave.markDirty();
 					}
 				}
@@ -473,11 +473,11 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * @return True if the multiblock should save data, i.e. its internal game state has changed. False otherwise.
 	 */
 	protected abstract boolean updateServer(int tickCount);
-	
+
 	protected int getTickCount() {
 		return tickCount;
 	}
-	
+
 	/**
 	 * Client-side update loop. Generally, this shouldn't do anything, but if you want
 	 * to do some interpolation or something, do it here.
@@ -591,9 +591,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		BlockPos maxCoord = getMaximumCoord();
 
 		return new BlockPos(
-				(minCoord.getX() + maxCoord.getX()) / 2,
-				(minCoord.getY() + maxCoord.getY()) / 2,
-				(minCoord.getZ() + maxCoord.getZ()) / 2
+			(minCoord.getX() + maxCoord.getX()) / 2,
+			(minCoord.getY() + maxCoord.getY()) / 2,
+			(minCoord.getZ() + maxCoord.getZ()) / 2
 		);
 	}
 
@@ -602,9 +602,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		BlockPos maxCoord = getMaximumCoord();
 
 		return new BlockPos(
-				(minCoord.getX() + maxCoord.getX()) / 2,
-				maxCoord.getY(),
-				(minCoord.getZ() + maxCoord.getZ()) / 2
+			(minCoord.getX() + maxCoord.getX()) / 2,
+			maxCoord.getY(),
+			(minCoord.getZ() + maxCoord.getZ()) / 2
 		);
 	}
 
@@ -650,7 +650,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 				Log.error("My Controller (%d): size (%d), parts: %s", hashCode(), connectedParts.size(), getPartsListString());
 				Log.error("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.getComponents().size(), otherController.getPartsListString());
 				throw new IllegalArgumentException("[" + (world.isRemote ? "CLIENT" : "SERVER") + "] " +
-						"Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
+					"Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
 			}
 
 		}

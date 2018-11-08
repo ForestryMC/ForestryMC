@@ -37,10 +37,10 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 		this.model = new ModelAnalyzer(baseTexture);
 	}
 
-	private EntityItem dummyItem(World world){
-		if(dummyEntityItem == null){
+	private EntityItem dummyItem(World world) {
+		if (dummyEntityItem == null) {
 			dummyEntityItem = new EntityItem(world);
-		}else{
+		} else {
 			dummyEntityItem.world = world;
 		}
 		return dummyEntityItem;

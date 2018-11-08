@@ -61,7 +61,7 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 		boolean unicode = FONT_RENDERER.getUnicodeFlag();
 		FONT_RENDERER.setUnicodeFlag(style.isUnicode());
 		int posY = 0;
-		for(String text : lines) {
+		for (String text : lines) {
 			int posX = width - FONT_RENDERER.getStringWidth(text);
 			posX *= getAlign().getXOffset();
 			FONT_RENDERER.drawString(text, posX, posY, style.getColor());

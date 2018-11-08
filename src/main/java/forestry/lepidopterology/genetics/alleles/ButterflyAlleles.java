@@ -3,14 +3,15 @@ package forestry.lepidopterology.genetics.alleles;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.core.ModuleCore;
 import forestry.core.items.ItemRegistryCore;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 public class ButterflyAlleles {
 	public static final IAlleleButterflyCocoon cocoonDefault;
@@ -21,7 +22,7 @@ public class ButterflyAlleles {
 
 	static {
 		cocoonAlleles = Arrays.asList(cocoonDefault = new AlleleButterflyCocoon("default", false),
-				cocoonSilk = new AlleleButterflyCocoon("silk", false));
+			cocoonSilk = new AlleleButterflyCocoon("silk", false));
 	}
 
 	public static void registerCocoonAlleles() {

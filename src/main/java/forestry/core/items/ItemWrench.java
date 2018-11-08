@@ -49,5 +49,6 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 	}
 
 	@Override
-	public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {}
+	public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+	}
 }

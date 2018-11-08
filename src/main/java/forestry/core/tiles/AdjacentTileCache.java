@@ -100,7 +100,7 @@ public final class AdjacentTileCache {
 	}
 
 	private boolean areCoordinatesOnSide(EnumFacing side, TileEntity target) {
-		return source.getPos().getX() + side.getFrontOffsetX() == target.getPos().getX() && source.getPos().getY() + side.getFrontOffsetY() == target.getPos().getY() && source.getPos().getZ() + side.getFrontOffsetZ() == target.getPos().getZ();
+		return source.getPos().getX() + side.getXOffset() == target.getPos().getX() && source.getPos().getY() + side.getYOffset() == target.getPos().getY() && source.getPos().getZ() + side.getZOffset() == target.getPos().getZ();
 	}
 
 	@Nullable

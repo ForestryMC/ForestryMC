@@ -182,18 +182,21 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/* ITriggerProvider */
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+	}
 
 	@Override
-	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
+	}
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) { }
+	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
+	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
-		return world.isBlockIndirectlyGettingPowered(getPos()) > 0;
+		return world.getRedstonePowerFromNeighbors(getPos()) > 0;
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -212,7 +215,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	 */
 	@Override
 	public String getUnlocalizedTitle() {
-		String blockUnlocalizedName = getBlockType().getUnlocalizedName();
+		String blockUnlocalizedName = getBlockType().getTranslationKey();
 		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
 	}
 
@@ -365,6 +368,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-				super.hasCapability(capability, facing);
+			super.hasCapability(capability, facing);
 	}
 }

@@ -195,7 +195,7 @@ public class PluginIC2 extends BlankForestryModule {
 		FluidStack glass = Fluids.GLASS.getFluid(500);
 		if (rubber != null && glass != null) {
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, glass, coreItems.tubes.get(EnumElectronTube.RUBBER, 4),
-					new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
+				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "itemRubber"});
 		}
 
 		ItemStack plantBall = IC2Items.getItem("crafting", "plant_ball");
@@ -225,8 +225,8 @@ public class PluginIC2 extends BlankForestryModule {
 
 		if (rubberSapling != null && resin != null) {
 			FarmRegistry.getInstance().registerFarmables("farmArboreal", new FarmableSapling(
-					rubberSapling,
-					new ItemStack[0]
+				rubberSapling,
+				new ItemStack[0]
 			));
 		}
 
@@ -271,21 +271,21 @@ public class PluginIC2 extends BlankForestryModule {
 		BlockRegistryEnergy energyBlocks = ModuleEnergy.blocks;
 		if (energyBlocks != null) {
 			RecipeUtil.addRecipe("ic2_generator", getBlocks().generator,
-					"X#X",
-					"XYX",
-					"X#X",
-					'#', "blockGlass",
-					'X', "ingotGold",
-					'Y', coreItems.sturdyCasing);
+				"X#X",
+				"XYX",
+				"X#X",
+				'#', "blockGlass",
+				'X', "ingotGold",
+				'Y', coreItems.sturdyCasing);
 
 			RecipeUtil.addRecipe("ic2_electrical_engine", getBlocks().electricalEngine,
-					"###",
-					" X ",
-					"YVY",
-					'#', "ingotTin",
-					'X', "blockGlass",
-					'Y', "gearTin",
-					'V', Blocks.PISTON);
+				"###",
+				" X ",
+				"YVY",
+				'#', "ingotTin",
+				'X', "blockGlass",
+				'Y', "gearTin",
+				'V', Blocks.PISTON);
 		}
 	}
 }

@@ -23,13 +23,14 @@ import forestry.api.gui.events.GuiEventOrigin;
 /**
  * A <em>gui element</em> is an object having a graphical representation that can be displayed on the screen and that
  * can interact with the user.
- *
+ * <p>
  * The interface the most gui elements of forestry implement. You must place the element a containment hierarchy whose
  * root is a top-level {@link IWindowElement}.
  */
 @SideOnly(Side.CLIENT)
 public interface IGuiElement extends ICroppable {
 	/* Position and Size*/
+
 	/**
 	 * @return the x position of this element relative to the position of its parent.
 	 */
@@ -83,7 +84,7 @@ public interface IGuiElement extends ICroppable {
 	/**
 	 * Sets the dimensions of this element.
 	 *
-	 * @param width the size of the element on the x-axis.
+	 * @param width  the size of the element on the x-axis.
 	 * @param height the size of the element on the y-axis.
 	 */
 	IGuiElement setSize(int width, int height);
@@ -101,9 +102,9 @@ public interface IGuiElement extends ICroppable {
 	/**
 	 * Sets the dimensions and position of this element.
 	 *
-	 * @param xPos the x position of this element relative to the position of its parent.
-	 * @param yPos the y position of this element relative to the position of its parent.
-	 * @param width the size of the element on the x-axis.
+	 * @param xPos   the x position of this element relative to the position of its parent.
+	 * @param yPos   the y position of this element relative to the position of its parent.
+	 * @param width  the size of the element on the x-axis.
 	 * @param height the size of the element on the y-axis.
 	 */
 	IGuiElement setBounds(int xPos, int yPos, int width, int height);
@@ -119,6 +120,7 @@ public interface IGuiElement extends ICroppable {
 	void setYPosition(int yPos);
 
 	/* Parent */
+
 	/**
 	 * The position of this element is relative to the position of its parent.
 	 *
@@ -133,10 +135,11 @@ public interface IGuiElement extends ICroppable {
 	IGuiElement setParent(@Nullable IGuiElement parent);
 
 	/* Creation & Deletion */
+
 	/**
 	 * Called at {@link IElementGroup#add(IGuiElement)} after the element was added to the group and
 	 * {@link #setParent(IGuiElement)} was called at the element.
-	 *
+	 * <p>
 	 * Can be used to add other element to the element if the element is an {@link IElementGroup}.
 	 */
 	void onCreation();
@@ -147,6 +150,7 @@ public interface IGuiElement extends ICroppable {
 	void onDeletion();
 
 	/* Rendering */
+
 	/**
 	 * Draws the element and his children.
 	 *
@@ -164,6 +168,7 @@ public interface IGuiElement extends ICroppable {
 	void drawElement(int mouseX, int mouseY);
 
 	/* Mouse Over */
+
 	/**
 	 * @param mouseX The x position of the mouse relative to the parent of the element.
 	 * @param mouseY The y position of the mouse relative to the parent of the element.
@@ -176,11 +181,12 @@ public interface IGuiElement extends ICroppable {
 	 */
 	boolean isMouseOver();
 
-	default boolean canMouseOver(){
+	default boolean canMouseOver() {
 		return hasTooltip();
 	}
 
 	/* Updates */
+
 	/**
 	 * Updates the element. Called at {@link GuiScreen#updateScreen()}.
 	 */
@@ -188,10 +194,11 @@ public interface IGuiElement extends ICroppable {
 	void updateClient();
 
 	/* State */
+
 	/**
 	 * @return True if this element can be focused and processes keys.
 	 */
-	default boolean canFocus(){
+	default boolean canFocus() {
 		return false;
 	}
 
@@ -220,6 +227,7 @@ public interface IGuiElement extends ICroppable {
 	boolean isEnabled();
 
 	/* Tooltip */
+
 	/**
 	 * Adds an additional tooltip to the current tooltip of the element.
 	 */
@@ -258,6 +266,7 @@ public interface IGuiElement extends ICroppable {
 	List<String> getTooltip();
 
 	/* Events */
+
 	/**
 	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
 	 */
@@ -266,32 +275,32 @@ public interface IGuiElement extends ICroppable {
 	/**
 	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
 	 */
-	default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler){
+	default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
 		addEventHandler(new GuiEventHandler<>(eventClass, eventHandler));
 	}
 
 	/**
 	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
 	 */
-	default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> eventHandler){
+	default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> eventHandler) {
 		addEventHandler(new GuiEventHandler<>(eventClass, origin, relative, eventHandler));
 	}
 
 	/**
 	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
 	 */
-	default <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler){
+	default <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
 		addEventHandler(new GuiEventHandler<>(eventClass, GuiEventOrigin.SELF, this, eventHandler));
 	}
 
 	/**
 	 * Distributes the event to the elements that are defined by the {@link GuiEventDestination}.
 	 */
-	default void postEvent(GuiElementEvent event, GuiEventDestination destination){
+	default void postEvent(GuiElementEvent event, GuiEventDestination destination) {
 		destination.sendEvent(this, event);
 	}
 
-	default void postEvent(GuiElementEvent event){
+	default void postEvent(GuiElementEvent event) {
 		postEvent(event, GuiEventDestination.SINGLE);
 	}
 

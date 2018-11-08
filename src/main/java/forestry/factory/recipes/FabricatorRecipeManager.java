@@ -31,7 +31,7 @@ import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
-	
+
 	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
 
 	@Override
@@ -85,7 +85,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		return Collections.unmodifiableSet(recipes);
 	}
 
-	public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack){
+	public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
 		}

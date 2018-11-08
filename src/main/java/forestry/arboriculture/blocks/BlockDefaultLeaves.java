@@ -62,9 +62,9 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 		this.blockNumber = blockNumber;
 		PropertyTreeType variant = getVariant();
 		setDefaultState(this.blockState.getBaseState()
-				.withProperty(variant, variant.getFirstType())
-				.withProperty(CHECK_DECAY, false)
-				.withProperty(DECAYABLE, true));
+			.withProperty(variant, variant.getFirstType())
+			.withProperty(CHECK_DECAY, false)
+			.withProperty(DECAYABLE, true));
 	}
 
 	public int getBlockNumber() {
@@ -94,9 +94,9 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState()
-				.withProperty(getVariant(), getTreeType(meta))
-				.withProperty(DECAYABLE, (meta & DECAYABLE_FLAG) == 0)
-				.withProperty(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
+			.withProperty(getVariant(), getTreeType(meta))
+			.withProperty(DECAYABLE, (meta & DECAYABLE_FLAG) == 0)
+			.withProperty(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
 	}
 
 	@Override
@@ -161,7 +161,7 @@ public abstract class BlockDefaultLeaves extends BlockAbstractLeaves {
 	/* RENDERING */
 	@Override
 	public final boolean isOpaqueCube(IBlockState state) {
-		if(!Proxies.render.fancyGraphicsEnabled()){
+		if (!Proxies.render.fancyGraphicsEnabled()) {
 			TreeDefinition treeDefinition = state.getValue(getVariant());
 			return !TreeDefinition.Willow.equals(treeDefinition);
 		}

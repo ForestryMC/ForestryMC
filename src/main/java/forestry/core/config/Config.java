@@ -25,16 +25,11 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Property;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;

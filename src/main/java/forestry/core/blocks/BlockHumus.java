@@ -71,7 +71,7 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	public int tickRate(World world) {
 		return 500;
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		drops.add(new ItemStack(Blocks.DIRT));
@@ -143,7 +143,7 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		for(int i = 0;i < degradeDelimiter;i++){
+		for (int i = 0; i < degradeDelimiter; i++) {
 			manager.registerItemModel(item, i, "soil/humus");
 		}
 	}

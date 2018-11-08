@@ -17,7 +17,7 @@ public class SlotAnalyzer extends SlotFiltered {
 		super(inventory, slotIndex, xPos, yPos);
 	}
 
-	public void setPosition(int xPos, int yPos){
+	public void setPosition(int xPos, int yPos) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
