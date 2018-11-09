@@ -86,8 +86,6 @@ public class Config {
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
-	public static boolean generateTrees = true;
-	public static float generateTreesAmount = 1.0F;
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -195,7 +193,7 @@ public class Config {
 
 	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
-		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.1");
+		configCommon = new LocalizedConfiguration(configCommonFile, "1.3.0");
 		loadConfigCommon(side);
 
 		File configFluidsFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_FLUIDS + ".cfg");
@@ -269,10 +267,6 @@ public class Config {
 		}
 
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
-
-		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
-
-		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "treeFrequency", generateTreesAmount, 0.0F, 10.0F);
 
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
 		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);

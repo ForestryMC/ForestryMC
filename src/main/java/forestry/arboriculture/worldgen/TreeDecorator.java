@@ -41,7 +41,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.TreeConfig;
 import forestry.arboriculture.commands.TreeGenHelper;
-import forestry.core.config.Config;
 import forestry.core.utils.BlockUtil;
 
 public class TreeDecorator {
@@ -56,7 +55,8 @@ public class TreeDecorator {
 	}
 
 	public static void decorateTrees(World world, Random rand, int worldX, int worldZ) {
-		if (Config.generateTreesAmount == 0 || !TreeConfig.isValidDimension(null, world.provider.getDimension())) {
+		float globalRarity = TreeConfig.getSpawnRarity(null);
+		if (globalRarity <= 0.0F || !TreeConfig.isValidDimension(null, world.provider.getDimension())) {
 			return;
 		}
 		if (biomeCache.isEmpty()) {
@@ -75,7 +75,7 @@ public class TreeDecorator {
 					continue;
 				}
 				IAlleleTreeSpecies species = tree.getGenome().getPrimary();
-				if (species.getRarity() * Config.generateTreesAmount >= rand.nextFloat()) {
+				if (TreeConfig.getSpawnRarity(species.getUID()) * globalRarity >= rand.nextFloat()) {
 					pos = getValidPos(world, x, z, tree);
 
 					if (pos == null) {

@@ -22,28 +22,62 @@ import forestry.core.utils.Log;
 
 public class TreeConfig {
 	public static final String CONFIG_CATEGORY_TREE = "trees";
+	public static final String CONFIG_COMMENT =
+		"This config can be used to customise the world generation for all trees that where added by forestry or\n" +
+			"by an addon mod like extra trees.\n" +
+			"\n" +
+			"# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" +
+			"S:rarity=1.0\n" +
+			"\n" +
+			"# Dimension ids can be added to these lists to blacklist or whitelist them. \n" +
+			"dimensions {\n" +
+			"\tI:blacklist <\n" +
+			"\t\t1\n" +
+			"\t >\n" +
+			"\tI:whitelist <\n" +
+			"\t\t-1\n" +
+			"\t >\n" +
+			"}\n" +
+			"\n" +
+			"# Biome types or registry names can be added to these lists to blacklist them. \n" +
+			"biomes {\n" +
+			"\tblacklist {\n" +
+			"\t\tS:names <\n" +
+			"\t\t\tminecraft:plains\n" +
+			"\t\t >\n" +
+			"\t\tS:types <\n" +
+			"\t\t\tforest\n" +
+			"\t\t >\n" +
+			"\t}\n" +
+			"}";
 	private static final Map<String, TreeConfig> configs = new HashMap<>();
-	private static final TreeConfig GLOBAL = new TreeConfig("global");
+	private static final TreeConfig GLOBAL = new TreeConfig("global", 1.0F);
 
 	private final String treeName;
+	private final float defaultRarity;
 	private final Set<Integer> blacklistedDimensions = new HashSet<>();
 	private final Set<Integer> whitelistedDimensions = new HashSet<>();
 	private final Set<BiomeDictionary.Type> blacklistedBiomeTypes = new HashSet<>();
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
+	private float spawnRarity;
 
 	public static void parse(LocalizedConfiguration config) {
+		config.setCategoryComment(CONFIG_CATEGORY_TREE, CONFIG_COMMENT);
+		config.setCategoryComment(CONFIG_CATEGORY_TREE + ".global", "All options defined in the global category are used for all trees.");
 		GLOBAL.parseConfig(config);
 		for (IAllele treeAllele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.SPECIES)) {
 			if (!(treeAllele instanceof IAlleleTreeSpecies)) {
 				continue;
 			}
 			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) treeAllele;
-			configs.put(treeSpecies.getUID(), new TreeConfig(treeSpecies.getUID()).parseConfig(config));
+			configs.put(treeSpecies.getUID(), new TreeConfig(treeSpecies.getUID(), treeSpecies.getRarity()).parseConfig(config));
 		}
 	}
 
-	private TreeConfig(String treeName) {
+	private TreeConfig(String treeName, float defaultRarity) {
 		this.treeName = treeName;
+		this.defaultRarity = defaultRarity;
+		this.spawnRarity = defaultRarity;
 	}
 
 	private TreeConfig parseConfig(LocalizedConfiguration config) {
@@ -64,6 +98,7 @@ public class TreeConfig {
 				Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName + "'. No biome is registered under the registry name '" + biomeName + "'.");
 			}
 		}
+		spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity).setMinValue(0.0F).setMaxValue(1.0F).getDouble();
 		return this;
 	}
 
@@ -107,5 +142,12 @@ public class TreeConfig {
 		return BiomeDictionary.getTypes(biome).stream().noneMatch(blacklistedBiomeTypes::contains);
 	}
 
+	public static float getSpawnRarity(@Nullable String treeUID) {
+		TreeConfig treeConfig = configs.get(treeUID);
+		if (treeUID == null) {
+			treeConfig = GLOBAL;
+		}
+		return treeConfig.spawnRarity;
+	}
 }
 

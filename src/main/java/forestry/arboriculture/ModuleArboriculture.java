@@ -186,7 +186,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 
-		if (Config.generateTrees) {
+		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
 			MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
 		}
 
@@ -618,7 +618,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (Config.generateTrees) {
+		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
 			TreeDecorator.decorateTrees(world, rand, chunkX, chunkZ);
 		}
 	}
