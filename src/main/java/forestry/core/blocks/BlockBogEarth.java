@@ -102,7 +102,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 	public int tickRate(World world) {
 		return 500;
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Integer maturity = state.getValue(MATURITY);

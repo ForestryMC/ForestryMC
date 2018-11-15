@@ -69,11 +69,11 @@ public class FarmHelper {
 	}
 
 	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
-			Blocks.BRICK_BLOCK,
-			Blocks.STONEBRICK,
-			Blocks.SANDSTONE,
-			Blocks.NETHER_BRICK,
-			Blocks.QUARTZ_BLOCK
+		Blocks.BRICK_BLOCK,
+		Blocks.STONEBRICK,
+		Blocks.SANDSTONE,
+		Blocks.NETHER_BRICK,
+		Blocks.QUARTZ_BLOCK
 	);
 
 	private static FarmDirection getOpposite(FarmDirection farmDirection) {

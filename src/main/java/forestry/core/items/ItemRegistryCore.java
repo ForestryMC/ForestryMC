@@ -191,7 +191,7 @@ public class ItemRegistryCore extends ItemRegistry {
 
 		// / BEE RESOURCES
 		beeswax = registerItem(new ItemForestry(), "beeswax");
-		if(ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			beeswax.setCreativeTab(Tabs.tabApiculture);
 		}
 		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);

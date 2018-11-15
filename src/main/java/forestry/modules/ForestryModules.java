@@ -32,8 +32,8 @@ public class ForestryModules implements IModuleContainer {
 		return getModulesConfiguration();
 	}
 
-	public static final Configuration getModulesConfiguration(){
-		if(config == null){
+	public static final Configuration getModulesConfiguration() {
+		if (config == null) {
 			config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
 		}
 		return config;

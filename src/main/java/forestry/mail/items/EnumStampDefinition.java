@@ -14,9 +14,10 @@ import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Map;
 
+import net.minecraft.init.Items;
+
 import forestry.api.mail.EnumPostage;
 import forestry.core.items.ItemOverlay;
-import net.minecraft.init.Items;
 
 public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	P_1("1n", EnumPostage.P_1, "gemApatite", new Color(0x4a8ca7), new Color(0xffffff)),

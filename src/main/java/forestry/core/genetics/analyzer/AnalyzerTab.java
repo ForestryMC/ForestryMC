@@ -21,7 +21,7 @@ public enum AnalyzerTab implements IDatabaseTab {
 		}
 	};
 
-	public String getTooltip(IIndividual individual){
+	public String getTooltip(IIndividual individual) {
 		return I18n.translateToLocal("for.gui.database.tab." + name().toLowerCase() + ".name");
 	}
 }

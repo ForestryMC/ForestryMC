@@ -29,28 +29,28 @@ public class ModelCrateBaked extends BlankModel {
 
 	@Override
 	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-		if(contentModel.hasBakedModel()) {
+		if (contentModel.hasBakedModel()) {
 			contentModel = contentModel.bake();
 		}
 		return contentModel.getQuads();
 	}
 
-	private class ContentModel{
+	private class ContentModel {
 		final List<BakedQuad> quads;
 
 		private ContentModel(List<BakedQuad> quads) {
 			this.quads = quads;
 		}
 
-		public List<BakedQuad> getQuads(){
+		public List<BakedQuad> getQuads() {
 			return quads;
 		}
 
-		public ContentModel bake(){
+		public ContentModel bake() {
 			return this;
 		}
 
-		public boolean hasBakedModel(){
+		public boolean hasBakedModel() {
 			return false;
 		}
 	}
@@ -66,11 +66,11 @@ public class ModelCrateBaked extends BlankModel {
 		@Override
 		public ContentModel bake() {
 			IBakedModel bakedModel = ModelUtil.getModel(content);
-			if(bakedModel != null) {
-				if(bakedModel instanceof BakedItemModel) {
+			if (bakedModel != null) {
+				if (bakedModel instanceof BakedItemModel) {
 					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, 0.0625F, 0.5F).getQuads(null, null, 0L));
 					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, -0.0625F, 0.5F).getQuads(null, null, 0L));
-				}else{
+				} else {
 					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, 0, 0.5F).getQuads(null, null, 0L));
 				}
 			}

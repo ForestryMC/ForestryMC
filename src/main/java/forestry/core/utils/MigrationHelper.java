@@ -35,6 +35,7 @@ public class MigrationHelper {
 	private static Map<String, String> tileRemappings = new HashMap<>();
 
 	private static Set<String> ignoredMappings = new HashSet<>();
+
 	static {
 		//Greenhouse
 		ignoredMappings.add("greenhouse.sprinkler");
@@ -45,22 +46,23 @@ public class MigrationHelper {
 		blockRemappings.put("greenhouse.gearbox", "greenhouse");
 		itemRemappings.put("greenhouse.control", "greenhouse");
 		blockRemappings.put("greenhouse.control", "greenhouse");
-		itemRemappings.put("greenhouse.fan", "climatiser.fan");
-		blockRemappings.put("greenhouse.fan", "climatiser.fan");
-		blockRemappings.put("greenhouse.heater", "climatiser.heater");
-		itemRemappings.put("greenhouse.heater", "climatiser.heater");
-		blockRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
-		itemRemappings.put("greenhouse.dehumidifier", "climatiser.dehumidifier");
-		blockRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
-		itemRemappings.put("greenhouse.humidifier", "climatiser.humidifier");
-		itemRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
-		blockRemappings.put("greenhouse.dryer", "climatiser.dehumidifier");
+		itemRemappings.put("greenhouse.fan", "climatiser");
+		blockRemappings.put("greenhouse.fan", "climatiser");
+		blockRemappings.put("greenhouse.heater", "climatiser");
+		itemRemappings.put("greenhouse.heater", "climatiser");
+		blockRemappings.put("greenhouse.dehumidifier", "climatiser");
+		itemRemappings.put("greenhouse.dehumidifier", "climatiser");
+		blockRemappings.put("greenhouse.humidifier", "climatiser");
+		itemRemappings.put("greenhouse.humidifier", "climatiser");
+		itemRemappings.put("greenhouse.dryer", "climatiser");
+		blockRemappings.put("greenhouse.dryer", "climatiser");
 		//Arboriculture
 		itemRemappings.put("pile_dirt", "loam");
 		blockRemappings.put("pile_dirt", "loam");
 		itemRemappings.put("pile_wood", "wood_pile");
 		blockRemappings.put("pile_wood", "wood_pile");
-		blockRemappings.put("pile_ash", "ash_block");
+		blockRemappings.put("pile_ash", "ash_block_0");
+		blockRemappings.put("ash_block", "ash_block_0");
 
 		//Apiculture
 		addTileRemappingName("Alveary", "alveary_plain");
@@ -82,16 +84,6 @@ public class MigrationHelper {
 		addTileRemappingName("FarmHatch", "farm_hatch");
 		addTileRemappingName("FarmValve", "farm_valve");
 		addTileRemappingName("FarmControl", "farm_control");
-		//Greenhouse
-		addTileRemappingName("GreenhousePlain", "greenhouse");
-		addTileRemappingName("ClimateSourceHygroregulator", "greenhouse_hygro");
-		addTileRemappingName("GreenhouseGearbox", "greenhouse_gearbox");
-		addTileRemappingName("GreenhouseController", "greenhouse_controller");
-		addTileRemappingName("ClimateSourceWindow", "greenhouse_window");
-		addTileRemappingName("GreenhouseFan", "greenhouse_fan");
-		addTileRemappingName("GreenhouseHeater", "greenhouse_heater");
-		addTileRemappingName("GreenhouseDryer", "greenhouse_dehumidifier");
-		addTileRemappingName("GreenhouseSprinkler", "greenhouse_humidifier");
 		//Lepidopterology
 		addTileRemappingName("Cocoon", "cocoon");
 		//Sorting
@@ -116,7 +108,7 @@ public class MigrationHelper {
 		add(itemName, itemRemappings);
 	}
 
-	public static void addTileName(String tileName){
+	public static void addTileName(String tileName) {
 		add(tileName, tileRemappings);
 	}
 
@@ -132,11 +124,11 @@ public class MigrationHelper {
 		for (RegistryEvent.MissingMappings.Mapping<Block> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
 
-			String resourcePath = resourceLocation.getResourcePath();
+			String resourcePath = resourceLocation.getPath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
 			} else if (blockRemappings.containsKey(resourcePath)) {
-				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), blockRemappings.get(resourcePath));
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getNamespace(), blockRemappings.get(resourcePath));
 				if (ForgeRegistries.BLOCKS.containsKey(remappedResourceLocation)) {
 					Block remappedBlock = ForgeRegistries.BLOCKS.getValue(remappedResourceLocation);
 					if (remappedBlock != null && remappedBlock != Blocks.AIR) {
@@ -152,11 +144,11 @@ public class MigrationHelper {
 		for (RegistryEvent.MissingMappings.Mapping<Item> missingMapping : event.getMappings()) {
 			ResourceLocation resourceLocation = missingMapping.key;
 
-			String resourcePath = resourceLocation.getResourcePath();
+			String resourcePath = resourceLocation.getPath();
 			if (ignoredMappings.contains(resourcePath)) {
 				missingMapping.ignore();
 			} else if (itemRemappings.containsKey(resourcePath)) {
-				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getResourceDomain(), itemRemappings.get(resourcePath));
+				ResourceLocation remappedResourceLocation = new ResourceLocation(resourceLocation.getNamespace(), itemRemappings.get(resourcePath));
 				if (ForgeRegistries.ITEMS.containsKey(remappedResourceLocation)) {
 					Item remappedItem = ForgeRegistries.ITEMS.getValue(remappedResourceLocation);
 					if (remappedItem != null && remappedItem != Items.AIR) {
@@ -168,8 +160,8 @@ public class MigrationHelper {
 	}
 
 	@Nullable
-	public static String getRemappedTileName(String resourcePath){
-		if(tileRemappings.containsKey(resourcePath)){
+	public static String getRemappedTileName(String resourcePath) {
+		if (tileRemappings.containsKey(resourcePath)) {
 			return Constants.MOD_ID + ":" + tileRemappings.get(resourcePath);
 		}
 		return null;

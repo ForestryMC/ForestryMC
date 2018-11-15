@@ -57,7 +57,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		
+
 		int offset = (138 - fontRenderer.getStringWidth(Translator.translateToLocal("for.gui.imprinter.name"))) / 2;
 		fontRenderer.drawString(Translator.translateToLocal("for.gui.imprinter.name"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 

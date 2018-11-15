@@ -31,22 +31,22 @@ public class ForestryJeiPlugin implements IModPlugin {
 		ItemRegistryCore items = ModuleCore.getItems();
 
 		JeiUtil.addDescription(registry,
-				items.solderingIron,
-				items.circuitboards,
-				items.tubes,
-				items.pipette,
-				items.kitPickaxe,
-				items.kitShovel,
-				items.fertilizerCompound
+			items.solderingIron,
+			items.circuitboards,
+			items.tubes,
+			items.pipette,
+			items.kitPickaxe,
+			items.kitShovel,
+			items.fertilizerCompound
 		);
 
 		BlockRegistryCore blocks = ModuleCore.getBlocks();
 
 		JeiUtil.addDescription(registry,
-				blocks.analyzer,
-				blocks.bogEarth,
-				blocks.escritoire,
-				blocks.humus
+			blocks.analyzer,
+			blocks.bogEarth,
+			blocks.escritoire,
+			blocks.humus
 		);
 	}
 }

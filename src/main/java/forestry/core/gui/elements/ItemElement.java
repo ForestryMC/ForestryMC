@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.gui.IItemElement;
 
-public class ItemElement extends AbstractItemElement implements IItemElement{
+public class ItemElement extends AbstractItemElement implements IItemElement {
 	/* Attributes */
 	private ItemStack stack;
 

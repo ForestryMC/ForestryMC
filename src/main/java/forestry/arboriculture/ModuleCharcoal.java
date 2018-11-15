@@ -45,7 +45,7 @@ public class ModuleCharcoal extends BlankForestryModule {
 	@Override
 	public void postInit() {
 		ICharcoalManager manager = TreeManager.charcoalManager;
-		if(manager != null) {
+		if (manager != null) {
 			manager.registerWall(Blocks.CLAY, 3);
 			manager.registerWall(getBlocks().loam, 4);
 			manager.registerWall(Blocks.END_STONE, 6);

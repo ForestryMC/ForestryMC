@@ -40,11 +40,11 @@ public class ItemCraftingMaterial extends ItemForestry {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
 			return "item.forestry.unknown";
 		} else {
-			return super.getUnlocalizedName(stack) + "." + definition[stack.getItemDamage()];
+			return super.getTranslationKey(stack) + "." + definition[stack.getItemDamage()];
 		}
 	}
 

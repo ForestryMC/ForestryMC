@@ -37,7 +37,7 @@ public abstract class BlockRegistry {
 			Log.error("Name must be lowercase");
 		}
 
-		block.setUnlocalizedName("for." + name);
+		block.setTranslationKey("for." + name);
 		block.setRegistryName(name);
 		ForgeRegistries.BLOCKS.register(block);
 		Proxies.common.registerBlock(block);

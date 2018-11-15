@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 
+import forestry.api.climate.IClimateListener;
 import forestry.apiculture.tiles.TileBeeHousingBase;
+import forestry.core.climate.ClimateRoot;
 import forestry.core.gui.ContainerAnalyzerProvider;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketGuiUpdate;
@@ -24,6 +27,10 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();
+		IClimateListener listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+		if (listener != null && player.player instanceof EntityPlayerMP) {
+			listener.syncToClient((EntityPlayerMP) player.player);
+		}
 	}
 
 	private int beeProgress = -1;

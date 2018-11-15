@@ -39,7 +39,6 @@ import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.Translator;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
@@ -76,16 +75,15 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
-		
+
 		Minecraft minecraft = Minecraft.getMinecraft();
 		if (world != null && minecraft.player != null) {
 			EntityPlayerSP player = minecraft.player;
 			Biome currentBiome = player.world.getBiome(player.getPosition());
-			
-			float temperatureValue = ClimateUtil.getTemperature(world, player.getPosition());
-			EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
-			EnumHumidity humidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, player.getPosition()));
-			
+
+			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
+			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getRainfall());
+
 			list.add(Translator.translateToLocal("for.gui.currentBiome") + ": " + currentBiome.getBiomeName());
 			list.add(Translator.translateToLocal("for.gui.temperature") + ": " + AlleleManager.climateHelper.toDisplay(temperature));
 			list.add(Translator.translateToLocal("for.gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));

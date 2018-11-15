@@ -18,7 +18,7 @@ public class CharcoalPileWallWrapper implements IRecipeWrapper {
 	public CharcoalPileWallWrapper(ICharcoalPileWall pileWall) {
 		this.pileWall = pileWall;
 	}
-	
+
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputs(ItemStack.class, pileWall.getDisplayItems());

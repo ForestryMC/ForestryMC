@@ -90,47 +90,47 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
 
 		alleleRegistry.getClassification("class.insecta").addMemberGroup(
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera",
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "geometridae", "Geometridae",
-								Opisthograptis.getBranch(),
-								Chiasmia.getBranch()
-						),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "saturniidae", "Saturniidae",
-								Attacus.getBranch()
-						),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "pieridae", "Pieridae",
-								Pieris.getBranch(),
-								Gonepteryx.getBranch(),
-								Anthocharis.getBranch(),
-								Colias.getBranch(),
-								Pontia.getBranch(),
-								Celastrina.getBranch()
-						),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae",
-								Pararge.getBranch(),
-								Polygonia.getBranch(),
-								Morpho.getBranch(),
-								Greta.getBranch(),
-								Batesia.getBranch(),
-								Myscelia.getBranch(),
-								Danaus.getBranch(),
-								Bassarona.getBranch(),
-								Parantica.getBranch(),
-								Heliconius.getBranch(),
-								Siproeta.getBranch(),
-								Cethosia.getBranch(),
-								Speyeria.getBranch()
-						),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae"),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "papilionidae", "Papilionidae",
-								Papilio.getBranch(),
-								Protographium.getBranch()
-						),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae"),
-						alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "bombycidae", "Bombycidae",
-								Bombyx.getBranch()
-						)
+			alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera",
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "geometridae", "Geometridae",
+					Opisthograptis.getBranch(),
+					Chiasmia.getBranch()
+				),
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "saturniidae", "Saturniidae",
+					Attacus.getBranch()
+				),
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "pieridae", "Pieridae",
+					Pieris.getBranch(),
+					Gonepteryx.getBranch(),
+					Anthocharis.getBranch(),
+					Colias.getBranch(),
+					Pontia.getBranch(),
+					Celastrina.getBranch()
+				),
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae",
+					Pararge.getBranch(),
+					Polygonia.getBranch(),
+					Morpho.getBranch(),
+					Greta.getBranch(),
+					Batesia.getBranch(),
+					Myscelia.getBranch(),
+					Danaus.getBranch(),
+					Bassarona.getBranch(),
+					Parantica.getBranch(),
+					Heliconius.getBranch(),
+					Siproeta.getBranch(),
+					Cethosia.getBranch(),
+					Speyeria.getBranch()
+				),
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae"),
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "papilionidae", "Papilionidae",
+					Papilio.getBranch(),
+					Protographium.getBranch()
+				),
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae"),
+				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "bombycidae", "Bombycidae",
+					Bombyx.getBranch()
 				)
+			)
 		);
 	}
 }

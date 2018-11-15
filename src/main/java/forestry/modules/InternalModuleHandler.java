@@ -40,7 +40,7 @@ public class InternalModuleHandler {
 	}
 
 	protected final Set<BlankForestryModule> modules = new LinkedHashSet();
-	protected final Set<IForestryModule> disabledModules  = new LinkedHashSet();
+	protected final Set<IForestryModule> disabledModules = new LinkedHashSet();
 	protected final ModuleManager moduleManager;
 	private Stage stage = Stage.SETUP;
 
@@ -52,8 +52,8 @@ public class InternalModuleHandler {
 		if (stage != Stage.SETUP) {
 			throw new RuntimeException("Tried to register Modules outside of SETUP");
 		}
-		for(IForestryModule module : modules) {
-			if(!(module instanceof BlankForestryModule)){
+		for (IForestryModule module : modules) {
+			if (!(module instanceof BlankForestryModule)) {
 				continue;
 			}
 			this.modules.add((BlankForestryModule) module);

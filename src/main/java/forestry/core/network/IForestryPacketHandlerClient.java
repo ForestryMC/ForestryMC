@@ -3,6 +3,7 @@ package forestry.core.network;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

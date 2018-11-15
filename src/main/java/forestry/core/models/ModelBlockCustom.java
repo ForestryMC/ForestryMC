@@ -1,14 +1,11 @@
 package forestry.core.models;
 
+import com.google.common.base.Preconditions;
+
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Preconditions;
-
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -23,9 +20,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.property.IExtendedBlockState;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.blocks.properties.UnlistedBlockAccess;
+import forestry.core.blocks.properties.UnlistedBlockPos;
 
 @SideOnly(Side.CLIENT)
 public abstract class ModelBlockCustom<B extends Block, K> implements IBakedModel {
@@ -82,7 +84,7 @@ public abstract class ModelBlockCustom<B extends Block, K> implements IBakedMode
 	@Override
 	public boolean isAmbientOcclusion() {
 		return (itemModel != null || blockModel != null) &&
-				(blockModel != null ? blockModel.isAmbientOcclusion() : itemModel.isAmbientOcclusion());
+			(blockModel != null ? blockModel.isAmbientOcclusion() : itemModel.isAmbientOcclusion());
 	}
 
 	@Override
@@ -93,9 +95,9 @@ public abstract class ModelBlockCustom<B extends Block, K> implements IBakedMode
 	@Override
 	public boolean isBuiltInRenderer() {
 		return (itemModel != null || blockModel != null) &&
-				(blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
+			(blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
 	}
-	
+
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		if (blockModel != null) {

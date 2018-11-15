@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Map for fluids and items. Can add things like ore dictionary strings etc.

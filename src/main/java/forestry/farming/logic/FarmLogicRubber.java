@@ -40,7 +40,7 @@ public class FarmLogicRubber extends FarmLogic {
 	public FarmLogicRubber(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
 		if ((PluginIC2.rubberWood == null || PluginIC2.resin == null) &&
-				PluginTechReborn.rubberItemsSuccess()) {
+			PluginTechReborn.rubberItemsSuccess()) {
 			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
 			active = false;
 		}
@@ -134,7 +134,7 @@ public class FarmLogicRubber extends FarmLogic {
 			IBlockState blockState = world.getBlockState(candidate);
 			Block block = blockState.getBlock();
 			if ((PluginIC2.rubberWood != null && !ItemStackUtil.equals(block, PluginIC2.rubberWood)) &&
-					(PluginTechReborn.RUBBER_WOOD != null && !ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD))) {
+				(PluginTechReborn.RUBBER_WOOD != null && !ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD))) {
 				break;
 			}
 

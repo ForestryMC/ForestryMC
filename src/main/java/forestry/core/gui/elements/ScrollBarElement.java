@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 
+import forestry.api.gui.IWindowElement;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.widgets.IScrollable;
@@ -16,11 +17,12 @@ public class ScrollBarElement extends ElementGroup {
 	private final GuiElement slider;
 
 	/* Attributes - State */
-	private boolean visible;
 	private boolean isScrolling;
 	private boolean wasClicked;
+	private boolean vertical = false;
 	private int currentValue;
-	private int initialMouseClickY;
+	private final ElementGroup interactionField;
+	private int initialMouseClick;
 
 	/* Attributes - Parameters */
 	@Nullable
@@ -28,14 +30,16 @@ public class ScrollBarElement extends ElementGroup {
 	private int minValue;
 	private int maxValue;
 	private int step;
+	private boolean initialised = false;
 
 	public ScrollBarElement(int xPos, int yPos, int width, int height, Drawable sliderTexture) {
 		super(xPos, yPos, width, height);
 
+		interactionField = add(new ElementGroup(0, 0, width, height));
 		isScrolling = false;
 		wasClicked = false;
 		visible = true;
-		slider = drawable(sliderTexture);
+		slider = interactionField.drawable(sliderTexture);
 	}
 
 	public ScrollBarElement(int xPos, int yPos, Drawable backgroundTexture, boolean hasBorder, Drawable sliderTexture) {
@@ -43,21 +47,31 @@ public class ScrollBarElement extends ElementGroup {
 
 		int offset = hasBorder ? 1 : 0;
 
+		interactionField = new ElementGroup(offset, offset, hasBorder ? width - 2 : width, hasBorder ? height - 2 : height);
 		isScrolling = false;
 		wasClicked = false;
 		visible = true;
 
 		drawable(backgroundTexture);
-		slider = drawable(offset, offset, sliderTexture);
+		slider = interactionField.drawable(sliderTexture);
+		add(interactionField);
 	}
 
-	public void setParameters(IScrollable listener, int minValue, int maxValue, int step) {
+	public ScrollBarElement setVertical() {
+		this.vertical = true;
+		return this;
+	}
+
+	public ScrollBarElement setParameters(IScrollable listener, int minValue, int maxValue, int step) {
 		this.listener = listener;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.step = step;
 
-		setValue(currentValue);
+		if (initialised) {
+			setValue(currentValue);
+		}
+		return this;
 	}
 
 	@Override
@@ -65,33 +79,38 @@ public class ScrollBarElement extends ElementGroup {
 		return true;
 	}
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
 	public int getValue() {
 		return MathHelper.clamp(currentValue, minValue, maxValue);
 	}
 
-	public int setValue(int value) {
+	public ScrollBarElement setValue(int value) {
+		initialised = true;
 		currentValue = MathHelper.clamp(value, minValue, maxValue);
 		if (listener != null) {
 			listener.onScroll(currentValue);
 		}
-		int offset;
-		if (value >= maxValue) {
-			offset = height - slider.height;
-		} else if (value <= minValue) {
-			offset = 0;
+		if (vertical) {
+			int offset;
+			if (value >= maxValue) {
+				offset = interactionField.getWidth() - slider.width;
+			} else if (value <= minValue) {
+				offset = 0;
+			} else {
+				offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getWidth() - slider.width));
+			}
+			slider.setXPosition(offset);
 		} else {
-			offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (height - slider.height));
+			int offset;
+			if (value >= maxValue) {
+				offset = interactionField.getHeight() - slider.height;
+			} else if (value <= minValue) {
+				offset = 0;
+			} else {
+				offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getHeight() - slider.height));
+			}
+			slider.setYPosition(offset);
 		}
-		slider.setYPosition(offset);
-		return currentValue;
+		return this;
 	}
 
 	@Override
@@ -99,7 +118,8 @@ public class ScrollBarElement extends ElementGroup {
 		if (!isVisible()) {
 			return;
 		}
-		updateSlider(mouseX, mouseY);
+		IWindowElement window = getWindow();
+		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		super.drawElement(mouseX, mouseY);
@@ -119,8 +139,8 @@ public class ScrollBarElement extends ElementGroup {
 			}
 		}
 
-		//Zhe position of the mouse relative to the position of the widget
-		int y = mouseY - yPos;
+		//The position of the mouse relative to the position of the widget
+		int pos = vertical ? mouseX - interactionField.getX() : mouseY - interactionField.getY();
 
 		if (!mouseDown && wasClicked) {
 			wasClicked = false;
@@ -134,7 +154,7 @@ public class ScrollBarElement extends ElementGroup {
 		//Clicked on the slider and scrolling
 		if (this.isScrolling) {
 			int range = maxValue - minValue;
-			float value = (float) (y - initialMouseClickY) / (float) (height - slider.height);
+			float value = (float) (pos - initialMouseClick) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
 			value *= (float) range;
 			if (value < (float) step / 2f) {
 				setValue(minValue);
@@ -146,11 +166,11 @@ public class ScrollBarElement extends ElementGroup {
 		} else if (slider.isMouseOver()) { //clicked on the slider
 			if (mouseDown) {
 				isScrolling = true;
-				initialMouseClickY = y - slider.getY();
+				initialMouseClick = vertical ? pos - slider.getX() : pos - slider.getY();
 			}
 		} else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
 			int range = maxValue - minValue;
-			float value = ((float) y - (float) slider.height / 2.0F) / (float) (height - slider.height);
+			float value = ((float) pos - (vertical ? slider.width : slider.height) / 2.0F) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
 			value *= (float) range;
 			if (value < (float) step / 2f) {
 				setValue(minValue);

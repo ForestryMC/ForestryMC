@@ -31,7 +31,7 @@ public class SlotLockable extends SlotForestry {
 
 	@Override
 	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
-		if(!locked){
+		if (!locked) {
 			return super.onTake(player, itemStack);
 		}
 		return ItemStack.EMPTY;
@@ -44,7 +44,7 @@ public class SlotLockable extends SlotForestry {
 
 	@Override
 	public ItemStack decrStackSize(int i) {
-		if(!locked){
+		if (!locked) {
 			return super.decrStackSize(i);
 		}
 		return ItemStack.EMPTY;

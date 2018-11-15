@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileStill;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 public class InventoryStill extends InventoryAdapterTile<TileStill> {
 	public static final short SLOT_PRODUCT = 0;

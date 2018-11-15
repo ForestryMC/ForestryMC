@@ -12,9 +12,10 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import forestry.core.network.PacketBufferForestry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.network.PacketBufferForestry;
 
 public abstract class TileMill extends TileBase {
 

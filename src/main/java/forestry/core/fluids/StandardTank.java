@@ -11,18 +11,20 @@
 package forestry.core.fluids;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
+
+import net.minecraft.item.EnumRarity;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.Translator;
-import net.minecraft.item.EnumRarity;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -143,7 +145,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 			if (rarity == null) {
 				rarity = EnumRarity.COMMON;
 			}
-			toolTip.add(fluidType.getLocalizedName(getFluid()), rarity.rarityColor);
+			toolTip.add(fluidType.getLocalizedName(getFluid()), rarity.color);
 			amount = getFluid().amount;
 		}
 		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", amount, getCapacity());

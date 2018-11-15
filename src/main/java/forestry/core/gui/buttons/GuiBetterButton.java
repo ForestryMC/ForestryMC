@@ -85,7 +85,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 	public boolean isMouseOverButton(int mouseX, int mouseY) {
 		return mouseX >= x && mouseY >= y && mouseX < x + getWidth() && mouseY < y + getHeight();
 	}
-	
+
 	@Override
 	public void drawButton(Minecraft minecraft, int mouseX, int mouseY, float partialTicks) {
 		if (!visible) {

@@ -1,0 +1,9 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "forestry:items/habitat_screen_0",
+		"layer1": "forestry:items/habitat_screen_1",
+		"layer2": "forestry:items/habitat_screen_2",
+		"layer3": "forestry:items/habitat_screen_3"
+    }
+}

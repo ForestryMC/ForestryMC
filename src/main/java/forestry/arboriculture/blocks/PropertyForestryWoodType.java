@@ -1,9 +1,10 @@
 package forestry.arboriculture.blocks;
 
-import java.util.Collection;
-
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
+import java.util.Collection;
+
 import forestry.api.arboriculture.EnumForestryWoodType;
 
 public class PropertyForestryWoodType extends PropertyWoodType<EnumForestryWoodType> {

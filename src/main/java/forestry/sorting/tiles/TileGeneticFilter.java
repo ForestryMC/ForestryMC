@@ -1,7 +1,6 @@
 package forestry.sorting.tiles;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -79,7 +78,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void readGuiData(PacketBufferForestry data) throws IOException {
+	public void readGuiData(PacketBufferForestry data) {
 		logic.readGuiData(data);
 	}
 
@@ -197,7 +196,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing != null) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemHandlerFilter(this, facing));
 		}
-		if(capability == GeneticCapabilities.FILTER_LOGIC){
+		if (capability == GeneticCapabilities.FILTER_LOGIC) {
 			return GeneticCapabilities.FILTER_LOGIC.cast(logic);
 		}
 		return super.getCapability(capability, facing);

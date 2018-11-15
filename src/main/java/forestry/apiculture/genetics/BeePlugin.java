@@ -29,8 +29,8 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 	private BeePlugin() {
 		super(new BeeDatabaseTab(DatabaseMode.ACTIVE),
 			new BeeDatabaseTab(DatabaseMode.INACTIVE),
-			new ProductsTab(()->ModuleApiculture.getItems().beeComb.get(EnumHoneyComb.HONEY, 1)),
-			new MutationsTab(()-> ModuleApiculture.getItems().frameImpregnated.getItemStack()));
+			new ProductsTab(() -> ModuleApiculture.getItems().beeComb.get(EnumHoneyComb.HONEY, 1)),
+			new MutationsTab(() -> ModuleApiculture.getItems().frameImpregnated.getItemStack()));
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {

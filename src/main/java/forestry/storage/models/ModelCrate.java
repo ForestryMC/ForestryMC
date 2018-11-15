@@ -43,20 +43,20 @@ public class ModelCrate implements IModel {
 	}
 
 	@Nullable
-	private IBakedModel getCustomContentModel(){
+	private IBakedModel getCustomContentModel() {
 		ResourceLocation registryName = crated.getRegistryName();
-		if(registryName == null){
+		if (registryName == null) {
 			return null;
 		}
-		String containedName = registryName.getResourcePath().replace("crated.", "");
+		String containedName = registryName.getPath().replace("crated.", "");
 		ResourceLocation location = new ResourceLocation(CUSTOM_CRATES + containedName);
 		IModel model;
-		if(!ModelUtil.resourceExists(new ResourceLocation(location.getResourceDomain(), "models/" + location.getResourcePath() + ".json"))){
+		if (!ModelUtil.resourceExists(new ResourceLocation(location.getNamespace(), "models/" + location.getPath() + ".json"))) {
 			return null;
 		}
-		try{
+		try {
 			model = ModelLoaderRegistry.getModel(location);
-		}catch(Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 		return model.bake(ModelManager.getInstance().getDefaultItemState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
@@ -64,7 +64,7 @@ public class ModelCrate implements IModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		if(bakedQuads.isEmpty()) {
+		if (bakedQuads.isEmpty()) {
 			IModel crateModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation(Constants.MOD_ID + ":item/crate-filled"));
 			IBakedModel bakedModel = crateModel.bake(ModelManager.getInstance().getDefaultItemState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
 			//Set the crate color index to 100
@@ -75,10 +75,10 @@ public class ModelCrate implements IModel {
 		IBakedModel model;
 		List<BakedQuad> quads = new LinkedList<>(bakedQuads);
 		IBakedModel contentModel = getCustomContentModel();
-		if(contentModel == null){
+		if (contentModel == null) {
 			model = new ModelCrateBaked(quads, contained);
 
-		}else {
+		} else {
 			quads.addAll(contentModel.getQuads(null, null, 0));
 			model = new ModelCrateBaked(quads);
 		}

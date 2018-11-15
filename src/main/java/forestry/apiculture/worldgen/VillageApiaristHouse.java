@@ -348,7 +348,7 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 			candidates = BeeManager.commonVillageBees;
 		}
 
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, pos);
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, pos);
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 		// Add bees that can live in this environment
@@ -372,8 +372,8 @@ public class VillageApiaristHouse extends StructureVillagePieces.House1 {
 	private static boolean checkBiomeHazard(IBeeGenome genome, EnumTemperature biomeTemperature, EnumHumidity biomeHumidity) {
 		IAlleleBeeSpecies species = genome.getPrimary();
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
-				species.getTemperature(), genome.getToleranceTemp(),
-				species.getHumidity(), genome.getToleranceHumid());
+			species.getTemperature(), genome.getToleranceTemp(),
+			species.getHumidity(), genome.getToleranceHumid());
 	}
 
 	@Override

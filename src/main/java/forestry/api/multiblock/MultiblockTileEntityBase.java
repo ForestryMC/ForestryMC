@@ -10,6 +10,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -55,13 +56,13 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	}
 
 	@Override
-	public final void invalidate() {
+	public void invalidate() {
 		super.invalidate();
 		multiblockLogic.invalidate(world, this);
 	}
 
 	@Override
-	public final void onChunkUnload() {
+	public void onChunkUnload() {
 		super.onChunkUnload();
 		multiblockLogic.onChunkUnload(world, this);
 	}

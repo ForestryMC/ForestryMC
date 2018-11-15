@@ -32,7 +32,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
-				if(resourceStacks.size() == 4) {
+				if (resourceStacks.size() == 4) {
 					widgetManager.add(new GhostItemStackWidget(widgetManager, 11 + j * 18, 65 + i * 18, resourceStacks.get(index), inventorySlots.getSlot(36 + InventoryPlanter.SLOT_RESOURCES_1 + index)));
 				}
 			}
@@ -42,7 +42,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
-				if(germlingStacks.size() == 4){
+				if (germlingStacks.size() == 4) {
 					widgetManager.add(new GhostItemStackWidget(widgetManager, 71 + j * 18, 65 + i * 18, germlingStacks.get(index), inventorySlots.getSlot(36 + InventoryPlanter.SLOT_GERMLINGS_1 + index)));
 				}
 			}
@@ -52,7 +52,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
-				if(productionStacks.size() == 4) {
+				if (productionStacks.size() == 4) {
 					widgetManager.add(new GhostItemStackWidget(widgetManager, 131 + j * 18, 65 + i * 18, productionStacks.get(index), inventorySlots.getSlot(36 + InventoryPlanter.SLOT_PRODUCTION_1 + j + i * 2)));
 				}
 			}

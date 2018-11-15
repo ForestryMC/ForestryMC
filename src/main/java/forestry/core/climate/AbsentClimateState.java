@@ -13,10 +13,8 @@ package forestry.core.climate;
 import com.google.common.base.MoreObjects;
 
 import javax.annotation.concurrent.Immutable;
+import java.util.function.Function;
 
-import net.minecraft.nbt.NBTTagCompound;
-
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 
 @Immutable
@@ -25,43 +23,52 @@ public final class AbsentClimateState implements IClimateState {
 	public static final AbsentClimateState INSTANCE = new AbsentClimateState();
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setBoolean(ClimateState.ABSENT_NBT_KEY, true);
-		return compound;
-	}
-
-	@Override
-	public IClimateState copy(ClimateStateType type) {
-		return this;
-	}
-
-	@Override
 	public IClimateState copy() {
 		return this;
 	}
 
 	@Override
-	public IClimateState addTemperature(float temperature){
+	public IClimateState setTemperature(float temperature) {
 		return this;
 	}
 
 	@Override
-	public IClimateState addHumidity(float humidity){
+	public IClimateState setHumidity(float humidity) {
 		return this;
 	}
 
 	@Override
-	public IClimateState add(IClimateState state){
+	public IClimateState setClimate(float temperature, float humidity) {
 		return this;
 	}
 
 	@Override
-	public IClimateState scale(double factor) {
+	public IClimateState addTemperature(float temperature) {
 		return this;
 	}
 
 	@Override
-	public IClimateState remove(IClimateState state){
+	public IClimateState addHumidity(float humidity) {
+		return this;
+	}
+
+	@Override
+	public IClimateState add(IClimateState state) {
+		return this;
+	}
+
+	@Override
+	public IClimateState multiply(double factor) {
+		return this;
+	}
+
+	@Override
+	public IClimateState subtract(IClimateState state) {
+		return this;
+	}
+
+	@Override
+	public IClimateState map(Function<Float, Float> mapper) {
 		return this;
 	}
 
@@ -71,8 +78,28 @@ public final class AbsentClimateState implements IClimateState {
 	}
 
 	@Override
-	public ClimateStateType getType() {
-		return ClimateStateType.DEFAULT;
+	public boolean isClamped() {
+		return false;
+	}
+
+	@Override
+	public boolean isMutable() {
+		return false;
+	}
+
+	@Override
+	public IClimateState toImmutable() {
+		return this;
+	}
+
+	@Override
+	public IClimateState copy(boolean mutable) {
+		return this;
+	}
+
+	@Override
+	public IClimateState toMutable() {
+		return this;
 	}
 
 	@Override
@@ -87,7 +114,7 @@ public final class AbsentClimateState implements IClimateState {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof IClimateState)){
+		if (!(obj instanceof IClimateState)) {
 			return false;
 		}
 		IClimateState otherState = (IClimateState) obj;

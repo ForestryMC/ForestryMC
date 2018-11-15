@@ -13,6 +13,10 @@ package forestry.core.multiblock;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -21,9 +25,6 @@ import forestry.api.multiblock.IMultiblockController;
 import forestry.core.network.IStreamableGui;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.tiles.IClimatised;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 // internal implementation of IMultiblockController
 public interface IMultiblockControllerInternal extends IMultiblockController, INbtWritable, INbtReadable, IOwnedTile, IErrorLogicSource, IClimatised, IStreamableGui {

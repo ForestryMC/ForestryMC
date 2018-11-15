@@ -18,25 +18,25 @@ import forestry.api.genetics.IFilterRuleType;
 import forestry.core.render.TextureManagerForestry;
 
 public enum ApicultureFilterRuleType implements IFilterRuleType {
-	BEE{
+	BEE {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent();
 		}
 	},
-	DRONE{
+	DRONE {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumBeeType.DRONE;
 		}
 	},
-	PRINCESS{
+	PRINCESS {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumBeeType.PRINCESS;
 		}
 	},
-	QUEEN{
+	QUEEN {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumBeeType.QUEEN;

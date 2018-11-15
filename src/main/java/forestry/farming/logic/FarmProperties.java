@@ -54,7 +54,7 @@ public final class FarmProperties implements IFarmProperties {
 
 	@Override
 	public Collection<IFarmableInfo> getFarmableInfo() {
-		if(farmableInfo == null){
+		if (farmableInfo == null) {
 			farmableInfo = farmablesIdentifiers.stream()
 				.map(FarmRegistry.getInstance()::getFarmableInfo)
 				.collect(Collectors.toSet());

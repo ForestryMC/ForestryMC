@@ -11,7 +11,6 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
@@ -25,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.util.Constants;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,12 +56,10 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.apiculture.ModuleApiculture;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketTileStream;
-import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
@@ -78,6 +76,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private IButterfly caterpillar;
 
 	private boolean isFruitLeaf;
+	private boolean checkFruit = true;
 	private boolean isPollinatedState;
 	private int ripeningTime;
 	private short ripeningPeriod = Short.MAX_VALUE - 1;
@@ -101,6 +100,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		ripeningTime = nbttagcompound.getShort("RT");
 		damage = nbttagcompound.getInteger("ENC");
+		isFruitLeaf = nbttagcompound.getBoolean("FL");
+		checkFruit = !nbttagcompound.hasKey("FL", Constants.NBT.TAG_ANY_NUMERIC);
 
 		if (nbttagcompound.hasKey("CATER")) {
 			maturationTime = nbttagcompound.getInteger("CATMAT");
@@ -120,6 +121,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		nbtTagCompound.setInteger("RT", getRipeningTime());
 		nbtTagCompound.setInteger("ENC", damage);
+		nbtTagCompound.setBoolean("FL", isFruitLeaf);
 
 		if (caterpillar != null) {
 			nbtTagCompound.setInteger("CATMAT", maturationTime);
@@ -143,7 +145,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		if (!checkedForConversionToDefaultLeaves) {
 			if (shouldConvertToDefaultLeaves()) {
-				IBlockState defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
+				IBlockState defaultLeaves;
+				if (isFruitLeaf) {
+					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(primary.getUID());
+				} else {
+					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
+				}
 				worldIn.setBlockState(getPos(), defaultLeaves);
 				return;
 			}
@@ -196,27 +203,31 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void setTree(ITree tree) {
+		ITree oldTree = getTree();
 		super.setTree(tree);
 
 		ITreeGenome genome = tree.getGenome();
 		species = genome.getPrimary();
 
-		if (tree.canBearFruit()) {
+		if (oldTree != null && !tree.equals(oldTree)) {
+			checkFruit = true;
+		}
+
+		if (tree.canBearFruit() && checkFruit && world != null && !world.isRemote) {
 			IFruitProvider fruitProvider = genome.getFruitProvider();
-
-			isFruitLeaf = fruitProvider.isFruitLeaf(genome, world, getPos());
-			if (isFruitLeaf) {
-				// Hardcoded because vanilla oak trees don't show fruits.
-				if (species == TreeDefinition.Oak.getGenome().getPrimary() && fruitProvider == AlleleFruits.fruitApple.getProvider()) {
-					fruitSprite = null;
-				} else {
-					fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
-				}
-
-				ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
+			if (fruitProvider.isFruitLeaf(genome, world, getPos())) {
+				isFruitLeaf = fruitProvider.getFruitChance(genome, world, getPos()) >= world.rand.nextFloat();
 			}
-		} else {
-			isFruitLeaf = false;
+		}
+
+		if (isFruitLeaf) {
+			IFruitProvider fruitProvider = genome.getFruitProvider();
+			if (world != null && world.isRemote) {
+				fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
+			}
+
+			ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
+		} else if (world != null && world.isRemote) {
 			fruitSprite = null;
 		}
 
@@ -307,8 +318,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (individual instanceof ITree) {
 			ITree tree = getTree();
 			return tree != null &&
-					tree.getMate() == null &&
-					(ModuleApiculture.doSelfPollination ||!tree.isGeneticEqual(individual));
+				tree.getMate() == null &&
+				(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
 		}
 		return false;
 	}
@@ -363,7 +374,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
-		
+
 		byte leafState = 0;
 		boolean hasFruit = hasFruit();
 
@@ -545,12 +556,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(world.getBiome(pos), world, pos);
+		return EnumTemperature.getFromBiome(getBiome(), pos);
 	}
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
+		return EnumHumidity.getFromValue(getBiome().getRainfall());
 	}
 
 

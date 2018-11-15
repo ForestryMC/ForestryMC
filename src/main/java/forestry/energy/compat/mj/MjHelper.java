@@ -1,21 +1,24 @@
 package forestry.energy.compat.mj;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+
+import net.minecraftforge.fml.common.Optional;
+
+import forestry.core.config.Constants;
+import forestry.core.utils.Log;
+
 import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.IMjPassiveProvider;
 import buildcraft.api.mj.IMjReadable;
 import buildcraft.api.mj.IMjReceiver;
 import buildcraft.api.mj.IMjRedstoneReceiver;
 import buildcraft.api.mj.MjAPI;
-import forestry.core.config.Constants;
-import forestry.core.utils.Log;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.fml.common.Optional;
-
-import javax.annotation.Nullable;
-
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -77,10 +80,12 @@ public class MjHelper {
 	}
 
 	public static boolean isMjCapability(Capability<?> capability) {
-		if (!isLoaded()) return false;
+		if (!isLoaded()) {
+			return false;
+		}
 
 		return capability == CAP_CONNECTOR || capability == CAP_RECEIVER || capability == CAP_REDSTONE_RECEIVER ||
-				capability == CAP_READABLE || capability == CAP_PASSIVE_PROVIDER;
+			capability == CAP_READABLE || capability == CAP_PASSIVE_PROVIDER;
 	}
 
 	public static int fromMicroJoules(long microJoules) {

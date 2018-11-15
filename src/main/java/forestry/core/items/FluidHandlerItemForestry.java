@@ -48,7 +48,7 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 
 	@Override
 	protected void setContainerToEmpty() {
-		if (Config.nonConsumableCapsules) {		//default behaviour of FluidHandlerItemStack
+		if (Config.nonConsumableCapsules) {        //default behaviour of FluidHandlerItemStack
 			container.getTagCompound().removeTag(FLUID_NBT_KEY);
 		} else {
 			super.setContainerToEmpty();

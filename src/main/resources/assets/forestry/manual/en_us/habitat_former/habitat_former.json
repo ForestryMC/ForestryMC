@@ -1,0 +1,79 @@
+{
+	"title": "Habitat Former",
+	"icon":{
+		"item": "forestry:habitat_former"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:habitat_former"
+				]
+			},
+			{
+				"text": "The Habitat Formert can be used to manipulate the climate in an specific region. The size (1-16) and the shape (square or circle) of the area can be change with the slider and the button on the upper left side of the gui."
+			}
+		],
+		[
+			{
+				"text": "The former always tries to reach the targeted climate. It needs two things to reach this climate."
+			},
+			{
+				"text": "\n"
+			},
+				{
+				"text": "\n"
+			},
+			{
+				"text": "The first is a Fluid (water, lava or crushed ice) to change the humidity of the area."
+			},
+			{
+				"text": "\n"
+			},
+				{
+				"text": "\n"
+			},
+			{
+				"text": "The second is Energy (FE/RF/Tesla/MJ) to change the temperature of the area."
+			}
+		],
+		[
+			{
+				"text": "The former needs more resources (fluid/energy) for bigger areas. Currently there are 4 ways to select the targeted climate."
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "1. You can change the targeted climate by clicking on one of the bars in the upper center of the gui."
+			},
+			{
+				"text": "\n"
+			},
+				{
+				"text": "\n"
+			},
+			{
+				"text": "2. You can use one of the two text fields to type the targeted climate. (Number from 0 - 200)"
+			}
+		],
+		[
+			{
+				"text": "3. You can select one of the default habitats next to the text fields."
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "4. You can click with a bee in the hand on the slot with the shape of a hexagon next to the habitats. That changes the targeted climate automatically to the preferred climate of the bee."
+			}
+		]
+	]
+}

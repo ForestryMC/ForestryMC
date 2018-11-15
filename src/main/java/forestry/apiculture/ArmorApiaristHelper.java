@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.apiculture.IArmorApiarist;
-import forestry.api.apiculture.IArmorApiaristHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.apiculture.ApicultureCapabilities;
+import forestry.api.apiculture.IArmorApiarist;
+import forestry.api.apiculture.IArmorApiaristHelper;
 
 public class ArmorApiaristHelper implements IArmorApiaristHelper {
 

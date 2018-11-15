@@ -154,9 +154,9 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.drawLine(Translator.translateToLocal("for.gui.native"), GuiAlyzer.COLUMN_0);
 			textLayout.drawLine(Translator.translateToLocal("for.gui." + tree.getGenome().getPrimary().getPlantType().toString().toLowerCase(Locale.ENGLISH)), GuiAlyzer.COLUMN_1,
-					speciesDominance0);
+				speciesDominance0);
 			textLayout.drawLine(Translator.translateToLocal("for.gui." + tree.getGenome().getSecondary().getPlantType().toString().toLowerCase(Locale.ENGLISH)), GuiAlyzer.COLUMN_2,
-					speciesDominance1);
+				speciesDominance1);
 
 			textLayout.newLine();
 

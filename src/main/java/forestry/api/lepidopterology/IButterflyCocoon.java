@@ -8,7 +8,7 @@ package forestry.api.lepidopterology;
 import forestry.api.genetics.IHousing;
 
 public interface IButterflyCocoon extends IHousing {
-	
+
 	IButterfly getCaterpillar();
 
 	void setCaterpillar(IButterfly butterfly);

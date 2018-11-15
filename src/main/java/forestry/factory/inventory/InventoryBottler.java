@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import forestry.core.fluids.FluidHelper;
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.factory.tiles.TileBottler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import forestry.core.fluids.FluidHelper;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.factory.tiles.TileBottler;
 
 public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
 	public static final short SLOT_INPUT_FULL_CONTAINER = 0;

@@ -89,14 +89,14 @@ public class FarmableSapling implements IFarmable {
 	@Override
 	public void addInformation(IFarmableInfo info) {
 		NonNullList<ItemStack> germlings = NonNullList.create();
-		if(ignoreMetadata){
+		if (ignoreMetadata) {
 			Item germlingItem = germling.getItem();
 			CreativeTabs tab = germlingItem.getCreativeTab();
-			if(tab != null) {
+			if (tab != null) {
 				germlingItem.getSubItems(tab, germlings);
 			}
 		}
-		if(germlings.isEmpty()){
+		if (germlings.isEmpty()) {
 			germlings.add(germling);
 		}
 		info.addGermlings(germlings);

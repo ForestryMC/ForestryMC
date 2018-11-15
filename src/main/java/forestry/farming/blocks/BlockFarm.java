@@ -83,13 +83,13 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-				.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, new IProperty[]{META},
-				new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
+			new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class BlockFarm extends BlockStructure {
 		}
 		return world.setBlockToAir(pos);
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		int meta = getMetaFromState(state);
@@ -174,7 +174,7 @@ public class BlockFarm extends BlockStructure {
 	/* MODELS */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

@@ -28,12 +28,12 @@ public interface IFilterRegistry {
 
 	IFilterLogic createLogic(ILocatable locatable, IFilterLogic.INetworkHandler networkHandler);
 
-	default IFilterRuleType getRuleOrDefault(String uid){
+	default IFilterRuleType getRuleOrDefault(String uid) {
 		IFilterRuleType rule = getRule(uid);
 		return rule != null ? rule : getDefaultRule();
 	}
 
-	default IFilterRuleType getRuleOrDefault(int id){
+	default IFilterRuleType getRuleOrDefault(int id) {
 		IFilterRuleType rule = getRule(id);
 		return rule != null ? rule : getDefaultRule();
 	}

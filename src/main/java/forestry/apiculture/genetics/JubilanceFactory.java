@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import net.minecraft.block.state.IBlockState;
+
 import forestry.api.apiculture.IJubilanceFactory;
 import forestry.api.apiculture.IJubilanceProvider;
-import net.minecraft.block.state.IBlockState;
 
 public class JubilanceFactory implements IJubilanceFactory {
 	@Override

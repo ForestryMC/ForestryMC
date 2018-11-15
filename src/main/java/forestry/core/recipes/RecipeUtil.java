@@ -43,7 +43,7 @@ public abstract class RecipeUtil {
 			return;
 		}
 		FluidStack outputStack = output.getFluid(1);
-		if(outputStack == null) {
+		if (outputStack == null) {
 			return;
 		}
 
@@ -63,7 +63,7 @@ public abstract class RecipeUtil {
 			return;
 		}
 		FluidStack outputStack = output.getFluid(1);
-		if(outputStack == null) {
+		if (outputStack == null) {
 			return;
 		}
 

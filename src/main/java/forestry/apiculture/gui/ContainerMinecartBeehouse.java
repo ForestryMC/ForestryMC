@@ -52,7 +52,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<EntityMinecartBee
 
 	/* Methods - Implement IContainerAnalyzerProvider */
 	@Nullable
-	public Slot getAnalyzerSlot(){
+	public Slot getAnalyzerSlot() {
 		return providerHelper.getAnalyzerSlot();
 	}
 

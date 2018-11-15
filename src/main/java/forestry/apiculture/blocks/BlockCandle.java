@@ -82,28 +82,28 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 	static {
 		colours = ImmutableMap.<String, Integer>builder()
-				.put("dyeWhite", new Color(255, 255, 255).getRGB())
-				.put("dyeOrange", new Color(219, 125, 62).getRGB())
-				.put("dyeMagenta", new Color(255, 20, 255).getRGB())
-				.put("dyeLightBlue", new Color(107, 138, 201).getRGB())
-				.put("dyeYellow", new Color(255, 255, 20).getRGB())
-				.put("dyeLime", new Color(20, 255, 20).getRGB())
-				.put("dyePink", new Color(208, 132, 153).getRGB())
-				.put("dyeGray", new Color(74, 74, 74).getRGB())
-				.put("dyeLightGray", new Color(154, 161, 161).getRGB())
-				.put("dyeCyan", new Color(20, 255, 255).getRGB())
-				.put("dyePurple", new Color(126, 61, 181).getRGB())
-				.put("dyeBlue", new Color(20, 20, 255).getRGB())
-				.put("dyeBrown", new Color(79, 50, 31).getRGB())
-				.put("dyeGreen", new Color(53, 70, 27).getRGB())
-				.put("dyeRed", new Color(150, 52, 48).getRGB())
-				.put("dyeBlack", new Color(20, 20, 20).getRGB())
-				.build();
+			.put("dyeWhite", new Color(255, 255, 255).getRGB())
+			.put("dyeOrange", new Color(219, 125, 62).getRGB())
+			.put("dyeMagenta", new Color(255, 20, 255).getRGB())
+			.put("dyeLightBlue", new Color(107, 138, 201).getRGB())
+			.put("dyeYellow", new Color(255, 255, 20).getRGB())
+			.put("dyeLime", new Color(20, 255, 20).getRGB())
+			.put("dyePink", new Color(208, 132, 153).getRGB())
+			.put("dyeGray", new Color(74, 74, 74).getRGB())
+			.put("dyeLightGray", new Color(154, 161, 161).getRGB())
+			.put("dyeCyan", new Color(20, 255, 255).getRGB())
+			.put("dyePurple", new Color(126, 61, 181).getRGB())
+			.put("dyeBlue", new Color(20, 20, 255).getRGB())
+			.put("dyeBrown", new Color(79, 50, 31).getRGB())
+			.put("dyeGreen", new Color(53, 70, 27).getRGB())
+			.put("dyeRed", new Color(150, 52, 48).getRGB())
+			.put("dyeBlack", new Color(20, 20, 20).getRGB())
+			.build();
 
 		lightingItems = new HashSet<>(Arrays.asList(
-				Items.FLINT_AND_STEEL,
-				Items.FLINT,
-				Item.getItemFromBlock(Blocks.TORCH)
+			Items.FLINT_AND_STEEL,
+			Items.FLINT,
+			Item.getItemFromBlock(Blocks.TORCH)
 		));
 	}
 
@@ -240,7 +240,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			drop.set(itemStack);
 		}
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ItemStack dropStack = drop.get();
@@ -318,9 +318,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	public static void addItemToLightingList(Item item) {
-		if (!lightingItems.contains(item)) {
-			lightingItems.add(item);
-		}
+		lightingItems.add(item);
 	}
 
 	public ItemStack getUnlitCandle(int amount) {

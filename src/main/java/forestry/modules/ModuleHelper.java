@@ -30,61 +30,61 @@ public final class ModuleHelper {
 		return Stream.of(moduleIDs).anyMatch(ModuleHelper::isEnabled);
 	}
 
-	public static boolean isModuleEnabled(String containerID, String moduleID){
+	public static boolean isModuleEnabled(String containerID, String moduleID) {
 		ModuleManager manager = ModuleManager.getInstance();
 		return manager.isModuleEnabled(containerID, moduleID);
 	}
 
-	public static void addItemToBackpack(String backpackUid, @Nullable ItemStack stack){
-		if(stack == null || stack.isEmpty()){
+	public static void addItemToBackpack(String backpackUid, @Nullable ItemStack stack) {
+		if (stack == null || stack.isEmpty()) {
 			return;
 		}
 		IBackpackInterface backpackInterface = BackpackManager.backpackInterface;
-		if(backpackInterface == null) {
+		if (backpackInterface == null) {
 			return;
 		}
 		backpackInterface.addItemToForestryBackpack(backpackUid, stack);
 	}
 
-	public static void registerCrate(@Nullable ItemStack stack){
-		if(stack == null || stack.isEmpty()){
+	public static void registerCrate(@Nullable ItemStack stack) {
+		if (stack == null || stack.isEmpty()) {
 			return;
 		}
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if(crateRegistry == null) {
+		if (crateRegistry == null) {
 			return;
 		}
 		crateRegistry.registerCrate(stack);
 	}
 
-	public static void registerCrate(@Nullable Item item){
-		if(item == null){
+	public static void registerCrate(@Nullable Item item) {
+		if (item == null) {
 			return;
 		}
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if(crateRegistry == null) {
+		if (crateRegistry == null) {
 			return;
 		}
 		crateRegistry.registerCrate(item);
 	}
 
-	public static void registerCrate(@Nullable Block block){
-		if(block == null){
+	public static void registerCrate(@Nullable Block block) {
+		if (block == null) {
 			return;
 		}
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if(crateRegistry == null) {
+		if (crateRegistry == null) {
 			return;
 		}
 		crateRegistry.registerCrate(block);
 	}
 
-	public static void registerCrate(@Nullable String oreDict){
-		if(oreDict == null || oreDict.isEmpty()){
+	public static void registerCrate(@Nullable String oreDict) {
+		if (oreDict == null || oreDict.isEmpty()) {
 			return;
 		}
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if(crateRegistry == null) {
+		if (crateRegistry == null) {
 			return;
 		}
 		crateRegistry.registerCrate(oreDict);

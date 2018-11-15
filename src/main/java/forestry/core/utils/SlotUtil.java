@@ -12,14 +12,15 @@ package forestry.core.utils;
 
 import java.util.List;
 
-import forestry.core.gui.slots.SlotCrafter;
-import forestry.core.gui.slots.SlotForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+
+import forestry.core.gui.slots.SlotCrafter;
+import forestry.core.gui.slots.SlotForestry;
 
 public abstract class SlotUtil {
 

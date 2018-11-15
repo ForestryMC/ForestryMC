@@ -10,18 +10,21 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.config.Constants;
+import forestry.core.utils.Translator;
+
 import buildcraft.api.core.render.ISprite;
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.StatementManager;
-import forestry.core.config.Constants;
-import forestry.core.utils.Translator;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 public abstract class Trigger implements ITriggerExternal {
 

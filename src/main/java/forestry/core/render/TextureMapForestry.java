@@ -48,18 +48,18 @@ public class TextureMapForestry extends TextureMap {
 		this.listAnimatedSprites.clear();
 
 		ProgressManager.ProgressBar bar = ProgressManager.push("Texture stitching", this.mapRegisteredSprites.size());
-		
+
 		for (Map.Entry<String, TextureAtlasSprite> entry : this.mapRegisteredSprites.entrySet()) {
 			TextureAtlasSprite textureatlassprite = entry.getValue();
 			ResourceLocation resourcelocation = this.getResourceLocation(textureatlassprite);
-			bar.step(resourcelocation.getResourcePath());
+			bar.step(resourcelocation.getPath());
 			IResource iresource = null;
 
 			if (textureatlassprite.hasCustomLoader(resourceManager, resourcelocation)) {
 				if (textureatlassprite.load(resourceManager, resourcelocation, l -> mapRegisteredSprites.get(l.toString()))) {
 					continue;
 				}
-			} else
+			} else {
 				try {
 					PngSizeInfo pngsizeinfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourcelocation));
 					iresource = resourceManager.getResource(resourcelocation);
@@ -74,10 +74,11 @@ public class TextureMapForestry extends TextureMap {
 				} finally {
 					IOUtils.closeQuietly(iresource);
 				}
+			}
 
 			stitcher.addSprite(textureatlassprite);
 		}
-		
+
 		ProgressManager.pop(bar);
 
 		this.missingImage.generateMipmaps(0);
@@ -131,7 +132,9 @@ public class TextureMapForestry extends TextureMap {
 		label9:
 		{
 			boolean flag;
-			if (texture.hasCustomLoader(resourceManager, resourcelocation)) break label9;
+			if (texture.hasCustomLoader(resourceManager, resourcelocation)) {
+				break label9;
+			}
 			try {
 				iresource = resourceManager.getResource(resourcelocation);
 				texture.loadSpriteFrames(iresource, 1);
@@ -166,6 +169,6 @@ public class TextureMapForestry extends TextureMap {
 
 	private ResourceLocation getResourceLocation(TextureAtlasSprite p_184396_1_) {
 		ResourceLocation resourcelocation = new ResourceLocation(p_184396_1_.getIconName());
-		return new ResourceLocation(resourcelocation.getResourceDomain(), String.format("%s/%s%s", this.basePath, resourcelocation.getResourcePath(), ".png"));
+		return new ResourceLocation(resourcelocation.getNamespace(), String.format("%s/%s%s", this.basePath, resourcelocation.getPath(), ".png"));
 	}
 }

@@ -197,7 +197,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 							break;
 						case 2:
 							if (blocksTouching.contains(EnumFacing.SOUTH) && blocksTouching.contains(EnumFacing.EAST) ||
-									blocksTouching.contains(EnumFacing.NORTH) && blocksTouching.contains(EnumFacing.WEST)) {
+								blocksTouching.contains(EnumFacing.NORTH) && blocksTouching.contains(EnumFacing.WEST)) {
 								state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
 							} else {
 								state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
@@ -244,7 +244,7 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-			String resourceDomain = Block.REGISTRY.getNameForObject(state.getBlock()).getResourceDomain();
+			String resourceDomain = Block.REGISTRY.getNameForObject(state.getBlock()).getNamespace();
 			String resourceLocation = "apiculture/alveary_" + type;
 			String propertyString = getPropertyString(state.getProperties());
 			return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);
@@ -262,13 +262,13 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 			NetworkUtil.sendNetworkPacket(new PacketAlvearyChange(referenceCoord), referenceCoord, worldIn);
 		});
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		if(GuiScreen.isShiftKeyDown()){
+		if (GuiScreen.isShiftKeyDown()) {
 			tooltip.add(Translator.translateToLocal("tile.for.alveary.tooltip"));
-		}else{
+		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
 	}

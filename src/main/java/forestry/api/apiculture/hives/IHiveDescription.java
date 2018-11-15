@@ -7,12 +7,13 @@ package forestry.api.apiculture.hives;
 
 import java.util.Random;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 
 public interface IHiveDescription {
 

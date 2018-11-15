@@ -46,6 +46,9 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	public static final int FOLIAGE_COLOR_INDEX = 0;
 	public static final int FRUIT_COLOR_INDEX = 2;
 
+	public static final int DECAYABLE_FLAG = 4;
+	public static final int CHECK_DECAY_FLAG = 8;
+
 	@Nullable
 	protected abstract ITree getTree(IBlockAccess world, BlockPos pos);
 
@@ -104,8 +107,8 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	 * Used for walking through willow leaves.
 	 */
 	@Override
-	public final void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+	public final void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		super.onEntityCollision(worldIn, pos, state, entityIn);
 		entityIn.motionX *= 0.4D;
 		entityIn.motionZ *= 0.4D;
 	}
@@ -120,12 +123,12 @@ public abstract class BlockAbstractLeaves extends BlockLeaves implements IItemMo
 	@Override
 	public final boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) &&
-				BlockUtil.shouldSideBeRendered(blockState, blockAccess, pos, side);
+			BlockUtil.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final BlockRenderLayer getBlockLayer() {
+	public final BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED; // fruit overlays require CUTOUT_MIPPED, even in Fast graphics
 	}
 

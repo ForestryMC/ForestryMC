@@ -25,16 +25,11 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Property;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 
 import forestry.Forestry;
@@ -70,10 +65,10 @@ public class Config {
 	// Humus
 	public static int humusDegradeDelimiter = 3;
 
-	// Greenhouse
-	public static int climateSourceRange = 36;
-	public static float climateSourceEnergyModifier = 1.5F;
-	public static int greenhouseSize = 4;
+	// Climatology
+	public static int habitatformerRange = 10;
+	public static float habitatformerAreaCostModifier = 0.5F;
+	public static float habitatformerAreaSpeedModifier = 0.5F;
 
 	// Genetics
 	public static boolean pollinateVanillaTrees = true;
@@ -91,12 +86,6 @@ public class Config {
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
 	public static boolean enableVillagers = true;
-	public static boolean generateTrees = true;
-	public static float generateTreesAmount = 1.0F;
-	public static Set<Integer> blacklistedTreeDims = new HashSet<>();
-	public static Set<Integer> whitelistedTreeDims = new HashSet<>();
-	public static Set<BiomeDictionary.Type> blacklistedTreeTypes = new HashSet<>();
-	public static Set<Biome> blacklistedTreeBiomes = new HashSet<>();
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -150,6 +139,11 @@ public class Config {
 	public static boolean enableTesla = true;
 	public static EnergyDisplayMode energyDisplayMode = EnergyDisplayMode.RF;
 
+	// Charcoal
+	public static int charcoalAmountBase = 8;
+	public static int charcoalWallCheckRange = 16;
+
+
 	public static boolean isStructureEnabled(String uid) {
 		return !Config.disabledStructures.contains(uid);
 	}
@@ -183,15 +177,6 @@ public class Config {
 		return enableMagicalCropsSupport;
 	}
 
-	//Dimension Blacklists
-	public static void blacklistTreeDim(int dimID) {
-		blacklistedTreeDims.add(dimID);
-	}
-
-	public static void whitelistTreeDim(int dimID) {
-		whitelistedTreeDims.add(dimID);
-	}
-
 	public static void blacklistOreDim(int dimID) {
 		blacklistedOreDims.add(dimID);
 	}
@@ -207,23 +192,9 @@ public class Config {
 		return false;
 	}
 
-	public static boolean isValidTreeDim(int dimID) {        //blacklist has priority
-		if (blacklistedTreeDims.isEmpty() || !blacklistedTreeDims.contains(dimID)) {
-			return whitelistedTreeDims.isEmpty() || whitelistedTreeDims.contains(dimID);
-		}
-		return false;
-	}
-
-	public static boolean isValidTreeBiome(Biome biome) {
-		if (blacklistedTreeBiomes.contains(biome)) {
-			return false;
-		}
-		return !BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTreeTypes::contains);
-	}
-
 	public static void load(Side side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
-		configCommon = new LocalizedConfiguration(configCommonFile, "1.2.1");
+		configCommon = new LocalizedConfiguration(configCommonFile, "1.3.0");
 		loadConfigCommon(side);
 
 		File configFluidsFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_FLUIDS + ".cfg");
@@ -298,27 +269,6 @@ public class Config {
 
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 
-		generateTrees = configCommon.getBooleanLocalized("world.generate", "trees", generateTrees);
-
-		generateTreesAmount = configCommon.getFloatLocalized("world.generate.trees", "treeFrequency", generateTreesAmount, 0.0F, 10.0F);
-
-		for (int dimId : configCommon.get("world.generate.trees", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedTreeDims.add(dimId);
-		}
-		for (int dimId : configCommon.get("world.generate.trees", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedTreeDims.add(dimId);
-		}
-		for (String entry : configCommon.get("world.generate.trees", "biomeblacklist", new String[0]).getStringList()) {
-			BiomeDictionary.Type type = BiomeDictionary.Type.getType(entry);
-			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
-			if (type != null) {
-				blacklistedTreeTypes.add(type);
-			} else if (biome != null) {
-				blacklistedTreeBiomes.add(biome);
-			}
-		}
-
-
 		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
 		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);
 
@@ -369,9 +319,12 @@ public class Config {
 		CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks.capsule", "capsulePickup", CapsuleFluidPickup);
 		nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks.capsule", "capsuleReuseable", nonConsumableCapsules);
 
-		climateSourceRange = configCommon.getIntLocalized("tweaks.greenhouse", "range", climateSourceRange, 9, 270);
-		climateSourceEnergyModifier = configCommon.getFloatLocalized("tweaks.greenhouse", "energy", climateSourceEnergyModifier, 0.0F, 15.0F);
-		greenhouseSize = configCommon.getIntLocalized("tweaks.greenhouse", "size", greenhouseSize, 1, 5);
+		habitatformerRange = configCommon.getIntLocalized("tweaks.habitatformer", "range", habitatformerRange, 1, 100);
+		habitatformerAreaCostModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "resources", habitatformerAreaCostModifier, 0F, 5.0F);
+		habitatformerAreaSpeedModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "speed", habitatformerAreaSpeedModifier, 0F, 5.0F);
+
+		charcoalAmountBase = configCommon.getIntLocalized("tweaks.charcoal", "amount.base", charcoalAmountBase, 0, 63);
+		charcoalWallCheckRange = configCommon.getIntLocalized("tweaks.charcoal", "check.range", charcoalWallCheckRange, 1, 32);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);

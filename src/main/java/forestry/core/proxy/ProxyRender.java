@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import net.minecraft.block.Block;
+
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.fluids.Fluids;
 import forestry.core.tiles.TileAnalyzer;
@@ -17,7 +19,6 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
-import net.minecraft.block.Block;
 
 public class ProxyRender {
 

@@ -33,8 +33,18 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 
 	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/escritoire.png");
 	private final ModelEscritoire modelEscritoire = new ModelEscritoire();
-	private final EntityItem dummyEntityItem = new EntityItem(null);
+	@Nullable
+	private EntityItem dummyEntityItem;
 	private long lastTick;
+
+	private EntityItem dummyItem(World world) {
+		if (dummyEntityItem == null) {
+			dummyEntityItem = new EntityItem(world);
+		} else {
+			dummyEntityItem.world = world;
+		}
+		return dummyEntityItem;
+	}
 
 	/**
 	 * @param escritoire If it null its render the item else it render the tile entity.
@@ -87,7 +97,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 		GlStateManager.popMatrix();
 
 		if (!itemstack.isEmpty() && world != null) {
-			dummyEntityItem.world = world;
+			EntityItem dummyItem = dummyItem(world);
 
 			float renderScale = 0.75f;
 
@@ -95,19 +105,19 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 			{
 				GlStateManager.translate((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
 				GlStateManager.scale(renderScale, renderScale, renderScale);
-				dummyEntityItem.setItem(itemstack);
+				dummyItem.setItem(itemstack);
 
 				if (world.getTotalWorldTime() != lastTick) {
 					lastTick = world.getTotalWorldTime();
-					dummyEntityItem.onUpdate();
+					dummyItem.onUpdate();
 				}
 
 				RenderManager rendermanager = minecraft.getRenderManager();
-				rendermanager.renderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+				rendermanager.renderEntity(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 			}
 			GlStateManager.popMatrix();
 
-			dummyEntityItem.world = null; // prevent leaking the world object
+			dummyItem.world = null; // prevent leaking the world object
 		}
 	}
 }

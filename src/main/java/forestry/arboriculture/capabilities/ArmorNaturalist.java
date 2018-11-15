@@ -1,8 +1,9 @@
 package forestry.arboriculture.capabilities;
 
-import forestry.api.core.IArmorNaturalist;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.core.IArmorNaturalist;
 
 public class ArmorNaturalist implements IArmorNaturalist {
 	public static final ArmorNaturalist INSTANCE = new ArmorNaturalist();

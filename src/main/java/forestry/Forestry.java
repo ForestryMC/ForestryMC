@@ -35,11 +35,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ForestryEvent;
 import forestry.core.EventHandlerCore;
 import forestry.core.advancements.AdvancementManager;
-import forestry.core.climate.ClimateStates;
+import forestry.core.climate.ClimateFactory;
+import forestry.core.climate.ClimateRoot;
+import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
@@ -65,18 +68,18 @@ import forestry.plugins.PluginTechReborn;
  * @author SirSengir
  */
 @Mod(
-		modid = Constants.MOD_ID,
-		name = Constants.MOD_NAME,
-		version = Constants.VERSION,
-		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		acceptedMinecraftVersions = "[1.12.2,1.13.0)",
-		dependencies = "required-after:forge@[14.23.4.2749,);"
-				+ "after:jei@[4.7.8.91,);"
-				+ "after:" + PluginIC2.MOD_ID + ";"
-				+ "after:" + PluginNatura.MOD_ID + ";"
-				+ "after:toughasnails;"
-				+ "after:" + PluginTechReborn.MOD_ID + ";"
-				+ "after:" + PluginBuildCraftFuels.MOD_ID + ";")
+	modid = Constants.MOD_ID,
+	name = Constants.MOD_NAME,
+	version = Constants.VERSION,
+	guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
+	acceptedMinecraftVersions = "[1.12.2,1.13.0)",
+	dependencies = "required-after:forge@[14.23.4.2749,);"
+		+ "after:jei@[4.7.8.91,);"
+		+ "after:" + PluginIC2.MOD_ID + ";"
+		+ "after:" + PluginNatura.MOD_ID + ";"
+		+ "after:toughasnails;"
+		+ "after:" + PluginTechReborn.MOD_ID + ";"
+		+ "after:" + PluginBuildCraftFuels.MOD_ID + ";")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")
@@ -89,7 +92,9 @@ public class Forestry {
 		ForestryAPI.instance = this;
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
-		ForestryAPI.states = ClimateStates.INSTANCE;
+		ClimateManager.climateRoot = ForestryAPI.climateManager = ClimateRoot.getInstance();
+		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
+		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
 		EnumErrorCode.init();
 		FluidRegistry.enableUniversalBucket();
 		MinecraftForge.EVENT_BUS.register(this);

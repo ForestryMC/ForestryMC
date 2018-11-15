@@ -4,31 +4,31 @@ public interface ITextStyle {
 
 	int getColor();
 
-	default boolean isBold(){
+	default boolean isBold() {
 		return false;
 	}
 
-	default boolean isObfuscated(){
+	default boolean isObfuscated() {
 		return false;
 	}
 
-	default boolean isStrikethrough(){
+	default boolean isStrikethrough() {
 		return false;
 	}
 
-	default boolean isUnderlined(){
+	default boolean isUnderlined() {
 		return false;
 	}
 
-	default boolean isItalic(){
+	default boolean isItalic() {
 		return false;
 	}
 
-	default boolean isShadow(){
+	default boolean isShadow() {
 		return false;
 	}
 
-	default boolean isUnicode(){
+	default boolean isUnicode() {
 		return false;
 	}
 }

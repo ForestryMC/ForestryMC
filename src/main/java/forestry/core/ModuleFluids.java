@@ -75,7 +75,7 @@ public class ModuleFluids extends BlankForestryModule {
 				fluidBlock = forestryFluid.makeBlock();
 				if (fluidBlock != null) {
 					String name = "fluid." + forestryFluid.getTag();
-					fluidBlock.setUnlocalizedName("forestry." + name);
+					fluidBlock.setTranslationKey("forestry." + name);
 					fluidBlock.setRegistryName(name);
 					ForgeRegistries.BLOCKS.register(fluidBlock);
 
@@ -91,8 +91,8 @@ public class ModuleFluids extends BlankForestryModule {
 			} else {
 				ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(fluidBlock);
 				Log.warning("Pre-existing {} fluid block detected, deferring to {}:{}, "
-						+ "this may cause issues if the server/client have different mod load orders, "
-						+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), resourceLocation.getResourceDomain(), resourceLocation.getResourcePath(), fluid.getName());
+					+ "this may cause issues if the server/client have different mod load orders, "
+					+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), resourceLocation.getNamespace(), resourceLocation.getPath(), fluid.getName());
 			}
 		}
 	}

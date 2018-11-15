@@ -12,12 +12,21 @@ package forestry.farming.tiles;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerInternalSided;
-import buildcraft.api.statements.ITriggerProvider;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
+
+import net.minecraftforge.fml.common.Optional;
+
 import forestry.api.multiblock.IFarmComponent;
 import forestry.core.config.Constants;
 import forestry.core.inventory.AdjacentInventoryCache;
@@ -25,19 +34,11 @@ import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.triggers.FarmingTriggers;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
-
-import java.util.Collection;
-import java.util.Collections;
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerInternalSided;
+import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active, ITriggerProvider {
@@ -91,11 +92,13 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) { }
+	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+	}
 
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
 	@Override
-	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) { }
+	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
+	}
 
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = Constants.BCLIB_MOD_ID)

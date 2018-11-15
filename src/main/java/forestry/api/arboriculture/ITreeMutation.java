@@ -5,10 +5,11 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesRoot;
 
 public interface ITreeMutation extends IMutation {
 

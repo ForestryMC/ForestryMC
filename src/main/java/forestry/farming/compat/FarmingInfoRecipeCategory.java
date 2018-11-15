@@ -37,24 +37,24 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	@Override
 	public void drawExtras(Minecraft minecraft) {
 		slotDrawable.draw(minecraft, 63, 18);
-		for(int x = 0;x < 2;x++){
-			for(int y = 0;y < 2;y++){
+		for (int x = 0; x < 2; x++) {
+			for (int y = 0; y < 2; y++) {
 				slotDrawable.draw(minecraft, x * 18, 54 + y * 18);
 			}
 		}
 
 		addition.draw(minecraft, 37, 64);
 
-		for(int x = 0;x < 2;x++){
-			for(int y = 0;y < 2;y++){
+		for (int x = 0; x < 2; x++) {
+			for (int y = 0; y < 2; y++) {
 				slotDrawable.draw(minecraft, 54 + x * 18, 54 + y * 18);
 			}
 		}
 
 		arrow.draw(minecraft, 91, 64);
 
-		for(int x = 0;x < 2;x++){
-			for(int y = 0;y < 2;y++){
+		for (int x = 0; x < 2; x++) {
+			for (int y = 0; y < 2; y++) {
 				slotDrawable.draw(minecraft, 108 + x * 18, 54 + y * 18);
 			}
 		}
@@ -67,31 +67,31 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
 		guiItemStacks.init(0, true, 63, 18);
 		guiItemStacks.set(0, inputs.get(0));
-		for(int x = 0;x < 2;x++){
-			for(int y = 0;y < 2;y++){
+		for (int x = 0; x < 2; x++) {
+			for (int y = 0; y < 2; y++) {
 				int index = 1 + x + y * 2;
 				guiItemStacks.init(index, true, x * 18, 54 + y * 18);
-				if(inputs.size() > index) {
+				if (inputs.size() > index) {
 					List<ItemStack> stack = inputs.get(index);
 					guiItemStacks.set(index, stack);
 				}
 			}
 		}
-		for(int x = 0;x < 2;x++){
-			for(int y = 0;y < 2;y++){
+		for (int x = 0; x < 2; x++) {
+			for (int y = 0; y < 2; y++) {
 				int index = 5 + x + y * 2;
-				guiItemStacks.init(index, true, 54 +x * 18, 54 + y * 18);
-				if(inputs.size() > index) {
+				guiItemStacks.init(index, true, 54 + x * 18, 54 + y * 18);
+				if (inputs.size() > index) {
 					List<ItemStack> stack = inputs.get(index);
 					guiItemStacks.set(index, stack);
 				}
 			}
 		}
-		for(int x = 0;x < 2;x++){
-			for(int y = 0;y < 2;y++){
+		for (int x = 0; x < 2; x++) {
+			for (int y = 0; y < 2; y++) {
 				int index = 9 + x + y * 2;
-				guiItemStacks.init(index, false, 108 +x * 18, 54 + y * 18);
-				if(outputs.size() > x + y * 2) {
+				guiItemStacks.init(index, false, 108 + x * 18, 54 + y * 18);
+				if (outputs.size() > x + y * 2) {
 					List<ItemStack> stack = outputs.get(x + y * 2);
 					guiItemStacks.set(index, stack);
 				}

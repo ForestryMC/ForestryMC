@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements IColoredItem {
 
@@ -38,8 +40,8 @@ public class ItemBlockCandle extends ItemBlockForestry<BlockCandle> implements I
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
-		String value = getBlock().getUnlocalizedName();
+	public String getTranslationKey(ItemStack itemStack) {
+		String value = getBlock().getTranslationKey();
 		if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(BlockCandle.colourTagName)) {
 			value = value + ".dyed";
 		}

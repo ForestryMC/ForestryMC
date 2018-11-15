@@ -5,12 +5,14 @@
  ******************************************************************************/
 package forestry.api.mail;
 
-import forestry.api.core.ITextureManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.ITextureManager;
 
 /**
  * Postal Carriers are systems which can be hooked into Forestry's mail system to handle mail delivery.

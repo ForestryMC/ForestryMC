@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -20,6 +17,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
+import forestry.core.gui.ContainerItemInventory;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerItem;
 
 public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
 	public ItemWithGui() {
@@ -43,8 +44,8 @@ public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerIte
 	@Override
 	public boolean onDroppedByPlayer(ItemStack itemstack, EntityPlayer player) {
 		if (itemstack != null &&
-				player instanceof EntityPlayerMP &&
-				player.openContainer instanceof ContainerItemInventory) {
+			player instanceof EntityPlayerMP &&
+			player.openContainer instanceof ContainerItemInventory) {
 			player.closeScreen();
 		}
 

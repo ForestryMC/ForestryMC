@@ -46,10 +46,10 @@ public class WoodTextureManager {
 
 	public static void parseFile() {
 		try (InputStream stream = WoodTextureManager.class.getResourceAsStream(LOCATION)) {
-			if (stream == null){
+			if (stream == null) {
 				return;
 			}
-			try (JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(stream)))){
+			try (JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(stream)))) {
 				JsonElement json = Streams.parse(reader);
 				if (json.isJsonObject()) {
 					JsonObject jsonObject = json.getAsJsonObject();
@@ -69,36 +69,36 @@ public class WoodTextureManager {
 			}
 		}
 	}
-	
-	private static void addSingleTexture(String key, JsonObject object){
+
+	private static void addSingleTexture(String key, JsonObject object) {
 		WOOD_TEXTURES.put(key, createSimpleTexture(object));
 	}
-	
-	private static void addTextureMap(String key, JsonArray jsonArray){
+
+	private static void addTextureMap(String key, JsonArray jsonArray) {
 		ImmutableMap.Builder<String, SimpleTexture> textures = new ImmutableMap.Builder<>();
 		for (JsonElement elementEntry : jsonArray) {
 			if (elementEntry.isJsonObject()) {
 				JsonObject obj = elementEntry.getAsJsonObject();
 				String kind = getKind(obj);
-				if(kind != null){
+				if (kind != null) {
 					textures.put(kind, createSimpleTexture(obj));
 				}
 			}
 		}
 		WOOD_TEXTURES.put(key, new TextureMap(textures.build()));
 	}
-	
+
 	@Nullable
-	private static String getKind(JsonObject obj){
-		if(!obj.has(KIND_KEY)){
+	private static String getKind(JsonObject obj) {
+		if (!obj.has(KIND_KEY)) {
 			return null;
 		}
 		JsonElement element = obj.get(KIND_KEY);
-		if(!element.isJsonPrimitive()){
+		if (!element.isJsonPrimitive()) {
 			return null;
 		}
 		JsonPrimitive primative = element.getAsJsonPrimitive();
-		if(!primative.isString()){
+		if (!primative.isString()) {
 			return null;
 		}
 		return primative.getAsString();
@@ -110,22 +110,22 @@ public class WoodTextureManager {
 			JsonElement element = entry.getValue();
 			if (element.isJsonPrimitive()) {
 				JsonPrimitive primitive = element.getAsJsonPrimitive();
-				if(primitive.isString()){
+				if (primitive.isString()) {
 					locations.put(entry.getKey(), primitive.getAsString());
 				}
 			}
 		}
 		return new SimpleTexture(locations.build());
 	}
-	
+
 	@Nullable
-	private static WoodTexture getKindTexture(WoodBlockKind blockKind){
+	private static WoodTexture getKindTexture(WoodBlockKind blockKind) {
 		String kindName = blockKind.getName();
 		return WOOD_TEXTURES.get(kindName);
 	}
-	
+
 	@Nullable
-	private static WoodTexture getTexture(IWoodType woodType){
+	private static WoodTexture getTexture(IWoodType woodType) {
 		String woodName = woodType.getName();
 		woodName = woodName.toLowerCase(Locale.ENGLISH);
 		return WOOD_TEXTURES.get(woodName);

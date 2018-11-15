@@ -22,7 +22,7 @@ public class BookCategoryDeserializer implements JsonDeserializer<BookCategory> 
 	public BookCategory deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
 		JsonObject object = json.getAsJsonObject();
 		String name = JsonUtils.getString(object, "name");
-		ItemStack stack = JsonUtil.deserializeItemStack(JsonUtils.getJsonObject(object, "icon"));
+		ItemStack stack = JsonUtil.deserializeItemStack(JsonUtils.getJsonObject(object, "icon"), ItemStack.EMPTY);
 		BookCategory category = new BookCategory(name);
 		category.setStack(stack);
 		return category;

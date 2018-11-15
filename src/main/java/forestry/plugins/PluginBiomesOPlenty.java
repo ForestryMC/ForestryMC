@@ -203,26 +203,26 @@ public class PluginBiomesOPlenty extends CompatPlugin {
 		// most blocks are covered by the oreDictionary
 
 		addBlocksToBackpack(BackpackManager.MINER_UID,
-				"driedDirt",
-				"overgrownNetherrack",
-				"cragRock",
-				"ashStone"
+			"driedDirt",
+			"overgrownNetherrack",
+			"cragRock",
+			"ashStone"
 		);
 
 		addBlocksToBackpack(BackpackManager.DIGGER_UID,
-				"bopGrass",
-				"newBopGrass",
-				"longGrass",
-				"mud",
-				"hardDirt",
-				"hardSand",
-				"originGrass",
-				"ash",
-				"newBopDirt"
+			"bopGrass",
+			"newBopGrass",
+			"longGrass",
+			"mud",
+			"hardDirt",
+			"hardSand",
+			"originGrass",
+			"ash",
+			"newBopDirt"
 		);
 
 		addBlocksToBackpack(BackpackManager.FORESTER_UID,
-				"petals"
+			"petals"
 		);
 	}
 

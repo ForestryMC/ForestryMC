@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
-import net.minecraft.item.ItemStack;
 
 public class CircuitRecipe {
 

@@ -97,12 +97,12 @@ public class ItemFruit extends ItemForestryFood {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= EnumFruit.VALUES.length) {
-			return super.getUnlocalizedName(stack);
+			return super.getTranslationKey(stack);
 		}
 
-		return super.getUnlocalizedName(stack) + "." + EnumFruit.VALUES[stack.getItemDamage()].name().toLowerCase(Locale.ENGLISH);
+		return super.getTranslationKey(stack) + "." + EnumFruit.VALUES[stack.getItemDamage()].name().toLowerCase(Locale.ENGLISH);
 	}
 
 }

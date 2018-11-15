@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemTooltipUtil {
 	@SideOnly(Side.CLIENT)
 	public static void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		String unlocalizedName = stack.getUnlocalizedName();
+		String unlocalizedName = stack.getTranslationKey();
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
 			String tooltipInfo = Translator.translateToLocal(tooltipKey);
@@ -28,26 +28,26 @@ public class ItemTooltipUtil {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void addShiftInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
-		tooltip.add(TextFormatting.ITALIC .toString() + '<' + Translator.translateToLocal("for.gui.tooltip.tmi") + '>');
+	public static void addShiftInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+		tooltip.add(TextFormatting.ITALIC.toString() + '<' + Translator.translateToLocal("for.gui.tooltip.tmi") + '>');
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static List<String> getInformation(ItemStack stack){
+	public static List<String> getInformation(ItemStack stack) {
 		Minecraft minecraft = Minecraft.getMinecraft();
 		boolean advancedTooltips = minecraft.gameSettings.advancedItemTooltips;
 		return getInformation(stack, minecraft.player, advancedTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static List<String> getInformation(ItemStack stack, EntityPlayer player, ITooltipFlag flag){
+	public static List<String> getInformation(ItemStack stack, EntityPlayer player, ITooltipFlag flag) {
 		if (stack.isEmpty()) {
 			return Collections.emptyList();
 		}
 		List<String> tooltip = stack.getTooltip(player, flag);
 		for (int i = 0; i < tooltip.size(); ++i) {
 			if (i == 0) {
-				tooltip.set(i, stack.getRarity().rarityColor + tooltip.get(i));
+				tooltip.set(i, stack.getRarity().color + tooltip.get(i));
 			} else {
 				tooltip.set(i, TextFormatting.GRAY + tooltip.get(i));
 			}

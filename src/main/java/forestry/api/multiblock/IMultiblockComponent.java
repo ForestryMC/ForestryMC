@@ -7,8 +7,9 @@ package forestry.api.multiblock;
 
 import javax.annotation.Nullable;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.util.math.BlockPos;
+
+import com.mojang.authlib.GameProfile;
 
 /**
  * Basic interface for a multiblock machine component.

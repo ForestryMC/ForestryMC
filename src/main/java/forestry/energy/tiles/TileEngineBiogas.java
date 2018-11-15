@@ -109,9 +109,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			// If we have reached a safe temperature, enable energy transfer
 			if (heatStage > 0.25 && shutdown) {
 				shutdown(false);
-			} else if (shutdown)
-
-			{
+			} else if (shutdown) {
 				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == FluidRegistry.LAVA) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drainInternal(1, true);

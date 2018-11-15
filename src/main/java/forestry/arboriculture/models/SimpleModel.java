@@ -52,7 +52,7 @@ public class SimpleModel implements IModel {
 	private final IModelState defaultState;
 
 	public SimpleModel(List<ResourceLocation> locations, List<IModel> models, List<Variant> variants,
-			IModelState defaultState) {
+		IModelState defaultState) {
 		this.variants = variants;
 		this.locations = ImmutableList.copyOf(locations);
 		this.models = ImmutableList.copyOf(models);
@@ -126,7 +126,7 @@ public class SimpleModel implements IModel {
 			for (int i = 0; i < variants.size(); i++) {
 				IModel model = models.get(i);
 				builder.add(model.bake(MultiModelState.getPartState(state, model, i), format, bakedTextureGetter),
-						variants.get(i).getWeight());
+					variants.get(i).getWeight());
 			}
 			return builder.build();
 		}

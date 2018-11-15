@@ -29,9 +29,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class ItemStackUtil {
 
@@ -74,7 +75,7 @@ public abstract class ItemStackUtil {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * @return The registry name of the block as {@link ResourceLocation}
 	 */
@@ -87,7 +88,7 @@ public abstract class ItemStackUtil {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * @return The registry name of the block as {@link ResourceLocation}
 	 */
@@ -236,12 +237,12 @@ public abstract class ItemStackUtil {
 
 		return condensed;
 	}
-	
+
 	public static Pair<NonNullList<ItemStack>, NonNullList<String>> condenseStacks(NonNullList<ItemStack> stacks, NonNullList<String> dicts) {
 		NonNullList<ItemStack> condensed = NonNullList.create();
 		NonNullList<String> condensedDicts = NonNullList.create();
 
-		for (int i = 0;i < stacks.size();i++) {
+		for (int i = 0; i < stacks.size(); i++) {
 			ItemStack stack = stacks.get(i);
 			if (stack.isEmpty()) {
 				continue;
@@ -312,7 +313,7 @@ public abstract class ItemStackUtil {
 
 		return totalSets;
 	}
-	
+
 	/**
 	 * Counts how many full sets are contained in the passed stock
 	 */
@@ -320,11 +321,11 @@ public abstract class ItemStackUtil {
 		int totalSets = 0;
 
 		Pair<NonNullList<ItemStack>, NonNullList<String>> condensedRequired = ItemStackUtil.condenseStacks(set, oreDicts);
-		NonNullList<String> condensedRequiredDicts= condensedRequired.getRight();
+		NonNullList<String> condensedRequiredDicts = condensedRequired.getRight();
 		NonNullList<ItemStack> condensedRequiredStacks = condensedRequired.getLeft();
 		NonNullList<ItemStack> condensedOfferedStacks = ItemStackUtil.condenseStacks(stock);
 
-		for (int y = 0;y < condensedRequiredStacks.size();y++) {
+		for (int y = 0; y < condensedRequiredStacks.size(); y++) {
 			ItemStack req = condensedRequiredStacks.get(y);
 			String offerDict = condensedRequiredDicts.get(y);
 			int reqCount = 0;
@@ -384,13 +385,13 @@ public abstract class ItemStackUtil {
 		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().isEmpty()) {
 			return true;
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
 		}
 	}
-	
+
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
@@ -422,12 +423,12 @@ public abstract class ItemStackUtil {
 
 		return false;
 	}
-	
+
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, @Nullable String oreDict, boolean craftingTools) {
-		if(isCraftingEquivalent(base, comparison, craftingTools)){
+		if (isCraftingEquivalent(base, comparison, craftingTools)) {
 			return true;
 		}
 
@@ -435,7 +436,7 @@ public abstract class ItemStackUtil {
 			int[] validIds = OreDictionary.getOreIDs(comparison);
 			int validID = OreDictionary.getOreID(oreDict);
 
-			for(int id : validIds){
+			for (int id : validIds) {
 				if (id == validID) {
 					return true;
 				}
@@ -444,7 +445,7 @@ public abstract class ItemStackUtil {
 
 		return false;
 	}
-	
+
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean craftingTools) {
 		if (base.isEmpty() || comparison.isEmpty()) {
 			return false;
@@ -458,7 +459,7 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (base.getTagCompound() != null && !base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() != null && !base.getTagCompound().isEmpty()) {
 			if (!ItemStack.areItemStacksEqual(base, comparison)) {
 				return false;
 			}
@@ -478,7 +479,7 @@ public abstract class ItemStackUtil {
 			return false;
 		}
 
-		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().isEmpty()) {
 			// tool uses meta for damage
 			return true;
 		} else {
@@ -593,7 +594,7 @@ public abstract class ItemStackUtil {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Checks like {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}
 	 * but ignores stack size (count).

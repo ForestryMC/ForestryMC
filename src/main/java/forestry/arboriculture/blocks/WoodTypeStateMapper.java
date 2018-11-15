@@ -74,7 +74,7 @@ public class WoodTypeStateMapper extends StateMapperBase implements IWoodStateMa
 		if (woodType instanceof EnumVanillaWoodType) {
 			return getVanillaModelResourceLocation(block, woodType, properties);
 		} else {
-			return getModelResourceLocation(woodType, properties, block.getRegistryName().getResourceDomain());
+			return getModelResourceLocation(woodType, properties, block.getRegistryName().getNamespace());
 		}
 	}
 

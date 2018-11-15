@@ -50,7 +50,7 @@ public class GameProfileDataSerializer implements DataSerializer<Optional<GamePr
 	public DataParameter<Optional<GameProfile>> createKey(int id) {
 		return new DataParameter<>(id, this);
 	}
-	
+
 	@Override
 	public Optional<GameProfile> copyValue(Optional<GameProfile> value) {
 		return value;

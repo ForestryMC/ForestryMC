@@ -68,7 +68,7 @@ public class ItemResearchNote extends ItemForestry {
 			for (IMutation mutation : root.getCombinations(allele0)) {
 				if (mutation.isPartner(allele1)) {
 					if (result == null
-							|| mutation.getTemplate()[0].getUID().equals(result.getUID())) {
+						|| mutation.getTemplate()[0].getUID().equals(result.getUID())) {
 						encoded = mutation;
 						break;
 					}
@@ -163,9 +163,9 @@ public class ItemResearchNote extends ItemForestry {
 				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote"));
 
 				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote2",
-						TextFormatting.GRAY + species0.getAlleleName(),
-						TextFormatting.GRAY + species1.getAlleleName(),
-						TextFormatting.GREEN + speciesResult.getAlleleName()));
+					TextFormatting.GRAY + species0.getAlleleName(),
+					TextFormatting.GRAY + species1.getAlleleName(),
+					TextFormatting.GREEN + speciesResult.getAlleleName()));
 
 				return true;
 			}
@@ -278,7 +278,7 @@ public class ItemResearchNote extends ItemForestry {
 		} else {
 			researcherName = note.researcher.getName();
 		}
-		return Translator.translateToLocalFormatted(getUnlocalizedName(itemstack) + ".name", researcherName);
+		return Translator.translateToLocalFormatted(getTranslationKey(itemstack) + ".name", researcherName);
 	}
 
 	@Override

@@ -149,11 +149,6 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		}
 	}
 
-	@Override
-	protected boolean hasClickedOutside(int mouseX, int mouseY, int guiLeft, int guiTop) {
-		return !analyzer.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop);
-	}
-
 	/* Methods - Implement ISlotChangeWatcher*/
 	@Override
 	public void onSlotChanged(IInventory inventory, int slot) {

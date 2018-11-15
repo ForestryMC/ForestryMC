@@ -33,8 +33,8 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 		}
 
 		ingredients.setInputLists(ItemStack.class, Arrays.asList(
-				Collections.singletonList(fermentable),
-				fuelInputs
+			Collections.singletonList(fermentable),
+			fuelInputs
 		));
 
 		FluidStack fluidInput = getRecipe().getFluidResource().copy();

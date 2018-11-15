@@ -106,7 +106,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 
 		if (!categories.isEmpty()) {
 			registry.addRecipeCategories(
-					categories.toArray(new IRecipeCategory[0])
+				categories.toArray(new IRecipeCategory[0])
 			);
 		}
 	}

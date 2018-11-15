@@ -48,6 +48,7 @@ import forestry.energy.inventory.InventoryGenerator;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.plugins.ForestryCompatPlugins;
+
 import ic2.api.energy.prefab.BasicSource;
 
 public class TileEuGenerator extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile, IStreamableGui {
@@ -70,7 +71,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 		resourceTank.setFilters(FuelManager.generatorFuel.keySet());
 
 		tankManager = new TankManager(this, resourceTank);
-		
+
 		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.INDUSTRIALCRAFT2)) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
 		}

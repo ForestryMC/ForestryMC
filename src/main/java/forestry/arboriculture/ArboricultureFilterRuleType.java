@@ -18,19 +18,19 @@ import forestry.api.genetics.IFilterRuleType;
 import forestry.core.render.TextureManagerForestry;
 
 public enum ArboricultureFilterRuleType implements IFilterRuleType {
-	TREE{
+	TREE {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent();
 		}
 	},
-	SAPLING{
+	SAPLING {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumGermlingType.SAPLING;
 		}
 	},
-	POLLEN{
+	POLLEN {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumGermlingType.POLLEN;

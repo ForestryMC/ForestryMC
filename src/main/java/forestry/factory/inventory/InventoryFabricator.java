@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 import forestry.factory.tiles.TileFabricator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	public static final short SLOT_METAL = 0;

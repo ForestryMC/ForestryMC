@@ -1,7 +1,6 @@
 package forestry.sorting;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -79,7 +78,8 @@ public final class FakeFilterLogic implements IFilterLogic {
 
 	@Override
 	public INetworkHandler getNetworkHandler() {
-		return (l, s, p)->{ };
+		return (l, s, p) -> {
+		};
 	}
 
 	@Override

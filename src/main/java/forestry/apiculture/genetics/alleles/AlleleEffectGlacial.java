@@ -10,16 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IEffectData;
-import forestry.core.utils.VectUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.IEffectData;
+import forestry.core.utils.VectUtil;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 

@@ -1,7 +1,6 @@
 package forestry.sorting;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -237,9 +236,9 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Nullable
-	public IAllele getGenomeFilter(EnumFacing facing, int index, boolean active){
+	public IAllele getGenomeFilter(EnumFacing facing, int index, boolean active) {
 		AlleleFilter filter = getGenomeFilter(facing, index);
-		if(filter == null){
+		if (filter == null) {
 			return null;
 		}
 		return active ? filter.activeAllele : filter.inactiveAllele;

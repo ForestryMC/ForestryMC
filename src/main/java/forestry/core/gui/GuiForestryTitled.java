@@ -30,15 +30,15 @@ public abstract class GuiForestryTitled<C extends Container> extends GuiForestry
 
 		String name = Translator.translateToLocal(this.unlocalizedTitle);
 		textLayout.line = 6;
-		if(centeredTitle()) {
+		if (centeredTitle()) {
 			textLayout.drawCenteredLine(name, 0, ColourProperties.INSTANCE.get("gui.title"));
-		}else{
+		} else {
 			textLayout.drawLine(name, 8, ColourProperties.INSTANCE.get("gui.title"));
 		}
 		bindTexture(textureFile);
 	}
 
-	protected boolean centeredTitle(){
+	protected boolean centeredTitle() {
 		return true;
 	}
 }

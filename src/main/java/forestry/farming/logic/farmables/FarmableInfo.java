@@ -22,7 +22,7 @@ public class FarmableInfo implements IFarmableInfo {
 	}
 
 	@Override
-	public void addGermlings(Collection<ItemStack> germlings){
+	public void addGermlings(Collection<ItemStack> germlings) {
 		this.germlings.addAll(germlings);
 	}
 
@@ -32,7 +32,7 @@ public class FarmableInfo implements IFarmableInfo {
 	}
 
 	@Override
-	public void addProducts(Collection<ItemStack> products){
+	public void addProducts(Collection<ItemStack> products) {
 		this.products.addAll(products);
 	}
 

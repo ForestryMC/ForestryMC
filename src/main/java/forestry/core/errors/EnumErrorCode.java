@@ -84,10 +84,8 @@ public enum EnumErrorCode implements IErrorState {
 	NO_FARMLAND("no_farmland"), // Smooth sandstone, bricks or stone bricks create a platform the farm will build on.
 	NO_LIQUID_FARM("no_liquid"), // Depending on rainfall, temperature and humidity farms need to be supplied with varying amounts of water.
 
-	// Greenhouse
-	NOT_LOADED("not_loaded"), // One chunk of the greenhouse is not loaded.
-	NOT_CLOSED("not_closed"), // The roof of the greenhouse is not closed.
-	TOO_LARGE("too_large") //The greenhouse is too large for its controller or it is not closed at a position.
+	// Habitatformer
+	WRONG_RESOURCE("wrong_resource", "no_recipe") // The habitatformer can not reach the targeted humidity wit the inserted fluid.
 	;
 
 	private final String name;

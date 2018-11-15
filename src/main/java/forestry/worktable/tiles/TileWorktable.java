@@ -114,7 +114,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			currentRecipe.decrementRecipe();
 		}
 	}
-	
+
 	@Override
 	public ItemStack getResult(InventoryCrafting inventoryCrafting, World world) {
 		if (currentRecipe != null) {
@@ -122,12 +122,12 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		}
 		return ItemStack.EMPTY;
 	}
-	
+
 	/* ICrafterWorktable */
 	@Override
 	public boolean canTakeStack(int craftingSlotIndex) {
 		return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT ||
-				canCraftCurrentRecipe();
+			canCraftCurrentRecipe();
 	}
 
 	private boolean canCraftCurrentRecipe() {
@@ -143,7 +143,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (currentRecipe == null) {
 			return false;
 		}
-		
+
 		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
 		if (selectedRecipe == null) {
 			return false;
@@ -154,7 +154,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (crafting == null) {
 			return false;
 		}
-		
+
 		NonNullList<ItemStack> recipeItems = InventoryUtil.getStacks(crafting);
 
 		IInventory inventory;
@@ -183,7 +183,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		Preconditions.checkNotNull(currentRecipe);
 		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
 		Preconditions.checkNotNull(selectedRecipe);
-		
+
 		ForgeHooks.setCraftingPlayer(player);
 		InventoryCraftingForestry craftMatrix = currentRecipe.getCraftMatrix();
 		NonNullList<ItemStack> remainingItems = selectedRecipe.getRemainingItems(craftMatrix.copy());
@@ -196,19 +196,19 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 				}
 			}
 		}
-		
+
 		if (!world.isRemote) {
 			recipeMemory.memorizeRecipe(world.getTotalWorldTime(), currentRecipe);
 		}
 	}
-	
+
 	@Nullable
 	@Override
 	public IRecipe getRecipeUsed() {
 		if (currentRecipe == null) {
 			return null;
 		}
-		
+
 		return currentRecipe.getSelectedRecipe();
 	}
 

@@ -1,7 +1,6 @@
 package forestry.sorting.network.packets;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
@@ -57,7 +56,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 		@Override
 		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
 			BlockPos pos = data.readBlockPos();
-			EnumFacing facing = EnumFacing.getFront(data.readShort());
+			EnumFacing facing = EnumFacing.byIndex(data.readShort());
 			short index = data.readShort();
 			boolean active = data.readBoolean();
 			IAllele allele;
@@ -67,7 +66,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 				allele = null;
 			}
 			IFilterLogic logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
-			if(logic != null) {
+			if (logic != null) {
 				if (logic.setGenomeFilter(facing, index, active, allele)) {
 					logic.getNetworkHandler().sendToPlayers(logic, player.getServerWorld(), player);
 				}

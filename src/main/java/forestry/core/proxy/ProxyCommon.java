@@ -38,9 +38,8 @@ public class ProxyCommon {
 		MultiblockServerTickHandler multiblockServerTickHandler = new MultiblockServerTickHandler();
 		MinecraftForge.EVENT_BUS.register(multiblockServerTickHandler);
 	}
-	
-	public void registerEventHandlers(){
-		
+
+	public void registerEventHandlers() {
 	}
 
 	public File getForestryRoot() {

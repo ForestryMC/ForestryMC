@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import java.util.Collection;
-
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import forestry.arboriculture.genetics.TreeDefinition;
+
+import java.util.Collection;
+
 import net.minecraft.block.properties.PropertyEnum;
+
+import forestry.arboriculture.genetics.TreeDefinition;
 
 public class PropertyTreeType extends PropertyEnum<TreeDefinition> {
 	public static int getBlockCount(int variantsPerBlock) {

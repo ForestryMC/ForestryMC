@@ -11,7 +11,9 @@
 package forestry.core.tiles;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
@@ -23,8 +25,6 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class EscritoireGameToken implements INbtWritable, IStreamable {
 
@@ -47,7 +47,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 	private State state = State.UNREVEALED;
 
-	public EscritoireGameToken(PacketBufferForestry data) throws IOException {
+	public EscritoireGameToken(PacketBufferForestry data) {
 		readData(data);
 	}
 

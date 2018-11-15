@@ -26,13 +26,13 @@ public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 		}
 	}
 
-	public void sendContainerToListeners(){
-		for(IContainerListener listener : listeners){
+	public void sendContainerToListeners() {
+		for (IContainerListener listener : listeners) {
 			listener.sendAllContents(this, getInventory());
 		}
 	}
 
-	public IItemHandler getItemHandler(){
+	public IItemHandler getItemHandler() {
 		return new InvWrapper(tile.getInternalInventory());
 	}
 }

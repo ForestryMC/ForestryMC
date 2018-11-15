@@ -37,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelBaker;
 import forestry.api.core.IModelBakerModel;
 import forestry.core.models.ModelManager;
+
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -45,7 +46,7 @@ import org.lwjgl.util.vector.Vector3f;
 @SideOnly(Side.CLIENT)
 public final class ModelBaker implements IModelBaker {
 
-	private static final float[] UVS = new float[] {0F, 0F, 16.0F, 16.0F, 0F, 0F, 16.0F, 16.0F };
+	private static final float[] UVS = new float[]{0.0F, 0.0F, 16.0F, 16.0F, 0.0F, 0.0F, 16.0F, 16.0F};
 	private static final FaceBakery FACE_BAKERY = new FaceBakery();
 	private static final Vector3f POS_FROM = new Vector3f(0.0F, 0.0F, 0.0F);
 	private static final Vector3f POS_TO = new Vector3f(16.0F, 16.0F, 16.0F);
@@ -74,7 +75,7 @@ public final class ModelBaker implements IModelBaker {
 
 	@Override
 	public void addModel(TextureAtlasSprite texture, int colorIndex) {
-		addModel(new TextureAtlasSprite[] { texture, texture, texture, texture, texture, texture }, colorIndex);
+		addModel(new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
 	}
 
 	@Override
@@ -99,8 +100,8 @@ public final class ModelBaker implements IModelBaker {
 
 	@Override
 	public void addBlockModel(@Nullable BlockPos pos, TextureAtlasSprite texture, int colorIndex) {
-		addBlockModel(pos, new TextureAtlasSprite[] { texture, texture, texture, texture, texture, texture },
-				colorIndex);
+		addBlockModel(pos, new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture},
+			colorIndex);
 	}
 
 	@Override
@@ -142,7 +143,7 @@ public final class ModelBaker implements IModelBaker {
 			BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
 			BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
 			BakedQuad quad = FACE_BAKERY.makeBakedQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation,
-					null, true, true);
+				null, true, true);
 
 			currentModel.addQuad(facing, quad);
 		}

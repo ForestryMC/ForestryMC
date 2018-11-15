@@ -37,13 +37,13 @@ public class MutationsTab extends DatabaseTab {
 
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
 		Collection<? extends IMutation> mutations = getValidMutations(speciesRoot.getCombinations(species));
-		if(!mutations.isEmpty()) {
+		if (!mutations.isEmpty()) {
 			container.label(Translator.translateToLocal("for.gui.database.mutations.further"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
 			mutations.forEach(mutation -> groupHelper.add(GuiElementFactory.INSTANCE.createMutation(0, 0, 50, 16, mutation, species, breedingTracker)));
 			groupHelper.finish(true);
 		}
 		mutations = getValidMutations(speciesRoot.getResultantMutations(species));
-		if(mutations.isEmpty()){
+		if (mutations.isEmpty()) {
 			return;
 		}
 		container.label(Translator.translateToLocal("for.gui.database.mutations.resultant"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
@@ -51,7 +51,7 @@ public class MutationsTab extends DatabaseTab {
 		groupHelper.finish(true);
 	}
 
-	private Collection<? extends IMutation> getValidMutations(List<? extends IMutation> mutations){
+	private Collection<? extends IMutation> getValidMutations(List<? extends IMutation> mutations) {
 		mutations.removeIf(IMutation::isSecret);
 		return mutations;
 	}

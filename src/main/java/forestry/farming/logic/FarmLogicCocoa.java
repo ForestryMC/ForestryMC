@@ -133,7 +133,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		IBlockState blockState = world.getBlockState(current);
 		while (isJungleTreeTrunk(blockState)) {
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
-				BlockPos candidate = new BlockPos(current.getX() + direction.getFrontOffsetX(), current.getY(), current.getZ() + direction.getFrontOffsetZ());
+				BlockPos candidate = new BlockPos(current.getX() + direction.getXOffset(), current.getY(), current.getZ() + direction.getZOffset());
 				if (world.isBlockLoaded(candidate) && world.isAirBlock(candidate)) {
 					return farmHousing.plantGermling(cocoa, world, candidate, farmDirection);
 				}
@@ -214,7 +214,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						continue;
 					}
 
-					if(!world.isBlockLoaded(candidate)){
+					if (!world.isBlockLoaded(candidate)) {
 						continue;
 					}
 

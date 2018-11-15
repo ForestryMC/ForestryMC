@@ -22,7 +22,7 @@ public abstract class DatabasePlugin<I extends IIndividual> implements IDatabase
 	}
 
 	@Override
-	public IDatabaseTab[] getTabs(){
+	public IDatabaseTab[] getTabs() {
 		return new IDatabaseTab[]{
 			activeTab,
 			inactiveTab,

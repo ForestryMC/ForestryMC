@@ -52,7 +52,7 @@ public enum EnumHoneyComb implements IStringSerializable {
 		this.secondaryColor = secondary.getRGB();
 		this.secret = secret;
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -61,9 +61,9 @@ public enum EnumHoneyComb implements IStringSerializable {
 	public boolean isSecret() {
 		return secret;
 	}
-	
-	public static EnumHoneyComb get(int meta){
-		if(meta >= VALUES.length){
+
+	public static EnumHoneyComb get(int meta) {
+		if (meta >= VALUES.length) {
 			meta = 0;
 		}
 		return VALUES[meta];

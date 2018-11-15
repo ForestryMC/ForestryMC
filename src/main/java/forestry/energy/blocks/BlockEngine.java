@@ -39,22 +39,22 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	static {
 		boundingBoxesForDirections.put(EnumFacing.DOWN, ImmutableList.of(
-				new AxisAlignedBB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
+			new AxisAlignedBB(0.0, 0.5, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
 		));
 		boundingBoxesForDirections.put(EnumFacing.UP, ImmutableList.of(
-				new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), new AxisAlignedBB(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
+			new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0), new AxisAlignedBB(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
 		));
 		boundingBoxesForDirections.put(EnumFacing.NORTH, ImmutableList.of(
-				new AxisAlignedBB(0.0, 0.0, 0.5, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
+			new AxisAlignedBB(0.0, 0.0, 0.5, 1.0, 1.0, 1.0), new AxisAlignedBB(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
 		));
 		boundingBoxesForDirections.put(EnumFacing.SOUTH, ImmutableList.of(
-				new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 0.5), new AxisAlignedBB(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
+			new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 0.5), new AxisAlignedBB(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
 		));
 		boundingBoxesForDirections.put(EnumFacing.WEST, ImmutableList.of(
-				new AxisAlignedBB(0.5, 0.0, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
+			new AxisAlignedBB(0.5, 0.0, 0.0, 1.0, 1.0, 1.0), new AxisAlignedBB(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
 		));
 		boundingBoxesForDirections.put(EnumFacing.EAST, ImmutableList.of(
-				new AxisAlignedBB(0.0, 0.0, 0.0, 0.5, 1.0, 1.0), new AxisAlignedBB(0.5, 0.25, 0.25, 1.0, 0.75, 0.75)
+			new AxisAlignedBB(0.0, 0.0, 0.0, 0.5, 1.0, 1.0), new AxisAlignedBB(0.5, 0.25, 0.25, 1.0, 0.75, 0.75)
 		));
 	}
 
@@ -112,7 +112,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	@Override
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
 		return rotate(world, pos) ||
-				super.rotateBlock(world, pos, axis);
+			super.rotateBlock(world, pos, axis);
 	}
 
 	private static boolean isOrientedAtEnergyReciever(World world, BlockPos pos, EnumFacing orientation) {
@@ -163,7 +163,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	@Override
 	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
 		TileEngine tileEngine = TileUtil.getTile(worldIn, pos, TileEngine.class);
-		if(tileEngine != null){
+		if (tileEngine != null) {
 			EnergyManager energyManager = tileEngine.getEnergyManager();
 			return energyManager.calculateRedstone();
 		}

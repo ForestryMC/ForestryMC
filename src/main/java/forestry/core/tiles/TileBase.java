@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,8 +23,6 @@ import net.minecraft.world.World;
 import forestry.core.blocks.BlockBase;
 import forestry.core.gui.GuiHandler;
 
-import javax.annotation.Nonnull;
-
 public abstract class TileBase extends TileForestry {
 
 	public void openGui(EntityPlayer player, ItemStack heldItem) {
@@ -33,7 +33,7 @@ public abstract class TileBase extends TileForestry {
 	public String getUnlocalizedTitle() {
 		Block block = getBlockType();
 		if (block instanceof BlockBase) {
-			return block.getUnlocalizedName() + ".name";
+			return block.getTranslationKey() + ".name";
 		}
 		return super.getUnlocalizedTitle();
 	}

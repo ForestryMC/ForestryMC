@@ -33,6 +33,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -188,8 +189,13 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
+	public boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
+		return genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos, rand);
+	}
+
+	@Override
 	public boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos) {
-		return genome.getPrimary().getGenerator().setLeaves(genome, world, owner, pos);
+		return setLeaves(world, owner, pos, world.rand);
 	}
 
 	@Override
@@ -213,7 +219,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IFruitProvider provider = getGenome().getFruitProvider();
 		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
 		return suitable.contains(provider.getFamily()) &&
-				provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
+			provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
 	}
 
 	/* INFORMATION */
@@ -262,11 +268,9 @@ public class Tree extends Individual implements ITree, IPlantable {
 		String girth = TextFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
 		String saplings = TextFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getAlleleName();
 		String yield = TextFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getAlleleName();
-		String carbonization = TextFormatting.GRAY + "CA: " + secondary.getWoodProvider().getCarbonization();
 		list.add(String.format("%s, %s", saplings, maturation));
 		list.add(String.format("%s, %s", height, girth));
 		list.add(String.format("%s, %s", yield, sappiness));
-		list.add(String.format("%s", carbonization));
 
 		IAlleleBoolean primaryFireproof = (IAlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue()) {

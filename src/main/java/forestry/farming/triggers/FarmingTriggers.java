@@ -13,8 +13,9 @@ package forestry.farming.triggers;
 import java.util.Arrays;
 import java.util.List;
 
-import buildcraft.api.statements.ITriggerExternal;
 import forestry.core.triggers.Trigger;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class FarmingTriggers {
 	public static Trigger lowResourceLiquid50;
@@ -30,15 +31,15 @@ public class FarmingTriggers {
 
 	public static void initialize() {
 		allExternalTriggers = Arrays.asList(
-				lowResourceLiquid50 = new TriggerLowLiquid("lowLiquid.50", 0.5f),
-				lowResourceLiquid25 = new TriggerLowLiquid("lowLiquid.25", 0.25f),
-				lowSoil128 = new TriggerLowSoil(128),
-				lowSoil64 = new TriggerLowSoil(64),
-				lowSoil32 = new TriggerLowSoil(32),
-				lowFertilizer50 = new TriggerLowFertilizer("lowFertilizer.50", 0.5f),
-				lowFertilizer25 = new TriggerLowFertilizer("lowFertilizer.25", 0.25f),
-				lowGermlings25 = new TriggerLowGermlings("lowGermlings.25", 0.25f),
-				lowGermlings10 = new TriggerLowGermlings("lowGermlings.10", 0.1f)
+			lowResourceLiquid50 = new TriggerLowLiquid("lowLiquid.50", 0.5f),
+			lowResourceLiquid25 = new TriggerLowLiquid("lowLiquid.25", 0.25f),
+			lowSoil128 = new TriggerLowSoil(128),
+			lowSoil64 = new TriggerLowSoil(64),
+			lowSoil32 = new TriggerLowSoil(32),
+			lowFertilizer50 = new TriggerLowFertilizer("lowFertilizer.50", 0.5f),
+			lowFertilizer25 = new TriggerLowFertilizer("lowFertilizer.25", 0.25f),
+			lowGermlings25 = new TriggerLowGermlings("lowGermlings.25", 0.25f),
+			lowGermlings10 = new TriggerLowGermlings("lowGermlings.10", 0.1f)
 		);
 	}
 }

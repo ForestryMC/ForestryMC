@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "type=plain": { "model": "forestry:greenhouse/plain" },
+		"type=border": { "model": "forestry:greenhouse/plain" },
+		"type=border_center": { "model": "forestry:greenhouse/plain" },
+		"type=gearbox": { "model": "forestry:greenhouse/gearbox" },
+		"type=control": { "model": "forestry:greenhouse/control" },
+		"type=screen": { "model": "forestry:greenhouse/screen" }
+	}
+}

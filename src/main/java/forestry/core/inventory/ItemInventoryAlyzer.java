@@ -175,7 +175,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	protected void onWriteNBT(NBTTagCompound nbt) {
 		ItemStack energy = getStackInSlot(ItemInventoryAlyzer.SLOT_ENERGY);
 		int amount = 0;
-		if(!energy.isEmpty()){
+		if (!energy.isEmpty()) {
 			amount = energy.getCount();
 		}
 		nbt.setInteger("Charges", amount);

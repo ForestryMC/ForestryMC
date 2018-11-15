@@ -36,6 +36,8 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.climate.ClimateCapabilities;
+import forestry.api.climate.IClimateListener;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -92,6 +94,7 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+			capability == ClimateCapabilities.CLIMATE_LISTENER ||
 			super.hasCapability(capability, facing);
 	}
 
@@ -110,6 +113,10 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
 			}
+		}
+		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
+			IClimateListener listener = getMultiblockLogic().getController().getClimateListener();
+			return ClimateCapabilities.CLIMATE_LISTENER.cast(listener);
 		}
 		return null;
 	}

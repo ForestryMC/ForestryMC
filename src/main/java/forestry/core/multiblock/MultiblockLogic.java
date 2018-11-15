@@ -12,12 +12,13 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.utils.Log;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.utils.Log;
 
 public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> implements IMultiblockLogic {
 	private final Class<T> controllerClass;
@@ -140,11 +141,11 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 		return controller != null;
 	}
 
-	public final void becomeMultiblockSaveDelegate() {
+	public void becomeMultiblockSaveDelegate() {
 		this.saveMultiblockData = true;
 	}
 
-	public final void forfeitMultiblockSaveDelegate() {
+	public void forfeitMultiblockSaveDelegate() {
 		this.saveMultiblockData = false;
 	}
 

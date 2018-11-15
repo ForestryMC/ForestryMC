@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateManager;
-import forestry.api.climate.IClimateStates;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISimpleFarmLogic;
@@ -54,6 +53,10 @@ public class ForestryAPI {
 	@SideOnly(Side.CLIENT)
 	public static IModelManager modelManager;
 
+	/**
+	 * @deprecated Please use {@link forestry.api.climate.ClimateManager#climateRoot}.
+	 */
+	@Deprecated
 	public static IClimateManager climateManager;
 
 	/**
@@ -63,15 +66,10 @@ public class ForestryAPI {
 	public static IModuleManager moduleManager;
 
 	/**
-	 *
-	 */
-	public static IClimateStates states;
-
-	/**
 	 * A registry for register fertilizers, {@link IFarmable}s and {@link ISimpleFarmLogic}s
 	 */
 	public static IFarmRegistry farmRegistry;
-	
+
 	/**
 	 * The currently active {@link IGameMode}.
 	 */

@@ -44,5 +44,14 @@
 		"icon":{
 			"item": "forestry:mailbox"
 		}
+	},
+	{
+		"name": "habitat_former",
+		"icon":{
+			"item": "forestry:habitat_former"
+		},
+		"modules": [
+			"climatology"
+		]
 	}
 ]

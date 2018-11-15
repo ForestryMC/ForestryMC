@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.mail.items;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.core.items.ItemRegistry;
 import forestry.core.utils.OreDictUtil;
-import net.minecraft.item.ItemStack;
 
 public class ItemRegistryMail extends ItemRegistry {
 	public final ItemStamps stamps;

@@ -15,11 +15,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.climate.ClimateStateType;
 import forestry.api.climate.IClimateState;
 import forestry.core.climate.AbsentClimateState;
-import forestry.core.climate.ClimateStates;
-import forestry.greenhouse.api.greenhouse.Position2D;
+import forestry.core.climate.ClimateStateHelper;
 
 import io.netty.buffer.ByteBuf;
 
@@ -91,15 +89,6 @@ public class PacketBufferForestry extends PacketBuffer {
 		return null;
 	}
 
-	public void writePosition(Position2D position) {
-		writeInt(position.getX());
-		writeInt(position.getZ());
-	}
-
-	public Position2D readPosition() {
-		return new Position2D(readInt(), readInt());
-	}
-
 	public void writeEntityById(Entity entity) {
 		writeVarInt(entity.getEntityId());
 	}
@@ -127,7 +116,7 @@ public class PacketBufferForestry extends PacketBuffer {
 		}
 		return enumValues[ordinal];
 	}
-	
+
 	public void writeStreamable(@Nullable Object object) {
 		if (object != null && object instanceof IStreamable) {
 			IStreamable streamable = (IStreamable) object;
@@ -181,22 +170,21 @@ public class PacketBufferForestry extends PacketBuffer {
 		T create(PacketBufferForestry data) throws IOException;
 	}
 
-	public void writeClimateState(IClimateState climateState){
-		if(climateState.isPresent()) {
+	public void writeClimateState(IClimateState climateState) {
+		if (climateState.isPresent()) {
 			writeBoolean(true);
-			writeByte(climateState.getType().ordinal());
 			writeFloat(climateState.getTemperature());
 			writeFloat(climateState.getHumidity());
-		}else{
+			writeBoolean(climateState.isMutable());
+		} else {
 			writeBoolean(false);
 		}
 	}
 
-	public IClimateState readClimateState(){
-		if(readBoolean()){
-			ClimateStateType type = ClimateStateType.values()[readByte()];
-			return ClimateStates.of(readFloat(), readFloat(), type);
-		}else{
+	public IClimateState readClimateState() {
+		if (readBoolean()) {
+			return ClimateStateHelper.of(readFloat(), readFloat(), readBoolean());
+		} else {
 			return AbsentClimateState.INSTANCE;
 		}
 	}

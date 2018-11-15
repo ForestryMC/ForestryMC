@@ -8,15 +8,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Log;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Log;
 
 /**
  * This class manages all the multiblock controllers that exist in a given world,

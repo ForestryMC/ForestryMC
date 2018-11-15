@@ -29,11 +29,11 @@ public class VillagerTradeLists {
 		public final EntityVillager.PriceInfo sellingPriceInfo;
 
 		public GiveItemForItemAndEmerald(
-				ItemStack buyingItemStack,
-				@Nullable EntityVillager.PriceInfo buyingPriceInfo,
-				@Nullable EntityVillager.PriceInfo emeraldPriceInfo,
-				ItemStack sellingItemstack,
-				@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
+			ItemStack buyingItemStack,
+			@Nullable EntityVillager.PriceInfo buyingPriceInfo,
+			@Nullable EntityVillager.PriceInfo emeraldPriceInfo,
+			ItemStack sellingItemstack,
+			@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
 			this.buyingItemStack = buyingItemStack;
 			this.buyingPriceInfo = buyingPriceInfo;
 			this.emeraldPriceInfo = emeraldPriceInfo;
@@ -189,12 +189,12 @@ public class VillagerTradeLists {
 		public final EntityVillager.PriceInfo sellingPriceInfo;
 
 		public GiveItemForTwoItems(
-				ItemStack buyingItemStack,
-				@Nullable EntityVillager.PriceInfo buyingPriceInfo,
-				ItemStack buyingItemStackTwo,
-				@Nullable EntityVillager.PriceInfo buyingPriceItemTwoInfo,
-				ItemStack sellingItemstack,
-				@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
+			ItemStack buyingItemStack,
+			@Nullable EntityVillager.PriceInfo buyingPriceInfo,
+			ItemStack buyingItemStackTwo,
+			@Nullable EntityVillager.PriceInfo buyingPriceItemTwoInfo,
+			ItemStack sellingItemstack,
+			@Nullable EntityVillager.PriceInfo sellingPriceInfo) {
 			this.buyingItemStack = buyingItemStack;
 			this.buyingPriceInfo = buyingPriceInfo;
 			this.buyingItemStackTwo = buyingItemStackTwo;

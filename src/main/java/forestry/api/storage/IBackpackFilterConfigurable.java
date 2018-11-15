@@ -8,6 +8,7 @@ package forestry.api.storage;
 import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.oredict.OreDictionary;
 
 /**

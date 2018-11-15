@@ -11,7 +11,7 @@ public class GuiToggleButton extends GuiButton {
 
 	public GuiToggleButton(int buttonId, int x, int y, int widthIn, int heightIn, Drawable drawable) {
 		super(buttonId, x, y, widthIn, heightIn, "");
-		for(int i = 0;i < 3;i++){
+		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
 		}
 	}

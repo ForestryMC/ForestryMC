@@ -129,18 +129,18 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	public IButterflyGenome getMate() {
 		return mate;
 	}
-	
+
 	@Override
-	public Set<IErrorState> getCanSpawn(IButterflyNursery nursery,  @Nullable IButterflyCocoon cocoon) {
+	public Set<IErrorState> getCanSpawn(IButterflyNursery nursery, @Nullable IButterflyCocoon cocoon) {
 		World world = nursery.getWorldObj();
 
 		Set<IErrorState> errorStates = new HashSet<>();
 		// / Night or darkness requires nocturnal species
 		boolean isDaytime = world.isDaytime();
-		if(!isActiveThisTime(isDaytime)){
-			if(isDaytime){
+		if (!isActiveThisTime(isDaytime)) {
+			if (isDaytime) {
 				errorStates.add(EnumErrorCode.NOT_NIGHT);
-			}else{
+			} else {
 				errorStates.add(EnumErrorCode.NOT_DAY);
 			}
 		}
@@ -157,9 +157,9 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		return errorStates;
 	}
-	
+
 	@Override
-	public Set<IErrorState> getCanGrow(IButterflyNursery nursery,  @Nullable IButterflyCocoon cocoon) {
+	public Set<IErrorState> getCanGrow(IButterflyNursery nursery, @Nullable IButterflyCocoon cocoon) {
 		World world = nursery.getWorldObj();
 
 		Set<IErrorState> errorStates = new HashSet<>();
@@ -212,12 +212,12 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	@Override
 	public boolean canTakeFlight(World world, double x, double y, double z) {
 		return canFly(world) &&
-				isAcceptedEnvironment(world, x, y, z);
+			isAcceptedEnvironment(world, x, y, z);
 	}
 
 	private boolean canFly(World world) {
 		return (!world.isRaining() || getGenome().getTolerantFlyer()) &&
-				isActiveThisTime(world.isDaytime());
+			isActiveThisTime(world.isDaytime());
 	}
 
 	@Override
@@ -228,11 +228,11 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		Biome biome = world.getBiome(pos);
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, world, pos);
-		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(ClimateUtil.getHumidity(world, pos));
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, pos);
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getRainfall());
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
-				getGenome().getPrimary().getTemperature(), getGenome().getToleranceTemp(),
-				getGenome().getPrimary().getHumidity(), getGenome().getToleranceHumid());
+			getGenome().getPrimary().getTemperature(), getGenome().getToleranceTemp(),
+			getGenome().getPrimary().getHumidity(), getGenome().getToleranceHumid());
 	}
 
 	@Override

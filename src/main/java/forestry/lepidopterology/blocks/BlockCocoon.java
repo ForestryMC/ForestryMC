@@ -56,7 +56,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 		setSoundType(SoundType.GROUND);
 		setCreativeTab(null);
 		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault)
-				.withProperty(AlleleButterflyCocoon.AGE, 0));
+			.withProperty(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon != null) {
 			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-					.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
+				.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
 		}
 		return super.getActualState(state, world, pos);
 	}
@@ -132,12 +132,12 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-	
+
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-			EntityPlayer player) {
+		EntityPlayer player) {
 		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;

@@ -2,7 +2,7 @@ package forestry.api.gui.style;
 
 import java.util.function.IntSupplier;
 
-public class TextStyle implements ITextStyle{
+public class TextStyle implements ITextStyle {
 	private IntSupplier color = () -> 0xFFFFFF;
 	private boolean bold = false;
 	private boolean italic = false;
@@ -38,7 +38,7 @@ public class TextStyle implements ITextStyle{
 	}
 
 	public TextStyle setColor(int color) {
-		this.color = ()-> color;
+		this.color = () -> color;
 		return this;
 	}
 

@@ -53,7 +53,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 		return individual;
 	}
 
-	public IGenome getGenome(){
+	public IGenome getGenome() {
 		Preconditions.checkNotNull(individual, "Database Element has not been initialised.");
 		return individual.getGenome();
 	}
@@ -63,15 +63,15 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 		IGenome genome = getGenome();
 		IAllele activeAllele = genome.getActiveAllele(chromosome);
 		IAllele inactiveAllele = genome.getInactiveAllele(chromosome);
-		if(mode == DatabaseMode.BOTH){
-			if(!(activeAllele instanceof IAlleleInteger) || !(inactiveAllele instanceof IAlleleInteger)){
+		if (mode == DatabaseMode.BOTH) {
+			if (!(activeAllele instanceof IAlleleInteger) || !(inactiveAllele instanceof IAlleleInteger)) {
 				return;
 			}
 			addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleInteger) activeAllele, texOffset), GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleInteger) inactiveAllele, texOffset));
-		}else{
+		} else {
 			boolean active = mode == DatabaseMode.ACTIVE;
 			IAllele allele = active ? activeAllele : inactiveAllele;
-			if(!(allele instanceof IAlleleInteger)){
+			if (!(allele instanceof IAlleleInteger)) {
 				return;
 			}
 			addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleInteger) allele, texOffset));
@@ -81,7 +81,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 	@Override
 	public void addToleranceLine(IChromosomeType chromosome) {
 		IAllele allele = getGenome().getActiveAllele(chromosome);
-		if(!(allele instanceof IAlleleTolerance)){
+		if (!(allele instanceof IAlleleTolerance)) {
 			return;
 		}
 		addLine("  " + Translator.translateToLocal("for.gui.tolerance"), GuiElementFactory.INSTANCE.createToleranceInfo((IAlleleTolerance) allele));
@@ -112,9 +112,9 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
 	@Override
 	public void addLine(String leftText, Function<Boolean, String> toText, boolean dominant) {
-		if(mode == DatabaseMode.BOTH){
+		if (mode == DatabaseMode.BOTH) {
 			addLine(leftText, toText.apply(true), toText.apply(false), dominant, dominant);
-		}else {
+		} else {
 			addLine(leftText, toText.apply(mode == DatabaseMode.ACTIVE), dominant);
 		}
 	}
@@ -131,9 +131,9 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 		IGenome genome = getGenome();
 		IAllele activeAllele = genome.getActiveAllele(chromosome);
 		IAllele inactiveAllele = genome.getInactiveAllele(chromosome);
-		if(mode == DatabaseMode.BOTH){
+		if (mode == DatabaseMode.BOTH) {
 			addLine(leftText, toText.apply(true), toText.apply(false), activeAllele.isDominant(), inactiveAllele.isDominant());
-		}else{
+		} else {
 			boolean active = mode == DatabaseMode.ACTIVE;
 			IAllele allele = active ? activeAllele : inactiveAllele;
 			addLine(leftText, toText.apply(active), allele.isDominant());
@@ -211,13 +211,13 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 	}
 
 	@SuppressWarnings("unchecked")
-	private  <A extends IAllele> void addAlleleRow(String chromosomeName, BiFunction<A, Boolean, String> toString, IChromosomeType chromosome, @Nullable Boolean dominant) {
+	private <A extends IAllele> void addAlleleRow(String chromosomeName, BiFunction<A, Boolean, String> toString, IChromosomeType chromosome, @Nullable Boolean dominant) {
 		IGenome genome = getGenome();
 		A activeAllele = (A) genome.getActiveAllele(chromosome);
 		A inactiveAllele = (A) genome.getInactiveAllele(chromosome);
-		if(mode == DatabaseMode.BOTH){
+		if (mode == DatabaseMode.BOTH) {
 			addLine(chromosomeName, toString.apply(activeAllele, true), toString.apply(inactiveAllele, false), dominant != null ? dominant : activeAllele.isDominant(), dominant != null ? dominant : inactiveAllele.isDominant());
-		}else{
+		} else {
 			boolean active = mode == DatabaseMode.ACTIVE;
 			A allele = active ? activeAllele : inactiveAllele;
 			addLine(chromosomeName, toString.apply(allele, active), dominant != null ? dominant : allele.isDominant());

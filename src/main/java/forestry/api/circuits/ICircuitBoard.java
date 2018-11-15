@@ -7,9 +7,10 @@ package forestry.api.circuits;
 
 import java.util.List;
 
-import forestry.api.core.INbtWritable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.INbtWritable;
 
 public interface ICircuitBoard extends INbtWritable {
 	@SideOnly(Side.CLIENT)

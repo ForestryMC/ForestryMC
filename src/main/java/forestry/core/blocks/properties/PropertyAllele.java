@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core.blocks.properties;
 
-import java.util.List;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
+
+import java.util.List;
+
+import net.minecraft.block.properties.IProperty;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleProperty;
-import net.minecraft.block.properties.IProperty;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IProperty<A> {
 	protected final String name;
@@ -34,10 +36,10 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-				.add("name", this.name)
-				.add("clazz", getValueClass())
-				.add("values", this.getAllowedValues())
-				.toString();
+			.add("name", this.name)
+			.add("clazz", getValueClass())
+			.add("values", this.getAllowedValues())
+			.toString();
 	}
 
 	@Override

@@ -29,11 +29,21 @@ import forestry.core.tiles.TileAnalyzer;
 public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 
 	private final ModelAnalyzer model;
-	private final EntityItem dummyEntityItem = new EntityItem(null);
+	@Nullable
+	private EntityItem dummyEntityItem;
 	private long lastTick;
 
 	public RenderAnalyzer(String baseTexture) {
 		this.model = new ModelAnalyzer(baseTexture);
+	}
+
+	private EntityItem dummyItem(World world) {
+		if (dummyEntityItem == null) {
+			dummyEntityItem = new EntityItem(world);
+		} else {
+			dummyEntityItem.world = world;
+		}
+		return dummyEntityItem;
 	}
 
 	/**
@@ -47,7 +57,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 				IBlockState blockState = worldObj.getBlockState(analyzer.getPos());
 				if (blockState.getBlock() instanceof BlockBase) {
 					EnumFacing facing = blockState.getValue(BlockBase.FACING);
-					render(analyzer.getIndividualOnDisplay(), analyzer.getWorld(), facing, x, y, z);
+					render(analyzer.getIndividualOnDisplay(), worldObj, facing, x, y, z);
 					return;
 				}
 			}
@@ -57,27 +67,26 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
 
 	private void render(ItemStack itemstack, @Nullable World world, EnumFacing orientation, double x, double y, double z) {
 
-		dummyEntityItem.world = world;
-
 		model.render(orientation, (float) x, (float) y, (float) z);
 		if (itemstack.isEmpty() || world == null) {
 			return;
 		}
+		EntityItem dummyItem = dummyItem(world);
 		float renderScale = 1.0f;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.translate(0.5f, 0.2f, 0.5f);
 		GlStateManager.scale(renderScale, renderScale, renderScale);
-		dummyEntityItem.setItem(itemstack);
+		dummyItem.setItem(itemstack);
 
 		if (world.getTotalWorldTime() != lastTick) {
 			lastTick = world.getTotalWorldTime();
-			dummyEntityItem.onUpdate();
+			dummyItem.onUpdate();
 		}
 		RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
 
-		rendermanager.renderEntity(dummyEntityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
+		rendermanager.renderEntity(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 		GlStateManager.popMatrix();
 
 	}

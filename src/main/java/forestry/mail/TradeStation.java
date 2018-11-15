@@ -352,8 +352,8 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 				ItemStack buffer = inventory.getStackInSlot(i);
 
 				if (!buffer.isEmpty() &&
-						buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD)) &&
-						ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
+					buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD)) &&
+					ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
 
 					ItemStack decrease = inventory.decrStackSize(i, toRemove);
 					toRemove -= decrease.getCount();

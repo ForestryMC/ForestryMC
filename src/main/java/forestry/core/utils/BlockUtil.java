@@ -101,12 +101,12 @@ public abstract class BlockUtil {
 		return false;
 	}
 
-	public static boolean isBreakableBlock(World world, BlockPos pos){
+	public static boolean isBreakableBlock(World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		return isBreakableBlock(blockState, world, pos);
 	}
 
-	public static boolean isBreakableBlock(IBlockState blockState, World world, BlockPos pos){
+	public static boolean isBreakableBlock(IBlockState blockState, World world, BlockPos pos) {
 		return blockState.getBlockHardness(world, pos) >= 0.0F;
 	}
 
@@ -125,8 +125,8 @@ public abstract class BlockUtil {
 	 */
 	@Nullable
 	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-		startVec = startVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
-		endVec = endVec.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
+		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
+		endVec = endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
 		Vec3d vec32 = startVec.getIntermediateWithXValue(endVec, minX);
 		Vec3d vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
 		Vec3d vec34 = startVec.getIntermediateWithYValue(endVec, minY);
@@ -213,7 +213,7 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new RayTraceResult(minHit.addVector(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
+			return new RayTraceResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
 		}
 	}
 
@@ -237,7 +237,7 @@ public abstract class BlockUtil {
 	private static boolean isVecInsideXYBounds(@Nullable Vec3d vec, double minX, double minY, double maxX, double maxY) {
 		return vec != null && vec.x >= minX && vec.x <= maxX && vec.y >= minY && vec.y <= maxY;
 	}
-	
+
 	/* CHUNKS */
 
 	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
@@ -249,9 +249,9 @@ public abstract class BlockUtil {
 		BlockPos downPos = pos.down();
 		Block block = world.getBlockState(downPos).getBlock();
 		return !(block.isReplaceable(world, downPos) &&
-				blockState.getMaterial().isLiquid()) &&
-				!block.isLeaves(blockState, world, downPos) &&
-				!block.isWood(world, downPos);
+			blockState.getMaterial().isLiquid()) &&
+			!block.isLeaves(blockState, world, downPos) &&
+			!block.isWood(world, downPos);
 	}
 
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
@@ -259,9 +259,9 @@ public abstract class BlockUtil {
 		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
 		IBlockState blockState = world.getBlockState(newPos);
 
-		while (!BlockUtil.canReplace(blockState, world, newPos)){
+		while (!BlockUtil.canReplace(blockState, world, newPos)) {
 			newPos.move(EnumFacing.UP);
-			if(newPos.getY() > topPos.getY()){
+			if (newPos.getY() > topPos.getY()) {
 				return null;
 			}
 			blockState = world.getBlockState(newPos);

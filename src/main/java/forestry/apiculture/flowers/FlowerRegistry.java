@@ -124,9 +124,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			Set<IBlockState> blocks = this.getAcceptedBlockStates(flowerType);
 			blocks.add(blockState);
 
-			if (this.chances.containsKey(flowerType)) {
-				this.chances.remove(flowerType);
-			}
+			this.chances.remove(flowerType);
 		}
 	}
 

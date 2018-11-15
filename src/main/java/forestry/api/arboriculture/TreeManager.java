@@ -50,8 +50,7 @@ public class TreeManager {
 
 	/**
 	 * @deprecated Please use {@link ICharcoalManager#registerWall}.
-	 *
-	 * */
+	 */
 	@Deprecated
 	public static List<ICharcoalPileWall> pileWalls = new ArrayList<>();
 }

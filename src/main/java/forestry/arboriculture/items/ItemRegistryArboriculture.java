@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.core.items.ItemRegistry;
 import forestry.core.utils.OreDictUtil;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryArboriculture extends ItemRegistry {
 	public final ItemGermlingGE sapling;

@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import com.google.common.collect.ForwardingList;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.ForwardingList;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagByteArray;
@@ -29,11 +27,18 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.nbt.NBTTagLongArray;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
+
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+
+import io.netty.buffer.Unpooled;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -65,6 +70,13 @@ public abstract class NBTUtilForestry {
 	public static <T extends NBTBase> NBTList<T> getNBTList(NBTTagCompound nbt, String tag, EnumNBTType type) {
 		NBTTagList nbtList = nbt.getTagList(tag, type.ordinal());
 		return new NBTList<>(nbtList);
+	}
+
+	public static long[] getLongArray(NBTBase nbt) {
+		if (!(nbt instanceof NBTTagLongArray)) {
+			return new long[0];
+		}
+		return ObfuscationReflectionHelper.getPrivateValue(NBTTagLongArray.class, (NBTTagLongArray) nbt, 0);
 	}
 
 	public static class NBTList<T extends NBTBase> extends ForwardingList<T> {

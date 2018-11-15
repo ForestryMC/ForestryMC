@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.client.model.ModelLoader;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,10 +36,10 @@ import forestry.core.config.Constants;
 
 public abstract class BlockHoneyComb extends Block implements IItemModelRegister, IBlockWithMeta, IColoredBlock, IStateMapperRegister {
 	public final int minMeta;
-	
-	public static final BlockHoneyComb[] create(){
+
+	public static final BlockHoneyComb[] create() {
 		BlockHoneyComb[] blocks = new BlockHoneyComb[2];
-		for(int i = 0;i < blocks.length;i++){
+		for (int i = 0; i < blocks.length; i++) {
 			HoneyCombPredicate filter = new HoneyCombPredicate(i, 16);
 			PropertyEnum<EnumHoneyComb> variant = PropertyEnum.create("type", EnumHoneyComb.class, filter);
 			blocks[i] = new BlockHoneyComb(filter.minMeta) {
@@ -50,7 +51,7 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 		}
 		return blocks;
 	}
-	
+
 	public BlockHoneyComb(int minMeta) {
 		super(Material.CLOTH);
 		setHardness(1F);
@@ -58,7 +59,7 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 		setDefaultState(this.blockState.getBaseState().withProperty(getVariant(), getVariant().getAllowedValues().iterator().next()));
 		this.minMeta = minMeta;
 	}
-	
+
 	protected abstract PropertyEnum<EnumHoneyComb> getVariant();
 
 	@Override
@@ -68,7 +69,7 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(getVariant()).ordinal()-minMeta;
+		return state.getValue(getVariant()).ordinal() - minMeta;
 	}
 
 	@Override
@@ -79,20 +80,20 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EnumHoneyComb honeyComb : getVariant().getAllowedValues()) {
-			if(!honeyComb.isSecret() || Config.isDebug){
+			if (!honeyComb.isSecret() || Config.isDebug) {
 				list.add(get(honeyComb));
 			}
 		}
 	}
-	
+
 	@Override
-	public String getUnlocalizedName() {
+	public String getTranslationKey() {
 		return "tile.for.bee_combs";
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
@@ -105,7 +106,7 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for (EnumHoneyComb comb : getVariant().getAllowedValues()) {
-			manager.registerItemModel(item, comb.ordinal()-minMeta, "block_bee_combs");
+			manager.registerItemModel(item, comb.ordinal() - minMeta, "block_bee_combs");
 		}
 	}
 
@@ -130,13 +131,13 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 			return honeyComb.secondaryColor;
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerStateMapper() {
 		ModelLoader.setCustomStateMapper(this, new HoneyCombStateMapper());
 	}
-	
+
 	private static class HoneyCombPredicate implements Predicate<EnumHoneyComb> {
 		private final int minMeta;
 		private final int maxMeta;
@@ -151,7 +152,7 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 			return honeyComb != null && honeyComb.ordinal() >= minMeta && honeyComb.ordinal() <= maxMeta;
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static class HoneyCombStateMapper extends StateMapperBase {
 
@@ -159,6 +160,6 @@ public abstract class BlockHoneyComb extends Block implements IItemModelRegister
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
 			return new ModelResourceLocation(Constants.MOD_ID + ":bee_combs", "normal");
 		}
-		
+
 	}
 }

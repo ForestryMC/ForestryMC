@@ -4,7 +4,5 @@
 package forestry.factory.recipes.jei.still;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import forestry.core.utils.FieldsAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+import forestry.core.utils.FieldsAreNonnullByDefault;

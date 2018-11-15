@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.network;
 
-import forestry.core.network.IPacketRegistry;
-import forestry.core.network.PacketIdClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.network.IPacketRegistry;
+import forestry.core.network.PacketIdClient;
 
 public class PacketRegistryArboriculture implements IPacketRegistry {
 	@Override

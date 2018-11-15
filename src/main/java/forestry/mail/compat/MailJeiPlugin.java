@@ -20,9 +20,9 @@ public class MailJeiPlugin implements IModPlugin {
 
 		BlockRegistryMail blocks = ModuleMail.getBlocks();
 		JeiUtil.addDescription(registry,
-				blocks.mailbox,
-				blocks.stampCollector,
-				blocks.tradeStation
+			blocks.mailbox,
+			blocks.stampCollector,
+			blocks.tradeStation
 		);
 	}
 }

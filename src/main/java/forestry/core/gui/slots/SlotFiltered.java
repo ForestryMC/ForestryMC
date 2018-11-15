@@ -12,13 +12,15 @@ package forestry.core.gui.slots;
 
 import javax.annotation.Nullable;
 
-import forestry.core.render.TextureManagerForestry;
-import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.tiles.IFilterSlotDelegate;
 
 /**
  * Slot which only takes specific items, specified by the IFilterSlotDelegate.
@@ -38,7 +40,7 @@ public class SlotFiltered extends SlotWatched {
 	public boolean isItemValid(ItemStack itemstack) {
 		int slotIndex = getSlotIndex();
 		return !filterSlotDelegate.isLocked(slotIndex) &&
-				(itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
+			(itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
 	}
 
 	public SlotFiltered setBlockedTexture(String ident) {

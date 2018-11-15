@@ -8,8 +8,7 @@ import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.database.DatabaseHelper;
 
 public enum DatabaseButton {
-	SORT_DIRECTION_BUTTON{
-
+	SORT_DIRECTION_BUTTON {
 		@Override
 		public void onValueChange(GuiDatabaseButton button) {
 			boolean ascending = (boolean) button.getValue();
@@ -19,20 +18,20 @@ public enum DatabaseButton {
 		@Override
 		public void onPressed(GuiDatabaseButton button) {
 			//Client side only button
-			button.setValue(DatabaseHelper.ascending =!DatabaseHelper.ascending);
+			button.setValue(DatabaseHelper.ascending = !DatabaseHelper.ascending);
 			button.gui.markForSorting();
 		}
 	};
 
-	public List<String> getTooltip(GuiDatabaseButton button){
+	public List<String> getTooltip(GuiDatabaseButton button) {
 		return Collections.emptyList();
 	}
 
-	public IButtonTextureSet getDefaultTexture(){
+	public IButtonTextureSet getDefaultTexture() {
 		return StandardButtonTextureSets.SMALL_BLANK_BUTTON;
 	}
 
-	public void onValueChange(GuiDatabaseButton button){
+	public void onValueChange(GuiDatabaseButton button) {
 
 	}
 

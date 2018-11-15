@@ -44,7 +44,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 		}
 
 		return slotIndex == SLOT_ANALYZE &&
-				(AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null);
+			(AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null);
 
 	}
 

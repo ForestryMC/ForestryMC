@@ -125,7 +125,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			IBeeGenome genome = queen.getGenome();
 			String flowerType = genome.getFlowerProvider().getFlowerType();
 			if (!this.flowerData.flowerType.equals(flowerType)
-					|| !this.flowerData.territory.equals(genome.getTerritory())) {
+				|| !this.flowerData.territory.equals(genome.getTerritory())) {
 				flowerData = new FlowerData(queen, housing);
 				flowerCoords.clear();
 				flowers.clear();

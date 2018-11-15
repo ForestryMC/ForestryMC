@@ -124,7 +124,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		IMachineProperties definition = getDefinition();
-		return definition.getBoundingBox(pos, blockState);
+		return definition.getBoundingBox(worldIn, pos, blockState);
 	}
 
 
@@ -132,13 +132,13 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		IMachineProperties definition = getDefinition();
-		return definition.getBoundingBox(pos, state).offset(pos);
+		return definition.getBoundingBox(worldIn, pos, state).offset(pos);
 	}
 
 	@Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
 		IMachineProperties definition = getDefinition();
-		return definition.collisionRayTrace(worldIn, pos, start, end);
+		return definition.collisionRayTrace(worldIn, pos, blockState, start, end);
 	}
 
 
@@ -262,7 +262,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
 	}
 
 	@Override

@@ -10,6 +10,13 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -17,11 +24,6 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.tiles.TileSqueezer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidStack;
 
 public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	public static final short SLOT_RESOURCE_1 = 0;

@@ -8,11 +8,13 @@ package forestry.api.world;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.arboriculture.ITreeGenome;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.arboriculture.ITreeGenome;
 
 public interface ITreeGenData {
 
@@ -27,7 +29,12 @@ public interface ITreeGenData {
 	@Nullable
 	BlockPos canGrow(World world, BlockPos pos, int expectedGirth, int expectedHeight);
 
+	@Deprecated
 	boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos);
+
+	default boolean setLeaves(World world, @Nullable GameProfile owner, BlockPos pos, Random random) {
+		return setLeaves(world, owner, pos);
+	}
 
 	boolean setLogBlock(World world, BlockPos pos, EnumFacing facing);
 

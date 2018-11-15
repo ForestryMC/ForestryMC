@@ -38,6 +38,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -54,22 +55,24 @@ import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
+import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 
 public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEntityProvider, IGrowable {
 
 	public BlockForestryLeaves() {
 		setDefaultState(this.blockState.getBaseState()
-				.withProperty(CHECK_DECAY, false)
-				.withProperty(DECAYABLE, true));
+			.withProperty(CHECK_DECAY, false)
+			.withProperty(DECAYABLE, true));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this,
-				new IProperty[]{DECAYABLE, CHECK_DECAY},
-				new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS}
+			new IProperty[]{DECAYABLE, CHECK_DECAY},
+			new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS}
 		);
 	}
 
@@ -102,11 +105,11 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
 		if (!state.getValue(DECAYABLE)) {
-			i |= 4;
+			i |= DECAYABLE_FLAG;
 		}
 
 		if (state.getValue(CHECK_DECAY)) {
-			i |= 8;
+			i |= CHECK_DECAY_FLAG;
 		}
 
 		return i;
@@ -114,13 +117,13 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(DECAYABLE, (meta & 4) == 0).withProperty(CHECK_DECAY, (meta & 8) > 0);
+		return this.getDefaultState().withProperty(DECAYABLE, (meta & DECAYABLE_FLAG) == 0).withProperty(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
 	}
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-				.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
+			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
 	}
 
 	/* TILE ENTITY */
@@ -164,20 +167,30 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			IButterfly caterpillar = leaves.getCaterpillar();
-			ItemStack heldItem = playerIn.getHeldItem(hand);
-			if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
+			ItemStack heldItem = player.getHeldItem(hand);
+			ItemStack otherHand = player.getHeldItem(hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+			if (heldItem.isEmpty() && otherHand.isEmpty()) {
+				if (leaves.hasFruit() && leaves.getRipeness() >= 0.9F) {
+					PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
+					NetworkUtil.sendNetworkPacket(packet, pos, world);
+					for (ItemStack fruit : leaves.pickFruit(ItemStack.EMPTY)) {
+						ItemHandlerHelper.giveItemToPlayer(player, fruit);
+					}
+					return true;
+				}
+			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
 				ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
-				ItemStackUtil.dropItemStackAsEntity(butterfly, worldIn, pos);
+				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
 				return true;
 			}
 		}
 
-		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+		return false;
 	}
 
 	/* IGrowable */
@@ -209,7 +222,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 			if (leaves != null) {
 				if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 					return leaves.getFruitColour();
-				}else {
+				} else {
 					EntityPlayer thePlayer = Minecraft.getMinecraft().player;
 					return leaves.getFoliageColour(thePlayer);
 				}

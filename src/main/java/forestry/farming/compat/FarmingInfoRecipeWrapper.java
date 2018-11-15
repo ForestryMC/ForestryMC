@@ -68,32 +68,32 @@ public class FarmingInfoRecipeWrapper implements IRecipeWrapper {
 		ingredients.setOutputLists(ItemStack.class, outputStacks);
 	}
 
-	private static <T> void splitItems(List<List<ItemStack>> items, int startIndex, List<T> values, Function<T, ItemStack> itemFunction){
+	private static <T> void splitItems(List<List<ItemStack>> items, int startIndex, List<T> values, Function<T, ItemStack> itemFunction) {
 		int count = values.size();
-		if(count == 0 || count % 4 != 0) {
+		if (count == 0 || count % 4 != 0) {
 			count += (4 - count % 4);
 		}
-		for(int i = 0;i < count;i++){
+		for (int i = 0; i < count; i++) {
 			int index = startIndex + i % 4;
 			ItemStack stack;
-			if(values.size() > i){
+			if (values.size() > i) {
 				stack = itemFunction.apply(values.get(i));
-			}else{
+			} else {
 				stack = null;
 			}
 			addItemToList(items, index, stack);
 		}
 	}
 
-	private static void addItemToList(List<List<ItemStack>> items, int index, @Nullable ItemStack stack){
+	private static void addItemToList(List<List<ItemStack>> items, int index, @Nullable ItemStack stack) {
 		List<ItemStack> itemList;
-		if(items.size() > index){
+		if (items.size() > index) {
 			itemList = items.get(index);
-			if(itemList == null){
+			if (itemList == null) {
 				itemList = new ArrayList<>();
 				items.set(index, itemList);
 			}
-		}else{
+		} else {
 			itemList = new ArrayList<>();
 			items.add(itemList);
 		}

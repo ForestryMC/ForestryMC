@@ -100,7 +100,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 			hasFlowersCache.update(queen, housing);
 			World world = housing.getWorldObj();
 			boolean canWork = (world.isDaytime() || queen.getGenome().getNeverSleeps()) &&
-					(!housing.isRaining() || queen.getGenome().getToleratesRain());
+				(!housing.isRaining() || queen.getGenome().getToleratesRain());
 			boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 
 			if (active != canWork) {

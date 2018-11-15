@@ -44,7 +44,7 @@ public class GuiMailboxInfo extends Gui {
 	public static final GuiMailboxInfo instance = new GuiMailboxInfo();
 	private static final int WIDTH = 98;
 	private static final int HEIGHT = 17;
-	
+
 	private final FontRenderer fontRenderer;
 	@Nullable
 	private POBoxInfo poInfo;
@@ -78,7 +78,7 @@ public class GuiMailboxInfo extends Gui {
 		textureManager.bindTexture(textureAlert);
 
 		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);
-		
+
 		fontRenderer.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
 		fontRenderer.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
 	}

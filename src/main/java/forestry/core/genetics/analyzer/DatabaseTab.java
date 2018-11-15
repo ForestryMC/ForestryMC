@@ -23,7 +23,7 @@ public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab
 	}
 
 	@Override
-	public String getTooltip(IIndividual individual){
+	public String getTooltip(IIndividual individual) {
 		return I18n.translateToLocal("for.gui.database.tab." + name + ".name");
 	}
 }

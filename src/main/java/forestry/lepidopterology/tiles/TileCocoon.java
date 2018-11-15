@@ -13,7 +13,6 @@ package forestry.lepidopterology.tiles;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -164,7 +163,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 		IButterflyGenome caterpillarGenome = caterpillar.getGenome();
 		int caterpillarMatureTime = Math
-				.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
+			.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
 			if (age < 2) {
@@ -182,13 +181,13 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 			}
 		}
 	}
-	
-	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops){
-		if(cocoonDrops.isEmpty()){
+
+	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops) {
+		if (cocoonDrops.isEmpty()) {
 			return true;
 		}
-		for(ItemStack stack : cocoonDrops){
-			if(!stack.isEmpty()){
+		for (ItemStack stack : cocoonDrops) {
+			if (!stack.isEmpty()) {
 				return false;
 			}
 		}
@@ -197,9 +196,9 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
 		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(),
-				pos.getX(), pos.getY() + 0.1f, pos.getZ());
+			pos.getX(), pos.getY() + 0.1f, pos.getZ());
 		Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(),
-				pos.getZ());
+			pos.getZ());
 	}
 
 	@Override

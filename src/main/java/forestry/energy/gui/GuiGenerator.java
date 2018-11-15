@@ -18,7 +18,7 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEuGenerator;
 
 public class GuiGenerator extends GuiForestryTitled<ContainerGenerator> {
-	
+
 	private final TileEuGenerator tile;
 
 	public GuiGenerator(InventoryPlayer inventory, TileEuGenerator tile) {
@@ -39,7 +39,7 @@ public class GuiGenerator extends GuiForestryTitled<ContainerGenerator> {
 
 	@Override
 	protected void addLedgers() {
-		
+
 	}
 
 }

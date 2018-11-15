@@ -225,6 +225,11 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 	}
 
 	@Override
+	protected boolean hasClickedOutside(int mouseX, int mouseY, int guiLeft, int guiTop) {
+		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop);
+	}
+
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		ledgerManager.drawTooltips(mouseX, mouseY);
 
@@ -261,7 +266,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 		bindTexture(textureFile);
 	}
 
-	protected void drawBackground(){
+	protected void drawBackground() {
 		bindTexture(textureFile);
 
 		//int x = (width - xSize) / 2;

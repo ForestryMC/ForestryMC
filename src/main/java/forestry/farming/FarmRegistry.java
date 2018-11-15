@@ -60,7 +60,7 @@ public final class FarmRegistry implements IFarmRegistry {
 	@Override
 	public void registerFarmables(String identifier, IFarmable... farmablesArray) {
 		IFarmableInfo info = getFarmableInfo(identifier);
-		for(IFarmable farmable : farmablesArray){
+		for (IFarmable farmable : farmablesArray) {
 			farmable.addInformation(info);
 		}
 		farmables.putAll(identifier, Arrays.asList(farmablesArray));
@@ -88,7 +88,7 @@ public final class FarmRegistry implements IFarmRegistry {
 
 	@Override
 	public void registerFertilizer(ItemStack itemStack, int value) {
-		if(itemStack.isEmpty()){
+		if (itemStack.isEmpty()) {
 			return;
 		}
 		fertilizers.put(itemStack, value);
@@ -131,19 +131,19 @@ public final class FarmRegistry implements IFarmRegistry {
 		fertilizer = new FertilizerConfig(fertilizerMap);
 	}
 
-	private ImmutableMap<ItemStack, Integer> checkConfig(Property property, Map<String, String> defaultEntries){
+	private ImmutableMap<ItemStack, Integer> checkConfig(Property property, Map<String, String> defaultEntries) {
 		String[] fertilizerList = property.getStringList();
 		ImmutableMap.Builder<ItemStack, Integer> fertilizerMap = new ImmutableMap.Builder<>();
 		Map<String, String> configEntries = parseConfig(fertilizerList, fertilizerMap);
 
 		List<String> newEntries = new ArrayList<>(Arrays.asList(fertilizerList));
-		for(Entry<String, String> defaultEntry : defaultEntries.entrySet()){
-			if(!configEntries.containsKey(defaultEntry.getKey())){
+		for (Entry<String, String> defaultEntry : defaultEntries.entrySet()) {
+			if (!configEntries.containsKey(defaultEntry.getKey())) {
 				newEntries.add(defaultEntry.getValue());
 			}
 		}
 
-		if(newEntries.size() > fertilizerList.length){
+		if (newEntries.size() > fertilizerList.length) {
 			Collections.sort(newEntries);
 			property.set(newEntries.toArray(new String[newEntries.size()]));
 			return checkConfig(property, defaultEntries);
@@ -152,23 +152,23 @@ public final class FarmRegistry implements IFarmRegistry {
 		return fertilizerMap.build();
 	}
 
-	private Map<String, String> parseConfig(String[] fertilizerList, ImmutableMap.Builder<ItemStack, Integer> fertilizerMap){
+	private Map<String, String> parseConfig(String[] fertilizerList, ImmutableMap.Builder<ItemStack, Integer> fertilizerMap) {
 		Map<String, String> configEntries = new HashMap<>();
-		for(String entry : fertilizerList){
+		for (String entry : fertilizerList) {
 			String[] spited = entry.split(";");
-			if(spited.length < 2){
+			if (spited.length < 2) {
 				Log.error("Forestry failed to parse a entry of the fertilizer config.");
 				continue;
 			}
 			String itemName = spited[0];
 			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, OreDictionary.WILDCARD_VALUE);
-			if(fertilizerItem == null || fertilizerItem.isEmpty()){
+			if (fertilizerItem == null || fertilizerItem.isEmpty()) {
 				Log.error("Forestry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
 				continue;
 			}
 			String value = spited[1];
 			int fertilizerValue = Integer.parseInt(value);
-			if(fertilizerValue > 0) {
+			if (fertilizerValue > 0) {
 				fertilizerMap.put(fertilizerItem, fertilizerValue);
 			}
 			configEntries.put(itemName, value);
@@ -185,7 +185,7 @@ public final class FarmRegistry implements IFarmRegistry {
 		return itemStrings;
 	}
 
-	private static class FertilizerConfig{
+	private static class FertilizerConfig {
 		private static final FertilizerConfig DUMMY = new FertilizerConfig(Collections.emptyMap());
 
 		private final Map<ItemStack, Integer> fertilizers;

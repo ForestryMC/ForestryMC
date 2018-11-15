@@ -2,6 +2,8 @@ package forestry.core.gui.elements;
 
 import java.util.function.Consumer;
 
+import net.minecraft.client.renderer.GlStateManager;
+
 import forestry.api.gui.events.GuiEvent;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
@@ -15,13 +17,32 @@ public class ButtonElement extends GuiElement {
 	/* Attributes - State */
 	private boolean enabled = true;
 
+	public ButtonElement(int xPos, int yPos, int width, int height, Drawable disabledDrawable, Drawable enabledDrawable, Consumer<ButtonElement> onClicked) {
+		this(xPos, yPos, width, height, disabledDrawable, enabledDrawable, enabledDrawable, onClicked);
+	}
+
+	public ButtonElement(int xPos, int yPos, int width, int height, Drawable disabledDrawable, Drawable enabledDrawable, Drawable mouseOverDrawable, Consumer<ButtonElement> onClicked) {
+		super(xPos, yPos, width, height);
+		this.onClicked = onClicked;
+		textures[0] = disabledDrawable;
+		textures[1] = enabledDrawable;
+		textures[2] = mouseOverDrawable;
+		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+			if (!enabled) {
+				return;
+			}
+			onPressed();
+			SoundUtil.playButtonClick();
+		});
+	}
+
 	public ButtonElement(int xPos, int yPos, Drawable drawable, Consumer<ButtonElement> onClicked) {
 		super(xPos, yPos, drawable.uWidth, drawable.vHeight);
 		this.onClicked = onClicked;
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
 		}
-		addSelfEventHandler(GuiEvent.DownEvent.class, event ->{
+		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}
@@ -36,7 +57,7 @@ public class ButtonElement extends GuiElement {
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(textureSets.getTexture(), textureSets.getX(), textureSets.getY() + textureSets.getHeight() * i, textureSets.getWidth(), textureSets.getHeight());
 		}
-		addSelfEventHandler(GuiEvent.DownEvent.class, event ->{
+		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}
@@ -47,10 +68,12 @@ public class ButtonElement extends GuiElement {
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
+		GlStateManager.enableAlpha();
 		boolean mouseOver = isMouseOver();
 		int hoverState = getHoverState(mouseOver);
 		Drawable drawable = textures[hoverState];
 		drawable.draw(0, 0);
+		GlStateManager.disableAlpha();
 	}
 
 	@Override

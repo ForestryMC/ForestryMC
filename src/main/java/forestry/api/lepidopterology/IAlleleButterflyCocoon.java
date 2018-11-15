@@ -7,9 +7,10 @@ package forestry.api.lepidopterology;
 
 import java.util.Map;
 
-import forestry.api.genetics.IAlleleProperty;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.genetics.IAlleleProperty;
 
 public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
 
@@ -18,7 +19,7 @@ public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterfly
 	String getCocoonName();
 
 	Map<ItemStack, Float> getCocoonLoot();
-	
+
 	void clearLoot();
 
 	void addLoot(ItemStack loot, float chance);

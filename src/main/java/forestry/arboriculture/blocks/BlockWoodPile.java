@@ -36,6 +36,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.ModuleCharcoal;
+import forestry.core.config.Config;
 
 public class BlockWoodPile extends Block implements IItemModelRegister, IStateMapperRegister {
 
@@ -122,6 +123,9 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		if (state.getValue(IS_ACTIVE)) {
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				BlockPos position = pos.offset(facing);
+				if (!world.isBlockLoaded(position)) {
+					continue;
+				}
 				IBlockState blockState = world.getBlockState(position);
 				Block block = blockState.getBlock();
 				if (block == this) {
@@ -139,8 +143,8 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 				if (state.getValue(AGE) < 7) {
 					world.setBlockState(pos, state.withProperty(AGE, state.getValue(AGE) + 1), 2);
 				} else {
-					IBlockState ashState = ModuleCharcoal.getBlocks().ash.getDefaultState();
-					world.setBlockState(pos, ashState.withProperty(BlockAsh.AMOUNT, Math.round(getCharcoalAmount(world, pos))), 2);
+					IBlockState ashState = ModuleCharcoal.getBlocks().getAshState(Math.round(Config.charcoalAmountBase + getCharcoalAmount(world, pos)));
+					world.setBlockState(pos, ashState, 2);
 				}
 			}
 			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
@@ -201,7 +205,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		return charcoalAmount / 6;
+		return Math.max(Math.min(charcoalAmount / 6, 63.0F - Config.charcoalAmountBase), -Config.charcoalAmountBase);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing) {
@@ -210,16 +214,18 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 
 		BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos(pos);
 		testPos.move(facing);
-		while(!world.isAirBlock(testPos)) {
-			testPos.move(facing);
+		int i = 0;
+		while (i < Config.charcoalWallCheckRange && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)) {
 			IBlockState state = world.getBlockState(testPos);
 			for (ICharcoalPileWall wall : walls) {
 				if (wall.matches(state)) {
 					return wall.getCharcoalAmount();
 				}
 			}
+			testPos.move(facing);
+			i++;
 		}
-		return 1;
+		return 0;
 	}
 
 	@SideOnly(Side.CLIENT)

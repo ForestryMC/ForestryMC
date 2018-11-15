@@ -14,16 +14,18 @@ import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Locale;
 
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBeeModelProvider;
-import forestry.api.core.IModelManager;
-import forestry.apiculture.items.ItemBeeGE;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IBeeModelProvider;
+import forestry.api.core.IModelManager;
+import forestry.apiculture.items.ItemBeeGE;
 
 public class DefaultBeeModelProvider implements IBeeModelProvider {
 

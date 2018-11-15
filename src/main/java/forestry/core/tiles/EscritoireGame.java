@@ -14,6 +14,10 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.AlleleManager;
@@ -21,9 +25,6 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	private static final Random rand = new Random();

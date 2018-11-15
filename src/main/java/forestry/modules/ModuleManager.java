@@ -79,7 +79,7 @@ public class ModuleManager implements IModuleManager {
 
 	@Override
 	public void registerContainers(IModuleContainer... containers) {
-		for(IModuleContainer container : containers) {
+		for (IModuleContainer container : containers) {
 			Preconditions.checkNotNull(container);
 			moduleContainers.put(container.getID(), container);
 		}
@@ -114,7 +114,7 @@ public class ModuleManager implements IModuleManager {
 
 		ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
 
-		for(IModuleContainer container : moduleContainers.values()){
+		for (IModuleContainer container : moduleContainers.values()) {
 			String containerID = container.getID();
 			List<IForestryModule> containerModules = modules.get(containerID);
 			Configuration config = container.getModulesConfig();
@@ -123,17 +123,17 @@ public class ModuleManager implements IModuleManager {
 			config.addCustomCategoryComment(CONFIG_CATEGORY, "Disabling these modules can greatly change how the mod functions.\n"
 				+ "Your mileage may vary, please report any issues.");
 			IForestryModule coreModule = getModuleCore(containerModules);
-			if(coreModule != null) {
+			if (coreModule != null) {
 				containerModules.remove(coreModule);
 				containerModules.add(0, coreModule);
-			}else{
+			} else {
 				Log.debug("Could not find core module for the module container: {}", containerID);
 			}
 
 			Iterator<IForestryModule> iterator = containerModules.iterator();
 			while (iterator.hasNext()) {
 				IForestryModule module = iterator.next();
-				if(!container.isAvailable()){
+				if (!container.isAvailable()) {
 					iterator.remove();
 					Log.info("Module disabled: {}", module);
 					continue;
@@ -193,9 +193,9 @@ public class ModuleManager implements IModuleManager {
 			}
 		} while (changed);
 
-		for(IModuleContainer container : moduleContainers.values()){
+		for (IModuleContainer container : moduleContainers.values()) {
 			Configuration config = container.getModulesConfig();
-			if(config.hasChanged()){
+			if (config.hasChanged()) {
 				config.save();
 			}
 		}
@@ -204,7 +204,7 @@ public class ModuleManager implements IModuleManager {
 		unloadedModules.addAll(allModules);
 		unloadedModules.removeAll(sortedModules.values());
 
-		for(IModuleContainer container : moduleContainers.values()){
+		for (IModuleContainer container : moduleContainers.values()) {
 			Collection<IForestryModule> loadedModules = sortedModules.values().stream().filter(m -> {
 					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
 					return info.containerID().equals(container.getID());
@@ -223,7 +223,7 @@ public class ModuleManager implements IModuleManager {
 		for (IForestryModule module : sortedModules.values()) {
 			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 			ForestryAPI.enabledModules.add(new ResourceLocation(info.containerID(), info.moduleID()));
-			if(module instanceof BlankForestryModule){
+			if (module instanceof BlankForestryModule) {
 				ForestryAPI.enabledPlugins.add(info.containerID() + "." + info.moduleID());
 			}
 		}

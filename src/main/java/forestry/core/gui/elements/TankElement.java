@@ -55,6 +55,7 @@ public class TankElement extends GuiElement {
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
 		if (background != null) {
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(0, 0);
@@ -124,6 +125,7 @@ public class TankElement extends GuiElement {
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.disableAlpha();
 	}
 
 	@Override
@@ -141,7 +143,7 @@ public class TankElement extends GuiElement {
 			if (rarity == null) {
 				rarity = EnumRarity.COMMON;
 			}
-			toolTip.add(rarity.rarityColor + fluidType.getLocalizedName(fluidStack));
+			toolTip.add(rarity.color + fluidType.getLocalizedName(fluidStack));
 			amount = fluidStack.amount;
 		}
 		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", amount, tankInfo.capacity);

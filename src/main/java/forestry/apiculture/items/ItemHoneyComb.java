@@ -55,9 +55,9 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		EnumHoneyComb honeyComb = EnumHoneyComb.get(stack.getItemDamage());
-		return super.getUnlocalizedName(stack) + "." + honeyComb.name;
+		return super.getTranslationKey(stack) + "." + honeyComb.name;
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 			}
 		}
 	}
-	
+
 	@Nullable
 	private static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
 		List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);

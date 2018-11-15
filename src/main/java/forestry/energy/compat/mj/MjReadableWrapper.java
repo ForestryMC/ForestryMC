@@ -1,9 +1,11 @@
 package forestry.energy.compat.mj;
 
-import buildcraft.api.mj.IMjReadable;
+import net.minecraftforge.fml.common.Optional;
+
 import forestry.core.config.Constants;
 import forestry.energy.EnergyManager;
-import net.minecraftforge.fml.common.Optional;
+
+import buildcraft.api.mj.IMjReadable;
 
 @Optional.Interface(iface = "buildcraft.api.mj.IMjReadable", modid = Constants.BCLIB_MOD_ID)
 public class MjReadableWrapper extends MjConnectorWrapper implements IMjReadable {

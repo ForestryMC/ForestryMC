@@ -13,6 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,13 +55,13 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(BlockPos pos, IBlockState state) {
+	public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos, IBlockState state) {
 		return boundingBox;
 	}
 
 	@Override
 	@Nullable
-	public RayTraceResult collisionRayTrace(World world, BlockPos pos, Vec3d startVec, Vec3d endVec) {
+	public RayTraceResult collisionRayTrace(World world, BlockPos pos, IBlockState state, Vec3d startVec, Vec3d endVec) {
 		return BlockUtil.collisionRayTrace(pos, startVec, endVec, boundingBox);
 	}
 
@@ -75,7 +76,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	public void registerModel(Item item, IModelManager manager) {
 		ResourceLocation itemNameFromRegistry = ItemStackUtil.getItemNameFromRegistry(item);
 		Preconditions.checkNotNull(itemNameFromRegistry, "No registry name for item");
-		String identifier = itemNameFromRegistry.getResourcePath();
+		String identifier = itemNameFromRegistry.getPath();
 		manager.registerItemModel(item, 0, identifier);
 	}
 

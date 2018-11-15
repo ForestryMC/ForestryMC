@@ -12,7 +12,10 @@ package forestry.mail.tiles;
 
 import com.google.common.base.Preconditions;
 
-import forestry.core.config.Constants;
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.Collection;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -22,20 +25,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.IOException;
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-
-import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
+import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.IInventoryAdapter;
@@ -55,6 +54,8 @@ import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
 import forestry.mail.triggers.MailTriggers;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class TileTrader extends TileBase implements IOwnedTile {
 	private final OwnerHandler ownerHandler = new OwnerHandler();

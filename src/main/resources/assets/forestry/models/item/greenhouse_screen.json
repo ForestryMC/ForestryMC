@@ -1,9 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "forestry:items/greenhouse_screen_0",
-		"layer1": "forestry:items/greenhouse_screen_1",
-		"layer2": "forestry:items/greenhouse_screen_2",
-		"layer3": "forestry:items/greenhouse_screen_3"
-    }
-}

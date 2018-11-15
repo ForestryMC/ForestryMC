@@ -13,10 +13,11 @@ package forestry.factory.triggers;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
 import forestry.core.tiles.TilePowered;
 import forestry.core.triggers.Trigger;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerLowResource extends Trigger {
 

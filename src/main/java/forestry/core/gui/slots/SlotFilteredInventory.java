@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.inventory.IInventory;
+
+import forestry.core.tiles.IFilterSlotDelegate;
 
 /**
  * Useful for InventoryTweaks. Works like SlotFiltered but allows InventoryTweaks to sort it.

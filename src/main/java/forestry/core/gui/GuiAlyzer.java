@@ -90,15 +90,15 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	public final void drawRow(String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
 		textLayout.drawRow(text0, text1, text2, ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
-				getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
+			getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
 	public final void drawChromosomeRow(String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
 		textLayout.drawRow(chromosomeName, active.getAlleleName(), inactive.getAlleleName(),
-				ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
-				getColorCoding(inactive.isDominant()));
+			ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
+			getColorCoding(inactive.isDominant()));
 	}
 
 	public final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome, @Nullable String customPrimaryName, @Nullable String customSecondaryName) {
@@ -207,7 +207,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase();
 		textLayout.drawCenteredLine(title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
-		
+
 		fontRenderer.drawSplitString(Translator.translateToLocal("for.gui.portablealyzer.help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
@@ -275,7 +275,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
 			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase() + " <<";
 			fontRenderer.drawStringWithShadow(extinct, guiLeft + 200 - fontRenderer.getStringWidth(extinct),
-					guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
+				guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
 		}
 
 		textLayout.newLine();
@@ -464,7 +464,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = Integer.toString(fertility) + " x";
-		
+
 		int stringWidth = fontRenderer.getStringWidth(fertilityString);
 
 		bindTexture(textureFile);

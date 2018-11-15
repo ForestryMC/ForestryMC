@@ -58,19 +58,19 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private float rarity = 0.0F;
 
 	public AlleleTreeSpecies(
-			String uid,
-			String unlocalizedName,
-			String authority,
-			String unlocalizedDescription,
-			boolean isDominant,
-			IClassification branch,
-			String binomial,
-			String modID,
-			ILeafSpriteProvider leafIconProvider,
-			IGermlingModelProvider germlingModelProvider,
-			IWoodProvider woodProvider,
-			ITreeGenerator generator,
-			@Nullable ILeafProvider leafProvider) {
+		String uid,
+		String unlocalizedName,
+		String authority,
+		String unlocalizedDescription,
+		boolean isDominant,
+		IClassification branch,
+		String binomial,
+		String modID,
+		ILeafSpriteProvider leafIconProvider,
+		IGermlingModelProvider germlingModelProvider,
+		IWoodProvider woodProvider,
+		ITreeGenerator generator,
+		@Nullable ILeafProvider leafProvider) {
 		super(modID, uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
@@ -107,24 +107,24 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		fruits.add(family);
 		return this;
 	}
-	
+
 	@Override
 	public IAlleleTreeSpeciesBuilder setRarity(float rarity) {
 		this.rarity = rarity;
 		return this;
 	}
-	
+
 	@Override
 	public float getRarity() {
 		return rarity;
 	}
-	
+
 	@Override
 	public IAlleleTreeSpeciesBuilder setGrowthProvider(IGrowthProvider growthProvider) {
 		this.growthProvider = growthProvider;
 		return this;
 	}
-	
+
 	@Override
 	public IGrowthProvider getGrowthProvider() {
 		return growthProvider;

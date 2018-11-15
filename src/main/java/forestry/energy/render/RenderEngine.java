@@ -77,16 +77,16 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		extension.rotationPointZ = 8F;
 
 		textures = new ResourceLocation[]{
-				new ForestryResource(baseTexture + "base.png"),
-				new ForestryResource(baseTexture + "piston.png"),
-				new ForestryResource(baseTexture + "extension.png"),
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_highest.png"),
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_higher.png"),
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_high.png"),
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
+			new ForestryResource(baseTexture + "base.png"),
+			new ForestryResource(baseTexture + "piston.png"),
+			new ForestryResource(baseTexture + "extension.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_highest.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_higher.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_high.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
 	}
-	
+
 	@Override
 	public void render(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (engine != null) {
@@ -120,7 +120,7 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		float tfactor = step / 16;
 
 		float[] angle = {0, 0, 0};
-		float[] translate = {orientation.getFrontOffsetX(), orientation.getFrontOffsetY(), orientation.getFrontOffsetZ()};
+		float[] translate = {orientation.getXOffset(), orientation.getYOffset(), orientation.getZOffset()};
 
 		switch (orientation) {
 			case EAST:

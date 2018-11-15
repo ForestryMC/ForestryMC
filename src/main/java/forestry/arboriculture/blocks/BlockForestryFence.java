@@ -47,11 +47,11 @@ public abstract class BlockForestryFence<T extends Enum<T> & IWoodType> extends 
 
 		PropertyWoodType<T> variant = getVariant();
 		this.setDefaultState(this.blockState.getBaseState()
-				.withProperty(NORTH, false)
-				.withProperty(EAST, false)
-				.withProperty(SOUTH, false)
-				.withProperty(WEST, false)
-				.withProperty(variant, variant.getFirstType())
+			.withProperty(NORTH, false)
+			.withProperty(EAST, false)
+			.withProperty(SOUTH, false)
+			.withProperty(WEST, false)
+			.withProperty(variant, variant.getFirstType())
 		);
 
 		setHardness(2.0F);

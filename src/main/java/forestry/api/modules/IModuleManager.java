@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public interface IModuleManager {
 
-	default boolean isModuleEnabled(String containerID, String moduleID){
+	default boolean isModuleEnabled(String containerID, String moduleID) {
 		return isModuleEnabled(new ResourceLocation(containerID, moduleID));
 	}
 

@@ -24,8 +24,8 @@ public class ArboricultureJeiPlugin implements IModPlugin {
 		Preconditions.checkNotNull(items);
 
 		JeiUtil.addDescription(registry,
-				items.grafter,
-				items.grafterProven
+			items.grafter,
+			items.grafterProven
 		);
 	}
 }

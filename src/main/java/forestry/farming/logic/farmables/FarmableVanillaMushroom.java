@@ -41,7 +41,7 @@ public class FarmableVanillaMushroom extends FarmableBase {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		if(!plantedState.getBlock().canPlaceBlockAt(world, pos)) {
+		if (!plantedState.getBlock().canPlaceBlockAt(world, pos)) {
 			return false;
 		}
 		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);

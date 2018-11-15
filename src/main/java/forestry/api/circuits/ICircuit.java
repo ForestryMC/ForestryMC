@@ -14,7 +14,7 @@ public interface ICircuit {
 
 	String getUnlocalizedName();
 
-	default String getLocalizedName(){
+	default String getLocalizedName() {
 		return I18n.translateToLocal(getUnlocalizedName());
 	}
 

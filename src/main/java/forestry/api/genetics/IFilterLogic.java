@@ -1,7 +1,6 @@
 package forestry.api.genetics;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.Collection;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +44,7 @@ public interface IFilterLogic extends INbtWritable, INbtReadable {
 
 	INetworkHandler getNetworkHandler();
 
-	interface INetworkHandler{
+	interface INetworkHandler {
 		/**
 		 * Sends the data of the logic to the client of all players that have the gui currently open.
 		 *

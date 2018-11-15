@@ -25,7 +25,7 @@ public abstract class ForestryRecipeCategory<T extends IRecipeWrapper> implement
 	public String getModName() {
 		return Constants.MOD_NAME;
 	}
-	
+
 	@Override
 	public IDrawable getBackground() {
 		return background;

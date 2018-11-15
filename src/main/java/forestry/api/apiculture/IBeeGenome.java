@@ -5,10 +5,11 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import net.minecraft.util.math.Vec3i;
+
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
-import net.minecraft.util.math.Vec3i;
 
 /**
  * Only the default implementation is supported.

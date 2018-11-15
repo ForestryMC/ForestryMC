@@ -336,8 +336,8 @@ public class Bee extends IndividualLiving implements IBee {
 
 	private boolean isSuitableClimate(EnumTemperature temperature, EnumHumidity humidity) {
 		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
-				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
-				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
+			genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
+			genome.getPrimary().getHumidity(), genome.getToleranceHumid());
 	}
 
 	@Override
@@ -380,7 +380,7 @@ public class Bee extends IndividualLiving implements IBee {
 				rarity = EnumRarity.COMMON;
 			}
 
-			String generationString = rarity.rarityColor + Translator.translateToLocalFormatted("for.gui.beealyzer.generations", generation);
+			String generationString = rarity.color + Translator.translateToLocalFormatted("for.gui.beealyzer.generations", generation);
 			list.add(generationString);
 		}
 

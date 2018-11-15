@@ -10,17 +10,21 @@
  ******************************************************************************/
 package forestry.mail;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Locale;
 import java.util.UUID;
 
-import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.INbtWritable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.utils.PlayerUtil;
-import net.minecraft.nbt.NBTTagCompound;
-import org.apache.commons.lang3.StringUtils;
 
 public class MailAddress implements INbtWritable, IMailAddress {
 

@@ -7,8 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -19,11 +21,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IHiveTile;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 import forestry.apiculture.entities.ParticleBeeExplore;
 import forestry.apiculture.entities.ParticleBeeRoundTrip;
 import forestry.apiculture.entities.ParticleBeeTargetEntity;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.config.Config;
+import forestry.core.entities.ParticleClimate;
 import forestry.core.entities.ParticleHoneydust;
 import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
@@ -105,6 +110,62 @@ public class ParticleRender {
 		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
 	}
 
+	public static void addClimateParticles(World worldIn, BlockPos pos, Random rand, EnumTemperature temperature, EnumHumidity humidity) {
+		if (!shouldSpawnParticle(worldIn)) {
+			return;
+		}
+		if (rand.nextFloat() >= 0.75F) {
+			for (int i = 0; i < 3; i++) {
+				EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(4)];
+				int xOffset = facing.getXOffset();
+				int zOffset = facing.getZOffset();
+				double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				double y = pos.getY() + (0.75 + rand.nextFloat() * 14.5) / 16.0;
+				double z = pos.getZ() + 0.5 + (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				if (rand.nextBoolean()) {
+					ParticleRender.addEntityClimateParticle(worldIn, x, y, z, temperature.color);
+				} else {
+					ParticleRender.addEntityClimateParticle(worldIn, x, y, z, humidity.color);
+				}
+			}
+		}
+	}
+
+	public static void addEntityClimateParticle(World world, double x, double y, double z, int color) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new ParticleClimate(world, x, y, z, color));
+	}
+
+	public static void addTransformParticles(World worldIn, BlockPos pos, Random rand) {
+		if (!shouldSpawnParticle(worldIn)) {
+			return;
+		}
+		if (rand.nextFloat() >= 0.65F) {
+			for (int i = 0; i < 3; i++) {
+				EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(4)];
+				int xOffset = facing.getXOffset();
+				int zOffset = facing.getZOffset();
+				double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				double y = pos.getY() + (0.75 + rand.nextFloat() * 14.5) / 16.0;
+				double z = pos.getZ() + 0.5 + (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				ParticleRender.addEntityTransformParticle(worldIn, x, y, z);
+			}
+		}
+	}
+
+	public static void addEntityTransformParticle(World world, double x, double y, double z) {
+		if (!shouldSpawnParticle(world)) {
+			return;
+		}
+
+		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
+		effectRenderer.addEffect(new ParticleClimate(world, x, y, z));
+	}
+
 	public static void addEntityExplodeFX(World world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
@@ -159,27 +220,27 @@ public class ParticleRender {
 		}
 	}
 
-	public static void addPortalFx(World world, BlockPos pos, Random rand){
+	public static void addPortalFx(World world, BlockPos pos, Random rand) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 
 		int j = rand.nextInt(2) * 2 - 1;
 		int k = rand.nextInt(2) * 2 - 1;
-		double xPos = (double)pos.getX() + 0.5D + 0.25D * (double)j;
-		double yPos = (double)((float)pos.getY() + rand.nextFloat());
-		double zPos = (double)pos.getZ() + 0.5D + 0.25D * (double)k;
-		double xSpeed = (double)(rand.nextFloat() * (float)j);
-		double ySpeed = ((double)rand.nextFloat() - 0.5D) * 0.125D;
-		double zSpeed = (double)(rand.nextFloat() * (float)k);
+		double xPos = (double) pos.getX() + 0.5D + 0.25D * (double) j;
+		double yPos = (double) ((float) pos.getY() + rand.nextFloat());
+		double zPos = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
+		double xSpeed = (double) (rand.nextFloat() * (float) j);
+		double ySpeed = ((double) rand.nextFloat() - 0.5D) * 0.125D;
+		double zSpeed = (double) (rand.nextFloat() * (float) k);
 		ParticleManager effectRenderer = Minecraft.getMinecraft().effectRenderer;
 		Particle particle = effectRenderer.spawnEffectParticle(EnumParticleTypes.PORTAL.getParticleID(), xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
-		if(particle != null){
+		if (particle != null) {
 			effectRenderer.addEffect(particle);
 		}
 	}
-	
-	public static void addEntityBiodustFX(World world, double x, double y, double z){
+
+	public static void addEntityBiodustFX(World world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}

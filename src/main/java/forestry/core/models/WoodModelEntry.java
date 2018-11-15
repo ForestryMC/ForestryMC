@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import forestry.arboriculture.IWoodTyped;
 import net.minecraft.block.Block;
+
+import forestry.arboriculture.IWoodTyped;
 
 /**
  * Only to storage data's to register a model later.

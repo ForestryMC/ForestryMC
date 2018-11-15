@@ -70,7 +70,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		scrollable.add(scrollableContent);
 		//Scrollbar
 		scrollBar = new ScrollBarElement(width - 10 - (rightBoarder ? 6 : 0), 12, SCROLLBAR_BACKGROUND, false, SCROLLBAR_SLIDER);
-		scrollBar.setVisible(false);
+		scrollBar.hide();
 		add(scrollBar);
 		//Side Tabs
 		tabs = new GeneticAnalyzerTabs(0, 5, this);
@@ -93,7 +93,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 				rightButton.onPressed();
 			} else if ((keyCode == Keyboard.KEY_UP || keyCode == Keyboard.KEY_LEFT) && leftButton.isEnabled()) {
 				leftButton.onPressed();
-			} else if(keyCode == Keyboard.KEY_RETURN && analyzeButton.isEnabled()){
+			} else if (keyCode == Keyboard.KEY_RETURN && analyzeButton.isEnabled()) {
 				analyzeButton.onPressed();
 			}
 		});
@@ -144,10 +144,10 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 						int invisibleArea = scrollable.getInvisibleArea();
 						if (invisibleArea > 0) {
 							scrollBar.setParameters(this, 0, invisibleArea, 1);
-							scrollBar.setVisible(true);
+							scrollBar.show();
 						} else {
 							scrollBar.setValue(0);
-							scrollBar.setVisible(false);
+							scrollBar.hide();
 						}
 						return;
 					}
@@ -167,7 +167,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			scrollableContent.label(text);
 		}
 		//Disable the scrollbar
-		scrollBar.setVisible(false);
+		scrollBar.hide();
 	}
 
 	@Override

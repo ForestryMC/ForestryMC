@@ -14,9 +14,6 @@ import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Random;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.entities.ParticleColoredDripParticle;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -32,12 +29,18 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.entities.ParticleColoredDripParticle;
 
 public class BlockForestryFluid extends BlockFluidClassic implements IItemModelRegister {
 
@@ -80,7 +83,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 		double d1 = pos.getY();
 		double d2 = pos.getZ();
 
-		if (this.blockMaterial == Material.WATER) {
+		if (this.material == Material.WATER) {
 			int i = stateIn.getValue(LEVEL);
 
 			if (i > 0 && i < 8) {
@@ -92,7 +95,7 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 			}
 		}
 
-		if (this.blockMaterial == Material.LAVA && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && !worldIn.getBlockState(pos.up()).isOpaqueCube()) {
+		if (this.material == Material.LAVA && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && !worldIn.getBlockState(pos.up()).isOpaqueCube()) {
 			if (rand.nextInt(100) == 0) {
 				double d8 = d0 + rand.nextFloat();
 				double d4 = d1 + stateIn.getBoundingBox(worldIn, pos).maxY;
@@ -124,14 +127,14 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		return !blockState.getMaterial().isLiquid() &&
-				super.canDisplace(world, pos);
+			super.canDisplace(world, pos);
 	}
 
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 		IBlockState blockState = world.getBlockState(pos);
 		return !blockState.getMaterial().isLiquid() &&
-				super.displaceIfPossible(world, pos);
+			super.displaceIfPossible(world, pos);
 	}
 
 	@Override
@@ -238,11 +241,11 @@ public class BlockForestryFluid extends BlockFluidClassic implements IItemModelR
 
 	private static boolean isNeighborFlammable(World world, int x, int y, int z) {
 		return isFlammable(world, new BlockPos(x - 1, y, z)) ||
-				isFlammable(world, new BlockPos(x + 1, y, z)) ||
-				isFlammable(world, new BlockPos(x, y, z - 1)) ||
-				isFlammable(world, new BlockPos(x, y, z + 1)) ||
-				isFlammable(world, new BlockPos(x, y - 1, z)) ||
-				isFlammable(world, new BlockPos(x, y + 1, z));
+			isFlammable(world, new BlockPos(x + 1, y, z)) ||
+			isFlammable(world, new BlockPos(x, y, z - 1)) ||
+			isFlammable(world, new BlockPos(x, y, z + 1)) ||
+			isFlammable(world, new BlockPos(x, y - 1, z)) ||
+			isFlammable(world, new BlockPos(x, y + 1, z));
 	}
 
 	private static boolean isNearFire(World world, int x, int y, int z) {
