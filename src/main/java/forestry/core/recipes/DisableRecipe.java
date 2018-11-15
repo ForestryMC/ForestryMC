@@ -44,6 +44,6 @@ public class DisableRecipe implements IConditionFactory {
 	private static void getEnabledModules() {
 		enabledModuleUIDs = new HashSet<>();
 		Set<ResourceLocation> enabledModuleRLs = ForestryAPI.enabledModules;
-		enabledModuleRLs.forEach(rl -> enabledModuleUIDs.add(rl.getResourcePath()));
+		enabledModuleRLs.forEach(rl -> enabledModuleUIDs.add(rl.getPath()));
 	}
 }
