@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "forestry:portable_analyzer"
+    "item": "forestry:portable_alyzer"
   },
   "pattern": [
     "X#X",
@@ -37,7 +37,7 @@
       "item": "#DUSTREDSTONE"
     },
     "D": {
-      "item": "#GEMDIAMOND  "
+      "item": "#GEMDIAMOND"
     }
   },
   "group": "core"
