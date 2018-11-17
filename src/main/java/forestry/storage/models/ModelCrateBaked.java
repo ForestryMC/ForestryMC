@@ -3,9 +3,11 @@ package forestry.storage.models;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
@@ -16,6 +18,8 @@ import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.ModelUtil;
 
 public class ModelCrateBaked extends BlankModel {
+	private static final float CONTENT_RENDER_OFFSET_X = 1f/16f; // how far to offset content model from the left edge of the crate model
+	private static final float CONTENT_RENDER_OFFSET_Z = 1f/128f; // how far to render the content model away from the crate model
 
 	private ContentModel contentModel;
 
@@ -29,6 +33,9 @@ public class ModelCrateBaked extends BlankModel {
 
 	@Override
 	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+		if (side != null) {
+			return ImmutableList.of();
+		}
 		if (contentModel.hasBakedModel()) {
 			contentModel = contentModel.bake();
 		}
@@ -67,11 +74,14 @@ public class ModelCrateBaked extends BlankModel {
 		public ContentModel bake() {
 			IBakedModel bakedModel = ModelUtil.getModel(content);
 			if (bakedModel != null) {
+				IBakedModel guiModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI).getKey();
 				if (bakedModel instanceof BakedItemModel) {
-					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, 0.0625F, 0.5F).getQuads(null, null, 0L));
-					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, -0.0625F, 0.5F).getQuads(null, null, 0L));
+					TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, -CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z, 0, 0, 0, 0.5F, 0.5F, 1F);
+					quads.addAll(frontModel.getQuads(null, null, 0L));
+					TRSRBakedModel backModel = new TRSRBakedModel(guiModel, -CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z, 0, (float) Math.PI, 0, 0.5F, 0.5F, 1F);
+					quads.addAll(backModel.getQuads(null, null, 0L));
 				} else {
-					quads.addAll(new TRSRBakedModel(bakedModel, -0.0625F, 0, 0, 0.5F).getQuads(null, null, 0L));
+					quads.addAll(new TRSRBakedModel(guiModel, -CONTENT_RENDER_OFFSET_X, 0, 0, 0.5F).getQuads(null, null, 0L));
 				}
 			}
 			return new ContentModel(quads);
