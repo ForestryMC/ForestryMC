@@ -1,5 +1,7 @@
 package forestry.storage.models;
 
+import java.util.function.Predicate;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.Item;
@@ -9,6 +11,8 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
+import net.minecraftforge.client.resource.IResourceType;
+import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,6 +49,13 @@ public enum ModelLoaderCrate implements ICustomModelLoader {
 
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
+		ModelCrate.clearCachedQuads();
+	}
 
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+		if (resourcePredicate.test(VanillaResourceType.TEXTURES)) {
+			this.onResourceManagerReload(resourceManager);
+		}
 	}
 }
