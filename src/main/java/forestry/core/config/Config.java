@@ -219,6 +219,7 @@ public class Config {
 
 		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", false);
 		if (recreate) {
+			Log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
 			String recreateDefinitionsComment = Translator.translateToLocal("for.config.difficulty.recreate.definitions.comment");
 			Property property = configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
 			property.set(false);
