@@ -202,7 +202,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (cachedStack != null) {
 			IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(cachedStack);
 			if (recipe != null) {
-				fluidChange = recipe.getTempChange();
+				fluidChange = Math.abs(recipe.getTempChange());
 			}
 		}
 		return (0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
