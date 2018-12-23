@@ -125,7 +125,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 			int currentCost = getFluidCost(changedState);
 			if (resourceTank.drain(currentCost, false) != null) {
 				IClimateState simulatedState = /*changedState.add(ClimateType.HUMIDITY, climateChange)*/
-					changedState.toImmutable().add(manipulator.addChange(true));
+						changedState.toImmutable().add(manipulator.addChange(true));
 				int fluidCost = getFluidCost(simulatedState);
 				if (resourceTank.drain(fluidCost, false) != null) {
 					cachedStack = resourceTank.drain(fluidCost, true);
@@ -205,7 +205,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 				fluidChange = recipe.getTempChange();
 			}
 		}
-		return (0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
+		return (fluidChange < 0 ? -0.05F + fluidChange : 0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
 	}
 
 	private IClimateState getClimateDifference() {
@@ -329,7 +329,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
-			|| capability == ClimateCapabilities.CLIMATE_TRANSFORMER
-			|| super.hasCapability(capability, facing);
+				|| capability == ClimateCapabilities.CLIMATE_TRANSFORMER
+				|| super.hasCapability(capability, facing);
 	}
 }
