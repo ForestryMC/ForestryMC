@@ -59,7 +59,7 @@ public abstract class HiveDecorator {
 
 		Collections.shuffle(hives, rand);
 
-		for (int tries = 0; tries < 4; tries++) {
+		for (int tries = 0; tries < hives.size() / 2; tries++) {
 			int x = worldX + rand.nextInt(16);
 			int z = worldZ + rand.nextInt(16);
 
@@ -72,7 +72,7 @@ public abstract class HiveDecorator {
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getRainfall());
 
 			for (Hive hive : hives) {
-				if (hive.genChance() * Config.getBeehivesAmount() >= rand.nextFloat() * 100.0f) {
+				if (hive.genChance() * Config.getBeehivesAmount() * hives.size() / 8 >= rand.nextFloat() * 100.0f) {
 					if (hive.isGoodBiome(biome) && hive.isGoodHumidity(humidity)) {
 						if (tryGenHive(world, rand, x, z, hive)) {
 							return;
