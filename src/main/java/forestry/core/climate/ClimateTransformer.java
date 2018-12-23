@@ -117,6 +117,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	@Override
 	public IClimateManipulatorBuilder createManipulator(ClimateType type) {
 		return new ClimateManipulator.Builder()
+					.setAllowBackwards()
 			.setDefault(defaultState)
 			.setCurrent(currentState)
 			.setTarget(targetedState)

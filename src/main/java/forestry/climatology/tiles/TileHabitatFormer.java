@@ -205,7 +205,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 				fluidChange = recipe.getTempChange();
 			}
 		}
-		return (fluidChange < 0 ? -0.05F + fluidChange : 0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
+		return (0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
 	}
 
 	private IClimateState getClimateDifference() {
