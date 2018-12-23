@@ -214,26 +214,22 @@ public class Config {
 
 	private static void loadConfigCommon(Side side) {
 
-		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
+		String[] gameModes = new String[]{"EASY", "NORMAL", "HARD", "OP"};
+		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", gameModes);
 
-		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", true);
+		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", false);
 		if (recreate) {
 			Log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
-
 			String recreateDefinitionsComment = Translator.translateToLocal("for.config.difficulty.recreate.definitions.comment");
 			Property property = configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
 			property.set(false);
+		}
 
-			// Make sure the default mode files are there.
-
-			File opMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/OP.cfg");
-			copyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");
-
-			File normalMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/NORMAL.cfg");
-			copyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.cfg");
-
-			File hardMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/HARD.cfg");
-			copyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
+		for (String gameMode : gameModes) {
+			File modeFile = new File(Forestry.instance.getConfigFolder(), String.format("gamemodes/%s.cfg", gameMode));
+			if (!modeFile.exists() || recreate) {
+				copyFileToFS(modeFile, String.format("/config/forestry/gamemodes/%s.cfg", gameMode));
+			}
 		}
 
 		// RetroGen
