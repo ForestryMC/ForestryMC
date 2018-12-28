@@ -79,7 +79,8 @@ import forestry.plugins.PluginTechReborn;
 		+ "after:" + PluginNatura.MOD_ID + ";"
 		+ "after:toughasnails;"
 		+ "after:" + PluginTechReborn.MOD_ID + ";"
-		+ "after:" + PluginBuildCraftFuels.MOD_ID + ";")
+		+ "after:" + PluginBuildCraftFuels.MOD_ID + ";"
+		+ "before:binniecore@[2.5.1.184,)")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")

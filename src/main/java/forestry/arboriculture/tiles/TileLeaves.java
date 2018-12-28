@@ -145,10 +145,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		if (!checkedForConversionToDefaultLeaves) {
 			if (shouldConvertToDefaultLeaves()) {
-				IBlockState defaultLeaves;
+				IBlockState defaultLeaves = null;
 				if (isFruitLeaf) {
 					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(primary.getUID());
-				} else {
+				}
+				if(defaultLeaves == null) {
 					defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(primary.getUID());
 				}
 				worldIn.setBlockState(getPos(), defaultLeaves);
@@ -318,8 +319,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (individual instanceof ITree) {
 			ITree tree = getTree();
 			return tree != null &&
-				tree.getMate() == null &&
-				(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
+					tree.getMate() == null &&
+					(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
 		}
 		return false;
 	}
