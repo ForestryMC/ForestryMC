@@ -171,7 +171,7 @@ public class ClimateManipulator implements IClimateManipulator {
 
 		@Override
 		public IClimateManipulatorBuilder setAllowBackwards() {
-			this.backwards = false;
+			this.backwards = true;
 			return this;
 		}
 

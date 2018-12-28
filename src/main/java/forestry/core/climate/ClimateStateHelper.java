@@ -139,7 +139,6 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 		float temp = climateState.getTemperature();
 		float humid = climateState.getHumidity();
 		if (temp > 2.0F || temp < 0.0F || humid > 2.0F || humid < 0.0F) {
-			temp = MathHelper.clamp(temp, 0.0F, 2.0F);
 			return climateState.setClimate(MathHelper.clamp(temp, 0.0F, 2.0F), MathHelper.clamp(humid, 0.0F, 2.0F));
 		}
 		return climateState;
