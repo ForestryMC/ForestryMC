@@ -236,11 +236,10 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
-		if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
-			EnumFacing powerSide = world.getBlockState(getPos()).getValue(BlockBase.FACING);
-			Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
-			InventoryUtil.moveItemStack(wasteItemHandler, inventories);
-		}
+		EnumFacing powerSide = world.getBlockState(getPos()).getValue(BlockBase.FACING);
+		Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
+		InventoryUtil.moveItemStack(wasteItemHandler, inventories);
+
 	}
 
 	// / STATE INFORMATION

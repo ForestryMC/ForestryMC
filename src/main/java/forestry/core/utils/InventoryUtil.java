@@ -18,7 +18,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,15 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
 
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.StandardStackFilters;
-import forestry.core.tiles.AdjacentTileCache;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
-import forestry.plugins.ForestryCompatPlugins;
 
 public abstract class InventoryUtil {
 	/**
@@ -62,66 +55,6 @@ public abstract class InventoryUtil {
 				return true;
 			}
 		}
-		return false;
-	}
-
-	/**
-	 * Attempts to move a single item from the source inventory into a adjacent Buildcraft pipe.
-	 * If the attempt fails, the source Inventory will not be modified.
-	 *
-	 * @param source    The source inventory
-	 * @param tileCache The tile cache of the source block.
-	 * @return true if an item was inserted, otherwise false.
-	 */
-	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache) {
-		return moveOneItemToPipe(source, tileCache, EnumFacing.values());
-	}
-
-	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
-		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_TRANSPORT)) {
-			return internal_moveOneItemToPipe(source, tileCache, directions);
-		}
-
-		return false;
-	}
-
-	//TODO Buildcraft for 1.9
-	@Optional.Method(modid = "BuildCraftAPI|transport")
-	private static boolean internal_moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
-		//		IInventory invClone = new InventoryCopy(source);
-		//		ItemStack stackToMove = removeOneItem(invClone);
-		//		if (stackToMove == null) {
-		//			return false;
-		//		}
-		//		if (stackToMove.stackSize <= 0) {
-		//			return false;
-		//		}
-		//
-		//		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<>();
-		//		boolean foundPipe = false;
-		//		for (EnumFacing side : directions) {
-		//			TileEntity tile = tileCache.getTileOnSide(side);
-		//			if (tile instanceof IPipeTile) {
-		//				IPipeTile pipe = (IPipeTile) tile;
-		//				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
-		//					pipes.add(new AbstractMap.SimpleEntry<>(side, pipe));
-		//					foundPipe = true;
-		//				}
-		//			}
-		//		}
-		//
-		//		if (!foundPipe) {
-		//			return false;
-		//		}
-		//
-		//		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
-		//		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
-		//		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
-		//			if (removeOneItem(source, stackToMove) != null) {
-		//				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
-		//				return true;
-		//			}
-		//		}
 		return false;
 	}
 
