@@ -86,7 +86,7 @@ public abstract class InventoryUtil {
 	}
 
 	//TODO Buildcraft for 1.9
-	@Optional.Method(modid = "BuildCraftAPI|transport")
+	@Optional.Method(modid = "buildcraftapi_transport")
 	private static boolean internal_moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
 		//		IInventory invClone = new InventoryCopy(source);
 		//		ItemStack stackToMove = removeOneItem(invClone);
