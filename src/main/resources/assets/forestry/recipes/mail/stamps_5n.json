@@ -10,23 +10,10 @@
     "ZZZ"
   ],
   "conditions": [
-    {
-      "type": "forge:and",
-      "values": [
         {
           "module": "mail",
           "type": "module"
-        },
-        {
-          "type": "config",
-          "category": "crafting.stamps:enabled"
-        },
-        {
-          "type": "collector_stamps",
-          "UID": "5n"
         }
-      ]
-    }
   ],
   "type": "forge:ore_shaped",
   "key": {

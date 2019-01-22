@@ -12,11 +12,9 @@
  */
 package forestry.core.recipes;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.BooleanSupplier;
 
 import net.minecraft.util.ResourceLocation;
@@ -27,23 +25,14 @@ import net.minecraftforge.common.crafting.JsonContext;
 import forestry.api.core.ForestryAPI;
 
 @SuppressWarnings("unused")
-
 public class DisableRecipe implements IConditionFactory {
-
-	@Nullable
-	private static Set<String> enabledModuleUIDs;
 
 	@Override
 	public BooleanSupplier parse(JsonContext context, JsonObject json) {
-		if (enabledModuleUIDs == null) {
-			getEnabledModules();
-		}
-		return () -> enabledModuleUIDs.contains(json.get("module").getAsString());
-	}
+		String module = json.get("module").getAsString();
+		JsonElement conElement = json.get("container");
+		String container = conElement == null ? "forestry" : conElement.getAsString();
 
-	private static void getEnabledModules() {
-		enabledModuleUIDs = new HashSet<>();
-		Set<ResourceLocation> enabledModuleRLs = ForestryAPI.enabledModules;
-		enabledModuleRLs.forEach(rl -> enabledModuleUIDs.add(rl.getPath()));
+		return () -> ForestryAPI.enabledModules.contains(new ResourceLocation(container, module));
 	}
 }

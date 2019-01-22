@@ -9,19 +9,10 @@
     "ZVY"
   ],
   "conditions": [
-    {
-      "type": "forge:and",
-      "values": [
         {
           "module": "energy",
           "type": "module"
-        },
-        {
-          "type": "config",
-          "category": "energy.engine.clockwork"
         }
-      ]
-    }
   ],
   "type": "forge:ore_shaped",
   "key": {

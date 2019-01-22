@@ -18,20 +18,10 @@
     }
   ],
   "conditions": [
-    {
-      "type": "forge:and",
-      "values": [
         {
           "module": "core",
           "type": "module"
-        },
-        {
-          "type": "config",
-          "category": "crafting:bronze",
-          "default": true
         }
-      ]
-    }
       ],
       "type": "forge:ore_shapeless",
       "group": "core"

@@ -43,7 +43,7 @@ public class VariableOutputRecipeFactory implements IRecipeFactory {
 		String configProperty = JsonUtils.getString(json, "config_property");
 		int amount = ForestryAPI.activeMode.getIntegerSetting(configProperty);
 		if (amount == 0) {
-			Log.warning("Recipe disabled as %s is 0", configProperty);
+			Log.info("Recipe disabled as %s is 0", configProperty);
 			return new ShapedOreRecipe(null, ItemStack.EMPTY, new Object[1]);
 		}
 		return factory(context, json, amount);
