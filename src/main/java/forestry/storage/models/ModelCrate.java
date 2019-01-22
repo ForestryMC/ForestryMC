@@ -34,6 +34,10 @@ public class ModelCrate implements IModel {
 
 	private static List<BakedQuad> bakedQuads = new LinkedList<>();
 
+	public static void clearCachedQuads() {
+		bakedQuads.clear();
+	}
+
 	private final ItemCrated crated;
 	private final ItemStack contained;
 

@@ -50,6 +50,7 @@ import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.SolderManager;
+import forestry.core.commands.CommandListAlleles;
 import forestry.core.commands.CommandModules;
 import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
@@ -137,6 +138,7 @@ public class ModuleCore extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
 		rootCommand.addChildCommand(new CommandModules());
+		rootCommand.addChildCommand(new CommandListAlleles());
 	}
 
 	@Override

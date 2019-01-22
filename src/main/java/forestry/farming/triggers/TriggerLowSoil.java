@@ -10,16 +10,18 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
+import java.util.stream.Stream;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 
 import forestry.api.farming.IFarmInventory;
 import forestry.api.multiblock.IFarmController;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.farming.tiles.TileFarmHatch;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -63,13 +65,16 @@ public class TriggerLowSoil extends Trigger {
 		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
 		IFarmInventory farmInventory = farmController.getFarmInventory();
 
-		if (parameter == null || parameter.getItemStack().isEmpty()) {
-			IInventory resourcesInventory = farmInventory.getResourcesInventory();
-			return InventoryUtil.containsPercent(resourcesInventory, threshold);
-		} else {
-			ItemStack filter = parameter.getItemStack().copy();
-			filter.setCount(threshold);
-			return farmInventory.hasResources(NonNullList.from(ItemStack.EMPTY, filter));
+		IInventory resourcesInventory = farmInventory.getResourcesInventory();
+		Stream<ItemStack> stackStream = InventoryUtil.getStacks(resourcesInventory).stream();
+
+		if (parameter != null && !parameter.getItemStack().isEmpty()) {
+			ItemStack filter = parameter.getItemStack();
+			stackStream = stackStream.filter(s -> ItemStackUtil.areItemStacksEqualIgnoreCount(filter, s));
 		}
+
+		return stackStream
+				.mapToInt(ItemStack::getCount)
+				.sum() < threshold;
 	}
 }
