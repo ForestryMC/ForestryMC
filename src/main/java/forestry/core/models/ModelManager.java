@@ -50,7 +50,6 @@ import forestry.api.core.IStateMapperRegister;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Constants;
 import forestry.core.items.IColoredItem;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.ModelUtil;
 
 @SideOnly(Side.CLIENT)
@@ -102,7 +101,7 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
-		ResourceLocation resourceLocation = ItemStackUtil.getItemNameFromRegistry(item);
+		ResourceLocation resourceLocation = item.getRegistryName();
 		Preconditions.checkNotNull(resourceLocation);
 		String itemName = resourceLocation.getPath();
 		return getModelLocation(itemName);

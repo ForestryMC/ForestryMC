@@ -5,9 +5,14 @@ import com.google.common.collect.ImmutableMap;
 import javax.annotation.Nullable;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry.ItemStackHolder;
 
 import forestry.api.circuits.ChipsetManager;
@@ -132,7 +137,8 @@ public class PluginTechReborn extends CompatPlugin {
 	}
 
 	public static boolean rubberItemsSuccess() {
-		return ItemStackUtil.getItemFromRegistry("techreborn:rubber_wood") != null
-			&& !new ItemStack(ItemStackUtil.getItemFromRegistry("techreborn:part"), 1, 31).isEmpty();
+		IForgeRegistry<Item> registry = ForgeRegistries.ITEMS;
+		return registry.containsKey(new ResourceLocation("techreborn", "rubber_wood"))
+				&& registry.containsKey(new ResourceLocation("techreborn", "part"));
 	}
 }

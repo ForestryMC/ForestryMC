@@ -111,7 +111,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.IMCUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.VillagerTradeLists;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -559,7 +558,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
-			Block block = ItemStackUtil.getBlockFromRegistry(message.getStringValue());
+			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(message.getStringValue()));
 
 			if (block != null) {
 				validFences.add(block);
