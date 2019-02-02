@@ -34,7 +34,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.arboriculture.ModuleCharcoal;
 import forestry.core.config.Config;
 
@@ -47,7 +46,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	public BlockWoodPile() {
 		super(Material.WOOD);
 		setHardness(1.5f);
-		setCreativeTab(Tabs.tabArboriculture);
+		setCreativeTab(ModuleCharcoal.getTag());
 		setSoundType(SoundType.WOOD);
 	}
 

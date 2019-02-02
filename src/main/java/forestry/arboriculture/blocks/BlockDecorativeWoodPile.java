@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.arboriculture.ModuleCharcoal;
 
 public class BlockDecorativeWoodPile extends BlockRotatedPillar implements IItemModelRegister {
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class);
@@ -29,7 +29,7 @@ public class BlockDecorativeWoodPile extends BlockRotatedPillar implements IItem
 		super(Material.WOOD);
 		setSoundType(SoundType.WOOD);
 		setHardness(1.5f);
-		setCreativeTab(Tabs.tabArboriculture);
+		setCreativeTab(ModuleCharcoal.getTag());
 	}
 
 	@Override
