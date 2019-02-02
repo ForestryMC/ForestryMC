@@ -1,5 +1,7 @@
 package forestry.core.genetics.analyzer;
 
+import java.util.Locale;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 

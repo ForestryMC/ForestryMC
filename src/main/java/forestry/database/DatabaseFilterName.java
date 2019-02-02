@@ -1,5 +1,6 @@
 package forestry.database;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import net.minecraft.item.ItemStack;

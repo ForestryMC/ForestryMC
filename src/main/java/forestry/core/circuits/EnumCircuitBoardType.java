@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import java.util.Locale;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
