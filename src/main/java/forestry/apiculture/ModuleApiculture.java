@@ -163,7 +163,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	public static boolean hivesDamageOnlyPlayers = false;
 
-	public static boolean hiveDamageOnAttack = false;
+	public static boolean hiveDamageOnAttack = true;
 
 	public static boolean doSelfPollination = true;
 
@@ -293,7 +293,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		hivesDamageOnlyPlayers = config.getBooleanLocalized("beekeeping.hivedamage", "onlyPlayers", hivesDamageOnlyPlayers);
 
-		hiveDamageOnAttack = config.getBooleanLocalized("beekeeping.hivedamage", "onlyOnAttack", hiveDamageOnAttack);
+		hiveDamageOnAttack = config.getBooleanLocalized("beekeeping.hivedamage", "onlyAfterAttack", hiveDamageOnAttack);
 
 		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
 
