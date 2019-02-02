@@ -327,7 +327,7 @@ public class ModuleCore extends BlankForestryModule {
 				'R', OreDictUtil.DUST_REDSTONE,
 				'D', OreDictUtil.GEM_DIAMOND);
 			if (Fluids.BIOMASS.getFluid() != null) {
-				RecipeUtil.addRecipe("camouflaged_paneling", ModuleFluids.getItems().getContainer(EnumContainerType.CAPSULE, Fluids.BIOMASS),
+				RecipeUtil.addShapelessRecipe("camouflaged_paneling", ModuleFluids.getItems().getContainer(EnumContainerType.CAPSULE, Fluids.BIOMASS),
 					items.craftingMaterial.getCamouflagedPaneling(1));
 			}
 		}
