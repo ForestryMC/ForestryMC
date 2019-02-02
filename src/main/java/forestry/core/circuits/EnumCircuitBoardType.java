@@ -33,11 +33,11 @@ public enum EnumCircuitBoardType {
 
 	@SideOnly(Side.CLIENT)
 	public int getPrimaryColor() {
-		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase() + ".primary");
+		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".primary");
 	}
 
 	@SideOnly(Side.CLIENT)
 	public int getSecondaryColor() {
-		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase() + ".secondary");
+		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".secondary");
 	}
 }
