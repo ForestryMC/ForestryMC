@@ -7,8 +7,6 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 

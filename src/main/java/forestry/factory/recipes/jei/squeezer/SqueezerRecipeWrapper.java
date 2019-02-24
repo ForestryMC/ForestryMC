@@ -3,8 +3,6 @@ package forestry.factory.recipes.jei.squeezer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.ISqueezerRecipe;
 
 import mezz.jei.api.ingredients.IIngredients;
