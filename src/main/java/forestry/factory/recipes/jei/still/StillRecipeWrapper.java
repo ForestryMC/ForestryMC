@@ -8,6 +8,7 @@ import forestry.api.recipes.IStillRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class StillRecipeWrapper extends ForestryRecipeWrapper<IStillRecipe> {
 
@@ -17,7 +18,7 @@ public class StillRecipeWrapper extends ForestryRecipeWrapper<IStillRecipe> {
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInputs(FluidStack.class, Collections.singletonList(getRecipe().getInput()));
-		ingredients.setOutput(FluidStack.class, getRecipe().getOutput());
+		ingredients.setInputs(VanillaTypes.FLUID, Collections.singletonList(getRecipe().getInput()));
+		ingredients.setOutput(VanillaTypes.FLUID, getRecipe().getOutput());
 	}
 }

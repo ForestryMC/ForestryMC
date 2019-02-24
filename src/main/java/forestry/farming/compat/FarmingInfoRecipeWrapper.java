@@ -20,6 +20,7 @@ import forestry.api.farming.ISoil;
 import forestry.core.utils.Translator;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class FarmingInfoRecipeWrapper implements IRecipeWrapper {
@@ -64,8 +65,8 @@ public class FarmingInfoRecipeWrapper implements IRecipeWrapper {
 			.flatMap(Collection::stream)
 			.collect(Collectors.toList());
 		splitItems(outputStacks, 0, productions, item -> item);
-		ingredients.setInputLists(ItemStack.class, inputStacks);
-		ingredients.setOutputLists(ItemStack.class, outputStacks);
+		ingredients.setInputLists(VanillaTypes.ITEM, inputStacks);
+		ingredients.setOutputLists(VanillaTypes.ITEM, outputStacks);
 	}
 
 	private static <T> void splitItems(List<List<ItemStack>> items, int startIndex, List<T> values, Function<T, ItemStack> itemFunction) {

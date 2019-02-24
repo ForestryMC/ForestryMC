@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class BottlerRecipeWrapper implements IRecipeWrapper {
@@ -25,15 +26,15 @@ public class BottlerRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInput(ItemStack.class, inputStack);
+		ingredients.setInput(VanillaTypes.ITEM, inputStack);
 		if (outputStack != null) {
-			ingredients.setOutput(ItemStack.class, outputStack);
+			ingredients.setOutput(VanillaTypes.ITEM, outputStack);
 		}
 
 		if (fillRecipe) {
-			ingredients.setInput(FluidStack.class, fluid);
+			ingredients.setInput(VanillaTypes.FLUID, fluid);
 		} else {
-			ingredients.setOutput(FluidStack.class, fluid);
+			ingredients.setOutput(VanillaTypes.FLUID, fluid);
 		}
 	}
 }

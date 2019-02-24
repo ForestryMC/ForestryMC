@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import mezz.jei.api.ingredients.IIngredientRegistry;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class BottlerRecipeMaker {
 
@@ -22,7 +23,7 @@ public class BottlerRecipeMaker {
 
 	public static List<BottlerRecipeWrapper> getBottlerRecipes(IIngredientRegistry ingredientRegistry) {
 		List<BottlerRecipeWrapper> recipes = new ArrayList<>();
-		for (ItemStack stack : ingredientRegistry.getAllIngredients(ItemStack.class)) {
+		for (ItemStack stack : ingredientRegistry.getAllIngredients(VanillaTypes.ITEM)) {
 			if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 				IFluidHandlerItem fluidHandler = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 				if (fluidHandler != null) {
