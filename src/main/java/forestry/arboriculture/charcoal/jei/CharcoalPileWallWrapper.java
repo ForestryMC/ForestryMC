@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.core.ModuleCore;
+import forestry.core.config.Config;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -22,7 +23,7 @@ public class CharcoalPileWallWrapper implements IRecipeWrapper {
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputs(ItemStack.class, pileWall.getDisplayItems());
-		int amount = 9 + pileWall.getCharcoalAmount();
+		int amount = Config.charcoalAmountBase + pileWall.getCharcoalAmount();
 		ItemStack charcoal = new ItemStack(Items.COAL, amount, 1);
 		ItemStack ash = new ItemStack(ModuleCore.getItems().ash, amount / 4);
 		ImmutableList<ItemStack> outputs = ImmutableList.of(
