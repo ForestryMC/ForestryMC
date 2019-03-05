@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import mezz.jei.api.ingredients.IIngredientRegistry;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class BottlerRecipeMaker {
 
@@ -22,14 +23,12 @@ public class BottlerRecipeMaker {
 
 	public static List<BottlerRecipeWrapper> getBottlerRecipes(IIngredientRegistry ingredientRegistry) {
 		List<BottlerRecipeWrapper> recipes = new ArrayList<>();
-		for (ItemStack stack : ingredientRegistry.getAllIngredients(ItemStack.class)) {
+		for (ItemStack stack : ingredientRegistry.getAllIngredients(VanillaTypes.ITEM)) {
 			if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 				IFluidHandlerItem fluidHandler = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 				if (fluidHandler != null) {
-					final boolean canDrain = canDrain(fluidHandler);
-					final boolean canFill = canFill(fluidHandler);
 
-					if (canDrain) {
+					if (hasDrainProperty(fluidHandler)) {
 						FluidStack drainedFluid = fluidHandler.drain(Integer.MAX_VALUE, true);
 						if (drainedFluid != null) {
 							ItemStack drained = fluidHandler.getContainer();
@@ -37,18 +36,18 @@ public class BottlerRecipeMaker {
 						}
 					}
 
-					if (canFill) {
-						for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-							IFluidHandlerItem fillingCapability = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-							if (fillingCapability != null) {
-								int fill = fillingCapability.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
-								if (fill > 0) {
+					if (hasFillProperty(fluidHandler)) {
+						IFluidHandlerItem fillingCapability = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+						if (fillingCapability != null) {
+							for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+								int testFill = fillingCapability.fill(new FluidStack(fluid, Integer.MAX_VALUE), false);    //try to reduce itemstack copies
+								if (testFill > 0) {
+									IFluidHandlerItem copiedCap = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+									int fill = copiedCap.fill(new FluidStack(fluid, Integer.MAX_VALUE), true);
 									FluidStack filledFluid = new FluidStack(fluid, fill);
-									ItemStack filled = fillingCapability.getContainer();
+									ItemStack filled = copiedCap.getContainer();
 									recipes.add(new BottlerRecipeWrapper(stack, filledFluid, filled, true));
 								}
-							} else {
-								break;
 							}
 						}
 					}
@@ -58,7 +57,7 @@ public class BottlerRecipeMaker {
 		return recipes;
 	}
 
-	private static boolean canDrain(IFluidHandler fluidHandler) {
+	private static boolean hasDrainProperty(IFluidHandler fluidHandler) {
 		for (IFluidTankProperties properties : fluidHandler.getTankProperties()) {
 			if (properties.canDrain()) {
 				return true;
@@ -67,7 +66,7 @@ public class BottlerRecipeMaker {
 		return false;
 	}
 
-	private static boolean canFill(IFluidHandler fluidHandler) {
+	private static boolean hasFillProperty(IFluidHandler fluidHandler) {
 		for (IFluidTankProperties properties : fluidHandler.getTankProperties()) {
 			if (properties.canFill()) {
 				return true;
