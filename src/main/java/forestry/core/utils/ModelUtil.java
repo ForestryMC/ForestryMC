@@ -75,8 +75,8 @@ public class ModelUtil {
 	}
 
 	private static ItemCameraTransforms loadTransformFromJson(ResourceLocation location) {
-		try {
-			return ModelBlock.deserialize(getReaderForResource(location)).getAllTransforms();
+		try (Reader reader = getReaderForResource(location)) {
+			return ModelBlock.deserialize(reader).getAllTransforms();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
