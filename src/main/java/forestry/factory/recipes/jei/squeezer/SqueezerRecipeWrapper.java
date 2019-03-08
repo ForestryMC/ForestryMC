@@ -3,11 +3,10 @@ package forestry.factory.recipes.jei.squeezer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.ISqueezerRecipe;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class SqueezerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerRecipe> {
 	public SqueezerRecipeWrapper(ISqueezerRecipe recipe) {
@@ -17,14 +16,14 @@ public class SqueezerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueez
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		NonNullList<ItemStack> resources = getRecipe().getResources();
-		ingredients.setInputs(ItemStack.class, resources);
+		ingredients.setInputs(VanillaTypes.ITEM, resources);
 
 		ItemStack remnants = getRecipe().getRemnants();
 		if (!remnants.isEmpty()) {
-			ingredients.setOutput(ItemStack.class, remnants);
+			ingredients.setOutput(VanillaTypes.ITEM, remnants);
 		}
 
-		ingredients.setOutput(FluidStack.class, getRecipe().getFluidOutput());
+		ingredients.setOutput(VanillaTypes.FLUID, getRecipe().getFluidOutput());
 	}
 
 	@Override

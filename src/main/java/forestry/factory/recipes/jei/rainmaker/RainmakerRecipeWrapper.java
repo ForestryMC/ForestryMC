@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.Collections;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,6 +12,7 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.core.utils.Translator;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class RainmakerRecipeWrapper implements IRecipeWrapper {
@@ -24,7 +24,7 @@ public class RainmakerRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInputs(ItemStack.class, Collections.singletonList(substrate.getItem()));
+		ingredients.setInputs(VanillaTypes.ITEM, Collections.singletonList(substrate.getItem()));
 	}
 
 	@Override

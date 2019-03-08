@@ -14,6 +14,7 @@ import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
 	private final List<List<ItemStack>> inputStacks;
@@ -45,15 +46,15 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 
 		inputStacks.addAll(getInputStacks());
 
-		ingredients.setInputLists(ItemStack.class, inputStacks);
+		ingredients.setInputLists(VanillaTypes.ITEM, inputStacks);
 
 		FluidStack fluidResource = recipe.getFluidResource();
 		if (fluidResource != null) {
-			ingredients.setInputs(FluidStack.class, Collections.singletonList(fluidResource));
+			ingredients.setInputs(VanillaTypes.FLUID, Collections.singletonList(fluidResource));
 		}
 
 		ItemStack recipeOutput = craftingGridRecipe.getOutput();
-		ingredients.setOutput(ItemStack.class, recipeOutput);
+		ingredients.setOutput(VanillaTypes.ITEM, recipeOutput);
 	}
 
 	public List<List<ItemStack>> getInputStacks() {
