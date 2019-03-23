@@ -400,7 +400,13 @@ public class PluginIC2 extends ForestryPlugin {
 	public ArrayList<ItemStack> getCropDrops(TileEntity tileEntity) {
 		if (isIC2Crop(tileEntity)) {
 			ICropTile crop = (ICropTile)tileEntity;
-			ItemStack[] cropDrops = crop.harvest_automated(true);
+			if (crop == null || crop.getCrop() == null)
+				return null;
+			ItemStack[] cropDrops;
+			if ((crop.getCrop().canGrow(crop) && crop.getSize() < crop.getCrop().getOptimalHavestSize(crop)) || crop.getSize() == crop.getCrop().getOptimalHavestSize(crop))
+				cropDrops = crop.harvest_automated(true);
+			else
+				cropDrops = crop.harvest_automated(false);
 			if (cropDrops != null) {
 				return new ArrayList<>(Arrays.asList(cropDrops));
 			}
