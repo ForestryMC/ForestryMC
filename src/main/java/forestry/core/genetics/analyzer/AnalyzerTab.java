@@ -1,5 +1,7 @@
 package forestry.core.genetics.analyzer;
 
+import java.util.Locale;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 
@@ -22,6 +24,6 @@ public enum AnalyzerTab implements IDatabaseTab {
 	};
 
 	public String getTooltip(IIndividual individual) {
-		return I18n.translateToLocal("for.gui.database.tab." + name().toLowerCase() + ".name");
+		return I18n.translateToLocal("for.gui.database.tab." + name().toLowerCase(Locale.ENGLISH) + ".name");
 	}
 }

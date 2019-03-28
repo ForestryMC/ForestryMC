@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -61,10 +62,10 @@ public class SelectionLogic<S> implements IScrollable {
 
 		Pattern pattern;
 		try {
-			pattern = Pattern.compile(searchText.toLowerCase(), Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile(searchText.toLowerCase(Locale.ENGLISH), Pattern.CASE_INSENSITIVE);
 		} catch (Throwable ignore) {
 			try {
-				pattern = Pattern.compile(Pattern.quote(searchText.toLowerCase()), Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile(Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)), Pattern.CASE_INSENSITIVE);
 			} catch (Throwable e) {
 				return;
 			}
@@ -72,7 +73,7 @@ public class SelectionLogic<S> implements IScrollable {
 
 		for (S entry : entries) {
 			String name = provider.getName(entry);
-			if (pattern.matcher(name.toLowerCase()).find()) {
+			if (pattern.matcher(name.toLowerCase(Locale.ENGLISH)).find()) {
 				sorted.add(entry);
 			}
 		}

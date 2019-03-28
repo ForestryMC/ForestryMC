@@ -20,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -34,7 +35,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.arboriculture.ModuleCharcoal;
 import forestry.core.config.Config;
 
@@ -47,7 +47,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 	public BlockWoodPile() {
 		super(Material.WOOD);
 		setHardness(1.5f);
-		setCreativeTab(Tabs.tabArboriculture);
+		setCreativeTab(ModuleCharcoal.getTag());
 		setSoundType(SoundType.WOOD);
 	}
 
@@ -205,7 +205,7 @@ public class BlockWoodPile extends Block implements IItemModelRegister, IStateMa
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		return Math.max(Math.min(charcoalAmount / 6, 63.0F - Config.charcoalAmountBase), -Config.charcoalAmountBase);
+		return MathHelper.clamp(charcoalAmount / 6, Config.charcoalAmountBase, 63.0F - Config.charcoalAmountBase);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, EnumFacing facing) {

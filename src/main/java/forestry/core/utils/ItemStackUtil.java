@@ -30,13 +30,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.IForgeRegistry;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class ItemStackUtil {
-
-	public static final ItemStack[] EMPTY_STACK_ARRAY = new ItemStack[0];
 
 	/**
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
@@ -63,55 +58,16 @@ public abstract class ItemStackUtil {
 		return ItemStack.areItemStackTagsEqual(lhs, rhs);
 	}
 
-	/**
-	 * @return The registry name of the item as {@link ResourceLocation}
-	 */
-	@Nullable
-	public static ResourceLocation getItemNameFromRegistry(Item item) {
-		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
-		if (itemRegistry.containsValue(item)) {
-			return itemRegistry.getKey(item);
-		} else {
-			return null;
-		}
-	}
 
-	/**
-	 * @return The registry name of the block as {@link ResourceLocation}
-	 */
-	@Nullable
-	public static String getBlockNameFromRegistryAsString(Block block) {
-		IForgeRegistry<Block> itemRegistry = ForgeRegistries.BLOCKS;
-		if (itemRegistry.containsValue(block)) {
-			return itemRegistry.getKey(block).toString();
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * @return The registry name of the block as {@link ResourceLocation}
-	 */
-	@Nullable
-	public static ResourceLocation getBlockNameFromRegistry(Block block) {
-		IForgeRegistry<Block> itemRegistry = ForgeRegistries.BLOCKS;
-		if (itemRegistry.containsValue(block)) {
-			return itemRegistry.getKey(block);
-		} else {
-			return null;
-		}
-	}
+	//TODO - move towards resourcelocations anyway as they are safer in some ways
 
 	/**
 	 * @return The registry name of the item as {@link String}
 	 */
 	@Nullable
 	public static String getItemNameFromRegistryAsString(Item item) {
-		ResourceLocation itemNameFromRegistry = getItemNameFromRegistry(item);
-		if (itemNameFromRegistry == null) {
-			return null;
-		}
-		return itemNameFromRegistry.toString();
+		ResourceLocation rl = item.getRegistryName();
+		return rl == null ? null : rl.toString();
 	}
 
 	@Nullable
@@ -132,50 +88,6 @@ public abstract class ItemStackUtil {
 		} else {
 			return itemStackString;
 		}
-	}
-
-	/**
-	 * @param itemName The registry name from the item as {@link String}
-	 * @return The item from the item registry
-	 */
-	@Nullable
-	public static Item getItemFromRegistry(String itemName) {
-		return getItemFromRegistry(new ResourceLocation(itemName));
-	}
-
-	/**
-	 * @param itemName The registry name from the item as {@link ResourceLocation}
-	 * @return The item from the item registry
-	 */
-	@Nullable
-	public static Item getItemFromRegistry(ResourceLocation itemName) {
-		IForgeRegistry<Item> itemRegistry = ForgeRegistries.ITEMS;
-		if (!itemRegistry.containsKey(itemName)) {
-			return null;
-		}
-		return itemRegistry.getValue(itemName);
-	}
-
-	/**
-	 * @param itemName The registry name from the block as {@link String}
-	 * @return The block from the block registry
-	 */
-	@Nullable
-	public static Block getBlockFromRegistry(String itemName) {
-		return getBlockFromRegistry(new ResourceLocation(itemName));
-	}
-
-	/**
-	 * @param itemName The registry name from the block as {@link ResourceLocation}
-	 * @return The block from the block registry
-	 */
-	@Nullable
-	public static Block getBlockFromRegistry(ResourceLocation itemName) {
-		IForgeRegistry<Block> blockRegistry = ForgeRegistries.BLOCKS;
-		if (!blockRegistry.containsKey(itemName)) {
-			return null;
-		}
-		return blockRegistry.getValue(itemName);
 	}
 
 	/**
@@ -455,17 +367,8 @@ public abstract class ItemStackUtil {
 			return true;
 		}
 
-		if (isCraftingEquivalent(base, comparison)) {
-			return true;
-		}
+		return isCraftingEquivalent(base, comparison);
 
-		if (base.getTagCompound() != null && !base.getTagCompound().isEmpty()) {
-			if (!ItemStack.areItemStacksEqual(base, comparison)) {
-				return false;
-			}
-		}
-
-		return false;
 	}
 
 	public static boolean isCraftingToolEquivalent(ItemStack base, ItemStack comparison) {
@@ -516,16 +419,8 @@ public abstract class ItemStackUtil {
 
 
 	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
-		int size = max <= 0 ? 0 : rand.nextInt(max);
-		ItemStack created = template.copy();
-		if (size <= 0) {
-			created.setCount(1);
-		} else if (size > created.getMaxStackSize()) {
-			created.setCount(created.getMaxStackSize());
-		} else {
-			created.setCount(size);
-		}
-		return created;
+		int size = max <= 0 ? 1 : rand.nextInt(max);
+		return createCopyWithCount(template, Math.min(size, template.getMaxStackSize()));
 	}
 
 	@Nullable
@@ -595,6 +490,7 @@ public abstract class ItemStackUtil {
 		return null;
 	}
 
+	//TODO - just use a copy and set the count to make code simpler?
 	/**
 	 * Checks like {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}
 	 * but ignores stack size (count).

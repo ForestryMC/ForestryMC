@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -47,10 +48,10 @@ public class DatabaseHelper {
 
 		Pattern pattern;
 		try {
-			pattern = Pattern.compile(searchText.toLowerCase(), Pattern.CASE_INSENSITIVE);
+			pattern = Pattern.compile(searchText.toLowerCase(Locale.ENGLISH), Pattern.CASE_INSENSITIVE);
 		} catch (Throwable ignore) {
 			try {
-				pattern = Pattern.compile(Pattern.quote(searchText.toLowerCase()), Pattern.CASE_INSENSITIVE);
+				pattern = Pattern.compile(Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)), Pattern.CASE_INSENSITIVE);
 			} catch (Throwable e) {
 				return;
 			}

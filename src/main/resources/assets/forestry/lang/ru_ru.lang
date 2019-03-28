@@ -55,14 +55,6 @@ for.circuit.machine.speed.boost.2.description.1=Повышает скорост�
 for.circuit.machine.speed.boost.2.description.2=Повышает потребление энергии на 10%
 for.circuit.machine.efficiency.1=Повышение эффективности
 for.circuit.machine.efficiency.1.description.1=Снижает потребление на 10%
-for.circuit.climatiser.temperature.1=Повышение температуры I
-for.circuit.climatiser.temperature.1.description.1=Увеличивает дальность и изменяет на 12.5%
-for.circuit.climatiser.temperature.2=Повышение температуры II
-for.circuit.climatiser.temperature.2.description.1=Увеличивает дальность и изменяет на 25%
-for.circuit.climatiser.humidity.1=Повышение влажности I
-for.circuit.climatiser.humidity.1.description.1=Увеличивает дальность и изменяет на 12.5%
-for.circuit.climatiser.humidity.2=Повышение влажности II
-for.circuit.climatiser.humidity.2.description.1=Увеличивает дальность и изменяет на 25%
 
 for.circuit.layout.dummy.name=Не доступен
 for.circuit.layout.dummy.usage=Ничего
@@ -78,9 +70,6 @@ for.circuit.layout.farms.manual.usage=Ручные фермы
 
 for.circuit.layout.machine.upgrade.name=Улучшение механизма
 for.circuit.layout.machine.upgrade.usage=Сокетные машины
-
-for.circuit.layout.greenhouse.climatiser.name=Климат контроль
-for.circuit.layout.greenhouse.climatiser.usage=Климат контроль
 
 for.flowers.cacti=Кактусы
 for.flowers.end=Край
@@ -461,7 +450,10 @@ item.for.apiarist_helmet.name=Защитная маска пчеловода
 item.for.apiarist_legs.name=Штаны пчеловода
 
 item.for.ash.name=Пепел
-tile.for.pile_ash.name=Груда пепла
+tile.for.ash_block_0.name=Блок пепла
+tile.for.ash_block_1.name=Блок пепла
+tile.for.ash_block_2.name=Блок пепла
+tile.for.ash_block_3.name=Блок пепла
 
 item.for.habitat_locator.name=Определитель ареала
 
@@ -852,14 +844,6 @@ for.errors.no_fertilizer.help=Фермы требуют удобрения дл�
 for.errors.no_liquid.desc=Нет воды
 for.errors.no_liquid.help=В зависимости от количества осадков, температуры и влажности ферм должны быть поставлены с различными количествами воды.
 
-# GREENHOUSE
-for.errors.not_closed.desc=Крыша не закрыта
-for.errors.not_closed.help=Крыша теплицы не закрыта.
-for.errors.not_loaded.desc=Не загружено
-for.errors.not_loaded.help=Один чанк теплицы не загружен.
-for.errors.too_large.desc=Слишком большая
-for.errors.too_large.help=Теплица слишком велика для своего контроллера или не закрыта в положении.
-
 ####################
 # APICULTURE
 ####################
@@ -1122,7 +1106,7 @@ for.gui.book.categories=Категории
 for.gui.book.category.core.title=Ядро
 for.gui.book.category.lepidopterology.title=Лепидоптерология
 for.gui.book.category.mail.title=Почта
-for.gui.book.category.greenhouse.title=Теплица (WIP)
+for.gui.book.category.greenhouse.title=Теплица
 for.gui.book.category.beekeeping.title=Пчеловодство
 for.gui.book.category.arboriculture.title=Лесоводство
 for.gui.book.category.farming.title=Сельское хозяйство
@@ -1152,15 +1136,8 @@ for.multiblock.farm.error.needPlainBand=Ферма должна иметь пр�
 for.multiblock.farm.error.needPlainInterior=Ферма должна иметь простые фермерские блоки для интерьера.
 for.multiblock.farm.error.needGearbox=Ферма должна иметь редуктор, чтобы принимать энергию и работать.
 
-for.multiblock.greenhouse.error.needPlainOnTop=Парниковый дом должен иметь простые парниковые блоки для верхнего уровня.
-for.multiblock.greenhouse.error.needPlainInterior=У теплицы должны быть простые парниковые блоки для интерьера.
-for.multiblock.greenhouse.error.space.notclosed=Теплица должна быть закрыта. Некоторые блоки отсутствуют или они не являются допустимыми стенами.
-for.multiblock.greenhouse.error.space.unloaded=Часть парника в разгруженном чанке. Все чанки вокруг теплицы должны быть загружены.
-for.multiblock.greenhouse.error.needSpace=Парниковый дом не должен находиться в зоне действия другого парника.
-
 for.multiblock.alveary.type=Пчелиный улей
 for.multiblock.farm.type=Ферма
-for.multiblock.greenhouse.type=Теплица
 
 ####################
 # ARBORICULTURE
@@ -1353,7 +1330,7 @@ for.farm.grammar.manual=Руководство %s
 for.farm.grammar.managed=Управляемый %s
 
 for.farm.arboretum=Дендрарий
-for.farm.crops=Crop Farm
+for.farm.crops=Ферма урожая
 for.farm.shroom=Грибная ферма
 for.farm.succulent=Кактусовая ферма
 for.farm.peat=Торфяник
@@ -1436,9 +1413,6 @@ for.gui.planter.west=З
 ####################
 # GREENHOUSE
 ####################
-for.gui.greenhouse.title=Теплица
-for.gui.greenhouse.hygroregulator.title=Тепличный гидрорегулятор
-
 tile.for.greenhouse.tooltip=Мультиблок: 3x2x3 - 5x5x5
 tile.for.greenhouse.camouflage.tooltip=Этот блок можно замаскировать, что означает, что вы можете настроить модель этого блока.
 tile.for.greenhouse.plain.name=Парниковый блок
@@ -1453,38 +1427,49 @@ tile.for.climatiser.dehumidifier.name=Осушитель парника
 tile.for.climatiser.humidifier.name=Увлажнитель парника
 tile.for.climatiser.hygro.name=Тепличный терморегулятор
 
-item.for.greenhouse_screen.name=Портативный парниковый экран
+####################
+# CLIMATOLAGY
+####################
+tile.for.habitat_former.name=Бывшая среда обитания
 
-for.gui.modifier.sources.range.up=Диапазон выше: %s
-for.gui.modifier.sources.range.down=Диапазон ниже: %s
-for.gui.modifier.sources.change=Изменить: %s
-for.gui.modifier.rain=Дождь: %s
-for.gui.modifier.time=Время: %s
-for.gui.modifier.altitude=Высота: %s
-for.gui.modifier.title=Модификаторы
-for.gui.sources=Источники климата: %s
-for.gui.modifier.weather.title=Погода
-for.gui.modifier.time.title=Время
-for.gui.modifier.altitude.title=Высота
-for.gui.modifier.sources.title=Источники климата
+item.for.habitat_screen.name=Экран среды обитания
 
-for.message.greenhouse_screen.fail=Вы можете использовать этот предмет только в том случае, если он связан с теплицей
-for.message.greenhouse_screen.position=Этот предмет теперь связан с теплицей
-for.message.greenhouse_screen.preview.active=Переключить режим предпросмотра на активный
-for.message.greenhouse_screen.preview.inactive=Переключить режим предпросмотра на неактивный
-for.message.greenhouse_screen.center=Вы установили центр теплицы в координаты
-for.message.greenhouse_screen.away=Вы слишком далеко от теплицы, чтобы использовать этот предмет
-for.message.greenhouse_screen.notassembled=Вам может понравиться только этот предмет в собранной теплице
+for.gui.habitat_former.climate.target=Целевой: %s
+for.gui.habitat_former.climate.value=Значение: %s
+for.gui.habitat_former.climate.default=По умолчанию: %s
+for.gui.habitat_former.climate.temperature=Температура
+for.gui.habitat_former.climate.humidity=Влажность
+for.gui.habitat_former.climate.habitats=Места обитания
+for.gui.habitat_former.climate.selection=Селекция
+for.gui.habitat_former.climate.range=Дальность
+for.gui.habitat_former.climate.range.blocks=%s блоков
+for.gui.habitat_former.climate.circle.enabled=Циркулярный режим включен
+for.gui.habitat_former.climate.circle.disabled=Циркулярный режим отключен
+for.gui.habitat_former.climate.preview.enabled=Режим прдепросмотра включен
+for.gui.habitat_former.climate.preview.disabled=Режим прдепросмотра отключен
+for.gui.habitat_former=Бывшая среда обитания
+for.gui.habitat_former.range=Дальность
+for.gui.habitat_former.resources=Ресурсы
+for.gui.habitat_former.speed=Скорость
 
-for.greenhouse_screen.mode=Режим предпросмотра: %s
-for.greenhouse_screen.mode.active=Активный
-for.greenhouse_screen.mode.inactive=Неактивный
-for.greenhouse_screen.state=Состояние: %s
-for.greenhouse_screen.state.linked=Связано с позицией (%s, %s, %s)
-for.greenhouse_screen.state.fail=Не связано
-for.greenhouse_screen.temperature=Температура: %s
-for.greenhouse_screen.humidity=Влажность: %s
+for.habitat_screen.mode.active=Режим предпросмотра: Активный
+for.habitat_screen.mode.inactive=Режим предпросмотра: Неактивный
+for.habitat_screen.state.linked=Позиция '%s, %s, %s', Измерение '%s'
+for.habitat_screen.state.fail=Не связано
+for.habitat_screen.temperature=Температура: %s
+for.habitat_screen.humidity=Влажность: %s
+for.habitat_screen.status.state=Температура: %s, Влажность: %s
+for.habitat_screen.status.nostate=Не найдено статистики
 
+for.hints.formergui.tag=Нажмите и готово!
+for.hints.formergui.desc=Вы можете использовать кнопки среды обитания, две климатические полосы в верхнем центре или два текстовых поля, чтобы изменить целевой климат.
+for.hints.formerresources.tag=Что вам нужно?
+for.hints.formerresources.desc=Среда обитания использует энергию для изменения своей температуры. И жидкости как лава, вода или задавленный лед для того чтобы изменить свою влажность и небольшое количество своей температуры.
+for.hints.formersettings.tag=Все, что вы хотите
+for.hints.formersettings.desc=В дополнение к другим параметрам вы можете использовать слот рядом с кнопками среды обитания, чтобы изменить целевой климат на предпочтительный климат пчелы. Просто нажмите с пчелой на нем.
+
+for.errors.wrong_resource.desc=Неверный ресурс
+for.errors.wrong_resource.help=Бывшая среда обитания не может достичь целевой влажности с вставленной жидкостью.
 ####################
 # LEPIDOPTEROLOGY
 ####################
@@ -1709,17 +1694,10 @@ for.config.world.generate.beehives.debug=Debug Beehive Generation
 for.config.world.generate.beehives.debug.comment=Force Forestry to generate a beehive at every possible location. (This will break your world. Only useful to developers)
 for.config.world.generate.beehives.dimBlacklist=Beehive Generation Dimension Blacklist
 for.config.world.generate.beehives.dimBlacklist.comment=Disables the generation of all hives in the specified dimensions. Enter one dimension id per line.
-for.config.world.generate.beehives.blacklist.category_comment=Disables the generation of a specific hive in a specific biome or in a biome with a specific biome type. Just add the registry name of the biome or the name of the biome type to the property of the hive. Every biome type / registry name has to be in a seperate line.
+for.config.world.generate.beehives.blacklist.category_comment=Disables the generation of a specific hive in a specific biome or in a biome with a specific biome type. Just add the registry name of the biome or the name of the biome type to the property of the hive. Every biome type / registry name has to be in a seperate line. The global type can be used to blacklist a biome from all hive generation.
 
 for.config.world.generate.villagers=Generate Villagers
-for.config.world.generate.villagers.comment=Generates forestry villagers and their houses.
-
-for.config.world.generate.trees=Whether forestry should generate forestry trees in the world.
-for.config.world.generate.trees.dimBlacklist=Tree Generation Dimension Blacklist
-for.config.world.generate.trees.dimBlacklist.comment=Disables the generation of all trees in the specified dimensions. Enter one dimension id per line.
-for.config.world.generate.trees.treeFrequency=Tree Generation Frequency
-for.config.world.generate.trees.treeFrequency.comment=How Frequently forestry generates it's trees in the world
-for.config.world.generate.trees.biomeblacklist.comment=This will blacklist a biome or biome type for all tree generation. See the hive biome blacklist for more information.
+for.config.world.generate.villagers.comment=Generates Forestry villagers and their houses.
 
 for.config.crafting=Crafting
 for.config.crafting.bronze=Craft Bronze
@@ -1749,7 +1727,7 @@ for.config.tweaks.gui.tooltip.liquidamount=Liquid Tooltip
 for.config.tweaks.gui.tooltip.liquidamount.comment=Display liquid amounts in tank tooltips.
 
 for.config.tweaks.permissions=Permissions
-for.config.tweaks.permissions.comment=Enables access restrictions on forestry machines.
+for.config.tweaks.permissions.comment=Enables access restrictions on Forestry machines.
 for.config.tweaks.version.check=Version Check
 for.config.tweaks.version.check.comment=Enables update and version check notice.
 
@@ -1781,12 +1759,10 @@ for.config.tweaks.capsule.capsulePickup.comment=Enables the function that cans a
 for.config.tweaks.capsule.capsuleReuseable=Reuseable Capsules
 for.config.tweaks.capsule.capsuleReuseable.comment=Capsules are no longer consumed after being emptied.
 
-for.config.tweaks.greenhouse.range=Greenhouse Range
-for.config.tweaks.greenhouse.range.comment=Set the range divisor of the climatiser of the greenhouse.
-for.config.tweaks.greenhouse.size=Greenhouse Size
-for.config.tweaks.greenhouse.size.comment=Set the size multiplier of the climated blocks.
-for.config.tweaks.greenhouse.energy=Greenhouse Energy Modifier
-for.config.tweaks.greenhouse.energy.comment=Modifies the energy that is used by the greenhouse climatisers.
+for.config.tweaks.charcoal.amount.base=Amount Base
+for.config.tweaks.charcoal.amount.base.comment=The base amount that the wood pile will drop if the wall blocks are no registered pile waal blocks.
+for.config.tweaks.charcoal.check.range=Wall Check Range
+for.config.tweaks.charcoal.check.range.comment=Sets the amount of blocks that the wood pile will check if it is a valid charcoal pile wall block.
 
 for.config.tweaks.book.spawn=Forester's Manual
 for.config.tweaks.book.spawn.comment=Players who enter the world for the first time get a Forester's Manual.
@@ -1811,7 +1787,7 @@ for.config.structures=Structures
 for.config.structures.disabled=Disabled Structures
 for.config.structures.disabled.comment=List specific structures to disable them.
 
-for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry have to looks like this modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. \n You can't remove auto generated entries you only can deactivate them if you set there value to 0.
+for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry has to look like this: modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. You can't remove auto generated entries you only can deactivate them if you set their value to 0.
 
 for.config.fluids=Fluids
 for.config.fluids.enable.format=Enables %s fluid.
@@ -1837,11 +1813,14 @@ for.config.beekeeping.hivedamage.peaceful=Peaceful Hive Damage
 for.config.beekeeping.hivedamage.peaceful.comment=Whether bees can damage a player playing on peaceful mode.
 for.config.beekeeping.hivedamage.underwater=Underwater Hive Damage
 for.config.beekeeping.hivedamage.underwater.comment=Whether bees can damage a player while they are underwater.
+for.config.beekeeping.hivedamage.onlyOnAttack=Defend Hive Damage
+for.config.beekeeping.hivedamage.onlyOnAttack.comment=The bees only attack the player if he starts to destroy the hive.
+for.config.beekeeping.hivedamage.onlyPlayers=Player Hive Damage
+for.config.beekeeping.hivedamage.onlyPlayers.comment=Whether bees can damage other entities than the player.
 for.config.beekeeping.self.pollination=Leaf Self Pollination
 for.config.beekeeping.self.pollination.comment=If true bees will pollinate leaves with themselves to speed up getting a homozgous genome.
 for.config.beekeeping.ignoble.decay=Ignoble Decay
 for.config.beekeeping.ignoble.decay.comment=Whether ignoble bees will eventually die out.
-
 
 for.config.species.blacklist=Species Blacklist
 for.config.species.blacklist.comment=Add species to blacklist identified by their uid, one per line.
@@ -1849,12 +1828,23 @@ for.config.species.blacklist.comment=Add species to blacklist identified by thei
 for.config.butterfly.alleles.rarity=Get the butterfly spawn rarity by their uid, one per line.
 for.config.butterfly.entities.spawn.limit=Butterfly Spawn Limit
 for.config.butterfly.entities.spawn.limit.comment=Butterflies will stop natural spawning once this limit is reached.
+for.config.butterfly.entities.spawn.leaves=Spawn Butterflies From Leaves
+for.config.butterfly.entities.spawn.leaves.comment=Whether butterflies should spawn from the leaves of trees.
 for.config.butterfly.entities.maximum=Butterfly Maximum
 for.config.butterfly.entities.maximum.comment=New butterflies will stay in item form and will not take flight once this limit is reached.
 for.config.butterfly.entities.maxDistance=Maximum Distance To Home
 for.config.butterfly.entities.maxDistance.comment=Butterflies will fly home if they are too far away from it.
 for.config.butterfly.entities.pollination=Butterfly Pollination
 for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate leaves.
+for.config.butterfly.cocoons.generate=Generate Butterfly Cocoons
+for.config.butterfly.cocoons.generate.comment=Whether cocoons containing butterfiles should generate in the world
+for.config.butterfly.cocoons.amount=Butterfly Cocoon Frequency
+for.config.butterfly.cocoons.amount.comment=How often butterfly cocoons should generate
+for.config.butterfly.cocoons.serum=Serum Drop Chance
+for.config.butterfly.cocoons.serum.comment=How often cocoons should drop a serum
+for.config.butterfly.cocoons.second.serum=Second Serum Drop Chance
+for.config.butterfly.cocoons.second.serum.comment=How often cocoons should drop a second serum
+for.config.butterfly.alleles.loot=Loot drops from cocoons. Format is modid:name:meta;chance
 
 for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
@@ -1910,6 +1900,10 @@ for.config.power.types.tesla=Tesla
 for.config.power.types.tesla.comment=Enable Tesla power support.
 for.config.power.display.mode=Power Display Mode
 for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
+
+for.config.machines.enabled=Enabled machines.
+for.config.machines.enabled.comment=List of enabled machines. Note that some things may be impossible to do if you change this!
+
 
 ###################################
 # CUSTOM BEE AND TREE SPECIES NAMES

@@ -204,7 +204,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.startPage();
 
 		textLayout.newLine();
-		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase();
+		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase(Locale.ENGLISH);
 		textLayout.drawCenteredLine(title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 
@@ -273,7 +273,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.newLine();
 		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
-			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase() + " <<";
+			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase(Locale.ENGLISH) + " <<";
 			fontRenderer.drawStringWithShadow(extinct, guiLeft + 200 - fontRenderer.getStringWidth(extinct),
 				guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
 		}

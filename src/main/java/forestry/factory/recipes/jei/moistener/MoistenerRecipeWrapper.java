@@ -13,6 +13,7 @@ import forestry.api.recipes.IMoistenerRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerRecipe> {
 	private final MoistenerFuel fuel;
@@ -30,15 +31,15 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
 		itemStackInputs.add(recipe.getResource());
 		ItemStack fuelItem = fuel.getItem();
 		itemStackInputs.add(fuelItem);
-		ingredients.setInputs(ItemStack.class, itemStackInputs);
+		ingredients.setInputs(VanillaTypes.ITEM, itemStackInputs);
 
 		List<ItemStack> itemStackOutputs = new ArrayList<>();
 		itemStackOutputs.add(recipe.getProduct());
 		ItemStack fuelProduct = fuel.getProduct();
 		itemStackOutputs.add(fuelProduct);
-		ingredients.setOutputs(ItemStack.class, itemStackOutputs);
+		ingredients.setOutputs(VanillaTypes.ITEM, itemStackOutputs);
 
-		ingredients.setInput(FluidStack.class, new FluidStack(FluidRegistry.WATER, recipe.getTimePerItem() / 4));
+		ingredients.setInput(VanillaTypes.FLUID, new FluidStack(FluidRegistry.WATER, recipe.getTimePerItem() / 4));
 	}
 
 	public MoistenerFuel getFuel() {

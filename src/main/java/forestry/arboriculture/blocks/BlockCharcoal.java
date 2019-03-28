@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.arboriculture.ModuleCharcoal;
 
 public class BlockCharcoal extends Block implements IItemModelRegister {
 
@@ -20,7 +20,7 @@ public class BlockCharcoal extends Block implements IItemModelRegister {
 		setHardness(5.0F);
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
-		setCreativeTab(Tabs.tabArboriculture);
+		setCreativeTab(ModuleCharcoal.getTag());
 		setHarvestLevel("pickaxe", 1);
 	}
 

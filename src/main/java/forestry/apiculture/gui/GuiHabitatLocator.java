@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -85,7 +86,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		String str = Translator.translateToLocal("item.for.habitat_locator.name").toUpperCase();
+		String str = Translator.translateToLocal("item.for.habitat_locator.name").toUpperCase(Locale.ENGLISH);
 		fontRenderer.drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.

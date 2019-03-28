@@ -9,6 +9,7 @@ import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.core.ModuleCore;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
 public class CharcoalPileWallWrapper implements IRecipeWrapper {
@@ -21,7 +22,7 @@ public class CharcoalPileWallWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInputs(ItemStack.class, pileWall.getDisplayItems());
+		ingredients.setInputs(VanillaTypes.ITEM, pileWall.getDisplayItems());
 		int amount = 9 + pileWall.getCharcoalAmount();
 		ItemStack charcoal = new ItemStack(Items.COAL, amount, 1);
 		ItemStack ash = new ItemStack(ModuleCore.getItems().ash, amount / 4);
@@ -29,7 +30,7 @@ public class CharcoalPileWallWrapper implements IRecipeWrapper {
 			charcoal,
 			ash
 		);
-		ingredients.setOutputs(ItemStack.class, outputs);
+		ingredients.setOutputs(VanillaTypes.ITEM, outputs);
 	}
 
 }

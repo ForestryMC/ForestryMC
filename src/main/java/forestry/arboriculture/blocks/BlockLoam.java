@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
+import forestry.arboriculture.ModuleCharcoal;
 
 public class BlockLoam extends Block implements IItemModelRegister {
 
@@ -18,7 +18,7 @@ public class BlockLoam extends Block implements IItemModelRegister {
 		super(Material.GROUND);
 		setHardness(0.5F);
 		setSoundType(SoundType.GROUND);
-		setCreativeTab(Tabs.tabArboriculture);
+		setCreativeTab(ModuleCharcoal.getTag());
 	}
 
 	@SideOnly(Side.CLIENT)
