@@ -75,9 +75,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 	private static ItemRegistryBackpacks items;
 
 	private final Map<String, List<String>> backpackAcceptedOreDictRegexpDefaults = new HashMap<>();
-	private final Map<String, List<String>> backpackRejectedOreDictRegexpDefaults = new HashMap<>();
 	private final Map<String, List<String>> backpackAcceptedItemDefaults = new HashMap<>();
-	private final Map<String, List<String>> backpackRejectedItemDefaults = new HashMap<>();
 
 	private final List<String> forestryBackpackUids = Arrays.asList(
 		BackpackManager.MINER_UID,
@@ -413,7 +411,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 				List<String> defaultAcceptedItemNames = backpackAcceptedItemDefaults.get(backpackUid);
 				if (defaultAcceptedItemNames != null) {
 					Collections.sort(defaultAcceptedItemNames);
-					defaultValidItems = defaultAcceptedItemNames.toArray(new String[defaultAcceptedItemNames.size()]);
+					defaultValidItems = defaultAcceptedItemNames.toArray(new String[0]);
 				}
 
 				Property backpackConf = config.get("backpacks." + backpackUid, "item.stacks.accepted", defaultValidItems);
@@ -426,32 +424,13 @@ public class ModuleBackpacks extends BlankForestryModule {
 				}
 			}
 
-			// rejected items
-			{
-				String[] defaultRejectedItems = new String[0];
-				List<String> defaultRejectedItemNames = backpackRejectedItemDefaults.get(backpackUid);
-				if (defaultRejectedItemNames != null) {
-					Collections.sort(defaultRejectedItemNames);
-					defaultRejectedItems = defaultRejectedItemNames.toArray(new String[defaultRejectedItemNames.size()]);
-				}
-
-				Property backpackConf = config.get("backpacks." + backpackUid, "item.stacks.rejected", defaultRejectedItems);
-				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.item.stacks.format", backpackUid));
-
-				String[] backpackItemList = backpackConf.getStringList();
-				List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
-				for (ItemStack backpackItem : backpackItems) {
-					backpackFilter.rejectItem(backpackItem);
-				}
-			}
-
 			// accepted oreDict
 			{
 				String[] defaultOreRegexpNames = new String[0];
 				List<String> defaultOreRegexpList = backpackAcceptedOreDictRegexpDefaults.get(backpackUid);
 				if (defaultOreRegexpList != null) {
 					Collections.sort(defaultOreRegexpList);
-					defaultOreRegexpNames = defaultOreRegexpList.toArray(new String[defaultOreRegexpList.size()]);
+					defaultOreRegexpNames = defaultOreRegexpList.toArray(new String[0]);
 				}
 
 				Property backpackConf = config.get("backpacks." + backpackUid, "ore.dict.accepted", defaultOreRegexpNames);
@@ -464,31 +443,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 						for (String regex : backpackConf.getStringList()) {
 							if (name.matches(regex)) {
 								backpackFilter.acceptOreDictName(name);
-							}
-						}
-					}
-				}
-			}
-
-			// rejected oreDict
-			{
-				String[] defaultOreRegexpNames = new String[0];
-				List<String> defaultOreRegexpList = backpackRejectedOreDictRegexpDefaults.get(backpackUid);
-				if (defaultOreRegexpList != null) {
-					Collections.sort(defaultOreRegexpList);
-					defaultOreRegexpNames = defaultOreRegexpList.toArray(new String[defaultOreRegexpList.size()]);
-				}
-
-				Property backpackConf = config.get("backpacks." + backpackUid, "ore.dict.rejected", defaultOreRegexpNames);
-				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.ore.dict.format", backpackUid));
-
-				for (String name : OreDictionary.getOreNames()) {
-					if (name == null) {
-						Log.error("Found a null oreName in the ore dictionary");
-					} else {
-						for (String regex : backpackConf.getStringList()) {
-							if (name.matches(regex)) {
-								backpackFilter.rejectOreDictName(name);
 							}
 						}
 					}
