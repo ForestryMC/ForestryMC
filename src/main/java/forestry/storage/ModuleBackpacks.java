@@ -163,6 +163,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 		config.save();
 	}
 
+	//TODO - in 1.13 just ship json file that people can edit, don't have config in code.
 	private void setDefaultsForConfig() {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 
@@ -181,10 +182,12 @@ public class ModuleBackpacks extends BlankForestryModule {
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.DIGGER_UID, Arrays.asList(
 			"cobblestone",
 			"dirt",
+			"grass[A-Z].*",
 			"gravel",
 			"netherrack",
 			"stone",
 			"stone[A-Z].*",
+			"sandstone",
 			"sand"
 		));
 
@@ -252,6 +255,8 @@ public class ModuleBackpacks extends BlankForestryModule {
 			new ItemStack(Items.CLAY_BALL),
 			new ItemStack(Items.SNOWBALL),
 			new ItemStack(Blocks.SOUL_SAND),
+			new ItemStack(Blocks.CLAY),
+			new ItemStack(Blocks.SNOW),
 			coreItems.bronzeShovel.getItemStack(),
 			coreItems.kitShovel.getItemStack(),
 			coreItems.brokenBronzeShovel.getItemStack()
@@ -274,6 +279,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 			new ItemStack(Items.BEETROOT_SEEDS),
 			new ItemStack(Items.BEETROOT),
 			new ItemStack(Items.CHORUS_FRUIT),
+			new ItemStack(Blocks.CHORUS_PLANT),
 			new ItemStack(Items.APPLE)
 		)));
 
