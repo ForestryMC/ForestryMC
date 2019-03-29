@@ -182,6 +182,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.DIGGER_UID, Arrays.asList(
 			"cobblestone",
 			"dirt",
+			"grass",
 			"grass[A-Z].*",
 			"gravel",
 			"netherrack",
@@ -251,7 +252,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 		backpackAcceptedItemDefaults.put(BackpackManager.DIGGER_UID, getItemStrings(Arrays.asList(
 			new ItemStack(Blocks.DIRT, 1, OreDictionary.WILDCARD_VALUE),
 			new ItemStack(Items.FLINT),
-			new ItemStack(Blocks.SANDSTONE, 1, 0),
 			new ItemStack(Items.CLAY_BALL),
 			new ItemStack(Items.SNOWBALL),
 			new ItemStack(Blocks.SOUL_SAND),
