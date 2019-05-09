@@ -21,6 +21,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.arboriculture.EnumFruitFamily;
@@ -458,7 +459,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 		@Override
 		protected void registerMutations() {
-			// only available by rare villager trade
+			registerMutation(Sequioa,Baobab,1).requireNight().restrictBiomeType(BiomeDictionary.Type.FOREST);
 		}
 	},
 	Jungle(TreeBranchDefinition.TROPICAL, "jungle", "tectona", false, EnumLeafType.JUNGLE, new Color(4764952), new Color(0x658917), 3, new ItemStack(Blocks.log, 1, 3)) {
