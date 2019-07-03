@@ -210,7 +210,7 @@ public abstract class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	public void registerModel(Item item, IModelManager manager) {
 		for (IBlockState state : blockState.getValidStates()) {
 			int meta = getMetaFromState(state);
-			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("forestry:leaves.default." + blockNumber, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("forestry:leaves.default.fruit." + blockNumber, "inventory"));
 		}
 	}
 
