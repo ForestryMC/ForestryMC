@@ -23,7 +23,6 @@ import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.MigrationHelper;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
@@ -74,7 +73,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
-		ResourceLocation itemNameFromRegistry = ItemStackUtil.getItemNameFromRegistry(item);
+		ResourceLocation itemNameFromRegistry = item.getRegistryName();
 		Preconditions.checkNotNull(itemNameFromRegistry, "No registry name for item");
 		String identifier = itemNameFromRegistry.getPath();
 		manager.registerItemModel(item, 0, identifier);

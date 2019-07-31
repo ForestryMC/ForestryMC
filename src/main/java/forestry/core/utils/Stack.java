@@ -18,8 +18,11 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.oredict.OreDictionary;
+
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class Stack {
 	private final String name;
@@ -82,7 +85,7 @@ public class Stack {
 
 	@Nullable
 	public Item getItem() {
-		Item item = ItemStackUtil.getItemFromRegistry(name);
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
 		if (item == null) {
 			Log.warning("Failed to find item for (" + name + ") in the Forge registry.");
 		}
@@ -91,7 +94,7 @@ public class Stack {
 
 	@Nullable
 	public Block getBlock() {
-		Block block = ItemStackUtil.getBlockFromRegistry(name);
+		Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(name));
 		if (block == null) {
 			Log.warning("Failed to find block for (" + name + ") in the Forge registry.");
 		}

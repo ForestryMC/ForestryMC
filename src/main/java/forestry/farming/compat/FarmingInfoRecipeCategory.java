@@ -14,6 +14,7 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInfoRecipeWrapper> {
 	public static final String UID = "forestry.farming";
@@ -63,8 +64,8 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, FarmingInfoRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-		List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+		List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 		guiItemStacks.init(0, true, 63, 18);
 		guiItemStacks.set(0, inputs.get(0));
 		for (int x = 0; x < 2; x++) {

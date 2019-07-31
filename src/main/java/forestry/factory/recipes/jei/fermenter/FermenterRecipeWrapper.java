@@ -16,6 +16,7 @@ import forestry.api.recipes.IVariableFermentable;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 
 public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterRecipe> {
 	private final ItemStack fermentable;
@@ -32,20 +33,20 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 			fuelInputs.add(fuel.getItem());
 		}
 
-		ingredients.setInputLists(ItemStack.class, Arrays.asList(
+		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(
 			Collections.singletonList(fermentable),
 			fuelInputs
 		));
 
 		FluidStack fluidInput = getRecipe().getFluidResource().copy();
 		fluidInput.amount = getRecipe().getFermentationValue();
-		ingredients.setInput(FluidStack.class, fluidInput);
+		ingredients.setInput(VanillaTypes.FLUID, fluidInput);
 
 		int amount = Math.round(getRecipe().getFermentationValue() * getRecipe().getModifier());
 		if (fermentable.getItem() instanceof IVariableFermentable) {
 			amount *= ((IVariableFermentable) fermentable.getItem()).getFermentationModifier(fermentable);
 		}
 		FluidStack fluidOutput = new FluidStack(getRecipe().getOutput(), amount);
-		ingredients.setOutput(FluidStack.class, fluidOutput);
+		ingredients.setOutput(VanillaTypes.FLUID, fluidOutput);
 	}
 }
