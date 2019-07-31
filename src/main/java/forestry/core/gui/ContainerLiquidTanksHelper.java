@@ -65,7 +65,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 				if (liquidAmount > 0) {
 					if (tank instanceof FluidTank) {
-						FluidStack fillAmount = ((FluidTank) tank).drainInternal(Fluid.BUCKET_VOLUME, true);
+						FluidStack fillAmount = ((FluidTank) tank).drainInternal(Fluid.BUCKET_VOLUME, false);
 						int filled = fluidHandlerItem.fill(fillAmount, true);
 						tank.drain(filled, true);
 						player.inventory.setItemStack(fluidHandlerItem.getContainer());
