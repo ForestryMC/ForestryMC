@@ -80,7 +80,7 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 				amount += rand.nextInt(1 + fortune);
 			}
 			drops.add(new ItemStack(Items.COAL, amount, 1));
-			drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(amount / 4)));
+			drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(Math.max(amount / 4, 1))));
 		}
 	}
 
