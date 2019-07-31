@@ -47,7 +47,12 @@ public abstract class TileBase extends TileForestry {
 
 	@Nonnull
 	public EnumFacing getFacing() {
-		return getWorld().getBlockState(getPos()).getValue(BlockBase.FACING);
+		IBlockState state = getWorld().getBlockState(getPos());
+		// This test is needed if the save gets corrupted a bug occurs that the tile still exists even if the block isn't a forestry block anymore
+		if (!(state.getBlock() instanceof BlockBase)) {
+			return EnumFacing.DOWN;
+		}
+		return state.getValue(BlockBase.FACING);
 	}
 
 }
