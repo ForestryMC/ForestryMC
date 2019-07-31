@@ -1,6 +1,7 @@
 package forestry.energy;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
@@ -38,9 +39,15 @@ import net.darkhax.tesla.api.ITeslaProducer;
 
 public class EnergyManager extends EnergyStorage implements IStreamable, INbtReadable, INbtWritable {
 	private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;
+	@Nullable
+	private Consumer<Integer> changeHandler;
 
 	public EnergyManager(int maxTransfer, int capacity) {
 		super(EnergyHelper.scaleForDifficulty(capacity), EnergyHelper.scaleForDifficulty(maxTransfer), EnergyHelper.scaleForDifficulty(maxTransfer));
+	}
+
+	public void setChangeHandler(@Nullable Consumer<Integer> changeHandler) {
+		this.changeHandler = changeHandler;
 	}
 
 	public void setExternalMode(EnergyTransferMode externalMode) {
@@ -104,9 +111,33 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 		this.energy = energyStored;
 		if (this.energy > capacity) {
 			this.energy = capacity;
+			if (changeHandler != null) {
+				changeHandler.accept(energy);
+			}
 		} else if (this.energy < 0) {
 			this.energy = 0;
+			if (changeHandler != null) {
+				changeHandler.accept(0);
+			}
 		}
+	}
+
+	@Override
+	public int extractEnergy(int maxExtract, boolean simulate) {
+		int value = super.extractEnergy(maxExtract, simulate);
+		if (changeHandler != null && value != 0 && !simulate) {
+			changeHandler.accept(energy);
+		}
+		return value;
+	}
+
+	@Override
+	public int receiveEnergy(int maxReceive, boolean simulate) {
+		int value = super.receiveEnergy(maxReceive, simulate);
+		if (changeHandler != null && value != 0 && !simulate) {
+			changeHandler.accept(energy);
+		}
+		return value;
 	}
 
 	public boolean hasCapability(Capability<?> capability) {

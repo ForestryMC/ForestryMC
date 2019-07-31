@@ -64,6 +64,11 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		energyManager = new EnergyManager(2000, maxEnergy);
 
 		energyManager.setExternalMode(EnergyTransferMode.EXTRACT);
+		energyManager.setChangeHandler((energy) -> {
+			if (world != null) {
+				world.updateComparatorOutputLevel(pos, getBlockType());
+			}
+		});
 	}
 
 	public String getHintKey() {
@@ -164,6 +169,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 			burn();
 		} else {
 			energyManager.drainEnergy(20);
+			world.updateComparatorOutputLevel(pos, getBlockType());
 		}
 	}
 
