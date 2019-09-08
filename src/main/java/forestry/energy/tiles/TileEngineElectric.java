@@ -180,7 +180,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		if (getStackInSlot(InventoryEngineElectric.SLOT_BATTERY) != null) {
+		if (!getStackInSlot(InventoryEngineElectric.SLOT_BATTERY).isEmpty()) {
 			replenishFromBattery(InventoryEngineElectric.SLOT_BATTERY);
 		}
 
