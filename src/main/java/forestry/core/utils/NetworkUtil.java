@@ -13,65 +13,67 @@ package forestry.core.utils;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.management.PlayerChunkMap;
+import net.minecraft.client.network.play.ClientPlayNetHandler;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.Forestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
 
+//import net.minecraft.server.management.PlayerChunkMap;
+
 public class NetworkUtil {
 	public static <P extends IForestryPacketClient> void sendNetworkPacket(P packet, BlockPos pos, World world) {
-		if (!(world instanceof WorldServer)) {
+		if (!(world instanceof ServerWorld)) {
 			return;
 		}
 
-		WorldServer worldServer = (WorldServer) world;
-		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
+		ServerWorld worldServer = (ServerWorld) world;
+		//		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
 
-		int chunkX = pos.getX() >> 4;
-		int chunkZ = pos.getZ() >> 4;
+		//		int chunkX = pos.getX() >> 4;
+		//		int chunkZ = pos.getZ() >> 4;
 
-		for (Object playerObj : world.playerEntities) {
-			if (playerObj instanceof EntityPlayerMP) {
-				EntityPlayerMP player = (EntityPlayerMP) playerObj;
+		for (PlayerEntity playerObj : world.getPlayers()) {
+			if (playerObj instanceof ServerPlayerEntity) {
+				ServerPlayerEntity player = (ServerPlayerEntity) playerObj;
 
-				if (playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
+				if (true) {//TODO packet spam - playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
 					sendToPlayer(packet, player);
 				}
 			}
 		}
 	}
 
-	public static void sendToPlayer(IForestryPacketClient packet, EntityPlayer entityplayer) {
-		if (!(entityplayer instanceof EntityPlayerMP) || entityplayer instanceof FakePlayer) {
+	public static void sendToPlayer(IForestryPacketClient packet, PlayerEntity PlayerEntity) {
+		if (!(PlayerEntity instanceof ServerPlayerEntity) || PlayerEntity instanceof FakePlayer) {
 			return;
 		}
 
-		EntityPlayerMP player = (EntityPlayerMP) entityplayer;
-		Forestry.getPacketHandler().sendPacket(packet.getPacket(), player);
+		ServerPlayerEntity player = (ServerPlayerEntity) PlayerEntity;
+		//TODO - packets
+		//		Forestry.getPacketHandler().sendPacket(packet.getPacket(), player);
 	}
 
-	public static void inventoryChangeNotify(EntityPlayer player) {
-		if (player instanceof EntityPlayerMP) {
-			((EntityPlayerMP) player).sendContainerToPlayer(player.inventoryContainer);
+	public static void inventoryChangeNotify(PlayerEntity player) {
+		if (player instanceof ServerPlayerEntity) {
+			//TODO network
+			//			((ServerPlayerEntity) player).sendContainerToPlayer(player.inventory);
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static void sendToServer(IForestryPacketServer packet) {
-		NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getConnection();
+		ClientPlayNetHandler netHandler = Minecraft.getInstance().getConnection();
 		Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
-		netHandler.sendPacket(packet.getPacket());
+		//TODO packets
+		//		netHandler.sendPacket(packet);
 	}
 }

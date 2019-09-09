@@ -1,20 +1,23 @@
 package forestry.core.gui.elements;
 
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.api.genetics.AlleleManager;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IGeneticAnalyzer;
 import forestry.api.genetics.IGeneticAnalyzerProvider;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.GuiEvent;
@@ -27,7 +30,7 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
-import org.lwjgl.input.Keyboard;
+import org.lwjgl.glfw.GLFW;
 
 public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, IScrollable {
 	/* Textures */
@@ -72,7 +75,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		scrollBar = new ScrollBarElement(width - 10 - (rightBoarder ? 6 : 0), 12, SCROLLBAR_BACKGROUND, false, SCROLLBAR_SLIDER);
 		scrollBar.hide();
 		add(scrollBar);
-		//Side Tabs
+		//Side ItemGroups
 		tabs = new GeneticAnalyzerTabs(0, 5, this);
 		add(tabs);
 		//Selection Bar at the bottom
@@ -88,12 +91,12 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			}
 		});
 		addEventHandler(GuiEvent.KeyEvent.class, event -> {
-			int keyCode = event.getKey();
-			if ((keyCode == Keyboard.KEY_DOWN || keyCode == Keyboard.KEY_RIGHT) && rightButton.isEnabled()) {
+			int keyCode = event.getMouseKey().getKeyCode();
+			if ((keyCode == GLFW.GLFW_KEY_DOWN || keyCode == GLFW.GLFW_KEY_RIGHT) && rightButton.isEnabled()) {
 				rightButton.onPressed();
-			} else if ((keyCode == Keyboard.KEY_UP || keyCode == Keyboard.KEY_LEFT) && leftButton.isEnabled()) {
+			} else if ((keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_LEFT) && leftButton.isEnabled()) {
 				leftButton.onPressed();
-			} else if (keyCode == Keyboard.KEY_RETURN && analyzeButton.isEnabled()) {
+			} else if (keyCode == GLFW.GLFW_KEY_ENTER && analyzeButton.isEnabled()) {
 				analyzeButton.onPressed();
 			}
 		});
@@ -126,12 +129,14 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			return;
 		}
 		ItemStack stack = provider.getSpecimen(selectedSlot);
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(stack);
-		if (root != null) {
+		IRootDefinition<IForestrySpeciesRoot> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stack);
+		if (definition.isRootPresent()) {
+			IForestrySpeciesRoot root = definition.get();
 			IDatabasePlugin databasePlugin = root.getSpeciesPlugin();
 			if (databasePlugin != null) {
-				IIndividual individual = root.getMember(stack);
-				if (individual != null) {
+				Optional<IIndividual> optionalIndividual = root.create(stack);
+				if (optionalIndividual.isPresent()) {
+					IIndividual individual = optionalIndividual.get();
 					if (individual.isAnalyzed()) {
 						tabs.setPlugin(databasePlugin);
 						IDatabaseTab tab = tabs.getSelected();
@@ -157,7 +162,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		}
 		//Clean the element area
 		scrollableContent.clear();
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		String key = "for.gui.portablealyzer.help";
 		//if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
 		//key = "for.gui.database.support";
@@ -171,7 +176,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 	}
 
 	@Override
-	public void drawTooltip(GuiScreen gui, int mouseX, int mouseY) {
+	public void drawTooltip(Screen gui, int mouseX, int mouseY) {
 		if (!visible) {
 			return;
 		}

@@ -10,48 +10,51 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.inventory.ItemInventory;
 
+//TODO - container types now registry things...
 public abstract class ContainerItemInventory<I extends ItemInventory> extends ContainerForestry {
 
 	protected final I inventory;
 
-	protected ContainerItemInventory(I inventory, InventoryPlayer playerInventory, int xInv, int yInv) {
+	protected ContainerItemInventory(int windowId, I inventory, PlayerInventory playerInventory, int xInv, int yInv, ContainerType<?> type) {
+		super(windowId, type);
 		this.inventory = inventory;
 
 		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 
 	@Override
-	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
+	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
 		ItemStack stackInSlot = playerInventory.getStackInSlot(slot);
 
 		if (inventory.isParentItemInventory(stackInSlot)) {
-			addSlotToContainer(new SlotLocked(playerInventory, slot, x, y));
+			addSlot(new SlotLocked(playerInventory, slot, x, y));
 		} else {
-			addSlotToContainer(new Slot(playerInventory, slot, x, y));
+			addSlot(new Slot(playerInventory, slot, x, y));
 		}
 	}
 
 	@Override
-	protected final boolean canAccess(EntityPlayer player) {
+	protected final boolean canAccess(PlayerEntity player) {
 		return canInteractWith(player);
 	}
 
 	@Override
-	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return inventory.isUsableByPlayer(entityplayer);
+	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
+		return inventory.isUsableByPlayer(PlayerEntity);
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
 		ItemStack result = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 		if (slotId > 0) {
 			inventory.onSlotClick(inventorySlots.get(slotId).getSlotIndex(), player);

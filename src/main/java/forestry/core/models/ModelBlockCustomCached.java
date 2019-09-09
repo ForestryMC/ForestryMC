@@ -8,15 +8,15 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockCustomCached<B extends Block, K> extends ModelBlockCustom<B, K> {
 	private static final Set<ModelBlockCustomCached> CACHE_PROVIDERS = new HashSet<>();
 
@@ -45,7 +45,7 @@ public abstract class ModelBlockCustomCached<B extends Block, K> extends ModelBl
 	}
 
 	@Override
-	protected IBakedModel getModel(IBlockState state) {
+	protected IBakedModel getModel(BlockState state) {
 		K key = getWorldKey(state);
 
 		IBakedModel model = worldCache.getIfPresent(key);

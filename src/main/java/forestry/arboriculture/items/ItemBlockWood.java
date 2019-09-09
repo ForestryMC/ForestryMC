@@ -11,28 +11,30 @@
 package forestry.arboriculture.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.arboriculture.IWoodType;
+import forestry.api.core.ItemGroups;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
 	public ItemBlockWood(B block) {
-		super(block);
+		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public ITextComponent getDisplayName(ItemStack itemstack) {
 		IWoodTyped wood = getBlock();
-		int meta = itemstack.getMetadata();
-		IWoodType woodType = wood.getWoodType(meta);
+		IWoodType woodType = wood.getWoodType();
 		return WoodHelper.getDisplayName(wood, woodType);
 	}
 
 	@Override
-	public int getItemBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack) {
 		B block = getBlock();
 		if (block.isFireproof()) {
 			return 0;

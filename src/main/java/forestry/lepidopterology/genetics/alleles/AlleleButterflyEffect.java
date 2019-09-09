@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
+import genetics.api.alleles.AlleleCategorized;
+
 import forestry.api.genetics.IEffectData;
-import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.api.lepidopterology.genetics.IAlleleButterflyEffect;
 import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleButterflyEffect {
 

@@ -19,12 +19,6 @@ public interface ISimpleFarmLogic {
 	 */
 	ItemStack getIconItemStack();
 
-	/**
-	 * @deprecated Since 5.8
-	 */
-	@Deprecated
-	Iterable<IFarmable> getSeeds();
-
 	String getName();
 
 }

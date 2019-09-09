@@ -2,12 +2,12 @@ package forestry.core.network;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IForestryPacketHandlerClient extends IForestryPacketHandler {
-	void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException;
+	void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException;
 }

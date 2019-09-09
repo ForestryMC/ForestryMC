@@ -13,8 +13,8 @@ package forestry.apiculture.flowers;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -24,14 +24,7 @@ import forestry.api.genetics.IFlowerGrowthRule;
 public class GrowthRuleMycelium implements IFlowerGrowthRule {
 
 	@Override
-	@Deprecated
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
-		return isValidSpot(world, pos) &&
-			helper.plantRandomFlower(flowerType, world, pos);
-	}
-
-	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		return isValidSpot(world, pos) &&
 			helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
 	}

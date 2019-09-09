@@ -11,19 +11,20 @@
 package forestry.apiculture.entities;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.Vec3d;
 
-public class AIAvoidPlayers extends EntityAIBase {
+public class AIAvoidPlayers extends Goal {
 
-	private final EntityCreature mob;
-	private final PathNavigate pathNavigator;
+	private final CreatureEntity mob;
+	private final PathNavigator pathNavigator;
 
 	private final float farSpeed;
 	private final float nearSpeed;
@@ -33,21 +34,21 @@ public class AIAvoidPlayers extends EntityAIBase {
 	private Path path;
 
 	@Nullable
-	private EntityPlayer player;
+	private PlayerEntity player;
 
-	public AIAvoidPlayers(EntityCreature mob, float minDistance, float farSpeed, float nearSpeed) {
+	public AIAvoidPlayers(CreatureEntity mob, float minDistance, float farSpeed, float nearSpeed) {
 		this.mob = mob;
 		this.minDistance = minDistance;
 		this.farSpeed = farSpeed;
 		this.nearSpeed = nearSpeed;
 		this.pathNavigator = mob.getNavigator();
-		this.setMutexBits(1);
+		this.setMutexFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override
 	public boolean shouldExecute() {
 
-		player = mob.world.getClosestPlayerToEntity(mob, minDistance);
+		player = mob.world.getClosestPlayer(mob, minDistance);
 
 		if (player == null) {
 			return false;
@@ -68,7 +69,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 			return false;
 		}
 
-		path = pathNavigator.getPathToXYZ(randomTarget.x, randomTarget.y, randomTarget.z);
+		path = pathNavigator.func_225466_a(randomTarget.x, randomTarget.y, randomTarget.z, 0);    //TODO what does the 4th param mean?
 		return path != null;
 	}
 
@@ -88,7 +89,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (player != null && mob.getDistance(player) < 49.0D) {
 			mob.getNavigator().setSpeed(nearSpeed);
 		} else {

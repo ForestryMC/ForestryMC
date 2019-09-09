@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.AbstractChunkProvider;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
@@ -72,7 +72,7 @@ public class MultiblockWorldRegistry {
 	public void tickStart() {
 		if (!controllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : controllers) {
-				if (controller.getWorldObj() == world && controller.getWorldObj().isRemote == world.isRemote) {
+				if (controller.getWorldObj() == world && controller.getWorldObj().isRemote == world.isRemote()) {
 					if (controller.isEmpty()) {
 						// This happens on the server when the user breaks the last block. It's fine.
 						// Mark 'er dead and move on.
@@ -90,7 +90,7 @@ public class MultiblockWorldRegistry {
 	 * Called prior to processing multiblock controllers. Do bookkeeping.
 	 */
 	public void processMultiblockChanges() {
-		IChunkProvider chunkProvider = world.getChunkProvider();
+		AbstractChunkProvider chunkProvider = world.getChunkProvider();
 		BlockPos coord;
 
 		// Merge pools - sets of adjacent machines which should be merged later on in processing
@@ -116,12 +116,13 @@ public class MultiblockWorldRegistry {
 				// These are blocks that exist in a valid chunk and require a controller
 				for (IMultiblockComponent orphan : orphansToProcess) {
 					coord = orphan.getCoordinates();
-					if (chunkProvider.getLoadedChunk(coord.getX() >> 4, coord.getZ() >> 4) == null) {
+					//TODO loaded boolean
+					if (chunkProvider.getChunk(coord.getX() >> 4, coord.getZ() >> 4, true) == null) {
 						continue;
 					}
 
 					// This can occur on slow machines.
-					if (orphan instanceof TileEntity && ((TileEntity) orphan).isInvalid()) {
+					if (orphan instanceof TileEntity && ((TileEntity) orphan).isRemoved()) {
 						continue;
 					}
 
@@ -313,7 +314,8 @@ public class MultiblockWorldRegistry {
 	public void onPartAdded(IMultiblockComponent part) {
 		BlockPos worldLocation = part.getCoordinates();
 
-		if (world.getChunkProvider().getLoadedChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4) == null) {
+		//TODO loaded boolean
+		if (world.getChunkProvider().getChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4, true) == null) {
 			// Part goes into the waiting-for-chunk-load list
 			Set<IMultiblockComponent> partSet;
 			long chunkHash = ChunkPos.asLong(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);

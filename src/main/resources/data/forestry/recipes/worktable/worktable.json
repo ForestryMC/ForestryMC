@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:worktable",
+    "data": 0
+  },
+  "pattern": [
+    "B",
+    "W",
+    "C"
+  ],
+  "conditions": [
+    {
+      "module": "worktable",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "C": {
+      "item": "#CHESTWOOD"
+    },
+    "W": {
+      "item": "#CRAFTINGTABLEWOOD"
+    }
+  },
+  "group": "worktable"
+}

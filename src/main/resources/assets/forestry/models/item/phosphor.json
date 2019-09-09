@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/phosphor"
+      "layer0": "forestry:item/phosphor"
     }
 }

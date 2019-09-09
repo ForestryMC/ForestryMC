@@ -11,27 +11,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.climate.ClimateManager;
-import forestry.api.climate.IClimateListener;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -59,7 +58,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.VectUtil;
 import forestry.cultivation.gui.ContainerPlanter;
-import forestry.cultivation.gui.GuiPlanter;
 import forestry.cultivation.inventory.InventoryPlanter;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmHelper.FarmWorkStatus;
@@ -83,7 +81,6 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	private final TankManager tankManager;
 	private final StandardTank resourceTank;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
-	private final IClimateListener listener;
 
 	private int platformHeight = -1;
 	private Stage stage = Stage.CULTIVATE;
@@ -99,18 +96,17 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		logic = FarmRegistry.getInstance().getProperties(identifier).getLogic(manual);
 	}
 
-	protected TilePlanter(String identifier) {
-		super(150, 1500);
+	protected TilePlanter(TileEntityType type, String identifier) {
+		super(type, 150, 1500);
 		this.identifier = identifier;
 		setManual(false);
 		setInternalInventory(inventory = new InventoryPlanter(this));
 		this.hydrationManager = new FarmHydrationManager(this);
 		this.fertilizerManager = new FarmFertilizerManager();
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters((Fluid) null/*FluidRegistry.WATER TODO fluids*/);
 
 		this.tankManager = new TankManager(this, resourceTank);
-		this.listener = ClimateManager.climateFactory.createListener(this);
 		setEnergyPerWorkCycle(10);
 		setTicksPerWorkCycle(2);
 	}
@@ -209,23 +205,23 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		data = super.writeToNBT(data);
-		hydrationManager.writeToNBT(data);
-		tankManager.writeToNBT(data);
-		fertilizerManager.writeToNBT(data);
-		ownerHandler.writeToNBT(data);
-		data.setBoolean("isManual", isManual);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
+		hydrationManager.write(data);
+		tankManager.write(data);
+		fertilizerManager.write(data);
+		ownerHandler.write(data);
+		data.putBoolean("isManual", isManual);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
-		hydrationManager.readFromNBT(data);
-		tankManager.readFromNBT(data);
-		fertilizerManager.readFromNBT(data);
-		ownerHandler.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
+		hydrationManager.read(data);
+		tankManager.read(data);
+		fertilizerManager.read(data);
+		ownerHandler.read(data);
 		setManual(data.getBoolean("isManual"));
 	}
 
@@ -268,7 +264,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// Check fertilizer
-		Boolean hasFertilizer = fertilizerManager.hasFertilizer(inventory, fertilizerConsumption);
+		boolean hasFertilizer = fertilizerManager.hasFertilizer(inventory, fertilizerConsumption);
 		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
 			return false;
 		}
@@ -276,8 +272,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = logic.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = new FluidStack(FluidRegistry.WATER, waterConsumption);
-		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
+		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
+		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
 			return false;
@@ -322,7 +318,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-			final FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
+			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water
@@ -331,7 +327,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 					continue;
 				}
 
-				if (liquid.amount > 0 && !hasLiquid(liquid)) {
+				if (liquid.getAmount() > 0 && !hasLiquid(liquid)) {
 					farmWorkStatus.hasLiquid = false;
 					continue;
 				}
@@ -382,19 +378,13 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		FluidStack drained = resourceTank.drainInternal(liquid, false);
+		FluidStack drained = resourceTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 		return liquid.isFluidStackIdentical(drained);
 	}
 
 	@Override
 	public void removeLiquid(FluidStack liquid) {
-		resourceTank.drain(liquid.amount, true);
-	}
-
-	@Override
-	public boolean plantGermling(IFarmable germling, World world, BlockPos pos) {
-		EntityPlayer player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
-		return player != null && inventory.plantGermling(germling, player, pos);
+		resourceTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 	}
 
 	@Override
@@ -404,7 +394,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	@Override
 	public boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction) {
-		EntityPlayer player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
+		PlayerEntity player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
 		return player != null && inventory.plantGermling(farmable, player, pos, direction);
 	}
 
@@ -451,17 +441,17 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	}
 
 	@Override
-	public void invalidate() {
-		super.invalidate();
+	public void remove() {
+		super.remove();
 		targets.clear();
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound data = super.getUpdateTag();
-		hydrationManager.writeToNBT(data);
-		tankManager.writeToNBT(data);
-		fertilizerManager.writeToNBT(data);
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT data = super.getUpdateTag();
+		hydrationManager.write(data);
+		tankManager.write(data);
+		fertilizerManager.write(data);
 		return data;
 	}
 
@@ -469,15 +459,9 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiPlanter(this, player.inventory);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerPlanter(this, player.inventory);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerPlanter(windowId, inv, this);
 	}
 
 	public IFarmLedgerDelegate getFarmLedgerDelegate() {
@@ -496,12 +480,14 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	@Override
 	public float getExactTemperature() {
-		return listener.getExactTemperature();
+		BlockPos coords = getCoordinates();
+		return world.getBiome(coords).getTemperature(coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return listener.getExactHumidity();
+		BlockPos coords = getCoordinates();
+		return world.getBiome(coords).getDownfall();
 	}
 
 	@Override
@@ -509,17 +495,10 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		return tankManager;
 	}
 
-
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
+			return LazyOptional.of(this::getTankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}

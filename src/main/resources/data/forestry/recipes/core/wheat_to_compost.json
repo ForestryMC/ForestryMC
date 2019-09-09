@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "forestry:fertilizer_bio",
+    "count": 4
+  },
+  "pattern": [
+    " X ",
+    "X#X",
+    " X "
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.compost.wheat",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": {
+      "item": "#CROPWHEAT"
+    }
+  },
+  "group": "core"
+}

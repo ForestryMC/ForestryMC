@@ -20,9 +20,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -56,10 +58,10 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private int startX;
 	private int startY;
 
-	public GuiHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator itemInventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, itemInventory));
+	public GuiHabitatLocator(ContainerHabitatLocator container, PlayerInventory playerInv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", container, playerInv, title);
 
-		this.itemInventory = itemInventory;
+		this.itemInventory = container.getItemInventory();
 		xSize = 176;
 		ySize = 184;
 
@@ -86,8 +88,8 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		String str = Translator.translateToLocal("item.for.habitat_locator.name").toUpperCase(Locale.ENGLISH);
-		fontRenderer.drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		String str = Translator.translateToLocal("item.forestry.habitat_locator").toUpperCase(Locale.ENGLISH);
+		getFontRenderer().drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.
 		Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<>();
@@ -103,12 +105,12 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 		for (HabitatSlot slot : habitatSlots) {
 			slot.draw(startX, startY);
 		}
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
 		startX = (this.width - this.xSize) / 2;
 		startY = (this.height - this.ySize) / 2;

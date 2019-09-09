@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +36,7 @@ import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.ModuleCore;
+import forestry.core.items.ItemFruit;
 import forestry.core.tiles.TileUtil;
 import forestry.farming.logic.crops.CropFruit;
 
@@ -123,7 +124,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(ModuleCore.getItems().fruits);
+		return ModuleCore.getItems().getFruit(ItemFruit.EnumFruit.CHERRY, 1);    //TODO which fruit to use?
 	}
 
 	@Override
@@ -140,9 +141,10 @@ public class FarmLogicOrchard extends FarmLogic {
 		}
 
 		// Determine what type we want to harvest.
-		IBlockState blockState = world.getBlockState(position);
+		BlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
+		//TODO tags
+		if (false) {//!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
 			return crops;
 		}
 
@@ -183,9 +185,9 @@ public class FarmLogicOrchard extends FarmLogic {
 						continue;
 					}
 
-					IBlockState blockState = world.getBlockState(candidate);
+					BlockState blockState = world.getBlockState(candidate);
 					Block block = blockState.getBlock();
-					if (block.isWood(world, candidate) || isBlockTraversable(blockState, traversalBlocks)) {
+					if (false) {//block.isWood(world, candidate) || isBlockTraversable(blockState, traversalBlocks)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}
@@ -205,7 +207,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return candidates;
 	}
 
-	private boolean isFruitBearer(World world, BlockPos position, IBlockState blockState) {
+	private boolean isFruitBearer(World world, BlockPos position, BlockState blockState) {
 		IFruitBearer tile = TileUtil.getTile(world, position, IFruitBearer.class);
 		if (tile != null) {
 			return true;
@@ -220,7 +222,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private static boolean isBlockTraversable(IBlockState blockState, ImmutableList<Block> traversalBlocks) {
+	private static boolean isBlockTraversable(BlockState blockState, ImmutableList<Block> traversalBlocks) {
 		Block candidate = blockState.getBlock();
 		for (Block block : traversalBlocks) {
 			if (block == candidate) {

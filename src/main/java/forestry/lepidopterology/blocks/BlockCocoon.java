@@ -10,102 +10,80 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.tiles.TileUtil;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-public class BlockCocoon extends Block implements ITileEntityProvider, IStateMapperRegister, IItemModelRegister {
-	public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+public class BlockCocoon extends Block {
+	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockCocoon() {
-		super(MaterialCocoon.INSTANCE);
-		setTickRandomly(true);
-		setSoundType(SoundType.GROUND);
-		setCreativeTab(null);
-		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault)
-			.withProperty(AlleleButterflyCocoon.AGE, 0));
+		super(Block.Properties.create(MaterialCocoon.INSTANCE)
+			.tickRandomly()
+			.sound(SoundType.GROUND));
+		//		setCreativeTab(null);
+		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
+			.with(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, COCOON, AlleleButterflyCocoon.AGE);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(COCOON, AlleleButterflyCocoon.AGE);
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-		if (cocoon != null) {
-			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-				.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
-		}
-		return super.getActualState(state, world, pos);
-	}
+	//TODO
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+	//		if (cocoon != null) {
+	//			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
+	//				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
+	//		}
+	//		return super.getActualState(state, world, pos);
+	//	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new CocoonStateMapper());
-	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		// To delete the error message
-		manager.registerItemModel(item, 0, "cocoon_late");
-	}
-
-	@Override
-	public boolean isFullBlock(IBlockState state) {
-		return false;
-	}
+	//	@Override
+	//	public boolean isFullBlock(BlockState state) {
+	//		return false;
+	//	}
+	//
+	//	@Override
+	//	public boolean isOpaqueCube(BlockState state) {
+	//		return false;
+	//	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		TileCocoon tileCocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tileCocoon == null) {
 			return;
 		}
 
-		if (tileCocoon.isInvalid()) {
+		if (tileCocoon.isRemoved()) {
 			return;
 		}
 
@@ -113,31 +91,30 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileCocoon(false);
 	}
 
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return 0;
-	}
+	//	@Override
+	//	@Deprecated
+	//	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	//		if (worldIn.isAirBlock(pos.up())) {
+	//			worldIn.setBlockToAir(pos);
+	//		}
+	//	}
+
+	//	@Override
+	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+	//
+	//	}
 
 	@Override
-	@Deprecated
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if (worldIn.isAirBlock(pos.up())) {
-			worldIn.setBlockToAir(pos);
-		}
-	}
-
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-
-	}
-
-	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-		EntityPlayer player) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;
@@ -146,31 +123,22 @@ public class BlockCocoon extends Block implements ITileEntityProvider, IStateMap
 		IButterfly caterpillar = tile.getCaterpillar();
 		int age = tile.getAge();
 
-		ItemStack stack = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.COCOON);
-		if (!stack.isEmpty() && stack.getTagCompound() != null) {
-			stack.getTagCompound().setInteger(ItemButterflyGE.NBT_AGE, age);
+		ItemStack stack = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.COCOON);
+		if (!stack.isEmpty() && stack.getTag() != null) {
+			stack.getTag().putInt(ItemButterflyGE.NBT_AGE, age);
 		}
 		return stack;
 	}
 
-	@Override
-	public boolean isFullCube(IBlockState state) {
-		return false;
-	}
+	//TODO automatically determined from shape?
+	//	@Override
+	//	public boolean isFullCube(BlockState state) {
+	//		return false;
+	//	}
 
+	//other shapes (collision etc) defer to this in block I believe
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-		return BOUNDING_BOX.offset(pos);
-	}
-
-	@Nullable
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return BOUNDING_BOX;
-	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		return BOUNDING_BOX;
 	}
 

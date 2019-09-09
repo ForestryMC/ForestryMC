@@ -15,30 +15,33 @@ import java.util.Collection;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleRegistry;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ApiaristAI;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Constants;
@@ -53,15 +56,16 @@ public class EventHandlerCore {
 	public EventHandlerCore() {
 	}
 
+	//TODO - register event handler
 	@SubscribeEvent
 	public void handleItemPickup(EntityItemPickupEvent event) {
-		if (event.isCanceled() || event.getResult() == Result.ALLOW) {
+		if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
 			return;
 		}
 
 		for (IPickupHandler handler : ModuleManager.pickupHandlers) {
 			if (handler.onItemPickup(event.getEntityPlayer(), event.getItem())) {
-				event.setResult(Result.ALLOW);
+				event.setResult(Event.Result.ALLOW);
 				return;
 			}
 		}
@@ -69,20 +73,27 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		EntityPlayer player = event.player;
+		PlayerEntity player = event.getPlayer();
 		syncBreedingTrackers(player);
 	}
 
 	@SubscribeEvent
 	public void handlePlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-		EntityPlayer player = event.player;
+		PlayerEntity player = event.getPlayer();
 		syncBreedingTrackers(player);
 	}
 
-	private static void syncBreedingTrackers(EntityPlayer player) {
-		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
-		Collection<ISpeciesRoot> speciesRoots = alleleRegistry.getSpeciesRoot().values();
-		for (ISpeciesRoot speciesRoot : speciesRoots) {
+	private static void syncBreedingTrackers(PlayerEntity player) {
+		Collection<IRootDefinition> speciesRoots = GeneticsAPI.apiInstance.getRoots().values();
+		for (IRootDefinition definition : speciesRoots) {
+			if (!definition.isRootPresent()) {
+				continue;
+			}
+			IIndividualRoot root = definition.get();
+			if (!(root instanceof IForestrySpeciesRoot)) {
+				continue;
+			}
+			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
 			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}
@@ -90,7 +101,7 @@ public class EventHandlerCore {
 
 	@SubscribeEvent
 	public void handleWorldLoad(WorldEvent.Load event) {
-		World world = event.getWorld();
+		IWorld world = event.getWorld();
 
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldLoad(world);
@@ -112,10 +123,13 @@ public class EventHandlerCore {
 	}
 
 	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		ErrorStateRegistry.initSprites();
-		TextureManagerForestry.initDefaultSprites();
+		if (event.getMap() == TextureManagerForestry.getInstance().getTextureMap()) {
+			ErrorStateRegistry.initSprites(event);
+			TextureManagerForestry.getInstance().registerSprites(event);
+			TextureManagerForestry.initDefaultSprites(event);
+		}
 		ModelBlockCached.clear();
 		ModelBlockCustomCached.clear();
 	}
@@ -149,11 +163,12 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void handleVillagerAI(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
-		if ((entity instanceof EntityVillager)) {
-			EntityVillager villager = (EntityVillager) entity;
-			VillagerRegistry.VillagerProfession profession = villager.getProfessionForge();
-			if (ModuleApiculture.villagerApiarist != null && profession == ModuleApiculture.villagerApiarist) {
-				villager.tasks.addTask(6, new ApiaristAI(villager, 0.6));
+		if ((entity instanceof VillagerEntity)) {
+			VillagerEntity villager = (VillagerEntity) entity;
+			//TODO - not sure this is quite right
+			VillagerProfession prof = ForgeRegistries.PROFESSIONS.getValue(EntityType.getKey(villager.getType()));
+			if (ModuleApiculture.villagerApiarist != null && prof == ModuleApiculture.villagerApiarist) {
+				villager.goalSelector.addGoal(6, new ApiaristAI(villager, 0.6));
 			}
 		}
 	}

@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "forestry:portable_alyzer"
+  },
+  "pattern": [
+    "X#X",
+    "X#X",
+    "RDR"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "core",
+          "type": "forestry:module"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forestry:module",
+            "module": "factory"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#PANEGLASS"
+    },
+    "X": {
+      "item": "#INGOTTIN"
+    },
+    "R": {
+      "item": "#DUSTREDSTONE"
+    },
+    "D": {
+      "item": "#GEMDIAMOND"
+    }
+  },
+  "group": "core"
+}

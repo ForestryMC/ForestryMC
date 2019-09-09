@@ -9,10 +9,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * This interface provides some methods to add or remove {@link IClimateTransformer}s and to get the current climate
+ * This interface provides some methods to add or remove {@link IClimateTransformer}s and to getComb the current climate
  * state at a given position.
  * <p>
- * You can use {@link IClimateRoot#getWorldClimate(World)} to get the instance of this interface that provides the
+ * You can use {@link IClimateRoot#getWorldClimate(World)} to getComb the instance of this interface that provides the
  * information about a given world.
  */
 public interface IWorldClimateHolder {

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.core.network.ForestryPacket;
@@ -43,7 +43,7 @@ public class PacketLetterInfoRequest extends ForestryPacket implements IForestry
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			String recipientName = data.readString();
 			EnumAddressee addressType = data.readEnum(EnumAddressee.values());
 

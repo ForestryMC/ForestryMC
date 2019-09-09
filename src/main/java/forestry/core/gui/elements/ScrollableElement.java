@@ -12,13 +12,13 @@ import forestry.core.gui.widgets.IScrollable;
 public class ScrollableElement extends ElementGroup implements IScrollable {
 	@Nullable
 	private IGuiElement content;
-	private float scrollPercentage;
+	private double scrollPercentage;
 	private float step;
 
 	public ScrollableElement(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
 		addSelfEventHandler(GuiEvent.WheelEvent.class, event -> {
-			//movePercentage(event.getDWheel());
+			movePercentage(event.getDWheel());
 		});
 	}
 
@@ -30,7 +30,7 @@ public class ScrollableElement extends ElementGroup implements IScrollable {
 		return (int) ((content.getHeight() - height) / (step));
 	}
 
-	protected void movePercentage(float percentage) {
+	protected void movePercentage(double percentage) {
 		scrollPercentage = (percentage * step);
 	}
 

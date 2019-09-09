@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
+import net.minecraft.util.text.TranslationTextComponent;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.utils.Translator;
 
 public class BiogasSlot extends ReservoirWidget {
 	public BiogasSlot(WidgetManager manager, int xPos, int yPos, int slot) {
@@ -29,17 +30,17 @@ public class BiogasSlot extends ReservoirWidget {
 		IFluidTank tank = getTank();
 		if (tank != null) {
 			FluidStack fluid = tank.getFluid();
-			if (fluid == null) {
-				toolTip.add(Translator.translateToLocal("for.gui.empty"));
+			if (fluid.isEmpty()) {
+				toolTip.add(new TranslationTextComponent("for.gui.empty"));
 			} else {
-				toolTip.add(fluid.getLocalizedName());
+				toolTip.add(fluid.getDisplayName());
 			}
 		}
 		return toolTip;
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		// do not allow pipette
 	}
 }

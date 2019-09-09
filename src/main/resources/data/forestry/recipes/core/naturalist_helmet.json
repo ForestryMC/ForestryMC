@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "forestry:naturalist_helmet"
+  },
+  "pattern": [
+    " X ",
+    "Y Y"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "#INGOTBRONZE"
+    },
+    "Y": {
+      "item": "#PANEGLASS"
+    }
+  },
+  "group": "core"
+}

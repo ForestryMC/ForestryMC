@@ -13,25 +13,26 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IFabricatorRecipe;
@@ -51,8 +52,8 @@ import forestry.core.recipes.RecipePair;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerFabricator;
-import forestry.factory.gui.GuiFabricator;
 import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
@@ -67,12 +68,12 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	private int meltingPoint = 0;
 
 	public TileFabricator() {
-		super(1100, 3300);
+		super(ModuleFactory.getTiles().fabricator, 1100, 3300);
 		setEnergyPerWorkCycle(200);
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 
-		moltenTank = new FilteredTank(8 * Fluid.BUCKET_VOLUME, false, false).setFilters(FabricatorSmeltingRecipeManager.getRecipeFluids());
+		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, false).setFilters(FabricatorSmeltingRecipeManager.getRecipeFluids());
 
 		tankManager = new TankManager(this, moltenTank);
 	}
@@ -80,22 +81,22 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	/* SAVING & LOADING */
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
 
-		nbttagcompound.setInteger("Heat", heat);
-		tankManager.writeToNBT(nbttagcompound);
-		craftingInventory.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		compound.putInt("Heat", heat);
+		tankManager.write(compound);
+		craftingInventory.write(compound);
+		return compound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
 
-		heat = nbttagcompound.getInteger("Heat");
-		tankManager.readFromNBT(nbttagcompound);
-		craftingInventory.readFromNBT(nbttagcompound);
+		heat = compound.getInt("Heat");
+		tankManager.read(compound);
+		craftingInventory.read(compound);
 	}
 
 	@Override
@@ -105,7 +106,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -123,7 +124,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		if (!moltenTank.isEmpty()) {
 			// Remove smelt if we have gone below melting point
 			if (heat < getMeltingPoint() - 100) {
-				moltenTank.drain(5, true);
+				moltenTank.drain(5, IFluidHandler.FluidAction.EXECUTE);
 			}
 		}
 
@@ -148,9 +149,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 
 		FluidStack smeltFluid = smelt.getProduct();
-		if (moltenTank.fillInternal(smeltFluid, false) == smeltFluid.amount) {
+		if (moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.SIMULATE) == smeltFluid.getAmount()) {
 			this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
-			moltenTank.fillInternal(smeltFluid, true);
+			moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.EXECUTE);
 			meltingPoint = smelt.getMeltingPoint();
 		}
 	}
@@ -167,14 +168,13 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		return true;
 	}
 
-	@Nullable
-	private RecipePair getRecipe() {
+	private RecipePair<IFabricatorRecipe> getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
 		RecipePair<IFabricatorRecipe> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
 		IFabricatorRecipe recipe = recipePair.getRecipe();
-		if (liquid != null && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
+		if (!liquid.isEmpty() && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
 			return RecipePair.EMPTY;
 		}
 		return recipePair;
@@ -191,7 +191,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	/* ISlotPickupWatcher */
 	@Override
-	public void onTake(int slotIndex, EntityPlayer player) {
+	public void onTake(int slotIndex, PlayerEntity player) {
 		if (slotIndex == InventoryFabricator.SLOT_RESULT) {
 			decrStackSize(InventoryFabricator.SLOT_RESULT, 1);
 		}
@@ -207,10 +207,10 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			// Remove resources
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			if (removeFromInventory(crafting, myRecipePair, false)) {
-				FluidStack drained = moltenTank.drainInternal(liquid, false);
-				if (drained != null && drained.isFluidStackIdentical(liquid)) {
+				FluidStack drained = moltenTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
+				if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
 					removeFromInventory(crafting, myRecipePair, true);
-					moltenTank.drain(liquid.amount, true);
+					moltenTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
 					// Damage plan
 					if (!getStackInSlot(InventoryFabricator.SLOT_PLAN).isEmpty()) {
@@ -242,11 +242,14 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		RecipePair<IFabricatorRecipe> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
 		if (!recipePair.isEmpty()) {
 			IFabricatorRecipe recipe = recipePair.getRecipe();
+			if (recipe == null) {
+				return false;
+			}
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, recipePair, false);
 			FluidStack toDrain = recipe.getLiquid();
-			FluidStack drained = moltenTank.drainInternal(toDrain, false);
-			hasLiquidResources = drained != null && drained.isFluidStackIdentical(toDrain);
+			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
+			hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);
 		} else {
 			hasRecipe = false;
 		}
@@ -313,27 +316,15 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiFabricator(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerFabricator(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerFabricator(windowId, player.inventory, this);
 	}
 }

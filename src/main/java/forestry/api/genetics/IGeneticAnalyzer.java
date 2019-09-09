@@ -1,6 +1,6 @@
 package forestry.api.genetics;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 
 import forestry.api.gui.IGuiElement;
 
@@ -27,7 +27,7 @@ public interface IGeneticAnalyzer extends IGuiElement {
 	/**
 	 * Draws the tooltip of the element that is under the mouse.
 	 */
-	void drawTooltip(GuiScreen gui, int mouseX, int mouseY);
+	void drawTooltip(Screen gui, int mouseX, int mouseY);
 
 	/**
 	 * @return

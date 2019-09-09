@@ -13,14 +13,15 @@ package forestry.core.gui.widgets;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
@@ -49,7 +50,7 @@ public class GameTokenWidget extends Widget {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void draw(int startX, int startY) {
 
 		EscritoireGameToken token = getToken();
@@ -63,13 +64,14 @@ public class GameTokenWidget extends Widget {
 		float colorG = (tokenColour >> 8 & 255) / 255.0F;
 		float colorB = (tokenColour & 255) / 255.0F;
 
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
 
-		GlStateManager.enableDepth();
-		GlStateManager.color(colorR, colorG, colorB);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, 0, 22, 22);
-		GlStateManager.color(1.0f, 1.0f, 1.0f);
+		//TODO not sure if this works...
+		GlStateManager.enableDepthTest();
+		GlStateManager.color3f(colorR, colorG, colorB);
+		manager.gui.blit(startX + xPos, startY + yPos, 228, 0, 22, 22);
+		GlStateManager.color3f(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
 		if (token.isVisible()) {
@@ -78,13 +80,14 @@ public class GameTokenWidget extends Widget {
 
 		GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
 
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-			manager.gui.drawTexturedModalRect(startX + xPos + 3, startY + yPos + 3, icon, 16, 16);
+			//TODO no idea if this is right at all
+			manager.gui.blit(startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
 		}
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 	}
 
 	@Override
@@ -100,7 +103,7 @@ public class GameTokenWidget extends Widget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		game.choose(index);
 		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, 0));
 		SoundUtil.playButtonClick();

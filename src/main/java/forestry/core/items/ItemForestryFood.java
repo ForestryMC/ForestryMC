@@ -10,19 +10,19 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.EnumAction;
+import net.minecraft.item.Food;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 
-public class ItemForestryFood extends ItemFood implements IItemModelRegister {
+public class ItemForestryFood extends Item implements IItemModelRegister {
 
 	private boolean isDrink = false;
 
@@ -30,17 +30,29 @@ public class ItemForestryFood extends ItemFood implements IItemModelRegister {
 		this(heal, 0.6f);
 	}
 
+	public ItemForestryFood(Item.Properties properties) {
+		super(properties);
+	}
+
 	public ItemForestryFood(int heal, float saturation) {
-		super(heal, saturation, false);
-		setCreativeTab(CreativeTabForestry.tabForestry);
+		this(heal, saturation, new Item.Properties());
+	}
+
+	public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
+		super(properties
+			.group(ItemGroupForestry.tabForestry)
+			.food((new Food.Builder())
+				.hunger(heal)
+				.saturation(saturation)
+				.build()));
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack itemstack) {
+	public UseAction getUseAction(ItemStack itemstack) {
 		if (isDrink) {
-			return EnumAction.DRINK;
+			return UseAction.DRINK;
 		} else {
-			return EnumAction.EAT;
+			return UseAction.EAT;
 		}
 	}
 
@@ -49,7 +61,7 @@ public class ItemForestryFood extends ItemFood implements IItemModelRegister {
 		return this;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0);

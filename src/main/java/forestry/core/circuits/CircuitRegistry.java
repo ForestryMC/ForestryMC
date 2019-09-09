@@ -15,8 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
@@ -38,16 +38,11 @@ public class CircuitRegistry implements ICircuitRegistry {
 		DUMMY_MAP.put("dummy", DUMMY_LAYOUT);
 	}
 
+	//TODO - dimensionsavedddatamanager? check later
 	@Override
-	public ICircuitLibrary getCircuitLibrary(World world, String playerName) {
-		CircuitLibrary library = (CircuitLibrary) world.loadData(CircuitLibrary.class, "CircuitLibrary_" + playerName);
+	public ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName) {
 
-		if (library == null) {
-			library = new CircuitLibrary(playerName);
-			world.setData("CircuitLibrary_" + playerName, library);
-		}
-
-		return library;
+		return world.getSavedData().getOrCreate(() -> new CircuitLibrary(playerName), "CircuitLibrary_" + playerName);
 	}
 
 	/* CIRCUIT LAYOUTS */
@@ -113,11 +108,11 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public ICircuitBoard getCircuitBoard(ItemStack itemstack) {
-		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
-		if (nbttagcompound == null) {
+		CompoundNBT compoundNBT = itemstack.getTag();
+		if (compoundNBT == null) {
 			return null;
 		}
 
-		return new CircuitBoard(nbttagcompound);
+		return new CircuitBoard(compoundNBT);
 	}
 }

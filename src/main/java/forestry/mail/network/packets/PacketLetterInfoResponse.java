@@ -16,15 +16,15 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
@@ -96,10 +96,10 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			Container container = player.openContainer;
 			if (container instanceof ILetterInfoReceiver) {
 				EnumAddressee type = data.readEnum(EnumAddressee.values());

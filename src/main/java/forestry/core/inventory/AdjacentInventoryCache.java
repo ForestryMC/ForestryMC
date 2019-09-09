@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import net.minecraftforge.items.IItemHandler;
 
@@ -59,7 +59,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 	}
 
 	@Nullable
-	public IItemHandler getAdjacentInventory(EnumFacing side) {
+	public IItemHandler getAdjacentInventory(Direction side) {
 		checkChanged();
 		return sides[side.ordinal()];
 	}
@@ -69,7 +69,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		return invs;
 	}
 
-	public Collection<IItemHandler> getAdjacentInventoriesOtherThan(EnumFacing side) {
+	public Collection<IItemHandler> getAdjacentInventoriesOtherThan(Direction side) {
 		checkChanged();
 		Collection<IItemHandler> ret = getAdjacentInventories();
 		ret.remove(getAdjacentInventory(side));
@@ -92,7 +92,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		if (changed) {
 			changed = false;
 			purge();
-			for (EnumFacing side : EnumFacing.values()) {
+			for (Direction side : Direction.values()) {
 				TileEntity tile = cache.getTileOnSide(side);
 				if (tile != null && (filter == null || filter.matches(tile))) {
 					IItemHandler inv = TileUtil.getInventoryFromTile(tile, side.getOpposite());

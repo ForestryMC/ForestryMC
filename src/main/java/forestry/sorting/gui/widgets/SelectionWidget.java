@@ -52,16 +52,16 @@ public class SelectionWidget extends Widget {
 		if (logic == null) {
 			return;
 		}
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(TEXTURE);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 0, 0, width, height);
+		manager.gui.blit(startX + xPos, startY + yPos, 0, 0, width, height);
 		logic.draw();
 
 		manager.minecraft.fontRenderer.drawString(Translator.translateToLocal("for.gui.filter.seletion"), startX + xPos + 12, startY + yPos + 4, manager.gui.getFontColor().get("gui.title"));
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		return logic != null && super.isMouseOver(mouseX, mouseY);
 	}
 
@@ -75,7 +75,7 @@ public class SelectionWidget extends Widget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		if (logic == null) {
 			return;
 		}

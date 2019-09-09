@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/kit_pickaxe"
+      "layer0": "forestry:item/kit_pickaxe"
     }
 }

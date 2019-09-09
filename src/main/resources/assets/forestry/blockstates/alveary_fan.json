@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "state=on": {
+      "model": "forestry:block/apiculture/alveary_fan_on"
+    },
+    "state=off": {
+      "model": "forestry:block/apiculture/alveary_fan_off"
+    }
+  }
+}

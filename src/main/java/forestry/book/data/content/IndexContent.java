@@ -2,8 +2,8 @@ package forestry.book.data.content;
 
 import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
@@ -12,7 +12,7 @@ import forestry.api.gui.IGuiElementFactory;
 import forestry.book.data.IndexData;
 import forestry.book.gui.elements.IndexElement;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class IndexContent extends BookContent<IndexData> {
 	@Nullable
 	@Override

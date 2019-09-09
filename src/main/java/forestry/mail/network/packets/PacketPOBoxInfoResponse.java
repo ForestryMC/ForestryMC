@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -41,11 +41,11 @@ public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestry
 		data.writeInt(poboxInfo.tradeLetters);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			POBoxInfo poboxInfo = new POBoxInfo(data.readInt(), data.readInt());
 			GuiMailboxInfo.instance.setPOBoxInfo(player, poboxInfo);
 		}

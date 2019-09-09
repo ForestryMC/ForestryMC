@@ -12,13 +12,14 @@ package forestry.farming.multiblock;
 
 import java.util.Stack;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -76,14 +77,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
-			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid != null && farmController.getTankManager().canFillFluidType(fluid);
+			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			return fluid.map(f -> farmController.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
 	}
 
@@ -162,7 +163,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 	}
 
-	public boolean plantGermling(IFarmable germling, EntityPlayer player, BlockPos pos) {
+	public boolean plantGermling(IFarmable germling, PlayerEntity player, BlockPos pos) {
 		for (int i = 0; i < germlingsInventory.getSizeInventory(); i++) {
 			ItemStack germlingStack = germlingsInventory.getStackInSlot(i);
 			if (germlingStack.isEmpty() || !germling.isGermling(germlingStack)) {

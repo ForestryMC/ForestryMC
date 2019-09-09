@@ -1442,7 +1442,7 @@ for.gui.habitat_former.climate.humidity=Влажность
 for.gui.habitat_former.climate.habitats=Места обитания
 for.gui.habitat_former.climate.selection=Селекция
 for.gui.habitat_former.climate.range=Дальность
-for.gui.habitat_former.climate.range.blocks=%s блоков
+for.gui.habitat_former.climate.range.block=%s блоков
 for.gui.habitat_former.climate.circle.enabled=Циркулярный режим включен
 for.gui.habitat_former.climate.circle.disabled=Циркулярный режим отключен
 for.gui.habitat_former.climate.preview.enabled=Режим прдепросмотра включен
@@ -1591,7 +1591,7 @@ item.for.catalogue.tooltip=Перечисляет все доступные то
 # PIPES
 ####################
 
-item.PipeItemsPropolis.name=Труба пчеловода
+item.PipeitemPropolis.name=Труба пчеловода
 
 tile.for.genetic_filter.name=Генетический фильтр
 tile.for.genetic_filter.0.name=Генетический фильтр
@@ -1680,11 +1680,11 @@ for.config.world.generate.retrogen.forced=Forced Retrogen
 for.config.world.generate.retrogen.forced.comment=Creates Forestry world generation in all chunks, even if they were generated there before.
 
 for.config.world.generate.ore.apatite=Generate Apatite
-for.config.world.generate.ore.apatite.comment=Generates apatite ore blocks in the world.
+for.config.world.generate.ore.apatite.comment=Generates apatite ore block in the world.
 for.config.world.generate.ore.copper=Generate Copper
-for.config.world.generate.ore.copper.comment=Generates copper ore blocks in the world.
+for.config.world.generate.ore.copper.comment=Generates copper ore block in the world.
 for.config.world.generate.ore.tin=Generate Tin
-for.config.world.generate.ore.tin.comment=Generates tin ore blocks in the world.
+for.config.world.generate.ore.tin.comment=Generates tin ore block in the world.
 for.config.world.generate.ore.dimBlacklist=Ore generation Dimension Blacklist
 for.config.world.generate.ore.dimBlacklist.comment=Disables the generation of all ore in the specified dimensions. Enter one dimension id per line.
 
@@ -1760,9 +1760,9 @@ for.config.tweaks.capsule.capsuleReuseable=Reuseable Capsules
 for.config.tweaks.capsule.capsuleReuseable.comment=Capsules are no longer consumed after being emptied.
 
 for.config.tweaks.charcoal.amount.base=Amount Base
-for.config.tweaks.charcoal.amount.base.comment=The base amount that the wood pile will drop if the wall blocks are no registered pile waal blocks.
+for.config.tweaks.charcoal.amount.base.comment=The base amount that the wood pile will drop if the wall block are no registered pile waal block.
 for.config.tweaks.charcoal.check.range=Wall Check Range
-for.config.tweaks.charcoal.check.range.comment=Sets the amount of blocks that the wood pile will check if it is a valid charcoal pile wall block.
+for.config.tweaks.charcoal.check.range.comment=Sets the amount of block that the wood pile will check if it is a valid charcoal pile wall block.
 
 for.config.tweaks.book.spawn=Forester's Manual
 for.config.tweaks.book.spawn.comment=Players who enter the world for the first time get a Forester's Manual.
@@ -1787,12 +1787,12 @@ for.config.structures=Structures
 for.config.structures.disabled=Disabled Structures
 for.config.structures.disabled.comment=List specific structures to disable them.
 
-for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry has to look like this: modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. You can't remove auto generated entries you only can deactivate them if you set their value to 0.
+for.config.farm.fertilizers.item=Add fertilizers to Forestry. An entry has to look like this: modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. You can't remove auto generated entries you only can deactivate them if you set their value to 0.
 
 for.config.fluids=Fluids
 for.config.fluids.enable.format=Enables %s fluid.
-for.config.fluid.blocks=Fluid Blocks
-for.config.fluid.blocks.enable.format=Enables %s in-world fluid block.
+for.config.fluid.block=Fluid block
+for.config.fluid.block.enable.format=Enables %s in-world fluid block.
 
 for.config.debug.enabled=Debug Mode
 for.config.debug.enabled.comment=Enable Debug mode (only useful to developers).
@@ -1846,11 +1846,11 @@ for.config.butterfly.cocoons.second.serum=Second Serum Drop Chance
 for.config.butterfly.cocoons.second.serum.comment=How often cocoons should drop a second serum
 for.config.butterfly.alleles.loot=Loot drops from cocoons. Format is modid:name:meta;chance
 
-for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
+for.config.backpacks.item.stacks.format=Add itemtacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
 
-for.config.crates.items.accepted.comment=Added items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
-for.config.crates.items.rejected.comment=Blacklisted items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
+for.config.crates.item.accepted.comment=Added item. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
+for.config.crates.item.rejected.comment=Blacklisted item. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
 for.config.crates.oredict.accepted.comment=Added oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
 for.config.crates.oredict.rejected.comment=Blacklisted oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
 

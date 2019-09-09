@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
@@ -26,7 +27,7 @@ public class JubilanceDefault implements IJubilanceProvider {
 	}
 
 	@Override
-	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
+	public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
 		EnumTemperature temperature = housing.getTemperature();
 		EnumHumidity humidity = housing.getHumidity();
 

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 
 import forestry.api.climate.ClimateType;
@@ -101,7 +101,7 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 	}
 
 	@Override
-	public IClimateState create(NBTTagCompound compound, boolean mutable) {
+	public IClimateState create(CompoundNBT compound, boolean mutable) {
 		if (compound.getBoolean(ABSENT_NBT_KEY)) {
 			return AbsentClimateState.INSTANCE;
 		}
@@ -109,19 +109,19 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 	}
 
 	@Override
-	public IClimateState create(NBTTagCompound compound) {
+	public IClimateState create(CompoundNBT compound) {
 		return create(compound, compound.getBoolean(MUTABLE_NBT_KEY));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound, IClimateState state) {
+	public CompoundNBT writeToNBT(CompoundNBT compound, IClimateState state) {
 		if (state.isPresent()) {
-			compound.setBoolean(ABSENT_NBT_KEY, false);
-			compound.setFloat(TEMPERATURE_NBT_KEY, state.getTemperature());
-			compound.setFloat(HUMIDITY_NBT_KEY, state.getHumidity());
-			compound.setBoolean(MUTABLE_NBT_KEY, state instanceof MutableClimateState);
+			compound.putBoolean(ABSENT_NBT_KEY, false);
+			compound.putFloat(TEMPERATURE_NBT_KEY, state.getTemperature());
+			compound.putFloat(HUMIDITY_NBT_KEY, state.getHumidity());
+			compound.putBoolean(MUTABLE_NBT_KEY, state instanceof MutableClimateState);
 		} else {
-			compound.setBoolean(ABSENT_NBT_KEY, true);
+			compound.putBoolean(ABSENT_NBT_KEY, true);
 		}
 		return compound;
 	}

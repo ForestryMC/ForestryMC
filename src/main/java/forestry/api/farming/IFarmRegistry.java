@@ -14,17 +14,6 @@ import net.minecraft.item.ItemStack;
 public interface IFarmRegistry {
 
 	/**
-	 * Registers farming logic in registry under given identifier
-	 *
-	 * @param identifier Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-	 * @param logic      corresponding instance of logic
-	 * @deprecated Since Forestry 5.8. Use {@link #registerLogic(String, BiFunction, String...)} or
-	 * {@link #registerLogic(String, IFarmProperties)}.
-	 */
-	@Deprecated
-	void registerLogic(String identifier, IFarmLogic logic);
-
-	/**
 	 * Registers farming logic in registry
 	 *
 	 * @since Forestry 5.8
@@ -53,18 +42,6 @@ public interface IFarmRegistry {
 	IFarmableInfo getFarmableInfo(String identifier);
 
 	/**
-	 * Can be used to create a simple version of a farm logic, like the vanilla vegetable or wheat farm logic.
-	 *
-	 * @return Null if the farming plugin is not active.
-	 * @deprecated Since Forestry 5.8. Use {@link #createCropLogic(IFarmProperties, boolean, ISimpleFarmLogic)} instead.
-	 */
-	@Nullable
-	@Deprecated
-	default IFarmLogic createLogic(ISimpleFarmLogic simpleFarmLogic) {
-		return null;
-	}
-
-	/**
 	 * @param itemStack the fertilizer itemstack
 	 * @param value     The value of the fertilizer. The value of the forestry fertilizer is 500.
 	 */
@@ -74,15 +51,6 @@ public interface IFarmRegistry {
 	 * @return The value of the fertilizer
 	 */
 	int getFertilizeValue(ItemStack itemStack);
-
-	/**
-	 * Returns a fake {@link IFarmProperties} that returns the given logic at {@link IFarmProperties#getLogic(boolean)}.
-	 *
-	 * @since Forestry 5.8
-	 * @deprecated Only for backwards comparability.
-	 */
-	@Deprecated
-	IFarmProperties createFakeInstance(IFarmLogic logic);
 
 	/**
 	 * Can be used to create a simple version of a farm logic, like the vanilla vegetable or wheat farm logic.

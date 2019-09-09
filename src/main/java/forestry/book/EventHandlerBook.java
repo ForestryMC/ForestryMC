@@ -1,13 +1,12 @@
 package forestry.book;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import forestry.core.config.Config;
 
@@ -18,13 +17,13 @@ public class EventHandlerBook {
 	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		if (Config.spawnWithBook) {
-			NBTTagCompound playerData = event.player.getEntityData();
-			NBTTagCompound data = playerData.hasKey(EntityPlayer.PERSISTED_NBT_TAG) ? playerData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG) : new NBTTagCompound();
+			CompoundNBT playerData = event.getPlayer().getPersistantData();    //TODO think this is the right method
+			CompoundNBT data = playerData.contains(PlayerEntity.PERSISTED_NBT_TAG) ? playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG) : new CompoundNBT();
 
 			if (!data.getBoolean(HAS_BOOK)) {
-				ItemHandlerHelper.giveItemToPlayer(event.player, new ItemStack(ModuleBook.getItems().book));
-				data.setBoolean(HAS_BOOK, true);
-				playerData.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
+				ItemHandlerHelper.giveItemToPlayer(event.getPlayer(), new ItemStack(ModuleBook.getItems().book));
+				data.putBoolean(HAS_BOOK, true);
+				playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
 			}
 		}
 	}

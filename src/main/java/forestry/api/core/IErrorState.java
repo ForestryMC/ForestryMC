@@ -7,8 +7,9 @@ package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -23,13 +24,13 @@ public interface IErrorState {
 
 	String getUnlocalizedHelp();
 
-	@SideOnly(Side.CLIENT)
-	void registerSprite();
+	@OnlyIn(Dist.CLIENT)
+	void registerSprite(TextureStitchEvent.Pre event);
 
 	/**
 	 * Sprite registered to the Gui Texture Map at {@link ITextureManager}
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	TextureAtlasSprite getSprite();
 
 }

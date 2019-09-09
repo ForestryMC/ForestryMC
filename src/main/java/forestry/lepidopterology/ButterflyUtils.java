@@ -1,24 +1,24 @@
 package forestry.lepidopterology;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.utils.Log;
-import forestry.lepidopterology.entities.EntityButterfly;
 
 public class ButterflyUtils {
 
 	static boolean attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-		EntityLiving entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
+		MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
 		Log.trace("Spawned a butterfly '{}' at {}/{}/{}.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		return entityLiving != null;
 	}
 
 	public static boolean spawnButterfly(IButterfly butterfly, World world, BlockPos pos) {
-		if (world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
+		//TODO needs server world I think
+		if (false) {//world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
 
@@ -33,10 +33,9 @@ public class ButterflyUtils {
 	}
 
 	public static boolean spawnButterflyWithoutCheck(IButterfly butterfly, World world, BlockPos pos) {
-		if (world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
+		if (false) {//TODO world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
-
 		if (world.isAirBlock(pos)) {
 			return attemptButterflySpawn(world, butterfly, pos);
 		}

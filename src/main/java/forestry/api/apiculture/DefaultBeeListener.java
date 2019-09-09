@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.genetics.IIndividual;
+import genetics.api.individual.IIndividual;
 
 /**
  * Easily extendable default IBeeListener.

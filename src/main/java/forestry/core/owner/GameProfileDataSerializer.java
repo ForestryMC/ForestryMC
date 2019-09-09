@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.IDataSerializer;
 
 import com.mojang.authlib.GameProfile;
 
-public class GameProfileDataSerializer implements DataSerializer<Optional<GameProfile>> {
+public class GameProfileDataSerializer implements IDataSerializer<Optional<GameProfile>> {
 	public static final GameProfileDataSerializer INSTANCE = new GameProfileDataSerializer();
 
 	public static void register() {
@@ -21,7 +21,6 @@ public class GameProfileDataSerializer implements DataSerializer<Optional<GamePr
 
 	}
 
-	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	@Override
 	public void write(PacketBuffer buf, Optional<GameProfile> value) {
 		if (!value.isPresent()) {

@@ -17,21 +17,22 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3f;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelStateComposition;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
@@ -39,20 +40,20 @@ import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.organism.IOrganism;
 
-import forestry.api.genetics.IAlleleFloat;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Constants;
-import forestry.core.genetics.Genome;
 import forestry.core.models.BlankModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.ModelUtil;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelButterflyItem extends BlankModel {
 	@Nullable
 	private static IModel modelButterfly;
@@ -60,6 +61,7 @@ public class ModelButterflyItem extends BlankModel {
 	private static final Cache<IAlleleButterflySpecies, IBakedModel> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 
 	public static void onModelBake(ModelBakeEvent event) {
+		ModelLoader loader = event.getModelLoader();    //TODO this needs to be passed to be used by cache I think. I don't like rendering/baking code.
 		modelButterfly = null;
 		cache.invalidateAll();
 	}
@@ -80,10 +82,10 @@ public class ModelButterflyItem extends BlankModel {
 			}
 		}
 		IModel model = modelButterfly.retexture(textures);
-		IBakedModel bakedModel = model.bake(ModelRotation.X0_Y0, DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE);
 		float scale = 1F / 16F;
 		IModelState state = ModelUtil.loadModelState(new ResourceLocation(Constants.MOD_ID, "models/item/butterfly_ge"));
-		state = new ModelStateComposition(state, new SimpleModelState(getTransformations(size)));
+		ModelStateComposition compState = new ModelStateComposition(state, new SimpleModelState(getTransformations(size)));
+		IBakedModel bakedModel = model.bake(null, DefaultTextureGetter.INSTANCE, compState, DefaultVertexFormats.ITEM);    //TODO models
 		return new PerspectiveMapWrapper(new TRSRBakedModel(bakedModel, -0.03125F, 0.25F - size * 0.37F, -0.03125F + size * scale, size * 1.4F), state);
 	}
 
@@ -101,13 +103,14 @@ public class ModelButterflyItem extends BlankModel {
 
 	private class ButterflyItemOverrideList extends ItemOverrideList {
 		public ButterflyItemOverrideList() {
-			super(Collections.emptyList());
+			super();
 		}
 
 		@Override
-		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
-			IAlleleButterflySpecies species = Genome.getAllele(stack, EnumButterflyChromosome.SPECIES, true, IAlleleButterflySpecies.class);
-			IAlleleFloat size = Genome.getAllele(stack, EnumButterflyChromosome.SIZE, true, IAlleleFloat.class);
+		public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
+			IOrganism<IButterfly> organism = GeneticHelper.getOrganism(stack);
+			IAlleleButterflySpecies species = organism.getAllele(ButterflyChromosomes.SPECIES, true);
+			IAlleleValue<Float> size = organism.getAllele(ButterflyChromosomes.SIZE, true);
 			Preconditions.checkNotNull(species);
 			Preconditions.checkNotNull(size);
 			IBakedModel bakedModel = cache.getIfPresent(species);

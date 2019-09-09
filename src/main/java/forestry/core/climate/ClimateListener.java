@@ -3,15 +3,16 @@ package forestry.core.climate;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import forestry.api.climate.ClimateManager;
 import forestry.api.climate.IClimateListener;
@@ -40,9 +41,9 @@ public class ClimateListener implements IClimateListener {
 	protected BlockPos pos;
 	private IClimateState cachedState = AbsentClimateState.INSTANCE;
 	private IClimateState cachedClientState = AbsentClimateState.INSTANCE;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private TickHelper tickHelper;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected boolean needsClimateUpdate;
 	//The total world time at the moment the cached state has been updated
 	private long cacheTime = 0;
@@ -50,13 +51,13 @@ public class ClimateListener implements IClimateListener {
 
 	public ClimateListener(Object locationProvider) {
 		this.locationProvider = locationProvider;
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+		if (FMLEnvironment.dist == Dist.CLIENT) {
 			tickHelper = new TickHelper();
 			needsClimateUpdate = true;
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void updateClientSide(boolean spawnParticles) {
 		if (spawnParticles) {
@@ -79,7 +80,7 @@ public class ClimateListener implements IClimateListener {
 
 	private void updateState(boolean syncToClient) {
 		IWorldClimateHolder climateHolder = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
-		long totalTime = getWorldObj().getTotalWorldTime();
+		long totalTime = getWorldObj().getGameTime();
 		if (cacheTime + SERVER_UPDATE > totalTime && climateHolder.getLastUpdate(getCoordinates()) == lastUpdate) {
 			return;
 		}
@@ -158,7 +159,7 @@ public class ClimateListener implements IClimateListener {
 			humidity = climateState.getHumidity();
 		} else {
 			Biome biome = getBiome();
-			humidity = biome.getRainfall();
+			humidity = biome.getDownfall();
 		}
 		return humidity;
 	}
@@ -168,7 +169,7 @@ public class ClimateListener implements IClimateListener {
 		return ClimateStateHelper.of(getExactTemperature(), getExactHumidity());
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void setClimateState(IClimateState climateState) {
 		this.cachedState = climateState;
@@ -191,7 +192,7 @@ public class ClimateListener implements IClimateListener {
 	}
 
 	@Override
-	public void syncToClient(EntityPlayerMP player) {
+	public void syncToClient(ServerPlayerEntity player) {
 		World worldObj = getWorldObj();
 		if (!worldObj.isRemote) {
 			IClimateState climateState = getState(true, false);

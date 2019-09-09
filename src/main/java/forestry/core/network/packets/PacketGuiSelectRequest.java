@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.network.ForestryPacket;
@@ -42,7 +42,7 @@ public class PacketGuiSelectRequest extends ForestryPacket implements IForestryP
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			int primary = data.readVarInt();
 			int secondary = data.readVarInt();
 

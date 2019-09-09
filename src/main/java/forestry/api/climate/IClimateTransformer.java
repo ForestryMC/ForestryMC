@@ -9,7 +9,7 @@ import forestry.api.core.ILocatable;
 
 /**
  * A transformer modifies the climate in a specific area.
- * To get the climate at a specific position use {@link IWorldClimateHolder#getClimate(long)}.
+ * To getComb the climate at a specific position use {@link IWorldClimateHolder#getClimate(long)}.
  * {@link IClimateTransformer} have to be registered with {@link IWorldClimateHolder#updateTransformer(IClimateTransformer)}
  * and {@link IWorldClimateHolder#removeTransformer(IClimateTransformer)} has to be called after the block that contains
  * the transformer gets harvested / replaced.

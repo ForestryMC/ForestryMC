@@ -3,62 +3,66 @@ package forestry.apiculture.items;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.apiculture.IHiveTile;
-import forestry.api.core.Tabs;
+import forestry.api.apiculture.hives.IHiveTile;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileUtil;
 
 public class ItemSmoker extends ItemForestry {
 	public ItemSmoker() {
-		super(Tabs.tabApiculture);
-		setMaxStackSize(1);
+		super((new Item.Properties())
+			.maxStackSize(1)
+			.group(ItemGroups.tabApiculture));
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (worldIn.isRemote && isSelected && worldIn.rand.nextInt(40) == 0) {
 			addSmoke(stack, worldIn, entityIn, 1);
 		}
 	}
 
 	@Override
-	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+	public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
 		super.onUsingTick(stack, player, count);
 		World world = player.world;
 		addSmoke(stack, world, player, (count % 5) + 1);
 	}
 
-	private static EnumHandSide getHandSide(ItemStack stack, Entity entity) {
-		if (entity instanceof EntityLivingBase) {
-			EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
-			EnumHand activeHand = entityLivingBase.getActiveHand();
-			EnumHandSide handSide = entityLivingBase.getPrimaryHand();
-			if (activeHand == EnumHand.OFF_HAND) {
+	private static HandSide getHandSide(ItemStack stack, Entity entity) {
+		if (entity instanceof LivingEntity) {
+			LivingEntity LivingEntity = (LivingEntity) entity;
+			Hand activeHand = LivingEntity.getActiveHand();
+			HandSide handSide = LivingEntity.getPrimaryHand();
+			if (activeHand == Hand.OFF_HAND) {
 				// TODO: use EnumHandSide.opposite() when it's no longer client-only
-				handSide = handSide == EnumHandSide.LEFT ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
+				handSide = handSide == HandSide.LEFT ? HandSide.RIGHT : HandSide.LEFT;
 			}
 			return handSide;
 		}
-		return EnumHandSide.RIGHT;
+		return HandSide.RIGHT;
 	}
 
 	private static void addSmoke(ItemStack stack, World world, Entity entity, int distance) {
@@ -66,10 +70,10 @@ public class ItemSmoker extends ItemForestry {
 			return;
 		}
 		Vec3d look = entity.getLookVec();
-		EnumHandSide handSide = getHandSide(stack, entity);
+		HandSide handSide = getHandSide(stack, entity);
 
 		Vec3d handOffset;
-		if (handSide == EnumHandSide.RIGHT) {
+		if (handSide == HandSide.RIGHT) {
 			handOffset = look.crossProduct(new Vec3d(0, 1, 0));
 		} else {
 			handOffset = look.crossProduct(new Vec3d(0, -1, 0));
@@ -88,37 +92,33 @@ public class ItemSmoker extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		playerIn.setActiveHand(handIn);
 		ItemStack itemStack = playerIn.getHeldItem(handIn);
-		return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
+		return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		TileUtil.actOnTile(world, pos, IHiveTile.class, IHiveTile::calmBees);
-		return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
+	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+		TileUtil.actOnTile(context.getWorld(), context.getPos(), IHiveTile.class, IHiveTile::calmBees);
+		return super.onItemUseFirst(stack, context);
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 32;
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 		return new ICapabilityProvider() {
-			@Override
-			public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-				return capability == ApicultureCapabilities.ARMOR_APIARIST;
-			}
 
 			@Override
-			public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return capability.getDefaultInstance();
+					return LazyOptional.of(capability::getDefaultInstance);
 				}
-				return null;
+				return LazyOptional.empty();
 			}
 		};
 	}

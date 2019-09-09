@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
@@ -43,7 +44,7 @@ public abstract class AlleleEffectThrottled extends AlleleEffect {
 	}
 
 	@Override
-	public final IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public final IEffectData doEffect(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (isThrottled(storedData, housing)) {
 			return storedData;
 		}
@@ -69,6 +70,6 @@ public abstract class AlleleEffectThrottled extends AlleleEffect {
 		return false;
 	}
 
-	abstract IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing);
+	abstract IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing);
 
 }

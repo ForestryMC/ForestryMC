@@ -13,12 +13,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IFruitFamily;
 
 /**
@@ -36,7 +43,7 @@ public interface IFruitProvider {
 	 * @param genome       The genome of the tree of the pod / leaves block.
 	 * @param ripeningTime The ripening time of the leaves / pod block. From 0 to {@link #getRipeningPeriod()}.
 	 */
-	int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime);
+	int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * return the color to use for decorative leaves. Usually the ripe color.
@@ -51,21 +58,22 @@ public interface IFruitProvider {
 	 * @param pos    The position of the pod / leaves block.
 	 * @return True if this provider provides a fruit leaf for the given genome at the given position.
 	 */
-	boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos);
+	boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos);
 
 	/**
 	 * The chance that this leaves contains fruits or the chance that a pod block spawns.
 	 *
 	 * @param genome The genome of the tree of the pod / leaves block.
+	 * @param world
 	 * @return The chance that this leaves contains fruits or the chance that a pod block spawns.
 	 */
-	default float getFruitChance(ITreeGenome genome, World world, BlockPos pos) {
+	default float getFruitChance(IGenome genome, IWorld world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
 		if (treeRoot == null) {
 			return 0.0F;
 		}
 		float yieldModifier = treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1.0F);
-		return genome.getYield() * yieldModifier * 2.5F;
+		return genome.getActiveValue(TreeChromosomes.YIELD) * yieldModifier * 2.5F;
 	}
 
 	/**
@@ -93,12 +101,12 @@ public interface IFruitProvider {
 	 * @param genome       The genome of the tree of the leaves / pod.
 	 * @param ripeningTime The repining time of the block. From 0 to {@link #getRipeningPeriod()}.
 	 */
-	NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime);
+	NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
-	String getDescription();
+	ITextComponent getDescription();
 
 	/**
 	 * @return The location of the pod model in the "modid:pods/" folder.
@@ -118,7 +126,7 @@ public interface IFruitProvider {
 	 * @return ResourceLocation of the texture to overlay on the leaf block.
 	 */
 	@Nullable
-	ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime);
+	ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * return the ResourceLocation to display on decorative leaves
@@ -133,16 +141,17 @@ public interface IFruitProvider {
 
 	/**
 	 * Tries to spawn a fruit block at the potential position when the tree generates.
-	 * Spawning a fruit has a random chance of success based on {@link ITreeGenome#getSappiness()}
+	 * Spawning a fruit has a random chance of success based on {@link TreeChromosomes#SAPPINESS}
 	 *
 	 * @return true if a fruit block was spawned, false otherwise.
 	 */
-	boolean trySpawnFruitBlock(ITreeGenome genome, World world, Random rand, BlockPos pos);
+	boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos);
 
 	/**
 	 * Can be used to register the sprite/s that can be returned with
-	 * {@link #getSprite(ITreeGenome, IBlockAccess, BlockPos, int)}.
+	 * {@link #getSprite(IGenome, IBlockReader, BlockPos, int)}.
+	 * @param event
 	 */
-	@SideOnly(Side.CLIENT)
-	void registerSprites();
+	@OnlyIn(Dist.CLIENT)
+	void registerSprites(TextureStitchEvent.Pre event);
 }

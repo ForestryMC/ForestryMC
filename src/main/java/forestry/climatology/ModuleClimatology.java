@@ -14,35 +14,32 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
 
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
 
-import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.modules.ForestryModule;
-import forestry.api.recipes.RecipeManagers;
 import forestry.climatology.blocks.BlockRegistryClimatology;
+import forestry.climatology.gui.ClimatologyContainerTypes;
+import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.items.ItemRegistryClimatology;
 import forestry.climatology.network.PacketRegistryClimatology;
 import forestry.climatology.proxy.ProxyClimatology;
-import forestry.climatology.tiles.TileHabitatFormer;
+import forestry.climatology.proxy.ProxyClimatologyClient;
+import forestry.climatology.tiles.TileRegistryClimatology;
 import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
-import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.climate.FakeClimateListener;
 import forestry.core.climate.FakeClimateTransformer;
 import forestry.core.config.Constants;
-import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -51,13 +48,20 @@ import forestry.modules.ModuleHelper;
 public class ModuleClimatology extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.climatology.proxy.ProxyClimatologyClient", serverSide = "forestry.climatology.proxy.ProxyClimatology")
 	public static ProxyClimatology proxy;
 
 	@Nullable
 	private static BlockRegistryClimatology blocks;
 	@Nullable
 	private static ItemRegistryClimatology items;
+	@Nullable
+	private static ClimatologyContainerTypes containerTypes;
+	@Nullable
+	private static TileRegistryClimatology tiles;
+
+	public ModuleClimatology() {
+		proxy = DistExecutor.runForDist(() -> () -> new ProxyClimatologyClient(), () -> () -> new ProxyClimatology());
+	}
 
 	public static BlockRegistryClimatology getBlocks() {
 		Preconditions.checkNotNull(blocks);
@@ -69,10 +73,39 @@ public class ModuleClimatology extends BlankForestryModule {
 		return items;
 	}
 
+	public static ClimatologyContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
+	}
+
+	public static TileRegistryClimatology getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
+	}
+
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerBlocks() {
 		blocks = new BlockRegistryClimatology();
+	}
+
+	@Override
+	public void registerItems() {
 		items = new ItemRegistryClimatology();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new ClimatologyContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		ScreenManager.registerFactory(getContainerTypes().HABITAT_FORMER, GuiHabitatFormer::new);
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryClimatology();
 	}
 
 	@Override
@@ -85,43 +118,19 @@ public class ModuleClimatology extends BlankForestryModule {
 	}
 
 	@Override
-	public void doInit() {
-		TileUtil.registerTile(TileHabitatFormer.class, "habitat_former");
-	}
-
-	@Override
 	public void registerRecipes() {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		BlockRegistryClimatology blockRegistry = getBlocks();
 
-		RecipeUtil.addRecipe("habitat_former", new ItemStack(blockRegistry.habitatformer),
-			"GRG",
-			"TST",
-			"BCB",
-			'S', coreItems.sturdyCasing,
-			'G', OreDictUtil.BLOCK_GLASS,
-			'B', OreDictUtil.GEAR_BRONZE,
-			'R', OreDictUtil.DUST_REDSTONE,
-			'C', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC),
-			'T', coreItems.tubes.get(EnumElectronTube.IRON, 1));
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, getItems().habitatScreen.getItemStack(),
-				"IPI",
-				"IPI",
-				"GDG",
-				'G', OreDictUtil.GEAR_BRONZE,
-				'P', OreDictUtil.PANE_GLASS,
-				'I', OreDictUtil.INGOT_BRONZE,
-				'D', OreDictUtil.GEM_DIAMOND);
-		} else {
-			RecipeUtil.addRecipe("habitat_screen", getItems().habitatScreen.getItemStack(),
-				"IPI",
-				"IPI",
-				"GDG",
-				'G', OreDictUtil.GEAR_BRONZE,
-				'P', OreDictUtil.PANE_GLASS,
-				'I', OreDictUtil.INGOT_BRONZE,
-				'D', OreDictUtil.GEM_DIAMOND);
+			//			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, getItems().habitatScreen.getItemStack(),
+			//				"IPI",
+			//				"IPI",
+			//				"GDG",
+			//				'G', OreDictUtil.GEAR_BRONZE,
+			//				'P', OreDictUtil.PANE_GLASS,
+			//				'I', OreDictUtil.INGOT_BRONZE,
+			//				'D', OreDictUtil.GEM_DIAMOND);	//TODO fluids
 		}
 	}
 

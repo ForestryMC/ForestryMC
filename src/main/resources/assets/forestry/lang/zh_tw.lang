@@ -1439,7 +1439,7 @@ for.gui.habitat_former.climate.humidity=濕度
 for.gui.habitat_former.climate.habitats=棲息地
 for.gui.habitat_former.climate.selection=選擇
 for.gui.habitat_former.climate.range=範圍
-for.gui.habitat_former.climate.range.blocks=%s格方塊
+for.gui.habitat_former.climate.range.block=%s格方塊
 for.gui.habitat_former.climate.circle.enabled=循環模式啟用
 for.gui.habitat_former.climate.circle.disabled=循環模式停用
 for.gui.habitat_former.climate.preview.enabled=預覽模式啟用
@@ -1588,7 +1588,7 @@ item.for.catalogue.tooltip=列出所有可用的貿易。
 # PIPES
 ####################
 
-item.PipeItemsPropolis.name=養蜂家管線
+item.PipeitemPropolis.name=養蜂家管線
 
 tile.for.genetic_filter.name=基因過濾器
 tile.for.genetic_filter.0.name=基因過濾器
@@ -1787,12 +1787,12 @@ for.config.structures=建築物
 for.config.structures.disabled=停用建築物
 for.config.structures.disabled.comment=列出特定的建築以停用它們。
 
-for.config.farm.fertilizers.items=加入肥料到林業模組。每個條目必須看起來像這樣 'modID:itemName:MetaData;fertilizerValue'。你需要把每一個條目分開到分別的一行。你無法移除自動產生的條目，你只能將它們的值設成0來停用它們。
+for.config.farm.fertilizers.item=加入肥料到林業模組。每個條目必須看起來像這樣 'modID:itemName:MetaData;fertilizerValue'。你需要把每一個條目分開到分別的一行。你無法移除自動產生的條目，你只能將它們的值設成0來停用它們。
 
 for.config.fluids=流體
 for.config.fluids.enable.format=啟用%s流體。
-for.config.fluid.blocks=流體方塊
-for.config.fluid.blocks.enable.format=啟用世界中的%s液體方塊。
+for.config.fluid.block=流體方塊
+for.config.fluid.block.enable.format=啟用世界中的%s液體方塊。
 
 for.config.debug.enabled=偵錯模式
 for.config.debug.enabled.comment=啟用偵錯模式(只對開發者有用)。
@@ -1850,8 +1850,8 @@ for.config.butterfly.alleles.loot=從繭掉落的物品。格式為 'modid:name:
 for.config.backpacks.item.stacks.format=在這裡以 'modid:name:meta' 的格式為%s的背包添加物品堆疊。通配 metadata 的格式為 'modid:name'。
 for.config.backpacks.ore.dict.format=在這裡以 'oreDictName' 的格式為%s的背包添加礦物字典名稱。也可以使用正規表達式。
 
-for.config.crates.items.accepted.comment=已加入的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
-for.config.crates.items.rejected.comment=已黑名單的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
+for.config.crates.item.accepted.comment=已加入的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
+for.config.crates.item.rejected.comment=已黑名單的物品。格式為 'modid:meta:name'。通配 metadata 的格式為 'modid:name'。
 for.config.crates.oredict.accepted.comment=已加入的礦物字典。格式為 'oreDictName'。也可以使用正規表達式。更多資訊請見背包設定。
 for.config.crates.oredict.rejected.comment=已黑名單的礦物字典。格式為 'oreDictName'。也可以使用正規表達式。更多資訊請見背包設定。
 

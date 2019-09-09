@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "forestry:items/doors/willow"
+    "layer0": "forestry:item/doors/willow"
   },
   "display": {
     "thirdperson": {

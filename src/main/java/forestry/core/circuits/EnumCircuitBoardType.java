@@ -12,8 +12,8 @@ package forestry.core.circuits;
 
 import java.util.Locale;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.render.ColourProperties;
 
@@ -24,8 +24,10 @@ public enum EnumCircuitBoardType {
 	INTRICATE(4);
 
 	private final int sockets;
+	private final String name;
 
 	EnumCircuitBoardType(int sockets) {
+		this.name = toString().toLowerCase(Locale.ENGLISH);
 		this.sockets = sockets;
 	}
 
@@ -33,12 +35,16 @@ public enum EnumCircuitBoardType {
 		return sockets;
 	}
 
-	@SideOnly(Side.CLIENT)
+	public String getName() {
+		return name;
+	}
+
+	@OnlyIn(Dist.CLIENT)
 	public int getPrimaryColor() {
 		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".primary");
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getSecondaryColor() {
 		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".secondary");
 	}

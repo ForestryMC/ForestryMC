@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import com.mojang.authlib.GameProfile;
 
@@ -53,10 +53,10 @@ public class MailAddress implements INbtWritable, IMailAddress {
 		this.gameProfile = new GameProfile(null, name);
 	}
 
-	public MailAddress(NBTTagCompound nbt) {
+	public MailAddress(CompoundNBT nbt) {
 		EnumAddressee type = null;
 		GameProfile gameProfile = invalidGameProfile;
-		if (nbt.hasKey("TP")) {
+		if (nbt.contains("TP")) {
 			String typeName = nbt.getString("TP");
 			type = EnumAddressee.fromString(typeName);
 		}
@@ -64,9 +64,9 @@ public class MailAddress implements INbtWritable, IMailAddress {
 		if (type == null) {
 			type = EnumAddressee.PLAYER;
 			gameProfile = invalidGameProfile;
-		} else if (nbt.hasKey("profile")) {
-			NBTTagCompound profileTag = nbt.getCompoundTag("profile");
-			gameProfile = PlayerUtil.readGameProfileFromNBT(profileTag);
+		} else if (nbt.contains("profile")) {
+			CompoundNBT profileTag = nbt.getCompound("profile");
+			gameProfile = PlayerUtil.readGameProfile(profileTag);
 			if (gameProfile == null) {
 				gameProfile = invalidGameProfile;
 			}
@@ -125,14 +125,14 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setString("TP", type.toString());
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT.putString("TP", type.toString());
 
 		if (gameProfile != invalidGameProfile) {
-			NBTTagCompound profileNbt = new NBTTagCompound();
+			CompoundNBT profileNbt = new CompoundNBT();
 			PlayerUtil.writeGameProfile(profileNbt, gameProfile);
-			nbttagcompound.setTag("profile", profileNbt);
+			compoundNBT.put("profile", profileNbt);
 		}
-		return nbttagcompound;
+		return compoundNBT;
 	}
 }

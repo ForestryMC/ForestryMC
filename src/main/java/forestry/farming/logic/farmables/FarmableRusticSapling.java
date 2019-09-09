@@ -1,8 +1,8 @@
 package forestry.farming.logic.farmables;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -28,8 +28,8 @@ public class FarmableRusticSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		IBlockState blockState = germlingBlock.getStateFromMeta(germling.getItemDamage());    //TODO - stop using meta here
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+		BlockState blockState = germlingBlock.getDefaultState();//TODO flatten germlingBlock.getStateFromMeta(germling.getItemDamage());    //TODO - stop using meta here
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -39,14 +39,14 @@ public class FarmableRusticSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
 		return blockState.getBlock() == germlingBlock;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, pos)) {
+		if (false) {//TODO tags !block.isWood(world, pos)) {
 			return null;
 		}
 

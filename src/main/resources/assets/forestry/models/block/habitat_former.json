@@ -1,8 +1,8 @@
 {
 	"textures": {
-		"particle": "forestry:blocks/habitat_former/particle",
-		"base": "forestry:blocks/habitat_former/base",
-		"sides": "forestry:blocks/habitat_former/base_sides"
+      "particle": "forestry:block/habitat_former/particle",
+      "base": "forestry:block/habitat_former/base",
+      "sides": "forestry:block/habitat_former/base_sides"
 	},
 	"elements": [ 	 
 		{

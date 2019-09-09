@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.climatology.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
@@ -42,7 +44,7 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> implements IScrollable {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png");
 	//Drawables
@@ -54,7 +56,6 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 
 	private final TileHabitatFormer tile;
 	private final IClimateTransformer transformer;
-	private final ElementGroup selectionPage;
 	private final ScrollBarElement rangeBar;
 	//private final ElementGroup rangePage;
 	//private final ButtonElement selectionButton;
@@ -62,10 +63,10 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	private TextEditElement temperatureEdit;
 	private TextEditElement humidityEdit;
 
-	public GuiHabitatFormer(EntityPlayer player, TileHabitatFormer tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", new ContainerHabitatFormer(player.inventory, tile), tile);
+	public GuiHabitatFormer(ContainerHabitatFormer container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", container, inv, container.getTile());
+		this.tile = container.getTile();
 		this.transformer = tile.getTransformer();
-		this.tile = tile;
 		this.ySize = 233;
 
 		widgetManager.add(new TankWidget(widgetManager, 152, 17, 0));
@@ -76,12 +77,12 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		rangeBar = window.add(new ScrollBarElement(10, 17, 12, 58, SCROLLBAR_SLIDER))
 			.setParameters(this, 1, 16, 1);
 		rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
-			tooltip.add(Translator.translateToLocal("for.gui.habitat_former.climate.range"));
-			tooltip.add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range"));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).applyTextStyle(TextFormatting.GRAY));
 		});
 		window.add(new CircleButton(30, 37));
 
-		selectionPage = window.pane(8, 86, 164, 56);
+		ElementGroup selectionPage = window.pane(8, 86, 164, 56);
 		selectionPage.add(new SpeciesSelectionElement(135, 22, transformer));
 		selectionPage.label(Translator.translateToLocal("for.gui.habitat_former.climate.habitats"), GuiElementAlignment.TOP_CENTER).setLocation(17, 3);
 		selectionPage.add(new HabitatSelectionElement(67, 12, transformer));
@@ -96,8 +97,8 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
+	public void tick() {
+		super.tick();
 		IClimateState target = transformer.getTarget();
 		if (humidityEdit != null && !window.isFocused(humidityEdit)) {
 			humidityEdit.setValue(Integer.toString((int) (MathHelper.clamp(target.getHumidity(), 0.0F, 2.0F) * 100)));
@@ -122,7 +123,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	private void drawCenteredString(String text, int x, int y) {
-		fontRenderer.drawStringWithShadow(text, guiLeft + (float) (x - (double) fontRenderer.getStringWidth(text) / 2), (float) guiTop + y, 16777215);
+		minecraft.fontRenderer.drawStringWithShadow(text, guiLeft + (float) (x - (double) minecraft.fontRenderer.getStringWidth(text) / 2), (float) guiTop + y, 16777215);
 	}
 
 	public void setClimate(ClimateType type, String text) {
@@ -177,7 +178,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 
 		private CircleButton(int xPos, int yPos) {
 			super(xPos, yPos, 18, 18, CIRCLE_DISABLED_BUTTON, CIRCLE_ENABLED_BUTTON, button -> ((CircleButton) button).onButtonPressed());
-			addTooltip((tooltip, element, mouseX, mouseY) -> tooltip.add(Translator.translateToLocal("for.gui.habitat_former.climate.circle." + (transformer.isCircular() ? "enabled" : "disabled"))));
+			addTooltip((tooltip, element, mouseX, mouseY) -> tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.circle." + (transformer.isCircular() ? "enabled" : "disabled"))));
 		}
 
 		private void onButtonPressed() {

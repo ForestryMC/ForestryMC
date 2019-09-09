@@ -10,23 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Locale;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleRegistry;
-import forestry.api.genetics.IClassification;
-import forestry.api.genetics.IClassification.EnumClassLevel;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
-import forestry.core.genetics.IBranchDefinition;
-import forestry.core.genetics.alleles.AlleleHelper;
-import forestry.core.genetics.alleles.EnumAllele;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.classification.IBranchDefinition;
+import genetics.api.classification.IClassification;
+import genetics.api.classification.IClassification.EnumClassLevel;
+import genetics.api.classification.IClassificationRegistry;
 
 public enum TreeBranchDefinition implements IBranchDefinition {
 	ACACIA,
@@ -78,25 +70,9 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		branch = new BranchTrees(name, scientific);
 	}
 
-	@Nullable
-	private static IAllele[] defaultTemplate;
-
 	@Override
-	public IAllele[] getTemplate() {
-		if (defaultTemplate == null) {
-			defaultTemplate = new IAllele[EnumTreeChromosome.values().length];
-
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.FRUITS, AlleleFruits.fruitNone);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWER);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWEST);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.EFFECT, AlleleLeafEffects.leavesNone);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.AVERAGE);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.GIRTH, 1);
-			AlleleHelper.getInstance().set(defaultTemplate, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.FALSE);
-		}
-		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
+	public IAlleleTemplate getTemplate() {
+		return TreeHelper.getKaryotype().getDefaultTemplate();
 	}
 
 	@Override
@@ -104,69 +80,66 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		return branch;
 	}
 
-	public static void registerAlleles() {
-
-		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
-
-		IClassification plantae = alleleRegistry.getClassification("kingdom.plantae");
+	public static void registerBranches(IClassificationRegistry classRegistry) {
+		IClassification plantae = classRegistry.getClassification("kingdom.plantae");
 
 		plantae.addMemberGroup(
-			alleleRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "angiosperms", "Angiosperms",
-				alleleRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "asterids", "Asterids",
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "ericales", "Ericales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "ebenaceae", "Ebenaceae",
+			classRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "angiosperms", "Angiosperms",
+				classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "asterids", "Asterids",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "ericales", "Ericales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "ebenaceae", "Ebenaceae",
 							EBONY.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "fabaceae", "Fabaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "fabaceae", "Fabaceae",
 							ACACIA.getBranch(),
 							DALBERGIA.getBranch(),
 							MILLETTIA.getBranch(),
 							PTEROCARPUS.getBranch()
 						)
 					),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "lamiales", "Lamiales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "bignoniaceae", "Bignoniaceae",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "lamiales", "Lamiales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "bignoniaceae", "Bignoniaceae",
 							TABEBUIA.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lamiaceae", "Lamiaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lamiaceae", "Lamiaceae",
 							TECTONA.getBranch()
 						)
 					)
 				),
-				alleleRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "commelinids", "Commelinids",
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "arecales", "Arecales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "arecaceae", "Arecaceae",
+				classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "commelinids", "Commelinids",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "arecales", "Arecales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "arecaceae", "Arecaceae",
 							PHOENIX.getBranch()
 						)
 					)
 				),
-				alleleRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "rosids", "Rosids",
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "brassicales", "Brassicales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "caricaceae", "Caricaceae")
+				classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "rosids", "Rosids",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "brassicales", "Brassicales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "caricaceae", "Caricaceae")
 					),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "fabales", "Fabales"),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "fagales", "Fagales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "betulaceae", "Betulaceae",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "fabales", "Fabales"),
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "fagales", "Fagales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "betulaceae", "Betulaceae",
 							BETULA.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "fagaceae", "Fagaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "fagaceae", "Fagaceae",
 							CASTANEA.getBranch(),
 							QUERCUS.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "juglandaceae", "Juglandaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "juglandaceae", "Juglandaceae",
 							JUGLANS.getBranch()
 						)
 					),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "rosales", "Rosales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "rosaceae", "Rosaceae",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "rosales", "Rosales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "rosaceae", "Rosaceae",
 							PRUNUS.getBranch()
 						)
 					),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "malvales", "Malvales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "dipterocarpaceae", "Dipterocarpaceae",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "malvales", "Malvales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "dipterocarpaceae", "Dipterocarpaceae",
 							MAHOGANY.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "malvaceae", "Malvaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "malvaceae", "Malvaceae",
 							ADANSONIA.getBranch(),
 							CEIBA.getBranch(),
 							OCHROMA.getBranch(),
@@ -174,23 +147,23 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 							TILIA.getBranch()
 						)
 					),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "laurales", "Laurales"),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "malpighiales", "Malpighiales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "salicaceae", "Salicaceae",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "laurales", "Laurales"),
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "malpighiales", "Malpighiales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "salicaceae", "Salicaceae",
 							CHLOROCARDIUM.getBranch(),
 							POPULUS.getBranch(),
 							SALIX.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lauraceae", "Lauraceae")
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lauraceae", "Lauraceae")
 					),
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "sapindales", "Sapindales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "rutaceae", "Rutaceae",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "sapindales", "Sapindales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "rutaceae", "Rutaceae",
 							CITRUS.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "sapindaceae", "Sapindaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "sapindaceae", "Sapindaceae",
 							ACER.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "anacardiaceae", "Anacardiaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "anacardiaceae", "Anacardiaceae",
 							ASTRONIUM.getBranch()
 						)
 					)
@@ -199,26 +172,26 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 		);
 
 		plantae.addMemberGroup(
-			alleleRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "pinophyta", "Pinophyta",
-				alleleRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "pinopsida", "Pinopsida",
-					alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "pinales", "Pinales",
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "pinaceae", "Pinaceae",
+			classRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "pinophyta", "Pinophyta",
+				classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "pinopsida", "Pinopsida",
+					classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "pinales", "Pinales",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "pinaceae", "Pinaceae",
 							PICEA.getBranch(),
 							PINUS.getBranch(),
 							LARIX.getBranch()
 						),
-						alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "cupressaceae", "Cupressaceae",
+						classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "cupressaceae", "Cupressaceae",
 							SEQUOIA.getBranch(),
 							SEQUOIADENDRON.getBranch()
 						)
 					)
 				),
-				alleleRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "magnoliopsida", "Magnoliopsida")
+				classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "magnoliopsida", "Magnoliopsida")
 			)
 		);
 
 		plantae.addMemberGroup(
-			alleleRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "magnoliophyta", "Magnoliophyta")
+			classRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "magnoliophyta", "Magnoliophyta")
 		);
 	}
 }

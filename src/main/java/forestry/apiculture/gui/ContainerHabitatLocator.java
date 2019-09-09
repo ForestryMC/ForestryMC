@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Hand;
 
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
@@ -19,15 +23,22 @@ import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
-	public ContainerHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator inventory) {
-		super(inventory, player.inventory, 8, 102);
+	public static ContainerHabitatLocator fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+		PlayerEntity player = playerInv.player;
+		ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getHeldItem(hand));
+		return new ContainerHabitatLocator(windowId, player, inv);
+	}
+
+	public ContainerHabitatLocator(int windowId, PlayerEntity player, ItemInventoryHabitatLocator inventory) {
+		super(windowId, inventory, player.inventory, 8, 102, ModuleApiculture.getContainerTypes().HABITAT_LOCATOR);
 
 		// Energy
-		this.addSlotToContainer(new SlotFiltered(inventory, 2, 152, 8));
+		this.addSlot(new SlotFiltered(inventory, 2, 152, 8));
 
 		// Bee to analyze
-		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 32));
+		this.addSlot(new SlotFiltered(inventory, 0, 152, 32));
 		// Analyzed bee
-		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 75));
+		this.addSlot(new SlotOutput(inventory, 1, 152, 75));
 	}
 }

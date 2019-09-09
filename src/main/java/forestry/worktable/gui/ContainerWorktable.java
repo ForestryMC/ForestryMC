@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.worktable.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.IContainerCrafting;
@@ -26,9 +27,11 @@ import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.network.packets.PacketGuiSelectRequest;
+import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.worktable.inventory.InventoryCraftingForestry;
+import forestry.worktable.ModuleWorktable;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.inventory.InventoryWorktable;
 import forestry.worktable.network.packets.PacketWorktableMemoryUpdate;
 import forestry.worktable.network.packets.PacketWorktableRecipeRequest;
@@ -38,12 +41,17 @@ import forestry.worktable.recipes.RecipeMemory;
 import forestry.worktable.tiles.TileWorktable;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
-	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry(this);
+	private final CraftingInventoryForestry craftMatrix = new CraftingInventoryForestry(this);
 	private long lastMemoryUpdate;
 	private boolean craftMatrixChanged = false;
 
-	public ContainerWorktable(EntityPlayer player, TileWorktable tile) {
-		super(tile, player.inventory, 8, 136);
+	public static ContainerWorktable fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		TileWorktable worktable = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileWorktable.class);
+		return new ContainerWorktable(windowId, playerInv, worktable);    //TODO what to do if Worktable null
+	}
+
+	public ContainerWorktable(int windowId, PlayerInventory inv, TileWorktable tile) {
+		super(windowId, ModuleWorktable.getContainerTypes().WORKTABLE, inv, tile, 8, 136);
 
 		IInventory craftingDisplay = tile.getCraftingDisplay();
 		IInventory internalInventory = tile.getInternalInventory();
@@ -51,19 +59,19 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(internalInventory, InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+				addSlot(new Slot(internalInventory, InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
 			}
 		}
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k1 = 0; k1 < 3; k1++) {
-				addSlotToContainer(new SlotCraftMatrix(this, craftingDisplay, k1 + l * 3, 11 + k1 * 18, 20 + l * 18));
+				addSlot(new SlotCraftMatrix(this, craftingDisplay, k1 + l * 3, 11 + k1 * 18, 20 + l * 18));
 			}
 		}
 
 		// CraftResult display
-		addSlotToContainer(new SlotCrafter(player, craftMatrix, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
+		addSlot(new SlotCrafter(inv.player, craftMatrix, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
 
 		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
 			onCraftMatrixChanged(tile.getCraftingDisplay(), i);
@@ -116,18 +124,18 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	/* Gui Selection Handling */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static void clearRecipe() {
 		sendRecipeClick(-1, 0);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
 		NetworkUtil.sendToServer(new PacketGuiSelectRequest(mouseButton, recipeIndex));
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 		switch (primary) {
 			case -1: { // clicked clear button
 				tile.clearCraftMatrix();
@@ -142,7 +150,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 				break;
 			}
 			case 1: { // right clicked a memorized recipe
-				long time = player.world.getTotalWorldTime();
+				long time = player.world.getGameTime();
 				RecipeMemory memory = tile.getMemory();
 				memory.toggleLock(time, secondary);
 				break;
@@ -160,7 +168,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void sendWorktableRecipeRequest(MemorizedRecipe recipe) {
 		NetworkUtil.sendToServer(new PacketWorktableRecipeRequest(tile, recipe));
 	}

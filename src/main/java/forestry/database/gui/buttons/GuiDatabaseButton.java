@@ -9,8 +9,8 @@ public class GuiDatabaseButton<V> extends GuiBetterButton {
 	public final GuiDatabase gui;
 	public V value;
 
-	public GuiDatabaseButton(int id, int x, int y, V value, GuiDatabase gui, DatabaseButton type) {
-		super(id, x, y, type.getDefaultTexture());
+	public GuiDatabaseButton(int x, int y, V value, GuiDatabase gui, DatabaseButton type, IPressable handler) {
+		super(x, y, type.getDefaultTexture(), handler);
 		this.type = type;
 		this.gui = gui;
 		setValue(value);

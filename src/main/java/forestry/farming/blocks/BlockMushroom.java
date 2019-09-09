@@ -10,42 +10,49 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockDirt;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.BushBlock;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenBigMushroom;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.storage.loot.LootContext;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.config.Constants;
 
-public class BlockMushroom extends BlockBush implements IItemModelRegister, IGrowable {
+//import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
-	public static final PropertyEnum<MushroomType> VARIANT = PropertyEnum.create("mushroom", MushroomType.class);
-	public static final PropertyBool MATURE = PropertyBool.create("mature");
+//TODO - figure out why this class exists
+public class BlockMushroom extends BushBlock implements IGrowable {
+
+	public static final EnumProperty<MushroomType> VARIANT = EnumProperty.create("mushroom", MushroomType.class);
+	public static final BooleanProperty MATURE = BooleanProperty.create("mature");
 
 	public enum MushroomType implements IStringSerializable {
 		BROWN {
@@ -69,128 +76,115 @@ public class BlockMushroom extends BlockBush implements IItemModelRegister, IGro
 		}
 	}
 
-	private final WorldGenerator[] generators;
+	private final Feature[] generators;
 
 	public BlockMushroom() {
-		setHardness(0.0f);
-		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(Blocks.BROWN_MUSHROOM_BLOCK), new WorldGenBigMushroom(Blocks.RED_MUSHROOM_BLOCK)};
-		setCreativeTab(null);
-		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, MushroomType.BROWN).withProperty(MATURE, false));
-		setTickRandomly(true);
-		setSoundType(SoundType.PLANT);
+		super(Block.Properties.create(Material.PLANTS)
+			.hardnessAndResistance(0.0f)
+			.tickRandomly()
+			.sound(SoundType.PLANT));
+		this.generators = new Feature[]{Feature.HUGE_BROWN_MUSHROOM, Feature.HUGE_RED_MUSHROOM};
+		//		setCreativeTab(null); TODO - done in item
+		setDefaultState(this.getStateContainer().getBaseState().with(VARIANT, MushroomType.BROWN).with(MATURE, false));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, VARIANT, MATURE);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(VARIANT, MATURE);
+	}
+
+	//TODO - idk
+	//	@Override
+	//	protected BlockStateContainer createBlockState() {
+	//		return new BlockStateContainer(this, VARIANT, MATURE);
+	//	}
+
+	//TODO - right method to override?
+	@Override
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+		MushroomType type = state.get(VARIANT);
+		return Lists.newArrayList(type.getDrop());
+	}
+
+	//TODO now through isValidPosition?
+	//	@Override
+	//	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+	//		return super.canPlaceBlockAt(worldIn, pos) && this.isValidPosition(this.getDefaultState(), worldIn, pos);
+	//	}
+
+	@Override
+	protected boolean isValidGround(BlockState state, IBlockReader world, BlockPos pos) {
+		//		return state.isFullBlock();	//TODO VoxelShapes?
+		return false;
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(VARIANT).ordinal() | ((state.getValue(MATURE) ? 1 : 0) << 2);
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(VARIANT, MushroomType.values()[meta % 2]).withProperty(MATURE, (meta >> 2) == 1);
-	}
-
-	@Override
-	public boolean getTickRandomly() {
-		return true;
-	}
-
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		MushroomType type = state.getValue(VARIANT);
-		drops.add(type.getDrop());
-	}
-
-	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		return super.canPlaceBlockAt(worldIn, pos) && this.canBlockStay(worldIn, pos, this.getDefaultState());
-	}
-
-	@Override
-	protected boolean canSustainBush(IBlockState state) {
-		return state.isFullBlock();
-	}
-
-	@Override
-	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		if (pos.getY() >= 0 && pos.getY() < 256) {
-			IBlockState iblockstate = worldIn.getBlockState(pos.down());
-			return iblockstate.getBlock() == Blocks.MYCELIUM || (iblockstate.getBlock() == Blocks.DIRT && iblockstate.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.PODZOL || worldIn.getLight(pos) < 13 && iblockstate.getBlock().canSustainPlant(iblockstate, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this));
+			BlockState blockState = worldIn.getBlockState(pos.down());
+			Block block = blockState.getBlock();
+			return block == Blocks.MYCELIUM || block == Blocks.PODZOL || worldIn.getLight(pos) < 13 && block.canSustainPlant(blockState, worldIn, pos.down(), net.minecraft.util.Direction.UP, this);
 		} else {
 			return false;
 		}
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isRemote || rand.nextInt(2) != 0) {
 			return;
 		}
 
-		IBlockState blockState = world.getBlockState(pos);
-		if (!blockState.getValue(MATURE)) {
-			world.setBlockState(pos, blockState.withProperty(MATURE, true), Constants.FLAG_BLOCK_SYNC);
+		BlockState blockState = world.getBlockState(pos);
+		if (!blockState.get(MATURE)) {
+			world.setBlockState(pos, blockState.with(MATURE, true), Constants.FLAG_BLOCK_SYNC);
 		} else {
-			int lightValue1 = world.getLightFromNeighbors(pos.up());
+			//TODO probably not right
+			int lightValue1 = world.getLightFor(LightType.BLOCK, pos.up());
 			if (lightValue1 <= 7) {
-				generateGiantMushroom(world, pos, blockState, rand);
+				//TODO worldgen
+				//				generateGiantMushroom(world, pos, blockState, rand);
 			}
 		}
 	}
 
-	public void generateGiantMushroom(World world, BlockPos pos, IBlockState state, Random rand) {
-		MushroomType type = state.getValue(VARIANT);
+	public void generateGiantMushroom(IWorld world, ChunkGenerator<? extends GenerationSettings> gen, BlockPos pos, BlockState state, Random rand, IFeatureConfig config) {
+		MushroomType type = state.get(VARIANT);
 
-		world.setBlockToAir(pos);
-		if (!generators[type.ordinal()].generate(world, rand, pos)) {
-			world.setBlockState(pos, getStateFromMeta(type.ordinal()), 0);
+		world.removeBlock(pos, false);
+		if (!generators[type.ordinal()].place(world, gen, rand, pos, config)) {//TODO worldgen .generate(world, rand, pos)) {
+			world.setBlockState(pos, this.stateContainer.getBaseState().with(VARIANT, type), 0);
 		}
 	}
 
-	public void grow(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		this.generateGiantMushroom(worldIn, pos, state, rand);
+	public void grow(World worldIn, BlockPos pos, BlockState state, Random rand) {
+		//		this.generateGiantMushroom(worldIn, pos, state, rand);
+		//TODO worldgen
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, 0));
-		list.add(new ItemStack(this, 1, 1));
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "minecraft", "brown_mushroom");
-		manager.registerItemModel(item, 1, "minecraft", "red_mushroom");
-	}
-
-	@Override
-	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+	public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
 		return true;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
 		return worldIn.rand.nextFloat() < 0.45D;
 	}
 
 	@Override
-	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state) {
 		this.grow(worldIn, pos, state, rand);
 	}
 
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		return state.getValue(VARIANT).getDrop();
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+		return state.get(VARIANT).getDrop();
 	}
 
-	@Override
-	public int damageDropped(IBlockState state) {
-		return state.getValue(VARIANT).ordinal();
-	}
 }

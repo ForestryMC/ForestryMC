@@ -13,15 +13,9 @@ import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
 import forestry.api.farming.ISimpleFarmLogic;
-import forestry.farming.logic.FakeFarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
 
 public class DummyFarmRegistry implements IFarmRegistry {
-
-	@Override
-	public void registerLogic(String identifier, IFarmLogic logic) {
-		//Dummy-Implementation
-	}
 
 	@Override
 	public void registerFarmables(String identifier, IFarmable... farmable) {
@@ -55,11 +49,6 @@ public class DummyFarmRegistry implements IFarmRegistry {
 	public IFarmLogic createCropLogic(IFarmProperties instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic) {
 		//Dummy-Implementation
 		return null;
-	}
-
-	@Override
-	public IFarmProperties createFakeInstance(IFarmLogic logic) {
-		return new FakeFarmProperties(logic);
 	}
 
 	@Override

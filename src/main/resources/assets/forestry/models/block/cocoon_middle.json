@@ -1,7 +1,7 @@
 {
     "textures": {
-		"particle": "forestry:blocks/lepidopterology/cocoons/cocoon_middle",
-        "0": "forestry:blocks/lepidopterology/cocoons/cocoon_middle"
+      "particle": "forestry:block/lepidopterology/cocoons/cocoon_middle",
+      "0": "forestry:block/lepidopterology/cocoons/cocoon_middle"
     },
     "elements": [
         {

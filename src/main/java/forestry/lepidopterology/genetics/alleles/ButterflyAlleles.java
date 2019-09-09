@@ -3,14 +3,16 @@ package forestry.lepidopterology.genetics.alleles;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.api.lepidopterology.IAlleleButterflyCocoon;
-import forestry.api.lepidopterology.IAlleleButterflyEffect;
+import genetics.api.alleles.IAlleleRegistry;
+
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
+import forestry.api.lepidopterology.genetics.IAlleleButterflyEffect;
 import forestry.core.ModuleCore;
+import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.ItemRegistryCore;
 
 public class ButterflyAlleles {
@@ -25,14 +27,11 @@ public class ButterflyAlleles {
 			cocoonSilk = new AlleleButterflyCocoon("silk", false));
 	}
 
-	public static void registerCocoonAlleles() {
+	public static void registerAlleles(IAlleleRegistry registry) {
 		for (IAlleleButterflyCocoon cocoonAllele : cocoonAlleles) {
-			AlleleManager.alleleRegistry.registerAllele(cocoonAllele, EnumButterflyChromosome.COCOON);
+			registry.registerAllele(cocoonAllele, ButterflyChromosomes.COCOON);
 		}
-	}
-
-	public static void registerEffectAlleles() {
-		AlleleManager.alleleRegistry.registerAllele(butterflyNone, EnumButterflyChromosome.EFFECT);
+		registry.registerAllele(butterflyNone, ButterflyChromosomes.EFFECT);
 	}
 
 	public static void createLoot() {
@@ -41,8 +40,8 @@ public class ButterflyAlleles {
 		cocoonDefault.addLoot(new ItemStack(Items.STRING, 3), 0.25F);
 
 		ItemRegistryCore itemRegistry = ModuleCore.getItems();
-		cocoonSilk.addLoot(new ItemStack(itemRegistry.craftingMaterial, 3, 2), 0.75F);
-		cocoonSilk.addLoot(new ItemStack(itemRegistry.craftingMaterial, 2, 2), 0.25F);
+		cocoonSilk.addLoot(itemRegistry.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 3), 0.75F);
+		cocoonSilk.addLoot(itemRegistry.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 2), 0.25F);
 	}
 
 }

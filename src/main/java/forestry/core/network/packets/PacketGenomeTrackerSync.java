@@ -12,18 +12,20 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
 
 import forestry.api.core.ForestryEvent;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -32,10 +34,10 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 
 public class PacketGenomeTrackerSync extends ForestryPacket implements IForestryPacketClient {
-	private final NBTTagCompound nbt;
+	private final CompoundNBT nbt;
 
-	public PacketGenomeTrackerSync(NBTTagCompound nbtTagCompound) {
-		this.nbt = nbtTagCompound;
+	public PacketGenomeTrackerSync(CompoundNBT CompoundNBT) {
+		this.nbt = CompoundNBT;
 	}
 
 	@Override
@@ -48,17 +50,18 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 		data.writeCompoundTag(nbt);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
-			NBTTagCompound nbt = data.readCompoundTag();
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+			CompoundNBT nbt = data.readCompoundTag();
 			if (nbt != null) {
 				String type = nbt.getString(BreedingTracker.TYPE_KEY);
 
-				ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
-				if (root != null) {
-					IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+				IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(type);
+
+				if (definition.isRootPresent()) {
+					IBreedingTracker tracker = definition.get().getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 					tracker.decodeFromNBT(nbt);
 					MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
 				}

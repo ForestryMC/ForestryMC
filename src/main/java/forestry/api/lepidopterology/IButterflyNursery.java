@@ -9,9 +9,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.world.World;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IHousing;
-import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.genetics.IButterfly;
 
 public interface IButterflyNursery extends IHousing, IClimateProvider {
 	@Nullable

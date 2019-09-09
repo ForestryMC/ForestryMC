@@ -7,7 +7,7 @@ import java.util.Collection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFilterLogic;
@@ -24,10 +24,10 @@ import forestry.sorting.gui.ISelectableProvider;
 public class RuleWidget extends Widget implements ISelectableProvider<IFilterRuleType> {
 	private static final ImmutableSet<IFilterRuleType> ENTRIES = createEntries();
 
-	private final EnumFacing facing;
+	private final Direction facing;
 	private final GuiGeneticFilter gui;
 
-	public RuleWidget(WidgetManager manager, int xPos, int yPos, EnumFacing facing, GuiGeneticFilter gui) {
+	public RuleWidget(WidgetManager manager, int xPos, int yPos, Direction facing, GuiGeneticFilter gui) {
 		super(manager, xPos, yPos);
 		this.facing = facing;
 		this.gui = gui;
@@ -40,10 +40,10 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 		IFilterLogic logic = gui.getLogic();
 		IFilterRuleType rule = logic.getRule(facing);
 		draw(manager.gui, rule, x, y);
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		if (this.gui.selection.isSame(this)) {
 			textureManager.bindTexture(SelectionWidget.TEXTURE);
-			gui.drawTexturedModalRect(x - 1, y - 1, 212, 0, 18, 18);
+			gui.blit(x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}
 
@@ -54,11 +54,11 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 
 	@Override
 	public void draw(GuiForestry gui, IFilterRuleType selectable, int x, int y) {
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(selectable.getTextureMap());
 
 		TextureAtlasSprite sprite = selectable.getSprite();
-		gui.drawTexturedModalRect(x, y, sprite, 16, 16);
+		//		gui.blit(x, y, sprite, 16, 16);	//TODO how to do this with sprite again.
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		if (mouseButton == 1) {
 			onSelect(AlleleManager.filterRegistry.getDefaultRule());
 		} else {

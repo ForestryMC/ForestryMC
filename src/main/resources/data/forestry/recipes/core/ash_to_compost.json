@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "forestry:fertilizer_bio"
+  },
+  "pattern": [
+    " X ",
+    "X#X",
+    " X "
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.compost.ash",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": {
+      "item": "#DUSTASH"
+    }
+  },
+  "group": "core"
+}

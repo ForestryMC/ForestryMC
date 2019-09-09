@@ -27,17 +27,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -118,7 +119,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public FarmController(World world) {
 		super(world, FarmMultiblockSizeLimits.instance);
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(/* TODO fluids FluidRegistry.WATER*/);
 
 		this.tankManager = new TankManager(this, resourceTank);
 
@@ -152,8 +153,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data) {
-		this.readFromNBT(data);
+	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundNBT data) {
+		this.read(data);
 	}
 
 	@Override
@@ -271,42 +272,42 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		data = super.writeToNBT(data);
-		sockets.writeToNBT(data);
-		hydrationManager.writeToNBT(data);
-		tankManager.writeToNBT(data);
-		fertilizerManager.writeToNBT(data);
-		inventory.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
+		sockets.write(data);
+		hydrationManager.write(data);
+		tankManager.write(data);
+		fertilizerManager.write(data);
+		inventory.write(data);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
-		sockets.readFromNBT(data);
-		hydrationManager.readFromNBT(data);
-		tankManager.readFromNBT(data);
-		fertilizerManager.readFromNBT(data);
-		inventory.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
+		sockets.read(data);
+		hydrationManager.read(data);
+		tankManager.read(data);
+		fertilizerManager.read(data);
+		inventory.read(data);
 
 		refreshFarmLogics();
 	}
 
 	@Override
-	public void formatDescriptionPacket(NBTTagCompound data) {
-		sockets.writeToNBT(data);
-		hydrationManager.writeToNBT(data);
-		tankManager.writeToNBT(data);
-		fertilizerManager.writeToNBT(data);
+	public void formatDescriptionPacket(CompoundNBT data) {
+		sockets.write(data);
+		hydrationManager.write(data);
+		tankManager.write(data);
+		fertilizerManager.write(data);
 	}
 
 	@Override
-	public void decodeDescriptionPacket(NBTTagCompound data) {
-		sockets.readFromNBT(data);
-		hydrationManager.readFromNBT(data);
-		tankManager.readFromNBT(data);
-		fertilizerManager.readFromNBT(data);
+	public void decodeDescriptionPacket(CompoundNBT data) {
+		sockets.read(data);
+		hydrationManager.read(data);
+		tankManager.read(data);
+		fertilizerManager.read(data);
 
 		refreshFarmLogics();
 	}
@@ -369,7 +370,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getReferenceCoord();
-		return world.getBiome(coords).getRainfall();
+		return world.getBiome(coords).getDownfall();
 	}
 
 	@Override
@@ -504,7 +505,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-			final FluidStack liquid = new FluidStack(FluidRegistry.WATER, liquidConsumption);
+			final FluidStack liquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water
@@ -513,7 +514,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 					continue;
 				}
 
-				if (liquid.amount > 0 && !hasLiquid(liquid)) {
+				if (liquid.getAmount() > 0 && !hasLiquid(liquid)) {
 					farmWorkStatus.hasLiquid = false;
 					continue;
 				}
@@ -564,7 +565,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		IErrorLogic errorLogic = getErrorLogic();
 
 		// Check fertilizer
-		Boolean hasFertilizer = fertilizerManager.hasFertilizer(inventory, fertilizerConsumption);
+		boolean hasFertilizer = fertilizerManager.hasFertilizer(inventory, fertilizerConsumption);
 		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
 			return false;
 		}
@@ -572,8 +573,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = provider.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = new FluidStack(FluidRegistry.WATER, waterConsumption);
-		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
+		FluidStack requiredLiquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, waterConsumption);
+		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
 			return false;
@@ -602,18 +603,18 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		FluidStack drained = resourceTank.drainInternal(liquid, false);
+		FluidStack drained = resourceTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 		return liquid.isFluidStackIdentical(drained);
 	}
 
 	@Override
 	public void removeLiquid(FluidStack liquid) {
-		resourceTank.drain(liquid.amount, true);
+		resourceTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable germling, World world, BlockPos pos) {
-		EntityPlayer player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
+	public boolean plantGermling(IFarmable germling, World world, BlockPos pos, FarmDirection direction) {
+		PlayerEntity player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
 		return player != null && inventory.plantGermling(germling, player, pos);
 	}
 
@@ -686,7 +687,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public boolean isValidPlatform(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 		return FarmHelper.bricks.contains(blockState.getBlock());
 	}
 

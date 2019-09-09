@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -58,7 +59,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Blocks.SAPLING);
+		return new ItemStack(Blocks.OAK_SAPLING);
 	}
 
 	@Override
@@ -106,7 +107,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			return Collections.emptyList();
 		}
 
-		// get all crops of the same type that are connected to the first one
+		// getComb all crops of the same type that are connected to the first one
 		Stack<BlockPos> knownCropPositions = new Stack<>();
 		knownCropPositions.add(position);
 
@@ -115,7 +116,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		while (!knownCropPositions.empty()) {
 			BlockPos knownCropPos = knownCropPositions.pop();
-			for (BlockPos candidate : BlockPos.getAllInBox(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
+			//TODO potentially unnecessary collect
+			for (BlockPos candidate : BlockPos.getAllInBox(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1)).collect(Collectors.toList())) {
 				if (!world.isBlockLoaded(candidate)) {
 					return crops;
 				}
@@ -123,7 +125,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 				if (!checkedBlocks.contains(candidate)) {
 					checkedBlocks.add(candidate);
 
-					IBlockState blockState = world.getBlockState(candidate);
+					BlockState blockState = world.getBlockState(candidate);
 					ICrop crop = farmable.getCropAt(world, candidate, blockState);
 					if (crop != null) {
 						crops.push(crop);
@@ -141,7 +143,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		if (world.isAirBlock(position)) {
 			return null;
 		}
-		IBlockState blockState = world.getBlockState(position);
+		BlockState blockState = world.getBlockState(position);
 		for (IFarmable farmable : farmables) {
 			ICrop crop = farmable.getCropAt(world, position, blockState);
 			if (crop != null) {
@@ -158,7 +160,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 			if (world.isAirBlock(position)) {
 				BlockPos soilPosition = position.down();
-				IBlockState soilState = world.getBlockState(soilPosition);
+				BlockState soilState = world.getBlockState(soilPosition);
 				if (isAcceptedSoil(soilState)) {
 					return plantSapling(world, farmHousing, position, direction);
 				}

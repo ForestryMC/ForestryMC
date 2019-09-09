@@ -7,12 +7,13 @@ package forestry.api.core;
 
 import net.minecraft.item.Item;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IItemModelRegister {
 
-	@SideOnly(Side.CLIENT)
-	void registerModel(Item item, IModelManager manager);
+	@OnlyIn(Dist.CLIENT)
+	default void registerModel(Item item, IModelManager manager) {
+
+	}
 
 }

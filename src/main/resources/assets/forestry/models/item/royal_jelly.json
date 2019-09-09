@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/royal_jelly"
+      "layer0": "forestry:item/royal_jelly"
     },
     "display": {
         "thirdperson": {

@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import java.util.EnumSet;
+
 public class AIButterflyWander extends AIButterflyMovement {
 
 	public AIButterflyWander(EntityButterfly entity) {
 		super(entity);
-		setMutexBits(1);
+		setMutexFlags(EnumSet.of(Flag.MOVE));
+		//		setMutexBits(1);	TODO mutex
 	}
 
 	@Override

@@ -1,31 +1,26 @@
 package forestry.database.tiles;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 
 import forestry.core.tiles.TileBase;
+import forestry.database.ModuleDatabase;
 import forestry.database.gui.ContainerDatabase;
-import forestry.database.gui.GuiDatabase;
 import forestry.database.inventory.InventoryDatabase;
 
 public class TileDatabase extends TileBase {
 
 	public TileDatabase() {
+		super(ModuleDatabase.getTiles().DATABASE);
 		setInternalInventory(new InventoryDatabase(this));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Nullable
 	@Override
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiDatabase(this, player);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerDatabase(this, player.inventory);
+	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+		return new ContainerDatabase(windowId, playerInventory, this);
 	}
 }

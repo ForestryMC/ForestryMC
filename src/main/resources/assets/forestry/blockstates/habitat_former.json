@@ -1,8 +1,25 @@
 {
     "variants": {
-        "facing=north": { "model": "forestry:habitat_former", "y": 180 },
-		"facing=east": { "model": "forestry:habitat_former", "y": -90 },
-		"facing=south": { "model": "forestry:habitat_former" },
-		"facing=west": { "model": "forestry:habitat_former", "y": 90 }
+      "facing=up": {
+        "model": "forestry:block/habitat_former"
+      },
+      "facing=down": {
+        "model": "forestry:block/habitat_former"
+      },
+      "facing=north": {
+        "model": "forestry:block/habitat_former",
+        "y": 180
+      },
+      "facing=east": {
+        "model": "forestry:block/habitat_former",
+        "y": -90
+      },
+      "facing=south": {
+        "model": "forestry:block/habitat_former"
+      },
+      "facing=west": {
+        "model": "forestry:block/habitat_former",
+        "y": 90
+      }
 	}
 }

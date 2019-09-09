@@ -5,18 +5,19 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.state.IProperty;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public abstract class ForestryStateMapper implements IStateMapper {
+//import net.minecraft.client.renderer.block.statemap.IStateMapper;
+//TODO - flatten to avoid statemapper?
+@OnlyIn(Dist.CLIENT)
+public abstract class ForestryStateMapper {//implements IStateMapper {
 
-	protected final Map<IBlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
+	protected final Map<BlockState, ModelResourceLocation> mapStateModelLocations = Maps.newLinkedHashMap();
 
 	@SuppressWarnings("unchecked")
 	public String getPropertyString(Map<IProperty<?>, Comparable<?>> map) {

@@ -13,10 +13,10 @@ package forestry.mail.inventory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -27,14 +27,14 @@ import forestry.core.items.ItemWithGui;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.Letter;
 import forestry.mail.LetterProperties;
-import forestry.mail.items.ItemStamps;
+import forestry.mail.items.ItemStamp;
 
 public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	private final ILetter letter;
 
-	public ItemInventoryLetter(EntityPlayer player, ItemStack itemstack) {
+	public ItemInventoryLetter(PlayerEntity player, ItemStack itemstack) {
 		super(player, 0, itemstack);
-		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		CompoundNBT tagCompound = itemstack.getTag();
 		Preconditions.checkNotNull(tagCompound);
 		letter = new Letter(tagCompound);
 	}
@@ -45,29 +45,29 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 
 	public void onLetterClosed() {
 		ItemStack parent = getParent();
-		LetterProperties.closeLetter(parent, letter);
+		setParent(LetterProperties.closeLetter(parent, letter));
 	}
 
 	public void onLetterOpened() {
 		ItemStack parent = getParent();
-		LetterProperties.openLetter(parent);
+		setParent(LetterProperties.openLetter(parent));
 	}
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
 		ItemStack result = letter.decrStackSize(index, count);
-		NBTTagCompound tagCompound = getParent().getTagCompound();
+		CompoundNBT tagCompound = getParent().getTag();
 		Preconditions.checkNotNull(tagCompound);
-		letter.writeToNBT(tagCompound);
+		letter.write(tagCompound);
 		return result;
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack itemstack) {
 		letter.setInventorySlotContents(index, itemstack);
-		NBTTagCompound tagCompound = getParent().getTagCompound();
+		CompoundNBT tagCompound = getParent().getTag();
 		Preconditions.checkNotNull(tagCompound);
-		letter.writeToNBT(tagCompound);
+		letter.write(tagCompound);
 	}
 
 	@Override
@@ -81,18 +81,13 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	public String getName() {
-		return letter.getName();
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return letter.getInventoryStackLimit();
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return letter.isUsableByPlayer(entityplayer);
+	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
+		return letter.isUsableByPlayer(PlayerEntity);
 	}
 
 	@Override
@@ -106,7 +101,7 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 			return false;
 		} else if (SlotUtil.isSlotInRange(slotIndex, Letter.SLOT_POSTAGE_1, Letter.SLOT_POSTAGE_COUNT)) {
 			Item item = itemStack.getItem();
-			return item instanceof ItemStamps;
+			return item instanceof ItemStamp;
 		} else if (SlotUtil.isSlotInRange(slotIndex, Letter.SLOT_ATTACHMENT_1, Letter.SLOT_ATTACHMENT_COUNT)) {
 			return !(itemStack.getItem() instanceof ItemWithGui);
 		}

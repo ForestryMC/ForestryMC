@@ -15,9 +15,10 @@ import com.google.common.collect.ImmutableSet;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ContainerType;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
@@ -28,23 +29,24 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 	@Nullable
 	private ImmutableSet<IErrorState> previousErrorStates;
 
-	protected ContainerEntity(T entity) {
+	protected ContainerEntity(int windowId, ContainerType<?> type, T entity) {
+		super(windowId, type);
 		this.entity = entity;
 	}
 
-	protected ContainerEntity(T entity, InventoryPlayer playerInventory, int xInv, int yInv) {
-		this(entity);
+	protected ContainerEntity(int windowId, ContainerType<?> type, T entity, PlayerInventory playerInventory, int xInv, int yInv) {
+		this(windowId, type, entity);
 		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 
 	@Override
-	protected final boolean canAccess(EntityPlayer player) {
+	protected final boolean canAccess(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return entity.isUsableByPlayer(entityplayer);
+	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
+		return entity.isUsableByPlayer(PlayerEntity);
 	}
 
 	@Override

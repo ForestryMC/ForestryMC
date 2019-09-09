@@ -14,27 +14,28 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.core.tiles.TileUtil;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 
-	private final Set<IBlockState> acceptedBlockStates = new HashSet<>();
+	private final Set<BlockState> acceptedBlockStates = new HashSet<>();
 
-	public JubilanceRequiresResource(IBlockState... acceptedBlockStates) {
+	public JubilanceRequiresResource(BlockState... acceptedBlockStates) {
 		Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
 	}
 
 	@Override
-	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
+	public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		BlockPos pos = housing.getCoordinates();
 
@@ -44,7 +45,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 			tile = TileUtil.getTile(world, pos);
 		} while (tile instanceof IBeeHousing && pos.getY() > 0);
 
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 		return this.acceptedBlockStates.contains(blockState);
 	}
 

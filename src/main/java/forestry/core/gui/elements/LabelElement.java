@@ -16,7 +16,7 @@ import forestry.core.utils.GuiElementUtil;
 
 public class LabelElement extends GuiElement implements ILabelElement {
 	/* Constants */
-	public static final FontRenderer FONT_RENDERER = Minecraft.getMinecraft().fontRenderer;
+	public static final FontRenderer FONT_RENDERER = Minecraft.getInstance().fontRenderer;
 
 	/* Attributes - State */
 	protected ITextStyle style;
@@ -28,6 +28,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 		this(0, 0, -1, FONT_RENDERER.FONT_HEIGHT, text, align, style);
 	}
 
+	//TODO reduce code duplication in this class
 	public LabelElement(int xPos, int yPos, int width, int height, String text, GuiElementAlignment align, ITextStyle style) {
 		super(xPos, yPos, width, height);
 		textLength = width < 0;
@@ -36,10 +37,11 @@ public class LabelElement extends GuiElement implements ILabelElement {
 		this.text = GuiElementUtil.getFormattedString(style, text);
 		setAlign(align);
 		if (textLength) {
-			boolean uni = FONT_RENDERER.getUnicodeFlag();
-			FONT_RENDERER.setUnicodeFlag(style.isUnicode());
+			//TODO - think this is bidi flag
+			boolean uni = FONT_RENDERER.getBidiFlag();
+			FONT_RENDERER.setBidiFlag(style.isUnicode());
 			setWidth(FONT_RENDERER.getStringWidth(this.text));
-			FONT_RENDERER.setUnicodeFlag(uni);
+			FONT_RENDERER.setBidiFlag(uni);
 		}
 	}
 
@@ -48,10 +50,11 @@ public class LabelElement extends GuiElement implements ILabelElement {
 		this.style = style;
 		this.text = GuiElementUtil.getFormattedString(style, rawText);
 		if (textLength) {
-			boolean uni = FONT_RENDERER.getUnicodeFlag();
-			FONT_RENDERER.setUnicodeFlag(style.isUnicode());
+			//TODO - think this is bidi now
+			boolean uni = FONT_RENDERER.getBidiFlag();
+			FONT_RENDERER.setBidiFlag(style.isUnicode());
 			setWidth(FONT_RENDERER.getStringWidth(this.text));
-			FONT_RENDERER.setUnicodeFlag(uni);
+			FONT_RENDERER.setBidiFlag(uni);
 		}
 		return this;
 	}
@@ -71,10 +74,11 @@ public class LabelElement extends GuiElement implements ILabelElement {
 		this.rawText = text;
 		this.text = GuiElementUtil.getFormattedString(style, text);
 		if (textLength) {
-			boolean uni = FONT_RENDERER.getUnicodeFlag();
-			FONT_RENDERER.setUnicodeFlag(style.isUnicode());
+			//TODO think this is bidi now
+			boolean uni = FONT_RENDERER.getBidiFlag();
+			FONT_RENDERER.setBidiFlag(style.isUnicode());
 			setWidth(FONT_RENDERER.getStringWidth(this.text));
-			FONT_RENDERER.setUnicodeFlag(uni);
+			FONT_RENDERER.setBidiFlag(uni);
 		}
 		return this;
 	}
@@ -96,9 +100,10 @@ public class LabelElement extends GuiElement implements ILabelElement {
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-		boolean unicode = FONT_RENDERER.getUnicodeFlag();
-		FONT_RENDERER.setUnicodeFlag(style.isUnicode());
+		//TODO think this is bidi now
+		boolean unicode = FONT_RENDERER.getBidiFlag();
+		FONT_RENDERER.setBidiFlag(style.isUnicode());
 		FONT_RENDERER.drawString(text, 0, 0, style.getColor());
-		FONT_RENDERER.setUnicodeFlag(unicode);
+		FONT_RENDERER.setBidiFlag(unicode);
 	}
 }

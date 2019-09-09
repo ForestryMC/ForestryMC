@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 public interface IGuiSelectable {
 	// server
-	void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary);
+	void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary);
 }

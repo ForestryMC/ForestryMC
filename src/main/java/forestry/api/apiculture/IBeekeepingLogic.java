@@ -8,14 +8,14 @@ package forestry.api.apiculture;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -51,11 +51,11 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	/* CLIENT */
 
 	/**
-	 * Sync to client by using {@link #writeToNBT(NBTTagCompound)} in your {@link TileEntity#getUpdateTag()}
+	 * Sync to client by using {@link #write(CompoundNBT)} in your {@link TileEntity#getUpdateTag()}
 	 */
 	void syncToClient();
 
-	void syncToClient(EntityPlayerMP player);
+	void syncToClient(ServerPlayerEntity player);
 
 	/**
 	 * Get the progress bar for breeding and production.
@@ -68,14 +68,14 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 * Whether bee fx should be active.
 	 * Internally, this is automatically synced to the client.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	boolean canDoBeeFX();
 
 	/**
 	 * Display bee fx. Calls IBee.doFX(IEffectData[] storedData, IBeeHousing housing) on the queen.
 	 * Internally, the queen is automatically synced to the client for the fx.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void doBeeFX();
 
 	/**

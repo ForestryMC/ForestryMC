@@ -10,8 +10,14 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import javax.annotation.Nullable;
+
+import forestry.core.render.IForestryRenderer;
 import forestry.core.tiles.TileForestry;
 
 public interface IMachinePropertiesTesr<T extends TileForestry> extends IMachineProperties<T> {
 	String getParticleTextureLocation();
+
+	@Nullable
+	IForestryRenderer<? super T> getRenderer();
 }

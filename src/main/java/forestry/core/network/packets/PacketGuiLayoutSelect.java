@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
@@ -42,10 +42,10 @@ public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPa
 		data.writeString(layoutUid);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			String layoutUid = data.readString();
 			Container container = player.openContainer;
 			if (!(container instanceof ContainerSolderingIron)) {

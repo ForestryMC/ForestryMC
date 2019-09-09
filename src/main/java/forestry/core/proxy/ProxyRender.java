@@ -12,8 +12,10 @@ package forestry.core.proxy;
 
 import net.minecraft.block.Block;
 
+import net.minecraftforge.client.event.ModelBakeEvent;
+
 import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
@@ -47,13 +49,13 @@ public class ProxyRender {
 	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
 	}
 
-	public void registerModels() {
+	public void registerModels(ModelBakeEvent event) {
 	}
 
 	public void registerItemAndBlockColors() {
 	}
 
-	public void registerFluidStateMapper(Block block, Fluids fluid) {
+	public void registerFluidStateMapper(Block block, ForestryFluids fluid) {
 	}
 
 }

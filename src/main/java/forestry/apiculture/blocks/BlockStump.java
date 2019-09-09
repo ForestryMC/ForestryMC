@@ -12,53 +12,35 @@ package forestry.apiculture.blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.block.TorchBlock;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
 
-public class BlockStump extends BlockTorch implements IItemModelRegister {
+public class BlockStump extends TorchBlock {
 
 	public BlockStump() {
-		this.setHardness(0.0F);
-		this.setSoundType(SoundType.WOOD);
-		setCreativeTab(Tabs.tabApiculture);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "stump");
+		super(Block.Properties.create(Material.MISCELLANEOUS)
+			.hardnessAndResistance(0.0f)
+			.sound(SoundType.WOOD));
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, 0));
-	}
-
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		ItemStack heldItem = playerIn.getHeldItem(hand);
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
-			IBlockState activatedState = ModuleApiculture.getBlocks().candle.getDefaultState().withProperty(BlockCandle.STATE, BlockCandle.State.ON);
+			BlockState activatedState = ModuleApiculture.getBlocks().candle.getDefaultState().with(BlockCandle.STATE, BlockCandle.State.ON);
 			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
 			TileCandle tc = new TileCandle();
 			tc.setColour(16777215); // default to white
@@ -71,6 +53,6 @@ public class BlockStump extends BlockTorch implements IItemModelRegister {
 	}
 
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 	}
 }

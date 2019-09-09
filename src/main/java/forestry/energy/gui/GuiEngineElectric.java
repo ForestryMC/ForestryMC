@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.SocketWidget;
@@ -19,8 +20,8 @@ import forestry.energy.tiles.TileEngineElectric;
 
 public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEngineElectric> {
 
-	public GuiEngineElectric(InventoryPlayer inventory, TileEngineElectric tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineElectric(inventory, tile), tile);
+	public GuiEngineElectric(ContainerEngineElectric container, PlayerInventory inventory, ITextComponent name) {
+		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", container, inventory, container.getTile());
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
 	}
 
@@ -40,7 +41,7 @@ public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEn
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 
-		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+		this.blit(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 }

@@ -14,12 +14,15 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -31,7 +34,7 @@ import forestry.core.render.TextureManagerForestry;
 /**
  * Side ledger for guis
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class Ledger {
 
 	protected static final int minWidth = 24;
@@ -146,21 +149,21 @@ public abstract class Ledger {
 		this.y = y;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public final void draw() {
 		draw(x, y);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public abstract void draw(int x, int y);
 
-	public abstract String getTooltip();
+	public abstract ITextComponent getTooltip();
 
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
+	public boolean handleMouseClicked(double x, double y, int mouseButton) {
 		return false;
 	}
 
-	public boolean intersects(int mouseX, int mouseY) {
+	public boolean intersects(double mouseX, double mouseY) {
 		return mouseX >= currentShiftX && mouseX <= currentShiftX + currentWidth && mouseY >= currentShiftY && mouseY <= currentShiftY + getHeight();
 	}
 
@@ -202,20 +205,20 @@ public abstract class Ledger {
 		float colorG = (overlayColor >> 8 & 255) / 255.0F;
 		float colorB = (overlayColor & 255) / 255.0F;
 
-		GlStateManager.color(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color4f(colorR, colorG, colorB, 1.0F);
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+		Minecraft.getInstance().getTextureManager().bindTexture(texture);
 
 		int height = getHeight();
 		int width = getWidth();
 
-		manager.gui.drawTexturedModalRect(x, y + 4, 0, 256 - height + 4, 4, height - 4); // left edge
-		manager.gui.drawTexturedModalRect(x + 4, y, 256 - width + 4, 0, width - 4, 4); // top edge
-		manager.gui.drawTexturedModalRect(x, y, 0, 0, 4, 4); // top left corner
+		manager.gui.blit(x, y + 4, 0, 256 - height + 4, 4, height - 4); // left edge
+		manager.gui.blit(x + 4, y, 256 - width + 4, 0, width - 4, 4); // top edge
+		manager.gui.blit(x, y, 0, 0, 4, 4); // top left corner
 
-		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
+		manager.gui.blit(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
@@ -223,9 +226,9 @@ public abstract class Ledger {
 	}
 
 	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(textureMap);
-		manager.gui.drawTexturedModalRect(x, y, sprite, 16, 16);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
+		AbstractGui.blit(x, y, 16, 16, manager.gui.getBlitOffset(), sprite);//TODO: Find out why this does not work
 	}
 
 	protected int drawHeader(String string, int x, int y) {
@@ -246,11 +249,16 @@ public abstract class Ledger {
 
 	protected int drawSplitText(String string, int x, int y, int width, int color, boolean shadow) {
 		int originalY = y;
-		Minecraft minecraft = Minecraft.getMinecraft();
+		Minecraft minecraft = Minecraft.getInstance();
 		List strings = minecraft.fontRenderer.listFormattedStringToWidth(string, width);
 		for (Object obj : strings) {
 			if (obj instanceof String) {
-				minecraft.fontRenderer.drawString((String) obj, x, y, color, shadow);
+				String s = (String) obj;
+				if (shadow) {
+					minecraft.fontRenderer.drawStringWithShadow(s, x, y, color);
+				} else {
+					minecraft.fontRenderer.drawString(s, x, y, color);
+				}
 				y += minecraft.fontRenderer.FONT_HEIGHT;
 			}
 		}
@@ -258,7 +266,7 @@ public abstract class Ledger {
 	}
 
 	protected int drawText(String string, int x, int y) {
-		Minecraft minecraft = Minecraft.getMinecraft();
+		Minecraft minecraft = Minecraft.getInstance();
 		minecraft.fontRenderer.drawString(string, x, y, fontColorText);
 		return minecraft.fontRenderer.FONT_HEIGHT;
 	}

@@ -11,7 +11,7 @@
 package forestry.farming.logic.crops;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -21,9 +21,9 @@ import forestry.core.utils.BlockUtil;
 
 public class CropBasicAgriCraft extends Crop {
 
-	private final IBlockState blockState;
+	private final BlockState blockState;
 
-	public CropBasicAgriCraft(World world, IBlockState blockState, BlockPos position) {
+	public CropBasicAgriCraft(World world, BlockState blockState, BlockPos position) {
 		super(world, position);
 		this.blockState = blockState;
 	}
@@ -37,13 +37,14 @@ public class CropBasicAgriCraft extends Crop {
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		NonNullList<ItemStack> harvest = NonNullList.create();
-		block.getDrops(harvest, world, pos, blockState, 0);
+		//		block.getDrops(harvest, world, pos, blockState, 0);
+		//TODO getDrops
 		if (harvest.size() > 1) {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
 		harvest.remove(0);
 
-		IBlockState oldState = world.getBlockState(pos);
+		BlockState oldState = world.getBlockState(pos);
 		BlockUtil.setBlockWithBreakSound(world, pos, block.getDefaultState(), oldState);
 		return harvest;
 	}

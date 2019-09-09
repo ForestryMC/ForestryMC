@@ -1,6 +1,6 @@
 package forestry.api.farming;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -10,7 +10,7 @@ public interface ISoil {
 
 	ItemStack getResource();
 
-	IBlockState getSoilState();
+	BlockState getSoilState();
 
 	boolean hasMetaData();
 }

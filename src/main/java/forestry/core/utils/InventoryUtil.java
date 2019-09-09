@@ -12,13 +12,13 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,15 +26,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
 
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.StandardStackFilters;
 import forestry.core.tiles.AdjacentTileCache;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
-import forestry.plugins.ForestryCompatPlugins;
+
+//import net.minecraftforge.fml.common.Optional;
+//import forestry.plugins.ForestryCompatPlugins;
 
 public abstract class InventoryUtil {
 	/**
@@ -74,20 +72,20 @@ public abstract class InventoryUtil {
 	 * @return true if an item was inserted, otherwise false.
 	 */
 	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache) {
-		return moveOneItemToPipe(source, tileCache, EnumFacing.values());
+		return moveOneItemToPipe(source, tileCache, Direction.values());
 	}
 
-	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
-		if (ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_TRANSPORT)) {
+	public static boolean moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, Direction[] directions) {
+		if (false) {//ModuleHelper.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_TRANSPORT)) {
 			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
 
 		return false;
 	}
 
-	//TODO Buildcraft for 1.9
-	@Optional.Method(modid = "buildcraftapi_transport")
-	private static boolean internal_moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, EnumFacing[] directions) {
+	//TODO Buildcraft for 1.14+
+	//	@Optional.Method(modid = "buildcraftapi_transport")
+	private static boolean internal_moveOneItemToPipe(IItemHandler source, AdjacentTileCache tileCache, Direction[] directions) {
 		//		IInventory invClone = new InventoryCopy(source);
 		//		ItemStack stackToMove = removeOneItem(invClone);
 		//		if (stackToMove == null) {
@@ -97,9 +95,9 @@ public abstract class InventoryUtil {
 		//			return false;
 		//		}
 		//
-		//		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<>();
+		//		List<Map.Entry<Direction, IPipeTile>> pipes = new ArrayList<>();
 		//		boolean foundPipe = false;
-		//		for (EnumFacing side : directions) {
+		//		for (Direction side : directions) {
 		//			TileEntity tile = tileCache.getTileOnSide(side);
 		//			if (tile instanceof IPipeTile) {
 		//				IPipeTile pipe = (IPipeTile) tile;
@@ -115,7 +113,7 @@ public abstract class InventoryUtil {
 		//		}
 		//
 		//		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
-		//		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
+		//		Map.Entry<Direction, IPipeTile> pipe = pipes.getComb(choice);
 		//		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
 		//			if (removeOneItem(source, stackToMove) != null) {
 		//				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
@@ -133,7 +131,7 @@ public abstract class InventoryUtil {
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
 	 */
-	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
+	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable PlayerEntity player, boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
 		if (doRemove) {
@@ -144,7 +142,7 @@ public abstract class InventoryUtil {
 		}
 	}
 
-	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
+	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
 		if (doRemove) {
@@ -198,7 +196,7 @@ public abstract class InventoryUtil {
 	}
 
 	@Nullable
-	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable PlayerEntity player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
@@ -226,7 +224,7 @@ public abstract class InventoryUtil {
 	}
 
 	@Nullable
-	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
+	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools) {
 		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
@@ -256,7 +254,7 @@ public abstract class InventoryUtil {
 	/**
 	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
 	 */
-	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable PlayerEntity player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {
@@ -277,7 +275,7 @@ public abstract class InventoryUtil {
 		return ItemStack.EMPTY;
 	}
 
-	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable String oreDictOfStack, @Nullable EntityPlayer player, boolean stowContainer, boolean craftingTools) {
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable String oreDictOfStack, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools) {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {
@@ -535,7 +533,7 @@ public abstract class InventoryUtil {
 		return added;
 	}
 
-	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, @Nullable EntityPlayer player) {
+	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, @Nullable PlayerEntity player) {
 		if (!itemstack.getItem().hasContainerItem(itemstack)) {
 			return;
 		}
@@ -603,13 +601,12 @@ public abstract class InventoryUtil {
 			if (stackPartial > itemStack.getCount()) {
 				stackPartial = itemStack.getCount();
 			}
-			ItemStack drop = itemStack.splitStack(stackPartial);
-			EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
-			float accel = 0.05F;
-			entityitem.motionX = (float) world.rand.nextGaussian() * accel;
-			entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
-			entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
-			world.spawnEntity(entityitem);
+			ItemStack drop = itemStack.split(stackPartial);
+			ItemEntity entityitem = new ItemEntity(world, x + f, y + f1, z + f2, drop);
+			double accel = 0.05D;
+			//TODO - hopefully correct I think
+			entityitem.setVelocity(world.rand.nextGaussian() * accel, world.rand.nextGaussian() * accel + 0.2F, world.rand.nextGaussian() * accel);
+			world.addEntity(entityitem);
 		}
 	}
 
@@ -617,38 +614,31 @@ public abstract class InventoryUtil {
 
 	/**
 	 * The database has an inventory large enough that int must be used here instead of byte
-	 * TODO in 1.13 - remove migrations from this.
 	 */
-	public static void readFromNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
-		if (!nbttagcompound.hasKey(inventory.getName())) {
+	public static void readFromNBT(IInventory inventory, CompoundNBT compoundNBT) {
+		if (!compoundNBT.contains("inventory")) {//TODO inventory name inventory.getName())) {
 			return;
 		}
 
-		NBTTagList nbttaglist = nbttagcompound.getTagList(inventory.getName(), 10);
+		ListNBT nbttaglist = compoundNBT.getList("inventory", 10);//inventory.getName(), 10);
 
-		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
-			NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
-			int index;
-			//type of byte tag is 1
-			if (nbttagcompound2.hasKey("Slot", 1)) {
-				index = nbttagcompound2.getByte("Slot");
-			} else {
-				index = nbttagcompound2.getInteger("Slot");
-			}
-			inventory.setInventorySlotContents(index, new ItemStack(nbttagcompound2));
+		for (int j = 0; j < nbttaglist.size(); ++j) {
+			CompoundNBT compoundNBT2 = nbttaglist.getCompound(j);
+			int index = compoundNBT2.getInt("Slot");
+			inventory.setInventorySlotContents(index, ItemStack.read(compoundNBT2));
 		}
 	}
 
-	public static void writeToNBT(IInventory inventory, NBTTagCompound nbttagcompound) {
-		NBTTagList nbttaglist = new NBTTagList();
+	public static void writeToNBT(IInventory inventory, CompoundNBT compoundNBT) {
+		ListNBT nbttaglist = new ListNBT();
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {
-				NBTTagCompound nbttagcompound2 = new NBTTagCompound();
-				nbttagcompound2.setInteger("Slot", i);
-				inventory.getStackInSlot(i).writeToNBT(nbttagcompound2);
-				nbttaglist.appendTag(nbttagcompound2);
+				CompoundNBT compoundNBT2 = new CompoundNBT();
+				compoundNBT2.putInt("Slot", i);
+				inventory.getStackInSlot(i).write(compoundNBT2);
+				nbttaglist.add(compoundNBT2);
 			}
 		}
-		nbttagcompound.setTag(inventory.getName(), nbttaglist);
+		compoundNBT.put("inventory", nbttaglist);//TODO saving inventory
 	}
 }

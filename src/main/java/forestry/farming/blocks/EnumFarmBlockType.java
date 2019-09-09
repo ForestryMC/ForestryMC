@@ -5,15 +5,12 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.config.Constants;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum EnumFarmBlockType implements IStringSerializable {
 	PLAIN,
@@ -34,28 +31,29 @@ public enum EnumFarmBlockType implements IStringSerializable {
 	private static final int TYPE_VALVE = 6;
 	private static final int TYPE_CONTROL = 7;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static List<TextureAtlasSprite> sprites;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static void registerSprites() {
-		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 		sprites = Arrays.asList(
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/plain")),
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/reverse")),
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/top")),
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/band")),
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/gears")),
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/hatch")),
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/valve")),
-			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "blocks/farm/control"))
+			//TODO - dynamic textures
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/top")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/band")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/gears")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/hatch")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/valve")),
+			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/control"))
 		);
 	}
 
 	/**
 	 * @return The texture sprite from the type of the farm block
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static TextureAtlasSprite getSprite(EnumFarmBlockType type, int side) {
 		switch (type) {
 			case PLAIN: {

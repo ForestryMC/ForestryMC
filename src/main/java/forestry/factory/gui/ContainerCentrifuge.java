@@ -10,32 +10,40 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketItemStackDisplay;
+import forestry.core.tiles.TileUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.tiles.TileCentrifuge;
 
 public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
-	public ContainerCentrifuge(InventoryPlayer player, TileCentrifuge tile) {
-		super(tile, player, 8, 84);
+	public static ContainerCentrifuge fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileCentrifuge tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCentrifuge.class);
+		return new ContainerCentrifuge(windowId, inv, tile);    //TODO nullability.
+	}
+
+	public ContainerCentrifuge(int windowId, PlayerInventory player, TileCentrifuge tile) {
+		super(windowId, ModuleFactory.getContainerTypes().CENTRIFUGE, player, tile, 8, 84);
 
 		// Resource
-		this.addSlotToContainer(new SlotFiltered(tile, 0, 16, 37));
+		this.addSlot(new SlotFiltered(this.tile, 0, 16, 37));
 
 		// Craft Preview display
-		addSlotToContainer(new SlotLocked(tile.getCraftPreviewInventory(), 0, 49, 37));
+		this.addSlot(new SlotLocked(this.tile.getCraftPreviewInventory(), 0, 49, 37));
 
 		// Product Inventory
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new SlotOutput(tile, 1 + k + l * 3, 112 + k * 18, 19 + l * 18));
+				this.addSlot(new SlotOutput(this.tile, 1 + k + l * 3, 112 + k * 18, 19 + l * 18));
 			}
 		}
 	}

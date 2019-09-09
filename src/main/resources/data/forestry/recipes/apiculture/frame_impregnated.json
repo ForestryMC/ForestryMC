@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "forestry:frame_impregnated"
+  },
+  "pattern": [
+    "###",
+    "#S#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:oak_stick"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "group": "apiculture"
+}

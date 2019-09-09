@@ -10,20 +10,28 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerAlvearySwarmer extends ContainerTile<TileAlvearySwarmer> {
 
-	public ContainerAlvearySwarmer(InventoryPlayer player, TileAlvearySwarmer tile) {
-		super(tile, player, 8, 87);
+	public static ContainerAlvearySwarmer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileAlvearySwarmer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearySwarmer.class);
+		return new ContainerAlvearySwarmer(windowId, inv, tile);    //TODO nullability.
+	}
 
-		this.addSlotToContainer(new SlotFiltered(tile, 0, 79, 52));
-		this.addSlotToContainer(new SlotFiltered(tile, 1, 100, 39));
-		this.addSlotToContainer(new SlotFiltered(tile, 2, 58, 39));
-		this.addSlotToContainer(new SlotFiltered(tile, 3, 79, 26));
+	public ContainerAlvearySwarmer(int windowId, PlayerInventory player, TileAlvearySwarmer tile) {
+		super(windowId, ModuleApiculture.getContainerTypes().ALVEARY_SWARMER, player, tile, 8, 87);
+
+		this.addSlot(new SlotFiltered(tile, 0, 79, 52));
+		this.addSlot(new SlotFiltered(tile, 1, 100, 39));
+		this.addSlot(new SlotFiltered(tile, 2, 58, 39));
+		this.addSlot(new SlotFiltered(tile, 3, 79, 26));
 	}
 }

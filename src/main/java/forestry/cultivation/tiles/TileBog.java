@@ -4,11 +4,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import forestry.core.ModuleCore;
+import forestry.cultivation.ModuleCultivation;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileBog extends TilePlanter {
 	public TileBog() {
-		super(ForestryFarmIdentifier.PEAT);
+		super(ModuleCultivation.getTiles().BOG, ForestryFarmIdentifier.PEAT);
 	}
 
 	@Override

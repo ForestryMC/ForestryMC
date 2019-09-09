@@ -1,13 +1,14 @@
 package forestry.core.gui;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.inventory.Container;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.genetics.IGeneticAnalyzer;
 import forestry.api.genetics.IGeneticAnalyzerProvider;
@@ -49,19 +50,19 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	private boolean dirty = true;
 
 	/* Constructors */
-	public GuiAnalyzerProvider(String texture, C container, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
-		this(texture, container, titled, buttonX, buttonY, 0, false, slots, firstSlot);
+	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
+		this(texture, container, inv, titled, buttonX, buttonY, 0, false, slots, firstSlot);
 	}
 
-	public GuiAnalyzerProvider(String texture, C container, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBoarder, int slots, int firstSlot) {
-		super(texture, container, titled);
+	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
+		super(texture, container, inv, titled);
 		this.buttonX = buttonX;
 		this.buttonY = buttonY;
 		this.screenDistance = screenDistance;
 		this.slots = slots;
 		this.firstSlot = firstSlot;
 
-		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(window, -189 - screenDistance, 0, hasBoarder, this);
+		this.analyzer = GuiElementFactory.INSTANCE.createAnalyzer(window, -189 - screenDistance, 0, hasBorder, this);
 		updateVisibility();
 
 		SlotAnalyzer analyzerSlot = null;
@@ -89,15 +90,15 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 	/* Methods - Implement GuiScreen */
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
 		if (analyzer.isVisible()) {
 			this.guiLeft = (this.width - this.xSize + analyzer.getWidth() + (screenDistance)) / 2;
 		}
 		window.init(guiLeft, guiTop + (ySize - 166) / 2);
 
-		addButton(new GuiToggleButton(0, guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON)).enabled = ((IContainerAnalyzerProvider) inventorySlots).getAnalyzerSlot() != null;
+		addButton(new GuiToggleButton(guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
 		dirty = true;
 
 		if (slotAnalyzer != null) {
@@ -107,7 +108,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		boolean ledger = hasErrors();
 		if (!deactivated && ledger || !ledger && deactivated) {
 			deactivated = ledger;
@@ -115,24 +116,25 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 			dirtyAnalyzer = true;
 		}
 		if (dirtyAnalyzer) {
-			buttonList.clear();
-			initGui();
+			buttons.clear();
+			init();
 			dirtyAnalyzer = false;
 		}
 		if (dirty) {
 			analyzer.update();
 			dirty = false;
 		}
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 	}
 
-	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
-		super.actionPerformed(button);
-		if (button instanceof GuiToggleButton) {
-			setAnalyzerVisible(!isAnalyzerVisible());
-			updateVisibility();
-			dirtyAnalyzer = true;
+	class Handler implements Button.IPressable {
+		@Override
+		public void onPress(Button button) {
+			if (button instanceof GuiToggleButton) {
+				setAnalyzerVisible(!isAnalyzerVisible());
+				updateVisibility();
+				dirtyAnalyzer = true;
+			}
 		}
 	}
 
@@ -140,7 +142,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
-		GlStateManager.color(1.0F, 1.0F, 1.0F);
+		GlStateManager.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();
 			if (selectedSlot >= 0) {

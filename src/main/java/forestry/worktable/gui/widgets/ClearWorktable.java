@@ -28,7 +28,7 @@ public class ClearWorktable extends Widget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		ContainerWorktable.clearRecipe();
 		SoundUtil.playButtonClick();
 	}

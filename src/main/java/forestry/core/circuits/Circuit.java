@@ -12,9 +12,12 @@ package forestry.core.circuits;
 
 import java.util.List;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
-import forestry.core.utils.Translator;
 
 public abstract class Circuit implements ICircuit {
 	private final String uid;
@@ -36,17 +39,13 @@ public abstract class Circuit implements ICircuit {
 	}
 
 	@Override
-	public void addTooltip(List<String> list) {
-		list.add(getLocalizedName());
+	public void addTooltip(List<ITextComponent> list) {
+		list.add(new TranslationTextComponent(getUnlocalizedName()));
 
 		int i = 1;
 		while (true) {
 			String unlocalizedDescription = getUnlocalizedName() + ".description." + i;
-			String description = Translator.translateToLocal(unlocalizedDescription);
-			if (description.endsWith(unlocalizedDescription)) {
-				break;
-			}
-			list.add(" - " + description);
+			list.add(new StringTextComponent(" - ").appendSibling(new TranslationTextComponent(unlocalizedDescription)));
 			i++;
 		}
 	}

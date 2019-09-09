@@ -2,26 +2,30 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.Item;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.VoxelShape;
 
-import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
+import forestry.core.render.IForestryRenderer;
+import forestry.core.render.RenderForestryItem;
+import forestry.core.render.RenderForestryTile;
 import forestry.core.tiles.TileForestry;
 
 public class MachinePropertiesTesr<T extends TileForestry> extends MachineProperties<T> implements IMachinePropertiesTesr<T> {
+
 	@Nullable
-	@SideOnly(Side.CLIENT)
-	private TileEntitySpecialRenderer<? super T> renderer;
+	@OnlyIn(Dist.CLIENT)
+	private IForestryRenderer<? super T> renderer;
+	@Nullable
+	@OnlyIn(Dist.CLIENT)
+	private TileEntityRenderer<? super T> tileRenderer;
 
 	private final String particleTextureLocation;
 	private final boolean isFullCube;
@@ -30,8 +34,8 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 		this(teClass, name, particleTextureLocation, true);
 	}
 
-	public MachinePropertiesTesr(Class<T> teClass, String name, AxisAlignedBB boundingBox, String particleTextureLocation) {
-		this(teClass, name, boundingBox, particleTextureLocation, true);
+	public MachinePropertiesTesr(Class<T> teClass, String name, VoxelShape shape, String particleTextureLocation) {
+		this(teClass, name, shape, particleTextureLocation, true);
 	}
 
 	public MachinePropertiesTesr(Class<T> teClass, String name, String particleTextureLocation, boolean isFullCube) {
@@ -40,27 +44,29 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 		this.isFullCube = isFullCube;
 	}
 
-	public MachinePropertiesTesr(Class<T> teClass, String name, AxisAlignedBB boundingBox, String particleTextureLocation, boolean isFullCube) {
-		super(teClass, name, boundingBox);
+	public MachinePropertiesTesr(Class<T> teClass, String name, VoxelShape shape, String particleTextureLocation, boolean isFullCube) {
+		super(teClass, name, shape);
 		this.particleTextureLocation = particleTextureLocation;
 		this.isFullCube = isFullCube;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void setRenderer(TileEntitySpecialRenderer<? super T> renderer) {
+	@OnlyIn(Dist.CLIENT)
+	public void setRenderer(IForestryRenderer<? super T> renderer) {
 		this.renderer = renderer;
+		this.tileRenderer = new RenderForestryTile<>(renderer);
 	}
 
 	@Override
-	public void registerTileEntity() {
-		super.registerTileEntity();
-		Block block = getBlock();
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT && renderer != null && block != null) {
-			ClientRegistry.bindTileEntitySpecialRenderer(getTeClass(), renderer);
-			Item item = Item.getItemFromBlock(block);
-			if (item != Items.AIR) {
-				ForgeHooksClient.registerTESRItemStack(item, 0, getTeClass());
-			}
+	@Nullable
+	public IForestryRenderer<? super T> getRenderer() {
+		return renderer;
+	}
+
+	@Override
+	public void clientSetup() {
+		super.clientSetup();
+		if (tileRenderer != null) {
+			ClientRegistry.bindTileEntitySpecialRenderer(getTeClass(), tileRenderer);
 		}
 	}
 
@@ -70,7 +76,19 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return isFullCube;
+	}
+
+	public static Item.Properties setRenderer(Item.Properties properties, IBlockType type) {
+		IMachineProperties machineProperties = type.getMachineProperties();
+		if (FMLEnvironment.dist == Dist.DEDICATED_SERVER || !(machineProperties instanceof IMachinePropertiesTesr)) {
+			return properties;
+		}
+		IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
+		if (machinePropertiesTesr.getRenderer() == null) {
+			return properties;
+		}
+		return properties.setTEISR(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
 	}
 }

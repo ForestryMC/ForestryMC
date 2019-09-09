@@ -4,8 +4,8 @@
         "apply": {
           "model": "forestry:arboriculture/fence_post",
           "textures": {
-            "particle": "forestry:blocks/wood/planks.acacia",
-            "texture": "forestry:blocks/wood/planks.acacia"
+            "particle": "forestry:block/wood/planks.acacia",
+            "texture": "forestry:block/wood/planks.acacia"
           },
           "uvlock": true
         }
@@ -14,7 +14,9 @@
         "apply": {
           "model": "forestry:arboriculture/fence_side",
           "uvlock": true,
-          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }
+          "textures": {
+            "texture": "forestry:block/wood/planks.acacia"
+          }
         },
         "when": { "north": "true" }
       },
@@ -22,7 +24,9 @@
         "apply": {
           "model": "forestry:arboriculture/fence_side",
           "uvlock": true,
-          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }, 
+          "textures": {
+            "texture": "forestry:block/wood/planks.acacia"
+          },
 		  "y": 90
 		  
         },
@@ -32,7 +36,9 @@
         "apply": {
           "model": "forestry:arboriculture/fence_side",
           "uvlock": true,
-          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }, 
+          "textures": {
+            "texture": "forestry:block/wood/planks.acacia"
+          },
 		  "y": 180
         },
         "when": { "south": "true" }
@@ -41,7 +47,9 @@
         "apply": {
           "model": "forestry:arboriculture/fence_side",
           "uvlock": true,
-          "textures": { "texture": "forestry:blocks/wood/planks.acacia" }, 
+          "textures": {
+            "texture": "forestry:block/wood/planks.acacia"
+          },
 		  "y": 270
         },
         "when": { "west": "true" }

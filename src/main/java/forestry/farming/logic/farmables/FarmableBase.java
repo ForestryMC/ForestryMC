@@ -1,7 +1,7 @@
 package forestry.farming.logic.farmables;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,11 +14,11 @@ import forestry.farming.logic.crops.CropDestroy;
 
 public abstract class FarmableBase implements IFarmable {
 	protected final ItemStack germling;
-	protected final IBlockState plantedState;
-	protected final IBlockState matureState;
+	protected final BlockState plantedState;
+	protected final BlockState matureState;
 	protected final boolean replant;
 
-	public FarmableBase(ItemStack germling, IBlockState plantedState, IBlockState matureState, boolean replant) {
+	public FarmableBase(ItemStack germling, BlockState plantedState, BlockState matureState, boolean replant) {
 		this.germling = germling;
 		this.plantedState = plantedState;
 		this.matureState = matureState;
@@ -26,17 +26,17 @@ public abstract class FarmableBase implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
 		return blockState.getBlock() == plantedState.getBlock() && blockState != matureState;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		if (blockState != matureState) {
 			return null;
 		}
 
-		IBlockState replantState = replant ? plantedState : null;
+		BlockState replantState = replant ? plantedState : null;
 		return new CropDestroy(world, blockState, pos, replantState);
 	}
 
@@ -51,7 +51,7 @@ public abstract class FarmableBase implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
 	}
 

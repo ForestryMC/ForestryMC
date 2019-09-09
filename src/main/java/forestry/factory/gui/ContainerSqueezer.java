@@ -10,33 +10,41 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerLiquidTanksSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.tiles.TileUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.tiles.TileSqueezer;
 
 public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
 
-	public ContainerSqueezer(InventoryPlayer player, TileSqueezer tile) {
-		super(tile, player, 8, 84);
+	public static ContainerSqueezer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileSqueezer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileSqueezer.class);
+		return new ContainerSqueezer(windowId, inv, tile);    //TODO nullability.
+	}
+
+	public ContainerSqueezer(int windowId, PlayerInventory player, TileSqueezer tile) {
+		super(windowId, ModuleFactory.getContainerTypes().SQUEEZER, player, tile, 8, 84);
 
 		// Resource inventory
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 3; column++) {
-				addSlotToContainer(new SlotFiltered(tile, column + row * 3, 17 + column * 18, 21 + row * 18));
+				this.addSlot(new SlotFiltered(this.tile, column + row * 3, 17 + column * 18, 21 + row * 18));
 			}
 		}
 
 		// Remnants slot
-		this.addSlotToContainer(new SlotOutput(tile, InventorySqueezer.SLOT_REMNANT, 97, 60));
+		this.addSlot(new SlotOutput(this.tile, InventorySqueezer.SLOT_REMNANT, 97, 60));
 
 		// Can slot
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventorySqueezer.SLOT_CAN_INPUT, 147, 24));
+		this.addSlot(new SlotLiquidIn(this.tile, InventorySqueezer.SLOT_CAN_INPUT, 147, 24));
 		// Output slot
-		this.addSlotToContainer(new SlotOutput(tile, InventorySqueezer.SLOT_CAN_OUTPUT, 147, 60));
+		this.addSlot(new SlotOutput(this.tile, InventorySqueezer.SLOT_CAN_OUTPUT, 147, 60));
 	}
 }

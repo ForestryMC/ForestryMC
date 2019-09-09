@@ -3,32 +3,33 @@ package forestry.book.gui.buttons;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
-@SideOnly(Side.CLIENT)
-public class GuiButtonBack extends GuiButton implements IToolTipProvider {
-	public GuiButtonBack(int buttonId, int x, int y) {
-		super(buttonId, x, y, 18, 9, "");
+@OnlyIn(Dist.CLIENT)
+public class GuiButtonBack extends Button implements IToolTipProvider {
+	public GuiButtonBack(int x, int y, IPressable action) {
+		super(x, y, 18, 9, "", action);
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		if (visible) {
-			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
-			TextureManager manager = mc.renderEngine;
+			TextureManager manager = Minecraft.getInstance().getTextureManager();
 			manager.bindTexture(GuiForesterBook.TEXTURE);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			drawTexturedModalRect(x, y, 36 + (hovered ? 18 : 0), 181, 18, 9);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			blit(x, y, 36 + (isHovered ? 18 : 0), 181, 18, 9);
 		}
 	}
 
@@ -44,7 +45,7 @@ public class GuiButtonBack extends GuiButton implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		return false;
 	}
 }

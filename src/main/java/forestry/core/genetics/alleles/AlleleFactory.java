@@ -10,53 +10,21 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import net.minecraft.util.math.Vec3i;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IChromosomeType;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleArea;
-import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleFactory;
-import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
-import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.apiculture.genetics.alleles.AlleleFlowers;
 
 public class AlleleFactory implements IAlleleFactory {
 
 	@Override
-	public IAlleleFloat createFloat(String modId, String category, String valueName, float value, boolean isDominant, IChromosomeType... types) {
-		IAlleleFloat alleleFloat = new AlleleFloat(modId, category, valueName, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleFloat, types);
-		return alleleFloat;
-	}
-
-	@Override
-	public IAlleleArea createArea(String modId, String category, String valueName, Vec3i value, boolean isDominant, IChromosomeType... types) {
-		IAlleleArea alleleArea = new AlleleArea(modId, category, valueName, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleArea, types);
-		return alleleArea;
-	}
-
-	@Override
-	public IAlleleInteger createInteger(String modId, String category, String valueName, int value, boolean isDominant, IChromosomeType... types) {
-		IAlleleInteger alleleInteger = new AlleleInteger(modId, category, valueName, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleInteger, types);
-		return alleleInteger;
-	}
-
-	@Override
-	public IAlleleBoolean createBoolean(String modId, String category, boolean value, boolean isDominant, IChromosomeType... types) {
-		IAlleleBoolean alleleBoolean = new AlleleBoolean(modId, category, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleBoolean, types);
-		return alleleBoolean;
-	}
-
-	@Override
 	public IAlleleFlowers createFlowers(String modId, String category, String valueName, IFlowerProvider value, boolean isDominant, IChromosomeType... types) {
 		IAlleleFlowers alleleFlowers = new AlleleFlowers(modId, category, valueName, value, isDominant);
-		AlleleManager.alleleRegistry.registerAllele(alleleFlowers, types);
+		GeneticsAPI.apiInstance.getAlleleRegistry().registerAllele(alleleFlowers, types);
+		//TODO: Test if this is a good idea to register it at here
 		return alleleFlowers;
 	}
 }

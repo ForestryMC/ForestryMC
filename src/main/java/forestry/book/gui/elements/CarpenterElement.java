@@ -8,10 +8,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fluids.FluidTankInfo;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
@@ -21,7 +19,7 @@ import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/crafting.png");
 	private static final Drawable CARPENTER_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 0, 108, 60);
@@ -45,7 +43,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 
 	@Override
 	protected void onIndexUpdate(int index, ICarpenterRecipe recipe) {
-		selectedElement.add(new TankElement(91, 1, null, () -> new FluidTankInfo(recipe.getFluidResource(), Constants.PROCESSOR_TANK_CAPACITY), CARPENTER_TANK_OVERLAY));
+		selectedElement.add(new TankElement(91, 1, null, recipe.getFluidResource(), Constants.PROCESSOR_TANK_CAPACITY, CARPENTER_TANK_OVERLAY));
 		IDescriptiveRecipe gridRecipe = recipe.getCraftingGridRecipe();
 		NonNullList<NonNullList<ItemStack>> ingredients = gridRecipe.getRawIngredients();
 		for (int x = 0; x < 3; x++) {
@@ -55,7 +53,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 					continue;
 				}
 				NonNullList<ItemStack> items = ingredients.get(ingredientIndex);
-				selectedElement.add(new IngredientElement(1 + x * 19, 3 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[items.size()]))));
+				selectedElement.add(new IngredientElement(1 + x * 19, 3 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[0]))));
 			}
 		}
 		selectedElement.item(71, 41, gridRecipe.getOutput());

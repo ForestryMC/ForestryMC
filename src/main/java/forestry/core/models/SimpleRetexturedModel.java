@@ -1,18 +1,19 @@
 package forestry.core.models;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.IModel;
@@ -28,13 +29,15 @@ public class SimpleRetexturedModel extends BlankModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		return getModel().getQuads(state, side, rand);
 	}
 
 	@Override
 	protected ItemOverrideList createOverrides() {
-		return new RetexturedOverrideList(model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, DefaultTextureGetter.INSTANCE));
+		ModelBakery bakery = null;
+		//TODO models
+		return new RetexturedOverrideList(model.bake(bakery, DefaultTextureGetter.INSTANCE, null, DefaultVertexFormats.ITEM));
 	}
 
 	@Override
@@ -44,7 +47,9 @@ public class SimpleRetexturedModel extends BlankModel {
 
 	private IBakedModel getModel() {
 		if (bakedModel == null) {
-			return bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, DefaultTextureGetter.INSTANCE);
+			ModelBakery bakery = null;
+			//TODO models
+			return bakedModel = model.bake(bakery, DefaultTextureGetter.INSTANCE, null, DefaultVertexFormats.BLOCK);
 		}
 		return bakedModel;
 	}
@@ -53,13 +58,13 @@ public class SimpleRetexturedModel extends BlankModel {
 		public final IBakedModel bakedModel;
 
 		public RetexturedOverrideList(IBakedModel bakedModel) {
-			super(Collections.emptyList());
+			super();
 
 			this.bakedModel = bakedModel;
 		}
 
 		@Override
-		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+		public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
 			return bakedModel;
 		}
 

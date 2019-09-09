@@ -11,24 +11,30 @@
 package forestry.core.tiles;
 
 import java.io.IOException;
+import java.util.Optional;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+
+import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IResearchHandler;
+import forestry.core.ModuleCore;
 import forestry.core.gui.ContainerEscritoire;
-import forestry.core.gui.GuiEscritoire;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.InventoryEscritoire;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
@@ -44,22 +50,23 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	public TileEscritoire() {
+		super(ModuleCore.getTiles().escritoire);
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		game.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		game.read(compoundNBT);
 	}
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		game.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		game.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	/* GAME */
@@ -77,13 +84,16 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 			return;
 		}
 
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
-		if (individual == null) {
+		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
+		if (!optional.isPresent()) {
 			return;
 		}
+		IIndividual individual = optional.get();
 
-		IAlleleSpecies species = individual.getGenome().getPrimary();
-		for (ItemStack itemstack : species.getResearchBounty(world, gameProfile, individual, game.getBountyLevel())) {
+		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
+		IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
+		IResearchHandler<IIndividual> handler = root.getComponent(ForestryComponentKeys.RESEARCH);
+		for (ItemStack itemstack : handler.getResearchBounty(species, world, gameProfile, individual, game.getBountyLevel())) {
 			InventoryUtil.addStack(getInternalInventory(), itemstack, InventoryEscritoire.SLOT_RESULTS_1, InventoryEscritoire.SLOTS_RESULTS_COUNT, true);
 		}
 	}
@@ -131,7 +141,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
@@ -139,7 +149,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 
 	/* ISlotPickupWatcher */
 	@Override
-	public void onTake(int slotIndex, EntityPlayer player) {
+	public void onTake(int slotIndex, PlayerEntity player) {
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			game.reset();
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
@@ -157,21 +167,17 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiEscritoire(player, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerEscritoire(player, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEscritoire(windowId, player, this);
 	}
 
 	@Override
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			//TODO
+			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+			//			world.markForRerender(getPos());
 		}
 	}
 

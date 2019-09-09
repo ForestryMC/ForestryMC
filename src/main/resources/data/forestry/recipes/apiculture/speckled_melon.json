@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "minecraft:speckled_melon"
+  },
+  "pattern": [
+    "#X#",
+    "#Y#",
+    "#X#"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:honey_drop",
+      "data": 0
+    },
+    "X": {
+      "item": "forestry:honeydew"
+    },
+    "Y": {
+      "item": "minecraft:melon"
+    }
+  },
+  "group": "apiculture"
+}

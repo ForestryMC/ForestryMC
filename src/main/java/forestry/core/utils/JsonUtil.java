@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JSONUtils;
 
 import net.minecraftforge.common.util.JsonUtils;
 
@@ -24,10 +25,10 @@ public class JsonUtil {
 			return fallback;
 		}
 		try {
-			Item item = net.minecraft.util.JsonUtils.getItem(object, "item");
-			int meta = net.minecraft.util.JsonUtils.getInt(object, "data", 0);
-			ItemStack stack = new ItemStack(item, 1, meta);
-			stack.setTagCompound(JsonUtils.readNBT(object, "nbt"));
+			Item item = JSONUtils.getItem(object, "item");
+			int meta = JSONUtils.getInt(object, "data", 0);
+			ItemStack stack = new ItemStack(item, 1);//TODO flatten, meta);
+			stack.setTag(JsonUtils.readNBT(object, "nbt"));
 			return stack;
 		} catch (JsonSyntaxException e) {
 			if (logError) {

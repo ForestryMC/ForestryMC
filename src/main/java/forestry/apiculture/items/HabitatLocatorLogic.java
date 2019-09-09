@@ -16,15 +16,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.utils.NetworkUtil;
@@ -64,7 +64,7 @@ public class HabitatLocatorLogic {
 		return targetBiomes;
 	}
 
-	public void startBiomeSearch(IBee bee, EntityPlayer player) {
+	public void startBiomeSearch(IBee bee, PlayerEntity player) {
 		this.targetBiomes = new HashSet<>(bee.getSuitableBiomes());
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
@@ -90,15 +90,15 @@ public class HabitatLocatorLogic {
 		}
 
 		// once we've found the biome, slow down to conserve cpu and network data
-		if (biomeFound && world.getTotalWorldTime() % 20 != 0) {
+		if (biomeFound && world.getGameTime() % 20 != 0) {
 			return;
 		}
 
 		BlockPos target = findNearestBiome(player, targetBiomes);
 
 		// send an update if we find the biome
-		if (target != null && player instanceof EntityPlayerMP) {
-			NetworkUtil.sendToPlayer(new PacketHabitatBiomePointer(target), (EntityPlayerMP) player);
+		if (target != null && player instanceof ServerPlayerEntity) {
+			NetworkUtil.sendToPlayer(new PacketHabitatBiomePointer(target), (ServerPlayerEntity) player);
 			biomeFound = true;
 		}
 	}

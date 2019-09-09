@@ -16,28 +16,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.BiomeDictionary;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IGenome;
+import genetics.api.mutation.IMutation;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IMutation;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
 
 public abstract class Mutation implements IMutation, IMutationBuilder {
 
 	private final int chance;
-
-	private final IAlleleSpecies species0;
-	private final IAlleleSpecies species1;
+	private final IAlleleForestrySpecies firstParent;
+	private final IAlleleForestrySpecies secondParent;
 
 	private final IAllele[] template;
 
@@ -46,9 +47,9 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 
 	private boolean isSecret = false;
 
-	protected Mutation(IAlleleSpecies species0, IAlleleSpecies species1, IAllele[] template, int chance) {
-		this.species0 = species0;
-		this.species1 = species1;
+	protected Mutation(IAlleleForestrySpecies firstParent, IAlleleForestrySpecies secondParent, IAllele[] template, int chance) {
+		this.firstParent = firstParent;
+		this.secondParent = secondParent;
 		this.template = template;
 		this.chance = chance;
 	}
@@ -111,7 +112,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public Mutation requireResource(IBlockState... acceptedBlockStates) {
+	public Mutation requireResource(BlockState... acceptedBlockStates) {
 		IMutationCondition mutationCondition = new MutationConditionRequiresResource(acceptedBlockStates);
 		return addMutationCondition(mutationCondition);
 	}
@@ -129,10 +130,10 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 		return this;
 	}
 
-	protected float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+	protected float getChance(World world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate) {
 		float mutationChance = chance;
 		for (IMutationCondition mutationCondition : mutationConditions) {
-			mutationChance *= mutationCondition.getChance(world, pos, allele0, allele1, genome0, genome1, climate);
+			mutationChance *= mutationCondition.getChance(world, pos, firstParent, secondParent, firstGenome, secondGenome, climate);
 			if (mutationChance == 0) {
 				return 0;
 			}
@@ -141,13 +142,18 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public IAlleleSpecies getAllele0() {
-		return species0;
+	public IAlleleSpecies getFirstParent() {
+		return firstParent;
 	}
 
 	@Override
-	public IAlleleSpecies getAllele1() {
-		return species1;
+	public IAlleleSpecies getSecondParent() {
+		return secondParent;
+	}
+
+	@Override
+	public IAlleleSpecies getResultingSpecies() {
+		return (IAlleleSpecies) template[0];//ToDo: More testing ?
 	}
 
 	@Override
@@ -162,17 +168,17 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 
 	@Override
 	public boolean isPartner(IAllele allele) {
-		return species0.getUID().equals(allele.getUID()) || species1.getUID().equals(allele.getUID());
+		return firstParent.getRegistryName().equals(allele.getRegistryName()) || secondParent.getRegistryName().equals(allele.getRegistryName());
 	}
 
 	@Override
 	public IAllele getPartner(IAllele allele) {
-		if (species0.getUID().equals(allele.getUID())) {
-			return species1;
-		} else if (species1.getUID().equals(allele.getUID())) {
-			return species0;
+		if (firstParent.getRegistryName().equals(allele.getRegistryName())) {
+			return secondParent;
+		} else if (secondParent.getRegistryName().equals(allele.getRegistryName())) {
+			return firstParent;
 		} else {
-			throw new IllegalArgumentException("Tried to get partner for allele that is not part of this mutation.");
+			throw new IllegalArgumentException("Tried to getComb partner for allele that is not part of this mutation.");
 		}
 	}
 
@@ -184,8 +190,8 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	@Override
 	public String toString() {
 		MoreObjects.ToStringHelper stringHelper = MoreObjects.toStringHelper(this)
-			.add("first", species0)
-			.add("second", species1)
+			.add("first", firstParent)
+			.add("second", secondParent)
 			.add("result", template[0]);
 		if (!specialConditions.isEmpty()) {
 			stringHelper.add("conditions", getSpecialConditions());

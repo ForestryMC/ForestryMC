@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import forestry.api.arboriculture.ITreeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.ITreekeepingMode;
 
 public class TreekeepingMode implements ITreekeepingMode {
@@ -53,27 +54,27 @@ public class TreekeepingMode implements ITreekeepingMode {
 	}
 
 	@Override
-	public float getHeightModifier(ITreeGenome genome, float currentModifier) {
+	public float getHeightModifier(IGenome genome, float currentModifier) {
 		return 1f;
 	}
 
 	@Override
-	public float getYieldModifier(@Nullable ITreeGenome genome, float currentModifier) {
+	public float getYieldModifier(@Nullable IGenome genome, float currentModifier) {
 		return yieldModifier;
 	}
 
 	@Override
-	public float getSappinessModifier(ITreeGenome genome, float currentModifier) {
+	public float getSappinessModifier(IGenome genome, float currentModifier) {
 		return sappinessModifier;
 	}
 
 	@Override
-	public float getMaturationModifier(ITreeGenome genome, float currentModifier) {
+	public float getMaturationModifier(IGenome genome, float currentModifier) {
 		return maturationModifier;
 	}
 
 	@Override
-	public float getMutationModifier(ITreeGenome genome, ITreeGenome mate, float currentModifier) {
+	public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
 		return mutationModifier;
 	}
 }

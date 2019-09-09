@@ -36,21 +36,8 @@ public interface IFarmHousing extends IErrorLogicSource {
 	 * It's up to the logic to only call this on a valid location.
 	 *
 	 * @return true if planting was successful, false otherwise.
-	 * @deprecated TODO remove this method in 1.13
 	 */
-	@Deprecated
-	boolean plantGermling(IFarmable farmable, World world, BlockPos pos);
-
-	/**
-	 * Callback for {@link IFarmLogic}s to plant a sapling, seed, germling, stem.
-	 * Will remove the appropriate germling from the farm's inventory.
-	 * It's up to the logic to only call this on a valid location.
-	 *
-	 * @return true if planting was successful, false otherwise.
-	 */
-	default boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction) {
-		return plantGermling(farmable, world, pos);
-	}
+	boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction);
 
 	default boolean isValidPlatform(World world, BlockPos pos) {
 		return false;

@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "forestry:catalogue"
+  },
+  "ingredients": [
+    {
+      "item": "forestry:stamps",
+      "data": 32767
+    },
+    {
+      "item": "minecraft:book"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "mail",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "mail"
+}

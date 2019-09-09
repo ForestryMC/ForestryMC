@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -79,7 +79,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 
 			for (int i = 0; i < extent; i++) {
 				BlockPos position = translateWithOffset(pos, direction, i);
-				IBlockState soilState = world.getBlockState(position);
+				BlockState soilState = world.getBlockState(position);
 
 				if (!world.isBlockLoaded(position) || farmHousing.isValidPlatform(world, pos)) {
 					break;

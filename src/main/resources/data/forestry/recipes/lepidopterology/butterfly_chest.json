@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "forestry:butterfly_chest",
+    "data": 0
+  },
+  "pattern": [
+    " # ",
+    "XYX",
+    "XXX"
+  ],
+  "conditions": [
+    {
+      "module": "lepidopterology",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "forestry:butterfly_ge",
+      "data": 32767
+    },
+    "Y": {
+      "item": "#CHESTWOOD"
+    }
+  },
+  "group": "lepidopterology"
+}

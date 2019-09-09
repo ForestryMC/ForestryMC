@@ -10,12 +10,18 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IResearchHandler;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;
@@ -39,12 +45,12 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 			if (specimen.isEmpty()) {
 				return false;
 			}
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
-			return individual != null && individual.getGenome().getPrimary().getResearchSuitability(itemStack) > 0;
+			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
+			return optional.filter(individual -> ((IResearchHandler) individual.getRoot().getComponent(ForestryComponentKeys.RESEARCH)).getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0).isPresent();
 		}
 
 		return slotIndex == SLOT_ANALYZE &&
-			(AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null);
+			(GeneticsAPI.apiInstance.getRootHelper().isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
 
 	}
 
@@ -66,7 +72,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
 	}
 
@@ -74,9 +80,9 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		super.setInventorySlotContents(slotIndex, itemstack);
 		if (slotIndex == SLOT_ANALYZE) {
-			if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && !getStackInSlot(SLOT_ANALYZE).isEmpty()) {
+			if (!GeneticsAPI.apiInstance.getRootHelper().isIndividual(getStackInSlot(SLOT_ANALYZE)) && !getStackInSlot(SLOT_ANALYZE).isEmpty()) {
 				ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
-				if (AlleleManager.alleleRegistry.isIndividual(ersatz)) {
+				if (GeneticsAPI.apiInstance.getRootHelper().isIndividual(ersatz)) {
 					super.setInventorySlotContents(SLOT_ANALYZE, ersatz);
 				}
 			}

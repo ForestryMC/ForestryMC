@@ -1,0 +1,29 @@
+{
+  "parent": "forestry:item/backpacks/woven_neutral",
+  "overrides": [
+    {
+      "predicate": {
+        "mode": 0
+      },
+      "model": "forestry:item/backpacks/woven_neutral"
+    },
+    {
+      "predicate": {
+        "mode": 1
+      },
+      "model": "forestry:item/backpacks/woven_locked"
+    },
+    {
+      "predicate": {
+        "mode": 2
+      },
+      "model": "forestry:item/backpacks/woven_receive"
+    },
+    {
+      "predicate": {
+        "mode": 3
+      },
+      "model": "forestry:item/backpacks/woven_resupply"
+    }
+  ]
+}

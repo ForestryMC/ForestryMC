@@ -5,25 +5,25 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public enum FarmDirection {
-	NORTH(EnumFacing.NORTH),
-	EAST(EnumFacing.EAST),
-	SOUTH(EnumFacing.SOUTH),
-	WEST(EnumFacing.WEST);
+	NORTH(Direction.NORTH),
+	EAST(Direction.EAST),
+	SOUTH(Direction.SOUTH),
+	WEST(Direction.WEST);
 
-	private final EnumFacing forgeDirection;
+	private final Direction forgeDirection;
 
-	FarmDirection(EnumFacing forgeDirection) {
+	FarmDirection(Direction forgeDirection) {
 		this.forgeDirection = forgeDirection;
 	}
 
-	public EnumFacing getFacing() {
+	public Direction getFacing() {
 		return forgeDirection;
 	}
 
-	public static FarmDirection getFarmDirection(EnumFacing forgeDirection) {
+	public static FarmDirection getFarmDirection(Direction forgeDirection) {
 		switch (forgeDirection) {
 			case NORTH:
 				return NORTH;
@@ -34,7 +34,7 @@ public enum FarmDirection {
 			case WEST:
 				return WEST;
 			default:
-				throw new IllegalArgumentException("Farm directios can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
+				throw new IllegalArgumentException("Farm directions can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
 		}
 	}
 }

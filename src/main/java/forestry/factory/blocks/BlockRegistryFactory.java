@@ -11,7 +11,7 @@
 package forestry.factory.blocks;
 
 import forestry.core.blocks.BlockRegistry;
-import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockNBT;
 import forestry.factory.MachineUIDs;
 
@@ -30,28 +30,28 @@ public class BlockRegistryFactory extends BlockRegistry {
 
 	public BlockRegistryFactory() {
 		bottler = new BlockFactoryTESR(BlockTypeFactoryTesr.BOTTLER);
-		registerBlock(bottler, new ItemBlockForestry<>(bottler), MachineUIDs.BOTTLER);
+		registerBlock(bottler, new ItemBlockBase<>(bottler, BlockTypeFactoryTesr.BOTTLER), MachineUIDs.BOTTLER);
 
 		carpenter = new BlockFactoryTESR(BlockTypeFactoryTesr.CARPENTER);
-		registerBlock(carpenter, new ItemBlockForestry<>(carpenter), MachineUIDs.CARPENTER);
+		registerBlock(carpenter, new ItemBlockBase<>(carpenter, BlockTypeFactoryTesr.CARPENTER), MachineUIDs.CARPENTER);
 
 		centrifuge = new BlockFactoryTESR(BlockTypeFactoryTesr.CENTRIFUGE);
-		registerBlock(centrifuge, new ItemBlockForestry<>(centrifuge), MachineUIDs.CENTRIFUGE);
+		registerBlock(centrifuge, new ItemBlockBase<>(centrifuge, BlockTypeFactoryTesr.CENTRIFUGE), MachineUIDs.CENTRIFUGE);
 
 		fermenter = new BlockFactoryTESR(BlockTypeFactoryTesr.FERMENTER);
-		registerBlock(fermenter, new ItemBlockForestry<>(fermenter), MachineUIDs.FERMENTER);
+		registerBlock(fermenter, new ItemBlockBase<>(fermenter, BlockTypeFactoryTesr.FERMENTER), MachineUIDs.FERMENTER);
 
 		moistener = new BlockFactoryTESR(BlockTypeFactoryTesr.MOISTENER);
-		registerBlock(moistener, new ItemBlockForestry<>(moistener), MachineUIDs.MOISTENER);
+		registerBlock(moistener, new ItemBlockBase<>(moistener, BlockTypeFactoryTesr.MOISTENER), MachineUIDs.MOISTENER);
 
 		squeezer = new BlockFactoryTESR(BlockTypeFactoryTesr.SQUEEZER);
-		registerBlock(squeezer, new ItemBlockForestry<>(squeezer), MachineUIDs.SQUEEZER);
+		registerBlock(squeezer, new ItemBlockBase<>(squeezer, BlockTypeFactoryTesr.SQUEEZER), MachineUIDs.SQUEEZER);
 
 		still = new BlockFactoryTESR(BlockTypeFactoryTesr.STILL);
-		registerBlock(still, new ItemBlockForestry<>(still), MachineUIDs.STILL);
+		registerBlock(still, new ItemBlockBase<>(still, BlockTypeFactoryTesr.STILL), MachineUIDs.STILL);
 
 		rainmaker = new BlockFactoryTESR(BlockTypeFactoryTesr.RAINMAKER);
-		registerBlock(rainmaker, new ItemBlockForestry<>(rainmaker), MachineUIDs.RAINMAKER);
+		registerBlock(rainmaker, new ItemBlockBase<>(rainmaker, BlockTypeFactoryTesr.RAINMAKER), MachineUIDs.RAINMAKER);
 
 		fabricator = new BlockFactoryPlain(BlockTypeFactoryPlain.FABRICATOR);
 		registerBlock(fabricator, new ItemBlockNBT(fabricator), MachineUIDs.FABRICATOR);

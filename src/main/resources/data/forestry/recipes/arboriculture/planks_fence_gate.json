@@ -1,0 +1,22 @@
+{
+  "output": {
+    "fireproof": false,
+    "blockKind": "FENCE_GATE"
+  },
+  "input": {
+    "fireproof": false,
+    "blockKind": "PLANKS"
+  },
+  "pattern": [
+    "X#X",
+    "X#X"
+  ],
+  "conditions": [
+    {
+      "module": "arboriculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:wood_type",
+  "group": "arboriculture"
+}

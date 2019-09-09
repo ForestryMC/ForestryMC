@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import genetics.api.alleles.IAllele;
+
 public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, Comparable<A> {
 
 	/**

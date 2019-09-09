@@ -1,0 +1,50 @@
+{
+  "result": {
+    "item": "forestry:bog_earth",
+    "data": 0,
+    "count": 8
+  },
+  "pattern": [
+    "#Y#",
+    "YXY",
+    "#Y#"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.bogearth.can",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": [
+      {
+        "nbt": "{Fluid:{FluidName:\"water\",Amount:1000}}",
+        "item": "forestry:can",
+        "data": 1,
+        "type": "minecraft:item_nbt"
+      },
+      {
+        "nbt": "{Fluid:{FluidName:\"water\",Amount:1000}}",
+        "item": "forestry:capsule",
+        "data": 1,
+        "type": "minecraft:item_nbt"
+      },
+      {
+        "nbt": "{Fluid:{FluidName:\"water\",Amount:1000}}",
+        "item": "forestry:refractory",
+        "data": 1,
+        "type": "minecraft:item_nbt"
+      }
+    ],
+    "Y": {
+      "item": "#SAND"
+    }
+  },
+  "group": "core"
+}

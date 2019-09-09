@@ -13,8 +13,6 @@ package forestry.core.utils.datastructures;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
@@ -30,11 +28,13 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 			return a.getItem() == b;
 		}
 		if (b instanceof String) {
-			for (ItemStack stack : OreDictionary.getOres((String) b)) {
-				if (areEqual(a, stack)) {
-					return true;
-				}
-			}
+			//TODO - tags
+			//			for (ItemStack stack : OreDictionary.getOres((String) b)) {
+			//				if (areEqual(a, stack)) {
+			//					return true;
+			//				}
+			//			}
+			return false;
 		}
 		return false;
 	}

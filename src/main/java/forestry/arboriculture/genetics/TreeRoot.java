@@ -15,91 +15,83 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootContext;
+import genetics.api.root.IndividualRoot;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeMutation;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.ITreekeepingMode;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IAlyzerPlugin;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IBreedingTrackerHandler;
 import forestry.api.genetics.ICheckPollinatable;
-import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
-import forestry.api.genetics.ISpeciesType;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.BlockSapling;
-import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.genetics.SpeciesRoot;
+import forestry.core.genetics.root.BreedingTrackerManager;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.RenderUtil;
 
-public class TreeRoot extends SpeciesRoot implements ITreeRoot {
+public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreedingTrackerHandler {
 	public static final String UID = "rootTrees";
 	private static int treeSpeciesCount = -1;
 	@Nullable
 	private static ITreekeepingMode activeTreekeepingMode;
-	public static final List<ITree> treeTemplates = new ArrayList<>();
 
 	private final Map<IFruitFamily, Collection<IFruitProvider>> providersForFamilies = new HashMap<>();
 	private final List<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
-	public TreeRoot() {
-		setResearchSuitability(new ItemStack(Blocks.SAPLING, 1, OreDictionary.WILDCARD_VALUE), 1.0f);
+	public TreeRoot(IRootContext<ITree> context) {
+		super(context);
+		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
 	}
 
 	@Override
-	public String getUID() {
-		return UID;
-	}
-
-	@Override
-	public Class<? extends IIndividual> getMemberClass() {
+	public Class<? extends ITree> getMemberClass() {
 		return ITree.class;
 	}
 
@@ -107,9 +99,9 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public int getSpeciesCount() {
 		if (treeSpeciesCount < 0) {
 			treeSpeciesCount = 0;
-			for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
-				if (entry.getValue() instanceof IAlleleTreeSpecies) {
-					if (((IAlleleTreeSpecies) entry.getValue()).isCounted()) {
+			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
+				if (allele instanceof IAlleleTreeSpecies) {
+					if (((IAlleleTreeSpecies) allele).isCounted()) {
 						treeSpeciesCount++;
 					}
 				}
@@ -120,13 +112,28 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean isMember(ItemStack itemstack) {
-		return getType(itemstack) != null;
+	public ITree create(CompoundNBT compound) {
+		return new Tree(compound);
 	}
 
 	@Override
-	public boolean isMember(ItemStack stack, ISpeciesType type) {
-		return getType(stack) == type;
+	public ITree create(IGenome genome) {
+		return new Tree(genome);
+	}
+
+	@Override
+	public ITree create(IGenome genome, IGenome mate) {
+		return new Tree(genome, mate);
+	}
+
+	@Override
+	public IGenomeWrapper createWrapper(IGenome genome) {
+		return () -> genome;
+	}
+
+	@Override
+	public ITree getTree(World world, IGenome genome) {
+		return create(genome);
 	}
 
 	@Override
@@ -134,33 +141,15 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		return individual instanceof ITree;
 	}
 
-	/* TREE SPECIFIC */
 	@Override
-	@Nullable
-	public EnumGermlingType getType(ItemStack stack) {
-		if (stack.isEmpty()) {
-			return null;
-		}
-		ItemRegistryArboriculture items = ModuleArboriculture.getItems();
-
-		Item item = stack.getItem();
-		if (items.sapling == item) {
-			return EnumGermlingType.SAPLING;
-		} else if (items.pollenFertile == item) {
-			return EnumGermlingType.POLLEN;
-		}
-
-		return null;
+	public boolean isMember(ItemStack itemstack) {
+		return getTypes().getType(itemstack).isPresent();
 	}
 
+	/* TREE SPECIFIC */
 	@Override
 	public EnumGermlingType getIconType() {
 		return EnumGermlingType.SAPLING;
-	}
-
-	@Override
-	public ISpeciesType[] getTypes() {
-		return EnumGermlingType.values();
 	}
 
 	@Override
@@ -169,64 +158,15 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	@Nullable
-	public ITree getMember(ItemStack itemstack) {
-		if (!isMember(itemstack) || itemstack.getTagCompound() == null) {
-			return null;
-		}
-
-		return new Tree(itemstack.getTagCompound());
-	}
-
-	@Override
-	public ITree getMember(NBTTagCompound compound) {
-		return new Tree(compound);
-	}
-
-	@Override
-	public ITree getTree(World world, ITreeGenome genome) {
-		return new Tree(genome);
-	}
-
-	@Override
-	public ItemStack getMemberStack(IIndividual tree, ISpeciesType type) {
-		Preconditions.checkArgument(tree instanceof ITree, "individual is not a tree");
-		Preconditions.checkArgument(type instanceof EnumGermlingType, "type is not an EnumGermlingType");
-		ItemRegistryArboriculture items = ModuleArboriculture.getItems();
-
-		Item germlingItem;
-		switch ((EnumGermlingType) type) {
-			case SAPLING:
-				germlingItem = items.sapling;
-				break;
-			case POLLEN:
-				germlingItem = items.pollenFertile;
-				break;
-			default:
-				throw new RuntimeException("Cannot instantiate a tree of type " + type);
-		}
-
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		tree.writeToNBT(nbttagcompound);
-
-		ItemStack treeStack = new ItemStack(germlingItem);
-		treeStack.setTagCompound(nbttagcompound);
-
-		return treeStack;
-
-	}
-
-	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
-
-		IBlockState state = blocks.saplingGE.getDefaultState().withProperty(BlockSapling.TREE, tree.getGenome().getPrimary());
+		BlockState state = blocks.saplingGE.getDefaultState().with(BlockSapling.TREE, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;
 		}
 
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
 		if (blocks.saplingGE != block) {
 			return false;
@@ -234,7 +174,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling == null) {
-			world.setBlockToAir(pos);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			return false;
 		}
 
@@ -248,17 +188,17 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean setFruitBlock(World world, ITreeGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
+	public boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
 		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
 
-		EnumFacing facing = BlockUtil.getValidPodFacing(world, pos);
+		Direction facing = BlockUtil.getValidPodFacing(world, pos);
 		if (facing != null) {
 
 			BlockFruitPod fruitPod = blocks.getFruitPod(allele);
 			if (fruitPod != null) {
 
-				IBlockState state = fruitPod.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
-				boolean placed = world.setBlockState(pos, state);
+				BlockState state = fruitPod.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
+				boolean placed = world.setBlockState(pos, state, 18);
 				if (placed) {
 
 					Block block = world.getBlockState(pos).getBlock();
@@ -267,10 +207,10 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 						TileFruitPod pod = TileUtil.getTile(world, pos, TileFruitPod.class);
 						if (pod != null) {
 							pod.setProperties(genome, allele, yield);
-							world.markBlockRangeForRenderUpdate(pos, pos);
+							RenderUtil.markForUpdate(pos);
 							return true;
 						} else {
-							world.setBlockToAir(pos);
+							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
 							return false;
 						}
 					}
@@ -280,43 +220,30 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		return false;
 	}
 
-	/* GENOME CONVERSIONS */
-	@Override
-	public ITreeGenome templateAsGenome(IAllele[] template) {
-		return new TreeGenome(templateAsChromosomes(template));
-	}
-
-	@Override
-	public ITreeGenome templateAsGenome(IAllele[] templateActive, IAllele[] templateInactive) {
-		return new TreeGenome(templateAsChromosomes(templateActive, templateInactive));
-	}
-
-	@Override
-	public ITree templateAsIndividual(IAllele[] template) {
-		return new Tree(templateAsGenome(template));
-	}
-
-	@Override
-	public ITree templateAsIndividual(IAllele[] templateActive, IAllele[] templateInactive) {
-		return new Tree(templateAsGenome(templateActive, templateInactive));
-	}
-
 	/* BREEDING TRACKER */
 	@Override
-	public IArboristTracker getBreedingTracker(World world, @Nullable GameProfile player) {
-		String filename = "ArboristTracker." + (player == null ? "common" : player.getId());
-		ArboristTracker tracker = (ArboristTracker) world.loadData(ArboristTracker.class, filename);
+	public IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
+	}
 
-		// Create a tracker if there is none yet.
-		if (tracker == null) {
-			tracker = new ArboristTracker(filename);
-			world.setData(filename, tracker);
+	@Override
+	public String getFileName(@Nullable GameProfile profile) {
+		return "ArboristTracker." + (profile == null ? "common" : profile.getId());
+	}
+
+	@Override
+	public IBreedingTracker createTracker(String fileName) {
+		return new ArboristTracker(fileName);
+	}
+
+	@Override
+	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+		if (!(tracker instanceof ArboristTracker)) {
+			return;
 		}
-
-		tracker.setUsername(player);
-		tracker.setWorld(world);
-
-		return tracker;
+		ArboristTracker arboristTracker = (ArboristTracker) tracker;
+		arboristTracker.setWorld(world);
+		arboristTracker.setUsername(profile);
 	}
 
 	/* BREEDING MODES */
@@ -327,7 +254,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public ITreekeepingMode getTreekeepingMode(World world) {
+	public ITreekeepingMode getTreekeepingMode(IWorld world) {
 		if (activeTreekeepingMode != null) {
 			return activeTreekeepingMode;
 		}
@@ -349,7 +276,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public void setTreekeepingMode(World world, ITreekeepingMode mode) {
+	public void setTreekeepingMode(IWorld world, ITreekeepingMode mode) {
 		activeTreekeepingMode = mode;
 		getBreedingTracker(world, null).setModeName(mode.getName());
 	}
@@ -366,50 +293,6 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 		return treekeepingModes.get(0);
 	}
 
-	/* TEMPLATES */
-
-	@Override
-	public List<ITree> getIndividualTemplates() {
-		return treeTemplates;
-	}
-
-	@Override
-	public void registerTemplate(String identifier, IAllele[] template) {
-		treeTemplates.add(new Tree(TreeManager.treeRoot.templateAsGenome(template)));
-		speciesTemplates.put(identifier, template);
-	}
-
-	@Override
-	public IAllele[] getDefaultTemplate() {
-		return TreeDefinition.Oak.getTemplate();
-	}
-
-	/* MUTATIONS */
-	private static final List<ITreeMutation> treeMutations = new ArrayList<>();
-
-	@Override
-	public List<ITreeMutation> getMutations(boolean shuffle) {
-		if (shuffle) {
-			Collections.shuffle(treeMutations);
-		}
-		return treeMutations;
-	}
-
-	@Override
-	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
-			return;
-		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
-			return;
-		}
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
-			return;
-		}
-
-		treeMutations.add((ITreeMutation) mutation);
-	}
-
 	/* ILEAFTICKHANDLER */
 	private final LinkedList<ILeafTickHandler> leafTickHandlers = new LinkedList<>();
 
@@ -424,22 +307,12 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public IChromosomeType[] getKaryotype() {
-		return EnumTreeChromosome.values();
-	}
-
-	@Override
-	public IChromosomeType getSpeciesChromosomeType() {
-		return EnumTreeChromosome.SPECIES;
-	}
-
-	@Override
 	public IAlyzerPlugin getAlyzerPlugin() {
 		return TreeAlyzerPlugin.INSTANCE;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public IDatabasePlugin getSpeciesPlugin() {
 		return TreePlugin.INSTANCE;
 	}
@@ -455,7 +328,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual individual) {
 		Preconditions.checkArgument(individual instanceof ITree, "pollen must be an instance of ITree");
 		ITree pollen = (ITree) individual;
-		if (pollen.setLeaves(world, owner, pos)) {
+		if (pollen.setLeaves(world, owner, pos, world.rand)) {
 			return TileUtil.getTile(world, pos, IPollinatable.class);
 		} else {
 			return null;
@@ -466,7 +339,7 @@ public class TreeRoot extends SpeciesRoot implements ITreeRoot {
 	public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
 		if (providersForFamilies.isEmpty()) {
 			@SuppressWarnings("unchecked")
-			Collection<IAlleleFruit> fruitAlleles = (Collection<IAlleleFruit>) (Object) AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.FRUITS);
+			Collection<IAlleleFruit> fruitAlleles = (Collection<IAlleleFruit>) (Object) GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.FRUITS);
 			for (IAlleleFruit alleleFruit : fruitAlleles) {
 				IFruitProvider fruitProvider = alleleFruit.getProvider();
 				Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());

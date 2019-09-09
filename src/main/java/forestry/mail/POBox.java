@@ -14,11 +14,10 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.WorldSavedData;
 
 import forestry.api.mail.EnumAddressee;
@@ -30,7 +29,7 @@ import forestry.core.utils.InventoryUtil;
 
 public class POBox extends WorldSavedData implements IInventory {
 
-	public static final String SAVE_NAME = "POBox_";
+	public static final String SAVE_NAME = "pobox_";
 	public static final short SLOT_SIZE = 84;
 
 	@Nullable
@@ -51,22 +50,22 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound.hasKey("address")) {
-			this.address = new MailAddress(nbttagcompound.getCompoundTag("address"));
+	public void read(CompoundNBT compoundNBT) {
+		if (compoundNBT.contains("address")) {
+			this.address = new MailAddress(compoundNBT.getCompound("address"));
 		}
-		letters.readFromNBT(nbttagcompound);
+		letters.read(compoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 		if (this.address != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			this.address.writeToNBT(nbt);
-			nbttagcompound.setTag("address", nbt);
+			CompoundNBT nbt = new CompoundNBT();
+			this.address.write(nbt);
+			compoundNBT.put("address", nbt);
 		}
-		letters.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		letters.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	public boolean storeLetter(ItemStack letterstack) {
@@ -76,9 +75,9 @@ public class POBox extends WorldSavedData implements IInventory {
 		// Mark letter as processed
 		letter.setProcessed(true);
 		letter.invalidatePostage();
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		letter.writeToNBT(nbttagcompound);
-		letterstack.setTagCompound(nbttagcompound);
+		CompoundNBT compoundNBT = new CompoundNBT();
+		letter.write(compoundNBT);
+		letterstack.setTag(compoundNBT);
 
 		this.markDirty();
 
@@ -92,7 +91,7 @@ public class POBox extends WorldSavedData implements IInventory {
 			if (letters.getStackInSlot(i).isEmpty()) {
 				continue;
 			}
-			NBTTagCompound tagCompound = letters.getStackInSlot(i).getTagCompound();
+			CompoundNBT tagCompound = letters.getStackInSlot(i).getTag();
 			if (tagCompound != null) {
 				ILetter letter = new Letter(tagCompound);
 				if (letter.getSender().getType() == EnumAddressee.PLAYER) {
@@ -145,10 +144,10 @@ public class POBox extends WorldSavedData implements IInventory {
 		return letters.removeStackFromSlot(index);
 	}
 
-	@Override
-	public String getName() {
-		return letters.getName();
-	}
+	//	@Override
+	//	public String getName() {
+	//		return letters.getName();
+	//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -156,46 +155,21 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer var1) {
+	public boolean isUsableByPlayer(PlayerEntity var1) {
 		return letters.isUsableByPlayer(var1);
 	}
 
 	@Override
-	public void openInventory(EntityPlayer var1) {
+	public void openInventory(PlayerEntity var1) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer var1) {
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return true;
+	public void closeInventory(PlayerEntity var1) {
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return letters.isItemValidForSlot(i, itemstack);
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return letters.getDisplayName();
-	}
-
-	/* FIELDS */
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
 	}
 
 	@Override

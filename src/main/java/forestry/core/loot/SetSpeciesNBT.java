@@ -4,46 +4,47 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
-import java.util.Random;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.ILootFunction;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.genetics.ISpeciesType;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
-public class SetSpeciesNBT extends LootFunction {
+//TODO - loot tables now different
+public class SetSpeciesNBT implements ILootFunction {
 	private final String speciesUid;
 
-	public SetSpeciesNBT(LootCondition[] conditionsIn, String speciesUid) {
-		super(conditionsIn);
+	public SetSpeciesNBT(String speciesUid) {
 		this.speciesUid = speciesUid;
 	}
 
 	@Override
-	public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(stack);
-		if (speciesRoot != null) {
-			ISpeciesType speciesType = speciesRoot.getType(stack);
-			if (speciesType != null) {
-				IAllele[] template = speciesRoot.getTemplate(speciesUid);
-				if (template != null) {
+	public ItemStack apply(ItemStack stack, LootContext context) {
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stack);
+		if (definition.isRootPresent()) {
+			IIndividualRoot<IIndividual> speciesRoot = definition.get();
+			Optional<IOrganismType> speciesType = speciesRoot.getTypes().getType(stack);
+			if (speciesType.isPresent()) {
+				IAllele[] template = speciesRoot.getTemplates().getTemplate(speciesUid);
+				if (template.length > 0) {
 					IIndividual individual = speciesRoot.templateAsIndividual(template);
-					return speciesRoot.getMemberStack(individual, speciesType);
+					return speciesRoot.getTypes().createStack(individual, speciesType.get());
 				}
 			}
 		}
 		return stack;
 	}
 
-	public static class Serializer extends LootFunction.Serializer<SetSpeciesNBT> {
+	public static class Serializer extends ILootFunction.Serializer<SetSpeciesNBT> {
 		public Serializer() {
 			super(new ResourceLocation("set_species_nbt"), SetSpeciesNBT.class);
 		}
@@ -54,9 +55,9 @@ public class SetSpeciesNBT extends LootFunction {
 		}
 
 		@Override
-		public SetSpeciesNBT deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootCondition[] conditionsIn) {
-			String speciesUid = JsonUtils.getString(object, "speciesUid");
-			return new SetSpeciesNBT(conditionsIn, speciesUid);
+		public SetSpeciesNBT deserialize(JsonObject object, JsonDeserializationContext deserializationContext) {
+			String speciesUid = JSONUtils.getString(object, "speciesUid");
+			return new SetSpeciesNBT(speciesUid);
 		}
 	}
 }

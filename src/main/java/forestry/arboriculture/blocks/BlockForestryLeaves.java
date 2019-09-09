@@ -14,121 +14,89 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IToolScoop;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 
-public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEntityProvider, IGrowable {
+public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
 	public BlockForestryLeaves() {
-		setDefaultState(this.blockState.getBaseState()
-			.withProperty(CHECK_DECAY, false)
-			.withProperty(DECAYABLE, true));
+		super(Block.Properties.create(Material.LEAVES)
+			.hardnessAndResistance(0.2f)
+			.sound(SoundType.PLANT)
+			.tickRandomly());
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this,
-			new IProperty[]{DECAYABLE, CHECK_DECAY},
-			new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS}
-		);
-	}
-
-	@Override
-	protected ITree getTree(IBlockAccess world, BlockPos pos) {
+	protected ITree getTree(IBlockReader world, BlockPos pos) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			ITree tree = leaves.getTree();
-			if (tree != null) {
-				return tree;
-			}
+			return tree;
 		}
 
 		return null;
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(world, pos, state, rand);
+	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+		super.tick(state, world, pos, rand);
 
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 
 		// check leaves tile because they might have decayed
-		if (tileLeaves != null && !tileLeaves.isInvalid() && rand.nextFloat() <= 0.1) {
+		if (tileLeaves != null && !tileLeaves.isRemoved() && rand.nextFloat() <= 0.1) {
 			tileLeaves.onBlockTick(world, pos, state, rand);
 		}
 	}
 
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		int i = 0;
-		if (!state.getValue(DECAYABLE)) {
-			i |= DECAYABLE_FLAG;
-		}
-
-		if (state.getValue(CHECK_DECAY)) {
-			i |= CHECK_DECAY_FLAG;
-		}
-
-		return i;
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(DECAYABLE, (meta & DECAYABLE_FLAG) == 0).withProperty(CHECK_DECAY, (meta & CHECK_DECAY_FLAG) > 0);
-	}
-
-	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
-	}
+	//TODO extended state
+	//	@Override
+	//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		return super.getExtendedState(state, world, pos).with(UnlistedBlockPos.POS, pos)
+	//				.with(UnlistedBlockAccess.BLOCKACCESS, world);
+	//	}
 
 	/* TILE ENTITY */
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileLeaves();
 	}
 
@@ -144,12 +112,12 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 			return;
 		}
 
-		// Add saplings
+		// Add saplings	//TODO cast
 		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				drops.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING));
+				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
 
@@ -160,19 +128,19 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 	}
 
 	/* MODELS */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
-	}
+	//	@Override
+	//	@OnlyIn(Dist.CLIENT)
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
+	//	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			IButterfly caterpillar = leaves.getCaterpillar();
 			ItemStack heldItem = player.getHeldItem(hand);
-			ItemStack otherHand = player.getHeldItem(hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+			ItemStack otherHand = player.getHeldItem(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
 			if (heldItem.isEmpty() && otherHand.isEmpty()) {
 				if (leaves.hasFruit() && leaves.getRipeness() >= 0.9F) {
 					PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
@@ -183,7 +151,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 					return true;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-				ItemStack butterfly = ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR);
+				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
 				return true;
@@ -196,18 +164,18 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 	/* IGrowable */
 
 	@Override
-	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
+	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		return leafTile != null && leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
 		return true;
 	}
 
 	@Override
-	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
+	public void grow(World world, Random rand, BlockPos pos, BlockState state) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			leafTile.addRipeness(0.5f);
@@ -215,19 +183,19 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements ITileEnt
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+	@OnlyIn(Dist.CLIENT)
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn != null && pos != null) {
 			TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 			if (leaves != null) {
 				if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 					return leaves.getFruitColour();
 				} else {
-					EntityPlayer thePlayer = Minecraft.getMinecraft().player;
+					PlayerEntity thePlayer = Minecraft.getInstance().player;
 					return leaves.getFoliageColour(thePlayer);
 				}
 			}
 		}
-		return ModuleArboriculture.proxy.getFoliageColorBasic();
+		return ModuleArboriculture.proxy.getFoliageColorDefault();
 	}
 }

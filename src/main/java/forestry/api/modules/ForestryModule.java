@@ -10,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Annotation to provide additional information on IForestryModules. This information will be available via the "/forestry module info {@link #moduleID()}" command ingame.
- * Any class annotated by this and implementing {@link IForestryModule} will be loaded by the model manager of Forestry.
+ * Any class annotated by this and implementing {@link IForestryModule} will be loaded by the module manager of Forestry.
  *
  * @author Nedelosk
  */

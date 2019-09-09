@@ -1,5 +1,7 @@
 {
     "variants": {
-        "normal": { "model": "forestry:wood_pile" }
+      "": {
+        "model": "forestry:block/wood_pile"
+      }
 	}
 }

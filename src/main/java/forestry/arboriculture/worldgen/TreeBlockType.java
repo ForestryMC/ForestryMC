@@ -10,30 +10,30 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 public class TreeBlockType implements ITreeBlockType {
 
-	private final IBlockState blockState;
+	private final BlockState blockState;
 
-	public TreeBlockType(IBlockState blockState) {
+	public TreeBlockType(BlockState blockState) {
 		this.blockState = blockState;
 	}
 
 	@Override
-	public void setDirection(EnumFacing facing) {
+	public void setDirection(Direction facing) {
 
 	}
 
 	@Override
-	public boolean setBlock(World world, BlockPos pos) {
-		return world.setBlockState(pos, blockState);
+	public boolean setBlock(IWorld world, BlockPos pos) {
+		return world.setBlockState(pos, blockState, 18);
 	}
 
-	public IBlockState getBlockState() {
+	public BlockState getBlockState() {
 		return blockState;
 	}
 }

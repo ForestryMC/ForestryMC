@@ -13,8 +13,8 @@ package forestry.core.fluids;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -44,16 +44,11 @@ public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
 
 	@Override
 	public IFluidTank getTank(int tankIndex) {
-		return EmptyFluidHandler.INSTANCE;
+		return null;    //TODO return dummy tank instead?
 	}
 
 	@Override
 	public boolean canFillFluidType(FluidStack fluidStack) {
-		return false;
-	}
-
-	@Override
-	public boolean canDrainFluidType(FluidStack fluidStack) {
 		return false;
 	}
 

@@ -11,8 +11,8 @@
 package forestry.farming.logic.crops;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +37,7 @@ public class CropPeat extends Crop {
 			return false;
 		}
 
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 		BlockBogEarth.SoilType soilType = BlockBogEarth.getTypeFromState(blockState);
 		return soilType == BlockBogEarth.SoilType.PEAT;
 	}
@@ -47,7 +47,7 @@ public class CropPeat extends Crop {
 		NonNullList<ItemStack> drops = NonNullList.create();
 		drops.add(ModuleCore.getItems().peat.getItemStack());
 
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);

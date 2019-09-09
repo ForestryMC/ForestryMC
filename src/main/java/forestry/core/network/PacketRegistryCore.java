@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.packets.PacketActiveUpdate;
@@ -51,7 +52,7 @@ public class PacketRegistryCore implements IPacketRegistry {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerPacketsClient() {
 		PacketIdClient.ERROR_UPDATE.setPacketHandler(new PacketErrorUpdate.Handler());
 		PacketIdClient.ERROR_UPDATE_ENTITY.setPacketHandler(new PacketErrorUpdateEntity.Handler());

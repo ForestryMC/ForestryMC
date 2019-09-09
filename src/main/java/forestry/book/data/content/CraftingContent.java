@@ -3,13 +3,16 @@ package forestry.book.data.content;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
@@ -21,7 +24,7 @@ import forestry.book.gui.elements.CraftingElement;
 /**
  * A book content that displays one ore more crafting recipes.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class CraftingContent extends BookContent<CraftingData> {
 	@Override
 	public Class<CraftingData> getDataClass() {
@@ -35,7 +38,9 @@ public class CraftingContent extends BookContent<CraftingData> {
 		}
 		List<IRecipe> recipes = new LinkedList<>();
 		for (ResourceLocation location : data.locations) {
-			IRecipe recipe = ForgeRegistries.RECIPES.getValue(location);
+			//TODO sides
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
+			IRecipe recipe = recipeMap.get(location);
 			if (recipe != null) {
 				recipes.add(recipe);
 			}

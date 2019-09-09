@@ -1,0 +1,47 @@
+{
+  "result": {
+    "item": "forestry:bog_earth",
+    "data": 0,
+    "count": 8
+  },
+  "pattern": [
+    "#Y#",
+    "YXY",
+    "#Y#"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "core",
+          "type": "forestry:module"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ic2"
+        }
+      ]
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.bogearth.can",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": [
+      {
+        "nbt": "{Fluid:{FluidName:\"water\",Amount:1000}}",
+        "item": "ic2:fluid_cell",
+        "data": 1,
+        "type": "minecraft:item_nbt"
+      }
+    ],
+    "Y": {
+      "item": "#SAND"
+    }
+  },
+  "group": "plugins"
+}

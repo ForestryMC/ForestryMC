@@ -1,7 +1,7 @@
 {
     "textures": {
-		"particle": "forestry:blocks/lepidopterology/cocoons/cocoon_silk_late",
-        "0": "forestry:blocks/lepidopterology/cocoons/cocoon_silk_late"
+      "particle": "forestry:block/lepidopterology/cocoons/cocoon_silk_late",
+      "0": "forestry:block/lepidopterology/cocoons/cocoon_silk_late"
     },
     "elements": [
         {

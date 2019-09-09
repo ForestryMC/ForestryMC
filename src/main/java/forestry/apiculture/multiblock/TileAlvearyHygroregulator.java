@@ -12,26 +12,24 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.recipes.IHygroregulatorRecipe;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
-import forestry.apiculture.gui.GuiAlvearyHygroregulator;
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.core.config.Constants;
 import forestry.core.fluids.FilteredTank;
@@ -75,11 +73,11 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public void changeClimate(int tickCount, IClimateControlled climateControlled) {
 		if (transferTime <= 0) {
 			FluidStack fluid = liquidTank.getFluid();
-			if (fluid != null) {
+			if (!fluid.isEmpty()) {
 				currentRecipe = HygroregulatorManager.findMatchingRecipe(fluid);
 
 				if (currentRecipe != null) {
-					liquidTank.drainInternal(currentRecipe.getResource().amount, true);
+					liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
 					transferTime = currentRecipe.getTransferTime();
 				}
 			}
@@ -104,31 +102,31 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		tankManager.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
 
-		transferTime = nbttagcompound.getInteger("TransferTime");
+		transferTime = compoundNBT.getInt("TransferTime");
 
-		if (nbttagcompound.hasKey("CurrentLiquid")) {
-			FluidStack liquid = FluidStack.loadFluidStackFromNBT(nbttagcompound.getCompoundTag("CurrentLiquid"));
+		if (compoundNBT.contains("CurrentLiquid")) {
+			FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
 			currentRecipe = HygroregulatorManager.findMatchingRecipe(liquid);
 		}
 	}
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		tankManager.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
 
-		nbttagcompound.setInteger("TransferTime", transferTime);
+		compoundNBT.putInt("TransferTime", transferTime);
 		if (currentRecipe != null) {
-			NBTTagCompound subcompound = new NBTTagCompound();
+			CompoundNBT subcompound = new CompoundNBT();
 			currentRecipe.getResource().writeToNBT(subcompound);
-			nbttagcompound.setTag("CurrentLiquid", subcompound);
+			compoundNBT.put("CurrentLiquid", subcompound);
 		}
-		return nbttagcompound;
+		return compoundNBT;
 	}
 
 	/* ILIQUIDTANKCONTAINER */
@@ -139,31 +137,19 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
-			super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if (super.hasCapability(capability, facing)) {
-			return super.getCapability(capability, facing);
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> superCap = super.getCapability(capability, facing);
+		if (superCap.isPresent()) {
+			return superCap;
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiAlvearyHygroregulator(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerAlvearyHygroregulator(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAlvearyHygroregulator(windowId, inv, this);
 	}
 }

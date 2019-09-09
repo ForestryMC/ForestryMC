@@ -3,13 +3,14 @@ package forestry.database.gui.widgets;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
@@ -55,14 +56,14 @@ public class WidgetDatabaseSlot extends Widget {
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		return mouseX >= xPos && mouseX <= xPos + this.width && mouseY >= yPos && mouseY <= yPos + this.height;
 	}
 
 	@Override
 	public void draw(int startX, int startY) {
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		manager.minecraft.renderEngine.bindTexture(TEXTURE_LOCATION);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		manager.minecraft.textureManager.bindTexture(TEXTURE_LOCATION);
 		Drawable texture = SLOT;
 		if (isSelected()) {
 			texture = SLOT_SELECTED;
@@ -70,9 +71,9 @@ public class WidgetDatabaseSlot extends Widget {
 		texture.draw(startX + xPos - 3, startY + yPos - 3);
 		ItemStack itemStack = getItemStack();
 		if (!itemStack.isEmpty()) {
-			Minecraft minecraft = Minecraft.getMinecraft();
+			Minecraft minecraft = Minecraft.getInstance();
 			TextureManager textureManager = minecraft.getTextureManager();
-			textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 			RenderHelper.enableGUIStandardItemLighting();
 			GuiUtil.drawItemStack(manager.gui, itemStack, startX + xPos, startY + yPos);
 			RenderHelper.disableStandardItemLighting();
@@ -83,11 +84,11 @@ public class WidgetDatabaseSlot extends Widget {
 	}
 
 	private void drawMouseOver() {
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		GlStateManager.colorMask(true, true, true, false);
-		manager.gui.drawGradientRect(xPos, yPos, xPos + width, yPos + height, -2130706433, -2130706433);
+		manager.gui.blit(xPos, yPos, xPos + width, yPos + height, -2130706433, -2130706433);    //TODO should be blit?
 		GlStateManager.colorMask(true, true, true, true);
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class WidgetDatabaseSlot extends Widget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getItemStack().isEmpty()) {
 			return;
 		}
@@ -106,26 +107,26 @@ public class WidgetDatabaseSlot extends Widget {
 			return;
 		}
 
-		if (GuiScreen.isCtrlKeyDown() && mouseButton == 0) {
+		if (Screen.hasControlDown() && mouseButton == 0) {
 			gui.analyzer.setSelectedSlot(databaseIndex);
 			return;
 		}
 
 		ignoreMouseUp = true;
 		byte flags = 0;
-		if (GuiScreen.isShiftKeyDown()) {
+		if (Screen.hasShiftDown()) {
 			flags |= PacketExtractItem.SHIFT;
 		}
 		if (mouseButton == 1) {
 			flags |= PacketExtractItem.HALF;
-		} else if (mouseButton == 2 && manager.minecraft.player.capabilities.isCreativeMode) {
+		} else if (mouseButton == 2 && manager.minecraft.player.isCreative()) {
 			flags |= PacketExtractItem.CLONE;
 		}
 		NetworkUtil.sendToServer(new PacketExtractItem(item.invIndex, flags));
 	}
 
 	@Override
-	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
 		if (!isMouseOver(mouseX, mouseY)
 			|| ignoreMouseUp
 			|| eventType != 0 && eventType != 1

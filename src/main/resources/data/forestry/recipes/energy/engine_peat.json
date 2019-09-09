@@ -1,0 +1,33 @@
+{
+  "result": {
+    "item": "forestry:engine_peat",
+    "data": 0
+  },
+  "pattern": [
+    "###",
+    " X ",
+    "YVY"
+  ],
+  "conditions": [
+    {
+      "module": "energy",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTCOPPER"
+    },
+    "V": {
+      "item": "minecraft:piston"
+    },
+    "X": {
+      "item": "#BLOCKGLASS"
+    },
+    "Y": {
+      "item": "#GEARCOPPER"
+    }
+  },
+  "group": "energy"
+}

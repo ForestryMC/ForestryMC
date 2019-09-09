@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 import forestry.api.apiculture.IJubilanceFactory;
 import forestry.api.apiculture.IJubilanceProvider;
@@ -22,7 +22,7 @@ public class JubilanceFactory implements IJubilanceFactory {
 	}
 
 	@Override
-	public IJubilanceProvider getRequiresResource(IBlockState... acceptedBlockStates) {
+	public IJubilanceProvider getRequiresResource(BlockState... acceptedBlockStates) {
 		return new JubilanceRequiresResource(acceptedBlockStates);
 	}
 }

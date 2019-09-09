@@ -12,7 +12,7 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,7 +25,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	private boolean visited;
 	private boolean saveMultiblockData;
 	@Nullable
-	private NBTTagCompound cachedMultiblockData;
+	private CompoundNBT cachedMultiblockData;
 	@Nullable
 	protected T controller;
 
@@ -110,20 +110,20 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
+	public void readFromNBT(CompoundNBT data) {
 		// We can't directly initialize a multiblock controller yet, so we cache the data here until
 		// we receive a validate() call, which creates the controller and hands off the cached data.
-		if (data.hasKey("multiblockData")) {
-			this.cachedMultiblockData = data.getCompoundTag("multiblockData");
+		if (data.contains("multiblockData")) {
+			this.cachedMultiblockData = data.getCompound("multiblockData");
 		}
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+	public CompoundNBT write(CompoundNBT data) {
 		if (isMultiblockSaveDelegate() && this.controller != null) {
-			NBTTagCompound multiblockData = new NBTTagCompound();
-			this.controller.writeToNBT(multiblockData);
-			data.setTag("multiblockData", multiblockData);
+			CompoundNBT multiblockData = new CompoundNBT();
+			this.controller.write(multiblockData);
+			data.put("multiblockData", multiblockData);
 		}
 		return data;
 	}
@@ -170,7 +170,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Nullable
-	public final NBTTagCompound getMultiblockSaveData() {
+	public final CompoundNBT getMultiblockSaveData() {
 		return this.cachedMultiblockData;
 	}
 
@@ -186,11 +186,11 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * @param packetData An NBT compound tag into which you should write your custom description data.
 	 */
 	@Override
-	public void encodeDescriptionPacket(NBTTagCompound packetData) {
+	public void encodeDescriptionPacket(CompoundNBT packetData) {
 		if (this.isMultiblockSaveDelegate() && controller != null) {
-			NBTTagCompound tag = new NBTTagCompound();
+			CompoundNBT tag = new CompoundNBT();
 			controller.formatDescriptionPacket(tag);
-			packetData.setTag("multiblockData", tag);
+			packetData.put("multiblockData", tag);
 		}
 	}
 
@@ -201,9 +201,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * @param packetData The NBT data from the tile entity's description packet.
 	 */
 	@Override
-	public void decodeDescriptionPacket(NBTTagCompound packetData) {
-		if (packetData.hasKey("multiblockData")) {
-			NBTTagCompound tag = packetData.getCompoundTag("multiblockData");
+	public void decodeDescriptionPacket(CompoundNBT packetData) {
+		if (packetData.contains("multiblockData")) {
+			CompoundNBT tag = packetData.getCompound("multiblockData");
 			if (controller != null) {
 				controller.decodeDescriptionPacket(tag);
 			} else {

@@ -12,51 +12,55 @@ package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CocoaBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.ITreeGenome;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.config.Constants;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.RenderUtil;
 
 public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
 
 	private static final short MAX_MATURITY = 2;
-	private static final ITreeGenome defaultGenome = TreeManager.treeRoot.templateAsGenome(TreeManager.treeRoot.getDefaultTemplate());
-	private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleManager.alleleRegistry.getAllele(Constants.MOD_ID + ".fruitCocoa");
+	private static final IGenome defaultGenome = TreeManager.treeRoot.getKaryotype().getDefaultGenome();
+	private static final IAlleleFruit defaultAllele = (IAlleleFruit) GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(Constants.MOD_ID + ".fruitCocoa").get();
 
-	private ITreeGenome genome = defaultGenome;
+	private IGenome genome = defaultGenome;
 	private IAlleleFruit allele = defaultAllele;
 	private short maturity;
 	private float yield;
 
 	public TileFruitPod() {
-
+		super(ModuleArboriculture.getTiles().pods);
 	}
 
-	public void setProperties(ITreeGenome genome, IAlleleFruit allele, float yield) {
+	public void setProperties(IGenome genome, IAlleleFruit allele, float yield) {
 		this.genome = genome;
 		this.allele = allele;
 		this.yield = yield;
@@ -65,31 +69,36 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		IAllele stored = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString("UID"));
-		if (stored instanceof IAlleleFruit) {
-			allele = (IAlleleFruit) stored;
-		} else {
+		Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compoundNBT.getString("UID"));
+		if (!optionalAllele.isPresent()) {
 			allele = defaultAllele;
+		} else {
+			IAllele stored = optionalAllele.get();
+			if (stored instanceof IAlleleFruit) {
+				allele = (IAlleleFruit) stored;
+			} else {
+				allele = defaultAllele;
+			}
 		}
 
-		maturity = nbttagcompound.getShort("MT");
-		yield = nbttagcompound.getFloat("SP");
+		maturity = compoundNBT.getShort("MT");
+		yield = compoundNBT.getFloat("SP");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		nbttagcompound.setString("UID", allele.getUID());
-		nbttagcompound.setShort("MT", maturity);
-		nbttagcompound.setFloat("SP", yield);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		compoundNBT.putString("UID", allele.getRegistryName().toString());
+		compoundNBT.putShort("MT", maturity);
+		compoundNBT.putFloat("SP", yield);
+		return compoundNBT;
 	}
 
 	/* UPDATING */
-	public void onBlockTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void onBlockTick(World world, BlockPos pos, BlockState state, Random rand) {
 		if (canMature() && rand.nextFloat() <= yield) {
 			addRipeness(0.5f);
 		}
@@ -126,28 +135,28 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	/* NETWORK */
 	@Nullable
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound tag = super.getUpdateTag();
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = super.getUpdateTag();
 		return NBTUtilForestry.writeStreamableToNbt(this, tag);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void handleUpdateTag(NBTTagCompound tag) {
+	@OnlyIn(Dist.CLIENT)
+	public void handleUpdateTag(CompoundNBT tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	@OnlyIn(Dist.CLIENT)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
-		NBTTagCompound nbt = pkt.getNbtCompound();
+		CompoundNBT nbt = pkt.getNbtCompound();
 		handleUpdateTag(nbt);
 	}
 
@@ -167,8 +176,8 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		NonNullList<ItemStack> fruits = getDrops();
 		maturity = 0;
 
-		IBlockState oldState = world.getBlockState(getPos());
-		IBlockState newState = oldState.withProperty(BlockCocoa.AGE, 0);
+		BlockState oldState = world.getBlockState(getPos());
+		BlockState newState = oldState.with(CocoaBlock.AGE, 0);
 		BlockUtil.setBlockWithBreakSound(world, getPos(), newState, oldState);
 
 		return fruits;
@@ -181,29 +190,24 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	@Override
 	public void addRipeness(float add) {
-		int previousAge = (int) Math.floor(maturity);
+		int previousAge = maturity;
 
 		maturity += MAX_MATURITY * add;
 		if (maturity > MAX_MATURITY) {
 			maturity = MAX_MATURITY;
 		}
 
-		int age = (int) Math.floor(maturity);
+		int age = maturity;
 		if (age - previousAge > 0) {
-			IBlockState state = world.getBlockState(getPos()).withProperty(BlockCocoa.AGE, age);
+			BlockState state = world.getBlockState(getPos()).with(CocoaBlock.AGE, age);
 			world.setBlockState(getPos(), state);
 		}
 	}
 
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
-
-	@Override
 	public void writeData(PacketBufferForestry data) {
 		if (allele != defaultAllele) {
-			data.writeString(allele.getUID());
+			data.writeString(allele.getRegistryName().toString());
 		} else {
 			data.writeString("");
 		}
@@ -211,12 +215,17 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	@Override
 	public void readData(PacketBufferForestry data) {
-		IAllele stored = AlleleManager.alleleRegistry.getAllele(data.readString());
-		if (stored instanceof IAlleleFruit) {
-			allele = (IAlleleFruit) stored;
-		} else {
+		Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(data.readString());
+		if (!optionalAllele.isPresent()) {
 			allele = defaultAllele;
+		} else {
+			IAllele stored = optionalAllele.get();
+			if (stored instanceof IAlleleFruit) {
+				allele = (IAlleleFruit) stored;
+			} else {
+				allele = defaultAllele;
+			}
 		}
-		world.markBlockRangeForRenderUpdate(getPos(), getPos());
+		RenderUtil.markForUpdate(getPos());
 	}
 }

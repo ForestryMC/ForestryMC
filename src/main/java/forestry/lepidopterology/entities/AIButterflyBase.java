@@ -13,13 +13,13 @@ package forestry.lepidopterology.entities;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public abstract class AIButterflyBase extends EntityAIBase {
+public abstract class AIButterflyBase extends Goal {
 
 	protected final EntityButterfly entity;
 
@@ -60,12 +60,13 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		if (!entity.world.isBlockLoaded(pos)) {
 			return false;
 		}
-		IBlockState blockState = entity.world.getBlockState(pos);
+		BlockState blockState = entity.world.getBlockState(pos);
 		Block block = blockState.getBlock();
 		if (!allowFluids && blockState.getMaterial().isLiquid()) {
 			return false;
 		}
-		if (!block.isPassable(entity.world, pos)) {
+		//		if (!block.isPassable(entity.world, pos)) {
+		if (!block.isAir(blockState)) {    //TODO
 			return false;
 		}
 		return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.x, dest.y, dest.z);

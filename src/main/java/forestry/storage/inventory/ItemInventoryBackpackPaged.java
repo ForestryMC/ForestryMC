@@ -10,23 +10,29 @@
  ******************************************************************************/
 package forestry.storage.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.GuiHandler;
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import forestry.core.gui.IPagedInventory;
 import forestry.storage.items.ItemBackpackNaturalist;
 
 public class ItemInventoryBackpackPaged extends ItemInventoryBackpack implements IPagedInventory {
 	private final ItemBackpackNaturalist backpackNaturalist;
 
-	public ItemInventoryBackpackPaged(EntityPlayer player, int size, ItemStack itemstack, ItemBackpackNaturalist backpackNaturalist) {
+	public ItemInventoryBackpackPaged(PlayerEntity player, int size, ItemStack itemstack, ItemBackpackNaturalist backpackNaturalist) {
 		super(player, size, itemstack);
 		this.backpackNaturalist = backpackNaturalist;
 	}
 
+	//TODO gui
 	@Override
-	public void flipPage(EntityPlayer player, short page) {
-		GuiHandler.openGui(player, backpackNaturalist, page);
+	public void flipPage(ServerPlayerEntity player, short page) {
+		ItemStack heldItem = player.getHeldItem(player.getActiveHand());
+		NetworkHooks.openGui(player, new ItemBackpackNaturalist.ContainerProvider(heldItem), b -> {
+
+		});
 	}
 }

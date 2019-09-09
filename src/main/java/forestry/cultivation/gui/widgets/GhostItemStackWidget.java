@@ -5,10 +5,11 @@ import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.farming.FarmDirection;
 import forestry.core.gui.tooltips.ToolTip;
@@ -32,7 +33,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 			super.draw(startX, startY);
 		}
 		GlStateManager.disableLighting();
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		GlStateManager.enableBlend();
 
 		String directionString = getDirectionString();
@@ -41,14 +42,14 @@ public class GhostItemStackWidget extends ItemStackWidget {
 			fontRenderer.drawStringWithShadow(getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
 
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
 
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
-		manager.gui.drawTexturedModalRect(xPos + startX, yPos + startY, 206, 0, 16, 16);
+		manager.gui.blit(xPos + startX, yPos + startY, 206, 0, 16, 16);
 
 		GlStateManager.disableBlend();
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 		GlStateManager.enableLighting();
 	}
 

@@ -4,10 +4,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.arboriculture.ILeafProvider;
-import forestry.api.genetics.IAllele;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.ModuleArboriculture;
 
 public class LeafProvider implements ILeafProvider {
@@ -24,9 +25,9 @@ public class LeafProvider implements ILeafProvider {
 	public ItemStack getDecorativeLeaves() {
 		IAllele allele = treeSpecies;
 		if (allele == null) {
-			allele = TreeDefinition.Oak.getTemplate()[EnumTreeChromosome.SPECIES.ordinal()];
+			allele = TreeDefinition.Oak.getTemplate().get(TreeChromosomes.SPECIES);
 		}
-		return ModuleArboriculture.getBlocks().getDecorativeLeaves(allele.getUID());
+		return ModuleArboriculture.getBlocks().getDecorativeLeaves(allele.getRegistryName().toString());
 	}
 
 }

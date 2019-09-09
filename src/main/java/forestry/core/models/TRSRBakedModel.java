@@ -23,30 +23,29 @@ import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TRSRTransformation;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TRSRBakedModel implements IBakedModel {
 
 	protected final ImmutableList<BakedQuad> general;
-	protected final ImmutableMap<EnumFacing, ImmutableList<BakedQuad>> faces;
+	protected final ImmutableMap<Direction, ImmutableList<BakedQuad>> faces;
 	protected final IBakedModel original;
 
 	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float scale) {
@@ -73,10 +72,10 @@ public class TRSRBakedModel implements IBakedModel {
 		transform = TRSRTransformation.blockCenterToCorner(transform);
 
 		// face quads
-		EnumMap<EnumFacing, ImmutableList<BakedQuad>> faces = Maps.newEnumMap(EnumFacing.class);
-		for (EnumFacing face : EnumFacing.values()) {
+		EnumMap<Direction, ImmutableList<BakedQuad>> faces = Maps.newEnumMap(Direction.class);
+		for (Direction face : Direction.values()) {
 			if (!original.isBuiltInRenderer()) {
-				for (BakedQuad quad : original.getQuads(null, face, 0)) {
+				for (BakedQuad quad : original.getQuads(null, face, new Random())) {
 					Transformer transformer = new Transformer(transform, quad.getFormat());
 					quad.pipe(transformer);
 					builder.add(transformer.build());
@@ -89,7 +88,7 @@ public class TRSRBakedModel implements IBakedModel {
 		// general quads
 		//builder = ImmutableList.builder();
 		if (!original.isBuiltInRenderer()) {
-			for (BakedQuad quad : original.getQuads(null, null, 0)) {
+			for (BakedQuad quad : original.getQuads(null, null, new Random())) {
 				Transformer transformer = new Transformer(transform, quad.getFormat());
 				quad.pipe(transformer);
 				builder.add(transformer.build());
@@ -101,7 +100,7 @@ public class TRSRBakedModel implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		if (side != null) {
 			return faces.get(side);
 		}
@@ -146,7 +145,7 @@ public class TRSRBakedModel implements IBakedModel {
 		public Transformer(TRSRTransformation transformation, VertexFormat format) {
 			super(new UnpackedBakedQuad.Builder(format));
 			// position transform
-			this.transformation = transformation.getMatrix();
+			this.transformation = TRSRTransformation.getMatrix(Direction.UP/*this.parent.getVertexFormat()*/);    //TODO how to access direction
 			// normal transform
 			this.normalTransformation = new Matrix3f();
 			this.transformation.getRotationScale(this.normalTransformation);
@@ -156,16 +155,16 @@ public class TRSRBakedModel implements IBakedModel {
 
 		@Override
 		public void put(int element, float... data) {
-			VertexFormatElement.EnumUsage usage = parent.getVertexFormat().getElement(element).getUsage();
+			VertexFormatElement.Usage usage = parent.getVertexFormat().getElement(element).getUsage();
 
 			// transform normals and position
-			if (usage == VertexFormatElement.EnumUsage.POSITION && data.length >= 3) {
+			if (usage == VertexFormatElement.Usage.POSITION && data.length >= 3) {
 				Vector4f vec = new Vector4f(data);
 				vec.setW(1.0f);
 				transformation.transform(vec);
 				data = new float[4];
 				vec.get(data);
-			} else if (usage == VertexFormatElement.EnumUsage.NORMAL && data.length >= 3) {
+			} else if (usage == VertexFormatElement.Usage.NORMAL && data.length >= 3) {
 				Vector3f vec = new Vector3f(data);
 				normalTransformation.transform(vec);
 				vec.normalize();

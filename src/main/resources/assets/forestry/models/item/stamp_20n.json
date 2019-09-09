@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/stamps.0",
+    "layer1": "forestry:item/stamps.1"
+  }
+}

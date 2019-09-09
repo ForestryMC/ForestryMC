@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -41,7 +41,7 @@ public class SlotWatched extends SlotForestry {
 	}
 
 	@Override
-	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
+	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
 		itemStack = super.onTake(player, itemStack);
 		pickupWatcher.onTake(getSlotIndex(), player);
 		return itemStack;

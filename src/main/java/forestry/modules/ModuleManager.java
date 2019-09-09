@@ -29,15 +29,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.config.Configuration;
-
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
@@ -47,6 +40,7 @@ import forestry.api.modules.IModuleManager;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
+import forestry.core.config.forge_old.Configuration;
 import forestry.core.utils.Log;
 
 public class ModuleManager implements IModuleManager {
@@ -219,21 +213,17 @@ public class ModuleManager implements IModuleManager {
 		}
 
 		ForestryAPI.enabledModules = new HashSet<>();
-		ForestryAPI.enabledPlugins = new HashSet<>();
 		for (IForestryModule module : sortedModules.values()) {
 			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 			ForestryAPI.enabledModules.add(new ResourceLocation(info.containerID(), info.moduleID()));
-			if (module instanceof BlankForestryModule) {
-				ForestryAPI.enabledPlugins.add(info.containerID() + "." + info.moduleID());
-			}
 		}
 
 		Locale.setDefault(locale);
 	}
 
-	public static void runSetup(FMLPreInitializationEvent event) {
-		ASMDataTable asmDataTable = event.getAsmData();
-		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules(asmDataTable);
+	//TODO - Is this still called early enough? I don't think modules are getting recognised
+	public static void runSetup() {
+		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules();
 
 		internalHandler = new InternalModuleHandler(getInstance());
 		configureModules(forestryModules);
@@ -245,17 +235,18 @@ public class ModuleManager implements IModuleManager {
 	}
 
 	public static void serverStarting(MinecraftServer server) {
-		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
-
-		for (IForestryModule module : loadedModules) {
-			ICommand[] commands = module.getConsoleCommands();
-			if (commands == null) {
-				continue;
-			}
-			for (ICommand command : commands) {
-				commandManager.registerCommand(command);
-			}
-		}
+		//TODO - commands
+		//		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
+		//
+		//		for (IForestryModule module : loadedModules) {
+		//			ICommand[] commands = module.getConsoleCommands();
+		//			if (commands == null) {
+		//				continue;
+		//			}
+		//			for (ICommand command : commands) {
+		//				commandManager.registerCommand(command);
+		//			}
+		//		}
 	}
 
 

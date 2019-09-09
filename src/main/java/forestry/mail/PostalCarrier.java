@@ -11,13 +11,13 @@
 package forestry.mail;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
@@ -53,13 +53,13 @@ public class PostalCarrier implements IPostalCarrier {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public TextureAtlasSprite getSprite() {
 		return TextureManagerForestry.getInstance().getDefault(iconID);
 	}
 
 	@Override
-	public IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterStack, boolean doDeliver) {
+	public IPostalState deliverLetter(ServerWorld world, IPostOffice office, IMailAddress recipient, ItemStack letterStack, boolean doDeliver) {
 		if (type == EnumAddressee.TRADER) {
 			return handleTradeLetter(world, recipient, letterStack, doDeliver);
 		} else {
@@ -67,7 +67,7 @@ public class PostalCarrier implements IPostalCarrier {
 		}
 	}
 
-	private static IPostalState handleTradeLetter(World world, IMailAddress recipient, ItemStack letterStack, boolean doLodge) {
+	private static IPostalState handleTradeLetter(ServerWorld world, IMailAddress recipient, ItemStack letterStack, boolean doLodge) {
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
 		if (trade == null) {
 			return EnumDeliveryState.NO_MAILBOX;
@@ -76,7 +76,7 @@ public class PostalCarrier implements IPostalCarrier {
 		return trade.handleLetter(world, recipient, letterStack, doLodge);
 	}
 
-	private static EnumDeliveryState storeInPOBox(World world, IMailAddress recipient, ItemStack letterStack) {
+	private static EnumDeliveryState storeInPOBox(ServerWorld world, IMailAddress recipient, ItemStack letterStack) {
 
 		POBox pobox = PostRegistry.getPOBox(world, recipient);
 		if (pobox == null) {
@@ -86,8 +86,8 @@ public class PostalCarrier implements IPostalCarrier {
 		if (!pobox.storeLetter(letterStack.copy())) {
 			return EnumDeliveryState.MAILBOX_FULL;
 		} else {
-			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
-			if (player instanceof EntityPlayerMP) {
+			PlayerEntity player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
+			if (player instanceof ServerPlayerEntity) {
 				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
 		}

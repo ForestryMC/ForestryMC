@@ -16,11 +16,11 @@ import java.util.LinkedList;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
@@ -37,15 +37,15 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		memorizedRecipes = new LinkedList<>();
 	}
 
-	public RecipeMemory(NBTTagCompound nbt) {
+	public RecipeMemory(CompoundNBT nbt) {
 		memorizedRecipes = new LinkedList<>();
-		if (!nbt.hasKey("RecipeMemory")) {
+		if (!nbt.contains("RecipeMemory")) {
 			return;
 		}
 
-		NBTTagList nbttaglist = nbt.getTagList("RecipeMemory", 10);
-		for (int j = 0; j < nbttaglist.tagCount(); ++j) {
-			NBTTagCompound recipeNbt = nbttaglist.getCompoundTagAt(j);
+		ListNBT nbttaglist = nbt.getList("RecipeMemory", 10);
+		for (int j = 0; j < nbttaglist.size(); ++j) {
+			CompoundNBT recipeNbt = nbttaglist.getCompound(j);
 			MemorizedRecipe recipe = new MemorizedRecipe(recipeNbt);
 			if (recipe.getSelectedRecipe() != null) {
 				memorizedRecipes.add(recipe);
@@ -153,17 +153,17 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		NBTTagList nbttaglist = new NBTTagList();
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		ListNBT nbttaglist = new ListNBT();
 		for (MemorizedRecipe recipe : memorizedRecipes) {
 			if (recipe != null && recipe.getSelectedRecipe() != null) {
-				NBTTagCompound recipeNbt = new NBTTagCompound();
-				recipe.writeToNBT(recipeNbt);
-				nbttaglist.appendTag(recipeNbt);
+				CompoundNBT recipeNbt = new CompoundNBT();
+				recipe.write(recipeNbt);
+				nbttaglist.add(recipeNbt);
 			}
 		}
-		nbttagcompound.setTag("RecipeMemory", nbttaglist);
-		return nbttagcompound;
+		compoundNBT.put("RecipeMemory", nbttaglist);
+		return compoundNBT;
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		data.readStreamables(memorizedRecipes, MemorizedRecipe::new);
 	}

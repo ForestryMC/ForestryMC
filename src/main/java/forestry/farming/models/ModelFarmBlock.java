@@ -2,28 +2,23 @@ package forestry.farming.models;
 
 import java.util.Objects;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 
-import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelBaker;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
-import forestry.core.tiles.TileUtil;
+import forestry.core.models.baker.ModelBaker;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.tiles.TileFarm;
 
-@SideOnly(Side.CLIENT)
+//TODO - I think the farm block nneds flattening
+@OnlyIn(Dist.CLIENT)
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.Key> {
+
 	public static class Key {
 		public final EnumFarmBlockTexture texture;
 		public final EnumFarmBlockType type;
@@ -37,7 +32,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 
 		@Override
 		public boolean equals(Object other) {
-			if (other == null || !(other instanceof Key)) {
+			if (!(other instanceof Key)) {
 				return false;
 			} else {
 				Key otherKey = (Key) other;
@@ -57,32 +52,32 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 
 	@Override
 	protected Key getInventoryKey(ItemStack stack) {
-		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTagCompound());
-		EnumFarmBlockType type = EnumFarmBlockType.VALUES[stack.getItemDamage()];
+		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
+		EnumFarmBlockType type = EnumFarmBlockType.VALUES[0];//stack.getItemDamage()];
 
 		return new Key(texture, type);
 	}
 
 	@Override
-	protected Key getWorldKey(IBlockState state) {
-		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
-		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-
-		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
+	protected Key getWorldKey(BlockState state, IModelData extraData) {
+		//		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
+		//		IBlockReader world = stateExtended.getComb(UnlistedBlockAccess.BLOCKACCESS);
+		//		BlockPos pos = stateExtended.getComb(UnlistedBlockPos.POS);
+		//
+		//		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
 		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;
 		EnumFarmBlockType type = EnumFarmBlockType.PLAIN;
 
-		if (farm != null) {
-			texture = farm.getFarmBlockTexture();
-			type = farm.getFarmBlockType();
-		}
+		//		if (farm != null) {
+		//			texture = farm.getFarmBlockTexture();
+		//			type = farm.getFarmBlockType();
+		//		}
 
 		return new Key(texture, type);
 	}
 
 	@Override
-	protected void bakeBlock(BlockFarm blockFarm, Key key, IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockFarm blockFarm, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TextureAtlasSprite[] textures = getSprites(key.texture);
 
 		// Add the plain block.

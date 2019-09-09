@@ -12,20 +12,16 @@
  ******************************************************************************/
 package forestry.book.data.structure;
 
-import java.util.Map;
-import java.util.Optional;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.nbt.NBTUtil;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class StructureInfo {
-	public IBlockState[][][] data;
+	public BlockState[][][] data;
 	public int blockCount = 0;
 	public int[] countPerLevel;
 	public int structureHeight = 0;
@@ -40,14 +36,14 @@ public class StructureInfo {
 		this.structureWidth = width;
 		this.structureHeight = height;
 		this.structureLength = length;
-		IBlockState[][][] states = new IBlockState[height][length][width];
+		BlockState[][][] states = new BlockState[height][length][width];
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < length; x++) {
 				for (int z = 0; z < width; z++) {
 					for (BlockData data : blockData) {
 						if (inside(x, y, z, data.pos, data.endPos)) {
-							states[y][x][z] = convert(data);
+							states[y][x][z] = NBTUtil.readBlockState(data.state);
 							break;
 						}
 					}
@@ -58,37 +54,6 @@ public class StructureInfo {
 		data = states;
 		maxBlockIndex = blockIndex = structureHeight * structureLength * structureWidth;
 	}
-
-	private IBlockState convert(BlockData data) {
-		Block block = Block.getBlockFromName(data.block);
-		if (block == null) {
-			return Blocks.AIR.getDefaultState();
-		}
-		IBlockState state;
-		if (data.state == null || data.state.isEmpty()) {
-			state = block.getStateFromMeta(data.meta);
-		} else {
-			state = block.getDefaultState();
-
-			for (Map.Entry<String, String> entry : data.state.entrySet()) {
-				Optional<IProperty<?>> property = state.getPropertyKeys().stream().filter(iProperty -> entry.getKey().equals(iProperty.getName())).findFirst();
-
-				if (property.isPresent()) {
-					state = setProperty(state, property.get(), entry.getValue());
-				}
-			}
-		}
-		return state;
-	}
-
-	private <T extends Comparable<T>> IBlockState setProperty(IBlockState state, IProperty<T> prop, String valueString) {
-		com.google.common.base.Optional<T> value = prop.parseValue(valueString);
-		if (value.isPresent()) {
-			state = state.withProperty(prop, value.get());
-		}
-		return state;
-	}
-
 
 	private boolean inside(int x, int y, int z, int[] rangeStart, int[] rangeEnd) {
 		if (x >= rangeStart[0] && x <= rangeEnd[0]) {

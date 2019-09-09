@@ -10,52 +10,33 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.IBlockReader;
 
 import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.WoodHelper.WoodMeshDefinition;
-import forestry.arboriculture.proxy.ProxyArboricultureClient;
 
-public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends BlockFenceGate implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
+//   public static final Block SPRUCE_FENCE_GATE = register("spruce_fence_gate", new FenceGateBlock(Block.Properties.create(Material.WOOD, SPRUCE_PLANKS.materialColor).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)));
+public class BlockForestryFenceGate extends FenceGateBlock implements IWoodTyped {
 
 	private final boolean fireproof;
-	private final T woodType;
+	private final IWoodType woodType;
 
-	public BlockForestryFenceGate(boolean fireproof, T woodType) {
-		super(EnumType.OAK);
+	public BlockForestryFenceGate(boolean fireproof, IWoodType woodType) {
+		super(Block.Properties.create(Material.WOOD)
+			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+			.sound(SoundType.WOOD));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
 
-		setHardness(2.0F);
-		setResistance(5.0F);
-		setSoundType(SoundType.WOOD);
-		setCreativeTab(Tabs.tabArboriculture);
+		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
 	}
 
 	@Override
@@ -64,7 +45,12 @@ public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends Block
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public IWoodType getWoodType() {
+		return woodType;
+	}
+
+	@Override
+	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		if (fireproof) {
 			return 0;
 		}
@@ -72,7 +58,7 @@ public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends Block
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		if (fireproof) {
 			return 0;
 		}
@@ -82,40 +68,5 @@ public class BlockForestryFenceGate<T extends Enum<T> & IWoodType> extends Block
 	@Override
 	public WoodBlockKind getBlockKind() {
 		return WoodBlockKind.FENCE_GATE;
-	}
-
-	@Override
-	public T getWoodType(int meta) {
-		return woodType;
-	}
-
-	@Override
-	public Collection<T> getWoodTypes() {
-		return Collections.singleton(woodType);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerStateMapper() {
-		ProxyArboricultureClient.registerWoodStateMapper(this, new WoodTypeStateMapper(this, null).addPropertyToRemove(POWERED));
-	}
-
-	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(TreeManager.woodAccess.getStack(woodType, getBlockKind(), fireproof));
-	}
-
-	@Override
-	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
-		int meta = getMetaFromState(blockState);
-		T woodType = getWoodType(meta);
-		return woodType.getHardness();
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
-		ProxyArboricultureClient.registerWoodMeshDefinition(item, new WoodMeshDefinition(this));
 	}
 }

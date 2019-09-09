@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import org.apache.commons.lang3.tuple.Pair;
+
+import net.minecraft.network.PacketBuffer;
 
 public interface IForestryPacket {
-	FMLProxyPacket getPacket();
+	Pair<PacketBuffer, Integer> getPacketData();
 
 	IPacketId getPacketId();
 }

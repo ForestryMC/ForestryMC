@@ -10,7 +10,10 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import forestry.core.config.Config;
 import forestry.core.gui.GuiForestryTitled;
@@ -22,8 +25,8 @@ import forestry.core.utils.Translator;
 public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C> {
 	protected final I tile;
 
-	protected GuiEngine(String texture, C container, I tile) {
-		super(texture, container, tile);
+	protected GuiEngine(String texture, C container, PlayerInventory inv, I tile) {
+		super(texture, container, inv, tile);
 		this.tile = tile;
 	}
 
@@ -60,8 +63,8 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 		}
 
 		@Override
-		public String getTooltip() {
-			return Config.energyDisplayMode.formatRate(tile.getCurrentOutput());
+		public ITextComponent getTooltip() {
+			return new StringTextComponent(Config.energyDisplayMode.formatRate(tile.getCurrentOutput()));
 		}
 	}
 

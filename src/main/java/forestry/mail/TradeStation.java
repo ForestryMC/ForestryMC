@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
 import com.mojang.authlib.GameProfile;
@@ -41,7 +40,7 @@ import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
-	public static final String SAVE_NAME = "TradePO_";
+	public static final String SAVE_NAME = "trade_po_";
 	public static final short SLOT_TRADEGOOD = 0;
 	public static final short SLOT_TRADEGOOD_COUNT = 1;
 	public static final short SLOT_EXCHANGE_1 = 1;
@@ -83,38 +82,38 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	// / SAVING & LOADING
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound.hasKey("owner")) {
-			owner = PlayerUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
+	public void read(CompoundNBT compoundNBT) {
+		if (compoundNBT.contains("owner")) {
+			owner = PlayerUtil.readGameProfile(compoundNBT.getCompound("owner"));
 		}
 
-		if (nbttagcompound.hasKey("address")) {
-			address = new MailAddress(nbttagcompound.getCompoundTag("address"));
+		if (compoundNBT.contains("address")) {
+			address = new MailAddress(compoundNBT.getCompound("address"));
 		}
 
-		this.isVirtual = nbttagcompound.getBoolean("VRT");
-		this.isInvalid = nbttagcompound.getBoolean("IVL");
-		inventory.readFromNBT(nbttagcompound);
+		this.isVirtual = compoundNBT.getBoolean("VRT");
+		this.isInvalid = compoundNBT.getBoolean("IVL");
+		inventory.read(compoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 		if (owner != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
+			CompoundNBT nbt = new CompoundNBT();
 			PlayerUtil.writeGameProfile(nbt, owner);
-			nbttagcompound.setTag("owner", nbt);
+			compoundNBT.put("owner", nbt);
 		}
 
 		if (address != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			address.writeToNBT(nbt);
-			nbttagcompound.setTag("address", nbt);
+			CompoundNBT nbt = new CompoundNBT();
+			address.write(nbt);
+			compoundNBT.put("address", nbt);
 		}
 
-		nbttagcompound.setBoolean("VRT", this.isVirtual);
-		nbttagcompound.setBoolean("IVL", this.isInvalid);
-		inventory.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		compoundNBT.putBoolean("VRT", this.isVirtual);
+		compoundNBT.putBoolean("IVL", this.isInvalid);
+		inventory.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	/* INVALIDATING */
@@ -167,8 +166,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	/* ILETTERHANDLER */
+	//TODO this method is long. Shorten it.
 	@Override
-	public IPostalState handleLetter(World world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	public IPostalState handleLetter(ServerWorld world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		boolean sendOwnerNotice = doLodge && owner != null;
 
@@ -232,16 +232,16 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			if (count > 0) {
 				EnumPostage postage = EnumPostage.values()[i];
 				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				mail.addStamps(ModuleMail.getItems().stamps.get(stampDefinition, count));
+				mail.addStamps(ModuleMail.getItems().getStamp(stampDefinition, count));
 			}
 		}
 
 		// Send the letter
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		mail.writeToNBT(nbttagcompound);
+		CompoundNBT compoundNBT = new CompoundNBT();
+		mail.write(compoundNBT);
 
 		ItemStack mailstack = LetterProperties.createStampedLetterStack(mail);
-		mailstack.setTagCompound(nbttagcompound);
+		mailstack.setTag(compoundNBT);
 
 		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
 
@@ -267,7 +267,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		// Send confirmation message to seller
 		if (sendOwnerNotice) {
-			nbttagcompound = new NBTTagCompound();
+			compoundNBT = new CompoundNBT();
 
 			ILetter confirm = new Letter(this.address, new MailAddress(this.owner));
 
@@ -282,11 +282,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			orderFilledMessage = orderFilledMessage.replace("%SENDER", letter.getSender().getName());
 
 			confirm.setText(orderFilledMessage);
-			confirm.addStamps(ModuleMail.getItems().stamps.get(EnumStampDefinition.P_1, 1));
-			confirm.writeToNBT(nbttagcompound);
+			confirm.addStamps(ModuleMail.getItems().getStamp(EnumStampDefinition.P_1, 1));
+			confirm.write(compoundNBT);
 
 			ItemStack confirmstack = LetterProperties.createStampedLetterStack(confirm);
-			confirmstack.setTagCompound(nbttagcompound);
+			confirmstack.setTag(compoundNBT);
 
 			PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, confirmstack, doLodge);
 
@@ -595,10 +595,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		return inventory.removeStackFromSlot(index);
 	}
 
-	@Override
-	public String getName() {
-		return inventory.getName();
-	}
+	//tODO
+	//	@Override
+	//	public String getName() {
+	//		return inventory.getName();
+	//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -606,16 +607,16 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 	}
 
 	@Override
@@ -624,27 +625,17 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public boolean hasCustomName() {
-		return true;
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return inventory.getDisplayName();
-	}
-
-	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
+	public int[] getSlotsForFace(Direction side) {
 		return inventory.getSlotsForFace(side);
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack itemStack, EnumFacing side) {
+	public boolean canInsertItem(int slot, ItemStack itemStack, Direction side) {
 		return inventory.canInsertItem(slot, itemStack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, EnumFacing side) {
+	public boolean canExtractItem(int slot, ItemStack itemStack, Direction side) {
 		return inventory.canExtractItem(slot, itemStack, side);
 	}
 
@@ -656,21 +647,6 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	@Override
 	public boolean isLocked(int slotIndex) {
 		return inventory.isLocked(slotIndex);
-	}
-
-	/* FIELDS */
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
 	}
 
 	@Override

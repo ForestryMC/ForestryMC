@@ -14,24 +14,24 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fluids.Fluid;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.StandardTank;
@@ -42,7 +42,7 @@ import forestry.farming.gui.ContainerFarm;
 /**
  * Slot for liquid tanks
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TankWidget extends Widget {
 
 	private int overlayTexX = 176;
@@ -64,7 +64,7 @@ public class TankWidget extends Widget {
 
 	@Nullable
 	public IFluidTank getTank() {
-		Container container = manager.gui.inventorySlots;
+		Container container = manager.gui.getContainer();
 		if (container instanceof IContainerLiquidTanks) {
 			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
@@ -82,32 +82,32 @@ public class TankWidget extends Widget {
 		}
 
 		FluidStack contents = tank.getFluid();
-		Minecraft minecraft = Minecraft.getMinecraft();
+		Minecraft minecraft = Minecraft.getInstance();
 		TextureManager textureManager = minecraft.getTextureManager();
-		if (contents != null && contents.amount > 0 && contents.getFluid() != null) {
+		if (!contents.isEmpty() && contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			if (fluid != null) {
-				TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
-				ResourceLocation fluidStill = fluid.getStill();
+				AtlasTexture textureMapBlocks = minecraft.getTextureMap();
+				ResourceLocation fluidStill = fluid.getAttributes().getStill(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
-					fluidStillSprite = textureMapBlocks.getTextureExtry(fluidStill.toString());
+					fluidStillSprite = textureMapBlocks.getSprite(fluidStill);
 				}
 				if (fluidStillSprite == null) {
-					fluidStillSprite = textureMapBlocks.getMissingSprite();
+					fluidStillSprite = textureMapBlocks.missingImage; //TODO AT;
 				}
 
-				int fluidColor = fluid.getColor(contents);
+				int fluidColor = fluid.getAttributes().getColor(contents);
 
-				int scaledAmount = contents.amount * height / tank.getCapacity();
-				if (contents.amount > 0 && scaledAmount < 1) {
+				int scaledAmount = contents.getAmount() * height / tank.getCapacity();
+				if (contents.getAmount() > 0 && scaledAmount < 1) {
 					scaledAmount = 1;
 				}
 				if (scaledAmount > height) {
 					scaledAmount = height;
 				}
 
-				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 				setGLColorFromInt(fluidColor);
 
 				final int xTileCount = width / 16;
@@ -135,15 +135,15 @@ public class TankWidget extends Widget {
 		}
 
 		if (drawOverlay) {
-			GlStateManager.enableAlpha();
-			GlStateManager.disableDepth();
+			GlStateManager.enableAlphaTest();
+			GlStateManager.disableDepthTest();
 			textureManager.bindTexture(manager.gui.textureFile);
-			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
-			GlStateManager.enableDepth();
-			GlStateManager.disableAlpha();
+			manager.gui.blit(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
+			GlStateManager.enableDepthTest();
+			GlStateManager.disableAlphaTest();
 		}
 
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 	}
 
 	@Override
@@ -161,7 +161,7 @@ public class TankWidget extends Widget {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		GlStateManager.color(red, green, blue, 1.0F);
+		GlStateManager.color4f(red, green, blue, 1.0F);
 	}
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
@@ -183,15 +183,15 @@ public class TankWidget extends Widget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-		EntityPlayer player = manager.minecraft.player;
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+		PlayerEntity player = manager.minecraft.player;
 		ItemStack itemstack = player.inventory.getItemStack();
 		if (itemstack.isEmpty()) {
 			return;
 		}
 
 		Item held = itemstack.getItem();
-		Container container = manager.gui.inventorySlots;
+		Container container = manager.gui.getContainer();
 		if (held instanceof IToolPipette && container instanceof IContainerLiquidTanks) {
 			((IContainerLiquidTanks) container).handlePipetteClickClient(slot, player);
 		}

@@ -10,30 +10,35 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+
+import forestry.core.ItemGroupForestry;
 
 public class ItemAssemblyKit extends ItemForestry {
 	private final ItemStack assembled;
 
 	public ItemAssemblyKit(ItemStack assembled) {
-		maxStackSize = 24;
+		super((new Item.Properties())
+			.maxStackSize(24)
+			.group(ItemGroupForestry.tabForestry));
 		this.assembled = assembled;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (!worldIn.isRemote) {
 			heldItem.shrink(1);
-			EntityItem entity = new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, assembled.copy());
-			worldIn.spawnEntity(entity);
+			ItemEntity entity = new ItemEntity(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, assembled.copy());
+			worldIn.addEntity(entity);
 		}
-		return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
+		return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);
 	}
 }

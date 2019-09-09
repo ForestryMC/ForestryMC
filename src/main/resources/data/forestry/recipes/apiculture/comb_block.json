@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "forestry:bee_combs_0",
+    "data": 0
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:comb_block",
+  "key": {
+    "#": {
+      "item": "forestry:bee_combs",
+      "data": 0
+    }
+  },
+  "group": "apiculture"
+}

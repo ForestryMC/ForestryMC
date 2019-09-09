@@ -12,7 +12,7 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.climate.IClimateHousing;
@@ -49,7 +49,7 @@ public class PacketClimateUpdate extends ForestryPacket implements IForestryPack
 
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos position = data.readBlockPos();
 			IClimateHousing housing = TileUtil.getTile(player.world, position, IClimateHousing.class);
 			if (housing == null) {

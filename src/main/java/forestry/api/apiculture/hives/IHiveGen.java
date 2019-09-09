@@ -7,7 +7,7 @@ package forestry.api.apiculture.hives;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,6 +29,6 @@ public interface IHiveGen {
 	/**
 	 * returns true if the hive can safely replace the block at this location.
 	 */
-	boolean canReplace(IBlockState blockState, World world, BlockPos pos);
+	boolean canReplace(BlockState blockState, World world, BlockPos pos);
 
 }

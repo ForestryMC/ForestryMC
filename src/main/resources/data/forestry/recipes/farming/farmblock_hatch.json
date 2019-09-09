@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:ffarm",
+    "data": 3
+  },
+  "pattern": [
+    " # ",
+    "TDT"
+  ],
+  "conditions": [
+    {
+      "module": "farming",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:farm_block",
+  "key": {
+    "#": {
+      "item": "forestry:ffarm",
+      "data": 0
+    },
+    "T": {
+      "item": "#GEARTIN"
+    },
+    "D": {
+      "item": "#TRAPDOORWOOD"
+    }
+  },
+  "group": "farming"
+}

@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.database.tiles.TileDatabase;
@@ -36,7 +37,7 @@ public class InventoryDatabaseAnalyzer extends InventoryAdapterTile<TileDatabase
 			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 
 			Item item = itemstack.getItem();
-			return beeItems.honeyDrop == item || beeItems.honeydew == item;
+			return beeItems.getHoneyDrop(EnumHoneyDrop.HONEY, 1).getItem() == item || beeItems.honeydew == item;
 		}
 
 		return false;

@@ -16,23 +16,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.config.Constants;
-import forestry.core.utils.Translator;
 
 public class FruitProviderNone implements IFruitProvider {
 
@@ -42,7 +44,7 @@ public class FruitProviderNone implements IFruitProvider {
 
 		public OverlayType(String ident) {
 			this.ident = ident;
-			this.sprite = new ResourceLocation(Constants.MOD_ID, "blocks/leaves/fruits." + ident);
+			this.sprite = new ResourceLocation(Constants.MOD_ID, "block/leaves/fruits." + ident);
 		}
 	}
 
@@ -80,7 +82,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		return NonNullList.create();
 	}
 
@@ -90,12 +92,12 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
+	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
 		return 0xffffff;
 	}
 
@@ -105,7 +107,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
+	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
 		return false;
 	}
 
@@ -125,12 +127,12 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public String getDescription() {
-		return Translator.translateToLocal(unlocalizedDescription);
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent(unlocalizedDescription);
 	}
 
 	@Override
-	public ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
+	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
 		if (overlay != null) {
 			return overlay.sprite;
 		} else {
@@ -148,11 +150,10 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerSprites() {
+	@OnlyIn(Dist.CLIENT)
+	public void registerSprites(TextureStitchEvent.Pre event) {
 		if (overlay != null) {
-			TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-			map.registerSprite(overlay.sprite);
+			event.addSprite(overlay.sprite);
 		}
 	}
 

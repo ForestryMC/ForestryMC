@@ -12,6 +12,10 @@ package forestry.core.gui.ledgers;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import forestry.api.core.IErrorState;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
@@ -32,7 +36,8 @@ public class ErrorLedger extends Ledger {
 	public void setState(@Nullable IErrorState state) {
 		this.state = state;
 		if (state != null) {
-			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), Translator.translateToLocal(state.getUnlocalizedHelp()));
+			//TODO - textcomponent
+			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip().getString(), Translator.translateToLocal(state.getUnlocalizedHelp()));
 			maxHeight = lineHeight + 20;
 		}
 	}
@@ -57,7 +62,8 @@ public class ErrorLedger extends Ledger {
 
 		// Write description if fully opened
 		if (isFullyOpened()) {
-			y += drawHeader(getTooltip(), xHeader, y);
+			//TODO textcomponent
+			y += drawHeader(getTooltip().getString(), xHeader, y);
 			y += 4;
 
 			String helpString = Translator.translateToLocal(state.getUnlocalizedHelp());
@@ -71,11 +77,11 @@ public class ErrorLedger extends Ledger {
 	}
 
 	@Override
-	public String getTooltip() {
+	public ITextComponent getTooltip() {
 		if (state == null) {
-			return "";
+			return new StringTextComponent("");
 		}
-		return Translator.translateToLocal(state.getUnlocalizedDescription());
+		return new TranslationTextComponent(state.getUnlocalizedDescription());
 	}
 
 }

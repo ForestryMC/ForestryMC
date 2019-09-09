@@ -1,0 +1,65 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "forestry:arboriculture/fence_post",
+        "textures": {
+          "particle": "forestry:block/wood/zebrawood_planks",
+          "texture": "forestry:block/wood/zebrawood_planks"
+        },
+        "uvlock": true
+      }
+    },
+    {
+      "apply": {
+        "model": "forestry:arboriculture/fence_side",
+        "uvlock": true,
+        "textures": {
+          "texture": "forestry:block/wood/zebrawood_planks"
+        }
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "forestry:arboriculture/fence_side",
+        "uvlock": true,
+        "textures": {
+          "texture": "forestry:block/wood/zebrawood_planks"
+        },
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "forestry:arboriculture/fence_side",
+        "uvlock": true,
+        "textures": {
+          "texture": "forestry:block/wood/zebrawood_planks"
+        },
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "forestry:arboriculture/fence_side",
+        "uvlock": true,
+        "textures": {
+          "texture": "forestry:block/wood/zebrawood_planks"
+        },
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    }
+  ]
+}

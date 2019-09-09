@@ -12,9 +12,10 @@ package forestry.lepidopterology.genetics;
 
 import java.awt.Color;
 
-import forestry.api.genetics.IClassification;
-import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
-import forestry.api.lepidopterology.IButterflyFactory;
+import genetics.api.classification.IClassification;
+
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpeciesBuilder;
+import forestry.api.lepidopterology.genetics.IButterflyFactory;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflySpecies;
 
 public class ButterflyFactory implements IButterflyFactory {

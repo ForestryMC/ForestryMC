@@ -1,0 +1,33 @@
+{
+  "result": {
+    "item": "forestry:bog_earth",
+    "data": 0,
+    "count": 6
+  },
+  "pattern": [
+    "#Y#",
+    "YXY",
+    "#Y#"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.bogearth.bucket",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": {
+      "item": "minecraft:water_bucket"
+    },
+    "Y": {
+      "item": "#SAND"
+    }
+  },
+  "group": "core"
+}

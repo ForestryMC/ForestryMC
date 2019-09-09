@@ -12,28 +12,30 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.core.ILocatable;
 import forestry.api.multiblock.IMultiblockLogic;
 import forestry.api.multiblock.MultiblockTileEntityBase;
 import forestry.core.config.Constants;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.PlayerUtil;
 
-public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, IGuiHandlerTile {
+public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, INamedContainerProvider {
 	@Nullable
 	private GameProfile owner;
 
@@ -44,33 +46,33 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	/**
 	 * Called by a structure block when it is right clicked by a player.
 	 */
-	public void openGui(EntityPlayer player) {
-		GuiHandler.openGui(player, this);
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, pos);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 
-		if (data.hasKey("owner")) {
-			NBTTagCompound ownerNbt = data.getCompoundTag("owner");
-			this.owner = PlayerUtil.readGameProfileFromNBT(ownerNbt);
+		if (data.contains("owner")) {
+			CompoundNBT ownerNbt = data.getCompound("owner");
+			this.owner = PlayerUtil.readGameProfile(ownerNbt);
 		}
 
-		getInternalInventory().readFromNBT(data);
+		getInternalInventory().read(data);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		data = super.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
 
 		if (this.owner != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
+			CompoundNBT nbt = new CompoundNBT();
 			PlayerUtil.writeGameProfile(nbt, owner);
-			data.setTag("owner", nbt);
+			data.put("owner", nbt);
 		}
 
-		getInternalInventory().writeToNBT(data);
+		getInternalInventory().write(data);
 		return data;
 	}
 
@@ -119,34 +121,34 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public final void openInventory(EntityPlayer player) {
+	public final void openInventory(PlayerEntity player) {
 		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory(EntityPlayer player) {
+	public final void closeInventory(PlayerEntity player) {
 		getInternalInventory().closeInventory(player);
 	}
 
-	@Override
-	public final String getName() {
-		return getInternalInventory().getName();
-	}
+	//	@Override TODO 1.14
+	//	public final String getName() {
+	//		return getInternalInventory().getName();
+	//	}
+	//
+	//	@Override
+	//	public ITextComponent getDisplayName() {
+	//		return getInternalInventory().getDisplayName();
+	//	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return getInternalInventory().getDisplayName();
-	}
-
-	@Override
-	public final boolean isUsableByPlayer(EntityPlayer player) {
+	public final boolean isUsableByPlayer(PlayerEntity player) {
 		return getInternalInventory().isUsableByPlayer(player);
 	}
-
-	@Override
-	public final boolean hasCustomName() {
-		return getInternalInventory().hasCustomName();
-	}
+	// TODO 1.14
+	//	@Override
+	//	public final boolean hasCustomName() {
+	//		return getInternalInventory().hasCustomName();
+	//	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -154,7 +156,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
+	public int[] getSlotsForFace(Direction side) {
 		if (allowsAutomation()) {
 			return getInternalInventory().getSlotsForFace(side);
 		} else {
@@ -163,12 +165,12 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return allowsAutomation() && getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return allowsAutomation() && getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 
@@ -200,21 +202,22 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		this.owner = owner;
 	}
 
+	//TODO 1.14
 	/* Fields */
-	@Override
-	public int getField(int id) {
-		return getInternalInventory().getField(id);
-	}
-
-	@Override
-	public int getFieldCount() {
-		return getInternalInventory().getFieldCount();
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		getInternalInventory().setField(id, value);
-	}
+	//	@Override
+	//	public int getField(int id) {
+	//		return getInternalInventory().getField(id);
+	//	}
+	//
+	//	@Override
+	//	public int getFieldCount() {
+	//		return getInternalInventory().getFieldCount();
+	//	}
+	//
+	//	@Override
+	//	public void setField(int id, int value) {
+	//		getInternalInventory().setField(id, value);
+	//	}
 
 	@Override
 	public void clear() {

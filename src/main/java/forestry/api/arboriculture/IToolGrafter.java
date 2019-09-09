@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,5 +19,5 @@ public interface IToolGrafter {
 	 * @param pos   Coordinate of the broken leaf block.
 	 * @return Float representing the factor the usual drop chance is to be multiplied by.
 	 */
-	float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, BlockPos pos);
+	float getSaplingModifier(ItemStack stack, World world, PlayerEntity player, BlockPos pos);
 }

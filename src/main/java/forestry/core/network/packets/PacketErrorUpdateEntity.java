@@ -11,10 +11,10 @@
 package forestry.core.network.packets;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
@@ -44,10 +44,10 @@ public class PacketErrorUpdateEntity extends ForestryPacket implements IForestry
 		errorLogic.writeData(data);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			Entity entity = data.readEntityById(player.world);
 			if (entity instanceof IErrorLogicSource) {
 				IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;

@@ -3,14 +3,16 @@ package forestry.api.genetics;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.Direction;
+import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.alleles.IAllele;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -18,29 +20,29 @@ import forestry.api.core.INbtWritable;
 public interface IFilterLogic extends INbtWritable, INbtReadable {
 	void writeGuiData(PacketBuffer data);
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void readGuiData(PacketBuffer data);
 
-	Collection<EnumFacing> getValidDirections(ItemStack itemStack, EnumFacing from);
+	Collection<Direction> getValidDirections(ItemStack itemStack, Direction from);
 
-	boolean isValid(ItemStack itemStack, EnumFacing facing);
+	boolean isValid(ItemStack itemStack, Direction facing);
 
-	boolean isValid(EnumFacing facing, ItemStack itemStack, IFilterData filterData);
+	boolean isValid(Direction facing, ItemStack itemStack, IFilterData filterData);
 
-	boolean isValidAllelePair(EnumFacing orientation, String activeUID, String inactiveUID);
+	boolean isValidAllelePair(Direction orientation, String activeUID, String inactiveUID);
 
-	IFilterRuleType getRule(EnumFacing facing);
+	IFilterRuleType getRule(Direction facing);
 
-	boolean setRule(EnumFacing facing, IFilterRuleType rule);
+	boolean setRule(Direction facing, IFilterRuleType rule);
 
 	@Nullable
-	IAllele getGenomeFilter(EnumFacing facing, int index, boolean active);
+	IAllele getGenomeFilter(Direction facing, int index, boolean active);
 
-	boolean setGenomeFilter(EnumFacing facing, int index, boolean active, @Nullable IAllele allele);
+	boolean setGenomeFilter(Direction facing, int index, boolean active, @Nullable IAllele allele);
 
-	void sendToServer(EnumFacing facing, int index, boolean active, @Nullable IAllele allele);
+	void sendToServer(Direction facing, int index, boolean active, @Nullable IAllele allele);
 
-	void sendToServer(EnumFacing facing, IFilterRuleType rule);
+	void sendToServer(Direction facing, IFilterRuleType rule);
 
 	INetworkHandler getNetworkHandler();
 
@@ -50,6 +52,6 @@ public interface IFilterLogic extends INbtWritable, INbtReadable {
 		 *
 		 * @param player The player that changed the filter.
 		 */
-		void sendToPlayers(IFilterLogic logic, WorldServer server, EntityPlayer player);
+		void sendToPlayers(IFilterLogic logic, ServerWorld server, PlayerEntity player);
 	}
 }

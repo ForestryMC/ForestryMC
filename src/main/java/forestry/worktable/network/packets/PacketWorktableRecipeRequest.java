@@ -12,7 +12,7 @@ package forestry.worktable.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.core.network.ForestryPacket;
@@ -52,7 +52,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 			MemorizedRecipe recipe = new MemorizedRecipe(data);
 

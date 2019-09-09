@@ -13,12 +13,12 @@ package forestry.core.utils;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -53,18 +53,18 @@ public abstract class PlayerUtil {
 	 * Do not store references to the return value, to prevent worlds staying in memory.
 	 */
 	@Nullable
-	public static EntityPlayer getPlayer(World world, @Nullable GameProfile profile) {
+	public static PlayerEntity getPlayer(World world, @Nullable GameProfile profile) {
 		if (profile == null || profile.getName() == null) {
-			if (world instanceof WorldServer) {
-				return FakePlayerFactory.getMinecraft((WorldServer) world);
+			if (world instanceof ServerWorld) {
+				return FakePlayerFactory.getMinecraft((ServerWorld) world);
 			} else {
 				return null;
 			}
 		}
 
-		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
-		if (player == null && world instanceof WorldServer) {
-			player = FakePlayerFactory.get((WorldServer) world, profile);
+		PlayerEntity player = world.getPlayerByUuid(profile.getId());
+		if (player == null && world instanceof ServerWorld) {
+			player = FakePlayerFactory.get((ServerWorld) world, profile);
 		}
 		return player;
 	}
@@ -74,33 +74,33 @@ public abstract class PlayerUtil {
 	 * Do not store references to the return value, to prevent worlds staying in memory.
 	 */
 	@Nullable
-	public static EntityPlayer getFakePlayer(World world, @Nullable GameProfile profile) {
+	public static PlayerEntity getFakePlayer(World world, @Nullable GameProfile profile) {
 		if (profile == null || profile.getName() == null) {
-			if (world instanceof WorldServer) {
-				return FakePlayerFactory.getMinecraft((WorldServer) world);
+			if (world instanceof ServerWorld) {
+				return FakePlayerFactory.getMinecraft((ServerWorld) world);
 			} else {
 				return null;
 			}
 		}
 
-		if (world instanceof WorldServer) {
-			return FakePlayerFactory.get((WorldServer) world, profile);
+		if (world instanceof ServerWorld) {
+			return FakePlayerFactory.get((ServerWorld) world, profile);
 		}
 		return null;
 	}
 
-	public static void writeGameProfile(NBTTagCompound tagCompound, GameProfile profile) {
+	public static void writeGameProfile(CompoundNBT tagCompound, GameProfile profile) {
 		if (!StringUtils.isNullOrEmpty(profile.getName())) {
-			tagCompound.setString("Name", profile.getName());
+			tagCompound.putString("Name", profile.getName());
 		}
 
 		if (profile.getId() != null) {
-			tagCompound.setString("Id", profile.getId().toString());
+			tagCompound.putString("Id", profile.getId().toString());
 		}
 	}
 
 	@Nullable
-	public static GameProfile readGameProfileFromNBT(NBTTagCompound compound) {
-		return NBTUtil.readGameProfileFromNBT(compound);
+	public static GameProfile readGameProfile(CompoundNBT compound) {
+		return NBTUtil.readGameProfile(compound);
 	}
 }

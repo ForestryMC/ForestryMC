@@ -3,7 +3,7 @@ package forestry.farming.logic.crops;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -15,12 +15,12 @@ import forestry.core.utils.NetworkUtil;
 
 public class CropDestroyDouble extends Crop {
 
-	protected final IBlockState blockState;
-	protected final IBlockState blockStateUp;
+	protected final BlockState blockState;
+	protected final BlockState blockStateUp;
 	@Nullable
-	protected final IBlockState replantState;
+	protected final BlockState replantState;
 
-	public CropDestroyDouble(World world, IBlockState blockState, IBlockState blockStateUp, BlockPos position, @Nullable IBlockState replantState) {
+	public CropDestroyDouble(World world, BlockState blockState, BlockState blockStateUp, BlockPos position, @Nullable BlockState replantState) {
 		super(world, position);
 		this.blockState = blockState;
 		this.blockStateUp = blockStateUp;
@@ -37,17 +37,17 @@ public class CropDestroyDouble extends Crop {
 		Block block = blockState.getBlock();
 		Block blockUp = blockStateUp.getBlock();
 		NonNullList<ItemStack> harvested = NonNullList.create();
-		block.getDrops(harvested, world, pos, blockState, 0);
-		blockUp.getDrops(harvested, world, pos.up(), blockStateUp, 0);
-
+		//		block.getDrops(harvested, world, pos, blockState, 0);
+		//		blockUp.getDrops(harvested, world, pos.up(), blockStateUp, 0);
+		//TODO getDrops. Loot tables?
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		world.setBlockToAir(pos.up());
+		world.removeBlock(pos.up(), false);
 		if (replantState != null) {
 			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);
 		} else {
-			world.setBlockToAir(pos);
+			world.removeBlock(pos, false);
 		}
 
 		return harvested;

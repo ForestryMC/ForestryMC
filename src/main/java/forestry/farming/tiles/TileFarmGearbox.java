@@ -12,10 +12,11 @@ package forestry.farming.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
@@ -39,23 +40,23 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		energyManager.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		energyManager.read(compoundNBT);
 
-		activationDelay = nbttagcompound.getInteger("ActivationDelay");
-		previousDelays = nbttagcompound.getInteger("PrevDelays");
+		activationDelay = compoundNBT.getInt("ActivationDelay");
+		previousDelays = compoundNBT.getInt("PrevDelays");
 	}
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		energyManager.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		energyManager.write(compoundNBT);
 
-		nbttagcompound.setInteger("ActivationDelay", activationDelay);
-		nbttagcompound.setInteger("PrevDelays", previousDelays);
-		return nbttagcompound;
+		compoundNBT.putInt("ActivationDelay", activationDelay);
+		compoundNBT.putInt("PrevDelays", previousDelays);
+		return compoundNBT;
 	}
 
 	@Override
@@ -96,16 +97,11 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 		return energyManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
-	}
 
-	@Nullable
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+		if (energyCapability.isPresent()) {
 			return energyCapability;
 		}
 		return super.getCapability(capability, facing);

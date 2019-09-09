@@ -5,10 +5,11 @@
  ******************************************************************************/
 package forestry.api.gui;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+@OnlyIn(Dist.CLIENT)
 public interface IElementLayout extends IElementGroup {
 	/**
 	 * @param distance

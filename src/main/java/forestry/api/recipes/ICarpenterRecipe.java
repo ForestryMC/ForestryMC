@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -32,7 +30,6 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	/**
 	 * @return the fluid required for this recipe. return null if there is no required fluid.
 	 */
-	@Nullable
 	FluidStack getFluidResource();
 
 }

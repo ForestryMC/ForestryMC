@@ -10,23 +10,25 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import forestry.api.core.IToolPipette;
+import forestry.core.fluids.StandardTank;
 import forestry.core.network.packets.PacketPipetteClick;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.NetworkUtil;
@@ -40,8 +42,8 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void handlePipetteClickClient(int slot, EntityPlayer player) {
+	@OnlyIn(Dist.CLIENT)
+	public void handlePipetteClickClient(int slot, PlayerEntity player) {
 		ItemStack itemstack = player.inventory.getItemStack();
 		if (itemstack.getItem() instanceof IToolPipette) {
 			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
@@ -49,7 +51,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 	}
 
 	@Override
-	public void handlePipetteClick(int slot, EntityPlayerMP player) {
+	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
 		ItemStack itemstack = player.inventory.getItemStack();
 		Item held = itemstack.getItem();
 		if (!(held instanceof IToolPipette)) {
@@ -60,30 +62,34 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 		IFluidTank tank = tile.getTankManager().getTank(slot);
 		int liquidAmount = tank.getFluidAmount();
 
-		IFluidHandlerItem fluidHandlerItem = FluidUtil.getFluidHandler(itemstack);
-		if (fluidHandlerItem != null) {
+		LazyOptional<IFluidHandlerItem> fluidCap = FluidUtil.getFluidHandler(itemstack);
+		fluidCap.ifPresent(fluidHandlerItem -> {
 			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
-				if (liquidAmount > 0) {
-					if (tank instanceof FluidTank) {
-						FluidStack fillAmount = ((FluidTank) tank).drainInternal(Fluid.BUCKET_VOLUME, false);
-						int filled = fluidHandlerItem.fill(fillAmount, true);
-						tank.drain(filled, true);
-						player.inventory.setItemStack(fluidHandlerItem.getContainer());
-						player.updateHeldItem();
-					}
+				if (tank instanceof StandardTank) {
+					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+					player.inventory.setItemStack(fluidHandlerItem.getContainer());
+					player.updateHeldItem();
+				} else {//TODO: Test if this works
+					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+					player.inventory.setItemStack(fluidHandlerItem.getContainer());
+					player.updateHeldItem();
 				}
 			} else {
-				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, false);
-				if (potential != null) {
+				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+				if (!potential.isEmpty()) {
 					if (tank instanceof FluidTank) {
-						int fill = tank.fill(potential, true);
-						fluidHandlerItem.drain(fill, true);
+						int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
+						fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
 						player.inventory.setItemStack(fluidHandlerItem.getContainer());
 						player.updateHeldItem();
 					}
 				}
 			}
-		}
+		});
 	}
 
 	@Override

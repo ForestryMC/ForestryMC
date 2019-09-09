@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/chipsets.1",
+    "layer1": "forestry:item/chipsets.0"
+  }
+}

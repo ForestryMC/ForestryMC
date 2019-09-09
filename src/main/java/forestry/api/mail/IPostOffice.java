@@ -10,12 +10,13 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public interface IPostOffice {
 
 	void collectPostage(NonNullList<ItemStack> stamps);
 
-	IPostalState lodgeLetter(World world, ItemStack itemstack, boolean doLodge);
+	IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge);
 
 	ItemStack getAnyStamp(int max);
 

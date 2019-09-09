@@ -11,60 +11,70 @@
 package forestry.lepidopterology.entities;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.core.IToolScoop;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyHelper;
 
-public class EntityButterfly extends EntityCreature implements IEntityButterfly {
+//TODO minecraft has flying entities (bat, parrot). Can some of their logic be reused here?
+//TODO getMaxSpawnedInChunk?
+public class EntityButterfly extends CreatureEntity implements IEntityButterfly {
 
 	/* CONSTANTS */
 	public static final int COOLDOWNS = 1500;
@@ -83,7 +93,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	@Nullable
 	private Vec3d flightTarget;
 	private int exhaustion;
-	private IButterfly contained = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
+	private IButterfly contained = ButterflyHelper.getKaryotype().getDefaultTemplate().toIndividual(ButterflyHelper.getRoot());
 	@Nullable
 	private IIndividual pollen;
 
@@ -96,25 +106,34 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	private IAlleleButterflySpecies species;
 	private float size = DEFAULT_BUTTERFLY_SIZE;
 	private EnumButterflyState state = DEFAULT_STATE;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private ResourceLocation textureResource;
 
 	/* CONSTRUCTOR */
-	public EntityButterfly(World world) {
-		super(world);
+	public EntityButterfly(EntityType<EntityButterfly> type, World world) {
+		super(type, world);
 		setDefaults();
 	}
 
-	public EntityButterfly(World world, IButterfly butterfly, BlockPos homePos) {
-		super(world);
-		setDefaults();
-		setIndividual(butterfly);
-		setHomePosAndDistance(homePos, ModuleLepidopterology.maxDistance);
+	//TODO this doesn't play well with registering the entity. So static method for now
+	//	public EntityButterfly(EntityType<EntityButterfly> type, World world, IButterfly butterfly, BlockPos homePos) {
+	//		super(type, world);
+	//		setDefaults();
+	//		setIndividual(butterfly);
+	//		setHomePosAndDistance(homePos, ModuleLepidopterology.maxDistance);
+	//	}
+
+	public static EntityButterfly create(EntityType<EntityButterfly> type, World world, IButterfly butterfly, BlockPos homePos) {
+		EntityButterfly bf = new EntityButterfly(type, world);
+		bf.setDefaults();
+		bf.setIndividual(butterfly);
+		bf.setHomePosAndDistance(homePos, ModuleLepidopterology.maxDistance);
+		return bf;
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 
 		dataManager.register(DATAWATCHER_ID_SPECIES, "");
 		dataManager.register(DATAWATCHER_ID_SIZE, (int) (DEFAULT_BUTTERFLY_SIZE * 100));
@@ -122,73 +141,71 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	private void setDefaults() {
-		tasks.addTask(8, new AIButterflyFlee(this));
-		tasks.addTask(9, new AIButterflyMate(this));
-		tasks.addTask(10, new AIButterflyPollinate(this));
-		tasks.addTask(11, new AIButterflyRest(this));
-		tasks.addTask(12, new AIButterflyRise(this));
-		tasks.addTask(12, new AIButterflyWander(this));
+		this.goalSelector.addGoal(8, new AIButterflyFlee(this));
+		this.goalSelector.addGoal(9, new AIButterflyMate(this));
+		this.goalSelector.addGoal(10, new AIButterflyPollinate(this));
+		this.goalSelector.addGoal(11, new AIButterflyRest(this));
+		this.goalSelector.addGoal(12, new AIButterflyRise(this));
+		this.goalSelector.addGoal(12, new AIButterflyWander(this));
 	}
 
 	@Override
-	public EntityCreature getEntity() {
+	public CreatureEntity getEntity() {
 		return this;
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void writeAdditional(CompoundNBT compoundNBT) {
+		super.writeAdditional(compoundNBT);
 
-		NBTTagCompound bio = new NBTTagCompound();
-		contained.writeToNBT(bio);
-		nbttagcompound.setTag("BTFLY", bio);
+		CompoundNBT bio = new CompoundNBT();
+		contained.write(bio);
+		compoundNBT.put("BTFLY", bio);
 
 		if (pollen != null) {
-			NBTTagCompound pln = new NBTTagCompound();
-			pln.setString("Root", pollen.getGenome().getSpeciesRoot().getUID());
-			pollen.writeToNBT(pln);
-			nbttagcompound.setTag("PLN", pln);
+			CompoundNBT pln = new CompoundNBT();
+			pln.putString("Root", pollen.getRoot().getUID());
+			pollen.write(pln);
+			compoundNBT.put("PLN", pln);
 		}
 
-		nbttagcompound.setByte("STATE", (byte) getState().ordinal());
-		nbttagcompound.setInteger("EXH", exhaustion);
+		compoundNBT.putByte("STATE", (byte) getState().ordinal());
+		compoundNBT.putInt("EXH", exhaustion);
 
-		nbttagcompound.setInteger("homeX", getHomePosition().getX());
-		nbttagcompound.setInteger("homeY", getHomePosition().getY());
-		nbttagcompound.setInteger("homeZ", getHomePosition().getZ());
+		compoundNBT.putLong("home", getHomePosition().toLong());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	public void readAdditional(CompoundNBT compoundNBT) {
+		super.readAdditional(compoundNBT);
 
 		IButterfly butterfly = null;
-		if (nbttagcompound.hasKey("BTFLY")) {
-			butterfly = new Butterfly((NBTTagCompound) nbttagcompound.getTag("BTFLY"));
+		if (compoundNBT.contains("BTFLY")) {
+			butterfly = new Butterfly((CompoundNBT) compoundNBT.get("BTFLY"));
 		}
 		setIndividual(butterfly);
 
-		if (nbttagcompound.hasKey("PLN")) {
-			NBTTagCompound pollenNBT = nbttagcompound.getCompoundTag("PLN");
-			ISpeciesRoot root;
-			if (pollenNBT.hasKey("Root")) {
-				root = AlleleManager.alleleRegistry.getSpeciesRoot(pollenNBT.getString("Root"));
+		if (compoundNBT.contains("PLN")) {
+			CompoundNBT pollenNBT = compoundNBT.getCompound("PLN");
+			IIndividualRoot root;
+			if (pollenNBT.contains("Root")) {
+				root = GeneticsAPI.apiInstance.getRoot(pollenNBT.getString("Root")).get();
 			} else {
 				root = TreeManager.treeRoot;
 			}
-			pollen = root.getMember(pollenNBT);
+			pollen = root.create(pollenNBT);
 		}
 
-		EnumButterflyState state = EnumButterflyState.VALUES[nbttagcompound.getByte("STATE")];
+		EnumButterflyState state = EnumButterflyState.VALUES[compoundNBT.getByte("STATE")];
 		setState(state);
-		exhaustion = nbttagcompound.getInteger("EXH");
-		BlockPos home = new BlockPos(nbttagcompound.getInteger("homeX"), nbttagcompound.getInteger("homeY"), nbttagcompound.getInteger("homeZ"));
+		exhaustion = compoundNBT.getInt("EXH");
+		BlockPos home = BlockPos.fromLong(compoundNBT.getLong("home"));
 		setHomePosAndDistance(home, ModuleLepidopterology.maxDistance);
 	}
 
 	public float getWingFlap(float partialTicktime) {
-		int offset = species != null ? species.getUID().hashCode() : world.rand.nextInt();
+		int offset = species != null ? species.getRegistryName().toString().hashCode() : world.rand.nextInt();
 		return getState().getWingFlap(this, offset, partialTicktime);
 	}
 
@@ -211,7 +228,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	public float getSpeed() {
-		return contained.getGenome().getSpeed();
+		return contained.getGenome().getActiveValue(ButterflyChromosomes.SPEED);
 	}
 
 	/* DESTINATION */
@@ -250,9 +267,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		if (depth > 0) {
 			weight -= 0.1f * depth;
 		} else {
-			IBlockState blockState = world.getBlockState(pos);
+			BlockState blockState = world.getBlockState(pos);
 			Block block = blockState.getBlock();
-			if (block instanceof BlockFlower) {
+			if (block instanceof FlowerBlock) {
 				weight += 2.0f;
 			} else if (block instanceof IPlantable) {
 				weight += 1.5f;
@@ -263,18 +280,18 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			}
 
 			BlockPos posBelow = pos.down();
-			IBlockState blockStateBelow = world.getBlockState(posBelow);
+			BlockState blockStateBelow = world.getBlockState(posBelow);
 			Block blockBelow = blockStateBelow.getBlock();
-			if (blockBelow.isLeaves(blockStateBelow, world, posBelow)) {
+			if (blockBelow.isIn(BlockTags.LEAVES)) {
 				weight += 2.5f;
-			} else if (blockBelow instanceof BlockFence) {
+			} else if (blockBelow instanceof FenceBlock) {
 				weight += 1.0f;
-			} else if (blockBelow instanceof BlockWall) {
+			} else if (blockBelow instanceof WallBlock) {
 				weight += 1.0f;
 			}
 		}
 
-		weight += world.getLightBrightness(pos);
+		weight += world.getBrightness(pos);
 		return weight;
 	}
 
@@ -283,12 +300,13 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	private int getFluidDepth(BlockPos pos) {
-		Chunk chunk = world.getChunk(pos);
+		IChunk chunk = world.getChunk(pos);
 		int xx = pos.getX() & 15;
 		int zz = pos.getZ() & 15;
 		int depth = 0;
 		for (int y = chunk.getTopFilledSegment() + 15; y > 0; --y) {
-			IBlockState blockState = chunk.getBlockState(xx, y, zz);
+			//TODO could be a mutable blockpos if this shows as a hotspot
+			BlockState blockState = chunk.getBlockState(new BlockPos(xx, y, zz));
 			Block block = blockState.getBlock();
 			if (blockState.getMaterial().isLiquid()) {
 				depth++;
@@ -330,20 +348,22 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	public void setIndividual(@Nullable IButterfly butterfly) {
 		if (butterfly == null) {
-			butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
+			butterfly = ButterflyHelper.getKaryotype().getDefaultTemplate().toIndividual(ButterflyHelper.getRoot());
 		}
 		contained = butterfly;
 
-		IButterflyGenome genome = contained.getGenome();
+		IGenome genome = contained.getGenome();
 
-		isImmuneToFire = genome.getFireResist();
-		size = genome.getSize();
-		setSize(size, 0.4f);
-		species = genome.getPrimary();
+		//TODO AT methods or more entity types.
+		//		isImmuneToFire();
+		//		isImmuneToFire = genome.getFireResist();
+		size = genome.getActiveValue(ButterflyChromosomes.SIZE);
+		//		setSize(size, 0.4f);
+		species = genome.getActiveAllele(ButterflyChromosomes.SPECIES);
 
 		if (!world.isRemote) {
 			dataManager.set(DATAWATCHER_ID_SIZE, (int) (size * 100));
-			dataManager.set(DATAWATCHER_ID_SPECIES, species.getUID());
+			dataManager.set(DATAWATCHER_ID_SPECIES, species.getRegistryName().toString());
 		} else {
 			textureResource = new ResourceLocation(species.getEntityTexture());
 		}
@@ -355,23 +375,23 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data) {
+	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 		if (!world.isRemote) {
 			setIndividual(contained);
 		}
-		return data;
+		return spawnDataIn;
 	}
 
 	@Override
-	public String getName() {
+	public ITextComponent getName() {
 		if (species == null) {
 			return super.getName();
 		}
-		return species.getAlleleName();
+		return species.getDisplayName();
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
+	public boolean canSpawn(IWorld worldIn, SpawnReason spawnReasonIn) {
 		return true;
 	}
 
@@ -384,7 +404,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		return species != null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public ResourceLocation getTexture() {
 		return textureResource;
 	}
@@ -404,28 +424,28 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn(double distanceToClosestPlayer) {
 		return ticksExisted > MAX_LIFESPAN;
 	}
 
 	/* INTERACTION */
 
 	@Override
-	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (isDead) {
+	protected boolean processInteract(PlayerEntity player, Hand hand) {
+		if (dead) {
 			return false;
 		}
 
 		ItemStack stack = player.getHeldItem(hand);
 		if ((stack.getItem() instanceof IToolScoop)) {
 			if (!world.isRemote) {
-				IButterflyRoot root = contained.getGenome().getPrimary().getRoot();
+				IButterflyRoot root = ButterflyHelper.getRoot();
 				ILepidopteristTracker tracker = root.getBreedingTracker(world, player.getGameProfile());
-				ItemStack itemStack = root.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY);
+				ItemStack itemStack = root.getTypes().createStack(contained.copy(), EnumFlutterType.BUTTERFLY);
 
 				tracker.registerCatch(contained);
 				ItemStackUtil.dropItemStackAsEntity(itemStack, world, posX, posY, posZ);
-				setDead();
+				this.dead = true;
 			} else {
 				player.swingArm(hand);
 			}
@@ -437,34 +457,40 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	/* LOOT */
 	@Override
-	protected void dropFewItems(boolean playerKill, int lootLevel) {
-		for (ItemStack stack : contained.getLootDrop(this, playerKill, lootLevel)) {
+	protected void dropSpecialItems(DamageSource source, int looting, boolean recentlyHitIn) {
+		for (ItemStack stack : contained.getLootDrop(this, recentlyHitIn, looting)) {
 			ItemStackUtil.dropItemStackAsEntity(stack, world, posX, posY, posZ);
 		}
 
 		// Drop pollen if any
 		IIndividual pollen = getPollen();
 		if (pollen != null) {
-			ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(pollen);
-			ItemStack pollenStack = root.getMemberStack(pollen, EnumGermlingType.POLLEN);
+			IRootDefinition root = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
+			if (!root.isRootPresent()) {
+				return;
+			}
+			ItemStack pollenStack = root.get().getTypes().createStack(pollen, EnumGermlingType.POLLEN);
 			ItemStackUtil.dropItemStackAsEntity(pollenStack, world, posX, posY, posZ);
 		}
 	}
 
 	/* UPDATING */
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		// Update stuff client side
 		if (world.isRemote) {
 			if (species == null) {
 				String speciesUid = dataManager.get(DATAWATCHER_ID_SPECIES);
-				IAllele allele = AlleleManager.alleleRegistry.getAllele(speciesUid);
-				if (allele instanceof IAlleleButterflySpecies) {
-					species = (IAlleleButterflySpecies) allele;
-					textureResource = new ResourceLocation(species.getEntityTexture());
-					size = dataManager.get(DATAWATCHER_ID_SIZE) / 100f;
+				Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(speciesUid);
+				if (optionalAllele.isPresent()) {
+					IAllele allele = optionalAllele.get();
+					if (allele instanceof IAlleleButterflySpecies) {
+						species = (IAlleleButterflySpecies) allele;
+						textureResource = new ResourceLocation(species.getEntityTexture());
+						size = dataManager.get(DATAWATCHER_ID_SIZE) / 100f;
+					}
 				}
 			}
 
@@ -474,7 +500,8 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			}
 		}
 
-		motionY *= 0.6000000238418579d;
+		Vec3d motion = getMotion();
+		setMotion(motion.x, motion.y * 0.6000000238418579d, motion.z);
 
 		// Make sure we die if the butterfly hasn't rested in a long, long time.
 		if (exhaustion > EXHAUSTION_CONSUMPTION && getRNG().nextInt(20) == 0) {
@@ -506,14 +533,17 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			double diffY = flightTarget.y + 0.1d - posY;
 			double diffZ = flightTarget.z + 0.5d - posZ;
 
-			motionX += (Math.signum(diffX) * 0.5d - motionX) * 0.10000000149011612d;
-			motionY += (Math.signum(diffY) * 0.699999988079071d - motionY) * 0.10000000149011612d;
-			motionZ += (Math.signum(diffZ) * 0.5d - motionZ) * 0.10000000149011612d;
+			Vec3d motion = getMotion();
+			double newX = (Math.signum(diffX) * 0.5d - motion.x) * 0.10000000149011612d;
+			double newY = (Math.signum(diffY) * 0.699999988079071d - motion.y) * 0.10000000149011612d;
+			double newZ = (Math.signum(diffZ) * 0.5d - motion.z) * 0.10000000149011612d;
 
-			float horizontal = (float) (Math.atan2(motionZ, motionX) * 180d / Math.PI) - 90f;
+			setMotion(newX, newY, newZ);
+
+			float horizontal = (float) (Math.atan2(newZ, newX) * 180d / Math.PI) - 90f;
 			rotationYaw += MathHelper.wrapDegrees(horizontal - rotationYaw);
 
-			setMoveForward(contained.getGenome().getSpeed());
+			setMoveForward(contained.getGenome().getActiveValue(ButterflyChromosomes.SPEED));
 		}
 	}
 
@@ -527,7 +557,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	@Override
-	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+	protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 	}
 
 	@Override
@@ -557,9 +587,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			return ItemStack.EMPTY;
 		}
 		IButterflyRoot root = species.getRoot();
-		IAllele[] template = root.getTemplate(species);
+		IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
 		IButterfly butterfly = root.templateAsIndividual(template);
-		return root.getMemberStack(butterfly, EnumFlutterType.BUTTERFLY);
+		return root.getTypes().createStack(butterfly, EnumFlutterType.BUTTERFLY);
 	}
 
 	@Override

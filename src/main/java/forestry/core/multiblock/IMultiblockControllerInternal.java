@@ -13,7 +13,7 @@ package forestry.core.multiblock;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -101,14 +101,14 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	 *
 	 * @param data A fresh compound tag to write your multiblock data into
 	 */
-	void formatDescriptionPacket(NBTTagCompound data);
+	void formatDescriptionPacket(CompoundNBT data);
 
 	/**
 	 * Called when the save delegate's tile entity receiving a description packet
 	 *
 	 * @param data A compound tag containing multiblock data to import
 	 */
-	void decodeDescriptionPacket(NBTTagCompound data);
+	void decodeDescriptionPacket(CompoundNBT data);
 
 	World getWorldObj();
 

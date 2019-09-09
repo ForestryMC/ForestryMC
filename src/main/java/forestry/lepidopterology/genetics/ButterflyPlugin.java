@@ -7,19 +7,23 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
 
 import forestry.api.genetics.DatabaseMode;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Config;
 import forestry.core.genetics.analyzer.DatabasePlugin;
 import forestry.core.genetics.analyzer.MutationsTab;
 import forestry.lepidopterology.ModuleLepidopterology;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ButterflyPlugin extends DatabasePlugin<IButterfly> {
 	public static final ButterflyPlugin INSTANCE = new ButterflyPlugin();
 
@@ -33,8 +37,12 @@ public class ButterflyPlugin extends DatabasePlugin<IButterfly> {
 		NonNullList<ItemStack> butterflyList = NonNullList.create();
 		ModuleLepidopterology.getItems().butterflyGE.addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
-			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);
-			iconStacks.put(species.getUID(), butterflyStack);
+			IOrganism<?> organism = GeneticHelper.getOrganism(butterflyStack);
+			if (organism.isEmpty()) {
+				continue;
+			}
+			IAlleleButterflySpecies species = organism.getAllele(ButterflyChromosomes.SPECIES, true);
+			iconStacks.put(species.getRegistryName().toString(), butterflyStack);
 		}
 	}
 

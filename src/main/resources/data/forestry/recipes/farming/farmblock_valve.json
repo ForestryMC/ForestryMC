@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:ffarm",
+    "data": 4
+  },
+  "pattern": [
+    " # ",
+    "XTX"
+  ],
+  "conditions": [
+    {
+      "module": "farming",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:farm_block",
+  "key": {
+    "#": {
+      "item": "forestry:ffarm",
+      "data": 0
+    },
+    "T": {
+      "item": "#GEARTIN"
+    },
+    "X": {
+      "item": "#BLOCKGLASS"
+    }
+  },
+  "group": "farming"
+}

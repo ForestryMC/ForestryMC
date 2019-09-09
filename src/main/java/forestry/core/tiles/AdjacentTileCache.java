@@ -16,7 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -55,7 +55,7 @@ public final class AdjacentTileCache {
 	}
 
 	@Nullable
-	private TileEntity searchSide(EnumFacing side) {
+	private TileEntity searchSide(Direction side) {
 		World world = source.getWorld();
 		BlockPos pos = source.getPos().offset(side);
 		if (world.isBlockLoaded(pos) && !world.isAirBlock(pos)) {
@@ -65,7 +65,7 @@ public final class AdjacentTileCache {
 	}
 
 	public void refresh() {
-		for (EnumFacing side : EnumFacing.values()) {
+		for (Direction side : Direction.values()) {
 			getTileOnSide(side);
 		}
 	}
@@ -99,15 +99,15 @@ public final class AdjacentTileCache {
 		}
 	}
 
-	private boolean areCoordinatesOnSide(EnumFacing side, TileEntity target) {
+	private boolean areCoordinatesOnSide(Direction side, TileEntity target) {
 		return source.getPos().getX() + side.getXOffset() == target.getPos().getX() && source.getPos().getY() + side.getYOffset() == target.getPos().getY() && source.getPos().getZ() + side.getZOffset() == target.getPos().getZ();
 	}
 
 	@Nullable
-	public TileEntity getTileOnSide(EnumFacing side) {
+	public TileEntity getTileOnSide(Direction side) {
 		int s = side.ordinal();
 		if (cache[s] != null) {
-			if (cache[s].isInvalid() || !areCoordinatesOnSide(side, cache[s])) {
+			if (cache[s].isRemoved() || !areCoordinatesOnSide(side, cache[s])) {
 				setTile(s, null);
 			} else {
 				return cache[s];
@@ -142,7 +142,7 @@ public final class AdjacentTileCache {
 		private long startTime = Long.MIN_VALUE;
 
 		public boolean hasTriggered(World world, int ticks) {
-			long currentTime = world.getTotalWorldTime();
+			long currentTime = world.getGameTime();
 			if (currentTime >= ticks + startTime || startTime > currentTime) {
 				startTime = currentTime;
 				return true;

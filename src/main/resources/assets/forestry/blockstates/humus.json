@@ -1,14 +1,7 @@
 {
 	"variants": {
-		"degrade=0": { "model": "forestry:soil/humus" },
-		"degrade=1": { "model": "forestry:soil/humus" },
-		"degrade=2": { "model": "forestry:soil/humus" },
-		"degrade=3": { "model": "forestry:soil/humus" },
-		"degrade=4": { "model": "forestry:soil/humus" },
-		"degrade=5": { "model": "forestry:soil/humus" },
-		"degrade=6": { "model": "forestry:soil/humus" },
-		"degrade=7": { "model": "forestry:soil/humus" },
-		"degrade=8": { "model": "forestry:soil/humus" },
-		"degrade=9": { "model": "forestry:soil/humus" }
+      "": {
+        "model": "forestry:block/soil/humus"
+      }
 	}
 }

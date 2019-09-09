@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "forestry:wood_pile",
+    "data": 0
+  },
+  "ingredients": [
+    {
+      "item": "#LOGWOOD"
+    },
+    {
+      "item": "#LOGWOOD"
+    },
+    {
+      "item": "#LOGWOOD"
+    },
+    {
+      "item": "#LOGWOOD"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "charcoal",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "charcoal"
+}

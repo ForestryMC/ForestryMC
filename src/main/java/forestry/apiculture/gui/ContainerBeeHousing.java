@@ -10,27 +10,46 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.api.climate.IClimateListener;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.gui.ContainerAnalyzerProvider;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousingBase> implements IContainerBeeHousing {
 
-	public ContainerBeeHousing(InventoryPlayer player, TileBeeHousingBase tile, boolean hasFrames) {
-		super(tile, player, 8, 108);
+	private final IGuiBeeHousingDelegate delegate;
+	private final GuiBeeHousing.Icon icon;
+
+	public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		PacketBufferForestry buf = new PacketBufferForestry(data);
+		TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, buf.readBlockPos(), TileBeeHousingBase.class);
+		boolean hasFrames = buf.readBoolean();
+		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
+		return new ContainerBeeHousing(windowId, inv, tile, hasFrames, icon);    //TODO nullability.
+	}
+
+	//TODO hack icon in GUI by checking title. Then it isn't needed here.
+	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
+		super(windowId, ModuleApiculture.getContainerTypes().BEE_HOUSING, player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();
 		IClimateListener listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-		if (listener != null && player.player instanceof EntityPlayerMP) {
-			listener.syncToClient((EntityPlayerMP) player.player);
+		if (listener != null && player.player instanceof ServerPlayerEntity) {
+			listener.syncToClient((ServerPlayerEntity) player.player);
 		}
+
+		delegate = tile;
+		this.icon = icon;
 	}
 
 	private int beeProgress = -1;
@@ -47,4 +66,13 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 		}
 	}
 
+	@Override
+	public IGuiBeeHousingDelegate getDelegate() {
+		return delegate;
+	}
+
+	@Override
+	public GuiBeeHousing.Icon getIcon() {
+		return icon;
+	}
 }

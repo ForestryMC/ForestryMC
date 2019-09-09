@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -64,7 +62,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		if (itemStack.isEmpty()) {
 			return ItemStack.EMPTY;
 		}
-		return itemStack.splitStack(count);
+		return itemStack.split(count);
 	}
 
 	@Override
@@ -72,10 +70,11 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		contents.set(slotId, itemstack);
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
+	//TODO - inventory name
+	//	@Override
+	//	public String getName() {
+	//		return name;
+	//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -87,7 +86,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
 		return false;
 	}
 
@@ -96,15 +95,16 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		return this.getStackInSlot(slotIndex);
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return true;
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TextComponentString(getName());
-	}
+	//TODO inventory title
+	//	@Override
+	//	public boolean hasCustomName() {
+	//		return true;
+	//	}
+	//
+	//	@Override
+	//	public ITextComponent getDisplayName() {
+	//		return new StringTextComponent(getName());
+	//	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -112,40 +112,41 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 	}
 
 	/* INBTagable */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		InventoryUtil.readFromNBT(this, nbttagcompound);
+	public void read(CompoundNBT CompoundNBT) {
+		InventoryUtil.readFromNBT(this, CompoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		InventoryUtil.writeToNBT(this, nbttagcompound);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		InventoryUtil.writeToNBT(this, CompoundNBT);
+		return CompoundNBT;
 	}
 
 	/* Fields */
 
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
+	//TODO - inventory fields
+	//	@Override
+	//	public int getField(int id) {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public void setField(int id, int value) {
+	//	}
+	//
+	//	@Override
+	//	public int getFieldCount() {
+	//		return 0;
+	//	}
 
 	@Override
 	public void clear() {

@@ -11,17 +11,20 @@
 package forestry.farming.logic.farmables;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -50,13 +53,14 @@ public class FarmableSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		ItemStack copy = germling.copy();
-		player.setHeldItem(EnumHand.MAIN_HAND, copy);
-		EnumActionResult actionResult = copy.onItemUse(player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
-		player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
-		if (actionResult == EnumActionResult.SUCCESS) {
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.SAPLING.getDefaultState());
+		player.setHeldItem(Hand.MAIN_HAND, copy);
+		BlockRayTraceResult result = new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos.down(), true);    //TODO isInside
+		ActionResultType actionResult = copy.onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, result));
+		player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+		if (actionResult == ActionResultType.SUCCESS) {
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.getDefaultState());
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
@@ -64,16 +68,16 @@ public class FarmableSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
 		return blockState.getBlock() == this.saplingBlock;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
-		if (!block.isWood(world, pos)) {
-			return null;
-		}
+		//		if (!block.isWood(world, pos)) {
+		//			return null;
+		//		} TODO tags
 
 		return new CropDestroy(world, blockState, pos, null);
 	}
@@ -91,9 +95,9 @@ public class FarmableSapling implements IFarmable {
 		NonNullList<ItemStack> germlings = NonNullList.create();
 		if (ignoreMetadata) {
 			Item germlingItem = germling.getItem();
-			CreativeTabs tab = germlingItem.getCreativeTab();
+			ItemGroup tab = germlingItem.getGroup();
 			if (tab != null) {
-				germlingItem.getSubItems(tab, germlings);
+				germlingItem.fillItemGroup(tab, germlings);
 			}
 		}
 		if (germlings.isEmpty()) {

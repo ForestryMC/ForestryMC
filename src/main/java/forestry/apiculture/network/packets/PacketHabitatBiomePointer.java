@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.network.ForestryPacket;
@@ -40,10 +40,10 @@ public class PacketHabitatBiomePointer extends ForestryPacket implements IForest
 		return PacketIdClient.HABITAT_BIOME_POINTER;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
 			TextureHabitatLocator.getInstance().setTargetCoordinates(pos);
 		}

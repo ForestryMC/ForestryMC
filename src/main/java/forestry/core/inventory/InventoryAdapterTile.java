@@ -12,7 +12,7 @@ package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public class InventoryAdapterTile<T extends TileEntity> extends InventoryAdapterRestricted {
 
@@ -34,7 +34,7 @@ public class InventoryAdapterTile<T extends TileEntity> extends InventoryAdapter
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
 		return false;
 	}
 }

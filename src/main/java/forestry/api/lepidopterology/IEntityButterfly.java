@@ -7,12 +7,14 @@ package forestry.api.lepidopterology;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.entity.CreatureEntity;
 
-import forestry.api.genetics.IIndividual;
+import genetics.api.individual.IIndividual;
 
-public interface IEntityButterfly extends IAnimals {
+import forestry.api.lepidopterology.genetics.IButterfly;
+
+//TODO - figure out how IAnimal works now, might want to make abstract and extend AnimalEntity
+public interface IEntityButterfly {
 
 	void changeExhaustion(int change);
 
@@ -23,7 +25,7 @@ public interface IEntityButterfly extends IAnimals {
 	/**
 	 * @return The entity as an EntityCreature to save casting.
 	 */
-	EntityCreature getEntity();
+	CreatureEntity getEntity();
 
 	@Nullable
 	IIndividual getPollen();

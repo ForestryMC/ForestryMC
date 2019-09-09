@@ -5,13 +5,13 @@
  ******************************************************************************/
 package forestry.api.food;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
 public interface IBeverageEffect {
 	int getId();
 
-	void doEffect(World world, EntityPlayer player);
+	void doEffect(World world, PlayerEntity player);
 
 	String getDescription();
 }

@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 import forestry.api.core.INbtWritable;
@@ -50,24 +50,24 @@ public interface IMultiblockLogic extends INbtWritable {
 	 * Writes data for client synchronization.
 	 * Use this in Tile.getDescriptionPacket()
 	 */
-	void encodeDescriptionPacket(NBTTagCompound packetData);
+	void encodeDescriptionPacket(CompoundNBT packetData);
 
 	/**
 	 * Reads data for client synchronization.
 	 * Use this in Tile.onDataPacket()
 	 */
-	void decodeDescriptionPacket(NBTTagCompound packetData);
+	void decodeDescriptionPacket(CompoundNBT packetData);
 
 	/**
 	 * Read the logic's data from file.
-	 * Use this in Tile.readFromNBT()
+	 * Use this in Tile.read()
 	 */
-	void readFromNBT(NBTTagCompound nbttagcompound);
+	void readFromNBT(CompoundNBT CompoundNBT);
 
 	/**
 	 * Write the logic's data to file.
-	 * Use this in Tile.writeToNBT()
+	 * Use this in Tile.write()
 	 */
 	@Override
-	NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound);
+	CompoundNBT write(CompoundNBT CompoundNBT);
 }

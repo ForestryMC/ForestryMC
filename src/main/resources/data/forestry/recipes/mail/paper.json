@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "minecraft:paper"
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "mail",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#EMPTIEDLETTER"
+    }
+  },
+  "group": "mail"
+}

@@ -7,8 +7,8 @@ package forestry.api.book;
 
 import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
@@ -17,7 +17,7 @@ import forestry.api.gui.IGuiElementFactory;
 /**
  * The deserialized content data of a book page. It creates a gui element at the moment the entry gets opened.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class BookContent<D> {
 	public String type;
 

@@ -11,8 +11,8 @@
 package forestry.farming.logic.farmables;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -41,12 +41,12 @@ public class FarmableStacked implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
 		return blockState.getBlock() == cropBlock;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		BlockPos cropPos = pos.add(0, matureHeight - 1, 0);
 		blockState = world.getBlockState(cropPos);
 		if (blockState.getBlock() != cropBlock) {
@@ -68,7 +68,7 @@ public class FarmableStacked implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		return BlockUtil.setBlockWithPlaceSound(world, pos, cropBlock.getDefaultState());
 	}
 

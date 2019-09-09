@@ -13,96 +13,134 @@ package forestry.mail.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.IModelManager;
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import forestry.api.mail.ILetter;
+import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
-import forestry.core.utils.Translator;
 import forestry.mail.Letter;
-import forestry.mail.LetterProperties;
 import forestry.mail.gui.ContainerLetter;
-import forestry.mail.gui.GuiLetter;
 import forestry.mail.inventory.ItemInventoryLetter;
 
 public class ItemLetter extends ItemWithGui {
-	public ItemLetter() {
-		setMaxStackSize(64);
+
+	public enum State {
+		FRESH, STAMPED, OPENED, EMPTIED
+	}
+
+	public enum Size {
+		EMPTY, SMALL, BIG
+	}
+
+	private Size size;
+	private State state;
+
+	public ItemLetter(Size size, State state) {
+		super((new Item.Properties())
+			.group(ItemGroupForestry.tabForestry)
+			.maxStackSize(64));
+		this.size = size;
+		this.state = state;
+	}
+
+	public Size getSize() {
+		return size;
+	}
+
+	public State getState() {
+		return state;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public String getTranslationKey() {
+		return "item.forestry.letter";
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (heldItem.getCount() == 1) {
 			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
-			playerIn.sendMessage(new TextComponentTranslation("for.chat.mail.wrongstacksize"));
-			return ActionResult.newResult(EnumActionResult.FAIL, heldItem);
+			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"));
+			return ActionResult.newResult(ActionResultType.FAIL, heldItem);
 		}
 	}
 
 	@Override
-	public boolean getShareTag() {
-		return true;
-	}
-
-	/* MODELS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		LetterProperties.registerModel(item, manager);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 
-		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
-		if (nbttagcompound == null) {
-			list.add('<' + Translator.translateToLocal("for.gui.blank") + '>');
+		CompoundNBT compoundNBT = itemstack.getTag();
+		if (compoundNBT == null) {
+			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.blank").appendText(">")).applyTextStyle(TextFormatting.GRAY));
 			return;
 		}
 
-		ILetter letter = new Letter(nbttagcompound);
+		ILetter letter = new Letter(compoundNBT);
 		letter.addTooltip(list);
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
-			LetterProperties.getSubItems(this, tab, subItems);
+	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
+		if (isInGroup(group) && state == State.FRESH && size == Size.EMPTY) {
+			stacks.add(new ItemStack(this));
 		}
 	}
 
-	public List<ItemStack> getEmptiedLetters() {
-		return LetterProperties.getEmptiedLetters(this);
+	@Override
+	protected void openGui(ServerPlayerEntity playerEntity, ItemStack stack) {
+		NetworkHooks.openGui(playerEntity, new ContainerProvider(stack), b -> b.writeBoolean(playerEntity.getActiveHand() == Hand.MAIN_HAND));
 	}
 
+	@Nullable
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiLetter(player, new ItemInventoryLetter(player, heldItem));
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerLetter(windowId, player, new ItemInventoryLetter(player, heldItem));
 	}
 
-	@Override
-	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerLetter(player, new ItemInventoryLetter(player, heldItem));
+	//TODO see if this can be deduped. Given we pass in the held item etc.
+	public static class ContainerProvider implements INamedContainerProvider {
+
+		private ItemStack heldItem;
+
+		public ContainerProvider(ItemStack heldItem) {
+			this.heldItem = heldItem;
+		}
+
+		@Override
+		public ITextComponent getDisplayName() {
+			return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
+		}
+
+		@Nullable
+		@Override
+		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+			return new ContainerLetter(windowId, playerEntity, new ItemInventoryLetter(playerEntity, heldItem));
+		}
 	}
 }

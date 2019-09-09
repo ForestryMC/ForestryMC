@@ -12,9 +12,10 @@ package forestry.apiculture.genetics;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.apiculture.IAlleleBeeSpeciesBuilder;
-import forestry.api.apiculture.IBeeFactory;
-import forestry.api.genetics.IClassification;
+import genetics.api.classification.IClassification;
+
+import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
+import forestry.api.apiculture.genetics.IBeeFactory;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 
 public class BeeFactory implements IBeeFactory {
@@ -43,11 +44,5 @@ public class BeeFactory implements IBeeFactory {
 	@Override
 	public IClassification createBranch(String uid, String scientific) {
 		return new BranchBees(uid, scientific);
-	}
-
-	@Override
-	@Deprecated
-	public IAlleleBeeSpeciesBuilder createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
-		return createSpecies("forestry", uid, dominant, authority, unlocalizedName, unlocalizedDescription, branch, binomial, primaryColor, secondaryColor);
 	}
 }

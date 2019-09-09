@@ -6,23 +6,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
 import forestry.api.core.ILocatable;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IFilterRuleType;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.genetics.ISpeciesType;
 import forestry.core.utils.NetworkUtil;
 import forestry.sorting.network.packets.PacketFilterChangeGenome;
 import forestry.sorting.network.packets.PacketFilterChangeRule;
@@ -47,9 +51,9 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+	public CompoundNBT write(CompoundNBT data) {
 		for (int i = 0; i < filterRules.length; i++) {
-			data.setString("TypeFilter" + i, filterRules[i].getUID());
+			data.putString("TypeFilter" + i, filterRules[i].getUID());
 		}
 
 		for (int i = 0; i < 6; i++) {
@@ -59,10 +63,10 @@ public class FilterLogic implements IFilterLogic {
 					continue;
 				}
 				if (filter.activeAllele != null) {
-					data.setString("GenomeFilterS" + i + "-" + j + "-" + 0, filter.activeAllele.getUID());
+					data.putString("GenomeFilterS" + i + "-" + j + "-" + 0, filter.activeAllele.getRegistryName().toString());
 				}
 				if (filter.inactiveAllele != null) {
-					data.setString("GenomeFilterS" + i + "-" + j + "-" + 1, filter.inactiveAllele.getUID());
+					data.putString("GenomeFilterS" + i + "-" + j + "-" + 1, filter.inactiveAllele.getRegistryName().toString());
 				}
 			}
 		}
@@ -70,19 +74,20 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
+	public void read(CompoundNBT data) {
 		for (int i = 0; i < filterRules.length; i++) {
 			filterRules[i] = AlleleManager.filterRegistry.getRuleOrDefault(data.getString("TypeFilter" + i));
 		}
 
+		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
-				if (data.hasKey("GenomeFilterS" + i + "-" + j + "-" + 0)) {
-					filter.activeAllele = AlleleManager.alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0));
+				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 0)) {
+					filter.activeAllele = alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0)).orElse(null);
 				}
-				if (data.hasKey("GenomeFilterS" + i + "-" + j + "-" + 1)) {
-					filter.inactiveAllele = AlleleManager.alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1));
+				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 1)) {
+					filter.inactiveAllele = alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1)).orElse(null);
 				}
 				genomeFilter[i][j] = filter;
 			}
@@ -105,13 +110,13 @@ public class FilterLogic implements IFilterLogic {
 				}
 				if (filter.activeAllele != null) {
 					data.writeBoolean(true);
-					data.writeString(filter.activeAllele.getUID());
+					data.writeString(filter.activeAllele.getRegistryName().toString());
 				} else {
 					data.writeBoolean(false);
 				}
 				if (filter.inactiveAllele != null) {
 					data.writeBoolean(true);
-					data.writeString(filter.inactiveAllele.getUID());
+					data.writeString(filter.inactiveAllele.getRegistryName().toString());
 				} else {
 					data.writeBoolean(false);
 				}
@@ -119,38 +124,40 @@ public class FilterLogic implements IFilterLogic {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void readGuiData(PacketBuffer data) {
 		for (int i = 0; i < filterRules.length; i++) {
 			filterRules[i] = AlleleManager.filterRegistry.getRule(data.readShort());
 		}
 
+		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
 				if (data.readBoolean()) {
-					filter.activeAllele = AlleleManager.alleleRegistry.getAllele(data.readString(1024));
+					filter.activeAllele = alleleRegistry.getAllele(data.readString(1024)).orElse(null);
 				}
 				if (data.readBoolean()) {
-					filter.inactiveAllele = AlleleManager.alleleRegistry.getAllele(data.readString(1024));
+					filter.inactiveAllele = alleleRegistry.getAllele(data.readString(1024)).orElse(null);
 				}
 				genomeFilter[i][j] = filter;
 			}
 		}
 	}
 
-	public Collection<EnumFacing> getValidDirections(ItemStack itemStack, EnumFacing from) {
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
 		IIndividual individual = null;
-		ISpeciesType type = null;
-		if (root != null) {
-			individual = root.getMember(itemStack);
-			type = root.getType(itemStack);
+		IOrganismType type = null;
+		if (definition.isRootPresent()) {
+			IIndividualRoot<IIndividual> root = definition.get();
+			individual = root.create(itemStack).orElse(null);
+			type = root.getTypes().getType(itemStack).orElse(null);
 		}
-		IFilterData filterData = new FilterData(root, individual, type);
-		List<EnumFacing> validFacings = new LinkedList<>();
-		for (EnumFacing facing : EnumFacing.VALUES) {
+		IFilterData filterData = new FilterData(definition, individual, type);
+		List<Direction> validFacings = new LinkedList<>();
+		for (Direction facing : Direction.VALUES) {
 			if (facing == from) {
 				continue;
 			}
@@ -162,18 +169,19 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public boolean isValid(ItemStack itemStack, EnumFacing facing) {
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+	public boolean isValid(ItemStack itemStack, Direction facing) {
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
 		IIndividual individual = null;
-		ISpeciesType type = null;
-		if (root != null) {
-			individual = root.getMember(itemStack);
-			type = root.getType(itemStack);
+		IOrganismType type = null;
+		if (definition.isRootPresent()) {
+			IIndividualRoot<IIndividual> root = definition.get();
+			individual = root.create(itemStack).orElse(null);
+			type = root.getTypes().getType(itemStack).orElse(null);
 		}
-		return isValid(facing, itemStack, new FilterData(root, individual, type));
+		return isValid(facing, itemStack, new FilterData(definition, individual, type));
 	}
 
-	public boolean isValid(EnumFacing facing, ItemStack itemStack, IFilterData filterData) {
+	public boolean isValid(Direction facing, ItemStack itemStack, IFilterData filterData) {
 		IFilterRuleType rule = getRule(facing);
 		if (rule == DefaultFilterRuleType.CLOSED) {
 			return false;
@@ -191,14 +199,14 @@ public class FilterLogic implements IFilterLogic {
 				IGenome genome = ind.getGenome();
 				IAllele active = genome.getPrimary();
 				IAllele inactive = genome.getSecondary();
-				return isValidAllelePair(facing, active.getUID(), inactive.getUID());
+				return isValidAllelePair(facing, active.getRegistryName().toString(), inactive.getRegistryName().toString());
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public boolean isValidAllelePair(EnumFacing orientation, String activeUID, String inactiveUID) {
+	public boolean isValidAllelePair(Direction orientation, String activeUID, String inactiveUID) {
 		AlleleFilter[] directionFilters = genomeFilter[orientation.ordinal()];
 
 		if (directionFilters == null) {
@@ -218,11 +226,11 @@ public class FilterLogic implements IFilterLogic {
 		return !foundFilter;
 	}
 
-	public IFilterRuleType getRule(EnumFacing facing) {
+	public IFilterRuleType getRule(Direction facing) {
 		return filterRules[facing.ordinal()];
 	}
 
-	public boolean setRule(EnumFacing facing, IFilterRuleType rule) {
+	public boolean setRule(Direction facing, IFilterRuleType rule) {
 		if (filterRules[facing.ordinal()] != rule) {
 			filterRules[facing.ordinal()] = rule;
 			return true;
@@ -231,12 +239,12 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Nullable
-	public AlleleFilter getGenomeFilter(EnumFacing facing, int index) {
+	public AlleleFilter getGenomeFilter(Direction facing, int index) {
 		return genomeFilter[facing.ordinal()][index];
 	}
 
 	@Nullable
-	public IAllele getGenomeFilter(EnumFacing facing, int index, boolean active) {
+	public IAllele getGenomeFilter(Direction facing, int index, boolean active) {
 		AlleleFilter filter = getGenomeFilter(facing, index);
 		if (filter == null) {
 			return null;
@@ -244,7 +252,7 @@ public class FilterLogic implements IFilterLogic {
 		return active ? filter.activeAllele : filter.inactiveAllele;
 	}
 
-	public boolean setGenomeFilter(EnumFacing facing, int index, boolean active, @Nullable IAllele allele) {
+	public boolean setGenomeFilter(Direction facing, int index, boolean active, @Nullable IAllele allele) {
 		AlleleFilter filter = genomeFilter[facing.ordinal()][index];
 		if (filter == null) {
 			filter = genomeFilter[facing.ordinal()][index] = new AlleleFilter();
@@ -261,12 +269,12 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void sendToServer(EnumFacing facing, int index, boolean active, @Nullable IAllele allele) {
+	public void sendToServer(Direction facing, int index, boolean active, @Nullable IAllele allele) {
 		NetworkUtil.sendToServer(new PacketFilterChangeGenome(locatable.getCoordinates(), facing, (short) index, active, allele));
 	}
 
 	@Override
-	public void sendToServer(EnumFacing facing, IFilterRuleType rule) {
+	public void sendToServer(Direction facing, IFilterRuleType rule) {
 		NetworkUtil.sendToServer(new PacketFilterChangeRule(locatable.getCoordinates(), facing, rule));
 	}
 }

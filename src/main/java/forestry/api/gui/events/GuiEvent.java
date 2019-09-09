@@ -1,44 +1,43 @@
 package forestry.api.gui.events;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraft.client.util.InputMappings;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IWindowElement;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiEvent extends GuiElementEvent {
 	private GuiEvent(IGuiElement origin) {
 		super(origin);
 	}
 
 	public static class KeyEvent extends GuiEvent {
-		private final char character;
-		private final int key;
+		private final InputMappings.Input mouseKey;
 
-		public KeyEvent(IGuiElement origin, char character, int key) {
+		//TODO - better parameter names
+		public KeyEvent(IGuiElement origin, int pressed_1, int pressed_2) {
 			super(origin);
-			this.character = character;
-			this.key = key;
+			this.mouseKey = InputMappings.getInputByCode(pressed_1, pressed_2);
+
 		}
 
-		public char getCharacter() {
-			return this.character;
-		}
-
-		public int getKey() {
-			return this.key;
+		public InputMappings.Input getMouseKey() {
+			return mouseKey;
 		}
 	}
 
 	public static class ButtonEvent extends GuiEvent {
-		private final int x;
-		private final int y;
+		private final double x;
+		private final double y;
 		private final int relativeX;
 		private final int relativeY;
 		private final int button;
 
-		public ButtonEvent(IGuiElement origin, int x, int y, int button) {
+		public ButtonEvent(IGuiElement origin, double x, double y, int button) {
 			super(origin);
 			this.x = x;
 			this.y = y;
@@ -56,11 +55,11 @@ public class GuiEvent extends GuiElementEvent {
 			return relativeY;
 		}
 
-		public int getX() {
+		public double getX() {
 			return this.x;
 		}
 
-		public int getY() {
+		public double getY() {
 			return this.y;
 		}
 
@@ -70,13 +69,13 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class DownEvent extends ButtonEvent {
-		public DownEvent(IGuiElement origin, int x, int y, int button) {
+		public DownEvent(IGuiElement origin, double x, double y, int button) {
 			super(origin, x, y, button);
 		}
 	}
 
 	public static class UpEvent extends ButtonEvent {
-		public UpEvent(IGuiElement origin, int x, int y, int button) {
+		public UpEvent(IGuiElement origin, double x, double y, int button) {
 			super(origin, x, y, button);
 		}
 	}
@@ -107,15 +106,15 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class WheelEvent extends GuiEvent {
-		private int dWheel;
+		private double dWheel;
 
-		public WheelEvent(IGuiElement origin, int dWheel) {
+		public WheelEvent(IGuiElement origin, double dWheel) {
 			super(origin);
-			this.dWheel = 0;
+			this.dWheel = 0;    //TODO why is this line needed?
 			this.dWheel = dWheel / 28;
 		}
 
-		public int getDWheel() {
+		public double getDWheel() {
 			return this.dWheel;
 		}
 	}

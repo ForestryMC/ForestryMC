@@ -1,7 +1,7 @@
 package forestry.database.network.packets;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.items.IItemHandler;
@@ -33,7 +33,7 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			boolean single = data.readBoolean();
 			Container container = player.openContainer;
 			if (!(container instanceof ContainerDatabase)) {

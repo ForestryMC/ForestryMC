@@ -8,7 +8,7 @@ public interface IFilterRule {
 	boolean isValid(ItemStack itemStack, IFilterData data);
 
 	/**
-	 * If a root with this uid is registered, the filter will only get stack with individuals from this root.
+	 * If a root with this uid is registered, the filter will only getComb stack with individuals from this root.
 	 */
 	@Nullable
 	default String getRootUID() {

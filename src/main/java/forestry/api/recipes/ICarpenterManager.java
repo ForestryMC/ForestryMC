@@ -8,7 +8,7 @@ package forestry.api.recipes;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -30,7 +30,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 *
 	 * @param box       ItemStack of one item representing the required box (carton, crate) for this recipe. May be null.
 	 * @param product   Crafting result.
-	 * @param materials Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipes}. Notation is the same.
+	 * @param materials Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(ItemStack box, ItemStack product, Object... materials);
 
@@ -40,7 +40,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param packagingTime Number of work cycles required to craft the recipe once.
 	 * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
 	 * @param product       Crafting result.
-	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipes}. Notation is the same.
+	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials);
 
@@ -51,7 +51,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param liquid        Liquid required in carpenter's tank.
 	 * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
 	 * @param product       Crafting result.
-	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipes}. Notation is the same.
+	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
 }

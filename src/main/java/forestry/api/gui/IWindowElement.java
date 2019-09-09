@@ -3,17 +3,16 @@ package forestry.api.gui;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * The window element is the root element of the containment hierarchy. Its the only element the gui interacts with
  * directly.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IWindowElement extends IElementGroup {
 	/**
 	 * Returns the mouse position.
@@ -59,7 +58,7 @@ public interface IWindowElement extends IElementGroup {
 
 	int getGuiTop();
 
-	GuiScreen getGui();
+	Screen getGui();
 
 	TextureManager getTextureManager();
 

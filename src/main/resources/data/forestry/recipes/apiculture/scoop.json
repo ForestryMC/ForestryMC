@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "forestry:scoop"
+  },
+  "pattern": [
+    "#X#",
+    "###",
+    " # "
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#STICKWOOD"
+    },
+    "X": {
+      "item": "#BLOCKWOOL"
+    }
+  },
+  "group": "apiculture"
+}

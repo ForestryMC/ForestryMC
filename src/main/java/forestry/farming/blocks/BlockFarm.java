@@ -13,105 +13,91 @@ package forestry.farming.blocks;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.blocks.properties.UnlistedBlockAccess;
-import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarm;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
+
+//import net.minecraft.block.properties.IProperty;
+//import net.minecraft.block.properties.EnumProperty;
+//import net.minecraft.block.BlockStateContainer;
+//import net.minecraftforge.common.property.ExtendedBlockState;
+//import net.minecraftforge.common.property.IExtendedBlockState;
+//import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BlockFarm extends BlockStructure {
 
-	public static final PropertyEnum<EnumFarmBlockType> META = PropertyEnum.create("meta", EnumFarmBlockType.class);
+	public static final EnumProperty<EnumFarmBlockType> META = EnumProperty.create("meta", EnumFarmBlockType.class);
+	private final EnumFarmBlockType type;
 
-	public BlockFarm() {
-		super(Material.ROCK);
-		setHardness(1.0f);
-		setHarvestLevel("pickaxe", 0);
-		setDefaultState(blockState.getBaseState().withProperty(META, EnumFarmBlockType.PLAIN));
-		setCreativeTab(Tabs.tabAgriculture);
+	public BlockFarm(EnumFarmBlockType type) {
+		super(Block.Properties.create(Material.ROCK)
+			.hardnessAndResistance(1.0f));
+		//		setHarvestLevel("pickaxe", 0); TODO set in item
+		//		setCreativeTab(ItemGroups.tabAgriculture); TODO set in item I think
+		this.type = type;
 	}
 
+	//TODO - either flatten or work out how extended states work
+	//	@Override
+	//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).with(UnlistedBlockPos.POS, pos)
+	//			.with(UnlistedBlockAccess.BLOCKACCESS, world);
+	//	}
+	//
+	//	@Override
+	//	protected BlockStateContainer createBlockState() {
+	//		return new ExtendedBlockState(this, new IProperty[]{META},
+	//			new ModelProperty<>()[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
+	//	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(META, EnumFarmBlockType.VALUES[meta]);
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(META).ordinal();
-	}
-
-	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).withProperty(UnlistedBlockPos.POS, pos)
-			.withProperty(UnlistedBlockAccess.BLOCKACCESS, world);
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[]{META},
-			new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
-	}
-
-	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < 6; i++) {
 			if (i == 1) {
 				continue;
 			}
 
 			for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-				ItemStack stack = new ItemStack(this, 1, i);
-				NBTTagCompound compound = new NBTTagCompound();
+				ItemStack stack = new ItemStack(this);
+				CompoundNBT compound = new CompoundNBT();
 				block.saveToCompound(compound);
-				stack.setTagCompound(compound);
+				stack.setTag(compound);
 				list.add(stack);
 			}
 		}
 	}
 
+	public EnumFarmBlockType getType() {
+		return type;
+	}
+
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+		List<ItemStack> drops = getDrops(world.getBlockState(pos), (ServerWorld) world, pos, world.getTileEntity(pos));    //TODO this call is not safe
 		if (drops.isEmpty()) {
 			return super.getPickBlock(state, target, world, pos, player);
 		}
@@ -119,82 +105,87 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
 
-		if (stack.getTagCompound() == null) {
+		if (stack.getTag() == null) {
 			return;
 		}
 
 		TileFarm tile = TileUtil.getTile(world, pos, TileFarm.class);
 		if (tile != null) {
-			tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTagCompound()));
+			tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTag()));
 		}
 	}
 
-	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
-			List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
-			for (ItemStack drop : drops) {
-				ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-			}
-		}
-		return world.setBlockToAir(pos);
-	}
+	//TODO - idk
+	//	@Override
+	//	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest) {
+	//		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
+	//			List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
+	//			for (ItemStack drop : drops) {
+	//				ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
+	//			}
+	//		}
+	//		return world.setBlockToAir(pos);
+	//	}
 
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		int meta = getMetaFromState(state);
-		TileUtil.actOnTile(world, pos, TileFarm.class, farm -> {
-			ItemStack stack = new ItemStack(this, 1, meta != 1 ? meta : 0);
-			NBTTagCompound compound = new NBTTagCompound();
-			farm.getFarmBlockTexture().saveToCompound(compound);
-			stack.setTagCompound(compound);
-			drops.add(stack);
-		});
-	}
+	//TODO not sjure about this
+	//	@Override
+	//	public static List<ItemStack> getDrops(BlockState state, ServerWorld worldIn, BlockPos pos, @Nullable TileEntity tileEntityIn) {
+	////		int meta = getMetaFromState(state);
+	//
+	//		List<ItemStack> ret = new ArrayList<>();
+	//		if(!(tileEntityIn instanceof TileFarm)) {
+	//			return ret;
+	//		}
+	//
+	//		ItemStack stack = new ItemStack(state.getBlock());
+	//		CompoundNBT compound = new CompoundNBT();
+	//		((TileFarm) te).getFarmBlockTexture().saveToCompound(compound);
+	//		stack.setTag(compound);
+	//		ret.add(stack);
+	//		return ret;
+	//	}
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		switch (meta) {
-			case 2:
-				return new TileFarmGearbox();
-			case 3:
-				return new TileFarmHatch();
-			case 4:
-				return new TileFarmValve();
-			case 5:
-				return new TileFarmControl();
-			default:
-				return new TileFarmPlain();
-		}
-	}
+	//TODO - not sure where this lives now
+	//	@Override
+	//	public TileEntity createNewTileEntity(World world, int meta) {
+	//		switch (meta) {
+	//			case 2:
+	//				return new TileFarmGearbox();
+	//			case 3:
+	//				return new TileFarmHatch();
+	//			case 4:
+	//				return new TileFarmValve();
+	//			case 5:
+	//				return new TileFarmControl();
+	//			default:
+	//				return new TileFarmPlain();
+	//		}
+	//	}
 
 	/* MODELS */
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		for (int i = 0; i < 6; i++) {
 			if (i == 1) {
 				continue;
 			}
-			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
+			//TODO
+			//			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
 		}
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-		return state.getValue(META) == EnumFarmBlockType.CONTROL;
-	}
-
-	public ItemStack get(EnumFarmBlockType type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+		return getType() == EnumFarmBlockType.CONTROL;
 	}
 }

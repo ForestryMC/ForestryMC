@@ -1,9 +1,9 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "forestry:blocks/doors/acacia_upper",
-    "bottom": "forestry:blocks/doors/acacia_lower",
-    "top": "forestry:blocks/doors/acacia_upper"
+    "particle": "forestry:block/doors/acacia_upper",
+    "bottom": "forestry:block/doors/acacia_lower",
+    "top": "forestry:block/doors/acacia_upper"
   },
     "elements": [
         {   "from": [ 0, 0, 0 ],

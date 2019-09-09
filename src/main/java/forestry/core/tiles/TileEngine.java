@@ -13,15 +13,16 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.blocks.BlockBase;
@@ -35,6 +36,7 @@ import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
 
+//TODO - move to energy module?
 public abstract class TileEngine extends TileBase implements IActivatable, IStreamableGui {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
 
@@ -58,17 +60,13 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	protected final EnergyManager energyManager;
 	private final String hintKey;
 
-	protected TileEngine(String hintKey, int maxHeat, int maxEnergy) {
+	protected TileEngine(TileEntityType<?> type, String hintKey, int maxHeat, int maxEnergy) {
+		super(type);
 		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
 
 		energyManager.setExternalMode(EnergyTransferMode.EXTRACT);
-		energyManager.setChangeHandler((energy) -> {
-			if (world != null) {
-				world.updateComparatorOutputLevel(pos, getBlockType());
-			}
-		});
 	}
 
 	public String getHintKey() {
@@ -123,8 +121,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NO_REDSTONE);
 
 		// Determine targeted tile
-		IBlockState blockState = world.getBlockState(getPos());
-		EnumFacing facing = blockState.getValue(BlockBase.FACING);
+		BlockState blockState = world.getBlockState(getPos());
+		Direction facing = blockState.get(BlockBase.FACING);
 		TileEntity tile = world.getTileEntity(getPos().offset(facing));
 
 		float newPistonSpeed = getPistonSpeed();
@@ -169,7 +167,6 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 			burn();
 		} else {
 			energyManager.drainEnergy(20);
-			world.updateComparatorOutputLevel(pos, getBlockType());
 		}
 	}
 
@@ -245,11 +242,11 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		energyManager.readFromNBT(nbt);
+	public void read(CompoundNBT nbt) {
+		super.read(nbt);
+		energyManager.read(nbt);
 
-		heat = nbt.getInteger("EngineHeat");
+		heat = nbt.getInt("EngineHeat");
 
 		progress = nbt.getFloat("EngineProgress");
 		forceCooldown = nbt.getBoolean("ForceCooldown");
@@ -257,13 +254,13 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt = super.writeToNBT(nbt);
-		energyManager.writeToNBT(nbt);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt = super.write(nbt);
+		energyManager.write(nbt);
 
-		nbt.setInteger("EngineHeat", heat);
-		nbt.setFloat("EngineProgress", progress);
-		nbt.setBoolean("ForceCooldown", forceCooldown);
+		nbt.putInt("EngineHeat", heat);
+		nbt.putFloat("EngineProgress", progress);
+		nbt.putBoolean("ForceCooldown", forceCooldown);
 		return nbt;
 	}
 
@@ -278,7 +275,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		active = data.readBoolean();
@@ -308,16 +305,10 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return (facing == getFacing() && energyManager.hasCapability(capability)) || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (facing == getFacing()) {
-			T energyCapability = energyManager.getCapability(capability);
-			if (energyCapability != null) {
+			LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+			if (energyCapability.isPresent()) {
 				return energyCapability;
 			}
 		}

@@ -13,11 +13,12 @@ package forestry.core.genetics.mutations;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.Translator;
 
@@ -43,10 +44,11 @@ public class MutationConditionTemperature implements IMutationCondition {
 
 	@Override
 	public String getDescription() {
-		String minString = AlleleManager.climateHelper.toDisplay(minTemperature);
+		//TODO textcomponent
+		String minString = AlleleManager.climateHelper.toDisplay(minTemperature).getFormattedText();
 
 		if (minTemperature != maxTemperature) {
-			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature);
+			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature).getFormattedText();
 			return Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString);
 		} else {
 			return Translator.translateToLocalFormatted("for.mutation.condition.temperature.single", minString);

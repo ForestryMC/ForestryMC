@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "forestry:ffarm",
+    "data": 2
+  },
+  "pattern": [
+    " # ",
+    "TTT"
+  ],
+  "conditions": [
+    {
+      "module": "farming",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:farm_block",
+  "key": {
+    "#": {
+      "item": "forestry:ffarm",
+      "data": 0
+    },
+    "T": {
+      "item": "#GEARTIN"
+    }
+  },
+  "group": "farming"
+}

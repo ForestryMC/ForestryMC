@@ -8,12 +8,15 @@ package forestry.api.arboriculture;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import com.mojang.authlib.GameProfile;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.world.ITreeGenData;
 
@@ -21,14 +24,9 @@ import forestry.api.world.ITreeGenData;
  * Implements the tree generation for a tree species.
  */
 public interface ITreeGenerator {
-	WorldGenerator getWorldGenerator(ITreeGenData tree);
+	Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree);
 
-	boolean setLogBlock(ITreeGenome genome, World world, BlockPos pos, EnumFacing facing);
+	boolean setLogBlock(IGenome genome, IWorld world, BlockPos pos, Direction facing);
 
-	@Deprecated
-	boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos);
-
-	default boolean setLeaves(ITreeGenome genome, World world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
-		return setLeaves(genome, world, owner, pos);
-	}
+	boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand);
 }

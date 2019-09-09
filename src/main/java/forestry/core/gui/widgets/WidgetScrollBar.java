@@ -2,12 +2,12 @@ package forestry.core.gui.widgets;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 
-import forestry.core.gui.Drawable;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-import org.lwjgl.input.Mouse;
+import forestry.core.gui.Drawable;
 
 public class WidgetScrollBar extends Widget {
 	@Nullable
@@ -99,7 +99,7 @@ public class WidgetScrollBar extends Widget {
 		if (!isVisible()) {
 			return;
 		}
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if (background != null) {
 			background.draw(startX + xPos, startY + yPos);
 		}
@@ -111,17 +111,17 @@ public class WidgetScrollBar extends Widget {
 		if (!isVisible()) {
 			return;
 		}
-		boolean mouseDown = Mouse.isButtonDown(0);
+		boolean mouseDown = Minecraft.getInstance().mouseHelper.isLeftDown();
 
 		if (listener == null || listener.isFocused(mouseX, mouseY)) {
-			int wheel = Mouse.getDWheel();
-			if (wheel > 0) {
-				setValue(currentValue - step);
-				return;
-			} else if (wheel < 0) {
-				setValue(currentValue + step);
-				return;
-			}
+			//			int wheel = Mouse.getDWheel();    //TODO - dwheel. Maybe need to hook into forge events now?
+			//			if (wheel > 0) {	//TODO I think this needs to be changed through the gui in mouseScrolled
+			//				setValue(currentValue - step);
+			//				return;
+			//			} else if (wheel < 0) {
+			//				setValue(currentValue + step);
+			//				return;
+			//			}
 		}
 
 		//the position of the mouse relative to the position of the widget

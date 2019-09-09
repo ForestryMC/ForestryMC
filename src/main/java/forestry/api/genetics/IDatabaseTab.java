@@ -4,15 +4,17 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IIndividual;
 
 import forestry.api.gui.IDatabaseElement;
 
 /**
  * A tab of the database screen that shows some information about a {@link IIndividual}.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IDatabaseTab<I extends IIndividual> {
 	/**
 	 * Creates the gui elements that are displayed if this tab is selected in the database.

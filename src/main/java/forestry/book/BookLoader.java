@@ -20,16 +20,16 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.resources.Language;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntryBuilder;
@@ -53,19 +53,20 @@ import forestry.core.utils.Log;
 import forestry.core.utils.ResourceUtil;
 import forestry.modules.ModuleHelper;
 
-@SideOnly(Side.CLIENT)
+//TODO use selective resource reloader
+@OnlyIn(Dist.CLIENT)
 public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	public static final Gson GSON = new GsonBuilder()
 		.registerTypeAdapter(BookContent.class, new BookContentDeserializer())
 		.registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
-		.registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JsonUtils.getString(json, "location")))
+		.registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(json, "location")))
 		.registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY))
 		.registerTypeAdapter(Entries.class, new EntriesDeserializer())
 		.create();
 	public static final BookLoader INSTANCE = new BookLoader();
 	private static final String BOOK_LOCATION = "forestry:manual/";
 	private static final String BOOK_LOCATION_LANG = BOOK_LOCATION + "%s/%s";
-	private static final String DEFAULT_LANG = "en_US";
+	private static final String DEFAULT_LANG = "en_us";
 	private final Map<String, Class<? extends BookContent>> contentByType = new HashMap<>();
 	private final Map<String, IBookPageFactory> factoryByName = new HashMap<>();
 	@Nullable
@@ -126,8 +127,8 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	public static IResource getResource(String path) {
 		IResource resource;
 		if (!path.contains(":")) {
-			Language currentLanguage = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage();
-			String lang = currentLanguage.getLanguageCode();
+			Language currentLanguage = Minecraft.getInstance().getLanguageManager().getCurrentLanguage();
+			String lang = currentLanguage.getCode();
 
 			ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
 			resource = ResourceUtil.getResource(location);

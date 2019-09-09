@@ -10,42 +10,58 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 
-import forestry.api.arboriculture.ITree;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
+
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.arboriculture.worldgen.WorldGenArboriculture;
-import forestry.core.worldgen.WorldGenBase;
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.worldgen.FeatureArboriculture;
+import forestry.core.worldgen.FeatureBase;
 
 public class TileSapling extends TileTreeContainer {
+	public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<IAlleleTreeSpecies>();
+
 	private int timesTicked = 0;
+
+	public TileSapling() {
+		super(ModuleArboriculture.getTiles().sapling);
+	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		timesTicked = nbttagcompound.getInteger("TT");
+		timesTicked = compoundNBT.getInt("TT");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		nbttagcompound.setInteger("TT", timesTicked);
-		return nbttagcompound;
+		compoundNBT.putInt("TT", timesTicked);
+		return compoundNBT;
 	}
 
 	@Override
-	public void onBlockTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
 		timesTicked++;
 		tryGrow(rand, false);
 	}
@@ -68,9 +84,9 @@ public class TileSapling extends TileTreeContainer {
 			return true;
 		}
 
-		WorldGenerator generator = tree.getTreeGenerator(world, getPos(), true);
-		if (generator instanceof WorldGenArboriculture) {
-			WorldGenArboriculture arboricultureGenerator = (WorldGenArboriculture) generator;
+		Feature generator = tree.getTreeGenerator(world, getPos(), true);
+		if (generator instanceof FeatureArboriculture) {
+			FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
 			arboricultureGenerator.preGenerate(world, rand, getPos());
 			return arboricultureGenerator.getValidGrowthPos(world, getPos()) != null;
 		} else {
@@ -93,12 +109,12 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		WorldGenerator generator = tree.getTreeGenerator(world, getPos(), bonemealed);
+		Feature generator = tree.getTreeGenerator(world, getPos(), bonemealed);
 		final boolean generated;
-		if (generator instanceof WorldGenBase) {
-			generated = ((WorldGenBase) generator).generate(world, random, getPos(), false);
+		if (generator instanceof FeatureBase) {
+			generated = ((FeatureBase) generator).place(world, random, getPos(), false);
 		} else {
-			generated = generator.generate(world, random, getPos());
+			generated = generator.place(world, world.getChunkProvider().getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
 		}
 
 		if (generated) {
@@ -107,4 +123,13 @@ public class TileSapling extends TileTreeContainer {
 		}
 	}
 
+	@Nonnull
+	@Override
+	public IModelData getModelData() {
+		ITree tree = getTree();
+		if (tree == null) {
+			return EmptyModelData.INSTANCE;
+		}
+		return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
+	}
 }

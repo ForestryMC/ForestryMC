@@ -12,35 +12,36 @@
 package forestry.apiculture;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.ai.EntityAIMoveToBlock;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.apiculture.blocks.BlockApiculture;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 
-public class ApiaristAI extends EntityAIMoveToBlock {
-	private final EntityVillager villager;
+public class ApiaristAI extends MoveToBlockGoal {
+	private final VillagerEntity villager;
 	private boolean hasDrone;
 	private boolean hasPrincess;
-	private final InventoryBasic villagerInventory;
+	private final Inventory villagerInventory;
 
 	private static final int SLOT_PRODUCT_1 = InventoryBeeHousing.SLOT_PRODUCT_1;
 	private static final int SLOT_PRODUCT_COUNT = InventoryBeeHousing.SLOT_PRODUCT_COUNT;
 	private static final int SLOT_QUEEN = InventoryBeeHousing.SLOT_QUEEN;
 	private static final int SLOT_DRONE = InventoryBeeHousing.SLOT_DRONE;
 
-	public ApiaristAI(EntityVillager villager, double speed) {
+	public ApiaristAI(VillagerEntity villager, double speed) {
 		super(villager, speed, 16);
 		this.villager = villager;
-		villagerInventory = villager.getVillagerInventory();
+		villagerInventory = villager.func_213715_ed();
 	}
 
 	@Override
@@ -52,12 +53,13 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 		return super.shouldExecute();
 	}
 
+	//TODO - now tick?
 	@Override
-	public void updateTask() {
-		super.updateTask();
+	public void tick() {
+		super.tick();
 		BlockPos housePos = this.destinationBlock.north().up();
-		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
-
+		//		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
+		//TODO lookHelper
 		if (this.getIsAboveDestination()) {
 			World world = this.villager.world;
 
@@ -126,7 +128,8 @@ public class ApiaristAI extends EntityAIMoveToBlock {
 		return false;
 	}
 
-	protected boolean shouldMoveTo(World world, BlockPos pos) {
+	@Override
+	protected boolean shouldMoveTo(IWorldReader world, BlockPos pos) {
 		pos = pos.north().up();
 		Block block = world.getBlockState(pos).getBlock();
 		if (block instanceof BlockApiculture && TileUtil.getTile(world, pos) instanceof TileBeeHouse) {

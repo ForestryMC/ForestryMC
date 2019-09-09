@@ -12,10 +12,13 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
@@ -72,30 +75,30 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* LOADING & SAVING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		energyManager.readFromNBT(nbttagcompound);
-		workingTime = nbttagcompound.getInteger("Heating");
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		energyManager.read(compoundNBT);
+		workingTime = compoundNBT.getInt("Heating");
 		setActive(workingTime > 0);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		energyManager.writeToNBT(nbttagcompound);
-		nbttagcompound.setInteger("Heating", workingTime);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		energyManager.write(compoundNBT);
+		compoundNBT.putInt("Heating", workingTime);
+		return compoundNBT;
 	}
 
 	/* Network */
 	@Override
-	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void encodeDescriptionPacket(CompoundNBT packetData) {
 		super.encodeDescriptionPacket(packetData);
-		packetData.setBoolean("Active", active);
+		packetData.putBoolean("Active", active);
 	}
 
 	@Override
-	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void decodeDescriptionPacket(CompoundNBT packetData) {
 		super.decodeDescriptionPacket(packetData);
 		setActive(packetData.getBoolean("Active"));
 	}
@@ -116,7 +119,10 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 		if (world != null) {
 			if (world.isRemote) {
-				world.markBlockRangeForRenderUpdate(getPos(), getPos());
+				//TODO
+				BlockPos pos = getPos();
+				Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+				//				world.markForRerender(getPos());
 			} else {
 				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 			}
@@ -124,14 +130,9 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+		if (energyCapability.isPresent()) {
 			return energyCapability;
 		}
 		return super.getCapability(capability, facing);

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemOverlay;
 
+//TODO - create common superclass for items/blocks defined by an enum.
+//Will help with automatic creation of stuff too.
 public class ItemPropolis extends ItemOverlay {
-	public ItemPropolis() {
-		super(Tabs.tabApiculture, EnumPropolis.VALUES);
-	}
 
-	public ItemStack get(EnumPropolis propolis, int amount) {
-		return new ItemStack(this, amount, propolis.ordinal());
+	private final EnumPropolis type;
+
+	public ItemPropolis(EnumPropolis type) {
+		super(ItemGroups.tabApiculture, type);
+		this.type = type;
 	}
 }

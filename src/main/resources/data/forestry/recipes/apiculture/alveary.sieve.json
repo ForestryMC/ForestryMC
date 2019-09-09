@@ -1,0 +1,32 @@
+{
+  "result": {
+    "item": "forestry:alveary.sieve",
+    "data": 0
+  },
+  "pattern": [
+    "III",
+    " X ",
+    "WWW"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "forestry:crafting_material",
+      "data": 3
+    },
+    "X": {
+      "item": "forestry:alveary.plain",
+      "data": 0
+    },
+    "I": {
+      "item": "#INGOTIRON"
+    }
+  },
+  "group": "apiculture"
+}

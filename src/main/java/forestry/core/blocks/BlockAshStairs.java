@@ -1,23 +1,23 @@
 package forestry.core.blocks;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.item.Item;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
 
-public class BlockAshStairs extends BlockStairs implements IItemModelRegister {
-	public BlockAshStairs(IBlockState modelState) {
-		super(modelState);
-		setCreativeTab(CreativeTabForestry.tabForestry);
+public class BlockAshStairs extends StairsBlock implements IItemModelRegister {
+	public BlockAshStairs(BlockState modelState) {
+		super(modelState, Block.Properties.from(modelState.getBlock()));
+		//		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0);

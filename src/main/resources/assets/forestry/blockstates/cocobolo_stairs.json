@@ -1,0 +1,210 @@
+{
+  "variants": {
+    "facing=east,half=bottom,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo"
+    },
+    "facing=west,half=bottom,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,half=bottom,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=bottom,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=bottom,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer"
+    },
+    "facing=west,half=bottom,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,half=bottom,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=bottom,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=bottom,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,half=bottom,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,half=bottom,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer"
+    },
+    "facing=north,half=bottom,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=east,half=bottom,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner"
+    },
+    "facing=west,half=bottom,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,half=bottom,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=bottom,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=bottom,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,half=bottom,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,half=bottom,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner"
+    },
+    "facing=north,half=bottom,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=east,half=top,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo",
+      "x": 180,
+      "uvlock": true
+    },
+    "facing=west,half=top,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo",
+      "x": 180,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,half=top,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo",
+      "x": 180,
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=top,shape=straight": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo",
+      "x": 180,
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=top,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west,half=top,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=south,half=top,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=north,half=top,shape=outer_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "uvlock": true
+    },
+    "facing=east,half=top,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "uvlock": true
+    },
+    "facing=west,half=top,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,half=top,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=top,shape=outer_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_outer",
+      "x": 180,
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=top,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west,half=top,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=south,half=top,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=north,half=top,shape=inner_right": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "uvlock": true
+    },
+    "facing=east,half=top,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "uvlock": true
+    },
+    "facing=west,half=top,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,half=top,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=top,shape=inner_left": {
+      "model": "forestry:block/arboriculture/stairs/cocobolo_inner",
+      "x": 180,
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}
+

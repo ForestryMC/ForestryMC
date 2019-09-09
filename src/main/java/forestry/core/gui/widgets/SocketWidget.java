@@ -11,13 +11,13 @@
 package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
@@ -42,11 +42,11 @@ public class SocketWidget extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (!socketStack.isEmpty()) {
-			Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
+			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		return toolTip;
@@ -54,7 +54,7 @@ public class SocketWidget extends Widget {
 
 	private final ToolTip toolTip = new ToolTip(250) {
 		@Override
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		public void refresh() {
 			toolTip.clear();
 			ItemStack stack = tile.getSocket(slot);
@@ -68,7 +68,7 @@ public class SocketWidget extends Widget {
 	};
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 
 		ItemStack itemstack = manager.minecraft.player.inventory.getItemStack();
 		if (itemstack.isEmpty()) {
@@ -77,7 +77,7 @@ public class SocketWidget extends Widget {
 
 		Item held = itemstack.getItem();
 
-		Container container = manager.gui.inventorySlots;
+		Container container = manager.gui.getContainer();
 		if (!(container instanceof IContainerSocketed)) {
 			return;
 		}

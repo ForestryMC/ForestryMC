@@ -14,17 +14,16 @@ package forestry.book.data.structure;
 
 import com.google.gson.JsonObject;
 
-import java.util.Map;
+import net.minecraft.nbt.CompoundNBT;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BlockData {
 	public int[] pos;
 	public int[] endPos;
+	public CompoundNBT state;
 	public String block;
-	public byte meta;
 	public JsonObject nbt;
-	public Map<String, String> state;
 }

@@ -12,10 +12,10 @@ package forestry.arboriculture.models;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class WoodTexture {
 
 	private WoodTexture() {

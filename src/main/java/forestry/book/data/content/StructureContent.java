@@ -20,10 +20,10 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 
-import net.minecraft.client.resources.IResource;
+import net.minecraft.resources.IResource;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
@@ -38,7 +38,7 @@ import forestry.core.utils.Log;
 /**
  * A book content that displays a multiblock structure.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class StructureContent extends BookContent {
 	@Nullable
 	private String structureFile = null;

@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public interface ICircuitRegistry {
 
@@ -23,7 +23,7 @@ public interface ICircuitRegistry {
 	@Nullable
 	ICircuit getCircuit(String uid);
 
-	ICircuitLibrary getCircuitLibrary(World world, String playerName);
+	ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName);
 
 	/* LAYOUTS */
 	Map<String, ICircuitLayout> getRegisteredLayouts();

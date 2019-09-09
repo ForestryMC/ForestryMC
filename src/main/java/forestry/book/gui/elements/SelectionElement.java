@@ -2,8 +2,8 @@ package forestry.book.gui.elements;
 
 import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
@@ -14,7 +14,7 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.layouts.PaneLayout;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class SelectionElement<R> extends PaneLayout {
 	private static final Drawable CRAFTING_COUNT = new Drawable(GuiForesterBook.TEXTURE, 104, 181, 34, 14);
 	private static final Drawable RIGHT_BUTTON = new Drawable(GuiForesterBook.TEXTURE, 138, 181, 10, 9);

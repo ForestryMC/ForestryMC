@@ -11,59 +11,60 @@
 package forestry.apiculture.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.render.ForestryResource;
 
-@SideOnly(Side.CLIENT)
-public class ModelAnalyzer extends ModelBase {
+@OnlyIn(Dist.CLIENT)
+public class ModelAnalyzer extends Model {
 
-	private final ModelRenderer pedestal;
-	private final ModelRenderer cover;
-	private final ModelRenderer tower1;
-	private final ModelRenderer tower2;
+	private final RendererModel pedestal;
+	private final RendererModel cover;
+	private final RendererModel tower1;
+	private final RendererModel tower2;
 
 	private final ResourceLocation[] textures;
 
 	public ModelAnalyzer(String gfxBase) {
 
 		textures = new ResourceLocation[]{
-			new ForestryResource(gfxBase + "pedestal.png"),
-			new ForestryResource(gfxBase + "tower1.png"),
-			new ForestryResource(gfxBase + "tower2.png"),
+			new ForestryResource(gfxBase + "_pedestal.png"),
+			new ForestryResource(gfxBase + "_tower1.png"),
+			new ForestryResource(gfxBase + "_tower2.png"),
 		};
 
-		pedestal = new ModelRenderer(this, 0, 0);
+		pedestal = new RendererModel(this, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
 		pedestal.setRotationPoint(8, 8, 8);
 
-		cover = new ModelRenderer(this, 0, 0);
+		cover = new RendererModel(this, 0, 0);
 		cover.addBox(-8F, -8F, -8F, 16, 1, 16);
 		cover.setRotationPoint(8, 8, 8);
 
-		tower1 = new ModelRenderer(this, 0, 0);
+		tower1 = new RendererModel(this, 0, 0);
 		tower1.addBox(-8, -7, -7, 2, 14, 14);
 		tower1.setRotationPoint(8, 8, 8);
 
-		tower2 = new ModelRenderer(this, 0, 0);
+		tower2 = new RendererModel(this, 0, 0);
 		tower2.addBox(6, -7, -7, 2, 14, 14);
 		tower2.setRotationPoint(8, 8, 8);
 
 	}
 
-	public void render(EnumFacing orientation, float posX, float posY, float posZ) {
+	public void render(Direction orientation, float posX, float posY, float posZ) {
 
 		GlStateManager.pushMatrix();
 
-		GlStateManager.translate(posX, posY, posZ);
+		GlStateManager.translatef(posX, posY, posZ);
 		float[] angle = {0, 0, 0};
 
 		switch (orientation) {
@@ -83,7 +84,7 @@ public class ModelAnalyzer extends ModelBase {
 
 		float factor = (float) (1.0 / 16.0);
 
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textures[0]);
 
 		pedestal.rotateAngleX = angle[0];

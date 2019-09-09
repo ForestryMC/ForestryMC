@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBeeGenome;
 
 public class ApiaryBeeModifier extends DefaultBeeModifier {
 	@Override
-	public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+	public float getProductionModifier(IGenome genome, float currentModifier) {
 		return 0.1f;
 	}
 }

@@ -6,7 +6,8 @@ public class BlockDatabase extends BlockBase<BlockTypeDatabase> {
 
 	public BlockDatabase(BlockTypeDatabase blockType) {
 		super(blockType);
-		setHarvestLevel("pickaxe", 0);
+		//TODO harvest level
+		//		setHarvestLevel("pickaxe", 0);
 	}
 
 }

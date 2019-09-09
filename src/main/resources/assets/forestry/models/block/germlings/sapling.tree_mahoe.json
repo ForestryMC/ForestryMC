@@ -1,6 +1,6 @@
 {
   "parent": "block/cross",
   "textures": {
-    "cross": "forestry:blocks/germlings/sapling.tree_mahoe"
+    "cross": "forestry:block/germlings/sapling.tree_mahoe"
   }
 }

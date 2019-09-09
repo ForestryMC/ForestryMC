@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Helper class for checking whether an entity is wearing Apiarist Armor
@@ -25,7 +26,7 @@ public interface IArmorApiaristHelper {
 	 * @return Whether or not the item is valid Apiarist Armor and should protect the player from that attack
 	 * @since Forestry 4.2
 	 */
-	boolean isArmorApiarist(ItemStack stack, EntityLivingBase entity, String cause, boolean doProtect);
+	boolean isArmorApiarist(ItemStack stack, LivingEntity entity, ResourceLocation cause, boolean doProtect);
 
 	/**
 	 * Called when the apiarist's armor acts as protection against an attack.
@@ -37,5 +38,5 @@ public interface IArmorApiaristHelper {
 	 * 4 means full protection, but it can go higher if they are holding items like the smoker.
 	 * @since Forestry 4.2
 	 */
-	int wearsItems(EntityLivingBase entity, String cause, boolean doProtect);
+	int wearsItems(LivingEntity entity, ResourceLocation cause, boolean doProtect);
 }

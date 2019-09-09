@@ -11,11 +11,14 @@
 package forestry.farming.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
@@ -29,12 +32,13 @@ public class FarmLedger extends Ledger {
 		super(ledgerManager, "farm");
 		this.delegate = delegate;
 
-		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
+		//TODO textcomponent
+		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip().getString());
 		this.maxHeight = titleHeight + 110;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void draw(int x, int y) {
 
 		// Draw background
@@ -46,10 +50,10 @@ public class FarmLedger extends Ledger {
 		int xHeader = x + 22;
 
 		// Draw icon
-		Minecraft minecraft = Minecraft.getMinecraft();
-		TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
+		Minecraft minecraft = Minecraft.getInstance();
+		AtlasTexture textureMapBlocks = minecraft.getTextureMap();
 		TextureAtlasSprite textureAtlasSprite = textureMapBlocks.getAtlasSprite("minecraft:items/bucket_water");
-		drawSprite(TextureMap.LOCATION_BLOCKS_TEXTURE, textureAtlasSprite, xIcon, y);
+		drawSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, textureAtlasSprite, xIcon, y);
 		y += 4;
 
 		if (!isFullyOpened()) {
@@ -80,8 +84,9 @@ public class FarmLedger extends Ledger {
 	}
 
 	@Override
-	public String getTooltip() {
+	public ITextComponent getTooltip() {
 		float hydrationModifier = delegate.getHydrationModifier();
-		return StringUtil.floatAsPercent(hydrationModifier) + ' ' + Translator.translateToLocal("for.gui.hydration");
+		return new StringTextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ')
+			.appendSibling(new TranslationTextComponent("for.gui.hydration"));
 	}
 }

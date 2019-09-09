@@ -10,26 +10,25 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
+import forestry.mail.ModuleMail;
 import forestry.mail.gui.ContainerStampCollector;
-import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
 
 public class TileStampCollector extends TileBase implements IInventory {
 	public TileStampCollector() {
+		super(ModuleMail.getTiles().STAMP_COLLECTOR);
 		setInternalInventory(new InventoryStampCollector(this));
 	}
 
@@ -43,11 +42,11 @@ public class TileStampCollector extends TileBase implements IInventory {
 
 		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER).isEmpty()) {
-			stamp = PostManager.postRegistry.getPostOffice(world).getAnyStamp(1);
+			stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(1);
 		} else {
 			ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
 			if (filter.getItem() instanceof IStamps) {
-				stamp = PostManager.postRegistry.getPostOffice(world).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
+				stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
 			}
 		}
 
@@ -60,13 +59,7 @@ public class TileStampCollector extends TileBase implements IInventory {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiStampCollector(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerStampCollector(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerStampCollector(windowId, inv, this);
 	}
 }

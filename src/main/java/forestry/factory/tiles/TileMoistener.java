@@ -14,21 +14,21 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
@@ -47,8 +47,8 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerMoistener;
-import forestry.factory.gui.GuiMoistener;
 import forestry.factory.inventory.InventoryMoistener;
 import forestry.factory.recipes.MoistenerRecipeManager;
 
@@ -68,54 +68,55 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	private ItemStack pendingProduct;
 
 	public TileMoistener() {
+		super(ModuleFactory.getTiles().moistener);
 		setInternalInventory(new InventoryMoistener(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(FluidRegistry.WATER);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(/* TODO fluids FluidRegistry.WATER*/);
 		tankManager = new TankManager(this, resourceTank);
 	}
 
 	/* LOADING & SAVING */
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		nbttagcompound.setInteger("BurnTime", burnTime);
-		nbttagcompound.setInteger("TotalTime", totalTime);
-		nbttagcompound.setInteger("ProductionTime", productionTime);
+		compoundNBT.putInt("BurnTime", burnTime);
+		compoundNBT.putInt("TotalTime", totalTime);
+		compoundNBT.putInt("ProductionTime", productionTime);
 
-		tankManager.writeToNBT(nbttagcompound);
+		tankManager.write(compoundNBT);
 
 		// Write pending product
 		if (pendingProduct != null) {
-			NBTTagCompound nbttagcompoundP = new NBTTagCompound();
-			pendingProduct.writeToNBT(nbttagcompoundP);
-			nbttagcompound.setTag("PendingProduct", nbttagcompoundP);
+			CompoundNBT CompoundNBTP = new CompoundNBT();
+			pendingProduct.write(CompoundNBTP);
+			compoundNBT.put("PendingProduct", CompoundNBTP);
 		}
 		if (currentProduct != null) {
-			NBTTagCompound nbttagcompoundP = new NBTTagCompound();
-			currentProduct.writeToNBT(nbttagcompoundP);
-			nbttagcompound.setTag("CurrentProduct", nbttagcompoundP);
+			CompoundNBT CompoundNBTP = new CompoundNBT();
+			currentProduct.write(CompoundNBTP);
+			compoundNBT.put("CurrentProduct", CompoundNBTP);
 		}
-		return nbttagcompound;
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		burnTime = nbttagcompound.getInteger("BurnTime");
-		totalTime = nbttagcompound.getInteger("TotalTime");
-		productionTime = nbttagcompound.getInteger("ProductionTime");
+		burnTime = compoundNBT.getInt("BurnTime");
+		totalTime = compoundNBT.getInt("TotalTime");
+		productionTime = compoundNBT.getInt("ProductionTime");
 
-		tankManager.readFromNBT(nbttagcompound);
+		tankManager.read(compoundNBT);
 
 		// Load pending product
-		if (nbttagcompound.hasKey("PendingProduct")) {
-			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("PendingProduct");
-			pendingProduct = new ItemStack(nbttagcompoundP);
+		if (compoundNBT.contains("PendingProduct")) {
+			CompoundNBT compoundNBTP = compoundNBT.getCompound("PendingProduct");
+			pendingProduct = ItemStack.read(compoundNBTP);
 		}
-		if (nbttagcompound.hasKey("CurrentProduct")) {
-			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("CurrentProduct");
-			currentProduct = new ItemStack(nbttagcompoundP);
+		if (compoundNBT.contains("CurrentProduct")) {
+			CompoundNBT compoundNBTP = compoundNBT.getCompound("CurrentProduct");
+			currentProduct = ItemStack.read(compoundNBTP);
 		}
 
 		checkRecipe();
@@ -128,7 +129,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -142,8 +143,9 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			FluidHelper.drainContainers(tankManager, this, InventoryMoistener.SLOT_PRODUCT);
 		}
 
-		// Let's get to work
-		int lightvalue = world.getLightFromNeighbors(getPos().up());
+		// Let's getComb to work
+		//TODO correct method?
+		int lightvalue = world.getLightValue(getPos().up());
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -179,7 +181,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 				return;
 			}
 
-			resourceTank.drain(1, true);
+			resourceTank.drain(1, IFluidHandler.FluidAction.EXECUTE);
 			burnTime -= speed;
 			productionTime -= speed;
 
@@ -512,26 +514,14 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiMoistener(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerMoistener(windowId, inv, this);
 	}
 
 	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerMoistener(player.inventory, this);
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();    //TODO this shouldn't be created every time this method is called...
 		}
 		return super.getCapability(capability, facing);
 	}

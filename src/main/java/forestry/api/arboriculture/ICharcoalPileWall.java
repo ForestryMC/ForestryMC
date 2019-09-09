@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -13,12 +13,7 @@ public interface ICharcoalPileWall {
 
 	int getCharcoalAmount();
 
-	boolean matches(IBlockState state);
-
-	@Deprecated
-	default NonNullList<ItemStack> getDisplyItems() {
-		return getDisplayItems();
-	}
+	boolean matches(BlockState state);
 
 	NonNullList<ItemStack> getDisplayItems();
 

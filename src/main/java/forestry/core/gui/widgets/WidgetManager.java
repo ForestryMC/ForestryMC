@@ -16,12 +16,12 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.GuiForestry;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class WidgetManager {
 
 	public final GuiForestry gui;
@@ -30,7 +30,7 @@ public class WidgetManager {
 
 	public WidgetManager(GuiForestry gui) {
 		this.gui = gui;
-		this.minecraft = Minecraft.getMinecraft();
+		this.minecraft = Minecraft.getInstance();
 	}
 
 	public void add(Widget slot) {
@@ -50,7 +50,7 @@ public class WidgetManager {
 	}
 
 	@Nullable
-	public Widget getAtPosition(int mX, int mY) {
+	public Widget getAtPosition(double mX, double mY) {
 		for (Widget slot : widgets) {
 			if (slot.isMouseOver(mX, mY)) {
 				return slot;
@@ -72,14 +72,14 @@ public class WidgetManager {
 		}
 	}
 
-	public void handleMouseClicked(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClicked(double mouseX, double mouseY, int mouseButton) {
 		Widget slot = getAtPosition(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 		if (slot != null) {
 			slot.handleMouseClick(mouseX, mouseY, mouseButton);
 		}
 	}
 
-	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
 		boolean hasToStop = false;
 		for (Widget slot : widgets) {
 			hasToStop |= slot.handleMouseRelease(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop(), eventType);

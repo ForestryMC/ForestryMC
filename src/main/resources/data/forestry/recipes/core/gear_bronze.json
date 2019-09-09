@@ -1,0 +1,36 @@
+{
+  "result": {
+    "item": "forestry:gear_bronze"
+  },
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTBRONZE"
+    },
+    "X": {
+      "type": "fallback",
+      "primary": [
+        {
+          "item": "#GEARSTONE"
+        }
+      ],
+      "fallback": [
+        {
+          "item": "#INGOTCOPPER"
+        }
+      ]
+    }
+  },
+  "group": "core"
+}

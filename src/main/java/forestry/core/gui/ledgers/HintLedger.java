@@ -15,26 +15,29 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
 
 public class HintLedger extends Ledger {
 
-	private final String hintString;
-	private final String hintTooltip;
+	private final ITextComponent hintString;
+	private final ITextComponent hintTooltip;
 
 	public HintLedger(LedgerManager manager, List<String> hints) {
 		super(manager, "hint");
 		int position = new Random().nextInt(hints.size());
 		String hint = hints.get(position);
 
-		hintString = Translator.translateToLocal("for.hints." + hint + ".desc");
-		hintTooltip = Translator.translateToLocal("for.hints." + hint + ".tag");
+		hintString = new TranslationTextComponent("for.hints." + hint + ".desc");
+		hintTooltip = new TranslationTextComponent("for.hints." + hint + ".tag");
 
-		Minecraft minecraft = Minecraft.getMinecraft();
+		Minecraft minecraft = Minecraft.getInstance();
 		FontRenderer fontRenderer = minecraft.fontRenderer;
-		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxTextWidth).size();
+		//TODO text component
+		int lineCount = fontRenderer.listFormattedStringToWidth(hintString.getString(), maxTextWidth).size();
 		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 	}
 
@@ -51,12 +54,13 @@ public class HintLedger extends Ledger {
 			return;
 		}
 
+		//TODO textcomponent
 		drawHeader(Translator.translateToLocal("for.gui.didyouknow") + '?', x + 22, y + 8);
-		drawSplitText(hintString, x + 12, y + 20, maxTextWidth);
+		drawSplitText(hintString.getString(), x + 12, y + 20, maxTextWidth);
 	}
 
 	@Override
-	public String getTooltip() {
+	public ITextComponent getTooltip() {
 		return hintTooltip;
 	}
 }

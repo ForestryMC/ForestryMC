@@ -12,35 +12,40 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Container;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.ISpeciesRoot;
+import net.minecraftforge.fml.network.NetworkHooks;
+
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.PacketBufferForestry;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
-	public static final AxisAlignedBB chestBoundingBox = new AxisAlignedBB(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+	public static final VoxelShape CHEST_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
-	private final ISpeciesRoot speciesRoot;
+	private final IForestrySpeciesRoot speciesRoot;
 	public float lidAngle;
 	public float prevLidAngle;
 	private int numPlayersUsing;
 
-	public TileNaturalistChest(ISpeciesRoot speciesRoot) {
+	public TileNaturalistChest(TileEntityType type, IForestrySpeciesRoot speciesRoot) {
+		super(type);
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
 	}
@@ -97,8 +102,19 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
-	public void flipPage(EntityPlayer player, short page) {
-		GuiHandler.openGui(player, this, page);
+	public void flipPage(ServerPlayerEntity player, short page) {
+		NetworkHooks.openGui(player, this, p -> {
+			p.writeBlockPos(this.pos);
+			p.writeVarInt(page);
+		});
+	}
+
+	@Override
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, p -> {
+			p.writeBlockPos(this.pos);
+			p.writeVarInt(0);
+		});
 	}
 
 	/* IStreamable */
@@ -109,21 +125,19 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		numPlayersUsing = data.readInt();
 	}
 
+	//TODO page stuff.
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int page) {
-		ContainerNaturalistInventory container = new ContainerNaturalistInventory(player.inventory, this, page);
-		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerNaturalistInventory(windowId, inv, this, 5);
 	}
 
-	@Override
-	public Container getContainer(EntityPlayer player, int page) {
-		return new ContainerNaturalistInventory(player.inventory, this, page);
+	public IForestrySpeciesRoot getSpeciesRoot() {
+		return speciesRoot;
 	}
 }

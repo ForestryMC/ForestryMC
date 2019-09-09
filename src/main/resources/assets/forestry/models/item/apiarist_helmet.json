@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/apiarist_helmet"
+      "layer0": "forestry:item/apiarist_helmet"
     },
     "display": {
         "thirdperson": {

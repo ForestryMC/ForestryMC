@@ -17,12 +17,14 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
 import forestry.core.utils.StringUtil;
@@ -52,9 +54,9 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 	}
 
 	@Override
-	public Collection<IAlleleSpecies> getSpecies() {
-		Collection<IAlleleSpecies> species = new ArrayList<>();
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+	public Collection<IAlleleForestrySpecies> getSpecies() {
+		Collection<IAlleleForestrySpecies> species = new ArrayList<>();
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleBeeSpecies) {
 				species.add((IAlleleBeeSpecies) allele);
 			}
@@ -69,6 +71,7 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 
 	@Override
 	public IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile) {
+		//TODO world cast
 		return BeeManager.beeRoot.getBreedingTracker(world, gameProfile);
 	}
 

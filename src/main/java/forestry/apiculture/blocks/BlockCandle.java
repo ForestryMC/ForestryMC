@@ -14,56 +14,55 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.TorchBlock;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockCandle extends BlockTorch implements IItemModelRegister, ITileEntityProvider, IColoredBlock {
+public class BlockCandle extends TorchBlock implements IColoredBlock {
 
 	private static final ImmutableMap<String, Integer> colours;
 	public static final Set<Item> lightingItems;
-	public static final String colourTagName = "colour";
+	public static final String COLOUR_TAG_NAME = "colour";
 
-	public static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
+	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 
 	enum State implements IStringSerializable {
 		ON("on"), OFF("off");
@@ -108,40 +107,29 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	public BlockCandle() {
-		this.setHardness(0.0F);
-		this.setSoundType(SoundType.WOOD);
-		setCreativeTab(Tabs.tabApiculture);
-		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP).withProperty(STATE, State.OFF));
+		super(Block.Properties.create(Material.MISCELLANEOUS)
+			.hardnessAndResistance(0.0f)
+			.sound(SoundType.WOOD));
+		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.OFF));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING, STATE);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(STATE);
 	}
 
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
-		if (tileCandle != null && tileCandle.isLit()) {
-			state = state.withProperty(STATE, State.ON);
-		}
-		return super.getActualState(state, world, pos);
-	}
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
+	//		if (tileCandle != null && tileCandle.isLit()) {
+	//			state = state.with(STATE, State.ON);
+	//		}
+	//		return super.getActualState(state, world, pos);
+	//	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileCandle();
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "candle");
-		manager.registerItemModel(item, 1, "candle");
-	}
-
-	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public int getLightValue(BlockState state, IEnviromentBlockReader world, BlockPos pos) {
 		TileCandle candle = TileUtil.getTile(world, pos, TileCandle.class);
 		if (candle != null && candle.isLit()) {
 			return 14;
@@ -150,12 +138,7 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, 0));
-	}
-
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle == null) {
 			return false;
@@ -179,8 +162,8 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			if (ItemStackUtil.equals(this, heldItem)) {
 				if (!isLit(heldItem)) {
 					// Copy the colour of an unlit, coloured candle.
-					if (heldItem.getTagCompound() != null && heldItem.getTagCompound().hasKey(colourTagName)) {
-						tileCandle.setColour(heldItem.getTagCompound().getInteger(colourTagName));
+					if (heldItem.getTag() != null && heldItem.getTag().contains(COLOUR_TAG_NAME)) {
+						tileCandle.setColour(heldItem.getTag().getInt(COLOUR_TAG_NAME));
 					} else {
 						// Reset to white if item has no
 						tileCandle.setColour(0xffffff);
@@ -192,7 +175,9 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			} else {
 				boolean dyed = tryDye(heldItem, isLit, tileCandle);
 				if (dyed) {
-					worldIn.markBlockRangeForRenderUpdate(pos, pos);
+					//TODO
+					Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+					//					worldIn.markForRerender(pos);
 					toggleLitState = false;
 					flag = true;
 				}
@@ -201,10 +186,12 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
-			worldIn.markBlockRangeForRenderUpdate(pos, pos);
-			worldIn.profiler.startSection("checkLight");
-			worldIn.checkLight(pos);
-			worldIn.profiler.endSection();
+			//TODO
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+			//			worldIn.markForRerender(pos);
+			worldIn.getProfiler().startSection("checkLight");
+			worldIn.getChunkProvider().getLightManager().checkBlock(pos);
+			worldIn.getProfiler().endSection();
 			flag = true;
 		}
 		return flag;
@@ -214,8 +201,8 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		// Check for dye-able.
 		for (Map.Entry<String, Integer> colour : colours.entrySet()) {
 			String colourName = colour.getKey();
-			for (ItemStack stack : OreDictionary.getOres(colourName)) {
-				if (OreDictionary.itemMatches(stack, held, true)) {
+			for (ItemStack stack : new ItemStack[0]) {// TODO tags OreDictionary.getOres(colourName)) {
+				if (false) {//OreDictionary.itemMatches(stack, held, true)) {
 					if (isLit) {
 						tileCandle.setColour(colour.getValue());
 					} else {
@@ -228,38 +215,43 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		return false;
 	}
 
+	//TODO - is this fixed?
 	/* DROP HANDLING */
-	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
+	// Hack: 	When harvesting we need to getComb the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
 	private final ThreadLocal<ItemStack> drop = new ThreadLocal<>();
 
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.onBlockHarvested(world, pos, state, player);
 		if (!world.isRemote) {
 			ItemStack itemStack = getCandleDrop(world, pos);
 			drop.set(itemStack);
 		}
 	}
 
+	//TODO loot table stuff??
 	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 		ItemStack dropStack = drop.get();
 		drop.remove();
+		List<ItemStack> drops = new ArrayList<>();
 
-		// not harvested, get drops normally
+		// not harvested, getComb drops normally
 		if (dropStack == null) {
-			dropStack = getCandleDrop(world, pos);
+			dropStack = getCandleDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
 		}
 
 		drops.add(dropStack);
+		return drops;
 	}
 
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		return getCandleDrop(world, pos);
 	}
 
-	private ItemStack getCandleDrop(IBlockAccess world, BlockPos pos) {
+	private ItemStack getCandleDrop(IBlockReader world, BlockPos pos) {
 		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
 		if (tileCandle == null) {
 			return new ItemStack(this);
@@ -267,18 +259,18 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 		int colour = tileCandle.getColour();
 
 		int newMeta = tileCandle.isLit() ? 1 : 0;
-		ItemStack itemStack = new ItemStack(this, 1, newMeta);
+		ItemStack itemStack = new ItemStack(this, 1);//TODO flatten, newMeta);
 		if (colour != 0xffffff) {
 			// When dropped, tag new item stack with colour. Unless it's white, then do no such thing for maximum stacking.
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setInteger(colourTagName, colour);
-			itemStack.setTagCompound(tag);
+			CompoundNBT tag = new CompoundNBT();
+			tag.putInt(COLOUR_TAG_NAME, colour);
+			itemStack.setTag(tag);
 		}
 		return itemStack;
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
 		if (tileCandle != null) {
 			int colour = getColourValueFromItemStack(stack);
@@ -286,35 +278,35 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 			tileCandle.setColour(colour);
 			tileCandle.setLit(isLit);
 			if (tileCandle.isLit()) {
-				world.profiler.startSection("checkLight");
-				world.checkLight(pos);
-				world.profiler.endSection();
+				world.getProfiler().startSection("checkLight");
+				world.getChunkProvider().getLightManager().checkBlock(pos);
+				world.getProfiler().endSection();
 			}
 		}
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle != null && tileCandle.isLit()) {
-			super.randomDisplayTick(stateIn, worldIn, pos, rand);
+			super.animateTick(stateIn, worldIn, pos, rand);
 		}
 	}
 
 	private static int getColourValueFromItemStack(ItemStack itemStack) {
 		int value = 0xffffff; // default to white.
-		if (itemStack.getTagCompound() != null) {
-			NBTTagCompound tag = itemStack.getTagCompound();
-			if (tag.hasKey(colourTagName)) {
-				value = tag.getInteger(colourTagName);
+		if (itemStack.getTag() != null) {
+			CompoundNBT tag = itemStack.getTag();
+			if (tag.contains(COLOUR_TAG_NAME)) {
+				value = tag.getInt(COLOUR_TAG_NAME);
 			}
 		}
 		return value;
 	}
 
 	public static boolean isLit(ItemStack itemStack) {
-		return itemStack.getItemDamage() > 0;
+		return false;//TODO properties or something itemStack.getItemDamage() > 0;
 	}
 
 	public static void addItemToLightingList(Item item) {
@@ -322,16 +314,16 @@ public class BlockCandle extends BlockTorch implements IItemModelRegister, ITile
 	}
 
 	public ItemStack getUnlitCandle(int amount) {
-		return new ItemStack(this, amount, 0);
+		return new ItemStack(this, amount);//TODO flatten , 0);
 	}
 
 	public ItemStack getLitCandle(int amount) {
-		return new ItemStack(this, amount, 1);
+		return new ItemStack(this, amount);// TODO flatten , 1);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn != null && pos != null) {
 			TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 			if (tileCandle != null) {

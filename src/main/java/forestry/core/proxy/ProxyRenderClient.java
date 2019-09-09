@@ -11,23 +11,16 @@
 package forestry.core.proxy;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 
-import net.minecraftforge.client.model.ModelLoader;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelBakeEvent;
 
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.models.ModelManager;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
@@ -35,7 +28,6 @@ import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.render.TextureMapForestry;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
@@ -43,21 +35,21 @@ import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
 
 @SuppressWarnings("unused")
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getMinecraft().gameSettings.fancyGraphics;
+		return Minecraft.getInstance().gameSettings.fancyGraphics;
 	}
 
 	@Override
 	public void initRendering() {
 		TextureManagerForestry textureManagerForestry = TextureManagerForestry.getInstance();
-		TextureMapForestry textureMap = textureManagerForestry.getTextureMap();
+		AtlasTexture textureMap = textureManagerForestry.getTextureMap();
 
-		Minecraft minecraft = Minecraft.getMinecraft();
-		minecraft.renderEngine.loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);
+		Minecraft minecraft = Minecraft.getInstance();
+		minecraft.getTextureManager().loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);
 	}
 
 	@Override
@@ -82,7 +74,7 @@ public class ProxyRenderClient extends ProxyRender {
 
 	@Override
 	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
-		RenderAnalyzer renderAnalyzer = new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCKS + "/analyzer_");
+		RenderAnalyzer renderAnalyzer = new RenderAnalyzer(Constants.TEXTURE_PATH_BLOCK + "/analyzer");
 		machineProperties.setRenderer(renderAnalyzer);
 	}
 
@@ -92,8 +84,8 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerModels() {
-		ModelManager.getInstance().registerModels();
+	public void registerModels(ModelBakeEvent event) {
+		ModelManager.getInstance().registerModels(event);
 	}
 
 	@Override
@@ -102,37 +94,38 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerFluidStateMapper(Block block, Fluids fluid) {
-		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
-		StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
-		ModelLoader.setCustomStateMapper(block, ignoreState);
-		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
+	public void registerFluidStateMapper(Block block, ForestryFluids fluid) {
+		//		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
+		//TODO - fluids
+		// StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
+		//		ModelLoader.setCustomStateMapper(block, ignoreState);
+		//		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
+		//		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
 	}
 
-	private static class FluidStateMapper extends StateMapperBase {
-		private final ModelResourceLocation fluidLocation;
+	//	private static class FluidStateMapper extends StateMapperBase {
+	//		private final ModelResourceLocation fluidLocation;
+	//
+	//		public FluidStateMapper(ModelResourceLocation fluidLocation) {
+	//			this.fluidLocation = fluidLocation;
+	//		}
+	//
+	//		@Override
+	//		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
+	//			return fluidLocation;
+	//		}
+	//	}
 
-		public FluidStateMapper(ModelResourceLocation fluidLocation) {
-			this.fluidLocation = fluidLocation;
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-			return fluidLocation;
-		}
-	}
-
-	private static class FluidItemMeshDefinition implements ItemMeshDefinition {
-		private final ModelResourceLocation fluidLocation;
-
-		public FluidItemMeshDefinition(ModelResourceLocation fluidLocation) {
-			this.fluidLocation = fluidLocation;
-		}
-
-		@Override
-		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			return fluidLocation;
-		}
-	}
+	//	private static class FluidItemMeshDefinition implements ItemMeshDefinition {
+	//		private final ModelResourceLocation fluidLocation;
+	//
+	//		public FluidItemMeshDefinition(ModelResourceLocation fluidLocation) {
+	//			this.fluidLocation = fluidLocation;
+	//		}
+	//
+	//		@Override
+	//		public ModelResourceLocation getModelLocation(ItemStack stack) {
+	//			return fluidLocation;
+	//		}
+	//	}
 }

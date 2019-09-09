@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "forestry:items/doors/cherry"
+    "layer0": "forestry:item/doors/cherry"
   },
   "display": {
     "thirdperson": {

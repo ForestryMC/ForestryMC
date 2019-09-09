@@ -10,8 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.core.config.LocalizedConfiguration;
@@ -23,20 +22,20 @@ public class HiveConfig {
 	private final Set<BiomeDictionary.Type> blacklistedTypes = new HashSet<>();
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
 
-	private static final Set<Integer> blacklistedDims = new HashSet<>();
+	private static final Set<ResourceLocation> blacklistedDims = new HashSet<>();
 
-	private static final Set<Integer> whitelistedDims = new HashSet<>();
+	private static final Set<ResourceLocation> whitelistedDims = new HashSet<>();
 
 	@Nullable
 	private static HiveConfig GLOBAL;
 
 	public static void parse(LocalizedConfiguration config) {
 		config.addCategoryCommentLocalized(CATEGORY);
-		for (int dimId : config.get("world.generate.beehives", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedDims.add(dimId);
+		for (String dimId : config.get("world.generate.beehives", "dimBlacklist", new String[0]).getStringList()) {
+			blacklistedDims.add(new ResourceLocation(dimId));
 		}
-		for (int dimId : config.get("world.generate.beehives", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedDims.add(dimId);
+		for (String dimId : config.get("world.generate.beehives", "dimWhitelist", new String[0]).getStringList()) {
+			whitelistedDims.add(new ResourceLocation(dimId));
 		}
 		for (IHiveRegistry.HiveType type : IHiveRegistry.HiveType.values()) {
 			String[] entries = config.get(CATEGORY, type.getName(), new String[0]).getStringList();
@@ -79,18 +78,18 @@ public class HiveConfig {
 		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTypes::contains);
 	}
 
-	public static boolean isDimAllowed(int dimId) {        //blacklist has priority
+	public static boolean isDimAllowed(ResourceLocation dimId) {        //blacklist has priority
 		if (blacklistedDims.isEmpty() || !blacklistedDims.contains(dimId)) {
 			return whitelistedDims.isEmpty() || whitelistedDims.contains(dimId);
 		}
 		return false;
 	}
 
-	public static void addBlacklistedDim(int dimId) {
+	public static void addBlacklistedDim(ResourceLocation dimId) {
 		blacklistedDims.add(dimId);
 	}
 
-	public static void addWhitelistedDim(int dimId) {
+	public static void addWhitelistedDim(ResourceLocation dimId) {
 		whitelistedDims.add(dimId);
 	}
 }

@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.fuels;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 
 public class EngineBronzeFuel {
 	private final Fluid liquid;

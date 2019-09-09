@@ -10,94 +10,88 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.ToolType;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-public class BlockSolidCocoon extends Block implements ITileEntityProvider, IStateMapperRegister, IItemModelRegister {
+public class BlockSolidCocoon extends Block {
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockSolidCocoon() {
-		super(MaterialCocoon.INSTANCE);
-		setHarvestLevel("scoop", 0);
-		setHardness(0.5F);
-		setTickRandomly(true);
-		setSoundType(SoundType.GROUND);
-		setCreativeTab(null);
-		setDefaultState(this.blockState.getBaseState().withProperty(COCOON, ButterflyAlleles.cocoonDefault)
-			.withProperty(AlleleButterflyCocoon.AGE, 0));
+		super(Block.Properties.create(MaterialCocoon.INSTANCE)
+			.harvestTool(ToolType.get("scoop"))
+			.harvestLevel(0)    //TODO correct?
+			.hardnessAndResistance(0.5F)
+			.tickRandomly()
+			.sound(SoundType.GROUND));
+		//		setCreativeTab(null); TODO creative tabs
+		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
+			.with(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, COCOON, AlleleButterflyCocoon.AGE);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(COCOON, AlleleButterflyCocoon.AGE);
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-		if (cocoon != null) {
-			state = state.withProperty(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-				.withProperty(AlleleButterflyCocoon.AGE, cocoon.getAge());
-		}
-		return super.getActualState(state, world, pos);
-	}
+	//TODO
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+	//		if (cocoon != null) {
+	//			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
+	//				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
+	//		}
+	//		return super.getActualState(state, world, pos);
+	//	}
+	//
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public void registerStateMapper() {
+	//		ModelLoader.setCustomStateMapper(this, new CocoonStateMapper());
+	//	}
+	//
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		// To delete the error message
+	//		manager.registerItemModel(item, 0, "cocoon_late");
+	//	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new CocoonStateMapper());
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		// To delete the error message
-		manager.registerItemModel(item, 0, "cocoon_late");
-	}
+	//	@Override
+	//	public boolean isFullBlock(BlockState state) {
+	//		return false;
+	//	}
+	//
+	//	@Override
+	//	public boolean isOpaqueCube(BlockState state) {
+	//		return false;
+	//	}
 
 	@Override
-	public boolean isFullBlock(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
-		boolean willHarvest) {
-		if (canHarvestBlock(world, pos, player)) {
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, IFluidState fluid) {
+		if (canHarvestBlock(state, world, pos, player)) {
 			TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
 				NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
 				for (ItemStack stack : drops) {
@@ -106,40 +100,34 @@ public class BlockSolidCocoon extends Block implements ITileEntityProvider, ISta
 			});
 		}
 
-		return world.setBlockToAir(pos);
+		return world.setBlockState(pos, Blocks.AIR.getDefaultState());
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileCocoon(true);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return 0;
-	}
-
-	@Override
 	@Deprecated
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		if (worldIn.isAirBlock(pos.up())) {
-			worldIn.setBlockToAir(pos);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 		}
 	}
 
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	//	@Override
+	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+	//
+	//	}
 
-	}
-
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-		return BlockCocoon.BOUNDING_BOX;
-	}
-
-	@Nullable
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		return BlockCocoon.BOUNDING_BOX;
 	}
 

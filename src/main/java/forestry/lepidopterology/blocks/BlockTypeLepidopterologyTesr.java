@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.VoxelShape;
 
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
@@ -21,14 +21,14 @@ import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
-	LEPICHEST(TileLepidopteristChest.class, "lepi_chest", "lepichest", TileNaturalistChest.chestBoundingBox);
+	LEPICHEST(TileLepidopteristChest.class, "lepi_chest", "lepichest", TileNaturalistChest.CHEST_SHAPE);
 
 	public static final BlockTypeLepidopterologyTesr[] VALUES = values();
 
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(Class<T> teClass, String name, String renderName, AxisAlignedBB boundingBox) {
-		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0", false);
+	<T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(Class<T> teClass, String name, String renderName, VoxelShape shape) {
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, shape, Constants.MOD_ID + ":blocks/" + name + ".0", false);
 		Proxies.render.setRenderChest(machineProperties, renderName);
 		this.machineProperties = machineProperties;
 	}

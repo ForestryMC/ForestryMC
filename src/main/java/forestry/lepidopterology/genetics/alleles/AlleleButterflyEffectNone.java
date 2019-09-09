@@ -16,7 +16,7 @@ public class AlleleButterflyEffectNone extends AlleleButterflyEffect {
 	}
 
 	@Override
-	public String getUnlocalizedName() {
+	public String getLocalisationKey() {
 		return "for.lepidopterology.effect.none";
 	}
 }

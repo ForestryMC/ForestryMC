@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.config.Constants;
@@ -20,9 +21,9 @@ import forestry.core.gui.widgets.TankWidget;
 public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlvearyHygroregulator> {
 	private final TileAlvearyHygroregulator tile;
 
-	public GuiAlvearyHygroregulator(InventoryPlayer inventory, TileAlvearyHygroregulator tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/hygroregulator.png", new ContainerAlvearyHygroregulator(inventory, tile), tile);
-		this.tile = tile;
+	public GuiAlvearyHygroregulator(ContainerAlvearyHygroregulator container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/hygroregulator.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 
 		widgetManager.add(new TankWidget(this.widgetManager, 104, 17, 0));
 	}

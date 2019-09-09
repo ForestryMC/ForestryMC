@@ -7,17 +7,21 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.ITextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
@@ -28,13 +32,13 @@ import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.layouts.ElementGroup;
 
-import org.lwjgl.input.Mouse;
+
 
 /**
  * This element is the top parent.
  */
-@SideOnly(Side.CLIENT)
-public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup implements IWindowElement {
+@OnlyIn(Dist.CLIENT)
+public class Window<G extends Screen & IGuiSizable> extends ElementGroup implements IWindowElement {
 	protected final G gui;
 	@Nullable
 	private Minecraft mc = null;
@@ -163,7 +167,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateClient() {
 		if (!isVisible()) {
 			return;
@@ -180,7 +184,8 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 		if (this.getFocusedElement() != null && (!this.getFocusedElement().isVisible() || !this.getFocusedElement().isEnabled())) {
 			this.setFocusedElement(null);
 		}
-		if (!Mouse.isButtonDown(0)) {
+		//|TODO - mousehelper.left down?
+		if (!Minecraft.getInstance().mouseHelper.isLeftDown()) {
 			if (this.draggedElement != null) {
 				this.setDraggedElement(null);
 			}
@@ -235,18 +240,21 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 	}
 
 	public void drawTooltip(int mouseX, int mouseY) {
-		List<String> lines = getTooltip(mouseX, mouseY);
+		List<ITextComponent> lines = getTooltip(mouseX, mouseY);
+		//TODO has textComponent gone too far?
+		List<String> strings = lines.stream().map(ITextComponent::getString).collect(Collectors.toList());
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
-			ScaledResolution scaledresolution = new ScaledResolution(getMinecraft());
-			GuiUtils.drawHoveringText(lines, mouseX - getX(), mouseY - getY(), scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, getFontRenderer());
+			//TODO test
+			MainWindow window = Minecraft.getInstance().mainWindow;
+			GuiUtils.drawHoveringText(strings, mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
 			GlStateManager.popMatrix();
 		}
 	}
 
 	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
-		List<String> tooltip = new ArrayList<>();
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
+		List<ITextComponent> tooltip = new ArrayList<>();
 		Deque<IGuiElement> queue = this.calculateMousedOverElements();
 		while (!queue.isEmpty()) {
 			IGuiElement element = queue.removeFirst();
@@ -339,7 +347,7 @@ public class Window<G extends GuiScreen & IGuiSizable> extends ElementGroup impl
 
 	protected Minecraft getMinecraft() {
 		if (mc == null) {
-			mc = Minecraft.getMinecraft();
+			mc = Minecraft.getInstance();
 		}
 		return mc;
 	}

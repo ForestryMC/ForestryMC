@@ -1,7 +1,7 @@
 package forestry.farming.logic.crops;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +13,7 @@ import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 
 public class CropChorusFlower extends Crop {
-	private static final IBlockState BLOCK_STATE = Blocks.CHORUS_FLOWER.getDefaultState();
+	private static final BlockState BLOCK_STATE = Blocks.CHORUS_FLOWER.getDefaultState();
 
 	public CropChorusFlower(World world, BlockPos position) {
 		super(world, position);
@@ -35,7 +35,7 @@ public class CropChorusFlower extends Crop {
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, BLOCK_STATE);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		world.setBlockToAir(pos);
+		world.removeBlock(pos, false);
 
 		return harvested;
 	}

@@ -19,13 +19,15 @@ import java.util.Random;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -68,7 +70,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 	@Override
 	public int getFinalFertility(IBee queen, World world, BlockPos pos) {
-		int toCreate = queen.getGenome().getFertility();
+		int toCreate = queen.getGenome().getActiveValue(BeeChromosomes.FERTILITY);
 
 		if (reducesFertility) {
 			toCreate = new Random().nextInt(toCreate);
@@ -97,7 +99,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 	public boolean isDegenerating(IBee queen, IBee offspring, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
-		float mutationModifier = beeModifier.getMutationModifier(queen.getGenome(), queen.getMate(), 1.0f);
+		float mutationModifier = beeModifier.getMutationModifier(queen.getGenome(), queen.getMate().orElse(null), 1.0f);
 		if (mutationModifier > 10) {
 			return housing.getWorldObj().rand.nextFloat() * 100 < 0.4 * (mutationModifier * mutationModifier - 100);
 		}
@@ -132,17 +134,17 @@ public class BeekeepingMode implements IBeekeepingMode {
 		}
 
 		@Override
-		public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+		public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
 			return this.mutationModifier;
 		}
 
 		@Override
-		public float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, float currentModifier) {
+		public float getLifespanModifier(IGenome genome, @Nullable IGenome mate, float currentModifier) {
 			return this.lifespanModifier;
 		}
 
 		@Override
-		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+		public float getProductionModifier(IGenome genome, float currentModifier) {
 			if (this.speedModifier > 16.0f) {
 				return 16.0f;
 			}

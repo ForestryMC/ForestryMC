@@ -12,6 +12,14 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IGenome;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.apiculture.genetics.IBeeFactory;
+import forestry.api.apiculture.genetics.IBeeMutationFactory;
+import forestry.api.apiculture.genetics.IBeeRoot;
+
 /**
  * Some miscellaneous lists and settings for bees.
  *
@@ -22,23 +30,25 @@ public class BeeManager {
 	/**
 	 * Common Village Bees
 	 */
-	public static List<IBeeGenome> commonVillageBees;
+	public static List<IGenome> commonVillageBees;
 	/**
 	 * Uncommon Village Bees (20 % of spawns)
 	 */
-	public static List<IBeeGenome> uncommonVillageBees;
+	public static List<IGenome> uncommonVillageBees;
 
 	/**
 	 * List of items that can induce swarming. Integer denotes x in 1000 chance.
 	 */
 	public static final Map<ItemStack, Integer> inducers = new HashMap<>();
 
+	public static final IRootDefinition<IBeeRoot> beeRootDefinition = GeneticsAPI.apiInstance.getRoot("rootBees");
+
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")
 	 *
 	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */
-	@Nullable
+	//TODO: Move most calls to definition (more save)
 	public static IBeeRoot beeRoot;
 
 	/**
@@ -58,7 +68,7 @@ public class BeeManager {
 	public static IBeeMutationFactory beeMutationFactory;
 
 	/**
-	 * Used to get Forestry's jubilance implementations.
+	 * Used to getComb Forestry's jubilance implementations.
 	 *
 	 * @implNote Only null if the "apiculture" module is not enabled.
 	 */

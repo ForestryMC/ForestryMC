@@ -1,54 +1,27 @@
 package forestry.arboriculture.blocks;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.item.Item;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.IBlockReader;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodHelper;
-import forestry.arboriculture.proxy.ProxyArboricultureClient;
 
-public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockStairs implements IWoodTyped, IItemModelRegister, IStateMapperRegister {
+//eg    public static final Block OAK_STAIRS = register("oak_stairs", new StairsBlock(OAK_PLANKS.getDefaultState(), Block.Properties.from(OAK_PLANKS)));
+public class BlockForestryStairs extends StairsBlock implements IWoodTyped {
 	private final boolean fireproof;
-	private final T woodType;
+	private final IWoodType woodType;
 
-	public BlockForestryStairs(boolean fireproof, IBlockState modelState, T woodType) {
-		super(modelState);
-		this.fireproof = fireproof;
-		this.woodType = woodType;
-		setCreativeTab(Tabs.tabArboriculture);
-		setHarvestLevel("axe", 0);
-	}
-
-	/* MODELS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		ModelBakery.registerItemVariants(item, WoodHelper.getDefaultResourceLocations(this));
-		ProxyArboricultureClient.registerWoodMeshDefinition(item, new WoodHelper.WoodMeshDefinition(this));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerStateMapper() {
-		ProxyArboricultureClient.registerWoodStateMapper(this, new WoodTypeStateMapper(this, null));
+	public BlockForestryStairs(BlockForestryPlank plank) {
+		super(plank.getDefaultState(), Block.Properties.from(plank));
+		this.fireproof = plank.isFireproof();
+		this.woodType = plank.getWoodType();
+		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
+		//		setHarvestLevel("axe", 0); TODO harvest level
 	}
 
 	@Override
@@ -57,29 +30,17 @@ public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockSta
 	}
 
 	@Override
+	public IWoodType getWoodType() {
+		return woodType;
+	}
+
+	@Override
 	public WoodBlockKind getBlockKind() {
 		return WoodBlockKind.STAIRS;
 	}
 
 	@Override
-	public T getWoodType(int meta) {
-		return woodType;
-	}
-
-	@Override
-	public Collection<T> getWoodTypes() {
-		return Collections.singleton(woodType);
-	}
-
-	@Override
-	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
-		int meta = getMetaFromState(blockState);
-		T woodType = getWoodType(meta);
-		return woodType.getHardness();
-	}
-
-	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		if (fireproof) {
 			return 0;
 		}
@@ -87,7 +48,7 @@ public class BlockForestryStairs<T extends Enum<T> & IWoodType> extends BlockSta
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		if (fireproof) {
 			return 0;
 		}

@@ -2,36 +2,37 @@ package forestry.book.gui.buttons;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.IBookCategory;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
-@SideOnly(Side.CLIENT)
-public class GuiButtonBookCategory extends GuiButton implements IToolTipProvider {
+@OnlyIn(Dist.CLIENT)
+public class GuiButtonBookCategory extends Button implements IToolTipProvider {
 	public final IBookCategory category;
 
-	public GuiButtonBookCategory(int buttonId, int x, int y, IBookCategory category) {
-		super(buttonId, x, y, 32, 32, "");
+	public GuiButtonBookCategory(int x, int y, IBookCategory category, IPressable action) {
+		super(x, y, 32, 32, "", action);
 		this.category = category;
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		if (visible) {
-			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-			FontRenderer fontRenderer = mc.fontRenderer;
+			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+			FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y, zLevel);
-			GlStateManager.scale(2F, 2F, 2F);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.translatef(x, y, blitOffset);    //TODO correct?
+			GlStateManager.scalef(2F, 2F, 2F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderHelper.enableGUIStandardItemLighting();
 			GlStateManager.enableRescaleNormal();
 			GuiUtil.drawItemStack(fontRenderer, category.getStack(), 0, 0);
@@ -53,7 +54,7 @@ public class GuiButtonBookCategory extends GuiButton implements IToolTipProvider
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 	}
 

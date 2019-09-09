@@ -13,34 +13,38 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
 
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
+import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.gui.ContainerAnalyzer;
-import forestry.core.gui.GuiAnalyzer;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
@@ -66,9 +70,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		super(800, Constants.MACHINE_MAX_ENERGY);
+		super(ModuleCore.getTiles().analyzer, 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryAnalyzer(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.FOR_HONEY.getFluid());
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
 		invInput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_INPUT_1, InventoryAnalyzer.SLOT_INPUT_COUNT);
 		invOutput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_OUTPUT_1, InventoryAnalyzer.SLOT_OUTPUT_COUNT);
@@ -77,20 +81,20 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* SAVING & LOADING */
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		tankManager.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		tankManager.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
 
 		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 		if (!stackToAnalyze.isEmpty()) {
-			specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
+			specimenToAnalyze = GeneticsAPI.apiInstance.getRootHelper().getIndividual(stackToAnalyze).orElse(null);
 		}
 	}
 
@@ -113,17 +117,17 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		if (!specimenToAnalyze.isAnalyzed()) {
-			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
-			if (drained == null || drained.amount != HONEY_REQUIRED) {
+			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+			if (drained.isEmpty() || drained.getAmount() != HONEY_REQUIRED) {
 				return false;
 			}
-			resourceTank.drain(HONEY_REQUIRED, true);
+			resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.EXECUTE);
 
 			specimenToAnalyze.analyze();
 
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			specimenToAnalyze.writeToNBT(nbttagcompound);
-			stackToAnalyze.setTagCompound(nbttagcompound);
+			CompoundNBT compoundNBT = new CompoundNBT();
+			specimenToAnalyze.write(compoundNBT);
+			stackToAnalyze.setTag(compoundNBT);
 		}
 
 		boolean added = InventoryUtil.tryAddStack(invOutput, stackToAnalyze, true);
@@ -142,7 +146,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private Integer getInputSlotIndex() {
 		for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
 			ItemStack inputStack = invInput.getStackInSlot(slotIndex);
-			if (AlleleManager.alleleRegistry.isIndividual(inputStack)) {
+			if (GeneticsAPI.apiInstance.getRootHelper().isIndividual(inputStack)) {
 				return slotIndex;
 			}
 		}
@@ -159,7 +163,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
@@ -170,7 +174,10 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void handleItemStackForDisplay(ItemStack itemStack) {
 		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			//TODO
+			BlockPos pos = getPos();
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+			//			world.markForRerender(getPos());
 		}
 	}
 
@@ -189,8 +196,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
 
 			if (specimenToAnalyze != null && !specimenToAnalyze.isAnalyzed()) {
-				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, false);
-				hasResource = drained != null && drained.amount == HONEY_REQUIRED;
+				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+				hasResource = !drained.isEmpty() && drained.getAmount() == HONEY_REQUIRED;
 			}
 		}
 
@@ -220,7 +227,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 
-		specimenToAnalyze = AlleleManager.alleleRegistry.getIndividual(inputStack);
+		specimenToAnalyze = GeneticsAPI.apiInstance.getRootHelper().getIndividual(inputStack).orElse(null);
 		if (specimenToAnalyze == null) {
 			return;
 		}
@@ -254,29 +261,17 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
 
 	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiAnalyzer(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerAnalyzer(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAnalyzer(windowId, player.inventory, this);
 	}
 }

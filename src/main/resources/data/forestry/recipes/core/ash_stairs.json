@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "forestry:ash_stairs",
+    "data": 0
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:brick"
+    }
+  },
+  "group": "core"
+}

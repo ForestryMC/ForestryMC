@@ -10,13 +10,14 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
 public interface IPostRegistry {
 
 	/* POST OFFICE */
-	IPostOffice getPostOffice(World world);
+	IPostOffice getPostOffice(ServerWorld world);
 
 	/* MAIL ADDRESSES */
 	IMailAddress getMailAddress(GameProfile gameProfile);
@@ -48,14 +49,14 @@ public interface IPostRegistry {
 	Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers();
 
 	/* TRADE STATIONS */
-	void deleteTradeStation(World world, IMailAddress address);
+	void deleteTradeStation(ServerWorld world, IMailAddress address);
 
-	ITradeStation getOrCreateTradeStation(World world, GameProfile owner, IMailAddress address);
+	ITradeStation getOrCreateTradeStation(ServerWorld world, GameProfile owner, IMailAddress address);
 
 	@Nullable
-	ITradeStation getTradeStation(World world, IMailAddress address);
+	ITradeStation getTradeStation(ServerWorld world, IMailAddress address);
 
-	boolean isAvailableTradeAddress(World world, IMailAddress address);
+	boolean isAvailableTradeAddress(ServerWorld world, IMailAddress address);
 
 	boolean isValidTradeAddress(World world, IMailAddress address);
 

@@ -14,8 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,8 +44,8 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
 	}
 
 	@Override
-	public IBlockState getBlockState() {
-		return ModuleApiculture.getBlocks().beehives.getStateForType(IHiveRegistry.HiveType.SWARM);
+	public BlockState getBlockState() {
+		return ModuleApiculture.getBlocks().beehives.get(IHiveRegistry.HiveType.SWARM).getDefaultState();
 	}
 
 	@Override

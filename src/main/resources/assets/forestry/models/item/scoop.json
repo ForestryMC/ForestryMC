@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/scoop"
+      "layer0": "forestry:item/scoop"
     },
     "display": {
         "thirdperson": {

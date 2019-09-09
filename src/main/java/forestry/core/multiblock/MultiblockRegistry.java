@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import forestry.api.multiblock.IMultiblockComponent;
@@ -19,14 +20,14 @@ import forestry.core.utils.Log;
  */
 public class MultiblockRegistry {
 	// World > WorldRegistry map
-	private static final Map<World, MultiblockWorldRegistry> registries = new HashMap<>();
+	private static final Map<IWorld, MultiblockWorldRegistry> registries = new HashMap<>();
 
 	/**
 	 * Called before Tile Entities are ticked in the world. Do bookkeeping here.
 	 *
 	 * @param world The world being ticked
 	 */
-	public static void tickStart(World world) {
+	public static void tickStart(IWorld world) {
 		if (registries.containsKey(world)) {
 			MultiblockWorldRegistry registry = registries.get(world);
 			registry.processMultiblockChanges();
@@ -41,7 +42,7 @@ public class MultiblockRegistry {
 	 * @param chunkX The X coordinate of the chunk
 	 * @param chunkZ The Z coordinate of the chunk
 	 */
-	public static void onChunkLoaded(World world, int chunkX, int chunkZ) {
+	public static void onChunkLoaded(IWorld world, int chunkX, int chunkZ) {
 		if (registries.containsKey(world)) {
 			registries.get(world).onChunkLoaded(chunkX, chunkZ);
 		}
@@ -77,7 +78,7 @@ public class MultiblockRegistry {
 	 *
 	 * @param world The world being unloaded.
 	 */
-	public static void onWorldUnloaded(World world) {
+	public static void onWorldUnloaded(IWorld world) {
 		if (registries.containsKey(world)) {
 			registries.get(world).onWorldUnloaded();
 			registries.remove(world);
@@ -91,7 +92,7 @@ public class MultiblockRegistry {
 	 * @param world      The world containing the multiblock
 	 * @param controller The dirty controller
 	 */
-	public static void addDirtyController(World world, IMultiblockControllerInternal controller) {
+	public static void addDirtyController(IWorld world, IMultiblockControllerInternal controller) {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDirtyController(controller);
 		} else {
@@ -106,7 +107,7 @@ public class MultiblockRegistry {
 	 * @param world      The world formerly containing the multiblock
 	 * @param controller The dead controller
 	 */
-	public static void addDeadController(World world, IMultiblockControllerInternal controller) {
+	public static void addDeadController(IWorld world, IMultiblockControllerInternal controller) {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDeadController(controller);
 		} else {
@@ -118,7 +119,7 @@ public class MultiblockRegistry {
 	 * @param world The world whose controllers you wish to retrieve.
 	 * @return An unmodifiable set of controllers active in the given world.
 	 */
-	public static Set<IMultiblockControllerInternal> getControllersFromWorld(World world) {
+	public static Set<IMultiblockControllerInternal> getControllersFromWorld(IWorld world) {
 		if (registries.containsKey(world)) {
 			return registries.get(world).getControllers();
 		}
@@ -126,7 +127,7 @@ public class MultiblockRegistry {
 	}
 
 	/// *** PRIVATE HELPERS *** ///
-
+	//TODO refactor to getOrDefault
 	private static MultiblockWorldRegistry getOrCreateRegistry(World world) {
 		if (registries.containsKey(world)) {
 			return registries.get(world);

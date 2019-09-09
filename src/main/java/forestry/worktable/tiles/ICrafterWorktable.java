@@ -2,20 +2,20 @@ package forestry.worktable.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 public interface ICrafterWorktable {
-	ItemStack getResult(InventoryCrafting inventoryCrafting, World world);
+	ItemStack getResult(CraftingInventory CraftingInventory, World world);
 
 	boolean canTakeStack(int slotIndex);
 
-	boolean onCraftingStart(EntityPlayer player);
+	boolean onCraftingStart(PlayerEntity player);
 
-	void onCraftingComplete(EntityPlayer player);
+	void onCraftingComplete(PlayerEntity player);
 
 	@Nullable
 	IRecipe getRecipeUsed();

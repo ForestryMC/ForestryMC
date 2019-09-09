@@ -6,8 +6,6 @@ import java.util.Set;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.core.utils.ItemStackUtil;
 
@@ -25,19 +23,19 @@ public class BackpackFilter implements IBackpackFilterConfigurable {
 	}
 
 	@Override
-	public void acceptOreDictName(String oreDictName) {
-		if (OreDictionary.doesOreNameExist(oreDictName)) {
-			int oreId = OreDictionary.getOreID(oreDictName);
-			this.validOreIds.add(oreId);
-		}
+	public void acceptTagName(String oreDictName) {
+		//		if (OreDictionary.doesOreNameExist(oreDictName)) {
+		//			int oreId = OreDictionary.getOreID(oreDictName);
+		//			this.validOreIds.add(oreId);
+		//		}	//TODO tags
 	}
 
 	@Override
 	public void rejectOreDictName(String oreDictName) {
-		if (OreDictionary.doesOreNameExist(oreDictName)) {
-			int oreId = OreDictionary.getOreID(oreDictName);
-			this.validOreIds.remove(oreId);
-		}
+		//		if (OreDictionary.doesOreNameExist(oreDictName)) {
+		//			int oreId = OreDictionary.getOreID(oreDictName);
+		//			this.validOreIds.remove(oreId);
+		//		} //TODO tags
 	}
 
 	@Override
@@ -66,30 +64,26 @@ public class BackpackFilter implements IBackpackFilterConfigurable {
 		if (rejectedItemStacks.contains(itemStackStringWild)) {
 			return false;
 		}
-		if (acceptedItemStacks.contains(itemStackStringWild)) {
-			return true;
-		}
+		return acceptedItemStacks.contains(itemStackStringWild);
 
-		int meta = itemStack.getMetadata();
-		if (meta != OreDictionary.WILDCARD_VALUE) {
-			String itemStackString = itemStackStringWild + ':' + meta;
-			if (rejectedItemStacks.contains(itemStackString)) {
-				return false;
-			}
-			if (acceptedItemStacks.contains(itemStackString)) {
-				return true;
-			}
-		}
-
-		int[] oreIds = OreDictionary.getOreIDs(itemStack);
-		for (int oreId : oreIds) {
-			if (validOreIds.contains(oreId)) {
-				acceptedItemStacks.add(itemStackStringWild);
-				return true;
-			}
-		}
-
-		return false;
+		//		int meta = itemStack.getMetadata();
+		//		if (meta != OreDictionary.WILDCARD_VALUE) {
+		//			String itemStackString = itemStackStringWild + ':' + meta;
+		//			if (rejectedItemStacks.contains(itemStackString)) {
+		//				return false;
+		//			}
+		//			if (acceptedItemStacks.contains(itemStackString)) {
+		//				return true;
+		//			}
+		//		}
+		//
+		//		int[] oreIds = OreDictionary.getOreIDs(itemStack);
+		//		for (int oreId : oreIds) {
+		//			if (validOreIds.contains(oreId)) {
+		//				acceptedItemStacks.add(itemStackStringWild);
+		//				return true;
+		//			}
+		//		}	//TODO tags
 	}
 
 	public Set<Integer> getValidOreIds() {

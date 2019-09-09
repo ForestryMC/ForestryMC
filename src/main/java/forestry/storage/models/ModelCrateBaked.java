@@ -1,16 +1,18 @@
 package forestry.storage.models;
 
+import com.google.common.collect.ImmutableList;
+
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3f;
 import java.util.List;
+import java.util.Random;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import net.minecraftforge.client.model.BakedItemModel;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -35,7 +37,7 @@ public class ModelCrateBaked extends BlankModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		if (side != null) {
 			return ImmutableList.of();
 		}
@@ -84,13 +86,13 @@ public class ModelCrateBaked extends BlankModel {
 						new Vector3f(0.5F, 0.5F, 1F),
 						null);
 					TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
-					quads.addAll(frontModel.getQuads(null, null, 0L));
+					quads.addAll(frontModel.getQuads(null, null, new Random(0L)));
 					TRSRTransformation backTransform = new TRSRTransformation(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
 						null,
 						new Vector3f(0.5F, 0.5F, 1f),
 						TRSRTransformation.quatFromYXZ((float) Math.PI, 0, 0));
 					TRSRBakedModel backModel = new TRSRBakedModel(guiModel, backTransform);
-					quads.addAll(backModel.getQuads(null, null, 0L));
+					quads.addAll(backModel.getQuads(null, null, new Random(0L)));
 				} else {
 					TRSRTransformation frontTransform = new TRSRTransformation(
 						new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, 0),
@@ -98,7 +100,7 @@ public class ModelCrateBaked extends BlankModel {
 						new Vector3f(0.5F, 0.5F, CONTENT_RENDER_BLOCK_Z_SCALE),
 						null);
 					TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
-					quads.addAll(frontModel.getQuads(null, null, 0L));
+					quads.addAll(frontModel.getQuads(null, null, new Random(0L)));
 				}
 			}
 			return new ContentModel(quads);

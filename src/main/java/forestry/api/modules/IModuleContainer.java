@@ -7,7 +7,7 @@ package forestry.api.modules;
 
 import java.util.Collection;
 
-import net.minecraftforge.common.config.Configuration;
+import forestry.core.config.forge_old.Configuration;
 
 public interface IModuleContainer {
 	/**

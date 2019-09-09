@@ -1,0 +1,20 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/pipette.0"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "state": 0
+      },
+      "model": "forestry:item/pipette"
+    },
+    {
+      "predicate": {
+        "state": 1
+      },
+      "model": "forestry:item/pipette_filled"
+    }
+  ]
+}

@@ -13,40 +13,37 @@ package forestry.core.blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 
 /**
  * bog earth, which becomes peat
  */
-public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWithMeta {
+public class BlockBogEarth extends Block implements IItemModelRegister {
 	private static final int maturityDelimiter = 3; //maturity at which bogEarth becomes peat
-	public static final PropertyInteger MATURITY = PropertyInteger.create("maturity", 0, maturityDelimiter);
+	public static final IntegerProperty MATURITY = IntegerProperty.create("maturity", 0, maturityDelimiter);
 
 	public enum SoilType implements IStringSerializable {
 		BOG_EARTH("bog_earth"),
@@ -74,69 +71,63 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 	}
 
 	public BlockBogEarth() {
-		super(Material.GROUND);
-		setTickRandomly(true);
-		setHardness(0.5f);
-		setSoundType(SoundType.GROUND);
-		setCreativeTab(CreativeTabForestry.tabForestry);
+		super(Block.Properties.create(Material.EARTH)
+			.tickRandomly()
+			.hardnessAndResistance(0.5f)
+			.sound(SoundType.GROUND));
+		//TODO - creative tabs done by item. Handle this in per module registries I think
+		//setCreativeTab(CreativeTabForestry.tabForestry);
 
-		setDefaultState(this.blockState.getBaseState().withProperty(MATURITY, 0));
+		setDefaultState(this.getStateContainer().getBaseState().with(MATURITY, 0));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(MATURITY);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(MATURITY);
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(MATURITY, meta);
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, MATURITY);
-	}
-
-	@Override
-	public int tickRate(World world) {
+	public int tickRate(IWorldReader world) {
 		return 500;
 	}
 
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		Integer maturity = state.getValue(MATURITY);
-		SoilType type = SoilType.fromMaturity(maturity);
+	//TODO - loot tables for drops (at least for easy cases like this
+	//	@Override
+	//	public List<ItemStack> getDrops(BlockState state, ServerWorld world, BlockPos pos, TileEntity te) {
+	//		Integer maturity = state.getComb(MATURITY);
+	//		SoilType type = SoilType.fromMaturity(maturity);
+	//
+	//		if (type == SoilType.PEAT) {
+	//			drops.add(ModuleCore.getItems().peat.getItemStack(2));
+	//			drops.add(new ItemStack(Blocks.DIRT));
+	//		} else {
+	//			drops.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
+	//		}
+	//		return new ArrayList<>();
+	//	}
 
-		if (type == SoilType.PEAT) {
-			drops.add(ModuleCore.getItems().peat.getItemStack(2));
-			drops.add(new ItemStack(Blocks.DIRT));
-		} else {
-			drops.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
-		}
-	}
-
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(13) != 0) {
 			return;
 		}
 
-		Integer maturity = state.getValue(MATURITY);
+		Integer maturity = state.get(MATURITY);
 		SoilType type = SoilType.fromMaturity(maturity);
 
 		if (type == SoilType.BOG_EARTH) {
 			if (isMoistened(world, pos)) {
-				world.setBlockState(pos, state.withProperty(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNC);
+				world.setBlockState(pos, state.with(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNC);
 			}
 		}
 	}
 
 	private static boolean isMoistened(World world, BlockPos pos) {
-		for (BlockPos.MutableBlockPos waterPos : BlockPos.getAllInBoxMutable(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
-			IBlockState blockState = world.getBlockState(waterPos);
+		for (BlockPos waterPos : BlockPos.getAllInBoxMutable(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
+			BlockState blockState = world.getBlockState(waterPos);
 			Block block = blockState.getBlock();
-			if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+			if (block == Blocks.WATER) {
 				return true;
 			}
 		}
@@ -145,28 +136,30 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 	}
 
 	@Override
-	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
+	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
 		return false;
 	}
 
-	@Override
-	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		return false;
-	}
+	//TODO - loot tables
+	//	@Override
+	//	public boolean canSilkHarvest(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	//		return false;
+	//	}
 
-	public static SoilType getTypeFromState(IBlockState state) {
-		Integer maturity = state.getValue(MATURITY);
+	public static SoilType getTypeFromState(BlockState state) {
+		Integer maturity = state.get(MATURITY);
 		return SoilType.fromMaturity(maturity);
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, 0));
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1));
 	}
 
+	//TODO still needed?
 	/* MODELS */
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0, "soil/bog");
 		manager.registerItemModel(item, 1, "soil/bog");
@@ -174,18 +167,13 @@ public class BlockBogEarth extends Block implements IItemModelRegister, IBlockWi
 		manager.registerItemModel(item, 3, "soil/peat");
 	}
 
-	@Override
-	public String getNameFromMeta(int meta) {
-		SoilType type = SoilType.fromMaturity(meta);
-		return type.getName();
-	}
+	//TODO - loot tables or flatten
+	//	@Override
+	//	public int damageDropped(BlockState state) {
+	//		return 0;
+	//	}
 
-	@Override
-	public int damageDropped(IBlockState state) {
-		return 0;
-	}
-
-	public ItemStack get(SoilType soilType, int amount) {
-		return new ItemStack(this, amount, soilType.ordinal());
+	public ItemStack get(SoilType soilType, int amount) {    //TODO- check
+		return new ItemStack(this.getStateContainer().getBaseState().with(MATURITY, soilType.ordinal()).getBlock(), amount);
 	}
 }

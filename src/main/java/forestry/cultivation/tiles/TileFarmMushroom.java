@@ -1,14 +1,15 @@
 package forestry.cultivation.tiles;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import forestry.cultivation.ModuleCultivation;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmMushroom extends TilePlanter {
 	public TileFarmMushroom() {
-		super(ForestryFarmIdentifier.SHROOM);
+		super(ModuleCultivation.getTiles().MUSHROOM, ForestryFarmIdentifier.SHROOM);
 	}
 
 	@Override
@@ -25,8 +26,8 @@ public class TileFarmMushroom extends TilePlanter {
 	public NonNullList<ItemStack> createResourceStacks() {
 		return createList(
 			new ItemStack(Blocks.MYCELIUM),
-			new ItemStack(Blocks.DIRT, 1, 2),
-			new ItemStack(Blocks.DIRT, 1, 2),
+			new ItemStack(Blocks.PODZOL),
+			new ItemStack(Blocks.PODZOL),
 			new ItemStack(Blocks.MYCELIUM)
 		);
 	}

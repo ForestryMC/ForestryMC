@@ -6,17 +6,24 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.arboriculture.genetics.ITreeFactory;
+import forestry.api.arboriculture.genetics.ITreeMutationFactory;
+import forestry.api.arboriculture.genetics.ITreeRoot;
 
 public class TreeManager {
+
+	public static final IRootDefinition<ITreeRoot> treeRootDefinition = GeneticsAPI.apiInstance.getRoot("rootTrees");
 
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")
 	 *
 	 * @implNote Only null if the "arboriculture" module is not enabled.
 	 */
-	@Nullable
+	//TODO: Move most calls to definition (more save)
 	public static ITreeRoot treeRoot;
 
 	/**
@@ -47,10 +54,4 @@ public class TreeManager {
 	 */
 	@Nullable
 	public static ICharcoalManager charcoalManager;
-
-	/**
-	 * @deprecated Please use {@link ICharcoalManager#registerWall}.
-	 */
-	@Deprecated
-	public static List<ICharcoalPileWall> pileWalls = new ArrayList<>();
 }

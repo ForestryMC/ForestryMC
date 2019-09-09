@@ -12,11 +12,13 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class BottlerRecipe {
@@ -24,13 +26,16 @@ public class BottlerRecipe {
 	public static BottlerRecipe createEmptyingRecipe(ItemStack filled) {
 		ItemStack empty = filled.copy();
 		empty.setCount(1);
-		IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(empty);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(empty);
+
+		if (!fluidHandlerCap.isPresent()) {
 			return null;
 		}
 
-		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, true);
-		if (drained != null && drained.amount > 0) {
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
+
+		FluidStack drained = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
+		if (!drained.isEmpty() && drained.getAmount() > 0) {
 			return new BottlerRecipe(fluidHandler.getContainer(), drained, filled, false);
 		}
 
@@ -42,12 +47,14 @@ public class BottlerRecipe {
 		ItemStack filled = empty.copy();
 		filled.setCount(1);
 
-		IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(filled);
-		if (fluidHandler == null) {
+		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(filled);
+		if (!fluidHandlerCap.isPresent()) {
 			return null;
 		}
 
-		int fillAmount = fluidHandler.fill(new FluidStack(res, Integer.MAX_VALUE), true);
+		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
+
+		int fillAmount = fluidHandler.fill(new FluidStack(res, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
 		if (fillAmount > 0) {
 			return new BottlerRecipe(empty, new FluidStack(res, fillAmount), fluidHandler.getContainer(), true);
 		}

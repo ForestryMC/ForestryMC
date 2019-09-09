@@ -11,17 +11,17 @@
 package forestry.book.proxy;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookManager;
 import forestry.book.BookLoader;
 
 @SuppressWarnings("unused")
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ProxyBookClient extends ProxyBook {
 
 	@Override
@@ -31,10 +31,10 @@ public class ProxyBookClient extends ProxyBook {
 
 	@Override
 	public void preInit() {
-		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		if (resourceManager instanceof IReloadableResourceManager) {
 			IReloadableResourceManager manager = (IReloadableResourceManager) resourceManager;
-			manager.registerReloadListener(BookLoader.INSTANCE);
+			manager.addReloadListener(BookLoader.INSTANCE);
 		}
 	}
 }

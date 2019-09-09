@@ -10,20 +10,20 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 public class SaveEventHandlerCore implements ISaveEventHandler {
 
 	@Override
-	public void onWorldLoad(World world) {
+	public void onWorldLoad(IWorld world) {
 	}
 
 	@Override
-	public void onWorldSave(World world) {
+	public void onWorldSave(IWorld world) {
 	}
 
 	@Override
-	public void onWorldUnload(World world) {
+	public void onWorldUnload(IWorld world) {
 	}
 
 }

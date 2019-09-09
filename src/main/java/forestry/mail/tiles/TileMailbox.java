@@ -10,63 +10,56 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import javax.annotation.Nonnull;
-import java.util.Collection;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.PostManager;
-import forestry.core.config.Constants;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.tiles.TileBase;
 import forestry.mail.EnumDeliveryState;
+import forestry.mail.ModuleMail;
 import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
 import forestry.mail.gui.ContainerMailbox;
-import forestry.mail.gui.GuiMailbox;
-
-import buildcraft.api.statements.ITriggerExternal;
 
 public class TileMailbox extends TileBase {
 
 	public TileMailbox() {
+		super(ModuleMail.getTiles().MAILBOX);
 		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
 	}
 
 	/* GUI */
 	@Override
-	public void openGui(EntityPlayer player, ItemStack heldItem) {
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
 		if (world.isRemote) {
 			return;
 		}
 
+		ItemStack heldItem = player.getHeldItem(player.getActiveHand());
 		// Handle letter sending
 		if (PostManager.postRegistry.isLetter(heldItem)) {
 			IPostalState result = this.tryDispatchLetter(heldItem);
 			if (!result.isOk()) {
-				player.sendMessage(new TextComponentString(result.getDescription()));
+				player.sendMessage(new StringTextComponent(result.getDescription()));
 			} else {
 				heldItem.shrink(1);
 			}
 		} else {
-			super.openGui(player, heldItem);
+			super.openGui(player, pos);
 		}
 	}
 
@@ -77,7 +70,7 @@ public class TileMailbox extends TileBase {
 		}
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
-		return PostRegistry.getOrCreatePOBox(world, address);
+		return PostRegistry.getOrCreatePOBox((ServerWorld) world, address);
 	}
 
 	private IPostalState tryDispatchLetter(ItemStack letterStack) {
@@ -85,6 +78,8 @@ public class TileMailbox extends TileBase {
 		IPostalState result;
 
 		if (letter != null) {
+			//this is only called after !world.isRemote has been checked, so I believe the cast is OK
+			ServerWorld world = (ServerWorld) this.world;
 			result = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, letterStack, true);
 		} else {
 			result = EnumDeliveryState.NOT_MAILABLE;
@@ -93,21 +88,15 @@ public class TileMailbox extends TileBase {
 		return result;
 	}
 
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		// triggers.add(MailTriggers.triggerHasMail);
-	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		// triggers.add(MailTriggers.triggerHasMail);
+	//	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiMailbox(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerMailbox(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerMailbox(windowId, inv, this);
 	}
 }

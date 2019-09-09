@@ -14,58 +14,68 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestryTool;
-import forestry.core.utils.Translator;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
+
+	//TODO could expose this in API, but others can just call same method to get same thing
+	//TODO also. It looks like this isn't thread safe
+	public static ToolType GRAFTER = ToolType.get("grafter");
+
 	public ItemGrafter(int maxDamage) {
-		super(ItemStack.EMPTY);
-		setMaxDamage(maxDamage);
-		setMaxStackSize(1);
-		setCreativeTab(Tabs.tabArboriculture);
-		setHarvestLevel("grafter", 3);
+		super(ItemStack.EMPTY, (new Item.Properties())
+			.maxDamage(maxDamage)
+			.group(ItemGroups.tabArboriculture)
+			.addToolType(GRAFTER, 3));
 		setEfficiencyOnProperMaterial(4.0f);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
-		if (!stack.isItemDamaged()) {
-			tooltip.add(Translator.translateToLocalFormatted("item.for.uses", stack.getMaxDamage() + 1));
+		if (!stack.isDamaged()) {
+			tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).applyTextStyle(TextFormatting.GRAY));
 		}
 	}
 
 	@Override
-	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+	public boolean canHarvestBlock(BlockState state) {
 		Block block = state.getBlock();
-		return block instanceof BlockLeaves ||
+		return block instanceof LeavesBlock ||
 			state.getMaterial() == Material.LEAVES ||
-			super.canHarvestBlock(state, stack);
+			block.isIn(BlockTags.LEAVES) ||
+			super.canHarvestBlock(state);
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 		return true;
 	}
 
 	@Override
-	public float getSaplingModifier(ItemStack stack, World world, EntityPlayer player, BlockPos pos) {
+	public float getSaplingModifier(ItemStack stack, World world, PlayerEntity player, BlockPos pos) {
 		return 100f;
 	}
 }

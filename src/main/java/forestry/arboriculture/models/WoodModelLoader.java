@@ -13,23 +13,18 @@ package forestry.arboriculture.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.block.model.ModelBlockDefinition;
-import net.minecraft.client.renderer.block.model.ModelBlockDefinition.MissingVariantException;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.model.VariantList;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.config.Constants;
-import forestry.core.utils.ModelUtil;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public enum WoodModelLoader implements ICustomModelLoader {
 	INSTANCE;
 
@@ -67,19 +62,21 @@ public enum WoodModelLoader implements ICustomModelLoader {
 		return false;
 	}
 
+	//TODO: Fix after forge fixes model loaders
 	@Override
-	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
-		ModelResourceLocation variant = (ModelResourceLocation) modelLocation;
-		ModelBlockDefinition definition = ModelUtil.getModelBlockDefinition(variant);
-		try {
-			VariantList variants = definition.getVariant(variant.getVariant());
-			return new SimpleModel(variant, variants);
-		} catch (MissingVariantException e) {
-			if (definition.hasMultipartData()) {
-				return new MultipartModel(new ResourceLocation(variant.getNamespace(), variant.getPath()),
-					definition.getMultipartData());
-			}
-			throw e;
-		}
+	public IUnbakedModel loadModel(ResourceLocation modelLocation) throws Exception {
+		//		ModelResourceLocation variant = (ModelResourceLocation) modelLocation;
+		//		BlockModelDefinition definition = ModelUtil.getModelBlockDefinition(variant);
+		//		try {
+		//			VariantList variants = definition.getVariants().get(variant.getVariant());
+		//			return new SimpleModel(variant, variants);
+		//		} catch (Exception e) {
+		//			if (definition.hasMultipartData()) {
+		//				return new MultipartModel(new ResourceLocation(variant.getNamespace(), variant.getPath()),
+		//						definition.getMultipartData());
+		//			}
+		//			throw e;
+		//		}
+		return null;
 	}
 }

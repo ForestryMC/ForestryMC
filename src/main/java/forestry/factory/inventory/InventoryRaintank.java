@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileRaintank;
@@ -32,16 +34,14 @@ public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_RESOURCE) {
-			IFluidHandler fluidHandler = FluidUtil.getFluidHandler(itemStack);
-			if (fluidHandler != null) {
-				return fluidHandler.fill(new FluidStack(FluidRegistry.WATER, Integer.MAX_VALUE), false) > 0;
-			}
+			LazyOptional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(itemStack);
+			return fluidHandler.map(handler -> handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE) > 0).orElse(false);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_PRODUCT;
 	}
 }

@@ -10,17 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 
-public class MaterialBeehive extends Material {
+public class MaterialBeehive {
 
-	public MaterialBeehive(boolean noHarvest) {
-		super(MapColor.STONE);
-		if (noHarvest) {
-			this.setRequiresTool();
-		}
-		setImmovableMobility();
+	//TODO - need AT for several material builder methods
+	public static final Material BEEHIVE_WORLD = (new Material.Builder(MaterialColor.STONE)).build();
+	public static final Material BEEHIVE_ALVEARY = (new Material.Builder(MaterialColor.STONE)).build();
+
+	private MaterialBeehive(boolean noHarvest) {
+		//		super(MaterialColor.STONE);
+		//		if (noHarvest) {
+		//			this.setRequiresTool();
+		//		}
+		//		setImmovableMobility();
 	}
 
 }

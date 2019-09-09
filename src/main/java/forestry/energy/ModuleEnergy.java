@@ -14,18 +14,30 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
 
-import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
-import forestry.core.recipes.RecipeUtil;
 import forestry.energy.blocks.BlockRegistryEnergy;
+import forestry.energy.gui.EnergyContainerTypes;
+import forestry.energy.gui.GuiEngineBiogas;
+import forestry.energy.gui.GuiEngineElectric;
+import forestry.energy.gui.GuiEnginePeat;
+import forestry.energy.gui.GuiGenerator;
 import forestry.energy.proxy.ProxyEnergy;
+import forestry.energy.proxy.ProxyEnergyClient;
+import forestry.energy.tiles.TileRegistryEnergy;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -33,20 +45,59 @@ import forestry.modules.ForestryModuleUids;
 public class ModuleEnergy extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.energy.proxy.ProxyEnergyClient", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
 
 	@Nullable
 	public static BlockRegistryEnergy blocks;
+	@Nullable
+	public static TileRegistryEnergy tiles;
+	@Nullable
+	public static EnergyContainerTypes containerTypes;
+
+	public ModuleEnergy() {
+		//set up proxies as early as possible
+		proxy = DistExecutor.runForDist(() -> () -> new ProxyEnergyClient(), () -> () -> new ProxyEnergy());
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+	}
 
 	public static BlockRegistryEnergy getBlocks() {
 		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
+	public static TileRegistryEnergy getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
+	}
+
+	public static EnergyContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
+	}
+
+
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerBlocks() {
 		blocks = new BlockRegistryEnergy();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryEnergy();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new EnergyContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		EnergyContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.ENGINE_ELECTRIC, GuiEngineElectric::new);
+		ScreenManager.registerFactory(containerTypes.ENGINE_BIOGAS, GuiEngineBiogas::new);
+		ScreenManager.registerFactory(containerTypes.ENGINE_PEAT, GuiEnginePeat::new);
+		ScreenManager.registerFactory(containerTypes.GENERATOR, GuiGenerator::new);
 	}
 
 	@Override
@@ -60,38 +111,16 @@ public class ModuleEnergy extends BlankForestryModule {
 		}
 	}
 
-	@Override
-	public void registerRecipes() {
-		BlockRegistryEnergy blocks = getBlocks();
-
-		RecipeUtil.addRecipe("peat_engine", new ItemStack(blocks.peatEngine),
-			"###",
-			" X ",
-			"YVY",
-			'#', "ingotCopper",
-			'X', "blockGlass",
-			'Y', "gearCopper",
-			'V', Blocks.PISTON);
-
-		RecipeUtil.addRecipe("biogas_engine", new ItemStack(blocks.biogasEngine),
-			"###",
-			" X ",
-			"YVY",
-			'#', "ingotBronze",
-			'X', "blockGlass",
-			'Y', "gearBronze",
-			'V', Blocks.PISTON);
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void onClientSetup(FMLClientSetupEvent event) {
+		blocks.peatEngine.clientInit();
+		blocks.biogasEngine.clientInit();
 
 		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			RecipeUtil.addRecipe("clockwork_engine", new ItemStack(blocks.clockworkEngine),
-				"###",
-				" X ",
-				"ZVY",
-				'#', "plankWood",
-				'X', "blockGlass",
-				'Y', Items.CLOCK,
-				'Z', "gearCopper",
-				'V', Blocks.PISTON);
+			blocks.clockworkEngine.clientInit();
 		}
 	}
+
+
 }

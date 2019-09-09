@@ -1530,8 +1530,8 @@ for.config.structures.disabled.comment=Listez les structures spécifiques à dé
 
 for.config.fluids=Fluides
 for.config.fluids.enable.format=Activez %s fluides.
-for.config.fluid.blocks=Blocs de fluides
-for.config.fluid.blocks.enable.format=Activez %s blocs de fluide en jeu.
+for.config.fluid.block=Blocs de fluides
+for.config.fluid.block.enable.format=Activez %s blocs de fluide en jeu.
 
 for.config.debug.enabled=Mode débogueur
 for.config.debug.enabled.comment=Active le mode de dégogueur (seulement utile aux développeurs).
@@ -1555,7 +1555,7 @@ for.config.butterfly.entities.maximum.comment=Les nouveaux papillons resterons e
 for.config.butterfly.entities.pollination=Pollinisation des papillons
 for.config.butterfly.entities.pollination.comment=Autorise les papillons de polliniser les feuilles.
 
-for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
+for.config.backpacks.item.stacks.format=Add itemtacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'.
 
 for.config.gamemode=Mode de jeu
@@ -1668,12 +1668,12 @@ nei.subsets.Forestry.Bees.Combs=Alvéoles
 nei.subsets.Forestry.Bees.Drones=Faux-bourdons
 nei.subsets.Forestry.Bees.Princesses=Princesses
 nei.subsets.Forestry.Bees.Queens=Reines
-nei.subsets.Forestry.Blocks=Blocs
+nei.subsets.Forestry.block=Blocs
 nei.subsets.Forestry.Butterflies=Papillons
 nei.subsets.Forestry.Butterflies.Butterflies=Papillons
 nei.subsets.Forestry.Butterflies.Caterpillars=Chenilles
 nei.subsets.Forestry.Butterflies.Serums=Sérums
-nei.subsets.Forestry.Items=Éléments
+nei.subsets.Forestry.item=Éléments
 nei.subsets.Forestry.Trees=Arbres
 nei.subsets.Forestry.Trees.Pollen=Pollen
 nei.subsets.Forestry.Trees.Saplings=Pousses

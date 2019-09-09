@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,12 +31,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 	}
 
 	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos) {
-		return growFlower(world, pos);
-	}
-
-	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		return growFlower(world, pos);
 	}
 
@@ -45,12 +40,12 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 			return false;
 		}
 
-		IBlockState state = world.getBlockState(pos);
+		BlockState state = world.getBlockState(pos);
 		Block ground = state.getBlock();
 		int groundMeta;
 		for (Block b : this.allowedItems) {
 			if (b == ground) {
-				groundMeta = ground.getMetaFromState(state);
+				groundMeta = 0;//TODO flatten ground.getMetaFromState(state); Want the maturity property instead?
 				if (groundMeta > 6) {
 					return false;
 				}
@@ -60,7 +55,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 					groundMeta = 7;
 				}
 
-				return world.setBlockState(pos, ground.getStateFromMeta(groundMeta), 2);
+				return world.setBlockState(pos, ground.getDefaultState(), 2); //TODO flatten ground.getStateFromMeta(groundMeta), 2);
 			}
 		}
 

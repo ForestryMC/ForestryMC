@@ -10,27 +10,27 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 import forestry.api.world.ITreeGenData;
 
 public class TreeBlockTypeLog implements ITreeBlockType {
 	private final ITreeGenData tree;
-	private EnumFacing facing = EnumFacing.UP;
+	private Direction facing = Direction.UP;
 
 	public TreeBlockTypeLog(ITreeGenData tree) {
 		this.tree = tree;
 	}
 
 	@Override
-	public void setDirection(EnumFacing facing) {
+	public void setDirection(Direction facing) {
 		this.facing = facing;
 	}
 
 	@Override
-	public boolean setBlock(World world, BlockPos pos) {
+	public boolean setBlock(IWorld world, BlockPos pos) {
 		return tree.setLogBlock(world, pos, facing);
 	}
 }

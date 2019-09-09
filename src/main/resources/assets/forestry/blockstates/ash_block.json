@@ -1,5 +1,7 @@
 {
     "variants": {
-        "normal": { "model": "forestry:ash_block" }
+      "": {
+        "model": "forestry:block/ash_block"
+      }
 	}
 }

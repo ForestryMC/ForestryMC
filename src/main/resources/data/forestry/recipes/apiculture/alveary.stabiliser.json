@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "forestry:alveary.stabiliser",
+    "data": 0
+  },
+  "pattern": [
+    "G G",
+    "GXG",
+    "G G"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "#GEMQUARTZ"
+    },
+    "X": {
+      "item": "forestry:alveary.plain",
+      "data": 0
+    }
+  },
+  "group": "apiculture"
+}

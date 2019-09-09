@@ -3,9 +3,8 @@ package forestry.api.genetics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IFilterRuleType extends IFilterRule {
 	void addLogic(IFilterRule logic);
 
@@ -19,9 +18,9 @@ public interface IFilterRuleType extends IFilterRule {
 	 */
 	String getUID();
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	TextureAtlasSprite getSprite();
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	ResourceLocation getTextureMap();
 }

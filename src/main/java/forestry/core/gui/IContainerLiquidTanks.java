@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidTank;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 public interface IContainerLiquidTanks {
-	@SideOnly(Side.CLIENT)
-	void handlePipetteClickClient(int slot, EntityPlayer player);
+	@OnlyIn(Dist.CLIENT)
+	void handlePipetteClickClient(int slot, PlayerEntity player);
 
-	void handlePipetteClick(int slot, EntityPlayerMP player);
+	void handlePipetteClick(int slot, ServerPlayerEntity player);
 
 	IFluidTank getTank(int slot);
 }

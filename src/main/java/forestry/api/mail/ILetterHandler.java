@@ -6,8 +6,8 @@
 package forestry.api.mail;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public interface ILetterHandler {
-	IPostalState handleLetter(World world, IMailAddress recipient, ItemStack letterStack, boolean doLodge);
+	IPostalState handleLetter(ServerWorld world, IMailAddress recipient, ItemStack letterStack, boolean doLodge);
 }

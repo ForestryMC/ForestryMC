@@ -11,6 +11,7 @@
 package forestry.lepidopterology.entities;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 import net.minecraft.util.math.BlockPos;
 
@@ -23,7 +24,8 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 
 	protected AIButterflyInteract(EntityButterfly entity) {
 		super(entity);
-		setMutexBits(3);
+		setMutexFlags(EnumSet.of(Flag.MOVE));
+		//		setMutexBits(3);	TODO mutex
 	}
 
 	@Override

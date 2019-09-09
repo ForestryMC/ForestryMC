@@ -13,22 +13,26 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.client.config.GuiUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiUtil {
 	public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
 		drawItemStack(gui.getFontRenderer(), stack, xPos, yPos);
@@ -43,20 +47,22 @@ public class GuiUtil {
 			font = fontRenderer;
 		}
 
-		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+		ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
 		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
 		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 	}
 
+	//TODO hopefully this is client side...
 	public static void drawToolTips(IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
-		List<String> lines = toolTips.getLines();
+		//TODO textcomponent
+		List<String> lines = toolTips.getLines().stream().map(ITextComponent::getFormattedText).collect(Collectors.toList());
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
 			if (provider == null || provider.isRelativeToGui()) {
-				GlStateManager.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
+				GlStateManager.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
-			ScaledResolution scaledresolution = new ScaledResolution(gui.getMC());
-			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, gui.getMC().fontRenderer);
+			MainWindow window = Minecraft.getInstance().mainWindow;    //TODO - more resolution stuff to check
+			GuiUtils.drawHoveringText(lines, mouseX, mouseY, window.getScaledWidth(), window.getScaledHeight(), -1, gui.getMC().fontRenderer);
 			GlStateManager.popMatrix();
 		}
 	}

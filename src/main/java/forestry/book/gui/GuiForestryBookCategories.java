@@ -1,11 +1,15 @@
 package forestry.book.gui;
 
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IForesterBook;
@@ -14,7 +18,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.utils.Translator;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiForestryBookCategories extends GuiForesterBook {
 	public static final Drawable LOGO = new Drawable(new ResourceLocation(Constants.MOD_ID, "textures/gui/almanac/logo.png"), 0, 0, 256, 58, 256, 58);
 
@@ -23,15 +27,15 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 		int x = 0;
 		int y = 0;
 		for (IBookCategory category : book.getCategories()) {
 			if (category.getEntries().isEmpty()) {
 				continue;
 			}
-			buttonList.add(new GuiButtonBookCategory(y * 3 + x, guiLeft + LEFT_PAGE_START_X + x * 36, guiTop + 25 + y * 36, category));
+			buttons.add(new GuiButtonBookCategory(guiLeft + LEFT_PAGE_START_X + x * 36, guiTop + 25 + y * 36, category, this::actionPerformed));
 			x++;
 			if (x == 3) {
 				y++;
@@ -47,6 +51,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 
 	@Override
 	protected void drawText() {
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		drawCenteredString(fontRenderer, TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.book.about.title"), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 		String about = Translator.translateToLocal("for.gui.book.about");
 		fontRenderer.drawSplitString(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
@@ -55,15 +60,15 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) {
+	protected void actionPerformed(Button button) {
 		if (button instanceof GuiButtonBookCategory) {
 			GuiButtonBookCategory buttonCategory = (GuiButtonBookCategory) button;
-			mc.displayGuiScreen(new GuiForestryBookEntries(book, buttonCategory.category));
+			Minecraft.getInstance().displayGuiScreen(new GuiForestryBookEntries(book, buttonCategory.category));
 		}
 	}
 
 	@Override
-	protected String getTitle() {
-		return Translator.translateToLocal("for.gui.book.categories");
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent("for.gui.book.categories");
 	}
 }

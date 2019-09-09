@@ -22,7 +22,6 @@ import forestry.core.circuits.Circuit;
 public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 
 	private final IFarmLogic logic;
-	private boolean isManual = false;
 
 	public CircuitFarmLogic(String uid, IFarmProperties instance, boolean manual) {
 		super(uid);
@@ -50,15 +49,6 @@ public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 		return logic;
 	}
 
-	/**
-	 * @deprecated TODO: Remove this method in 1.13
-	 */
-	@Deprecated
-	public CircuitFarmLogic setManual() {
-		isManual = true;
-		return this;
-	}
-
 	@Override
 	public boolean isCircuitable(Object tile) {
 		return tile instanceof IFarmHousing;
@@ -78,8 +68,6 @@ public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 		if (housing == null) {
 			return;
 		}
-
-		logic.setManual(isManual);
 
 		housing.setFarmLogic(FarmDirection.values()[slot], logic);
 	}

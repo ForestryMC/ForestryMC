@@ -12,7 +12,7 @@ package forestry.core.inventory.wrappers;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 /**
  * Wrapper class used to bake the side variable into the object itself instead
@@ -23,13 +23,13 @@ import net.minecraft.util.EnumFacing;
 public class SidedInventoryMapper extends InvWrapperBase implements ISidedInventory {
 
 	private final ISidedInventory inv;
-	private final EnumFacing side;
+	private final Direction side;
 
-	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
+	public SidedInventoryMapper(ISidedInventory inv, Direction side) {
 		this(inv, side, true);
 	}
 
-	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
+	public SidedInventoryMapper(ISidedInventory inv, Direction side, boolean checkItems) {
 		super(inv, checkItems);
 		this.inv = inv;
 		this.side = side;
@@ -47,17 +47,17 @@ public class SidedInventoryMapper extends InvWrapperBase implements ISidedInvent
 	}
 
 	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
+	public int[] getSlotsForFace(Direction side) {
 		return inv.getSlotsForFace(side);
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing s) {
+	public boolean canInsertItem(int slot, ItemStack stack, Direction s) {
 		return !checkItems() || inv.canInsertItem(slot, stack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing s) {
+	public boolean canExtractItem(int slot, ItemStack stack, Direction s) {
 		return !checkItems() || inv.canExtractItem(slot, stack, side);
 	}
 

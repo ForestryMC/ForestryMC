@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/carton"
+      "layer0": "forestry:item/carton"
     }
 }

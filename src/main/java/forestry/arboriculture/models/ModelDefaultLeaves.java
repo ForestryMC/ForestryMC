@@ -15,21 +15,23 @@ import com.google.common.base.Preconditions;
 import java.util.Objects;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.core.IModelBaker;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -37,7 +39,7 @@ import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, ModelDefaultLeaves.Key> {
 	public ModelDefaultLeaves() {
 		super(BlockDefaultLeaves.class);
@@ -75,11 +77,11 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
 		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		return new Key(bBlock.getTreeType(stack.getMetadata()), Proxies.render.fancyGraphicsEnabled());
+		return new Key(bBlock.getTreeDefinition(), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected ModelDefaultLeaves.Key getWorldKey(IBlockState state) {
+	protected ModelDefaultLeaves.Key getWorldKey(BlockState state, IModelData extraData) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "state must be for default leaves.");
 		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
@@ -89,12 +91,12 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 	}
 
 	@Override
-	protected void bakeBlock(BlockDefaultLeaves block, Key key, IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDefaultLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
-		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
-		ITreeGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getPrimary();
+		IGenome genome = treeDefinition.getGenome();
+		IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
@@ -107,11 +109,12 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		baker.setParticleSprite(leafSprite);
 	}
 
-	@Override
-	protected IBakedModel bakeModel(IBlockState state, Key key, BlockDefaultLeaves block) {
-		IModelBaker baker = new ModelBaker();
 
-		bakeBlock(block, key, baker, false);
+	@Override
+	protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block, IModelData extraData) {
+		ModelBaker baker = new ModelBaker();
+
+		bakeBlock(block, extraData, key, baker, false);
 
 		blockModel = baker.bakeModel(false);
 		onCreateModel(blockModel);

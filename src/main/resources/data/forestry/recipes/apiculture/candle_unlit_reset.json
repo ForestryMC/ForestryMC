@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "forestry:candle",
+    "data": 0
+  },
+  "ingredients": [
+    {
+      "item": "forestry:candle",
+      "data": 0
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "forestry:module"
+        },
+        {
+          "module": "factory",
+          "type": "forestry:module"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "apiculture"
+}

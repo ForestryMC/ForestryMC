@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "forestry:ingot_tin",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "#BLOCKTIN"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "core"
+}

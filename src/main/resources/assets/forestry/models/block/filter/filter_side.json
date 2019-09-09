@@ -1,6 +1,6 @@
 {
 	"textures": {
-		"filter": "forestry:blocks/genetic_filter"
+      "filter": "forestry:block/genetic_filter"
 	},
 	"elements": [ 	 
 		{

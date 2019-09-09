@@ -15,7 +15,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,24 +25,26 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IBlockPosPredicate;
 import forestry.api.genetics.IFlowerAcceptableRule;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
-import forestry.api.genetics.IIndividual;
 import forestry.core.utils.BlockStateSet;
 import forestry.core.utils.VectUtil;
 import forestry.core.utils.WeightedCollection;
@@ -80,7 +81,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public void registerAcceptableFlower(IBlockState blockState, String... flowerTypes) {
+	public void registerAcceptableFlower(BlockState blockState, String... flowerTypes) {
 		for (String flowerType : flowerTypes) {
 			if (flowerType == null) {
 				throw new NullPointerException("Tried to register flower with null type. " + blockState);
@@ -102,7 +103,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public void registerPlantableFlower(IBlockState blockState, double weight, String... flowerTypes) {
+	public void registerPlantableFlower(BlockState blockState, double weight, String... flowerTypes) {
 		Preconditions.checkNotNull(blockState);
 		Preconditions.checkArgument(blockState.getBlock() != Blocks.AIR, "Tried to register AIR as a flower. Bad idea.");
 
@@ -121,34 +122,17 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			Set<Flower> flowers = this.plantableFlowers.get(flowerType);
 			flowers.add(newFlower);
 
-			Set<IBlockState> blocks = this.getAcceptedBlockStates(flowerType);
+			Set<BlockState> blocks = this.getAcceptedBlockStates(flowerType);
 			blocks.add(blockState);
 
 			this.chances.remove(flowerType);
 		}
 	}
 
-	private static Vec3i getArea(IBeeGenome genome, IBeeModifier beeModifier) {
-		Vec3i genomeTerritory = genome.getTerritory();
+	private static Vec3i getArea(IGenome genome, IBeeModifier beeModifier) {
+		Vec3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
 		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
 		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
-	}
-
-	@Override
-	public List<BlockPos> getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType, int maxFlowers) {
-		List<BlockPos> flowerCoords = new ArrayList<>();
-
-		World world = beeHousing.getWorldObj();
-		IBlockPosPredicate acceptedFlowerPredicate = createAcceptedFlowerPredicate(flowerType);
-		Iterator<BlockPos.MutableBlockPos> areaIterator = getAreaIterator(beeHousing, bee);
-		while (areaIterator.hasNext() && flowerCoords.size() < maxFlowers) {
-			BlockPos.MutableBlockPos pos = areaIterator.next();
-			if (acceptedFlowerPredicate.test(world, pos)) {
-				flowerCoords.add(pos.toImmutable());
-			}
-		}
-
-		return flowerCoords;
 	}
 
 	@Override
@@ -161,62 +145,26 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		return VectUtil.getAllInBoxFromCenterMutable(world, minPos, beeHousing.getCoordinates(), maxPos);
 	}
 
-	@Override
-	@Deprecated
-	public boolean isAcceptedFlower(String flowerType, World world, BlockPos pos) {
-		if (!world.isBlockLoaded(pos)) {
-			return true; // Avoid actually checking until the flower's position is loaded.
-		}
-		IBlockState blockState = world.getBlockState(pos);
-		Set<IFlowerAcceptableRule> acceptedCustom = this.registeredRules.get(flowerType);
-		for (IFlowerAcceptableRule acceptableFlower : acceptedCustom) {
-			if (acceptableFlower.isAcceptableFlower(blockState, world, pos, flowerType)) {
-				return true;
-			}
-		}
-
-		Set<IBlockState> acceptedBlockStates = this.getAcceptedBlockStates(flowerType);
-		Set<Block> acceptedBlocks = this.acceptableBlocks.get(flowerType);
-
-		return isAcceptedFlower(blockState, acceptedBlocks, acceptedBlockStates);
-	}
-
-	private Set<IBlockState> getAcceptedBlockStates(String flowerType) {
+	private Set<BlockState> getAcceptedBlockStates(String flowerType) {
 		return this.acceptableBlockStates.computeIfAbsent(flowerType, k -> new BlockStateSet());
 	}
 
 	@Override
 	public IBlockPosPredicate createAcceptedFlowerPredicate(String flowerType) {
 		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
-		Set<IBlockState> acceptedBlockStates = this.getAcceptedBlockStates(flowerType);
+		Set<BlockState> acceptedBlockStates = this.getAcceptedBlockStates(flowerType);
 		Set<Block> acceptedBlocks = this.acceptableBlocks.get(flowerType);
 
 		return new AcceptedFlowerPredicate(flowerType, acceptableRules, acceptedBlocks, acceptedBlockStates);
 	}
 
-	private static boolean isAcceptedFlower(IBlockState blockState, Set<Block> acceptedBlocks, Set<IBlockState> acceptedBlockStates) {
+	private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates) {
 		Block block = blockState.getBlock();
 		return acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState);
 	}
 
 	@Override
-	@Deprecated
-	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos) {
-		if (!this.growthRules.containsKey(flowerType)) {
-			return false;
-		}
-
-		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType)) {
-			if (rule.growFlower(this, flowerType, world, pos)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<IBlockState> potentialFlowers) {
+	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		if (!this.growthRules.containsKey(flowerType)) {
 			return false;
 		}
@@ -270,25 +218,19 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos) {
-		Flower flower = getRandomPlantableFlower(flowerType, world.rand);
-		return flower != null && world.setBlockState(pos, flower.getBlockState());
-	}
-
-	@Override
-	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos, Collection<IBlockState> potentialFlowers) {
+	public boolean plantRandomFlower(String flowerType, World world, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		WeightedCollection<Flower> chances = getFlowerChances(flowerType);
-		WeightedCollection<IBlockState> potentialChances = new WeightedCollection<>();
+		WeightedCollection<BlockState> potentialChances = new WeightedCollection<>();
 
 		for (Map.Entry<Double, Flower> entry : chances.entrySet()) {
 			Flower flower = entry.getValue();
-			IBlockState blockState = flower.getBlockState();
+			BlockState blockState = flower.getBlockState();
 			if (potentialFlowers.contains(blockState)) {
 				potentialChances.put(entry.getKey(), blockState);
 			}
 		}
 
-		final IBlockState blockState = potentialChances.getRandom(world.rand);
+		final BlockState blockState = potentialChances.getRandom(world.rand);
 		return blockState != null && world.setBlockState(pos, blockState);
 	}
 
@@ -296,9 +238,9 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		private final String flowerType;
 		private final Set<IFlowerAcceptableRule> acceptableRules;
 		private final Set<Block> acceptedBlocks;
-		private final Set<IBlockState> acceptedBlockStates;
+		private final Set<BlockState> acceptedBlockStates;
 
-		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<IBlockState> acceptedBlockStates) {
+		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates) {
 			this.flowerType = flowerType;
 			this.acceptableRules = acceptableRules;
 			this.acceptedBlocks = acceptedBlocks;
@@ -308,8 +250,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		@Override
 		public boolean test(World world, BlockPos blockPos) {
 			if (world.isBlockLoaded(blockPos)) {
-				IBlockState blockState = world.getBlockState(blockPos);
-				blockState = blockState.getBlock().getActualState(blockState, world, blockPos);
+				BlockState blockState = world.getBlockState(blockPos);
+				blockState = blockState;//TODO getActualState .getBlock().getActualState(blockState, world, blockPos);
 				if (!blockState.getBlock().isAir(blockState, world, blockPos)) {
 					for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
 						if (acceptableRule.isAcceptableFlower(blockState, world, blockPos, flowerType)) {

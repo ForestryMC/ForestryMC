@@ -1,24 +1,25 @@
 package forestry.cultivation.tiles;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 
+import forestry.cultivation.ModuleCultivation;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileArboretum extends TilePlanter {
 	public TileArboretum() {
-		super(ForestryFarmIdentifier.ARBOREAL);
+		super(ModuleCultivation.getTiles().ARBORETUM, ForestryFarmIdentifier.ARBOREAL);
 	}
 
 	@Override
 	public NonNullList<ItemStack> createGermlingStacks() {
 		return createList(
-			new ItemStack(Blocks.SAPLING),
-			new ItemStack(Blocks.SAPLING, 1, 2),
-			new ItemStack(Blocks.SAPLING, 1, 2),
-			new ItemStack(Blocks.SAPLING)
+			new ItemStack(Blocks.OAK_SAPLING),
+			new ItemStack(Blocks.BIRCH_SAPLING),
+			new ItemStack(Blocks.BIRCH_SAPLING),
+			new ItemStack(Blocks.OAK_SAPLING)
 		);
 	}
 
@@ -35,10 +36,10 @@ public class TileArboretum extends TilePlanter {
 	@Override
 	public NonNullList<ItemStack> createProductionStacks() {
 		return createList(
-			new ItemStack(Blocks.LOG),
+			new ItemStack(Blocks.OAK_LOG),
 			new ItemStack(Items.APPLE),
 			new ItemStack(Items.APPLE),
-			new ItemStack(Blocks.LOG)
+			new ItemStack(Blocks.OAK_LOG)
 		);
 	}
 }

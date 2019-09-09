@@ -10,27 +10,56 @@
  ******************************************************************************/
 package forestry.mail.items;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkHooks;
 
+import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
 import forestry.mail.gui.ContainerCatalogue;
-import forestry.mail.gui.GuiCatalogue;
 
 public class ItemCatalogue extends ItemWithGui {
-	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiCatalogue(player);
+
+	public ItemCatalogue() {
+		super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override
-	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerCatalogue(player);
+	protected void openGui(ServerPlayerEntity player, ItemStack stack) {
+		NetworkHooks.openGui(player, new ContainerProvider());
+	}
+
+	//TODO see if this can be deduped. Given we pass in the held item etc.
+	public static class ContainerProvider implements INamedContainerProvider {
+
+		public ContainerProvider() {
+		}
+
+		@Override
+		public ITextComponent getDisplayName() {
+			return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
+		}
+
+		@Nullable
+		@Override
+		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+			return new ContainerCatalogue(windowId, playerInventory);
+		}
+	}
+
+	@Nullable
+	@Override
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerCatalogue(windowId, player.inventory);
 	}
 }

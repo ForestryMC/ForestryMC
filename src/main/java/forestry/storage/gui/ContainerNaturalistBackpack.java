@@ -10,24 +10,37 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 
+import forestry.core.config.Constants;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.IGuiSelectable;
+import forestry.storage.ModuleBackpacks;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
+import forestry.storage.items.ItemBackpackNaturalist;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged> implements IGuiSelectable {
 
-	public ContainerNaturalistBackpack(EntityPlayer player, ItemInventoryBackpackPaged inventory, int selectedPage) {
-		super(inventory, player.inventory, 18, 120);
+	public ContainerNaturalistBackpack(int windowId, PlayerInventory inv, ItemInventoryBackpackPaged inventory, int selectedPage) {
+		super(windowId, inventory, inv, 18, 120, ModuleBackpacks.getContainerTypes().NATURALIST_BACKPACK);
 
 		ContainerNaturalistInventory.addInventory(this, inventory, selectedPage);
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 		inventory.flipPage(player, (short) primary);
+	}
+
+	public static ContainerNaturalistBackpack fromNetwork(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+		ItemStack parent = extraData.readItemStack();
+		ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) extraData.readItemStack().getItem();    //TODO this is b it ugly
+		ItemInventoryBackpackPaged paged = new ItemInventoryBackpackPaged(playerInventory.player, Constants.SLOTS_BACKPACK_APIARIST, parent, backpack);
+		int page = extraData.readVarInt();
+		return new ContainerNaturalistBackpack(windowId, playerInventory, paged, page);
 	}
 }

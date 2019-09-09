@@ -7,11 +7,15 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.DatabaseMode;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.EnumHoneyComb;
@@ -20,7 +24,7 @@ import forestry.core.genetics.analyzer.DatabasePlugin;
 import forestry.core.genetics.analyzer.MutationsTab;
 import forestry.core.genetics.analyzer.ProductsTab;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BeePlugin extends DatabasePlugin<IBee> {
 	public static final BeePlugin INSTANCE = new BeePlugin();
 
@@ -29,13 +33,17 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 	private BeePlugin() {
 		super(new BeeDatabaseTab(DatabaseMode.ACTIVE),
 			new BeeDatabaseTab(DatabaseMode.INACTIVE),
-			new ProductsTab(() -> ModuleApiculture.getItems().beeComb.get(EnumHoneyComb.HONEY, 1)),
+			new ProductsTab(() -> ModuleApiculture.getItems().getComb(EnumHoneyComb.HONEY, 1)),
 			new MutationsTab(() -> ModuleApiculture.getItems().frameImpregnated.getItemStack()));
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
-			iconStacks.put(species.getUID(), beeStack);
+			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
+			if (organism.isEmpty()) {
+				continue;
+			}
+			IAlleleBeeSpecies species = organism.getAllele(BeeChromosomes.SPECIES, true);
+			iconStacks.put(species.getRegistryName().toString(), beeStack);
 		}
 	}
 

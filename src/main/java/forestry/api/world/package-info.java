@@ -3,7 +3,8 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-@API(apiVersion = "2.1.0", owner = "ForestryAPI|core", provides = "ForestryAPI|world")
+//@API(apiVersion = "2.1.0", owner = "ForestryAPI|core", provides = "ForestryAPI|world")
 package forestry.api.world;
 
-import net.minecraftforge.fml.common.API;
+//import net.minecraftforge.fml.common.API;
+//TODO API

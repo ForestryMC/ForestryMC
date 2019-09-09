@@ -5,11 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-import forestry.api.genetics.IAllele;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IFilterRuleType;
@@ -31,48 +32,48 @@ public final class FakeFilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public Collection<EnumFacing> getValidDirections(ItemStack itemStack, EnumFacing from) {
+	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
 		return Collections.emptySet();
 	}
 
 	@Override
-	public boolean isValid(ItemStack itemStack, EnumFacing facing) {
+	public boolean isValid(ItemStack itemStack, Direction facing) {
 		return false;
 	}
 
 	@Override
-	public boolean isValid(EnumFacing facing, ItemStack itemStack, IFilterData filterData) {
+	public boolean isValid(Direction facing, ItemStack itemStack, IFilterData filterData) {
 		return false;
 	}
 
 	@Override
-	public boolean isValidAllelePair(EnumFacing orientation, String activeUID, String inactiveUID) {
+	public boolean isValidAllelePair(Direction orientation, String activeUID, String inactiveUID) {
 		return false;
 	}
 
 	@Override
-	public IFilterRuleType getRule(EnumFacing facing) {
+	public IFilterRuleType getRule(Direction facing) {
 		return DefaultFilterRuleType.CLOSED;
 	}
 
 	@Override
-	public boolean setRule(EnumFacing facing, IFilterRuleType rule) {
+	public boolean setRule(Direction facing, IFilterRuleType rule) {
 		return false;
 	}
 
 	@Nullable
 	@Override
-	public IAllele getGenomeFilter(EnumFacing facing, int index, boolean active) {
+	public IAllele getGenomeFilter(Direction facing, int index, boolean active) {
 		return null;
 	}
 
 	@Override
-	public boolean setGenomeFilter(EnumFacing facing, int index, boolean active, @Nullable IAllele allele) {
+	public boolean setGenomeFilter(Direction facing, int index, boolean active, @Nullable IAllele allele) {
 		return false;
 	}
 
 	@Override
-	public void sendToServer(EnumFacing facing, int index, boolean active, @Nullable IAllele allele) {
+	public void sendToServer(Direction facing, int index, boolean active, @Nullable IAllele allele) {
 
 	}
 
@@ -83,17 +84,17 @@ public final class FakeFilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void sendToServer(EnumFacing facing, IFilterRuleType rule) {
+	public void sendToServer(Direction facing, IFilterRuleType rule) {
 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void read(CompoundNBT nbt) {
 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public CompoundNBT write(CompoundNBT nbt) {
 		return nbt;
 	}
 }

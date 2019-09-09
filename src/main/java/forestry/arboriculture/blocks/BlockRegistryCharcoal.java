@@ -1,66 +1,57 @@
 package forestry.arboriculture.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
+import forestry.api.core.ItemGroups;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.OreDictUtil;
 
 public class BlockRegistryCharcoal extends BlockRegistry {
 	public final BlockCharcoal charcoal;
 	public final BlockWoodPile woodPile;
 	public final BlockDecorativeWoodPile woodPileDecorative;
-	public final BlockAsh[] ash = new BlockAsh[4];
+	public final BlockAsh ash;
 	public final Block loam;
 
 	public BlockRegistryCharcoal() {
 		charcoal = new BlockCharcoal();
-		ItemBlockForestry itemBlockCharcoal = new ItemBlockForestry<BlockCharcoal>(charcoal) {
+		ItemBlockForestry itemBlockCharcoal = new ItemBlockForestry<BlockCharcoal>(charcoal, new Item.Properties().group(ItemGroups.tabArboriculture)) {
 			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
+			public int getBurnTime(ItemStack itemStack) {
 				return 16000;
 			}
 		};
 		registerBlock(charcoal, itemBlockCharcoal, "charcoal");
-		OreDictionary.registerOre(OreDictUtil.BLOCK_CHARCOAL, itemBlockCharcoal);
 
 		woodPile = new BlockWoodPile();
-		ItemBlockForestry itemBlockWoodPile = new ItemBlockForestry<BlockWoodPile>(woodPile) {
+		ItemBlockForestry itemBlockWoodPile = new ItemBlockForestry<BlockWoodPile>(woodPile, new Item.Properties().group(ItemGroups.tabArboriculture)) {
 			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
+			public int getBurnTime(ItemStack itemStack) {
 				return 1200;
 			}
 		};
 		registerBlock(woodPile, itemBlockWoodPile, "wood_pile");
 
 		woodPileDecorative = new BlockDecorativeWoodPile();
-		ItemBlockForestry itemBlockWoodPileDecorative = new ItemBlockForestry<BlockDecorativeWoodPile>(woodPileDecorative) {
+		ItemBlockForestry itemBlockWoodPileDecorative = new ItemBlockForestry<BlockDecorativeWoodPile>(woodPileDecorative, new Item.Properties().group(ItemGroups.tabArboriculture)) {
 			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
+			public int getBurnTime(ItemStack itemStack) {
 				return 1200;
 			}
 		};
 		registerBlock(woodPileDecorative, itemBlockWoodPileDecorative, "wood_pile_decorative");
 
-		for (int i = 0; i < 4; i++) {
-			BlockAsh ashBlock = new BlockAsh(i * 16);
-			ash[i] = ashBlock;
-			registerBlock(ashBlock, new ItemBlockForestry<>(ashBlock), "ash_block_" + i);
-		}
+		ash = new BlockAsh();
+		registerBlock(ash, "ash_block");
 
 		loam = new BlockLoam();
-		registerBlock(loam, new ItemBlockForestry<>(loam), "loam");
+		registerBlock(loam, new ItemBlockForestry<>(loam, new Item.Properties().group(ItemGroups.tabArboriculture)), "loam");
 	}
 
-	public IBlockState getAshState(int amount) {
-		if (amount > 63) {
-			amount = 63;
-		}
-		int i = amount / 16;
-		return ash[i].getDefaultState().withProperty(BlockAsh.AMOUNT, amount % 16);
+	public BlockState getAshState(int amount) {
+		return ash.getDefaultState().with(BlockAsh.AMOUNT, Math.min(amount, 63));
 	}
 }

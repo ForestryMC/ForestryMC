@@ -15,7 +15,7 @@ package forestry.mail.triggers;
 // import forestry.core.triggers.Trigger;
 // import forestry.mail.tiles.TileMailbox;
 // import net.minecraft.tileentity.TileEntity;
-// import net.minecraft.util.EnumFacing;
+// import net.minecraft.util.Direction;
 //
 // public class TriggerHasMail extends Trigger {
 //
@@ -24,7 +24,7 @@ package forestry.mail.triggers;
 // 	}
 //
 // 	@Override
-// 	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
+// 	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
 // 		if (!(tile instanceof TileMailbox)) {
 // 			return false;
 // 		}

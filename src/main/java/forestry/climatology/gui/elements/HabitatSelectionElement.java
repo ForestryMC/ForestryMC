@@ -16,15 +16,17 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
@@ -38,7 +40,7 @@ import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.StringUtil;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class HabitatSelectionElement extends ElementGroup {
 	private static final Comparator<ClimateButton> BUTTON_COMPARATOR = Comparator.comparingDouble(ClimateButton::getComparingCode);
 	private final List<ClimateButton> buttons = new ArrayList<>();
@@ -64,20 +66,20 @@ public class HabitatSelectionElement extends ElementGroup {
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		super.drawElement(mouseX, mouseY);
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		Optional<ClimateButton> optional = buttons.stream().min(BUTTON_COMPARATOR);
 		if (!optional.isPresent()) {
 			return;
 		}
 		ClimateButton button = optional.get();
-		drawTexturedModalRect(button.getX() - 1, button.getY() - 1, 0, 233, 22, 22);
+		blit(button.getX() - 1, button.getY() - 1, 0, 233, 22, 22);
 	}
 
 	private enum EnumClimate {
-		ICY("habitats/snow", Biomes.ICE_PLAINS),
+		ICY("habitats/snow", Biomes.SNOWY_TUNDRA),
 		COLD("habitats/taiga", Biomes.TAIGA),
-		HILLS("habitats/hills", Biomes.SWAMPLAND),
+		HILLS("habitats/hills", Biomes.SWAMP),
 		NORMAL("habitats/plains", Biomes.PLAINS),
 		WARM("habitats/jungle", Biomes.JUNGLE),
 		HOT("habitats/desert", Biomes.DESERT);
@@ -85,11 +87,11 @@ public class HabitatSelectionElement extends ElementGroup {
 		private String spriteName;
 
 		EnumClimate(String spriteName, Biome biome) {
-			climateState = ClimateStateHelper.of(biome.getDefaultTemperature(), biome.getRainfall());
+			climateState = ClimateStateHelper.of(biome.getDefaultTemperature(), biome.getDownfall());
 			this.spriteName = spriteName;
 		}
 
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		public TextureAtlasSprite getSprite() {
 			return ForestryAPI.textureManager.getDefault(spriteName);
 		}
@@ -108,19 +110,19 @@ public class HabitatSelectionElement extends ElementGroup {
 				former.sendClimateUpdate();
 			});
 			addTooltip((tooltip, element, mouseX, mouseY) -> {
-				tooltip.add("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature()));
-				tooltip.add("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity()));
+				tooltip.add(new StringTextComponent("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
+				tooltip.add(new StringTextComponent("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
 			});
 		}
 
 		@Override
 		public void drawElement(int mouseX, int mouseY) {
-			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-			TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 			textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
-			drawTexturedModalRect(0, 0, 204, 46, 20, 20);
+			blit(0, 0, 204, 46, 20, 20);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			drawTexturedModalRect(2, 2, climate.getSprite(), 16, 16);
+			//			blit(2, 2, climate.getSprite(), 16, 16);	//TODO texture sprite blit
 		}
 
 		private double getComparingCode() {

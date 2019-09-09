@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraft.nbt.CompoundNBT;
 
 public interface INbtWritable {
-	NBTTagCompound writeToNBT(NBTTagCompound nbt);
+	CompoundNBT write(CompoundNBT nbt);
 }

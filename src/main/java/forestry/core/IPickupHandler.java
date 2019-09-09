@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 
 public interface IPickupHandler {
 
 	/**
 	 * Returns true if the item was picked up completely
 	 */
-	boolean onItemPickup(EntityPlayer entityPlayer, EntityItem item);
+	boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity item);
 
 }

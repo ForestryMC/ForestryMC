@@ -17,15 +17,12 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.MigrationHelper;
 import forestry.storage.items.ItemCrated;
 
 public class CrateRegistry implements ICrateRegistry {
@@ -50,10 +47,8 @@ public class CrateRegistry implements ICrateRegistry {
 		}
 
 		ItemCrated crate = new ItemCrated(stack, oreDictName);
-		crate.setTranslationKey(crateName);
 		crate.setRegistryName(crateName);
 
-		MigrationHelper.addItemName(crateName);
 
 		ForgeRegistries.ITEMS.register(crate);
 		Proxies.common.registerItem(crate);
@@ -65,14 +60,14 @@ public class CrateRegistry implements ICrateRegistry {
 		if (ModuleCrates.cratesRejectedOreDict.contains(oreDictName)) {
 			return;
 		}
-		if (OreDictionary.doesOreNameExist(oreDictName)) {
-			for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
-				if (stack != null) {
-					registerCrate(stack, oreDictName);
-					break;
-				}
-			}
-		}
+		//		if (OreDictionary.doesOreNameExist(oreDictName)) {
+		//			for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
+		//				if (stack != null) {
+		//					registerCrate(stack, oreDictName);
+		//					break;
+		//				}
+		//			}
+		//		}	//TODO tags
 	}
 
 	@Override

@@ -11,13 +11,13 @@
 package forestry.core.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.network.ForestryPacket;
@@ -48,19 +48,18 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
 		data.writeBoolean(active);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
 			boolean active = data.readBoolean();
 
-			WorldClient world = Minecraft.getMinecraft().world;
+			ClientWorld world = Minecraft.getInstance().world;
 			TileEntity tile = TileUtil.getTile(world, pos);
 			if (tile instanceof IActivatable) {
 				((IActivatable) tile).setActive(active);
-			}
-			if (tile instanceof IMultiblockComponent) {
+			} else if (tile instanceof IMultiblockComponent) {
 				IMultiblockComponent component = (IMultiblockComponent) tile;
 				if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
 					((IActivatable) component.getMultiblockLogic().getController()).setActive(active);

@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveDescription;
+import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry;
 
 public class HiveRegistry implements IHiveRegistry {

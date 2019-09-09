@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.CrashReportExtender;
 import net.minecraftforge.fml.common.ICrashCallable;
 
 import forestry.api.modules.ForestryModule;
@@ -41,7 +41,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 
 			String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(disabledModuleNames);
 			ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
-			FMLCommonHandler.instance().registerCrashCallable(callable);
+			CrashReportExtender.registerCrashCallable(callable);
 		}
 	}
 

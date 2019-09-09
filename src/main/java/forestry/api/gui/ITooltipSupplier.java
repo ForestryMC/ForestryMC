@@ -7,6 +7,8 @@ package forestry.api.gui;
 
 import java.util.Collection;
 
+import net.minecraft.util.text.ITextComponent;
+
 @FunctionalInterface
 public interface ITooltipSupplier {
 
@@ -14,5 +16,5 @@ public interface ITooltipSupplier {
 		return true;
 	}
 
-	void addTooltip(Collection<String> tooltip, IGuiElement element, int mouseX, int mouseY);
+	void addTooltip(Collection<ITextComponent> tooltip, IGuiElement element, int mouseX, int mouseY);
 }

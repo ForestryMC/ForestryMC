@@ -13,23 +13,24 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -45,7 +46,6 @@ import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlveary;
-import forestry.apiculture.gui.GuiAlveary;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
 import forestry.core.network.IStreamableGui;
@@ -54,71 +54,69 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
+import forestry.core.utils.RenderUtil;
 
-public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
+public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
 
-	protected TileAlveary() {
+	public TileAlveary() {
 		this(BlockAlvearyType.PLAIN);
 	}
 
-	protected TileAlveary(BlockAlvearyType type) {
+	public TileAlveary(BlockAlvearyType type) {
 		super(new MultiblockLogicAlveary());
-		this.unlocalizedTitle = "tile.for.alveary." + type + ".name";
+		this.unlocalizedTitle = "block.forestry.alveary." + type;
 	}
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		// Re-render this block on the client
 		if (world.isRemote) {
-			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			RenderUtil.markForUpdate(getPos());
 		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
+		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
 	}
 
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
+	//TODO refreshing
+	//	@Override
+	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+	//		return oldState.getBlock() != newState.getBlock();
+	//	}
 
 	@Override
 	public void onMachineBroken() {
 		// Re-render this block on the client
 		if (world.isRemote) {
-			this.world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			//TODO
+			BlockPos pos = getPos();
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+			//			this.world.markForRerender(getPos());
 		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockType(), false);
+		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
 		markDirty();
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-			capability == ClimateCapabilities.CLIMATE_LISTENER ||
-			super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if (super.hasCapability(capability, facing)) {
-			return super.getCapability(capability, facing);
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> superCap = super.getCapability(capability, facing);
+		if (superCap.isPresent()) {
+			return superCap;
 		}
 
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing != null) {
 				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+				return LazyOptional.of(() -> sidedInvWrapper).cast();    //TODO - still not sure if I am doing this right
 			} else {
 				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
+				return LazyOptional.of(() -> invWrapper).cast();
 			}
 		}
 		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
 			IClimateListener listener = getMultiblockLogic().getController().getClimateListener();
-			return ClimateCapabilities.CLIMATE_LISTENER.cast(listener);
+			return LazyOptional.of(() -> listener).cast();
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 
 	/* IHousing */
@@ -217,19 +215,18 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiAlveary(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAlveary(windowId, player.inventory, this);
 	}
 
 	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerAlveary(player.inventory, this);
+	public ITextComponent getDisplayName() {
+		return new TranslationTextComponent(this.getUnlocalizedTitle());
 	}
 }

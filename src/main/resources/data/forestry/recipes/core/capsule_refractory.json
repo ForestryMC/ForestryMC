@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "forestry:refractory",
+    "count": 4
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.refractory",
+  "key": {
+    "#": {
+      "item": "forestry:refractory_wax"
+    }
+  },
+  "group": "apiculture"
+}

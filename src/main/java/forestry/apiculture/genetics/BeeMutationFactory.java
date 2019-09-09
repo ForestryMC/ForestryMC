@@ -10,18 +10,24 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBeeMutationBuilder;
-import forestry.api.apiculture.IBeeMutationFactory;
-import forestry.api.genetics.IAllele;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeMutationBuilder;
+import forestry.api.apiculture.genetics.IBeeMutationFactory;
 
 public class BeeMutationFactory implements IBeeMutationFactory {
 
 	@Override
 	public IBeeMutationBuilder createMutation(IAlleleBeeSpecies parentBee0, IAlleleBeeSpecies parentBee1, IAllele[] result, int chance) {
 		BeeMutation beeMutation = new BeeMutation(parentBee0, parentBee1, result, chance);
-		BeeManager.beeRoot.registerMutation(beeMutation);
+		IMutationContainer<IBee, IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
+		container.registerMutation(beeMutation);
 		return beeMutation;
 	}
 }

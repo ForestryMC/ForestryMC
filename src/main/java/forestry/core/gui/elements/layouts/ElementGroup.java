@@ -6,8 +6,8 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
@@ -25,7 +25,7 @@ import forestry.core.gui.elements.ItemElement;
 import forestry.core.gui.elements.LabelElement;
 import forestry.core.gui.elements.SplitTextElement;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ElementGroup extends GuiElement implements IElementGroup {
 	protected final List<IGuiElement> elements = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateClient() {
 		if (!isVisible()) {
 			return;

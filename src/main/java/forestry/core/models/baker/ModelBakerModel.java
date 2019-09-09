@@ -18,30 +18,28 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelBakerModel;
-
-@SideOnly(Side.CLIENT)
-public class ModelBakerModel implements IModelBakerModel {
+@OnlyIn(Dist.CLIENT)
+public class ModelBakerModel implements IBakedModel {
 
 	private boolean isGui3d;
 	private boolean isAmbientOcclusion;
@@ -51,10 +49,10 @@ public class ModelBakerModel implements IModelBakerModel {
 	@Nullable
 	private ImmutableMap<TransformType, TRSRTransformation> transforms;
 
-	private final Map<EnumFacing, List<BakedQuad>> faceQuads;
+	private final Map<Direction, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
-	private final List<Pair<IBlockState, IBakedModel>> models;
-	private final List<Pair<IBlockState, IBakedModel>> modelsPost;
+	private final List<Pair<BlockState, IBakedModel>> models;
+	private final List<Pair<BlockState, IBakedModel>> modelsPost;
 
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
@@ -63,19 +61,19 @@ public class ModelBakerModel implements IModelBakerModel {
 	public ModelBakerModel(IModelState modelState) {
 		models = new ArrayList<>();
 		modelsPost = new ArrayList<>();
-		faceQuads = new EnumMap<>(EnumFacing.class);
+		faceQuads = new EnumMap<>(Direction.class);
 		generalQuads = new ArrayList<>();
-		particleSprite = Minecraft.getMinecraft().getTextureMapBlocks().missingImage;
+		particleSprite = Minecraft.getInstance().getTextureMap().missingImage;
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);
 
-		for (EnumFacing face : EnumFacing.VALUES) {
+		for (Direction face : Direction.VALUES) {
 			faceQuads.put(face, new ArrayList<>());
 		}
 	}
 
-	private ModelBakerModel(List<Pair<IBlockState, IBakedModel>> models, List<Pair<IBlockState, IBakedModel>> modelsPost, Map<EnumFacing, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
+	private ModelBakerModel(List<Pair<BlockState, IBakedModel>> models, List<Pair<BlockState, IBakedModel>> modelsPost, Map<Direction, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
 		this.models = models;
 		this.modelsPost = modelsPost;
 		this.faceQuads = faceQuads;
@@ -90,16 +88,10 @@ public class ModelBakerModel implements IModelBakerModel {
 	}
 
 	@Override
-	public void setGui3d(boolean gui3d) {
-		this.isGui3d = gui3d;
-	}
-
-	@Override
 	public boolean isGui3d() {
 		return isGui3d;
 	}
 
-	@Override
 	public void setAmbientOcclusion(boolean ambientOcclusion) {
 		this.isAmbientOcclusion = ambientOcclusion;
 	}
@@ -109,7 +101,6 @@ public class ModelBakerModel implements IModelBakerModel {
 		return isAmbientOcclusion;
 	}
 
-	@Override
 	public void setParticleSprite(TextureAtlasSprite particleSprite) {
 		this.particleSprite = particleSprite;
 	}
@@ -131,7 +122,7 @@ public class ModelBakerModel implements IModelBakerModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return ItemOverrideList.NONE;
+		return ItemOverrideList.EMPTY;
 	}
 
 	private static float[] getDefaultRotation() {
@@ -146,32 +137,26 @@ public class ModelBakerModel implements IModelBakerModel {
 		return new float[]{0.375F, 0.375F, 0.375F};
 	}
 
-	@Override
 	public void setRotation(float[] rotation) {
 		this.rotation = rotation;
 	}
 
-	@Override
 	public void setTranslation(float[] translation) {
 		this.translation = translation;
 	}
 
-	@Override
 	public void setScale(float[] scale) {
 		this.scale = scale;
 	}
 
-	@Override
 	public float[] getRotation() {
 		return rotation;
 	}
 
-	@Override
 	public float[] getTranslation() {
 		return translation;
 	}
 
-	@Override
 	public float[] getScale() {
 		return scale;
 	}
@@ -181,16 +166,7 @@ public class ModelBakerModel implements IModelBakerModel {
 		this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
 	}
 
-	public void addModelQuads(Pair<IBlockState, IBakedModel> model) {
-		this.models.add(model);
-	}
-
-	public void addModelQuadsPost(Pair<IBlockState, IBakedModel> model) {
-		this.modelsPost.add(model);
-	}
-
-	@Override
-	public void addQuad(@Nullable EnumFacing facing, BakedQuad quad) {
+	public void addQuad(@Nullable Direction facing, BakedQuad quad) {
 		if (facing != null) {
 			faceQuads.get(facing).add(quad);
 		} else {
@@ -199,9 +175,9 @@ public class ModelBakerModel implements IModelBakerModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		List<BakedQuad> quads = new ArrayList<>();
-		for (Pair<IBlockState, IBakedModel> model : this.models) {
+		for (Pair<BlockState, IBakedModel> model : this.models) {
 			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
 			if (!modelQuads.isEmpty()) {
 				quads.addAll(modelQuads);
@@ -211,7 +187,7 @@ public class ModelBakerModel implements IModelBakerModel {
 			quads.addAll(faceQuads.get(side));
 		}
 		quads.addAll(generalQuads);
-		for (Pair<IBlockState, IBakedModel> model : this.modelsPost) {
+		for (Pair<BlockState, IBakedModel> model : this.modelsPost) {
 			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
 			if (!modelQuads.isEmpty()) {
 				quads.addAll(modelQuads);

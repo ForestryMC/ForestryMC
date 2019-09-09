@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -97,20 +95,20 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 
 	/* Save and Load */
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt.setTag(CURRENT_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new NBTTagCompound(), currentState));
-		nbt.setTag(TARGETED_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new NBTTagCompound(), targetedState));
-		nbt.setBoolean(CIRCULAR_KEY, circular);
-		nbt.setInteger(RANGE_KEY, range);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt.put(CURRENT_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundNBT(), currentState));
+		nbt.put(TARGETED_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundNBT(), targetedState));
+		nbt.putBoolean(CIRCULAR_KEY, circular);
+		nbt.putInt(RANGE_KEY, range);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		currentState = ClimateManager.stateHelper.create(nbt.getCompoundTag(CURRENT_STATE_KEY));
-		targetedState = ClimateManager.stateHelper.create(nbt.getCompoundTag(TARGETED_STATE_KEY));
+	public void read(CompoundNBT nbt) {
+		currentState = ClimateManager.stateHelper.create(nbt.getCompound(CURRENT_STATE_KEY));
+		targetedState = ClimateManager.stateHelper.create(nbt.getCompound(TARGETED_STATE_KEY));
 		circular = nbt.getBoolean(CIRCULAR_KEY);
-		range = nbt.getInteger(RANGE_KEY);
+		range = nbt.getInt(RANGE_KEY);
 		onAreaChange(range, circular);
 	}
 
@@ -136,7 +134,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		currentState = data.readClimateState();
 		targetedState = data.readClimateState();
 		defaultState = data.readClimateState();

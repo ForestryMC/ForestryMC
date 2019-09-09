@@ -7,20 +7,22 @@ package forestry.api.circuits;
 
 import java.util.List;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.ITextComponent;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.INbtWritable;
 
 public interface ICircuitBoard extends INbtWritable {
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	int getPrimaryColor();
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	int getSecondaryColor();
 
-	@SideOnly(Side.CLIENT)
-	void addTooltip(List<String> list);
+	@OnlyIn(Dist.CLIENT)
+	void addTooltip(List<ITextComponent> list);
 
 	void onInsertion(Object tile);
 

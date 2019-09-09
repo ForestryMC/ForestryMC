@@ -13,6 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -20,7 +21,8 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
 
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 
@@ -33,7 +35,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
@@ -45,7 +47,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		int blockMinY = housingCoordinates.getY() - area.getY() / 2 - 1;
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			if (world.getChunkProvider().getLoadedChunk(blockX >> 4, blockZ >> 4) != null) {
+			if (world.getChunkProvider().getChunk(blockX >> 4, blockZ >> 4, false) != null) {
 				if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
 					break;
 				}
@@ -63,9 +65,10 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 
 	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
 		for (int y = maxY; y >= minY; --y) {
-			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-			if (block.getTickRandomly() && (block instanceof IGrowable || block instanceof IPlantable)) {
-				world.scheduleUpdate(new BlockPos(x, y, z), block, 5);
+			BlockState state = world.getBlockState(new BlockPos(x, y, z));
+			Block block = state.getBlock();
+			if (block.ticksRandomly(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
+				world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
 				return true;
 			}
 		}

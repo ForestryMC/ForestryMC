@@ -14,79 +14,64 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.render.SaplingStateMapper;
 import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.models.IStateMapperRegister;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister, IItemModelRegister {
-	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
+	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
 
 	public BlockSapling() {
-		super(Material.PLANTS);
-		setSoundType(SoundType.PLANT);
+		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return SAPLING_AABB;
+	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+		return SHAPE;
 	}
-
-	@Override
-	public TileEntity createNewTileEntity(World var1, int meta) {
-		return new TileSapling();
-	}
-
-	/* COLLISION BOX */
 
 	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return null;
+	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+		return new TileSapling();
 	}
 
 	/* RENDERING */
-
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return false;
 	}
 
@@ -95,41 +80,42 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return BlockFaceShape.UNDEFINED;
-	}
-
 	/* STATES */
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return 0;
-	}
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+	//		if (sapling != null && sapling.getTree() != null) {
+	//			state = state.with(TREE, sapling.getTree().getGenome().getPrimary());
+	//		} else {
+	//			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary());
+	//		}
+	//		return state;
+	//	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vec3d viewpoint) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling != null && sapling.getTree() != null) {
-			state = state.withProperty(TREE, sapling.getTree().getGenome().getPrimary());
+			state = state.with(TREE, sapling.getTree().getGenome().getActiveAllele(TreeChromosomes.SPECIES));
 		} else {
-			state = state.withProperty(TREE, TreeDefinition.Oak.getGenome().getPrimary());
+			state = state.with(TREE, TreeDefinition.Oak.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
 		}
 		return state;
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, TREE);
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(TREE);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
+		//	ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
 	}
 
 	/* MODELS */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		//To delete the error message
@@ -137,7 +123,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	/* PLANTING */
-	public static boolean canBlockStay(IBlockAccess world, BlockPos pos) {
+	public static boolean canBlockStay(IBlockReader world, BlockPos pos) {
 		TileSapling tile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (tile == null) {
 			return false;
@@ -148,41 +134,41 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
 		if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
 			dropAsSapling(worldIn, pos);
-			worldIn.setBlockToAir(pos);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 		}
 	}
 
 	/* REMOVING */
-	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ItemStack drop = getDrop(world, pos);
-		if (!drop.isEmpty()) {
-			drops.add(drop);
-		}
-	}
+	//	@Override
+	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+	//		ItemStack drop = getDrop(world, pos);
+	//		if (!drop.isEmpty()) {
+	//			drops.add(drop);
+	//		}
+	//	}
 
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling == null || sapling.getTree() == null) {
 			return ItemStack.EMPTY;
 		}
-		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING);
+		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
-			if (!player.capabilities.isCreativeMode) {
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, IFluidState fluid) {
+		if (!world.isRemote && canHarvestBlock(state, world, pos, player)) {
+			if (!player.isCreative()) {
 				dropAsSapling(world, pos);
 			}
 		}
 
-		return world.setBlockToAir(pos);
+		return world.setBlockState(pos, Blocks.AIR.getDefaultState());
 	}
 
 	private static void dropAsSapling(World world, BlockPos pos) {
@@ -195,12 +181,12 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 		}
 	}
 
-	private static ItemStack getDrop(IBlockAccess world, BlockPos pos) {
+	private static ItemStack getDrop(IBlockReader world, BlockPos pos) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling != null) {
 			ITree tree = sapling.getTree();
 			if (tree != null) {
-				return TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING);
+				return TreeManager.treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING);
 			}
 		}
 		return ItemStack.EMPTY;
@@ -208,7 +194,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 
 	/* GROWNING */
 	@Override
-	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
 		if (world.rand.nextFloat() >= 0.45F) {
 			return false;
 		}
@@ -217,12 +203,12 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	}
 
 	@Override
-	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
+	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
 		return true;
 	}
 
 	@Override
-	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
+	public void grow(World world, Random rand, BlockPos pos, BlockState state) {
 		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (saplingTile != null) {
 			saplingTile.tryGrow(rand, true);

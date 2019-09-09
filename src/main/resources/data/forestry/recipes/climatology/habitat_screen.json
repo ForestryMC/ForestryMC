@@ -1,0 +1,43 @@
+{
+  "result": {
+    "item": "forestry:habitat_screen"
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IPI",
+    "IPI",
+    "GDG"
+  ],
+  "key": {
+    "G": {
+      "item": "#GEARBRONZE"
+    },
+    "P": {
+      "item": "#PANEGLASS"
+    },
+    "I": {
+      "item": "#INGOTBRONZE"
+    },
+    "D": {
+      "item": "#GEMDIAMOND"
+    }
+  },
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "climatology",
+          "type": "forestry:module"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forestry:module",
+            "module": "factory"
+          }
+        }
+      ]
+    }
+  ]
+}

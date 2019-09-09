@@ -15,23 +15,24 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.ByteNBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateState;
@@ -41,7 +42,6 @@ import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 
 public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
@@ -50,42 +50,42 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	public static final String PREVIEW_KEY = "preview";
 
 	public static boolean isPreviewModeActive(ItemStack itemStack) {
-		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
-		if (nbtTagCompound == null || !nbtTagCompound.hasKey(PREVIEW_KEY)) {
+		CompoundNBT compoundNBT = itemStack.getTag();
+		if (compoundNBT == null || !compoundNBT.contains(PREVIEW_KEY)) {
 			return false;
 		}
-		return nbtTagCompound.getBoolean(PREVIEW_KEY);
+		return compoundNBT.getBoolean(PREVIEW_KEY);
 	}
 
 	public static void setPreviewMode(ItemStack itemStack, boolean preview) {
-		itemStack.setTagInfo(PREVIEW_KEY, new NBTTagByte((byte) (preview ? 1 : 0)));
+		itemStack.setTagInfo(PREVIEW_KEY, new ByteNBT((byte) (preview ? 1 : 0)));
 	}
 
 	@Nullable
 	public static BlockPos getPosition(ItemStack itemStack) {
-		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
-		if (nbtTagCompound == null || !nbtTagCompound.hasKey(POSITION_KEY)) {
+		CompoundNBT CompoundNBT = itemStack.getTag();
+		if (CompoundNBT == null || !CompoundNBT.contains(POSITION_KEY)) {
 			return null;
 		}
-		NBTTagCompound compound = nbtTagCompound.getCompoundTag(POSITION_KEY);
+		CompoundNBT compound = CompoundNBT.getCompound(POSITION_KEY);
 		if (compound.isEmpty()) {
 			return null;
 		}
-		return NBTUtil.getPosFromTag(compound);
+		return NBTUtil.readBlockPos(compound);
 	}
 
 	public static int getDimension(ItemStack itemStack) {
-		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
-		if (nbtTagCompound == null || !nbtTagCompound.hasKey(DIMENSION_KEY)) {
+		CompoundNBT compoundNBT = itemStack.getTag();
+		if (compoundNBT == null || !compoundNBT.contains(DIMENSION_KEY)) {
 			return Integer.MAX_VALUE;
 		}
-		return nbtTagCompound.getInteger(DIMENSION_KEY);
+		return compoundNBT.getInt(DIMENSION_KEY);
 	}
 
 	public static boolean isValid(ItemStack stack, @Nullable World world) {
 		BlockPos pos = getPosition(stack);
 		int dimension = getDimension(stack);
-		if (pos == null || world == null || dimension == Integer.MAX_VALUE || dimension != world.provider.getDimension() || !world.isBlockLoaded(pos)) {
+		if (pos == null || world == null || dimension == Integer.MAX_VALUE || dimension != world.getDimension().getType().getId() || !world.isBlockLoaded(pos)) {
 			return false;
 		} else {
 			return TileUtil.getTile(world, pos, IClimateHousing.class) != null;
@@ -93,7 +93,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
 		if (!player.isSneaking()) {
 			boolean previewModeActive = isPreviewModeActive(itemStack);
@@ -101,21 +101,25 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
 			if (!world.isRemote) {
 				String text = !previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive";
-				player.sendStatusMessage(new TextComponentTranslation(text), true);
+				player.sendStatusMessage(new TranslationTextComponent(text), true);
 			}
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
+		return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
+
 		if (player.isSneaking()) {
 			IClimateHousing housing = TileUtil.getTile(world, pos, IClimateHousing.class);
 			if (housing != null) {
-				ItemStack heldItem = player.getHeldItem(hand);
-				heldItem.setTagInfo(POSITION_KEY, NBTUtil.createPosTag(pos));
-				heldItem.setTagInfo(DIMENSION_KEY, new NBTTagInt(world.provider.getDimension()));
+				ItemStack heldItem = player.getHeldItem(context.getHand());
+				heldItem.setTagInfo(POSITION_KEY, NBTUtil.writeBlockPos(pos));
+				heldItem.setTagInfo(DIMENSION_KEY, new IntNBT(world.getDimension().getType().getId()));
 			}
 		}
 		if (!world.isRemote) {
@@ -130,27 +134,27 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 				state = ClimateRoot.getInstance().getBiomeState(world, pos);
 			}
 			if (state.isPresent()) {
-				player.sendStatusMessage(new TextComponentTranslation("for.habitat_screen.status.state", TextFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()), TextFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())), true);
+				player.sendStatusMessage(new TranslationTextComponent("for.habitat_screen.status.state", TextFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()), TextFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())), true);
 			} else {
-				player.sendStatusMessage(new TextComponentTranslation("for.habitat_screen.status.nostate"), true);
+				player.sendStatusMessage(new TranslationTextComponent("for.habitat_screen.status.nostate"), true);
 			}
 		}
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		super.addInformation(stack, world, tooltip, flag);
 		if (world == null) {
 			return;
 		}
 		boolean previewModeActive = isPreviewModeActive(stack);
-		tooltip.add(Translator.translateToLocal(previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive"));
+		tooltip.add(new TranslationTextComponent(previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive"));
 		boolean isValid = isValid(stack, world);
 		BlockPos pos = getPosition(stack);
 		if (pos != null) {
-			String state = isValid ? Translator.translateToLocalFormatted("for.habitat_screen.state.linked", pos.getX(), pos.getY(), pos.getZ(), world.provider.getDimension()) : Translator.translateToLocal("for.habitat_screen.state.fail");
+			ITextComponent state = isValid ? new TranslationTextComponent("for.habitat_screen.state.linked", pos.getX(), pos.getY(), pos.getZ(), world.getDimension().getType().getId()) : new TranslationTextComponent("for.habitat_screen.state.fail");
 			tooltip.add(state);
 		}
 		if (!isValid || pos == null) {
@@ -161,17 +165,17 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			return;
 		}
 		IClimateState climateState = housing.getTransformer().getCurrent();
-		tooltip.add(Translator.translateToLocalFormatted("for.habitat_screen.temperature", TextFormatting.GOLD + StringUtil.floatAsPercent(climateState.getTemperature())));
-		tooltip.add(Translator.translateToLocalFormatted("for.habitat_screen.humidity", TextFormatting.BLUE + StringUtil.floatAsPercent(climateState.getHumidity())));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).applyTextStyle(TextFormatting.GOLD));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).applyTextStyle(TextFormatting.BLUE));
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+	@OnlyIn(Dist.CLIENT)
+	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
 		if (tintIndex == 2) {
-			return isValid(stack, Minecraft.getMinecraft().world) ? 0x14B276 : 0xBA1F17;
+			return isValid(stack, Minecraft.getInstance().world) ? 0x14B276 : 0xBA1F17;
 		} else if (tintIndex == 1) {
-			World world = Minecraft.getMinecraft().world;
+			World world = Minecraft.getInstance().world;
 			if (!isValid(stack, world)) {
 				return 0xFFFFFF;
 			}

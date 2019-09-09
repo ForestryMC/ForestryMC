@@ -1,8 +1,8 @@
 {
 	"textures": {
-		"texture": "blocks/glass",
-		"particle": "blocks/glass",
-		"log_oak": "blocks/log_oak"
+      "texture": "block/glass",
+      "particle": "block/glass",
+      "log_oak": "block/log_oak"
 	},
 	"elements": [
 		{

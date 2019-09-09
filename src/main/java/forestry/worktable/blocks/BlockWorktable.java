@@ -15,6 +15,6 @@ import forestry.core.blocks.BlockBase;
 public class BlockWorktable extends BlockBase<BlockTypeWorktable> {
 	public BlockWorktable(BlockTypeWorktable worktable) {
 		super(worktable);
-		setHarvestLevel("pickaxe", 0);
+		//		setHarvestLevel("pickaxe", 0); TODO harvest level
 	}
 }

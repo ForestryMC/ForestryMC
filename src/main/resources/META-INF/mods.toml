@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/ForestryMC/ForestryMC/issues"
+
+[[mods]]
+	modId="forestry"
+	version="${file.jarVersion}"
+	displayName="Forestry"
+	# TODO - old has http://minecraft.curseforge.com/projects/forestry. Does this work?
+	#updateJSONURL="http://myurl.me/"
+	#also TODO - is this the best website to choose?
+	displayURL="https://forestryforminecraft.info/"
+	logoFile="forestry_logo.png"
+	credits="mistaqur, Binnie, CovertJaguar, MysteriousAges, Nirek, Nedelosk, Temp1011"
+	authors="SirSengir, mezz, Nedelosk"
+	description='''
+	Trees, bees and more.
+	'''
+
+[[mods]]
+	modId="geneticsapi"
+	version="1.0.0"
+	displayName="Genetics API"
+	description='''
+	The Genetic API providers a api to add and manage items with genetic data.
+	'''
+
+[[dependencies.forestry]]
+    modId="geneticsapi"
+    mandatory=true
+    versionRange="1.0.0"
+    ordering="BEFORE"
+    side="BOTH"

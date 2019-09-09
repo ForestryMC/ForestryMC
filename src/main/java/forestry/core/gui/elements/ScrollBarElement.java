@@ -2,15 +2,15 @@ package forestry.core.gui.elements;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.gui.IWindowElement;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.widgets.IScrollable;
-
-import org.lwjgl.input.Mouse;
 
 public class ScrollBarElement extends ElementGroup {
 	/* Attributes - Final */
@@ -121,15 +121,16 @@ public class ScrollBarElement extends ElementGroup {
 		IWindowElement window = getWindow();
 		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		super.drawElement(mouseX, mouseY);
 	}
 
 	private void updateSlider(int mouseX, int mouseY) {
-		boolean mouseDown = Mouse.isButtonDown(0);
+		boolean mouseDown = Minecraft.getInstance().mouseHelper.isLeftDown();
 
 		if (listener == null || listener.isFocused(mouseX, mouseY)) {
-			int wheel = Mouse.getDWheel();
+			//TODO - scrolling?? I think this maybe needs an event now?
+			int wheel = 0; //Mouse.getDWheel();
 			if (wheel > 0) {
 				setValue(currentValue - step);
 				return;

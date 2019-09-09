@@ -12,14 +12,16 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
@@ -49,7 +51,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorldObj();
 		BlockPos housingCoords = housing.getCoordinates();
@@ -60,13 +62,13 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			return storedData;
 		}
 
-		List<EntityPlayer> players = getEntitiesInRange(genome, housing, EntityPlayer.class);
-		for (EntityPlayer player : players) {
+		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
+		for (PlayerEntity player : players) {
 			int chance = explosionChance;
 			storedData.setInteger(indexExplosionForce, defaultForce);
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(player, getUID(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
 			if (count > 3) {
 				continue; // Full set, no damage/effect
 			} else if (count > 2) {
@@ -102,7 +104,8 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			return;
 		}
 
-		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false);
+		//TODO - check explosion mode right
+		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
 	}
 
 }

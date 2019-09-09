@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.ChunkGenerator;
 
-import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.InterModComms;
 
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
@@ -41,11 +41,11 @@ public class BlankForestryModule implements IForestryModule {
 		return forestryModule.name() + " Module";
 	}
 
-	public boolean processIMCMessage(FMLInterModComms.IMCMessage message) {
+	public boolean processIMCMessage(InterModComms.IMCMessage message) {
 		return false;
 	}
 
-	public void populateChunk(IChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 	}
 
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {

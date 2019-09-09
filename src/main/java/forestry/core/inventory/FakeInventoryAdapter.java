@@ -12,12 +12,10 @@ package forestry.core.inventory;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 import forestry.core.config.Constants;
 
@@ -52,17 +50,17 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
+	public int[] getSlotsForFace(Direction side) {
 		return Constants.SLOTS_NONE;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
 		return false;
 	}
 
@@ -91,20 +89,21 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 
 	}
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TextComponentString(getName());
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
-	}
+	//TODO inventory name
+	//	@Override
+	//	public ITextComponent getDisplayName() {
+	//		return new StringTextComponent(getName());
+	//	}
+	//
+	//	@Override
+	//	public String getName() {
+	//		return "";
+	//	}
+	//
+	//	@Override
+	//	public boolean hasCustomName() {
+	//		return false;
+	//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -117,17 +116,17 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(PlayerEntity player) {
 		return false;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 
 	}
 
@@ -137,28 +136,29 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+	public void read(CompoundNBT CompoundNBT) {
 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		return CompoundNBT;
 	}
 
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
+	//TODO inventory fields
+	//	@Override
+	//	public int getField(int id) {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public void setField(int id, int value) {
+	//	}
+	//
+	//	@Override
+	//	public int getFieldCount() {
+	//		return 0;
+	//	}
 
 	@Override
 	public void clear() {

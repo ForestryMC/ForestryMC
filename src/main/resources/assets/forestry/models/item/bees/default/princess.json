@@ -1,8 +1,0 @@
-{
-    "parent": "forestry:item/mirror_hands",
-    "textures": {
-        "layer0": "forestry:items/bees/default/princess.outline",
-		"layer1": "forestry:items/bees/default/body1",
-		"layer2": "forestry:items/bees/default/princess.body2"
-    }
-}

@@ -1,15 +1,15 @@
 package forestry.core.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-@SideOnly(Side.CLIENT)
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+@OnlyIn(Dist.CLIENT)
 public class Drawable {
 	/* Final Attributes */
 	//Position on the Texture
@@ -43,12 +43,13 @@ public class Drawable {
 	}
 
 	public void draw(int xOffset, int yOffset, int width, int height) {
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textureLocation);
 
 		// Enable correct lighting.
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		Gui.drawScaledCustomSizeModalRect(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
+		//TODO - it's one of these methods. Work out the border maths..
+		//		GuiUtils.drawContinuousTexturedBox(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
 	}
 }

@@ -14,13 +14,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.text.StringTextComponent;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
@@ -43,11 +44,11 @@ public class HabitatSlot extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(name);
+		tooltip.add(new StringTextComponent(name));
 		return tooltip;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public TextureAtlasSprite getIcon() {
 		return TextureManagerForestry.getInstance().getDefault(iconIndex);
 	}
@@ -59,12 +60,13 @@ public class HabitatSlot extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		if (!isActive) {
-			GlStateManager.color(0.2f, 0.2f, 0.2f, 0.2f);
+			GlStateManager.color4f(0.2f, 0.2f, 0.2f, 0.2f);
 		} else {
-			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, getIcon(), 16, 16);
+		//TODO how to do the border maths for this
+		//		manager.gui.blit(startX + xPos, startY + yPos, getIcon(), 16, 16);
 	}
 }

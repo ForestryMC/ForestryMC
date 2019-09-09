@@ -12,37 +12,30 @@ package forestry.apiculture.blocks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
@@ -55,16 +48,13 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 
-public abstract class BlockAlveary extends BlockStructure implements IStateMapperRegister {
-	private static final PropertyEnum<State> STATE = PropertyEnum.create("state", State.class);
-	private static final PropertyEnum<AlvearyPlainType> PLAIN_TYPE = PropertyEnum.create("type", AlvearyPlainType.class);
+public class BlockAlveary extends BlockStructure {
+	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
+	private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create("type", AlvearyPlainType.class);
 
 	private enum State implements IStringSerializable {
 		ON, OFF;
@@ -84,53 +74,42 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		}
 	}
 
-	public static Map<BlockAlvearyType, BlockAlveary> create() {
-		Map<BlockAlvearyType, BlockAlveary> blockMap = new EnumMap<>(BlockAlvearyType.class);
-		for (final BlockAlvearyType type : BlockAlvearyType.VALUES) {
-			BlockAlveary block = new BlockAlveary() {
-				@Override
-				public BlockAlvearyType getAlvearyType() {
-					return type;
-				}
-			};
-			blockMap.put(type, block);
-		}
-		return blockMap;
-	}
+	private final BlockAlvearyType type;
 
-	public BlockAlveary() {
-		super(new MaterialBeehive(false));
-
-		BlockAlvearyType alvearyType = getAlvearyType();
-		IBlockState defaultState = this.blockState.getBaseState();
-		if (alvearyType == BlockAlvearyType.PLAIN) {
-			defaultState = defaultState.withProperty(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-		} else if (alvearyType.activatable) {
-			defaultState = defaultState.withProperty(STATE, State.OFF);
+	public BlockAlveary(BlockAlvearyType type) {
+		super(Block.Properties.create(MaterialBeehive.BEEHIVE_ALVEARY)
+			.hardnessAndResistance(1f)
+			.sound(SoundType.WOOD)
+			.harvestTool(ToolType.AXE)
+			.harvestLevel(0));
+		this.type = type;
+		BlockState defaultState = this.getStateContainer().getBaseState();
+		if (type == BlockAlvearyType.PLAIN) {
+			defaultState = defaultState.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+		} else if (type.activatable) {
+			defaultState = defaultState.with(STATE, State.OFF);
 		}
 		setDefaultState(defaultState);
-
-		setHardness(1.0f);
-		setCreativeTab(Tabs.tabApiculture);
-		setHarvestLevel("axe", 0);
-		setSoundType(SoundType.WOOD);
 	}
 
-	public abstract BlockAlvearyType getAlvearyType();
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(PLAIN_TYPE, STATE);
+	}
+
+	public BlockAlvearyType getType() {
+		return type;
+	}
 
 	@Override
-	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return true;
 	}
 
+	@Nullable
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return 0;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		BlockAlvearyType type = getAlvearyType();
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		switch (type) {
 			case SWARMER:
 				return new TileAlvearySwarmer();
@@ -150,77 +129,58 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		}
 	}
 
-	/* ITEM MODELS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "apiculture/alveary." + getAlvearyType());
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		BlockAlvearyType alvearyType = getAlvearyType();
-
-		if (alvearyType == BlockAlvearyType.PLAIN) {
-			return new BlockStateContainer(this, PLAIN_TYPE);
-		} else if (alvearyType.activatable) {
-			return new BlockStateContainer(this, STATE);
-		} else {
-			return new BlockStateContainer(this);
-		}
-	}
-
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileAlveary tile = TileUtil.getTile(world, pos, TileAlveary.class);
-		if (tile == null) {
-			return super.getActualState(state, world, pos);
-		}
-
-		if (tile instanceof IActivatable) {
-			if (((IActivatable) tile).isActive()) {
-				state = state.withProperty(STATE, State.ON);
-			} else {
-				state = state.withProperty(STATE, State.OFF);
-			}
-		} else if (getAlvearyType() == BlockAlvearyType.PLAIN) {
-			if (!tile.getMultiblockLogic().getController().isAssembled()) {
-				state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-			} else {
-				IBlockState blockStateAbove = world.getBlockState(pos.up());
-				Block blockAbove = blockStateAbove.getBlock();
-				if (BlockUtil.isWoodSlabBlock(blockStateAbove, blockAbove, world, pos)) {
-					List<EnumFacing> blocksTouching = getBlocksTouching(world, pos);
-					switch (blocksTouching.size()) {
-						case 3:
-							state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.ENTRANCE);
-							break;
-						case 2:
-							if (blocksTouching.contains(EnumFacing.SOUTH) && blocksTouching.contains(EnumFacing.EAST) ||
-								blocksTouching.contains(EnumFacing.NORTH) && blocksTouching.contains(EnumFacing.WEST)) {
-								state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
-							} else {
-								state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
-							}
-							break;
-						default:
-							state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-							break;
-					}
-				} else {
-					state = state.withProperty(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-				}
-			}
-		}
-
-		return super.getActualState(state, world, pos);
-	}
+	//TODO not sure how actual state works anymore, probably just means flattening
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileAlveary tile = TileUtil.getTile(world, pos, TileAlveary.class);
+	//		if (tile == null) {
+	//			return super.getActualState(state, world, pos);
+	//		}
+	//
+	//		if (tile instanceof IActivatable) {
+	//			if (((IActivatable) tile).isActive()) {
+	//				state = state.with(STATE, State.ON);
+	//			} else {
+	//				state = state.with(STATE, State.OFF);
+	//			}
+	//		} else if (getType() == BlockAlvearyType.PLAIN) {
+	//			if (!tile.getMultiblockLogic().getController().isAssembled()) {
+	//				state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+	//			} else {
+	//				BlockState blockStateAbove = world.getBlockState(pos.up());
+	//				Block blockAbove = blockStateAbove.getBlock();
+	//				if (BlockUtil.isWoodSlabBlock(blockStateAbove, blockAbove, world, pos)) {
+	//					List<Direction> blocksTouching = getBlocksTouching(world, pos);
+	//					switch (blocksTouching.size()) {
+	//						case 3:
+	//							state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE);
+	//							break;
+	//						case 2:
+	//							if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) ||
+	//								blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
+	//								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
+	//							} else {
+	//								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
+	//							}
+	//							break;
+	//						default:
+	//							state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+	//							break;
+	//					}
+	//				} else {
+	//					state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+	//				}
+	//			}
+	//		}
+	//
+	//		return super.getActualState(state, world, pos);
+	//	}
 
 
-	private static List<EnumFacing> getBlocksTouching(IBlockAccess world, BlockPos blockPos) {
-		List<EnumFacing> touching = new ArrayList<>();
-		for (EnumFacing direction : EnumFacing.HORIZONTALS) {
-			IBlockState blockState = world.getBlockState(blockPos.offset(direction));
+	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
+		List<Direction> touching = new ArrayList<>();
+		for (Direction direction : Direction.Plane.HORIZONTAL) {
+			BlockState blockState = world.getBlockState(blockPos.offset(direction));
 			if (blockState.getBlock() instanceof BlockAlveary) {
 				touching.add(direction);
 			}
@@ -228,32 +188,32 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		return touching;
 	}
 
+	//	@Override
+	//	@OnlyIn(Dist.CLIENT)
+	//	public void registerStateMapper() {
+	//		ModelLoader.setCustomStateMapper(this, new AlvearyStateMapper(getType()));
+	//	}
+	//
+	//	@OnlyIn(Dist.CLIENT)
+	//	private static class AlvearyStateMapper extends StateMapperBase {
+	//		private final BlockAlvearyType type;
+	//
+	//		public AlvearyStateMapper(BlockAlvearyType type) {
+	//			this.type = type;
+	//		}
+	//
+	//		@Override
+	//		protected ModelResourceLocation getModelResourceLocation(BlockState state) {
+	//			String resourceDomain = ForgeRegistries.BLOCKS.getKey(state.getBlock()).getNamespace();
+	//			String resourceLocation = "apiculture/alveary_" + type;
+	//			String propertyString = getPropertyString(state.getProperties());
+	//			return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);
+	//		}
+	//
+	//	}
+
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new AlvearyStateMapper(getAlvearyType()));
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static class AlvearyStateMapper extends StateMapperBase {
-		private final BlockAlvearyType type;
-
-		public AlvearyStateMapper(BlockAlvearyType type) {
-			this.type = type;
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-			String resourceDomain = Block.REGISTRY.getNameForObject(state.getBlock()).getNamespace();
-			String resourceLocation = "apiculture/alveary_" + type;
-			String propertyString = getPropertyString(state.getProperties());
-			return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);
-		}
-
-	}
-
-	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		TileUtil.actOnTile(worldIn, pos, TileAlveary.class, tileAlveary -> {
 			// We must check that the slabs on top were not removed
 			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
@@ -263,11 +223,11 @@ public abstract class BlockAlveary extends BlockStructure implements IStateMappe
 		});
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		if (GuiScreen.isShiftKeyDown()) {
-			tooltip.add(Translator.translateToLocal("tile.for.alveary.tooltip"));
+	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		if (Screen.hasShiftDown()) {
+			tooltip.add(new TranslationTextComponent("block.forestry.alveary_tooltip"));
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}

@@ -12,17 +12,18 @@ package forestry.farming.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
@@ -37,9 +38,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.ITitled;
-import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.gui.ContainerFarm;
-import forestry.farming.gui.GuiFarm;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 
@@ -50,20 +49,21 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 		super(new MultiblockLogicFarm());
 	}
 
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
+	//TODO don't know
+	//	@Override
+	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+	//		return oldState.getBlock() != newState.getBlock();
+	//	}
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock());    //TODO - removing false OK?
 		markDirty();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock(), false);
+		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock());
 		markDirty();
 	}
 
@@ -74,16 +74,16 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		farmBlockTexture = EnumFarmBlockTexture.getFromCompound(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		farmBlockTexture = EnumFarmBlockTexture.getFromCompound(compoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		farmBlockTexture.saveToCompound(nbttagcompound);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		farmBlockTexture.saveToCompound(compoundNBT);
+		return compoundNBT;
 	}
 
 	/* CONSTRUCTION MATERIAL */
@@ -91,28 +91,28 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
 		if (this.farmBlockTexture != farmBlockTexture) {
 			this.farmBlockTexture = farmBlockTexture;
-			world.markBlockRangeForRenderUpdate(getPos(), getPos());
+			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());    //TODO correct?
 		}
 	}
 
-	public EnumFarmBlockTexture getFarmBlockTexture() {
-		return farmBlockTexture;
-	}
-
-	public EnumFarmBlockType getFarmBlockType() {
-		return EnumFarmBlockType.VALUES[getBlockMetadata()];
-	}
+	//	public EnumFarmBlockTexture getFarmBlockTexture() {
+	//		return farmBlockTexture;
+	//	}
+	//
+	//	public EnumFarmBlockType getFarmBlockType() {
+	//		return EnumFarmBlockType.VALUES[getBlockMetadata()];
+	//	}
 
 	/* TILEFORESTRY */
 
 	@Override
-	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void encodeDescriptionPacket(CompoundNBT packetData) {
 		super.encodeDescriptionPacket(packetData);
 		farmBlockTexture.saveToCompound(packetData);
 	}
 
 	@Override
-	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void decodeDescriptionPacket(CompoundNBT packetData) {
 		super.decodeDescriptionPacket(packetData);
 		EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.getFromCompound(packetData);
 		setFarmBlockTexture(farmBlockTexture);
@@ -146,7 +146,7 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		getMultiblockLogic().getController().readGuiData(data);
 	}
@@ -169,13 +169,12 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiFarm(player, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerFarm(windowId, inv, this);
 	}
 
 	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerFarm(player.inventory, this);
+	public ITextComponent getDisplayName() {
+		return new TranslationTextComponent(this.getUnlocalizedTitle());
 	}
 }

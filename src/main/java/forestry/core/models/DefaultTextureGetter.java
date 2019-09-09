@@ -19,10 +19,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class DefaultTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {
 
 	public static final Function<ResourceLocation, TextureAtlasSprite> INSTANCE = new DefaultTextureGetter();
@@ -30,7 +30,7 @@ public class DefaultTextureGetter implements Function<ResourceLocation, TextureA
 	@Override
 	public TextureAtlasSprite apply(@Nullable ResourceLocation location) {
 		Preconditions.checkNotNull(location);
-		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+		return Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString());
 	}
 
 }

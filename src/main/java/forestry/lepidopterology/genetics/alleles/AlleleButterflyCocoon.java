@@ -14,18 +14,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IntegerProperty;
 
-import forestry.api.lepidopterology.IAlleleButterflyCocoon;
+import genetics.api.alleles.AlleleCategorized;
+
+import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.lepidopterology.blocks.PropertyCocoon;
 
 public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon {
 	public static final PropertyCocoon COCOON = new PropertyCocoon("cocoon");
-	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 2);
+	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 2);
 
 	private final Map<ItemStack, Float> loot = new HashMap<>();
 	private final String name;

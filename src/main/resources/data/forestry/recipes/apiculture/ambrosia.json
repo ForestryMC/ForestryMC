@@ -1,0 +1,38 @@
+{
+  "result": {
+    "item": "forestry:ambrosia"
+  },
+  "pattern": [
+    "#Y#",
+    "XXX",
+    "###"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "forestry:module"
+        },
+        {
+          "type": "forestry:module",
+          "module": "food"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:honeydew"
+    },
+    "X": {
+      "item": "forestry:royal_jelly"
+    },
+    "Y": {
+      "item": "forestry:capsule"
+    }
+  },
+  "group": "apiculture"
+}

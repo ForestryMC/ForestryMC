@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -64,12 +64,12 @@ public class FarmLogicCrops extends FarmLogicWatered {
 				break;
 			}
 
-			IBlockState state = world.getBlockState(position);
+			BlockState state = world.getBlockState(position);
 			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 
-			IBlockState groundState = world.getBlockState(position.down());
+			BlockState groundState = world.getBlockState(position.down());
 			if (isAcceptedSoil(groundState)) {
 				return trySetCrop(world, farmHousing, position, direction);
 			}

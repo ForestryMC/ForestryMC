@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -69,16 +69,16 @@ public class FarmHelper {
 	}
 
 	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
-		Blocks.BRICK_BLOCK,
-		Blocks.STONEBRICK,
+		Blocks.BRICKS,
+		Blocks.STONE_BRICKS,
 		Blocks.SANDSTONE,
-		Blocks.NETHER_BRICK,
+		Blocks.NETHER_BRICKS,
 		Blocks.QUARTZ_BLOCK
 	);
 
 	private static FarmDirection getOpposite(FarmDirection farmDirection) {
-		EnumFacing forgeDirection = farmDirection.getFacing();
-		EnumFacing forgeDirectionOpposite = forgeDirection.getOpposite();
+		Direction forgeDirection = farmDirection.getFacing();
+		Direction forgeDirectionOpposite = forgeDirection.getOpposite();
 		return FarmDirection.getFarmDirection(forgeDirectionOpposite);
 	}
 

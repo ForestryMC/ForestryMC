@@ -2,12 +2,12 @@ package forestry.farming.logic.farmables;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockChorusFlower;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChorusFlowerBlock;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,18 +29,18 @@ public class FarmableChorus implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
+	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
 		return blockState.getBlock() == Blocks.CHORUS_FLOWER;
 	}
 
 	@Nullable
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		if (blockState.getBlock() != Blocks.CHORUS_FLOWER) {
 			return null;
 		}
 
-		if (blockState.getValue(BlockChorusFlower.AGE) < 5) {
+		if (blockState.get(ChorusFlowerBlock.AGE) < 5) {
 			return null;
 		}
 
@@ -64,7 +64,7 @@ public class FarmableChorus implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		if (!canPlace(world, pos)) {
 			return false;
 		}
@@ -75,7 +75,7 @@ public class FarmableChorus implements IFarmable {
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
 				BlockPos offsetPosition = position.add(x, 0, z);
-				IBlockState state = world.getBlockState(offsetPosition);
+				BlockState state = world.getBlockState(offsetPosition);
 				if (state.getBlock() == Blocks.CHORUS_FLOWER || state.getBlock() == Blocks.CHORUS_PLANT) {
 					return false;
 				}

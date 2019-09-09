@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class DamageSourceForestry extends DamageSource {
 
@@ -23,15 +23,15 @@ public class DamageSourceForestry extends DamageSource {
 	}
 
 	@Override
-	public ITextComponent getDeathMessage(EntityLivingBase living) {
-		EntityLivingBase other = living.getAttackingEntity();
+	public ITextComponent getDeathMessage(LivingEntity living) {
+		LivingEntity other = living.getAttackingEntity();
 		String ssp = "death." + this.damageType;
 		String smp = ssp + ".player";
 
 		if (other != null) {
-			return new TextComponentTranslation(smp, living.getDisplayName(), other.getDisplayName());
+			return new TranslationTextComponent(smp, living.getDisplayName(), other.getDisplayName());
 		} else {
-			return new TextComponentTranslation(ssp, living.getDisplayName());
+			return new TranslationTextComponent(ssp, living.getDisplayName());
 		}
 	}
 

@@ -3,39 +3,40 @@ package forestry.book.gui.buttons;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 
-@SideOnly(Side.CLIENT)
-public class GuiButtonPage extends GuiButton implements IToolTipProvider {
+@OnlyIn(Dist.CLIENT)
+public class GuiButtonPage extends Button implements IToolTipProvider {
 	public boolean left;
 
-	public GuiButtonPage(int buttonId, int x, int y, boolean left) {
-		super(buttonId, x, y, 18, 10, "");
+	public GuiButtonPage(int x, int y, boolean left, IPressable action) {
+		super(x, y, 18, 10, "", action);
 		this.left = left;
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		if (visible) {
-			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
-			TextureManager manager = mc.renderEngine;
+			TextureManager manager = Minecraft.getInstance().textureManager;
 			manager.bindTexture(GuiForesterBook.TEXTURE);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.enableAlpha();
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.enableAlphaTest();
 			GlStateManager.disableBlend();
-			drawTexturedModalRect(x, y, hovered ? 18 : 0, 181 + (left ? 10 : 0), 18, 10);
+			blit(x, y, isHovered ? 18 : 0, 181 + (left ? 10 : 0), 18, 10);
 			GlStateManager.enableBlend();
-			GlStateManager.disableAlpha();
+			GlStateManager.disableAlphaTest();
 		}
 	}
 
@@ -51,7 +52,7 @@ public class GuiButtonPage extends GuiButton implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		return false;
 	}
 }

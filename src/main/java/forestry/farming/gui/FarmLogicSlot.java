@@ -11,7 +11,8 @@
 package forestry.farming.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 
@@ -45,10 +46,10 @@ public class FarmLogicSlot extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		if (!getStackIndex().isEmpty()) {
-			Minecraft minecraft = Minecraft.getMinecraft();
+			Minecraft minecraft = Minecraft.getInstance();
 			TextureManager textureManager = minecraft.getTextureManager();
-			textureManager.bindTexture(getLogic().getTextureMap());
-			RenderItem renderItem = minecraft.getRenderItem();
+			textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+			ItemRenderer renderItem = minecraft.getItemRenderer();
 			renderItem.renderItemIntoGUI(getStackIndex(), startX + xPos, startY + yPos);
 		}
 	}

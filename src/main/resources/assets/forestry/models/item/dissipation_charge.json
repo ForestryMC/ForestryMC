@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/dissipation_charge"
+      "layer0": "forestry:item/dissipation_charge"
     },
     "display": {
         "thirdperson": {

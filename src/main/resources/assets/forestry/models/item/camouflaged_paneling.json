@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/camouflaged_paneling"
+      "layer0": "forestry:item/camouflaged_paneling"
     },
     "display": {
         "thirdperson": {

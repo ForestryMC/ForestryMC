@@ -13,15 +13,14 @@ package forestry.storage;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.eventbus.api.Event;
 
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.core.IResupplyHandler;
@@ -31,7 +30,7 @@ import forestry.storage.items.ItemBackpack;
 
 public class ResupplyHandler implements IResupplyHandler {
 
-	private static NonNullList<ItemStack> getBackpacks(InventoryPlayer playerInventory) {
+	private static NonNullList<ItemStack> getBackpacks(PlayerInventory playerInventory) {
 		NonNullList<ItemStack> backpacks = NonNullList.create();
 		for (ItemStack itemStack : playerInventory.mainInventory) {
 			if (itemStack.getItem() instanceof ItemBackpack) {
@@ -42,10 +41,10 @@ public class ResupplyHandler implements IResupplyHandler {
 	}
 
 	@Override
-	public void resupply(EntityPlayer player) {
+	public void resupply(PlayerEntity player) {
 
 		// Do not attempt resupplying if this backpack is already opened.
-		if (!(player.openContainer instanceof ContainerPlayer)) {
+		if (!(player.openContainer instanceof PlayerContainer)) {
 			return;
 		}
 
@@ -73,11 +72,11 @@ public class ResupplyHandler implements IResupplyHandler {
 	 * This tops off existing stacks in the player's inventory.
 	 * Adds to player inventory if there is an incomplete stack in there.
 	 */
-	private static boolean topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
+	private static boolean topOffPlayerInventory(PlayerEntity player, ItemStack itemstack) {
 		if (itemstack.isEmpty()) {
 			return false;
 		}
-		InventoryPlayer playerInventory = player.inventory;
+		PlayerInventory playerInventory = player.inventory;
 		List<ItemStack> inventory = new LinkedList<>();
 		inventory.addAll(playerInventory.mainInventory);
 		inventory.addAll(playerInventory.offHandInventory);

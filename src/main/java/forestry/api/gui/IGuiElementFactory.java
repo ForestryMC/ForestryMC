@@ -7,23 +7,24 @@ package forestry.api.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IAlleleTolerance;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.mutation.IMutation;
+
+import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IGeneticAnalyzer;
 import forestry.api.genetics.IGeneticAnalyzerProvider;
-import forestry.api.genetics.IMutation;
 import forestry.api.gui.style.ITextStyle;
 
 /**
  * A helper interface to create gui elements.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IGuiElementFactory {
 
 	IGeneticAnalyzer createAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider);
@@ -52,11 +53,11 @@ public interface IGuiElementFactory {
 	@Nullable
 	IGuiElement createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker);
 
-	IGuiElement createFertilityInfo(IAlleleInteger fertilityAllele, int texOffset);
+	IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset);
 
-	IGuiElement createToleranceInfo(IAlleleTolerance toleranceAllele, IAlleleSpecies species, String text);
+	IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, String text);
 
-	IGuiElement createToleranceInfo(IAlleleTolerance toleranceAllele);
+	IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele);
 
 	/* LAYOUTS */
 	IElementLayout createHorizontal(int xPos, int yPos, int height);

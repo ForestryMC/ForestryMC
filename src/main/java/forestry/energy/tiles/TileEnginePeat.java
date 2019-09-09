@@ -10,26 +10,20 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.ModuleCore;
@@ -43,12 +37,13 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
+import forestry.energy.ModuleEnergy;
 import forestry.energy.gui.ContainerEnginePeat;
-import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
-import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import net.minecraftforge.fml.common.Optional;
+
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private ItemStack fuel = ItemStack.EMPTY;
@@ -59,7 +54,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
 	public TileEnginePeat() {
-		super("engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
+		super(ModuleEnergy.getTiles().peatEngine, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
 		ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
 		setInternalInventory(new InventoryEnginePeat(this));
@@ -125,7 +120,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			if (isRedstoneActivated()) {
 				currentOutput = determineFuelValue(fuel);
 				energyManager.generateEnergy(currentOutput);
-				world.updateComparatorOutputLevel(pos, getBlockType());
+				world.updateComparatorOutputLevel(pos, getBlockState().getBlock());    //TODO - I thuink
 			}
 		} else if (isRedstoneActivated()) {
 			int fuelSlot = getFuelSlot();
@@ -237,7 +232,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
 		if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
-			EnumFacing powerSide = world.getBlockState(getPos()).getValue(BlockBase.FACING);
+			Direction powerSide = world.getBlockState(getPos()).get(BlockBase.FACING);
 			Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
 			InventoryUtil.moveItemStack(wasteItemHandler, inventories);
 		}
@@ -271,34 +266,34 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	// / LOADING AND SAVING
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		if (nbttagcompound.hasKey("EngineFuelItemStack")) {
-			NBTTagCompound fuelItemNbt = nbttagcompound.getCompoundTag("EngineFuelItemStack");
-			fuel = new ItemStack(fuelItemNbt);
+		if (compoundNBT.contains("EngineFuelItemStack")) {
+			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
+			fuel = ItemStack.read(fuelItemNbt);
 		}
 
-		burnTime = nbttagcompound.getInteger("EngineBurnTime");
-		totalBurnTime = nbttagcompound.getInteger("EngineTotalTime");
-		if (nbttagcompound.hasKey("AshProduction")) {
-			ashProduction = nbttagcompound.getInteger("AshProduction");
+		burnTime = compoundNBT.getInt("EngineBurnTime");
+		totalBurnTime = compoundNBT.getInt("EngineTotalTime");
+		if (compoundNBT.contains("AshProduction")) {
+			ashProduction = compoundNBT.getInt("AshProduction");
 		}
 	}
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
 		if (!fuel.isEmpty()) {
-			nbttagcompound.setTag("EngineFuelItemStack", fuel.serializeNBT());
+			compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());
 		}
 
-		nbttagcompound.setInteger("EngineBurnTime", burnTime);
-		nbttagcompound.setInteger("EngineTotalTime", totalBurnTime);
-		nbttagcompound.setInteger("AshProduction", ashProduction);
-		return nbttagcompound;
+		compoundNBT.putInt("EngineBurnTime", burnTime);
+		compoundNBT.putInt("EngineTotalTime", totalBurnTime);
+		compoundNBT.putInt("AshProduction", ashProduction);
+		return compoundNBT;
 	}
 
 	@Override
@@ -316,22 +311,16 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	/* ITriggerProvider */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(FactoryTriggers.lowFuel25);
-		triggers.add(FactoryTriggers.lowFuel10);
-	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(FactoryTriggers.lowFuel25);
+	//		triggers.add(FactoryTriggers.lowFuel10);
+	//	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiEnginePeat(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerEnginePeat(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEnginePeat(windowId, player.inventory, this);
 	}
 }

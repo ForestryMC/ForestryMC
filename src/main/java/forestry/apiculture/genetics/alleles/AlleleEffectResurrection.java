@@ -13,26 +13,18 @@ package forestry.apiculture.genetics.alleles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.dragon.phase.PhaseList;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCaveSpider;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.boss.dragon.phase.PhaseType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.EntityUtil;
@@ -40,63 +32,72 @@ import forestry.core.utils.ItemStackUtil;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
-	public static class Resurrectable {
-		public final ItemStack res;
-		public final Class<? extends EntityLiving> risen;
-		public final Optional<Consumer<EntityLiving>> risenTransformer;
+	private static class Resurrectable<T extends MobEntity> {
+		private final ItemStack res;
+		private final EntityType<T> risen;
+		private final Consumer<T> risenTransformer;
 
-		public Resurrectable(ItemStack res, Class<? extends EntityLiving> risen) {
-			this.res = res;
-			this.risen = risen;
-			this.risenTransformer = Optional.empty();
+		private Resurrectable(ItemStack res, EntityType<T> risen) {
+			this(res, risen, e -> {
+			});
 		}
 
-		public <E extends EntityLiving> Resurrectable(ItemStack res, Class<E> risen, Consumer<E> risenTransformer) {
+		private Resurrectable(ItemStack res, EntityType<T> risen, Consumer<T> risenTransformer) {
 			this.res = res;
 			this.risen = risen;
-			this.risenTransformer = Optional.of((Consumer<EntityLiving>) risenTransformer);
+			this.risenTransformer = risenTransformer;
+		}
+
+
+		private boolean spawnAndTransform(ItemEntity entity) {
+			T spawnedEntity = EntityUtil.spawnEntity(entity.world, this.risen, entity.posX, entity.posY, entity.posZ);
+			if (spawnedEntity != null) {
+				this.risenTransformer.accept(spawnedEntity);
+				return true;
+			}
+			return false;
 		}
 	}
 
-	public static List<Resurrectable> getReanimationList() {
-		ArrayList<Resurrectable> list = new ArrayList<>();
-		list.add(new Resurrectable(new ItemStack(Items.BONE), EntitySkeleton.class));
-		list.add(new Resurrectable(new ItemStack(Items.ARROW), EntitySkeleton.class));
-		list.add(new Resurrectable(new ItemStack(Items.ROTTEN_FLESH), EntityZombie.class));
-		list.add(new Resurrectable(new ItemStack(Items.BLAZE_ROD), EntityBlaze.class));
+	public static List<Resurrectable<? extends MobEntity>> getReanimationList() {
+		ArrayList<Resurrectable<? extends MobEntity>> list = new ArrayList<>();
+		list.add(new Resurrectable<>(new ItemStack(Items.BONE), EntityType.SKELETON));
+		list.add(new Resurrectable<>(new ItemStack(Items.ARROW), EntityType.SKELETON));
+		list.add(new Resurrectable<>(new ItemStack(Items.ROTTEN_FLESH), EntityType.ZOMBIE));
+		list.add(new Resurrectable<>(new ItemStack(Items.BLAZE_ROD), EntityType.BLAZE));
 		return list;
 	}
 
-	public static List<Resurrectable> getResurrectionList() {
-		ArrayList<Resurrectable> list = new ArrayList<>();
-		list.add(new Resurrectable(new ItemStack(Items.GUNPOWDER), EntityCreeper.class));
-		list.add(new Resurrectable(new ItemStack(Items.ENDER_PEARL), EntityEnderman.class));
-		list.add(new Resurrectable(new ItemStack(Items.STRING), EntitySpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.SPIDER_EYE), EntitySpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.STRING), EntityCaveSpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.SPIDER_EYE), EntityCaveSpider.class));
-		list.add(new Resurrectable(new ItemStack(Items.GHAST_TEAR), EntityGhast.class));
-		list.add(new Resurrectable(new ItemStack(Blocks.DRAGON_EGG), EntityDragon.class, dragon -> dragon.getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN)));
+	public static List<Resurrectable<? extends MobEntity>> getResurrectionList() {
+		ArrayList<Resurrectable<?>> list = new ArrayList<>();
+		list.add(new Resurrectable<>(new ItemStack(Items.GUNPOWDER), EntityType.CREEPER));
+		list.add(new Resurrectable<>(new ItemStack(Items.ENDER_PEARL), EntityType.ENDERMAN));
+		list.add(new Resurrectable<>(new ItemStack(Items.STRING), EntityType.SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.SPIDER_EYE), EntityType.SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.STRING), EntityType.CAVE_SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.SPIDER_EYE), EntityType.CAVE_SPIDER));
+		list.add(new Resurrectable<>(new ItemStack(Items.GHAST_TEAR), EntityType.GHAST));
+		list.add(new Resurrectable<>(new ItemStack(Blocks.DRAGON_EGG), EntityType.ENDER_DRAGON, dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)));
 		return list;
 	}
 
-	private final List<Resurrectable> resurrectables;
+	private final List<Resurrectable<? extends MobEntity>> resurrectables;
 
-	public AlleleEffectResurrection(String name, List<Resurrectable> resurrectables) {
+	public AlleleEffectResurrection(String name, List<Resurrectable<? extends MobEntity>> resurrectables) {
 		super(name, true, 40, true, true);
 		this.resurrectables = resurrectables;
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<EntityItem> entities = getEntitiesInRange(genome, housing, EntityItem.class);
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		List<ItemEntity> entities = getEntitiesInRange(genome, housing, ItemEntity.class);
 		if (entities.isEmpty()) {
 			return storedData;
 		}
 
 		Collections.shuffle(resurrectables);
 
-		for (EntityItem entity : entities) {
+		for (ItemEntity entity : entities) {
 			if (resurrectEntity(entity)) {
 				break;
 			}
@@ -105,23 +106,20 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		return storedData;
 	}
 
-	private boolean resurrectEntity(EntityItem entity) {
-		if (entity.isDead) {
+	private boolean resurrectEntity(ItemEntity entity) {
+		if (!entity.isAlive()) {
 			return false;
 		}
 
 		ItemStack contained = entity.getItem();
-		for (Resurrectable entry : resurrectables) {
+		for (Resurrectable<? extends MobEntity> entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
-				EntityLiving spawnedEntity = EntityUtil.spawnEntity(entity.world, entry.risen, entity.posX, entity.posY, entity.posZ);
-				if (spawnedEntity != null) {
-					entry.risenTransformer.ifPresent(transformer -> transformer.accept(spawnedEntity));
-				}
+				if (entry.spawnAndTransform(entity)) {
+					contained.shrink(1);
 
-				contained.shrink(1);
-
-				if (contained.getCount() <= 0) {
-					entity.setDead();
+					if (contained.getCount() <= 0) {
+						entity.remove();
+					}
 				}
 
 				return true;

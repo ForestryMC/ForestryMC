@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "forestry:apiarist_chest"
+  },
+  "pattern": [
+    "# #",
+    "###",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:crafting_material",
+      "data": 3
+    }
+  },
+  "group": "apiculture"
+}

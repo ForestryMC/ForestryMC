@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraftforge.fml.common.SidedProxy;
+//import net.minecraftforge.fml.common.SidedProxy;
 
+//TODO - DistExecutor
 public class Proxies {
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.core.proxy.ProxyClient", serverSide = "forestry.core.proxy.ProxyCommon")
+	//	@SidedProxy(clientSide = "forestry.core.proxy.ProxyClient", serverSide = "forestry.core.proxy.ProxyCommon")
 	public static ProxyCommon common;
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
+	//	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
 	public static ProxyRender render;
 }

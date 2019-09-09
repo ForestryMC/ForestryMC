@@ -5,6 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.classification.IClassification;
+
 /**
  * @author Alex Binnie
  * <p>
@@ -14,21 +17,21 @@ package forestry.api.genetics;
 public interface IAlleleHandler {
 
 	/**
-	 * Called when an allele is registered with {@link IAlleleRegistry}.
+	 * Called when an allele is registered with {@link IGeneticRegistry}.
 	 *
 	 * @param allele Allele which was registered.
 	 */
 	void onRegisterAllele(IAllele allele);
 
 	/**
-	 * Called when a classification is registered with {@link IAlleleRegistry}.
+	 * Called when a classification is registered with {@link IGeneticRegistry}.
 	 *
 	 * @param classification Classification which was registered.
 	 */
 	void onRegisterClassification(IClassification classification);
 
 	/**
-	 * Called when a fruit family is registered with {@link IAlleleRegistry}.
+	 * Called when a fruit family is registered with {@link IGeneticRegistry}.
 	 *
 	 * @param family Fruit family which was registered.
 	 */

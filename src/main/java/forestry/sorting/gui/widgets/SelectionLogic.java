@@ -110,7 +110,7 @@ public class SelectionLogic<S> implements IScrollable {
 		return null;
 	}
 
-	public void select(int mouseX, int mouseY) {
+	public void select(double mouseX, double mouseY) {
 		mouseX -= widget.gui.getGuiLeft();
 		mouseY -= widget.gui.getGuiTop();
 		for (SelectableWidget selectable : visible) {
@@ -136,7 +136,7 @@ public class SelectionLogic<S> implements IScrollable {
 			provider.draw(gui, selectable, xPos, yPos);
 		}
 
-		public boolean isMouseOver(int mouseX, int mouseY) {
+		public boolean isMouseOver(double mouseX, double mouseY) {
 			return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
 		}
 

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.core.tiles.IClimatised;
@@ -46,16 +49,20 @@ public class ClimateLedger extends Ledger {
 
 		drawHeader(Translator.translateToLocal("for.gui.climate"), x + 22, y + 8);
 
+		//TODO textcomponent
 		drawSubheader(Translator.translateToLocal("for.gui.temperature") + ':', x + 22, y + 20);
-		drawText(AlleleManager.climateHelper.toDisplay(temperature) + ' ' + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22, y + 32);
+		drawText(AlleleManager.climateHelper.toDisplay(temperature).getString() + ' ' + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22, y + 32);
 
 		drawSubheader(Translator.translateToLocal("for.gui.humidity") + ':', x + 22, y + 44);
-		drawText(AlleleManager.climateHelper.toDisplay(tile.getHumidity()) + ' ' + StringUtil.floatAsPercent(tile.getExactHumidity()), x + 22, y + 56);
+		drawText(AlleleManager.climateHelper.toDisplay(tile.getHumidity()).getString() + ' ' + StringUtil.floatAsPercent(tile.getExactHumidity()), x + 22, y + 56);
 	}
 
 	@Override
-	public String getTooltip() {
-		return "T: " + AlleleManager.climateHelper.toDisplay(tile.getTemperature()) + " / H: " + AlleleManager.climateHelper.toDisplay(tile.getHumidity());
+	public ITextComponent getTooltip() {
+		return new StringTextComponent("T: ")
+			.appendSibling(AlleleManager.climateHelper.toDisplay(tile.getTemperature()))
+			.appendSibling(new StringTextComponent(" / H: "))
+			.appendSibling(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
 	}
 
 }

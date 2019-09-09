@@ -20,13 +20,11 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.Items;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,6 +36,9 @@ import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.farming.logic.farmables.FarmableCocoa;
 
+//import net.minecraft.block.BlockOldLog;
+//import net.minecraft.block.BlockPlanks;
+
 public class FarmLogicCocoa extends FarmLogic {
 	private final IFarmable cocoa = new FarmableCocoa();
 
@@ -47,7 +48,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.DYE, 1, 3);
+		return new ItemStack(Items.COCOA_BEANS);
 	}
 
 	@Override
@@ -130,16 +131,16 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
 		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(position);
-		IBlockState blockState = world.getBlockState(current);
+		BlockState blockState = world.getBlockState(current);
 		while (isJungleTreeTrunk(blockState)) {
-			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
+			for (Direction direction : Direction.Plane.HORIZONTAL) {
 				BlockPos candidate = new BlockPos(current.getX() + direction.getXOffset(), current.getY(), current.getZ() + direction.getZOffset());
 				if (world.isBlockLoaded(candidate) && world.isAirBlock(candidate)) {
 					return farmHousing.plantGermling(cocoa, world, candidate, farmDirection);
 				}
 			}
 
-			current.move(EnumFacing.UP);
+			current.move(Direction.UP);
 			if (current.getY() - position.getY() > 1) {
 				break;
 			}
@@ -150,9 +151,10 @@ public class FarmLogicCocoa extends FarmLogic {
 		return false;
 	}
 
-	private static boolean isJungleTreeTrunk(IBlockState blockState) {
+	private static boolean isJungleTreeTrunk(BlockState blockState) {
 		Block block = blockState.getBlock();
-		return block == Blocks.LOG && blockState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE;
+		//TODO - hopefully this is OK
+		return block == Blocks.JUNGLE_LOG;
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
@@ -161,11 +163,12 @@ public class FarmLogicCocoa extends FarmLogic {
 		Stack<ICrop> crops = new Stack<>();
 
 		// Determine what type we want to harvest.
-		IBlockState blockState = world.getBlockState(position);
+		BlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
 
 		ICrop crop = null;
-		if (!block.isWood(world, position)) {
+		//TODO - probably needs tag
+		if (false) {//!block.isWood(world, position)) {
 			crop = cocoa.getCropAt(world, position, blockState);
 			if (crop == null) {
 				return crops;
@@ -218,13 +221,14 @@ public class FarmLogicCocoa extends FarmLogic {
 						continue;
 					}
 
-					IBlockState blockState = world.getBlockState(candidate);
+					BlockState blockState = world.getBlockState(candidate);
 					ICrop crop = cocoa.getCropAt(world, candidate, blockState);
 					if (crop != null) {
 						crops.push(crop);
 						candidates.add(candidate);
 						seen.add(candidate);
-					} else if (blockState.getBlock().isWood(world, candidate)) {
+						//TODO - probably needs TAG
+					} else if (false) {//blockState.getBlock().isWood(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

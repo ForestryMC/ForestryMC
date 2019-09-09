@@ -5,23 +5,22 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.arboriculture.ModuleCharcoal;
 
 public class BlockLoam extends Block implements IItemModelRegister {
 
 	public BlockLoam() {
-		super(Material.GROUND);
-		setHardness(0.5F);
-		setSoundType(SoundType.GROUND);
-		setCreativeTab(ModuleCharcoal.getTag());
+		super(Block.Properties.create(Material.EARTH)
+			.hardnessAndResistance(0.5f)
+			.sound(SoundType.GROUND));
+		//		setCreativeTab(ModuleCharcoal.getTag()); TODO creative tab
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0);

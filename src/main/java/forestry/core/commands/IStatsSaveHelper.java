@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
 
 public interface IStatsSaveHelper {
@@ -25,7 +25,7 @@ public interface IStatsSaveHelper {
 
 	void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
 
-	Collection<IAlleleSpecies> getSpecies();
+	Collection<IAlleleForestrySpecies> getSpecies();
 
 	String getFileSuffix();
 

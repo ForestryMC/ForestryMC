@@ -11,8 +11,9 @@
 package forestry.factory.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -34,14 +35,14 @@ public class InventoryStill extends InventoryAdapterTile<TileStill> {
 		if (slotIndex == SLOT_RESOURCE) {
 			return FluidHelper.isFillableEmptyContainer(itemStack);
 		} else if (slotIndex == SLOT_CAN) {
-			FluidStack fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid != null && tile.getTankManager().canFillFluidType(fluid);
+			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_PRODUCT;
 	}
 }

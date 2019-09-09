@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
@@ -25,5 +25,5 @@ public interface IArmorNaturalist {
 	 * @param doSee  Whether or not to actually do the side effects of viewing
 	 * @return true if the armor actually allows the player to see pollination.
 	 */
-	boolean canSeePollination(EntityPlayer player, ItemStack armor, boolean doSee);
+	boolean canSeePollination(PlayerEntity player, ItemStack armor, boolean doSee);
 }

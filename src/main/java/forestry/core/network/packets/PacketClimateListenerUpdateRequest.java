@@ -1,10 +1,10 @@
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.IClimateListener;
@@ -34,14 +34,12 @@ public class PacketClimateListenerUpdateRequest extends ForestryPacket implement
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
 			TileEntity tileEntity = player.world.getTileEntity(pos);
-			if (tileEntity != null && tileEntity.hasCapability(ClimateCapabilities.CLIMATE_LISTENER, null)) {
-				IClimateListener listener = tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null);
-				if (listener != null) {
-					listener.syncToClient(player);
-				}
+			if (tileEntity != null) {
+				LazyOptional<IClimateListener> listener = tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER);
+				listener.ifPresent(l -> l.syncToClient(player));
 			}
 		}
 	}

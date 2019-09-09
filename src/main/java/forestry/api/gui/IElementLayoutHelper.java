@@ -7,10 +7,10 @@ package forestry.api.gui;
 
 import java.util.Collection;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IElementLayoutHelper {
 	/**
 	 * @return Only false if the helper has no space to add this element.

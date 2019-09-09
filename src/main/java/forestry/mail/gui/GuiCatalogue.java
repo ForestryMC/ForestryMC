@@ -13,10 +13,14 @@ package forestry.mail.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 import forestry.api.mail.EnumAddressee;
@@ -30,54 +34,53 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
-import org.lwjgl.input.Keyboard;
-
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 	private static final String boldUnderline = TextFormatting.BOLD.toString() + TextFormatting.UNDERLINE;
 
-	private GuiButton buttonFilter;
-	private GuiButton buttonUse;
+	private Button buttonFilter;
+	private Button buttonUse;
 
 	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
 
-	public GuiCatalogue(EntityPlayer player) {
-		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player));
+	public GuiCatalogue(ContainerCatalogue container, PlayerInventory inv, ITextComponent title) {
+		super(new ResourceLocation("textures/gui/book.png"), container, inv, title);
 		this.xSize = 192;
 		this.ySize = 192;
 
-		buttonFilter = new GuiButton(4, width / 2 - 44, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.filter.all"));
-		buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.address.copy"));
+		buttonFilter = new Button(width / 2 - 44, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.filter.all"), b -> actionPerformed(4));
+		buttonUse = new Button(width / 2, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.address.copy"), b -> actionPerformed(5));
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
-		buttonList.clear();
-		Keyboard.enableRepeatEvents(true);
+		buttons.clear();
+		Minecraft.getInstance().keyboardListener.enableRepeatEvents(true);
 
-		buttonList.add(new GuiButton(2, width / 2 + 44, guiTop + 150, 12, 20, ">"));
-		buttonList.add(new GuiButton(3, width / 2 - 58, guiTop + 150, 12, 20, "<"));
+		buttons.add(new Button(width / 2 + 44, guiTop + 150, 12, 20, ">", b -> actionPerformed(2)));
+		buttons.add(new Button(width / 2 - 58, guiTop + 150, 12, 20, "<", b -> actionPerformed(3)));
 
-		buttonFilter = new GuiButton(4, width / 2 - 44, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.filter.all"));
-		buttonList.add(buttonFilter);
+		//TODO but these are set in the constructor??
+		buttonFilter = new Button(width / 2 - 44, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.filter.all"), b -> actionPerformed(4));
+		buttons.add(buttonFilter);
 
-		buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.address.copy"));
-		buttonList.add(buttonUse);
+		buttonUse = new Button(width / 2, guiTop + 150, 42, 20, Translator.translateToLocal("for.gui.mail.address.copy"), b -> actionPerformed(5));
+		buttons.add(buttonUse);
 	}
 
 	@Override
-	public void onGuiClosed() {
-		Keyboard.enableRepeatEvents(false);
-		super.onGuiClosed();
+	public void onClose() {
+		Minecraft.getInstance().keyboardListener.enableRepeatEvents(false);
+		super.onClose();
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRenderer.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, ColourProperties.INSTANCE.get("gui.book"));
+		Minecraft.getInstance().fontRenderer.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, ColourProperties.INSTANCE.get("gui.book"));
 
 		clearTradeInfoWidgets();
 
@@ -85,21 +88,22 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 		if (tradeInfo != null) {
 			drawTradePreview(tradeInfo, guiLeft + 38, guiTop + 30);
-			buttonUse.enabled = tradeInfo.getState().isOk();
+			buttonUse.visible = tradeInfo.getState().isOk();
 		} else {
 			drawNoTrade(guiLeft + 38, guiTop + 30);
-			buttonUse.enabled = false;
+			buttonUse.visible = false;
 		}
 
-		buttonFilter.displayString = Translator.translateToLocal("for.gui.mail.filter." + container.getFilterIdent());
+		buttonFilter.setMessage(Translator.translateToLocal("for.gui.mail.filter." + container.getFilterIdent()));
 	}
 
 	private void drawNoTrade(int x, int y) {
-		fontRenderer.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
+		Minecraft.getInstance().fontRenderer.drawSplitString(Translator.translateToLocal("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
 	}
 
 	private void drawTradePreview(ITradeStationInfo tradeInfo, int x, int y) {
 
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		fontRenderer.drawString(boldUnderline + tradeInfo.getAddress().getName(), x, y, ColourProperties.INSTANCE.get("gui.book"));
 
 		fontRenderer.drawString(String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, ColourProperties.INSTANCE.get("gui.book"));
@@ -132,11 +136,11 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 		tradeInfoWidgets.clear();
 	}
 
-	@Override
-	protected void actionPerformed(GuiButton button) {
-		switch (button.id) {
+	protected void actionPerformed(int id) {
+		ClientPlayerEntity player = Minecraft.getInstance().player;
+		switch (id) {
 			case 0:
-				mc.player.closeScreen();
+				player.closeScreen();
 				break;
 			case 2: // next page
 				NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, 0));
@@ -153,7 +157,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 					SessionVars.setStringVar("mail.letter.recipient", info.getAddress().getName());
 					SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 				}
-				mc.player.closeScreen();
+				player.closeScreen();
 				break;
 		}
 	}

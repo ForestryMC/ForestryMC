@@ -13,9 +13,9 @@ package forestry.arboriculture.worldgen;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -39,12 +39,12 @@ public class TreeBlockTypeLeaf implements ITreeBlockType {
 	}
 
 	@Override
-	public void setDirection(EnumFacing facing) {
+	public void setDirection(Direction facing) {
 
 	}
 
 	@Override
-	public boolean setBlock(World world, BlockPos pos) {
-		return tree.setLeaves(world, owner, pos, rand == null ? world.rand : rand);
+	public boolean setBlock(IWorld world, BlockPos pos) {
+		return tree.setLeaves(world, owner, pos, rand == null ? world.getRandom() : rand);
 	}
 }

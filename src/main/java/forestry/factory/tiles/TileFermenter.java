@@ -10,29 +10,26 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collection;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FermenterFuel;
@@ -48,13 +45,14 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerFermenter;
-import forestry.factory.gui.GuiFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
-import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import net.minecraftforge.fml.common.Optional;
+
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
@@ -71,7 +69,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	private int fuelCurrentFerment = 0;
 
 	public TileFermenter() {
-		super(2000, 8000);
+		super(ModuleFactory.getTiles().fermenter, 2000, 8000);
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
 
@@ -85,30 +83,30 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		nbttagcompound.setInteger("FermentationTime", fermentationTime);
-		nbttagcompound.setInteger("FermentationTotalTime", fermentationTotalTime);
-		nbttagcompound.setInteger("FuelBurnTime", fuelBurnTime);
-		nbttagcompound.setInteger("FuelTotalTime", fuelTotalTime);
-		nbttagcompound.setInteger("FuelCurrentFerment", fuelCurrentFerment);
+		compoundNBT.putInt("FermentationTime", fermentationTime);
+		compoundNBT.putInt("FermentationTotalTime", fermentationTotalTime);
+		compoundNBT.putInt("FuelBurnTime", fuelBurnTime);
+		compoundNBT.putInt("FuelTotalTime", fuelTotalTime);
+		compoundNBT.putInt("FuelCurrentFerment", fuelCurrentFerment);
 
-		tankManager.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		tankManager.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		fermentationTime = nbttagcompound.getInteger("FermentationTime");
-		fermentationTotalTime = nbttagcompound.getInteger("FermentationTotalTime");
-		fuelBurnTime = nbttagcompound.getInteger("FuelBurnTime");
-		fuelTotalTime = nbttagcompound.getInteger("FuelTotalTime");
-		fuelCurrentFerment = nbttagcompound.getInteger("FuelCurrentFerment");
+		fermentationTime = compoundNBT.getInt("FermentationTime");
+		fermentationTotalTime = compoundNBT.getInt("FermentationTotalTime");
+		fuelBurnTime = compoundNBT.getInt("FuelBurnTime");
+		fuelTotalTime = compoundNBT.getInt("FuelTotalTime");
+		fuelCurrentFerment = compoundNBT.getInt("FuelCurrentFerment");
 
-		tankManager.readFromNBT(nbttagcompound);
+		tankManager.read(compoundNBT);
 	}
 
 	@Override
@@ -118,7 +116,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -146,10 +144,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
 		int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-		productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), true);
+		productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), IFluidHandler.FluidAction.EXECUTE);
 
 		fuelBurnTime--;
-		resourceTank.drain(fermented, true);
+		resourceTank.drain(fermented, IFluidHandler.FluidAction.EXECUTE);
 		fermentationTime -= fermented;
 
 		// Not done yet
@@ -169,7 +167,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		ItemStack resource = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
 		FluidStack fluid = resourceTank.getFluid();
 
-		if (fluid != null) {
+		if (!fluid.isEmpty()) {
 			currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
 		}
 
@@ -235,15 +233,15 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		boolean hasRecipe = currentRecipe != null;
 		boolean hasFuel = fuelBurnTime > 0;
 		boolean hasResource = fermentationTime > 0 || !getStackInSlot(InventoryFermenter.SLOT_RESOURCE).isEmpty();
-		FluidStack drained = resourceTank.drain(fermented, false);
-		boolean hasFluidResource = drained != null && drained.amount == fermented;
+		FluidStack drained = resourceTank.drain(fermented, IFluidHandler.FluidAction.SIMULATE);
+		boolean hasFluidResource = !drained.isEmpty() && drained.getAmount() == fermented;
 		boolean hasFluidSpace = true;
 
 		if (hasRecipe) {
 			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
 			Fluid output = currentRecipe.getOutput();
 			FluidStack fluidStack = new FluidStack(output, productAmount);
-			hasFluidSpace = productTank.fillInternal(fluidStack, false) == fluidStack.amount;
+			hasFluidSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -314,35 +312,23 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(FactoryTriggers.lowResource25);
+	//		triggers.add(FactoryTriggers.lowResource10);
+	//	}
+
 	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(FactoryTriggers.lowResource25);
-		triggers.add(FactoryTriggers.lowResource10);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerFermenter(windowId, inv, this);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiFermenter(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerFermenter(player.inventory, this);
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}

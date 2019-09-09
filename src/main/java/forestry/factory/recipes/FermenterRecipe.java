@@ -14,9 +14,9 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFermenterRecipe;
@@ -24,6 +24,7 @@ import forestry.api.recipes.IFermenterRecipe;
 public class FermenterRecipe implements IFermenterRecipe {
 
 	private final ItemStack resource;
+	@Nullable
 	private final String resourceOreName;
 	private final int fermentationValue;
 	private final float modifier;

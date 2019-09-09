@@ -13,11 +13,11 @@ package forestry.worktable.network.packets;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -52,10 +52,10 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 		data.writeStreamable(recipe);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 			MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
 

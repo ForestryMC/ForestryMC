@@ -13,25 +13,22 @@ package forestry.core.fluids;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 
 import forestry.api.core.INbtReadable;
@@ -80,6 +77,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	public boolean add(StandardTank tank) {
+		//TODO added is always true, and things are always appended to the end of the list?
 		boolean added = tanks.add(tank);
 		int index = tanks.indexOf(tank);
 		tank.setTankUpdateHandler(this);
@@ -89,25 +87,25 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		NBTTagList tagList = new NBTTagList();
+	public CompoundNBT write(CompoundNBT data) {
+		ListNBT tagList = new ListNBT();
 		for (byte slot = 0; slot < tanks.size(); slot++) {
 			StandardTank tank = tanks.get(slot);
-			if (tank.getFluid() != null) {
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("tank", slot);
+			if (!tank.getFluid().isEmpty()) {
+				CompoundNBT tag = new CompoundNBT();
+				tag.putByte("tank", slot);
 				tank.writeToNBT(tag);
-				tagList.appendTag(tag);
+				tagList.add(tag);
 			}
 		}
-		data.setTag("tanks", tagList);
+		data.put("tanks", tagList);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		NBTList<NBTTagCompound> tagList = NBTUtilForestry.getNBTList(data, "tanks", NBTUtilForestry.EnumNBTType.COMPOUND);
-		for (NBTTagCompound tag : tagList) {
+	public void read(CompoundNBT data) {
+		NBTList<CompoundNBT> tagList = NBTUtilForestry.getNBTList(data, "tanks", NBTUtilForestry.EnumNBTType.COMPOUND);
+		for (CompoundNBT tag : tagList) {
 			int slot = tag.getByte("tank");
 			if (slot >= 0 && slot < tanks.size()) {
 				StandardTank tank = tanks.get(slot);
@@ -125,7 +123,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		for (StandardTank tank : tanks) {
 			tank.readData(data);
 		}
@@ -133,7 +131,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 	@Override
 	public void containerAdded(Container container, IContainerListener player) {
-		if (!(player instanceof EntityPlayerMP)) {
+		if (!(player instanceof ServerPlayerEntity)) {
 			return;
 		}
 
@@ -166,6 +164,9 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 		FluidStack fluidStack = tank.getFluid();
 		FluidStack prev = prevFluidStacks.get(container, tankIndex);
+		if (prev == null) {
+			prev = FluidStack.EMPTY;
+		}
 		if (FluidHelper.areFluidStacksEqual(fluidStack, prev)) {
 			return;
 		}
@@ -179,12 +180,12 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			FluidStack fluid = tank.getFluid();
 			IForestryPacketClient packet = new PacketTankLevelUpdate(tile, tankIndex, fluid);
 			for (IContainerListener crafter : crafters) {
-				if (crafter instanceof EntityPlayerMP) {
-					NetworkUtil.sendToPlayer(packet, (EntityPlayerMP) crafter);
+				if (crafter instanceof ServerPlayerEntity) {
+					NetworkUtil.sendToPlayer(packet, (ServerPlayerEntity) crafter);
 				}
 			}
 
-			if (fluid == null) {
+			if (fluid.isEmpty()) {
 				prevFluidStacks.remove(container, tankIndex);
 			} else {
 				prevFluidStacks.put(container, tankIndex, fluid.copy());
@@ -207,17 +208,50 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	@Override
-	public int fill(FluidStack resource, boolean doFill) {
+	public int getTanks() {
+		return tanks.size();
+	}
+
+	@Nonnull
+	@Override
+	public FluidStack getFluidInTank(int tankIndex) {
+		IFluidTank tank = getTank(tankIndex);
+		if (tank == null) {
+			return FluidStack.EMPTY;
+		}
+		return tank.getFluid();
+	}
+
+	@Override
+	public int getTankCapacity(int tankIndex) {
+		IFluidTank tank = getTank(tankIndex);
+		if (tank == null) {
+			return 0;
+		}
+		return tank.getCapacity();
+	}
+
+	@Override
+	public boolean isFluidValid(int tankIndex, @Nonnull FluidStack stack) {
+		IFluidTank tank = getTank(tankIndex);
+		if (tank == null) {
+			return false;
+		}
+		return tank.isFluidValid(stack);
+	}
+
+	@Override
+	public int fill(FluidStack resource, FluidAction action) {
 		for (StandardTank tank : tanks) {
 			if (tankAcceptsFluid(tank, resource)) {
-				return fill(tank.getTankIndex(), resource, doFill);
+				return fill(tank.getTankIndex(), resource, action);
 			}
 		}
 
-		return EmptyFluidHandler.INSTANCE.fill(resource, doFill);
+		return EmptyFluidHandler.INSTANCE.fill(resource, action);
 	}
 
-	public int fill(int tankIndex, FluidStack resource, boolean doFill) {
+	public int fill(int tankIndex, FluidStack resource, FluidAction action) {
 		if (tankIndex < 0 || tankIndex >= tanks.size()) {
 			return 0;
 		}
@@ -227,7 +261,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 			return 0;
 		}
 
-		return tank.fill(resource, doFill);
+		return tank.fill(resource, action);
 	}
 
 	@Override
@@ -251,52 +285,37 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		}
 	}
 
-	@Nullable
 	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
+	public FluidStack drain(int maxDrain, FluidAction action) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrain(tank)) {
-				return drain(tank.getTankIndex(), maxDrain, doDrain);
+				return drain(tank.getTankIndex(), maxDrain, action);
 			}
 		}
-		return EmptyFluidHandler.INSTANCE.drain(maxDrain, doDrain);
+		return EmptyFluidHandler.INSTANCE.drain(maxDrain, action);
 	}
 
-	@Nullable
-	public FluidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+	public FluidStack drain(int tankIndex, int maxDrain, FluidAction action) {
 		if (tankIndex < 0 || tankIndex >= tanks.size()) {
-			return null;
+			return FluidStack.EMPTY;
 		}
 
 		StandardTank tank = tanks.get(tankIndex);
 		if (!tank.canDrain()) {
-			return null;
+			return FluidStack.EMPTY;
 		}
 
-		return tank.drain(maxDrain, doDrain);
+		return tank.drain(maxDrain, action);
 	}
 
 	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain) {
+	public FluidStack drain(FluidStack resource, FluidAction action) {
 		for (StandardTank tank : tanks) {
 			if (tankCanDrainFluid(tank, resource)) {
-				return drain(tank.getTankIndex(), resource.amount, doDrain);
+				return drain(tank.getTankIndex(), resource.getAmount(), action);
 			}
 		}
-		return null;
-	}
-
-	@Override
-	public IFluidTankProperties[] getTankProperties() {
-		IFluidTankProperties[] properties = new IFluidTankProperties[tanks.size()];
-		for (int i = 0; i < tanks.size(); i++) {
-			properties[i] = new FluidTankPropertiesWrapper(tanks.get(i));
-		}
-		return properties;
-	}
-
-	public FluidTankInfo getTankInfo(int tankIndex) {
-		return tanks.get(tankIndex).getInfo();
+		return FluidStack.EMPTY;
 	}
 
 	@Nullable
@@ -304,6 +323,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		return tanks.get(tankIndex).getFluid();
 	}
 
+	//TODO unused?
 	public int getFluidAmount(int tankIndex) {
 		return tanks.get(tankIndex).getFluidAmount();
 	}
@@ -311,18 +331,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	@Override
 	public boolean canFillFluidType(FluidStack fluidStack) {
 		for (StandardTank tank : tanks) {
-			if (tank.canFillFluidType(fluidStack)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean canDrainFluidType(FluidStack fluidStack) {
-		for (StandardTank tank : tanks) {
-			if (tank.canDrainFluidType(fluidStack)) {
+			if (tank.isFluidValid(fluidStack)) {
 				return true;
 			}
 		}
@@ -332,19 +341,19 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 	private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
 		return tank.canFill() &&
-			tank.fill(fluidStack, false) > 0;
+			tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
 	}
 
 	private static boolean tankCanDrain(StandardTank tank) {
 		if (!tank.canDrain()) {
 			return false;
 		}
-		FluidStack drained = tank.drain(1, false);
-		return drained != null && drained.amount > 0;
+		FluidStack drained = tank.drain(1, FluidAction.SIMULATE);
+		return !drained.isEmpty() && drained.getAmount() > 0;
 	}
 
 	private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
-		return Fluids.areEqual(tank.getFluidType(), fluidStack) &&
+		return ForestryFluids.areEqual(tank.getFluidType(), fluidStack) &&
 			tankCanDrain(tank);
 	}
 }

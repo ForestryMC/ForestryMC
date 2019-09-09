@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "minecraft:coal",
+    "data": 1,
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "forestry:charcoal",
+      "data": 0
+    }
+  ],
+  "conditions": [
+    {
+      "module": "charcoal",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "charcoal"
+}

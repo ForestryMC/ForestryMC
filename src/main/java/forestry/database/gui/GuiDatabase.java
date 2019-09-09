@@ -1,19 +1,19 @@
 package forestry.database.gui;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
@@ -39,7 +39,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	private final ArrayList<DatabaseItem> sorted = new ArrayList<>();
 	/* Attributes - Gui Elements */
 	@Nullable
-	private GuiTextField searchField;
+	private TextFieldWidget searchField;
 	private WidgetScrollBar scrollBar;
 	/* Attributes - State */
 	private boolean markedForSorting;
@@ -47,9 +47,9 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	private DatabaseItem selectedItem;
 
 	/* Constructors */
-	public GuiDatabase(TileDatabase tile, EntityPlayer player) {
-		super(Constants.TEXTURE_PATH_GUI + "/database_inventory.png", new ContainerDatabase(tile, player.inventory), tile, 7, 140, 20, true, tile.getInternalInventory().getSizeInventory(), 0);
-		this.tile = tile;
+	public GuiDatabase(ContainerDatabase container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/database_inventory.png", container, inv, container.getTile(), 7, 140, 20, true, container.getTile().getInternalInventory().getSizeInventory(), 0);
+		this.tile = container.getTile();
 
 		slots = new ArrayList<>();
 		xSize = 218;
@@ -189,54 +189,49 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement GuiScreen */
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
-		this.searchField = new GuiTextField(0, this.fontRenderer, this.guiLeft + 101, this.guiTop + 6, 80, this.fontRenderer.FONT_HEIGHT);
+		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + 101, this.guiTop + 6, 80, this.minecraft.fontRenderer.FONT_HEIGHT, "");
 		this.searchField.setMaxStringLength(50);
 		this.searchField.setEnableBackgroundDrawing(false);
 		this.searchField.setTextColor(16777215);
 
-		addButton(new GuiDatabaseButton<>(0, guiLeft - 18, guiTop, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON));
+		addButton(new GuiDatabaseButton<>(guiLeft - 18, guiTop, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
 
 		updateViewedItems();
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		String searchText = searchField != null ? searchField.getText() : "";
 		updateItems(searchText);
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (searchField != null && this.searchField.textboxKeyTyped(typedChar, keyCode)) {
+	public boolean keyPressed(int typedChar, int keyCode, int int3) {
+		if (searchField != null && this.searchField.keyPressed(typedChar, keyCode, int3)) {
 			scrollBar.setValue(0);
 			markForSorting();
+			return true;
 		} else {
-			super.keyTyped(typedChar, keyCode);
+			return super.keyPressed(typedChar, keyCode, int3);
 		}
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		Slot slot = getSlotAtPosition(mouseX, mouseY);
 		if (slot != null && slot.getSlotIndex() == -1) {
-			return;
+			return false;
 		}
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+		boolean acted = super.mouseClicked(mouseX, mouseY, mouseButton);
 		if (searchField != null) {
 			searchField.mouseClicked(mouseX, mouseY, mouseButton);
-		}
-	}
-
-	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
-		super.actionPerformed(button);
-		if (button instanceof GuiDatabaseButton) {
-			GuiDatabaseButton databaseButton = (GuiDatabaseButton) button;
-			databaseButton.onPressed();
+			return true;
+		} else {
+			return acted;
 		}
 	}
 
@@ -246,9 +241,9 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
 		if (searchField != null) {
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.disableLighting();
-			this.searchField.drawTextBox();
+			this.searchField.render(mouseX, mouseY, f);
 		}
 	}
 
@@ -257,7 +252,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	protected void drawBackground() {
 		bindTexture(textureFile);
 
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		blit(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 	@Override

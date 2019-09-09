@@ -1,7 +1,7 @@
 package forestry.sorting.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.sorting.tiles.TileGeneticFilter;
@@ -12,7 +12,7 @@ public class InventoryFilter extends InventoryAdapterTile<TileGeneticFilter> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
 		return false;
 	}
 }

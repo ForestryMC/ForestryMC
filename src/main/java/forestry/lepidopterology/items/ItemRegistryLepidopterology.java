@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.items;
 
-import forestry.api.lepidopterology.EnumFlutterType;
+
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.core.items.ItemRegistry;
 
 public class ItemRegistryLepidopterology extends ItemRegistry {

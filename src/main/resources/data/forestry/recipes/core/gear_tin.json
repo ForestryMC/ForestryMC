@@ -1,0 +1,36 @@
+{
+  "result": {
+    "item": "forestry:gear_tin"
+  },
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    },
+    "X": {
+      "type": "fallback",
+      "primary": [
+        {
+          "item": "#GEARSTONE"
+        }
+      ],
+      "fallback": [
+        {
+          "item": "#INGOTCOPPER"
+        }
+      ]
+    }
+  },
+  "group": "core"
+}

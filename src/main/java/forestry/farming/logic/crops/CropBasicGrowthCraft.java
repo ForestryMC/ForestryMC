@@ -11,23 +11,28 @@
 package forestry.farming.logic.crops;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 
+//TODO consider movnig compat specific crops to compat
+//TODO follow up in forge on generic crop interface...
 public class CropBasicGrowthCraft extends Crop {
 
-	private final IBlockState blockState;
+	private final BlockState blockState;
 	private final boolean isRice;
 	private final boolean isGrape;
 
-	public CropBasicGrowthCraft(World world, IBlockState blockState, BlockPos position, boolean isRice, boolean isGrape) {
+	public CropBasicGrowthCraft(World world, BlockState blockState, BlockPos position, boolean isRice, boolean isGrape) {
 		super(world, position);
 		this.blockState = blockState;
 		this.isRice = isRice;
@@ -43,7 +48,10 @@ public class CropBasicGrowthCraft extends Crop {
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		NonNullList<ItemStack> harvest = NonNullList.create();
-		block.getDrops(harvest, world, pos, blockState, 0);
+		//TODO cast
+		LootContext.Builder ctx = new LootContext.Builder((ServerWorld) world)
+			.withParameter(LootParameters.POSITION, pos);
+		harvest.addAll(block.getDrops(blockState, ctx));
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
@@ -52,14 +60,15 @@ public class CropBasicGrowthCraft extends Crop {
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		if (isGrape) {
-			world.setBlockToAir(pos);
+			world.removeBlock(pos, false);
 		} else {
 			world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 		}
 
 		if (isRice) {
-			// TODO: GrowthCraft for MC 1.9. Don't use meta, get the actual block state.
-			world.setBlockState(pos.down(), block.getStateFromMeta(7), Constants.FLAG_BLOCK_SYNC);
+			// TODO: GrowthCraft for MC 1.9. Don't use meta, getComb the actual block state.
+			world.setBlockState(pos.down(), block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+			//TODO flatten
 		}
 
 		return harvest;

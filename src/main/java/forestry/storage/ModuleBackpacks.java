@@ -24,23 +24,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.InterModComms;
 
 import forestry.Forestry;
 import forestry.api.modules.ForestryModule;
-import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilterConfigurable;
@@ -52,18 +49,19 @@ import forestry.core.IResupplyHandler;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.config.forge_old.Property;
+import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.ItemRegistryCore;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.Translator;
-import forestry.lepidopterology.ModuleLepidopterology;
-import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import forestry.storage.gui.BackPackContainerTypes;
+import forestry.storage.gui.GuiBackpack;
 import forestry.storage.items.ItemRegistryBackpacks;
 
 @ForestryModule(moduleID = ForestryModuleUids.BACKPACKS, containerID = Constants.MOD_ID, name = "Backpack", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.backpacks.description", lootTable = "storage")
@@ -73,6 +71,8 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 	@Nullable
 	private static ItemRegistryBackpacks items;
+	@Nullable
+	private static BackPackContainerTypes containerTypes;
 
 	private final Map<String, List<String>> backpackAcceptedOreDictRegexpDefaults = new HashMap<>();
 	private final Map<String, List<String>> backpackAcceptedItemDefaults = new HashMap<>();
@@ -91,9 +91,13 @@ public class ModuleBackpacks extends BlankForestryModule {
 		return items;
 	}
 
+	public static BackPackContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
+	}
+
 	@Override
 	public void setupAPI() {
-
 		StorageManager.crateRegistry = new CrateRegistry();
 
 		BackpackManager.backpackInterface = new BackpackInterface();
@@ -132,8 +136,19 @@ public class ModuleBackpacks extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerItems() {
 		items = new ItemRegistryBackpacks();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new BackPackContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		BackPackContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.BACKPACK, GuiBackpack::new);
 	}
 
 	@Override
@@ -250,7 +265,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 		)));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.DIGGER_UID, getItemStrings(Arrays.asList(
-			new ItemStack(Blocks.DIRT, 1, OreDictionary.WILDCARD_VALUE),
+			//			new ItemStack(Blocks.DIRT, 1, OreDictionary.WILDCARD_VALUE), TODO tags
 			new ItemStack(Items.FLINT),
 			new ItemStack(Items.CLAY_BALL),
 			new ItemStack(Items.SNOWBALL),
@@ -265,12 +280,11 @@ public class ModuleBackpacks extends BlankForestryModule {
 		backpackAcceptedItemDefaults.put(BackpackManager.FORESTER_UID, getItemStrings(Arrays.asList(
 			new ItemStack(Blocks.RED_MUSHROOM),
 			new ItemStack(Blocks.BROWN_MUSHROOM),
-			new ItemStack(Blocks.RED_FLOWER, 1, OreDictionary.WILDCARD_VALUE),
-			new ItemStack(Blocks.YELLOW_FLOWER),
-			new ItemStack(Blocks.TALLGRASS, 1, OreDictionary.WILDCARD_VALUE),
-			new ItemStack(Blocks.DOUBLE_PLANT, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Blocks.POPPY),    //TODO tag
+			new ItemStack(Blocks.GRASS),    //TODO tag
+			new ItemStack(Blocks.SUNFLOWER),    //TODO tag tall flowers
 			new ItemStack(Blocks.PUMPKIN),
-			new ItemStack(Blocks.MELON_BLOCK),
+			new ItemStack(Blocks.MELON),
 			new ItemStack(Items.GOLDEN_APPLE),
 			new ItemStack(Items.NETHER_WART),
 			new ItemStack(Items.WHEAT_SEEDS),
@@ -287,7 +301,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 			new ItemStack(Items.BLAZE_POWDER),
 			new ItemStack(Items.BLAZE_ROD),
 			new ItemStack(Items.ROTTEN_FLESH),
-			new ItemStack(Items.SKULL, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Items.SKELETON_SKULL),    //TODO tag
 			new ItemStack(Items.GHAST_TEAR),
 			new ItemStack(Items.GOLD_NUGGET),
 			new ItemStack(Items.ARROW),
@@ -307,14 +321,14 @@ public class ModuleBackpacks extends BlankForestryModule {
 			new ItemStack(Items.RABBIT_HIDE),
 			new ItemStack(Items.SPIDER_EYE),
 			new ItemStack(Items.FERMENTED_SPIDER_EYE),
-			new ItemStack(Items.DYE, 1, 0),
+			new ItemStack(Items.BONE_MEAL),    //TODO correct item?
 			new ItemStack(Blocks.HAY_BLOCK),
-			new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Blocks.WHITE_WOOL),    //TODO tag
 			new ItemStack(Items.ENDER_EYE),
 			new ItemStack(Items.MAGMA_CREAM),
-			new ItemStack(Items.SPECKLED_MELON),
-			new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE),
-			new ItemStack(Items.COOKED_FISH, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Items.GLISTERING_MELON_SLICE),    //TODO right item?
+			new ItemStack(Items.COD),    //TODO tag
+			new ItemStack(Items.COOKED_COD),    //TODO tag
 			new ItemStack(Items.LEAD),
 			new ItemStack(Items.FISHING_ROD),
 			new ItemStack(Items.NAME_TAG),
@@ -329,13 +343,14 @@ public class ModuleBackpacks extends BlankForestryModule {
 			new ItemStack(Blocks.REDSTONE_LAMP),
 			new ItemStack(Blocks.SEA_LANTERN),
 			new ItemStack(Blocks.END_ROD),
-			new ItemStack(Blocks.STONEBRICK, 1, OreDictionary.WILDCARD_VALUE),
-			new ItemStack(Blocks.BRICK_BLOCK),
+			new ItemStack(Blocks.STONE_BRICKS),    //TODO tag
+			new ItemStack(Blocks.BRICKS),
 			new ItemStack(Blocks.CLAY),
-			new ItemStack(Blocks.HARDENED_CLAY, 1, OreDictionary.WILDCARD_VALUE),
-			new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Blocks.TERRACOTTA),    //TODO tag?
+			new ItemStack(Blocks.WHITE_TERRACOTTA),    //TODO tag
+			new ItemStack(Blocks.WHITE_GLAZED_TERRACOTTA),    //TODO tag
 			new ItemStack(Blocks.PACKED_ICE),
-			new ItemStack(Blocks.NETHER_BRICK),
+			new ItemStack(Blocks.NETHER_BRICKS),
 			new ItemStack(Blocks.NETHER_BRICK_FENCE),
 			new ItemStack(Blocks.CRAFTING_TABLE),
 			new ItemStack(Blocks.FURNACE),
@@ -344,28 +359,28 @@ public class ModuleBackpacks extends BlankForestryModule {
 			new ItemStack(Blocks.DROPPER),
 			new ItemStack(Blocks.LADDER),
 			new ItemStack(Blocks.IRON_BARS),
-			new ItemStack(Blocks.QUARTZ_BLOCK, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Blocks.QUARTZ_BLOCK),    //TODO tag
 			new ItemStack(Blocks.QUARTZ_STAIRS),
 			new ItemStack(Blocks.SANDSTONE_STAIRS),
 			new ItemStack(Blocks.RED_SANDSTONE_STAIRS),
-			new ItemStack(Blocks.COBBLESTONE_WALL, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Blocks.COBBLESTONE_WALL),    //TODO tag
 			new ItemStack(Blocks.STONE_BUTTON),
-			new ItemStack(Blocks.WOODEN_BUTTON),
-			new ItemStack(Blocks.STONE_SLAB, 1, OreDictionary.WILDCARD_VALUE),
-			new ItemStack(Blocks.STONE_SLAB2, 1, OreDictionary.WILDCARD_VALUE),
-			new ItemStack(Blocks.WOODEN_SLAB, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Blocks.OAK_BUTTON),    //TODO tag
+			new ItemStack(Blocks.STONE_SLAB),    //TODO tag
+			new ItemStack(Blocks.SANDSTONE_SLAB),    //TODO tag
+			new ItemStack(Blocks.OAK_SLAB),    //TODO tag
 			new ItemStack(Blocks.PURPUR_BLOCK),
 			new ItemStack(Blocks.PURPUR_PILLAR),
 			new ItemStack(Blocks.PURPUR_STAIRS),
 			new ItemStack(Blocks.PURPUR_SLAB),
-			new ItemStack(Blocks.END_BRICKS),
-			new ItemStack(Blocks.CARPET, 1, OreDictionary.WILDCARD_VALUE),
+			new ItemStack(Blocks.END_STONE_BRICKS),
+			new ItemStack(Blocks.WHITE_CARPET),    //TODO tag
 			new ItemStack(Blocks.IRON_TRAPDOOR),
 			new ItemStack(Blocks.STONE_PRESSURE_PLATE),
-			new ItemStack(Blocks.WOODEN_PRESSURE_PLATE),
+			new ItemStack(Blocks.OAK_PRESSURE_PLATE),    //TODO tag
 			new ItemStack(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE),
 			new ItemStack(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE),
-			new ItemStack(Items.SIGN),
+			new ItemStack(Items.OAK_SIGN),    //TODO tag
 			new ItemStack(Items.ITEM_FRAME),
 			new ItemStack(Items.ACACIA_DOOR),
 			new ItemStack(Items.BIRCH_DOOR),
@@ -379,8 +394,8 @@ public class ModuleBackpacks extends BlankForestryModule {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			BlockRegistryApiculture beeBlocks = ModuleApiculture.getBlocks();
 			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
-				new ItemStack(beeBlocks.candle, 1, OreDictionary.WILDCARD_VALUE),
-				new ItemStack(beeBlocks.stump, 1, OreDictionary.WILDCARD_VALUE)
+				new ItemStack(beeBlocks.candle),    //TODO tag
+				new ItemStack(beeBlocks.stump)
 			)));
 		}
 
@@ -424,10 +439,10 @@ public class ModuleBackpacks extends BlankForestryModule {
 				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.item.stacks.format", backpackUid));
 
 				String[] backpackItemList = backpackConf.getStringList();
-				List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
-				for (ItemStack backpackItem : backpackItems) {
-					backpackFilter.acceptItem(backpackItem);
-				}
+				//				List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);	//TODO tags, new config
+				//				for (ItemStack backpackItem : backpackItems) {
+				//					backpackFilter.acceptItem(backpackItem);
+				//				}
 			}
 
 			// accepted oreDict
@@ -442,25 +457,25 @@ public class ModuleBackpacks extends BlankForestryModule {
 				Property backpackConf = config.get("backpacks." + backpackUid, "ore.dict.accepted", defaultOreRegexpNames);
 				backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.ore.dict.format", backpackUid));
 
-				for (String name : OreDictionary.getOreNames()) {
-					if (name == null) {
-						Log.error("Found a null oreName in the ore dictionary");
-					} else {
-						for (String regex : backpackConf.getStringList()) {
-							if (name.matches(regex)) {
-								backpackFilter.acceptOreDictName(name);
-							}
-						}
-					}
-				}
+				//				for (String name : OreDictionary.getOreNames()) {
+				//					if (name == null) {
+				//						Log.error("Found a null oreName in the ore dictionary");
+				//					} else {
+				//						for (String regex : backpackConf.getStringList()) {
+				//							if (name.matches(regex)) {
+				//								backpackFilter.acceptOreDictName(name);
+				//							}
+				//						}
+				//					}
+				//				}	//TODO new config, tags
 			}
 		}
 	}
 
 	@Override
-	public boolean processIMCMessage(IMCMessage message) {
-		if (message.key.equals("add-backpack-items")) {
-			String[] tokens = message.getStringValue().split("@");
+	public boolean processIMCMessage(InterModComms.IMCMessage message) {
+		if (message.getMethod().equals("add-backpack-items")) {
+			String[] tokens = ((String) message.getMessageSupplier().get()).split("@");    //TODO new imc
 			if (tokens.length != 2) {
 				IMCUtil.logInvalidIMCMessage(message);
 				return true;
@@ -498,25 +513,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryBackpacks items = getItems();
-		if (items.apiaristBackpack != null && ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			BlockRegistryApiculture beeBlocks = ModuleApiculture.getBlocks();
-			addBackpackRecipe("bee", items.apiaristBackpack, "stickWood", beeBlocks.beeChest);
-		}
-
-		if (items.lepidopteristBackpack != null && ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			BlockRegistryLepidopterology butterflyBlocks = ModuleLepidopterology.getBlocks();
-			ItemStack chest = new ItemStack(butterflyBlocks.butterflyChest);
-			addBackpackRecipe("butterfly", items.lepidopteristBackpack, "stickWood", chest);
-		}
-
-		addBackpackRecipe("mining", items.minerBackpack, "ingotIron");
-		addBackpackRecipe("digging", items.diggerBackpack, "stone");
-		addBackpackRecipe("foresting", items.foresterBackpack, "logWood");
-		addBackpackRecipe("hunting", items.hunterBackpack, Items.FEATHER);
-		addBackpackRecipe("adventuring", items.adventurerBackpack, Items.BONE);
-		addBackpackRecipe("building", items.builderBackpack, Items.CLAY_BALL);
-
 		// / CARPENTER
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / BACKPACKS WOVEN
@@ -529,32 +525,17 @@ public class ModuleBackpacks extends BlankForestryModule {
 		}
 	}
 
-	private static void addBackpackRecipe(String recipeName, Item backpack, Object material) {
-		addBackpackRecipe(recipeName, backpack, material, "chestWood");
-	}
-
-	private static void addBackpackRecipe(String recipeName, Item backpack, Object material, Object chest) {
-		RecipeUtil.addRecipe("backpack_" + recipeName, backpack,
-			"X#X",
-			"VYV",
-			"X#X",
-			'#', Blocks.WOOL,
-			'X', Items.STRING,
-			'V', material,
-			'Y', chest);
-	}
-
 	private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 
-		ItemStack wovenSilk = coreItems.craftingMaterial.getWovenSilk();
-		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(backpackT2),
-			"WXW",
-			"WTW",
-			"WWW",
-			'X', "gemDiamond",
-			'W', wovenSilk,
-			'T', backpackT1);
+		ItemStack wovenSilk = coreItems.getCraftingMaterial(EnumCraftingMaterial.WOVEN_SILK, 1);
+		//		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(backpackT2),
+		//				"WXW",
+		//				"WTW",
+		//				"WWW",
+		//				'X', "gemDiamond",
+		//				'W', wovenSilk,
+		//				'T', backpackT1);	//TODO fluids
 	}
 
 	@Override

@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "forestry:resource_storage",
+    "data": 2
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    }
+  },
+  "group": "core"
+}

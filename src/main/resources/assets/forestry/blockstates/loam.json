@@ -1,5 +1,7 @@
 {
 	"variants": {
-		"normal": { "model": "forestry:loam" }
+      "": {
+        "model": "forestry:block/loam"
+      }
 	}
 }

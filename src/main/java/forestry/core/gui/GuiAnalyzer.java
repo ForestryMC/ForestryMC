@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
@@ -20,9 +21,9 @@ import forestry.core.tiles.TileAnalyzer;
 public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
 	private final TileAnalyzer tile;
 
-	public GuiAnalyzer(InventoryPlayer inventory, TileAnalyzer tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/alyzer.png", new ContainerAnalyzer(inventory, tile), tile);
-		this.tile = tile;
+	public GuiAnalyzer(ContainerAnalyzer analyzer, PlayerInventory inventory, ITextComponent name) {
+		super(Constants.TEXTURE_PATH_GUI + "/alyzer.png", analyzer, inventory, analyzer.tile);
+		this.tile = analyzer.tile;
 		this.ySize = 176;
 		this.widgetManager.add(new TankWidget(this.widgetManager, 95, 24, 0));
 	}
@@ -37,7 +38,7 @@ public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 60;
 
-		drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+		blit(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 	@Override

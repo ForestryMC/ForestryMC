@@ -11,7 +11,7 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 public class InventoryAdapterRestricted extends InventoryAdapter {
 	public InventoryAdapterRestricted(int size, String name) {
@@ -28,12 +28,12 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return !itemStack.isEmpty() && isItemValidForSlot(slotIndex, itemStack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return !itemStack.isEmpty();
 	}
 }

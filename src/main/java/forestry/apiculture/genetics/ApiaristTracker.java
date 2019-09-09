@@ -10,15 +10,20 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.genetics.BreedingTracker;
 
@@ -36,39 +41,40 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	private int princessesTotal = 0;
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+	public void read(CompoundNBT compoundNBT) {
 
-		queensTotal = nbttagcompound.getInteger("QueensTotal");
-		princessesTotal = nbttagcompound.getInteger("PrincessesTotal");
-		dronesTotal = nbttagcompound.getInteger("DronesTotal");
+		queensTotal = compoundNBT.getInt("QueensTotal");
+		princessesTotal = compoundNBT.getInt("PrincessesTotal");
+		dronesTotal = compoundNBT.getInt("DronesTotal");
 
-		super.readFromNBT(nbttagcompound);
+		super.read(compoundNBT);
 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT compoundnbt) {
 
-		nbttagcompound.setInteger("QueensTotal", queensTotal);
-		nbttagcompound.setInteger("PrincessesTotal", princessesTotal);
-		nbttagcompound.setInteger("DronesTotal", dronesTotal);
+		compoundnbt.putInt("QueensTotal", queensTotal);
+		compoundnbt.putInt("PrincessesTotal", princessesTotal);
+		compoundnbt.putInt("DronesTotal", dronesTotal);
 
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		compoundnbt = super.write(compoundnbt);
+		return compoundnbt;
 	}
 
 	@Override
 	public void registerPickup(IIndividual individual) {
-		ISpeciesRoot speciesRoot = individual.getGenome().getPrimary().getRoot();
+		IBeeRoot speciesRoot = (IBeeRoot) individual.getRoot();
 		if (!speciesRoot.getUID().equals(speciesRootUID())) {
 			return;
 		}
 
-		if (!individual.isPureBred(EnumBeeChromosome.SPECIES)) {
+		if (!individual.isPureBred(BeeChromosomes.SPECIES)) {
 			return;
 		}
 
-		if (!speciesRoot.getCombinations(individual.getGenome().getPrimary()).isEmpty()) {
+		IMutationContainer<IBee, ? extends IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
+		if (!container.getCombinations(individual.getGenome().getPrimary()).isEmpty()) {
 			return;
 		}
 
@@ -108,7 +114,8 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
+		//TODO world cast
 		return BeeManager.beeRoot.getBreedingTracker(player.world, player.getGameProfile());
 	}
 

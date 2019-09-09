@@ -15,11 +15,13 @@ import java.util.function.Predicate;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.core.utils.Translator;
 
 public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;
@@ -42,16 +44,16 @@ public class BackpackDefinition implements IBackpackDefinition {
 	}
 
 	@Override
-	public String getName(ItemStack backpack) {
+	public ITextComponent getName(ItemStack backpack) {
 		Item item = backpack.getItem();
-		String display = Translator.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name").trim();
+		ITextComponent display = new TranslationTextComponent((item.getTranslationKey(backpack)).trim());
 
-		NBTTagCompound tagCompound = backpack.getTagCompound();
-		if (tagCompound != null && tagCompound.hasKey("display", 10)) {
-			NBTTagCompound nbt = tagCompound.getCompoundTag("display");
+		CompoundNBT tagCompound = backpack.getTag();
+		if (tagCompound != null && tagCompound.contains("display", 10)) {
+			CompoundNBT nbt = tagCompound.getCompound("display");
 
-			if (nbt.hasKey("Name", 8)) {
-				display = nbt.getString("Name");
+			if (nbt.contains("Name", 8)) {
+				display = new StringTextComponent(nbt.getString("Name"));
 			}
 		}
 

@@ -12,7 +12,8 @@ package forestry.apiculture;
 
 import javax.annotation.Nullable;
 
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 
@@ -24,7 +25,7 @@ public class BeeHousingModifier implements IBeeModifier {
 	}
 
 	@Override
-	public float getTerritoryModifier(IBeeGenome genome, final float currentModifier) {
+	public float getTerritoryModifier(IGenome genome, final float currentModifier) {
 		float modifierValue = 1.0f;
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getTerritoryModifier(genome, modifierValue * currentModifier);
@@ -33,7 +34,7 @@ public class BeeHousingModifier implements IBeeModifier {
 	}
 
 	@Override
-	public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, final float currentModifier) {
+	public float getMutationModifier(IGenome genome, IGenome mate, final float currentModifier) {
 		float modifierValue = 1.0f;
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getMutationModifier(genome, mate, modifierValue * currentModifier);
@@ -42,7 +43,7 @@ public class BeeHousingModifier implements IBeeModifier {
 	}
 
 	@Override
-	public float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, final float currentModifier) {
+	public float getLifespanModifier(IGenome genome, @Nullable IGenome mate, final float currentModifier) {
 		float modifierValue = 1.0f;
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getLifespanModifier(genome, mate, modifierValue * currentModifier);
@@ -51,7 +52,7 @@ public class BeeHousingModifier implements IBeeModifier {
 	}
 
 	@Override
-	public float getProductionModifier(IBeeGenome genome, final float currentModifier) {
+	public float getProductionModifier(IGenome genome, final float currentModifier) {
 		float modifierValue = 1.0f;
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getProductionModifier(genome, modifierValue * currentModifier);
@@ -60,7 +61,7 @@ public class BeeHousingModifier implements IBeeModifier {
 	}
 
 	@Override
-	public float getFloweringModifier(IBeeGenome genome, final float currentModifier) {
+	public float getFloweringModifier(IGenome genome, final float currentModifier) {
 		float modifierValue = 1.0f;
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getFloweringModifier(genome, modifierValue * currentModifier);
@@ -69,7 +70,7 @@ public class BeeHousingModifier implements IBeeModifier {
 	}
 
 	@Override
-	public float getGeneticDecay(IBeeGenome genome, final float currentModifier) {
+	public float getGeneticDecay(IGenome genome, final float currentModifier) {
 		float modifierValue = 1.0f;
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getGeneticDecay(genome, modifierValue * currentModifier);

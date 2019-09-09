@@ -1291,7 +1291,7 @@ item.for.catalogue.name=Каталог
 # PIPES
 ####################
 
-item.PipeItemsPropolis.name=Труба пчеловода
+item.PipeitemPropolis.name=Труба пчеловода
 
 ####################
 # PLUGINS

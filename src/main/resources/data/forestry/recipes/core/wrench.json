@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "forestry:wrench"
+  },
+  "pattern": [
+    "# #",
+    " # ",
+    " # "
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#INGOTBRONZE"
+    }
+  },
+  "group": "core"
+}

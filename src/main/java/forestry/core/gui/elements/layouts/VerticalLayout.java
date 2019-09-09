@@ -1,11 +1,12 @@
 package forestry.core.gui.elements.layouts;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.IGuiElement;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class VerticalLayout extends AbstractElementLayout {
 	public VerticalLayout(int width) {
 		this(0, 0, width);

@@ -1,13 +1,13 @@
 package forestry.core.climate;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Biomes;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateState;
@@ -26,13 +26,13 @@ public class FakeClimateListener implements IClimateListener {
 		return AbsentClimateState.INSTANCE;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void updateClientSide(boolean spawnParticles) {
 
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void setClimateState(IClimateState climateState) {
 	}
@@ -62,21 +62,21 @@ public class FakeClimateListener implements IClimateListener {
 		return 0.0F;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void syncToClient() {
 
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void syncToClient(EntityPlayerMP player) {
+	public void syncToClient(ServerPlayerEntity player) {
 
 	}
 
 	@Override
 	public BlockPos getCoordinates() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override

@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.farming.FarmDirection;
@@ -28,7 +28,7 @@ import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
-	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);
+	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
 
 	protected NonNullList<ItemStack> produce = NonNullList.create();
 
@@ -82,7 +82,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 					break;
 				}
 
-				IBlockState state = world.getBlockState(position);
+				BlockState state = world.getBlockState(position);
 				if (!BlockUtil.isBreakableBlock(state, world, pos) || isAcceptedSoil(state) || isWaterSourceBlock(world, position) || !farmHousing.getFarmInventory().hasResources(resources)) {
 					continue;
 				}
@@ -94,7 +94,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 				if (!BlockUtil.isReplaceableBlock(state, world, position)) {
 					produce.addAll(BlockUtil.getBlockDrops(world, position));
-					world.setBlockToAir(position);
+					world.removeBlock(position, false);    //TODO
 					return trySetSoil(world, farmHousing, position, soil.getResource(), soil.getSoilState());
 				}
 
@@ -137,7 +137,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 		return false;
 	}
 
-	private boolean trySetSoil(World world, IFarmHousing farmHousing, BlockPos position, ItemStack resource, IBlockState ground) {
+	private boolean trySetSoil(World world, IFarmHousing farmHousing, BlockPos position, ItemStack resource, BlockState ground) {
 		NonNullList<ItemStack> resources = NonNullList.create();
 		resources.add(resource);
 		if (!farmHousing.getFarmInventory().hasResources(resources)) {

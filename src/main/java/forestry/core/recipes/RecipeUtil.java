@@ -14,75 +14,71 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.block.Block;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.ItemStackUtil;
-import forestry.worktable.inventory.InventoryCraftingForestry;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public abstract class RecipeUtil {
 
 	// TODO use json recipes
 
-	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
+	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, ForestryFluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
 		FluidStack outputStack = output.getFluid(1);
-		if (outputStack == null) {
+		if (outputStack.isEmpty()) {
 			return;
 		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
 
-		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
 		}
 
-		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
 		}
 	}
 
-	public static void addFermenterRecipes(String resource, int fermentationValue, Fluids output) {
+	public static void addFermenterRecipes(String resource, int fermentationValue, ForestryFluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
 		}
 		FluidStack outputStack = output.getFluid(1);
-		if (outputStack == null) {
+		if (outputStack.isEmpty()) {
 			return;
 		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(FluidRegistry.WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
 
-		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.JUICE.getFluid(1));
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
 		}
 
-		if (FluidRegistry.isFluidRegistered(Fluids.FOR_HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, Fluids.FOR_HONEY.getFluid(1));
+		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
 		}
 	}
 
 	@Nullable
-	public static InventoryCraftingForestry getCraftRecipe(InventoryCrafting originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
+	public static CraftingInventoryForestry getCraftRecipe(CraftingInventory originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
 		if (!recipe.matches(originalCrafting, world)) {
 			return null;
 		}
@@ -92,7 +88,7 @@ public abstract class RecipeUtil {
 			return null;
 		}
 
-		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
+		CraftingInventoryForestry crafting = new CraftingInventoryForestry();
 		NonNullList<ItemStack> stockCopy = ItemStackUtil.condenseStacks(availableItems);
 
 		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
@@ -117,7 +113,7 @@ public abstract class RecipeUtil {
 		return null;
 	}
 
-	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, InventoryCrafting crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
+	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, CraftingInventory crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
 		for (ItemStack stockStack : stockCopy) {
 			if (!stockStack.isEmpty()) {
@@ -127,7 +123,7 @@ public abstract class RecipeUtil {
 					ItemStack output = recipe.getCraftingResult(crafting);
 					if (ItemStack.areItemStacksEqual(output, expectedOutput)) {
 						crafting.setInventorySlotContents(slot, originalStack);
-						return stockStack.splitStack(1);
+						return stockStack.split(1);
 					}
 				}
 			}
@@ -136,63 +132,40 @@ public abstract class RecipeUtil {
 		return ItemStack.EMPTY;
 	}
 
-	public static List<IRecipe> findMatchingRecipes(InventoryCrafting inventory, World world) {
-		return ForgeRegistries.RECIPES.getValuesCollection().stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+	public static List<IRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {    //TODO - is the stream() needed anymore?
+		return world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
-	public static void addRecipe(String recipeName, Block block, Object... obj) {
-		addRecipe(recipeName, new ItemStack(block), obj);
-	}
-
-	public static void addRecipe(String recipeName, Item item, Object... obj) {
-		addRecipe(recipeName, new ItemStack(item), obj);
-	}
-
-	public static void addRecipe(String recipeName, ItemStack itemstack, Object... obj) {
-		ShapedRecipeCustom recipe = new ShapedRecipeCustom(itemstack, obj);
-		recipe.setRegistryName(Constants.MOD_ID, recipeName);
-		ForgeRegistries.RECIPES.register(recipe);
-	}
-
-	public static void addShapelessRecipe(String recipeName, Item item, Object... obj) {
-		addShapelessRecipe(recipeName, new ItemStack(item), obj);
-	}
-
-	public static void addShapelessRecipe(String recipeName, ItemStack itemstack, Object... obj) {
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(null, itemstack, obj);
-		recipe.setRegistryName(Constants.MOD_ID, recipeName);
-		ForgeRegistries.RECIPES.register(recipe);
-	}
-
+	//TODO - smelting needs to be json now?
 	public static void addSmelting(ItemStack res, Item prod, float xp) {
 		addSmelting(res, new ItemStack(prod), xp);
 	}
 
 	public static void addSmelting(ItemStack res, ItemStack prod, float xp) {
-		GameRegistry.addSmelting(res, prod, xp);
+		//		GameRegistry.addSmelting(res, prod, xp);
 	}
 
 	@Nullable
-	public static String[][] matches(IDescriptiveRecipe recipe, IInventory inventoryCrafting) {
+	public static String[][] matches(IDescriptiveRecipe recipe, IInventory CraftingInventory) {
 		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getRawIngredients();
 		NonNullList<String> oreDicts = recipe.getOreDicts();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
-		return matches(recipeIngredients, oreDicts, width, height, inventoryCrafting);
+		return matches(recipeIngredients, oreDicts, width, height, CraftingInventory);
 	}
 
 	@Nullable
-	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory inventoryCrafting) {
-		ItemStack[][] resources = getResources(inventoryCrafting);
+	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory CraftingInventory) {
+		ItemStack[][] resources = getResources(CraftingInventory);
 		return matches(recipeIngredients, oreDicts, width, height, resources);
 	}
 
-	public static ItemStack[][] getResources(IInventory inventoryCrafting) {
+	public static ItemStack[][] getResources(IInventory CraftingInventory) {
 		ItemStack[][] resources = new ItemStack[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				int k = i + j * 3;
-				resources[i][j] = inventoryCrafting.getStackInSlot(k);
+				resources[i][j] = CraftingInventory.getStackInSlot(k);
 			}
 		}
 		return resources;

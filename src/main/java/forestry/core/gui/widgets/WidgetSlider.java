@@ -1,6 +1,6 @@
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.gui.Drawable;
 
@@ -32,12 +32,12 @@ public class WidgetSlider extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		texture.draw(startX + xPos + xOffset, startY + yPos + yOffset);
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		int xPos = this.xPos + xOffset;
 		int yPos = this.yPos + yOffset;
 		return mouseX >= xPos && mouseX <= xPos + this.width && mouseY >= yPos && mouseY <= yPos + this.height;

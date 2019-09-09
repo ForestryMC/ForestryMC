@@ -16,10 +16,11 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Random;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 public final class VectUtil {
 	public static BlockPos getRandomPositionInArea(Random random, Vec3i area) {
@@ -45,17 +46,17 @@ public final class VectUtil {
 		return new BlockPos(vect.getX() * factor, vect.getY() * factor, vect.getZ() * factor);
 	}
 
-	public static EnumFacing direction(Vec3i a, Vec3i b) {
+	public static Direction direction(Vec3i a, Vec3i b) {
 		int x = Math.abs(a.getX() - b.getX());
 		int y = Math.abs(a.getY() - b.getY());
 		int z = Math.abs(a.getZ() - b.getZ());
 		int max = Math.max(x, Math.max(y, z));
 		if (max == x) {
-			return EnumFacing.EAST;
+			return Direction.EAST;
 		} else if (max == z) {
-			return EnumFacing.SOUTH;
+			return Direction.SOUTH;
 		} else {
-			return EnumFacing.UP;
+			return Direction.UP;
 		}
 	}
 
@@ -107,7 +108,7 @@ public final class VectUtil {
 		protected BlockPos.MutableBlockPos nextPos() {
 			if (this.theBlockPos == null) {
 				this.theBlockPos = new BlockPos.MutableBlockPos(center.getX(), maxPos.getY(), center.getZ());
-				int y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+				int y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.theBlockPos).getY());
 				this.theBlockPos.setY(y);
 				return this.theBlockPos;
 			} else if (spiralLayer > maxSpiralLayers) {
@@ -149,7 +150,7 @@ public final class VectUtil {
 					}
 
 					this.theBlockPos.setPos(x, y, z);
-					y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+					y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.theBlockPos).getY());
 				}
 
 				return this.theBlockPos.setPos(x, y, z);

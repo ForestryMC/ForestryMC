@@ -11,15 +11,15 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class InventoryNaturalistChest extends InventoryAdapterTile<TileNaturalistChest> {
-	private final ISpeciesRoot speciesRoot;
+	private final IForestrySpeciesRoot speciesRoot;
 
-	public InventoryNaturalistChest(TileNaturalistChest tile, ISpeciesRoot speciesRoot) {
+	public InventoryNaturalistChest(TileNaturalistChest tile, IForestrySpeciesRoot speciesRoot) {
 		super(tile, 125, "Items");
 		this.speciesRoot = speciesRoot;
 	}
@@ -30,7 +30,7 @@ public class InventoryNaturalistChest extends InventoryAdapterTile<TileNaturalis
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
 		return true;
 	}
 }

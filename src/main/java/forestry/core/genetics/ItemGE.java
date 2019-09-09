@@ -12,32 +12,34 @@ package forestry.core.genetics;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.core.items.ItemForestry;
-import forestry.core.utils.Translator;
 
 public abstract class ItemGE extends ItemForestry {
-	protected ItemGE(CreativeTabs creativeTab) {
-		super(creativeTab);
-		setHasSubtypes(true);
+	protected ItemGE(Item.Properties properties) {
+		super(properties.setNoRepair());
+		//TODO - properties
+		//		setHasSubtypes(true);
 	}
 
-	@Nullable
-	public abstract IIndividual getIndividual(ItemStack itemstack);
-
-	protected abstract IAlleleSpecies getSpecies(ItemStack itemStack);
+	protected abstract IAlleleForestrySpecies getSpecies(ItemStack itemStack);
 
 	@Override
 	public boolean isDamageable() {
@@ -45,48 +47,41 @@ public abstract class ItemGE extends ItemForestry {
 	}
 
 	@Override
-	public boolean isRepairable() {
-		return false;
-	}
-
-	@Override
-	public boolean getShareTag() {
-		return true;
-	}
-
-	@Override
 	public boolean hasEffect(ItemStack stack) {
-		if (!stack.hasTagCompound()) { // villager trade wildcard bees
+		if (!stack.hasTag()) { // villager trade wildcard bees
 			return false;
 		}
-		IAlleleSpecies species = getSpecies(stack);
+		IAlleleForestrySpecies species = getSpecies(stack);
 		return species.hasEffect();
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
-		if (itemstack.getTagCompound() == null) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		if (!itemstack.hasTag()) {
 			return;
 		}
 
-		IIndividual individual = getIndividual(itemstack);
+		Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack);
 
-		if (individual != null && individual.isAnalyzed()) {
-			if (GuiScreen.isShiftKeyDown()) {
-				individual.addTooltip(list);
-			} else {
-				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+		if (optionalIndividual.isPresent()) {
+			IIndividual individual = optionalIndividual.get();
+			if (individual.isAnalyzed()) {
+				if (Screen.hasShiftDown()) {
+					individual.addTooltip(list);
+				} else {
+					list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle((new Style()).setItalic(true)));
+				}
 			}
 		} else {
-			list.add("<" + Translator.translateToLocal("for.gui.unknown") + ">");
+			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >"));
 		}
 	}
 
 	@Nullable
 	@Override
 	public String getCreatorModId(ItemStack itemStack) {
-		IAlleleSpecies species = getSpecies(itemStack);
-		return species.getModID();
+		IAlleleForestrySpecies species = getSpecies(itemStack);
+		return species.getRegistryName().getNamespace();
 	}
 }

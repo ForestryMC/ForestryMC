@@ -10,23 +10,13 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import javax.annotation.Nullable;
+//import buildcraft.api.core.render.ISprite;
+//import buildcraft.api.statements.IStatement;
+//import buildcraft.api.statements.IStatementParameter;
+//import buildcraft.api.statements.ITriggerExternal;
+//import buildcraft.api.statements.StatementManager;
 
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.core.config.Constants;
-import forestry.core.utils.Translator;
-
-import buildcraft.api.core.render.ISprite;
-import buildcraft.api.statements.IStatement;
-import buildcraft.api.statements.IStatementParameter;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.StatementManager;
-
-public abstract class Trigger implements ITriggerExternal {
+public abstract class Trigger {//implements ITriggerExternal {
 
 	private final String uid;
 	private final String localization;
@@ -40,54 +30,54 @@ public abstract class Trigger implements ITriggerExternal {
 		this.uid = "forestry:" + uid;
 		this.localization = localization;
 		this.textureName = textureName;
-		StatementManager.registerStatement(this);
+		//		StatementManager.registerStatement(this);
 	}
 
-	@Override
-	public String getUniqueTag() {
-		return uid;
-	}
-
-	@Override
-	public String getDescription() {
-		return Translator.translateToLocal("for.trigger." + localization);
-	}
-
-	@Override
-	public IStatementParameter createParameter(int index) {
-		return null;
-	}
-
-	@Override
-	public int maxParameters() {
-		return 0;
-	}
-
-	@Override
-	public int minParameters() {
-		return 0;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	private ISprite icon;
-
-	@Nullable
-	@Override
-	public ISprite getSprite() {
-		if (icon == null) {
-			icon = new Sprite(new ResourceLocation(Constants.MOD_ID, String.format("textures/gui/triggers/%s.png", textureName)));
-		}
-		return icon;
-	}
-
-	@Override
-	public IStatement rotateLeft() {
-		return this;
-	}
-
-	@Override
-	public IStatement[] getPossible() {
-		return new IStatement[0];
-	}
+	//	@Override
+	//	public String getUniqueTag() {
+	//		return uid;
+	//	}
+	//
+	//	@Override
+	//	public String getDescription() {
+	//		return Translator.translateToLocal("for.trigger." + localization);
+	//	}
+	//
+	//	@Override
+	//	public IStatementParameter createParameter(int index) {
+	//		return null;
+	//	}
+	//
+	//	@Override
+	//	public int maxParameters() {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public int minParameters() {
+	//		return 0;
+	//	}
+	//
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Nullable
+	//	private ISprite icon;
+	//
+	//	@Nullable
+	//	@Override
+	//	public ISprite getSprite() {
+	//		if (icon == null) {
+	//			icon = new Sprite(new ResourceLocation(Constants.MOD_ID, String.format("textures/gui/triggers/%s.png", textureName)));
+	//		}
+	//		return icon;
+	//	}
+	//
+	//	@Override
+	//	public IStatement rotateLeft() {
+	//		return this;
+	//	}
+	//
+	//	@Override
+	//	public IStatement[] getPossible() {
+	//		return new IStatement[0];
+	//	}
 }

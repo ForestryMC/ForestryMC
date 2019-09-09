@@ -15,30 +15,24 @@ import java.util.Locale;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import forestry.core.utils.MigrationHelper;
-import forestry.modules.InternalModuleHandler;
-import forestry.modules.ModuleManager;
+
+//import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class ItemRegistry {
 	protected static <T extends Item> T registerItem(T item, String name) {
-		if (ModuleManager.getInternalHandler().getStage() != InternalModuleHandler.Stage.REGISTER) {
-			throw new RuntimeException("Tried to register Item outside of REGISTER");
-		}
 
 		if (!name.equals(name.toLowerCase(Locale.ENGLISH))) {
 			Log.error("Name must be lowercase");
 		}
 
-		item.setTranslationKey("for." + name);
+		//TODO - now done by name??
+		//		item.setTranslationKey("for." + name);
 		item.setRegistryName(name);
 
-		MigrationHelper.addItemName(name);
 
 		ForgeRegistries.ITEMS.register(item);
 		Proxies.common.registerItem(item);
@@ -46,12 +40,14 @@ public abstract class ItemRegistry {
 	}
 
 	protected static void registerOreDict(String oreDictName, ItemStack itemStack) {
-		OreDictionary.registerOre(oreDictName, itemStack);
+		//		OreDictionary.registerOre(oreDictName, itemStack);
 	}
+	//TODO tags
 
 	public static ItemStack createItemForOreName(String oreName, String registryName) {
 		ItemStack oreItem = new ItemStack(registerItem(new ItemForestry(), registryName));
-		OreDictionary.registerOre(oreName, oreItem);
+		//		OreDictionary.registerOre(oreName, oreItem);
+		//TODO - tags
 		return oreItem;
 	}
 }

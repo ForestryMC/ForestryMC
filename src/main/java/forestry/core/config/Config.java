@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
 import javax.annotation.Nullable;
@@ -25,16 +26,18 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraftforge.common.config.Property;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import forestry.Forestry;
 import forestry.apiculture.HiveConfig;
-import forestry.core.fluids.Fluids;
+import forestry.core.config.forge_old.Property;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.factory.ModuleFactory;
@@ -54,8 +57,8 @@ public class Config {
 	public static String gameMode;
 
 	private static final Set<String> disabledStructures = new HashSet<>();
-	private static final Set<String> disabledFluids = new HashSet<>();
-	private static final Set<String> disabledBlocks = new HashSet<>();
+	private static final Set<ResourceLocation> disabledFluids = new HashSet<>();
+	private static final Set<ResourceLocation> disabledBlocks = new HashSet<>();
 
 	public static boolean isDebug = false;
 
@@ -80,8 +83,8 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
-	public static Set<Integer> blacklistedOreDims = new HashSet<>();
-	public static Set<Integer> whitelistedOreDims = new HashSet<>();
+	public static Set<ResourceLocation> blacklistedOreDims = new HashSet<>();
+	public static Set<ResourceLocation> whitelistedOreDims = new HashSet<>();
 	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean logHivePlacement = false;
@@ -148,11 +151,11 @@ public class Config {
 		return !Config.disabledStructures.contains(uid);
 	}
 
-	public static boolean isFluidEnabled(Fluids fluidDefinition) {
+	public static boolean isFluidEnabled(ForestryFluids fluidDefinition) {
 		return !Config.disabledFluids.contains(fluidDefinition.getTag());
 	}
 
-	public static boolean isBlockEnabled(String tag) {
+	public static boolean isBlockEnabled(ResourceLocation tag) {
 		return !Config.disabledBlocks.contains(tag);
 	}
 
@@ -164,6 +167,7 @@ public class Config {
 		return generateBeehivesAmount;
 	}
 
+	//Compat
 	public static boolean isExUtilEnderLilyEnabled() {
 		return enableExUtilEnderLily;
 	}
@@ -176,22 +180,22 @@ public class Config {
 		return enableMagicalCropsSupport;
 	}
 
-	public static void blacklistOreDim(int dimID) {
+	public static void blacklistOreDim(ResourceLocation dimID) {
 		blacklistedOreDims.add(dimID);
 	}
 
-	public static void whitelistOreDim(int dimID) {
+	public static void whitelistOreDim(ResourceLocation dimID) {
 		whitelistedOreDims.add(dimID);
 	}
 
-	public static boolean isValidOreDim(int dimID) {        //blacklist has priority
+	public static boolean isValidOreDim(ResourceLocation dimID) {        //blacklist has priority
 		if (blacklistedOreDims.isEmpty() || !blacklistedOreDims.contains(dimID)) {
 			return whitelistedOreDims.isEmpty() || whitelistedOreDims.contains(dimID);
 		}
 		return false;
 	}
 
-	public static void load(Side side) {
+	public static void load(Dist side) {
 		File configCommonFile = new File(Forestry.instance.getConfigFolder(), CATEGORY_COMMON + ".cfg");
 		configCommon = new LocalizedConfiguration(configCommonFile, "1.3.0");
 		loadConfigCommon(side);
@@ -203,16 +207,16 @@ public class Config {
 		loadHints();
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent    //TODO - register event handler
 	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (!event.getModID().equals(Constants.MOD_ID)) {
 			return;
 		}
-		loadConfigCommon(FMLCommonHandler.instance().getSide());
+		loadConfigCommon(FMLEnvironment.dist);    //TODO - correct?
 		loadConfigFluids();
 	}
 
-	private static void loadConfigCommon(Side side) {
+	private static void loadConfigCommon(Dist side) {
 
 		String[] gameModes = new String[]{"EASY", "NORMAL", "HARD", "OP"};
 		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", gameModes);
@@ -255,11 +259,11 @@ public class Config {
 		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
 		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
 		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
-		for (int dimId : configCommon.get("world.generate.ore", "dimBlacklist", new int[0]).getIntList()) {
-			blacklistedOreDims.add(dimId);
+		for (String dimId : configCommon.get("world.generate.ore", "dimBlacklist", new String[0]).getStringList()) {
+			blacklistedOreDims.add(new ResourceLocation(dimId));
 		}
-		for (int dimId : configCommon.get("world.generate.ore", "dimWhitelist", new int[0]).getIntList()) {
-			whitelistedOreDims.add(dimId);
+		for (String dimId : configCommon.get("world.generate.ore", "dimWhitelist", new String[0]).getStringList()) {
+			whitelistedOreDims.add(new ResourceLocation(dimId));
 		}
 
 		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
@@ -288,7 +292,7 @@ public class Config {
 
 		humusDegradeDelimiter = configCommon.getIntLocalized("tweaks.humus", "degradeDelimiter", humusDegradeDelimiter, 1, 10);
 
-		if (side == Side.CLIENT) {
+		if (side == Dist.CLIENT) {
 			mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
 			mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
 			mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
@@ -322,12 +326,12 @@ public class Config {
 		charcoalWallCheckRange = configCommon.getIntLocalized("tweaks.charcoal", "check.range", charcoalWallCheckRange, 1, 32);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
-		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
+		String[] disabledStructureArray = disabledStructures.toArray(new String[0]);
 		disabledStructureArray = configCommon.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
 
 		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
-		for (String str : disabledStructures) {
-			Log.debug("Disabled structure '{}'.", str);
+		for (String s : disabledStructures) {
+			Log.debug("Disabled structure '{}'.", s);
 		}
 
 		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
@@ -346,19 +350,20 @@ public class Config {
 	}
 
 	private static void loadConfigFluids() {
-		for (Fluids fluid : Fluids.values()) {
-			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag());
+		Preconditions.checkNotNull(configFluid);
+		for (ForestryFluids fluid : ForestryFluids.values()) {
+			String fluidName = Translator.translateToLocal("fluid." + fluid.getTag().getPath());
 
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());
 			String enableFluidComment = Translator.translateToLocalFormatted("for.config.fluids.enable.format", fluidName);
-			enabledFluid = configFluid.getBoolean("enableFluid", fluid.getTag(), enabledFluid, enableFluidComment);
+			enabledFluid = configFluid.getBoolean("enableFluid", fluid.getTag().toString(), enabledFluid, enableFluidComment);
 			if (!enabledFluid) {
 				Config.disabledFluids.add(fluid.getTag());
 			}
 
 			boolean enabledFluidBlock = !Config.disabledBlocks.contains(fluid.getTag());
 			String enableFluidBlockComment = Translator.translateToLocalFormatted("for.config.fluid.blocks.enable.format", fluidName);
-			enabledFluidBlock = configFluid.getBoolean("enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
+			enabledFluidBlock = configFluid.getBoolean("enableFluidBlock", fluid.getTag().toString(), enabledFluidBlock, enableFluidBlockComment);
 			if (!enabledFluidBlock) {
 				Config.disabledBlocks.add(fluid.getTag());
 			}
@@ -369,6 +374,9 @@ public class Config {
 
 	private static void copyFileToFS(File destination, String resourcePath) {
 		InputStream stream = Config.class.getResourceAsStream(resourcePath);
+		if (stream == null) {
+			return;    //TODO config needs to be migrated anyway
+		}
 		OutputStream outstream;
 		int readBytes;
 		byte[] buffer = new byte[4096];

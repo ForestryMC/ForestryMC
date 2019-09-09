@@ -9,16 +9,15 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * A entry in the {@link IForesterBook}.
  * <p>
- * Forestry crates them with the help of json file, but you can add you own custom ones with
+ * Forestry creates them with the help of json file, but you can add you own custom ones with
  * {@link IBookCategory#addEntry(IBookEntry)}.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IBookEntry {
 
 	/**

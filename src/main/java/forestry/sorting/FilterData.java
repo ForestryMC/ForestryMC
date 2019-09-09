@@ -3,31 +3,37 @@ package forestry.sorting;
 import javax.annotation.Nullable;
 import java.util.NoSuchElementException;
 
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.genetics.ISpeciesType;
 
 public class FilterData implements IFilterData {
-	@Nullable
-	private ISpeciesRoot root;
+	private IRootDefinition definition;
 	@Nullable
 	private IIndividual individual;
 	@Nullable
-	private ISpeciesType type;
+	private IOrganismType type;
 
-	public FilterData(@Nullable ISpeciesRoot root, @Nullable IIndividual individual, @Nullable ISpeciesType type) {
-		this.root = root;
+	public FilterData(IRootDefinition root, @Nullable IIndividual individual, @Nullable IOrganismType type) {
+		this.definition = root;
 		this.individual = individual;
 		this.type = type;
 	}
 
 	@Override
-	public ISpeciesRoot getRoot() {
-		if (root == null) {
+	public IIndividualRoot getRoot() {
+		if (!definition.isRootPresent()) {
 			throw new NoSuchElementException("No root present");
 		}
-		return root;
+		return definition.get();
+	}
+
+	@Override
+	public IRootDefinition getDefinition() {
+		return definition;
 	}
 
 	@Override
@@ -39,7 +45,7 @@ public class FilterData implements IFilterData {
 	}
 
 	@Override
-	public ISpeciesType getType() {
+	public IOrganismType getType() {
 		if (type == null) {
 			throw new NoSuchElementException("No type present");
 		}
@@ -48,6 +54,6 @@ public class FilterData implements IFilterData {
 
 	@Override
 	public boolean isPresent() {
-		return root != null && individual != null && type != null;
+		return !definition.isRootPresent() && individual != null && type != null;
 	}
 }

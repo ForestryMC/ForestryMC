@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.climatology.network.packets;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.climate.IClimateHousing;
@@ -45,7 +45,7 @@ public class PacketSelectClimateTargeted extends ForestryPacket implements IFore
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
 			IClimateState climateState = data.readClimateState();
 

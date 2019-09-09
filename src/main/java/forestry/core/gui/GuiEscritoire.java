@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
@@ -31,10 +33,10 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	private final EscritoireTextSource textSource = new EscritoireTextSource();
 	private final TileEscritoire tile;
 
-	public GuiEscritoire(EntityPlayer player, TileEscritoire tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile));
+	public GuiEscritoire(ContainerEscritoire container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", container, inv, title);
 
-		this.tile = tile;
+		this.tile = container.getTile();
 		this.xSize = 228;
 		this.ySize = 235;
 
@@ -89,8 +91,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 
 		textLayout.startPage();
 		{
-			GlStateManager.scale(0.5, 0.5, 0.5);
-			GlStateManager.translate(guiLeft + 170, guiTop + 10, 0.0);
+			GlStateManager.scaled(0.5, 0.5, 0.5);
+			GlStateManager.translated(guiLeft + 170, guiTop + 10, 0.0);
 
 			textLayout.newLine();
 			textLayout.newLine();

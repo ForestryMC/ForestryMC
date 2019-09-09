@@ -5,15 +5,17 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
+//import net.minecraft.client.renderer.ItemMeshDefinition;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public interface IWoodItemMeshDefinition extends ItemMeshDefinition {
+//TODO flatten?
+@OnlyIn(Dist.CLIENT)
+public interface IWoodItemMeshDefinition {//extends ItemMeshDefinition {
 
 	ResourceLocation getDefaultModelLocation(ItemStack stack);
 

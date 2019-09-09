@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
+import net.minecraft.item.Item;
+
+import forestry.api.core.ItemGroups;
 import forestry.core.blocks.BlockRegistry;
+import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockForestry;
-import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 
 public class BlockRegistryLepidopterology extends BlockRegistry {
 	public final BlockLepidopterology butterflyChest;
@@ -21,9 +24,8 @@ public class BlockRegistryLepidopterology extends BlockRegistry {
 
 	public BlockRegistryLepidopterology() {
 		butterflyChest = new BlockLepidopterology(BlockTypeLepidopterologyTesr.LEPICHEST);
-		registerBlock(butterflyChest, new ItemBlockForestry<>(butterflyChest), "butterfly_chest");
+		registerBlock(butterflyChest, new ItemBlockBase<>(butterflyChest, new Item.Properties().group(ItemGroups.tabLepidopterology), BlockTypeLepidopterologyTesr.LEPICHEST), "butterfly_chest");
 
-		ButterflyAlleles.registerCocoonAlleles();
 		cocoon = new BlockCocoon();
 		registerBlock(cocoon, new ItemBlockForestry<>(cocoon), "cocoon");
 

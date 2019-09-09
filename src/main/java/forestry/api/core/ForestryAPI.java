@@ -9,10 +9,9 @@ import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.climate.IClimateManager;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.ISimpleFarmLogic;
@@ -47,17 +46,11 @@ public class ForestryAPI {
 	/**
 	 * A {@link ITextureManager} needed for some things in the API.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static ITextureManager textureManager;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static IModelManager modelManager;
-
-	/**
-	 * @deprecated Please use {@link forestry.api.climate.ClimateManager#climateRoot}.
-	 */
-	@Deprecated
-	public static IClimateManager climateManager;
 
 	/**
 	 * Instance of the module manager of forestry.
@@ -86,16 +79,6 @@ public class ForestryAPI {
 	 * ForestryAPI.enabledModules.contains(new ResourceLocation("forestry", "apiculture"))
 	 */
 	public static Set<ResourceLocation> enabledModules;
-
-	/**
-	 * The currently enabled Forestry modules.
-	 * Can be used to check if certain features are available, for example:
-	 * ForestryAPI.enabledPlugins.contains("forestry.apiculture")
-	 *
-	 * @deprecated Use {@link #enabledModules}
-	 */
-	@Deprecated
-	public static Set<String> enabledPlugins;
 
 	/**
 	 * Instance of the errorStateRegistry for registering errors.

@@ -5,12 +5,12 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 public interface ISpriteRegister {
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void registerSprites(ITextureManager manager);
 
 }

@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.worktable.gui.widgets;
 
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.gui.widgets.ItemStackWidgetBase;
 import forestry.core.gui.widgets.WidgetManager;
@@ -41,18 +42,18 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	public void draw(int startX, int startY) {
 		super.draw(startX, startY);
 
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 
 		if (recipeMemory.isLocked(slotNumber)) {
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, lockIcon, 16, 16);
+			//			manager.gui.blit(startX + xPos, startY + yPos, lockIcon, 16, 16); TODO blit with altas sprite
 		}
 
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		if (!getItemStack().isEmpty()) {
 			ContainerWorktable.sendRecipeClick(mouseButton, slotNumber);
 			SoundUtil.playButtonClick();

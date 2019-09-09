@@ -10,27 +10,23 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -47,13 +43,14 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerCentrifuge;
-import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
-import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import forestry.factory.triggers.FactoryTriggers;
+//
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -61,50 +58,50 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 20;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
-	private final InventoryCraftResult craftPreviewInventory;
+	private final CraftResultInventory craftPreviewInventory;
 	@Nullable
 	private ICentrifugeRecipe currentRecipe;
 
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
-		super(800, Constants.MACHINE_MAX_ENERGY);
+		super(ModuleFactory.getTiles().centrifuge, 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
-		craftPreviewInventory = new InventoryCraftResult();
+		craftPreviewInventory = new CraftResultInventory();
 	}
 
 	/* LOADING & SAVING */
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
 
-		sockets.writeToNBT(nbttagcompound);
+		sockets.write(compound);
 
-		NBTTagList nbttaglist = new NBTTagList();
-		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[pendingProducts.size()]);
+		ListNBT nbttaglist = new ListNBT();
+		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[0]);
 		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				offspring[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
+				CompoundNBT products = new CompoundNBT();
+				products.putByte("Slot", (byte) i);
+				offspring[i].write(products);
+				nbttaglist.add(products);
 			}
 		}
-		nbttagcompound.setTag("PendingProducts", nbttaglist);
-		return nbttagcompound;
+		compound.put("PendingProducts", nbttaglist);
+		return compound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
 
-		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingProducts", 10);
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			pendingProducts.add(new ItemStack(nbttagcompound1));
+		ListNBT nbttaglist = compound.getList("PendingProducts", 10);
+		for (int i = 0; i < nbttaglist.size(); i++) {
+			CompoundNBT CompoundNBT1 = nbttaglist.getCompound(i);
+			pendingProducts.add(ItemStack.read(CompoundNBT1));
 		}
-		sockets.readFromNBT(nbttagcompound);
+		sockets.read(compound);
 
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (!chip.isEmpty()) {
@@ -122,7 +119,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		sockets.readData(data);
@@ -215,14 +212,15 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		return hasResource;
 	}
 
-	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(FactoryTriggers.lowResource25);
-		triggers.add(FactoryTriggers.lowResource10);
-	}
+	//TODO - buildcraft
+	//	/* ITRIGGERPROVIDER */
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(FactoryTriggers.lowResource25);
+	//		triggers.add(FactoryTriggers.lowResource10);
+	//	}
 
 	/* ISocketable */
 	@Override
@@ -269,14 +267,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiCentrifuge(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerCentrifuge(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerCentrifuge(windowId, player.inventory, this);
 	}
 
 	public IInventory getCraftPreviewInventory() {

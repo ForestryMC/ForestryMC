@@ -12,26 +12,23 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Stack;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySwarmer;
-import forestry.apiculture.gui.GuiAlvearySwarmer;
 import forestry.apiculture.inventory.InventorySwarmer;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
@@ -95,9 +92,13 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		}
 
 		// Queue swarm spawn
-		IBee princess = BeeManager.beeRoot.getMember(princessStack);
+		Optional<IBee> optionalPrincess = BeeManager.beeRoot.create(princessStack);
+		if (!optionalPrincess.isPresent()) {
+			return;
+		}
+		IBee princess = optionalPrincess.get();
 		princess.setIsNatural(false);
-		pendingSpawns.push(BeeManager.beeRoot.getMemberStack(princess, EnumBeeType.PRINCESS));
+		pendingSpawns.push(BeeManager.beeRoot.getTypes().createStack(princess, EnumBeeType.PRINCESS));
 	}
 
 	@Override
@@ -147,48 +148,48 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	/* NETWORK */
 
 	@Override
-	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void encodeDescriptionPacket(CompoundNBT packetData) {
 		super.encodeDescriptionPacket(packetData);
-		packetData.setBoolean("Active", active);
+		packetData.putBoolean("Active", active);
 	}
 
 	@Override
-	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void decodeDescriptionPacket(CompoundNBT packetData) {
 		super.decodeDescriptionPacket(packetData);
 		setActive(packetData.getBoolean("Active"));
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		setActive(nbttagcompound.getBoolean("Active"));
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		setActive(compoundNBT.getBoolean("Active"));
 
-		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingSpawns", 10);
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			pendingSpawns.add(new ItemStack(nbttagcompound1));
+		ListNBT nbttaglist = compoundNBT.getList("PendingSpawns", 10);
+		for (int i = 0; i < nbttaglist.size(); i++) {
+			CompoundNBT compoundNBT1 = nbttaglist.getCompound(i);
+			pendingSpawns.add(ItemStack.read(compoundNBT1));
 		}
 	}
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		nbttagcompound.setBoolean("Active", active);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		compoundNBT.putBoolean("Active", active);
 
-		NBTTagList nbttaglist = new NBTTagList();
-		ItemStack[] offspring = pendingSpawns.toArray(new ItemStack[pendingSpawns.size()]);
+		ListNBT nbttaglist = new ListNBT();
+		ItemStack[] offspring = pendingSpawns.toArray(new ItemStack[0]);
 		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				offspring[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
+				CompoundNBT compoundNBT1 = new CompoundNBT();
+				compoundNBT1.putByte("Slot", (byte) i);
+				offspring[i].write(compoundNBT1);
+				nbttaglist.add(compoundNBT1);
 			}
 		}
-		nbttagcompound.setTag("PendingSpawns", nbttaglist);
-		return nbttagcompound;
+		compoundNBT.put("PendingSpawns", nbttaglist);
+		return compoundNBT;
 	}
 
 	@Override
@@ -210,13 +211,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiAlvearySwarmer(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerAlvearySwarmer(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAlvearySwarmer(windowId, inv, this);
 	}
 }

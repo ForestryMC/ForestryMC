@@ -2,7 +2,7 @@ package forestry.storage.inventory;
 
 import com.google.common.base.Preconditions;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -14,7 +14,7 @@ public class ItemInventoryBackpack extends ItemInventory {
 
 	private final IBackpackDefinition backpackDefinition;
 
-	public ItemInventoryBackpack(EntityPlayer player, int size, ItemStack parent) {
+	public ItemInventoryBackpack(PlayerEntity player, int size, ItemStack parent) {
 		super(player, size, parent);
 
 		Item item = parent.getItem();

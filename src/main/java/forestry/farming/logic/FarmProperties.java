@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.farming.IFarmLogic;
@@ -68,7 +68,7 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public void registerSoil(ItemStack resource, IBlockState soilState, boolean hasMetaData) {
+	public void registerSoil(ItemStack resource, BlockState soilState, boolean hasMetaData) {
 		soils.add(new Soil(resource, soilState, hasMetaData));
 	}
 
@@ -93,13 +93,13 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public boolean isAcceptedSoil(IBlockState ground) {
+	public boolean isAcceptedSoil(BlockState ground) {
 		for (ISoil soil : soils) {
-			IBlockState soilState = soil.getSoilState();
+			BlockState soilState = soil.getSoilState();
 			Block soilBlock = soilState.getBlock();
 			Block block = ground.getBlock();
 			if (soilState.getBlock() == ground.getBlock()) {
-				if (!soil.hasMetaData() || block.getMetaFromState(ground) == soilBlock.getMetaFromState(soilState)) {
+				if (!soil.hasMetaData() || false) {//TODO Flatten block.getMetaFromState(ground) == soilBlock.getMetaFromState(soilState)) {
 					return true;
 				}
 			}

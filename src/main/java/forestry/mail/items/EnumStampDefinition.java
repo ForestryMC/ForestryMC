@@ -14,7 +14,7 @@ import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Map;
 
-import net.minecraft.init.Items;
+import net.minecraft.item.Items;
 
 import forestry.api.mail.EnumPostage;
 import forestry.core.items.ItemOverlay;

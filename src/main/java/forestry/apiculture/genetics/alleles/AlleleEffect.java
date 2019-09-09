@@ -17,18 +17,20 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.alleles.AlleleCategorized;
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IAlleleBeeEffect;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeEffect;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
 
@@ -48,13 +50,13 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffect(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		return storedData;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	@OnlyIn(Dist.CLIENT)
+	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
 		List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
 
@@ -62,11 +64,11 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		return storedData;
 	}
 
-	public static Vec3i getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
+	public static Vec3i getModifiedArea(IGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
-		Vec3i area = VectUtil.scale(genome.getTerritory(), territoryModifier);
+		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
 		int x = area.getX();
 		int y = area.getY();
 		int z = area.getZ();
@@ -84,11 +86,11 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		return new Vec3i(x, y, z);
 	}
 
-	public static AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing) {
+	public static AxisAlignedBB getBounding(IGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
 
-		Vec3i area = VectUtil.scale(genome.getTerritory(), territoryModifier);
+		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
 		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
 
 		BlockPos min = housing.getCoordinates().add(offset);
@@ -97,7 +99,7 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 
-	public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {
+	public static <T extends Entity> List<T> getEntitiesInRange(IGenome genome, IBeeHousing housing, Class<T> entityClass) {
 		AxisAlignedBB boundingBox = getBounding(genome, housing);
 		return housing.getWorldObj().getEntitiesWithinAABB(entityClass, boundingBox);
 	}

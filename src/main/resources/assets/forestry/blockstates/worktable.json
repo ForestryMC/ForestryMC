@@ -1,8 +1,25 @@
 {
     "variants": {
-        "facing=north": { "model": "forestry:worktable" },
-		"facing=east": { "model": "forestry:worktable", "y": 90 },
-		"facing=south": { "model": "forestry:worktable", "y": 180 },
-		"facing=west": { "model": "forestry:worktable", "y": -90 }
+      "facing=up": {
+        "model": "forestry:block/worktable"
+      },
+      "facing=down": {
+        "model": "forestry:block/worktable"
+      },
+      "facing=north": {
+        "model": "forestry:block/worktable"
+      },
+      "facing=east": {
+        "model": "forestry:block/worktable",
+        "y": 90
+      },
+      "facing=south": {
+        "model": "forestry:block/worktable",
+        "y": 180
+      },
+      "facing=west": {
+        "model": "forestry:block/worktable",
+        "y": -90
+      }
 	}
 }

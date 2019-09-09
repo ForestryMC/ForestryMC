@@ -19,7 +19,7 @@ public class ProxyArboriculture {
 	public void initializeModels() {
 	}
 
-	public int getFoliageColorBasic() {
+	public int getFoliageColorDefault() {
 		return 4764952;
 	}
 
@@ -27,7 +27,7 @@ public class ProxyArboriculture {
 		return 8431445;
 	}
 
-	public int getFoliageColorPine() {
+	public int getFoliageColorSpruce() {
 		return 6396257;
 	}
 

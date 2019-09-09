@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "forestry:ffarm",
+    "data": 5
+  },
+  "pattern": [
+    " # ",
+    "XTX"
+  ],
+  "conditions": [
+    {
+      "module": "farming",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:farm_block",
+  "key": {
+    "#": {
+      "item": "forestry:ffarm",
+      "data": 0
+    },
+    "T": {
+      "item": "forestry:thermionic_tubes",
+      "data": 4
+    },
+    "X": {
+      "item": "#DUSTREDSTONE"
+    }
+  },
+  "group": "farming"
+}

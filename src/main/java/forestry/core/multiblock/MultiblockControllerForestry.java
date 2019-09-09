@@ -13,12 +13,11 @@ package forestry.core.multiblock;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -95,14 +94,14 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 
 	/* INbtWritable */
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		ownerHandler.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		ownerHandler.write(data);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		ownerHandler.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		ownerHandler.read(data);
 	}
 
 	/* INVENTORY */
@@ -147,34 +146,36 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public final void openInventory(EntityPlayer player) {
+	public final void openInventory(PlayerEntity player) {
 		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory(EntityPlayer player) {
+	public final void closeInventory(PlayerEntity player) {
 		getInternalInventory().closeInventory(player);
 	}
 
-	@Override
-	public String getName() {
-		return getInternalInventory().getName();
-	}
+	//TODO inventory title
+	//	@Override
+	//	public String getName() {
+	//		return getInternalInventory().getName();
+	//	}
+	//
+	//	@Override
+	//	public ITextComponent getDisplayName() {
+	//		return getInternalInventory().getDisplayName();
+	//	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return getInternalInventory().getDisplayName();
-	}
-
-	@Override
-	public final boolean isUsableByPlayer(EntityPlayer player) {
+	public final boolean isUsableByPlayer(PlayerEntity player) {
 		return getInternalInventory().isUsableByPlayer(player);
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return getInternalInventory().hasCustomName();
-	}
+	//TODO inventory title
+	//	@Override
+	//	public boolean hasCustomName() {
+	//		return getInternalInventory().hasCustomName();
+	//	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -182,34 +183,35 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
+	public int[] getSlotsForFace(Direction side) {
 		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 
-	@Override
-	public int getField(int id) {
-		return getInternalInventory().getField(id);
-	}
-
-	@Override
-	public int getFieldCount() {
-		return getInternalInventory().getFieldCount();
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		getInternalInventory().setField(id, value);
-	}
+	//TODO inventory field
+	//	@Override
+	//	public int getField(int id) {
+	//		return getInternalInventory().getField(id);
+	//	}
+	//
+	//	@Override
+	//	public int getFieldCount() {
+	//		return getInternalInventory().getFieldCount();
+	//	}
+	//
+	//	@Override
+	//	public void setField(int id, int value) {
+	//		getInternalInventory().setField(id, value);
+	//	}
 
 	@Override
 	public void clear() {

@@ -1,12 +1,11 @@
 package forestry.core.multiblock;
 
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.chunk.IChunk;
 
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
  * In your mod, subscribe this on both the client and server sides side to handle chunk
@@ -17,9 +16,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class MultiblockEventHandler {
 	@SubscribeEvent
 	public void onChunkLoad(ChunkEvent.Load loadEvent) {
-		Chunk chunk = loadEvent.getChunk();
-		World world = loadEvent.getWorld();
-		MultiblockRegistry.onChunkLoaded(world, chunk.x, chunk.z);
+		IChunk chunk = loadEvent.getChunk();
+		IWorld world = loadEvent.getWorld();
+		//TODO - check right x part of chunk
+		MultiblockRegistry.onChunkLoaded(world, chunk.getPos().getRegionCoordX(), chunk.getPos().getRegionCoordZ());
 	}
 
 	// Cleanup, for nice memory usageness

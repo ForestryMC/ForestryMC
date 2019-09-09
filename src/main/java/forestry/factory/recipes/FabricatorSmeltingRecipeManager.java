@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorSmeltingManager;
@@ -68,7 +68,7 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 		if (recipeFluids.isEmpty()) {
 			for (IFabricatorSmeltingRecipe recipe : recipes) {
 				FluidStack fluidStack = recipe.getProduct();
-				if (fluidStack != null) {
+				if (!fluidStack.isEmpty()) {
 					recipeFluids.add(fluidStack.getFluid());
 				}
 			}

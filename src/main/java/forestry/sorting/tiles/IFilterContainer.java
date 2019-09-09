@@ -3,7 +3,6 @@ package forestry.sorting.tiles;
 import javax.annotation.Nullable;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.core.ILocatable;
 import forestry.api.genetics.IFilterLogic;
@@ -14,7 +13,7 @@ public interface IFilterContainer extends ILocatable, ITitled {
 	@Nullable
 	IInventory getBuffer();
 
-	TileEntity getTileEntity();
+	TileGeneticFilter getTileEntity();
 
 	IFilterLogic getLogic();
 }

@@ -1491,13 +1491,13 @@ item.for.catalogue.tooltip=トレードステーションで利用可能なト�
 # PIPES
 ####################
 
-item.PipeItemsPropolis.name=養蜂パイプ
+item.PipeitemPropolis.name=養蜂パイプ
 
 ####################
 # PLUGINS
 ####################
 for.plugin.core.description=Core mechanics for Forestry. Required by all other plugins.
-for.plugin.fluids.description=Adds fluids, fluid blocks, and fluid containers.
+for.plugin.fluids.description=Adds fluids, fluid block, and fluid containers.
 for.plugin.apiculture.description=Adds bees, beekeeping and bee products. Affects world generation.
 for.plugin.arboriculture.description=Adds additional tree species and products.
 for.plugin.energy.description=Adds several RF engines.
@@ -1519,7 +1519,7 @@ for.plugin.biomesoplenty.description=Compatibility plugin for Biomes O Plenty. E
 for.plugin.extrautilities.description=Compatibility plugin for Extra Utilities. Enables farming ender lilies.
 for.plugin.harvestcraft.description=Compatibility plugin for HarvestCraft. Enables farming HarvestCraft plants and trees.
 for.plugin.magicalcrops.description=Compatibility plugin for Magical Crops.
-for.plugin.chisel.description=Compatibility plugin for Chisel. Adds worldgen blocks to Backpacks.
+for.plugin.chisel.description=Compatibility plugin for Chisel. Adds worldgen block to Backpacks.
 for.plugin.plantmegapack.description=Compatibility plugin for Plant Mega Pack.
 for.plugin.witchery.description=Compatibility plugin for Witchery.
 for.plugin.agricraft.description=Compatibility plugin for AgriCraft.
@@ -1548,11 +1548,11 @@ for.config.world.generate.retrogen.forced=Forced Retrogen
 for.config.world.generate.retrogen.forced.comment=Creates Forestry world generation in all chunks, even if they were generated there before.
 
 for.config.world.generate.ore.apatite=Generate Apatite
-for.config.world.generate.ore.apatite.comment=Generates apatite ore blocks in the world.
+for.config.world.generate.ore.apatite.comment=Generates apatite ore block in the world.
 for.config.world.generate.ore.copper=Generate Copper
-for.config.world.generate.ore.copper.comment=Generates copper ore blocks in the world.
+for.config.world.generate.ore.copper.comment=Generates copper ore block in the world.
 for.config.world.generate.ore.tin=Generate Tin
-for.config.world.generate.ore.tin.comment=Generates tin ore blocks in the world.
+for.config.world.generate.ore.tin.comment=Generates tin ore block in the world.
 
 for.config.world.generate.beehives.amount=Beehives Generation Amount
 for.config.world.generate.beehives.amount.comment=Sets how many beehives spawn in the world.
@@ -1621,12 +1621,12 @@ for.config.structures=Structures
 for.config.structures.disabled=Disabled Structures
 for.config.structures.disabled.comment=List specific structures to disable them.
 
-for.config.farm.fertilizers.items=Add fertilizers to forestry. An entry have to looks like this modID:itemName:MetaData;fertilizerValue. You need to seperate every entry in a sererate line.
+for.config.farm.fertilizers.item=Add fertilizers to forestry. An entry have to looks like this modID:itemName:MetaData;fertilizerValue. You need to seperate every entry in a sererate line.
 
 for.config.fluids=Fluids
 for.config.fluids.enable.format=Enables %s fluid.
-for.config.fluid.blocks=Fluid Blocks
-for.config.fluid.blocks.enable.format=Enables %s in-world fluid block.
+for.config.fluid.block=Fluid block
+for.config.fluid.block.enable.format=Enables %s in-world fluid block.
 
 for.config.debug.enabled=Debug Mode
 for.config.debug.enabled.comment=Enable Debug mode (only useful to developers).
@@ -1653,7 +1653,7 @@ for.config.butterfly.entities.maxDistance.comment=Butterflies will fly home if t
 for.config.butterfly.entities.pollination=Butterfly Pollination
 for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate leaves.
 
-for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
+for.config.backpacks.item.stacks.format=Add itemtacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
 for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
 
 for.config.gamemode=Game Mode

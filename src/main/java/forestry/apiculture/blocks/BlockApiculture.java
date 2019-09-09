@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
-import forestry.api.core.Tabs;
+import net.minecraftforge.common.ToolType;
+
 import forestry.core.blocks.BlockBase;
 
 public class BlockApiculture extends BlockBase<BlockTypeApiculture> {
 	public BlockApiculture(BlockTypeApiculture type) {
-		super(type, Material.WOOD);
-		setCreativeTab(Tabs.tabApiculture);
-		setHarvestLevel("axe", 0);
+		super(type, Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0));
 	}
 }

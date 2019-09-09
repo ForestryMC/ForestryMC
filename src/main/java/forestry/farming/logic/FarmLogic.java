@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -63,11 +63,6 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Override
-	public FarmLogic setManual(boolean flag) {
-		return this;
-	}
-
-	@Override
 	public IFarmProperties getProperties() {
 		return properties;
 	}
@@ -95,7 +90,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		if (!world.isBlockLoaded(position) || world.isAirBlock(position)) {
 			return null;
 		}
-		IBlockState blockState = world.getBlockState(position);
+		BlockState blockState = world.getBlockState(position);
 		for (IFarmable seed : getFarmables()) {
 			ICrop crop = seed.getCropAt(world, position, blockState);
 			if (crop != null) {
@@ -111,7 +106,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		if (!world.isBlockLoaded(position)) {
 			return false;
 		}
-		IBlockState blockState = world.getBlockState(position);
+		BlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
 		return block == Blocks.WATER;
 	}
@@ -139,12 +134,12 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected NonNullList<ItemStack> collectEntityItems(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
 		AxisAlignedBB harvestBox = getHarvestBox(world, farmHousing, toWorldHeight);
 
-		List<EntityItem> entityItems = world.getEntitiesWithinAABB(EntityItem.class, harvestBox, entitySelectorFarm);
+		List<ItemEntity> entityItems = world.getEntitiesWithinAABB(ItemEntity.class, harvestBox, entitySelectorFarm);
 		NonNullList<ItemStack> stacks = NonNullList.create();
-		for (EntityItem entity : entityItems) {
+		for (ItemEntity entity : entityItems) {
 			ItemStack contained = entity.getItem();
 			stacks.add(contained.copy());
-			entity.setDead();
+			entity.remove();
 		}
 		return stacks;
 	}
@@ -155,7 +150,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		return getName();
 	}
 
-	private static class EntitySelectorFarm implements Predicate<EntityItem> {
+	private static class EntitySelectorFarm implements Predicate<ItemEntity> {
 		private final FarmLogic farmLogic;
 
 		public EntitySelectorFarm(FarmLogic farmLogic) {
@@ -163,12 +158,13 @@ public abstract class FarmLogic implements IFarmLogic {
 		}
 
 		@Override
-		public boolean apply(@Nullable EntityItem entity) {
-			if (entity == null || entity.isDead) {
+		public boolean apply(@Nullable ItemEntity entity) {
+			if (entity == null || !entity.isAlive()) {
 				return false;
 			}
 
-			if (entity.getEntityData().getBoolean("PreventRemoteMovement")) {
+			//TODO not sure if this key still exists
+			if (entity.getPersistantData().getBoolean("PreventRemoteMovement")) {
 				return false;
 			}
 

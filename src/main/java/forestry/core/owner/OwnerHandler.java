@@ -13,7 +13,7 @@ package forestry.core.owner;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import com.mojang.authlib.GameProfile;
 
@@ -59,9 +59,9 @@ public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, I
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		if (data.hasKey("owner")) {
-			GameProfile owner = PlayerUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
+	public void read(CompoundNBT data) {
+		if (data.contains("owner")) {
+			GameProfile owner = PlayerUtil.readGameProfile(data.getCompound("owner"));
 			if (owner != null) {
 				setOwner(owner);
 			}
@@ -69,11 +69,11 @@ public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, I
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
+	public CompoundNBT write(CompoundNBT data) {
 		if (this.owner != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
+			CompoundNBT nbt = new CompoundNBT();
 			PlayerUtil.writeGameProfile(nbt, owner);
-			data.setTag("owner", nbt);
+			data.put("owner", nbt);
 		}
 		return data;
 	}

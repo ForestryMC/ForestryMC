@@ -13,34 +13,34 @@ package forestry.arboriculture.models;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 
-import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.core.IModelBaker;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.genetics.TreeRoot;
+import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.blocks.properties.UnlistedBlockAccess;
 import forestry.core.blocks.properties.UnlistedBlockPos;
 import forestry.core.models.ModelBlockCached;
+import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileUtil;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
 	public static class Key {
 		public final TextureAtlasSprite leafSprite;
@@ -74,13 +74,13 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 
 	@Override
 	protected Key getInventoryKey(ItemStack itemStack) {
-		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		TileLeaves leaves = new TileLeaves();
-		if (itemStack.getTagCompound() != null) {
-			leaves.readFromNBT(itemStack.getTagCompound());
+		if (itemStack.getTag() != null) {
+			leaves.read(itemStack.getTag());
 		} else {
-			leaves.setTree(TreeRoot.treeTemplates.get(0));
+			leaves.setTree(TreeHelper.getRoot().getIndividualTemplates().get(0));
 		}
 
 		boolean fancy = Proxies.render.fancyGraphicsEnabled();
@@ -93,13 +93,12 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected Key getWorldKey(IBlockState state) {
-		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		IBlockAccess world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
-		BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
+	protected Key getWorldKey(BlockState state, IModelData extraData) {
+		IBlockReader world = extraData.getData(UnlistedBlockAccess.BLOCKACCESS);
+		BlockPos pos = extraData.getData(UnlistedBlockPos.POS);
 
 		boolean fancy = Proxies.render.fancyGraphicsEnabled();
-		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		if (world == null || pos == null) {
 			return createEmptyKey(map, fancy);
@@ -119,15 +118,15 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 			fancy);
 	}
 
-	private Key createEmptyKey(TextureMap map, boolean fancy) {
-		IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.getIndividual().getGenome().getPrimary();
+	private Key createEmptyKey(AtlasTexture map, boolean fancy) {
+		IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 		ResourceLocation spriteLocation = oakSpecies.getLeafSpriteProvider().getSprite(false, fancy);
 		TextureAtlasSprite sprite = map.getAtlasSprite(spriteLocation.toString());
 		return new Key(sprite, null, fancy);
 	}
 
 	@Override
-	protected void bakeBlock(BlockForestryLeaves block, Key key, IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockForestryLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		// Render the plain leaf block.
 		baker.addBlockModel(null, key.leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 

@@ -1,14 +1,15 @@
 package forestry.sorting.gui;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.genetics.IFilterLogic;
 import forestry.core.config.Constants;
@@ -27,23 +28,23 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	private final WidgetScrollBar scrollBar;
 	public final SelectionWidget selection;
 	@Nullable
-	private GuiTextField searchField;
+	private TextFieldWidget searchField;
 
-	public GuiGeneticFilter(IFilterContainer tile, InventoryPlayer inventory) {
-		super(Constants.TEXTURE_PATH_GUI + "/filter.png", new ContainerGeneticFilter(tile, inventory), tile);
+	public GuiGeneticFilter(ContainerGeneticFilter container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/filter.png", container, inventory, container.getTile());
 		ySize = 222;
 		xSize = 212;
-		this.tile = tile;
+		this.tile = container.getTile();
 
 		for (int i = 0; i < 6; i++) {
-			EnumFacing facing = EnumFacing.byIndex(i);
+			Direction facing = Direction.byIndex(i);
 			widgetManager.add(new RuleWidget(widgetManager, 8 + 36, 18 + i * 18, facing, this));
 		}
 
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				for (int k = 0; k < 2; k++) {
-					widgetManager.add(new SpeciesWidget(widgetManager, 44 + 36 + j * 45 + k * 18, 18 + i * 18, EnumFacing.byIndex(i), j, k == 0, this));
+					widgetManager.add(new SpeciesWidget(widgetManager, 44 + 36 + j * 45 + k * 18, 18 + i * 18, Direction.byIndex(i), j, k == 0, this));
 				}
 			}
 		}
@@ -69,7 +70,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 			searchField.setVisible(true);
 		}
 		selection.filterEntries(searchField != null ? searchField.getText() : "");
-		for (Slot slot : inventorySlots.inventorySlots) {
+		for (Slot slot : this.container.inventorySlots) {
 			if (slot instanceof SlotGeneticFilter) {
 				SlotGeneticFilter filter = (SlotGeneticFilter) slot;
 				filter.setEnabled(false);
@@ -84,7 +85,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 			searchField.setVisible(false);
 		}
 		scrollBar.setVisible(false);
-		for (Slot slot : inventorySlots.inventorySlots) {
+		for (Slot slot : this.container.inventorySlots) {
 			if (slot instanceof SlotGeneticFilter) {
 				SlotGeneticFilter filter = (SlotGeneticFilter) slot;
 				filter.setEnabled(true);
@@ -93,12 +94,12 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
 		String oldString = searchField != null ? searchField.getText() : "";
 
-		this.searchField = new GuiTextField(0, this.fontRenderer, this.guiLeft + selection.getX() + 89 + 36, selection.getY() + this.guiTop + 4, 80, this.fontRenderer.FONT_HEIGHT);
+		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + selection.getX() + 89 + 36, selection.getY() + this.guiTop + 4, 80, this.minecraft.fontRenderer.FONT_HEIGHT, "");
 		this.searchField.setMaxStringLength(50);
 		this.searchField.setEnableBackgroundDrawing(false);
 		this.searchField.setTextColor(16777215);
@@ -109,26 +110,27 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.disableLighting();
 		if (searchField != null) {
-			this.searchField.drawTextBox();
+			this.searchField.render(mouseX, mouseY, f);    //TODO correct?
 		}
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (searchField != null && this.searchField.textboxKeyTyped(typedChar, keyCode)) {
+	public boolean keyPressed(int typedChar, int keyCode, int int3) {
+		if (searchField != null && this.searchField.keyPressed(typedChar, keyCode, int3)) {
 			scrollBar.setValue(0);
 			selection.filterEntries(searchField.getText());
+			return true;
 		} else {
-			super.keyTyped(typedChar, keyCode);
+			return super.keyPressed(typedChar, keyCode, int3);
 		}
 	}
 
 	@Nullable
 	@Override
-	protected Slot getSlotAtPosition(int mouseX, int mouseY) {
+	protected Slot getSlotAtPosition(double mouseX, double mouseY) {
 		Slot slot = super.getSlotAtPosition(mouseX, mouseY);
 		if (slot instanceof SlotGeneticFilter && selection.getLogic() != null) {
 			return null;
@@ -137,8 +139,10 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
+			return true;
+		}
 
 		if (searchField != null) {
 			searchField.mouseClicked(mouseX, mouseY, mouseButton);
@@ -147,6 +151,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		if (widget == null) {
 			deselectFilter();
 		}
+		return true;
 	}
 
 	@Override
@@ -154,9 +159,10 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		addHintLedger("filter");
 	}
 
-	public IFilterContainer getContainer() {
-		return tile;
-	}
+	//TODO not sure about this
+	//	public IFilterContainer getContainer() {
+	//		return tile;
+	//	}
 
 	public IFilterLogic getLogic() {
 		return tile.getLogic();

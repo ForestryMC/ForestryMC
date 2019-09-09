@@ -7,7 +7,8 @@ package forestry.api.circuits;
 
 import java.util.List;
 
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextComponent;
 
 public interface ICircuit {
 	String getUID();
@@ -15,7 +16,7 @@ public interface ICircuit {
 	String getUnlocalizedName();
 
 	default String getLocalizedName() {
-		return I18n.translateToLocal(getUnlocalizedName());
+		return I18n.format(getUnlocalizedName());
 	}
 
 	boolean isCircuitable(Object tile);
@@ -28,5 +29,5 @@ public interface ICircuit {
 
 	void onTick(int slot, Object tile);
 
-	void addTooltip(List<String> list);
+	void addTooltip(List<ITextComponent> list);
 }

@@ -16,15 +16,17 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-import forestry.api.apiculture.IBeeGenome;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
@@ -63,7 +65,7 @@ public enum HiveDescription implements IHiveDescription {
 		}
 	},
 	JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_BRICKS)) {
+	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
 			return BiomeDictionary.hasType(biome, BiomeDictionary.Type.END);
@@ -74,7 +76,7 @@ public enum HiveDescription implements IHiveDescription {
 		public void postGen(World world, Random rand, BlockPos pos) {
 			BlockPos posAbove = pos.up();
 			if (world.isAirBlock(posAbove)) {
-				world.setBlockState(posAbove, Blocks.SNOW_LAYER.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+				world.setBlockState(posAbove, Blocks.SNOW.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 			}
 
 			postGenFlowers(world, rand, pos, flowerStates);
@@ -90,25 +92,25 @@ public enum HiveDescription implements IHiveDescription {
 	};
 
 	private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW, Blocks.SAND, Blocks.SANDSTONE);
-	private static final List<IBlockState> flowerStates = new ArrayList<>();
-	private static final List<IBlockState> mushroomStates = new ArrayList<>();
-	private static final List<IBlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());
+	private static final List<BlockState> flowerStates = new ArrayList<>();
+	private static final List<BlockState> mushroomStates = new ArrayList<>();
+	private static final List<BlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());
 
 	static {
-		flowerStates.addAll(Blocks.RED_FLOWER.getBlockState().getValidStates());
-		flowerStates.addAll(Blocks.YELLOW_FLOWER.getBlockState().getValidStates());
+		flowerStates.addAll(Blocks.POPPY.getStateContainer().getValidStates());
+		flowerStates.addAll(Blocks.DANDELION.getStateContainer().getValidStates());
 		mushroomStates.add(Blocks.RED_MUSHROOM.getDefaultState());
 		mushroomStates.add(Blocks.BROWN_MUSHROOM.getDefaultState());
 	}
 
-	private final IBlockState blockState;
+	private final BlockState blockState;
 	private final float genChance;
-	private final IBeeGenome beeGenome;
+	private final IGenome beeGenome;
 	private final IHiveGen hiveGen;
 	private final IHiveRegistry.HiveType hiveType;
 
 	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
-		this.blockState = ModuleApiculture.getBlocks().beehives.getStateForType(hiveType);
+		this.blockState = ModuleApiculture.getBlocks().beehives.get(hiveType).getDefaultState();
 		this.genChance = genChance;
 		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;
@@ -121,7 +123,7 @@ public enum HiveDescription implements IHiveDescription {
 	}
 
 	@Override
-	public IBlockState getBlockState() {
+	public BlockState getBlockState() {
 		return blockState;
 	}
 
@@ -132,15 +134,15 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public boolean isGoodHumidity(EnumHumidity humidity) {
-		EnumHumidity idealHumidity = beeGenome.getPrimary().getHumidity();
-		EnumTolerance humidityTolerance = beeGenome.getToleranceHumid();
+		EnumHumidity idealHumidity = beeGenome.getActiveAllele(BeeChromosomes.SPECIES).getHumidity();
+		EnumTolerance humidityTolerance = beeGenome.getActiveValue(BeeChromosomes.HUMIDITY_TOLERANCE);
 		return AlleleManager.climateHelper.isWithinLimits(humidity, idealHumidity, humidityTolerance);
 	}
 
 	@Override
 	public boolean isGoodTemperature(EnumTemperature temperature) {
-		EnumTemperature idealTemperature = beeGenome.getPrimary().getTemperature();
-		EnumTolerance temperatureTolerance = beeGenome.getToleranceTemp();
+		EnumTemperature idealTemperature = beeGenome.getActiveAllele(BeeChromosomes.SPECIES).getTemperature();
+		EnumTolerance temperatureTolerance = beeGenome.getActiveValue(BeeChromosomes.TEMPERATURE_TOLERANCE);
 		return AlleleManager.climateHelper.isWithinLimits(temperature, idealTemperature, temperatureTolerance);
 	}
 
@@ -153,7 +155,7 @@ public enum HiveDescription implements IHiveDescription {
 	public void postGen(World world, Random rand, BlockPos pos) {
 	}
 
-	protected static void postGenFlowers(World world, Random rand, BlockPos hivePos, List<IBlockState> flowerStates) {
+	protected static void postGenFlowers(World world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
 		int plantedCount = 0;
 		for (int i = 0; i < 10; i++) {
 			int xOffset = rand.nextInt(8) - 4;
@@ -168,9 +170,9 @@ public enum HiveDescription implements IHiveDescription {
 				continue;
 			}
 
-			IBlockState state = flowerStates.get(rand.nextInt(flowerStates.size()));
+			BlockState state = flowerStates.get(rand.nextInt(flowerStates.size()));
 			Block block = state.getBlock();
-			if (!block.canPlaceBlockAt(world, blockPos)) {
+			if (!block.getDefaultState().isValidPosition(world, blockPos)) {
 				continue;
 			}
 

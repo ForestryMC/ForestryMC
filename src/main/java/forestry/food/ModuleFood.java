@@ -31,7 +31,7 @@ public class ModuleFood extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerItems() {
 		items = new ItemRegistryFood();
 	}
 

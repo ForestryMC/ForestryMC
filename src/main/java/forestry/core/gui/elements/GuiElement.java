@@ -7,14 +7,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IGuiElement;
@@ -26,8 +30,8 @@ import forestry.api.gui.events.GuiEventDestination;
 
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
-public class GuiElement extends Gui implements IGuiElement {
+@OnlyIn(Dist.CLIENT)
+public class GuiElement extends AbstractGui implements IGuiElement {
 	/* Attributes - Final */
 	//Tooltip of the element
 	private final List<ITooltipSupplier> tooltipSuppliers = new ArrayList<>();
@@ -117,17 +121,18 @@ public class GuiElement extends Gui implements IGuiElement {
 			return;
 		}
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(getX(), getY(), 0.0F);
+		GlStateManager.translatef(getX(), getY(), 0.0F);
 		if (isCropped()) {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			Minecraft mc = Minecraft.getMinecraft();
-			ScaledResolution res = new ScaledResolution(mc);
-			double scaleWidth = mc.displayWidth / res.getScaledWidth_double();
-			double scaleHeight = mc.displayHeight / res.getScaledHeight_double();
+			Minecraft mc = Minecraft.getInstance();
+			//TODO - resolution stuff again, check gameSettings.guiscale too
+			MainWindow window = mc.mainWindow;
+			double scaleWidth = ((double) window.getWidth()) / window.getScaledWidth();
+			double scaleHeight = ((double) window.getHeight()) / window.getScaledHeight();
 			IGuiElement cropRelative = cropElement != null ? cropElement : this;
 			int posX = cropRelative.getAbsoluteX();
 			int posY = cropRelative.getAbsoluteY();
-			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (mc.displayHeight - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
+			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
 		}
 
 		drawElement(mouseX, mouseY);
@@ -256,7 +261,7 @@ public class GuiElement extends Gui implements IGuiElement {
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		if (!isVisible()) {
 			return false;
 		}
@@ -279,15 +284,15 @@ public class GuiElement extends Gui implements IGuiElement {
 	}
 
 	/**
-	 * Called if this element get updated on the client side.
+	 * Called if this element getComb updated on the client side.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void onUpdateClient() {
 		//Default-Implementation
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateClient() {
 		if (!this.isVisible()) {
 			return;
@@ -328,21 +333,23 @@ public class GuiElement extends Gui implements IGuiElement {
 	}
 
 	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
-		List<String> lines = new ArrayList<>();
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
+		List<ITextComponent> lines = new ArrayList<>();
 		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
 		return lines;
 	}
 
 	@Override
 	public IGuiElement addTooltip(String line) {
-		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.add(line));
+		//TODO textcomponent
+		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.add(new StringTextComponent(line)));
 		return this;
 	}
 
 	@Override
 	public IGuiElement addTooltip(Collection<String> lines) {
-		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.addAll(lines));
+		//TODO textcomponent
+		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.addAll(lines.stream().map(StringTextComponent::new).collect(Collectors.toList())));
 		return this;
 	}
 
@@ -363,10 +370,10 @@ public class GuiElement extends Gui implements IGuiElement {
 	}
 
 	@Override
-	public List<String> getTooltip() {
+	public List<ITextComponent> getTooltip() {
 		int mouseX = getWindow().getRelativeMouseX(this);
 		int mouseY = getWindow().getRelativeMouseY(this);
-		List<String> lines = new ArrayList<>();
+		List<ITextComponent> lines = new ArrayList<>();
 		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
 		return lines;
 	}

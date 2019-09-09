@@ -11,15 +11,16 @@
 package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
-import forestry.core.utils.Translator;
 
 public class ProbeButton extends Widget {
 
@@ -35,28 +36,28 @@ public class ProbeButton extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
-		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
+		manager.gui.blit(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
 	}
 
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(Translator.translateToLocal("for.gui.escritoire.probe"));
+		tooltip.add(new TranslationTextComponent("for.gui.escritoire.probe"));
 		return tooltip;
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		pressed = true;
 		NetworkUtil.sendToServer(new PacketGuiSelectRequest(-1, 0));
 		SoundUtil.playButtonClick();
 	}
 
 	@Override
-	public boolean handleMouseRelease(int mouseX, int mouseY, int eventType) {
+	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
 		if (pressed) {
 			pressed = false;
 		}

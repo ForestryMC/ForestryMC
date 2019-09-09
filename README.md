@@ -17,8 +17,6 @@ For those interested in developement, you can also visit #forestry-dev.
 
 ### Building
 
-The localization files reside in their own repository. It is pulled in automatically.
-
 You may want to adjust the "./gradle.properties" file to set your mc account as needed.
 
 To setup, open a command line and run "gradlew setupDecompWorkspace". Then run the following depending on your IDE:

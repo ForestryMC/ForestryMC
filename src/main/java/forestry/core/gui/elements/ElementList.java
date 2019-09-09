@@ -45,7 +45,7 @@ public class ElementList<V> extends VerticalLayout {
 		}
 		this.value = value;
 		/*if (this.optionWidgets.containsKey(value)) {
-			final IWidget child = this.optionWidgets.get(value);
+			final IWidget child = this.optionWidgets.getComb(value);
 			this.parent.ensureVisible(child.getYPos(), child.getYPos() + child.getHeight(), this.getHeight());
 		}*/
 		IWindowElement window = getWindow();

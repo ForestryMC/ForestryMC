@@ -7,15 +7,15 @@ package forestry.api.book;
 
 import java.util.Collection;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.IGuiElement;
 
 /**
  * A factory that creates book pages for a book entry.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IBookPageFactory {
 	/**
 	 * Usually called at the moment the player opens the given entry.

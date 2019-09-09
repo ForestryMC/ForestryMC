@@ -7,6 +7,8 @@ package forestry.api.apiculture;
 
 import javax.annotation.Nullable;
 
+import genetics.api.individual.IGenome;
+
 /**
  * Easily extendable default IBeeModifier.
  * By itself, this IBeeModifier does nothing.
@@ -15,32 +17,32 @@ import javax.annotation.Nullable;
 public class DefaultBeeModifier implements IBeeModifier {
 
 	@Override
-	public float getTerritoryModifier(IBeeGenome genome, float currentModifier) {
+	public float getTerritoryModifier(IGenome genome, float currentModifier) {
 		return 1.0f;
 	}
 
 	@Override
-	public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+	public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
 		return 1.0f;
 	}
 
 	@Override
-	public float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, float currentModifier) {
+	public float getLifespanModifier(IGenome genome, @Nullable IGenome mate, float currentModifier) {
 		return 1.0f;
 	}
 
 	@Override
-	public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+	public float getProductionModifier(IGenome genome, float currentModifier) {
 		return 1.0f;
 	}
 
 	@Override
-	public float getFloweringModifier(IBeeGenome genome, float currentModifier) {
+	public float getFloweringModifier(IGenome genome, float currentModifier) {
 		return 1.0f;
 	}
 
 	@Override
-	public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
+	public float getGeneticDecay(IGenome genome, float currentModifier) {
 		return 1.0f;
 	}
 

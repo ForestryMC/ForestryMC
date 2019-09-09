@@ -1,7 +1,7 @@
 package forestry.database.network.packets;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -39,9 +39,10 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 		return PacketIdServer.EXTRACT_ITEM;
 	}
 
+	//TODO pretty big method
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			int invIndex = data.readInt();
 			byte flags = data.readByte();
 
@@ -93,7 +94,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 			ItemStack extracted = itemHandler.extractItem(invIndex, count, true);
 			if (!extracted.isEmpty()) {
 				if ((flags & SHIFT) == SHIFT) {
-					IItemHandler playerInv = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+					IItemHandler playerInv = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);    //TODO unwrap should be fine
 					//Test if the player has enough space
 					ItemStack remaining = ItemHandlerHelper.insertItem(playerInv, extracted, true);
 					if (remaining.isEmpty()) {

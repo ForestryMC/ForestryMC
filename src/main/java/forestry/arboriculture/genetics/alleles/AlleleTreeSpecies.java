@@ -12,47 +12,38 @@ package forestry.arboriculture.genetics.alleles;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.PlantType;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.classification.IClassification;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.IAlleleTreeSpeciesBuilder;
-import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
-import forestry.api.arboriculture.ITreeRoot;
-import forestry.api.arboriculture.IWoodProvider;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IClassification;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
+import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.arboriculture.genetics.LeafProvider;
-import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
+public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleTreeSpeciesBuilder, IAlleleTreeSpecies {
 	private final ITreeGenerator generator;
-	private final IWoodProvider woodProvider;
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafSpriteProvider leafSpriteProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
-	private EnumPlantType nativeType = EnumPlantType.Plains;
+	private PlantType nativeType = PlantType.Plains;
 	private final ILeafProvider leafProvider;
 	private IGrowthProvider growthProvider = new ClimateGrowthProvider();
 	private float rarity = 0.0F;
@@ -68,14 +59,12 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		String modID,
 		ILeafSpriteProvider leafIconProvider,
 		IGermlingModelProvider germlingModelProvider,
-		IWoodProvider woodProvider,
 		ITreeGenerator generator,
 		@Nullable ILeafProvider leafProvider) {
 		super(modID, uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
 		this.generator = generator;
 		this.germlingModelProvider = germlingModelProvider;
-		this.woodProvider = woodProvider;
 		this.leafSpriteProvider = leafIconProvider;
 		if (leafProvider == null) {
 			this.leafProvider = new LeafProvider();
@@ -86,7 +75,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	@Override
 	public IAlleleTreeSpecies build() {
-		AlleleManager.alleleRegistry.registerAllele(this, EnumTreeChromosome.SPECIES);
 		leafProvider.init(this);
 		return this;
 	}
@@ -97,7 +85,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
-	public AlleleTreeSpecies setPlantType(EnumPlantType type) {
+	public AlleleTreeSpecies setPlantType(PlantType type) {
 		nativeType = type;
 		return this;
 	}
@@ -132,7 +120,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	/* OTHER */
 	@Override
-	public EnumPlantType getPlantType() {
+	public PlantType getPlantType() {
 		return nativeType;
 	}
 
@@ -156,60 +144,27 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		return leafSpriteProvider.getColor(false);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public ModelResourceLocation getGermlingModel(EnumGermlingType type) {
-		return germlingModelProvider.getModel(type);
+	@OnlyIn(Dist.CLIENT)
+	public ModelResourceLocation getItemModel() {
+		return new ModelResourceLocation(germlingModelProvider.getItemModel(), "inventory");
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
+	public ResourceLocation getBlockModel() {
+		return germlingModelProvider.getBlockModel();
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
 	public int getGermlingColour(EnumGermlingType type, int renderPass) {
 		return germlingModelProvider.getSpriteColor(type, renderPass);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
-		germlingModelProvider.registerModels(item, manager, type);
-	}
-
-	@Override
-	public IWoodProvider getWoodProvider() {
-		return woodProvider;
 	}
 
 	@Override
 	public ILeafProvider getLeafProvider() {
 		return leafProvider;
-	}
-
-	@Override
-	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return 0f;
-		}
-
-		List<IFruitFamily> suitableFruit = getSuitableFruit();
-		for (IFruitFamily fruitFamily : suitableFruit) {
-			Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
-			for (IFruitProvider fruitProvider : fruitProviders) {
-				Map<ItemStack, Float> products = fruitProvider.getProducts();
-				for (ItemStack stack : products.keySet()) {
-					if (stack.isItemEqual(itemstack)) {
-						return 1.0f;
-					}
-				}
-				Map<ItemStack, Float> specialtyChances = fruitProvider.getSpecialty();
-				for (ItemStack stack : specialtyChances.keySet()) {
-					if (stack.isItemEqual(itemstack)) {
-						return 1.0f;
-					}
-				}
-			}
-		}
-
-		return super.getResearchSuitability(itemstack);
 	}
 
 	@Override

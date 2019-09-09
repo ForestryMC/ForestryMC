@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 public interface IJubilanceFactory {
 	/**
@@ -16,5 +16,5 @@ public interface IJubilanceFactory {
 	/**
 	 * The Requires Resource Jubilance Provider is satisfied when a specific block is under the hive.
 	 */
-	IJubilanceProvider getRequiresResource(IBlockState... acceptedBlockStates);
+	IJubilanceProvider getRequiresResource(BlockState... acceptedBlockStates);
 }

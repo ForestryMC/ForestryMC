@@ -4,15 +4,18 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.MainWindow;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import net.minecraftforge.fml.client.config.GuiUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
@@ -21,7 +24,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiWindow;
 import forestry.core.gui.IGuiSizable;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/almanac.png");
 	static final int LEFT_PAGE_START_X = 16;
@@ -39,7 +42,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	protected final IForesterBook book;
 
 	protected GuiForesterBook(IForesterBook book) {
-		super(X_SIZE, Y_SIZE);
+		super(X_SIZE, Y_SIZE, new StringTextComponent("FORESTER_BOOK_TITLE"));    //TODO localise
 		this.book = book;
 		setGuiScreen(this);
 	}
@@ -49,13 +52,13 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
-		this.buttonList.clear();
+	public void init() {
+		super.init();
+		this.buttons.clear();
 		if (hasButtons()) {
-			GuiButtonPage leftButton = addButton(new GuiButtonPage(0, guiLeft + 24, guiTop + Y_SIZE - 20, true));
-			GuiButtonPage rightButton = addButton(new GuiButtonPage(1, guiLeft + X_SIZE - 44, guiTop + Y_SIZE - 20, false));
-			GuiButtonBack backButton = addButton(new GuiButtonBack(2, guiLeft + X_SIZE / 2 - 12, guiTop + Y_SIZE - 20));
+			GuiButtonPage leftButton = addButton(new GuiButtonPage(guiLeft + 24, guiTop + Y_SIZE - 20, true, this::actionPerformed));
+			GuiButtonPage rightButton = addButton(new GuiButtonPage(guiLeft + X_SIZE - 44, guiTop + Y_SIZE - 20, false, this::actionPerformed));
+			GuiButtonBack backButton = addButton(new GuiButtonBack(guiLeft + X_SIZE / 2 - 12, guiTop + Y_SIZE - 20, this::actionPerformed));
 			initButtons(leftButton, rightButton, backButton);
 		}
 	}
@@ -68,26 +71,27 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		TextureManager manager = mc.renderEngine;
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		TextureManager manager = this.minecraft.textureManager;
 
 		manager.bindTexture(TEXTURE);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, X_SIZE, Y_SIZE);
+		blit(guiLeft, guiTop, 0, 0, X_SIZE, Y_SIZE);
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 
-		boolean unicode = fontRenderer.getUnicodeFlag();
-		fontRenderer.setUnicodeFlag(true);
-		drawCenteredString(fontRenderer, TextFormatting.UNDERLINE + getTitle(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
+		boolean unicode = minecraft.fontRenderer.getBidiFlag();
+		minecraft.fontRenderer.setBidiFlag(true);
+		//TODO textcomponent
+		drawCenteredString(minecraft.fontRenderer, TextFormatting.UNDERLINE + getTitle().toString(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 
 		drawText();
 
-		fontRenderer.setUnicodeFlag(unicode);
+		minecraft.fontRenderer.setBidiFlag(unicode);
 
 		drawTooltips(mouseX, mouseY);
 	}
@@ -95,13 +99,13 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	@Override
 	protected void drawTooltips(int mouseX, int mouseY) {
 		super.drawTooltips(mouseX, mouseY);
-		InventoryPlayer playerInv = mc.player.inventory;
+		PlayerInventory playerInv = minecraft.player.inventory;
 
 		if (playerInv.getItemStack().isEmpty()) {
 			List<String> tooltip = getTooltip(mouseX, mouseY);
 			if (!tooltip.isEmpty()) {
-				ScaledResolution scaledresolution = new ScaledResolution(mc);
-				GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, fontRenderer);
+				MainWindow mainWindow = getMC().mainWindow;
+				GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, mainWindow.getScaledWidth(), mainWindow.getScaledHeight(), -1, getMC().fontRenderer);
 			}
 		}
 	}
@@ -113,8 +117,6 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 		return Collections.emptyList();
 	}
 
-	protected abstract String getTitle();
-
 	@Nullable
 	public static GuiForesterBook getGuiScreen() {
 		return guiScreen;
@@ -123,4 +125,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	public static void setGuiScreen(@Nullable GuiForesterBook guiScreen) {
 		GuiForesterBook.guiScreen = guiScreen;
 	}
+
+	protected abstract void actionPerformed(Button button);
+
 }

@@ -5,18 +5,17 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
- * @deprecated TODO Remove in 1.13: Not needed in the api
+ * @deprecated TODO Remove in 1.13: Not needed in the api, just pass in resourcelocations
  */
 @Deprecated
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IModelManager {
 
 	void registerItemModel(Item item, int meta, String modifier, String identifier);
@@ -31,6 +30,7 @@ public interface IModelManager {
 
 	ModelResourceLocation getModelLocation(String modID, String identifier);
 
-	void registerItemModel(Item item, ItemMeshDefinition definition);
+	//TODO - itemmeshdefinition doesn't exist any more
+	//	void registerItemModel(Item item, ItemMeshDefinition definition);
 
 }

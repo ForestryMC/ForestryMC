@@ -12,43 +12,33 @@ package forestry.core.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockFlowerPot;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FlowerPotBlock;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.Region;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import forestry.core.config.Constants;
-import forestry.core.utils.MigrationHelper;
-
 public abstract class TileUtil {
 
-	public static void registerTile(Class<? extends TileEntity> tileClass, String key) {
-		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(Constants.MOD_ID, key));
-		MigrationHelper.addTileName(key);
-	}
-
-	public static boolean isUsableByPlayer(EntityPlayer player, TileEntity tile) {
+	public static boolean isUsableByPlayer(PlayerEntity player, TileEntity tile) {
 		BlockPos pos = tile.getPos();
 		World world = tile.getWorld();
 
-		return !tile.isInvalid() &&
+		return !tile.isRemoved() &&
 			getTile(world, pos) == tile &&
 			player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 	}
@@ -56,13 +46,13 @@ public abstract class TileUtil {
 	/**
 	 * Returns the tile at the specified position, returns null if it is the wrong type or does not exist.
 	 * Avoids creating new tile entities when using a ChunkCache (off the main thread).
-	 * see {@link BlockFlowerPot#getActualState(IBlockState, IBlockAccess, BlockPos)}
+	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
-	public static TileEntity getTile(IBlockAccess world, BlockPos pos) {
-		if (world instanceof ChunkCache) {
-			ChunkCache chunkCache = (ChunkCache) world;
-			return chunkCache.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+	public static TileEntity getTile(IBlockReader world, BlockPos pos) {
+		if (world instanceof Region) {
+			Region chunkCache = (Region) world;
+			return chunkCache.getTileEntity(pos);
 		} else {
 			return world.getTileEntity(pos);
 		}
@@ -71,10 +61,10 @@ public abstract class TileUtil {
 	/**
 	 * Returns the tile of the specified class, returns null if it is the wrong type or does not exist.
 	 * Avoids creating new tile entities when using a ChunkCache (off the main thread).
-	 * see {@link BlockFlowerPot#getActualState(IBlockState, IBlockAccess, BlockPos)}
+	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
-	public static <T> T getTile(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+	public static <T> T getTile(IBlockReader world, BlockPos pos, Class<T> tileClass) {
 		TileEntity tileEntity = getTile(world, pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
@@ -92,7 +82,7 @@ public abstract class TileUtil {
 	 * Performs an {@link ITileGetResult} on a tile if the tile exists.
 	 */
 	@Nullable
-	public static <T, R> R getResultFromTile(IBlockAccess world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
+	public static <T, R> R getResultFromTile(IWorldReader world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
 		T tile = getTile(world, pos, tileClass);
 		if (tile != null) {
 			return tileGetResult.getResult(tile);
@@ -107,7 +97,7 @@ public abstract class TileUtil {
 	/**
 	 * Performs an {@link ITileAction} on a tile if the tile exists.
 	 */
-	public static <T> void actOnTile(IBlockAccess world, BlockPos pos, Class<T> tileClass, ITileAction<T> tileAction) {
+	public static <T> void actOnTile(IWorldReader world, BlockPos pos, Class<T> tileClass, ITileAction<T> tileAction) {
 		T tile = getTile(world, pos, tileClass);
 		if (tile != null) {
 			tileAction.actOnTile(tile);
@@ -115,14 +105,17 @@ public abstract class TileUtil {
 	}
 
 	@Nullable
-	public static IItemHandler getInventoryFromTile(@Nullable TileEntity tile, @Nullable EnumFacing side) {
+	public static IItemHandler getInventoryFromTile(@Nullable TileEntity tile, @Nullable Direction side) {
 		if (tile == null) {
 			return null;
 		}
 
-		if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
-			return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
+
+		LazyOptional<IItemHandler> itemCap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
+		if (itemCap.isPresent()) {
+			return itemCap.orElse(null);
 		}
+
 
 		if (tile instanceof ISidedInventory) {
 			return new SidedInvWrapper((ISidedInventory) tile, side);
@@ -135,11 +128,10 @@ public abstract class TileUtil {
 		return null;
 	}
 
-	@Nullable
-	public static <T> T getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable EnumFacing facing) {
+	public static <T> LazyOptional<T> getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity == null || !tileEntity.hasCapability(capability, facing)) {
-			return null;
+		if (tileEntity == null) {
+			return LazyOptional.empty();
 		}
 		return tileEntity.getCapability(capability, facing);
 	}

@@ -18,10 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
@@ -33,11 +36,12 @@ import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.utils.NetworkUtil;
+import forestry.mail.ModuleMail;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 
-	private final EntityPlayer player;
+	private final PlayerEntity player;
 	private final List<ITradeStation> stations = new ArrayList<>();
 
 	@Nullable
@@ -65,8 +69,13 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		FILTERS.add(Collections.unmodifiableSet(offline));
 	}
 
-	public ContainerCatalogue(EntityPlayer player) {
-		this.player = player;
+	public static ContainerCatalogue fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		return new ContainerCatalogue(windowId, inv);
+	}
+
+	public ContainerCatalogue(int windowId, PlayerInventory inv) {
+		super(ModuleMail.getContainerTypes().CATALOGUE, windowId);
+		this.player = inv.player;
 
 		if (!player.world.isRemote) {
 			rebuildStationsList();
@@ -86,9 +95,13 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	private void rebuildStationsList() {
+		if (!player.world.isRemote) {
+			return;
+		}
+
 		stations.clear();
 
-		IPostOffice postOffice = PostManager.postRegistry.getPostOffice(player.world);
+		IPostOffice postOffice = PostManager.postRegistry.getPostOffice((ServerWorld) player.world);
 		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.world);
 
 		for (ITradeStation station : tradeStations.values()) {
@@ -185,12 +198,12 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer p_75145_1_) {
+	public boolean canInteractWith(PlayerEntity p_75145_1_) {
 		return true;
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 
 		switch (primary) {
 			case 0:

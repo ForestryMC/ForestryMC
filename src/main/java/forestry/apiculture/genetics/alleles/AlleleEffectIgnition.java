@@ -12,15 +12,16 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
@@ -34,15 +35,15 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
-		List<EntityLivingBase> entities = getEntitiesInRange(genome, housing, EntityLivingBase.class);
-		for (EntityLivingBase entity : entities) {
+		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
+		for (LivingEntity entity : entities) {
 			int chance = ignitionChance;
 			int duration = fireDuration;
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
 			if (count > 3) {
 				continue; // Full set, no damage/effect
 			} else if (count > 2) {
@@ -67,8 +68,8 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	@OnlyIn(Dist.CLIENT)
+	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		if (world.rand.nextInt(2) != 0) {
 			super.doFX(genome, storedData, housing);

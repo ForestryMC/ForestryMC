@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import java.util.EnumSet;
+
 public class AIButterflyRise extends AIButterflyMovement {
 
 	public AIButterflyRise(EntityButterfly entity) {
 		super(entity);
-		setMutexBits(1);
+		setMutexFlags(EnumSet.of(Flag.JUMP));
+		//		setMutexBits(1);	TODO mutex
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (entity.isInWater()) {
 			flightTarget = getRandomDestinationUpwards();
 		} else if (entity.collidedVertically && entity.getRNG().nextInt(62) == 0) {

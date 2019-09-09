@@ -15,19 +15,20 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillRecipe;
@@ -40,8 +41,8 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerStill;
-import forestry.factory.gui.GuiStill;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.recipes.StillRecipeManager;
 
@@ -54,11 +55,10 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 	@Nullable
 	private IStillRecipe currentRecipe;
-	@Nullable
 	private FluidStack bufferedLiquid;
 
 	public TileStill() {
-		super(1100, 8000);
+		super(ModuleFactory.getTiles().still, 1100, 8000);
 		setInternalInventory(new InventoryStill(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
 		resourceTank.setFilters(StillRecipeManager.recipeFluidInputs);
@@ -67,28 +67,30 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		productTank.setFilters(StillRecipeManager.recipeFluidOutputs);
 
 		tankManager = new TankManager(this, resourceTank, productTank);
+
+		bufferedLiquid = FluidStack.EMPTY;
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		tankManager.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
 
-		if (bufferedLiquid != null) {
-			NBTTagCompound buffer = new NBTTagCompound();
+		if (!bufferedLiquid.isEmpty()) {
+			CompoundNBT buffer = new CompoundNBT();
 			bufferedLiquid.writeToNBT(buffer);
-			nbttagcompound.setTag("Buffer", buffer);
+			compoundNBT.put("Buffer", buffer);
 		}
-		return nbttagcompound;
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		tankManager.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
 
-		if (nbttagcompound.hasKey("Buffer")) {
-			NBTTagCompound buffer = nbttagcompound.getCompoundTag("Buffer");
+		if (compoundNBT.contains("Buffer")) {
+			CompoundNBT buffer = compoundNBT.getCompound("Buffer");
 			bufferedLiquid = FluidStack.loadFluidStackFromNBT(buffer);
 		}
 	}
@@ -100,7 +102,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -114,7 +116,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 			FluidHelper.drainContainers(tankManager, this, InventoryStill.SLOT_CAN);
 
 			FluidStack fluidStack = productTank.getFluid();
-			if (fluidStack != null) {
+			if (!fluidStack.isEmpty()) {
 				FluidHelper.fillContainers(tankManager, this, InventoryStill.SLOT_RESOURCE, InventoryStill.SLOT_PRODUCT, fluidStack.getFluid(), true);
 			}
 		}
@@ -126,16 +128,16 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		int cycles = currentRecipe.getCyclesPerUnit();
 		FluidStack output = currentRecipe.getOutput();
 
-		FluidStack product = new FluidStack(output, output.amount * cycles);
-		productTank.fillInternal(product, true);
+		FluidStack product = new FluidStack(output, output.getAmount() * cycles);
+		productTank.fillInternal(product, IFluidHandler.FluidAction.EXECUTE);
 
-		bufferedLiquid = null;
+		bufferedLiquid = FluidStack.EMPTY;
 
 		return true;
 	}
 
 	private void checkRecipe() {
-		FluidStack recipeLiquid = bufferedLiquid != null ? bufferedLiquid : resourceTank.getFluid();
+		FluidStack recipeLiquid = !bufferedLiquid.isEmpty() ? bufferedLiquid : resourceTank.getFluid();
 
 		if (!StillRecipeManager.matches(currentRecipe, recipeLiquid)) {
 			currentRecipe = StillRecipeManager.findMatchingRecipe(recipeLiquid);
@@ -156,16 +158,16 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 		if (hasRecipe) {
 			FluidStack fluidStack = currentRecipe.getOutput();
-			hasTankSpace = productTank.fillInternal(fluidStack, false) == fluidStack.amount;
-			if (bufferedLiquid == null) {
+			hasTankSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
+			if (bufferedLiquid.isEmpty()) {
 				int cycles = currentRecipe.getCyclesPerUnit();
 				FluidStack input = currentRecipe.getInput();
-				int drainAmount = cycles * input.amount;
-				FluidStack drained = resourceTank.drain(drainAmount, false);
-				hasLiquidResource = drained != null && drained.amount == drainAmount;
+				int drainAmount = cycles * input.getAmount();
+				FluidStack drained = resourceTank.drain(drainAmount, IFluidHandler.FluidAction.SIMULATE);
+				hasLiquidResource = !drained.isEmpty() && drained.getAmount() == drainAmount;
 				if (hasLiquidResource) {
 					bufferedLiquid = new FluidStack(input, drainAmount);
-					resourceTank.drain(drainAmount, true);
+					resourceTank.drain(drainAmount, IFluidHandler.FluidAction.EXECUTE);
 				}
 			}
 		}
@@ -194,28 +196,18 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();    //TODO - still unsure if this is the correct pattern for caps
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiStill(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerStill(windowId, player.inventory, this);
 	}
 
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerStill(player.inventory, this);
-	}
 }

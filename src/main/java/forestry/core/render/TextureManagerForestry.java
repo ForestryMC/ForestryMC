@@ -11,30 +11,35 @@
 package forestry.core.render;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.Item;
+import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.config.Constants;
 
-@SideOnly(Side.CLIENT)
-public class TextureManagerForestry implements ITextureManager {
-	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/atlas/gui");
+@OnlyIn(Dist.CLIENT)
+public class TextureManagerForestry extends ReloadListener<AtlasTexture.SheetData> implements ITextureManager, AutoCloseable {
+	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/atlas/gui.png");
 	private static final TextureManagerForestry INSTANCE = new TextureManagerForestry();
 	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
-	private final TextureMapForestry textureMap;
+	private final AtlasTexture textureMap;
 
 	static {
 		ForestryAPI.textureManager = INSTANCE;
@@ -45,14 +50,14 @@ public class TextureManagerForestry implements ITextureManager {
 	}
 
 	private TextureManagerForestry() {
-		this.textureMap = new TextureMapForestry("textures");
+		this.textureMap = new AtlasTexture("textures");
 	}
 
-	public TextureMapForestry getTextureMap() {
+	public AtlasTexture getTextureMap() {
 		return textureMap;
 	}
 
-	public static void initDefaultSprites() {
+	public static void initDefaultSprites(TextureStitchEvent.Pre event) {
 		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle",
 			"habitats/mushroom", "habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga",
 			"misc/access.shared", "misc/energy", "misc/hint",
@@ -66,17 +71,12 @@ public class TextureManagerForestry implements ITextureManager {
 		};
 		for (String identifier : defaultIconNames) {
 			ResourceLocation resourceLocation = getForestryGuiLocation(identifier);
-			INSTANCE.registerGuiSprite(resourceLocation);
+			event.addSprite(resourceLocation);
 		}
 	}
 
 	private static ResourceLocation getForestryGuiLocation(String identifier) {
 		return new ResourceLocation(Constants.MOD_ID, "gui/" + identifier);
-	}
-
-	public static TextureAtlasSprite registerSprite(ResourceLocation location) {
-		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
-		return textureMap.registerSprite(location);
 	}
 
 	@Override
@@ -91,14 +91,9 @@ public class TextureManagerForestry implements ITextureManager {
 	}
 
 	public void bindGuiTextureMap() {
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		ResourceLocation guiTextureMap = getGuiTextureMap();
 		textureManager.bindTexture(guiTextureMap);
-	}
-
-	@Override
-	public TextureAtlasSprite registerGuiSprite(ResourceLocation location) {
-		return getTextureMap().registerSprite(location);
 	}
 
 	public void registerBlock(Block block) {
@@ -113,10 +108,32 @@ public class TextureManagerForestry implements ITextureManager {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void registerSprites() {
+	@OnlyIn(Dist.CLIENT)
+	public void registerSprites(TextureStitchEvent.Pre event) {
 		for (ISpriteRegister spriteRegister : spriteRegisters) {
 			spriteRegister.registerSprites(getInstance());
 		}
+	}
+
+	@Override
+	protected AtlasTexture.SheetData prepare(IResourceManager resourceManager, IProfiler profiler) {
+		profiler.startTick();
+		profiler.startSection("stitching");
+		AtlasTexture.SheetData sheetData = textureMap.stitch(resourceManager, new LinkedList<>(), profiler);
+		profiler.endSection();
+		profiler.endTick();
+		return sheetData;
+	}
+
+	protected void apply(AtlasTexture.SheetData sheetData, IResourceManager resourceManagerIn, IProfiler profilerIn) {
+		profilerIn.startTick();
+		profilerIn.startSection("upload");
+		textureMap.upload(sheetData);
+		profilerIn.endSection();
+		profilerIn.endTick();
+	}
+
+	public void close() {
+		textureMap.clear();
 	}
 }

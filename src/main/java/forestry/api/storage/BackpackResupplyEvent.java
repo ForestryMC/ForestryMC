@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
  * Use @SubscribeEvent on a method taking this event as an argument. Will fire whenever a backpack tries to resupply to a player inventory. Processing will stop
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 @Cancelable
 public class BackpackResupplyEvent extends BackpackEvent {
 
-	public BackpackResupplyEvent(EntityPlayer player, IBackpackDefinition backpackDefinition, IInventory backpackInventory) {
+	public BackpackResupplyEvent(PlayerEntity player, IBackpackDefinition backpackDefinition, IInventory backpackInventory) {
 		super(player, backpackDefinition, backpackInventory);
 	}
 

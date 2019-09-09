@@ -13,10 +13,10 @@ package forestry.core.network.packets;
 import java.io.IOException;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -45,10 +45,10 @@ public class PacketGuiUpdateEntity extends ForestryPacket implements IForestryPa
 		streamableGui.writeGuiData(data);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			Entity entity = data.readEntityById(player.world);
 			if (entity instanceof IStreamableGui) {
 				((IStreamableGui) entity).readGuiData(data);

@@ -8,27 +8,27 @@ package forestry.api.genetics;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IAlyzerPlugin {
 
-	@SideOnly(Side.CLIENT)
-	void drawAnalyticsPage1(GuiScreen gui, ItemStack itemStack);
+	@OnlyIn(Dist.CLIENT)
+	void drawAnalyticsPage1(Screen gui, ItemStack itemStack);
 
-	@SideOnly(Side.CLIENT)
-	void drawAnalyticsPage2(GuiScreen gui, ItemStack itemStack);
+	@OnlyIn(Dist.CLIENT)
+	void drawAnalyticsPage2(Screen gui, ItemStack itemStack);
 
-	@SideOnly(Side.CLIENT)
-	void drawAnalyticsPage3(GuiScreen gui, ItemStack itemStack);
+	@OnlyIn(Dist.CLIENT)
+	void drawAnalyticsPage3(Screen gui, ItemStack itemStack);
 
 	/**
 	 * The hints that will be shown in the alyzer gui.
 	 */
 	List<String> getHints();
 
-	Map<String, ItemStack> getIconStacks();
+	Map<ResourceLocation, ItemStack> getIconStacks();
 }

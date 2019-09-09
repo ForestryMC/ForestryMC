@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +20,7 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.utils.BlockUtil;
-import forestry.plugins.PluginExtraUtilities;
+//import forestry.plugins.PluginExtraUtilities;
 
 public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 
@@ -35,7 +35,7 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return PluginExtraUtilities.orchidStack;
+		return ItemStack.EMPTY;//PluginExtraUtilities.orchidStack;
 	}
 
 	@Override
@@ -61,13 +61,13 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 				break;
 			}
 
-			IBlockState state = world.getBlockState(position);
+			BlockState state = world.getBlockState(position);
 			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 
 			BlockPos soilPos = position.down();
-			IBlockState blockState = world.getBlockState(soilPos);
+			BlockState blockState = world.getBlockState(soilPos);
 			if (!isAcceptedSoil(blockState)) {
 				continue;
 			}

@@ -12,66 +12,63 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.models.ModelEscritoire;
 import forestry.core.tiles.TileEscritoire;
 
-public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> {
+public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 
-	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/escritoire.png");
+	private static final ResourceLocation texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
 	private final ModelEscritoire modelEscritoire = new ModelEscritoire();
 	@Nullable
-	private EntityItem dummyEntityItem;
+	private ItemEntity dummyEntityItem;
 	private long lastTick;
 
-	private EntityItem dummyItem(World world) {
+	private ItemEntity dummyItem(World world) {
 		if (dummyEntityItem == null) {
-			dummyEntityItem = new EntityItem(world);
+			dummyEntityItem = new ItemEntity(EntityType.ITEM, world);
 		} else {
 			dummyEntityItem.world = world;
 		}
 		return dummyEntityItem;
 	}
 
-	/**
-	 * @param escritoire If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileEscritoire escritoire, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		if (escritoire != null) {
-			World world = escritoire.getWorldObj();
-			if (world.isBlockLoaded(escritoire.getPos())) {
-				IBlockState blockState = world.getBlockState(escritoire.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					EnumFacing facing = blockState.getValue(BlockBase.FACING);
-					render(escritoire.getIndividualOnDisplay(), world, facing, x, y, z);
-					return;
-				}
-			}
+	public void renderTile(TileEscritoire tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		World world = tile.getWorldObj();
+		BlockState blockState = world.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(tile.getIndividualOnDisplay(), world, facing, x, y, z);
 		}
-		render(ItemStack.EMPTY, null, EnumFacing.SOUTH, x, y, z);
 	}
 
-	private void render(ItemStack itemstack, @Nullable World world, EnumFacing orientation, double x, double y, double z) {
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(ItemStack.EMPTY, null, Direction.SOUTH, 0, 0, 0);
+	}
+
+	private void render(ItemStack itemstack, @Nullable World world, Direction orientation, double x, double y, double z) {
 		float factor = (float) (1.0 / 16.0);
 
-		Minecraft minecraft = Minecraft.getMinecraft();
+		Minecraft minecraft = Minecraft.getInstance();
 		GlStateManager.pushMatrix();
 		{
-			GlStateManager.translate((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
+			GlStateManager.translatef((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
 
 			float[] angle = {(float) Math.PI, 0, 0};
 
@@ -97,22 +94,23 @@ public class RenderEscritoire extends TileEntitySpecialRenderer<TileEscritoire> 
 		GlStateManager.popMatrix();
 
 		if (!itemstack.isEmpty() && world != null) {
-			EntityItem dummyItem = dummyItem(world);
+			ItemEntity dummyItem = dummyItem(world);
 
 			float renderScale = 0.75f;
 
 			GlStateManager.pushMatrix();
 			{
-				GlStateManager.translate((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
-				GlStateManager.scale(renderScale, renderScale, renderScale);
+				GlStateManager.translatef((float) x + 0.5f, (float) y + 0.6f, (float) z + 0.5f);
+				GlStateManager.scalef(renderScale, renderScale, renderScale);
 				dummyItem.setItem(itemstack);
 
-				if (world.getTotalWorldTime() != lastTick) {
-					lastTick = world.getTotalWorldTime();
-					dummyItem.onUpdate();
+				//TODO - right time?
+				if (world.getGameTime() != lastTick) {
+					lastTick = world.getGameTime();
+					dummyItem.tick();
 				}
 
-				RenderManager rendermanager = minecraft.getRenderManager();
+				EntityRendererManager rendermanager = minecraft.getRenderManager();
 				rendermanager.renderEntity(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 			}
 			GlStateManager.popMatrix();

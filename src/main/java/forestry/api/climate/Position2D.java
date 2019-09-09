@@ -9,7 +9,7 @@ import com.google.common.base.MoreObjects;
 
 import javax.annotation.concurrent.Immutable;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
@@ -37,9 +37,9 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 		this.z = zIn;
 	}
 
-	public Position2D(NBTTagCompound nbtTagCompound) {
-		this.x = nbtTagCompound.getInteger("xPosition");
-		this.z = nbtTagCompound.getInteger("zPosition");
+	public Position2D(CompoundNBT CompoundNBT) {
+		this.x = CompoundNBT.getInt("xPosition");
+		this.z = CompoundNBT.getInt("zPosition");
 	}
 
 	public boolean equals(Object o) {
@@ -75,9 +75,9 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("xPosition", x);
-		nbt.setInteger("zPosition", z);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt.putInt("xPosition", x);
+		nbt.putInt("zPosition", z);
 		return nbt;
 	}
 
@@ -96,8 +96,8 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	}
 
 	public double getDistance(int xIn, int zIn) {
-		double d0 = (double) (this.getX() - xIn);
-		double d2 = (double) (this.getZ() - zIn);
+		double d0 = this.getX() - xIn;
+		double d2 = this.getZ() - zIn;
 		return Math.sqrt(d0 * d0 + d2 * d2);
 	}
 

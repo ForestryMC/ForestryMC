@@ -12,56 +12,63 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.common.util.LazyOptional;
+
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
+
 import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IArmorNaturalist;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.ICheckPollinatable;
-import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.genetics.ISpeciesRootPollinatable;
-import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
 
 public class GeneticsUtil {
 
-	public static boolean hasNaturalistEye(EntityPlayer player) {
-		ItemStack armorItemStack = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+	public static boolean hasNaturalistEye(PlayerEntity player) {
+		ItemStack armorItemStack = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
 		if (armorItemStack.isEmpty()) {
 			return false;
 		}
 
-		final Item armorItem = armorItemStack.getItem();
 		final IArmorNaturalist armorNaturalist;
-		if (armorItem instanceof IArmorNaturalist) { // legacy
-			armorNaturalist = (IArmorNaturalist) armorItem;
-		} else if (armorItemStack.hasCapability(ArboricultureCapabilities.ARMOR_NATURALIST, null)) {
-			armorNaturalist = armorItemStack.getCapability(ArboricultureCapabilities.ARMOR_NATURALIST, null);
+		LazyOptional<IArmorNaturalist> armorCap = armorItemStack.getCapability(ArboricultureCapabilities.ARMOR_NATURALIST);
+		if (armorCap.isPresent()) {
+			armorNaturalist = armorCap.orElse(null);
 		} else {
 			return false;
 		}
 
-		return armorNaturalist != null && armorNaturalist.canSeePollination(player, armorItemStack, true);
+		return armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
 	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {
@@ -80,9 +87,10 @@ public class GeneticsUtil {
 			return tile;
 		}
 
-		IIndividual pollen = getPollen(world, pos);
-		if (pollen != null) {
-			ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+		Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
+		if (optionalPollen.isPresent()) {
+			IIndividual pollen = optionalPollen.get();
+			IIndividualRoot root = pollen.getRoot();
 			if (root instanceof ISpeciesRootPollinatable) {
 				return ((ISpeciesRootPollinatable) root).createPollinatable(pollen);
 			}
@@ -98,9 +106,10 @@ public class GeneticsUtil {
 	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, boolean convertVanilla) {
 		IPollinatable pollinatable = TileUtil.getTile(world, pos, IPollinatable.class);
 		if (pollinatable == null && convertVanilla) {
-			final IIndividual pollen = getPollen(world, pos);
-			if (pollen != null) {
-				ISpeciesRoot root = pollen.getGenome().getSpeciesRoot();
+			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
+			if (optionalPollen.isPresent()) {
+				final IIndividual pollen = optionalPollen.get();
+				IIndividualRoot root = pollen.getRoot();
 				if (root instanceof ISpeciesRootPollinatable) {
 					ISpeciesRootPollinatable rootPollinatable = (ISpeciesRootPollinatable) root;
 					pollinatable = rootPollinatable.tryConvertToPollinatable(owner, world, pos, pollen);
@@ -111,78 +120,84 @@ public class GeneticsUtil {
 	}
 
 	@Nullable
-	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, World world, BlockPos pos, boolean convertVanilla) {
+	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, IWorld world, BlockPos pos, boolean convertVanilla) {
 		IButterflyNursery nursery = getNursery(world, pos);
 		if (nursery == null && convertVanilla) {
-			IIndividual pollen = GeneticsUtil.getPollen(world, pos);
-			if (pollen instanceof ITree) {
-				ITree treeLeave = (ITree) pollen;
-				if (treeLeave.setLeaves(world, gameProfile, pos)) {
-					nursery = getNursery(world, pos);
+			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
+			if (optionalPollen.isPresent()) {
+				IIndividual pollen = optionalPollen.get();
+				if (pollen instanceof ITree) {
+					ITree treeLeave = (ITree) pollen;
+					if (treeLeave.setLeaves(world, gameProfile, pos, world.getRandom())) {
+						nursery = getNursery(world, pos);
+					}
 				}
 			}
 		}
 		return nursery;
 	}
 
-	public static boolean canCreateNursery(World world, BlockPos pos) {
-		IIndividual pollen = GeneticsUtil.getPollen(world, pos);
-		return pollen != null && pollen instanceof ITree;
+	public static boolean canCreateNursery(IWorld world, BlockPos pos) {
+		Optional<IIndividual> optional = GeneticsUtil.getPollen(world, pos);
+		return optional.filter(pollen -> pollen instanceof ITree).isPresent();
 	}
 
 	@Nullable
-	public static IButterflyNursery getNursery(World world, BlockPos pos) {
+	public static IButterflyNursery getNursery(IWorld world, BlockPos pos) {
 		return TileUtil.getTile(world, pos, IButterflyNursery.class);
 	}
 
 	/**
 	 * Gets pollen from a location. Does not affect the pollen source.
 	 */
-	@Nullable
-	public static IIndividual getPollen(World world, final BlockPos pos) {
+	public static Optional<IIndividual> getPollen(IWorld world, final BlockPos pos) {
 		if (!world.isBlockLoaded(pos)) {
-			return null;
+			return Optional.empty();
 		}
 
 		ICheckPollinatable checkPollinatable = TileUtil.getTile(world, pos, ICheckPollinatable.class);
 		if (checkPollinatable != null) {
-			return checkPollinatable.getPollen();
+			return Optional.of(checkPollinatable.getPollen());
 		}
 
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 
-		for (ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()) {
-			IIndividual individual = root.translateMember(blockState);
-			if (individual != null) {
+		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			IIndividualRoot<IIndividual> root = definition.get();
+			Optional<IIndividual> individual = root.getTranslator().translateMember(blockState);
+			if (individual.isPresent()) {
 				return individual;
 			}
 		}
 
-		return null;
+		return Optional.empty();
 	}
 
-	@Nullable
-	public static IIndividual getGeneticEquivalent(ItemStack itemStack) {
+	public static Optional<IIndividual> getGeneticEquivalent(ItemStack itemStack) {
 		Item item = itemStack.getItem();
 		if (item instanceof ItemGE) {
-			return ((ItemGE) item).getIndividual(itemStack);
+			return GeneticHelper.getIndividual(itemStack);
 		}
 
-		for (ISpeciesRoot root : AlleleManager.alleleRegistry.getSpeciesRoot().values()) {
-			IIndividual individual = root.translateMember(itemStack);
-			if (individual != null) {
+		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			if (!definition.isRootPresent()) {
+				continue;
+			}
+			IIndividualRoot<IIndividual> root = definition.get();
+			Optional<IIndividual> individual = root.getTranslator().translateMember(itemStack);
+			if (individual.isPresent()) {
 				return individual;
 			}
 		}
 
-		return null;
+		return Optional.empty();
 	}
 
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
-		if (AlleleManager.alleleRegistry.getSpeciesRoot(foreign) == null) {
-			IIndividual individual = getGeneticEquivalent(foreign);
-			if (individual != null) {
-				ItemStack equivalent = TreeManager.treeRoot.getMemberStack(individual, EnumGermlingType.SAPLING);
+		if (!GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(foreign).isRootPresent()) {
+			Optional<IIndividual> optionalIndividual = getGeneticEquivalent(foreign);
+			if (optionalIndividual.isPresent()) {
+				ItemStack equivalent = TreeManager.treeRoot.getTypes().createStack((ITree) optionalIndividual.get(), EnumGermlingType.SAPLING);
 				equivalent.setCount(foreign.getCount());
 				return equivalent;
 			}
@@ -198,20 +213,21 @@ public class GeneticsUtil {
 		int highest = 0;
 		exclude.add(species);
 
-		for (IMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
-			highest = getHighestAdvancement(mutation.getAllele0(), highest, exclude, speciesChromosome);
-			highest = getHighestAdvancement(mutation.getAllele1(), highest, exclude, speciesChromosome);
+		IMutationContainer<IIndividual, ? extends IMutation> container = ((IIndividualRoot<IIndividual>) species.getRoot()).getComponent(ComponentKeys.MUTATIONS);
+		for (IMutation mutation : container.getPaths(species, speciesChromosome)) {
+			highest = getHighestAdvancement(mutation.getFirstParent(), highest, exclude, speciesChromosome);
+			highest = getHighestAdvancement(mutation.getSecondParent(), highest, exclude, speciesChromosome);
 		}
 
 		return 1 + highest;
 	}
 
 	private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
-		if (exclude.contains(mutationSpecies) || AlleleManager.alleleRegistry.isBlacklisted(mutationSpecies.getUID())) {
+		if (exclude.contains(mutationSpecies) || GeneticsAPI.apiInstance.getAlleleRegistry().isBlacklisted(mutationSpecies.getRegistryName().toString())) {
 			return highest;
 		}
 
 		int otherAdvance = getGeneticAdvancement(mutationSpecies, exclude, speciesChromosome);
-		return otherAdvance > highest ? otherAdvance : highest;
+		return Math.max(otherAdvance, highest);
 	}
 }

@@ -1,0 +1,319 @@
+[
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "beeComb"
+    },
+    "name": "BEECOMB"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockApatite"
+    },
+    "name": "BLOCKAPATITE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockBronze"
+    },
+    "name": "BLOCKBRONZE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockCopper"
+    },
+    "name": "BLOCKCOPPER"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "name": "BLOCKGLASS"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockTin"
+    },
+    "name": "BLOCKTIN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockWool"
+    },
+    "name": "BLOCKWOOL"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    },
+    "name": "CHESTWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "craftingTableWood"
+    },
+    "name": "CRAFTINGTABLEWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "cropWheat"
+    },
+    "name": "CROPWHEAT"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dropHoney"
+    },
+    "name": "DROPHONEY"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dustAsh"
+    },
+    "name": "DUSTASH"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "name": "DUSTREDSTONE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeBlue"
+    },
+    "name": "DYEBLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeRed"
+    },
+    "name": "DYERED"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeYellow"
+    },
+    "name": "DYEYELLOW"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "emptiedLetter"
+    },
+    "name": "EMPTIEDLETTER"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "fruitForestry"
+    },
+    "name": "FRUITFORESTRY"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearStone"
+    },
+    "name": "GEARSTONE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearBronze"
+    },
+    "name": "GEARBRONZE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearCopper"
+    },
+    "name": "GEARCOPPER"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearTin"
+    },
+    "name": "GEARTIN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gemApatite"
+    },
+    "name": "GEMAPATITE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "name": "GEMDIAMOND"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gemQuartz"
+    },
+    "name": "GEMQUARTZ"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotBronze"
+    },
+    "name": "INGOTBRONZE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    },
+    "name": "INGOTCOPPER"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "name": "INGOTGOLD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "name": "INGOTIRON"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotTin"
+    },
+    "name": "INGOTTIN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "leather"
+    },
+    "name": "LEATHER"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    },
+    "name": "LOGWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlass"
+    },
+    "name": "PANEGLASS"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "name": "PLANKWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forestry:fallback",
+      "primary": [
+        {
+          "item": "forestry:royal_jelly"
+        },
+        {
+          "item": "forestry:fruits",
+          "data": 4
+        }
+      ],
+      "fallback": [
+        {
+          "item": "#CHESTWOOD"
+        }
+      ]
+    },
+    "name": "POSSIBLESPECIAL"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "sand"
+    },
+    "name": "SAND"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "slabWood"
+    },
+    "name": "SLABWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "fallback",
+      "primary": [
+        {
+          "item": "forestry:honey_drop",
+          "data": 0
+        }
+      ],
+      "fallback": [
+        {
+          "item": "minecraft:slime_ball"
+        }
+      ]
+    },
+    "name": "STAMPGLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "name": "STICKWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "name": "STONE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "trapdoorWood"
+    },
+    "name": "TRAPDOORWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "treeSapling"
+    },
+    "name": "TREESAPLING"
+  }
+]

@@ -10,19 +10,27 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks<TileAlvearyHygroregulator> {
 
-	public ContainerAlvearyHygroregulator(InventoryPlayer playerInventory, TileAlvearyHygroregulator tile) {
-		super(tile, playerInventory, 8, 84);
+	public static ContainerAlvearyHygroregulator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileAlvearyHygroregulator tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearyHygroregulator.class);
+		return new ContainerAlvearyHygroregulator(windowId, inv, tile);    //TODO nullability.
+	}
 
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryHygroregulator.SLOT_INPUT, 56, 38));
+	public ContainerAlvearyHygroregulator(int windowId, PlayerInventory playerInventory, TileAlvearyHygroregulator tile) {
+		super(windowId, ModuleApiculture.getContainerTypes().ALVEARY_HYGROREGULATOR, playerInventory, tile, 8, 84);
+
+		this.addSlot(new SlotLiquidIn(tile, InventoryHygroregulator.SLOT_INPUT, 56, 38));
 	}
 
 }

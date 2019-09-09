@@ -15,19 +15,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.individual.IKaryotype;
+import genetics.api.root.IIndividualRoot;
 
 import forestry.api.core.INbtWritable;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
@@ -43,17 +46,17 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
 	}
 
-	public EscritoireGameBoard(NBTTagCompound nbt) {
-		tokenCount = nbt.getInteger("TokenCount");
+	public EscritoireGameBoard(CompoundNBT nbt) {
+		tokenCount = nbt.getInt("TokenCount");
 
 		if (tokenCount > 0) {
 			EscritoireGameToken[] tokens = new EscritoireGameToken[tokenCount];
-			NBTTagList nbttaglist = nbt.getTagList("GameTokens", 10);
+			ListNBT nbttaglist = nbt.getList("GameTokens", 10);
 
-			for (int j = 0; j < nbttaglist.tagCount(); ++j) {
-				NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
-				int index = nbttagcompound2.getByte("Slot");
-				tokens[index] = new EscritoireGameToken(nbttagcompound2);
+			for (int j = 0; j < nbttaglist.size(); ++j) {
+				CompoundNBT CompoundNBT2 = nbttaglist.getCompound(j);
+				int index = CompoundNBT2.getByte("Slot");
+				tokens[index] = new EscritoireGameToken(CompoundNBT2);
 			}
 
 			Collections.addAll(gameTokens, tokens);
@@ -61,19 +64,21 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	public boolean initialize(ItemStack specimen) {
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
-		if (individual == null) {
+		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
+		if (!optional.isPresent()) {
 			return false;
 		}
+		IIndividual individual = optional.get();
 
 		IGenome genome = individual.getGenome();
-		ISpeciesRoot root = genome.getPrimary().getRoot();
+		IKaryotype karyotype = genome.getKaryotype();
+		IIndividualRoot root = genome.getPrimary().getRoot();
 
 		tokenCount = getTokenCount(genome);
 
 		for (int i = 0; i < tokenCount / 2; i++) {
-			IAllele[] randomTemplate = root.getRandomTemplate(rand);
-			String speciesUid = randomTemplate[root.getSpeciesChromosomeType().ordinal()].getUID();
+			IAllele[] randomTemplate = root.getTemplates().getRandomTemplate(rand);
+			String speciesUid = randomTemplate[karyotype.getSpeciesType().getIndex()].getRegistryName().toString();
 			gameTokens.add(new EscritoireGameToken(speciesUid));
 			gameTokens.add(new EscritoireGameToken(speciesUid));
 		}
@@ -173,8 +178,8 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	private static int getTokenCount(IGenome genome) {
-		IAlleleSpecies species1 = genome.getPrimary();
-		IAlleleSpecies species2 = genome.getSecondary();
+		IAlleleForestrySpecies species1 = genome.getPrimary(IAlleleForestrySpecies.class);
+		IAlleleForestrySpecies species2 = genome.getSecondary(IAlleleForestrySpecies.class);
 
 		int tokenCount = species1.getComplexity() + species2.getComplexity();
 
@@ -192,10 +197,10 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 		if (tokenCount > 0) {
-			nbttagcompound.setInteger("TokenCount", tokenCount);
-			NBTTagList nbttaglist = new NBTTagList();
+			compoundNBT.putInt("TokenCount", tokenCount);
+			ListNBT nbttaglist = new ListNBT();
 
 			for (int i = 0; i < tokenCount; i++) {
 				EscritoireGameToken token = gameTokens.get(i);
@@ -203,17 +208,17 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 					continue;
 				}
 
-				NBTTagCompound nbttagcompound2 = new NBTTagCompound();
-				nbttagcompound2.setByte("Slot", (byte) i);
-				token.writeToNBT(nbttagcompound2);
-				nbttaglist.appendTag(nbttagcompound2);
+				CompoundNBT compoundNBT2 = new CompoundNBT();
+				compoundNBT2.putByte("Slot", (byte) i);
+				token.write(compoundNBT2);
+				nbttaglist.add(compoundNBT2);
 			}
 
-			nbttagcompound.setTag("GameTokens", nbttaglist);
+			compoundNBT.put("GameTokens", nbttaglist);
 		} else {
-			nbttagcompound.setInteger("TokenCount", 0);
+			compoundNBT.putInt("TokenCount", 0);
 		}
-		return nbttagcompound;
+		return compoundNBT;
 	}
 
 	/* IStreamable */

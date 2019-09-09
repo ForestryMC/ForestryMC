@@ -1,0 +1,52 @@
+{
+  "result": {
+    "item": "forestry:genetic_filter",
+    "data": 0,
+    "count": 2
+  },
+  "pattern": [
+    "WDW",
+    "FGF",
+    "BDB"
+  ],
+  "conditions": [
+    {
+      "module": "sorting",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "#GEARBRONZE"
+    },
+    "D": {
+      "item": "#GEMDIAMOND"
+    },
+    "F": [
+      {
+        "type": "multi_null",
+        "values": [
+          {
+            "item": "forestry:propolis",
+            "data": 0
+          },
+          {
+            "item": "#FRUITFORESTRY"
+          },
+          {
+            "item": "forestry:caterpillar_ge",
+            "data": 0
+          }
+        ]
+      }
+    ],
+    "W": {
+      "item": "#PLANKWOOD"
+    },
+    "G": {
+      "item": "#BLOCKGLASS"
+    }
+  },
+  "group": "sorting"
+}

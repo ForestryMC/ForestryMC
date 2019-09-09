@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "forestry:blocks/germlings/sapling.tree_willow"
+    "layer0": "forestry:block/germlings/sapling.tree_willow"
   }
 }

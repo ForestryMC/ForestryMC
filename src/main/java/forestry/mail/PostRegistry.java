@@ -11,15 +11,15 @@
 package forestry.mail;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
@@ -55,29 +55,29 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Nullable
-	public static POBox getPOBox(World world, IMailAddress address) {
+	public static POBox getPOBox(ServerWorld world, IMailAddress address) {
 
 		if (cachedPOBoxes.containsKey(address)) {
 			return cachedPOBoxes.get(address);
 		}
 
-		POBox pobox = (POBox) world.loadData(POBox.class, POBox.SAVE_NAME + address);
+		//TODO  needs getOrCreate
+		POBox pobox = world.getSavedData().get(() -> new POBox(address), POBox.SAVE_NAME + address);
 		if (pobox != null) {
 			cachedPOBoxes.put(address, pobox);
 		}
 		return pobox;
 	}
 
-	public static POBox getOrCreatePOBox(World world, IMailAddress address) {
-		POBox pobox = getPOBox(world, address);
+	public static POBox getOrCreatePOBox(ServerWorld world, IMailAddress add) {
+		POBox pobox = getPOBox(world, add);
 
 		if (pobox == null) {
-			pobox = new POBox(address);
-			world.setData(POBox.SAVE_NAME + address, pobox);
+			pobox = world.getSavedData().getOrCreate(() -> new POBox(add), POBox.SAVE_NAME + add);
 			pobox.markDirty();
-			cachedPOBoxes.put(address, pobox);
+			cachedPOBoxes.put(add, pobox);
 
-			EntityPlayer player = PlayerUtil.getPlayer(world, address.getPlayerProfile());
+			PlayerEntity player = PlayerUtil.getPlayer(world, add.getPlayerProfile());
 			if (player != null) {
 				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
@@ -102,17 +102,18 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the trade address has not yet been used before.
 	 */
 	@Override
-	public boolean isAvailableTradeAddress(World world, IMailAddress address) {
+	public boolean isAvailableTradeAddress(ServerWorld world, IMailAddress address) {
 		return getTradeStation(world, address) == null;
 	}
 
 	@Override
-	public TradeStation getTradeStation(World world, IMailAddress address) {
+	public TradeStation getTradeStation(ServerWorld world, IMailAddress address) {
 		if (cachedTradeStations.containsKey(address)) {
 			return (TradeStation) cachedTradeStations.get(address);
 		}
 
-		TradeStation trade = (TradeStation) world.loadData(TradeStation.class, TradeStation.SAVE_NAME + address);
+		//TODO again this should be altered to use getOrCreate. At the moment this may supply bad trade stations with no owner. Not sure how this code will handle that
+		TradeStation trade = world.getSavedData().get(() -> new TradeStation(TradeStation.SAVE_NAME + address), TradeStation.SAVE_NAME + address);
 
 		// Only existing and valid mail orders are returned
 		if (trade != null && trade.isValid()) {
@@ -125,12 +126,11 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public TradeStation getOrCreateTradeStation(World world, GameProfile owner, IMailAddress address) {
+	public TradeStation getOrCreateTradeStation(ServerWorld world, GameProfile owner, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
-			trade = new TradeStation(owner, address);
-			world.setData(TradeStation.SAVE_NAME + address, trade);
+			trade = world.getSavedData().getOrCreate(() -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
 			trade.markDirty();
 			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
@@ -140,7 +140,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public void deleteTradeStation(World world, IMailAddress address) {
+	public void deleteTradeStation(ServerWorld world, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 		if (trade == null) {
 			return;
@@ -150,26 +150,20 @@ public class PostRegistry implements IPostRegistry {
 		trade.invalidate();
 		cachedTradeStations.remove(address);
 		getPostOffice(world).deregisterTradeStation(trade);
-		File file = world.getSaveHandler().getMapFileFromName(trade.mapName);
-		boolean delete = file.delete();
+		//		File file = world.getSaveHandler().getMapFileFromName(trade.getName());	//TODO which file?
+		boolean delete = false; //TODO fix file.delete();
 		if (!delete) {
-			Log.error("Failed to delete trade station file. {}", file);
+			Log.error("Failed to delete trade station file. {}", "FIXME!");//file);
 		}
 	}
 
 	@Override
-	public IPostOffice getPostOffice(World world) {
+	public IPostOffice getPostOffice(ServerWorld world) {
 		if (cachedPostOffice != null) {
 			return cachedPostOffice;
 		}
 
-		PostOffice office = (PostOffice) world.loadData(PostOffice.class, PostOffice.SAVE_NAME);
-
-		// Create office if there is none yet
-		if (office == null) {
-			office = new PostOffice();
-			world.setData(PostOffice.SAVE_NAME, office);
-		}
+		PostOffice office = world.getSavedData().getOrCreate(PostOffice::new, PostOffice.SAVE_NAME);
 
 		office.setWorld(world);
 
@@ -212,11 +206,11 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public ItemStack createLetterStack(ILetter letter) {
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		letter.writeToNBT(nbttagcompound);
+		CompoundNBT compoundNBT = new CompoundNBT();
+		letter.write(compoundNBT);
 
 		ItemStack letterStack = LetterProperties.createStampedLetterStack(letter);
-		letterStack.setTagCompound(nbttagcompound);
+		letterStack.setTag(compoundNBT);
 
 		return letterStack;
 	}
@@ -232,11 +226,11 @@ public class PostRegistry implements IPostRegistry {
 			return null;
 		}
 
-		if (itemstack.getTagCompound() == null) {
+		if (itemstack.getTag() == null) {
 			return null;
 		}
 
-		return new Letter(itemstack.getTagCompound());
+		return new Letter(itemstack.getTag());
 	}
 
 	@Override

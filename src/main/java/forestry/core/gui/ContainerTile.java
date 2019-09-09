@@ -14,12 +14,13 @@ import com.google.common.collect.ImmutableSet;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
@@ -40,24 +41,25 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	private int previousWorkCounter = 0;
 	private int previousTicksPerWorkCycle = 0;
 
-	protected ContainerTile(T tile) {
+	protected ContainerTile(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type);
+		addPlayerInventory(playerInventory, xInv, yInv);
 		this.tile = tile;
 	}
 
-	protected ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
-		this(tileForestry);
-
-		addPlayerInventory(playerInventory, xInv, yInv);
+	protected ContainerTile(int windowId, ContainerType<?> type, T tile) {
+		super(windowId, type);
+		this.tile = tile;
 	}
 
 	@Override
-	protected final boolean canAccess(EntityPlayer player) {
+	protected final boolean canAccess(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return TileUtil.isUsableByPlayer(entityplayer, tile);
+	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
+		return TileUtil.isUsableByPlayer(PlayerEntity, tile);
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
 			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
+			if (!errorStates.equals(previousErrorStates)) {
 				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
 				sendPacketToListeners(packet);
 			}
@@ -111,11 +113,15 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void onGuiEnergy(int energyStored) {
 		if (tile instanceof IPowerHandler) {
 			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
 			energyManager.setEnergyStored(energyStored);
 		}
+	}
+
+	public T getTile() {
+		return tile;
 	}
 }

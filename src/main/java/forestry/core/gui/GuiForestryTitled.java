@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.core.render.ColourProperties;
 import forestry.core.tiles.ITitled;
@@ -19,8 +21,9 @@ import forestry.core.utils.Translator;
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
 	private final String unlocalizedTitle;
 
-	protected GuiForestryTitled(String texture, C container, ITitled titled) {
-		super(texture, container);
+	//TODO just pass in title now as ITextComponent
+	protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITitled titled) {
+		super(texture, container, inv, new TranslationTextComponent(titled.getUnlocalizedTitle()));
 		this.unlocalizedTitle = titled.getUnlocalizedTitle();
 	}
 

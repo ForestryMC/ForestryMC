@@ -43,7 +43,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	@Override
 	public BlockPos getCoords() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable farmable, World world, BlockPos pos) {
+	public boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction) {
 		return false;
 	}
 

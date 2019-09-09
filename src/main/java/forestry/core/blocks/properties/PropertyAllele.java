@@ -11,14 +11,15 @@
 package forestry.core.blocks.properties;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
 
 import java.util.List;
+import java.util.Optional;
 
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.state.IProperty;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.genetics.IAlleleProperty;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IProperty<A> {
@@ -49,12 +50,12 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 
 	@Override
 	public Optional<A> parseValue(String value) {
-		IAllele allele = AlleleManager.alleleRegistry.getAllele(value);
+		IAllele allele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(value).orElse(null);
 		Class<A> valueClass = getValueClass();
 		if (valueClass.isInstance(allele)) {
 			return Optional.of(valueClass.cast(allele));
 		}
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	@Override

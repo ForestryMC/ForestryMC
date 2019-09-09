@@ -1,61 +1,31 @@
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemDoor;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
-import forestry.arboriculture.blocks.BlockArbDoor;
+import forestry.arboriculture.blocks.BlockForestryDoor;
 
-public class ItemBlockWoodDoor extends ItemBlockWood<BlockArbDoor> {
+//TODO eg    public static final Item OAK_DOOR = register(new TallBlockItem(Blocks.OAK_DOOR, (new Item.Properties()).group(ItemGroup.REDSTONE)));
+public class ItemBlockWoodDoor extends ItemBlockWood<BlockForestryDoor> {
 
-	public ItemBlockWoodDoor(BlockArbDoor block) {
+	public ItemBlockWoodDoor(BlockForestryDoor block) {
 		super(block);
 	}
 
 	/**
-	 * Copy of {@link ItemDoor#onItemUse}
+	 * Copy of {@link net.minecraft.item.TallBlockItem#placeBlock(BlockItemUseContext, BlockState)}
+	 *
 	 */
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (facing != EnumFacing.UP) {
-			return EnumActionResult.FAIL;
-		} else {
-			IBlockState iblockstate = worldIn.getBlockState(pos);
-			Block block = iblockstate.getBlock();
-
-			if (!block.isReplaceable(worldIn, pos)) {
-				pos = pos.offset(facing);
-			}
-
-			ItemStack itemstack = player.getHeldItem(hand);
-
-			if (player.canPlayerEdit(pos, facing, itemstack) && this.block.canPlaceBlockAt(worldIn, pos)) {
-				EnumFacing enumfacing = EnumFacing.fromAngle(player.rotationYaw);
-				int i = enumfacing.getXOffset();
-				int j = enumfacing.getZOffset();
-				boolean flag = i < 0 && hitZ < 0.5F || i > 0 && hitZ > 0.5F || j < 0 && hitX > 0.5F || j > 0 && hitX < 0.5F;
-				ItemDoor.placeDoor(worldIn, pos, enumfacing, this.block, flag);
-				SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, player);
-				worldIn.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-				itemstack.shrink(1);
-				return EnumActionResult.SUCCESS;
-			} else {
-				return EnumActionResult.FAIL;
-			}
-		}
+	protected boolean placeBlock(BlockItemUseContext p_195941_1_, BlockState p_195941_2_) {
+		p_195941_1_.getWorld().setBlockState(p_195941_1_.getPos().up(), Blocks.AIR.getDefaultState(), 27);
+		return super.placeBlock(p_195941_1_, p_195941_2_);
 	}
 
 	@Override
-	public int getItemBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack) {
 		if (getBlock().isFireproof()) {
 			return 0;
 		} else {

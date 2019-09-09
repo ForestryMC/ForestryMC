@@ -8,7 +8,10 @@ package forestry.api.genetics;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+
+import genetics.api.individual.IIndividual;
 
 public interface IFlowerProvider {
 
@@ -23,7 +26,7 @@ public interface IFlowerProvider {
 	/**
 	 * @return Short, human-readable identifier used in the beealyzer.
 	 */
-	String getDescription();
+	ITextComponent getDescription();
 
 	/**
 	 * Allows the flower provider to affect the produce at the given location.

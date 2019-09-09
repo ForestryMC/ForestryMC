@@ -5,9 +5,11 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 import net.minecraftforge.common.BiomeDictionary;
+
+import genetics.api.mutation.IMutation;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -60,7 +62,7 @@ public interface IMutationBuilder {
 	/**
 	 * Require a specific resource to be under the location of the mutation
 	 */
-	IMutationBuilder requireResource(IBlockState... acceptedBlockStates);
+	IMutationBuilder requireResource(BlockState... acceptedBlockStates);
 
 	IMutationBuilder requireResource(String oreDictName);
 

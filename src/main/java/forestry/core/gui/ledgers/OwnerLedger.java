@@ -13,6 +13,8 @@ package forestry.core.gui.ledgers;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.authlib.GameProfile;
 
@@ -57,7 +59,8 @@ public class OwnerLedger extends Ledger {
 	}
 
 	@Override
-	public String getTooltip() {
-		return Translator.translateToLocal("for.gui.owner") + ": " + PlayerUtil.getOwnerName(owner);
+	public ITextComponent getTooltip() {
+		return new TranslationTextComponent("for.gui.owner")
+			.appendText(": " + PlayerUtil.getOwnerName(owner));
 	}
 }

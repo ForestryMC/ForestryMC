@@ -13,14 +13,14 @@ package forestry.apiculture.flowers;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 public final class Flower {
 
-	private final IBlockState blockState;
+	private final BlockState blockState;
 	private Double weight;
 
-	public Flower(IBlockState blockState, double weight) {
+	public Flower(BlockState blockState, double weight) {
 		this.blockState = blockState;
 		this.weight = weight;
 	}
@@ -45,7 +45,7 @@ public final class Flower {
 		return Objects.hashCode(blockState);
 	}
 
-	public IBlockState getBlockState() {
+	public BlockState getBlockState() {
 		return blockState;
 	}
 

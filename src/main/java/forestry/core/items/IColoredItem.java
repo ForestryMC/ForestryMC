@@ -2,10 +2,9 @@ package forestry.core.items;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IColoredItem {
-	@SideOnly(Side.CLIENT)
-	int getColorFromItemstack(ItemStack stack, int tintIndex);
+	@OnlyIn(Dist.CLIENT)
+	int getColorFromItemStack(ItemStack stack, int tintIndex);
 }

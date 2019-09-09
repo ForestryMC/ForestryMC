@@ -20,10 +20,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
+//TODO - this class relies on meta a lot so probably will have to go.
 public class Stack {
 	private final String name;
 	private final int meta;
@@ -73,7 +72,7 @@ public class Stack {
 			meta = missingMetaValue;
 		} else {
 			try {
-				meta = parts[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
+				meta = parts[2].equals("*") ? 0/*OreDictionary.WILDCARD_VALUE*/ : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
 			} catch (ParseException e) {
 				Log.warning("ItemStack string (" + stackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
 				return null;

@@ -14,50 +14,37 @@ import javax.annotation.Nullable;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.BlockItem;
 
-import net.minecraftforge.oredict.OreDictionary;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import forestry.core.utils.MigrationHelper;
-import forestry.modules.InternalModuleHandler;
-import forestry.modules.ModuleManager;
 
 public abstract class BlockRegistry {
-	protected <T extends Block> void registerBlock(T block, @Nullable ItemBlock itemBlock, String name) {
-		if (ModuleManager.getInternalHandler().getStage() != InternalModuleHandler.Stage.REGISTER) {
-			throw new RuntimeException("Tried to register Block outside of REGISTER");
-		}
+	protected <T extends Block> void registerBlock(T block, @Nullable BlockItem itemBlock, String name) {
 
 		if (!name.equals(name.toLowerCase(Locale.ENGLISH))) {
 			Log.error("Name must be lowercase");
 		}
 
-		block.setTranslationKey("for." + name);
+		//TODO - are these done by registry name now?
+		//https://gist.github.com/williewillus/353c872bcf1a6ace9921189f6100d09a#lang-changes
+		//		block.setTranslationKey("for." + name);
 		block.setRegistryName(name);
 		ForgeRegistries.BLOCKS.register(block);
 		Proxies.common.registerBlock(block);
 
-		MigrationHelper.addBlockName(name);
 
 		if (itemBlock != null) {
 			itemBlock.setRegistryName(name);
 			ForgeRegistries.ITEMS.register(itemBlock);
 			Proxies.common.registerItem(itemBlock);
-			MigrationHelper.addItemName(name);
 		}
 	}
 
 	protected <T extends Block> void registerBlock(T block, String name) {
 		registerBlock(block, null, name);
-	}
-
-	protected static void registerOreDictWildcard(String oreDictName, Block block) {
-		OreDictionary.registerOre(oreDictName, new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
 	}
 
 }

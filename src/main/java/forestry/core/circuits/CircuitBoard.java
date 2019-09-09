@@ -14,12 +14,16 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -27,7 +31,6 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.core.utils.Translator;
 
 public class CircuitBoard implements ICircuitBoard {
 
@@ -42,13 +45,13 @@ public class CircuitBoard implements ICircuitBoard {
 		this.circuits = circuits;
 	}
 
-	public CircuitBoard(NBTTagCompound nbttagcompound) {
-		type = EnumCircuitBoardType.values()[nbttagcompound.getShort("T")];
+	public CircuitBoard(CompoundNBT CompoundNBT) {
+		type = EnumCircuitBoardType.values()[CompoundNBT.getShort("T")];
 
 		// Layout
 		ICircuitLayout layout = null;
-		if (nbttagcompound.hasKey("LY")) {
-			layout = ChipsetManager.circuitRegistry.getLayout(nbttagcompound.getString("LY"));
+		if (CompoundNBT.contains("LY")) {
+			layout = ChipsetManager.circuitRegistry.getLayout(CompoundNBT.getString("LY"));
 		}
 		if (layout == null) {
 			ChipsetManager.circuitRegistry.getDefaultLayout();
@@ -58,10 +61,10 @@ public class CircuitBoard implements ICircuitBoard {
 		circuits = new ICircuit[4];
 
 		for (int i = 0; i < 4; i++) {
-			if (!nbttagcompound.hasKey("CA.I" + i)) {
+			if (!CompoundNBT.contains("CA.I" + i)) {
 				continue;
 			}
-			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(nbttagcompound.getString("CA.I" + i));
+			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(CompoundNBT.getString("CA.I" + i));
 			if (circuit != null) {
 				circuits[i] = circuit;
 			}
@@ -69,50 +72,51 @@ public class CircuitBoard implements ICircuitBoard {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getPrimaryColor() {
 		return type.getPrimaryColor();
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getSecondaryColor() {
 		return type.getSecondaryColor();
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addTooltip(List<String> list) {
+	@OnlyIn(Dist.CLIENT)
+	public void addTooltip(List<ITextComponent> list) {
 		if (layout != null) {
-			list.add(TextFormatting.GOLD + layout.getUsage() + ":");
-			List<String> extendedTooltip = new ArrayList<>();
+			list.add(new StringTextComponent(layout.getUsage() + ":").setStyle((new Style()).setColor(TextFormatting.GOLD)));
+			List<ITextComponent> extendedTooltip = new ArrayList<>();
 			for (ICircuit circuit : circuits) {
 				if (circuit != null) {
 					circuit.addTooltip(extendedTooltip);
 				}
 			}
 
-			if (GuiScreen.isShiftKeyDown() || extendedTooltip.size() <= 4) {
+			if (Screen.hasShiftDown() || extendedTooltip.size() <= 4) {
 				list.addAll(extendedTooltip);
 			} else {
-				list.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+				list.add(new StringTextComponent("<").setStyle((new Style()).setUnderlined(true).setColor(TextFormatting.GRAY))
+					.appendSibling(new TranslationTextComponent("for.gui.tooltip.tmi"))
+					.appendSibling(new StringTextComponent(">")));
 			}
 		} else {
 			int socketCount = type.getSockets();
-			String localizationKey = "item.for.circuitboard.tooltip." + (socketCount == 1 ? "singular" : "plural");
-			String tooltip = Translator.translateToLocalFormatted(localizationKey, type.getSockets());
-			list.add(tooltip);
+			String localizationKey = "item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
+			list.add(new TranslationTextComponent(localizationKey, type.getSockets()).applyTextStyle(TextFormatting.GRAY));
 		}
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
 
-		nbttagcompound.setShort("T", (short) type.ordinal());
+		CompoundNBT.putShort("T", (short) type.ordinal());
 
 		// Layout
 		if (layout != null) {
-			nbttagcompound.setString("LY", layout.getUID());
+			CompoundNBT.putString("LY", layout.getUID());
 		}
 
 		// Circuits
@@ -122,9 +126,9 @@ public class CircuitBoard implements ICircuitBoard {
 				continue;
 			}
 
-			nbttagcompound.setString("CA.I" + i, circuit.getUID());
+			CompoundNBT.putString("CA.I" + i, circuit.getUID());
 		}
-		return nbttagcompound;
+		return CompoundNBT;
 	}
 
 	@Override

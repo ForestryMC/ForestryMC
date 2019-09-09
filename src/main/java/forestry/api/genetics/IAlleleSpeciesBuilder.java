@@ -10,7 +10,7 @@ import forestry.api.core.EnumTemperature;
 
 public interface IAlleleSpeciesBuilder {
 
-	IAlleleSpecies build();
+	IAlleleForestrySpecies build();
 
 	IAlleleSpeciesBuilder setTemperature(EnumTemperature temperature);
 
@@ -32,7 +32,7 @@ public interface IAlleleSpeciesBuilder {
 	 * Manually the genetic complexity.
 	 * If this is not set, the complexity is based on the number of breeding steps to reach this species.
 	 *
-	 * @see forestry.api.genetics.IAlleleSpecies#getComplexity()
+	 * @see IAlleleForestrySpecies#getComplexity()
 	 */
 	void setComplexity(int complexity);
 }

@@ -13,13 +13,11 @@ package forestry.core.inventory;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 import forestry.core.config.Constants;
 import forestry.core.network.IStreamable;
@@ -65,7 +63,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
 	public InventoryAdapter copy() {
-		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getName(), inventory.getInventoryStackLimit());
+		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), "TEST_TITLE_PLEASE_IGNORE", inventory.getInventoryStackLimit());
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {
@@ -102,10 +100,11 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 		inventory.setInventorySlotContents(slotId, itemstack);
 	}
 
-	@Override
-	public String getName() {
-		return inventory.getName();
-	}
+	//TODO - inventory name
+	//	@Override
+	//	public String getName() {
+	//		return inventory.getName();
+	//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -123,19 +122,20 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
 		return true;
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return false;
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TextComponentString("");
-	}
+	//TODO - inventory name
+	//	@Override
+	//	public boolean hasCustomName() {
+	//		return false;
+	//	}
+	//
+	//	@Override
+	//	public ITextComponent getDisplayName() {
+	//		return new StringTextComponent("");
+	//	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -153,16 +153,16 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 	}
 
 	/* ISIDEDINVENTORY */
 	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
+	public int[] getSlotsForFace(Direction side) {
 		if (allowAutomation && slotMap != null) {
 			return slotMap;
 		}
@@ -178,25 +178,25 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
+	public boolean canInsertItem(int slot, ItemStack stack, Direction side) {
 		return isItemValidForSlot(slot, stack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+	public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
 		return false;
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		InventoryUtil.readFromNBT(this, nbttagcompound);
+	public void read(CompoundNBT CompoundNBT) {
+		InventoryUtil.readFromNBT(this, CompoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		InventoryUtil.writeToNBT(this, nbttagcompound);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		InventoryUtil.writeToNBT(this, compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
@@ -210,19 +210,20 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	/* FIELDS */
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
+	//TODO inventory fields
+	//	@Override
+	//	public int getField(int id) {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public int getFieldCount() {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public void setField(int id, int value) {
+	//	}
 
 	@Override
 	public void clear() {

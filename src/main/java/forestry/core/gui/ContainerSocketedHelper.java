@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
@@ -36,13 +36,13 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleChipsetClick(int slot) {
 		NetworkUtil.sendToServer(new PacketChipsetClick(slot));
 	}
 
 	@Override
-	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+	public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
 		if (!tile.getSocket(slot).isEmpty()) {
 			return;
 		}
@@ -73,13 +73,13 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleSolderingIronClick(int slot) {
 		NetworkUtil.sendToServer(new PacketSolderingIronClick(slot));
 	}
 
 	@Override
-	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+	public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
 		ItemStack socket = tile.getSocket(slot);
 		if (socket.isEmpty() || !(itemstack.getItem() instanceof ISolderingIron)) {
 			return;
@@ -92,7 +92,7 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 
 		tile.setSocket(slot, ItemStack.EMPTY);
 		InventoryUtil.stowInInventory(socket, player.inventory, true);
-		itemstack.damageItem(1, player);
+		itemstack.damageItem(1, player, p -> p.sendBreakAnimation(p.getActiveHand()));    //TODO onBreak
 		player.updateHeldItem();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);

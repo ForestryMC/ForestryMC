@@ -10,8 +10,6 @@ import java.util.Locale;
 
 import net.minecraft.util.IStringSerializable;
 
-import forestry.api.apiculture.IHiveDrop;
-
 public interface IHiveRegistry {
 
 	/* Forestry Hive Names */

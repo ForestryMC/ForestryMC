@@ -15,10 +15,10 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -28,7 +28,7 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LedgerManager {
 	private final List<Ledger> ledgers = new ArrayList<>();
 	private final List<ErrorLedger> errorLedgers = new ArrayList<>();
@@ -66,7 +66,7 @@ public class LedgerManager {
 		}
 	}
 
-	public void onGuiClosed() {
+	public void onClose() {
 		for (Ledger ledger : ledgers) {
 			ledger.onGuiClosed();
 		}
@@ -80,7 +80,7 @@ public class LedgerManager {
 	}
 
 	@Nullable
-	private Ledger getAtPosition(int mX, int mY) {
+	private Ledger getAtPosition(double mX, double mY) {
 		if (!ledgers.isEmpty()) {
 			final int xShift = gui.getGuiLeft() + gui.getSizeX();
 			int yShift = gui.getGuiTop() + 8;
@@ -140,7 +140,7 @@ public class LedgerManager {
 				continue;
 			}
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
 			ledger.draw();
 			yPos += ledger.getHeight();
@@ -163,11 +163,11 @@ public class LedgerManager {
 				continue;
 			}
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			errorLedger.draw(-errorLedger.getWidth(), yPos);
 			yPos += errorLedger.getHeight();
 		}
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 	}
 
 	public void drawTooltips(int mouseX, int mouseY) {
@@ -179,7 +179,7 @@ public class LedgerManager {
 		}
 	}
 
-	public void handleMouseClicked(int x, int y, int mouseButton) {
+	public void handleMouseClicked(double x, double y, int mouseButton) {
 
 		if (mouseButton == 0) {
 

@@ -1,7 +1,7 @@
 {
 	"parent": "forestry:block/farm_parent",
 	"textures": {
-		"particle": "forestry:blocks/farm_ender_particle",
-		"farm": "forestry:blocks/farm_ender"
+      "particle": "forestry:block/farm_ender_particle",
+      "farm": "forestry:block/farm_ender"
 	}
 }

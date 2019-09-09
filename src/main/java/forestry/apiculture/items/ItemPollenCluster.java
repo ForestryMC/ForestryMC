@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemOverlay;
 
 public class ItemPollenCluster extends ItemOverlay {
-	public ItemPollenCluster() {
-		super(Tabs.tabApiculture, EnumPollenCluster.VALUES);
-	}
 
-	public ItemStack get(EnumPollenCluster pollenCluster, int amount) {
-		return new ItemStack(this, amount, pollenCluster.ordinal());
+	private final EnumPollenCluster type;
+
+	public ItemPollenCluster(EnumPollenCluster type) {
+		super(ItemGroups.tabApiculture, type);
+		this.type = type;
 	}
 }

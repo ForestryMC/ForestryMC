@@ -9,8 +9,13 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.command.ICommand;
+import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;
+
+import com.mojang.brigadier.Command;
+
+import net.minecraftforge.registries.IForgeRegistry;
 
 /**
  * Defines a Forestry module.
@@ -54,12 +59,28 @@ public interface IForestryModule {
 	default void disabledSetupAPI() {
 	}
 
-	/**
-	 * Can be used to register items and blocks. Called before {@link #preInit()}.
-	 * <p>
-	 * Must be called by the mod that registers the container.
-	 */
-	default void registerItemsAndBlocks() {
+	default void registerBlocks() {
+
+	}
+
+	default void registerItems() {
+
+	}
+
+	default void registerTiles() {
+
+	}
+
+	default void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
+
+	}
+
+	default void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+
+	}
+
+	default void registerGuiFactories() {
+
 	}
 
 	/**
@@ -90,7 +111,7 @@ public interface IForestryModule {
 	}
 
 	@Nullable
-	default ICommand[] getConsoleCommands() {
+	default Command[] getConsoleCommands() {
 		return null;
 	}
 }

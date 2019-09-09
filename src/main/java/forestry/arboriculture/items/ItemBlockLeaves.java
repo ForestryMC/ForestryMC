@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
@@ -35,52 +33,46 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (itemstack.getTagCompound() == null) {
-			return Translator.translateToLocal("trees.grammar.leaves.type");
+	public ITextComponent getDisplayName(ItemStack itemstack) {
+		if (itemstack.getTag() == null) {
+			return new TranslationTextComponent("trees.grammar.leaves.type");
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemstack.getTagCompound());
+		tileLeaves.read(itemstack.getTag());
 
 		String unlocalizedName = tileLeaves.getUnlocalizedName();
 		return getDisplayName(unlocalizedName);
 	}
 
-	public static String getDisplayName(String unlocalizedSpeciesName) {
+	public static ITextComponent getDisplayName(String unlocalizedSpeciesName) {
 		String customTreeKey = "for.trees.custom.leaves." + unlocalizedSpeciesName.replace("for.trees.species.", "");
 		if (Translator.canTranslateToLocal(customTreeKey)) {
-			return Translator.translateToLocal(customTreeKey);
+			return new TranslationTextComponent(customTreeKey);
 		}
 
-		String grammar = Translator.translateToLocal("for.trees.grammar.leaves");
-		String localizedName = Translator.translateToLocal(unlocalizedSpeciesName);
+		ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
 
-		String leaves = Translator.translateToLocal("for.trees.grammar.leaves.type");
-		return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", leaves);
+		ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
+		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemstack(ItemStack itemStack, int renderPass) {
-		if (itemStack.getTagCompound() == null) {
-			return ModuleArboriculture.proxy.getFoliageColorBasic();
+	@OnlyIn(Dist.CLIENT)
+	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
+		if (itemStack.getTag() == null) {
+			return ModuleArboriculture.proxy.getFoliageColorDefault();
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemStack.getTagCompound());
+		tileLeaves.read(itemStack.getTag());
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			return tileLeaves.getFruitColour();
 		} else {
-			EntityPlayer player = Minecraft.getMinecraft().player;
+			PlayerEntity player = Minecraft.getInstance().player;
 			return tileLeaves.getFoliageColour(player);
 		}
-	}
-
-	@Override
-	public boolean placeBlockAt(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-		return false;
 	}
 
 }

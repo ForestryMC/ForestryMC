@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import forestry.apiculture.ModuleApiculture;
 
 public class ParticleBeeTargetEntity extends Particle {
 	private final Vec3d origin;
@@ -24,8 +24,8 @@ public class ParticleBeeTargetEntity extends Particle {
 
 	public ParticleBeeTargetEntity(World world, Vec3d origin, Entity entity, int color) {
 		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(ModuleApiculture.getBeeSprite());
-
+		//		setParticleTexture(ModuleApiculture.getBeeSprite());
+		//TODO - particleManager has a TextureManager so register through that?
 		this.origin = origin;
 		this.entity = entity;
 
@@ -38,8 +38,9 @@ public class ParticleBeeTargetEntity extends Particle {
 		particleBlue = (color & 255) / 255.0F;
 
 		this.setSize(0.1F, 0.1F);
-		this.particleScale *= 0.2F;
-		this.particleMaxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
+		//TODO multiplySCaleBy?
+		//		this.particleScale *= 0.2F;
+		this.maxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 
 		this.motionX *= 0.9D;
 		this.motionY *= 0.9D;
@@ -50,19 +51,19 @@ public class ParticleBeeTargetEntity extends Particle {
 	 * Called to update the entity's position/logic.
 	 */
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.move(this.motionX, this.motionY, this.motionZ);
 
-		if (this.particleAge == this.particleMaxAge / 2) {
+		if (this.age == this.maxAge / 2) {
 			this.motionX = (origin.x - this.posX) * 0.03;
 			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionZ = (origin.z - this.posZ) * 0.03;
 		}
 
-		if (this.particleAge < this.particleMaxAge * 0.5) {
+		if (this.age < this.maxAge * 0.5) {
 			// fly near the entity
 			this.motionX = (entity.posX - this.posX) * 0.09;
 			this.motionX = (this.motionX + 0.2 * (-0.5 + rand.nextFloat())) / 2;
@@ -70,40 +71,40 @@ public class ParticleBeeTargetEntity extends Particle {
 			this.motionY = (this.motionY + 0.4 * (-0.5 + rand.nextFloat())) / 4;
 			this.motionZ = (entity.posZ - this.posZ) * 0.09;
 			this.motionZ = (this.motionZ + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-		} else if (this.particleAge < this.particleMaxAge * 0.75) {
+		} else if (this.age < this.maxAge * 0.75) {
 			// venture back
 			this.motionX *= 0.95;
 			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.95;
 		} else {
-			// get to origin
+			// getComb to origin
 			this.motionX = (origin.x - this.posX) * 0.03;
 			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ = (origin.z - this.posZ) * 0.03;
 		}
 
-		if (this.particleAge++ >= this.particleMaxAge) {
+		if (this.age++ >= this.maxAge) {
 			this.setExpired();
 		}
 	}
-
 	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo info, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
 		float maxV = 1;
 
-		if (this.particleTexture != null) {
-			minU = particleTexture.getMinU();
-			maxU = particleTexture.getMaxU();
-			minV = particleTexture.getMinV();
-			maxV = particleTexture.getMaxV();
-		}
-
-		float f10 = 0.1F * particleScale;
+		//TODO particle texture
+		//		if (this.particleTexture != null) {
+		//			minU = particleTexture.getMinU();
+		//			maxU = particleTexture.getMaxU();
+		//			minV = particleTexture.getMinV();
+		//			maxV = particleTexture.getMaxV();
+		//		}
+		//		TODO multiplyScaleBy
+		float f10 = 0.1F * 1;//particleScale;
 		float f11 = (float) (prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
 		float f12 = (float) (prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
 		float f13 = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks - interpPosZ);
@@ -130,8 +131,9 @@ public class ParticleBeeTargetEntity extends Particle {
 		this.resetPositionToBB();
 	}
 
+
 	@Override
-	public int getFXLayer() {
-		return 1;
+	public IParticleRenderType getRenderType() {
+		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;    //TODO - not sure on this one
 	}
 }

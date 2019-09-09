@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "forestry:book_forester"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    [
+      {
+        "item": "#DROPHONEY"
+      },
+      {
+        "item": "#TREESAPLING"
+      }
+    ]
+  ],
+  "conditions": [
+    {
+      "module": "book",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "book"
+}

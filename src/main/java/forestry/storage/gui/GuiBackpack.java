@@ -10,17 +10,37 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 
 public class GuiBackpack extends GuiForestry<ContainerBackpack> {
 
-	public GuiBackpack(ContainerBackpack container) {
-		this(Constants.TEXTURE_PATH_GUI + "/backpack.png", container);
+	public GuiBackpack(ContainerBackpack container, PlayerInventory inv, ITextComponent title) {
+		super(getTextureString(container), container, inv, title);
+		ContainerBackpack.Size size = container.getSize();
+
+		if (size == ContainerBackpack.Size.T2) {
+			xSize = 176;
+			ySize = 192;
+		}
 	}
 
-	protected GuiBackpack(String texture, ContainerBackpack container) {
-		super(texture, container);
+	private static String getTextureString(ContainerBackpack container) {
+		ContainerBackpack.Size size = container.getSize();
+		switch (size) {
+			case DEFAULT: {
+				return Constants.TEXTURE_PATH_GUI + "/backpack.png";
+			}
+			case T2: {
+				return Constants.TEXTURE_PATH_GUI + "/backpack_t2.png";
+			}
+			default: {
+				return Constants.TEXTURE_PATH_GUI + "/backpack.png";
+			}
+		}
 	}
 
 	@Override

@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.config.Constants;
@@ -19,9 +20,9 @@ import forestry.core.gui.GuiForestryTitled;
 public class GuiAlvearySwarmer extends GuiForestryTitled<ContainerAlvearySwarmer> {
 	private final TileAlvearySwarmer tile;
 
-	public GuiAlvearySwarmer(InventoryPlayer inventory, TileAlvearySwarmer tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/swarmer.png", new ContainerAlvearySwarmer(inventory, tile), tile);
-		this.tile = tile;
+	public GuiAlvearySwarmer(ContainerAlvearySwarmer container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/swarmer.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 	}
 
 	@Override

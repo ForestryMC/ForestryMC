@@ -7,7 +7,7 @@
 	"content": [
 		[
 			{
-				"text": "You can control which fields your farm works on by applying redstone signals to control blocks. You can either shut down the whole farm by applying a redstone signal from top or below or you can disable a specific side by applying a redstone signal on the matching side of the control block."
+              "text": "You can control which fields your farm works on by applying redstone signals to control block. You can either shut down the whole farm by applying a redstone signal from top or below or you can disable a specific side by applying a redstone signal on the matching side of the control block."
 			}
 		],
 		[

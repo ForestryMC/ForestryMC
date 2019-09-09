@@ -14,9 +14,10 @@ import java.io.File;
 import java.util.LinkedHashMap;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
 import forestry.api.mail.EnumPostage;
@@ -33,7 +34,7 @@ import forestry.mail.items.EnumStampDefinition;
 public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	// / CONSTANTS
-	public static final String SAVE_NAME = "ForestryMail";
+	public static final String SAVE_NAME = "forestry_mail";
 	private final int[] collectedPostage = new int[EnumPostage.values().length];
 	private LinkedHashMap<IMailAddress, ITradeStation> activeTradeStations = new LinkedHashMap<>();
 
@@ -47,25 +48,25 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 		super(s);
 	}
 
-	public void setWorld(World world) {
+	public void setWorld(ServerWorld world) {
 		refreshActiveTradeStations(world);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+	public void read(CompoundNBT compoundNBT) {
 		for (int i = 0; i < collectedPostage.length; i++) {
-			if (nbttagcompound.hasKey("CPS" + i)) {
-				collectedPostage[i] = nbttagcompound.getInteger("CPS" + i);
+			if (compoundNBT.contains("CPS" + i)) {
+				collectedPostage[i] = compoundNBT.getInt("CPS" + i);
 			}
 		}
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 		for (int i = 0; i < collectedPostage.length; i++) {
-			nbttagcompound.setInteger("CPS" + i, collectedPostage[i]);
+			compoundNBT.putInt("CPS" + i, collectedPostage[i]);
 		}
-		return nbttagcompound;
+		return compoundNBT;
 	}
 
 	/* TRADE STATION MANAGMENT */
@@ -75,9 +76,9 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 		return this.activeTradeStations;
 	}
 
-	private void refreshActiveTradeStations(World world) {
+	private void refreshActiveTradeStations(ServerWorld world) {
 		activeTradeStations = new LinkedHashMap<>();
-		File worldSave = world.getSaveHandler().getMapFileFromName("dummy");
+		File worldSave = world.getSaveHandler().getWorldDirectory();    //TODO right file?
 		File file = worldSave.getParentFile();
 		if (!file.exists() || !file.isDirectory()) {
 			return;
@@ -137,7 +138,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 			if (collected > 0) {
 				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				return ModuleMail.getItems().stamps.get(stampDefinition, collected);
+				return ModuleMail.getItems().getStamp(stampDefinition, collected);
 			}
 		}
 
@@ -146,7 +147,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	// / DELIVERY
 	@Override
-	public IPostalState lodgeLetter(World world, ItemStack itemstack, boolean doLodge) {
+	public IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge) {
 		ILetter letter = PostManager.postRegistry.getLetter(itemstack);
 		if (letter == null) {
 			return EnumDeliveryState.NOT_MAILABLE;

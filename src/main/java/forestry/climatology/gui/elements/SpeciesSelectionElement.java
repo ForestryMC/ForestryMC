@@ -10,42 +10,47 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
+import java.util.Optional;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
 
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.gui.events.GuiEvent;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
 import forestry.core.gui.elements.GuiElement;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SpeciesSelectionElement extends GuiElement {
 	public SpeciesSelectionElement(int xPos, int yPos, IClimateTransformer transformer) {
 		super(xPos, yPos, 22, 22);
 		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
-			EntityPlayer player = Minecraft.getMinecraft().player;
+			PlayerEntity player = Minecraft.getInstance().player;
 			ItemStack itemstack = player.inventory.getItemStack();
 			if (itemstack.isEmpty()) {
 				return;
 			}
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
-			if (individual == null) {
+			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(itemstack);
+			if (!optional.isPresent()) {
 				return;
 			}
-			IAlleleSpecies primary = individual.getGenome().getPrimary();
+			IIndividual individual = optional.get();
+			IAlleleForestrySpecies primary = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
 			EnumTemperature temperature = primary.getTemperature();
 			EnumHumidity humidity = primary.getHumidity();
 			float temp;
@@ -90,11 +95,11 @@ public class SpeciesSelectionElement extends GuiElement {
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		super.drawElement(mouseX, mouseY);
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
-		GlStateManager.enableAlpha();
-		drawTexturedModalRect(0, 0, 224, 46, 22, 22);
-		GlStateManager.disableAlpha();
+		GlStateManager.enableAlphaTest();
+		blit(0, 0, 224, 46, 22, 22);
+		GlStateManager.disableAlphaTest();
 	}
 
 	@Override

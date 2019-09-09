@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import genetics.classification.Classification;
+
 public class Branch extends Classification {
 
 	public Branch(String uid, String scientific) {

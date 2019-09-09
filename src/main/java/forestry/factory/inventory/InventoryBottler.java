@@ -11,11 +11,12 @@
 package forestry.factory.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -38,14 +39,14 @@ public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
 		if (slotIndex == SLOT_INPUT_EMPTY_CONTAINER) {
 			return FluidHelper.isFillableContainerWithRoom(itemStack);
 		} else if (slotIndex == SLOT_INPUT_FULL_CONTAINER) {
-			FluidStack fluidStack = FluidUtil.getFluidContained(itemStack);
-			return fluidStack != null && FluidRegistry.isFluidRegistered(fluidStack.getFluid());
+			LazyOptional<FluidStack> fluidStack = FluidUtil.getFluidContained(itemStack);
+			return fluidStack.map(f -> ForgeRegistries.FLUIDS.containsValue(f.getFluid())).orElse(false);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_OUTPUT_EMPTY_CONTAINER || slotIndex == SLOT_OUTPUT_FULL_CONTAINER;
 	}
 }

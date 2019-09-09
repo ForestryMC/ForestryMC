@@ -10,15 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-
-import forestry.api.core.IErrorLogicSource;
-import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+//import buildcraft.api.statements.IStatementContainer;
+//import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerMissingDrone extends Trigger {
 
@@ -29,15 +24,15 @@ public class TriggerMissingDrone extends Trigger {
 	/**
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-
-		if (!(tile instanceof IErrorLogicSource)) {
-			return false;
-		}
-
-		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-		return apiary.getErrorLogic().contains(EnumErrorCode.NO_DRONE);
-	}
+	//	@Override
+	//	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+	//
+	//		if (!(tile instanceof IErrorLogicSource)) {
+	//			return false;
+	//		}
+	//
+	//		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+	//		return apiary.getErrorLogic().contains(EnumErrorCode.NO_DRONE);
+	//	}
 
 }

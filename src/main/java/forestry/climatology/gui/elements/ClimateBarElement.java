@@ -11,13 +11,15 @@
 package forestry.climatology.gui.elements;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
@@ -26,9 +28,8 @@ import forestry.api.gui.events.GuiEvent;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ClimateBarElement extends GuiElement {
 	public static final float MAX_VALUE = 2.0F;
 
@@ -42,7 +43,7 @@ public class ClimateBarElement extends GuiElement {
 		this.type = type;
 
 		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
-			if (GuiScreen.isCtrlKeyDown()) {
+			if (Screen.hasControlDown()) {
 				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				IClimateState climateState = former.getClimate();
 				IClimateState newState = climateState.toImmutable().setClimate(type, transformer.getDefault().getTemperature());
@@ -64,9 +65,9 @@ public class ClimateBarElement extends GuiElement {
 			IClimateState targetedState = transformer.getTarget();
 			IClimateState state = transformer.getCurrent();
 			IClimateState defaultState = transformer.getDefault();
-			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitat_former.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
-			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
-			tooltip.add(Translator.translateToLocalFormatted("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
 		});
 	}
 
@@ -74,20 +75,20 @@ public class ClimateBarElement extends GuiElement {
 	public void drawElement(int mouseX, int mouseY) {
 		handleMouse(mouseX - getX(), mouseY - getY());
 
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(gui.textureFile);
 
 		setGLColorFromInt(type == ClimateType.TEMPERATURE ? 0xFFD700 : 0x7ff4f4);
 		int progressScaled = getProgressScaled();
-		drawTexturedModalRect(1, 1, 177, 69, progressScaled, 10);
+		blit(1, 1, 177, 69, progressScaled, 10);
 
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		drawTexturedModalRect(1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
-		drawTexturedModalRect(1 + getPointerPosition(), 1, 229, 69, 1, 10);
-		drawTexturedModalRect(1, 1, 177, 80, 50, 10);
-		GlStateManager.disableAlpha();
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		blit(1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
+		blit(1 + getPointerPosition(), 1, 229, 69, 1, 10);
+		blit(1, 1, 177, 80, 50, 10);
+		GlStateManager.disableAlphaTest();
 	}
 
 	private int getProgressScaled() {
@@ -110,7 +111,7 @@ public class ClimateBarElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		GlStateManager.color(red, green, blue, 1.0F);
+		GlStateManager.color4f(red, green, blue, 1.0F);
 	}
 
 	private void handleMouse(int mouseX, int mouseY) {

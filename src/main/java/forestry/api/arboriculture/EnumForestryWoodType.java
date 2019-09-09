@@ -11,7 +11,7 @@ import java.util.Random;
 public enum EnumForestryWoodType implements IWoodType {
 	LARCH,
 	TEAK,
-	ACACIA,
+	ACACIA_FORESTRY,    //TODO needs different name to avoid clashing with vanilla. Perhaps this tree should be removed?
 	LIME,
 	CHESTNUT,
 	WENGE,
@@ -75,39 +75,27 @@ public enum EnumForestryWoodType implements IWoodType {
 	}
 
 	@Override
-	public int getMetadata() {
-		return ordinal();
-	}
-
-	public static EnumForestryWoodType byMetadata(int meta) {
-		if (meta < 0 || meta >= VALUES.length) {
-			meta = 0;
-		}
-		return VALUES[meta];
-	}
-
-	@Override
 	public String getPlankTexture() {
-		return "forestry:blocks/wood/planks." + getName();
+		return "forestry:block/wood/planks." + getName();
 	}
 
 	@Override
 	public String getDoorLowerTexture() {
-		return "forestry:blocks/doors/" + getName() + "_lower";
+		return "forestry:block/doors/" + getName() + "_lower";
 	}
 
 	@Override
 	public String getDoorUpperTexture() {
-		return "forestry:blocks/doors/" + getName() + "_upper";
+		return "forestry:block/doors/" + getName() + "_upper";
 	}
 
 	@Override
 	public String getBarkTexture() {
-		return "forestry:blocks/wood/bark." + getName();
+		return "forestry:block/wood/bark." + getName();
 	}
 
 	@Override
 	public String getHeartTexture() {
-		return "forestry:blocks/wood/heart." + getName();
+		return "forestry:block/wood/heart." + getName();
 	}
 }

@@ -12,55 +12,47 @@ package forestry.core.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
-import forestry.api.genetics.IGenome;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.Individual;
+
 import forestry.api.genetics.IIndividualLiving;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
+	private static final String NBT_HEALTH = "Health";
+	private static final String NBT_MAX_HEALTH = "MaxH";
 
 	private int health;
 	private int maxHealth;
 
-	protected IndividualLiving() {
+	protected IndividualLiving(IGenome genome, @Nullable IGenome mate) {
+		super(genome, mate);
 	}
 
-	protected IndividualLiving(int newHealth) {
+	protected IndividualLiving(IGenome genome, @Nullable IGenome mate, int newHealth) {
+		super(genome, mate);
 		health = maxHealth = newHealth;
 	}
 
-	protected IndividualLiving(NBTTagCompound nbt) {
+	protected IndividualLiving(CompoundNBT nbt) {
 		super(nbt);
-		health = nbt.getInteger("Health");
-		maxHealth = nbt.getInteger("MaxH");
+		health = nbt.getInt(NBT_HEALTH);
+		maxHealth = nbt.getInt(NBT_MAX_HEALTH);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
 
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+		compound.putInt(NBT_HEALTH, health);
+		compound.putInt(NBT_MAX_HEALTH, maxHealth);
 
-		nbttagcompound.setInteger("Health", health);
-		nbttagcompound.setInteger("MaxH", maxHealth);
-
-		NBTTagCompound nbtGenome = new NBTTagCompound();
-		getGenome().writeToNBT(nbtGenome);
-		nbttagcompound.setTag("Genome", nbtGenome);
-
-		if (getMate() != null) {
-			NBTTagCompound nbtMate = new NBTTagCompound();
-			getMate().writeToNBT(nbtMate);
-			nbttagcompound.setTag("Mate", nbtMate);
-		}
-		return nbttagcompound;
+		return compound;
 	}
 
 	/* GENERATION */
-	@Override
-	@Nullable
-	public abstract IGenome getMate();
-
 	@Override
 	public boolean isAlive() {
 		return health > 0;

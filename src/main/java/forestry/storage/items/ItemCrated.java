@@ -15,28 +15,26 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.client.model.ModelLoader;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IModelManager;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Translator;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
@@ -58,11 +56,11 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (!worldIn.isRemote) {
 			if (contained.isEmpty() || heldItem.isEmpty()) {
-				return ActionResult.newResult(EnumActionResult.PASS, heldItem);
+				return ActionResult.newResult(ActionResultType.PASS, heldItem);
 			}
 
 			heldItem.shrink(1);
@@ -71,20 +69,21 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 			dropStack.setCount(9);
 			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, 40);
 		}
-		return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
+		return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public ITextComponent getDisplayName(ItemStack itemstack) {
 		if (contained.isEmpty()) {
-			return Translator.translateToLocal("item.for.crate.name");
+			return new TranslationTextComponent("item.forestry.crate");
 		} else {
-			String containedName = contained.getDisplayName();
-			return Translator.translateToLocalFormatted("for.item.crated.grammar", containedName);
+			ITextComponent containedName = contained.getDisplayName();
+			return new TranslationTextComponent("for.item.crated.grammar", containedName);
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	//TODO I think this needs ItemOverrides or something?
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		if (contained.isEmpty()) {
@@ -93,23 +92,20 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 		} else {
 			ResourceLocation location = Preconditions.checkNotNull(getRegistryName());
 			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", location.getPath());
-			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
-			ModelBakery.registerItemVariants(item, modelLocation);
+			//			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
+			//			ModelBakery.registerItemVariants(item, modelLocation);
 		}
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemstack(ItemStack stack, int renderPass) {
-		ItemColors colors = Minecraft.getMinecraft().getItemColors();
+	@OnlyIn(Dist.CLIENT)
+	public int getColorFromItemStack(ItemStack stack, int renderPass) {
+		ItemColors colors = Minecraft.getInstance().getItemColors();
 		if (contained.isEmpty() || renderPass == 100) {
 			return -1;
 		}
-		int color = colors.colorMultiplier(contained, renderPass);
-		if (color != -1) {
-			return color;
-		}
-		return -1;
+		int color = colors.getColor(contained, renderPass);
+		return color;
 	}
 
 }

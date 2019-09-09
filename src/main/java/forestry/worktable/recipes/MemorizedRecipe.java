@@ -14,17 +14,18 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -32,10 +33,10 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NBTUtilForestry;
-import forestry.worktable.inventory.InventoryCraftingForestry;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
-	private InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
+	private CraftingInventoryForestry craftMatrix = new CraftingInventoryForestry();
 	private List<IRecipe> recipes = new ArrayList<>();
 	private int selectedRecipe;
 	private long lastUsed;
@@ -45,20 +46,20 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		readData(data);
 	}
 
-	public MemorizedRecipe(NBTTagCompound nbt) {
-		readFromNBT(nbt);
+	public MemorizedRecipe(CompoundNBT nbt) {
+		read(nbt);
 	}
 
-	public MemorizedRecipe(InventoryCraftingForestry craftMatrix, List<IRecipe> recipes) {
+	public MemorizedRecipe(CraftingInventoryForestry craftMatrix, List<IRecipe> recipes) {
 		InventoryUtil.deepCopyInventoryContents(craftMatrix, this.craftMatrix);
 		this.recipes = recipes;
 	}
 
-	public InventoryCraftingForestry getCraftMatrix() {
+	public CraftingInventoryForestry getCraftMatrix() {
 		return craftMatrix;
 	}
 
-	public void setCraftMatrix(InventoryCraftingForestry craftMatrix) {
+	public void setCraftMatrix(CraftingInventoryForestry craftMatrix) {
 		this.craftMatrix = craftMatrix;
 	}
 
@@ -98,10 +99,10 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		return ItemStack.EMPTY;
 	}
 
-	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting, World world) {
+	public ItemStack getCraftingResult(CraftingInventory CraftingInventory, World world) {
 		IRecipe selectedRecipe = getSelectedRecipe();
-		if (selectedRecipe != null && selectedRecipe.matches(inventoryCrafting, world)) {
-			ItemStack recipeOutput = selectedRecipe.getCraftingResult(inventoryCrafting);
+		if (selectedRecipe != null && selectedRecipe.matches(CraftingInventory, world)) {
+			ItemStack recipeOutput = selectedRecipe.getCraftingResult(CraftingInventory);
 			if (!recipeOutput.isEmpty()) {
 				return recipeOutput;
 			}
@@ -138,23 +139,27 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		return locked;
 	}
 
+	//TODO use recipemanager, maybe AT method. Then just need the type and the recipe id.
+	//and type is always Crafting.
 	/* INbtWritable */
 	@Override
-	public final void readFromNBT(NBTTagCompound nbttagcompound) {
-		InventoryUtil.readFromNBT(craftMatrix, nbttagcompound);
-		lastUsed = nbttagcompound.getLong("LastUsed");
-		locked = nbttagcompound.getBoolean("Locked");
+	public final void read(CompoundNBT compoundNBT) {
+		InventoryUtil.readFromNBT(craftMatrix, compoundNBT);
+		lastUsed = compoundNBT.getLong("LastUsed");
+		locked = compoundNBT.getBoolean("Locked");
 
-		if (nbttagcompound.hasKey("SelectedRecipe")) {
-			selectedRecipe = nbttagcompound.getInteger("SelectedRecipe");
+		if (compoundNBT.contains("SelectedRecipe")) {
+			selectedRecipe = compoundNBT.getInt("SelectedRecipe");
 		}
 
 		recipes.clear();
-		NBTTagList recipesNbt = nbttagcompound.getTagList("Recipes", NBTUtilForestry.EnumNBTType.STRING.ordinal());
-		for (int i = 0; i < recipesNbt.tagCount(); i++) {
-			String recipeKey = recipesNbt.getStringTagAt(i);
+		ListNBT recipesNbt = compoundNBT.getList("Recipes", NBTUtilForestry.EnumNBTType.STRING.ordinal());
+		for (int i = 0; i < recipesNbt.size(); i++) {
+			String recipeKey = recipesNbt.getString(i);
 			ResourceLocation key = new ResourceLocation(recipeKey);
-			IRecipe recipe = ForgeRegistries.RECIPES.getValue(key);
+			//TODO are we on server or client? Not sure how to access this on server...
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
+			IRecipe recipe = recipeMap.get(key);
 			if (recipe != null) {
 				recipes.add(recipe);
 			}
@@ -166,22 +171,20 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		InventoryUtil.writeToNBT(craftMatrix, nbttagcompound);
-		nbttagcompound.setLong("LastUsed", lastUsed);
-		nbttagcompound.setBoolean("Locked", locked);
-		nbttagcompound.setInteger("SelectedRecipe", selectedRecipe);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		InventoryUtil.writeToNBT(craftMatrix, compoundNBT);
+		compoundNBT.putLong("LastUsed", lastUsed);
+		compoundNBT.putBoolean("Locked", locked);
+		compoundNBT.putInt("SelectedRecipe", selectedRecipe);
 
-		NBTTagList recipesNbt = new NBTTagList();
+		ListNBT recipesNbt = new ListNBT();
 		for (IRecipe recipe : recipes) {
-			ResourceLocation recipeKey = ForgeRegistries.RECIPES.getKey(recipe);
-			if (recipeKey != null) {
-				recipesNbt.appendTag(new NBTTagString(recipeKey.toString()));
-			}
+			ResourceLocation recipeKey = recipe.getId();
+			recipesNbt.add(new StringNBT(recipeKey.toString()));
 		}
-		nbttagcompound.setTag("Recipes", recipesNbt);
+		compoundNBT.put("Recipes", recipesNbt);
 
-		return nbttagcompound;
+		return compoundNBT;
 	}
 
 	/* IStreamable */
@@ -193,10 +196,8 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 
 		data.writeVarInt(recipes.size());
 		for (IRecipe recipe : recipes) {
-			ResourceLocation recipeId = ForgeRegistries.RECIPES.getKey(recipe);
-			if (recipeId != null) {
-				data.writeString(recipeId.toString());
-			}
+			ResourceLocation recipeId = recipe.getId();
+			data.writeString(recipeId.toString());
 		}
 	}
 
@@ -210,7 +211,9 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		int recipeCount = data.readVarInt();
 		for (int i = 0; i < recipeCount; i++) {
 			String recipeId = data.readString();
-			IRecipe recipe = ForgeRegistries.RECIPES.getValue(new ResourceLocation(recipeId));
+			//TODO sidedness issues
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
+			IRecipe recipe = recipeMap.get(new ResourceLocation(recipeId));
 			if (recipe != null) {
 				recipes.add(recipe);
 			}

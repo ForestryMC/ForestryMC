@@ -14,26 +14,34 @@ import java.awt.Color;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.ITreeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.genetics.IFruitFamily;
 
+//TODO this class is a massive hack. Hopefully temporary until I work out how to separate AlleleFruits Block/Item dependancy problem
+//TODO double supplier probably not needed here...
 public class FruitProviderRipening extends FruitProviderNone {
 	private final Map<ItemStack, Float> products = new HashMap<>();
+	private final Supplier<ItemStack> product;
+	private final float modifier;
 	private int colourCallow = 0xffffff;
 	private int diffR;
 	private int diffG;
 	private int diffB;
 
-	public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, ItemStack product, float modifier) {
+	public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, Supplier<ItemStack> product, float modifier) {
 		super(unlocalizedDescription, family);
-		products.put(product, modifier);
+		this.product = product;
+		this.modifier = modifier;
 	}
 
 	public FruitProviderRipening setColours(Color ripe, Color callow) {
@@ -61,9 +69,9 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+		for (Map.Entry<ItemStack, Float> entry : getProducts().entrySet()) {
 			if (world.rand.nextFloat() <= entry.getValue()) {
 				product.add(entry.getKey().copy());
 			}
@@ -74,16 +82,19 @@ public class FruitProviderRipening extends FruitProviderNone {
 
 	@Override
 	public Map<ItemStack, Float> getProducts() {
+		if (products.isEmpty()) {
+			products.put(product.get(), modifier);
+		}
 		return Collections.unmodifiableMap(products);
 	}
 
 	@Override
-	public boolean isFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
+	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
+	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
 		float stage = getRipeningStage(ripeningTime);
 		return getColour(stage);
 	}

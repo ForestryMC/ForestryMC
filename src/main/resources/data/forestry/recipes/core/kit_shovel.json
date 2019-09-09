@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "forestry:kit_shovel"
+  },
+  "ingredients": [
+    {
+      "item": "forestry:bronze_shovel"
+    },
+    {
+      "item": "forestry:carton"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "core"
+}

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidTank;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.circuits.ISocketable;
 import forestry.core.tiles.ILiquidTankTile;
@@ -30,21 +30,21 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 	private final ContainerSocketedHelper<T> socketedHelper;
 	private final ContainerLiquidTanksHelper<T> tanksHelper;
 
-	protected ContainerLiquidTanksSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
-		super(tile, playerInventory, xInv, yInv);
-		this.socketedHelper = new ContainerSocketedHelper<>(tile);
-		this.tanksHelper = new ContainerLiquidTanksHelper<>(tile);
+	protected ContainerLiquidTanksSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type, playerInventory, tile, xInv, yInv);
+		this.socketedHelper = new ContainerSocketedHelper<>(this.tile);
+		this.tanksHelper = new ContainerLiquidTanksHelper<>(this.tile);
 	}
 
 	/* IContainerLiquidTanks */
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void handlePipetteClickClient(int slot, EntityPlayer player) {
+	@OnlyIn(Dist.CLIENT)
+	public void handlePipetteClickClient(int slot, PlayerEntity player) {
 		tanksHelper.handlePipetteClickClient(slot, player);
 	}
 
 	@Override
-	public void handlePipetteClick(int slot, EntityPlayerMP player) {
+	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
 		tanksHelper.handlePipetteClick(slot, player);
 	}
 
@@ -61,8 +61,8 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer entityPlayer) {
-		super.onContainerClosed(entityPlayer);
+	public void onContainerClosed(PlayerEntity PlayerEntity) {
+		super.onContainerClosed(PlayerEntity);
 		tile.getTankManager().containerRemoved(this);
 	}
 
@@ -73,24 +73,24 @@ public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiqui
 
 	/* IContainerSocketed */
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleChipsetClick(int slot) {
 		socketedHelper.handleChipsetClick(slot);
 	}
 
 	@Override
-	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+	public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
 		socketedHelper.handleChipsetClickServer(slot, player, itemstack);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleSolderingIronClick(int slot) {
 		socketedHelper.handleSolderingIronClick(slot);
 	}
 
 	@Override
-	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+	public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
 		socketedHelper.handleSolderingIronClickServer(slot, player, itemstack);
 	}
 

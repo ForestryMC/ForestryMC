@@ -13,16 +13,18 @@ package forestry.apiculture.inventory;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeRoot;
-import forestry.api.genetics.IAllele;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;
 
@@ -33,7 +35,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 	private int primaryIndex = 0;
 	private int secondaryIndex = 0;
 
-	public ItemInventoryImprinter(EntityPlayer player, ItemStack itemStack) {
+	public ItemInventoryImprinter(PlayerEntity player, ItemStack itemStack) {
 		super(player, 2, itemStack);
 	}
 
@@ -70,20 +72,20 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	public IAlleleBeeSpecies getPrimary() {
-		return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getPrimary();
+		return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public IAlleleBeeSpecies getSecondary() {
-		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getPrimary();
+		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public IBee getSelectedBee() {
 		IBeeRoot beeRoot = BeeManager.beeRoot;
 		List<IBee> individualTemplates = beeRoot.getIndividualTemplates();
-		Map<String, IAllele[]> genomeTemplates = beeRoot.getGenomeTemplates();
-		IAllele[] templateActive = genomeTemplates.get(individualTemplates.get(primaryIndex).getIdent());
-		IAllele[] templateInactive = genomeTemplates.get(individualTemplates.get(secondaryIndex).getIdent());
-		IBeeGenome genome = beeRoot.templateAsGenome(templateActive, templateInactive);
+		Map<String, IAllele[]> genomeTemplates = beeRoot.getTemplates().getGenomeTemplates();
+		IAllele[] templateActive = genomeTemplates.get(individualTemplates.get(primaryIndex).getIdentifier());
+		IAllele[] templateInactive = genomeTemplates.get(individualTemplates.get(secondaryIndex).getIdentifier());
+		IGenome genome = beeRoot.getKaryotype().templateAsGenome(templateActive, templateInactive);
 		return new Bee(genome);
 	}
 
@@ -104,7 +106,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	@Override
-	public void onSlotClick(int slotIndex, EntityPlayer player) {
+	public void onSlotClick(int slotIndex, PlayerEntity player) {
 		ItemStack specimen = getStackInSlot(specimenSlot);
 		if (specimen.isEmpty()) {
 			return;
@@ -122,18 +124,19 @@ public class ItemInventoryImprinter extends ItemInventory {
 
 		IBee imprint = getSelectedBee();
 
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		imprint.writeToNBT(nbttagcompound);
-		specimen.setTagCompound(nbttagcompound);
+		CompoundNBT CompoundNBT = new CompoundNBT();
+		imprint.write(CompoundNBT);
+		specimen.setTag(CompoundNBT);
 
 		setInventorySlotContents(imprintedSlot, specimen);
 		setInventorySlotContents(specimenSlot, ItemStack.EMPTY);
 	}
 
-	@Override
-	public String getName() {
-		return "Imprinter";
-	}
+	//TODO inventory name
+	//	@Override
+	//	public String getName() {
+	//		return "Imprinter";
+	//	}
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {

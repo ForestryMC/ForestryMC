@@ -1,8 +1,8 @@
 {
 	"textures": {
-		"filter": "forestry:blocks/genetic_filter",
-		"wool": "blocks/wool_colored_red",
-		"wool_blue": "blocks/wool_colored_blue"
+      "filter": "forestry:block/genetic_filter",
+      "wool": "block/red_wool",
+      "wool_blue": "block/blue_wool"
 	},
 	"elements": [ 	 
 		{

@@ -11,23 +11,22 @@
 package forestry.core.models.baker;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * A face of a {@link ModelBakerModel }
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelBakerFace {
-	public final EnumFacing face;
+	public final Direction face;
 
 	public final TextureAtlasSprite spite;
 
 	public final int colorIndex;
 
-	public ModelBakerFace(EnumFacing face, int colorIndex, TextureAtlasSprite sprite) {
+	public ModelBakerFace(Direction face, int colorIndex, TextureAtlasSprite sprite) {
 		this.colorIndex = colorIndex;
 		this.face = face;
 		this.spite = sprite;

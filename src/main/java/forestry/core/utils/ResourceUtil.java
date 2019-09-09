@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
 public class ResourceUtil {
@@ -24,7 +24,7 @@ public class ResourceUtil {
 	@Nullable
 	public static IResource getResource(ResourceLocation location) {
 		try {
-			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+			IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 			return resourceManager.getResource(location);
 		} catch (IOException e) {
 			return null;
@@ -33,7 +33,7 @@ public class ResourceUtil {
 
 	public static List<IResource> getResources(ResourceLocation location) {
 		try {
-			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+			IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 			return resourceManager.getAllResources(location);
 		} catch (IOException e) {
 			return Collections.emptyList();

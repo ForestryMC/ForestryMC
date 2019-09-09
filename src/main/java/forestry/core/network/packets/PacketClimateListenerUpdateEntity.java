@@ -1,12 +1,11 @@
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.IClimateListener;
@@ -37,17 +36,15 @@ public class PacketClimateListenerUpdateEntity extends ForestryPacket implements
 		return PacketIdClient.CLIMATE_LISTENER_UPDATE;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			Entity entity = data.readEntityById(player.world);
 			IClimateState state = data.readClimateState();
-			if (entity != null && entity.hasCapability(ClimateCapabilities.CLIMATE_LISTENER, null)) {
-				IClimateListener listener = entity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null);
-				if (listener != null) {
-					listener.setClimateState(state);
-				}
+			if (entity != null) {
+				LazyOptional<IClimateListener> listener = entity.getCapability(ClimateCapabilities.CLIMATE_LISTENER);
+				listener.ifPresent(l -> l.setClimateState(state));
 			}
 		}
 	}

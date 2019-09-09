@@ -1,10 +1,10 @@
 package forestry.database.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.ISpeciesRoot;
+import genetics.api.GeneticsAPI;
+
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.GeneticsUtil;
 import forestry.database.tiles.TileDatabase;
@@ -17,12 +17,11 @@ public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
-		return speciesRoot != null;
+		return GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack).isRootPresent();
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
 		return super.canExtractItem(slotIndex, stack, side);
 	}
 }

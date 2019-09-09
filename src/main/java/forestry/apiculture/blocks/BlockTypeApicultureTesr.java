@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.VoxelShape;
 
 import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.core.blocks.IBlockTypeTesr;
@@ -21,14 +21,14 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileNaturalistChest;
 
 public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
-	APIARIST_CHEST(TileApiaristChest.class, "api_chest", "apiaristchest", TileNaturalistChest.chestBoundingBox);
+	APIARIST_CHEST(TileApiaristChest.class, "api_chest", "apiaristchest", TileNaturalistChest.CHEST_SHAPE);
 
 	public static final BlockTypeApicultureTesr[] VALUES = values();
 
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileApiaristChest> BlockTypeApicultureTesr(Class<T> teClass, String name, String textureName, AxisAlignedBB boundingBox) {
-		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, boundingBox, Constants.MOD_ID + ":blocks/" + name + ".0", false);
+	<T extends TileApiaristChest> BlockTypeApicultureTesr(Class<T> teClass, String name, String textureName, VoxelShape shape) {
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, shape, Constants.MOD_ID + ":blocks/" + name + ".0", false);
 		Proxies.render.setRenderChest(machineProperties, textureName);
 		this.machineProperties = machineProperties;
 	}

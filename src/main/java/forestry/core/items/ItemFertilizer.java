@@ -10,32 +10,38 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemDye;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemFertilizer extends ItemForestry {
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public ActionResultType onItemUse(ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
+		World worldIn = context.getWorld();
+		Hand hand = context.getHand();
+		BlockPos pos = context.getPos();
+		Direction facing = context.getFace();
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		}
 
-		if (ItemDye.applyBonemeal(heldItem, worldIn, pos, player, hand)) {
+		if (BoneMealItem.applyBonemeal(heldItem, worldIn, pos, player)) {
 			if (!worldIn.isRemote) {
 				worldIn.playEvent(2005, pos, 0);
 			}
 
-			return EnumActionResult.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
 
-		return EnumActionResult.PASS;
+		return ActionResultType.PASS;
 	}
 }

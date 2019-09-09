@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.block.BlockLiquid;
+//import net.minecraft.block.BlockLiquid;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class ParticleColoredDripParticle extends Particle {
+//TODO - sort out setParticleTextureIndex
+public class ParticleColoredDripParticle extends SpriteTexturedParticle {
 
 	/**
 	 * The height of the current bob
@@ -33,11 +36,11 @@ public class ParticleColoredDripParticle extends Particle {
 		this.particleGreen = green;
 		this.particleBlue = blue;
 
-		this.setParticleTextureIndex(113);
+		//		this.setParticleTextureIndex(113);
 		this.setSize(0.01F, 0.01F);
 		this.particleGravity = 0.06F;
 		this.bobTimer = 40;
-		this.particleMaxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
+		this.maxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
 		this.motionX = this.motionY = this.motionZ = 0.0D;
 	}
 
@@ -45,7 +48,7 @@ public class ParticleColoredDripParticle extends Particle {
 	 * Called to update the entity's position/logic.
 	 */
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
@@ -56,9 +59,9 @@ public class ParticleColoredDripParticle extends Particle {
 			this.motionX *= 0.02D;
 			this.motionY *= 0.02D;
 			this.motionZ *= 0.02D;
-			this.setParticleTextureIndex(113);
+			//			this.setParticleTextureIndex(113);
 		} else {
-			this.setParticleTextureIndex(112);
+			//			this.setParticleTextureIndex(112);
 		}
 
 		this.move(this.motionX, this.motionY, this.motionZ);
@@ -66,27 +69,27 @@ public class ParticleColoredDripParticle extends Particle {
 		this.motionY *= 0.9800000190734863D;
 		this.motionZ *= 0.9800000190734863D;
 
-		if (this.particleMaxAge-- <= 0) {
+		if (this.maxAge-- <= 0) {
 			this.setExpired();
 		}
 
 		if (this.onGround) {
-			this.setParticleTextureIndex(114);
+			//			this.setParticleTextureIndex(114);
 
 			this.motionX *= 0.699999988079071D;
 			this.motionZ *= 0.699999988079071D;
 		}
 
 		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-		IBlockState iblockstate = this.world.getBlockState(blockpos);
-		Material material = iblockstate.getMaterial();
+		BlockState BlockState = this.world.getBlockState(blockpos);
+		Material material = BlockState.getMaterial();
 
 		if (material.isLiquid() || material.isSolid()) {
 			double d0 = 0.0D;
 
-			if (iblockstate.getBlock() instanceof BlockLiquid) {
-				d0 = BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL));
-			}
+			//			if (BlockState.getBlock() instanceof BlockLiquid) {
+			//				d0 = BlockLiquid.getLiquidHeightPercent(BlockState.getValue(BlockLiquid.LEVEL));
+			//			}
 
 			double d1 = MathHelper.floor(this.posY) + 1 - d0;
 
@@ -94,5 +97,10 @@ public class ParticleColoredDripParticle extends Particle {
 				this.setExpired();
 			}
 		}
+	}
+
+	@Override
+	public IParticleRenderType getRenderType() {
+		return IParticleRenderType.PARTICLE_SHEET_OPAQUE;    //same as DripParticle
 	}
 }

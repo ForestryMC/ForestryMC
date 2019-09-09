@@ -10,17 +10,21 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -35,20 +39,20 @@ import forestry.core.utils.InventoryUtil;
 
 public abstract class BlockStructure extends BlockForestry {
 
-	protected BlockStructure(Material material) {
-		super(material);
-		setHardness(1.0f);
+	protected BlockStructure(Block.Properties properties) {
+		super(properties.hardnessAndResistance(1f));
 	}
 
-	@Override
-	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		return false;
-	}
+	//TODO - dunno
+	//	@Override
+	//	public boolean canSilkHarvest(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	//		return false;
+	//	}
 
 	protected long previousMessageTick = 0;
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		if (playerIn.isSneaking()) {
 			return false;
 		}
@@ -60,23 +64,23 @@ public abstract class BlockStructure extends BlockForestry {
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
 		ItemStack heldItem = playerIn.getHeldItem(hand);
-		// If the player's hands are empty and they right-click on a multiblock, they get a
+		// If the player's hands are empty and they right-click on a multiblock, they getComb a
 		// multiblock-debugging message if the machine is not assembled.
 		if (heldItem.isEmpty()) {
 			if (controller != null) {
 				if (!controller.isAssembled()) {
 					String validationError = controller.getLastValidationError();
 					if (validationError != null) {
-						long tick = worldIn.getTotalWorldTime();
+						long tick = worldIn.getGameTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.sendMessage(new TextComponentString(validationError));
+							playerIn.sendMessage(new StringTextComponent(validationError));
 							previousMessageTick = tick;
 						}
 						return true;
 					}
 				}
 			} else {
-				playerIn.sendMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
+				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"));
 				return true;
 			}
 		}
@@ -87,20 +91,20 @@ public abstract class BlockStructure extends BlockForestry {
 		}
 
 		if (!worldIn.isRemote) {
-			part.openGui(playerIn);
+			part.openGui((ServerPlayerEntity) playerIn, pos);    //TODO cast is safe because on server?
 		}
 		return true;
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}
 
-		if (placer instanceof EntityPlayer) {
+		if (placer instanceof PlayerEntity) {
 			TileUtil.actOnTile(world, pos, MultiblockTileEntityForestry.class, tile -> {
-				EntityPlayer player = (EntityPlayer) placer;
+				PlayerEntity player = (PlayerEntity) placer;
 				GameProfile gameProfile = player.getGameProfile();
 				tile.setOwner(gameProfile);
 			});
@@ -108,7 +112,7 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}
@@ -125,7 +129,7 @@ public abstract class BlockStructure extends BlockForestry {
 			}
 		});
 
-		super.breakBlock(world, pos, state);
+		super.harvestBlock(world, player, pos, state, te, stack);
 	}
 
 }

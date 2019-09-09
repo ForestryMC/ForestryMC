@@ -5,11 +5,11 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.eventbus.api.Cancelable;
 
 /**
  * Use @SubscribeEvent on a method taking this event as an argument. Will fire whenever a backpack tries to store an item. Processing will stop if the stacksize
@@ -20,7 +20,7 @@ public class BackpackStowEvent extends BackpackEvent {
 
 	public final ItemStack stackToStow;
 
-	public BackpackStowEvent(EntityPlayer player, IBackpackDefinition backpackDefinition, IInventory backpackInventory, ItemStack stackToStow) {
+	public BackpackStowEvent(PlayerEntity player, IBackpackDefinition backpackDefinition, IInventory backpackInventory, ItemStack stackToStow) {
 		super(player, backpackDefinition, backpackInventory);
 		this.stackToStow = stackToStow;
 	}

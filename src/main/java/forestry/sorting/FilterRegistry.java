@@ -29,8 +29,7 @@ public class FilterRegistry implements IFilterRegistry {
 	}
 
 	public void init() {
-		List<IFilterRuleType> rules = new LinkedList<>();
-		rules.addAll(filterByName.values());
+		List<IFilterRuleType> rules = new LinkedList<>(filterByName.values());
 		rules.sort(FILTER_COMPARATOR);
 		for (int i = 0; i < rules.size(); i++) {
 			IFilterRuleType rule = rules.get(i);

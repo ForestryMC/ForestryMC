@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 
 /**
@@ -18,5 +18,5 @@ import net.minecraft.inventory.IInventory;
  */
 public interface IPagedInventory extends IInventory {
 
-	void flipPage(EntityPlayer player, short page);
+	void flipPage(ServerPlayerEntity player, short page);
 }

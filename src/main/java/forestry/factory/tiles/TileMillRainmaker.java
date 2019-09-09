@@ -12,18 +12,17 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 
-import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileMill;
+import forestry.factory.ModuleFactory;
 import forestry.factory.inventory.InventoryRainmaker;
 
 public class TileMillRainmaker extends TileMill {
@@ -31,47 +30,48 @@ public class TileMillRainmaker extends TileMill {
 	private boolean reverse;
 
 	public TileMillRainmaker() {
+		super(ModuleFactory.getTiles().rainmaker);
 		speed = 0.01f;
 		setInternalInventory(new InventoryRainmaker(this));
 	}
 
+	//	@Override	//TODO this needs to be in onactivated or similar
+	//	public void openGui(PlayerEntity player, ItemStack heldItem) {
+	//		if (!player.world.isRemote && !heldItem.isEmpty()) {
+	//			// We don't have a gui, but we can be activated
+	//			if (FuelManager.rainSubstrate.containsKey(heldItem) && charge == 0) {
+	//				RainSubstrate substrate = FuelManager.rainSubstrate.get(heldItem);
+	//				if (substrate.getItem().isItemEqual(heldItem)) {
+	//					addCharge(substrate);
+	//					heldItem.shrink(1);
+	//				}
+	//			}
+	//			sendNetworkUpdate();
+	//		}
+	//	}
+
 	@Override
-	public void openGui(EntityPlayer player, ItemStack heldItem) {
-		if (!player.world.isRemote && !heldItem.isEmpty()) {
-			// We don't have a gui, but we can be activated
-			if (FuelManager.rainSubstrate.containsKey(heldItem) && charge == 0) {
-				RainSubstrate substrate = FuelManager.rainSubstrate.get(heldItem);
-				if (substrate.getItem().isItemEqual(heldItem)) {
-					addCharge(substrate);
-					heldItem.shrink(1);
-				}
-			}
-			sendNetworkUpdate();
-		}
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+
+		charge = compoundNBT.getInt("Charge");
+		progress = compoundNBT.getFloat("Progress");
+		stage = compoundNBT.getInt("Stage");
+		duration = compoundNBT.getInt("Duration");
+		reverse = compoundNBT.getBoolean("Reverse");
 	}
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
-		charge = nbttagcompound.getInteger("Charge");
-		progress = nbttagcompound.getFloat("Progress");
-		stage = nbttagcompound.getInteger("Stage");
-		duration = nbttagcompound.getInteger("Duration");
-		reverse = nbttagcompound.getBoolean("Reverse");
-	}
-
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		nbttagcompound.setInteger("Charge", charge);
-		nbttagcompound.setFloat("Progress", progress);
-		nbttagcompound.setInteger("Stage", stage);
-		nbttagcompound.setInteger("Duration", duration);
-		nbttagcompound.setBoolean("Reverse", reverse);
-		return nbttagcompound;
+		compoundNBT.putInt("Charge", charge);
+		compoundNBT.putFloat("Progress", progress);
+		compoundNBT.putInt("Stage", stage);
+		compoundNBT.putInt("Duration", duration);
+		compoundNBT.putBoolean("Reverse", reverse);
+		return compoundNBT;
 	}
 
 	public void addCharge(RainSubstrate substrate) {
@@ -85,7 +85,7 @@ public class TileMillRainmaker extends TileMill {
 	@Override
 	public void activate() {
 		if (world.isRemote) {
-			world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
+			world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
 
 			float f = getPos().getX() + 0.5F;
 			float f1 = getPos().getY() + 0.0F + world.rand.nextFloat() * 6F / 16F;
@@ -113,13 +113,7 @@ public class TileMillRainmaker extends TileMill {
 
 	@Override
 	@Nullable
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return null;
-	}
-
-	@Override
-	@Nullable
-	public Container getContainer(EntityPlayer player, int data) {
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		return null;
 	}
 }

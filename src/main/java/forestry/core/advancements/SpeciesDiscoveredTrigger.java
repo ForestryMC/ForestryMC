@@ -9,17 +9,19 @@ import com.google.gson.JsonSyntaxException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.core.config.Constants;
 
 public class SpeciesDiscoveredTrigger implements ICriterionTrigger<SpeciesDiscoveredTrigger.Instance> {
@@ -57,22 +59,24 @@ public class SpeciesDiscoveredTrigger implements ICriterionTrigger<SpeciesDiscov
 		}
 	}
 
+	@Override
 	public void removeAllListeners(PlayerAdvancements advancements) {
 		this.listeners.remove(advancements);
 	}
 
+	@Override
 	public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-		String uid = JsonUtils.getString(json, "uid");
-		IAllele allele = AlleleManager.alleleRegistry.getAllele(uid);
+		String uid = JSONUtils.getString(json, "uid");
+		Optional<IAllele> allele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(uid);
 
-		if (allele == null) {
+		if (!allele.isPresent()) {
 			throw new JsonSyntaxException("Unknown allele '" + uid + "'");
 		} else {
-			return new Instance(allele);
+			return new Instance(allele.get());
 		}
 	}
 
-	public void trigger(EntityPlayerMP player, IAllele allele) {
+	public void trigger(ServerPlayerEntity player, IAllele allele) {
 		Listeners listeners = this.listeners.get(player.getAdvancements());
 
 		if (listeners != null) {
@@ -80,7 +84,7 @@ public class SpeciesDiscoveredTrigger implements ICriterionTrigger<SpeciesDiscov
 		}
 	}
 
-	public static class Instance extends AbstractCriterionInstance {
+	public static class Instance extends CriterionInstance {
 		private final IAllele allele;
 
 		public Instance(IAllele allele) {

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "": {
+      "model": "forestry:block/arboriculture/planks",
+      "textures": {
+        "all": "forestry:/block/wood/citrus_planks"
+      }
+    }
+  }
+}

@@ -13,11 +13,12 @@ package forestry.arboriculture.genetics.alleles;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.IAlleleLeafEffect;
-import forestry.api.arboriculture.ITreeGenome;
+import genetics.api.alleles.AlleleCategorized;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.genetics.IAlleleLeafEffect;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEffect {
 
@@ -36,7 +37,7 @@ public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEf
 	}
 
 	@Override
-	public IEffectData doEffect(ITreeGenome genome, IEffectData storedData, World world, BlockPos pos) {
+	public IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos) {
 		return storedData;
 	}
 }

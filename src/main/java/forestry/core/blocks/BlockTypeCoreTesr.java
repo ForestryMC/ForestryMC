@@ -25,13 +25,13 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 
 	private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Class<? extends TileAnalyzer> teClass, String name) {
 		MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
-		Proxies.render.setRendererAnalyzer(machineProperties);
+		Proxies.render.setRendererAnalyzer(machineProperties);    //TODO distexecutor
 		return machineProperties;
 	}
 
 	private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(Class<? extends TileEscritoire> teClass, String name) {
 		MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
-		Proxies.render.setRenderEscritoire(machineProperties);
+		Proxies.render.setRenderEscritoire(machineProperties); //TODO distexecutor
 		return machineProperties;
 	}
 

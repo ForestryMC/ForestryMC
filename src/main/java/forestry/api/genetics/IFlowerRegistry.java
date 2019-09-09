@@ -7,15 +7,16 @@ package forestry.api.genetics;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.IBee;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IBlockPosPredicate;
 
 // See {@link forestry.api.apiculture.FlowerManager}.FlowerType___ for basic Forestry flower types.
@@ -39,7 +40,7 @@ public interface IFlowerRegistry {
 	/**
 	 * Registers an accepted flower with a particular state.
 	 */
-	void registerAcceptableFlower(IBlockState blockState, String... flowerTypes);
+	void registerAcceptableFlower(BlockState blockState, String... flowerTypes);
 
 	/**
 	 * Registers custom logic for accepted flowers.
@@ -57,14 +58,14 @@ public interface IFlowerRegistry {
 	 * @param weight      Weight for the Flower (Vanilla = 1.0, Modded flowers < 1.0)
 	 * @param flowerTypes See {@link forestry.api.apiculture.FlowerManager}.FlowerTypeXXX
 	 */
-	void registerPlantableFlower(IBlockState blockState, double weight, String... flowerTypes);
+	void registerPlantableFlower(BlockState blockState, double weight, String... flowerTypes);
 
 	/**
 	 * Calls the appropriate IFlowerGrowthRule to grow a flower at a specified position.
 	 *
 	 * @since Forestry 5.5.4
 	 */
-	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<IBlockState> potentialFlowers);
+	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<BlockState> potentialFlowers);
 
 	/**
 	 * Gets an iterator over the area a bee can travel from its beeHousing.
@@ -83,31 +84,4 @@ public interface IFlowerRegistry {
 	 * @since Forestry 5.5.2
 	 */
 	IBlockPosPredicate createAcceptedFlowerPredicate(String flowerType);
-
-	/**
-	 * @param beeHousing The bee housing that will help determine the size of the area to check.
-	 * @param bee        The bee that will help determine the size of the area to check.
-	 * @param flowerType See {@link forestry.api.apiculture.FlowerManager}.FlowerTypeXXX
-	 * @param maxFlowers the largest number of flowers to check for before returning. Use 1 if you only need 1.
-	 * @return the coordinates of nearby accepted flowers, with size from 0 to maxFlowers.
-	 * @deprecated since Forestry 5.5.2. Use {@link #getAreaIterator(IBeeHousing, IBee)} and {@link #createAcceptedFlowerPredicate(String)}.
-	 */
-	@Deprecated
-	List<BlockPos> getAcceptedFlowerCoordinates(IBeeHousing beeHousing, IBee bee, String flowerType, int maxFlowers);
-
-	/**
-	 * Checks a single coordinate to see if it is an accepted flower.
-	 *
-	 * @deprecated since Forestry 5.5.2. Use {@link #createAcceptedFlowerPredicate(String)}.
-	 */
-	@Deprecated
-	boolean isAcceptedFlower(String flowerType, World world, BlockPos pos);
-
-	/**
-	 * Calls the appropriate IFlowerGrowthRule to grow a flower at a specified position.
-	 *
-	 * @deprecated since Forestry 5.5.4. Use {@link #growFlower(String, World, IIndividual, BlockPos, Collection)}
-	 */
-	@Deprecated
-	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos);
 }

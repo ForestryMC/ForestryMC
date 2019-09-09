@@ -3,9 +3,10 @@ package forestry.core.gui.elements;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IDatabaseTab;
@@ -123,7 +124,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 			if (!displayStack.isEmpty()) {
 				RenderHelper.enableGUIStandardItemLighting();
 				GlStateManager.enableRescaleNormal();
-				GuiUtil.drawItemStack(Minecraft.getMinecraft().fontRenderer, displayStack, x + 9, 5);
+				GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, displayStack, x + 9, 5);
 				RenderHelper.disableStandardItemLighting();
 			}
 		}

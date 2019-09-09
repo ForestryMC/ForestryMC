@@ -6,6 +6,7 @@
 package forestry.api.lepidopterology;
 
 import forestry.api.genetics.IHousing;
+import forestry.api.lepidopterology.genetics.IButterfly;
 
 public interface IButterflyCocoon extends IHousing {
 

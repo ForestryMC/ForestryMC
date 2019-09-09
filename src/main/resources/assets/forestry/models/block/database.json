@@ -1,11 +1,11 @@
 {
 	"parent": "block/block",
 	"textures": {
-		"particle": "forestry:blocks/database_top",
-		"side": "forestry:blocks/database_side",
-		"top": "forestry:blocks/database_top",
-		"bottom": "forestry:blocks/database_bottom",
-		"column": "forestry:blocks/database_side_column"
+      "particle": "forestry:block/database_top",
+      "side": "forestry:block/database_side",
+      "top": "forestry:block/database_top",
+      "bottom": "forestry:block/database_bottom",
+      "column": "forestry:block/database_side_column"
 	},
 	"elements": [
 		{

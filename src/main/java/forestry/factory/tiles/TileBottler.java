@@ -10,34 +10,30 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.EnumMap;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.config.Constants;
@@ -52,13 +48,13 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerBottler;
-import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
-import forestry.factory.triggers.FactoryTriggers;
+//import forestry.factory.triggers.FactoryTriggers;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, ISlotPickupWatcher {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
@@ -67,37 +63,37 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	private final StandardTank resourceTank;
 	private final TankManager tankManager;
 
-	private final EnumMap<EnumFacing, Boolean> canDump;
+	private final EnumMap<Direction, Boolean> canDump;
 	private boolean dumpingFluid = false;
 	@Nullable
 	private BottlerRecipe currentRecipe;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean isFillRecipe;
 
 	public TileBottler() {
-		super(1100, 4000);
+		super(ModuleFactory.getTiles().bottler, 1100, 4000);
 
 		setInternalInventory(new InventoryBottler(this));
 
 		resourceTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(this, resourceTank);
 
-		canDump = new EnumMap<>(EnumFacing.class);
+		canDump = new EnumMap<>(Direction.class);
 	}
 
 	/* SAVING & LOADING */
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		tankManager.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
+		tankManager.write(compound);
+		return compound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		tankManager.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
+		tankManager.read(compound);
 		checkEmptyRecipe();
 		checkFillRecipe();
 	}
@@ -109,7 +105,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -149,12 +145,12 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		FluidStack fluid = tankManager.getFluid(0);
 		if (fluid != null) {
 			if (canDump.isEmpty()) {
-				for (EnumFacing facing : EnumFacing.VALUES) {
+				for (Direction facing : Direction.VALUES) {
 					canDump.put(facing, FluidHelper.canAcceptFluid(world, pos.offset(facing), facing.getOpposite(), fluid));
 				}
 			}
 
-			for (EnumFacing facing : EnumFacing.VALUES) {
+			for (Direction facing : Direction.VALUES) {
 				if (canDump.get(facing)) {
 					return true;
 				}
@@ -163,15 +159,17 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		return false;
 	}
 
+	//TODO - a bit ugly atm. Are the new checks worth the perf with the new interface? Can this be written better?
+	//Is there a race condition here?
 	private boolean dumpFluid() {
 		if (!resourceTank.isEmpty()) {
-			for (EnumFacing facing : EnumFacing.VALUES) {
+			for (Direction facing : Direction.VALUES) {
 				if (canDump.get(facing)) {
-					IFluidHandler fluidDestination = FluidUtil.getFluidHandler(world, pos.offset(facing), facing.getOpposite());
-					if (fluidDestination != null) {
-						if (FluidUtil.tryFluidTransfer(fluidDestination, tankManager, Fluid.BUCKET_VOLUME / 20, true) != null) {
-							return true;
-						}
+					LazyOptional<IFluidHandler> fluidDestination = FluidUtil.getFluidHandler(world, pos.offset(facing), facing.getOpposite());
+
+					if (fluidDestination.isPresent()) {
+						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(f, tankManager, FluidAttributes.BUCKET_VOLUME / 20, true));
+						return true;
 					}
 				}
 			}
@@ -210,18 +208,18 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		ItemStack emptyCan = getStackInSlot(InventoryBottler.SLOT_FILLING_PROCESSING);
 		if (!emptyCan.isEmpty()) {
 			FluidStack resource = resourceTank.getFluid();
-			if (resource == null) {
+			if (resource.isEmpty()) {
 				return;
 			}
 			//Fill Container
 			if (currentRecipe == null || !currentRecipe.matchEmpty(emptyCan, resource)) {
 				currentRecipe = BottlerRecipe.createFillingRecipe(resource.getFluid(), emptyCan);
 				if (currentRecipe != null) {
-					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
+					float viscosityMultiplier = resource.getFluid().getAttributes().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
-					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
-					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
+					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
+					float fillTime = fillAmount / (float) FluidAttributes.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
 					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
@@ -239,11 +237,11 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 				currentRecipe = BottlerRecipe.createEmptyingRecipe(filledCan);
 				if (currentRecipe != null) {
 					FluidStack resource = currentRecipe.fluid;
-					float viscosityMultiplier = resource.getFluid().getViscosity(resource) / 1000.0f;
+					float viscosityMultiplier = resource.getFluid().getAttributes().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
-					int fillAmount = Math.min(currentRecipe.fluid.amount, resource.amount);
-					float fillTime = fillAmount / (float) Fluid.BUCKET_VOLUME;
+					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
+					float fillTime = fillAmount / (float) FluidAttributes.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
 					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
@@ -254,7 +252,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	public void onTake(int slotIndex, EntityPlayer player) {
+	public void onTake(int slotIndex, PlayerEntity player) {
 		if (slotIndex == InventoryBottler.SLOT_EMPTYING_PROCESSING) {
 			if (currentRecipe != null && !currentRecipe.fillRecipe) {
 				currentRecipe = null;
@@ -279,7 +277,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		super.readGuiData(data);
 		isFillRecipe = data.readBoolean();
@@ -305,8 +303,8 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 
 		checkEmptyRecipe();
 		if (currentRecipe != null) {
-			IFluidTankProperties properties = tankManager.getTankProperties()[0];
-			if (properties != null) {
+			IFluidTank tank = tankManager.getTank(0);
+			if (tank != null) {
 				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
 			} else {
 				emptyStatus = FillStatus.SUCCESS;
@@ -314,7 +312,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		} else {
 			emptyStatus = null;
 		}
-		if (emptyStatus == null || emptyStatus != FillStatus.SUCCESS) {
+		if (emptyStatus != FillStatus.SUCCESS) {
 			checkFillRecipe();
 			if (currentRecipe == null) {
 				return false;
@@ -351,37 +349,27 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
 
-
+	//TODO - is this efficient? or even correct?
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).cast();//.cast(tankManager);
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(FactoryTriggers.lowResource25);
-		triggers.add(FactoryTriggers.lowResource10);
-	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(FactoryTriggers.lowResource25);
+	//		triggers.add(FactoryTriggers.lowResource10);
+	//	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiBottler(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerBottler(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerBottler(windowId, player.inventory, this);
 	}
 }

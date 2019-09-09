@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import genetics.api.individual.IIndividual;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeListener;
-import forestry.api.genetics.IIndividual;
 
 public class BeeHousingListener implements IBeeListener {
 	private final IBeeHousing beeHousing;

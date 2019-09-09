@@ -64,7 +64,7 @@ public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
 
 	/**
 	 * Add a recipe for a fluid container to the squeezer.
-	 * This will add recipes to get all types of liquids out of this type of fluid container.
+	 * This will add recipes to getComb all types of liquids out of this type of fluid container.
 	 *
 	 * @param timePerItem    Number of work cycles required to squeeze one set of resources.
 	 * @param emptyContainer The empty version of the fluid container that will be squeezed.

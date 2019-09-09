@@ -11,54 +11,55 @@
 package forestry.core.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.tiles.TileMill;
 
-public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
+public class RenderMill implements IForestryRenderer<TileMill> {
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
 	private final ResourceLocation[] textures;
 
-	private final ModelRenderer pedestal;
-	private final ModelRenderer column;
-	private final ModelRenderer extension;
-	private final ModelRenderer blade1;
-	private final ModelRenderer blade2;
+	private final RendererModel pedestal;
+	private final RendererModel column;
+	private final RendererModel extension;
+	private final RendererModel blade1;
+	private final RendererModel blade2;
 
 	public RenderMill(String baseTexture) {
-		ModelBase model = new MillModelBase();
-		pedestal = new ModelRenderer(model, 0, 0);
+		Model model = new MillModelBase();
+		pedestal = new RendererModel(model, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
 		pedestal.rotationPointX = 8;
 		pedestal.rotationPointY = 8;
 		pedestal.rotationPointZ = 8;
 
-		column = new ModelRenderer(model, 0, 0);
+		column = new RendererModel(model, 0, 0);
 		column.addBox(-2, -7F, -2, 4, 15, 4);
 		column.rotationPointX = 8;
 		column.rotationPointY = 8;
 		column.rotationPointZ = 8;
 
-		extension = new ModelRenderer(model, 0, 0);
+		extension = new RendererModel(model, 0, 0);
 		extension.addBox(1F, 8F, 7F, 14, 2, 2);
 		extension.rotationPointX = 0;
 		extension.rotationPointY = 0;
 		extension.rotationPointZ = 0;
 
-		blade1 = new ModelRenderer(model, 0, 0);
+		blade1 = new RendererModel(model, 0, 0);
 		blade1.addBox(-4F, -5F, -3F, 8, 12, 1);
 		blade1.rotationPointX = 8;
 		blade1.rotationPointY = 8;
 		blade1.rotationPointZ = 8;
 
-		blade2 = new ModelRenderer(model, 0, 0);
+		blade2 = new RendererModel(model, 0, 0);
 		blade2.addBox(-4F, -5F, 2F, 8, 12, 1);
 		blade2.rotationPointX = 8;
 		blade2.rotationPointY = 8;
@@ -80,24 +81,21 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 		this(baseTexture);
 	}
 
-	/**
-	 * @param mill If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileMill mill, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		if (mill != null) {
-			render(mill.progress, mill.charge, EnumFacing.WEST, x, y, z);
-		} else {
-			byte charge = 0;
-			render(0.0f, charge, EnumFacing.WEST, x, y, z);
-		}
+	public void renderTile(TileMill tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		render(tile.progress, tile.charge, Direction.WEST, x, y, z);
 	}
 
-	private void render(float progress, int charge, EnumFacing orientation, double x, double y, double z) {
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(0.0f, 0, Direction.WEST, 0, 0, 0);
+	}
+
+	private void render(float progress, int charge, Direction orientation, double x, double y, double z) {
 
 		GlStateManager.pushMatrix();
 
-		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.translatef((float) x, (float) y, (float) z);
 
 		float step;
 
@@ -161,7 +159,7 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textures[Textures.PEDESTAL.ordinal()]);
 		pedestal.render(factor);
 
@@ -172,20 +170,20 @@ public class RenderMill extends TileEntitySpecialRenderer<TileMill> {
 		extension.render(factor);
 
 		textureManager.bindTexture(textures[Textures.BLADE_1.ordinal()]);
-		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
+		GlStateManager.translatef(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		blade1.render(factor);
 
 		// Reset
-		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
+		GlStateManager.translatef(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
 		textureManager.bindTexture(textures[Textures.BLADE_2.ordinal()]);
-		GlStateManager.translate(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
+		GlStateManager.translatef(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 
 		GlStateManager.popMatrix();
 
 	}
 
-	private static class MillModelBase extends ModelBase {
+	private static class MillModelBase extends Model {
 	}
 }

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -21,12 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
-import net.minecraft.block.properties.PropertyHelper;
+import net.minecraft.state.Property;
 
 import forestry.arboriculture.genetics.TreeDefinition;
 
-public class PropertyTreeTypeFruit extends PropertyHelper<PropertyTreeTypeFruit.LeafVariant> {
+public class PropertyTreeTypeFruit extends Property<PropertyTreeTypeFruit.LeafVariant> {
 	@Nullable
 	private static List<LeafVariant> definitions = null;
 
@@ -82,7 +82,7 @@ public class PropertyTreeTypeFruit extends PropertyHelper<PropertyTreeTypeFruit.
 
 	@Override
 	public Optional<LeafVariant> parseValue(String value) {
-		return Optional.fromNullable(this.nameToValue.get(value));
+		return Optional.ofNullable(this.nameToValue.get(value));
 	}
 
 	/**

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.inventory.watchers;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class FakeSlotPickupWatcher implements ISlotPickupWatcher {
 
@@ -21,7 +21,7 @@ public class FakeSlotPickupWatcher implements ISlotPickupWatcher {
 	}
 
 	@Override
-	public void onTake(int slotIndex, EntityPlayer player) {
+	public void onTake(int slotIndex, PlayerEntity player) {
 
 	}
 }

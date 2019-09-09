@@ -12,79 +12,75 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.apiculture.render.ModelAnalyzer;
 import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileAnalyzer;
 
-public class RenderAnalyzer extends TileEntitySpecialRenderer<TileAnalyzer> {
+public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 
 	private final ModelAnalyzer model;
 	@Nullable
-	private EntityItem dummyEntityItem;
+	private ItemEntity dummyEntityItem;
 	private long lastTick;
 
 	public RenderAnalyzer(String baseTexture) {
 		this.model = new ModelAnalyzer(baseTexture);
 	}
 
-	private EntityItem dummyItem(World world) {
+	private ItemEntity dummyItem(World world, double x, double y, double z) {
 		if (dummyEntityItem == null) {
-			dummyEntityItem = new EntityItem(world);
+			dummyEntityItem = new ItemEntity(world, x, y, z);
 		} else {
 			dummyEntityItem.world = world;
 		}
 		return dummyEntityItem;
 	}
 
-	/**
-	 * @param analyzer If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileAnalyzer analyzer, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		if (analyzer != null) {
-			World worldObj = analyzer.getWorldObj();
-			if (worldObj.isBlockLoaded(analyzer.getPos())) {
-				IBlockState blockState = worldObj.getBlockState(analyzer.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					EnumFacing facing = blockState.getValue(BlockBase.FACING);
-					render(analyzer.getIndividualOnDisplay(), worldObj, facing, x, y, z);
-					return;
-				}
-			}
+	public void renderTile(TileAnalyzer tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		World worldObj = tile.getWorldObj();
+		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(tile.getIndividualOnDisplay(), worldObj, facing, x, y, z);
 		}
-		render(ItemStack.EMPTY, null, EnumFacing.WEST, x, y, z);
 	}
 
-	private void render(ItemStack itemstack, @Nullable World world, EnumFacing orientation, double x, double y, double z) {
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(ItemStack.EMPTY, null, Direction.WEST, 0, 0, 0);
+	}
+
+	private void render(ItemStack itemstack, @Nullable World world, Direction orientation, double x, double y, double z) {
 
 		model.render(orientation, (float) x, (float) y, (float) z);
 		if (itemstack.isEmpty() || world == null) {
 			return;
 		}
-		EntityItem dummyItem = dummyItem(world);
+		ItemEntity dummyItem = dummyItem(world, x, y, z);
 		float renderScale = 1.0f;
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.translate(0.5f, 0.2f, 0.5f);
-		GlStateManager.scale(renderScale, renderScale, renderScale);
+		GlStateManager.translatef((float) x, (float) y, (float) z);
+		GlStateManager.translatef(0.5f, 0.2f, 0.5f);
+		GlStateManager.scalef(renderScale, renderScale, renderScale);
 		dummyItem.setItem(itemstack);
 
-		if (world.getTotalWorldTime() != lastTick) {
-			lastTick = world.getTotalWorldTime();
-			dummyItem.onUpdate();
+		if (world.getGameTime() != lastTick) {
+			lastTick = world.getGameTime();
+			dummyItem.tick();    //TODO - correct?
 		}
-		RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+		EntityRendererManager rendermanager = Minecraft.getInstance().getRenderManager();
 
 		rendermanager.renderEntity(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, false);
 		GlStateManager.popMatrix();

@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/frame_untreated"
+      "layer0": "forestry:item/frame_untreated"
     },
     "display": {
         "thirdperson": {

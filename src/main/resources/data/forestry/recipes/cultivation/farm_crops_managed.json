@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "forestry:farm_crops",
+    "data": 0
+  },
+  "pattern": [
+    "GTG",
+    "TCT",
+    "GBG"
+  ],
+  "conditions": [
+    {
+      "module": "cultivation",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "forestry:chipsets",
+      "data": 0
+    },
+    "C": {
+      "item": "forestry:flexible_casing"
+    },
+    "T": {
+      "item": "forestry:thermionic_tubes",
+      "data": 2
+    },
+    "G": {
+      "item": "#BLOCKGLASS"
+    }
+  },
+  "group": "cultivation"
+}

@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "forestry:farm_crops",
+    "data": 1
+  },
+  "ingredients": [
+    {
+      "item": "forestry:farm_crops",
+      "data": 0
+    }
+  ],
+  "conditions": [
+    {
+      "module": "cultivation",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "cultivation"
+}

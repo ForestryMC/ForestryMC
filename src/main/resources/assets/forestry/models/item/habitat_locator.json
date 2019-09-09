@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
 	"textures": {
-        "layer0": "forestry:items/biomefinder"
+      "layer0": "forestry:item/biomefinder"
     },
     "display": {
         "thirdperson": {

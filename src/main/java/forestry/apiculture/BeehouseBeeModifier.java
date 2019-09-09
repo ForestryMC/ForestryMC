@@ -12,32 +12,33 @@ package forestry.apiculture;
 
 import javax.annotation.Nullable;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBeeGenome;
 
 public class BeehouseBeeModifier extends DefaultBeeModifier {
 	@Override
-	public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+	public float getProductionModifier(IGenome genome, float currentModifier) {
 		return 0.25f;
 	}
 
 	@Override
-	public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+	public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
 		return 0.0f;
 	}
 
 	@Override
-	public float getLifespanModifier(IBeeGenome genome, @Nullable IBeeGenome mate, float currentModifier) {
+	public float getLifespanModifier(IGenome genome, @Nullable IGenome mate, float currentModifier) {
 		return 3.0f;
 	}
 
 	@Override
-	public float getFloweringModifier(IBeeGenome genome, float currentModifier) {
+	public float getFloweringModifier(IGenome genome, float currentModifier) {
 		return 3.0f;
 	}
 
 	@Override
-	public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
+	public float getGeneticDecay(IGenome genome, float currentModifier) {
 		return 0.0f;
 	}
 }

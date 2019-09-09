@@ -2,20 +2,21 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.gui.slots.SlotLockable;
 
 public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTile<T> implements IContainerAnalyzerProvider {
-	/* Attributes - Final*/
 	private final ContainerAnalyzerProviderHelper providerHelper;
 
-	/* Constructors */
-	public ContainerAnalyzerProvider(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
-		super(tileForestry, playerInventory, xInv, yInv);
+	//TODO maybe this is the constructor I need?
+	public ContainerAnalyzerProvider(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type, playerInventory, tile, xInv, yInv);
+		//TODO maybe analyzer container type can be reused?
 
 		providerHelper = new ContainerAnalyzerProviderHelper(this, playerInventory);
 	}
@@ -28,18 +29,18 @@ public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTi
 
 	/* Methods - Implement ContainerForestry */
 	@Override
-	protected void addSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	@Override
-	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	/* Methods - Implement IGuiSelectable */
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 		providerHelper.analyzeSpecimen(secondary);
 	}
 }

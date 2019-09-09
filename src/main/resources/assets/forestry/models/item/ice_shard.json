@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/ice_shard"
+      "layer0": "forestry:item/ice_shard"
     },
     "display": {
         "thirdperson": {

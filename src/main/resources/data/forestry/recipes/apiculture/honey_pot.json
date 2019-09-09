@@ -1,0 +1,36 @@
+{
+  "result": {
+    "item": "forestry:honey_pot"
+  },
+  "pattern": [
+    "# #",
+    " X ",
+    "# #"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "forestry:module"
+        },
+        {
+          "type": "forestry:module",
+          "module": "food"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:honey_drop",
+      "data": 0
+    },
+    "X": {
+      "item": "forestry:capsule"
+    }
+  },
+  "group": "apiculture"
+}

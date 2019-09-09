@@ -14,14 +14,14 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TextureHabitatLocator extends TextureAtlasSprite {
 
 	private static TextureHabitatLocator instance;
@@ -38,7 +38,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 	private double angleDelta;
 
 	public TextureHabitatLocator(String iconName) {
-		super(iconName);
+		//TODO texture size
+		super(new ResourceLocation(iconName), 0, 0);
 		instance = this;
 	}
 
@@ -49,7 +50,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 
 	@Override
 	public void updateAnimation() {
-		Minecraft minecraft = Minecraft.getMinecraft();
+		Minecraft minecraft = Minecraft.getInstance();
 
 		if (minecraft.world != null && minecraft.player != null) {
 			updateCompass(minecraft.world, minecraft.player.posX, minecraft.player.posZ, minecraft.player.rotationYaw);
@@ -99,15 +100,16 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		this.angleDelta += angleChange * 0.1D;
 		this.angleDelta *= 0.8D;
 		this.currentAngle += this.angleDelta;
-
-		int i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.framesTextureData.size()) % this.framesTextureData.size();
+		//TODO - check it is frames and not interpolatedframedata
+		int i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.frames.length) % this.frames.length;
 		while (i < 0) {
-			i = (i + this.framesTextureData.size()) % this.framesTextureData.size();
+			i = (i + this.frames.length) % this.frames.length;
 		}
 
 		if (i != this.frameCounter) {
 			this.frameCounter = i;
-			TextureUtil.uploadTextureMipmap(this.framesTextureData.get(this.frameCounter), this.width, this.height, this.originX, this.originY, false, false);
+			//TODO - check
+			this.frames[this.frameCounter].uploadTextureSub(0, this.x, this.y, false);
 		}
 
 	}

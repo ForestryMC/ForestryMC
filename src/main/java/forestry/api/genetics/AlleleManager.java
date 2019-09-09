@@ -6,13 +6,13 @@
 package forestry.api.genetics;
 
 /**
- * Holds a static reference to the {@link IAlleleRegistry}.
+ * Holds a static reference to the {@link IGeneticRegistry}.
  */
 public class AlleleManager {
 	/**
-	 * Main access point for all things related to genetics. See {@link IAlleleRegistry} for details.
+	 * Main access point for all things related to genetics. See {@link IGeneticRegistry} for details.
 	 */
-	public static IAlleleRegistry alleleRegistry;
+	public static IGeneticRegistry geneticRegistry;
 
 	/**
 	 * Queryable instance of an {@link IClimateHelper} for easier implementation.
@@ -28,5 +28,7 @@ public class AlleleManager {
 	 * @since 5.8
 	 */
 	public static IFilterRegistry filterRegistry;
+
+	public static IBreedingTrackerManager breedingTrackerManager;
 
 }

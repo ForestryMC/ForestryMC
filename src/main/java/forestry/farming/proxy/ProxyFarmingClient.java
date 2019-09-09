@@ -10,24 +10,25 @@
  ******************************************************************************/
 package forestry.farming.proxy;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.models.BlockModelEntry;
 import forestry.core.models.ModelManager;
 import forestry.farming.ModuleFarming;
+import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.models.ModelFarmBlock;
 
 @SuppressWarnings("unused")
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ProxyFarmingClient extends ProxyFarming {
 
 	@Override
 	public void initializeModels() {
 		ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
 			new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-			ModuleFarming.getBlocks().farm));
+			ModuleFarming.getBlocks().farms.get(EnumFarmBlockType.PLAIN)));    //TODO need to register all of them here?
 	}
 }

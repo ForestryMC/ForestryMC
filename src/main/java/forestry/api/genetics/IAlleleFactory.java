@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.util.math.Vec3i;
+import genetics.api.individual.IChromosomeType;
 
 /**
  * Creates new alleles with smart localization.
@@ -32,54 +32,6 @@ import net.minecraft.util.math.Vec3i;
  * forestry.allele.height.smallest=????? ??????
  */
 public interface IAlleleFactory {
-	/**
-	 * @param modId      mod prefix for uid and localization (i.e. "forestry")
-	 * @param category   allele category for uid and localization (i.e. "height")
-	 * @param valueName  allele value name for uid and localization (i.e. "smallest")
-	 * @param value      allele float value
-	 * @param isDominant allele dominance
-	 * @param types      allele chromosome type for registration (i.e. EnumTreeChromosome.HEIGHT)
-	 * @return a new IAlleleFloat, registered with the allele registry.
-	 * @since Forestry 4.2
-	 */
-	IAlleleFloat createFloat(String modId, String category, String valueName, float value, boolean isDominant, IChromosomeType... types);
-
-	/**
-	 * @param modId      mod prefix for uid and localization (i.e. "forestry")
-	 * @param category   allele category for uid and localization (i.e. "territory")
-	 * @param valueName  allele value name for uid and localization (i.e. "large")
-	 * @param value      allele area x, y, z size
-	 * @param isDominant allele dominance
-	 * @param types      allele chromosome type for registration (i.e. EnumBeeChromosome.TERRITORY)
-	 * @return a new IAlleleArea, registered with the allele registry.
-	 * @since Forestry 4.2
-	 */
-	IAlleleArea createArea(String modId, String category, String valueName, Vec3i value, boolean isDominant, IChromosomeType... types);
-
-	/**
-	 * @param modId      mod prefix for uid and localization (i.e. "forestry")
-	 * @param category   allele category for uid and localization (i.e. "fertility")
-	 * @param valueName  allele value name for uid and localization (i.e. "low")
-	 * @param value      allele int value
-	 * @param isDominant allele dominance
-	 * @param types      allele chromosome type for registration (i.e. EnumBeeChromosome.FERTILITY)
-	 * @return a new IAlleleInteger, registered with the allele registry.
-	 * @since Forestry 4.2
-	 */
-	IAlleleInteger createInteger(String modId, String category, String valueName, int value, boolean isDominant, IChromosomeType... types);
-
-	/**
-	 * @param modId      mod prefix for uid and localization (i.e. "forestry")
-	 * @param category   allele category for uid and localization (i.e. "fireproof")
-	 * @param value      allele boolean value
-	 * @param isDominant allele dominance
-	 * @param types      allele chromosome type for registration (i.e. EnumTreeChromosome.FIREPROOF)
-	 * @return a new IAlleleBoolean, registered with the allele registry.
-	 * Note that valueName will always be "true" or "false"
-	 * @since Forestry 4.2
-	 */
-	IAlleleBoolean createBoolean(String modId, String category, boolean value, boolean isDominant, IChromosomeType... types);
-
 	/**
 	 * @param modId      mod prefix for uid (i.e. "forestry")
 	 * @param category   allele category for uid (i.e. "flowers")

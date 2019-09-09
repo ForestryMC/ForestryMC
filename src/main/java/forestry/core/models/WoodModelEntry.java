@@ -12,12 +12,12 @@ package forestry.core.models;
 
 import net.minecraft.block.Block;
 
-import forestry.arboriculture.IWoodTyped;
+//import forestry.arboriculture.IWoodTyped;
 
 /**
  * Only to storage data's to register a model later.
  */
-public class WoodModelEntry<T extends Block & IWoodTyped> {
+public class WoodModelEntry<T extends Block> {//& IWoodTyped> {
 
 	public final T woodTyped;
 	public final boolean withVariants;

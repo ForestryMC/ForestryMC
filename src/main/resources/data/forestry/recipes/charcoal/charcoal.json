@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "forestry:charcoal",
+    "data": 0
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "charcoal",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:coal",
+      "data": 1
+    }
+  },
+  "group": "charcoal"
+}

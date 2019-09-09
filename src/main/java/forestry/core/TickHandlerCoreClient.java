@@ -11,33 +11,34 @@
 package forestry.core;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.core.utils.GeneticsUtil;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TickHandlerCoreClient {
 
 	private boolean hasNaturalistEye;
 
+	//TODO - register event handlers
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == Phase.END) {
-			Minecraft minecraft = Minecraft.getMinecraft();
+		if (event.phase == TickEvent.Phase.END) {
+			Minecraft minecraft = Minecraft.getInstance();
 			if (minecraft != null) {
-				EntityPlayer player = minecraft.player;
+				PlayerEntity player = minecraft.player;
 				if (player != null) {
 					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
 					if (this.hasNaturalistEye != hasNaturalistEye) {
 						this.hasNaturalistEye = hasNaturalistEye;
-						RenderGlobal renderGlobal = minecraft.renderGlobal;
+						//TODO - I think this is the correct field
+						WorldRenderer renderGlobal = minecraft.worldRenderer;
 						if (renderGlobal != null) {
 							renderGlobal.markBlockRangeForRenderUpdate(
 								(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,

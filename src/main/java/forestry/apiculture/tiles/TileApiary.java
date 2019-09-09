@@ -10,39 +10,38 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IHiveFrame;
+import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
-import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.core.config.Constants;
+import forestry.core.network.PacketBufferForestry;
 
-import buildcraft.api.statements.ITriggerExternal;
+//import net.minecraftforge.fml.common.Optional;
+
+//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
@@ -50,7 +49,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final InventoryApiary inventory = new InventoryApiary();
 
 	public TileApiary() {
-		super("apiary");
+		super(ModuleApiculture.getTiles().apiary, "apiary");
 		setInternalInventory(inventory);
 	}
 
@@ -71,8 +70,8 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 		beeModifiers.add(beeModifier);
 
 		for (Tuple<IHiveFrame, ItemStack> frame : inventory.getFrames()) {
-			IHiveFrame hiveFrame = frame.getFirst();
-			ItemStack stack = frame.getSecond();
+			IHiveFrame hiveFrame = frame.getA();
+			ItemStack stack = frame.getB();
 			IBeeModifier beeModifier = hiveFrame.getBeeModifier(stack);
 			beeModifiers.add(beeModifier);
 		}
@@ -86,24 +85,27 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(ApicultureTriggers.missingQueen);
+	//		triggers.add(ApicultureTriggers.missingDrone);
+	//		triggers.add(ApicultureTriggers.noFrames);
+	//	}
+
 	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(ApicultureTriggers.missingQueen);
-		triggers.add(ApicultureTriggers.missingDrone);
-		triggers.add(ApicultureTriggers.noFrames);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerBeeHousing(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		ContainerBeeHousing container = new ContainerBeeHousing(player.inventory, this, true);
-		return new GuiBeeHousing<>(this, container, GuiBeeHousing.Icon.APIARY);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerBeeHousing(player.inventory, this, true);
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, p -> {
+			PacketBufferForestry forestryP = new PacketBufferForestry(p);
+			forestryP.writeBlockPos(pos);
+			forestryP.writeBoolean(true);
+			forestryP.writeEnum(GuiBeeHousing.Icon.APIARY, GuiBeeHousing.Icon.values());
+		});
 	}
 }

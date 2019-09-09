@@ -13,20 +13,21 @@ package forestry.climatology.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.ClimateType;
@@ -38,8 +39,8 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.climatology.ModuleClimatology;
 import forestry.climatology.gui.ContainerHabitatFormer;
-import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.inventory.InventoryHabitatFormer;
 import forestry.core.climate.ClimateTransformer;
 import forestry.core.config.Constants;
@@ -65,7 +66,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	private final TankManager tankManager;
 
 	public TileHabitatFormer() {
-		super(1200, 10000);
+		super(ModuleClimatology.getTiles().HABITAT_FORMER, 1200, 10000);
 		this.transformer = new ClimateTransformer(this);
 		setInternalInventory(new InventoryHabitatFormer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
@@ -123,15 +124,15 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (manipulator.canAdd()) {
 			errorLogic.setCondition(false, EnumErrorCode.WRONG_RESOURCE);
 			int currentCost = getFluidCost(changedState);
-			if (resourceTank.drain(currentCost, false) != null) {
+			if (!resourceTank.drain(currentCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
 				IClimateState simulatedState = /*changedState.add(ClimateType.HUMIDITY, climateChange)*/
 						changedState.toImmutable().add(manipulator.addChange(true));
 				int fluidCost = getFluidCost(simulatedState);
-				if (resourceTank.drain(fluidCost, false) != null) {
-					cachedStack = resourceTank.drain(fluidCost, true);
+				if (!resourceTank.drain(fluidCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
+					cachedStack = resourceTank.drain(fluidCost, IFluidHandler.FluidAction.EXECUTE);
 					manipulator.addChange(false);
 				} else {
-					cachedStack = resourceTank.drain(currentCost, true);
+					cachedStack = resourceTank.drain(currentCost, IFluidHandler.FluidAction.EXECUTE);
 				}
 				errorLogic.setCondition(false, EnumErrorCode.NO_RESOURCE_LIQUID);
 			} else {
@@ -180,7 +181,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (recipe == null) {
 			return 0;
 		}
-		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().amount);
+		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().getAmount());
 	}
 
 	private int getEnergyCost(IClimateState state) {
@@ -220,14 +221,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiHabitatFormer(player, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerHabitatFormer(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerHabitatFormer(windowId, inv, this);
 	}
 
 	@Override
@@ -276,25 +271,25 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	/* Methods - SAVING & LOADING */
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		super.write(data);
 
-		tankManager.writeToNBT(data);
+		tankManager.write(data);
 
-		data.setTag(TRANSFORMER_KEY, transformer.writeToNBT(new NBTTagCompound()));
+		data.put(TRANSFORMER_KEY, transformer.write(new CompoundNBT()));
 
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 
-		tankManager.readFromNBT(data);
+		tankManager.read(data);
 
-		if (data.hasKey(TRANSFORMER_KEY)) {
-			NBTTagCompound nbtTag = data.getCompoundTag(TRANSFORMER_KEY);
-			transformer.readFromNBT(nbtTag);
+		if (data.contains(TRANSFORMER_KEY)) {
+			CompoundNBT nbtTag = data.getCompound(TRANSFORMER_KEY);
+			transformer.read(nbtTag);
 		}
 	}
 
@@ -307,29 +302,21 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
 		transformer.readData(data);
 	}
 
-	@Nullable
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		if (capability == ClimateCapabilities.CLIMATE_TRANSFORMER) {
-			return ClimateCapabilities.CLIMATE_TRANSFORMER.cast(transformer);
+			return LazyOptional.of(() -> transformer).cast();
 		}
 		return super.getCapability(capability, facing);
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
-				|| capability == ClimateCapabilities.CLIMATE_TRANSFORMER
-				|| super.hasCapability(capability, facing);
 	}
 }

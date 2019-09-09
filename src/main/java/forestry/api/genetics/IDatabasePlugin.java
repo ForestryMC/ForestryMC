@@ -10,14 +10,16 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IIndividual;
 
 /**
  * An ISpeciesPlugin provides methods that are used in the alyzer and database to display information about an
  * individual.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IDatabasePlugin<I extends IIndividual> {
 
 	/* ALYZER */

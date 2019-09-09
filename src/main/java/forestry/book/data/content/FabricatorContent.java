@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.api.gui.IElementGroup;
@@ -20,7 +20,7 @@ import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.FabricatorElement;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class FabricatorContent extends BookContent<CraftingData> {
 
 	@Override

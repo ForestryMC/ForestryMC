@@ -10,21 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.tiles.TileHive;
@@ -33,8 +33,7 @@ import forestry.core.utils.TickHelper;
 
 public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	private final TileHive housing;
-	private IBee queen;
-	private IEffectData effectData[] = new IEffectData[2];
+	private IEffectData[] effectData = new IEffectData[2];
 	private final HasFlowersCache hasFlowersCache = new HasFlowersCache(2);
 	private final TickHelper tickHelper = new TickHelper();
 
@@ -47,17 +46,17 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 
 	// / SAVING & LOADING
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		setActive(nbttagcompound.getBoolean("Active"));
-		hasFlowersCache.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT CompoundNBT) {
+		setActive(CompoundNBT.getBoolean("Active"));
+		hasFlowersCache.read(CompoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setBoolean("Active", active);
-		hasFlowersCache.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		CompoundNBT.putBoolean("Active", active);
+		hasFlowersCache.write(CompoundNBT);
 
-		return nbttagcompound;
+		return CompoundNBT;
 	}
 
 	@Override
@@ -69,7 +68,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readData(PacketBuffer data) throws IOException {
+	public void readData(PacketBuffer data) {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {
@@ -94,13 +93,11 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 		tickHelper.onTick();
 
 		if (tickHelper.updateOnInterval(200)) {
-			if (queen == null) {                //Trying to set this in constructor causes crash
-				queen = housing.getContainedBee();
-			}
+			IBee queen = housing.getContainedBee();
 			hasFlowersCache.update(queen, housing);
 			World world = housing.getWorldObj();
-			boolean canWork = (world.isDaytime() || queen.getGenome().getNeverSleeps()) &&
-				(!housing.isRaining() || queen.getGenome().getToleratesRain());
+			boolean canWork = (world.isDaytime() || queen.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) &&
+				(!housing.isRaining() || queen.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN));
 			boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 
 			if (active != canWork) {
@@ -134,7 +131,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void syncToClient(EntityPlayerMP player) {
+	public void syncToClient(ServerPlayerEntity player) {
 		World world = housing.getWorldObj();
 		if (world != null && !world.isRemote) {
 			NetworkUtil.sendToPlayer(new PacketBeeLogicActive(housing), player);
@@ -147,13 +144,13 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean canDoBeeFX() {
-		return !Minecraft.getMinecraft().isGamePaused() && active;
+		return !Minecraft.getInstance().isGamePaused() && active;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void doBeeFX() {
 		IBee queen = housing.getContainedBee();
 		queen.doFX(effectData, housing);

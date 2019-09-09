@@ -15,44 +15,54 @@ import com.google.common.collect.Multimap;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
 
 public class ItemElectronTube extends ItemOverlay {
 
-	public ItemElectronTube() {
-		super(CreativeTabForestry.tabForestry, EnumElectronTube.VALUES);
+	private EnumElectronTube type;
+
+	public ItemElectronTube(EnumElectronTube type) {
+		super(ItemGroupForestry.tabForestry, type);
+		this.type = type;
+	}
+
+	public EnumElectronTube getType() {
+		return type;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
 		if (!circuits.isEmpty()) {
-			if (GuiScreen.isShiftKeyDown()) {
+			if (Screen.hasShiftDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
-					list.add(TextFormatting.WHITE.toString() + TextFormatting.UNDERLINE + circuitLayoutName);
+					list.add(new StringTextComponent(circuitLayoutName).setStyle((new Style()).setColor(TextFormatting.WHITE).setUnderlined(true)));
 					for (ICircuit circuit : circuits.get(circuitLayout)) {
 						circuit.addTooltip(list);
 					}
@@ -61,27 +71,32 @@ public class ItemElectronTube extends ItemOverlay {
 				ItemTooltipUtil.addShiftInformation(itemstack, world, list, flag);
 			}
 		} else {
-			list.add("<" + Translator.translateToLocal("for.gui.noeffect") + ">");
+			list.add(new StringTextComponent("<")
+				.appendSibling(new TranslationTextComponent("for.gui.noeffect")
+					.appendText(">")));
 		}
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
-			for (int i = 0; i < overlays.length; i++) {
-				if (Config.isDebug || !overlays[i].isSecret()) {
-					ItemStack itemStack = new ItemStack(this, 1, i);
-					if (Config.isDebug || !getCircuits(itemStack).isEmpty()) {
-						subItems.add(itemStack);
-					}
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
+			if (Config.isDebug || !this.getType().isSecret()) {
+				ItemStack stack = new ItemStack(this);
+				if (!getCircuits(stack).isEmpty()) {
+					subItems.add(new ItemStack(this));
 				}
 			}
 		}
 	}
 
+
+	//TODO can this not be static now?
 	private static Multimap<ICircuitLayout, ICircuit> getCircuits(ItemStack itemStack) {
 		Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
-		Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
+		//TODO circuitRegistry is populated at setupAPI which is called after this is used to fill creative tab
+		//TODO so perhaps needs to be initialised earlier
+		//of course, or we could flatten...
+		Collection<ICircuitLayout> allLayouts = Collections.emptyList();//ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
 		for (ICircuitLayout circuitLayout : allLayouts) {
 			ICircuit circuit = SolderManager.getCircuit(circuitLayout, itemStack);
 			if (circuit != null) {
@@ -89,9 +104,5 @@ public class ItemElectronTube extends ItemOverlay {
 			}
 		}
 		return circuits;
-	}
-
-	public ItemStack get(EnumElectronTube type, int amount) {
-		return new ItemStack(this, amount, type.ordinal());
 	}
 }

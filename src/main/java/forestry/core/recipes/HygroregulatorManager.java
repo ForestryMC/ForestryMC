@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IHygroregulatorManager;
@@ -22,7 +23,7 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 
 	@Nullable
 	public static IHygroregulatorRecipe findMatchingRecipe(FluidStack liquid) {
-		if (liquid.amount <= 0) {
+		if (liquid.getAmount() <= 0) {
 			return null;
 		}
 		for (IHygroregulatorRecipe recipe : recipes) {

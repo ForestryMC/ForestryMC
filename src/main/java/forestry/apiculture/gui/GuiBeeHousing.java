@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
@@ -33,9 +35,10 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 		}
 	}
 
-	public GuiBeeHousing(IGuiBeeHousingDelegate delegate, C container, Icon icon) {
-		super(Constants.TEXTURE_PATH_GUI + icon.path, container, delegate, 25, 7, 2, 0);
-		this.delegate = delegate;
+	//TODO be hacky and use title to get the icon?
+	public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + container.getIcon().path, container, inv, container.getDelegate(), 25, 7, 2, 0);
+		this.delegate = container.getDelegate();
 		this.ySize = 190;
 
 		for (int i = 0; i < 2; i++) {
@@ -68,7 +71,7 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 
-		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+		this.blit(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 	@Override

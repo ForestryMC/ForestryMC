@@ -12,15 +12,16 @@ package forestry.apiculture.inventory;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.apiculture.ModuleApiculture;
@@ -28,6 +29,7 @@ import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.ItemInventory;
+import forestry.core.items.ItemOverlay;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 
@@ -37,7 +39,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 
 	private final HabitatLocatorLogic locatorLogic;
 
-	public ItemInventoryHabitatLocator(EntityPlayer player, ItemStack itemstack) {
+	public ItemInventoryHabitatLocator(PlayerEntity player, ItemStack itemstack) {
 		super(player, 3, itemstack);
 		ItemHabitatLocator habitatLocator = (ItemHabitatLocator) itemstack.getItem();
 		this.locatorLogic = habitatLocator.getLocatorLogic();
@@ -49,11 +51,11 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 
 		Item item = itemstack.getItem();
-		return ModuleApiculture.getItems().honeyDrop == item || ModuleApiculture.getItems().honeydew == item;
+		return (item instanceof ItemOverlay && ModuleApiculture.getItems().honeyDrops.containsValue(item)) || ModuleApiculture.getItems().honeydew == item;
 	}
 
 	@Override
-	public void onSlotClick(int slotIndex, EntityPlayer player) {
+	public void onSlotClick(int slotIndex, PlayerEntity player) {
 		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
 			if (locatorLogic.isBiomeFound()) {
 				return;
@@ -72,8 +74,9 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 
 		ItemStack analyzed = getStackInSlot(SLOT_ANALYZED);
-		IBee bee = BeeManager.beeRoot.getMember(analyzed);
-		if (bee != null) {
+		Optional<IBee> optionalBee = BeeManager.beeRoot.create(analyzed);
+		if (optionalBee.isPresent()) {
+			IBee bee = optionalBee.get();
 			locatorLogic.startBiomeSearch(bee, player);
 		}
 	}

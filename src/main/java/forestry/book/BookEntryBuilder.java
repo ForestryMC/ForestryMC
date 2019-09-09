@@ -6,8 +6,8 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookCategory;
@@ -16,7 +16,7 @@ import forestry.api.book.IBookEntryBuilder;
 import forestry.api.book.IBookPageFactory;
 import forestry.book.pages.JsonPageFactory;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BookEntryBuilder implements IBookEntryBuilder {
 	private final String name;
 	private final IBookCategory category;

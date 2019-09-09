@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleDigging;
+import net.minecraft.client.particle.DiggingParticle;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
@@ -37,16 +37,16 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	protected void setTexture(ParticleDigging fx, World world, BlockPos pos, IBlockState state) {
+	@OnlyIn(Dist.CLIENT)
+	protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-			Minecraft minecraft = Minecraft.getMinecraft();
-			TextureMap textureMapBlocks = minecraft.getTextureMapBlocks();
+			Minecraft minecraft = Minecraft.getInstance();
+			AtlasTexture textureMapBlocks = minecraft.getTextureMap();
 			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
 			String particleTextureLocation = machinePropertiesTesr.getParticleTextureLocation();
 			TextureAtlasSprite particleTexture = textureMapBlocks.getAtlasSprite(particleTextureLocation);
-			fx.setParticleTexture(particleTexture);
+			fx.sprite = particleTexture;
 		}
 	}
 

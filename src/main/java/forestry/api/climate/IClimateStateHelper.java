@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
- * Contains methods to create {@link IClimateState}s or to get constant and immutable {@link IClimateState}s like
+ * Contains methods to create {@link IClimateState}s or to getComb constant and immutable {@link IClimateState}s like
  * {@link #zero()}, {@link #min()},  {@link #max()} or {@link #absent()}.
  */
 public interface IClimateStateHelper {
@@ -64,7 +64,7 @@ public interface IClimateStateHelper {
 	 * @param compound The compound that contains the data.
 	 * @return A state that contains the data that the compound contains.
 	 */
-	IClimateState create(NBTTagCompound compound);
+	IClimateState create(CompoundNBT compound);
 
 	/**
 	 * Creates a state based on the data that the given compound contains.
@@ -73,7 +73,7 @@ public interface IClimateStateHelper {
 	 * @param mutable  If the copy should be mutable.
 	 * @return A state that contains the data that the compound contains.
 	 */
-	IClimateState create(NBTTagCompound compound, boolean mutable);
+	IClimateState create(CompoundNBT compound, boolean mutable);
 
 	/**
 	 * Writes the data of the given state to the given compound.
@@ -82,7 +82,7 @@ public interface IClimateStateHelper {
 	 * @param state    The state that contains the data.
 	 * @return The given compound.
 	 */
-	NBTTagCompound writeToNBT(NBTTagCompound compound, IClimateState state);
+	CompoundNBT writeToNBT(CompoundNBT compound, IClimateState state);
 
 	/**
 	 * Checks if the given state is valid and returns the absent state if the given state is not valid.

@@ -16,43 +16,42 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.IRegistry;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.model.IModelState;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
 import forestry.core.blocks.IColoredBlock;
 import forestry.core.config.Constants;
 import forestry.core.items.IColoredItem;
 import forestry.core.utils.ModelUtil;
 
-@SideOnly(Side.CLIENT)
+//import net.minecraft.client.renderer.ItemMeshDefinition;
+//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+
+@OnlyIn(Dist.CLIENT)
 public class ModelManager implements IModelManager {
 
 	private static final ModelManager instance = new ModelManager();
@@ -81,23 +80,27 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public void registerItemModel(Item item, int meta, String identifier) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(identifier));
+		//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(identifier));
+		//TODO models
 	}
 
 	@Override
 	public void registerItemModel(Item item, int meta, String modID, String identifier) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(modID, identifier));
+		//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(modID, identifier));
+		//TODO models
 	}
 
 	@Override
 	public void registerItemModel(Item item, int meta) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
+		//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
+		//TODO models
 	}
 
-	@Override
-	public void registerItemModel(Item item, ItemMeshDefinition definition) {
-		ModelLoader.setCustomMeshDefinition(item, definition);
-	}
+	//TODO - models
+	//	@Override
+	//	public void registerItemModel(Item item, ItemMeshDefinition definition) {
+	//		ModelLoader.setCustomMeshDefinition(item, definition);
+	//	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item) {
@@ -117,7 +120,7 @@ public class ModelManager implements IModelManager {
 		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerBlockClient(Block block) {
 		if (block instanceof IItemModelRegister) {
 			itemModelRegisters.add((IItemModelRegister) block);
@@ -130,7 +133,7 @@ public class ModelManager implements IModelManager {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerItemClient(Item item) {
 		if (item instanceof IItemModelRegister) {
 			itemModelRegisters.add((IItemModelRegister) item);
@@ -140,8 +143,8 @@ public class ModelManager implements IModelManager {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void registerModels() {
+	@OnlyIn(Dist.CLIENT)
+	public void registerModels(ModelBakeEvent event) {
 		for (IItemModelRegister itemModelRegister : itemModelRegisters) {
 			Item item = null;
 			if (itemModelRegister instanceof Block) {
@@ -160,21 +163,23 @@ public class ModelManager implements IModelManager {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerItemAndBlockColors() {
-		Minecraft minecraft = Minecraft.getMinecraft();
+		Minecraft minecraft = Minecraft.getInstance();
 
 		BlockColors blockColors = minecraft.getBlockColors();
 		for (IColoredBlock blockColor : blockColorList) {
 			if (blockColor instanceof Block) {
-				blockColors.registerBlockColorHandler(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
+				blockColors.register(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
+				//TODO models
 			}
 		}
 
 		ItemColors itemColors = minecraft.getItemColors();
 		for (IColoredItem itemColor : itemColorList) {
 			if (itemColor instanceof Item) {
-				itemColors.registerItemColorHandler(ColoredItemItemColor.INSTANCE, (Item) itemColor);
+				itemColors.register(ColoredItemItemColor.INSTANCE, (Item) itemColor);
+				//TODO models
 			}
 		}
 	}
@@ -196,8 +201,9 @@ public class ModelManager implements IModelManager {
 	public void registerCustomBlockModel(BlockModelEntry index) {
 		customBlockModels.add(index);
 		if (index.addStateMapper) {
-			StateMapperBase ignoreState = new BlockModeStateMapper(index);
-			ModelLoader.setCustomStateMapper(index.block, ignoreState);
+			//			StateMapperBase ignoreState = new BlockModeStateMapper(index);
+			//			ModelLoader.setCustomStateMapper(index.block, ignoreState);
+			//TODO models
 		}
 	}
 
@@ -207,20 +213,23 @@ public class ModelManager implements IModelManager {
 
 	public void onBakeModels(ModelBakeEvent event) {
 		//register custom models
-		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
+		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		for (final BlockModelEntry entry : customBlockModels) {
-			registry.putObject(entry.blockModelLocation, entry.model);
+			for (BlockState state : entry.block.getStateContainer().getValidStates()) {
+				IBakedModel model = registry.get(BlockModelShapes.getModelLocation(state));
+				registry.put(BlockModelShapes.getModelLocation(state), entry.model);
+			}
 			if (entry.itemModelLocation != null) {
-				registry.putObject(entry.itemModelLocation, entry.model);
+				registry.put(entry.itemModelLocation, entry.model);
 			}
 		}
 
 		for (final ModelEntry entry : customModels) {
-			registry.putObject(entry.modelLocation, entry.model);
+			registry.put(entry.modelLocation, entry.model);
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static class ColoredItemItemColor implements IItemColor {
 		public static final ColoredItemItemColor INSTANCE = new ColoredItemItemColor();
 
@@ -229,16 +238,16 @@ public class ModelManager implements IModelManager {
 		}
 
 		@Override
-		public int colorMultiplier(ItemStack stack, int tintIndex) {
+		public int getColor(ItemStack stack, int tintIndex) {
 			Item item = stack.getItem();
 			if (item instanceof IColoredItem) {
-				return ((IColoredItem) item).getColorFromItemstack(stack, tintIndex);
+				return ((IColoredItem) item).getColorFromItemStack(stack, tintIndex);
 			}
 			return 0xffffff;
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static class ColoredBlockBlockColor implements IBlockColor {
 		public static final ColoredBlockBlockColor INSTANCE = new ColoredBlockBlockColor();
 
@@ -247,7 +256,7 @@ public class ModelManager implements IModelManager {
 		}
 
 		@Override
-		public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+		public int getColor(BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 			Block block = state.getBlock();
 			if (block instanceof IColoredBlock && worldIn != null && pos != null) {
 				return ((IColoredBlock) block).colorMultiplier(state, worldIn, pos, tintIndex);
@@ -256,16 +265,17 @@ public class ModelManager implements IModelManager {
 		}
 	}
 
-	private static class BlockModeStateMapper extends StateMapperBase {
-		private final BlockModelEntry index;
-
-		public BlockModeStateMapper(BlockModelEntry index) {
-			this.index = index;
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-			return index.blockModelLocation;
-		}
-	}
+	//TODO models
+	//	private static class BlockModeStateMapper extends StateMapperBase {
+	//		private final BlockModelEntry index;
+	//
+	//		public BlockModeStateMapper(BlockModelEntry index) {
+	//			this.index = index;
+	//		}
+	//
+	//		@Override
+	//		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
+	//			return index.blockModelLocation;
+	//		}
+	//	}
 }

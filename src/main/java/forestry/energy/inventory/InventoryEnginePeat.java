@@ -11,7 +11,7 @@
 package forestry.energy.inventory;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -33,7 +33,7 @@ public class InventoryEnginePeat extends InventoryAdapterTile<TileEnginePeat> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
 	}
 }

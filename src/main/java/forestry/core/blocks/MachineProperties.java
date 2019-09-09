@@ -5,41 +5,37 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.IBlockReader;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.MigrationHelper;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 	private final String name;
 	private final Class<T> teClass;
-	private final AxisAlignedBB boundingBox;
+	private final VoxelShape shape;
 	@Nullable
 	private Block block;
 
 	public MachineProperties(Class<T> teClass, String name) {
-		this(teClass, name, new AxisAlignedBB(0, 0, 0, 1, 1, 1));
+		this(teClass, name, VoxelShapes.fullCube());
 	}
 
-	public MachineProperties(Class<T> teClass, String name, AxisAlignedBB boundingBox) {
+	public MachineProperties(Class<T> teClass, String name, VoxelShape shape) {
 		this.teClass = teClass;
 		this.name = name;
-		this.boundingBox = boundingBox;
+		this.shape = shape;
 	}
 
 	@Override
@@ -54,24 +50,23 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockAccess world, BlockPos pos, IBlockState state) {
-		return boundingBox;
-	}
-
-	@Override
-	@Nullable
-	public RayTraceResult collisionRayTrace(World world, BlockPos pos, IBlockState state, Vec3d startVec, Vec3d endVec) {
-		return BlockUtil.collisionRayTrace(pos, startVec, endVec, boundingBox);
+	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+		return shape;
 	}
 
 	@Override
 	public void registerTileEntity() {
-		TileUtil.registerTile(teClass, name);
-		MigrationHelper.addTileRemappingName(name, name);
+		//TODO - need to make sure that everything that used to call this is now a registered TileEntityType
+		//		TileUtil.registerTile(teClass, name);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	public void clientSetup() {
+
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerModel(Item item, IModelManager manager) {
 		ResourceLocation itemNameFromRegistry = item.getRegistryName();
 		Preconditions.checkNotNull(itemNameFromRegistry, "No registry name for item");
@@ -99,7 +94,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return true;
 	}
 }

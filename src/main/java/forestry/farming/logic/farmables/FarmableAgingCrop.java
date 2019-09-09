@@ -5,10 +5,10 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -65,31 +65,31 @@ public class FarmableAgingCrop implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
-		return blockState.getBlock() == cropBlock && blockState.getValue(ageProperty) <= minHarvestAge;
+	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
+		return blockState.getBlock() == cropBlock && blockState.get(ageProperty) <= minHarvestAge;
 	}
 
 	@Override
 	@Nullable
-	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		if (blockState.getBlock() != cropBlock) {
 			return null;
 		}
 
-		if (blockState.getValue(ageProperty) < minHarvestAge) {
+		if (blockState.get(ageProperty) < minHarvestAge) {
 			return null;
 		}
 
-		IBlockState replantState = getReplantState(blockState);
+		BlockState replantState = getReplantState(blockState);
 		return new CropDestroy(world, blockState, pos, replantState, germling);
 	}
 
 	@Nullable
-	protected IBlockState getReplantState(IBlockState blockState) {
+	protected BlockState getReplantState(BlockState blockState) {
 		if (replantAge == null) {
 			return null;
 		}
-		return blockState.withProperty(ageProperty, replantAge);
+		return blockState.with(ageProperty, replantAge);
 	}
 
 	@Override
@@ -104,8 +104,8 @@ public class FarmableAgingCrop implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		IBlockState plantedState = cropBlock.getDefaultState().withProperty(ageProperty, 0);
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+		BlockState plantedState = cropBlock.getDefaultState().with(ageProperty, 0);
 		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
 	}
 

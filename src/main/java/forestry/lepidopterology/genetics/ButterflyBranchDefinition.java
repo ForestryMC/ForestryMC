@@ -10,48 +10,38 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleRegistry;
-import forestry.api.genetics.IClassification;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.core.genetics.IBranchDefinition;
-import forestry.core.genetics.alleles.AlleleHelper;
-import forestry.core.genetics.alleles.EnumAllele;
-import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.alleles.IAlleleTemplateBuilder;
+import genetics.api.classification.IBranchDefinition;
+import genetics.api.classification.IClassification;
+import genetics.api.classification.IClassificationRegistry;
 
 public enum ButterflyBranchDefinition implements IBranchDefinition {
-	Anthocharis,
-	Attacus,
-	Bassarona,
-	Batesia,
-	Bombyx,
-	Celastrina,
-	Cethosia,
-	Chiasmia,
-	Colias,
-	Danaus,
-	Gonepteryx,
-	Greta,
-	Heliconius,
-	Morpho,
-	Myscelia,
-	Opisthograptis,
-	Papilio,
-	Parantica,
-	Pararge,
-	Pieris,
-	Polygonia,
-	Pontia,
-	Protographium,
-	Siproeta,
-	Speyeria;
-
-	@Nullable
-	private static IAllele[] defaultTemplate;
+	ANTHOCHARIS,
+	ATTACUS,
+	BASSARONA,
+	BATESIA,
+	BOMBYX,
+	CELASTRINA,
+	CETHOSIA,
+	CHIASMIA,
+	COLIAS,
+	DANAUS,
+	GONEPTERYX,
+	GRETA,
+	HELICONIUS,
+	MORPHO,
+	MYSCELIA,
+	OPISTHOGRAPTIS,
+	PAPILIO,
+	PARANTICA,
+	PARARGE,
+	PIERIS,
+	POLYGONIA,
+	PONTIA,
+	PROTOGRAPHIUM,
+	SIPROETA,
+	SPEYERIA;
 
 	private final IClassification branch;
 
@@ -60,75 +50,61 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 	}
 
 	@Override
-	public IAllele[] getTemplate() {
-		if (defaultTemplate == null) {
-			defaultTemplate = new IAllele[EnumButterflyChromosome.values().length];
-			AlleleHelper alleleHelper = AlleleHelper.getInstance();
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALL);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.SPEED, EnumAllele.Speed.SLOWEST);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.METABOLISM, 3);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.FERTILITY, 3);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.NOCTURNAL, false);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.TOLERANT_FLYER, false);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.FIRE_RESIST, false);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.EFFECT, ButterflyAlleles.butterflyNone);
-			alleleHelper.set(defaultTemplate, EnumButterflyChromosome.COCOON, ButterflyAlleles.cocoonDefault);
-		}
-		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
-	}
-
-	@Override
 	public IClassification getBranch() {
 		return branch;
 	}
 
-	public static void createAlleles() {
-		IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
+	@Override
+	public final IAlleleTemplate getTemplate() {
+		return getTemplateBuilder().build();
+	}
 
-		alleleRegistry.getClassification("class.insecta").addMemberGroup(
-			alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera",
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "geometridae", "Geometridae",
-					Opisthograptis.getBranch(),
-					Chiasmia.getBranch()
+	@Override
+	public final IAlleleTemplateBuilder getTemplateBuilder() {
+		return ButterflyHelper.createTemplate();
+	}
+
+	public static void createClassifications(IClassificationRegistry registry) {
+		registry.getClassification("class.insecta").addMemberGroup(
+			registry.createAndRegisterClassification(IClassification.EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera",
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "geometridae", "Geometridae",
+					OPISTHOGRAPTIS.getBranch(),
+					CHIASMIA.getBranch()
 				),
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "saturniidae", "Saturniidae",
-					Attacus.getBranch()
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "saturniidae", "Saturniidae",
+					ATTACUS.getBranch()
 				),
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "pieridae", "Pieridae",
-					Pieris.getBranch(),
-					Gonepteryx.getBranch(),
-					Anthocharis.getBranch(),
-					Colias.getBranch(),
-					Pontia.getBranch(),
-					Celastrina.getBranch()
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "pieridae", "Pieridae",
+					PIERIS.getBranch(),
+					GONEPTERYX.getBranch(),
+					ANTHOCHARIS.getBranch(),
+					COLIAS.getBranch(),
+					PONTIA.getBranch(),
+					CELASTRINA.getBranch()
 				),
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae",
-					Pararge.getBranch(),
-					Polygonia.getBranch(),
-					Morpho.getBranch(),
-					Greta.getBranch(),
-					Batesia.getBranch(),
-					Myscelia.getBranch(),
-					Danaus.getBranch(),
-					Bassarona.getBranch(),
-					Parantica.getBranch(),
-					Heliconius.getBranch(),
-					Siproeta.getBranch(),
-					Cethosia.getBranch(),
-					Speyeria.getBranch()
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae",
+					PARARGE.getBranch(),
+					POLYGONIA.getBranch(),
+					MORPHO.getBranch(),
+					GRETA.getBranch(),
+					BATESIA.getBranch(),
+					MYSCELIA.getBranch(),
+					DANAUS.getBranch(),
+					BASSARONA.getBranch(),
+					PARANTICA.getBranch(),
+					HELICONIUS.getBranch(),
+					SIPROETA.getBranch(),
+					CETHOSIA.getBranch(),
+					SPEYERIA.getBranch()
 				),
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae"),
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "papilionidae", "Papilionidae",
-					Papilio.getBranch(),
-					Protographium.getBranch()
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae"),
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "papilionidae", "Papilionidae",
+					PAPILIO.getBranch(),
+					PROTOGRAPHIUM.getBranch()
 				),
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae"),
-				alleleRegistry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "bombycidae", "Bombycidae",
-					Bombyx.getBranch()
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae"),
+				registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "bombycidae", "Bombycidae",
+					BOMBYX.getBranch()
 				)
 			)
 		);

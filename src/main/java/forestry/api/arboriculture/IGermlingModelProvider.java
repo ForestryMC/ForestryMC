@@ -5,13 +5,12 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.IModelManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 
 /**
  * Provides icons for saplings, pollen, etc.
@@ -19,11 +18,11 @@ import forestry.api.core.IModelManager;
  * There is no default implementation because every sapling has a unique icon.
  */
 public interface IGermlingModelProvider {
-	@SideOnly(Side.CLIENT)
-	void registerModels(Item item, IModelManager manager, EnumGermlingType type);
+	@OnlyIn(Dist.CLIENT)
+	ResourceLocation getItemModel();
 
-	@SideOnly(Side.CLIENT)
-	ModelResourceLocation getModel(EnumGermlingType type);
+	@OnlyIn(Dist.CLIENT)
+	ResourceLocation getBlockModel();
 
 	/**
 	 * Provides color for sapling. See {@link ILeafSpriteProvider} for pollen color.

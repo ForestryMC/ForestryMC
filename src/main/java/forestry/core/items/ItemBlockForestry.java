@@ -14,30 +14,36 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.core.ItemGroupForestry;
 import forestry.core.blocks.IBlockRotatable;
 import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
 
-public class ItemBlockForestry<B extends Block> extends ItemBlock {
+public class ItemBlockForestry<B extends Block> extends BlockItem {
+
+	public ItemBlockForestry(B block, Item.Properties builder) {
+		super(block, builder);
+	}
 
 	public ItemBlockForestry(B block) {
-		super(block);
-		setMaxDamage(0);
-		setHasSubtypes(true);
+		this(block, new Item.Properties().group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override
@@ -47,45 +53,48 @@ public class ItemBlockForestry<B extends Block> extends ItemBlock {
 	}
 
 	@Override
-	public int getMetadata(int i) {
-		return i;
-	}
-
-	@Override
 	public String getTranslationKey(ItemStack itemstack) {
 		Block block = getBlock();
 		if (block instanceof IBlockWithMeta) {
 			IBlockWithMeta blockMeta = (IBlockWithMeta) block;
-			int meta = itemstack.getMetadata();
+			int meta = 0;//TODO flatten itemstack.getMetadata();
 			return block.getTranslationKey() + "." + blockMeta.getNameFromMeta(meta);
 		}
 		return block.getTranslationKey();
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 
+	//TODO is this the right method
+	//and is it needed any more
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-		boolean placed = super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
+	public ActionResultType tryPlace(BlockItemUseContext context) {
+		ActionResultType placed = super.tryPlace(context);
 
-		if (placed) {
-			if (block.hasTileEntity(newState)) {
-				if (stack.getItem() instanceof ItemBlockNBT && stack.getTagCompound() != null) {
+		ItemStack stack = context.getItem();
+		BlockPos pos = context.getPos();
+		World world = context.getWorld();
+		PlayerEntity player = context.getPlayer();
+		Direction side = context.getFace();
+
+		if (placed == ActionResultType.SUCCESS) {
+			if (getBlock().hasTileEntity(getBlock().getDefaultState())) {    //TODO how to getComb the state??
+				if (stack.getItem() instanceof ItemBlockNBT && stack.getTag() != null) {
 					TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 					if (tile != null) {
-						tile.readFromNBT(stack.getTagCompound());
+						tile.read(stack.getTag());
 						tile.setPos(pos);
 					}
 				}
 			}
 
-			if (block instanceof IBlockRotatable) {
-				((IBlockRotatable) block).rotateAfterPlacement(player, world, pos, side);
+			if (getBlock() instanceof IBlockRotatable) {
+				((IBlockRotatable) getBlock()).rotateAfterPlacement(player, world, pos, side);
 			}
 		}
 

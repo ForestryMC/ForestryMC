@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "forestry:wax_cast"
+  },
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:beeswax"
+    }
+  },
+  "group": "apiculture"
+}

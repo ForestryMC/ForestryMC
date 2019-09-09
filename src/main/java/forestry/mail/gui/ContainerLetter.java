@@ -13,14 +13,18 @@ package forestry.mail.gui;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
@@ -34,6 +38,7 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.Letter;
+import forestry.mail.ModuleMail;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import forestry.mail.network.packets.PacketLetterTextSet;
@@ -44,20 +49,27 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	@Nullable
 	private ITradeStationInfo tradeInfo = null;
 
-	public ContainerLetter(EntityPlayer player, ItemInventoryLetter inventory) {
-		super(inventory, player.inventory, 17, 145);
+	public static ContainerLetter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+		PlayerEntity player = playerInv.player;
+		ItemInventoryLetter inv = new ItemInventoryLetter(player, player.getHeldItem(hand));
+		return new ContainerLetter(windowId, player, inv);
+	}
+
+	public ContainerLetter(int windowId, PlayerEntity player, ItemInventoryLetter inventory) {
+		super(windowId, inventory, player.inventory, 17, 145, ModuleMail.getContainerTypes().LETTER);
 
 		// Init slots
 
 		// Stamps
 		for (int i = 0; i < 4; i++) {
-			addSlotToContainer(new SlotFiltered(inventory, Letter.SLOT_POSTAGE_1 + i, 150, 14 + i * 19).setStackLimit(1));
+			addSlot(new SlotFiltered(inventory, Letter.SLOT_POSTAGE_1 + i, 150, 14 + i * 19).setStackLimit(1));
 		}
 
 		// Attachments
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new SlotFiltered(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18));
+				addSlot(new SlotFiltered(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18));
 			}
 		}
 
@@ -77,19 +89,19 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer entityplayer) {
+	public void onContainerClosed(PlayerEntity PlayerEntity) {
 
-		if (!entityplayer.world.isRemote) {
+		if (!PlayerEntity.world.isRemote) {
 			ILetter letter = inventory.getLetter();
 			if (!letter.isProcessed()) {
-				IMailAddress sender = PostManager.postRegistry.getMailAddress(entityplayer.getGameProfile());
+				IMailAddress sender = PostManager.postRegistry.getMailAddress(PlayerEntity.getGameProfile());
 				letter.setSender(sender);
 			}
 		}
 
 		inventory.onLetterClosed();
 
-		super.onContainerClosed(entityplayer);
+		super.onContainerClosed(PlayerEntity);
 	}
 
 	public ILetter getLetter() {
@@ -122,7 +134,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		setCarrierType(postal.getType());
 	}
 
-	public void handleRequestLetterInfo(EntityPlayer player, String recipientName, EnumAddressee type) {
+	public void handleRequestLetterInfo(PlayerEntity player, String recipientName, EnumAddressee type) {
 		MinecraftServer server = player.getServer();
 		if (server == null) {
 			Log.error("Could not get server");
@@ -168,7 +180,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		return getLetter().getText();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setText(String text) {
 		getLetter().setText(text);
 
@@ -191,7 +203,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 			return;
 		}
 
-		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address);
+		ITradeStation station = PostManager.postRegistry.getTradeStation((ServerWorld) world, address);
 		if (station == null) {
 			setTradeInfo(null);
 			return;

@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import forestry.apiculture.ModuleApiculture;
 
 public class ParticleBeeRoundTrip extends Particle {
 	private final Vec3d origin;
@@ -25,7 +24,8 @@ public class ParticleBeeRoundTrip extends Particle {
 
 	public ParticleBeeRoundTrip(World world, Vec3d origin, BlockPos destination, int color) {
 		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-		setParticleTexture(ModuleApiculture.getBeeSprite());
+		//		setParticleTexture(ModuleApiculture.getBeeSprite());
+		//TODO - particle texture
 		this.origin = origin;
 
 		this.destination = destination;
@@ -38,8 +38,9 @@ public class ParticleBeeRoundTrip extends Particle {
 		particleBlue = (color & 255) / 255.0F;
 
 		this.setSize(0.1F, 0.1F);
-		this.particleScale *= 0.2F;
-		this.particleMaxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
+		//		this.particleScale *= 0.2F;
+		//TODO particle scale
+		this.maxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 
 		this.motionX *= 0.9D;
 		this.motionY *= 0.015D;
@@ -50,63 +51,64 @@ public class ParticleBeeRoundTrip extends Particle {
 	 * Called to update the entity's position/logic.
 	 */
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.move(this.motionX, this.motionY, this.motionZ);
 
-		if (this.particleAge == this.particleMaxAge / 2) {
+		if (this.age == this.maxAge / 2) {
 			this.motionX = (origin.x - this.posX) * 0.03 + 0.1 * rand.nextFloat();
 			this.motionY = (origin.y - this.posY) * 0.03 + 0.1 * rand.nextFloat();
 			this.motionZ = (origin.z - this.posZ) * 0.03 + 0.1 * rand.nextFloat();
 		}
 
-		if (this.particleAge < this.particleMaxAge * 0.25) {
+		if (this.age < this.maxAge * 0.25) {
 			// venture out
 			this.motionX *= 0.92 + 0.2D * rand.nextFloat();
 			this.motionY = (this.motionY + 0.3 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();
-		} else if (this.particleAge < this.particleMaxAge * 0.5) {
-			// get to flower destination
+		} else if (this.age < this.maxAge * 0.5) {
+			// getComb to flower destination
 			this.motionX = (destination.getX() + 0.5 - this.posX) * 0.03;
 			this.motionY = (destination.getY() + 0.5 - this.posY) * 0.1;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ = (destination.getZ() + 0.5 - this.posZ) * 0.03;
-		} else if (this.particleAge < this.particleMaxAge * 0.75) {
+		} else if (this.age < this.maxAge * 0.75) {
 			// venture back
 			this.motionX *= 0.95;
 			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.95;
 		} else {
-			// get to origin
+			// getComb to origin
 			this.motionX = (origin.x - this.posX) * 0.03;
 			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ = (origin.z - this.posZ) * 0.03;
 		}
 
-		if (this.particleAge++ >= this.particleMaxAge) {
+		if (this.age++ >= this.maxAge) {
 			this.setExpired();
 		}
 	}
 
 	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
 		float maxV = 1;
 
-		if (this.particleTexture != null) {
-			minU = particleTexture.getMinU();
-			maxU = particleTexture.getMaxU();
-			minV = particleTexture.getMinV();
-			maxV = particleTexture.getMaxV();
-		}
+		//		if (this.particleTexture != null) {
+		//			minU = particleTexture.getMinU();
+		//			maxU = particleTexture.getMaxU();
+		//			minV = particleTexture.getMinV();
+		//			maxV = particleTexture.getMaxV();
+		//		}
+		//TODO particle texture
 
-		float f10 = 0.1F * particleScale;
+		float f10 = 0.1F * 1;//particleScale;
 		float f11 = (float) (prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
 		float f12 = (float) (prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
 		float f13 = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks - interpPosZ);
@@ -133,8 +135,13 @@ public class ParticleBeeRoundTrip extends Particle {
 		this.resetPositionToBB();
 	}
 
+	//	@Override
+	//	public int getFXLayer() {
+	//		return 1;
+	//	}
+
 	@Override
-	public int getFXLayer() {
-		return 1;
+	public IParticleRenderType getRenderType() {
+		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;    //TODO render type
 	}
 }

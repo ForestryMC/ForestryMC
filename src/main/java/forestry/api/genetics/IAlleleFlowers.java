@@ -6,6 +6,8 @@
 package forestry.api.genetics;
 
 
+import genetics.api.alleles.IAllele;
+
 public interface IAlleleFlowers extends IAllele {
 
 	/**

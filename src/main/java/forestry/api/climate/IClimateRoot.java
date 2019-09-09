@@ -19,7 +19,7 @@ public interface IClimateRoot {
 	IClimateListener getListener(World world, BlockPos pos);
 
 	/**
-	 * Can be used to get the climate state without the use of an {@link IClimateListener}.
+	 * Can be used to getComb the climate state without the use of an {@link IClimateListener}.
 	 *
 	 * @return The climate state at the given location.
 	 */

@@ -7,21 +7,21 @@ import com.google.gson.JsonObject;
 
 import java.lang.reflect.Type;
 
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.book.BookLoader;
 import forestry.book.data.content.TextContent;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BookContentDeserializer implements JsonDeserializer<BookContent> {
 	@Override
 	public BookContent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
 		JsonObject object = json.getAsJsonObject();
-		String type = JsonUtils.getString(object, "type", "text");
+		String type = JSONUtils.getString(object, "type", "text");
 		Class<? extends BookContent> typeClass = BookLoader.INSTANCE.getContentType(type);
 		BookContent content = context.deserialize(object, typeClass == null ? TextContent.class : typeClass);
 		content.type = type;

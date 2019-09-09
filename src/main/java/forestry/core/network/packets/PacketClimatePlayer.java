@@ -1,8 +1,6 @@
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import forestry.api.climate.IClimateState;
 import forestry.core.ClimateHandlerClient;
@@ -32,7 +30,7 @@ public class PacketClimatePlayer extends ForestryPacket implements IForestryPack
 
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			ClimateHandlerClient.setCurrentState(data.readClimateState());
 		}
 	}

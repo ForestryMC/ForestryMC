@@ -1,0 +1,35 @@
+{
+  "result": {
+    "nbt": "{FarmBlock:6}",
+    "item": "forestry:ffarm",
+    "data": 0,
+    "type": "minecraft:item_nbt"
+  },
+  "pattern": [
+    "I#I",
+    "WCW"
+  ],
+  "conditions": [
+    {
+      "module": "farming",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:nether_brick"
+    },
+    "C": {
+      "item": "forestry:thermionic_tubes",
+      "data": 1
+    },
+    "W": {
+      "item": "#SLABWOOD"
+    },
+    "I": {
+      "item": "#INGOTCOPPER"
+    }
+  },
+  "group": "farming"
+}

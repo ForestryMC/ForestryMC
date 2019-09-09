@@ -24,32 +24,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.compress.utils.IOUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ModelBlock;
-import net.minecraft.client.renderer.block.model.ModelBlockDefinition;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.model.BlockModel;
+import net.minecraft.client.renderer.model.BlockModelDefinition;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelState;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelUtil {
 
-	private static final Map<ResourceLocation, ModelBlockDefinition> blockDefinitions = Maps.newHashMap();
+	private static final Map<ResourceLocation, BlockModelDefinition> blockDefinitions = Maps.newHashMap();
 
 	public static boolean resourceExists(ResourceLocation location) {
-		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		try {
 			resourceManager.getResource(location);
 			return true;
@@ -63,7 +62,7 @@ public class ModelUtil {
 	 */
 	@Nullable
 	public static IBakedModel getModel(ItemStack stack) {
-		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+		ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
 		if (renderItem == null || renderItem.getItemModelMesher() == null) {
 			return null;
 		}
@@ -76,7 +75,7 @@ public class ModelUtil {
 
 	private static ItemCameraTransforms loadTransformFromJson(ResourceLocation location) {
 		try (Reader reader = getReaderForResource(location)) {
-			return ModelBlock.deserialize(reader).getAllTransforms();
+			return BlockModel.deserialize(reader).getAllTransforms();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -86,11 +85,11 @@ public class ModelUtil {
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
 		ResourceLocation file = new ResourceLocation(location.getNamespace(),
 			location.getPath() + ".json");
-		IResource iresource = Minecraft.getMinecraft().getResourceManager().getResource(file);
+		IResource iresource = Minecraft.getInstance().getResourceManager().getResource(file);
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), Charsets.UTF_8));
 	}
 
-	public static ModelBlockDefinition getModelBlockDefinition(ResourceLocation location) {
+	public static BlockModelDefinition getModelBlockDefinition(ResourceLocation location) {
 		try {
 			ResourceLocation resourcelocation = getBlockstateLocation(location);
 			return blockDefinitions.computeIfAbsent(resourcelocation,
@@ -98,7 +97,7 @@ public class ModelUtil {
 		} catch (Exception exception) {
 			Log.error("Failed to getModelBlockDefinition", exception);
 		}
-		return new ModelBlockDefinition(new ArrayList<>());
+		return new BlockModelDefinition(new ArrayList<>());
 	}
 
 	private static ResourceLocation getBlockstateLocation(ResourceLocation location) {
@@ -106,9 +105,9 @@ public class ModelUtil {
 			"blockstates/" + location.getPath() + ".json");
 	}
 
-	private static ModelBlockDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
-		List<ModelBlockDefinition> list = Lists.newArrayList();
-		Minecraft mc = Minecraft.getMinecraft();
+	private static BlockModelDefinition loadMultipartMBD(ResourceLocation location, ResourceLocation fileIn) {
+		List<BlockModelDefinition> list = Lists.newArrayList();
+		Minecraft mc = Minecraft.getInstance();
 		IResourceManager manager = mc.getResourceManager();
 
 		try {
@@ -119,20 +118,21 @@ public class ModelUtil {
 			throw new RuntimeException("Encountered an exception when loading model definition of model " + fileIn, e);
 		}
 
-		return new ModelBlockDefinition(list);
+		return new BlockModelDefinition(list);
 	}
 
-	private static ModelBlockDefinition loadModelBlockDefinition(ResourceLocation location, IResource resource) {
+	//TODO - how to load from arbitary stream now, then can uncomment
+	private static BlockModelDefinition loadModelBlockDefinition(ResourceLocation location, IResource resource) {
 		InputStream inputStream = null;
-		ModelBlockDefinition definition;
+		BlockModelDefinition definition;
 
 		try {
 			inputStream = resource.getInputStream();
-			definition = ModelBlockDefinition.parseFromReader(new InputStreamReader(inputStream, Charsets.UTF_8), location);
+			definition = BlockModelDefinition.fromJson(new BlockModelDefinition.ContainerHolder(), new InputStreamReader(inputStream, Charsets.UTF_8), location);
 		} catch (Exception exception) {
 			throw new RuntimeException("Encountered an exception when loading model definition of \'" + location
-				+ "\' from: \'" + resource.getResourceLocation() + "\' in resourcepack: \'"
-				+ resource.getResourcePackName() + "\'", exception);
+				+ "\' from: \'" + resource.getLocation() + "\' in resourcepack: \'"
+				+ resource.getPackName() + "\'", exception);
 		} finally {
 			IOUtils.closeQuietly(inputStream);
 		}

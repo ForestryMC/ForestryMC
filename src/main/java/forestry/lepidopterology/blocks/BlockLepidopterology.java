@@ -12,13 +12,14 @@ package forestry.lepidopterology.blocks;
 
 import net.minecraft.block.material.Material;
 
-import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
 
 public class BlockLepidopterology extends BlockBase<BlockTypeLepidopterologyTesr> {
 	public BlockLepidopterology(BlockTypeLepidopterologyTesr type) {
 		super(type, Material.WOOD);
-		setCreativeTab(Tabs.tabLepidopterology);
-		setHarvestLevel("axe", 0);
+		//TODO harvest level
+		//TODO creative tab
+		//		setCreativeTab(Tabs.tabLepidopterology);
+		//		setHarvestLevel("axe", 0);
 	}
 }

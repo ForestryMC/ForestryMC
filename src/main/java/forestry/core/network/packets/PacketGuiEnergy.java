@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.network.ForestryPacket;
@@ -42,10 +42,10 @@ public class PacketGuiEnergy extends ForestryPacket implements IForestryPacketCl
 		data.writeVarInt(value);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			int windowId = data.readVarInt();
 			int value = data.readVarInt();
 			if (player.openContainer instanceof ContainerTile && player.openContainer.windowId == windowId) {

@@ -13,10 +13,10 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nullable;
 import java.util.Collections;
 
-import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 
 import com.mojang.authlib.GameProfile;
 
@@ -82,7 +82,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 
 	@Override
 	public BlockPos getCoordinates() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override

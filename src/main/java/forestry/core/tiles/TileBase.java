@@ -13,46 +13,45 @@ package forestry.core.tiles;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.core.blocks.BlockBase;
-import forestry.core.gui.GuiHandler;
 
 public abstract class TileBase extends TileForestry {
 
-	public void openGui(EntityPlayer player, ItemStack heldItem) {
-		GuiHandler.openGui(player, this);
+	public TileBase(TileEntityType<?> tileEntityTypeIn) {
+		super(tileEntityTypeIn);
+	}
+
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, pos);
 	}
 
 	@Override
 	public String getUnlocalizedTitle() {
-		Block block = getBlockType();
+		Block block = getBlockState().getBlock();
 		if (block instanceof BlockBase) {
-			return block.getTranslationKey() + ".name";
+			return block.getTranslationKey();
 		}
 		return super.getUnlocalizedTitle();
 	}
 
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		Block oldBlock = oldState.getBlock();
-		Block newBlock = newState.getBlock();
-		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
-	}
+	//TODO
+	//	@Override
+	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+	//		Block oldBlock = oldState.getBlock();
+	//		Block newBlock = newState.getBlock();
+	//		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
+	//	}
 
 	@Nonnull
-	public EnumFacing getFacing() {
-		IBlockState state = getWorld().getBlockState(getPos());
-		// This test is needed if the save gets corrupted a bug occurs that the tile still exists even if the block isn't a forestry block anymore
-		if (!(state.getBlock() instanceof BlockBase)) {
-			return EnumFacing.DOWN;
-		}
-		return state.getValue(BlockBase.FACING);
+	public Direction getFacing() {
+		return getWorld().getBlockState(getPos()).get(BlockBase.FACING);
 	}
 
 }

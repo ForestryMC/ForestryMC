@@ -13,16 +13,16 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.core.IErrorLogic;
-import forestry.core.capabilities.HasWorkWrapper;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamableGui;
@@ -32,7 +32,9 @@ import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
 
-import static forestry.core.capabilities.HasWorkWrapper.CAPABILITY_HAS_WORK;
+//import forestry.core.capabilities.HasWorkWrapper;
+
+//import static forestry.core.capabilities.HasWorkWrapper.CAPABILITY_HAS_WORK;
 
 public abstract class TilePowered extends TileBase implements IRenderableTile, ISpeedUpgradable, IStreamableGui {
 
@@ -50,7 +52,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(int maxTransfer, int capacity) {
+	protected TilePowered(TileEntityType<?> type, int maxTransfer, int capacity) {
+		super(type);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 
@@ -152,16 +155,16 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt = super.writeToNBT(nbt);
-		energyManager.writeToNBT(nbt);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt = super.write(nbt);
+		energyManager.write(nbt);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		energyManager.readFromNBT(nbt);
+	public void read(CompoundNBT nbt) {
+		super.read(nbt);
+		energyManager.read(nbt);
 	}
 
 	@Override
@@ -172,7 +175,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readGuiData(PacketBufferForestry data) throws IOException {
 		energyManager.readData(data);
 		workCounter = data.readVarInt();
@@ -199,22 +202,21 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	/* IPowerHandler */
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		if (capability == CAPABILITY_HAS_WORK) {
-			return true;
-		}
-		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
-	}
+	//	@Override
+	//	public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
+	//		if (capability == CAPABILITY_HAS_WORK) {
+	//			return true;
+	//		}
+	//		return energyManager.hasCapability(capability) || super.hasCapability(capability, facing);
+	//	}
 
 	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if (capability == CAPABILITY_HAS_WORK) {
-			return CAPABILITY_HAS_WORK.cast(new HasWorkWrapper(this));
-		}
-		T energyCapability = energyManager.getCapability(capability);
-		if (energyCapability != null) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		//		if (capability == CAPABILITY_HAS_WORK) {
+		//			return CAPABILITY_HAS_WORK.cast(new HasWorkWrapper(this));
+		//		}
+		LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+		if (energyCapability.isPresent()) {
 			return energyCapability;
 		}
 		return super.getCapability(capability, facing);

@@ -1,0 +1,15 @@
+{
+  "conditions": {
+    "module": "forestry.core.recipes.DisableRecipe"
+  },
+  "recipes": {
+    "wood_type": "forestry.arboriculture.recipes.WoodTypeRecipeFactory",
+    "farm_block": "forestry.farming.recipes.FarmBlockRecipe$Factory",
+    "comb_block": "forestry.apiculture.recipes.CombBlockRecipe$Factory",
+    "variable_output": "forestry.core.recipes.VariableOutputRecipeFactory"
+  },
+  "ingredients": {
+    "fallback": "forestry.core.recipes.FallbackIngredientFactory",
+    "multi_null": "forestry.core.recipes.MultipleNullableIngredientFactory"
+  }
+}

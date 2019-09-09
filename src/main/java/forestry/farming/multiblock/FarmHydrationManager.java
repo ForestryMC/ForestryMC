@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -84,10 +84,10 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setInteger("HydrationDelay", hydrationDelay);
-		nbttagcompound.setInteger("TicksSinceRainfall", ticksSinceRainfall);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT.putInt("HydrationDelay", hydrationDelay);
+		compoundNBT.putInt("TicksSinceRainfall", ticksSinceRainfall);
+		return compoundNBT;
 	}
 
 	@Override
@@ -103,8 +103,8 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		hydrationDelay = nbt.getInteger("HydrationDelay");
-		ticksSinceRainfall = nbt.getInteger("TicksSinceRainfall");
+	public void read(CompoundNBT nbt) {
+		hydrationDelay = nbt.getInt("HydrationDelay");
+		ticksSinceRainfall = nbt.getInt("TicksSinceRainfall");
 	}
 }

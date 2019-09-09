@@ -11,6 +11,7 @@ import java.util.List;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.core.INbtWritable;
 
@@ -41,7 +42,7 @@ public interface ILetter extends IInventory, INbtWritable {
 
 	String getText();
 
-	void addTooltip(List<String> list);
+	void addTooltip(List<ITextComponent> list);
 
 	boolean isPostPaid();
 

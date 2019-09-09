@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.io.IOException;
-
 import org.apache.commons.lang3.StringUtils;
 
-import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
@@ -24,50 +24,53 @@ import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
 
-import org.lwjgl.input.Keyboard;
+import org.lwjgl.glfw.GLFW;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	private final TileTrader tile;
-	private GuiTextField addressNameField;
+	private TextFieldWidget addressNameField;
 
-	public GuiTradeName(TileTrader tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile));
-		this.tile = tile;
+	public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", container, inv, title);
+		this.tile = container.getTile();
 		this.xSize = 176;
 		this.ySize = 90;
 
-		addressNameField = new GuiTextField(0, this.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14);
+		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, "");
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
-		addressNameField = new GuiTextField(0, this.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14);
+		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, "");
 		addressNameField.setText(container.getAddress().getName());
-		addressNameField.setFocused(true);
+		addressNameField.focused = true;
 	}
 
 	@Override
-	protected void keyTyped(char eventCharacter, int eventKey) throws IOException {
+	public boolean keyPressed(int eventCharacter, int eventKey, int int3) {
 
 		// Set focus or enter text into address
 		if (addressNameField.isFocused()) {
-			if (eventKey == Keyboard.KEY_RETURN) {
+			if (eventKey == GLFW.GLFW_KEY_ENTER) {
 				setAddress();
 			} else {
-				addressNameField.textboxKeyTyped(eventCharacter, eventKey);
+				addressNameField.keyPressed(eventCharacter, eventKey, int3);
 			}
-			return;
+			return true;
 		}
 
-		super.keyTyped(eventCharacter, eventKey);
+		return super.keyPressed(eventCharacter, eventKey, int3);
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
+			return false;    //TODO this return value
+		}
 		addressNameField.mouseClicked(mouseX, mouseY, mouseButton);
+		return true;
 	}
 
 	@Override
@@ -79,12 +82,12 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 		textLayout.newLine();
 		textLayout.drawCenteredLine(prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
 		textLayout.endPage();
-		addressNameField.drawTextBox();
+		addressNameField.render(var2, var3, var1);    //TODO correct?
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
+	public void onClose() {
+		super.onClose();
 		setAddress();
 	}
 

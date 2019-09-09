@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.IArmorApiarist;
@@ -21,26 +23,24 @@ import forestry.api.apiculture.IArmorApiaristHelper;
 public class ArmorApiaristHelper implements IArmorApiaristHelper {
 
 	@Override
-	public boolean isArmorApiarist(ItemStack stack, EntityLivingBase entity, String cause, boolean doProtect) {
+	public boolean isArmorApiarist(ItemStack stack, LivingEntity entity, ResourceLocation cause, boolean doProtect) {
 		if (stack.isEmpty()) {
 			return false;
 		}
 
-		final Item item = stack.getItem();
 		final IArmorApiarist armorApiarist;
-		if (item instanceof IArmorApiarist) { // legacy
-			armorApiarist = (IArmorApiarist) item;
-		} else if (stack.hasCapability(ApicultureCapabilities.ARMOR_APIARIST, null)) {
-			armorApiarist = stack.getCapability(ApicultureCapabilities.ARMOR_APIARIST, null);
+		LazyOptional<IArmorApiarist> armorCap = stack.getCapability(ApicultureCapabilities.ARMOR_APIARIST);
+		if (armorCap.isPresent()) {
+			armorApiarist = armorCap.orElse(null);
 		} else {
 			return false;
 		}
 
-		return armorApiarist != null && armorApiarist.protectEntity(entity, stack, cause, doProtect);
+		return armorApiarist.protectEntity(entity, stack, cause, doProtect);
 	}
 
 	@Override
-	public int wearsItems(EntityLivingBase entity, String cause, boolean doProtect) {
+	public int wearsItems(LivingEntity entity, ResourceLocation cause, boolean doProtect) {
 		int count = 0;
 
 		for (ItemStack armorItem : entity.getEquipmentAndArmor()) {

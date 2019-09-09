@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class PacketHandlerDummyClient extends PacketHandlerDummy implements IForestryPacketHandlerClient {
 	public static final PacketHandlerDummyClient INSTANCE = new PacketHandlerDummyClient();
 
@@ -27,7 +27,7 @@ public class PacketHandlerDummyClient extends PacketHandlerDummy implements IFor
 	}
 
 	@Override
-	public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+	public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 
 	}
 }

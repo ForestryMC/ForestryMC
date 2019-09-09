@@ -15,30 +15,31 @@ import com.google.common.base.Preconditions;
 import java.util.Objects;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
 
-import forestry.api.arboriculture.IAlleleTreeSpecies;
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.core.IModelBaker;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
-import forestry.arboriculture.blocks.PropertyTreeTypeFruit;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeavesFruit, ModelDefaultLeavesFruit.Key> {
 	public ModelDefaultLeavesFruit() {
 		super(BlockDefaultLeavesFruit.class);
@@ -76,26 +77,24 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 		Block block = Block.getBlockFromItem(stack.getItem());
 		Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "ItemStack must be for default fruit leaves.");
 		BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
-		return new Key(bBlock.getTreeType(stack.getMetadata()).definition, Proxies.render.fancyGraphicsEnabled());
+		return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected ModelDefaultLeavesFruit.Key getWorldKey(IBlockState state) {
+	protected ModelDefaultLeavesFruit.Key getWorldKey(BlockState state, IModelData extraData) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "state must be for default fruit leaves.");
 		BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
-		PropertyTreeTypeFruit.LeafVariant leafVariant = bBlock.getLeafVariant(state);
-		Preconditions.checkNotNull(leafVariant);
-		return new ModelDefaultLeavesFruit.Key(leafVariant.definition, Proxies.render.fancyGraphicsEnabled());
+		return new ModelDefaultLeavesFruit.Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
 	}
 
 	@Override
-	protected void bakeBlock(BlockDefaultLeavesFruit block, Key key, IModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDefaultLeavesFruit block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
-		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
-		ITreeGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getPrimary();
+		IGenome genome = treeDefinition.getGenome();
+		IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
@@ -105,7 +104,7 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 		baker.addBlockModel(null, leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
 		// Render overlay for fruit leaves.
-		ResourceLocation fruitSpriteLocation = genome.getFruitProvider().getDecorativeSprite();
+		ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
 		if (fruitSpriteLocation != null) {
 			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
 			baker.addBlockModel(null, fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
@@ -116,10 +115,10 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 	}
 
 	@Override
-	protected IBakedModel bakeModel(IBlockState state, Key key, BlockDefaultLeavesFruit block) {
-		IModelBaker baker = new ModelBaker();
+	protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeavesFruit block, IModelData extraData) {
+		ModelBaker baker = new ModelBaker();
 
-		bakeBlock(block, key, baker, false);
+		bakeBlock(block, extraData, key, baker, false);
 
 		blockModel = baker.bakeModel(false);
 		onCreateModel(blockModel);

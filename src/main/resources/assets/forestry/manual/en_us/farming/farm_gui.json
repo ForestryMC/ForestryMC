@@ -75,7 +75,7 @@
 				"text": "\n"
 			},
 			{
-				"text": "This shows how much water the Multi-Farm currently has. It can be filled through (I) or through Farm Valve blocks."
+              "text": "This shows how much water the Multi-Farm currently has. It can be filled through (I) or through Farm Valve block."
 			}
 		],
 		[
@@ -110,7 +110,7 @@
 				"text": "\n"
 			},
 			{
-				"text": "This is where you will place the necessary soil for the farm to either lay down the farmland (if it's a Managed Farm) or to replace decayed soil blocks."
+              "text": "This is where you will place the necessary soil for the farm to either lay down the farmland (if it's a Managed Farm) or to replace decayed soil block."
 			}
 		],
 		[

@@ -12,16 +12,17 @@ package forestry.apiculture.inventory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingMode;
-import forestry.api.apiculture.IHiveFrame;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.utils.SlotUtil;
 
@@ -76,8 +77,9 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 				IHiveFrame hiveFrame = (IHiveFrame) hiveFrameItem;
 
 				ItemStack queenStack = getQueen();
-				IBee queen = BeeManager.beeRoot.getMember(queenStack);
-				if (queen != null) {
+				Optional<IBee> optionalBee = BeeManager.beeRoot.create(queenStack);
+				if (optionalBee.isPresent()) {
+					IBee queen = optionalBee.get();
 					ItemStack usedFrame = hiveFrame.frameUsed(beeHousing, hiveFrameStack, queen, wear);
 
 					setInventorySlotContents(i, usedFrame);

@@ -1,11 +1,12 @@
 package forestry.core.gui.elements.layouts;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.IElementLayout;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class AbstractElementLayout extends ElementGroup implements IElementLayout {
 	/* The distance between the different elements of this group. */
 	public int distance;

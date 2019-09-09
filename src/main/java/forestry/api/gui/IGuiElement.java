@@ -10,10 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.events.GuiElementEvent;
 import forestry.api.gui.events.GuiEventDestination;
@@ -27,7 +28,7 @@ import forestry.api.gui.events.GuiEventOrigin;
  * The interface the most gui elements of forestry implement. You must place the element a containment hierarchy whose
  * root is a top-level {@link IWindowElement}.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface IGuiElement extends ICroppable {
 	/* Position and Size*/
 
@@ -174,7 +175,7 @@ public interface IGuiElement extends ICroppable {
 	 * @param mouseY The y position of the mouse relative to the parent of the element.
 	 * @return True if the mouse is currently over the element.
 	 */
-	boolean isMouseOver(int mouseX, int mouseY);
+	boolean isMouseOver(double mouseX, double mouseY);
 
 	/**
 	 * @return True if the mouse is currently over the element.
@@ -188,9 +189,9 @@ public interface IGuiElement extends ICroppable {
 	/* Updates */
 
 	/**
-	 * Updates the element. Called at {@link GuiScreen#updateScreen()}.
+	 * Updates the element. Called at {@link Screen#updateScreen()}.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void updateClient();
 
 	/* State */
@@ -258,12 +259,12 @@ public interface IGuiElement extends ICroppable {
 	 * @param mouseX The x position of the mouse relative to the parent of the element.
 	 * @param mouseY The y position of the mouse relative to the parent of the element.
 	 */
-	List<String> getTooltip(int mouseX, int mouseY);
+	List<ITextComponent> getTooltip(int mouseX, int mouseY);
 
 	/**
 	 * @return Returns the tooltips that were added with {@link #addTooltip(String)} and {@link #addTooltip(Collection)}.
 	 */
-	List<String> getTooltip();
+	List<ITextComponent> getTooltip();
 
 	/* Events */
 

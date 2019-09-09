@@ -15,22 +15,20 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
-
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
@@ -39,13 +37,11 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.fluids.Fluids;
-import forestry.core.items.EnumContainerType;
+import forestry.core.fluids.ForestryFluid;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.ItemRegistryCore;
 import forestry.core.items.ItemRegistryFluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.Log;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -54,51 +50,84 @@ public class ModuleFluids extends BlankForestryModule {
 	@Nullable
 	private static ItemRegistryFluids items;
 
-	private static void createFluid(Fluids fluidDefinition) {
-		if (fluidDefinition.getFluid() == null && Config.isFluidEnabled(fluidDefinition)) {
-			String fluidName = fluidDefinition.getTag();
-			if (!FluidRegistry.isFluidRegistered(fluidName)) {
-				ResourceLocation[] resources = fluidDefinition.getResources();
-				Fluid fluid = new Fluid(fluidName, resources[0], fluidDefinition.flowTextureExists() ? resources[1] : resources[0]);
-				fluid.setDensity(fluidDefinition.getDensity());
-				fluid.setViscosity(fluidDefinition.getViscosity());
-				fluid.setTemperature(fluidDefinition.getTemperature());
-				FluidRegistry.registerFluid(fluid);
-				createBlock(fluidDefinition);
+	private static void createFluids(ForestryFluids definition) {
+		/*if (definition.getFluid() == null && Config.isFluidEnabled(definition)) {
+			String fluidName = definition.getTag();
+			if (false){//!FluidRegistry.isFluidRegistered(fluidName)) { TODO fluids
+				ResourceLocation[] resources = definition.getResources();
+				Fluid fluid = new Fluid(fluidName, resources[0], definition.flowTextureExists() ? resources[1] : resources[0]);
+				fluid.setDensity(definition.getDensity());
+				fluid.setViscosity(definition.getViscosity());
+				fluid.setTemperature(definition.getTemperature());
+//				FluidRegistry.registerFluid(fluid);
+				createBlocks(definition);
 			}
+		}*/
+
+		if (Config.isFluidEnabled(definition)) {
+			IForgeRegistry<Fluid> registry = ForgeRegistries.FLUIDS;
+			registry.registerAll(definition.getFluid(), definition.getFlowing());
 		}
 	}
 
-	private static void createBlock(Fluids forestryFluid) {
-		Fluid fluid = forestryFluid.getFluid();
-		Preconditions.checkNotNull(fluid);
-		Block fluidBlock = fluid.getBlock();
-
-		if (Config.isBlockEnabled(forestryFluid.getTag())) {
-			if (fluidBlock == null) {
-				fluidBlock = forestryFluid.makeBlock();
-				if (fluidBlock != null) {
-					String name = "fluid." + forestryFluid.getTag();
-					fluidBlock.setTranslationKey("forestry." + name);
-					fluidBlock.setRegistryName(name);
-					ForgeRegistries.BLOCKS.register(fluidBlock);
-
-					ItemBlock itemBlock = new ItemBlock(fluidBlock);
-					itemBlock.setRegistryName(name);
-					ForgeRegistries.ITEMS.register(itemBlock);
-
-					Proxies.render.registerFluidStateMapper(fluidBlock, forestryFluid);
-					if (forestryFluid.getOtherContainers().isEmpty()) {
-						FluidRegistry.addBucketForFluid(fluid);
-					}
-				}
-			} else {
-				ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(fluidBlock);
-				Log.warning("Pre-existing {} fluid block detected, deferring to {}:{}, "
-					+ "this may cause issues if the server/client have different mod load orders, "
-					+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getName(), resourceLocation.getNamespace(), resourceLocation.getPath(), fluid.getName());
-			}
+	private static void createBlocks(ForestryFluids definition) {
+		if (!Config.isFluidEnabled(definition)) {
+			return;
 		}
+		Fluid sourceFluid = new ForestryFluid.Source(definition);
+		Fluid flowingFluid = new ForestryFluid.Flowing(definition);
+		definition.setSourceFluid(sourceFluid);
+		definition.setFlowingFluid(flowingFluid);
+		sourceFluid.setRegistryName(definition.getTag());
+		flowingFluid.setRegistryName(Constants.MOD_ID, definition.getTag().getPath() + "_flowing");
+		if (!Config.isBlockEnabled(definition.getTag())) {
+			return;
+		}
+		Block sourceBlock = createBlock(definition, false);
+		Block flowingBlock = createBlock(definition, true);
+		definition.setSourceBlock(sourceBlock);
+		definition.setFlowingBlock(flowingBlock);
+		/*if (fluidBlock == null) {
+			fluidBlock = definition.makeBlock(fluid);
+			if (fluidBlock != null) {
+				String name = "fluid." + definition.getTag();
+//					fluidBlock.setTranslationKey("forestry." + name); TODO done by registry name?
+				fluidBlock.setRegistryName(name);
+				ForgeRegistries.BLOCKS.register(fluidBlock);
+
+				BlockItem itemBlock = new BlockItem(fluidBlock, new Item.Properties());
+				itemBlock.setRegistryName(name);
+				ForgeRegistries.ITEMS.register(itemBlock);
+
+				Proxies.render.registerFluidStateMapper(fluidBlock, definition);
+				if (definition.getOtherContainers().isEmpty()) {
+//						FluidRegistry.addBucketForFluid(fluid);
+				}
+			}
+		} else {
+			ResourceLocation resourceLocation = ForgeRegistries.BLOCKS.getKey(fluidBlock);
+			Log.warning("Pre-existing {} fluid block detected, deferring to {}:{}, "
+				+ "this may cause issues if the server/client have different mod load orders, "
+				+ "recommended that you disable all but one instance of {} fluid blocks via your configs.", fluid.getRegistryName(), resourceLocation.getNamespace(), resourceLocation.getPath(), fluid.getRegistryName());
+		}*/
+	}
+
+	private static Block createBlock(ForestryFluids definition, boolean flowing) {
+		Block fluidBlock = definition.makeBlock(flowing);
+		String name = "fluid." + definition.getTag().getPath() + (flowing ? "_flowing" : "");
+		//fluidBlock.setTranslationKey("forestry." + name); TODO done by registry name?
+		fluidBlock.setRegistryName(name);
+		ForgeRegistries.BLOCKS.register(fluidBlock);
+
+		BlockItem itemBlock = new BlockItem(fluidBlock, new Item.Properties());
+		itemBlock.setRegistryName(name);
+		ForgeRegistries.ITEMS.register(itemBlock);
+
+		Proxies.render.registerFluidStateMapper(fluidBlock, definition);
+		if (definition.getOtherContainers().isEmpty()) {
+			//FluidRegistry.addBucketForFluid(fluid);
+		}
+		return fluidBlock;
 	}
 
 	public static ItemRegistryFluids getItems() {
@@ -112,12 +141,21 @@ public class ModuleFluids extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
-		for (Fluids fluidType : Fluids.values()) {
-			createFluid(fluidType);
+	public void registerBlocks() {
+		for (ForestryFluids fluidType : ForestryFluids.values()) {
+			createBlocks(fluidType);
 		}
+	}
 
+	@Override
+	public void registerItems() {
 		items = new ItemRegistryFluids();
+	}
+
+	public static void registerFluids() {
+		for (ForestryFluids fluidType : ForestryFluids.values()) {
+			createFluids(fluidType);
+		}
 	}
 
 	@Override
@@ -134,49 +172,30 @@ public class ModuleFluids extends BlankForestryModule {
 			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
 		}
 
-		FluidStack ethanol = Fluids.BIO_ETHANOL.getFluid(1);
-		if (ethanol != null) {
+		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
+		if (!ethanol.isEmpty()) {
 			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
 			FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 		}
 
-		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
-		if (biomass != null) {
+		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(1);
+		if (!biomass.isEmpty()) {
 			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
 			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 		}
 	}
 
-	@Override
-	public void registerRecipes() {
-		Fluid milk = Fluids.MILK.getFluid();
-		if (milk == null) {
-			return;
-		}
-		for (EnumContainerType containerType : EnumContainerType.values()) {
-			if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
-				continue;
-			}
-			RecipeUtil.addRecipe("cake_" + containerType.getName(), new ItemStack(Items.CAKE),
-				"AAA",
-				"BEB",
-				"CCC",
-				'A', items.getContainer(containerType, milk),
-				'B', Items.SUGAR,
-				'C', Items.WHEAT,
-				'E', Items.EGG);
-		}
-	}
-
+	//TODO - register event handler
 	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerTextures(TextureStitchEvent.Pre event) {
-		TextureMap map = event.getMap();
-		for (Fluids fluids : Fluids.values()) {
+		AtlasTexture map = event.getMap();
+		for (ForestryFluids fluids : ForestryFluids.values()) {
 			Fluid fluid = fluids.getFluid();
-			if (fluid != null) {
-				map.registerSprite(fluid.getStill());
-				map.registerSprite(fluid.getFlowing());
+			if (fluid == Fluids.EMPTY) {
+				//TODO fluid textures
+				//				map.registerSprite(fluid.getStill());
+				//				map.registerSprite(fluid.getFlowing());
 			}
 		}
 	}

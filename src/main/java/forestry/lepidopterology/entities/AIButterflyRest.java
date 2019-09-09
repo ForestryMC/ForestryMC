@@ -10,13 +10,16 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import java.util.EnumSet;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockWall;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FlowerBlock;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.IPlantable;
@@ -25,7 +28,8 @@ public class AIButterflyRest extends AIButterflyBase {
 
 	public AIButterflyRest(EntityButterfly entity) {
 		super(entity);
-		setMutexBits(3);
+		setMutexFlags(EnumSet.of(Flag.MOVE));
+		//		setMutexBits(3);	TODO mutex
 	}
 
 	@Override
@@ -49,7 +53,7 @@ public class AIButterflyRest extends AIButterflyBase {
 		if (entity.world.isAirBlock(pos)) {
 			return false;
 		}
-		IBlockState blockState = entity.world.getBlockState(pos);
+		BlockState blockState = entity.world.getBlockState(pos);
 		if (blockState.getMaterial().isLiquid()) {
 			return false;
 		}
@@ -79,7 +83,7 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		entity.changeExhaustion(-1);
 	}
 
@@ -87,30 +91,31 @@ public class AIButterflyRest extends AIButterflyBase {
 		if (!entity.world.isBlockLoaded(pos)) {
 			return false;
 		}
-		IBlockState blockState = entity.world.getBlockState(pos);
+		BlockState blockState = entity.world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (!block.isPassable(entity.world, pos)) {
+		if (!block.isAir(blockState)) {    //TODO
+			//			if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}
 		if (isPlant(blockState)) {
 			return true;
 		}
 
-		IBlockState blockStateBelow = entity.world.getBlockState(pos.down());
+		BlockState blockStateBelow = entity.world.getBlockState(pos.down());
 		Block blockBelow = blockStateBelow.getBlock();
-		return isRest(blockBelow) || blockBelow.isLeaves(blockStateBelow, entity.world, pos.down());
+		return isRest(blockBelow) || blockBelow.isIn(BlockTags.LEAVES);
 	}
 
 	private static boolean isRest(Block block) {
-		if (block instanceof BlockFence) {
+		if (block instanceof FenceBlock) {
 			return true;
 		}
-		return block instanceof BlockWall;
+		return block instanceof WallBlock;
 	}
 
-	private static boolean isPlant(IBlockState blockState) {
+	private static boolean isPlant(BlockState blockState) {
 		Block block = blockState.getBlock();
-		if (block instanceof BlockFlower) {
+		if (block instanceof FlowerBlock) {
 			return true;
 		} else if (block instanceof IPlantable) {
 			return true;

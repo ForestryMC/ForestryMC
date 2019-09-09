@@ -10,7 +10,9 @@
         "transform": "forge:default-block"
      },
     "variants": {
-      "normal": [{}],
+      "": [
+        {}
+      ],
       "inventory": [{ }],
       "contained": [{
           "model": "stone",

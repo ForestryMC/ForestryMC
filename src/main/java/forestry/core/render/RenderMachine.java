@@ -14,28 +14,29 @@ import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Locale;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import forestry.core.blocks.BlockBase;
-import forestry.core.fluids.Fluids;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 
-public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
+public class RenderMachine implements IForestryRenderer<TileBase> {
 
-	private final ModelRenderer basefront;
-	private final ModelRenderer baseback;
-	private final ModelRenderer resourceTank;
-	private final ModelRenderer productTank;
+	private final RendererModel basefront;
+	private final RendererModel baseback;
+	private final RendererModel resourceTank;
+	private final RendererModel productTank;
 
 	private final ResourceLocation textureBase;
 	private final ResourceLocation textureResourceTank;
@@ -44,27 +45,27 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 	private final EnumMap<EnumTankLevel, ResourceLocation> texturesTankLevels = new EnumMap<>(EnumTankLevel.class);
 
 	public RenderMachine(String baseTexture) {
-		ModelBase model = new RenderModelBase();
+		Model model = new RenderModelBase();
 
-		basefront = new ModelRenderer(model, 0, 0);
+		basefront = new RendererModel(model, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
 		basefront.rotationPointX = 8;
 		basefront.rotationPointY = 8;
 		basefront.rotationPointZ = 8;
 
-		baseback = new ModelRenderer(model, 0, 0);
+		baseback = new RendererModel(model, 0, 0);
 		baseback.addBox(-8F, 4F, -8F, 16, 4, 16);
 		baseback.rotationPointX = 8;
 		baseback.rotationPointY = 8;
 		baseback.rotationPointZ = 8;
 
-		resourceTank = new ModelRenderer(model, 0, 0);
+		resourceTank = new RendererModel(model, 0, 0);
 		resourceTank.addBox(-6F, -8F, -6F, 12, 16, 6);
 		resourceTank.rotationPointX = 8;
 		resourceTank.rotationPointY = 8;
 		resourceTank.rotationPointZ = 8;
 
-		productTank = new ModelRenderer(model, 0, 0);
+		productTank = new RendererModel(model, 0, 0);
 		productTank.addBox(-6F, -8F, 0F, 12, 16, 6);
 		productTank.rotationPointX = 8;
 		productTank.rotationPointY = 8;
@@ -79,33 +80,29 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 				continue;
 			}
 			String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
-			texturesTankLevels.put(tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
+			texturesTankLevels.put(tankLevel, new ForestryResource("textures/block/machine_tank_" + tankLevelString + ".png"));
 		}
 	}
 
-	/**
-	 * @param tile If it null its render the item else it render the tile entity.
-	 */
 	@Override
-	public void render(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		if (tile != null) {
-			IRenderableTile generator = (IRenderableTile) tile;
-			World worldObj = tile.getWorldObj();
-			if (worldObj.isBlockLoaded(tile.getPos())) {
-				IBlockState blockState = worldObj.getBlockState(tile.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					EnumFacing facing = blockState.getValue(BlockBase.FACING);
-					render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, x, y, z, destroyStage);
-					return;
-				}
-			}
+	public void renderTile(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		IRenderableTile generator = (IRenderableTile) tile;
+		World worldObj = tile.getWorldObj();
+		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, x, y, z, destroyStage);
 		}
-		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, EnumFacing.SOUTH, x, y, z, -1);
 	}
 
-	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, EnumFacing orientation, double x, double y, double z, int destroyStage) {
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, Direction.SOUTH, 0, 0, 0, -1);
+	}
+
+	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, Direction orientation, double x, double y, double z, int destroyStage) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.translatef((float) x, (float) y, (float) z);
 		float[] angle = {0, 0, 0};
 
 		switch (orientation) {
@@ -150,7 +147,7 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textureBase);
 
 		basefront.render(factor);
@@ -160,11 +157,11 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		renderTank(productTank, textureProductTank, productTankInfo, factor);
 
 		GlStateManager.popMatrix();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+	private void renderTank(RendererModel tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textureBase);
 		tankModel.render(factor);
 
@@ -174,18 +171,18 @@ public class RenderMachine extends TileEntitySpecialRenderer<TileBase> {
 		}
 
 		// TODO: render fluid overlay on tank
-		Fluids fluidDefinition = Fluids.getFluidDefinition(renderInfo.getFluidStack());
+		ForestryFluids fluidDefinition = ForestryFluids.getFluidDefinition(renderInfo.getFluidStack());
 		Color primaryTankColor = fluidDefinition == null ? Color.BLUE : fluidDefinition.getParticleColor();
 		float[] colors = new float[3];
 		primaryTankColor.getRGBColorComponents(colors);
-		GlStateManager.color(colors[0], colors[1], colors[2], 1.0f);
+		GlStateManager.color4f(colors[0], colors[1], colors[2], 1.0f);
 
 		textureManager.bindTexture(textureResourceTankLevel);
 		tankModel.render(factor);
 
-		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	private static class RenderModelBase extends ModelBase {
+	private static class RenderModelBase extends Model {
 	}
 }

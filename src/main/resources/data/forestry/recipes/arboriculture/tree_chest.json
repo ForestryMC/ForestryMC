@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:tree_chest",
+    "data": 0
+  },
+  "pattern": [
+    " # ",
+    "XYX",
+    "XXX"
+  ],
+  "conditions": [
+    {
+      "module": "arboriculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "#TREESAPLING"
+    },
+    "Y": {
+      "item": "#CHESTWOOD"
+    }
+  },
+  "group": "arboriculture"
+}

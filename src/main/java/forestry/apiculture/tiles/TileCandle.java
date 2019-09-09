@@ -10,41 +10,47 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.apiculture.ModuleApiculture;
 
 public class TileCandle extends TileEntity {
 	private int colour;
 	private boolean lit;
 
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+	public TileCandle() {
+		super(ModuleApiculture.getTiles().candle);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
-		NBTTagCompound nbt = pkt.getNbtCompound();
+		CompoundNBT nbt = pkt.getNbtCompound();
 		handleUpdateTag(nbt);
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound tag = super.getUpdateTag();
-		return writeToNBT(tag);
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = super.getUpdateTag();
+		return write(tag);
 	}
 
 	@Override
-	public void handleUpdateTag(NBTTagCompound tag) {
+	public void handleUpdateTag(CompoundNBT tag) {
 		super.handleUpdateTag(tag);
-		readFromNBT(tag);
+		read(tag);
 	}
 
 	public void onPacketUpdate(int colour, boolean isLit) {
@@ -53,17 +59,17 @@ public class TileCandle extends TileEntity {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tagRoot) {
-		super.readFromNBT(tagRoot);
-		colour = tagRoot.getInteger("colour");
+	public void read(CompoundNBT tagRoot) {
+		super.read(tagRoot);
+		colour = tagRoot.getInt("colour");
 		lit = tagRoot.getBoolean("lit");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagRoot) {
-		tagRoot = super.writeToNBT(tagRoot);
-		tagRoot.setInteger("colour", this.colour);
-		tagRoot.setBoolean("lit", this.lit);
+	public CompoundNBT write(CompoundNBT tagRoot) {
+		tagRoot = super.write(tagRoot);
+		tagRoot.putInt("colour", this.colour);
+		tagRoot.putBoolean("lit", this.lit);
 		return tagRoot;
 	}
 

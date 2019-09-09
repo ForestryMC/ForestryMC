@@ -10,22 +10,19 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import forestry.lepidopterology.entities.EntityButterfly;
 
-public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
+public class RenderButterflyEntity extends MobRenderer<EntityButterfly, ModelButterfly> {
 
-	private final ModelButterfly butterflyModel;
-
-	public RenderButterflyEntity(RenderManager manager) {
+	public RenderButterflyEntity(EntityRendererManager manager) {
 		super(manager, new ModelButterfly(), 0.25f);
-		butterflyModel = (ModelButterfly) mainModel;
 	}
 
 	private void renderButterfly(EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
@@ -33,7 +30,7 @@ public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
 			return;
 		}
 
-		butterflyModel.setScale(entity.getSize());
+		entityModel.setScale(entity.getSize());
 		super.doRender(entity, x, y, z, light, partialTickTime);
 	}
 
@@ -54,7 +51,7 @@ public class RenderButterflyEntity extends RenderLiving<EntityButterfly> {
 
 	public static class Factory implements IRenderFactory<EntityButterfly> {
 		@Override
-		public Render<? super EntityButterfly> createRenderFor(RenderManager manager) {
+		public EntityRenderer<? super EntityButterfly> createRenderFor(EntityRendererManager manager) {
 			return new RenderButterflyEntity(manager);
 		}
 

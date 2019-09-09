@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.WorldSavedData;
 
 import forestry.api.circuits.ICircuitLibrary;
@@ -22,11 +22,11 @@ public class CircuitLibrary extends WorldSavedData implements ICircuitLibrary {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void read(CompoundNBT nbt) {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public CompoundNBT write(CompoundNBT nbt) {
 		return nbt;
 	}
 

@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.circuits.ISocketable;
 
@@ -24,30 +25,30 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 
 	private final ContainerSocketedHelper<T> helper;
 
-	protected ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
-		super(tile, playerInventory, xInv, yInv);
-		this.helper = new ContainerSocketedHelper<>(tile);
+	protected ContainerSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+		super(windowId, type, playerInventory, tile, xInv, yInv);
+		this.helper = new ContainerSocketedHelper<>(this.tile);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleChipsetClick(int slot) {
 		helper.handleChipsetClick(slot);
 	}
 
 	@Override
-	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+	public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
 		helper.handleChipsetClickServer(slot, player, itemstack);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleSolderingIronClick(int slot) {
 		helper.handleSolderingIronClick(slot);
 	}
 
 	@Override
-	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+	public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
 		helper.handleSolderingIronClickServer(slot, player, itemstack);
 	}
 }

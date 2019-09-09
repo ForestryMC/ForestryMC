@@ -14,11 +14,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.AbstractChunkProvider;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
@@ -38,17 +38,18 @@ public class MultiblockUtil {
 	public static List<IMultiblockComponent> getNeighboringParts(World world, IMultiblockComponent part) {
 		BlockPos partCoord = part.getCoordinates();
 
-		List<BlockPos> neighbors = new ArrayList<>(EnumFacing.values().length);
-		for (EnumFacing facing : EnumFacing.values()) {
+		List<BlockPos> neighbors = new ArrayList<>(Direction.values().length);
+		for (Direction facing : Direction.values()) {
 			BlockPos neighborCoord = new BlockPos(partCoord);
 			neighborCoord = neighborCoord.offset(facing);
 			neighbors.add(neighborCoord);
 		}
 
 		List<IMultiblockComponent> neighborParts = new ArrayList<>();
-		IChunkProvider chunkProvider = world.getChunkProvider();
+		AbstractChunkProvider chunkProvider = world.getChunkProvider();
 		for (BlockPos neighbor : neighbors) {
-			if (chunkProvider.getLoadedChunk(neighbor.getX() >> 4, neighbor.getZ() >> 4) == null) {
+			//TODO loaded chunk bool
+			if (chunkProvider.getChunk(neighbor.getX() >> 4, neighbor.getZ() >> 4, true) == null) {
 				// Chunk not loaded, skip it.
 				continue;
 			}
@@ -59,12 +60,12 @@ public class MultiblockUtil {
 	}
 
 	@Nullable
-	public static <C extends IMultiblockComponent> C getComponent(IBlockAccess world, BlockPos pos, Class<C> componentClass) {
+	public static <C extends IMultiblockComponent> C getComponent(IBlockReader world, BlockPos pos, Class<C> componentClass) {
 		return TileUtil.getTile(world, pos, componentClass);
 	}
 
 	@Nullable
-	public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(IBlockAccess world, BlockPos pos, Class<C> componentClass) {
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(IBlockReader world, BlockPos pos, Class<C> componentClass) {
 		C component = getComponent(world, pos, componentClass);
 		if (component == null) {
 			return null;
@@ -73,7 +74,7 @@ public class MultiblockUtil {
 	}
 
 	@Nullable
-	public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(IBlockAccess world, BlockPos pos, Class<C> componentClass) {
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(IBlockReader world, BlockPos pos, Class<C> componentClass) {
 		L logic = getLogic(world, pos, componentClass);
 		if (logic == null || !logic.isConnected()) {
 			return null;

@@ -1,12 +1,10 @@
 package forestry.energy;
 
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
-
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -17,37 +15,23 @@ import forestry.core.config.Config;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.energy.compat.EnergyStorageWrapper;
-import forestry.energy.compat.mj.MjConnectorWrapper;
 import forestry.energy.compat.mj.MjHelper;
-import forestry.energy.compat.mj.MjPassiveProviderWrapper;
-import forestry.energy.compat.mj.MjReadableWrapper;
-import forestry.energy.compat.mj.MjReceiverWrapper;
-import forestry.energy.compat.mj.MjRedstoneReceiverWrapper;
-import forestry.energy.compat.tesla.TeslaConsumerWrapper;
 import forestry.energy.compat.tesla.TeslaHelper;
-import forestry.energy.compat.tesla.TeslaHolderWrapper;
-import forestry.energy.compat.tesla.TeslaProducerWrapper;
 
-import buildcraft.api.mj.IMjConnector;
-import buildcraft.api.mj.IMjPassiveProvider;
-import buildcraft.api.mj.IMjReadable;
-import buildcraft.api.mj.IMjReceiver;
-import buildcraft.api.mj.IMjRedstoneReceiver;
-import net.darkhax.tesla.api.ITeslaConsumer;
-import net.darkhax.tesla.api.ITeslaHolder;
-import net.darkhax.tesla.api.ITeslaProducer;
+//import buildcraft.api.mj.IMjConnector;
+//import buildcraft.api.mj.IMjPassiveProvider;
+//import buildcraft.api.mj.IMjReadable;
+//import buildcraft.api.mj.IMjReceiver;
+//import buildcraft.api.mj.IMjRedstoneReceiver;
+//import net.darkhax.tesla.api.ITeslaConsumer;
+//import net.darkhax.tesla.api.ITeslaHolder;
+//import net.darkhax.tesla.api.ITeslaProducer;
 
 public class EnergyManager extends EnergyStorage implements IStreamable, INbtReadable, INbtWritable {
 	private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;
-	@Nullable
-	private Consumer<Integer> changeHandler;
 
 	public EnergyManager(int maxTransfer, int capacity) {
 		super(EnergyHelper.scaleForDifficulty(capacity), EnergyHelper.scaleForDifficulty(maxTransfer), EnergyHelper.scaleForDifficulty(maxTransfer));
-	}
-
-	public void setChangeHandler(@Nullable Consumer<Integer> changeHandler) {
-		this.changeHandler = changeHandler;
 	}
 
 	public void setExternalMode(EnergyTransferMode externalMode) {
@@ -59,22 +43,22 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void read(CompoundNBT nbt) {
 		final int energy;
-		if (nbt.hasKey("EnergyManager")) { // legacy
-			NBTTagCompound energyManagerNBT = nbt.getCompoundTag("EnergyManager");
-			NBTTagCompound energyStorageNBT = energyManagerNBT.getCompoundTag("EnergyStorage");
-			energy = energyStorageNBT.getInteger("Energy");
+		if (nbt.contains("EnergyManager")) { // legacy
+			CompoundNBT energyManagerNBT = nbt.getCompound("EnergyManager");
+			CompoundNBT energyStorageNBT = energyManagerNBT.getCompound("EnergyStorage");
+			energy = energyStorageNBT.getInt("Energy");
 		} else {
-			energy = nbt.getInteger("Energy");
+			energy = nbt.getInt("Energy");
 		}
 
 		setEnergyStored(energy);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("Energy", energy);
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt.putInt("Energy", energy);
 		return nbt;
 	}
 
@@ -111,33 +95,9 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 		this.energy = energyStored;
 		if (this.energy > capacity) {
 			this.energy = capacity;
-			if (changeHandler != null) {
-				changeHandler.accept(energy);
-			}
 		} else if (this.energy < 0) {
 			this.energy = 0;
-			if (changeHandler != null) {
-				changeHandler.accept(0);
-			}
 		}
-	}
-
-	@Override
-	public int extractEnergy(int maxExtract, boolean simulate) {
-		int value = super.extractEnergy(maxExtract, simulate);
-		if (changeHandler != null && value != 0 && !simulate) {
-			changeHandler.accept(energy);
-		}
-		return value;
-	}
-
-	@Override
-	public int receiveEnergy(int maxReceive, boolean simulate) {
-		int value = super.receiveEnergy(maxReceive, simulate);
-		if (changeHandler != null && value != 0 && !simulate) {
-			changeHandler.accept(energy);
-		}
-		return value;
 	}
 
 	public boolean hasCapability(Capability<?> capability) {
@@ -147,59 +107,59 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	private boolean hasTeslaCapability(Capability<?> capability) {
-		return capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract() ||
-			capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive() ||
-			capability == TeslaHelper.TESLA_HOLDER;
+		return false;
+		//		return capability == TeslaHelper.TESLA_PRODUCER && externalMode.canExtract() ||
+		//			capability == TeslaHelper.TESLA_CONSUMER && externalMode.canReceive() ||
+		//			capability == TeslaHelper.TESLA_HOLDER;
 	}
 
 	private boolean hasMjCapability(Capability<?> capability) {
-		return capability == MjHelper.CAP_READABLE ||
-			capability == MjHelper.CAP_CONNECTOR ||
-			capability == MjHelper.CAP_PASSIVE_PROVIDER && externalMode.canExtract() ||
-			capability == MjHelper.CAP_REDSTONE_RECEIVER && externalMode.canReceive() ||
-			capability == MjHelper.CAP_RECEIVER && externalMode.canReceive();
+		return false;//capability == MjHelper.CAP_READABLE ||
+		//			capability == MjHelper.CAP_CONNECTOR ||
+		//			capability == MjHelper.CAP_PASSIVE_PROVIDER && externalMode.canExtract() ||
+		//			capability == MjHelper.CAP_REDSTONE_RECEIVER && externalMode.canReceive() ||
+		//			capability == MjHelper.CAP_RECEIVER && externalMode.canReceive();
 	}
 
-	@Nullable
-	public <T> T getCapability(Capability<T> capability) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability) {
 		if (!hasCapability(capability)) {
-			return null;
+			return LazyOptional.empty();
 		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			IEnergyStorage energyStorage = new EnergyStorageWrapper(this, externalMode);
-			return CapabilityEnergy.ENERGY.cast(energyStorage);
+			return LazyOptional.of(() -> energyStorage).cast();
 		} else if (TeslaHelper.isTeslaCapability(capability)) {
-			Capability<ITeslaProducer> teslaProducer = TeslaHelper.TESLA_PRODUCER;
-			Capability<ITeslaConsumer> teslaConsumer = TeslaHelper.TESLA_CONSUMER;
-			Capability<ITeslaHolder> teslaHolder = TeslaHelper.TESLA_HOLDER;
-
-			if (capability == teslaProducer && externalMode.canExtract()) {
-				return teslaProducer.cast(new TeslaProducerWrapper(this));
-			} else if (capability == teslaConsumer && externalMode.canReceive()) {
-				return teslaConsumer.cast(new TeslaConsumerWrapper(this));
-			} else if (capability == teslaHolder) {
-				return teslaHolder.cast(new TeslaHolderWrapper(this));
-			}
+			//			Capability<ITeslaProducer> teslaProducer = TeslaHelper.TESLA_PRODUCER;
+			//			Capability<ITeslaConsumer> teslaConsumer = TeslaHelper.TESLA_CONSUMER;
+			//			Capability<ITeslaHolder> teslaHolder = TeslaHelper.TESLA_HOLDER;
+			//
+			//			if (capability == teslaProducer && externalMode.canExtract()) {
+			//				return teslaProducer.cast(new TeslaProducerWrapper(this));
+			//			} else if (capability == teslaConsumer && externalMode.canReceive()) {
+			//				return teslaConsumer.cast(new TeslaConsumerWrapper(this));
+			//			} else if (capability == teslaHolder) {
+			//				return teslaHolder.cast(new TeslaHolderWrapper(this));
+			//			}
 		} else if (MjHelper.isMjCapability(capability)) {
-			Capability<IMjConnector> mjConnector = MjHelper.CAP_CONNECTOR;
-			Capability<IMjPassiveProvider> mjPassiveProvider = MjHelper.CAP_PASSIVE_PROVIDER;
-			Capability<IMjReadable> mjReadable = MjHelper.CAP_READABLE;
-			Capability<IMjReceiver> mjReceiver = MjHelper.CAP_RECEIVER;
-			Capability<IMjRedstoneReceiver> mjRedstoneReceiver = MjHelper.CAP_REDSTONE_RECEIVER;
-
-			if (capability == mjPassiveProvider && externalMode.canExtract()) {
-				return mjPassiveProvider.cast(new MjPassiveProviderWrapper(this));
-			} else if (capability == mjReceiver && externalMode.canReceive()) {
-				return mjReceiver.cast(new MjReceiverWrapper(this));
-			} else if (capability == mjRedstoneReceiver && externalMode.canReceive()) {
-				return mjRedstoneReceiver.cast(new MjRedstoneReceiverWrapper(this));
-			} else if (capability == mjReadable) {
-				return mjReadable.cast(new MjReadableWrapper(this));
-			} else if (capability == mjConnector) {
-				return mjConnector.cast(new MjConnectorWrapper(this));
-			}
+			//			Capability<IMjConnector> mjConnector = MjHelper.CAP_CONNECTOR;
+			//			Capability<IMjPassiveProvider> mjPassiveProvider = MjHelper.CAP_PASSIVE_PROVIDER;
+			//			Capability<IMjReadable> mjReadable = MjHelper.CAP_READABLE;
+			//			Capability<IMjReceiver> mjReceiver = MjHelper.CAP_RECEIVER;
+			//			Capability<IMjRedstoneReceiver> mjRedstoneReceiver = MjHelper.CAP_REDSTONE_RECEIVER;
+			//
+			//			if (capability == mjPassiveProvider && externalMode.canExtract()) {
+			//				return mjPassiveProvider.cast(new MjPassiveProviderWrapper(this));
+			//			} else if (capability == mjReceiver && externalMode.canReceive()) {
+			//				return mjReceiver.cast(new MjReceiverWrapper(this));
+			//			} else if (capability == mjRedstoneReceiver && externalMode.canReceive()) {
+			//				return mjRedstoneReceiver.cast(new MjRedstoneReceiverWrapper(this));
+			//			} else if (capability == mjReadable) {
+			//				return mjReadable.cast(new MjReadableWrapper(this));
+			//			} else if (capability == mjConnector) {
+			//				return mjConnector.cast(new MjConnectorWrapper(this));
+			//			}
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 
 	public int calculateRedstone() {

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+
 import forestry.core.config.Config;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
@@ -52,8 +55,8 @@ public class PowerLedger extends Ledger {
 	}
 
 	@Override
-	public String getTooltip() {
-		return Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored());
+	public ITextComponent getTooltip() {
+		return new StringTextComponent(Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored()));
 	}
 
 }

@@ -1,5 +1,6 @@
 package forestry.core.capabilities;
-
+//TODO buildcraft
+/*
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
@@ -28,3 +29,4 @@ public class HasWorkWrapper implements IHasWork {
 	}
 
 }
+*/

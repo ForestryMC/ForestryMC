@@ -12,31 +12,25 @@ package forestry.mail.tiles;
 
 import com.google.common.base.Preconditions;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.util.Collection;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
-import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
@@ -46,22 +40,19 @@ import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.MailAddress;
+import forestry.mail.ModuleMail;
 import forestry.mail.TradeStation;
 import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.gui.ContainerTrader;
-import forestry.mail.gui.GuiTradeName;
-import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
-import forestry.mail.triggers.MailTriggers;
-
-import buildcraft.api.statements.ITriggerExternal;
 
 public class TileTrader extends TileBase implements IOwnedTile {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private IMailAddress address;
 
 	public TileTrader() {
+		super(ModuleMail.getTiles().TRADER);
 		address = new MailAddress();
 		setInternalInventory(new InventoryTradeStation());
 	}
@@ -72,39 +63,33 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, ItemStack heldItem) {
-		short data = (short) (isLinked() ? 0 : 1);
-		GuiHandler.openGui(player, this, data);
-	}
-
-	@Override
 	public void onRemoval() {
-		if (isLinked()) {
-			PostManager.postRegistry.deleteTradeStation(world, address);
+		if (isLinked() && !world.isRemote) {
+			PostManager.postRegistry.deleteTradeStation((ServerWorld) world, address);
 		}
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		NBTTagCompound nbt = new NBTTagCompound();
-		address.writeToNBT(nbt);
-		nbttagcompound.setTag("address", nbt);
+		CompoundNBT nbt = new CompoundNBT();
+		address.write(nbt);
+		compoundNBT.put("address", nbt);
 
-		ownerHandler.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		ownerHandler.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
 
-		if (nbttagcompound.hasKey("address")) {
-			address = new MailAddress(nbttagcompound.getCompoundTag("address"));
+		if (compoundNBT.contains("address")) {
+			address = new MailAddress(compoundNBT.getCompound("address"));
 		}
-		ownerHandler.readFromNBT(nbttagcompound);
+		ownerHandler.read(compoundNBT);
 	}
 
 	/* NETWORK */
@@ -118,7 +103,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		ownerHandler.readData(data);
@@ -227,18 +212,18 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		return hasItemCount(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.PAPER), count);
 	}
 
-	public boolean hasInputBufMin(float percentage) {
-		IInventory inventory = getInternalInventory();
-		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-		if (tradeGood.isEmpty()) {
-			return true;
-		}
-		return percentOccupied(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood) > percentage;
-	}
+	//	public boolean hasInputBufMin(float percentage) {
+	//		IInventory inventory = getInternalInventory();
+	//		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
+	//		if (tradeGood.isEmpty()) {
+	//			return true;
+	//		}
+	//		return percentOccupied(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood) > percentage;
+	//	}
 
-	public boolean hasOutputBufMin(float percentage) {
-		return percentOccupied(TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT, ItemStack.EMPTY) > percentage;
-	}
+	//	public boolean hasOutputBufMin(float percentage) {
+	//		return percentOccupied(TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT, ItemStack.EMPTY) > percentage;
+	//	}
 
 	public boolean hasPostageMin(int postage) {
 
@@ -277,7 +262,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleSetAddressResponse(String addressName) {
 		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		setAddress(address);
@@ -291,6 +276,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		}
 
 		if (!world.isRemote) {
+			ServerWorld world = (ServerWorld) this.world;
 			IErrorLogic errorLogic = getErrorLogic();
 
 			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(world, address);
@@ -315,39 +301,29 @@ public class TileTrader extends TileBase implements IOwnedTile {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(world, getOwnerHandler().getOwner(), address);
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation((ServerWorld) world, getOwnerHandler().getOwner(), address);
 	}
 
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-		super.addExternalTriggers(triggers, side, tile);
-		triggers.add(MailTriggers.lowPaper64);
-		triggers.add(MailTriggers.lowPaper32);
-		triggers.add(MailTriggers.lowInput25);
-		triggers.add(MailTriggers.lowInput10);
-		triggers.add(MailTriggers.lowPostage40);
-		triggers.add(MailTriggers.lowPostage20);
-		triggers.add(MailTriggers.highBuffer90);
-		triggers.add(MailTriggers.highBuffer75);
-	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(MailTriggers.lowPaper64);
+	//		triggers.add(MailTriggers.lowPaper32);
+	//		triggers.add(MailTriggers.lowInput25);
+	//		triggers.add(MailTriggers.lowInput10);
+	//		triggers.add(MailTriggers.lowPostage40);
+	//		triggers.add(MailTriggers.lowPostage20);
+	//		triggers.add(MailTriggers.highBuffer90);
+	//		triggers.add(MailTriggers.highBuffer75);
+	//	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		if (data == 0) {
-			return new GuiTrader(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		if (isLinked()) {    //TODO does this sync over?
+			return new ContainerTrader(windowId, inv, this);
 		} else {
-			return new GuiTradeName(this);
-		}
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		if (data == 0) {
-			return new ContainerTrader(player.inventory, this);
-		} else {
-			return new ContainerTradeName(this);
+			return new ContainerTradeName(windowId, inv, this);
 		}
 	}
 }

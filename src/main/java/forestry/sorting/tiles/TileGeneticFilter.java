@@ -5,31 +5,33 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.Direction;
+import net.minecraft.world.server.ServerWorld;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IRootDefinition;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.IFilterData;
 import forestry.api.genetics.IFilterLogic;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.genetics.ISpeciesType;
+import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
@@ -38,8 +40,8 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.sorting.FilterData;
 import forestry.sorting.FilterLogic;
+import forestry.sorting.ModuleSorting;
 import forestry.sorting.gui.ContainerGeneticFilter;
-import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.inventory.InventoryFilter;
 import forestry.sorting.inventory.ItemHandlerFilter;
 
@@ -50,25 +52,26 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	private final AdjacentInventoryCache inventoryCache;
 
 	public TileGeneticFilter() {
+		super(ModuleSorting.getTiles().GENETIC_FILTER);
 		this.inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 		this.logic = new FilterLogic(this, (logic1, server, player) -> sendToPlayers(server, player));
 		setInternalInventory(new InventoryFilter(this));
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		super.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		super.write(data);
 
-		data.setTag("Logic", logic.writeToNBT(new NBTTagCompound()));
+		data.put("Logic", logic.write(new CompoundNBT()));
 
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 
-		logic.readFromNBT(data.getCompoundTag("Logic"));
+		logic.read(data.getCompound("Logic"));
 	}
 
 	@Override
@@ -76,16 +79,16 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		logic.writeGuiData(data);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void readGuiData(PacketBufferForestry data) {
 		logic.readGuiData(data);
 	}
 
-	private void sendToPlayers(WorldServer server, EntityPlayer entityPlayer) {
-		for (EntityPlayer player : server.playerEntities) {
-			if (player != entityPlayer && player.openContainer instanceof ContainerGeneticFilter) {
-				if (((ContainerGeneticFilter) entityPlayer.openContainer).hasSameTile((ContainerGeneticFilter) player.openContainer)) {
+	private void sendToPlayers(ServerWorld server, PlayerEntity PlayerEntity) {
+		for (PlayerEntity player : server.getPlayers()) {
+			if (player != PlayerEntity && player.openContainer instanceof ContainerGeneticFilter) {
+				if (((ContainerGeneticFilter) PlayerEntity.openContainer).hasSameTile((ContainerGeneticFilter) player.openContainer)) {
 					((ContainerGeneticFilter) player.openContainer).setGuiNeedsUpdate(true);
 				}
 			}
@@ -95,7 +98,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	@Override
 	protected void updateServerSide() {
 		if (updateOnInterval(TRANSFER_DELAY)) {
-			for (EnumFacing facing : EnumFacing.VALUES) {
+			for (Direction facing : Direction.VALUES) {
 				ItemStack stack = getStackInSlot(facing.getIndex());
 				if (stack.isEmpty()) {
 					continue;
@@ -112,7 +115,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		}
 	}
 
-	public boolean isConnected(EnumFacing facing) {
+	public boolean isConnected(Direction facing) {
 		if (inventoryCache.getAdjacentInventory(facing) != null) {
 			return true;
 		}
@@ -120,7 +123,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		return TileUtil.getInventoryFromTile(tileEntity, facing.getOpposite()) != null;
 	}
 
-	private ItemStack transferItem(ItemStack itemStack, EnumFacing facing) {
+	private ItemStack transferItem(ItemStack itemStack, Direction facing) {
 		IItemHandler itemHandler = inventoryCache.getAdjacentInventory(facing);
 		if (itemHandler == null) {
 			return ItemStack.EMPTY;
@@ -138,17 +141,18 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		return copy;
 	}
 
-	public Collection<EnumFacing> getValidDirections(ItemStack itemStack, EnumFacing from) {
-		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(itemStack);
+	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
 		IIndividual individual = null;
-		ISpeciesType type = null;
-		if (root != null) {
-			individual = root.getMember(itemStack);
-			type = root.getType(itemStack);
+		IOrganismType type = null;
+		if (definition.isRootPresent()) {
+			IForestrySpeciesRoot<IIndividual> root = definition.get();
+			individual = root.create(itemStack).orElse(null);
+			type = root.getTypes().getType(itemStack).orElse(null);
 		}
-		IFilterData filterData = new FilterData(root, individual, type);
-		List<EnumFacing> validFacings = new LinkedList<>();
-		for (EnumFacing facing : EnumFacing.VALUES) {
+		IFilterData filterData = new FilterData(definition, individual, type);
+		List<Direction> validFacings = new LinkedList<>();
+		for (Direction facing : Direction.VALUES) {
 			if (facing == from) {
 				continue;
 			}
@@ -159,7 +163,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		return validFacings;
 	}
 
-	private boolean isValidFacing(EnumFacing facing, ItemStack itemStack, IFilterData filterData) {
+	private boolean isValidFacing(Direction facing, ItemStack itemStack, IFilterData filterData) {
 		return inventoryCache.getAdjacentInventory(facing) != null && logic.isValid(facing, itemStack, filterData);
 	}
 
@@ -173,37 +177,23 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	@Override
-	public TileEntity getTileEntity() {
+	public TileGeneticFilter getTileEntity() {
 		return this;
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Nullable
 	@Override
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiGeneticFilter(this, player.inventory);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerGeneticFilter(windowId, player.inventory, this);
 	}
 
-	@Nullable
 	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerGeneticFilter(this, player.inventory);
-	}
-
-	@Nullable
-	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing != null) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemHandlerFilter(this, facing));
-		}
-		if (capability == GeneticCapabilities.FILTER_LOGIC) {
-			return GeneticCapabilities.FILTER_LOGIC.cast(logic);
+			return LazyOptional.of(() -> new ItemHandlerFilter(this, facing)).cast();
+		} else if (capability == GeneticCapabilities.FILTER_LOGIC) {
+			return LazyOptional.of(() -> logic).cast();
 		}
 		return super.getCapability(capability, facing);
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == GeneticCapabilities.FILTER_LOGIC || super.hasCapability(capability, facing);
 	}
 }

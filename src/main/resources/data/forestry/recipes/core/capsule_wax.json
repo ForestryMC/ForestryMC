@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "forestry:capsule",
+    "count": 4
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.capsule",
+  "key": {
+    "#": {
+      "item": "forestry:beeswax"
+    }
+  },
+  "group": "apiculture"
+}

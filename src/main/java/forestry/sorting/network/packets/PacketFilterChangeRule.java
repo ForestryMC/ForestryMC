@@ -1,8 +1,10 @@
 package forestry.sorting.network.packets;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.GeneticCapabilities;
@@ -17,10 +19,10 @@ import forestry.core.tiles.TileUtil;
 
 public class PacketFilterChangeRule extends ForestryPacket implements IForestryPacketServer {
 	private final BlockPos pos;
-	private final EnumFacing facing;
+	private final Direction facing;
 	private final IFilterRuleType rule;
 
-	public PacketFilterChangeRule(BlockPos pos, EnumFacing facing, IFilterRuleType rule) {
+	public PacketFilterChangeRule(BlockPos pos, Direction facing, IFilterRuleType rule) {
 		this.pos = pos;
 		this.facing = facing;
 		this.rule = rule;
@@ -40,16 +42,16 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
-			EnumFacing facing = EnumFacing.byIndex(data.readShort());
+			Direction facing = Direction.byIndex(data.readShort());
 			IFilterRuleType rule = AlleleManager.filterRegistry.getRuleOrDefault(data.readShort());
-			IFilterLogic logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
-			if (logic != null) {
-				if (logic.setRule(facing, rule)) {
-					logic.getNetworkHandler().sendToPlayers(logic, player.getServerWorld(), player);
+			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
+			logic.ifPresent(l -> {
+				if (l.setRule(facing, rule)) {
+					l.getNetworkHandler().sendToPlayers(l, player.getServerWorld(), player);
 				}
-			}
+			});
 		}
 	}
 }

@@ -7,10 +7,10 @@ package forestry.api.mail;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.ITextureManager;
 
@@ -37,7 +37,7 @@ public interface IPostalCarrier {
 	 * Sprite registered to the Gui Texture Map at {@link ITextureManager}.
 	 * Must be 26 pixels wide and 15 pixels tall. The texture itself must be 32x32 square.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	TextureAtlasSprite getSprite();
 
 	/**
@@ -50,6 +50,6 @@ public interface IPostalCarrier {
 	 * @param doDeliver   Whether or not the letter is supposed to actually be delivered or if delivery is only to be simulated.
 	 * @return {link IPostalState} holding information on success or failure for delivery.
 	 */
-	IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);
+	IPostalState deliverLetter(ServerWorld world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);
 
 }

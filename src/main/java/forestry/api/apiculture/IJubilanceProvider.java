@@ -5,11 +5,15 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+
 public interface IJubilanceProvider {
 
 	/**
 	 * Returns true when conditions are right to make this species Jubilant.
 	 * Jubilant bees can produce their Specialty products.
 	 */
-	boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing);
+	boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing);
 }

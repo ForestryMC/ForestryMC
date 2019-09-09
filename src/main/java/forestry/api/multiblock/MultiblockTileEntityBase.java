@@ -5,14 +5,16 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.farming.ModuleFarming;
 
 /**
  * Base logic class for Multiblock-connected tile entities.
@@ -23,6 +25,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	private final T multiblockLogic;
 
 	public MultiblockTileEntityBase(T multiblockLogic) {
+		super(ModuleFarming.getTiles().plain);    //TODO tileentitytype?
 		this.multiblockLogic = multiblockLogic;
 	}
 
@@ -43,27 +46,27 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public abstract void onMachineBroken();
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 		multiblockLogic.readFromNBT(data);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		data = super.writeToNBT(data);
-		multiblockLogic.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
+		multiblockLogic.write(data);
 		return data;
 	}
 
 	@Override
-	public void invalidate() {
-		super.invalidate();
+	public void remove() {
+		super.remove();
 		multiblockLogic.invalidate(world, this);
 	}
 
 	@Override
-	public void onChunkUnload() {
-		super.onChunkUnload();
+	public void onChunkUnloaded() {
+		super.onChunkUnloaded();
 		multiblockLogic.onChunkUnload(world, this);
 	}
 
@@ -76,29 +79,29 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	/* Network Communication */
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound updateTag = super.getUpdateTag();
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT updateTag = super.getUpdateTag();
 		multiblockLogic.encodeDescriptionPacket(updateTag);
 		this.encodeDescriptionPacket(updateTag);
 		return updateTag;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
+	@OnlyIn(Dist.CLIENT)
+	public final void onDataPacket(NetworkManager network, SUpdateTileEntityPacket packet) {
 		super.onDataPacket(network, packet);
-		NBTTagCompound nbtData = packet.getNbtCompound();
+		CompoundNBT nbtData = packet.getNbtCompound();
 		multiblockLogic.decodeDescriptionPacket(nbtData);
 		this.decodeDescriptionPacket(nbtData);
 	}
 
 	@Override
-	public void handleUpdateTag(NBTTagCompound tag) {
+	public void handleUpdateTag(CompoundNBT tag) {
 		super.handleUpdateTag(tag);
 		multiblockLogic.decodeDescriptionPacket(tag);
 		this.decodeDescriptionPacket(tag);
@@ -107,14 +110,14 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	/**
 	 * Used to write tileEntity-specific data to the descriptionPacket
 	 */
-	protected void encodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void encodeDescriptionPacket(CompoundNBT packetData) {
 
 	}
 
 	/**
 	 * Used to read tileEntity-specific data from the descriptionPacket (onDataPacket)
 	 */
-	protected void decodeDescriptionPacket(NBTTagCompound packetData) {
+	protected void decodeDescriptionPacket(CompoundNBT packetData) {
 
 	}
 }

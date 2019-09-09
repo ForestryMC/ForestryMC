@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "forestry:loam",
+    "data": 0,
+    "count": 4
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "item": "forestry:fertilizer_bio"
+    },
+    {
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "item": "#SAND"
+    },
+    {
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "item": "#SAND"
+    },
+    {
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "item": "forestry:fertilizer_bio"
+    },
+    {
+      "item": "minecraft:clay_ball"
+    }
+  ],
+  "conditions": [
+    {
+      "module": "charcoal",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "charcoal"
+}

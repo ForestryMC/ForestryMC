@@ -13,12 +13,14 @@ package forestry.core.gui.elements;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.GuiUtil;
 import forestry.core.utils.ItemTooltipUtil;
@@ -39,14 +41,14 @@ public abstract class AbstractItemElement extends GuiElement {
 		if (!itemStack.isEmpty()) {
 			RenderHelper.enableGUIStandardItemLighting();
 			GlStateManager.enableRescaleNormal();
-			GuiUtil.drawItemStack(Minecraft.getMinecraft().fontRenderer, itemStack, 0, 0);
+			GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, itemStack, 0, 0);
 			RenderHelper.disableStandardItemLighting();
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public List<String> getTooltip(int mouseX, int mouseY) {
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
 		ItemStack itemStack = getStack();
 		return ItemTooltipUtil.getInformation(itemStack);
 	}

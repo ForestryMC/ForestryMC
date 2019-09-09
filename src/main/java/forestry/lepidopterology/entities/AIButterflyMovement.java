@@ -48,7 +48,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		// Reset destination if we did collide.
 		if (entity.isInWater()) {
 			flightTarget = getRandomDestinationUpwards();

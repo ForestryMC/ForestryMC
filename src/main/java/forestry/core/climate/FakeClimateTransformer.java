@@ -98,7 +98,7 @@ public class FakeClimateTransformer implements IClimateTransformer {
 
 	@Override
 	public BlockPos getCoordinates() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override

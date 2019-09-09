@@ -1,7 +1,8 @@
 package forestry.sorting.network;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
@@ -17,7 +18,7 @@ public class PacketRegistrySorting implements IPacketRegistry {
 		PacketIdServer.FILTER_CHANGE_GENOME.setPacketHandler(new PacketFilterChangeGenome.Handler());
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerPacketsClient() {
 		PacketIdClient.GUI_UPDATE_FILTER.setPacketHandler(new PacketGuiFilterUpdate.Handler());

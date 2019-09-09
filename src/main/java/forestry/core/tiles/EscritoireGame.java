@@ -12,17 +12,21 @@ package forestry.core.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.IResearchHandler;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
@@ -58,23 +62,23 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setInteger("bountyLevel", bountyLevel);
-		nbttagcompound.setLong("lastUpdate", lastUpdate);
-		gameBoard.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT.putInt("bountyLevel", bountyLevel);
+		compoundNBT.putLong("lastUpdate", lastUpdate);
+		gameBoard.write(compoundNBT);
 
-		nbttagcompound.setInteger("Status", status.ordinal());
-		return nbttagcompound;
+		compoundNBT.putInt("Status", status.ordinal());
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		bountyLevel = nbt.getInteger("bountyLevel");
+	public void read(CompoundNBT nbt) {
+		bountyLevel = nbt.getInt("bountyLevel");
 		lastUpdate = nbt.getLong("lastUpdate");
 		gameBoard = new EscritoireGameBoard(nbt);
 
-		if (nbt.hasKey("Status")) {
-			int statusOrdinal = nbt.getInteger("Status");
+		if (nbt.contains("Status")) {
+			int statusOrdinal = nbt.getInt("Status");
 			status = Status.values()[statusOrdinal];
 		}
 
@@ -111,23 +115,25 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 			return;
 		}
 
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
-		if (individual == null) {
+		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
+		if (!optional.isPresent()) {
 			return;
 		}
+		IIndividual individual = optional.get();
 
 		if (bountyLevel > 1) {
 			bountyLevel--;
 		}
 
-		IAlleleSpecies species = individual.getGenome().getPrimary();
+		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
+		IResearchHandler handler = species.getRoot().getComponent(ForestryComponentKeys.RESEARCH);
 		gameBoard.hideProbedTokens();
 
 		int revealCount = getSampleSize(slotCount);
 		for (int i = 0; i < revealCount; i++) {
 			ItemStack sample = inventory.decrStackSize(startSlot + i, 1);
 			if (!sample.isEmpty()) {
-				if (rand.nextFloat() < species.getResearchSuitability(sample)) {
+				if (rand.nextFloat() < handler.getResearchSuitability(species, sample)) {
 					gameBoard.probe();
 				}
 			}

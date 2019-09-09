@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import genetics.api.alleles.IAllele;
+
 /**
  * Basic effect allele.
  */

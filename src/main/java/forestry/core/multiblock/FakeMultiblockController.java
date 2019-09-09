@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -65,7 +65,7 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 
 	@Override
 	public BlockPos getReferenceCoord() {
-		return BlockPos.ORIGIN;
+		return BlockPos.ZERO;
 	}
 
 	@Override
@@ -74,12 +74,12 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public void formatDescriptionPacket(NBTTagCompound data) {
+	public void formatDescriptionPacket(CompoundNBT data) {
 
 	}
 
 	@Override
-	public void decodeDescriptionPacket(NBTTagCompound data) {
+	public void decodeDescriptionPacket(CompoundNBT data) {
 
 	}
 
@@ -147,13 +147,13 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+	public void read(CompoundNBT CompoundNBT) {
 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		return CompoundNBT;
 	}
 
 	@Override

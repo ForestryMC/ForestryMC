@@ -1,7 +1,7 @@
 {
 	"textures": {
-		"particle": "forestry:blocks/genetic_filter_particle",
-		"texture": "forestry:blocks/genetic_filter"
+      "particle": "forestry:block/genetic_filter_particle",
+      "texture": "forestry:block/genetic_filter"
 	},
 	"elements": [ 	 
 		{

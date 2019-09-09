@@ -7,13 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.TextFormatting;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.book.data.TextData;
 import forestry.core.gui.elements.GuiElement;
 
-@SideOnly(Side.CLIENT)
+//TODO ITextComponent?
+@OnlyIn(Dist.CLIENT)
 public class TextDataElement extends GuiElement {
 
 	private final List<TextData> textElements = new ArrayList<>();
@@ -27,9 +28,9 @@ public class TextDataElement extends GuiElement {
 		if (height >= 0) {
 			return height;
 		}
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-		boolean unicode = fontRenderer.getUnicodeFlag();
-		fontRenderer.setUnicodeFlag(true);
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		boolean unicode = fontRenderer.getBidiFlag();
+		fontRenderer.setBidiFlag(true);
 		boolean lastEmpty = false;
 		for (TextData data : textElements) {
 			if (data.text.equals("\n")) {
@@ -66,15 +67,15 @@ public class TextDataElement extends GuiElement {
 			}
 			height += fontRenderer.getWordWrappedHeight(modifiers + data.text, width);
 		}
-		fontRenderer.setUnicodeFlag(unicode);
+		fontRenderer.setBidiFlag(unicode);
 		return height;
 	}
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-		boolean unicode = fontRenderer.getUnicodeFlag();
-		fontRenderer.setUnicodeFlag(true);
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		boolean unicode = fontRenderer.getBidiFlag();
+		fontRenderer.setBidiFlag(true);
 		int x = 0;
 		int y = 0;
 		for (TextData data : textElements) {
@@ -93,7 +94,13 @@ public class TextDataElement extends GuiElement {
 			List<String> split = fontRenderer.listFormattedStringToWidth(text, width);
 			for (int i = 0; i < split.size(); i++) {
 				String s = split.get(i);
-				int textLength = fontRenderer.drawString(s, x, y, 0, data.dropshadow);
+				int textLength;
+				//TODO correct?
+				if (data.dropshadow) {
+					textLength = fontRenderer.drawString(s, x, y, 0);
+				} else {
+					textLength = fontRenderer.drawStringWithShadow(s, x, y, 0);
+				}
 				if (i == split.size() - 1) {
 					x += textLength;
 				} else {
@@ -101,7 +108,7 @@ public class TextDataElement extends GuiElement {
 				}
 			}
 		}
-		fontRenderer.setUnicodeFlag(unicode);
+		fontRenderer.setBidiFlag(unicode);
 	}
 
 	private String getFormattedString(TextData data) {

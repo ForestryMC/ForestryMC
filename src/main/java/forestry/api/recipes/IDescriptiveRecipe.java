@@ -11,7 +11,7 @@ import net.minecraft.util.NonNullList;
 
 /**
  * Replacement for IRecipe to give better access to the expected crafting inputs.
- * It can be matched against regular IInventory instead of just InventoryCrafting.
+ * It can be matched against regular IInventory instead of just CraftingInventory.
  * Useful for displaying crafting recipes.
  */
 public interface IDescriptiveRecipe {
@@ -32,6 +32,7 @@ public interface IDescriptiveRecipe {
 	 */
 	NonNullList<NonNullList<ItemStack>> getRawIngredients();
 
+	//TODO replace with tags
 	NonNullList<String> getOreDicts();
 
 	/**

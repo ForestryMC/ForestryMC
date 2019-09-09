@@ -10,37 +10,33 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimaps;
-
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
-import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SlotUtil;
 
-import invtweaks.api.container.ContainerSection;
-import invtweaks.api.container.ContainerSectionCallback;
+//import invtweaks.api.container.ContainerSection;
+//import invtweaks.api.container.ContainerSectionCallback;
 
-@invtweaks.api.container.ChestContainer(showButtons = false)
+//@invtweaks.api.container.ChestContainer(showButtons = false)
 public abstract class ContainerForestry extends Container {
 	public static final int PLAYER_HOTBAR_OFFSET = 27;
 	public static final int PLAYER_INV_SLOTS = PLAYER_HOTBAR_OFFSET + 9;
 	private int transferCount = 0; // number of items that have been shift-click-transfered during this click
 
-	protected final void addPlayerInventory(InventoryPlayer playerInventory, int xInv, int yInv) {
+	protected ContainerForestry(int windowId, ContainerType<?> type) {
+		super(type, windowId);
+	}
+
+	protected final void addPlayerInventory(PlayerInventory playerInventory, int xInv, int yInv) {
 		// Player inventory
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
@@ -53,21 +49,26 @@ public abstract class ContainerForestry extends Container {
 		}
 	}
 
-	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new Slot(playerInventory, slot, x, y));
+	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+		super.addSlot(new Slot(playerInventory, slot, x, y));
 	}
 
-	protected void addSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new Slot(playerInventory, slot, x, y));
-	}
-
-	@Override
-	public Slot addSlotToContainer(Slot p_75146_1_) {
-		return super.addSlotToContainer(p_75146_1_);
+	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+		super.addSlot(new Slot(playerInventory, slot, x, y));
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, EntityPlayer player) {
+	public Slot addSlot(Slot slot) {
+		return super.addSlot(slot);
+	}
+	//
+	//	@Override
+	//	public Slot addSlotToContainer(Slot p_75146_1_) {
+	//		return super.addSlotToContainer(p_75146_1_);
+	//	}
+
+	@Override
+	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
 		if (!canAccess(player)) {
 			return ItemStack.EMPTY;
 		}
@@ -99,7 +100,7 @@ public abstract class ContainerForestry extends Container {
 
 
 	@Override
-	public final ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+	public final ItemStack transferStackInSlot(PlayerEntity player, int slotIndex) {
 		if (!canAccess(player)) {
 			return ItemStack.EMPTY;
 		}
@@ -111,43 +112,44 @@ public abstract class ContainerForestry extends Container {
 		return ItemStack.EMPTY;
 	}
 
-	protected abstract boolean canAccess(EntityPlayer player);
+	protected abstract boolean canAccess(PlayerEntity player);
 
 	protected final void sendPacketToListeners(IForestryPacketClient packet) {
-		for (IContainerListener listener : listeners) {
-			if (listener instanceof EntityPlayer) {
-				NetworkUtil.sendToPlayer(packet, (EntityPlayer) listener);
-			}
-		}
+		//TODO - needs AT or maybe detectandsend in super can help?
+		//		for (IContainerListener listener : listeners) {
+		//			if (listener instanceof PlayerEntity) {
+		//				NetworkUtil.sendToPlayer(packet, (PlayerEntity) listener);
+		//			}
+		//		}
 	}
 
-	@SuppressWarnings("unused") // inventory tweaks
-	@ContainerSectionCallback
-	public Map<ContainerSection, List<Slot>> getContainerSections() {
-		ArrayListMultimap<ContainerSection, Slot> map = ArrayListMultimap.create();
-
-		for (Object object : inventorySlots) {
-			if (!(object instanceof Slot)) {
-				continue;
-			}
-			Slot slot = (Slot) object;
-
-			if (slot.inventory instanceof InventoryPlayer) {
-				map.put(ContainerSection.INVENTORY, slot);
-				if (slot.slotNumber < 9) {
-					map.put(ContainerSection.INVENTORY_HOTBAR, slot);
-				} else if (slot.slotNumber < 36) {
-					map.put(ContainerSection.INVENTORY_NOT_HOTBAR, slot);
-				} else {
-					map.put(ContainerSection.ARMOR, slot);
-				}
-			} else {
-				if (!(slot instanceof SlotForestry) || slot instanceof SlotFilteredInventory) {
-					map.put(ContainerSection.CHEST, slot);
-				}
-			}
-		}
-
-		return Multimaps.asMap(map);
-	}
+	//	@SuppressWarnings("unused") // inventory tweaks
+	//	@ContainerSectionCallback
+	//	public Map<ContainerSection, List<Slot>> getContainerSections() {
+	//		ArrayListMultimap<ContainerSection, Slot> map = ArrayListMultimap.create();
+	//
+	//		for (Object object : inventorySlots) {
+	//			if (!(object instanceof Slot)) {
+	//				continue;
+	//			}
+	//			Slot slot = (Slot) object;
+	//
+	//			if (slot.inventory instanceof InventoryPlayer) {
+	//				map.put(ContainerSection.INVENTORY, slot);
+	//				if (slot.slotNumber < 9) {
+	//					map.put(ContainerSection.INVENTORY_HOTBAR, slot);
+	//				} else if (slot.slotNumber < 36) {
+	//					map.put(ContainerSection.INVENTORY_NOT_HOTBAR, slot);
+	//				} else {
+	//					map.put(ContainerSection.ARMOR, slot);
+	//				}
+	//			} else {
+	//				if (!(slot instanceof SlotForestry) || slot instanceof SlotFilteredInventory) {
+	//					map.put(ContainerSection.CHEST, slot);
+	//				}
+	//			}
+	//		}
+	//
+	//		return Multimaps.asMap(map);
+	//	}
 }

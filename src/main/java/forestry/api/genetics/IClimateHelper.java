@@ -7,6 +7,8 @@ package forestry.api.genetics;
 
 import java.util.Collection;
 
+import net.minecraft.util.text.ITextComponent;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
@@ -54,7 +56,7 @@ public interface IClimateHelper {
 	 * @param temperature Temperature to generate the string for.
 	 * @return A localized, human readable string for the given temperature.
 	 */
-	String toDisplay(EnumTemperature temperature);
+	ITextComponent toDisplay(EnumTemperature temperature);
 
 	/**
 	 * Gets a localized, human readable string for the given humidity.
@@ -62,5 +64,5 @@ public interface IClimateHelper {
 	 * @param humidity Humidity to generate the string for.
 	 * @return A localized, human readable string for the given humidity.
 	 */
-	String toDisplay(EnumHumidity humidity);
+	ITextComponent toDisplay(EnumHumidity humidity);
 }

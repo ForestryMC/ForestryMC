@@ -39,6 +39,6 @@ public class DefaultClimateProvider implements IClimateProvider {
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getBiome().getRainfall());
+		return EnumHumidity.getFromValue(getBiome().getDownfall());
 	}
 }

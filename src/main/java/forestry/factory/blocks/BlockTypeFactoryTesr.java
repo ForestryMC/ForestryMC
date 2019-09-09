@@ -34,7 +34,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 	MOISTENER(TileMoistener.class, "moistener"),
 	SQUEEZER(TileSqueezer.class, "squeezer"),
 	STILL(TileStill.class, "still"),
-	RAINMAKER(TileMillRainmaker.class, "rainmaker", Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_");
+	RAINMAKER(TileMillRainmaker.class, "rainmaker", Constants.TEXTURE_PATH_BLOCK + "/rainmaker_");
 
 	public static final BlockTypeFactoryTesr[] VALUES = values();
 
@@ -42,7 +42,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 
 	<T extends TileBase> BlockTypeFactoryTesr(Class<T> teClass, String name) {
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks/" + name + ".0");
-		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCKS + "/" + name + "_");
+		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCK + "/" + name + "_");
 		this.machineProperties = machineProperties;
 	}
 

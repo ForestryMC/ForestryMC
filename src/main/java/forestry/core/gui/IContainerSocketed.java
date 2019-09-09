@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IContainerSocketed {
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void handleChipsetClick(int slot);
 
-	void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
+	void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack);
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void handleSolderingIronClick(int slot);
 
-	void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
+	void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack);
 }

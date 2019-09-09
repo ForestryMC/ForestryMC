@@ -10,20 +10,29 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
+import forestry.energy.ModuleEnergy;
 import forestry.energy.inventory.InventoryEngineBiogas;
 import forestry.energy.tiles.TileEngineBiogas;
 
 public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas> {
 
-	public ContainerEngineBiogas(InventoryPlayer player, TileEngineBiogas engine) {
-		super(engine, player, 8, 84);
+	//TODO dedupe
+	public static ContainerEngineBiogas fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+		TileEngineBiogas tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineBiogas.class);
+		return new ContainerEngineBiogas(windowId, inv, tile);
+	}
 
-		this.addSlotToContainer(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
+	public ContainerEngineBiogas(int windowId, PlayerInventory player, TileEngineBiogas engine) {
+		super(windowId, ModuleEnergy.getContainerTypes().ENGINE_BIOGAS, player, engine, 8, 84);
+
+		this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
 	}
 
 	@Override

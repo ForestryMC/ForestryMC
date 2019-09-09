@@ -10,34 +10,42 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.network.PacketBuffer;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.tiles.TileUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.tiles.TileFermenter;
 
 public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
-	public ContainerFermenter(InventoryPlayer player, TileFermenter fermenter) {
-		super(fermenter, player, 8, 84);
+	public static ContainerFermenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileFermenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFermenter.class);
+		return new ContainerFermenter(windowId, inv, tile);    //TODO nullability.
+	}
 
-		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_RESOURCE, 85, 23));
-		this.addSlotToContainer(new SlotFiltered(fermenter, InventoryFermenter.SLOT_FUEL, 75, 57));
-		this.addSlotToContainer(new SlotOutput(fermenter, InventoryFermenter.SLOT_CAN_OUTPUT, 150, 58));
-		this.addSlotToContainer(new SlotEmptyLiquidContainerIn(fermenter, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
-		this.addSlotToContainer(new SlotLiquidIn(fermenter, InventoryFermenter.SLOT_INPUT, 10, 40));
+	public ContainerFermenter(int windowId, PlayerInventory player, TileFermenter tile) {
+		super(windowId, ModuleFactory.getContainerTypes().FERMENTER, player, tile, 8, 84);
+
+		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_RESOURCE, 85, 23));
+		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_FUEL, 75, 57));
+		this.addSlot(new SlotOutput(tile, InventoryFermenter.SLOT_CAN_OUTPUT, 150, 58));
+		this.addSlot(new SlotEmptyLiquidContainerIn(tile, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
+		this.addSlot(new SlotLiquidIn(tile, InventoryFermenter.SLOT_INPUT, 10, 40));
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateProgressBar(int messageId, int data) {
 		super.updateProgressBar(messageId, data);
 

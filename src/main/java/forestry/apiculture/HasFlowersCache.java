@@ -16,17 +16,19 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import genetics.api.individual.IGenome;
+
 import forestry.api.apiculture.FlowerManager;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IBlockPosPredicate;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -51,7 +53,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	@Nullable
 	private FlowerData flowerData;
 	private final ArrayList<BlockPos> flowerCoords = new ArrayList<>();
-	private final List<IBlockState> flowers = new ArrayList<>();
+	private final List<BlockState> flowers = new ArrayList<>();
 
 	private boolean needsSync = false;
 
@@ -62,9 +64,9 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		public Iterator<BlockPos.MutableBlockPos> areaIterator;
 
 		public FlowerData(IBee queen, IBeeHousing beeHousing) {
-			IFlowerProvider flowerProvider = queen.getGenome().getFlowerProvider();
+			IFlowerProvider flowerProvider = queen.getGenome().getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider();
 			this.flowerType = flowerProvider.getFlowerType();
-			this.territory = queen.getGenome().getTerritory();
+			this.territory = queen.getGenome().getActiveValue(BeeChromosomes.TERRITORY);
 			this.flowerPredicate = FlowerManager.flowerRegistry.createAcceptedFlowerPredicate(flowerType);
 			this.areaIterator = FlowerManager.flowerRegistry.getAreaIterator(beeHousing, queen);
 		}
@@ -122,10 +124,10 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 
 	public void onNewQueen(IBee queen, IBeeHousing housing) {
 		if (this.flowerData != null) {
-			IBeeGenome genome = queen.getGenome();
-			String flowerType = genome.getFlowerProvider().getFlowerType();
+			IGenome genome = queen.getGenome();
+			String flowerType = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getFlowerType();
 			if (!this.flowerData.flowerType.equals(flowerType)
-				|| !this.flowerData.territory.equals(genome.getTerritory())) {
+				|| !this.flowerData.territory.equals(genome.getActiveValue(BeeChromosomes.TERRITORY))) {
 				flowerData = new FlowerData(queen, housing);
 				flowerCoords.clear();
 				flowers.clear();
@@ -137,11 +139,10 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 		return Collections.unmodifiableList(flowerCoords);
 	}
 
-	public List<IBlockState> getFlowers(World world) {
+	public List<BlockState> getFlowers(World world) {
 		if (flowers.isEmpty() && !flowerCoords.isEmpty()) {
-			flowers.clear();
 			for (BlockPos flowerCoord : flowerCoords) {
-				IBlockState blockState = world.getBlockState(flowerCoord);
+				BlockState blockState = world.getBlockState(flowerCoord);
 				flowers.add(blockState);
 			}
 		}
@@ -170,14 +171,14 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (!nbttagcompound.hasKey(NBT_KEY)) {
+	public void read(CompoundNBT compoundNBT) {
+		if (!compoundNBT.contains(NBT_KEY)) {
 			return;
 		}
 
-		NBTTagCompound hasFlowerCacheNBT = nbttagcompound.getCompoundTag(NBT_KEY);
+		CompoundNBT hasFlowerCacheNBT = compoundNBT.getCompound(NBT_KEY);
 		flowerCoords.clear();
-		if (hasFlowerCacheNBT.hasKey(NBT_KEY_FLOWERS)) {
+		if (hasFlowerCacheNBT.contains(NBT_KEY_FLOWERS)) {
 			int[] flowersList = hasFlowerCacheNBT.getIntArray(NBT_KEY_FLOWERS);
 			if (flowersList.length % 3 == 0) {
 				int flowerCount = flowersList.length / 3;
@@ -196,8 +197,8 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		NBTTagCompound hasFlowerCacheNBT = new NBTTagCompound();
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		CompoundNBT hasFlowerCacheNBT = new CompoundNBT();
 
 		if (!flowerCoords.isEmpty()) {
 			int[] flowersList = new int[flowerCoords.size() * 3];
@@ -209,11 +210,11 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 				i += 3;
 			}
 
-			hasFlowerCacheNBT.setIntArray(NBT_KEY_FLOWERS, flowersList);
+			hasFlowerCacheNBT.putIntArray(NBT_KEY_FLOWERS, flowersList);
 		}
 
-		nbttagcompound.setTag(NBT_KEY, hasFlowerCacheNBT);
-		return nbttagcompound;
+		CompoundNBT.put(NBT_KEY, hasFlowerCacheNBT);
+		return CompoundNBT;
 	}
 
 	public void writeData(PacketBuffer data) {

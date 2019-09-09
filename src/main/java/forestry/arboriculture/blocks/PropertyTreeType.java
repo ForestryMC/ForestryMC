@@ -15,11 +15,11 @@ import com.google.common.collect.Lists;
 
 import java.util.Collection;
 
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.state.EnumProperty;
 
 import forestry.arboriculture.genetics.TreeDefinition;
 
-public class PropertyTreeType extends PropertyEnum<TreeDefinition> {
+public class PropertyTreeType extends EnumProperty<TreeDefinition> {
 	public static int getBlockCount(int variantsPerBlock) {
 		return (int) Math.ceil((float) TreeDefinition.VALUES.length / variantsPerBlock);
 	}

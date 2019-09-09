@@ -31,13 +31,13 @@ public class HabitatFormerButton extends ButtonElement {
 
 	public HabitatFormerButton(int xPos, int yPos, boolean selectionButton, Consumer<Boolean> onClicked) {
 		super(xPos, yPos, 22, 22, DISABLED_BUTTON, ENABLED_BUTTON, button -> onClicked.accept(selectionButton));
-		this.iconStack = selectionButton ? ModuleCore.getItems().tubes.get(EnumElectronTube.GOLD, 1) : ModuleCore.getItems().gearBronze;
+		this.iconStack = selectionButton ? ModuleCore.getItems().getElectronTube(EnumElectronTube.GOLD, 1) : ModuleCore.getItems().gearBronze;
 	}
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		super.drawElement(mouseX, mouseY);
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		GuiUtil.drawItemStack(fontRenderer, iconStack, 3, 3);
 	}
 }

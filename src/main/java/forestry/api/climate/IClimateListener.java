@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.ILocatable;
 
@@ -43,13 +43,13 @@ public interface IClimateListener extends ILocatable, IClimateProvider {
 	 *
 	 * @param spawnParticles If the listener should spawn particles around its location.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void updateClientSide(boolean spawnParticles);
 
 	/**
 	 * Sets the cached state to the given state.
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void setClimateState(IClimateState climateState);
 
 	/**
@@ -60,7 +60,7 @@ public interface IClimateListener extends ILocatable, IClimateProvider {
 	/**
 	 * Sends a packet to the given players.
 	 */
-	void syncToClient(EntityPlayerMP player);
+	void syncToClient(ServerPlayerEntity player);
 
 	void markLocatableDirty();
 }

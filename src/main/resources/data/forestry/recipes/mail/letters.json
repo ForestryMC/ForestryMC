@@ -1,0 +1,32 @@
+{
+  "result": {
+    "item": "forestry:letters"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "type": "fallback",
+      "primary": [
+        {
+          "item": "forestry:propolis",
+          "data": 32767
+        }
+      ],
+      "fallback": [
+        {
+          "item": "minecraft:slime_ball"
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "module": "mail",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "mail"
+}

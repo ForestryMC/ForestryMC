@@ -1,8 +1,8 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "forestry:blocks/stump",
-    "stump": "forestry:blocks/stump"
+    "particle": "forestry:block/stump",
+    "stump": "forestry:block/stump"
   },
     "elements": [
       {

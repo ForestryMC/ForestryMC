@@ -12,13 +12,13 @@ package forestry.climatology.blocks;
 
 import java.util.Locale;
 
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.util.IStringSerializable;
 
 public enum State implements IStringSerializable {
 	ON, OFF;
 
-	public static final PropertyEnum<State> PROPERTY = PropertyEnum.create("state", State.class);
+	public static final EnumProperty<State> PROPERTY = EnumProperty.create("state", State.class);
 
 	public static State fromBool(boolean value) {
 		return value ? ON : OFF;

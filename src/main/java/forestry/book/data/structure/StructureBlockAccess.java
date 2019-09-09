@@ -14,27 +14,31 @@ package forestry.book.data.structure;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldType;
+import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
-public class StructureBlockAccess implements IBlockAccess {
+@OnlyIn(Dist.CLIENT)
+public class StructureBlockAccess implements IEnviromentBlockReader {
 
 	private final StructureInfo data;
-	private final IBlockState[][][] structure;
+	private final BlockState[][][] structure;
 
 	public StructureBlockAccess(StructureInfo data) {
 		this.data = data;
 		this.structure = data.data;
+	}
+
+	public boolean isAirBlock(BlockPos pos) {
+		return this.getBlockState(pos).isAir(this, pos);
 	}
 
 	@Nullable
@@ -50,7 +54,7 @@ public class StructureBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public IBlockState getBlockState(BlockPos pos) {
+	public BlockState getBlockState(BlockPos pos) {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -69,8 +73,8 @@ public class StructureBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public boolean isAirBlock(BlockPos pos) {
-		return getBlockState(pos).getBlock() == Blocks.AIR;
+	public IFluidState getFluidState(BlockPos blockPos) {
+		return null;
 	}
 
 	@Override
@@ -79,17 +83,9 @@ public class StructureBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public int getStrongPower(BlockPos pos, EnumFacing direction) {
-		return 0;
+	public int getLightFor(LightType lightType, BlockPos blockPos) {
+		// full brightness always
+		return 15 << 20 | 15 << 4;
 	}
 
-	@Override
-	public WorldType getWorldType() {
-		return null;
-	}
-
-	@Override
-	public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
-		return false;
-	}
 }

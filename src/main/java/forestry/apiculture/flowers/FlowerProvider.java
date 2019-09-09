@@ -13,15 +13,17 @@ package forestry.apiculture.flowers;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.PlantType;
+
+import genetics.api.individual.IIndividual;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.api.genetics.IIndividual;
-import forestry.core.utils.Translator;
 
 public class FlowerProvider implements IFlowerProvider {
 
@@ -41,21 +43,21 @@ public class FlowerProvider implements IFlowerProvider {
 	@Override
 	public boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable) {
 
-		EnumPlantType plantType = pollinatable.getPlantType();
+		PlantType plantType = pollinatable.getPlantType();
 
 		switch (flowerType) {
 			case FlowerManager.FlowerTypeNether:
-				return plantType == EnumPlantType.Nether;
+				return plantType == PlantType.Nether;
 			case FlowerManager.FlowerTypeCacti:
-				return plantType == EnumPlantType.Desert;
+				return plantType == PlantType.Desert;
 			default:
-				return plantType != EnumPlantType.Nether;
+				return plantType != PlantType.Nether;
 		}
 	}
 
 	@Override
-	public String getDescription() {
-		return Translator.translateToLocal(this.unlocalizedDescription);
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent(this.unlocalizedDescription);
 	}
 
 	@Override

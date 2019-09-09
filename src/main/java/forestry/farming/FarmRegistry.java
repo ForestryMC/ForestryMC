@@ -20,9 +20,6 @@ import java.util.function.BiFunction;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmRegistry;
@@ -30,10 +27,10 @@ import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
 import forestry.api.farming.ISimpleFarmLogic;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import forestry.farming.logic.FakeFarmProperties;
 import forestry.farming.logic.FarmLogicSimple;
 import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
@@ -50,11 +47,6 @@ public final class FarmRegistry implements IFarmRegistry {
 
 	public static FarmRegistry getInstance() {
 		return INSTANCE;
-	}
-
-	@Override
-	@Deprecated
-	public void registerLogic(String identifier, IFarmLogic logic) {
 	}
 
 	@Override
@@ -79,11 +71,6 @@ public final class FarmRegistry implements IFarmRegistry {
 	@Override
 	public IFarmLogic createCropLogic(IFarmProperties instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic) {
 		return new FarmLogicSimple(instance, isManual, simpleFarmLogic);
-	}
-
-	@Override
-	public IFarmProperties createFakeInstance(IFarmLogic logic) {
-		return new FakeFarmProperties(logic);
 	}
 
 	@Override
@@ -124,7 +111,7 @@ public final class FarmRegistry implements IFarmRegistry {
 		Map<String, String> defaultEntries = getItemStrings();
 		List<String> defaultFertilizers = new ArrayList<>(defaultEntries.values());
 		Collections.sort(defaultFertilizers);
-		String[] defaultSortedFertilizers = defaultFertilizers.toArray(new String[defaultFertilizers.size()]);
+		String[] defaultSortedFertilizers = defaultFertilizers.toArray(new String[0]);
 		Property property = config.get("fertilizers", "items", defaultSortedFertilizers, Translator.translateToLocal("for.config.farm.fertilizers.items"));
 
 		ImmutableMap<ItemStack, Integer> fertilizerMap = checkConfig(property, defaultEntries);
@@ -145,7 +132,7 @@ public final class FarmRegistry implements IFarmRegistry {
 
 		if (newEntries.size() > fertilizerList.length) {
 			Collections.sort(newEntries);
-			property.set(newEntries.toArray(new String[newEntries.size()]));
+			property.set(newEntries.toArray(new String[0]));
 			return checkConfig(property, defaultEntries);
 		}
 
@@ -161,7 +148,7 @@ public final class FarmRegistry implements IFarmRegistry {
 				continue;
 			}
 			String itemName = spited[0];
-			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, OreDictionary.WILDCARD_VALUE);
+			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, 0);//TODO oredict OreDictionary.WILDCARD_VALUE);
 			if (fertilizerItem == null || fertilizerItem.isEmpty()) {
 				Log.error("Forestry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
 				continue;

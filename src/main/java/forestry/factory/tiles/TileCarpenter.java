@@ -13,23 +13,24 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterRecipe;
@@ -48,8 +49,8 @@ import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
+import forestry.factory.ModuleFactory;
 import forestry.factory.gui.ContainerCarpenter;
-import forestry.factory.gui.GuiCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.recipes.CarpenterRecipeManager;
 
@@ -61,10 +62,11 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final InventoryAdapterTile craftingInventory;
-	private final InventoryCraftResult craftPreviewInventory;
+	private final CraftResultInventory craftPreviewInventory;
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
+	@Nullable
 	private NonNullList<String> oreDicts;
 
 	private ItemStack getBoxStack() {
@@ -72,12 +74,12 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	public TileCarpenter() {
-		super(1100, 4000);
+		super(ModuleFactory.getTiles().carpenter, 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(CarpenterRecipeManager.getRecipeFluids());
 
 		craftingInventory = new InventoryGhostCrafting<>(this, 10);
-		craftPreviewInventory = new InventoryCraftResult();
+		craftPreviewInventory = new CraftResultInventory();
 		setInternalInventory(new InventoryCarpenter(this));
 
 		tankManager = new TankManager(this, resourceTank);
@@ -86,19 +88,19 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	/* LOADING & SAVING */
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-		tankManager.writeToNBT(nbttagcompound);
-		craftingInventory.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		tankManager.write(compoundNBT);
+		craftingInventory.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		tankManager.readFromNBT(nbttagcompound);
-		craftingInventory.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tankManager.read(compoundNBT);
+		craftingInventory.read(compoundNBT);
 	}
 
 	@Override
@@ -108,7 +110,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		tankManager.readData(data);
@@ -119,12 +121,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
+		//TODO optional could work quite well here
 		if (CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory) == null) {
 			RecipePair<ICarpenterRecipe> recipePair = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
 			currentRecipe = recipePair.getRecipe();
 			oreDicts = recipePair.getOreDictEntries();
 
-			if (!recipePair.isEmpty()) {
+			if (!recipePair.isEmpty() && currentRecipe != null) {
 				int recipeTime = currentRecipe.getPackagingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
@@ -168,13 +171,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		FluidStack fluid = currentRecipe.getFluidResource();
-		if (fluid != null) {
-			FluidStack drained = resourceTank.drainInternal(fluid, false);
+		if (!fluid.isEmpty()) {
+			FluidStack drained = resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.SIMULATE);
 			if (!fluid.isFluidStackIdentical(drained)) {
 				return false;
 			}
 			if (doRemove) {
-				resourceTank.drainInternal(fluid, true);
+				resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.EXECUTE);
 			}
 		}
 
@@ -257,28 +260,17 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		return tankManager;
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return new GuiCarpenter(player.inventory, this);
-	}
-
-	@Override
-	public Container getContainer(EntityPlayer player, int data) {
-		return new ContainerCarpenter(player.inventory, this);
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerCarpenter(windowId, player.inventory, this);
 	}
 }

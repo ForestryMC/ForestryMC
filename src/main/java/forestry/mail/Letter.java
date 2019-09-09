@@ -16,18 +16,19 @@ import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.Translator;
 
 public class Letter implements ILetter {
 	private static final Random rand = new Random();
@@ -52,35 +53,35 @@ public class Letter implements ILetter {
 		this.uid = String.valueOf(rand.nextInt());
 	}
 
-	public Letter(NBTTagCompound nbttagcompound) {
-		this.isProcessed = nbttagcompound.getBoolean("PRC");
-		this.sender = new MailAddress(nbttagcompound.getCompoundTag("SDR"));
-		this.recipient = new MailAddress(nbttagcompound.getCompoundTag("RC"));
+	public Letter(CompoundNBT compoundNBT) {
+		this.isProcessed = compoundNBT.getBoolean("PRC");
+		this.sender = new MailAddress(compoundNBT.getCompound("SDR"));
+		this.recipient = new MailAddress(compoundNBT.getCompound("RC"));
 
-		this.text = nbttagcompound.getString("TXT");
-		this.uid = nbttagcompound.getString("UID");
-		this.inventory.readFromNBT(nbttagcompound);
+		this.text = compoundNBT.getString("TXT");
+		this.uid = compoundNBT.getString("UID");
+		this.inventory.read(compoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
+	public CompoundNBT write(CompoundNBT compoundNBT) {
 
-		nbttagcompound.setBoolean("PRC", isProcessed);
+		compoundNBT.putBoolean("PRC", isProcessed);
 
-		NBTTagCompound subcompound = new NBTTagCompound();
-		this.sender.writeToNBT(subcompound);
-		nbttagcompound.setTag("SDR", subcompound);
+		CompoundNBT subcompound = new CompoundNBT();
+		this.sender.write(subcompound);
+		compoundNBT.put("SDR", subcompound);
 
 		if (this.recipient != null) {
-			subcompound = new NBTTagCompound();
-			this.recipient.writeToNBT(subcompound);
-			nbttagcompound.setTag("RC", subcompound);
+			subcompound = new CompoundNBT();
+			this.recipient.write(subcompound);
+			compoundNBT.put("RC", subcompound);
 		}
 
-		nbttagcompound.setString("TXT", this.text);
-		nbttagcompound.setString("UID", this.uid);
-		inventory.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+		compoundNBT.putString("TXT", this.text);
+		compoundNBT.putString("UID", this.uid);
+		inventory.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
@@ -223,12 +224,12 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void addTooltip(List<String> list) {
+	public void addTooltip(List<ITextComponent> list) {
 		if (StringUtils.isNotBlank(this.sender.getName())) {
-			list.add(Translator.translateToLocal("for.gui.mail.from") + ": " + this.sender.getName());
+			list.add(new TranslationTextComponent("for.gui.mail.from").appendText(": " + this.sender.getName()).applyTextStyle(TextFormatting.GRAY));
 		}
 		if (this.recipient != null) {
-			list.add(Translator.translateToLocal("for.gui.mail.to") + ": " + this.getRecipientString());
+			list.add(new TranslationTextComponent("for.gui.mail.to").appendText(": " + this.getRecipientString()).applyTextStyle(TextFormatting.GRAY));
 		}
 	}
 
@@ -264,11 +265,6 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public String getName() {
-		return inventory.getName();
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return inventory.getInventoryStackLimit();
 	}
@@ -279,23 +275,18 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer var1) {
+	public boolean isUsableByPlayer(PlayerEntity var1) {
 		return true;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer var1) {
+	public void openInventory(PlayerEntity var1) {
 		inventory.openInventory(var1);
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer var1) {
+	public void closeInventory(PlayerEntity var1) {
 		inventory.closeInventory(var1);
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return inventory.hasCustomName();
 	}
 
 	@Override
@@ -303,27 +294,8 @@ public class Letter implements ILetter {
 		return inventory.isItemValidForSlot(i, itemstack);
 	}
 
-	/* FIELDS */
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
 	@Override
 	public void clear() {
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return inventory.getDisplayName();
+		inventory.clear();
 	}
 }

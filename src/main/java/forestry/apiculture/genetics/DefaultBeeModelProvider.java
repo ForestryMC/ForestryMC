@@ -14,16 +14,14 @@ import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBeeModelProvider;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.IModelManager;
 import forestry.apiculture.items.ItemBeeGE;
 
@@ -35,12 +33,12 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	private static EnumMap<EnumBeeType, ModelResourceLocation> models;
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerModels(Item item, IModelManager manager) {
 		String beeIconDir = "bees/default/";
 		EnumBeeType beeType = ((ItemBeeGE) item).getType();
@@ -51,11 +49,12 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 		}
 
 		models.put(beeType, manager.getModelLocation(beeTypeNameBase));
-		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
+		//TODO flatten or work out what this maps to
+		//		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public ModelResourceLocation getModel(EnumBeeType type) {
 		return models.get(type);
 	}

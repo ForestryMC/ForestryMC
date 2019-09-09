@@ -24,6 +24,7 @@ public class MultiblockValidationException extends Exception {
 		this.position = position;
 	}
 
+	@Nullable
 	public BlockPos getPosition() {
 		return position;
 	}

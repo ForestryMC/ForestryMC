@@ -12,17 +12,16 @@ package forestry.lepidopterology.genetics;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.core.genetics.IGeneticDefinition;
+import genetics.api.individual.ISpeciesDefinition;
 
-public interface IButterflyDefinition extends IGeneticDefinition {
-	@Override
-	IButterflyGenome getGenome();
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
+
+public interface IButterflyDefinition extends ISpeciesDefinition<IButterfly> {
 
 	@Override
-	IButterfly getIndividual();
+	IAlleleButterflySpecies getSpecies();
 
 	ItemStack getMemberStack(EnumFlutterType flutterType);
 }

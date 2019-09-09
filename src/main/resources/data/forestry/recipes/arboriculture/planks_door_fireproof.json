@@ -1,0 +1,24 @@
+{
+  "output": {
+    "fireproof": false,
+    "count": 3,
+    "blockKind": "DOOR"
+  },
+  "input": {
+    "fireproof": true,
+    "blockKind": "PLANKS"
+  },
+  "pattern": [
+    "## ",
+    "## ",
+    "## "
+  ],
+  "conditions": [
+    {
+      "module": "arboriculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:wood_type",
+  "group": "arboriculture"
+}

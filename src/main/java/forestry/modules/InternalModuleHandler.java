@@ -1,21 +1,23 @@
 package forestry.modules;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Stream;
 
+import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.IChunkGenerator;
 
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import net.minecraftforge.fml.InterModComms;
 
 import forestry.api.modules.IForestryModule;
 import forestry.core.IPickupHandler;
@@ -24,10 +26,12 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
-import forestry.plugins.ForestryCompatPlugins;
+//import forestry.plugins.ForestryCompatPlugins;
 
+//TODO - most of this needs tearing up and replacing
 public class InternalModuleHandler {
 
+	//TODO use toposort for sorting dependancies?
 	public enum Stage {
 		SETUP, // setup API to make it functional. GameMode Configs are not yet accessible
 		SETUP_DISABLED, // setup fallback API to avoid crashes
@@ -39,8 +43,8 @@ public class InternalModuleHandler {
 		FINISHED
 	}
 
-	protected final Set<BlankForestryModule> modules = new LinkedHashSet();
-	protected final Set<IForestryModule> disabledModules = new LinkedHashSet();
+	protected final Set<BlankForestryModule> modules = new LinkedHashSet<>();
+	protected final Set<IForestryModule> disabledModules = new LinkedHashSet<>();
 	protected final ModuleManager moduleManager;
 	private Stage stage = Stage.SETUP;
 
@@ -79,33 +83,68 @@ public class InternalModuleHandler {
 			Log.debug("Disabled-Setup Complete: {}", module);
 		}
 		stage = Stage.REGISTER;
+
+	}
+
+	public void registerBlocks() {
 		for (IForestryModule module : modules) {
-			Log.debug("Register Items and Blocks Start: {}", module);
-			module.registerItemsAndBlocks();
-			Log.debug("Register Items and Blocks Complete: {}", module);
+			module.registerBlocks();
 		}
 	}
 
-	public void runPreInit(Side side) {
+	public void registerItems() {
+		for (IForestryModule module : modules) {
+			module.registerItems();
+		}
+	}
+
+	//TODO generics or something on these registry events
+	//TODO possible to do this for modules too?
+	public void registerTileEntities() {
+		for (IForestryModule module : modules) {
+			module.registerTiles();
+		}
+	}
+
+	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
+		for (IForestryModule module : modules) {
+			module.registerEntityTypes(registry);
+		}
+	}
+
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		for (IForestryModule module : modules) {
+			module.registerContainerTypes(registry);
+		}
+	}
+
+	public void registerGuiFactories() {
+		for (IForestryModule module : modules) {
+			module.registerGuiFactories();
+		}
+	}
+
+	public void runPreInit(Dist side) {
 		stage = Stage.PRE_INIT;
 		for (BlankForestryModule module : modules) {
 			Log.debug("Pre-Init Start: {}", module);
 			registerHandlers(module, side);
 			module.preInit();
-			if (moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
+			//TODO - compat
+			if (false) {//moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
 				module.registerTriggers();
 			}
 			Log.debug("Pre-Init Complete: {}", module);
 		}
 	}
 
-	private void registerHandlers(BlankForestryModule module, Side side) {
+	private void registerHandlers(BlankForestryModule module, Dist side) {
 		Log.debug("Registering Handlers for Module: {}", module);
 
 		IPacketRegistry packetRegistry = module.getPacketRegistry();
 		if (packetRegistry != null) {
 			packetRegistry.registerPacketsServer();
-			if (side == Side.CLIENT) {
+			if (side == Dist.CLIENT) {
 				packetRegistry.registerPacketsClient();
 			}
 		}
@@ -171,21 +210,22 @@ public class InternalModuleHandler {
 		}
 	}
 
-	public void processIMCMessages(ImmutableList<FMLInterModComms.IMCMessage> messages) {
-		for (FMLInterModComms.IMCMessage message : messages) {
+	public void processIMCMessages(Stream<InterModComms.IMCMessage> messages) {
+		messages.forEach(m -> {
 			for (BlankForestryModule module : modules) {
-				if (module.processIMCMessage(message)) {
+				if (module.processIMCMessage(m)) {
 					break;
 				}
 			}
-		}
+		});
 	}
 
-	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		for (BlankForestryModule module : modules) {
-			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
-		}
-	}
+	//TODO - worldgen
+	//	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+	//		for (BlankForestryModule module : modules) {
+	//			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+	//		}
+	//	}
 
 	public void decorateBiome(World world, Random rand, BlockPos pos) {
 		for (BlankForestryModule module : modules) {

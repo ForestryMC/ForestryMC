@@ -10,30 +10,33 @@
  ******************************************************************************/
 package forestry.core.blocks.properties;
 
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 
-import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.client.model.data.ModelProperty;
 
-public final class UnlistedBlockAccess implements IUnlistedProperty<IBlockAccess> {
+public final class UnlistedBlockAccess extends ModelProperty<IBlockReader> {
 	public static final UnlistedBlockAccess BLOCKACCESS = new UnlistedBlockAccess();
 
-	@Override
-	public String getName() {
-		return "blockaccess";
+	public UnlistedBlockAccess() {
+		super();
 	}
-
-	@Override
-	public boolean isValid(IBlockAccess value) {
-		return true;
-	}
-
-	@Override
-	public Class<IBlockAccess> getType() {
-		return IBlockAccess.class;
-	}
-
-	@Override
-	public String valueToString(IBlockAccess value) {
-		return value.toString();
-	}
+	//	@Override
+	//	public String getName() {
+	//		return "blockaccess";
+	//	}
+	//
+	//	@Override
+	//	public boolean isValid(IBlockReader value) {
+	//		return true;
+	//	}
+	//
+	//	@Override
+	//	public Class<IBlockReader> getType() {
+	//		return IBlockReader.class;
+	//	}
+	//
+	//	@Override
+	//	public String valueToString(IBlockReader value) {
+	//		return value.toString();
+	//	}
 }

@@ -14,31 +14,40 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.oredict.OreDictionary;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
+import forestry.core.ItemGroupForestry;
 import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemForestry extends Item implements IItemModelRegister {
+	public ItemForestry(Item.Properties properties) {
+		//TODO - do the below at registration
+		super(properties);
+	}
+
+	public ItemForestry(ItemGroup group) {
+		this(new Item.Properties(), group);
+	}
+
+	//TODO may be worth removing this
 	public ItemForestry() {
-		setCreativeTab(CreativeTabForestry.tabForestry);
+		this(ItemGroupForestry.tabForestry);
 	}
 
-	public ItemForestry(CreativeTabs creativeTab) {
-		setCreativeTab(creativeTab);
+	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
+		super(properties.group(creativeTab));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
 		manager.registerItemModel(item, 0);
@@ -52,13 +61,14 @@ public class ItemForestry extends Item implements IItemModelRegister {
 		return new ItemStack(this, amount);
 	}
 
+	//TODO - figure out how tags fit into this
 	public ItemStack getWildcard() {
-		return new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE);
+		return new ItemStack(this, 1);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}

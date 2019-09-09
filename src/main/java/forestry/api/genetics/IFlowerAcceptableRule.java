@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -14,5 +14,5 @@ public interface IFlowerAcceptableRule {
 	 * Checks if the flower at this position is accepted by this rule.
 	 * flowerType is passed in case this rule is registered for multiple flower types.
 	 */
-	boolean isAcceptableFlower(IBlockState blockState, World world, BlockPos pos, String flowerType);
+	boolean isAcceptableFlower(BlockState blockState, World world, BlockPos pos, String flowerType);
 }

@@ -1,5 +1,5 @@
 {
-	"title": "Resource Blocks",
+  "title": "Resource block",
 	"icon":{
 		"item": "forestry:resource_storage",
 		"data": 3
@@ -16,7 +16,7 @@
 				]
 			},
 			{
-				"text": "Apatite and all metal ingots of forestry can be crafted into blocks and back."
+              "text": "Apatite and all metal ingots of forestry can be crafted into block and back."
 			}
 		],
 		[

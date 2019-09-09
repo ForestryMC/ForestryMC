@@ -1,0 +1,29 @@
+{
+  "parent": "forestry:item/backpacks/normal_neutral",
+  "overrides": [
+    {
+      "predicate": {
+        "mode": 0
+      },
+      "model": "forestry:item/backpacks/normal_neutral"
+    },
+    {
+      "predicate": {
+        "mode": 1
+      },
+      "model": "forestry:item/backpacks/normal_locked"
+    },
+    {
+      "predicate": {
+        "mode": 2
+      },
+      "model": "forestry:item/backpacks/normal_receive"
+    },
+    {
+      "predicate": {
+        "mode": 3
+      },
+      "model": "forestry:item/backpacks/normal_resupply"
+    }
+  ]
+}

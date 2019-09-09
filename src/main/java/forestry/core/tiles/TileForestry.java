@@ -12,39 +12,36 @@ package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;
-import forestry.core.config.Constants;
 import forestry.core.errors.ErrorLogic;
-import forestry.core.gui.IGuiHandlerTile;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.IStreamable;
@@ -54,14 +51,16 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerInternalSided;
-import buildcraft.api.statements.ITriggerProvider;
+//import net.minecraftforge.fml.common.Optional;
 
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, IGuiHandlerTile, ITickable, ITriggerProvider {
+//import buildcraft.api.statements.IStatementContainer;
+//import buildcraft.api.statements.ITriggerExternal;
+//import buildcraft.api.statements.ITriggerInternal;
+//import buildcraft.api.statements.ITriggerInternalSided;
+//import buildcraft.api.statements.ITriggerProvider;
+//
+//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, ITickableTileEntity, INamedContainerProvider {//, ITriggerProvider {
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -69,6 +68,10 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	private final TickHelper tickHelper = new TickHelper();
 	private boolean needsNetworkUpdate = false;
+
+	public TileForestry(TileEntityType<?> tileEntityTypeIn) {
+		super(tileEntityTypeIn);
+	}
 
 	protected AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -79,9 +82,9 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public void invalidate() {
+	public void remove() {
 		tileCache.purge();
-		super.invalidate();
+		super.remove();
 	}
 
 	@Override
@@ -92,7 +95,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / UPDATING
 	@Override
-	public final void update() {
+	public final void tick() {
 		tickHelper.onTick();
 
 		if (!world.isRemote) {
@@ -107,7 +110,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void updateClientSide() {
 	}
 
@@ -120,35 +123,35 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / SAVING & LOADING
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
-		inventory.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
+		inventory.read(data);
 	}
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		data = super.writeToNBT(data);
-		inventory.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
+		inventory.write(data);
 		return data;
 	}
 
 	@Nullable
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.getPos(), 0, getUpdateTag());
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
 	}
 
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound tag = super.getUpdateTag();
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = super.getUpdateTag();
 		return NBTUtilForestry.writeStreamableToNbt(this, tag);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void handleUpdateTag(NBTTagCompound tag) {
+	@OnlyIn(Dist.CLIENT)
+	public void handleUpdateTag(CompoundNBT tag) {
 		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
@@ -166,7 +169,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 
 	}
@@ -180,19 +183,19 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	/* ITriggerProvider */
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
-	}
-
-	@Override
-	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull EnumFacing side) {
-	}
-
-	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	@Override
-	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull EnumFacing side, TileEntity tile) {
-	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+	//	}
+	//
+	//	@Override
+	//	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
+	//	}
+	//
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
@@ -215,8 +218,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	 */
 	@Override
 	public String getUnlocalizedTitle() {
-		String blockUnlocalizedName = getBlockType().getTranslationKey();
-		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
+		return getBlockState().getBlock().getTranslationKey();
 	}
 
 	/* INVENTORY BASICS */
@@ -267,34 +269,34 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public final void openInventory(EntityPlayer player) {
+	public final void openInventory(PlayerEntity player) {
 		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory(EntityPlayer player) {
+	public final void closeInventory(PlayerEntity player) {
 		getInternalInventory().closeInventory(player);
 	}
 
-	@Override
-	public String getName() {
-		return getUnlocalizedTitle();
-	}
+	//	@Override
+	//	public String getName() {
+	//		return getUnlocalizedTitle();
+	//	}
+	//
+	//	@Override
+	//	public ITextComponent getDisplayName() {
+	//		return new TranslationTextComponent(getUnlocalizedTitle());
+	//	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return new TextComponentTranslation(getUnlocalizedTitle());
-	}
-
-	@Override
-	public final boolean isUsableByPlayer(EntityPlayer player) {
+	public final boolean isUsableByPlayer(PlayerEntity player) {
 		return getInternalInventory().isUsableByPlayer(player);
 	}
 
-	@Override
-	public boolean hasCustomName() {
-		return getInternalInventory().hasCustomName();
-	}
+	//	@Override
+	//	public boolean hasCustomName() {
+	//		return getInternalInventory().hasCustomName();
+	//	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -312,17 +314,17 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
+	public int[] getSlotsForFace(Direction side) {
 		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 
@@ -331,34 +333,32 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		return getPos();
 	}
 
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
+	//TODO - inv
+	//	@Override
+	//	public int getField(int id) {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public int getFieldCount() {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public void setField(int id, int value) {
+	//	}
 
 	@Override
 	public void clear() {
 	}
 
 	@Override
-	@Nullable
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing != null) {
-				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sidedInvWrapper);
+				return LazyOptional.of(() -> new SidedInvWrapper(getInternalInventory(), facing)).cast();
 			} else {
-				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
+				return LazyOptional.of(() -> new InvWrapper(getInternalInventory())).cast();
 			}
 
 		}
@@ -366,8 +366,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-			super.hasCapability(capability, facing);
+	public ITextComponent getDisplayName() {
+		return new TranslationTextComponent(this.getUnlocalizedTitle());
 	}
 }

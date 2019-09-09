@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "forestry:alveary.hygro",
+    "data": 0
+  },
+  "pattern": [
+    "GIG",
+    "GXG",
+    "GIG"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "#BLOCKGLASS"
+    },
+    "X": {
+      "item": "forestry:alveary.plain",
+      "data": 0
+    },
+    "I": {
+      "item": "#INGOTIRON"
+    }
+  },
+  "group": "apiculture"
+}

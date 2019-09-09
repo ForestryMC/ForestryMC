@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.climatology.network;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.IPacketRegistry;
@@ -24,7 +25,7 @@ public class PacketRegistryClimatology implements IPacketRegistry {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerPacketsClient() {
 	}
 }

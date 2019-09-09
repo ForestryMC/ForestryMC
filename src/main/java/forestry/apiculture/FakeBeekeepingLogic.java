@@ -13,8 +13,8 @@ package forestry.apiculture;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -47,7 +47,7 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void syncToClient(EntityPlayerMP player) {
+	public void syncToClient(ServerPlayerEntity player) {
 
 	}
 
@@ -72,12 +72,12 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+	public void read(CompoundNBT CompoundNBT) {
 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		return CompoundNBT;
 	}
 }

@@ -14,8 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -23,8 +23,8 @@ import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -112,8 +112,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data) {
-		this.readFromNBT(data);
+	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundNBT data) {
+		this.read(data);
 	}
 
 	@Override
@@ -179,13 +179,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		for (int slabX = minimumCoord.getX(); slabX <= maximumCoord.getX(); slabX++) {
 			for (int slabZ = minimumCoord.getZ(); slabZ <= maximumCoord.getZ(); slabZ++) {
 				BlockPos pos = new BlockPos(slabX, slabY, slabZ);
-				IBlockState state = world.getBlockState(pos);
+				BlockState state = world.getBlockState(pos);
 				Block block = state.getBlock();
 				if (!BlockUtil.isWoodSlabBlock(state, block, world, pos)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 
-				int meta = block.getMetaFromState(state);
+				int meta = 0;//TODO flatten block.getMetaFromState(state); probably needs tag
 				if ((meta & 8) != 0) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
@@ -200,8 +200,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				if (isCoordInMultiblock(airX, airY, airZ)) {
 					continue;
 				}
-				IBlockState blockState = world.getBlockState(new BlockPos(airX, airY, airZ));
-				if (blockState.isOpaqueCube()) {
+				BlockPos pos = new BlockPos(airX, airY, airZ);
+				BlockState blockState = world.getBlockState(pos);
+				if (blockState.isOpaqueCube(world, pos)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSpace"));
 				}
 			}
@@ -266,7 +267,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void updateClient(int tickCount) {
 		for (IAlvearyComponent.Active activeComponent : activeComponents) {
 			activeComponent.updateClient(tickCount);
@@ -297,38 +298,38 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound data) {
-		data = super.writeToNBT(data);
+	public CompoundNBT write(CompoundNBT data) {
+		data = super.write(data);
 
-		data.setFloat("TempChange", tempChange);
-		data.setFloat("HumidChange", humidChange);
+		data.putFloat("TempChange", tempChange);
+		data.putFloat("HumidChange", humidChange);
 
-		beekeepingLogic.writeToNBT(data);
-		inventory.writeToNBT(data);
+		beekeepingLogic.write(data);
+		inventory.write(data);
 		return data;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound data) {
-		super.readFromNBT(data);
+	public void read(CompoundNBT data) {
+		super.read(data);
 
 		tempChange = data.getFloat("TempChange");
 		humidChange = data.getFloat("HumidChange");
 
-		beekeepingLogic.readFromNBT(data);
-		inventory.readFromNBT(data);
+		beekeepingLogic.read(data);
+		inventory.read(data);
 	}
 
 	@Override
-	public void formatDescriptionPacket(NBTTagCompound data) {
-		writeToNBT(data);
-		beekeepingLogic.writeToNBT(data);
+	public void formatDescriptionPacket(CompoundNBT data) {
+		this.write(data);
+		beekeepingLogic.write(data);
 	}
 
 	@Override
-	public void decodeDescriptionPacket(NBTTagCompound data) {
-		readFromNBT(data);
-		beekeepingLogic.readFromNBT(data);
+	public void decodeDescriptionPacket(CompoundNBT data) {
+		this.read(data);
+		beekeepingLogic.read(data);
 	}
 
 	/* IActivatable */
@@ -392,7 +393,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public int getBlockLightValue() {
 		BlockPos topCenter = getTopCenterCoord();
-		return world.getLightFromNeighbors(topCenter.up());
+		//TODO light
+		return world.getLight(topCenter.up());
 	}
 
 	@Override

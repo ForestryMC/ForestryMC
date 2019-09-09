@@ -14,12 +14,12 @@
 					"forestry:stamps_10n",
 					"forestry:stamps_20n",
 					"forestry:stamps_50n",
-					"forestry:stamps_100n",
+					"forestry:stamps_100n"
 				]
 			},
 			{
-				"text": "The higher the value of the stamp, the more items that can be attached to a letter. A single 1n stamp is sufficient to send a letter containing only text. Each item attached to a letter,"
-			}
+              "text": "The higher the value of the stamp, the more item that can be attached to a letter. A single 1n stamp is sufficient to send a letter containing only text. Each item attached to a letter,"
+            }
 		],
 		[
 			{
@@ -56,8 +56,8 @@
 				]
 			},
 			{
-				"text": "will require an additional 1n stamp or the equivalent denomination Stamp corresponding to the total amount of items."
-			}
+              "text": "will require an additional 1n stamp or the equivalent denomination Stamp corresponding to the total amount of item."
+            }
 		]
 	]
 }

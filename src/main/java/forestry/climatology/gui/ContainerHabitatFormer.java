@@ -10,18 +10,19 @@
  ******************************************************************************/
 package forestry.climatology.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.network.PacketBuffer;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidTank;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
+import forestry.climatology.ModuleClimatology;
 import forestry.climatology.inventory.InventoryHabitatFormer;
 import forestry.climatology.tiles.TileHabitatFormer;
 import forestry.core.climate.ClimateStateHelper;
@@ -31,6 +32,7 @@ import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> implements IContainerLiquidTanks, IGuiSelectable {
 
@@ -48,11 +50,17 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	//Container Helper
 	private final ContainerLiquidTanksHelper<TileHabitatFormer> helper;
 
-	public ContainerHabitatFormer(InventoryPlayer playerInventory, TileHabitatFormer tile) {
-		super(tile, playerInventory, 8, 151);
+	//TODO dedupe
+	public static ContainerHabitatFormer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+		TileHabitatFormer tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileHabitatFormer.class);
+		return new ContainerHabitatFormer(windowId, inv, tile);
+	}
+
+	public ContainerHabitatFormer(int windowId, PlayerInventory playerInventory, TileHabitatFormer tile) {
+		super(windowId, ModuleClimatology.getContainerTypes().HABITAT_FORMER, playerInventory, tile, 8, 151);
 
 		this.helper = new ContainerLiquidTanksHelper<>(tile);
-		this.addSlotToContainer(new SlotLiquidIn(tile, InventoryHabitatFormer.SLOT_INPUT, 129, 38));
+		this.addSlot(new SlotLiquidIn(tile, InventoryHabitatFormer.SLOT_INPUT, 129, 38));
 	}
 
 	@Override
@@ -100,7 +108,7 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	}
 
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 		IClimateTransformer transformer = tile.getTransformer();
 		switch (primary) {
 			case REQUEST_ID_CIRCLE:
@@ -115,13 +123,13 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void handlePipetteClickClient(int slot, EntityPlayer player) {
+	@OnlyIn(Dist.CLIENT)
+	public void handlePipetteClickClient(int slot, PlayerEntity player) {
 		helper.handlePipetteClickClient(slot, player);
 	}
 
 	@Override
-	public void handlePipetteClick(int slot, EntityPlayerMP player) {
+	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
 		helper.handlePipetteClick(slot, player);
 	}
 
@@ -132,8 +140,8 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer entityPlayer) {
-		super.onContainerClosed(entityPlayer);
+	public void onContainerClosed(PlayerEntity PlayerEntity) {
+		super.onContainerClosed(PlayerEntity);
 		tile.getTankManager().containerRemoved(this);
 	}
 

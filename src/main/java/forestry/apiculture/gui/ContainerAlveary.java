@@ -10,26 +10,34 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.api.climate.IClimateListener;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.gui.ContainerTile;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketGuiUpdate;
+import forestry.core.tiles.TileUtil;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
-	public ContainerAlveary(InventoryPlayer player, TileAlveary tile) {
-		super(tile, player, 8, 108);
+	public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileAlveary tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlveary.class);
+		return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
+	}
+
+	public ContainerAlveary(int windowid, PlayerInventory player, TileAlveary tile) {
+		super(windowid, ModuleApiculture.getContainerTypes().ALVEARY, player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, false);
 
 		tile.getBeekeepingLogic().clearCachedValues();
 		IClimateListener listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-		if (listener != null && player.player instanceof EntityPlayerMP) {
-			listener.syncToClient((EntityPlayerMP) player.player);
+		if (listener != null && player.player instanceof ServerPlayerEntity) {
+			listener.syncToClient((ServerPlayerEntity) player.player);
 		}
 	}
 

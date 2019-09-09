@@ -1,10 +1,9 @@
 package forestry.core.fluids;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class DrainOnlyFluidHandlerWrapper implements IFluidHandler {
 	private final IFluidHandler internalFluidHandler;
@@ -14,70 +13,40 @@ public class DrainOnlyFluidHandlerWrapper implements IFluidHandler {
 	}
 
 	@Override
-	public IFluidTankProperties[] getTankProperties() {
-		IFluidTankProperties[] internalTankProperties = internalFluidHandler.getTankProperties();
-		IFluidTankProperties[] tankProperties = new IFluidTankProperties[internalTankProperties.length];
-		for (int i = 0; i < internalTankProperties.length; i++) {
-			IFluidTankProperties fluidTankProperties = internalTankProperties[i];
-			tankProperties[i] = new DrainOnlyFluidPropertiesWrapper(fluidTankProperties);
-		}
-		return tankProperties;
+	public int getTanks() {
+		return internalFluidHandler.getTanks();
+	}
+
+	@Nonnull
+	@Override
+	public FluidStack getFluidInTank(int tank) {
+		return internalFluidHandler.getFluidInTank(tank);
 	}
 
 	@Override
-	public int fill(FluidStack resource, boolean doFill) {
+	public int getTankCapacity(int tank) {
+		return internalFluidHandler.getTankCapacity(tank);
+	}
+
+	@Override
+	public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+		return internalFluidHandler.isFluidValid(tank, stack);
+	}
+
+	@Override
+	public int fill(FluidStack resource, FluidAction action) {
 		return 0;
 	}
 
-	@Nullable
+	@Nonnull
 	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		return internalFluidHandler.drain(resource, doDrain);
+	public FluidStack drain(FluidStack resource, FluidAction action) {
+		return internalFluidHandler.drain(resource, action);
 	}
 
-	@Nullable
+	@Nonnull
 	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
-		return internalFluidHandler.drain(maxDrain, doDrain);
-	}
-
-	private static class DrainOnlyFluidPropertiesWrapper implements IFluidTankProperties {
-
-		private final IFluidTankProperties internalTankProperties;
-
-		public DrainOnlyFluidPropertiesWrapper(IFluidTankProperties internalTankProperties) {
-			this.internalTankProperties = internalTankProperties;
-		}
-
-		@Nullable
-		@Override
-		public FluidStack getContents() {
-			return internalTankProperties.getContents();
-		}
-
-		@Override
-		public int getCapacity() {
-			return internalTankProperties.getCapacity();
-		}
-
-		@Override
-		public boolean canFill() {
-			return false;
-		}
-
-		@Override
-		public boolean canDrain() {
-			return internalTankProperties.canDrain();
-		}
-
-		@Override
-		public boolean canFillFluidType(FluidStack fluidStack) {
-			return false;
-		}
-
-		@Override
-		public boolean canDrainFluidType(FluidStack fluidStack) {
-			return internalTankProperties.canDrainFluidType(fluidStack);
-		}
+	public FluidStack drain(int maxDrain, FluidAction action) {
+		return internalFluidHandler.drain(maxDrain, action);
 	}
 }

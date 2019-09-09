@@ -5,18 +5,19 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.IModelManager;
 
 public interface IBeeModelProvider {
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	void registerModels(Item item, IModelManager manager);
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	ModelResourceLocation getModel(EnumBeeType type);
 }

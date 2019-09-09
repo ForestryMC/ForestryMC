@@ -1,8 +1,8 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/bee_combs.0",
-		"layer1": "forestry:items/bee_combs.1"
+      "layer0": "forestry:item/bee_combs.0",
+      "layer1": "forestry:item/bee_combs.1"
     },
     "display": {
         "thirdperson": {

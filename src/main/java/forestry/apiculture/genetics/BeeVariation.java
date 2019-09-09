@@ -2,46 +2,50 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IBee;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.genetics.IAllele;
-import forestry.core.genetics.alleles.AlleleHelper;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
 
 public abstract class BeeVariation implements IBeeDefinition {
 
-	private final IAllele[] template;
-	private final IBeeGenome genome;
+	private final IAlleleTemplate template;
+	private final IGenome genome;
 
 	protected BeeVariation(IBeeDefinition bee) {
-		template = bee.getTemplate();
-		initializeTemplate(template);
-		genome = BeeManager.beeRoot.templateAsGenome(template);
+		template = initializeTemplate(bee.getTemplate());
+		genome = template.toGenome();
 	}
 
-	protected abstract void initializeTemplate(IAllele[] template);
+	protected abstract IAlleleTemplate initializeTemplate(IAlleleTemplate template);
 
 	@Override
-	public IAllele[] getTemplate() {
+	public IAlleleTemplate getTemplate() {
 		return template;
 	}
 
 	@Override
-	public IBeeGenome getGenome() {
+	public IGenome getGenome() {
 		return genome;
 	}
 
 	@Override
-	public IBee getIndividual() {
-		return new Bee(genome);
+	public IBee createIndividual() {
+		return template.toIndividual(BeeHelper.getRoot());
 	}
 
 	@Override
 	public final ItemStack getMemberStack(EnumBeeType beeType) {
-		IBee bee = getIndividual();
-		return BeeManager.beeRoot.getMemberStack(bee, beeType);
+		IBee bee = createIndividual();
+		return BeeHelper.getRoot().getTypes().createStack(bee, beeType);
+	}
+
+	@Override
+	public IAlleleBeeSpecies getSpecies() {
+		return genome.getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public static class RainResist extends BeeVariation {
@@ -50,8 +54,8 @@ public abstract class BeeVariation implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			AlleleHelper.getInstance().set(template, EnumBeeChromosome.TOLERATES_RAIN, true);
+		protected IAlleleTemplate initializeTemplate(IAlleleTemplate template) {
+			return template.createBuilder().set(BeeChromosomes.TOLERATES_RAIN, true).build();
 		}
 	}
 }

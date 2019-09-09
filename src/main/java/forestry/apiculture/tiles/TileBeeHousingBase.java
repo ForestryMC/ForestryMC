@@ -12,18 +12,19 @@ package forestry.apiculture.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -51,7 +52,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	protected TileBeeHousingBase(String hintKey) {
+	protected TileBeeHousingBase(TileEntityType<?> type, String hintKey) {
+		super(type);
 		this.hintKey = hintKey;
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 
@@ -70,34 +72,34 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	/* LOADING & SAVING */
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		beeLogic.writeToNBT(nbttagcompound);
-		ownerHandler.writeToNBT(nbttagcompound);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		beeLogic.write(compoundNBT);
+		ownerHandler.write(compoundNBT);
+		return compoundNBT;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		beeLogic.readFromNBT(nbttagcompound);
-		ownerHandler.readFromNBT(nbttagcompound);
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		beeLogic.read(compoundNBT);
+		ownerHandler.read(compoundNBT);
 	}
 
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound updateTag = super.getUpdateTag();
-		beeLogic.writeToNBT(updateTag);
-		ownerHandler.writeToNBT(updateTag);
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT updateTag = super.getUpdateTag();
+		beeLogic.write(updateTag);
+		ownerHandler.write(updateTag);
 		return updateTag;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void handleUpdateTag(NBTTagCompound tag) {
+	@OnlyIn(Dist.CLIENT)
+	public void handleUpdateTag(CompoundNBT tag) {
 		super.handleUpdateTag(tag);
-		beeLogic.readFromNBT(tag);
-		ownerHandler.readFromNBT(tag);
+		beeLogic.read(tag);
+		ownerHandler.read(tag);
 	}
 
 	@Override
@@ -126,24 +128,17 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		return climateListener.getExactHumidity();
 	}
 
-	/* ClimateListener */
 	@Override
-	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-		return capability == ClimateCapabilities.CLIMATE_LISTENER || super.hasCapability(capability, facing);
-	}
-
-	@Nullable
-	@Override
-	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
-			return ClimateCapabilities.CLIMATE_LISTENER.cast(climateListener);
+			return LazyOptional.of(() -> climateListener).cast();
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	/* UPDATING */
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateClientSide() {
 		if (beeLogic.canDoBeeFX() && updateOnInterval(4)) {
 			beeLogic.doBeeFX();
@@ -155,7 +150,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		climateListener.updateClientSide(true);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static void doPollenFX(World world, double xCoord, double yCoord, double zCoord) {
 		double fxX = xCoord + 0.5F;
 		double fxY = yCoord + 0.25F;
@@ -199,9 +194,10 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		return world.getBiome(getPos());
 	}
 
+	//TODO check this call
 	@Override
 	public int getBlockLightValue() {
-		return world.getLightFromNeighbors(getPos().up());
+		return world.getLight(getPos().up());
 	}
 
 	@Override
@@ -223,5 +219,4 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	public Vec3d getBeeFXCoordinates() {
 		return new Vec3d(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
 	}
-
 }

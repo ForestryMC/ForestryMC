@@ -17,33 +17,32 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.util.List;
 
-import net.minecraft.block.BlockBeetroot;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BeetrootBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CropsBlock;
+import net.minecraft.block.NetherWartBlock;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.Forestry;
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -62,13 +61,12 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.OreDictUtil;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.circuits.CircuitFarmLogic;
+import forestry.farming.gui.FarmingContainerTypes;
+import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCocoa;
 import forestry.farming.logic.FarmLogicCrops;
@@ -88,32 +86,50 @@ import forestry.farming.logic.farmables.FarmableGourd;
 import forestry.farming.logic.farmables.FarmableStacked;
 import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.farming.logic.farmables.FarmableVanillaSapling;
-import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.proxy.ProxyFarming;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
+import forestry.farming.proxy.ProxyFarmingClient;
+import forestry.farming.tiles.TileRegistryFarming;
 import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
+//import forestry.arboriculture.genetics.alleles.AlleleFruits;
+
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
-	@SidedProxy(clientSide = "forestry.farming.proxy.ProxyFarmingClient", serverSide = "forestry.farming.proxy.ProxyFarming")
 	public static ProxyFarming proxy;
 
 	@Nullable
 	private static BlockRegistryFarming blocks;
+	@Nullable
+	private static TileRegistryFarming tiles;
+	@Nullable
+	private static FarmingContainerTypes containerTypes;
+
+	public ModuleFarming() {
+		proxy = DistExecutor.runForDist(() -> () -> new ProxyFarmingClient(), () -> () -> new ProxyFarming());
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+
+	public static TileRegistryFarming getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
+	}
 
 	public static BlockRegistryFarming getBlocks() {
 		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
+
+	public static FarmingContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
+	}
+
 
 	@Override
 	public void setupAPI() {
@@ -126,8 +142,24 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerBlocks() {
 		blocks = new BlockRegistryFarming();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryFarming();
+	}
+
+	@Override
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new FarmingContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		FarmingContainerTypes containerTypes = getContainerTypes();
+		ScreenManager.registerFactory(containerTypes.FARM, GuiFarm::new);
 	}
 
 	@Override
@@ -137,37 +169,37 @@ public class ModuleFarming extends BlankForestryModule {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
-
 		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
 		}
 
 		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-			new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), BlockCrops.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), BlockCrops.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), BlockCrops.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BlockBeetroot.BEETROOT_AGE, 3, 0));
+			new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
 
-		IBlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
+		BlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
 
-		IBlockState plantedRedMushroom = blocks.mushroom.getDefaultState().withProperty(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
+		BlockState plantedRedMushroom = blocks.mushroom.getDefaultState().with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
 
 		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
-		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON_BLOCK));
+		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON));
 
-		registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, BlockNetherWart.AGE, 3));
+		registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3));
 
-		registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.REEDS), Blocks.REEDS, 3));
+		registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3));
 
 		registry.registerFarmables(ForestryFarmIdentifier.SUCCULENTES, new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
 		registry.registerFarmables(ForestryFarmIdentifier.ENDER, FarmableChorus.INSTANCE);
 
 		//Forestry fertilizer
-		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound, 1, OreDictionary.WILDCARD_VALUE), 500);
+		//TODO - tags
+		registry.registerFertilizer(new ItemStack(coreItems.fertilizerCompound), 500);
 
 		proxy.initializeModels();
 
@@ -191,12 +223,6 @@ public class ModuleFarming extends BlankForestryModule {
 		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 		FarmRegistry.getInstance().loadConfig(config);
 		config.save();
-
-		TileUtil.registerTile(TileFarmPlain.class, "farm");
-		TileUtil.registerTile(TileFarmGearbox.class, "farm_gearbox");
-		TileUtil.registerTile(TileFarmHatch.class, "farm_hatch");
-		TileUtil.registerTile(TileFarmValve.class, "farm_valve");
-		TileUtil.registerTile(TileFarmControl.class, "farm_control");
 
 		IFarmRegistry registry = FarmRegistry.getInstance();
 		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
@@ -223,8 +249,7 @@ public class ModuleFarming extends BlankForestryModule {
 		Circuits.farmShroomManaged = new CircuitFarmLogic("managedShroom", mushroomFarm, false);
 		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", mushroomFarm, true);
 		mushroomFarm.registerSoil(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState());
-		mushroomFarm.registerSoil(new ItemStack(Blocks.DIRT, 1, 2),
-			Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.PODZOL), true);
+		mushroomFarm.registerSoil(new ItemStack(Blocks.PODZOL), Blocks.PODZOL.getDefaultState(), true);
 
 		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
 		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
@@ -265,10 +290,9 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmCocoaManaged = new CircuitFarmLogic("managedCocoa", cocoaFarm, false);
 		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", cocoaFarm, true);
-		cocoaFarm.registerSoil(new ItemStack(Blocks.LOG, 1, 3),
-			Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE));
-		cocoaFarm.addGermlings(new ItemStack(Items.DYE, 1, 3));
-		cocoaFarm.addProducts(new ItemStack(Items.DYE, 1, 3));
+		cocoaFarm.registerSoil(new ItemStack(Blocks.JUNGLE_LOG), Blocks.JUNGLE_LOG.getDefaultState());
+		cocoaFarm.addGermlings(new ItemStack(Items.COCOA_BEANS));
+		cocoaFarm.addProducts(new ItemStack(Items.COCOA_BEANS));
 
 		Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", enderFarm, false);
 		Circuits.farmEnderManual = new CircuitFarmLogic("manualEnder", enderFarm, true);
@@ -278,59 +302,6 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
-		BlockRegistryFarming blocks = getBlocks();
-
-		ItemStack basic = blocks.farm.get(EnumFarmBlockType.PLAIN, 1);
-		ItemStack gearbox = blocks.farm.get(EnumFarmBlockType.GEARBOX, 1);
-		ItemStack hatch = blocks.farm.get(EnumFarmBlockType.HATCH, 1);
-		ItemStack valve = blocks.farm.get(EnumFarmBlockType.VALVE, 1);
-		ItemStack control = blocks.farm.get(EnumFarmBlockType.CONTROL, 1);
-
-		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-			NBTTagCompound compound = new NBTTagCompound();
-			block.saveToCompound(compound);
-
-			basic.setTagCompound(compound);
-			gearbox.setTagCompound(compound);
-			hatch.setTagCompound(compound);
-			valve.setTagCompound(compound);
-			control.setTagCompound(compound);
-
-			RecipeUtil.addRecipe("farm_basic_" + block.getUid(), basic,
-				"I#I",
-				"WCW",
-				'#', block.getBase(),
-				'W', "slabWood",
-				'C', coreItems.tubes.get(EnumElectronTube.TIN, 1),
-				'I', "ingotCopper");
-
-			RecipeUtil.addRecipe("farm_gearbox_" + block.getUid(), gearbox,
-				" # ",
-				"TTT",
-				'#', basic,
-				'T', "gearTin");
-
-			RecipeUtil.addRecipe("farm_hatch_" + block.getUid(), hatch,
-				" # ",
-				"TDT",
-				'#', basic,
-				'T', "gearTin",
-				'D', OreDictUtil.TRAPDOOR_WOOD);
-
-			RecipeUtil.addRecipe("farm_valve_" + block.getUid(), valve,
-				" # ",
-				"XTX",
-				'#', basic,
-				'T', "gearTin",
-				'X', "blockGlass");
-
-			RecipeUtil.addRecipe("farm_control_" + block.getUid(), control,
-				" # ",
-				"XTX",
-				'#', basic,
-				'T', coreItems.tubes.get(EnumElectronTube.GOLD, 1),
-				'X', "dustRedstone");
-		}
 
 		// Circuits
 		ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
@@ -345,28 +316,28 @@ public class ModuleFarming extends BlankForestryModule {
 			return;
 		}
 
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.BLAZE, 1), Circuits.farmInfernalManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManaged);
-		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.GOLD, 1), Circuits.farmArborealManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.BLAZE, 1), Circuits.farmInfernalManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.APATITE, 1), Circuits.farmShroomManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManaged);
+		ChipsetManager.solderManager.addRecipe(layoutManaged, coreItems.getElectronTube(EnumElectronTube.ENDER, 1), Circuits.farmEnderManaged);
 
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.GOLD, 1), Circuits.farmArborealManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.APATITE, 1), Circuits.farmShroomManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManual);
-		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.tubes.get(EnumElectronTube.ENDER, 1), Circuits.farmEnderManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.GOLD, 1), Circuits.farmArborealManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.COPPER, 1), Circuits.farmSucculentManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.OBSIDIAN, 1), Circuits.farmPeatManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.BRONZE, 1), Circuits.farmCropsManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.TIN, 1), Circuits.farmPoalesManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.LAPIS, 1), Circuits.farmGourdManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.APATITE, 1), Circuits.farmShroomManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.DIAMOND, 1), Circuits.farmCocoaManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.EMERALD, 1), Circuits.farmOrchardManual);
+		ChipsetManager.solderManager.addRecipe(layoutManual, coreItems.getElectronTube(EnumElectronTube.ENDER, 1), Circuits.farmEnderManual);
 	}
 
 	@Override
@@ -376,9 +347,9 @@ public class ModuleFarming extends BlankForestryModule {
 			ITreeRoot treeRoot = TreeManager.treeRoot;
 			if (treeRoot != null) {
 				for (ITree tree : treeRoot.getIndividualTemplates()) {
-					IFruitProvider fruitProvider = tree.getGenome().getFruitProvider();
+					IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 					if (fruitProvider != AlleleFruits.fruitNone.getProvider()) {
-						orchardFarm.addGermlings(treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING));
+						orchardFarm.addGermlings(treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING));
 						orchardFarm.addProducts(fruitProvider.getProducts().keySet());
 						orchardFarm.addProducts(fruitProvider.getSpecialty().keySet());
 					}
@@ -390,11 +361,12 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// mushrooms are a workaround for the farm and should not be obtainable
-		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
+		//		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
+		//TODO - tag
 	}
 
 	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		EnumFarmBlockType.registerSprites();
 	}

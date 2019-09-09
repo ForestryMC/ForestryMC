@@ -5,7 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.PlantType;
+
+import genetics.api.individual.IIndividual;
 
 /**
  * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
@@ -17,7 +19,7 @@ public interface ICheckPollinatable {
 	 * @return plant type this pollinatable is classified as.
 	 * (Can be used by bees to determine whether to interact or not.)
 	 */
-	EnumPlantType getPlantType();
+	PlantType getPlantType();
 
 	/**
 	 * @return IIndividual containing the genetic information of this IPollinatable

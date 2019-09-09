@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "forestry:alveary.plain",
+    "data": 0
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:crafting_material",
+      "data": 6
+    },
+    "X": {
+      "item": "forestry:impregnated_casing"
+    }
+  },
+  "group": "apiculture"
+}

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.worktable.gui;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -31,9 +31,9 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private final TileWorktable tile;
 	private boolean hasRecipeConflict = false;
 
-	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
-		this.tile = tile;
+	public GuiWorktable(ContainerWorktable container, PlayerInventory inv, ITextComponent name) {
+		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", container, inv, container.getTile());
+		this.tile = container.getTile();
 
 		this.ySize = 218;
 
@@ -53,29 +53,28 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	}
 
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
+	public void tick() {
+		super.tick();
 
 		if (hasRecipeConflict != tile.hasRecipeConflict()) {
 			hasRecipeConflict = tile.hasRecipeConflict();
 			if (hasRecipeConflict) {
 				addButtons();
 			} else {
-				buttonList.clear();
+				buttons.clear();
 			}
 		}
 	}
 
 	private void addButtons() {
-		buttonList.add(new GuiBetterButton(0, guiLeft + 76, guiTop + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL));
-		buttonList.add(new GuiBetterButton(1, guiLeft + 85, guiTop + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL));
-	}
-
-	@Override
-	protected void actionPerformed(GuiButton button) {
-		int id = 100 + button.id;
-		NetworkUtil.sendToServer(new PacketGuiSelectRequest(id, 0));
-		SoundUtil.playButtonClick();
+		buttons.add(new GuiBetterButton(guiLeft + 76, guiTop + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
+			NetworkUtil.sendToServer(new PacketGuiSelectRequest(100, 0));
+			SoundUtil.playButtonClick();
+		}));
+		buttons.add(new GuiBetterButton(guiLeft + 85, guiTop + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
+			NetworkUtil.sendToServer(new PacketGuiSelectRequest(101, 0));
+			SoundUtil.playButtonClick();
+		}));
 	}
 
 	@Override

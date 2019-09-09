@@ -10,28 +10,30 @@
  ******************************************************************************/
 package forestry.energy.render;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryResource;
+import forestry.core.render.IForestryRenderer;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 
-public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
-	private final ModelRenderer boiler;
-	private final ModelRenderer trunk;
-	private final ModelRenderer piston;
-	private final ModelRenderer extension;
+public class RenderEngine implements IForestryRenderer<TileEngine> {
+	private final RendererModel boiler;
+	private final RendererModel trunk;
+	private final RendererModel piston;
+	private final RendererModel extension;
 
 	private enum Textures {
 
@@ -42,35 +44,35 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 	private static final float[] angleMap = new float[6];
 
 	static {
-		angleMap[EnumFacing.EAST.ordinal()] = (float) -Math.PI / 2;
-		angleMap[EnumFacing.WEST.ordinal()] = (float) Math.PI / 2;
-		angleMap[EnumFacing.UP.ordinal()] = 0;
-		angleMap[EnumFacing.DOWN.ordinal()] = (float) Math.PI;
-		angleMap[EnumFacing.SOUTH.ordinal()] = (float) Math.PI / 2;
-		angleMap[EnumFacing.NORTH.ordinal()] = (float) -Math.PI / 2;
+		angleMap[Direction.EAST.ordinal()] = (float) -Math.PI / 2;
+		angleMap[Direction.WEST.ordinal()] = (float) Math.PI / 2;
+		angleMap[Direction.UP.ordinal()] = 0;
+		angleMap[Direction.DOWN.ordinal()] = (float) Math.PI;
+		angleMap[Direction.SOUTH.ordinal()] = (float) Math.PI / 2;
+		angleMap[Direction.NORTH.ordinal()] = (float) -Math.PI / 2;
 	}
 
 	public RenderEngine(String baseTexture) {
-		ModelBase model = new EngineModelBase();
-		boiler = new ModelRenderer(model, 0, 0);
+		Model model = new EngineModelBase();
+		boiler = new RendererModel(model, 0, 0);
 		boiler.addBox(-8F, -8F, -8F, 16, 6, 16);
 		boiler.rotationPointX = 8;
 		boiler.rotationPointY = 8;
 		boiler.rotationPointZ = 8;
 
-		trunk = new ModelRenderer(model, 0, 0);
+		trunk = new RendererModel(model, 0, 0);
 		trunk.addBox(-4F, -4F, -4F, 8, 12, 8);
 		trunk.rotationPointX = 8F;
 		trunk.rotationPointY = 8F;
 		trunk.rotationPointZ = 8F;
 
-		piston = new ModelRenderer(model, 0, 0);
+		piston = new RendererModel(model, 0, 0);
 		piston.addBox(-6F, -2, -6F, 12, 4, 12);
 		piston.rotationPointX = 8F;
 		piston.rotationPointY = 8F;
 		piston.rotationPointZ = 8F;
 
-		extension = new ModelRenderer(model, 0, 0);
+		extension = new RendererModel(model, 0, 0);
 		extension.addBox(-5F, -3, -5F, 10, 2, 10);
 		extension.rotationPointX = 8F;
 		extension.rotationPointY = 8F;
@@ -80,34 +82,33 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 			new ForestryResource(baseTexture + "base.png"),
 			new ForestryResource(baseTexture + "piston.png"),
 			new ForestryResource(baseTexture + "extension.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_highest.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_higher.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_high.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),};
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_highest.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_higher.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_high.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_medium.png"),
+			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),};
 	}
 
 	@Override
-	public void render(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		if (engine != null) {
-			World worldObj = engine.getWorldObj();
-			if (worldObj.isBlockLoaded(engine.getPos())) {
-				IBlockState blockState = worldObj.getBlockState(engine.getPos());
-				if (blockState.getBlock() instanceof BlockBase) {
-					EnumFacing facing = blockState.getValue(BlockBase.FACING);
-					render(engine.getTemperatureState(), engine.progress, facing, x, y, z);
-					return;
-				}
-			}
+	public void renderTile(TileEngine tile, double x, double y, double z, float partialTicks, int destroyStage) {
+		World worldObj = tile.getWorldObj();
+		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		if (blockState.getBlock() instanceof BlockBase) {
+			Direction facing = blockState.get(BlockBase.FACING);
+			render(tile.getTemperatureState(), tile.progress, facing, x, y, z);
 		}
-		render(TemperatureState.COOL, 0.25F, EnumFacing.UP, x, y, z);
 	}
 
-	private void render(TemperatureState state, float progress, EnumFacing orientation, double x, double y, double z) {
-		GlStateManager.color(1, 1, 1);
+	@Override
+	public void renderItem(ItemStack stack) {
+		render(TemperatureState.COOL, 0.25F, Direction.UP, 0, 0, 0);
+	}
+
+	private void render(TemperatureState state, float progress, Direction orientation, double x, double y, double z) {
+		GlStateManager.color3f(1f, 1f, 1f);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.translatef((float) x, (float) y, (float) z);
 
 		float step;
 
@@ -153,14 +154,14 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 
 		float factor = (float) (1.0 / 16.0);
 
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textures[Textures.BASE.ordinal()]);
 		boiler.render(factor);
 
 		textureManager.bindTexture(textures[Textures.PISTON.ordinal()]);
-		GlStateManager.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
+		GlStateManager.translatef(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
 		piston.render(factor);
-		GlStateManager.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
+		GlStateManager.translatef(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
 		ResourceLocation texture;
 
@@ -192,13 +193,13 @@ public class RenderEngine extends TileEntitySpecialRenderer<TileEngine> {
 		if (step > 0) {
 			for (int i = 0; i <= step + 2; i += 2) {
 				extension.render(factor);
-				GlStateManager.translate(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
+				GlStateManager.translatef(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
 			}
 		}
 
 		GlStateManager.popMatrix();
 	}
 
-	private static class EngineModelBase extends ModelBase {
+	private static class EngineModelBase extends Model {
 	}
 }

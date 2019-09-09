@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
@@ -194,13 +197,13 @@ public class ClimateUtil implements IClimateHelper {
 	}
 
 	@Override
-	public String toDisplay(EnumTemperature temperature) {
-		return Translator.translateToLocal("for.gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
+	public ITextComponent toDisplay(EnumTemperature temperature) {
+		return new TranslationTextComponent("for.gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override
-	public String toDisplay(EnumHumidity humidity) {
-		return Translator.translateToLocal("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+	public ITextComponent toDisplay(EnumHumidity humidity) {
+		return new TranslationTextComponent("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity,

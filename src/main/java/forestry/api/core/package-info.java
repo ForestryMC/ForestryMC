@@ -5,11 +5,12 @@
  ******************************************************************************/
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@API(apiVersion = "5.7.0", owner = "Forestry", provides = "ForestryAPI|core")
+//@API(apiVersion = "5.7.0", owner = "Forestry", provides = "ForestryAPI|core")
 package forestry.api.core;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import mcp.MethodsReturnNonnullByDefault;
 
-import net.minecraftforge.fml.common.API;
+//import net.minecraftforge.fml.common.API;
+//TODO API

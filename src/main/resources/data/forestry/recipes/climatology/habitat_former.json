@@ -1,0 +1,41 @@
+{
+  "result": {
+    "item": "forestry:habitat_former",
+    "data": 0
+  },
+  "pattern": [
+    "GRG",
+    "TST",
+    "BCB"
+  ],
+  "conditions": [
+    {
+      "module": "climatology",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "forestry:sturdy_machine"
+    },
+    "G": {
+      "item": "#BLOCKGLASS"
+    },
+    "B": {
+      "item": "#GEARBRONZE"
+    },
+    "R": {
+      "item": "#DUSTREDSTONE"
+    },
+    "C": {
+      "item": "forestry:chipsets",
+      "data": 0
+    },
+    "T": {
+      "item": "forestry:thermionic_tubes",
+      "data": 3
+    }
+  },
+  "group": "climatology"
+}

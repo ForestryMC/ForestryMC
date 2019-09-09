@@ -1,6 +1,6 @@
 package forestry.farming.logic;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.farming.IFarmProperties;
@@ -11,7 +11,7 @@ public abstract class FarmLogicSoil extends FarmLogic {
 		super(properties, isManual);
 	}
 
-	protected boolean isAcceptedSoil(IBlockState blockState) {
+	protected boolean isAcceptedSoil(BlockState blockState) {
 		return properties.isAcceptedSoil(blockState);
 	}
 

@@ -10,6 +10,8 @@ import java.util.Random;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.arboriculture.genetics.ITree;
+
 public interface ILeafTickHandler {
 	boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed);
 }

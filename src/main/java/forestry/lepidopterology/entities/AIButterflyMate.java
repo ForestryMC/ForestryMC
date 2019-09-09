@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.utils.GeneticsUtil;
-import forestry.lepidopterology.ModuleLepidopterology;
 
 public class AIButterflyMate extends AIButterflyInteract {
 	@Nullable
@@ -38,7 +38,8 @@ public class AIButterflyMate extends AIButterflyInteract {
 			return false;
 		}
 
-		if (entity.world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
+		//TODO I think this needs a server world. Check what vanilla spawn cap code does?
+		if (false) {//entity.world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
 
@@ -46,12 +47,12 @@ public class AIButterflyMate extends AIButterflyInteract {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (shouldContinueExecuting()) {
 			if (entity.getButterfly().getMate() == null && targetMate != null) {
 				if (entity.cooldownMate <= 0 && entity.getDistance(targetMate) < 9.0D) {
-					entity.getButterfly().mate(targetMate.getButterfly());
-					targetMate.getButterfly().mate(entity.getButterfly());
+					entity.getButterfly().mate(targetMate.getButterfly().getGenome());
+					targetMate.getButterfly().mate(entity.getButterfly().getGenome());
 					entity.cooldownMate = EntityButterfly.COOLDOWNS;
 				}
 			} else if (rest != null) {
@@ -60,7 +61,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 					if (nursery.canNurse(entity.getButterfly())) {
 						nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(entity.world, nursery));
 						//Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
-						if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getFertility()) {
+						if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getActiveValue(ButterflyChromosomes.FERTILITY)) {
 							entity.setHealth(0);
 						}
 					}
@@ -93,7 +94,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 			return false;
 		}
 		if (entity.getButterfly().getMate() == null) {
-			return targetMate != null && targetMate.isEntityAlive() && targetMate.canMate();
+			return targetMate != null && targetMate.isAlive() && targetMate.canMate();
 		}
 		return true;
 	}
@@ -108,7 +109,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 	@Nullable
 	private EntityButterfly getNearbyMate() {
 		float f = 8.0F;
-		List<EntityButterfly> nextButterflys = entity.world.getEntitiesWithinAABB(EntityButterfly.class, this.entity.getEntityBoundingBox().expand(f, f, f));
+		List<EntityButterfly> nextButterflys = entity.world.getEntitiesWithinAABB(EntityButterfly.class, this.entity.getBoundingBox().expand(f, f, f));
 		double d0 = Double.MAX_VALUE;
 		EntityButterfly nextButterfly = null;
 

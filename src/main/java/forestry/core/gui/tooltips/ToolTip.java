@@ -10,23 +10,24 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ToolTip {
 
-	private final List<String> lines = new ArrayList<>();
+	private final List<ITextComponent> lines = new ArrayList<>();
 	private final long delay;
 	private long mouseOverStart;
 
@@ -42,29 +43,36 @@ public class ToolTip {
 		lines.clear();
 	}
 
-	public boolean add(String line) {
-		return add(line, null);
+	//TODO - only for porting, remove when cleaning up
+	@Deprecated
+	public boolean add(String s) {
+		return this.add(new StringTextComponent(s));
 	}
 
-	public boolean add(String line, @Nullable TextFormatting formatting) {
-		if (formatting != null) {
-			return lines.add(formatting + line);
-		} else {
-			return lines.add(line);
-		}
+	public boolean add(ITextComponent line) {
+		return lines.add(line);
 	}
 
-	public boolean add(List lines) {
+	public boolean add(ITextComponent line, TextFormatting format) {
+		Style style = new Style();
+		style.setColor(format);
+		return add(line, style);
+	}
+
+	public boolean add(ITextComponent line, Style style) {
+		line.setStyle(style);
+		return lines.add(line);
+	}
+
+	public boolean add(List<ITextComponent> lines) {
 		boolean changed = false;
-		for (Object line : lines) {
-			if (line instanceof String) {
-				changed |= add((String) line);
-			}
+		for (ITextComponent line : lines) {
+			changed |= add(line);
 		}
 		return changed;
 	}
 
-	public List<String> getLines() {
+	public List<ITextComponent> getLines() {
 		return Collections.unmodifiableList(lines);
 	}
 

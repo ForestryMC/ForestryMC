@@ -12,11 +12,14 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.tileentity.TileEntityType;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.PacketBufferForestry;
 
+//TODO - move to factory?
 public abstract class TileMill extends TileBase {
 
 	protected float speed;
@@ -24,7 +27,8 @@ public abstract class TileMill extends TileBase {
 	public int charge = 0;
 	public float progress;
 
-	protected TileMill() {
+	protected TileMill(TileEntityType<?> type) {
+		super(type);
 		speed = 0.01F;
 	}
 
@@ -47,7 +51,7 @@ public abstract class TileMill extends TileBase {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
 		charge = data.readInt();

@@ -10,55 +10,42 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.core.IModelManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.core.config.Constants;
 import forestry.core.utils.StringUtil;
 
 public class ModelProviderGermling implements IGermlingModelProvider {
 
-	private final String name;
 	private final ILeafSpriteProvider leafSpriteProvider;
-	@SideOnly(Side.CLIENT)
-	private ModelResourceLocation germlingModel;
-	@SideOnly(Side.CLIENT)
-	private ModelResourceLocation pollenModel;
+	@OnlyIn(Dist.CLIENT)
+	private ResourceLocation itemModel;
+	@OnlyIn(Dist.CLIENT)
+	private ResourceLocation blockModel;
 
 	public ModelProviderGermling(String uid, ILeafSpriteProvider leafSpriteProvider) {
-		String modelName = uid.substring("forestry.".length());
-		this.name = StringUtil.camelCaseToUnderscores(modelName);
+		String name = StringUtil.camelCaseToUnderscores(uid);
 		this.leafSpriteProvider = leafSpriteProvider;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(Item item, IModelManager manager, EnumGermlingType type) {
-		if (type == EnumGermlingType.SAPLING) {
-			germlingModel = manager.getModelLocation("germlings/sapling." + name);
-			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:germlings/sapling." + name));
-		} else if (type == EnumGermlingType.POLLEN) {
-			pollenModel = manager.getModelLocation("pollen");
-			ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:pollen"));
-		}
+		itemModel = new ResourceLocation(Constants.MOD_ID, "germlings/sapling." + name);
+		blockModel = new ResourceLocation(Constants.MOD_ID, "block/germlings/sapling." + name);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelResourceLocation getModel(EnumGermlingType type) {
-		if (type == EnumGermlingType.POLLEN) {
-			return pollenModel;
-		} else {
-			return germlingModel;
-		}
+	@OnlyIn(Dist.CLIENT)
+	public ResourceLocation getItemModel() {
+		return itemModel;
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public ResourceLocation getBlockModel() {
+		return blockModel;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import forestry.core.utils.InventoryUtil;
 
 public class RecipePair<R extends IForestryRecipe> {
 
-	public static final RecipePair EMPTY = new RecipePair(null, null);
+	public static final RecipePair EMPTY = new RecipePair<>(null, null);
 
 	@Nullable
 	private final R recipe;

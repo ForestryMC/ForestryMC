@@ -7,16 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidTankInfo;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
@@ -27,7 +25,7 @@ import forestry.core.gui.elements.TankElement;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/crafting.png");
 	private static final Drawable FABRICATOR_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 60, 108, 56);
@@ -51,7 +49,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 
 	@Override
 	protected void onIndexUpdate(int index, IFabricatorRecipe recipe) {
-		selectedElement.add(new TankElement(1, 33, null, () -> new FluidTankInfo(recipe.getLiquid(), 2000), FABRICATOR_TANK_OVERLAY, 16, 16));
+		selectedElement.add(new TankElement(1, 33, null, recipe.getLiquid(), 2000, FABRICATOR_TANK_OVERLAY, 16, 16));
 		NonNullList<NonNullList<ItemStack>> ingredients = recipe.getIngredients();
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
@@ -60,7 +58,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 					continue;
 				}
 				NonNullList<ItemStack> items = ingredients.get(ingredientIndex);
-				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[items.size()]))));
+				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[0]))));
 			}
 		}
 		ItemStack plan = recipe.getPlan();

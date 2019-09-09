@@ -13,19 +13,19 @@ package forestry.core.render;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.function.Predicate;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.resources.IResourceManager;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import forestry.core.utils.Log;
 
-@SideOnly(Side.CLIENT)
-public class ColourProperties implements IResourceManagerReloadListener {
+@OnlyIn(Dist.CLIENT)
+public class ColourProperties implements ISelectiveResourceReloadListener {
 
 	public static final ColourProperties INSTANCE;
 
@@ -37,15 +37,14 @@ public class ColourProperties implements IResourceManagerReloadListener {
 	private final Properties mappings = new Properties();
 
 	private ColourProperties() {
-		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(this);
 	}
 
 	public synchronized int get(String key) {
 		return Integer.parseInt(mappings.getProperty(key, defaultMappings.getProperty(key, "d67fff")), 16);
 	}
 
-	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
+	@Override    //TODO - actually be selective
+	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> pred) {
 		try {
 			InputStream defaultFontStream = ColourProperties.class.getResourceAsStream("/config/forestry/colour.properties");
 			mappings.load(defaultFontStream);

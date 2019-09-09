@@ -8,13 +8,13 @@ package forestry.core.errors;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
-import forestry.core.render.TextureManagerForestry;
 
 public enum EnumErrorCode implements IErrorState {
 
@@ -90,7 +90,7 @@ public enum EnumErrorCode implements IErrorState {
 
 	private final String name;
 	private final String iconName;
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private TextureAtlasSprite texture;
 
 	EnumErrorCode(String name) {
@@ -112,14 +112,14 @@ public enum EnumErrorCode implements IErrorState {
 		return "for.errors." + name + ".help";
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void registerSprite() {
+	public void registerSprite(TextureStitchEvent.Pre event) {
 		ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName);
-		texture = TextureManagerForestry.getInstance().registerGuiSprite(location);
+		event.addSprite(location);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public TextureAtlasSprite getSprite() {
 		return texture;

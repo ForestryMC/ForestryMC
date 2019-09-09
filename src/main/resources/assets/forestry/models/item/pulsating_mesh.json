@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "forestry:items/pulsating_mesh"
+      "layer0": "forestry:item/pulsating_mesh"
     }
 }

@@ -14,43 +14,40 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.ItemGroups;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
 import forestry.farming.models.EnumFarmBlockTexture;
 
-public class ItemBlockFarm extends ItemBlock {
+public class ItemBlockFarm extends BlockItem {
 
 	public ItemBlockFarm(Block block) {
-		super(block);
-		setHasSubtypes(true);
+		super(block, new Item.Properties().group(ItemGroups.tabAgriculture));
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public int getMetadata(int i) {
-		return i;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		if (GuiScreen.isShiftKeyDown()) {
-			tooltip.add(Translator.translateToLocal("tile.for.ffarm.tooltip"));
-			if (stack.getTagCompound() == null) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		if (Screen.hasShiftDown()) {
+			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.tooltip"));
+			if (stack.getTag() == null) {
 				return;
 			}
-			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTagCompound());
+			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
 
-			tooltip.add(Translator.translateToLocal("tile.for.ffarm.material.tooltip") + texture.getFormatting() + TextFormatting.ITALIC + " " + texture.getName());
+			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(texture.getFormatting())).appendText(" " + texture.getName()));
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
@@ -58,6 +55,6 @@ public class ItemBlockFarm extends ItemBlock {
 
 	@Override
 	public String getTranslationKey(ItemStack itemstack) {
-		return super.getTranslationKey(itemstack) + "." + itemstack.getItemDamage();
+		return super.getTranslationKey(itemstack) + "." + 0;// TODO flatten itemstack.getItemDamage();
 	}
 }

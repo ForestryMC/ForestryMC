@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntry;
@@ -15,7 +15,7 @@ import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class JsonPageFactory implements IBookPageFactory {
 
 	public static final String NAME = "json";

@@ -2,14 +2,15 @@ package forestry.core.gui.elements;
 
 import java.util.List;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.gui.IGuiElement;
 import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.layouts.PaneLayout;
 
-public class ElementManager<G extends GuiScreen & IGuiSizable> {
+public class ElementManager<G extends Screen & IGuiSizable> {
 	/* Attributes - Final */
 	private final ElementGroup container;
 
@@ -63,7 +64,7 @@ public class ElementManager<G extends GuiScreen & IGuiSizable> {
 		return getElements().stream().anyMatch(element -> element.isMouseOver(mX, mY));
 	}
 
-	public List<String> getTooltip(int mouseX, int mouseY) {
+	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
 		return container.getTooltip(mouseX, mouseY);
 	}
 

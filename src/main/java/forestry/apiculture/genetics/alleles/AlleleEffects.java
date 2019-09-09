@@ -3,11 +3,12 @@ package forestry.apiculture.genetics.alleles;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.IAlleleBeeEffect;
-import forestry.api.genetics.AlleleManager;
+import genetics.api.alleles.IAlleleRegistry;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeEffect;
 
 public class AlleleEffects {
 	public static final IAlleleBeeEffect effectNone;
@@ -36,17 +37,17 @@ public class AlleleEffects {
 			effectNone = new AlleleEffectNone("none", true),
 			effectAggressive = new AlleleEffectAggressive(),
 			effectHeroic = new AlleleEffectHeroic(),
-			effectBeatific = new AlleleEffectPotion("beatific", false, MobEffects.REGENERATION, 100),
-			effectMiasmic = new AlleleEffectPotion("miasmic", false, MobEffects.POISON, 600, 100, 0.1f),
+			effectBeatific = new AlleleEffectPotion("beatific", false, Effects.REGENERATION, 100),
+			effectMiasmic = new AlleleEffectPotion("miasmic", false, Effects.POISON, 600, 100, 0.1f),
 			effectMisanthrope = new AlleleEffectMisanthrope(),
 			effectGlacial = new AlleleEffectGlacial(),
 			effectRadioactive = new AlleleEffectRadioactive(),
 			effectCreeper = new AlleleEffectCreeper(),
 			effectIgnition = new AlleleEffectIgnition(),
 			effectExploration = new AlleleEffectExploration(),
-			effectFestiveEaster = new AlleleEffectNone("festiveEaster", true),
+			effectFestiveEaster = new AlleleEffectNone("festive_easter", true),
 			effectSnowing = new AlleleEffectSnowing(),
-			effectDrunkard = new AlleleEffectPotion("drunkard", false, MobEffects.NAUSEA, 100),
+			effectDrunkard = new AlleleEffectPotion("drunkard", false, Effects.NAUSEA, 100),
 			effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
 			effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
 			effectRepulsion = new AlleleEffectRepulsion(),
@@ -55,9 +56,9 @@ public class AlleleEffects {
 		);
 	}
 
-	public static void registerAlleles() {
+	public static void registerAlleles(IAlleleRegistry registry) {
 		for (IAlleleBeeEffect beeEffect : beeEffects) {
-			AlleleManager.alleleRegistry.registerAllele(beeEffect, EnumBeeChromosome.EFFECT);
+			registry.registerAllele(beeEffect, BeeChromosomes.EFFECT);
 		}
 	}
 }

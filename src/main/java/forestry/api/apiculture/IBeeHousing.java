@@ -11,6 +11,7 @@ import net.minecraft.util.math.Vec3d;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.ILocatable;

@@ -1,0 +1,46 @@
+{
+  "result": {
+    "item": "forestry:fertilizer_bio",
+    "count": 4
+  },
+  "pattern": [
+    " X ",
+    "X#X",
+    " X "
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "core",
+          "type": "forestry:module"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "harvestcraft"
+        }
+      ]
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.compost.wheat",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": [
+      {
+        "item": "harvestcraft:barley"
+      },
+      {
+        "item": "harvestcraft:rye"
+      },
+      {
+        "item": "harvestcraft:oats"
+      }
+    ]
+  },
+  "group": "plugins"
+}

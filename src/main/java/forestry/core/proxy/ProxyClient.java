@@ -14,14 +14,13 @@ import java.io.File;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.ClimateHandlerClient;
 import forestry.core.TickHandlerCoreClient;
@@ -32,7 +31,7 @@ import forestry.core.render.TextureManagerForestry;
 import forestry.core.worldgen.WorldGenerator;
 
 @SuppressWarnings("unused")
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ProxyClient extends ProxyCommon {
 
 	@Override
@@ -51,24 +50,28 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void registerBlock(Block block) {
 		ModelManager.getInstance().registerBlockClient(block);
-		TextureManagerForestry.getInstance().registerBlock(block);
+		if (Minecraft.getInstance() != null) {
+			TextureManagerForestry.getInstance().registerBlock(block);
+		}
 	}
 
 	@Override
 	public void registerItem(Item item) {
 		ModelManager.getInstance().registerItemClient(item);
-		TextureManagerForestry.getInstance().registerItem(item);
+		if (Minecraft.getInstance() != null) {
+			TextureManagerForestry.getInstance().registerItem(item);
+		}
 	}
 
 	@Override
 	public File getForestryRoot() {
-		return Minecraft.getMinecraft().gameDir;
+		return Minecraft.getInstance().gameDir;
 	}
 
 	@Override
-	public double getBlockReachDistance(EntityPlayer entityplayer) {
-		if (entityplayer instanceof EntityPlayerSP) {
-			return Minecraft.getMinecraft().playerController.getBlockReachDistance();
+	public double getBlockReachDistance(PlayerEntity PlayerEntity) {
+		if (PlayerEntity instanceof ClientPlayerEntity) {
+			return Minecraft.getInstance().playerController.getBlockReachDistance();
 		} else {
 			return 4f;
 		}

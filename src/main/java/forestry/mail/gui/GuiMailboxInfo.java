@@ -12,18 +12,19 @@ package forestry.mail.gui;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -31,7 +32,7 @@ import forestry.core.render.ForestryResource;
 import forestry.core.utils.SoundUtil;
 import forestry.mail.POBoxInfo;
 
-public class GuiMailboxInfo extends Gui {
+public class GuiMailboxInfo extends AbstractGui {
 
 	public enum XPosition {
 		LEFT, RIGHT
@@ -52,7 +53,7 @@ public class GuiMailboxInfo extends Gui {
 	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	private GuiMailboxInfo() {
-		fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		fontRenderer = Minecraft.getInstance().fontRenderer;
 	}
 
 	public void render() {
@@ -63,21 +64,21 @@ public class GuiMailboxInfo extends Gui {
 		int x = 0;
 		int y = 0;
 
-		Minecraft minecraft = Minecraft.getMinecraft();
-		ScaledResolution scaledresolution = new ScaledResolution(minecraft);
+		Minecraft minecraft = Minecraft.getInstance();
+		MainWindow win = minecraft.mainWindow;
 		if (Config.mailAlertXPosition == XPosition.RIGHT) {
-			x = scaledresolution.getScaledWidth() - WIDTH;
+			x = win.getScaledWidth() - WIDTH;
 		}
 		if (Config.mailAlertYPosition == YPosition.BOTTOM) {
-			y = scaledresolution.getScaledHeight() - HEIGHT;
+			y = win.getScaledHeight() - HEIGHT;
 		}
 
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.disableLighting();
 		TextureManager textureManager = minecraft.getTextureManager();
 		textureManager.bindTexture(textureAlert);
 
-		this.drawTexturedModalRect(x, y, 0, 0, WIDTH, HEIGHT);
+		this.blit(x, y, 0, 0, WIDTH, HEIGHT);
 
 		fontRenderer.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
 		fontRenderer.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
@@ -91,8 +92,8 @@ public class GuiMailboxInfo extends Gui {
 		return poInfo != null;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void setPOBoxInfo(EntityPlayer player, POBoxInfo info) {
+	@OnlyIn(Dist.CLIENT)
+	public void setPOBoxInfo(PlayerEntity player, POBoxInfo info) {
 		boolean playJingle = false;
 
 		if (info.hasMail()) {

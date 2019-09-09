@@ -1,7 +1,7 @@
 package forestry.core.multiblock;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
  * This is a generic multiblock tick handler. If you are using this code on your own,
@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
  */
 public class MultiblockServerTickHandler {
 
+	//TODO - register event handler
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		if (event.phase == TickEvent.Phase.START) {

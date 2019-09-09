@@ -1,28 +1,31 @@
 package forestry.arboriculture.items;
 
-import net.minecraft.item.ItemSlab;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.arboriculture.IWoodType;
+import forestry.api.core.ItemGroups;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 
-public class ItemBlockWoodSlab extends ItemSlab {
-	public ItemBlockWoodSlab(BlockForestrySlab block, BlockForestrySlab slab, BlockForestrySlab doubleSlab) {
-		super(block, slab, doubleSlab);
+public class ItemBlockWoodSlab extends BlockItem {
+
+	public ItemBlockWoodSlab(BlockForestrySlab block) {
+		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		BlockForestrySlab<?> wood = (BlockForestrySlab) getBlock();
-		int meta = itemstack.getMetadata();
-		IWoodType woodType = wood.getWoodType(meta);
+	public ITextComponent getDisplayName(ItemStack itemstack) {
+		BlockForestrySlab wood = (BlockForestrySlab) getBlock();
+		IWoodType woodType = wood.getWoodType();
 		return WoodHelper.getDisplayName(wood, woodType);
 	}
 
 	@Override
-	public int getItemBurnTime(ItemStack itemStack) {
-		BlockForestrySlab forestrySlab = (BlockForestrySlab) this.block;
+	public int getBurnTime(ItemStack itemStack) {
+		BlockForestrySlab forestrySlab = (BlockForestrySlab) getBlock();
 		if (forestrySlab.isFireproof()) {
 			return 0;
 		} else {

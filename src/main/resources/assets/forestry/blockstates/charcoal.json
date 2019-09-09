@@ -1,5 +1,7 @@
 {
     "variants": {
-        "normal": { "model": "forestry:charcoal" }
+      "": {
+        "model": "forestry:block/charcoal"
+      }
 	}
 }

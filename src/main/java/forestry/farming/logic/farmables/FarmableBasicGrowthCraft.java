@@ -28,7 +28,7 @@ public class FarmableBasicGrowthCraft {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
 		if (block != this.block) {
 			return null;
@@ -45,7 +45,7 @@ public class FarmableBasicGrowthCraft {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		return world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 	}
 

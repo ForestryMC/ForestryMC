@@ -13,18 +13,18 @@ package forestry.core.network.packets;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
@@ -45,17 +45,17 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 	private final BlockPos pos;
 	private final VisualFXType visualFX;
 	private final SoundFXType soundFX;
-	private final IBlockState blockState;
+	private final BlockState blockState;
 
-	public PacketFXSignal(VisualFXType type, BlockPos pos, IBlockState blockState) {
+	public PacketFXSignal(VisualFXType type, BlockPos pos, BlockState blockState) {
 		this(type, SoundFXType.NONE, pos, blockState);
 	}
 
-	public PacketFXSignal(SoundFXType type, BlockPos pos, IBlockState blockState) {
+	public PacketFXSignal(SoundFXType type, BlockPos pos, BlockState blockState) {
 		this(VisualFXType.NONE, type, pos, blockState);
 	}
 
-	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, IBlockState blockState) {
+	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, BlockState blockState) {
 		this.pos = pos;
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
@@ -67,8 +67,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
-		NBTTagCompound tag = new NBTTagCompound();
-		NBTUtil.writeBlockState(tag, blockState);
+		CompoundNBT tag = NBTUtil.writeBlockState(blockState);
 		data.writeCompoundTag(tag);
 	}
 
@@ -77,19 +76,19 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		return PacketIdClient.FX_SIGNAL;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
 			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
 			World world = player.world;
-			IBlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
+			BlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
 			Block block = blockState.getBlock();
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {
-				Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos, blockState);
+				Minecraft.getInstance().particles.addBlockDestroyEffects(pos, blockState);
 			}
 
 			if (soundFX != SoundFXType.NONE) {

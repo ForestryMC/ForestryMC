@@ -8,17 +8,17 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 /**
- * A set with fast {@link #contains(Object)} for IBlockState
+ * A set with fast {@link #contains(Object)} for BlockState
  */
-public class BlockStateSet extends AbstractSet<IBlockState> {
-	private final Set<IBlockState> blockStates = new HashSet<>();
+public class BlockStateSet extends AbstractSet<BlockState> {
+	private final Set<BlockState> blockStates = new HashSet<>();
 	private final Map<Block, Integer> blocks = new IdentityHashMap<>();
 
 	@Override
-	public boolean add(IBlockState blockState) {
+	public boolean add(BlockState blockState) {
 		Block block = blockState.getBlock();
 		Integer count = blocks.getOrDefault(block, 0);
 		blocks.put(block, count + 1);
@@ -27,7 +27,7 @@ public class BlockStateSet extends AbstractSet<IBlockState> {
 
 	@Override
 	public boolean remove(Object o) {
-		IBlockState blockState = (IBlockState) o;
+		BlockState blockState = (BlockState) o;
 		Block block = blockState.getBlock();
 		Integer count = blocks.getOrDefault(block, 0);
 		if (count > 0) {
@@ -40,7 +40,7 @@ public class BlockStateSet extends AbstractSet<IBlockState> {
 
 	@Override
 	public boolean contains(Object o) {
-		IBlockState blockState = (IBlockState) o;
+		BlockState blockState = (BlockState) o;
 		Block block = blockState.getBlock();
 		return blocks.containsKey(block) && blockStates.contains(blockState);
 	}
@@ -52,7 +52,7 @@ public class BlockStateSet extends AbstractSet<IBlockState> {
 	}
 
 	@Override
-	public Iterator<IBlockState> iterator() {
+	public Iterator<BlockState> iterator() {
 		return blockStates.iterator();
 	}
 

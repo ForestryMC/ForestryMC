@@ -13,8 +13,8 @@ package forestry.core.network;
 
 import javax.annotation.Nullable;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.network.packets.PacketHandlerDummyClient;
 
@@ -77,16 +77,16 @@ public enum PacketIdClient implements IPacketId {
 
 	public static final PacketIdClient[] VALUES = values();
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	private IForestryPacketHandlerClient packetHandler;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setPacketHandler(IForestryPacketHandlerClient packetHandler) {
 		this.packetHandler = packetHandler;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public IForestryPacketHandlerClient getPacketHandler() {
 		if (packetHandler == null) {
 			return PacketHandlerDummyClient.INSTANCE;

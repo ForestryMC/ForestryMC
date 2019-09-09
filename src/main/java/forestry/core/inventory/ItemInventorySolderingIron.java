@@ -12,7 +12,7 @@ package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -38,7 +38,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	private static final short ingredientSlot1 = 2;
 	private static final short ingredientSlotCount = 4;
 
-	public ItemInventorySolderingIron(EntityPlayer player, ItemStack itemStack) {
+	public ItemInventorySolderingIron(PlayerEntity player, ItemStack itemStack) {
 		super(player, 6, itemStack);
 
 		layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
@@ -86,7 +86,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	}
 
 	@Override
-	public void onSlotClick(int slotIndex, EntityPlayer player) {
+	public void onSlotClick(int slotIndex, PlayerEntity player) {
 		if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 			return;
 		}
@@ -106,11 +106,11 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		}
 
 		// Illegal type
-		if (inputCircuitBoard.getItemDamage() < 0 || inputCircuitBoard.getItemDamage() >= EnumCircuitBoardType.values().length) {
-			return;
-		}
+		//		if (inputCircuitBoard.getItemDamage() < 0 || inputCircuitBoard.getItemDamage() >= EnumCircuitBoardType.values().length) {
+		//			return;
+		//		} TODO flatten
 
-		EnumCircuitBoardType type = EnumCircuitBoardType.values()[inputCircuitBoard.getItemDamage()];
+		EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];// TODO flatten inputCircuitBoard.getItemDamage()];
 		if (getCircuitCount() != type.getSockets()) {
 			return;
 		}
@@ -147,7 +147,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		if (blankCircuitBoard.isEmpty()) {
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
 		} else {
-			EnumCircuitBoardType type = EnumCircuitBoardType.values()[blankCircuitBoard.getItemDamage()];
+			EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];//TODO flatten blankCircuitBoard.getItemDamage()];
 
 			int circuitCount = 0;
 			for (short i = 0; i < type.getSockets(); i++) {

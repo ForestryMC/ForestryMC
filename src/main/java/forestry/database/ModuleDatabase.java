@@ -3,41 +3,65 @@ package forestry.database;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.container.ContainerType;
+
+import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.modules.ForestryModule;
-import forestry.apiculture.ModuleApiculture;
-import forestry.arboriculture.ModuleArboriculture;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
-import forestry.core.items.ItemFruit;
-import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.OreDictUtil;
 import forestry.database.blocks.BlockRegistryDatabase;
+import forestry.database.gui.DatabaseContainerTypes;
+import forestry.database.gui.GuiDatabase;
 import forestry.database.network.PacketRegistryDatabase;
-import forestry.lepidopterology.ModuleLepidopterology;
+import forestry.database.tiles.TileRegistryDatabase;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.DATABASE, name = "Database", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.database.description")
 public class ModuleDatabase extends BlankForestryModule {
 	@Nullable
 	private static BlockRegistryDatabase blocks;
+	@Nullable
+	private static DatabaseContainerTypes containerTypes;
+	@Nullable
+	private static TileRegistryDatabase tiles;
 
 	public static BlockRegistryDatabase getBlocks() {
 		Preconditions.checkNotNull(blocks);
 		return blocks;
 	}
 
+	public static DatabaseContainerTypes getContainerTypes() {
+		Preconditions.checkNotNull(containerTypes);
+		return containerTypes;
+	}
+
+	public static TileRegistryDatabase getTiles() {
+		Preconditions.checkNotNull(tiles);
+		return tiles;
+	}
+
 	@Override
-	public void registerItemsAndBlocks() {
+	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
+		containerTypes = new DatabaseContainerTypes(registry);
+	}
+
+	@Override
+	public void registerGuiFactories() {
+		ScreenManager.registerFactory(getContainerTypes().DATABASE, GuiDatabase::new);
+	}
+
+	@Override
+	public void registerBlocks() {
 		blocks = new BlockRegistryDatabase();
+	}
+
+	@Override
+	public void registerTiles() {
+		tiles = new TileRegistryDatabase();
 	}
 
 	@Override
@@ -45,61 +69,6 @@ public class ModuleDatabase extends BlankForestryModule {
 		BlockRegistryDatabase blocks = getBlocks();
 
 		blocks.database.init();
-	}
-
-	@Override
-	public void registerRecipes() {
-		List<Object> possibleChests = new LinkedList<>();
-		List<Object> possibleSpecial = new LinkedList<>();
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			possibleChests.add(new ItemStack(ModuleApiculture.getBlocks().beeChest));
-			possibleSpecial.add(new ItemStack(ModuleApiculture.getItems().royalJelly));
-		}
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			possibleChests.add(new ItemStack(ModuleArboriculture.getBlocks().treeChest));
-			possibleSpecial.add(ItemFruit.EnumFruit.PLUM.getStack());
-		}
-		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			possibleChests.add(new ItemStack(ModuleLepidopterology.getBlocks().butterflyChest));
-		}
-		if (possibleChests.size() == 1) {
-			addRecipe(possibleSpecial, OreDictUtil.CHEST_WOOD, possibleChests.get(0));
-		}
-		if (possibleSpecial.isEmpty()) {
-			possibleSpecial.add(OreDictUtil.CHEST_WOOD);
-		}
-		if (possibleChests.isEmpty()) {
-			addRecipe(possibleSpecial, OreDictUtil.CHEST_WOOD, OreDictUtil.CHEST_WOOD);
-		} else {
-			for (int firstChest = 0; firstChest < possibleChests.size(); firstChest++) {
-				for (int secondChest = 0; secondChest < possibleChests.size(); secondChest++) {
-					if (secondChest != firstChest) {
-						addRecipe(possibleSpecial, possibleChests.get(firstChest), possibleChests.get(secondChest));
-					}
-				}
-			}
-		}
-	}
-
-	private void addRecipe(List<Object> possibleSpecial, Object firstChest, Object secondChest) {
-		for (Object special : possibleSpecial) {
-			ItemRegistryCore coreItems = ModuleCore.getItems();
-			RecipeUtil.addRecipe("database_" + getIngredientName(firstChest) + "_" + getIngredientName(secondChest) + "_" + getIngredientName(special), getBlocks().database,
-				"I#I",
-				"FYS",
-				"WCW",
-				'#', coreItems.portableAlyzer,
-				'I', "ingotBronze",
-				'W', "plankWood",
-				'C', special,
-				'Y', coreItems.sturdyCasing,
-				'F', firstChest,
-				'S', secondChest);
-		}
-	}
-
-	private String getIngredientName(Object o) {
-		return o instanceof ItemStack ? ((ItemStack) o).getItem().getRegistryName().getPath() : o.toString();
 	}
 
 	@Override

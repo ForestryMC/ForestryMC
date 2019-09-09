@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "minecraft:web",
+    "count": 4
+  },
+  "pattern": [
+    "# #",
+    " # ",
+    "# #"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "forestry:crafting_material",
+      "data": 2
+    }
+  },
+  "group": "core"
+}

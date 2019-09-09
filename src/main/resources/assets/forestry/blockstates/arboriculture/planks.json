@@ -1,5 +1,7 @@
 {
     "variants": {
-		"normal":  { "model": "forestry:arboriculture/planks" }
+      "": {
+        "model": "forestry:arboriculture/planks"
+      }
     }
 }

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.circuits.ItemCircuitBoard;
@@ -40,7 +40,7 @@ public class PacketChipsetClick extends ForestryPacket implements IForestryPacke
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayerMP player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			int slot = data.readVarInt();
 
 			if (player.openContainer instanceof IContainerSocketed) {

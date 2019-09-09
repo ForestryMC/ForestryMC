@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
@@ -36,9 +36,9 @@ public class AddresseeSlot extends Widget {
 	public void draw(int startX, int startY) {
 		IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
 		if (carrier != null) {
-			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
+			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, carrier.getSprite(), 32, 32);
+			//			manager.gui.blit(startX + xPos, startY + yPos, carrier.getSprite(), 32, 32);	//TODO weird blit stuff again....
 		}
 	}
 
@@ -51,7 +51,7 @@ public class AddresseeSlot extends Widget {
 	}
 
 	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		if (!containerLetter.getLetter().isProcessed()) {
 			containerLetter.advanceCarrierType();
 			SoundUtil.playButtonClick();

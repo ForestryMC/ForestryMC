@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -61,20 +62,21 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		return remnantsChance;
 	}
 
+	//TODO optional might be nice here
 	@Override
 	@Nullable
 	public ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer) {
 		if (filledContainer.isEmpty()) {
 			return null;
 		}
-		FluidStack fluidOutput = FluidUtil.getFluidContained(filledContainer);
-		if (fluidOutput == null) {
-			return null;
-		}
-		ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
-		NonNullList<ItemStack> input = NonNullList.create();
-		input.add(filledContainerCopy);
-		return new SqueezerRecipe(processingTime, input, fluidOutput, remnants, remnantsChance);
+		LazyOptional<FluidStack> fluidOutput = FluidUtil.getFluidContained(filledContainer);
+
+		return fluidOutput.map(f -> {
+			ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
+			NonNullList<ItemStack> input = NonNullList.create();
+			input.add(filledContainerCopy);
+			return new SqueezerRecipe(processingTime, input, f, remnants, remnantsChance);
+		}).orElse(null);
 	}
 
 }

@@ -10,65 +10,82 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import net.minecraft.block.BlockStairs;
-import net.minecraft.init.Blocks;
+import java.util.EnumMap;
+import java.util.Map;
+
+import net.minecraft.block.StairsBlock;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
-
+import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.OreDictUtil;
 
+//TODO - tags, harvest levels
 public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore analyzer;
 	public final BlockCore escritoire;
 	public final BlockBogEarth bogEarth;
 	public final BlockHumus humus;
-	public final BlockResourceOre resources;
 	public final BlockAshBrick ashBrick;
-	public final BlockStairs ashStairs;
-	public final ItemStack resourceStorageApatite;
-	public final ItemStack resourceStorageTin;
-	public final ItemStack resourceStorageCopper;
-	public final ItemStack resourceStorageBronze;
+	public final StairsBlock ashStairs;
+	public final Map<EnumResourceType, BlockResourceStorage> resourceStorage = new EnumMap<>(EnumResourceType.class);
+	public final Map<EnumResourceType, BlockResourceOre> resourceOre = new EnumMap<>(EnumResourceType.class);
+	//	public final ItemStack resourceStorageApatite;	//TODO just access these though getComb
+	//	public final ItemStack resourceStorageTin;
+	//	public final ItemStack resourceStorageCopper;
+	//	public final ItemStack resourceStorageBronze;
 
 	public BlockRegistryCore() {
 		analyzer = new BlockCore(BlockTypeCoreTesr.ANALYZER);
-		registerBlock(analyzer, new ItemBlockForestry<>(analyzer), "analyzer");
+		registerBlock(analyzer, new ItemBlockBase<>(analyzer, BlockTypeCoreTesr.ANALYZER), "analyzer");
 
 		escritoire = new BlockCore(BlockTypeCoreTesr.ESCRITOIRE);
-		registerBlock(escritoire, new ItemBlockForestry<>(escritoire), "escritoire");
+		registerBlock(escritoire, new ItemBlockBase<>(escritoire, BlockTypeCoreTesr.ESCRITOIRE), "escritoire");
 
 		bogEarth = new BlockBogEarth();
 		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bog_earth");
-		bogEarth.setHarvestLevel("shovel", 0);
+		//		bogEarth.setHarvestLevel("shovel", 0); TODO done in item
 
 		humus = new BlockHumus();
 		registerBlock(humus, new ItemBlockForestry<>(humus), "humus");
-		humus.setHarvestLevel("shovel", 0);
+		//		humus.setHarvestLevel("shovel", 0);
 
-		resources = new BlockResourceOre();
-		registerBlock(resources, new ItemBlockForestry<>(resources), "resources");
-		resources.setHarvestLevel("pickaxe", 1);
-		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
-		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
-		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
+		for (EnumResourceType type : EnumResourceType.VALUES) {
+			if (type == EnumResourceType.BRONZE) {
+				continue;    //there is no bronze ore
+			}
+			BlockResourceOre block = new BlockResourceOre(type);
+			registerBlock(block, new ItemBlockForestry<>(block), "resource_ore_" + type.getName());
+			resourceOre.put(type, block);
+		}
+		//TODO register tag for these
 
-		BlockResourceStorage resourceStorage = new BlockResourceStorage();
-		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
-		resourceStorage.setHarvestLevel("pickaxe", 0);
+		for (EnumResourceType type : EnumResourceType.VALUES) {
+			BlockResourceStorage block = new BlockResourceStorage(type);
+			registerBlock(block, new ItemBlockForestry<>(block), "resource_storage_" + type.getName());
+			resourceStorage.put(type, block);
+		}
+		//TODO register tag for these
 
-		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);
-		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorageApatite);
+		//		resources.setHarvestLevel("pickaxe", 1);
+		//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.getComb(EnumResourceType.APATITE, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.getComb(EnumResourceType.COPPER, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.getComb(EnumResourceType.TIN, 1));
 
-		resourceStorageCopper = resourceStorage.get(EnumResourceType.COPPER);
-		OreDictionary.registerOre(OreDictUtil.BLOCK_COPPER, resourceStorageCopper);
+		//		BlockResourceStorage resourceStorage = new BlockResourceStorage();
+		//		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
+		//		resourceStorage.setHarvestLevel("pickaxe", 0);
 
-		resourceStorageTin = resourceStorage.get(EnumResourceType.TIN);
-		OreDictionary.registerOre(OreDictUtil.BLOCK_TIN, resourceStorageTin);
+		//		resourceStorageApatite = resourceStorage.getComb(EnumResourceType.APATITE);
+		//		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorageApatite);
 
-		resourceStorageBronze = resourceStorage.get(EnumResourceType.BRONZE);
-		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
+		//		resourceStorageCopper = resourceStorage.getComb(EnumResourceType.COPPER);
+		//		OreDictionary.registerOre(OreDictUtil.BLOCK_COPPER, resourceStorageCopper);
+
+		//		resourceStorageTin = resourceStorage.getComb(EnumResourceType.TIN);
+		//		OreDictionary.registerOre(OreDictUtil.BLOCK_TIN, resourceStorageTin);
+
+		//		resourceStorageBronze = resourceStorage.getComb(EnumResourceType.BRONZE);
+		//		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
 
 		ashBrick = new BlockAshBrick();
 		registerBlock(ashBrick, new ItemBlockForestry<>(ashBrick), "ash_brick");
@@ -77,7 +94,21 @@ public class BlockRegistryCore extends BlockRegistry {
 		registerBlock(ashStairs, new ItemBlockForestry<>(ashStairs), "ash_stairs");
 
 		// register some common oreDict names for our recipes
-		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);
-		OreDictionary.registerOre(OreDictUtil.TRAPDOOR_WOOD, Blocks.TRAPDOOR);
+		//		OreDictionary.registerOre(OreDictUtil.CRAFTING_TABLE_WOOD, Blocks.CRAFTING_TABLE);
+		//		OreDictionary.registerOre(OreDictUtil.TRAPDOOR_WOOD, Blocks.TRAPDOOR);
 	}
+
+
+	public ItemStack getStorage(EnumResourceType type) {
+		return new ItemStack(resourceStorage.get(type));
+	}
+
+	public ItemStack getOre(EnumResourceType type) {
+		return getOre(type, 1);
+	}
+
+	public ItemStack getOre(EnumResourceType type, int amount) {
+		return new ItemStack(resourceOre.get(type), amount);
+	}
+
 }

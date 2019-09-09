@@ -15,29 +15,33 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.EnumRarity;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Rarity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.utils.Translator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FilteredTank extends StandardTank {
 
-	private final Set<String> filters = new HashSet<>(); // FluidNames
+	private final Set<ResourceLocation> filters = new HashSet<>(); // FluidNames
 
 	public FilteredTank(int capacity) {
 		super(capacity);
+		setValidator(this::fluidMatchesFilter);
 	}
 
 	public FilteredTank(int capacity, boolean canFill, boolean canDrain) {
@@ -51,28 +55,17 @@ public class FilteredTank extends StandardTank {
 	public FilteredTank setFilters(Collection<Fluid> filters) {
 		this.filters.clear();
 		for (Fluid fluid : filters) {
-			this.filters.add(fluid.getName());
+			this.filters.add(fluid.getRegistryName());
 		}
 		return this;
 	}
 
-	@Override
-	public boolean canFillFluidType(FluidStack fluid) {
-		return fluidMatchesFilter(fluid);
-	}
-
-	@Override
-	public boolean canDrainFluidType(FluidStack fluid) {
-		return fluidMatchesFilter(fluid);
-	}
-
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource != null && resource.getFluid() != null &&
-			filters.contains(resource.getFluid().getName());
+		return resource.getFluid() != null && filters.contains(resource.getFluid().getRegistryName());
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void refreshTooltip() {
 		if (hasFluid()) {
 			super.refreshTooltip();
@@ -81,22 +74,25 @@ public class FilteredTank extends StandardTank {
 
 		ToolTip toolTip = getToolTip();
 		toolTip.clear();
-		if (GuiScreen.isShiftKeyDown() || filters.size() < 5) {
-			for (String filterName : filters) {
-				Fluid fluidFilter = FluidRegistry.getFluid(filterName);
-				EnumRarity rarity = fluidFilter.getRarity();
+		if (Screen.hasShiftDown() || filters.size() < 5) {
+			for (ResourceLocation filterName : filters) {
+				Fluid fluidFilter = ForgeRegistries.FLUIDS.getValue(filterName);
+				FluidAttributes attributes = fluidFilter.getAttributes();
+				Rarity rarity = attributes.getRarity();
 				if (rarity == null) {
-					rarity = EnumRarity.COMMON;
+					rarity = Rarity.COMMON;
 				}
-				FluidStack filterFluidStack = FluidRegistry.getFluidStack(fluidFilter.getName(), 0);
-				toolTip.add(fluidFilter.getLocalizedName(filterFluidStack), rarity.color);
+				FluidStack filterFluidStack = new FluidStack(fluidFilter, 0);
+				toolTip.add(filterFluidStack.getDisplayName(), rarity.color);
 			}
 		} else {
-			toolTip.add(TextFormatting.ITALIC + "<" + Translator.translateToLocal("for.gui.tooltip.tmi") + ">");
+			//TODO can this be simplified
+			ITextComponent tmiComponent = new StringTextComponent("<")
+				.appendSibling(new TranslationTextComponent("for.gui.tooltip.tmi"))
+				.appendSibling(new StringTextComponent(">"));
+			toolTip.add(tmiComponent, TextFormatting.ITALIC);
 		}
-
-		String liquidAmount = Translator.translateToLocalFormatted("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity());
-		toolTip.add(liquidAmount);
+		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));
 	}
 
 }

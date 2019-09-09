@@ -1,0 +1,39 @@
+{
+  "result": {
+    "item": "forestry:book_forester"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    [
+      {
+        "item": "#DROPHONEY"
+      },
+      {
+        "item": "#TREESAPLING"
+      },
+      {
+        "item": "forestry:butterfly_ge",
+        "data": 0
+      }
+    ]
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "book",
+          "type": "forestry:module"
+        },
+        {
+          "module": "lepidopterology",
+          "type": "forestry:module"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "group": "book"
+}

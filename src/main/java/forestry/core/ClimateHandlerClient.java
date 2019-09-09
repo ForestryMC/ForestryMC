@@ -1,19 +1,21 @@
 package forestry.core;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import net.minecraftforge.fml.LogicalSide;
 
 import forestry.api.climate.IClimateState;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.render.ParticleRender;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ClimateHandlerClient {
 
 	//The current climate state at the position of the player.
@@ -23,12 +25,13 @@ public class ClimateHandlerClient {
 		ClimateHandlerClient.currentState = currentState;
 	}
 
+	//TODO - register event handler
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if (event.phase != TickEvent.Phase.END || event.side != Side.CLIENT) {
+		if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.CLIENT) {
 			return;
 		}
-		EntityPlayer player = event.player;
+		PlayerEntity player = event.player;
 		World world = player.world;
 		BlockPos pos = player.getPosition();
 		if (currentState.isPresent()) {

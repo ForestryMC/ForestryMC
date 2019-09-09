@@ -11,14 +11,14 @@
 package forestry.mail;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
@@ -28,10 +28,10 @@ import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class EventHandlerMailAlert {
 	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
-		if (event.phase == Phase.END &&
-			Minecraft.getMinecraft().world != null &&
+		if (event.phase == TickEvent.Phase.END &&
+			Minecraft.getInstance().world != null &&
 			GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render();
 		}
@@ -39,10 +39,11 @@ public class EventHandlerMailAlert {
 
 	@SubscribeEvent
 	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		EntityPlayer player = event.player;
+		PlayerEntity player = event.getPlayer();
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
-		POBox pobox = PostRegistry.getOrCreatePOBox(player.world, address);
+		//TODO I have no idea if this cast is safe. I hope that it is.
+		POBox pobox = PostRegistry.getOrCreatePOBox((ServerWorld) player.world, address);
 		PacketPOBoxInfoResponse packet = new PacketPOBoxInfoResponse(pobox.getPOBoxInfo());
 		NetworkUtil.sendToPlayer(packet, player);
 	}

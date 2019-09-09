@@ -15,25 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.core.config.Config;
+import forestry.api.core.ItemGroups;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 
 public class ItemHoneyComb extends ItemForestry implements IColoredItem {
-	public ItemHoneyComb() {
-		setMaxDamage(0);
-		setHasSubtypes(true);
-		setCreativeTab(Tabs.tabApiculture);
+
+	private final EnumHoneyComb type;
+
+	public ItemHoneyComb(EnumHoneyComb type) {
+		super((new Item.Properties())
+			.maxDamage(0)
+			.group(ItemGroups.tabApiculture)
+			.setNoRepair());
+
+		this.type = type;
 	}
 
 	@Override
@@ -41,39 +40,8 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		return false;
 	}
 
-	@Override
-	public boolean isRepairable() {
-		return false;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			manager.registerItemModel(item, i, "beecombs/" + EnumHoneyComb.get(i).name);
-		}
-	}
-
-	@Override
-	public String getTranslationKey(ItemStack stack) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(stack.getItemDamage());
-		return super.getTranslationKey(stack) + "." + honeyComb.name;
-	}
-
-	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
-			for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-				EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
-				if (!honeyComb.isSecret() || Config.isDebug) {
-					subItems.add(new ItemStack(this, 1, i));
-				}
-			}
-		}
-	}
-
 	@Nullable
-	private static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
+	public static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
 		List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);
 		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
 			EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
@@ -89,21 +57,9 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		}
 	}
 
-	public ItemStack getRandomComb(int amount, Random random, boolean includeSecret) {
-		EnumHoneyComb honeyComb = getRandomCombType(random, includeSecret);
-		if (honeyComb == null) {
-			return ItemStack.EMPTY;
-		}
-		return get(honeyComb, amount);
-	}
-
-	public ItemStack get(EnumHoneyComb honeyComb, int amount) {
-		return new ItemStack(this, amount, honeyComb.ordinal());
-	}
-
 	@Override
-	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
-		EnumHoneyComb honeyComb = EnumHoneyComb.get(itemstack.getItemDamage());
+	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
+		EnumHoneyComb honeyComb = this.type;
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;
 		} else {

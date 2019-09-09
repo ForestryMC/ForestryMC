@@ -12,14 +12,16 @@ package forestry.core.gui.slots;
 
 import com.google.common.collect.Lists;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.inventory.container.CraftingResultSlot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
-import forestry.worktable.inventory.InventoryCraftingForestry;
+import net.minecraftforge.fml.hooks.BasicEventHooks;
+
+import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends Slot {
@@ -27,19 +29,19 @@ public class SlotCrafter extends Slot {
 	/**
 	 * The craft matrix inventory linked to this result slot.
 	 */
-	private final InventoryCraftingForestry craftMatrix;
+	private final CraftingInventoryForestry craftMatrix;
 	private final ICrafterWorktable crafter;
 
 	/**
 	 * The player that is using the GUI where this slot resides.
 	 */
-	private final EntityPlayer player;
+	private final PlayerEntity player;
 	/**
 	 * The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset.
 	 */
 	private int amountCrafted;
 
-	public SlotCrafter(EntityPlayer player, InventoryCraftingForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
+	public SlotCrafter(PlayerEntity player, CraftingInventoryForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
 		super(craftingDisplay, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;
@@ -65,13 +67,13 @@ public class SlotCrafter extends Slot {
 	}
 
 	/**
-	 * Copied from {@link SlotCrafting#onCrafting(ItemStack)}
+	 * Copied from {@link CraftingResultSlot#onCrafting(ItemStack)}
 	 */
 	@Override
 	protected void onCrafting(ItemStack stack) {
 		if (this.amountCrafted > 0) {
 			stack.onCrafting(this.player.world, this.player, this.amountCrafted);
-			net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerCraftingEvent(this.player, stack, craftMatrix);
+			BasicEventHooks.firePlayerCraftingEvent(this.player, stack, craftMatrix);
 		}
 
 		this.amountCrafted = 0;
@@ -91,7 +93,7 @@ public class SlotCrafter extends Slot {
 	}
 
 	@Override
-	public boolean canTakeStack(EntityPlayer player) {
+	public boolean canTakeStack(PlayerEntity player) {
 		return crafter.canTakeStack(getSlotIndex());
 	}
 
@@ -106,7 +108,7 @@ public class SlotCrafter extends Slot {
 	}
 
 	@Override
-	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
+	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
 		if (crafter.onCraftingStart(player)) {
 			this.onCrafting(itemStack); // handles crafting achievements, maps, and statistics
 

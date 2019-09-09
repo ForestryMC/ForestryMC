@@ -11,8 +11,8 @@
 package forestry.farming.logic.farmables;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,13 +25,13 @@ import forestry.farming.logic.crops.CropDestroy;
 public class FarmableVanillaMushroom extends FarmableBase {
 	private final Block hugeMushroomBlock;
 
-	public FarmableVanillaMushroom(ItemStack mushroom, IBlockState plantedMushroom, Block hugeMushroomBlock) {
+	public FarmableVanillaMushroom(ItemStack mushroom, BlockState plantedMushroom, Block hugeMushroomBlock) {
 		super(mushroom, plantedMushroom, hugeMushroomBlock.getDefaultState(), false);
 		this.hugeMushroomBlock = hugeMushroomBlock;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, IBlockState blockState) {
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		if (blockState.getBlock() != hugeMushroomBlock) {
 			return null;
 		}
@@ -40,8 +40,8 @@ public class FarmableVanillaMushroom extends FarmableBase {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		if (!plantedState.getBlock().canPlaceBlockAt(world, pos)) {
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+		if (!plantedState.isValidPosition(world, pos)) {
 			return false;
 		}
 		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);

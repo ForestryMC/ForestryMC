@@ -31,7 +31,7 @@ public class CircuitLayout implements ICircuitLayout {
 
 	@Override
 	public String getName() {
-		return Translator.translateToLocal("for.circuit.layout." + this.uid + ".name");
+		return Translator.translateToLocal("for.circuit.layout." + this.uid);
 	}
 
 	@Override

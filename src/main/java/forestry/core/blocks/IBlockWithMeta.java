@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+//TODO - remove
+@Deprecated
 public interface IBlockWithMeta {
 
 	String getNameFromMeta(int meta);

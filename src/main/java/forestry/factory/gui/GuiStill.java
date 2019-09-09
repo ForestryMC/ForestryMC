@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -20,9 +21,9 @@ import forestry.factory.tiles.TileStill;
 public class GuiStill extends GuiForestryTitled<ContainerStill> {
 	private final TileStill tile;
 
-	public GuiStill(InventoryPlayer inventory, TileStill tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/still.png", new ContainerStill(inventory, tile), tile);
-		this.tile = tile;
+	public GuiStill(ContainerStill container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/still.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 35, 15, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 125, 15, 1));
 	}
@@ -31,11 +32,11 @@ public class GuiStill extends GuiForestryTitled<ContainerStill> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		drawTexturedModalRect(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
+		blit(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
 
 		if (tile.getWorkCounter() > 0) {
 			int massRemaining = tile.getProgressScaled(16);
-			drawTexturedModalRect(guiLeft + 84, guiTop + 17 + massRemaining, 176, 74 + massRemaining, 4, 17 - massRemaining);
+			blit(guiLeft + 84, guiTop + 17 + massRemaining, 176, 74 + massRemaining, 4, 17 - massRemaining);
 		}
 	}
 

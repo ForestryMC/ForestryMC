@@ -15,9 +15,8 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
+import forestry.core.config.forge_old.Configuration;
+import forestry.core.config.forge_old.Property;
 import forestry.core.utils.Translator;
 
 public class LocalizedConfiguration extends Configuration {
@@ -53,6 +52,7 @@ public class LocalizedConfiguration extends Configuration {
 		return getStringLocalized(category, name, defaultValue, new String[0]);
 	}
 
+	//TODO - called on wrong side.
 	public String getStringLocalized(String category, String name, String defaultValue, String[] validValues) {
 		return getStringLocalizedFormatted(category, name, defaultValue, validValues, "");
 	}

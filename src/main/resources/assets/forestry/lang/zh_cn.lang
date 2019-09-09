@@ -1606,7 +1606,7 @@ item.for.catalogue.tooltip=显示当前贸易站全部可用交易。
 # PIPES
 ####################
 
-item.PipeItemsPropolis.name=养蜂员管道
+item.PipeitemPropolis.name=养蜂员管道
 
 tile.for.genetic_filter.name=基因过滤器
 tile.for.genetic_filter.0.name=基因过滤器
@@ -1811,12 +1811,12 @@ for.config.structures=多方块结构
 for.config.structures.disabled=禁用多方块结构
 for.config.structures.disabled.comment=禁用多方块结构的列表。
 
-for.config.farm.fertilizers.items=为林业添加可用的肥料种类。按下面格式进行添加：'modid:name:meta;fertilizerValue'，按行分割。\n自动生成的条目不可移除；但将对应的肥料值设定为 0 即可禁用。
+for.config.farm.fertilizers.item=为林业添加可用的肥料种类。按下面格式进行添加：'modid:name:meta;fertilizerValue'，按行分割。\n自动生成的条目不可移除；但将对应的肥料值设定为 0 即可禁用。
 
 for.config.fluids=流体
 for.config.fluids.enable.format=启用%s流体。
-for.config.fluid.blocks=流体方块
-for.config.fluid.blocks.enable.format=启用%s流体方块。
+for.config.fluid.block=流体方块
+for.config.fluid.block.enable.format=启用%s流体方块。
 
 for.config.debug.enabled=调试模式
 for.config.debug.enabled.comment=开启调试模式（仅适用于开发者）。
@@ -1859,8 +1859,8 @@ for.config.butterfly.entities.pollination.comment=允许蝴蝶为树木授粉。
 for.config.backpacks.item.stacks.format=在此添加%s的背包对物品的支持，格式为：'modid:name:meta'，也可以使用忽略附加值的通配格式：'modid:name'。
 for.config.backpacks.ore.dict.format=在此添加%s的背包对矿物字典的支持，格式为：'oreDictName'。支持正则表达式。
 
-for.config.crates.items.accepted.comment=板条箱支持的物品。格式为：'modid:meta:name'，也可以使用忽略附加值的通配格式：'modid:name'。
-for.config.crates.items.rejected.comment=板条箱黑名单。格式为：'modid:meta:name'，也可以使用忽略附加值的通配格式：'modid:name'。
+for.config.crates.item.accepted.comment=板条箱支持的物品。格式为：'modid:meta:name'，也可以使用忽略附加值的通配格式：'modid:name'。
+for.config.crates.item.rejected.comment=板条箱黑名单。格式为：'modid:meta:name'，也可以使用忽略附加值的通配格式：'modid:name'。
 for.config.crates.oredict.accepted.comment=板条箱支持的矿物词典条目。格式为：'oreDictName'。支持正则表达式。参见背包配置获得详细信息。
 for.config.crates.oredict.rejected.comment=矿物词典版的板条箱黑名单。格式为：'oreDictName'。支持正则表达式。参见背包配置获得详细信息。
 

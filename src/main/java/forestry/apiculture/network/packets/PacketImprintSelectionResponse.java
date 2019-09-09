@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.core.network.ForestryPacket;
@@ -43,10 +43,10 @@ public class PacketImprintSelectionResponse extends ForestryPacket implements IF
 		data.writeVarInt(secondary);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, EntityPlayer player) {
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			Container container = player.openContainer;
 			if (container instanceof ContainerImprinter) {
 				int primaryIndex = data.readVarInt();

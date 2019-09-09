@@ -10,13 +10,17 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.storage.ModuleBackpacks;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
+//TODO it may be simpler to split this up into two containerTypes. One for normal size and one for t2
 public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
 
 	public enum Size {
@@ -40,15 +44,27 @@ public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackp
 		}
 	}
 
-	public ContainerBackpack(EntityPlayer player, Size size, ItemStack parent) {
-		super(new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18);
+	private Size size;
 
+	public static ContainerBackpack fromNetwork(int windowID, PlayerInventory inv, PacketBuffer extraData) {
+		Size size = extraData.readEnumValue(Size.class);
+		ItemStack parent = extraData.readItemStack();
+		return new ContainerBackpack(windowID, inv.player, size, parent);
+	}
+
+	public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
+		super(windowID, new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18, ModuleBackpacks.getContainerTypes().BACKPACK);
+		this.size = size;
 		// Inventory
 		for (int j = 0; j < size.rows; j++) {
 			for (int k = 0; k < size.columns; k++) {
 				int slot = k + j * size.columns;
-				addSlotToContainer(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
+				addSlot(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
 			}
 		}
+	}
+
+	public Size getSize() {
+		return size;
 	}
 }

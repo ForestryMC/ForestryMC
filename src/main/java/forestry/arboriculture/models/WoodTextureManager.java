@@ -29,8 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
@@ -38,7 +38,7 @@ import forestry.arboriculture.models.WoodTexture.SimpleTexture;
 import forestry.arboriculture.models.WoodTexture.TextureMap;
 import forestry.core.utils.Log;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class WoodTextureManager {
 	protected static final Map<String, WoodTexture> WOOD_TEXTURES = new HashMap<>();
 	public static final String KIND_KEY = "kind";

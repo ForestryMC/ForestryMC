@@ -15,6 +15,6 @@ import forestry.core.blocks.BlockBase;
 public class BlockFactoryPlain extends BlockBase<BlockTypeFactoryPlain> {
 	public BlockFactoryPlain(BlockTypeFactoryPlain type) {
 		super(type);
-		setHarvestLevel("pickaxe", 0);
+		//		setHarvestLevel("pickaxe", 0);	//TODO addToolType in item?
 	}
 }

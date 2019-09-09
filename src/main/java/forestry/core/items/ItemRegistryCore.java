@@ -10,16 +10,24 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import java.util.EnumMap;
+import java.util.Map;
+
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.Tabs;
+import forestry.api.core.ItemGroups;
+import forestry.core.ItemGroupForestry;
+import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.utils.OreDictUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+//import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
@@ -64,8 +72,8 @@ public class ItemRegistryCore extends ItemRegistry {
 
 	/* Soldering */
 	public final ItemSolderingIron solderingIron;
-	public final ItemCircuitBoard circuitboards;
-	public final ItemElectronTube tubes;
+	public final Map<EnumCircuitBoardType, ItemCircuitBoard> circuitboards = new EnumMap<>(EnumCircuitBoardType.class);
+	public final Map<EnumElectronTube, ItemElectronTube> electronTubes = new EnumMap<>(EnumElectronTube.class);
 
 	/* Armor */
 	public final ItemArmorNaturalist spectacles;
@@ -85,19 +93,19 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry phosphor;
 
 	/* Misc */
-	public final ItemCraftingMaterial craftingMaterial;
+	public final Map<EnumCraftingMaterial, ItemCraftingMaterial> craftingMaterials = new EnumMap<>(EnumCraftingMaterial.class);
 	public final ItemForestry stickImpregnated;
 	public final ItemForestry woodPulp;
 	public final ItemForestry beeswax;
 	public final ItemForestry refractoryWax;
-	public final ItemFruit fruits;
+	public final Map<ItemFruit.EnumFruit, ItemFruit> fruits = new EnumMap<>(ItemFruit.EnumFruit.class);
 
 	public ItemRegistryCore() {
 		compost = registerItem(new ItemForestry(), "fertilizer_bio");
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizer_compound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");
-		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
+		//		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
 
 		researchNote = registerItem(new ItemResearchNote(), "research_note");
 
@@ -115,25 +123,29 @@ public class ItemRegistryCore extends ItemRegistry {
 		impregnatedCasing = registerItem(new ItemForestry(), "impregnated_casing");
 		flexibleCasing = registerItem(new ItemForestry(), "flexible_casing");
 
-		craftingMaterial = registerItem(new ItemCraftingMaterial(), "crafting_material");
+		for (EnumCraftingMaterial type : EnumCraftingMaterial.VALUES) {
+			ItemCraftingMaterial item = new ItemCraftingMaterial(type);
+			registerItem(item, type.getName());
+			craftingMaterials.put(type, item);
+		}
 
 		spectacles = registerItem(new ItemArmorNaturalist(), "naturalist_helmet");
 
 		peat = new ItemForestry() {
 			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
+			public int getBurnTime(ItemStack itemStack) {
 				return 2000;
 			}
 		};
 		registerItem(peat, "peat");
-		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
+		//		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
 
 		ash = registerItem(new ItemForestry(), "ash");
-		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
+		//		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
 
 		bituminousPeat = new ItemForestry() {
 			@Override
-			public int getItemBurnTime(ItemStack itemStack) {
+			public int getBurnTime(ItemStack itemStack) {
 				return 4200;
 			}
 		};
@@ -143,13 +155,20 @@ public class ItemRegistryCore extends ItemRegistry {
 		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER, "gear_copper");
 		gearTin = createItemForOreName(OreDictUtil.GEAR_TIN, "gear_tin");
 
-		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
+		for (EnumCircuitBoardType type : EnumCircuitBoardType.values()) {
+			ItemCircuitBoard board = new ItemCircuitBoard(type);
+			registerItem(board, "circuit_board_" + type.getName());
+			circuitboards.put(type, board);
+		}
 
-		solderingIron = new ItemSolderingIron();
-		solderingIron.setMaxDamage(5).setFull3D();
+		solderingIron = new ItemSolderingIron((new Item.Properties()).maxDamage(5));
 		registerItem(solderingIron, "soldering_iron");
 
-		tubes = registerItem(new ItemElectronTube(), "thermionic_tubes");
+		for (EnumElectronTube def : EnumElectronTube.VALUES) {
+			ItemElectronTube tube = new ItemElectronTube(def);
+			registerItem(tube, "electron_tube_" + def.getUid());
+			electronTubes.put(def, tube);
+		}    //TODO tags?
 
 		// / CARTONS
 		carton = registerItem(new ItemForestry(), "carton");
@@ -157,19 +176,17 @@ public class ItemRegistryCore extends ItemRegistry {
 		// / CRAFTING CARPENTER
 		stickImpregnated = registerItem(new ItemForestry(), "oak_stick");
 		woodPulp = registerItem(new ItemForestry(), "wood_pulp");
-		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
+		//		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
 
 		// / RECLAMATION
 		brokenBronzePickaxe = registerItem(new ItemForestry(), "broken_bronze_pickaxe");
 		brokenBronzeShovel = registerItem(new ItemForestry(), "broken_bronze_shovel");
 
 		// / TOOLS
-		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe));
-		bronzePickaxe.setHarvestLevel("pickaxe", 3);
+		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe), (new Item.Properties()).addToolType(ToolType.PICKAXE, 3).maxDamage(200).group(ItemGroupForestry.tabForestry));
 		registerItem(bronzePickaxe, "bronze_pickaxe");
 
-		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel));
-		bronzeShovel.setHarvestLevel("shovel", 3);
+		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel), (new Item.Properties()).addToolType(ToolType.SHOVEL, 3).maxDamage(200).group(ItemGroupForestry.tabForestry));
 		registerItem(bronzeShovel, "bronze_shovel");
 
 		// / ASSEMBLY KITS
@@ -190,21 +207,37 @@ public class ItemRegistryCore extends ItemRegistry {
 		phosphor = registerItem(new ItemForestry(), "phosphor");
 
 		// / BEE RESOURCES
-		beeswax = registerItem(new ItemForestry(), "beeswax");
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			beeswax.setCreativeTab(Tabs.tabApiculture);
+			beeswax = registerItem(new ItemForestry(new Item.Properties(), ItemGroups.tabApiculture), "beeswax");
+		} else {
+			beeswax = registerItem(new ItemForestry(), "beeswax");
 		}
-		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
+		//		OreDictionary.registerOre(OreDictUtil.ITEM_BEESWAX, beeswax);
 
 		refractoryWax = registerItem(new ItemForestry(), "refractory_wax");
 
 		// FRUITS
-		fruits = registerItem(new ItemFruit(), "fruits");
 		for (ItemFruit.EnumFruit def : ItemFruit.EnumFruit.values()) {
-			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
-			OreDictionary.registerOre(def.getOreDict(), fruit);
-			OreDictionary.registerOre(OreDictUtil.FRUIT_FORESTRY, fruit);
-		}
+			ItemFruit fruit = new ItemFruit(def);
+			registerItem(fruit, "fruit_" + def.getName());
+			fruits.put(def, fruit);
+		}    //TODO tags
+	}
+
+	public ItemStack getCraftingMaterial(EnumCraftingMaterial type, int amount) {
+		return new ItemStack(craftingMaterials.get(type), amount);
+	}
+
+	public ItemStack getCircuitBoard(EnumCircuitBoardType type, int amount) {
+		return new ItemStack(circuitboards.get(type), amount);
+	}
+
+	public ItemStack getElectronTube(EnumElectronTube type, int amount) {
+		return new ItemStack(electronTubes.get(type), amount);
+	}
+
+	public ItemStack getFruit(ItemFruit.EnumFruit type, int amount) {
+		return new ItemStack(fruits.get(type), amount);
 	}
 
 }

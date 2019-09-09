@@ -5,31 +5,33 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import genetics.api.individual.IGenome;
+
 public interface ITreeModifier {
 
 	/**
 	 * @return Float used to modify the height.
 	 */
-	float getHeightModifier(ITreeGenome genome, float currentModifier);
+	float getHeightModifier(IGenome genome, float currentModifier);
 
 	/**
 	 * @return Float used to modify the yield.
 	 */
-	float getYieldModifier(ITreeGenome genome, float currentModifier);
+	float getYieldModifier(IGenome genome, float currentModifier);
 
 	/**
 	 * @return Float used to modify the sappiness.
 	 */
-	float getSappinessModifier(ITreeGenome genome, float currentModifier);
+	float getSappinessModifier(IGenome genome, float currentModifier);
 
 	/**
 	 * @return Float used to modify the maturation.
 	 */
-	float getMaturationModifier(ITreeGenome genome, float currentModifier);
+	float getMaturationModifier(IGenome genome, float currentModifier);
 
 	/**
 	 * @return Float used to modify the base mutation chance.
 	 */
-	float getMutationModifier(ITreeGenome genome0, ITreeGenome genome1, float currentModifier);
+	float getMutationModifier(IGenome genome0, IGenome genome1, float currentModifier);
 
 }

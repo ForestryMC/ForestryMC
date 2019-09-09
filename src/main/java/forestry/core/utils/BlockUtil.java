@@ -14,52 +14,56 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockStaticLiquid;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.state.IProperty;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
+
+//import net.minecraft.block.BlockStaticLiquid;
 
 public abstract class BlockUtil {
 
-	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
+	private static final int slabWoodId = -Integer.MAX_VALUE;//TODO - tagsOreDictionary.getOreID("slabWood");
 
-	public static List<ItemStack> getBlockDrops(World world, BlockPos posBlock) {
-		IBlockState blockState = world.getBlockState(posBlock);
+	public static List<ItemStack> getBlockDrops(IWorld world, BlockPos posBlock) {
+		BlockState blockState = world.getBlockState(posBlock);
 
-		return blockState.getBlock().getDrops(world, posBlock, blockState, 0);
+		//TODO - this call needs sorting
+		return blockState.getBlock().getDrops(blockState, (ServerWorld) world, posBlock, TileUtil.getTile(world, posBlock));
 
 	}
 
-	public static boolean tryPlantCocoaPod(World world, BlockPos pos) {
-
-		EnumFacing facing = getValidPodFacing(world, pos);
+	public static boolean tryPlantCocoaPod(IWorld world, BlockPos pos) {
+		Direction facing = getValidPodFacing(world, pos);
 		if (facing == null) {
 			return false;
 		}
 
-		IBlockState state = Blocks.COCOA.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
-		world.setBlockState(pos, state);
+		BlockState state = Blocks.COCOA.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
+		world.setBlockState(pos, state, 18);
 		return true;
 	}
 
 	@Nullable
-	public static EnumFacing getValidPodFacing(World world, BlockPos pos) {
-		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+	public static Direction getValidPodFacing(IWorld world, BlockPos pos) {
+		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			if (isValidPodLocation(world, pos, facing)) {
 				return facing;
 			}
@@ -67,21 +71,19 @@ public abstract class BlockUtil {
 		return null;
 	}
 
-	public static boolean isValidPodLocation(World world, BlockPos pos, EnumFacing direction) {
+	public static boolean isValidPodLocation(IWorldReader world, BlockPos pos, Direction direction) {
 		pos = pos.offset(direction);
 		if (!world.isBlockLoaded(pos)) {
 			return false;
 		}
-		IBlockState state = world.getBlockState(pos);
+		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block == Blocks.LOG) {
-			return state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE;
-		} else {
-			return block.isWood(world, pos);
-		}
+		//TODO - tags or something
+		//block.isWood(world, pos);
+		return block == Blocks.JUNGLE_LOG;
 	}
 
-	public static boolean isWoodSlabBlock(IBlockState blockState, Block block, IBlockAccess world, BlockPos pos) {
+	public static boolean isWoodSlabBlock(BlockState blockState, Block block, IBlockReader world, BlockPos pos) {
 		if (block.isAir(blockState, world, pos)) {
 			return false;
 		}
@@ -91,7 +93,7 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		int[] oreIds = OreDictionary.getOreIDs(stack);
+		int[] oreIds = new int[0];//TODO - tags OreDictionary.getOreIDs(stack);
 		for (int oreId : oreIds) {
 			if (oreId == slabWoodId) {
 				return true;
@@ -102,17 +104,17 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isBreakableBlock(World world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 		return isBreakableBlock(blockState, world, pos);
 	}
 
-	public static boolean isBreakableBlock(IBlockState blockState, World world, BlockPos pos) {
+	public static boolean isBreakableBlock(BlockState blockState, World world, BlockPos pos) {
 		return blockState.getBlockHardness(world, pos) >= 0.0F;
 	}
 
-	public static boolean isReplaceableBlock(IBlockState blockState, World world, BlockPos pos) {
+	public static boolean isReplaceableBlock(BlockState blockState, World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isReplaceable(world, pos) && !(block instanceof BlockStaticLiquid);
+		return world.getBlockState(pos).getMaterial().isReplaceable() && true;//!(block instanceof BlockStaticLiquid);
 	}
 
 	@Nullable
@@ -123,16 +125,17 @@ public abstract class BlockUtil {
 	/**
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
+	//TODO - looks pretty copy pasted. Find new version as well?
 	@Nullable
 	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
 		endVec = endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
-		Vec3d vec32 = startVec.getIntermediateWithXValue(endVec, minX);
-		Vec3d vec33 = startVec.getIntermediateWithXValue(endVec, maxX);
-		Vec3d vec34 = startVec.getIntermediateWithYValue(endVec, minY);
-		Vec3d vec35 = startVec.getIntermediateWithYValue(endVec, maxY);
-		Vec3d vec36 = startVec.getIntermediateWithZValue(endVec, minZ);
-		Vec3d vec37 = startVec.getIntermediateWithZValue(endVec, maxZ);
+		Vec3d vec32 = startVec;//.getIntermediateWithXValue(endVec, minX);
+		Vec3d vec33 = startVec;//.getIntermediateWithXValue(endVec, maxX);
+		Vec3d vec34 = startVec;//.getIntermediateWithYValue(endVec, minY);
+		Vec3d vec35 = startVec;//.getIntermediateWithYValue(endVec, maxY);
+		Vec3d vec36 = startVec;//.getIntermediateWithZValue(endVec, minZ);
+		Vec3d vec37 = startVec;//.getIntermediateWithZValue(endVec, maxZ);
 
 		if (!isVecInsideYZBounds(vec32, minY, minZ, maxY, maxZ)) {
 			vec32 = null;
@@ -213,7 +216,7 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new RayTraceResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), EnumFacing.values()[sideHit], pos);
+			return new BlockRayTraceResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), Direction.values()[sideHit], pos, true);
 		}
 	}
 
@@ -240,27 +243,27 @@ public abstract class BlockUtil {
 
 	/* CHUNKS */
 
-	public static boolean canReplace(IBlockState blockState, World world, BlockPos pos) {
+	public static boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isReplaceable(world, pos) && !blockState.getMaterial().isLiquid();
+		return world.getBlockState(pos).getMaterial().isReplaceable() && !blockState.getMaterial().isLiquid();
 	}
 
-	public static boolean canPlaceTree(IBlockState blockState, World world, BlockPos pos) {
+	public static boolean canPlaceTree(BlockState blockState, IWorld world, BlockPos pos) {
 		BlockPos downPos = pos.down();
 		Block block = world.getBlockState(downPos).getBlock();
-		return !(block.isReplaceable(world, downPos) &&
-			blockState.getMaterial().isLiquid()) &&
-			!block.isLeaves(blockState, world, downPos) &&
-			!block.isWood(world, downPos);
+		return !(world.getBlockState(pos).getMaterial().isReplaceable() &&
+			blockState.getMaterial().isLiquid()) && true;
+		//			!block.isLeaves(blockState, world, downPos) &&
+		//			!block.isWood(world, downPos);
 	}
 
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
-		BlockPos topPos = world.getHeight(pos);
+		BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
 		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
-		IBlockState blockState = world.getBlockState(newPos);
+		BlockState blockState = world.getBlockState(newPos);
 
 		while (!BlockUtil.canReplace(blockState, world, newPos)) {
-			newPos.move(EnumFacing.UP);
+			newPos.move(Direction.UP);
 			if (newPos.getY() > topPos.getY()) {
 				return null;
 			}
@@ -270,12 +273,13 @@ public abstract class BlockUtil {
 		return newPos.down();
 	}
 
+	@Nullable
 	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
 		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
 
-		IBlockState blockState = world.getBlockState(newPos);
+		BlockState blockState = world.getBlockState(newPos);
 		while (canReplace(blockState, world, newPos)) {
-			newPos.move(EnumFacing.DOWN);
+			newPos.move(Direction.DOWN);
 			if (newPos.getY() <= 0) {
 				return null;
 			}
@@ -287,8 +291,8 @@ public abstract class BlockUtil {
 	/**
 	 * Copied from {@link Block#shouldSideBeRendered}
 	 */
-	public static boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		AxisAlignedBB axisalignedbb = blockState.getBoundingBox(blockAccess, pos);
+	public static boolean shouldSideBeRendered(BlockState blockState, IEnviromentBlockReader blockAccess, BlockPos pos, Direction side) {
+		AxisAlignedBB axisalignedbb = blockState.getShape(blockAccess, pos).getBoundingBox();
 
 		switch (side) {
 			case DOWN:
@@ -325,7 +329,7 @@ public abstract class BlockUtil {
 		return !blockAccess.getBlockState(pos.offset(side)).doesSideBlockRendering(blockAccess, pos.offset(side), side.getOpposite());
 	}
 
-	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, IBlockState blockState) {
+	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, BlockState blockState) {
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -334,7 +338,7 @@ public abstract class BlockUtil {
 		return false;
 	}
 
-	public static boolean setBlockWithBreakSound(World world, BlockPos pos, IBlockState blockState, IBlockState oldState) {
+	public static boolean setBlockWithBreakSound(World world, BlockPos pos, BlockState blockState, BlockState oldState) {
 		if (world.setBlockState(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -343,8 +347,8 @@ public abstract class BlockUtil {
 		return false;
 	}
 
-	public static boolean setBlockToAirWithSound(World world, BlockPos pos, IBlockState oldState) {
-		if (world.setBlockToAir(pos)) {
+	public static boolean setBlockToAirWithSound(World world, BlockPos pos, BlockState oldState) {
+		if (world.removeBlock(pos, false)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
@@ -354,7 +358,7 @@ public abstract class BlockUtil {
 
 	@Nullable
 	public static <T extends Comparable<T>> IProperty<T> getProperty(Block block, String propertyName, Class<T> valueClass) {
-		for (IProperty<?> property : block.getDefaultState().getPropertyKeys()) {
+		for (IProperty<?> property : block.getStateContainer().getProperties()) {
 			if (property.getName().equals(propertyName)) {
 				if (property.getValueClass().isAssignableFrom(valueClass)) {
 					//noinspection unchecked

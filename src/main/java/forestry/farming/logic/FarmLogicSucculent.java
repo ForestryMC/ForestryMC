@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -29,7 +29,8 @@ public class FarmLogicSucculent extends FarmLogicSoil {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.DYE, 1, 2);
+		//TODO dye meta lookup
+		return new ItemStack(Items.GREEN_DYE);
 	}
 
 	@Override

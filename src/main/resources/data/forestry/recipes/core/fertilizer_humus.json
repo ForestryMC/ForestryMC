@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "forestry:humus",
+    "data": 0,
+    "count": 8
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.humus.fertilizer",
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    },
+    "X": {
+      "item": "forestry:fertilizer_compound"
+    }
+  },
+  "group": "core"
+}

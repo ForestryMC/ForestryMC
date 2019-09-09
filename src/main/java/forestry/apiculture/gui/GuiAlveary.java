@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
@@ -21,9 +22,9 @@ import forestry.core.render.EnumTankLevel;
 public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 	private final TileAlveary tile;
 
-	public GuiAlveary(InventoryPlayer inventory, TileAlveary tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
-		this.tile = tile;
+	public GuiAlveary(ContainerAlveary container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", container, inventory, container.getTile());
+		this.tile = container.getTile();
 		this.ySize = 190;
 	}
 
@@ -39,7 +40,7 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 
-		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+		this.blit(x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 	@Override

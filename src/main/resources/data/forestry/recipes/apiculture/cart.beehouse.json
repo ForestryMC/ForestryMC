@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "forestry:cart.beehouse",
+    "data": 0
+  },
+  "pattern": [
+    "B",
+    "C"
+  ],
+  "conditions": [
+    {
+      "module": "apiculture",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "forestry:bee_house",
+      "data": 0
+    },
+    "C": {
+      "item": "minecraft:minecart"
+    }
+  },
+  "group": "apiculture"
+}

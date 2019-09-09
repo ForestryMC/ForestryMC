@@ -1,11 +1,12 @@
 package forestry.api.gui.events;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.gui.IGuiElement;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ValueChangedEvent<V> extends GuiElementEvent {
 	private final V newValue;
 	private final V oldValue;

@@ -822,7 +822,7 @@ for.errors.no_paper.help=Die Handelsstation benötigt mehr Papier, um Briefe zu 
 for.errors.no_supplies.desc=Benötigt Vorräte
 for.errors.no_supplies.help=Die Handelsstation benötigt mehr Vorräte zum Verschicken.
 for.errors.no_trade.desc=Kein Handel festgelegt
-for.errors.no_trade.help=Die Handelsstation benötigt Items zum Senden und Empfangen.
+for.errors.no_trade.help=Die Handelsstation benötigt item zum Senden und Empfangen.
 
 # TRADE STATION NAMING
 for.errors.not_alpha_numeric.desc=Buchstaben und Zahlen
@@ -1571,7 +1571,7 @@ for.chat.command.forestry.mail.trades.help=Listet alle Handelsstationen und ihre
 for.chat.command.forestry.mail.trades.format=Format: /%s
 
 for.chat.command.forestry.mail.virtualize.desc=- %s : Virtuellen Modus (de-)aktievieren
-for.chat.command.forestry.mail.virtualize.help=(De-)Aktiviert den Virtuellen Modus für eine bestimmte Handelsstation. In diesem Modus verbraucht sie keine Items.
+for.chat.command.forestry.mail.virtualize.help=(De-)Aktiviert den Virtuellen Modus für eine bestimmte Handelsstation. In diesem Modus verbraucht sie keine item.
 for.chat.command.forestry.mail.virtualize.format=Format: /%s <Handelsstationsname>
 for.chat.command.forestry.mail.virtualize.no_tradestation=Keine Station mit dem Namen '%s' gefunden.
 for.chat.command.forestry.mail.virtualize.set=Virtualisierung für '%s' wurde auf %s gesetzt.
@@ -1606,7 +1606,7 @@ item.for.catalogue.tooltip=Enthält alle verfügbaren Angebote von Handelsstatio
 # PIPES
 ####################
 
-item.PipeItemsPropolis.name=Bienenrohr
+item.PipeitemPropolis.name=Bienenrohr
 
 tile.for.genetic_filter.name=Genfilter
 tile.for.genetic_filter.0.name=Genfilter
@@ -1615,7 +1615,7 @@ for.gui.filter.seletion=Filterauswahl
 
 for.gui.filter.forestry.default.anything=Alles
 for.gui.filter.forestry.default.closed=Geschlossen
-for.gui.filter.forestry.default.item=Items
+for.gui.filter.forestry.default.item=item
 for.gui.filter.forestry.default.cave=Höhlenbewohner
 for.gui.filter.forestry.default.flyer=Robuste Flieger
 for.gui.filter.forestry.default.nocturnal=Nachtaktiv
@@ -1659,7 +1659,7 @@ for.module.food.description=Beinhaltet Nahrungsmittel.
 for.module.greenhouse.description=Beinhaltet ein Gewächshaus.
 for.module.lepidopterology.description=Schmetterlinge. Schick.
 for.module.mail.description=Beinhaltet Forestry's Post- und Handelssystem.
-for.module.sorting.description=Beinhaltet einen Filter, um Items nach ihrer Genetik sortieren zu können.
+for.module.sorting.description=Beinhaltet einen Filter, um item nach ihrer Genetik sortieren zu können.
 for.module.worktable.description=Beinhaltet eine Wekbank, welche acht Rezepte speichern kann.
 
 for.module.actuallyadditions.description=Kompatibilitätsmodul für Actually Additions.

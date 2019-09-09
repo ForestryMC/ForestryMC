@@ -12,28 +12,47 @@ package forestry.apiculture.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.network.PacketBuffer;
 
-import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
+import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.core.gui.ContainerAnalyzerProviderHelper;
 import forestry.core.gui.ContainerEntity;
 import forestry.core.gui.slots.SlotLockable;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketGuiUpdateEntity;
 
-public class ContainerMinecartBeehouse extends ContainerEntity<EntityMinecartBeeHousingBase> implements IContainerBeeHousing {
+public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBeeHousingBase> implements IContainerBeeHousing {
 	/* Attributes - Final*/
 	private final ContainerAnalyzerProviderHelper providerHelper;
+	private final IGuiBeeHousingDelegate delegate;
+	private final GuiBeeHousing.Icon icon;
 
-	public ContainerMinecartBeehouse(InventoryPlayer player, EntityMinecartBeeHousingBase entity, boolean hasFrames) {
-		super(entity, player, 8, 108);
+
+	//TODO writing things to packets here
+	public static ContainerMinecartBeehouse fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		PacketBufferForestry buf = new PacketBufferForestry(extraData);
+		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.world);    //TODO cast
+		PlayerEntity player = playerInv.player;
+		boolean hasFrames = buf.readBoolean();
+		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
+		return new ContainerMinecartBeehouse(windowId, player.inventory, e, hasFrames, icon);
+	}
+
+	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {
+		super(windowId, ModuleApiculture.getContainerTypes().BEEHOUSE_MINECART, entity, player, 8, 108);
 		providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 
 		ContainerBeeHelper.addSlots(this, entity, hasFrames);
 
 		entity.getBeekeepingLogic().clearCachedValues();
+		delegate = entity;
+		this.icon = icon;
 	}
 
 	private int beeProgress = -1;
@@ -58,19 +77,28 @@ public class ContainerMinecartBeehouse extends ContainerEntity<EntityMinecartBee
 
 	/* Methods - Implement ContainerForestry */
 	@Override
-	protected void addSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	@Override
-	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
-		addSlotToContainer(new SlotLockable(playerInventory, slot, x, y));
+	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	/* Methods - Implement IGuiSelectable */
 	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 		providerHelper.analyzeSpecimen(secondary);
 	}
 
+	@Override
+	public IGuiBeeHousingDelegate getDelegate() {
+		return delegate;
+	}
+
+	@Override
+	public GuiBeeHousing.Icon getIcon() {
+		return icon;
+	}
 }

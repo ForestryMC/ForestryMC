@@ -1,6 +1,0 @@
-{
-    "variants": {
-		"state=on": { "model": "forestry:apiculture/alveary_swarmer_on" },
-		"state=off": { "model": "forestry:apiculture/alveary_swarmer_off" }
-	}
-}

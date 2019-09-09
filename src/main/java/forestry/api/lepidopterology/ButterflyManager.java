@@ -7,14 +7,23 @@ package forestry.api.lepidopterology;
 
 import javax.annotation.Nullable;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.lepidopterology.genetics.IButterflyFactory;
+import forestry.api.lepidopterology.genetics.IButterflyMutationFactory;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
+
 public class ButterflyManager {
+
+	public static final IRootDefinition<IButterflyRoot> butterflyRootDefinition = GeneticsAPI.apiInstance.getRoot("rootButterflies");
 
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies")
 	 *
 	 * @implNote Only null if the "lepidopterology" module is not enabled.
 	 */
-	@Nullable
+	//TODO: Move most calls to definition (more save)
 	public static IButterflyRoot butterflyRoot;
 
 	/**

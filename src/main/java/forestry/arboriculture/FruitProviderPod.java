@@ -16,24 +16,29 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.ITreeGenome;
+import genetics.api.individual.IGenome;
+
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.utils.BlockUtil;
 
+//TODO this is horribly hacky. Cleanup once dependancy issues with AlleleFruits is fixed.
 public class FruitProviderPod extends FruitProviderNone {
 
 	public enum EnumPodType {
@@ -45,16 +50,15 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	private final EnumPodType type;
+	private final Supplier<ItemStack> dropOnMature;
 
 	private final Map<ItemStack, Float> drops;
 
-	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, ItemStack... dropOnMature) {
+	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack> dropOnMature) {
 		super(unlocalizedDescription, family);
 		this.type = type;
 		this.drops = new HashMap<>();
-		for (ItemStack drop : dropOnMature) {
-			this.drops.put(drop, 1.0f);
-		}
+		this.dropOnMature = dropOnMature;
 	}
 
 	@Override
@@ -63,7 +67,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(@Nullable ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(@Nullable IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		if (drops.isEmpty()) {
 			return NonNullList.create();
 		}
@@ -80,7 +84,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
 		if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
 			return false;
 		}
@@ -88,13 +92,13 @@ public class FruitProviderPod extends FruitProviderNone {
 		if (type == EnumPodType.COCOA) {
 			return BlockUtil.tryPlantCocoaPod(world, pos);
 		} else {
-			IAlleleFruit activeAllele = (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS);
-			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getYield(), pos);
+			IAlleleFruit activeAllele = genome.getActiveAllele(TreeChromosomes.FRUITS);
+			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getActiveValue(TreeChromosomes.YIELD), pos);
 		}
 	}
 
 	@Override
-	public ResourceLocation getSprite(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
+	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
 		return null;
 	}
 
@@ -105,12 +109,15 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	@Override
 	public Map<ItemStack, Float> getProducts() {
+		if (drops.isEmpty()) {
+			drops.put(dropOnMature.get(), 1.0F);
+		}
 		return Collections.unmodifiableMap(drops);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerSprites() {
+	@OnlyIn(Dist.CLIENT)
+	public void registerSprites(TextureStitchEvent.Pre event) {
 	}
 
 	@Override

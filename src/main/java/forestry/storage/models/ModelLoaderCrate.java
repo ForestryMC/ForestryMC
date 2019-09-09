@@ -2,25 +2,24 @@ package forestry.storage.models;
 
 import java.util.function.Predicate;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-
-import net.minecraftforge.client.resource.IResourceType;
-import net.minecraftforge.client.resource.VanillaResourceType;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.VanillaResourceType;
 
 import forestry.core.config.Constants;
 import forestry.storage.items.ItemCrated;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public enum ModelLoaderCrate implements ICustomModelLoader {
 	INSTANCE;
 
@@ -36,7 +35,7 @@ public enum ModelLoaderCrate implements ICustomModelLoader {
 	}
 
 	@Override
-	public IModel loadModel(ResourceLocation modelLocation) {
+	public IUnbakedModel loadModel(ResourceLocation modelLocation) {
 		ModelResourceLocation location = (ModelResourceLocation) modelLocation;
 		ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, location.getVariant());
 		Item item = ForgeRegistries.ITEMS.getValue(registryName);

@@ -12,22 +12,16 @@ package forestry.energy.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.FakePlayer;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
 
 import forestry.core.config.Constants;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.DamageSourceForestry;
+import forestry.energy.ModuleEnergy;
 
 public class TileEngineClockwork extends TileEngine {
 
@@ -45,49 +39,50 @@ public class TileEngineClockwork extends TileEngine {
 	private short delay = 0;
 
 	public TileEngineClockwork() {
-		super("", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+		super(ModuleEnergy.getTiles().clockworkEngine, "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
-	@Override
-	public void openGui(EntityPlayer player, ItemStack heldItem) {
-		if (!(player instanceof EntityPlayerMP)) {
-			return;
-		}
-
-		if (player instanceof FakePlayer) {
-			return;
-		}
-
-		if (tension <= 0) {
-			tension = WIND_TENSION_BASE;
-		} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
-			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
-		} else {
-			return;
-		}
-
-		player.addExhaustion(WIND_EXHAUSTION);
-		if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
-			player.attackEntityFrom(damageSourceEngineClockwork, 6);
-		}
-		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
-		delay = WIND_DELAY;
-		setNeedsNetworkUpdate();
-	}
+	//TODO needs to be in onactivated or similar
+	//	@Override
+	//	public void openGui(PlayerEntity player, ItemStack heldItem) {
+	//		if (!(player instanceof ServerPlayerEntity)) {
+	//			return;
+	//		}
+	//
+	//		if (player instanceof FakePlayer) {
+	//			return;
+	//		}
+	//
+	//		if (tension <= 0) {
+	//			tension = WIND_TENSION_BASE;
+	//		} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
+	//			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
+	//		} else {
+	//			return;
+	//		}
+	//
+	//		player.addExhaustion(WIND_EXHAUSTION);
+	//		if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
+	//			player.attackEntityFrom(damageSourceEngineClockwork, 6);
+	//		}
+	//		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
+	//		delay = WIND_DELAY;
+	//		setNeedsNetworkUpdate();
+	//	}
 
 	/* LOADING & SAVING */
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		tension = nbttagcompound.getFloat("Wound");
+	public void read(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		tension = compoundNBT.getFloat("Wound");
 	}
 
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound = super.writeToNBT(nbttagcompound);
-		nbttagcompound.setFloat("Wound", tension);
-		return nbttagcompound;
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		compoundNBT.putFloat("Wound", tension);
+		return compoundNBT;
 	}
 
 	@Override
@@ -130,7 +125,7 @@ public class TileEngineClockwork extends TileEngine {
 			tension = 0;
 		}
 		energyManager.generateEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int) tension);
-		world.updateComparatorOutputLevel(pos, getBlockType());
+		world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
 	}
 
 	@Override
@@ -162,14 +157,7 @@ public class TileEngineClockwork extends TileEngine {
 
 	@Override
 	@Nullable
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, int data) {
-		return null;
-	}
-
-	@Override
-	@Nullable
-	public Container getContainer(EntityPlayer player, int data) {
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		return null;
 	}
 }

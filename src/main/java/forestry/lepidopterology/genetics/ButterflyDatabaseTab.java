@@ -4,27 +4,27 @@ import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.alleles.IAlleleValue;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.DatabaseMode;
-import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IDatabaseTab;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.genetics.GenericRatings;
-import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 	private final DatabaseMode mode;
 
@@ -39,35 +39,35 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 
 	@Override
 	public void createElements(IDatabaseElement database, IButterfly butterfly, ItemStack itemStack) {
-		IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getPrimary();
-		IAlleleButterflySpecies secondarySpecies = butterfly.getGenome().getSecondary();
+		IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES);
+		IAlleleButterflySpecies secondarySpecies = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.SPECIES);
 
 		database.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
 
-		database.addLine(Translator.translateToLocal("for.gui.species"), EnumButterflyChromosome.SPECIES);
+		database.addLine(Translator.translateToLocal("for.gui.species"), ButterflyChromosomes.SPECIES);
 
-		database.addLine(Translator.translateToLocal("for.gui.size"), EnumButterflyChromosome.SIZE);
+		database.addLine(Translator.translateToLocal("for.gui.size"), ButterflyChromosomes.SIZE);
 
-		database.addLine(Translator.translateToLocal("for.gui.lifespan"), EnumButterflyChromosome.LIFESPAN);
+		database.addLine(Translator.translateToLocal("for.gui.lifespan"), ButterflyChromosomes.LIFESPAN);
 
-		database.addLine(Translator.translateToLocal("for.gui.speed"), EnumButterflyChromosome.SPEED);
+		database.addLine(Translator.translateToLocal("for.gui.speed"), ButterflyChromosomes.SPEED);
 
-		database.addLine(Translator.translateToLocal("for.gui.metabolism"), (IAlleleInteger allele, Boolean a) -> GenericRatings.rateMetabolism(allele.getValue()), EnumButterflyChromosome.METABOLISM);
+		database.addLine(Translator.translateToLocal("for.gui.metabolism"), (IAlleleValue<Integer> allele, Boolean a) -> GenericRatings.rateMetabolism(allele.getValue()), ButterflyChromosomes.METABOLISM);
 
-		database.addFertilityLine(Translator.translateToLocal("for.gui.fertility"), EnumButterflyChromosome.FERTILITY, 8);
+		database.addFertilityLine(Translator.translateToLocal("for.gui.fertility"), ButterflyChromosomes.FERTILITY, 8);
 
-		database.addLine(Translator.translateToLocal("for.gui.flowers"), EnumButterflyChromosome.FLOWER_PROVIDER);
-		database.addLine(Translator.translateToLocal("for.gui.effect"), EnumButterflyChromosome.EFFECT);
+		database.addLine(Translator.translateToLocal("for.gui.flowers"), ButterflyChromosomes.FLOWER_PROVIDER);
+		database.addLine(Translator.translateToLocal("for.gui.effect"), ButterflyChromosomes.EFFECT);
 
 		Function<Boolean, String> toleranceText = a -> {
-			IAlleleSpecies species = a ? primarySpecies : secondarySpecies;
-			return AlleleManager.climateHelper.toDisplay(species.getTemperature());
+			IAlleleForestrySpecies species = a ? primarySpecies : secondarySpecies;
+			return AlleleManager.climateHelper.toDisplay(species.getTemperature()).getUnformattedComponentText();    //TODO ITextComponent
 		};
-		database.addLine(Translator.translateToLocal("for.gui.climate"), toleranceText, EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
-		database.addToleranceLine(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
+		database.addLine(Translator.translateToLocal("for.gui.climate"), toleranceText, ButterflyChromosomes.TEMPERATURE_TOLERANCE);
+		database.addToleranceLine(ButterflyChromosomes.TEMPERATURE_TOLERANCE);
 
-		database.addLine(Translator.translateToLocal("for.gui.humidity"), toleranceText, EnumButterflyChromosome.HUMIDITY_TOLERANCE);
-		database.addToleranceLine(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
+		database.addLine(Translator.translateToLocal("for.gui.humidity"), toleranceText, ButterflyChromosomes.HUMIDITY_TOLERANCE);
+		database.addToleranceLine(ButterflyChromosomes.HUMIDITY_TOLERANCE);
 
 		String yes = Translator.translateToLocal("for.yes");
 		String no = Translator.translateToLocal("for.no");
@@ -77,28 +77,28 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 			String diurnalSecond;
 			String nocturnalFirst;
 			String nocturnalSecond;
-			if (butterfly.getGenome().getNocturnal()) {
+			if (butterfly.getGenome().getActiveValue(ButterflyChromosomes.NOCTURNAL)) {
 				nocturnalFirst = diurnalFirst = yes;
 			} else {
-				nocturnalFirst = butterfly.getGenome().getPrimary().isNocturnal() ? yes : no;
-				diurnalFirst = !butterfly.getGenome().getPrimary().isNocturnal() ? yes : no;
+				nocturnalFirst = primarySpecies.isNocturnal() ? yes : no;
+				diurnalFirst = !primarySpecies.isNocturnal() ? yes : no;
 			}
-			if (((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue()) {
+			if (butterfly.getGenome().getInactiveValue(ButterflyChromosomes.NOCTURNAL)) {
 				nocturnalSecond = diurnalSecond = yes;
 			} else {
-				nocturnalSecond = butterfly.getGenome().getSecondary().isNocturnal() ? yes : no;
-				diurnalSecond = !butterfly.getGenome().getSecondary().isNocturnal() ? yes : no;
+				nocturnalSecond = secondarySpecies.isNocturnal() ? yes : no;
+				diurnalSecond = !secondarySpecies.isNocturnal() ? yes : no;
 			}
 
 			database.addLine(Translator.translateToLocal("for.gui.diurnal"), (Boolean a) -> a ? diurnalFirst : diurnalSecond, false);
 			database.addLine(Translator.translateToLocal("for.gui.nocturnal"), (Boolean a) -> a ? nocturnalFirst : nocturnalSecond, false);
 		}
 
-		Function<Boolean, String> flyer = active -> StringUtil.readableBoolean(active ? butterfly.getGenome().getTolerantFlyer() : ((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TOLERANT_FLYER)).getValue(), yes, no);
-		database.addLine(Translator.translateToLocal("for.gui.flyer"), flyer, EnumButterflyChromosome.TOLERANT_FLYER);
+		Function<Boolean, String> flyer = active -> StringUtil.readableBoolean(active ? butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) : butterfly.getGenome().getInactiveValue(ButterflyChromosomes.TOLERANT_FLYER), yes, no);
+		database.addLine(Translator.translateToLocal("for.gui.flyer"), flyer, ButterflyChromosomes.TOLERANT_FLYER);
 
-		Function<Boolean, String> fireresist = active -> StringUtil.readableBoolean(active ? butterfly.getGenome().getFireResist() : ((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FIRE_RESIST)).getValue(), yes, no);
-		database.addLine(Translator.translateToLocal("for.gui.fireresist"), fireresist, EnumButterflyChromosome.FIRE_RESIST);
+		Function<Boolean, String> fireresist = active -> StringUtil.readableBoolean(active ? butterfly.getGenome().getActiveValue(ButterflyChromosomes.FIRE_RESIST) : butterfly.getGenome().getInactiveValue(ButterflyChromosomes.FIRE_RESIST), yes, no);
+		database.addLine(Translator.translateToLocal("for.gui.fireresist"), fireresist, ButterflyChromosomes.FIRE_RESIST);
 	}
 
 	@Override

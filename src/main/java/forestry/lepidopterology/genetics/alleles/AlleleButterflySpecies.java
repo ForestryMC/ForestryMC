@@ -17,33 +17,23 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Items;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import genetics.api.classification.IClassification;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IClassification;
-import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumButterflyChromosome;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IAlleleButterflySpeciesBuilder;
-import forestry.api.lepidopterology.IButterflyRoot;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpeciesBuilder;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
 import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
-public class AlleleButterflySpecies extends AlleleSpecies
+public class AlleleButterflySpecies extends AlleleForestrySpecies
 	implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
 	private final String texture;
 	private final Color serumColour;
@@ -67,7 +57,6 @@ public class AlleleButterflySpecies extends AlleleSpecies
 
 	@Override
 	public IAlleleButterflySpecies build() {
-		AlleleManager.alleleRegistry.registerAllele(this, EnumButterflyChromosome.SPECIES);
 		return this;
 	}
 
@@ -106,12 +95,12 @@ public class AlleleButterflySpecies extends AlleleSpecies
 
 	@Override
 	public String getEntityTexture() {
-		return getModID() + ":" + Constants.TEXTURE_PATH_ENTITIES + "/" + texture + ".png";
+		return getRegistryName().getNamespace() + ":" + Constants.TEXTURE_PATH_ENTITIES + "/" + texture + ".png";
 	}
 
 	@Override
 	public String getItemTexture() {
-		return getModID() + ":items/" + texture;
+		return getRegistryName().getNamespace() + ":items/" + texture;
 	}
 
 	@Override
@@ -128,39 +117,6 @@ public class AlleleButterflySpecies extends AlleleSpecies
 	@Override
 	public int getComplexity() {
 		return (int) (1.35f / rarity * 1.5);
-	}
-
-	@Override
-	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return 0f;
-		}
-
-		if (itemstack.getItem() == Items.GLASS_BOTTLE) {
-			return 0.9f;
-		}
-
-		for (ItemStack stack : butterflyLoot.keySet()) {
-			if (stack.isItemEqual(itemstack)) {
-				return 1.0f;
-			}
-		}
-		for (ItemStack stack : caterpillarLoot.keySet()) {
-			if (stack.isItemEqual(itemstack)) {
-				return 1.0f;
-			}
-		}
-
-		return super.getResearchSuitability(itemstack);
-	}
-
-	@Override
-	public NonNullList<ItemStack> getResearchBounty(World world, GameProfile researcher, IIndividual individual,
-		int bountyLevel) {
-		ItemStack serum = getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM);
-		NonNullList<ItemStack> bounty = NonNullList.create();
-		bounty.add(serum);
-		return bounty;
 	}
 
 	/* OTHER */
@@ -203,10 +159,10 @@ public class AlleleButterflySpecies extends AlleleSpecies
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void registerSprites() {
 		String spriteName = getItemTexture();
-		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
-		textureMap.registerSprite(new ResourceLocation(spriteName));
+		AtlasTexture textureMap = Minecraft.getInstance().getTextureMap();
+		//		textureMap.registerSprite(new ResourceLocation(spriteName));	//TODO textures
 	}
 }

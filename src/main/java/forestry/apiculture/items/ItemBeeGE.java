@@ -10,35 +10,38 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IModelManager;
-import forestry.api.core.Tabs;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.genetics.BeeGenome;
-import forestry.apiculture.genetics.DefaultBeeModelProvider;
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
@@ -49,58 +52,60 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
-		super(Tabs.tabApiculture);
+		super(type != EnumBeeType.DRONE ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1) : new Item.Properties().group(ItemGroups.tabApiculture));
 		this.type = type;
-		if (type != EnumBeeType.DRONE) {
-			setMaxStackSize(1);
-		}
 	}
 
-	@Nonnull
+	@Nullable
 	@Override
-	public IBee getIndividual(ItemStack itemstack) {
-		IBee individual = BeeManager.beeRoot.getMember(itemstack);
-		if (individual == null) {
-			individual = BeeDefinition.FOREST.getIndividual();
-		}
-		return individual;
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		return GeneticHelper.createOrganism(stack, type, BeeHelper.getRoot().getDefinition());
 	}
 
 	@Override
-	protected IAlleleSpecies getSpecies(ItemStack itemStack) {
-		return BeeGenome.getSpecies(itemStack);
+	protected IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
+		return GeneticHelper.getOrganism(itemStack).getAllele(BeeChromosomes.SPECIES, true);
 	}
 
+	//TODO - pretty sure this is still translating on the server atm
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (itemstack.getTagCompound() == null) {
-			return super.getItemStackDisplayName(itemstack);
+	public ITextComponent getDisplayName(ItemStack itemstack) {
+		if (itemstack.getTag() == null) {
+			return super.getDisplayName(itemstack);
+		}
+		Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemstack);
+		if (!optionalIndividual.isPresent()) {
+			return super.getDisplayName(itemstack);
 		}
 
-		IBee individual = getIndividual(itemstack);
-		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		IBee individual = optionalIndividual.get();
+		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
 		if (Translator.canTranslateToLocal(customBeeKey)) {
-			return Translator.translateToLocal(customBeeKey);
+			return new TranslationTextComponent(customBeeKey);
 		}
-		String beeGrammar = Translator.translateToLocal("for.bees.grammar." + type.getName());
-		String beeSpecies = individual.getDisplayName();
-		String beeType = Translator.translateToLocal("for.bees.grammar." + type.getName() + ".type");
-		return beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType);
+		ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();
+		ITextComponent beeType = new TranslationTextComponent("for.bees.grammar." + type.getName() + ".type");
+		return new TranslationTextComponent("for.bees.grammar." + type.getName(), beeSpecies, beeType);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
-		if (itemstack.getTagCompound() == null) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		if (itemstack.getTag() == null) {
 			return;
 		}
 
 		if (type != EnumBeeType.DRONE) {
-			IBee individual = getIndividual(itemstack);
+			Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemstack);
+			if (!optionalIndividual.isPresent()) {
+				return;
+			}
+
+			IBee individual = optionalIndividual.get();
 			if (individual.isNatural()) {
-				list.add(TextFormatting.YELLOW + TextFormatting.ITALIC.toString() + Translator.translateToLocal("for.bees.stock.pristine"));
+				list.add(new TranslationTextComponent("for.bees.stock.pristine").setStyle((new Style()).setColor(TextFormatting.YELLOW).setItalic(true)));
 			} else {
-				list.add(TextFormatting.YELLOW + Translator.translateToLocal("for.bees.stock.ignoble"));
+				list.add(new TranslationTextComponent("for.bees.stock.ignoble").setStyle((new Style()).setColor(TextFormatting.YELLOW)));
 			}
 		}
 
@@ -108,29 +113,29 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
 			addCreativeItems(subItems, true);
 		}
 	}
 
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
-		for (IBee bee : BeeManager.beeRoot.getIndividualTemplates()) {
+		//so need to adjust init sequence
+		IBeeRoot root = BeeHelper.getRoot();
+		for (IBee bee : root.getIndividualTemplates()) {//BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && bee.isSecret() && !Config.isDebug) {
 				continue;
 			}
-
-			ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, type);
-			if (!beeStack.isEmpty()) {
-				subItems.add(beeStack);
-			}
+			ItemStack stack = new ItemStack(this);
+			GeneticHelper.setIndividual(stack, bee);
+			subItems.add(stack);
 		}
 	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack itemstack, int tintIndex) {
-		if (itemstack.getTagCompound() == null) {
+	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
+		if (itemstack.getTag() == null) {
 			if (tintIndex == 1) {
 				return 0xffdc16;
 			} else {
@@ -138,33 +143,34 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 			}
 		}
 
-		IAlleleBeeSpecies species = BeeGenome.getSpecies(itemstack);
+		IAlleleBeeSpecies species = getSpecies(itemstack);
 		return species.getSpriteColour(tintIndex);
 	}
 
 	/* MODELS */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleBeeSpecies) {
 				((IAlleleBeeSpecies) allele).registerModels(item, manager);
 			}
 		}
-		manager.registerItemModel(item, new BeeMeshDefinition());
+		//TODO - flatten or something custom rendering I think
+		//		manager.registerItemModel(item, new BeeMeshDefinition(?));
 	}
 
-	@SideOnly(Side.CLIENT)
-	private class BeeMeshDefinition implements ItemMeshDefinition {
-		@Override
-		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			if (!stack.hasTagCompound()) { // villager trade wildcard bees
-				return DefaultBeeModelProvider.instance.getModel(type);
-			}
-			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
-			return species.getModel(type);
-		}
-	}
+	//	@OnlyIn(Dist.CLIENT)
+	//	private class BeeMeshDefinition implements ItemMeshDefinition {
+	//		@Override
+	//		public ModelResourceLocation getModelLocation(ItemStack stack) {
+	//			if (!stack.hasTag()) { // villager trade wildcard bees
+	//				return DefaultBeeModelProvider.instance.getModel(type);
+	//			}
+	//			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
+	//			return species.getModel(type);
+	//		}
+	//	}
 
 	public final EnumBeeType getType() {
 		return type;

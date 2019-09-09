@@ -13,9 +13,9 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -69,7 +69,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 			if (world.isAirBlock(pos)) {
 				continue;
 			}
-			IBlockState blockState = world.getBlockState(position);
+			BlockState blockState = world.getBlockState(position);
 			for (IFarmable farmable : getFarmables()) {
 				ICrop crop = farmable.getCropAt(world, position, blockState);
 				if (crop != null) {
@@ -91,13 +91,13 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 				break;
 			}
 
-			IBlockState blockState = world.getBlockState(position);
+			BlockState blockState = world.getBlockState(position);
 			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(blockState, world, position)) {
 				continue;
 			}
 
 			BlockPos soilPosition = position.down();
-			IBlockState soilState = world.getBlockState(soilPosition);
+			BlockState soilState = world.getBlockState(soilPosition);
 			if (isAcceptedSoil(soilState)) {
 				return trySetCrop(world, farmHousing, position, direction);
 			}

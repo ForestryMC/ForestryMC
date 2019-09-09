@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "forestry:can",
+    "count": 12
+  },
+  "pattern": [
+    " # ",
+    "# #"
+  ],
+  "conditions": [
+    {
+      "module": "core",
+      "type": "forestry:module"
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.can",
+  "key": {
+    "#": {
+      "item": "#INGOTTIN"
+    }
+  },
+  "group": "core"
+}

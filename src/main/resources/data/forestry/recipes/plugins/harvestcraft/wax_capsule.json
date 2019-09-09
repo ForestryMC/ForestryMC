@@ -1,0 +1,32 @@
+{
+  "result": {
+    "item": "forestry:capsule",
+    "count": 4
+  },
+  "pattern": [
+    "###"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "module": "apiculture",
+          "type": "forestry:module"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "harvestcraft"
+        }
+      ]
+    }
+  ],
+  "type": "forestry:variable_output",
+  "config_property": "recipe.output.capsule",
+  "key": {
+    "#": {
+      "item": "harvestcraft:beeswaxitem"
+    }
+  },
+  "group": "plugins"
+}

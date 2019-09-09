@@ -12,13 +12,14 @@ package forestry.core.gui.slots;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.api.distmarker.Dist;
+
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
@@ -35,7 +36,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+		if (FMLEnvironment.dist == Dist.CLIENT) {
 			setBackgroundLocation(TextureManagerForestry.getInstance().getGuiTextureMap());
 		}
 		this.stackLimit = -1;
@@ -77,7 +78,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean canTakeStack(EntityPlayer stack) {
+	public boolean canTakeStack(PlayerEntity stack) {
 		return !isPhantom();
 	}
 
@@ -109,7 +110,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean isMouseOver(int mouseX, int mouseY) {
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
 	}
 }

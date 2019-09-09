@@ -14,50 +14,52 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Locale;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.IItemHandler;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
+import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.gui.GuiHandler;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.inventory.StandardStackFilters;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemWithGui;
+import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Translator;
 import forestry.storage.BackpackMode;
 import forestry.storage.gui.ContainerBackpack;
-import forestry.storage.gui.GuiBackpack;
-import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
 
 public class ItemBackpack extends ItemWithGui implements IColoredItem {
@@ -65,11 +67,19 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final EnumBackpackType type;
 
 	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
+		this(definition, type, ItemGroupForestry.tabForestry);
+	}
+
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type, ItemGroup tab) {
+		super((new Item.Properties()).group(tab));
 		Preconditions.checkNotNull(definition, "Backpack must have a backpack definition.");
 		Preconditions.checkNotNull(type, "Backpack must have a backpack type.");
 
 		this.definition = definition;
 		this.type = type;
+		addPropertyOverride(new ResourceLocation("mode"), (itemStack, world, livingEntity) -> {
+			return getMode(itemStack).ordinal();
+		});
 	}
 
 	public IBackpackDefinition getDefinition() {
@@ -77,45 +87,45 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
-	public boolean getShareTag() {
-		return true;
+	protected void openGui(ServerPlayerEntity playerEntity, ItemStack stack) {
+		NetworkHooks.openGui(playerEntity, new ContainerProvider(stack), b -> {
+			PacketBufferForestry p = new PacketBufferForestry(b);
+			p.writeEnum(type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT, ContainerBackpack.Size.values());
+			p.writeItemStack(stack);
+		});
 	}
 
 	@Override
-	protected void openGui(EntityPlayer entityplayer) {
-		GuiHandler.openGui(entityplayer, this, (short) type.ordinal());
-	}
-
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if (!playerIn.isSneaking()) {
 			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
 			ItemStack heldItem = playerIn.getHeldItem(handIn);
 			switchMode(heldItem);
-			return ActionResult.newResult(EnumActionResult.SUCCESS, heldItem);
+			return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);
 		}
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (getInventoryHit(worldIn, pos, facing) != null) {
-			return EnumActionResult.SUCCESS;
+	public ActionResultType onItemUse(ItemUseContext ctx) {
+		if (getInventoryHit(ctx.getWorld(), ctx.getPos(), ctx.getFace()) != null) {
+			return ActionResultType.SUCCESS;
 		}
-		return EnumActionResult.FAIL;
+		return ActionResultType.FAIL;
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
 		// We only do this when shift is clicked
 		if (player.isSneaking()) {
-			ItemStack heldItem = player.getHeldItem(hand);
-			return evaluateTileHit(heldItem, player, world, pos, side) ? EnumActionResult.PASS : EnumActionResult.FAIL;
+			ItemStack heldItem = player.getHeldItem(context.getHand());
+			return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
 		}
-		return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
+		return super.onItemUseFirst(stack, context);
 	}
 
-	public static void tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
+	public static void tryStowing(PlayerEntity player, ItemStack backpackStack, ItemStack stack) {
 		if (getMode(backpackStack) == BackpackMode.LOCKED) {
 			return;
 		}
@@ -144,16 +154,16 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 			nextMode++;
 		}
 		nextMode %= BackpackMode.values().length;
-		itemstack.setItemDamage(nextMode);
+		itemstack.setDamage(nextMode);
 	}
 
 	@Nullable
-	private static IItemHandler getInventoryHit(World world, BlockPos pos, EnumFacing side) {
+	private static IItemHandler getInventoryHit(World world, BlockPos pos, Direction side) {
 		TileEntity targeted = TileUtil.getTile(world, pos);
 		return TileUtil.getInventoryFromTile(targeted, side);
 	}
 
-	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
+	private boolean evaluateTileHit(ItemStack stack, PlayerEntity player, World world, BlockPos pos, Direction side) {
 
 		// Shift right-clicking on an inventory tile will attempt to transfer
 		// items contained in the backpack
@@ -199,8 +209,8 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
@@ -208,50 +218,18 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		BackpackMode mode = getMode(itemstack);
 		String infoKey = mode.getUnlocalizedInfo();
 		if (infoKey != null) {
-			list.add(Translator.translateToLocal(infoKey));
+			list.add(new TranslationTextComponent(infoKey).applyTextStyle(TextFormatting.GRAY));
 		}
-		list.add(Translator.translateToLocal("for.gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE", String.valueOf(getBackpackSize())));
+		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).applyTextStyle(TextFormatting.GRAY));
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public ITextComponent getDisplayName(ItemStack itemstack) {
 		return definition.getName(itemstack);
 	}
 
-	/* MODELS */
-	@SideOnly(Side.CLIENT)
-	private ModelResourceLocation[] models;
-
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		EnumBackpackType t = type == EnumBackpackType.NATURALIST ? EnumBackpackType.NORMAL : type;
-		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
-		models = new ModelResourceLocation[4];
-		models[0] = new ModelResourceLocation("forestry:" + typeTag + "_neutral", "inventory");
-		models[1] = new ModelResourceLocation("forestry:" + typeTag + "_locked", "inventory");
-		models[2] = new ModelResourceLocation("forestry:" + typeTag + "_receive", "inventory");
-		models[3] = new ModelResourceLocation("forestry:" + typeTag + "_resupply", "inventory");
-		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_neutral"));
-		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_locked"));
-		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_receive"));
-		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + typeTag + "_resupply"));
-		manager.registerItemModel(item, new BackpackMeshDefinition());
-	}
-
-	@SideOnly(Side.CLIENT)
-	private class BackpackMeshDefinition implements ItemMeshDefinition {
-
-		@Override
-		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			BackpackMode mode = getMode(stack);
-			return models[mode.ordinal()];
-		}
-
-	}
-
-	@Override
-	public int getColorFromItemstack(ItemStack itemstack, int j) {
+	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
 		if (j == 0) {
 			return definition.getPrimaryColour();
@@ -277,7 +255,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	public static BackpackMode getMode(ItemStack backpack) {
 		Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
 
-		int meta = backpack.getItemDamage();
+		int meta = backpack.getDamage();
 
 		if (meta >= 3) {
 			return BackpackMode.RESUPPLY;
@@ -299,36 +277,46 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	@Nullable
-	@SideOnly(Side.CLIENT)
-	public GuiContainer getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		if (data > EnumBackpackType.values().length) {
-			return null;
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		Item item = heldItem.getItem();
+		if (!(item instanceof ItemBackpack)) {
+			return null;    //TODO OK?
 		}
-		EnumBackpackType type = EnumBackpackType.values()[data];
+		ItemBackpack backpack = (ItemBackpack) item;
+		EnumBackpackType type = backpack.type;
 		switch (type) {
 			case NORMAL:
-				return new GuiBackpack(new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem));
+				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
 			case WOVEN:
-				return new GuiBackpackT2(new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem));
+				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
 			default:
 				return null;
 		}
 	}
 
-	@Override
-	@Nullable
-	public Container getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		if (data > EnumBackpackType.values().length) {
-			return null;
+	//TODO see if this can be deduped. Given we pass in the held item etc.
+	public static class ContainerProvider implements INamedContainerProvider {
+
+		private ItemStack heldItem;
+
+		public ContainerProvider(ItemStack heldItem) {
+			this.heldItem = heldItem;
 		}
-		EnumBackpackType type = EnumBackpackType.values()[data];
-		switch (type) {
-			case NORMAL:
-				return new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, heldItem);
-			case WOVEN:
-				return new ContainerBackpack(player, ContainerBackpack.Size.T2, heldItem);
-			default:
+
+		@Override
+		public ITextComponent getDisplayName() {
+			return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
+		}
+
+		@Nullable
+		@Override
+		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+			Item item = heldItem.getItem();
+			if (!(item instanceof ItemBackpack)) {
 				return null;
+			}
+			ItemBackpack backpack = (ItemBackpack) item;
+			return backpack.getContainer(windowId, playerEntity, heldItem);
 		}
 	}
 }

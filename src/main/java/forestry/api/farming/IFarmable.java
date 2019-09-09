@@ -7,8 +7,8 @@ package forestry.api.farming;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,25 +20,14 @@ public interface IFarmable {
 
 	/**
 	 * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature version of the crop.
-	 * @deprecated Since Forestry 5.8. Use the version below. TODO Remove this method in 1.13
 	 */
-	@Deprecated
-	default boolean isSaplingAt(World world, BlockPos pos) {
-		return false;
-	}
-
-	/**
-	 * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature version of the crop.
-	 */
-	default boolean isSaplingAt(World world, BlockPos pos, IBlockState blockState) {
-		return isSaplingAt(world, pos);
-	}
+	boolean isSaplingAt(World world, BlockPos pos, BlockState blockState);
 
 	/**
 	 * @return {@link ICrop} if the block at the given location is a harvestable and mature crop, null otherwise.
 	 */
 	@Nullable
-	ICrop getCropAt(World world, BlockPos pos, IBlockState blockState);
+	ICrop getCropAt(World world, BlockPos pos, BlockState blockState);
 
 	/**
 	 * @return true if the item is a valid germling (plantable sapling, seed, etc.) for this type.
@@ -59,6 +48,6 @@ public interface IFarmable {
 	 *
 	 * @return true on success, false otherwise.
 	 */
-	boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos);
+	boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos);
 
 }

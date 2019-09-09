@@ -4,8 +4,8 @@
         "inventory": {
             "model": "forge:forgebucket",
             "textures": {
-                "base": "forestry:items/liquids/can.bottle",
-                "fluid": "forestry:items/liquids/can.contents"
+              "base": "forestry:item/liquids/can.bottle",
+              "fluid": "forestry:item/liquids/can.contents"
             },
             "transform": "forge:default-item"
         }

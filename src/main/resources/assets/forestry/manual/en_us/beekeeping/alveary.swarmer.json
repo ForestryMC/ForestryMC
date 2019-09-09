@@ -17,10 +17,10 @@
 		],
 		[
 			{
-				"text": "Similar to the Alveary Fan and Alveary Heater Blocks, the Swarmer replaces one of the blocks in the Apiary. Right-click it to access its inventory, and place Royal Jelly inside it for it to operate."
+              "text": "Similar to the Alveary Fan and Alveary Heater block, the Swarmer replaces one of the block in the Apiary. Right-click it to access its inventory, and place Royal Jelly inside it for it to operate."
 			},
 			{
-				"text": "When a hive is ready to spawn and a new hive will appear in the world somewhere nearby, within about 25 blocks of the alveary. It will contain only the new princess.",
+              "text": "When a hive is ready to spawn and a new hive will appear in the world somewhere nearby, within about 25 block of the alveary. It will contain only the new princess.",
 				"paragraph": true
 			}
 		]
