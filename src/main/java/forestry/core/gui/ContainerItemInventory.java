@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.inventory.ItemInventory;
 
-//TODO - container types now registry things...
 public abstract class ContainerItemInventory<I extends ItemInventory> extends ContainerForestry {
 
 	protected final I inventory;
