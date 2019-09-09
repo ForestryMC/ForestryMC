@@ -37,7 +37,7 @@ import forestry.farming.logic.crops.CropDestroy;
 public class FarmableGE implements IFarmable {
 
 	//StackMap used because a normal HashSet didn't seem to work
-	//TODO use items instead and normal set if this is still used in 1.14+ since items are flattened.s
+	//TODO use items instead and normal set if this is still used in 1.14+ since items are flattened
 	private final StackMap<ItemStack, Boolean> windfall = new ItemStackMap<>();
 
 	//TODO would be nice to make this class more granular so windfall and germling checks could be more specific
