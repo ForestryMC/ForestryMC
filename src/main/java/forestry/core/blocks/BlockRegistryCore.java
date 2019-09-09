@@ -13,7 +13,11 @@ package forestry.core.blocks;
 import java.util.EnumMap;
 import java.util.Map;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.StairsBlock;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.items.ItemBlockBase;
@@ -25,7 +29,7 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore escritoire;
 	public final BlockBogEarth bogEarth;
 	public final BlockHumus humus;
-	public final BlockAshBrick ashBrick;
+	public final Block ashBrick;
 	public final StairsBlock ashStairs;
 	public final Map<EnumResourceType, BlockResourceStorage> resourceStorage = new EnumMap<>(EnumResourceType.class);
 	public final Map<EnumResourceType, BlockResourceOre> resourceOre = new EnumMap<>(EnumResourceType.class);
@@ -87,10 +91,12 @@ public class BlockRegistryCore extends BlockRegistry {
 		//		resourceStorageBronze = resourceStorage.getComb(EnumResourceType.BRONZE);
 		//		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
 
-		ashBrick = new BlockAshBrick();
+		ashBrick = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE)
+			.hardnessAndResistance(2.0f, 10.0f)
+			.sound(SoundType.STONE));
 		registerBlock(ashBrick, new ItemBlockForestry<>(ashBrick), "ash_brick");
 
-		ashStairs = new BlockAshStairs(ashBrick.getDefaultState());
+		ashStairs = new BlockStairs(ashBrick.getDefaultState());
 		registerBlock(ashStairs, new ItemBlockForestry<>(ashStairs), "ash_stairs");
 
 		// register some common oreDict names for our recipes

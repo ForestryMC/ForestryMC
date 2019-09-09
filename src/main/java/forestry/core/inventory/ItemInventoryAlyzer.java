@@ -15,7 +15,6 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Optional;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -27,10 +26,8 @@ import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.items.ItemOverlay;
 import forestry.core.utils.GeneticsUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -54,10 +51,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-
-			Item item = itemstack.getItem();
-			return (item instanceof ItemOverlay && beeItems.honeyDrops.containsValue(item)) || beeItems.honeydew == item;
+			return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
 		}
 
 		return false;

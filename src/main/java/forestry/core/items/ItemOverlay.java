@@ -17,10 +17,11 @@ import net.minecraft.util.NonNullList;
 
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
+import forestry.modules.features.IItemSubtype;
 
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 
-	public interface IOverlayInfo {
+	public interface IOverlayInfo extends IItemSubtype {
 		String getUid();
 
 		int getPrimaryColor();

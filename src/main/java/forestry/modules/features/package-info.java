@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
-@FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package forestry.core.advancements;
+@FieldsAreNonnullByDefault
+package forestry.modules.features;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

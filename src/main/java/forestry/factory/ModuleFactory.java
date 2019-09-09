@@ -51,10 +51,9 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
-import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
 import forestry.core.blocks.BlockBogEarth;
@@ -405,8 +404,6 @@ public class ModuleFactory extends BlankForestryModule {
 		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
-
 			if (!liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
 				for (int i = 0; i < 16; i++) {
 					//TODO - needs tag loop or tag match in recipe
@@ -561,23 +558,22 @@ public class ModuleFactory extends BlankForestryModule {
 
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, coreItems.iodineCharge.getItemStack(),
 				"Z#Z",
 				"#Y#",
 				"X#X",
-				'#', beeItems.getPollen(EnumPollenCluster.NORMAL, 1),    //TODO was a tag before
+				'#', ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1),    //TODO was a tag before
 				'X', Items.GUNPOWDER,
 				'Y', fluidItems.canEmpty,
-				'Z', beeItems.getHoneyDrop(EnumHoneyDrop.HONEY, 1));
+				'Z', ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1));
 			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, coreItems.getCraftingMaterial(EnumCraftingMaterial.DISSIPATION_CHARGE, 1),
 				"Z#Z",
 				"#Y#",
 				"X#X",
-				'#', beeItems.royalJelly,
+				'#', ApicultureItems.ROYAL_JELLY.stack(),
 				'X', Items.GUNPOWDER,
 				'Y', fluidItems.canEmpty,
-				'Z', beeItems.honeydew);
+				'Z', ApicultureItems.HONEYDEW.stack());
 		}
 
 		// Ender pearl

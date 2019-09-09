@@ -1,0 +1,10 @@
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+@FieldsAreNonnullByDefault
+package forestry.modules.features.constructors;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;
+
+import forestry.core.utils.FieldsAreNonnullByDefault;

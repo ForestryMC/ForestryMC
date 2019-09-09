@@ -35,7 +35,7 @@ import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumCraftingMaterial;
@@ -88,7 +88,7 @@ public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-		if (stack != null && stack.getItem() == ModuleApiculture.getItems().apiaristLegs) {
+		if (ApicultureItems.APIARIST_LEGS.itemEqual(stack)) {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;

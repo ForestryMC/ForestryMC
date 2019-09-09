@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +29,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 
 import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
@@ -38,7 +36,6 @@ import genetics.api.root.IRootDefinition;
 
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.core.advancements.SpeciesDiscoveredTrigger;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.utils.NetworkUtil;
 
@@ -129,11 +126,6 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 				writeToNBT(compound, discoveredSpecies, discoveredMutations, researchedMutations);
 				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(compound);
 				NetworkUtil.sendToPlayer(packet, player);
-
-				for (String species : discoveredSpecies) {
-					Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(species);
-					optionalAllele.ifPresent(allele -> SpeciesDiscoveredTrigger.INSTANCE.trigger((ServerPlayerEntity) player, allele));
-				}
 			}
 		}
 	}

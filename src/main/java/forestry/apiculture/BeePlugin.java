@@ -32,6 +32,7 @@ import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeHelper;
@@ -39,7 +40,6 @@ import forestry.apiculture.genetics.BeeRoot;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.apiculture.items.ItemHoneyComb;
-import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.genetics.root.IResearchPlugin;
@@ -84,10 +84,10 @@ public class BeePlugin implements IGeneticPlugin {
 			.setRootFactory(BeeRoot::new)
 			.setSpeciesType(BeeChromosomes.SPECIES)
 			.addListener(ComponentKeys.TYPES, (IOrganismTypes<IBee> builder) -> {
-				builder.registerType(EnumBeeType.DRONE, () -> new ItemStack(ModuleApiculture.getItems().beeDroneGE));
-				builder.registerType(EnumBeeType.PRINCESS, () -> new ItemStack(ModuleApiculture.getItems().beePrincessGE));
-				builder.registerType(EnumBeeType.QUEEN, () -> new ItemStack(ModuleApiculture.getItems().beeQueenGE));
-				builder.registerType(EnumBeeType.LARVAE, () -> new ItemStack(ModuleApiculture.getItems().beeLarvaeGE));
+				builder.registerType(EnumBeeType.DRONE, ApicultureItems.BEE_DRONE::stack);
+				builder.registerType(EnumBeeType.PRINCESS, ApicultureItems.BEE_PRINCESS::stack);
+				builder.registerType(EnumBeeType.QUEEN, ApicultureItems.BEE_QUEEN::stack);
+				builder.registerType(EnumBeeType.LARVAE, ApicultureItems.BEE_LARVAE::stack);
 			})
 			.addComponent(ComponentKeys.TRANSLATORS)
 			.addComponent(ComponentKeys.MUTATIONS)
@@ -95,11 +95,10 @@ public class BeePlugin implements IGeneticPlugin {
 			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<IBee> builder) -> builder.addPlugin(new IResearchPlugin() {
 				@Override
 				public float getResearchSuitability(IAlleleSpecies species, ItemStack itemStack) {
-					ItemRegistryApiculture beeItems = ModuleApiculture.getItems();
 					Item item = itemStack.getItem();
-					if (item instanceof ItemOverlay && beeItems.honeyDrops.containsValue(item)) {
+					if (item instanceof ItemOverlay && ApicultureItems.HONEY_DROPS.itemEqual(item)) {
 						return 0.5f;
-					} else if (beeItems.honeydew == item) {
+					} else if (ApicultureItems.HONEYDEW.itemEqual(item)) {
 						return 0.7f;
 						//TODO tag lookup?
 					} else if (item instanceof ItemHoneyComb) {

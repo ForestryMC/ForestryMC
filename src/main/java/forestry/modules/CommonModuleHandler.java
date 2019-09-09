@@ -14,8 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import net.minecraftforge.fml.InterModComms;
 
@@ -26,10 +27,11 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
+import forestry.modules.features.ModFeatureRegistry;
 //import forestry.plugins.ForestryCompatPlugins;
 
 //TODO - most of this needs tearing up and replacing
-public class InternalModuleHandler {
+public class CommonModuleHandler {
 
 	//TODO use toposort for sorting dependancies?
 	public enum Stage {
@@ -43,13 +45,15 @@ public class InternalModuleHandler {
 		FINISHED
 	}
 
+	protected final ModFeatureRegistry registry;
 	protected final Set<BlankForestryModule> modules = new LinkedHashSet<>();
 	protected final Set<IForestryModule> disabledModules = new LinkedHashSet<>();
 	protected final ModuleManager moduleManager;
 	private Stage stage = Stage.SETUP;
 
-	public InternalModuleHandler(ModuleManager moduleManager) {
+	public CommonModuleHandler(ModuleManager moduleManager) {
 		this.moduleManager = moduleManager;
+		this.registry = ModFeatureRegistry.get(Constants.MOD_ID);
 	}
 
 	public void addModules(Collection<IForestryModule> modules, Collection<IForestryModule> disabledModules) {
@@ -88,6 +92,10 @@ public class InternalModuleHandler {
 
 	public void registerBlocks() {
 		for (IForestryModule module : modules) {
+			module.registerFeatures();
+		}
+		registry.createObjects();
+		for (IForestryModule module : modules) {
 			module.registerBlocks();
 		}
 	}
@@ -96,6 +104,10 @@ public class InternalModuleHandler {
 		for (IForestryModule module : modules) {
 			module.registerItems();
 		}
+	}
+
+	public <T extends IForgeRegistryEntry<T>> void onObjectRegistration(RegistryEvent.Register<T> event) {
+		registry.onRegister(event);
 	}
 
 	//TODO generics or something on these registry events
@@ -124,11 +136,11 @@ public class InternalModuleHandler {
 		}
 	}
 
-	public void runPreInit(Dist side) {
+	public void runPreInit() {
 		stage = Stage.PRE_INIT;
 		for (BlankForestryModule module : modules) {
 			Log.debug("Pre-Init Start: {}", module);
-			registerHandlers(module, side);
+			registerHandlers(module);
 			module.preInit();
 			//TODO - compat
 			if (false) {//moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
@@ -138,15 +150,12 @@ public class InternalModuleHandler {
 		}
 	}
 
-	private void registerHandlers(BlankForestryModule module, Dist side) {
+	private void registerHandlers(BlankForestryModule module) {
 		Log.debug("Registering Handlers for Module: {}", module);
 
 		IPacketRegistry packetRegistry = module.getPacketRegistry();
 		if (packetRegistry != null) {
-			packetRegistry.registerPacketsServer();
-			if (side == Dist.CLIENT) {
-				packetRegistry.registerPacketsClient();
-			}
+			registerPackages(packetRegistry);
 		}
 
 		IPickupHandler pickupHandler = module.getPickupHandler();
@@ -163,6 +172,10 @@ public class InternalModuleHandler {
 		if (resupplyHandler != null) {
 			ModuleManager.resupplyHandlers.add(resupplyHandler);
 		}
+	}
+
+	protected void registerPackages(IPacketRegistry packetRegistry) {
+		packetRegistry.registerPacketsServer();
 	}
 
 	public void runInit() {

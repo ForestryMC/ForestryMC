@@ -31,7 +31,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.ItemGroupForestry;
 import forestry.core.blocks.IBlockRotatable;
-import forestry.core.blocks.IBlockWithMeta;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
@@ -54,13 +53,7 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 
 	@Override
 	public String getTranslationKey(ItemStack itemstack) {
-		Block block = getBlock();
-		if (block instanceof IBlockWithMeta) {
-			IBlockWithMeta blockMeta = (IBlockWithMeta) block;
-			int meta = 0;//TODO flatten itemstack.getMetadata();
-			return block.getTranslationKey() + "." + blockMeta.getNameFromMeta(meta);
-		}
-		return block.getTranslationKey();
+		return getBlock().getTranslationKey();
 	}
 
 	@Override

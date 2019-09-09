@@ -52,6 +52,6 @@ public class ModuleBook extends BlankForestryModule {
 
 	@Override
 	public void postInit() {
-		ModuleManager.getInternalHandler().runBookInit();
+		ModuleManager.getModuleHandler().runBookInit();
 	}
 }

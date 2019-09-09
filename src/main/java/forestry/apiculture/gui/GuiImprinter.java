@@ -23,7 +23,7 @@ import genetics.api.organism.IOrganism;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
@@ -48,7 +48,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		this.ySize = 185;
 
 		NonNullList<ItemStack> beeList = NonNullList.create();
-		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
+		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
 			if (organism.isEmpty()) {

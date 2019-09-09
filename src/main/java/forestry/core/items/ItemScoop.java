@@ -25,7 +25,7 @@ public class ItemScoop extends ItemForestryTool implements IToolScoop {
 		super(ItemStack.EMPTY, (new Item.Properties())
 			.maxDamage(10)
 			.group(ItemGroups.tabApiculture)
-			.addToolType(SCOOP, 1));
+			.addToolType(SCOOP, 3));
 		setEfficiencyOnProperMaterial(2.0f);
 	}
 }

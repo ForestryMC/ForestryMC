@@ -27,7 +27,7 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.core.config.Config;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.TextLayoutHelper;
@@ -43,7 +43,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 	private BeeAlyzerPlugin() {
 		NonNullList<ItemStack> beeList = NonNullList.create();
-		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
+		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
 			if (organism.isEmpty()) {

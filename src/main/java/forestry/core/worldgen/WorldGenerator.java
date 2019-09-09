@@ -66,7 +66,7 @@ public class WorldGenerator implements IWorldGenerator {
 
 	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
 		generateWorld(random, chunkX, chunkZ, world);
-		ModuleManager.getInternalHandler().populateChunkRetroGen(world, random, chunkX, chunkZ);
+		ModuleManager.getModuleHandler().populateChunkRetroGen(world, random, chunkX, chunkZ);
 		world.getChunk(chunkX, chunkZ).markDirty();
 	}
 

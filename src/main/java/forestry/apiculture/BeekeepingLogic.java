@@ -51,6 +51,7 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.core.config.Constants;
@@ -388,7 +389,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		CompoundNBT compound = new CompoundNBT();
 		princess.write(compound);
-		queenStack = new ItemStack(ModuleApiculture.getItems().beeQueenGE);
+		queenStack = ApicultureItems.BEE_QUEEN.stack();
 		queenStack.setTag(compound);
 
 		beeInventory.setQueen(queenStack);
@@ -419,7 +420,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		} else {
 			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
-			ItemStack convert = new ItemStack(ModuleApiculture.getItems().beePrincessGE);
+			ItemStack convert = ApicultureItems.BEE_PRINCESS.stack();
 			CompoundNBT CompoundNBT = new CompoundNBT();
 			queen.write(CompoundNBT);
 			convert.setTag(CompoundNBT);

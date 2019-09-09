@@ -32,6 +32,7 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -140,11 +141,11 @@ public class Forestry {
 		Proxies.render = DistExecutor.runForDist(() -> () -> new ProxyRenderClient(), () -> () -> new ProxyRender());
 		Proxies.common = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyCommon());
 
-		ModuleManager.getInternalHandler().runSetup();
+		ModuleManager.getModuleHandler().runSetup();
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
-		ModuleManager.getInternalHandler().registerGuiFactories();
+		ModuleManager.getModuleHandler().registerGuiFactories();
 	}
 
 	@Nullable
@@ -171,11 +172,11 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
 		//TODO - DistExecutor
-		ModuleManager.getInternalHandler().runPreInit(Dist.DEDICATED_SERVER);
+		ModuleManager.getModuleHandler().runPreInit();
 		Proxies.render.registerItemAndBlockColors();
 		//TODO put these here for now
-		ModuleManager.getInternalHandler().runInit();
-		ModuleManager.getInternalHandler().runPostInit();
+		ModuleManager.getModuleHandler().runInit();
+		ModuleManager.getModuleHandler().runPostInit();
 	}
 
 	private void gatherData(GatherDataEvent event) {
@@ -195,6 +196,12 @@ public class Forestry {
 
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
 	public static class RegistryEvents {
+		@SubscribeEvent(priority = EventPriority.HIGH)
+		@SuppressWarnings("unchecked")
+		public static void onRegister(RegistryEvent.Register event) {
+			ModuleManager.getModuleHandler().onObjectRegistration(event);
+		}
+
 		@SubscribeEvent
 		public static void registerFluids(RegistryEvent.Register<Fluid> event) {
 			ModuleFluids.registerFluids();
@@ -202,29 +209,29 @@ public class Forestry {
 
 		@SubscribeEvent
 		public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
-			ModuleManager.getInternalHandler().registerBlocks();
+			ModuleManager.getModuleHandler().registerBlocks();
 		}
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
-			ModuleManager.getInternalHandler().registerItems();
+			ModuleManager.getModuleHandler().registerItems();
 
-			ModuleManager.getInternalHandler().runRegisterBackpacksAndCrates();
+			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
 		}
 
 		@SubscribeEvent
 		public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-			ModuleManager.getInternalHandler().registerTileEntities();
+			ModuleManager.getModuleHandler().registerTileEntities();
 		}
 
 		@SubscribeEvent
 		public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event) {
-			ModuleManager.getInternalHandler().registerContainerTypes(event.getRegistry());
+			ModuleManager.getModuleHandler().registerContainerTypes(event.getRegistry());
 		}
 
 		@SubscribeEvent
 		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
-			ModuleManager.getInternalHandler().registerEntityTypes(event.getRegistry());
+			ModuleManager.getModuleHandler().registerEntityTypes(event.getRegistry());
 		}
 
 		@SubscribeEvent
@@ -276,6 +283,6 @@ public class Forestry {
 	}
 
 	public void processIMCMessages(InterModProcessEvent event) {
-		ModuleManager.getInternalHandler().processIMCMessages(event.getIMCStream());
+		ModuleManager.getModuleHandler().processIMCMessages(event.getIMCStream());
 	}
 }

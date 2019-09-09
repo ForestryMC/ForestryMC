@@ -73,6 +73,7 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockRegistryApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeFactory;
@@ -93,7 +94,6 @@ import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
-import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.tiles.TileRegistryApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -102,6 +102,7 @@ import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
+import forestry.core.ItemGroupForestry;
 import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
@@ -129,8 +130,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Nullable
 	private static TextureAtlasSprite beeSprite;
 	@Nullable
-	private static ItemRegistryApiculture items;
-	@Nullable
 	private static BlockRegistryApiculture blocks;
 	@Nullable
 	private static TileRegistryApiculture tiles;
@@ -156,11 +155,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerProfession villagerApiarist;
-
-	public static ItemRegistryApiculture getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
 
 	public static BlockRegistryApiculture getBlocks() {
 		Preconditions.checkNotNull(blocks);
@@ -209,13 +203,15 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryApiculture();
+	public void registerFeatures() {
+		//TODO: Remove this workaround to load the classes
+		ItemGroupForestry.tabForestry.getClass();
+		ApicultureItems.REGISTRY.getClass();
 	}
 
 	@Override
-	public void registerItems() {
-		items = new ItemRegistryApiculture();
+	public void registerBlocks() {
+		blocks = new BlockRegistryApiculture();
 	}
 
 	@Override
@@ -320,11 +316,10 @@ public class ModuleApiculture extends BlankForestryModule {
 		createHives();
 		registerBeehiveDrops();
 
-		ItemRegistryApiculture items = getItems();
 		BlockRegistryApiculture blocks = getBlocks();
 
 		// Inducers for swarmer
-		BeeManager.inducers.put(items.royalJelly.getItemStack(), 10);
+		BeeManager.inducers.put(ApicultureItems.ROYAL_JELLY.stack(), 10);
 
 		//TODO EntityType.MinecatyEntity or similar
 		ResourceLocation beeHouseCartResource = new ResourceLocation(Constants.MOD_ID, "cart.beehouse");
@@ -463,29 +458,28 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void registerCrates() {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
-		ItemRegistryApiculture items = getItems();
 
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		crateRegistry.registerCrate(coreItems.beeswax.getItemStack());
-		crateRegistry.registerCrate(items.getPollen(EnumPollenCluster.NORMAL, 1));
-		crateRegistry.registerCrate(items.getPollen(EnumPollenCluster.CRYSTALLINE, 1));
-		crateRegistry.registerCrate(items.getPropolis(EnumPropolis.NORMAL, 1));    //TODO
-		crateRegistry.registerCrate(items.honeydew.getItemStack());
-		crateRegistry.registerCrate(items.royalJelly.getItemStack());
+		crateRegistry.registerCrate(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL));
+		crateRegistry.registerCrate(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE));
+		crateRegistry.registerCrate(ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL));
+		crateRegistry.registerCrate(ApicultureItems.HONEYDEW.stack());
+		crateRegistry.registerCrate(ApicultureItems.ROYAL_JELLY.stack());
 
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.HONEY, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.COCOA, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.SIMMERING, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.STRINGY, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.FROZEN, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.DRIPPING, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.SILKY, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.PARCHED, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.MYSTERIOUS, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.POWDERY, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.WHEATEN, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.MOSSY, 1));
-		crateRegistry.registerCrate(items.getComb(EnumHoneyComb.MELLOW, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.COCOA, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SIMMERING, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.STRINGY, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.DRIPPING, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.POWDERY, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.WHEATEN, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1));
+		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MELLOW, 1));
 
 		crateRegistry.registerCrate(coreItems.refractoryWax.getItemStack());
 	}
@@ -493,17 +487,16 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		ItemRegistryCore coreItems = ModuleCore.getItems();
-		ItemRegistryApiculture items = getItems();
 		BlockRegistryApiculture blocks = getBlocks();
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 
-			ItemStack honeyDrop = items.getHoneyDrop(EnumHoneyDrop.HONEY, 1);
+			ItemStack honeyDrop = ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1);
 			// / SQUEEZER
 			FluidStack honeyDropFluid = ForestryFluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			if (!honeyDropFluid.isEmpty()) {
-				RecipeManagers.squeezerManager.addRecipe(10, honeyDrop, honeyDropFluid, items.getPropolis(EnumPropolis.NORMAL, 1), 5);
-				RecipeManagers.squeezerManager.addRecipe(10, items.honeydew.getItemStack(), honeyDropFluid);
+				RecipeManagers.squeezerManager.addRecipe(10, honeyDrop, honeyDropFluid, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 5);
+				RecipeManagers.squeezerManager.addRecipe(10, ApicultureItems.HONEYDEW.stack(), honeyDropFluid);
 			}
 
 			ItemStack phosphor = coreItems.phosphor.getItemStack(2);
@@ -527,9 +520,9 @@ public class ModuleApiculture extends BlankForestryModule {
 			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.HONEY.getFluid(500), ItemStack.EMPTY, coreItems.getCraftingMaterial(EnumCraftingMaterial.SCENTED_PANELING, 1),
 				" J ", "###", "WPW",
 				'#', OreDictUtil.PLANK_WOOD,
-				'J', items.royalJelly,
+				'J', ApicultureItems.ROYAL_JELLY.stack(),
 				'W', coreItems.beeswax,
-				'P', items.getPollen(EnumPollenCluster.NORMAL, 1));
+				'P', ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1));
 
 			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(Fluids.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
 				" X ",
@@ -544,121 +537,120 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			// / CENTRIFUGE
 			// Honey combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.HONEY, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1), ImmutableMap.of(
 				coreItems.beeswax.getItemStack(), 1.0f,
 				honeyDrop, 0.9f
 			));
 
 			// Cocoa combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.COCOA, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.COCOA, 1), ImmutableMap.of(
 				coreItems.beeswax.getItemStack(), 1.0f,
 				new ItemStack(Items.COCOA_BEANS), 0.5f
 			));
 
 			// Simmering combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.SIMMERING, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SIMMERING, 1), ImmutableMap.of(
 				coreItems.refractoryWax.getItemStack(), 1.0f,
 				coreItems.phosphor.getItemStack(2), 0.7f
 			));
 
 			// Stringy combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.STRINGY, 1), ImmutableMap.of(
-				items.getPropolis(EnumPropolis.NORMAL, 1), 1.0f,
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.STRINGY, 1), ImmutableMap.of(
+				ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 1.0f,
 				honeyDrop, 0.4f
 			));
 
 			// Dripping combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.DRIPPING, 1), ImmutableMap.of(
-				items.honeydew.getItemStack(), 1.0f,
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.DRIPPING, 1), ImmutableMap.of(
+				ApicultureItems.HONEYDEW.stack(), 1.0f,
 				honeyDrop, 0.4f
 			));
 
 			// Frozen combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.FROZEN, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1), ImmutableMap.of(
 				coreItems.beeswax.getItemStack(), 0.8f,
 				honeyDrop, 0.7f,
 				new ItemStack(Items.SNOWBALL), 0.4f,
-				items.getPollen(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
+				ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
 			));
 
 			// Silky combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.SILKY, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1), ImmutableMap.of(
 				honeyDrop, 1.0f,
-				items.getPropolis(EnumPropolis.SILKY, 1), 0.8f
+				ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1), 0.8f
 			));
 
 			// Parched combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.PARCHED, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1), ImmutableMap.of(
 				coreItems.beeswax.getItemStack(), 1.0f,
 				honeyDrop, 0.9f
 			));
 
 			// Mysterious combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.MYSTERIOUS, 1), ImmutableMap.of(
-				items.getPropolis(EnumPropolis.PULSATING, 1), 1.0f,
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1), ImmutableMap.of(
+				ApicultureItems.PROPOLIS.stack(EnumPropolis.PULSATING, 1), 1.0f,
 				honeyDrop, 0.4f
 			));
 
 			// Irradiated combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.IRRADIATED, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.IRRADIATED, 1), ImmutableMap.of(
 			));
 
 			// Powdery combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.POWDERY, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.POWDERY, 1), ImmutableMap.of(
 				honeyDrop, 0.2f,
 				coreItems.beeswax.getItemStack(), 0.2f,
 				new ItemStack(Items.GUNPOWDER), 0.9f
 			));
 
 			// Wheaten Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.WHEATEN, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.WHEATEN, 1), ImmutableMap.of(
 				honeyDrop, 0.2f,
 				coreItems.beeswax.getItemStack(), 0.2f,
 				new ItemStack(Items.WHEAT), 0.8f
 			));
 
 			// Mossy Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.MOSSY, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1), ImmutableMap.of(
 				coreItems.beeswax.getItemStack(), 1.0f,
 				honeyDrop, 0.9f
 			));
 
 			// Mellow Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, items.getComb(EnumHoneyComb.MELLOW, 1), ImmutableMap.of(
-				items.honeydew.getItemStack(), 0.6f,
+			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MELLOW, 1), ImmutableMap.of(
+				ApicultureItems.HONEYDEW.stack(), 0.6f,
 				coreItems.beeswax.getItemStack(), 0.2f,
 				new ItemStack(Items.QUARTZ), 0.3f
 			));
 
 			// Silky Propolis
-			RecipeManagers.centrifugeManager.addRecipe(5, items.getPropolis(EnumPropolis.SILKY, 1), ImmutableMap.of(
+			RecipeManagers.centrifugeManager.addRecipe(5, ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1), ImmutableMap.of(
 				coreItems.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 1), 0.6f,
-				items.getPropolis(EnumPropolis.NORMAL, 1), 0.1f
+				ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 0.1f
 			));
 
 			// / FERMENTER
 			FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
 			FluidStack honey = ForestryFluids.HONEY.getFluid(1);
 			if (!shortMead.isEmpty() && !honey.isEmpty()) {
-				RecipeManagers.fermenterManager.addRecipe(items.honeydew.getItemStack(), 500, 1.0f, shortMead, honey);
+				RecipeManagers.fermenterManager.addRecipe(ApicultureItems.HONEYDEW.stack(), 500, 1.0f, shortMead, honey);
 			}
 		}
 
 		// BREWING RECIPES
 		BrewingRecipeRegistry.addRecipe(
 			Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
-			Ingredient.fromStacks(items.getPollen(EnumPollenCluster.NORMAL, 1)),
+			Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1)),
 			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING));
 		BrewingRecipeRegistry.addRecipe(
 			Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
-			Ingredient.fromStacks(items.getPollen(EnumPollenCluster.CRYSTALLINE, 1)),
+			Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1)),
 			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION));
 
 	}
 
 	private static void registerBeehiveDrops() {
-		ItemRegistryApiculture items = getItems();
-		ItemStack honeyComb = items.getComb(EnumHoneyComb.HONEY, 1);
+		ItemStack honeyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1);
 		HiveRegistry hiveRegistry = getHiveRegistry();
 
 		hiveRegistry.addDrops(HiveType.FOREST.getHiveUid(),
@@ -672,30 +664,30 @@ public class ModuleApiculture extends BlankForestryModule {
 			new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
-		ItemStack parchedComb = items.getComb(EnumHoneyComb.PARCHED, 1);
+		ItemStack parchedComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1);
 		hiveRegistry.addDrops(HiveType.DESERT.getHiveUid(),
 			new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
 			new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
 		);
 
-		ItemStack silkyComb = items.getComb(EnumHoneyComb.SILKY, 1);
+		ItemStack silkyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1);
 		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveUid(),
 			new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
 			new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
 		);
 
-		ItemStack mysteriousComb = items.getComb(EnumHoneyComb.MYSTERIOUS, 1);
+		ItemStack mysteriousComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1);
 		hiveRegistry.addDrops(HiveType.END.getHiveUid(),
 			new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
-		ItemStack frozenComb = items.getComb(EnumHoneyComb.FROZEN, 1);
+		ItemStack frozenComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1);
 		hiveRegistry.addDrops(HiveType.SNOW.getHiveUid(),
 			new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
 			new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
 		);
 
-		ItemStack mossyComb = items.getComb(EnumHoneyComb.MOSSY, 1);
+		ItemStack mossyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1);
 		hiveRegistry.addDrops(HiveType.SWAMP.getHiveUid(),
 			new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
 			new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)

@@ -30,6 +30,7 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.core.inventory.IInventoryAdapter;
@@ -63,7 +64,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 
 	@Override
 	public ItemStack getCartItem() {
-		return ModuleApiculture.getItems().minecartBeehouse.getBeeHouseMinecart();
+		return ApicultureItems.MINECART_BEEHOUSE.item().getBeeHouseMinecart();
 	}
 
 	/* IBeeHousing */

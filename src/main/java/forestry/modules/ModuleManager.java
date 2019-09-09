@@ -16,7 +16,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +30,8 @@ import java.util.stream.Collectors;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
@@ -48,16 +49,16 @@ public class ModuleManager implements IModuleManager {
 	private static final String CONFIG_CATEGORY = "modules";
 	private static ModuleManager ourInstance = new ModuleManager();
 
-	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
-	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
-	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
+	public static final List<IPickupHandler> pickupHandlers = Lists.newArrayList();
+	public static final List<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
+	public static final List<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
 
 	private static final HashMap<ResourceLocation, IForestryModule> sortedModules = new LinkedHashMap<>();
 	private static final Set<IForestryModule> loadedModules = new LinkedHashSet<>();
 	private static final Set<IForestryModule> unloadedModules = new LinkedHashSet<>();
 	private static final HashMap<String, IModuleContainer> moduleContainers = new HashMap<>();
 	public static final Set<IForestryModule> configDisabledModules = new HashSet<>();
-	public static InternalModuleHandler internalHandler;
+	public static CommonModuleHandler moduleHandler;
 
 	private ModuleManager() {
 	}
@@ -221,17 +222,16 @@ public class ModuleManager implements IModuleManager {
 		Locale.setDefault(locale);
 	}
 
-	//TODO - Is this still called early enough? I don't think modules are getting recognised
 	public static void runSetup() {
 		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules();
 
-		internalHandler = new InternalModuleHandler(getInstance());
+		moduleHandler = DistExecutor.runForDist(() -> () -> new ClientModuleHandler(getInstance()), () -> () -> new CommonModuleHandler(getInstance()));
 		configureModules(forestryModules);
 	}
 
-	public static InternalModuleHandler getInternalHandler() {
-		Preconditions.checkNotNull(internalHandler);
-		return internalHandler;
+	public static CommonModuleHandler getModuleHandler() {
+		Preconditions.checkNotNull(moduleHandler);
+		return moduleHandler;
 	}
 
 	public static void serverStarting(MinecraftServer server) {

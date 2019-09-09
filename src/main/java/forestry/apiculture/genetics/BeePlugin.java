@@ -17,7 +17,7 @@ import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.genetics.DatabaseMode;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.config.Config;
 import forestry.core.genetics.analyzer.DatabasePlugin;
@@ -33,10 +33,10 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 	private BeePlugin() {
 		super(new BeeDatabaseTab(DatabaseMode.ACTIVE),
 			new BeeDatabaseTab(DatabaseMode.INACTIVE),
-			new ProductsTab(() -> ModuleApiculture.getItems().getComb(EnumHoneyComb.HONEY, 1)),
-			new MutationsTab(() -> ModuleApiculture.getItems().frameImpregnated.getItemStack()));
+			new ProductsTab(() -> ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY)),
+			new MutationsTab(ApicultureItems.FRAME_IMPREGNATED::stack));
 		NonNullList<ItemStack> beeList = NonNullList.create();
-		ModuleApiculture.getItems().beeDroneGE.addCreativeItems(beeList, false);
+		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
 			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
 			if (organism.isEmpty()) {

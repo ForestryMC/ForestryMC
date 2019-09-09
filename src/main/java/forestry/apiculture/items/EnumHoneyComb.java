@@ -15,7 +15,10 @@ import java.util.Locale;
 
 import net.minecraft.util.IStringSerializable;
 
-public enum EnumHoneyComb implements IStringSerializable {
+import forestry.modules.features.IBlockSubtype;
+import forestry.modules.features.IItemSubtype;
+
+public enum EnumHoneyComb implements IStringSerializable, IItemSubtype, IBlockSubtype {
 	HONEY(new Color(0xe8d56a), new Color(0xffa12b)),
 	COCOA(new Color(0x674016), new Color(0xffb62b), true),
 	SIMMERING(new Color(0x981919), new Color(0xffb62b)),
@@ -67,5 +70,10 @@ public enum EnumHoneyComb implements IStringSerializable {
 			meta = 0;
 		}
 		return VALUES[meta];
+	}
+
+	@Override
+	public String getUid() {
+		return getName();
 	}
 }
