@@ -1,8 +1,10 @@
 {
     "variants": {
-        "facing=north": { "model": "forestry:database" },
-		"facing=east": { "model": "forestry:database", "y": 90 },
-		"facing=south": { "model": "forestry:database", "y": 180 },
-		"facing=west": { "model": "forestry:database", "y": -90 }
+		"facing=up": { "model": "forestry:block/database" },
+		"facing=down": { "model": "forestry:block/database" },
+        "facing=north": { "model": "forestry:block/database" },
+		"facing=east": { "model": "forestry:block/database", "y": 90 },
+		"facing=south": { "model": "forestry:block/database", "y": 180 },
+		"facing=west": { "model": "forestry:block/database", "y": -90 }
 	}
 }
