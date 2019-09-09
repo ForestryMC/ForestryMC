@@ -19,13 +19,11 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 
@@ -42,7 +40,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.AlleleManager;
@@ -78,8 +75,6 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.render.ColourProperties;
-import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.TileRegistryCore;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -158,12 +153,6 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public void registerBlocks() {
 		blocks = new BlockRegistryCore();
-
-		//TODO: Find better place for this, has to be loaded before setup
-		if (FMLEnvironment.dist == Dist.CLIENT) {
-			((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(ColourProperties.INSTANCE);
-			((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(TextureManagerForestry.getInstance());
-		}
 	}
 
 	@Override

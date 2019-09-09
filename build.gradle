@@ -112,11 +112,12 @@ repositories {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.14.4-28.0.93'
+	minecraft "net.minecraftforge:forge:${forgeversion}"
 
 	/*deobfProvided "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"*/
-	compile "mezz.jei:jei-${jei_mcversion}:${jei_version}:api"
-	compile "mezz.jei:jei-${jei_mcversion}:${jei_version}"
+	compileOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}:api")
+
+	runtimeOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}")
 	/*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"*/

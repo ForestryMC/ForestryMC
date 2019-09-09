@@ -19,20 +19,26 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -69,6 +75,8 @@ import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
 import forestry.core.recipes.ModuleEnabledCondition;
+import forestry.core.render.ColourProperties;
+import forestry.core.render.TextureManagerForestry;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -119,6 +127,7 @@ public class Forestry {
 		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
 		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
 		EnumErrorCode.init();
+
 		//TODO not sure where this is enabled any more
 		//		FluidRegistry.enableUniversalBucket();
 		ModuleManager moduleManager = ModuleManager.getInstance();
@@ -127,21 +136,22 @@ public class Forestry {
 		ModuleManager.runSetup();
 		NetworkHandler networkHandler = new NetworkHandler();
 		//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
-
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(this::setup);
 		//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMCMessages);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientStuff);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::gatherData);
-		FMLJavaModLoadingContext.get().getModEventBus().register(TickHandlerCoreServer.class);    //TODO - correct?
+		modEventBus.addListener(this::processIMCMessages);
+		modEventBus.addListener(this::clientStuff);
+		modEventBus.addListener(this::gatherData);
+		modEventBus.register(TickHandlerCoreServer.class);    //TODO - correct?
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
-		FMLJavaModLoadingContext.get().getModEventBus().register(eventHandlerCore);
+		modEventBus.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(this);
 		//TODO - I think this is how it works
 		Proxies.render = DistExecutor.runForDist(() -> () -> new ProxyRenderClient(), () -> () -> new ProxyRender());
 		Proxies.common = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyCommon());
 
 		ModuleManager.getModuleHandler().runSetup();
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus));
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
@@ -188,10 +198,23 @@ public class Forestry {
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			try {
 				generator.run();
-			} catch (Exception ignored) {
+			} catch (Exception e) {
+				LOGGER.error(e);
 			}
 			//generator.run();
 		}
+	}
+
+	private void clientInit(IEventBus modEventBus) {
+		modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			IResourceManager resourceManager = minecraft.getResourceManager();
+			if(resourceManager instanceof IReloadableResourceManager) {
+				IReloadableResourceManager reloadableManager = (IReloadableResourceManager) resourceManager;
+				reloadableManager.addReloadListener(ColourProperties.INSTANCE);
+				reloadableManager.addReloadListener(TextureManagerForestry.getInstance());
+			}
+		});
 	}
 
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
