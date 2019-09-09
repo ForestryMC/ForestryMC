@@ -197,7 +197,8 @@ public class Forestry {
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			try {
 				generator.run();
-			} catch (Exception ignored) {
+			} catch (Exception e) {
+				LOGGER.error(e);
 			}
 			//generator.run();
 		}
