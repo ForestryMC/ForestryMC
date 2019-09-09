@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -72,9 +73,11 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 
 	public BlockBogEarth() {
 		super(Block.Properties.create(Material.EARTH)
-			.tickRandomly()
-			.hardnessAndResistance(0.5f)
-			.sound(SoundType.GROUND));
+				.tickRandomly()
+				.hardnessAndResistance(0.5f)
+				.sound(SoundType.GROUND)
+				.harvestTool(ToolType.SHOVEL)
+				.harvestLevel(0));
 		//TODO - creative tabs done by item. Handle this in per module registries I think
 		//setCreativeTab(CreativeTabForestry.tabForestry);
 

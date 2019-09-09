@@ -23,6 +23,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -35,10 +36,11 @@ public class BlockHumus extends Block implements IItemModelRegister {
 
 	public BlockHumus() {
 		super(Block.Properties.create(Material.EARTH)
-			.tickRandomly()
-			.hardnessAndResistance(0.5f)
-			.sound(SoundType.GROUND));
-		//		setCreativeTab(CreativeTabForestry.tabForestry);
+				.tickRandomly()
+				.hardnessAndResistance(0.5f)
+				.sound(SoundType.GROUND)
+				.harvestTool(ToolType.SHOVEL)
+				.harvestLevel(0));
 
 		setDefaultState(this.getStateContainer().getBaseState().with(DEGRADE, 0));
 	}

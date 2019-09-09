@@ -9,6 +9,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraftforge.common.ToolType;
+
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
@@ -21,13 +23,12 @@ public class BlockForestryFence extends FenceBlock implements IWoodTyped {
 
 	public BlockForestryFence(boolean fireproof, IWoodType woodType) {
 		super(Block.Properties.create(Material.WOOD)
-			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD));
+				.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+				.sound(SoundType.WOOD)
+				.harvestTool(ToolType.AXE)
+				.harvestLevel(0));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
-
-		//		setHarvestLevel("axe", 0);	TODO harvest level
-		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ToolType;
 
+import forestry.core.items.ItemScoop;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
@@ -39,12 +40,11 @@ public class BlockSolidCocoon extends Block {
 
 	public BlockSolidCocoon() {
 		super(Block.Properties.create(MaterialCocoon.INSTANCE)
-			.harvestTool(ToolType.get("scoop"))
-			.harvestLevel(0)    //TODO correct?
+			.harvestTool(ItemScoop.SCOOP)
+			.harvestLevel(0)
 			.hardnessAndResistance(0.5F)
 			.tickRandomly()
 			.sound(SoundType.GROUND));
-		//		setCreativeTab(null); TODO creative tabs
 		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
 			.with(AlleleButterflyCocoon.AGE, 0));
 	}

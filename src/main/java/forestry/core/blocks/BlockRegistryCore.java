@@ -33,10 +33,6 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final StairsBlock ashStairs;
 	public final Map<EnumResourceType, BlockResourceStorage> resourceStorage = new EnumMap<>(EnumResourceType.class);
 	public final Map<EnumResourceType, BlockResourceOre> resourceOre = new EnumMap<>(EnumResourceType.class);
-	//	public final ItemStack resourceStorageApatite;	//TODO just access these though getComb
-	//	public final ItemStack resourceStorageTin;
-	//	public final ItemStack resourceStorageCopper;
-	//	public final ItemStack resourceStorageBronze;
 
 	public BlockRegistryCore() {
 		analyzer = new BlockCore(BlockTypeCoreTesr.ANALYZER);
@@ -47,11 +43,9 @@ public class BlockRegistryCore extends BlockRegistry {
 
 		bogEarth = new BlockBogEarth();
 		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bog_earth");
-		//		bogEarth.setHarvestLevel("shovel", 0); TODO done in item
 
 		humus = new BlockHumus();
 		registerBlock(humus, new ItemBlockForestry<>(humus), "humus");
-		//		humus.setHarvestLevel("shovel", 0);
 
 		for (EnumResourceType type : EnumResourceType.VALUES) {
 			if (type == EnumResourceType.BRONZE) {
@@ -70,14 +64,12 @@ public class BlockRegistryCore extends BlockRegistry {
 		}
 		//TODO register tag for these
 
-		//		resources.setHarvestLevel("pickaxe", 1);
 		//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.getComb(EnumResourceType.APATITE, 1));
 		//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.getComb(EnumResourceType.COPPER, 1));
 		//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.getComb(EnumResourceType.TIN, 1));
 
 		//		BlockResourceStorage resourceStorage = new BlockResourceStorage();
 		//		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
-		//		resourceStorage.setHarvestLevel("pickaxe", 0);
 
 		//		resourceStorageApatite = resourceStorage.getComb(EnumResourceType.APATITE);
 		//		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorageApatite);

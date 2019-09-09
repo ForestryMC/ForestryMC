@@ -10,11 +10,17 @@
  ******************************************************************************/
 package forestry.mail.blocks;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+
+import net.minecraftforge.common.ToolType;
+
 import forestry.core.blocks.BlockBase;
 
 public class BlockMail extends BlockBase<BlockTypeMail> {
 	public BlockMail(BlockTypeMail blockType) {
-		super(blockType);
-		//		setHarvestLevel("pickaxe", 0); TODO harvest level
+		super(blockType, Block.Properties.create(Material.IRON)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
 	}
 }
