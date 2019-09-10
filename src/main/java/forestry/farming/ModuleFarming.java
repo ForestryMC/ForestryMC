@@ -242,7 +242,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmArborealManaged = new CircuitFarmLogic("managedArboreal", arborealFarm, false);
 		Circuits.farmArborealManual = new CircuitFarmLogic("manualArboreal", arborealFarm, true);
-		arborealFarm.registerSoil(Blocks.DIRT);	//TODO check this doesn't allow players to use dirt as soil in managed farm
+//		arborealFarm.registerSoil(Blocks.DIRT);	//TODO check this doesn't allow players to use dirt as soil in managed farm
 		arborealFarm.registerSoil(coreBlocks.humus);
 		arborealFarm.addProducts(new ItemStack(Blocks.SAND));
 
