@@ -19,6 +19,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateProvider;
@@ -35,14 +37,13 @@ public class ClimateRoot implements IClimateRoot {
 		return INSTANCE;
 	}
 
-	@Nullable
 	@Override
-	public IClimateListener getListener(World world, BlockPos pos) {
+	public LazyOptional<IClimateListener> getListener(World world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity != null && ClimateCapabilities.CLIMATE_LISTENER != null) {
-			return tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null).orElse(null);
+			return tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null);
 		}
-		return null;
+		return LazyOptional.empty();
 	}
 
 	@Override

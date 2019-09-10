@@ -10,13 +10,14 @@ import javax.annotation.Nullable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.common.util.LazyOptional;
+
 public interface IClimateRoot {
 
 	/**
 	 * @return the listener at the given position in the given world if there is any.
 	 */
-	@Nullable
-	IClimateListener getListener(World world, BlockPos pos);
+	LazyOptional<IClimateListener> getListener(World world, BlockPos pos);
 
 	/**
 	 * Can be used to getComb the climate state without the use of an {@link IClimateListener}.

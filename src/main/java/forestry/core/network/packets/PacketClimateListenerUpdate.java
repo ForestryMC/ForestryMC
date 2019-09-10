@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateState;
@@ -41,10 +42,8 @@ public class PacketClimateListenerUpdate extends ForestryPacket implements IFore
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
 			IClimateState state = data.readClimateState();
-			IClimateListener listener = ClimateRoot.getInstance().getListener(player.world, pos);
-			if (listener != null) {
-				listener.setClimateState(state);
-			}
+			LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(player.world, pos);
+			listener.ifPresent(l -> l.setClimateState(state));
 		}
 	}
 }
