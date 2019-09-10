@@ -83,7 +83,7 @@ public class BlockRegistryArboriculture extends BlockRegistry {
 			logs.put(woodType, log);
 
 			//logs fireproof
-			BlockForestryLog fireproofLog = new BlockForestryLog(false, woodType);
+			BlockForestryLog fireproofLog = new BlockForestryLog(true, woodType);
 			registerBlock(fireproofLog, new ItemBlockWood<>(fireproofLog), woodType.toString() + "_fireproof_log");
 			logsFireproof.put(woodType, fireproofLog);
 

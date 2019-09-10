@@ -64,6 +64,7 @@ import forestry.core.config.GameMode;
 import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootTableProvider;
+import forestry.core.data.ForestryRecipeProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
@@ -196,10 +197,11 @@ public class Forestry {
 			generator.addProvider(new ForestryBlockTagsProvider(generator));
 			generator.addProvider(new ForestryItemTagsProvider(generator));
 			generator.addProvider(new ForestryLootTableProvider(generator));
+			generator.addProvider(new ForestryRecipeProvider(generator));
 			try {
 				generator.run();
 			} catch (Exception e) {
-				LOGGER.error(e);
+				throw new RuntimeException(e);
 			}
 			//generator.run();
 		}

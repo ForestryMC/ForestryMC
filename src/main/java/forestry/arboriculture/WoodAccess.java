@@ -226,6 +226,7 @@ public class WoodAccess implements IWoodAccess {
 		return itemStack.copy();
 	}
 
+	//TODO I think we can return blocks here now that things are flattened.
 	@Override
 	public BlockState getBlock(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof) {
 		if (woodBlockKind == WoodBlockKind.DOOR) {
