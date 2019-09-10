@@ -6,7 +6,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.core.gui.ContainerTypes;
 
-//TODO - just move acquiring tile to ContainerTile, then none of these problems exist!!
 public class FactoryContainerTypes extends ContainerTypes {
 
 	public final ContainerType<ContainerBottler> BOTTLER;

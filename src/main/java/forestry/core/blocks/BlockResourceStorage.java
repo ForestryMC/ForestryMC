@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
@@ -15,9 +16,10 @@ public class BlockResourceStorage extends Block implements IItemModelRegister {
 
 	public BlockResourceStorage(EnumResourceType type) {
 		super(Block.Properties.create(Material.IRON)
-			.hardnessAndResistance(3f, 5f));
+				.hardnessAndResistance(3f, 5f)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
 		this.type = type;
-		//		setCreativeTab(CreativeTabForestry.tabForestry);	TODO done in item.
 	}
 
 	//TODO needed?

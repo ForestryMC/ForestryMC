@@ -23,6 +23,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -34,16 +35,19 @@ import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.tiles.TileUtil;
 import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarm;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileFarmValve;
 
-//import net.minecraft.block.properties.IProperty;
-//import net.minecraft.block.properties.EnumProperty;
-//import net.minecraft.block.BlockStateContainer;
 //import net.minecraftforge.common.property.ExtendedBlockState;
 //import net.minecraftforge.common.property.IExtendedBlockState;
 //import net.minecraftforge.common.property.IUnlistedProperty;
@@ -55,9 +59,9 @@ public class BlockFarm extends BlockStructure {
 
 	public BlockFarm(EnumFarmBlockType type) {
 		super(Block.Properties.create(Material.ROCK)
-			.hardnessAndResistance(1.0f));
-		//		setHarvestLevel("pickaxe", 0); TODO set in item
-		//		setCreativeTab(ItemGroups.tabAgriculture); TODO set in item I think
+				.hardnessAndResistance(1.0f)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
 		this.type = type;
 	}
 
@@ -148,22 +152,26 @@ public class BlockFarm extends BlockStructure {
 	//		return ret;
 	//	}
 
-	//TODO - not sure where this lives now
-	//	@Override
-	//	public TileEntity createNewTileEntity(World world, int meta) {
-	//		switch (meta) {
-	//			case 2:
-	//				return new TileFarmGearbox();
-	//			case 3:
-	//				return new TileFarmHatch();
-	//			case 4:
-	//				return new TileFarmValve();
-	//			case 5:
-	//				return new TileFarmControl();
-	//			default:
-	//				return new TileFarmPlain();
-	//		}
-	//	}
+		@Override
+		public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+			switch (state.get(META)) {
+				case GEARBOX:
+					return new TileFarmGearbox();
+				case HATCH:
+					return new TileFarmHatch();
+				case VALVE:
+					return new TileFarmValve();
+				case CONTROL:
+					return new TileFarmControl();
+				default:
+					return new TileFarmPlain();
+			}
+		}
+
+		@Override
+		public boolean hasTileEntity(BlockState state) {
+			return true;
+		}
 
 	/* MODELS */
 	@Override

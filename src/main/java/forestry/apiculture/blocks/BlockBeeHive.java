@@ -52,7 +52,7 @@ public class BlockBeeHive extends ContainerBlock {
 		this.type = type;
 	}
 
-	@Override    //TODO remove
+	@Override
 	public TileEntity createNewTileEntity(IBlockReader world) {
 		return new TileHive();
 	}

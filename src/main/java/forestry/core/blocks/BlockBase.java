@@ -103,12 +103,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		this(blockType, Material.IRON);
 	}
 
-	//TODO - recheck harvest level things once forge finalises theirs?
-	@Override
-	public int getHarvestLevel(BlockState state) {
-		return 0; //TODO - tool stuff????
-	}
-
 	//TODO - voxelshape stuff I think???
 	//	@Override
 	//	public boolean isOpaqueCube(BlockState state, IBlockReader world, BlockPos pos) {

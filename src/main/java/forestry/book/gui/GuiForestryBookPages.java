@@ -110,7 +110,6 @@ public class GuiForestryBookPages extends GuiForesterBook {
 		return tooltip;
 	}
 
-	//TODO ITextComponent
 	@Override
 	public ITextComponent getTitle() {
 		return new StringTextComponent(entry.getTitle());
