@@ -56,7 +56,6 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
-import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
@@ -521,7 +520,7 @@ public class ModuleFactory extends BlankForestryModule {
 			'#', Blocks.DIRT,
 			'X', coreItems.mulch);
 		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY,
-			coreBlocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 8),
+			new ItemStack(coreBlocks.bogEarth, 8),
 			"#X#",
 			"XYX", "#X#",
 			'#', Blocks.DIRT,

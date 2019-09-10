@@ -253,7 +253,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
 		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
-//		peatFarm.registerSoil(coreBlocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1)); TODO flatten bog earth
+		peatFarm.registerSoil(coreBlocks.bogEarth);
 		peatFarm.addProducts(new ItemStack(coreItems.peat), new ItemStack(Blocks.DIRT));
 
 		Circuits.farmCropsManaged = new CircuitFarmLogic("managedCrops", cropsFarm, false);

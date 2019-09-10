@@ -49,7 +49,6 @@ import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
@@ -230,7 +229,8 @@ public class ModuleCore extends BlankForestryModule {
 		// forestry blocks
 		BlockRegistryCore blocks = getBlocks();
 		crateRegistry.registerCrate(blocks.humus);
-		crateRegistry.registerCrate(blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1));
+		crateRegistry.registerCrate(blocks.bogEarth);
+		crateRegistry.registerCrate(blocks.peat);
 
 		// vanilla items
 		crateRegistry.registerCrate(OreDictUtil.CROP_WHEAT);

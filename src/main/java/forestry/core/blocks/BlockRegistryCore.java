@@ -20,6 +20,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.common.ToolType;
+
 import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockForestry;
 
@@ -28,6 +30,7 @@ public class BlockRegistryCore extends BlockRegistry {
 	public final BlockCore analyzer;
 	public final BlockCore escritoire;
 	public final BlockBogEarth bogEarth;
+	public final Block peat;
 	public final BlockHumus humus;
 	public final Block ashBrick;
 	public final StairsBlock ashStairs;
@@ -43,6 +46,13 @@ public class BlockRegistryCore extends BlockRegistry {
 
 		bogEarth = new BlockBogEarth();
 		registerBlock(bogEarth, new ItemBlockForestry<>(bogEarth), "bog_earth");
+
+		peat = new Block(Block.Properties.create(Material.EARTH)
+				.hardnessAndResistance(0.5f)
+				.sound(SoundType.GROUND)
+				.harvestTool(ToolType.SHOVEL)
+				.harvestLevel(0));
+		registerBlock(peat, new ItemBlockForestry<>(peat), "peat");
 
 		humus = new BlockHumus();
 		registerBlock(humus, new ItemBlockForestry<>(humus), "humus");

@@ -23,7 +23,6 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.ModuleCore;
-import forestry.core.blocks.BlockBogEarth;
 import forestry.farming.logic.crops.CropPeat;
 
 public class FarmLogicPeat extends FarmLogicWatered {
@@ -61,13 +60,8 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			}
 			BlockState blockState = world.getBlockState(position);
 			Block block = blockState.getBlock();
-			if (!(block instanceof BlockBogEarth)) {
-				continue;
-			}
 
-			BlockBogEarth.SoilType soilType = BlockBogEarth.getTypeFromState(blockState);
-
-			if (soilType == BlockBogEarth.SoilType.PEAT) {
+			if (block == ModuleCore.getBlocks().peat) {
 				crops.push(new CropPeat(world, position));
 			}
 		}
