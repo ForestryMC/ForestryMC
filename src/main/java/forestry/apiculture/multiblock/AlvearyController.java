@@ -184,11 +184,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				if (!BlockUtil.isWoodSlabBlock(state, block, world, pos)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
-
-				int meta = 0;//TODO flatten block.getMetaFromState(state); probably needs tag
-				if ((meta & 8) != 0) {
-					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
-				}
 			}
 		}
 

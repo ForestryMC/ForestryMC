@@ -19,6 +19,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IProperty;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +33,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
+
+import net.minecraftforge.common.Tags;
 
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
@@ -88,19 +91,7 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		ItemStack stack = new ItemStack(block);
-		if (stack.isEmpty()) {
-			return false;
-		}
-
-		int[] oreIds = new int[0];//TODO - tags OreDictionary.getOreIDs(stack);
-		for (int oreId : oreIds) {
-			if (oreId == slabWoodId) {
-				return true;
-			}
-		}
-
-		return false;
+		return block.isIn(BlockTags.WOODEN_SLABS);
 	}
 
 	public static boolean isBreakableBlock(World world, BlockPos pos) {

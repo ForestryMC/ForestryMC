@@ -52,9 +52,4 @@ public class ItemBlockFarm extends BlockItem {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
 	}
-
-	@Override
-	public String getTranslationKey(ItemStack itemstack) {
-		return super.getTranslationKey(itemstack) + "." + 0;// TODO flatten itemstack.getItemDamage();
-	}
 }

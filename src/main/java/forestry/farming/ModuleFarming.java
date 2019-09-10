@@ -242,28 +242,28 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmArborealManaged = new CircuitFarmLogic("managedArboreal", arborealFarm, false);
 		Circuits.farmArborealManual = new CircuitFarmLogic("manualArboreal", arborealFarm, true);
-		arborealFarm.registerSoil(new ItemStack(Blocks.DIRT), coreBlocks.humus.getDefaultState());
-		arborealFarm.registerSoil(new ItemStack(coreBlocks.humus), coreBlocks.humus.getDefaultState());
+		arborealFarm.registerSoil(Blocks.DIRT);	//TODO check this doesn't allow players to use dirt as soil in managed farm
+		arborealFarm.registerSoil(coreBlocks.humus);
 		arborealFarm.addProducts(new ItemStack(Blocks.SAND));
 
 		Circuits.farmShroomManaged = new CircuitFarmLogic("managedShroom", mushroomFarm, false);
 		Circuits.farmShroomManual = new CircuitFarmLogic("manualShroom", mushroomFarm, true);
-		mushroomFarm.registerSoil(new ItemStack(Blocks.MYCELIUM), Blocks.MYCELIUM.getDefaultState());
-		mushroomFarm.registerSoil(new ItemStack(Blocks.PODZOL), Blocks.PODZOL.getDefaultState(), true);
+		mushroomFarm.registerSoil(Blocks.MYCELIUM);
+		mushroomFarm.registerSoil(Blocks.PODZOL);
 
 		Circuits.farmPeatManaged = new CircuitFarmLogic("managedPeat", peatFarm, false);
 		Circuits.farmPeatManual = new CircuitFarmLogic("manualPeat", peatFarm, true);
-		peatFarm.registerSoil(coreBlocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1), coreBlocks.bogEarth.getDefaultState());
+//		peatFarm.registerSoil(coreBlocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1)); TODO flatten bog earth
 		peatFarm.addProducts(new ItemStack(coreItems.peat), new ItemStack(Blocks.DIRT));
 
 		Circuits.farmCropsManaged = new CircuitFarmLogic("managedCrops", cropsFarm, false);
 		Circuits.farmCropsManual = new CircuitFarmLogic("manualCrops", cropsFarm, true);
-		cropsFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.FARMLAND.getDefaultState());
+		cropsFarm.registerSoil(Blocks.DIRT);
 		cocoaFarm.registerFarmables("farmWheat");
 
 		Circuits.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", infernalFarm, false);
 		Circuits.farmInfernalManual = new CircuitFarmLogic("manualInfernal", infernalFarm, true);
-		infernalFarm.registerSoil(new ItemStack(Blocks.SOUL_SAND), Blocks.SOUL_SAND.getDefaultState());
+		infernalFarm.registerSoil(Blocks.SOUL_SAND);
 
 		Circuits.farmOrchardManaged = new CircuitFarmLogic("managedOrchard", orchardFarm, false);
 		Circuits.farmOrchardManual = new CircuitFarmLogic("manualOrchard", orchardFarm, true);
@@ -278,25 +278,25 @@ public class ModuleFarming extends BlankForestryModule {
 
 		Circuits.farmSucculentManaged = new CircuitFarmLogic("managedSucculent", succulentFarm, false);
 		Circuits.farmSucculentManual = new CircuitFarmLogic("manualSucculent", succulentFarm, true);
-		succulentFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(), true);
+		succulentFarm.registerSoil(Blocks.SAND);
 
 		Circuits.farmPoalesManaged = new CircuitFarmLogic("managedPoales", poalesFarm, false);
 		Circuits.farmPoalesManual = new CircuitFarmLogic("manualPoales", poalesFarm, true);
-		poalesFarm.registerSoil(new ItemStack(Blocks.SAND), Blocks.SAND.getDefaultState(), true);
-		poalesFarm.registerSoil(new ItemStack(Blocks.DIRT), Blocks.DIRT.getDefaultState(), false);
+		poalesFarm.registerSoil(Blocks.SAND);
+		poalesFarm.registerSoil(Blocks.DIRT);
 
 		Circuits.farmGourdManaged = new CircuitFarmLogic("managedGourd", gourdFarm, false);
 		Circuits.farmGourdManual = new CircuitFarmLogic("manualGourd", gourdFarm, true);
 
 		Circuits.farmCocoaManaged = new CircuitFarmLogic("managedCocoa", cocoaFarm, false);
 		Circuits.farmCocoaManual = new CircuitFarmLogic("manualCocoa", cocoaFarm, true);
-		cocoaFarm.registerSoil(new ItemStack(Blocks.JUNGLE_LOG), Blocks.JUNGLE_LOG.getDefaultState());
+		cocoaFarm.registerSoil(Blocks.JUNGLE_LOG);
 		cocoaFarm.addGermlings(new ItemStack(Items.COCOA_BEANS));
 		cocoaFarm.addProducts(new ItemStack(Items.COCOA_BEANS));
 
 		Circuits.farmEnderManaged = new CircuitFarmLogic("managedEnder", enderFarm, false);
 		Circuits.farmEnderManual = new CircuitFarmLogic("manualEnder", enderFarm, true);
-		enderFarm.registerSoil(new ItemStack(Blocks.END_STONE), Blocks.END_STONE.getDefaultState());
+		enderFarm.registerSoil(Blocks.END_STONE);
 	}
 
 	@Override

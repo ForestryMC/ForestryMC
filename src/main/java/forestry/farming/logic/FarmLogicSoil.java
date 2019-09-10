@@ -12,7 +12,7 @@ public abstract class FarmLogicSoil extends FarmLogic {
 	}
 
 	protected boolean isAcceptedSoil(BlockState blockState) {
-		return properties.isAcceptedSoil(blockState);
+		return properties.isAcceptedSoil(blockState.getBlock());
 	}
 
 	@Override

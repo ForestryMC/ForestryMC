@@ -3,6 +3,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Collections;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
@@ -10,7 +11,6 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
-import forestry.api.farming.ISoil;
 
 public class FakeFarmProperties implements IFarmProperties {
 	private final IFarmLogic logic;
@@ -24,7 +24,7 @@ public class FakeFarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public void registerSoil(ItemStack resource, BlockState soilState, boolean hasMetaData) {
+	public void registerSoil(Block soil) {
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class FakeFarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public boolean isAcceptedSoil(BlockState blockState) {
+	public boolean isAcceptedSoil(Block block) {
 		return false;
 	}
 
@@ -58,7 +58,7 @@ public class FakeFarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public Collection<ISoil> getSoils() {
+	public Collection<Block> getSoils() {
 		return Collections.emptySet();
 	}
 

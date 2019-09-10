@@ -9,17 +9,17 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
-import forestry.api.farming.ISoil;
 import forestry.farming.FarmRegistry;
 
 public final class FarmProperties implements IFarmProperties {
-	private final Set<ISoil> soils = new HashSet<>();
+	private final Set<Block> soils = new HashSet<>();
 	private final Set<String> farmablesIdentifiers;
 	private final IFarmLogic manualLogic;
 	private final IFarmLogic managedLogic;
@@ -45,9 +45,9 @@ public final class FarmProperties implements IFarmProperties {
 	public Collection<IFarmable> getFarmables() {
 		if (farmables == null) {
 			farmables = farmablesIdentifiers.stream()
-				.map(FarmRegistry.getInstance()::getFarmables)
-				.flatMap(Collection::stream)
-				.collect(Collectors.toSet());
+					.map(FarmRegistry.getInstance()::getFarmables)
+					.flatMap(Collection::stream)
+					.collect(Collectors.toSet());
 		}
 		return farmables;
 	}
@@ -56,8 +56,8 @@ public final class FarmProperties implements IFarmProperties {
 	public Collection<IFarmableInfo> getFarmableInfo() {
 		if (farmableInfo == null) {
 			farmableInfo = farmablesIdentifiers.stream()
-				.map(FarmRegistry.getInstance()::getFarmableInfo)
-				.collect(Collectors.toSet());
+					.map(FarmRegistry.getInstance()::getFarmableInfo)
+					.collect(Collectors.toSet());
 		}
 		return farmableInfo;
 	}
@@ -68,8 +68,8 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public void registerSoil(ItemStack resource, BlockState soilState, boolean hasMetaData) {
-		soils.add(new Soil(resource, soilState, hasMetaData));
+	public void registerSoil(Block soil) {
+		soils.add(soil);
 	}
 
 	@Override
@@ -93,25 +93,9 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public boolean isAcceptedSoil(BlockState ground) {
-		for (ISoil soil : soils) {
-			BlockState soilState = soil.getSoilState();
-			Block soilBlock = soilState.getBlock();
-			Block block = ground.getBlock();
-			if (soilState.getBlock() == ground.getBlock()) {
-				if (!soil.hasMetaData() || false) {//TODO Flatten block.getMetaFromState(ground) == soilBlock.getMetaFromState(soilState)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
-		for (ISoil soil : soils) {
-			ItemStack resource = soil.getResource();
-			if (resource.isItemEqual(itemstack)) {
+	public boolean isAcceptedSoil(Block ground) {
+		for (Block soil : soils) {
+			if (soil == ground) {
 				return true;
 			}
 		}
@@ -119,7 +103,18 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public Collection<ISoil> getSoils() {
+	public boolean isAcceptedResource(ItemStack itemstack) {
+		for (Block soil : soils) {
+			//TODO this is deprecated??
+			if (Item.getItemFromBlock(soil) == itemstack.getItem()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Collection<Block> getSoils() {
 		return soils;
 	}
 }

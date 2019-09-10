@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
@@ -24,7 +25,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
@@ -72,9 +72,9 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 			return false;
 		}
 
-		for (ISoil soil : getSoils()) {
+		for (Block soil : getSoils()) {
 			NonNullList<ItemStack> resources = NonNullList.create();
-			resources.add(soil.getResource());
+			resources.add(new ItemStack(soil));
 
 			for (int i = 0; i < extent; i++) {
 				BlockPos position = translateWithOffset(pos, direction, i);
@@ -95,7 +95,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 				if (!BlockUtil.isReplaceableBlock(state, world, position)) {
 					produce.addAll(BlockUtil.getBlockDrops(world, position));
 					world.removeBlock(position, false);    //TODO
-					return trySetSoil(world, farmHousing, position, soil.getResource(), soil.getSoilState());
+					return trySetSoil(world, farmHousing, position, new ItemStack(soil), soil.getDefaultState());
 				}
 
 				if (!isManual) {
@@ -103,7 +103,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 						return true;
 					}
 
-					return trySetSoil(world, farmHousing, position, soil.getResource(), soil.getSoilState());
+					return trySetSoil(world, farmHousing, position, new ItemStack(soil), soil.getDefaultState());
 				}
 			}
 		}

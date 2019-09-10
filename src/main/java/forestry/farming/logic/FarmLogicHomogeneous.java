@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -20,7 +21,6 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
-import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
@@ -70,9 +70,9 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 			return false;
 		}
 
-		for (ISoil soil : getSoils()) {
+		for (Block soil : getSoils()) {
 			NonNullList<ItemStack> resources = NonNullList.create();
-			resources.add(soil.getResource());
+			resources.add(new ItemStack(soil));
 			if (!farmHousing.getFarmInventory().hasResources(resources)) {
 				continue;
 			}
@@ -96,7 +96,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 
 				produce.addAll(BlockUtil.getBlockDrops(world, position));
 
-				BlockUtil.setBlockWithPlaceSound(world, position, soil.getSoilState());
+				BlockUtil.setBlockWithPlaceSound(world, position, soil.getDefaultState());
 				farmHousing.getFarmInventory().removeResources(resources);
 				return true;
 			}

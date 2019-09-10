@@ -122,7 +122,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
 		//so need to adjust init sequence
 		IBeeRoot root = BeeHelper.getRoot();
-		for (IBee bee : root.getIndividualTemplates()) {//BeeManager.beeRoot.getIndividualTemplates()) {
+		for (IBee bee : root.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && bee.isSecret() && !Config.isDebug) {
 				continue;
@@ -155,22 +155,9 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 			if (allele instanceof IAlleleBeeSpecies) {
 				((IAlleleBeeSpecies) allele).registerModels(item, manager);
 			}
-		}
-		//TODO - flatten or something custom rendering I think
-		//		manager.registerItemModel(item, new BeeMeshDefinition(?));
-	}
 
-	//	@OnlyIn(Dist.CLIENT)
-	//	private class BeeMeshDefinition implements ItemMeshDefinition {
-	//		@Override
-	//		public ModelResourceLocation getModelLocation(ItemStack stack) {
-	//			if (!stack.hasTag()) { // villager trade wildcard bees
-	//				return DefaultBeeModelProvider.instance.getModel(type);
-	//			}
-	//			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
-	//			return species.getModel(type);
-	//		}
-	//	}
+		}
+	}
 
 	public final EnumBeeType getType() {
 		return type;
