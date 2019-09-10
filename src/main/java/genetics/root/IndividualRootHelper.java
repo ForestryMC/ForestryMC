@@ -37,7 +37,7 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 				continue;
 			}
 			IIndividualRoot root = definition.get();
-			if (!root.isMember(stack) || rootClass.isInstance(root)) {
+			if (!root.isMember(stack) || !rootClass.isInstance(root)) {
 				continue;
 			}
 			return (IRootDefinition<R>) definition;
