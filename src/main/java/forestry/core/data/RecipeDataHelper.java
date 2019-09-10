@@ -30,16 +30,32 @@ public class RecipeDataHelper {
 			builder.addCondition(condition);
 		}
 
-		//this list stuff is a bit ugly but it's the quickest way I could think of to store one object quickly
-		List<IFinishedRecipe> finishedRecipes = new ArrayList<>(1);
-		recipe.accept(finishedRecipes::add);    //hack to get the finished recipe
+		Holder<IFinishedRecipe> finishedRecipeHolder = new Holder<>();
+		recipe.accept(finishedRecipeHolder::set);
 
-		IFinishedRecipe finishedRecipe = finishedRecipes.get(0);
+		IFinishedRecipe finishedRecipe = finishedRecipeHolder.get();
 		builder.addRecipe(finishedRecipe);
 		builder.build(consumer, finishedRecipe.getID());
 	}
 
 	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, String moduleUID) {
 		simpleConditionalRecipe(recipe, new ModuleEnabledCondition(Constants.MOD_ID, moduleUID));
+	}
+
+	private static class Holder<T> {
+
+		private T obj;
+
+		private Holder() {
+
+		}
+
+		private void set(T obj) {
+			this.obj = obj;
+		}
+
+		private T get() {
+			return obj;
+		}
 	}
 }

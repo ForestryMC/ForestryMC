@@ -5,13 +5,11 @@ import java.util.function.Consumer;
 
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.common.Tags;
@@ -81,8 +79,6 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(door, 3).key('#', Ingredient.fromItems(planks, fireproofPlanks)).patternLine("##").patternLine("##").patternLine("##").addCriterion("has_planks", this.hasItem(planks)).setGroup("wooden_door")::build,
 					ForestryModuleUids.ARBORICULTURE);
-
-
 			helper.moduleConditionRecipe(
 					ShapelessRecipeBuilder.shapelessRecipe(fireproofPlanks, 4).addIngredient(fireproofLog).addCriterion("has_planks", this.hasItem(fireproofPlanks)).setGroup("planks")::build,
 					ForestryModuleUids.ARBORICULTURE);
@@ -103,7 +99,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	}
 
 	private void registerCombRecipes(RecipeDataHelper helper) {
-		for(EnumHoneyComb honeyComb : EnumHoneyComb.VALUES) {
+		for (EnumHoneyComb honeyComb : EnumHoneyComb.VALUES) {
 			Item comb = ApicultureItems.BEE_COMBS.get(honeyComb).getItem();
 			Block combBlock = ModuleApiculture.getBlocks().beeCombs.get(honeyComb);
 			helper.moduleConditionRecipe(
