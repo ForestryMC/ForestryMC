@@ -14,6 +14,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.climate.IClimateListener;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.multiblock.TileAlveary;
@@ -30,14 +32,14 @@ public class ContainerAlveary extends ContainerTile<TileAlveary> {
 		return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerAlveary(int windowid, PlayerInventory player, TileAlveary tile) {
-		super(windowid, ModuleApiculture.getContainerTypes().ALVEARY, player, tile, 8, 108);
+	public ContainerAlveary(int windowid, PlayerInventory playerInv, TileAlveary tile) {
+		super(windowid, ModuleApiculture.getContainerTypes().ALVEARY, playerInv, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, false);
 
 		tile.getBeekeepingLogic().clearCachedValues();
-		IClimateListener listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-		if (listener != null && player.player instanceof ServerPlayerEntity) {
-			listener.syncToClient((ServerPlayerEntity) player.player);
+		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+		if (playerInv.player instanceof ServerPlayerEntity) {
+			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) playerInv.player));
 		}
 	}
 

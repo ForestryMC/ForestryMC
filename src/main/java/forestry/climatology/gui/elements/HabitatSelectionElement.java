@@ -122,7 +122,7 @@ public class HabitatSelectionElement extends ElementGroup {
 			textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 			blit(0, 0, 204, 46, 20, 20);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			//			blit(2, 2, climate.getSprite(), 16, 16);	//TODO texture sprite blit
+			blit(2, 2, blitOffset, 16, 16, climate.getSprite());
 		}
 
 		private double getComparingCode() {

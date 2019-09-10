@@ -15,6 +15,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
+import forestry.core.render.TextureManagerForestry;
 
 public enum EnumErrorCode implements IErrorState {
 
@@ -89,9 +90,7 @@ public enum EnumErrorCode implements IErrorState {
 	;
 
 	private final String name;
-	private final String iconName;
-	@OnlyIn(Dist.CLIENT)
-	private TextureAtlasSprite texture;
+	private final ResourceLocation location;
 
 	EnumErrorCode(String name) {
 		this(name, name);
@@ -99,7 +98,7 @@ public enum EnumErrorCode implements IErrorState {
 
 	EnumErrorCode(String name, String iconName) {
 		this.name = name;
-		this.iconName = iconName;
+		this.location = new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName);
 	}
 
 	@Override
@@ -115,14 +114,13 @@ public enum EnumErrorCode implements IErrorState {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerSprite(TextureStitchEvent.Pre event) {
-		ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "gui/errors/" + iconName);
 		event.addSprite(location);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public TextureAtlasSprite getSprite() {
-		return texture;
+		return TextureManagerForestry.getInstance().getTextureMap().getSprite(location);
 	}
 
 	@Override

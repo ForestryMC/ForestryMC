@@ -86,7 +86,7 @@ public class WidgetDatabaseSlot extends Widget {
 	private void drawMouseOver() {
 		GlStateManager.disableDepthTest();
 		GlStateManager.colorMask(true, true, true, false);
-		manager.gui.blit(xPos, yPos, xPos + width, yPos + height, -2130706433, -2130706433);    //TODO should be blit?
+//		manager.gui.blit(xPos, yPos, xPos + width, yPos + height, -2130706433, -2130706433);	TODO still not quite right
 		GlStateManager.colorMask(true, true, true, true);
 		GlStateManager.enableDepthTest();
 	}

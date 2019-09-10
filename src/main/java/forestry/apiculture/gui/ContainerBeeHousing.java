@@ -14,6 +14,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 
+import net.minecraftforge.common.util.LazyOptional;
+
 import forestry.api.climate.IClimateListener;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.tiles.TileBeeHousingBase;
@@ -43,9 +45,9 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();
-		IClimateListener listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-		if (listener != null && player.player instanceof ServerPlayerEntity) {
-			listener.syncToClient((ServerPlayerEntity) player.player);
+		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+		if (player.player instanceof ServerPlayerEntity) {
+			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) player.player));
 		}
 
 		delegate = tile;
