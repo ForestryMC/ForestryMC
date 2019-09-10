@@ -39,7 +39,7 @@ public class ClimateRoot implements IClimateRoot {
 	@Override
 	public IClimateListener getListener(World world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (tileEntity != null) {
+		if (tileEntity != null && ClimateCapabilities.CLIMATE_LISTENER != null) {
 			return tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null).orElse(null);
 		}
 		return null;
