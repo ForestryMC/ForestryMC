@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.mail.items;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
+import com.google.common.collect.ImmutableTable;
 
 import java.util.EnumMap;
 import java.util.Locale;
@@ -23,7 +22,7 @@ import forestry.core.items.ItemRegistry;
 
 public class ItemRegistryMail extends ItemRegistry {
 	public final Map<EnumStampDefinition, ItemStamp> stamps = new EnumMap<>(EnumStampDefinition.class);
-	public final Table<ItemLetter.Size, ItemLetter.State, ItemLetter> letters = HashBasedTable.create(3, 4);
+	public final ImmutableTable<ItemLetter.Size, ItemLetter.State, ItemLetter> letters;
 	public final ItemCatalogue catalogue;
 
 	public ItemRegistryMail() {
@@ -33,13 +32,15 @@ public class ItemRegistryMail extends ItemRegistry {
 			stamps.put(def, stamp);
 		}
 
+		ImmutableTable.Builder<ItemLetter.Size, ItemLetter.State, ItemLetter> builder = ImmutableTable.builder();
 		for (ItemLetter.Size size : ItemLetter.Size.values()) {
 			for (ItemLetter.State state : ItemLetter.State.values()) {
 				ItemLetter letter = new ItemLetter(size, state);
 				registerItem(letter, "letter_" + size.name().toLowerCase(Locale.ENGLISH) + "_" + state.name().toLowerCase(Locale.ENGLISH));
-				letters.put(size, state, letter);
+				builder.put(size, state, letter);
 			}
 		}
+		letters = builder.build();
 
 		catalogue = registerItem(new ItemCatalogue(), "catalogue");
 
