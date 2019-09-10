@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
@@ -60,7 +61,6 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(widgetManager, 16, 12, container));
 		this.tradeInfoWidgets = new ArrayList<>();
-
 		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, "");
 		text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
 	}

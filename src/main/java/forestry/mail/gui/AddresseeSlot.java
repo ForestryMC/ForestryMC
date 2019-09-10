@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.client.gui.AbstractGui;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import forestry.api.mail.IPostalCarrier;
@@ -38,7 +40,7 @@ public class AddresseeSlot extends Widget {
 		if (carrier != null) {
 			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			//			manager.gui.blit(startX + xPos, startY + yPos, carrier.getSprite(), 32, 32);	//TODO weird blit stuff again....
+			AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 32, 32, carrier.getSprite());
 		}
 	}
 
