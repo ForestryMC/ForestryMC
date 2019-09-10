@@ -72,6 +72,7 @@ public class BlockRegistryApiculture extends BlockRegistry {
 		for (EnumHoneyComb type : EnumHoneyComb.VALUES) {
 			BlockHoneyComb block = new BlockHoneyComb(type);
 			registerBlock(block, new ItemBlockHoneyComb(block), "block_bee_comb_" + type.getName());
+			beeCombs.put(type, block);
 		}    //TODO tag?
 
 		for (BlockAlvearyType type : BlockAlvearyType.VALUES) {

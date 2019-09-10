@@ -3,11 +3,15 @@ package forestry.core.data;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.data.ShapelessRecipeBuilder;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.common.Tags;
@@ -18,6 +22,9 @@ import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
+import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureItems;
+import forestry.apiculture.items.EnumHoneyComb;
 import forestry.modules.ForestryModuleUids;
 
 public class ForestryRecipeProvider extends ForgeRecipeProvider {
@@ -28,9 +35,14 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+		RecipeDataHelper helper = new RecipeDataHelper(consumer);
+		registerWoodRecipes(helper);
+		registerCombRecipes(helper);
+	}
+
+	private void registerWoodRecipes(RecipeDataHelper helper) {
 		IWoodAccess woodAccess = TreeManager.woodAccess;
 		List<IWoodType> woodTypes = woodAccess.getRegisteredWoodTypes();
-		RecipeDataHelper recipeDataHelper = new RecipeDataHelper(consumer);
 
 		for (IWoodType woodType : woodTypes) {
 
@@ -49,44 +61,55 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 			Block fireproofStairs = woodAccess.getBlock(woodType, WoodBlockKind.STAIRS, true).getBlock();
 
 			if (woodType instanceof EnumForestryWoodType) {
-				recipeDataHelper.moduleConditionRecipe(
+				helper.moduleConditionRecipe(
 						ShapelessRecipeBuilder.shapelessRecipe(planks, 4).addIngredient(log).addCriterion("has_log", this.hasItem(log)).setGroup("planks")::build,
 						ForestryModuleUids.ARBORICULTURE);
-				recipeDataHelper.moduleConditionRecipe(
+				helper.moduleConditionRecipe(
 						ShapedRecipeBuilder.shapedRecipe(fence, 3).key('#', Tags.Items.RODS_WOODEN).key('W', planks).patternLine("W#W").patternLine("W#W").addCriterion("has_planks", this.hasItem(planks)).setGroup("wooden_fence")::build,
 						ForestryModuleUids.ARBORICULTURE);
-				recipeDataHelper.moduleConditionRecipe(
+				helper.moduleConditionRecipe(
 						ShapedRecipeBuilder.shapedRecipe(fencegate).key('#', Tags.Items.RODS_WOODEN).key('W', planks).patternLine("#W#").patternLine("#W#").addCriterion("has_planks", this.hasItem(planks)).setGroup("wooden_fence_gate")::build,
 						ForestryModuleUids.ARBORICULTURE);
-				recipeDataHelper.moduleConditionRecipe(
+				helper.moduleConditionRecipe(
 						ShapedRecipeBuilder.shapedRecipe(slab, 6).key('#', planks).patternLine("###").addCriterion("has_planks", this.hasItem(planks)).setGroup("wooden_slab")::build,
 						ForestryModuleUids.ARBORICULTURE);
-				recipeDataHelper.moduleConditionRecipe(
+				helper.moduleConditionRecipe(
 						ShapedRecipeBuilder.shapedRecipe(stairs, 4).key('#', planks).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_planks", this.hasItem(planks)).setGroup("wooden_stairs")::build,
 						ForestryModuleUids.ARBORICULTURE);
 			}
 
-			recipeDataHelper.moduleConditionRecipe(
+			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(door, 3).key('#', Ingredient.fromItems(planks, fireproofPlanks)).patternLine("##").patternLine("##").patternLine("##").addCriterion("has_planks", this.hasItem(planks)).setGroup("wooden_door")::build,
 					ForestryModuleUids.ARBORICULTURE);
 
 
-			recipeDataHelper.moduleConditionRecipe(
+			helper.moduleConditionRecipe(
 					ShapelessRecipeBuilder.shapelessRecipe(fireproofPlanks, 4).addIngredient(fireproofLog).addCriterion("has_planks", this.hasItem(fireproofPlanks)).setGroup("planks")::build,
 					ForestryModuleUids.ARBORICULTURE);
-			recipeDataHelper.moduleConditionRecipe(
+			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(fireproofFence, 3).key('#', Tags.Items.RODS_WOODEN).key('W', fireproofPlanks).patternLine("W#W").patternLine("W#W").addCriterion("has_planks", this.hasItem(fireproofPlanks)).setGroup("wooden_fence")::build,
 					ForestryModuleUids.ARBORICULTURE);
-			recipeDataHelper.moduleConditionRecipe(
+			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(fireproofFencegate).key('#', Tags.Items.RODS_WOODEN).key('W', fireproofPlanks).patternLine("#W#").patternLine("#W#").addCriterion("has_planks", this.hasItem(fireproofPlanks)).setGroup("wooden_fence_gate")::build,
 					ForestryModuleUids.ARBORICULTURE);
-			recipeDataHelper.moduleConditionRecipe(
+			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(fireproofSlab, 6).key('#', fireproofPlanks).patternLine("###").addCriterion("has_planks", this.hasItem(fireproofPlanks)).setGroup("wooden_slab")::build,
 					ForestryModuleUids.ARBORICULTURE);
-			recipeDataHelper.moduleConditionRecipe(
+			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(fireproofStairs, 4).key('#', fireproofPlanks).patternLine("#  ").patternLine("## ").patternLine("###").addCriterion("has_planks", this.hasItem(fireproofPlanks)).setGroup("wooden_stairs")::build,
 					ForestryModuleUids.ARBORICULTURE);
 
+		}
+	}
+
+	private void registerCombRecipes(RecipeDataHelper helper) {
+		for(EnumHoneyComb honeyComb : EnumHoneyComb.VALUES) {
+			Item comb = ApicultureItems.BEE_COMBS.get(honeyComb).getItem();
+			Block combBlock = ModuleApiculture.getBlocks().beeCombs.get(honeyComb);
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(combBlock).key('#', comb).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_at_least_9_comb", this.hasItem(MinMaxBounds.IntBound.atLeast(9), comb))::build,
+					ForestryModuleUids.APICULTURE
+			);
 		}
 	}
 }
