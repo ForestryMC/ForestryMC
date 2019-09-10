@@ -18,11 +18,11 @@ public class TileRegistryFarming extends TileRegistry {
 	public TileRegistryFarming() {
 		BlockRegistryFarming blocks = ModuleFarming.getBlocks();
 
-		control = registerTileEntityType(TileFarmControl::new, "control", blocks.farms.get(EnumFarmBlockType.CONTROL));
-		gearbox = registerTileEntityType(TileFarmGearbox::new, "gearbox", blocks.farms.get(EnumFarmBlockType.GEARBOX));
-		hatch = registerTileEntityType(TileFarmHatch::new, "hatch", blocks.farms.get(EnumFarmBlockType.HATCH));
-		plain = registerTileEntityType(TileFarmPlain::new, "plain", blocks.farms.get(EnumFarmBlockType.PLAIN));
-		valve = registerTileEntityType(TileFarmValve::new, "valve", blocks.farms.get(EnumFarmBlockType.VALVE));
+		control = registerTileEntityType(TileFarmControl::new, "control", blocks.farms.row(EnumFarmBlockType.CONTROL).values());
+		gearbox = registerTileEntityType(TileFarmGearbox::new, "gearbox", blocks.farms.row(EnumFarmBlockType.GEARBOX).values());
+		hatch = registerTileEntityType(TileFarmHatch::new, "hatch", blocks.farms.row(EnumFarmBlockType.HATCH).values());
+		plain = registerTileEntityType(TileFarmPlain::new, "plain", blocks.farms.row(EnumFarmBlockType.PLAIN).values());
+		valve = registerTileEntityType(TileFarmValve::new, "valve", blocks.farms.row(EnumFarmBlockType.VALVE).values());
 	}
 
 

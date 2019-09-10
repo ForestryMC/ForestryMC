@@ -27,8 +27,8 @@ public class ProxyFarmingClient extends ProxyFarming {
 
 	@Override
 	public void initializeModels() {
-		ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
-			new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-			ModuleFarming.getBlocks().farms.get(EnumFarmBlockType.PLAIN)));    //TODO need to register all of them here?
+//		ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
+//			new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
+//			ModuleFarming.getBlocks().farms.get(EnumFarmBlockType.PLAIN)));    //TODO need to register all of them here?
 	}
 }

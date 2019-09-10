@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.multiblock.IMultiblockController;
+import forestry.farming.ModuleFarming;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.farming.models.EnumFarmBlockTexture;
 
 public class TileFarmPlain extends TileFarm {
 	@Override
@@ -24,7 +27,13 @@ public class TileFarmPlain extends TileFarm {
 		// set band block meta
 		int bandY = maxCoord.getY() - 1;
 		if (getPos().getY() == bandY) {
-			this.world.setBlockState(getPos(), getBlockState().getBlock().getDefaultState().with(BlockFarm.META, EnumFarmBlockType.BAND), 2);
+			Block block = world.getBlockState(getPos()).getBlock();
+			if(!(block instanceof BlockFarm)) {
+				return;
+			}
+			BlockFarm blockFarm = (BlockFarm) block;
+			EnumFarmBlockTexture texture = blockFarm.getTexture();
+			this.world.setBlockState(getPos(), ModuleFarming.getBlocks().farms.get(EnumFarmBlockType.BAND, texture).getDefaultState(), 2);
 		}
 	}
 
@@ -33,6 +42,12 @@ public class TileFarmPlain extends TileFarm {
 		super.onMachineBroken();
 
 		// set band block meta back to normal
-		this.world.setBlockState(getPos(), getBlockState().getBlock().getDefaultState(), 2);
+		Block block = world.getBlockState(getPos()).getBlock();
+		if(!(block instanceof BlockFarm)) {
+			return;
+		}
+		BlockFarm blockFarm = (BlockFarm) block;
+		EnumFarmBlockTexture texture = blockFarm.getTexture();
+		this.world.setBlockState(getPos(), ModuleFarming.getBlocks().farms.get(EnumFarmBlockType.PLAIN, texture).getDefaultState(), 2);
 	}
 }

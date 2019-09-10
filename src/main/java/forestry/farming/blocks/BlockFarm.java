@@ -54,15 +54,16 @@ import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 
-	public static final EnumProperty<EnumFarmBlockType> META = EnumProperty.create("meta", EnumFarmBlockType.class);
 	private final EnumFarmBlockType type;
+	private final EnumFarmBlockTexture texture;
 
-	public BlockFarm(EnumFarmBlockType type) {
+	public BlockFarm(EnumFarmBlockType type, EnumFarmBlockTexture texture) {
 		super(Block.Properties.create(Material.ROCK)
 				.hardnessAndResistance(1.0f)
 				.harvestTool(ToolType.PICKAXE)
 				.harvestLevel(0));
 		this.type = type;
+		this.texture = texture;
 	}
 
 	//TODO - either flatten or work out how extended states work
@@ -78,27 +79,15 @@ public class BlockFarm extends BlockStructure {
 	//			new ModelProperty<>()[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	//	}
 
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		for (int i = 0; i < 6; i++) {
-			if (i == 1) {
-				continue;
-			}
-
-			for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
-				ItemStack stack = new ItemStack(this);
-				CompoundNBT compound = new CompoundNBT();
-				block.saveToCompound(compound);
-				stack.setTag(compound);
-				list.add(stack);
-			}
-		}
-	}
-
 	public EnumFarmBlockType getType() {
 		return type;
 	}
 
+	public EnumFarmBlockTexture getTexture() {
+		return texture;
+	}
+
+	//TODO needed after flattening?
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		List<ItemStack> drops = getDrops(world.getBlockState(pos), (ServerWorld) world, pos, world.getTileEntity(pos));    //TODO this call is not safe
@@ -112,13 +101,9 @@ public class BlockFarm extends BlockStructure {
 	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
 
-		if (stack.getTag() == null) {
-			return;
-		}
-
 		TileFarm tile = TileUtil.getTile(world, pos, TileFarm.class);
 		if (tile != null) {
-			tile.setFarmBlockTexture(EnumFarmBlockTexture.getFromCompound(stack.getTag()));
+			tile.setFarmBlockTexture(texture);
 		}
 	}
 
@@ -134,7 +119,7 @@ public class BlockFarm extends BlockStructure {
 	//		return world.setBlockToAir(pos);
 	//	}
 
-	//TODO not sjure about this
+	//TODO not sure about this
 	//	@Override
 	//	public static List<ItemStack> getDrops(BlockState state, ServerWorld worldIn, BlockPos pos, @Nullable TileEntity tileEntityIn) {
 	////		int meta = getMetaFromState(state);
@@ -154,7 +139,7 @@ public class BlockFarm extends BlockStructure {
 
 		@Override
 		public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-			switch (state.get(META)) {
+			switch (type) {
 				case GEARBOX:
 					return new TileFarmGearbox();
 				case HATCH:
@@ -180,17 +165,17 @@ public class BlockFarm extends BlockStructure {
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < 6; i++) {
-			if (i == 1) {
-				continue;
-			}
-			//TODO
-			//			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
-		}
-	}
+//	@OnlyIn(Dist.CLIENT)
+//	@Override
+//	public void registerModel(Item item, IModelManager manager) {
+//		for (int i = 0; i < 6; i++) {
+//			if (i == 1) {
+//				continue;
+//			}
+//			//TODO
+//			//			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
+//		}
+//	}
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {

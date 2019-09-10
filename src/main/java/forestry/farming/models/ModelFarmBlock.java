@@ -2,6 +2,7 @@ package forestry.farming.models;
 
 import java.util.Objects;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -12,10 +13,10 @@ import net.minecraftforge.client.model.data.IModelData;
 
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
+import forestry.core.utils.BlockUtil;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
 
-//TODO - I think the farm block nneds flattening
 @OnlyIn(Dist.CLIENT)
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.Key> {
 
@@ -52,28 +53,26 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 
 	@Override
 	protected Key getInventoryKey(ItemStack stack) {
-		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
-		EnumFarmBlockType type = EnumFarmBlockType.VALUES[0];//stack.getItemDamage()];
-
-		return new Key(texture, type);
+		Block block = Block.getBlockFromItem(stack.getItem());
+		if(block instanceof BlockFarm) {
+			BlockFarm blockFarm = ((BlockFarm) block);
+			EnumFarmBlockType type = blockFarm.getType();
+			EnumFarmBlockTexture texture = blockFarm.getTexture();
+			return new Key(texture, type);
+		} else {
+			return new Key(EnumFarmBlockTexture.BRICK, EnumFarmBlockType.PLAIN);
+		}
 	}
 
 	@Override
 	protected Key getWorldKey(BlockState state, IModelData extraData) {
-		//		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		//		IBlockReader world = stateExtended.getComb(UnlistedBlockAccess.BLOCKACCESS);
-		//		BlockPos pos = stateExtended.getComb(UnlistedBlockPos.POS);
-		//
-		//		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
-		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;
-		EnumFarmBlockType type = EnumFarmBlockType.PLAIN;
-
-		//		if (farm != null) {
-		//			texture = farm.getFarmBlockTexture();
-		//			type = farm.getFarmBlockType();
-		//		}
-
-		return new Key(texture, type);
+		Block block = state.getBlock();
+		if(block instanceof BlockFarm) {
+			BlockFarm blockFarm = ((BlockFarm) block);
+			return new Key(blockFarm.getTexture(), blockFarm.getType());
+		} else {
+			return new Key(EnumFarmBlockTexture.BRICK, EnumFarmBlockType.PLAIN);
+		}
 	}
 
 	@Override
