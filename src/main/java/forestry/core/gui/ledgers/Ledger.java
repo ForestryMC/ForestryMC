@@ -228,7 +228,7 @@ public abstract class Ledger {
 	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
 		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
-		AbstractGui.blit(x, y, 16, 16, manager.gui.getBlitOffset(), sprite);
+		AbstractGui.blit(x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
 	}
 
 	protected int drawHeader(String string, int x, int y) {
