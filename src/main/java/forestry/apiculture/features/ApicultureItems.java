@@ -70,9 +70,9 @@ public class ApicultureItems {
 	public static final FeatureItem<ItemArmorApiarist> APIARIST_BOOTS = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlotType.FEET), "apiarist_boots");
 
 	// TOOLS
-	public static final FeatureItem<ItemScoop> scoop = REGISTRY.item(ItemScoop::new, "scoop");
+	public static final FeatureItem<ItemScoop> SCOOP = REGISTRY.item(ItemScoop::new, "scoop");
 	//TODO - harvest stuff
-	public static final FeatureItem<ItemSmoker> smoker = REGISTRY.item(ItemSmoker::new, "smoker");
+	public static final FeatureItem<ItemSmoker> SMOKER = REGISTRY.item(ItemSmoker::new, "smoker");
 
 	private ApicultureItems() {
 	}

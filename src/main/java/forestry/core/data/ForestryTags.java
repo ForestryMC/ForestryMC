@@ -25,6 +25,13 @@ public class ForestryTags {
 	public static class Items {
 
 		public static final Tag<Item> CHARCOAL = tag("charcoal");
+		public static final Tag<Item> BEE_COMBS = tag("comb");
+		public static final Tag<Item> PROPOLIS = tag("propolis");
+		public static final Tag<Item> ASH = tag("dusts/ash");
+
+		public static final Tag<Item> INGOT_BRONZE = tag("ingots/bronze");
+		public static final Tag<Item> INGOT_COPPER = tag("ingots/copper");
+		public static final Tag<Item> INGOT_TIN = tag("ingots/tin");
 
 		private static Tag<Item> tag(String name) {
 			return new ItemTags.Wrapper(new ResourceLocation(Constants.MOD_ID, name));

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.data;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import net.minecraft.data.IFinishedRecipe;
@@ -46,8 +47,8 @@ public class RecipeDataHelper {
 		builder.build(consumer, finishedRecipe.getID());
 	}
 
-	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, String moduleUID) {
-		simpleConditionalRecipe(recipe, new ModuleEnabledCondition(Constants.MOD_ID, moduleUID));
+	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, String... moduleUIDs) {
+		simpleConditionalRecipe(recipe, Arrays.stream(moduleUIDs).map(u -> new ModuleEnabledCondition(Constants.MOD_ID, u)).toArray(ICondition[]::new));
 	}
 
 	private static class Holder<T> {
