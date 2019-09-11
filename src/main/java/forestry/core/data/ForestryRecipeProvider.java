@@ -51,7 +51,10 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
 import forestry.food.ModuleFood;
 import forestry.food.items.ItemRegistryFood;
+import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.modules.ForestryModuleUids;
+import forestry.storage.ModuleBackpacks;
+import forestry.storage.items.ItemRegistryBackpacks;
 
 public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
@@ -65,6 +68,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerArboricultureRecipes(helper);
 		registerApicultureRecipes(helper);
 		registerFoodRecipes(helper);
+		registerBackpackRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -407,5 +411,86 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.patternLine("###").patternLine("#X#").patternLine("###")
 						.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
 				ForestryModuleUids.FOOD);
+	}
+
+	private void registerBackpackRecipes(RecipeDataHelper helper) {
+		ItemRegistryBackpacks backpackItems = ModuleBackpacks.getItems();
+
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.adventurerBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', Tags.Items.BONES)
+						.key('X', Tags.Items.STRING)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_bone", this.hasItem(Tags.Items.BONES))::build,
+				ForestryModuleUids.BACKPACKS);
+
+		Block beeChest = ModuleApiculture.getBlocks().beeChest;
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.apiaristBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', Tags.Items.RODS_WOODEN)
+						.key('X', Tags.Items.STRING)
+						.key('Y', beeChest)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_bee_chest", this.hasItem(beeChest))::build,
+				ForestryModuleUids.BACKPACKS, ForestryModuleUids.APICULTURE);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.builderBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', Items.CLAY_BALL)
+						.key('X', Tags.Items.STRING)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_clay", this.hasItem(Items.CLAY_BALL))::build,
+				ForestryModuleUids.BACKPACKS);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.diggerBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', Tags.Items.STONE)
+						.key('X', Tags.Items.STRING)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_stone", this.hasItem(Tags.Items.STONE))::build,
+				ForestryModuleUids.BACKPACKS);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.foresterBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', ItemTags.LOGS)
+						.key('X', Tags.Items.STRING)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_log", this.hasItem(ItemTags.LOGS))::build,
+				ForestryModuleUids.BACKPACKS);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.hunterBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', Tags.Items.FEATHERS)
+						.key('X', Tags.Items.STRING)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_feather", this.hasItem(Tags.Items.FEATHERS))::build,
+				ForestryModuleUids.BACKPACKS);
+
+		Block butterflyChest = ModuleLepidopterology.getBlocks().butterflyChest;
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.lepidopteristBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', butterflyChest)
+						.key('X', Tags.Items.STRING)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_butterfly_chest", this.hasItem(butterflyChest))::build,
+				ForestryModuleUids.BACKPACKS, ForestryModuleUids.LEPIDOPTEROLOGY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(backpackItems.minerBackpack)
+						.key('#', ItemTags.WOOL)
+						.key('V', Tags.Items.INGOTS_IRON)
+						.key('X', Tags.Items.STRING)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
+						.addCriterion("has_iron", this.hasItem(Tags.Items.INGOTS_IRON))::build,
+				ForestryModuleUids.BACKPACKS);
 	}
 }
