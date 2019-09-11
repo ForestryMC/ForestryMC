@@ -27,8 +27,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ForgeRecipeProvider;
 
-import net.minecraftforge.fml.common.Mod;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
@@ -43,7 +41,9 @@ import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
-import forestry.apiculture.items.ItemRegistryApiculture;
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.blocks.BlockRegistryArboriculture;
+import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
 import forestry.core.items.EnumCraftingMaterial;
@@ -62,7 +62,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 		RecipeDataHelper helper = new RecipeDataHelper(consumer);
-		registerWoodRecipes(helper);
+		registerArboricultureRecipes(helper);
 		registerApicultureRecipes(helper);
 		registerFoodRecipes(helper);
 	}
@@ -237,50 +237,50 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ApicultureItems.SCOOP.getItem())
-				.key('#', Tags.Items.RODS_WOODEN)
-				.key('X', ItemTags.WOOL)
-				.patternLine("#X#").patternLine("###").patternLine(" # ")
-				.addCriterion("has_wool", this.hasItem(ItemTags.WOOL))::build,
+						.key('#', Tags.Items.RODS_WOODEN)
+						.key('X', ItemTags.WOOL)
+						.patternLine("#X#").patternLine("###").patternLine(" # ")
+						.addCriterion("has_wool", this.hasItem(ItemTags.WOOL))::build,
 				ForestryModuleUids.APICULTURE
 		);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(Items.SLIME_BALL)
-				.key('#', propolis)
-				.key('X', ApicultureItems.POLLEN_CLUSTER.get(EnumPollenCluster.NORMAL).getItem())
-				.patternLine("#X#").patternLine("#X#").patternLine("#X#")
-				.addCriterion("has_propolis", this.hasItem(propolis))::build,
+						.key('#', propolis)
+						.key('X', ApicultureItems.POLLEN_CLUSTER.get(EnumPollenCluster.NORMAL).getItem())
+						.patternLine("#X#").patternLine("#X#").patternLine("#X#")
+						.addCriterion("has_propolis", this.hasItem(propolis))::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ApicultureItems.SMOKER.getItem())
-				.key('#', ForestryTags.Items.INGOT_TIN)
-				.key('S', Tags.Items.RODS_WOODEN)
-				.key('F', Items.FLINT_AND_STEEL)
-				.key('L', Tags.Items.LEATHER)
-				.patternLine("LS#").patternLine("LF#").patternLine("###")
-				.addCriterion("has_tin", this.hasItem(ForestryTags.Items.INGOT_TIN))::build,
+						.key('#', ForestryTags.Items.INGOT_TIN)
+						.key('S', Tags.Items.RODS_WOODEN)
+						.key('F', Items.FLINT_AND_STEEL)
+						.key('L', Tags.Items.LEATHER)
+						.patternLine("LS#").patternLine("LF#").patternLine("###")
+						.addCriterion("has_tin", this.hasItem(ForestryTags.Items.INGOT_TIN))::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(Items.GLISTERING_MELON_SLICE)
-				.key('#', ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).getItem())
-				.key('X', ApicultureItems.HONEYDEW.getItem())
-				.key('Y', Items.MELON_SLICE)
-				.patternLine("#X#").patternLine("#Y#").patternLine("#X#")
-				.addCriterion("has_melon", this.hasItem(Items.MELON_SLICE))::build,
+						.key('#', ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).getItem())
+						.key('X', ApicultureItems.HONEYDEW.getItem())
+						.key('Y', Items.MELON_SLICE)
+						.patternLine("#X#").patternLine("#Y#").patternLine("#X#")
+						.addCriterion("has_melon", this.hasItem(Items.MELON_SLICE))::build,
 				ForestryModuleUids.APICULTURE);
 
 		Item beesWax = coreItems.beeswax;
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(Items.TORCH, 3)
-				.key('#', beesWax)
-				.key('Y', Tags.Items.RODS_WOODEN)
-				.patternLine(" # ").patternLine(" # ").patternLine(" Y ")
-				.addCriterion("has_wax", this.hasItem(beesWax))::build,
+						.key('#', beesWax)
+						.key('Y', Tags.Items.RODS_WOODEN)
+						.patternLine(" # ").patternLine(" # ").patternLine(" Y ")
+						.addCriterion("has_wax", this.hasItem(beesWax))::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ApicultureItems.WAX_CAST.getItem())
-				.key('#', beesWax)
-				.patternLine("###").patternLine("# #").patternLine("###")
-				.addCriterion("has_wax", this.hasItem(beesWax))::build,
+						.key('#', beesWax)
+						.patternLine("###").patternLine("# #").patternLine("###")
+						.addCriterion("has_wax", this.hasItem(beesWax))::build,
 				ForestryModuleUids.APICULTURE);
 	}
 
@@ -293,6 +293,29 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 					ForestryModuleUids.APICULTURE
 			);
 		}
+	}
+
+	private void registerArboricultureRecipes(RecipeDataHelper helper) {
+		registerWoodRecipes(helper);
+
+		ItemRegistryArboriculture treeItems = ModuleArboriculture.getItems();
+		BlockRegistryArboriculture treeBlocks = ModuleArboriculture.getBlocks();
+
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(treeItems.grafter)
+						.key('B', ForestryTags.Items.INGOT_BRONZE)
+						.key('#', Tags.Items.RODS_WOODEN)
+						.patternLine("  B").patternLine(" # ").patternLine("#  ")
+						.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE))::build,
+				ForestryModuleUids.ARBORICULTURE);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(treeBlocks.treeChest)
+						.key('#', Tags.Items.GLASS)
+						.key('X', ItemTags.SAPLINGS)
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine(" # ").patternLine("XYX").patternLine("XXX")
+						.addCriterion("has_sapling", this.hasItem(ItemTags.SAPLINGS))::build,
+				ForestryModuleUids.ARBORICULTURE);
 	}
 
 	private void registerWoodRecipes(RecipeDataHelper helper) {
@@ -364,25 +387,25 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(foodItems.ambrosia)
-				.key('#', ApicultureItems.HONEYDEW.getItem())
-				.key('X', ApicultureItems.ROYAL_JELLY.getItem())
-				.key('Y', waxCapsule)
-				.patternLine("#Y#").patternLine("XXX").patternLine("###")
-				.addCriterion("has royal_jelly", this.hasItem(ApicultureItems.ROYAL_JELLY.getItem()))::build,
+						.key('#', ApicultureItems.HONEYDEW.getItem())
+						.key('X', ApicultureItems.ROYAL_JELLY.getItem())
+						.key('Y', waxCapsule)
+						.patternLine("#Y#").patternLine("XXX").patternLine("###")
+						.addCriterion("has royal_jelly", this.hasItem(ApicultureItems.ROYAL_JELLY.getItem()))::build,
 				ForestryModuleUids.FOOD);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(foodItems.honeyPot)
-				.key('#', honeyDrop)
-				.key('X', waxCapsule)
-				.patternLine("# #").patternLine(" X ").patternLine("# #")
-				.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
+						.key('#', honeyDrop)
+						.key('X', waxCapsule)
+						.patternLine("# #").patternLine(" X ").patternLine("# #")
+						.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
 				ForestryModuleUids.FOOD);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(foodItems.honeyedSlice)
-				.key('#', honeyDrop)
-				.key('X', Items.BREAD)
-				.patternLine("###").patternLine("#X#").patternLine("###")
-				.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
+						.key('#', honeyDrop)
+						.key('X', Items.BREAD)
+						.patternLine("###").patternLine("#X#").patternLine("###")
+						.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
 				ForestryModuleUids.FOOD);
 	}
 }
