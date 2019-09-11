@@ -24,7 +24,7 @@ public class BlockRegistryCharcoal extends BlockRegistry {
 				return 16000;
 			}
 		};
-		registerBlock(charcoal, itemBlockCharcoal, "charcoal");
+		registerBlock(charcoal, itemBlockCharcoal, "charcoal_block");
 
 		woodPile = new BlockWoodPile();
 		ItemBlockForestry itemBlockWoodPile = new ItemBlockForestry<BlockWoodPile>(woodPile, new Item.Properties().group(ItemGroups.tabArboriculture)) {

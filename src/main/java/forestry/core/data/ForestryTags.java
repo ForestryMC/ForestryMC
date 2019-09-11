@@ -28,6 +28,7 @@ public class ForestryTags {
 		public static final Tag<Item> BEE_COMBS = tag("comb");
 		public static final Tag<Item> PROPOLIS = tag("propolis");
 		public static final Tag<Item> ASH = tag("dusts/ash");
+		public static final Tag<Item> DROP_HONEY = tag("drop_honey");
 
 		public static final Tag<Item> INGOT_BRONZE = tag("ingots/bronze");
 		public static final Tag<Item> INGOT_COPPER = tag("ingots/copper");

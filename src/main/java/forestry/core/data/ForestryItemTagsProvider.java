@@ -34,6 +34,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		getBuilder(ForestryTags.Items.BEE_COMBS).add(ApicultureItems.BEE_COMBS.getFeatures().stream().map(FeatureItem::getItem).toArray(Item[]::new));
 		getBuilder(ForestryTags.Items.PROPOLIS).add(ApicultureItems.PROPOLIS.getFeatures().stream().map(FeatureItem::getItem).toArray(Item[]::new));
 		getBuilder(ForestryTags.Items.ASH).add(ModuleCore.getItems().ash);
+		getBuilder(ForestryTags.Items.DROP_HONEY).add(ApicultureItems.HONEY_DROPS.getFeatures().stream().map(FeatureItem::getItem).toArray(Item[]::new));
 
 		getBuilder(ForestryTags.Items.INGOT_BRONZE).add(ModuleCore.getItems().ingotBronze.getItem());
 		getBuilder(ForestryTags.Items.INGOT_COPPER).add(ModuleCore.getItems().ingotCopper.getItem());

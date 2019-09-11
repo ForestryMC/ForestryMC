@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ForgeRecipeProvider;
@@ -42,10 +43,13 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.ModuleCharcoal;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
+import forestry.arboriculture.blocks.BlockRegistryCharcoal;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
+import forestry.core.config.Constants;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
@@ -492,5 +496,53 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.patternLine("X#X").patternLine("VYV").patternLine("X#X")
 						.addCriterion("has_iron", this.hasItem(Tags.Items.INGOTS_IRON))::build,
 				ForestryModuleUids.BACKPACKS);
+	}
+
+	private void registerCharcoalRecipes(RecipeDataHelper helper) {
+		BlockRegistryCharcoal charcoalBlocks = ModuleCharcoal.getBlocks();
+		ItemRegistryCore coreItems = ModuleCore.getItems();
+
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.charcoal)
+						.key('#', Items.CHARCOAL)
+						.patternLine("###").patternLine("###").patternLine("###")
+						.addCriterion("has_enough_charcoal", this.hasItem(MinMaxBounds.IntBound.atLeast(9), Items.CHARCOAL))::build,
+				ForestryModuleUids.CHARCOAL);
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(Items.CHARCOAL, 9)
+						.addIngredient(ForestryTags.Items.CHARCOAL)
+						.addCriterion("has_charcoal_block", this.hasItem(ForestryTags.Items.CHARCOAL))::build,
+				ForestryModuleUids.CHARCOAL);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.loam)
+						.key('C', Items.CLAY_BALL)
+						.key('S', ItemTags.SAND)
+						.key('F', coreItems.compost)
+						.patternLine("CFC").patternLine("SCS").patternLine("CFC")
+						.addCriterion("has_compost", this.hasItem(coreItems.compost))::build,
+				ForestryModuleUids.CHARCOAL);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.woodPile)
+						.key('L', ItemTags.LOGS)
+						.patternLine("LL").patternLine("LL")
+						.addCriterion("has_log", this.hasItem(ItemTags.LOGS))::build,
+				ForestryModuleUids.CHARCOAL);
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(charcoalBlocks.woodPileDecorative)
+						.addIngredient(charcoalBlocks.woodPile)
+						.addCriterion("was_wood_pile", this.hasItem(charcoalBlocks.woodPile))::build,
+				ForestryModuleUids.CHARCOAL);
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(charcoalBlocks.woodPile)
+						.addIngredient(charcoalBlocks.woodPileDecorative)
+						.addCriterion("has_decorative", this.hasItem(charcoalBlocks.woodPileDecorative))::build,
+				new ResourceLocation(Constants.MOD_ID, "wood_pile_from_decorative"), ForestryModuleUids.CHARCOAL);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.ash)
+				.key('A', ForestryTags.Items.ASH)
+				.patternLine("AA").patternLine("AA")
+				.addCriterion("has_ash", this.hasItem(ForestryTags.Items.ASH))::build,
+				ForestryModuleUids.CHARCOAL);
+
 	}
 }
