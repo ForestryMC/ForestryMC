@@ -27,6 +27,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ForgeRecipeProvider;
 
+import net.minecraftforge.fml.common.Mod;
+
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
@@ -41,10 +43,14 @@ import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
+import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.ModuleCore;
+import forestry.core.ModuleFluids;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
+import forestry.food.ModuleFood;
+import forestry.food.items.ItemRegistryFood;
 import forestry.modules.ForestryModuleUids;
 
 public class ForestryRecipeProvider extends ForgeRecipeProvider {
@@ -58,6 +64,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		RecipeDataHelper helper = new RecipeDataHelper(consumer);
 		registerWoodRecipes(helper);
 		registerApicultureRecipes(helper);
+		registerFoodRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -277,6 +284,17 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 				ForestryModuleUids.APICULTURE);
 	}
 
+	private void registerCombRecipes(RecipeDataHelper helper) {
+		for (EnumHoneyComb honeyComb : EnumHoneyComb.VALUES) {
+			Item comb = ApicultureItems.BEE_COMBS.get(honeyComb).getItem();
+			Block combBlock = ModuleApiculture.getBlocks().beeCombs.get(honeyComb);
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(combBlock).key('#', comb).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_at_least_9_comb", this.hasItem(MinMaxBounds.IntBound.atLeast(9), comb)).setGroup("combs")::build,
+					ForestryModuleUids.APICULTURE
+			);
+		}
+	}
+
 	private void registerWoodRecipes(RecipeDataHelper helper) {
 		IWoodAccess woodAccess = TreeManager.woodAccess;
 		List<IWoodType> woodTypes = woodAccess.getRegisteredWoodTypes();
@@ -337,14 +355,34 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		}
 	}
 
-	private void registerCombRecipes(RecipeDataHelper helper) {
-		for (EnumHoneyComb honeyComb : EnumHoneyComb.VALUES) {
-			Item comb = ApicultureItems.BEE_COMBS.get(honeyComb).getItem();
-			Block combBlock = ModuleApiculture.getBlocks().beeCombs.get(honeyComb);
-			helper.moduleConditionRecipe(
-					ShapedRecipeBuilder.shapedRecipe(combBlock).key('#', comb).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_at_least_9_comb", this.hasItem(MinMaxBounds.IntBound.atLeast(9), comb)).setGroup("combs")::build,
-					ForestryModuleUids.APICULTURE
-			);
-		}
+	private void registerFoodRecipes(RecipeDataHelper helper) {
+
+		ItemRegistryFood foodItems = ModuleFood.getItems();
+
+		Item waxCapsule = ModuleFluids.getItems().waxCapsuleEmpty;
+		Item honeyDrop = ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).getItem();
+
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(foodItems.ambrosia)
+				.key('#', ApicultureItems.HONEYDEW.getItem())
+				.key('X', ApicultureItems.ROYAL_JELLY.getItem())
+				.key('Y', waxCapsule)
+				.patternLine("#Y#").patternLine("XXX").patternLine("###")
+				.addCriterion("has royal_jelly", this.hasItem(ApicultureItems.ROYAL_JELLY.getItem()))::build,
+				ForestryModuleUids.FOOD);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(foodItems.honeyPot)
+				.key('#', honeyDrop)
+				.key('X', waxCapsule)
+				.patternLine("# #").patternLine(" X ").patternLine("# #")
+				.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
+				ForestryModuleUids.FOOD);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(foodItems.honeyedSlice)
+				.key('#', honeyDrop)
+				.key('X', Items.BREAD)
+				.patternLine("###").patternLine("#X#").patternLine("###")
+				.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
+				ForestryModuleUids.FOOD);
 	}
 }
