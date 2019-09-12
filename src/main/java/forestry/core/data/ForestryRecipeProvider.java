@@ -538,12 +538,5 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addIngredient(charcoalBlocks.woodPileDecorative)
 						.addCriterion("has_decorative", this.hasItem(charcoalBlocks.woodPileDecorative))::build,
 				new ResourceLocation(Constants.MOD_ID, "wood_pile_from_decorative"), ForestryModuleUids.CHARCOAL);
-		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.ash)
-				.key('A', ForestryTags.Items.ASH)
-				.patternLine("AA").patternLine("AA")
-				.addCriterion("has_ash", this.hasItem(ForestryTags.Items.ASH))::build,
-				ForestryModuleUids.CHARCOAL);
-
 	}
 }
