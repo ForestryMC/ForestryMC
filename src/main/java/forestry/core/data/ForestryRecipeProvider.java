@@ -26,6 +26,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.common.data.ForgeRecipeProvider;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
@@ -57,6 +58,7 @@ import forestry.core.config.Constants;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemRegistryCore;
+import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.food.ModuleFood;
 import forestry.food.items.ItemRegistryFood;
 import forestry.lepidopterology.ModuleLepidopterology;
@@ -78,6 +80,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerFoodRecipes(helper);
 		registerBackpackRecipes(helper);
 		registerCharcoalRecipes(helper);
+		addClimatologyRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -551,22 +554,24 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(climatologyBlocks.habitatformer)
-				.key('S', coreItems.sturdyCasing)
-				.key('G', Tags.Items.GLASS)
-				.key('B', ForestryTags.Items.GEAR_BRONZE)
-				.key('R', Tags.Items.DUSTS_REDSTONE)
-				.key('C', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC))
-				.key('T', coreItems.electronTubes.get(EnumElectronTube.IRON))
-				.patternLine("GRG").patternLine("TST").patternLine("BCB")
-				.addCriterion("has_casing", this.hasItem(coreItems.sturdyCasing))::build,
+						.key('S', coreItems.sturdyCasing)
+						.key('G', Tags.Items.GLASS)
+						.key('B', ForestryTags.Items.GEAR_BRONZE)
+						.key('R', Tags.Items.DUSTS_REDSTONE)
+						.key('C', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC))
+						.key('T', coreItems.electronTubes.get(EnumElectronTube.IRON))
+						.patternLine("GRG").patternLine("TST").patternLine("BCB")
+						.addCriterion("has_casing", this.hasItem(coreItems.sturdyCasing))::build,
 				ForestryModuleUids.CLIMATOLOGY);
-		helper.moduleConditionRecipe(
+		helper.simpleConditionalRecipe(
 				ShapedRecipeBuilder.shapedRecipe(climatologyItems.habitatScreen)
-				.key('G', ForestryTags.Items.GEAR_BRONZE)
-				.key('P', Tags.Items.GLASS_PANES)
-				.key('I', ForestryTags.Items.INGOT_BRONZE)
-				.key('D', Tags.Items.GEMS_DIAMOND)
-				.addCriterion("has_diamond", this.hasItem(Tags.Items.GEMS_DIAMOND))::build,
-				ForestryModuleUids.CLIMATOLOGY);
+						.key('G', ForestryTags.Items.GEAR_BRONZE)
+						.key('P', Tags.Items.GLASS_PANES)
+						.key('I', ForestryTags.Items.INGOT_BRONZE)
+						.key('D', Tags.Items.GEMS_DIAMOND)
+						.patternLine("IPI").patternLine("IPI").patternLine("DGD")
+						.addCriterion("has_diamond", this.hasItem(Tags.Items.GEMS_DIAMOND))::build,
+				new ModuleEnabledCondition(Constants.MOD_ID, ForestryModuleUids.CLIMATOLOGY),
+				new NotCondition(new ModuleEnabledCondition(Constants.MOD_ID, ForestryModuleUids.FACTORY)));
 	}
 }
