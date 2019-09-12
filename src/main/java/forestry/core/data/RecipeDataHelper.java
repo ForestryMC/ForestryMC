@@ -35,6 +35,10 @@ public class RecipeDataHelper {
 		this.consumer = consumer;
 	}
 
+	public Consumer<IFinishedRecipe> getConsumer() {
+		return consumer;
+	}
+
 	public void simpleConditionalRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, ICondition... conditions) {
 		simpleConditionalRecipe(recipe, null, conditions);
 	}

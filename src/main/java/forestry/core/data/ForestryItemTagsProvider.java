@@ -55,7 +55,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		copy(ForestryTags.Blocks.STORAGE_BLOCK_BRONZE, ForestryTags.Items.STORAGE_BLOCK_BRONZE);
 		copy(ForestryTags.Blocks.STORAGE_BLOCK_APATITE, ForestryTags.Items.STORAGE_BLOCK_APATITE);
 
-		getBuilder(ForestryTags.Items.GEARS).add(ForestryTags.Items.GEAR_BRONZE, ForestryTags.Items.GEAR_COPPER, ForestryTags.Items.GEAR_TIN);
+		getBuilder(ForestryTags.Items.GEARS).add(ForestryTags.Items.GEAR_BRONZE, ForestryTags.Items.GEAR_COPPER, ForestryTags.Items.GEAR_TIN, ForestryTags.Items.GEAR_STONE);
 		getBuilder(ForestryTags.Items.GEAR_BRONZE).add(coreItems.gearBronze);
 		getBuilder(ForestryTags.Items.GEAR_COPPER).add(coreItems.gearCopper);
 		getBuilder(ForestryTags.Items.GEAR_TIN).add(coreItems.gearTin);
