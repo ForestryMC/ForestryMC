@@ -73,6 +73,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerApicultureRecipes(helper);
 		registerFoodRecipes(helper);
 		registerBackpackRecipes(helper);
+		registerCharcoalRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
