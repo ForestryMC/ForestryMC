@@ -52,6 +52,7 @@ import forestry.climatology.blocks.BlockRegistryClimatology;
 import forestry.climatology.items.ItemRegistryClimatology;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
+import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
@@ -546,5 +547,26 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	private void addClimatologyRecipes(RecipeDataHelper helper) {
 		BlockRegistryClimatology climatologyBlocks = ModuleClimatology.getBlocks();
 		ItemRegistryClimatology climatologyItems = ModuleClimatology.getItems();
+		ItemRegistryCore coreItems = ModuleCore.getItems();
+
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(climatologyBlocks.habitatformer)
+				.key('S', coreItems.sturdyCasing)
+				.key('G', Tags.Items.GLASS)
+				.key('B', ForestryTags.Items.GEAR_BRONZE)
+				.key('R', Tags.Items.DUSTS_REDSTONE)
+				.key('C', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC))
+				.key('T', coreItems.electronTubes.get(EnumElectronTube.IRON))
+				.patternLine("GRG").patternLine("TST").patternLine("BCB")
+				.addCriterion("has_casing", this.hasItem(coreItems.sturdyCasing))::build,
+				ForestryModuleUids.CLIMATOLOGY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(climatologyItems.habitatScreen)
+				.key('G', ForestryTags.Items.GEAR_BRONZE)
+				.key('P', Tags.Items.GLASS_PANES)
+				.key('I', ForestryTags.Items.INGOT_BRONZE)
+				.key('D', Tags.Items.GEMS_DIAMOND)
+				.addCriterion("has_diamond", this.hasItem(Tags.Items.GEMS_DIAMOND))::build,
+				ForestryModuleUids.CLIMATOLOGY);
 	}
 }
