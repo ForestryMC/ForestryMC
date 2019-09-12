@@ -16,6 +16,9 @@ import net.minecraftforge.common.Tags;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.ModuleCharcoal;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
+import forestry.core.ModuleCore;
+import forestry.core.blocks.BlockRegistryCore;
+import forestry.core.blocks.EnumResourceType;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -79,6 +82,18 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 			//getBuilder(Tags.Blocks.CHESTS).add(registry.treeChest);
 			//getBuilder(Tags.Blocks.CHESTS_WOODEN).add(registry.treeChest);
 		}
+
+		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
+		getBuilder(Tags.Blocks.ORES).add(ForestryTags.Blocks.ORE_COPPER, ForestryTags.Blocks.ORE_TIN, ForestryTags.Blocks.ORE_APATITE);
+		getBuilder(ForestryTags.Blocks.ORE_COPPER).add(coreBlocks.resourceOre.get(EnumResourceType.COPPER));
+		getBuilder(ForestryTags.Blocks.ORE_TIN).add(coreBlocks.resourceOre.get(EnumResourceType.TIN));
+		getBuilder(ForestryTags.Blocks.ORE_APATITE).add(coreBlocks.resourceOre.get(EnumResourceType.APATITE));
+
+		getBuilder(Tags.Blocks.STORAGE_BLOCKS).add(ForestryTags.Blocks.STORAGE_BLOCK_APATITE, ForestryTags.Blocks.STORAGE_BLOCK_BRONZE, ForestryTags.Blocks.STORAGE_BLOCK_COPPER, ForestryTags.Blocks.STORAGE_BLOCK_TIN);
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCK_COPPER).add(coreBlocks.resourceStorage.get(EnumResourceType.COPPER));
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCK_TIN).add(coreBlocks.resourceStorage.get(EnumResourceType.TIN));
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCK_BRONZE).add(coreBlocks.resourceStorage.get(EnumResourceType.BRONZE));
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCK_APATITE).add(coreBlocks.resourceStorage.get(EnumResourceType.APATITE));
 	}
 
 	/*@Override

@@ -47,6 +47,9 @@ import forestry.arboriculture.ModuleCharcoal;
 import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.BlockRegistryCharcoal;
 import forestry.arboriculture.items.ItemRegistryArboriculture;
+import forestry.climatology.ModuleClimatology;
+import forestry.climatology.blocks.BlockRegistryClimatology;
+import forestry.climatology.items.ItemRegistryClimatology;
 import forestry.core.ModuleCore;
 import forestry.core.ModuleFluids;
 import forestry.core.config.Constants;
@@ -538,5 +541,10 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addIngredient(charcoalBlocks.woodPileDecorative)
 						.addCriterion("has_decorative", this.hasItem(charcoalBlocks.woodPileDecorative))::build,
 				new ResourceLocation(Constants.MOD_ID, "wood_pile_from_decorative"), ForestryModuleUids.CHARCOAL);
+	}
+
+	private void addClimatologyRecipes(RecipeDataHelper helper) {
+		BlockRegistryClimatology climatologyBlocks = ModuleClimatology.getBlocks();
+		ItemRegistryClimatology climatologyItems = ModuleClimatology.getItems();
 	}
 }
