@@ -603,7 +603,7 @@ public class ModuleFactory extends BlankForestryModule {
 			new Object[]{" # ", " X ", " X ", '#', "ingotBronze", 'X', "stickWood"});
 
 		// Reclamation
-		ItemStack ingotBronze = coreItems.ingotBronze.copy();
+		ItemStack ingotBronze = coreItems.ingotBronze.getItemStack();
 		ingotBronze.setCount(2);
 		RecipeManagers.carpenterManager.addRecipe(ItemStack.EMPTY, ingotBronze, "#", '#', coreItems.brokenBronzePickaxe);
 

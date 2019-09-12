@@ -41,9 +41,9 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 
 		ItemRegistryCore coreItems = ModuleCore.getItems();
 		getBuilder(Tags.Items.INGOTS).add(ForestryTags.Items.INGOT_BRONZE, ForestryTags.Items.INGOT_COPPER, ForestryTags.Items.INGOT_TIN);
-		getBuilder(ForestryTags.Items.INGOT_BRONZE).add(coreItems.ingotBronze.getItem());
-		getBuilder(ForestryTags.Items.INGOT_COPPER).add(coreItems.ingotCopper.getItem());
-		getBuilder(ForestryTags.Items.INGOT_TIN).add(coreItems.ingotTin.getItem());
+		getBuilder(ForestryTags.Items.INGOT_BRONZE).add(coreItems.ingotBronze);
+		getBuilder(ForestryTags.Items.INGOT_COPPER).add(coreItems.ingotCopper);
+		getBuilder(ForestryTags.Items.INGOT_TIN).add(coreItems.ingotTin);
 		getBuilder(ForestryTags.Items.GEM_APATITE).add(coreItems.apatite);
 
 		copy(ForestryTags.Blocks.ORE_COPPER, ForestryTags.Items.ORE_COPPER);
@@ -56,9 +56,9 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		copy(ForestryTags.Blocks.STORAGE_BLOCK_APATITE, ForestryTags.Items.STORAGE_BLOCK_APATITE);
 
 		getBuilder(ForestryTags.Items.GEARS).add(ForestryTags.Items.GEAR_BRONZE, ForestryTags.Items.GEAR_COPPER, ForestryTags.Items.GEAR_TIN);
-		getBuilder(ForestryTags.Items.GEAR_BRONZE).add(coreItems.gearBronze.getItem());
-		getBuilder(ForestryTags.Items.GEAR_COPPER).add(coreItems.gearCopper.getItem());
-		getBuilder(ForestryTags.Items.GEAR_TIN).add(coreItems.gearTin.getItem());
+		getBuilder(ForestryTags.Items.GEAR_BRONZE).add(coreItems.gearBronze);
+		getBuilder(ForestryTags.Items.GEAR_COPPER).add(coreItems.gearCopper);
+		getBuilder(ForestryTags.Items.GEAR_TIN).add(coreItems.gearTin);
 	}
 
 	@Override

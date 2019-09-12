@@ -15,6 +15,7 @@ import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import net.minecraftforge.common.ToolType;
 
@@ -22,12 +23,10 @@ import forestry.api.core.ItemGroups;
 import forestry.core.ItemGroupForestry;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
+import forestry.core.data.ForestryTags;
 import forestry.core.genetics.ItemResearchNote;
-import forestry.core.utils.OreDictUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-
-//import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryCore extends ItemRegistry {
 	/* Fertilizer */
@@ -44,9 +43,9 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemAlyzer portableAlyzer;
 
 	/* Ingots */
-	public final ItemStack ingotCopper;
-	public final ItemStack ingotTin;
-	public final ItemStack ingotBronze;
+	public final ItemForestry ingotCopper;
+	public final ItemForestry ingotTin;
+	public final ItemForestry ingotBronze;
 
 	/* Tools */
 	public final ItemWrench wrench;
@@ -66,9 +65,9 @@ public class ItemRegistryCore extends ItemRegistry {
 	public final ItemForestry hardenedCasing;
 	public final ItemForestry impregnatedCasing;
 	public final ItemForestry flexibleCasing;
-	public final ItemStack gearBronze;
-	public final ItemStack gearCopper;
-	public final ItemStack gearTin;
+	public final ItemForestry gearBronze;
+	public final ItemForestry gearCopper;
+	public final ItemForestry gearTin;
 
 	/* Soldering */
 	public final ItemSolderingIron solderingIron;
@@ -105,15 +104,13 @@ public class ItemRegistryCore extends ItemRegistry {
 		fertilizerCompound = registerItem(new ItemFertilizer(), "fertilizer_compound");
 
 		apatite = registerItem(new ItemForestry(), "apatite");
-		//		OreDictionary.registerOre(OreDictUtil.GEM_APATITE, apatite);
 
 		researchNote = registerItem(new ItemResearchNote(), "research_note");
 
 		portableAlyzer = registerItem(new ItemAlyzer(), "portable_alyzer");
-
-		ingotCopper = createItemForOreName(OreDictUtil.INGOT_COPPER, "ingot_copper");
-		ingotTin = createItemForOreName(OreDictUtil.INGOT_TIN, "ingot_tin");
-		ingotBronze = createItemForOreName(OreDictUtil.INGOT_BRONZE, "ingot_bronze");
+		ingotCopper = registerItem(new ItemForestry(), "ingot_copper");
+		ingotTin = registerItem(new ItemForestry(), "ingot_tin");
+		ingotBronze = registerItem(new ItemForestry(), "ingot_bronze");
 
 		wrench = registerItem(new ItemWrench(), "wrench");
 		pipette = registerItem(new ItemPipette(), "pipette");
@@ -138,10 +135,9 @@ public class ItemRegistryCore extends ItemRegistry {
 			}
 		};
 		registerItem(peat, "peat");
-		//		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
+		//TODO		OreDictionary.registerOre(OreDictUtil.BRICK_PEAT, peat);
 
 		ash = registerItem(new ItemForestry(), "ash");
-		//		OreDictionary.registerOre(OreDictUtil.DUST_ASH, ash);
 
 		bituminousPeat = new ItemForestry() {
 			@Override
@@ -151,9 +147,9 @@ public class ItemRegistryCore extends ItemRegistry {
 		};
 		registerItem(bituminousPeat, "bituminous_peat");
 
-		gearBronze = createItemForOreName(OreDictUtil.GEAR_BRONZE, "gear_bronze");
-		gearCopper = createItemForOreName(OreDictUtil.GEAR_COPPER, "gear_copper");
-		gearTin = createItemForOreName(OreDictUtil.GEAR_TIN, "gear_tin");
+		gearBronze = registerItem(new ItemForestry(), "gear_bronze");
+		gearCopper = registerItem(new ItemForestry(), "gear_copper");
+		gearTin = registerItem(new ItemForestry(), "gear_tin");
 
 		for (EnumCircuitBoardType type : EnumCircuitBoardType.values()) {
 			ItemCircuitBoard board = new ItemCircuitBoard(type);
@@ -176,7 +172,7 @@ public class ItemRegistryCore extends ItemRegistry {
 		// / CRAFTING CARPENTER
 		stickImpregnated = registerItem(new ItemForestry(), "oak_stick");
 		woodPulp = registerItem(new ItemForestry(), "wood_pulp");
-		//		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
+		//TODO		OreDictionary.registerOre(OreDictUtil.PULP_WOOD, woodPulp);
 
 		// / RECLAMATION
 		brokenBronzePickaxe = registerItem(new ItemForestry(), "broken_bronze_pickaxe");

@@ -167,7 +167,7 @@ public class ModuleFluids extends BlankForestryModule {
 	public void doInit() {
 		if (RecipeManagers.squeezerManager != null) {
 			ItemRegistryCore itemRegistryCore = ModuleCore.getItems();
-			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().canEmpty.getItemStack(), itemRegistryCore.ingotTin.copy(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().canEmpty.getItemStack(), itemRegistryCore.ingotTin.getItemStack(), 0.05f);
 			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().waxCapsuleEmpty.getItemStack(), itemRegistryCore.beeswax.getItemStack(), 0.10f);
 			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
 		}
