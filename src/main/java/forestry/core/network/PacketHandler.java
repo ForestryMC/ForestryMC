@@ -73,8 +73,12 @@ public class PacketHandler {
 			threadListener.addScheduledTask(() -> {
 				try {
 					EntityPlayer player = Minecraft.getMinecraft().player;
-					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
-					packet.onPacketData(data, player);
+					if(player != null) {
+						packet.onPacketData(data, player);
+					} else {
+						Log.error("Client player was null when packet received: {}, {}", packet.getClass().getCanonicalName(), data.toString());
+						Log.error("Breeding trackers etc will likely be broken in this world");
+					}
 					data.release();
 				} catch (IOException e) {
 					Log.error("Network Error", e);
