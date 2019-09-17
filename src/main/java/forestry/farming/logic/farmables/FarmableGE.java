@@ -14,6 +14,8 @@ import com.google.common.collect.Sets;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
@@ -31,23 +33,22 @@ import forestry.api.farming.IFarmable;
 import forestry.api.genetics.AlleleManager;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.utils.datastructures.ItemStackMap;
-import forestry.core.utils.datastructures.StackMap;
 import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableGE implements IFarmable {
 
 	//StackMap used because a normal HashSet didn't seem to work
 	//TODO use items instead and normal set if this is still used in 1.14+ since items are flattened
-	private final StackMap<ItemStack, Boolean> windfall = new ItemStackMap<>();
+	private final Set<ItemStack> windfall = Collections.newSetFromMap(new ItemStackMap<>());
 
 	//TODO would be nice to make this class more granular so windfall and germling checks could be more specific
 	public FarmableGE() {
-		windfall.putAll(AlleleManager.alleleRegistry.getRegisteredFruitFamilies().values().stream()
+		windfall.addAll(AlleleManager.alleleRegistry.getRegisteredFruitFamilies().values().stream()
 				.map(TreeManager.treeRoot::getFruitProvidersForFruitFamily)
 				.flatMap(Collection::stream)
 				.map(p -> Sets.union(p.getProducts().keySet(), p.getSpecialty().keySet()))
 				.flatMap(Collection::stream)
-				.collect(Collectors.toMap(stack -> stack, stack -> true)));
+				.collect(Collectors.toSet()));
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean isWindfall(ItemStack itemstack) {
-		return windfall.containsKey(itemstack);
+		return windfall.contains(itemstack);
 	}
 
 }
