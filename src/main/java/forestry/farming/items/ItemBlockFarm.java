@@ -29,7 +29,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.ItemGroups;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.farming.models.EnumFarmBlockTexture;
+import forestry.farming.blocks.BlockFarm;
+import forestry.farming.models.EnumFarmMaterial;
 
 public class ItemBlockFarm extends BlockItem {
 
@@ -45,9 +46,13 @@ public class ItemBlockFarm extends BlockItem {
 			if (stack.getTag() == null) {
 				return;
 			}
-			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
+			Block block = getBlock();
+			EnumFarmMaterial material = EnumFarmMaterial.BRICK_STONE;
+			if (block instanceof BlockFarm) {
+				material = ((BlockFarm) block).getFarmMaterial();
+			}
 
-			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(texture.getFormatting())).appendText(" " + texture.getName()));
+			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(material.getFormatting())).appendText(" " + material.getName()));
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}

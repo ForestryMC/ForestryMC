@@ -40,6 +40,7 @@ import forestry.core.items.ItemBlockBase;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureBlockGroup;
+import forestry.modules.features.FeatureGroup;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
@@ -71,15 +72,15 @@ public class ArboricultureBlocks {
 	public static final FeatureBlockGroup<BlockForestryStairs, EnumForestryWoodType> STAIRS_FIREPROOF = woodGroup((type) -> new BlockForestryStairs(PLANKS_FIREPROOF.get(type).block()), WoodBlockKind.STAIRS, true, EnumForestryWoodType.VALUES);
 	public static final FeatureBlockGroup<BlockForestryStairs, EnumVanillaWoodType> STAIRS_VANILLA_FIREPROOF = woodGroup((type) -> new BlockForestryStairs(PLANKS_VANILLA_FIREPROOF.get(type).block()), WoodBlockKind.STAIRS, true, EnumVanillaWoodType.VALUES);
 
-	public static final FeatureBlockGroup<BlockForestryDoor, EnumForestryWoodType> DOORS = REGISTRY.blockGroup(BlockForestryDoor::new, EnumForestryWoodType.VALUES).setItem(ItemBlockWoodDoor::new).setIdent("door").affix().create();
+	public static final FeatureBlockGroup<BlockForestryDoor, EnumForestryWoodType> DOORS = REGISTRY.blockGroup(BlockForestryDoor::new, EnumForestryWoodType.VALUES).item(ItemBlockWoodDoor::new).identifier("door", FeatureGroup.IdentifierType.AFFIX).create();
 
 	/* GENETICS */
 	public static final FeatureBlock<BlockSapling, BlockItem> SAPLING_GE = REGISTRY.block(BlockSapling::new, "sapling_ge");
 	public static final FeatureBlock<BlockForestryLeaves, ItemBlockLeaves> LEAVES = REGISTRY.block(BlockForestryLeaves::new, ItemBlockLeaves::new, "leaves");
-	public static final FeatureBlockGroup<BlockDefaultLeaves, TreeDefinition> LEAVES_DEFAULT = REGISTRY.blockGroup(BlockDefaultLeaves::new, TreeDefinition.VALUES).setItem(ItemBlockLeaves::new).setIdent("default_leaves").affix().create();
-	public static final FeatureBlockGroup<BlockDefaultLeavesFruit, TreeDefinition> LEAVES_DEFAULT_FRUIT = REGISTRY.blockGroup(BlockDefaultLeavesFruit::new, TreeDefinition.VALUES).setItem(ItemBlockLeaves::new).setIdent("default_leaves_fruit").affix().create();
-	public static final FeatureBlockGroup<BlockDecorativeLeaves, TreeDefinition> LEAVES_DECORATIVE = REGISTRY.blockGroup(BlockDecorativeLeaves::new, TreeDefinition.VALUES).setItem(ItemBlockDecorativeLeaves::new).setIdent("decorative_leaves").affix().create();
-	public static final FeatureBlockGroup<BlockFruitPod, IAlleleFruit> PODS = REGISTRY.blockGroup(BlockFruitPod::new, AlleleFruits.getFruitAllelesWithModels()).setIdent("pods").create();
+	public static final FeatureBlockGroup<BlockDefaultLeaves, TreeDefinition> LEAVES_DEFAULT = REGISTRY.blockGroup(BlockDefaultLeaves::new, TreeDefinition.VALUES).item(ItemBlockLeaves::new).identifier("default_leaves", FeatureGroup.IdentifierType.AFFIX).create();
+	public static final FeatureBlockGroup<BlockDefaultLeavesFruit, TreeDefinition> LEAVES_DEFAULT_FRUIT = REGISTRY.blockGroup(BlockDefaultLeavesFruit::new, TreeDefinition.VALUES).item(ItemBlockLeaves::new).identifier("default_leaves_fruit", FeatureGroup.IdentifierType.AFFIX).create();
+	public static final FeatureBlockGroup<BlockDecorativeLeaves, TreeDefinition> LEAVES_DECORATIVE = REGISTRY.blockGroup(BlockDecorativeLeaves::new, TreeDefinition.VALUES).item(ItemBlockDecorativeLeaves::new).identifier("decorative_leaves", FeatureGroup.IdentifierType.AFFIX).create();
+	public static final FeatureBlockGroup<BlockFruitPod, IAlleleFruit> PODS = REGISTRY.blockGroup(BlockFruitPod::new, AlleleFruits.getFruitAllelesWithModels()).identifier("pods").create();
 
 	/* MACHINES */
 	public static final FeatureBlock<BlockArboriculture, ItemBlockBase> TREE_CHEST = REGISTRY.block(() -> new BlockArboriculture(BlockTypeArboricultureTesr.ARB_CHEST), (block) -> new ItemBlockBase<>(block, BlockTypeArboricultureTesr.ARB_CHEST), "tree_chest");
@@ -89,7 +90,7 @@ public class ArboricultureBlocks {
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> woodGroup(BiFunction<Boolean, S, B> constructor, Function<B, BlockItem> itemConstructor, WoodBlockKind kind, boolean fireproof, S[] types) {
-		return registerWood(REGISTRY.blockGroup((type) -> constructor.apply(fireproof, type), types).setItem(itemConstructor).setIdent((fireproof ? "fireproof_" : "") + kind.getName()).affix().create(), kind);
+		return registerWood(REGISTRY.blockGroup((type) -> constructor.apply(fireproof, type), types).item(itemConstructor).identifier((fireproof ? "fireproof_" : "") + kind.getName(), FeatureGroup.IdentifierType.AFFIX).create(), kind);
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> woodGroup(Function<S, B> constructor, WoodBlockKind kind, boolean fireproof, S[] types) {
@@ -97,7 +98,7 @@ public class ArboricultureBlocks {
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> woodGroup(Function<S, B> constructor, Function<B, BlockItem> itemConstructor, WoodBlockKind kind, boolean fireproof, S[] types) {
-		return registerWood(REGISTRY.blockGroup(constructor, types).setItem(itemConstructor).setIdent((fireproof ? "fireproof_" : "") + kind.getName()).affix().create(), kind);
+		return registerWood(REGISTRY.blockGroup(constructor, types).item(itemConstructor).identifier((fireproof ? "fireproof_" : "") + kind.getName(), FeatureGroup.IdentifierType.AFFIX).create(), kind);
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> registerWood(FeatureBlockGroup<B, S> group, WoodBlockKind kind) {

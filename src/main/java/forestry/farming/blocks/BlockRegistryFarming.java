@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.farming.items.ItemBlockFarm;
+import forestry.farming.models.EnumFarmMaterial;
 
 public class BlockRegistryFarming extends BlockRegistry {
 	public final BlockMushroom mushroom;
@@ -29,7 +30,7 @@ public class BlockRegistryFarming extends BlockRegistry {
 		registerBlock(mushroom, new ItemBlockForestry<>(mushroom, new Item.Properties().group(null)), "mushroom");
 
 		for (EnumFarmBlockType type : EnumFarmBlockType.VALUES) {
-			BlockFarm block = new BlockFarm(type);
+			BlockFarm block = new BlockFarm(type, EnumFarmMaterial.BRICK_STONE);
 			registerBlock(block, new ItemBlockFarm(block), "ffarm_" + type.getName());
 			farms.put(type, block);
 		}

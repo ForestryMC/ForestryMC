@@ -29,7 +29,7 @@ public class ForestryBlockLootTables extends BlockLootTables {
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDecorativeLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getBlockByType().entrySet()) {
+			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDecorativeLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getFeatureByType().entrySet()) {
 				this.registerLootTable(leaves.getValue().block(), (block) -> func_218540_a(block, Blocks.AIR, field_218579_g));
 			}
 		}

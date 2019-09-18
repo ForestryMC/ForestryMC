@@ -2,6 +2,7 @@ package forestry.farming.models;
 
 import java.util.Objects;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -20,11 +21,11 @@ import forestry.farming.blocks.EnumFarmBlockType;
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.Key> {
 
 	public static class Key {
-		public final EnumFarmBlockTexture texture;
+		public final EnumFarmMaterial texture;
 		public final EnumFarmBlockType type;
 		private final int hashCode;
 
-		public Key(EnumFarmBlockTexture texture, EnumFarmBlockType type) {
+		public Key(EnumFarmMaterial texture, EnumFarmBlockType type) {
 			this.texture = texture;
 			this.type = type;
 			this.hashCode = Objects.hash(texture, type);
@@ -52,27 +53,31 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 
 	@Override
 	protected Key getInventoryKey(ItemStack stack) {
-		EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
-		EnumFarmBlockType type = EnumFarmBlockType.VALUES[0];//stack.getItemDamage()];
+		EnumFarmMaterial texture = EnumFarmMaterial.BRICK;
+		EnumFarmBlockType type = EnumFarmBlockType.PLAIN;
 
+		Block block = Block.getBlockFromItem(stack.getItem());
+		if (block instanceof BlockFarm) {
+			BlockFarm blockFarm = ((BlockFarm) block);
+			type = blockFarm.getType();
+			texture = blockFarm.getFarmMaterial();
+			return new Key(texture, type);
+		}
 		return new Key(texture, type);
 	}
 
 	@Override
 	protected Key getWorldKey(BlockState state, IModelData extraData) {
-		//		IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		//		IBlockReader world = stateExtended.getComb(UnlistedBlockAccess.BLOCKACCESS);
-		//		BlockPos pos = stateExtended.getComb(UnlistedBlockPos.POS);
-		//
-		//		TileFarm farm = TileUtil.getTile(world, pos, TileFarm.class);
-		EnumFarmBlockTexture texture = EnumFarmBlockTexture.BRICK;
+		EnumFarmMaterial texture = EnumFarmMaterial.BRICK;
 		EnumFarmBlockType type = EnumFarmBlockType.PLAIN;
 
-		//		if (farm != null) {
-		//			texture = farm.getFarmBlockTexture();
-		//			type = farm.getFarmBlockType();
-		//		}
-
+		Block block = state.getBlock();
+		if (block instanceof BlockFarm) {
+			BlockFarm blockFarm = ((BlockFarm) block);
+			type = blockFarm.getType();
+			texture = blockFarm.getFarmMaterial();
+			return new Key(texture, type);
+		}
 		return new Key(texture, type);
 	}
 
@@ -89,14 +94,14 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, ModelFarmBlock.K
 		baker.setParticleSprite(textures[0]);
 	}
 
-	private static TextureAtlasSprite[] getSprites(EnumFarmBlockTexture texture) {
+	private static TextureAtlasSprite[] getSprites(EnumFarmMaterial texture) {
 		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
-		textures[0] = EnumFarmBlockTexture.getSprite(texture, 0);
-		textures[1] = EnumFarmBlockTexture.getSprite(texture, 1);
-		textures[2] = EnumFarmBlockTexture.getSprite(texture, 2);
-		textures[3] = EnumFarmBlockTexture.getSprite(texture, 3);
-		textures[4] = EnumFarmBlockTexture.getSprite(texture, 4);
-		textures[5] = EnumFarmBlockTexture.getSprite(texture, 5);
+		textures[0] = EnumFarmMaterial.getSprite(texture, 0);
+		textures[1] = EnumFarmMaterial.getSprite(texture, 1);
+		textures[2] = EnumFarmMaterial.getSprite(texture, 2);
+		textures[3] = EnumFarmMaterial.getSprite(texture, 3);
+		textures[4] = EnumFarmMaterial.getSprite(texture, 4);
+		textures[5] = EnumFarmMaterial.getSprite(texture, 5);
 		return textures;
 	}
 

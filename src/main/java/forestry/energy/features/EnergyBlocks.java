@@ -12,7 +12,7 @@ import forestry.modules.features.ModFeatureRegistry;
 public class EnergyBlocks {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.ENERGY);
 
-	public static final FeatureBlockGroup<BlockEngine, BlockTypeEngine> ENGINES = REGISTRY.blockGroup(BlockEngine::new, BlockTypeEngine.VALUES).setIdent("engine").setItem(ItemBlockBase::new).create();
+	public static final FeatureBlockGroup<BlockEngine, BlockTypeEngine> ENGINES = REGISTRY.blockGroup(BlockEngine::new, BlockTypeEngine.VALUES).itemWithType(ItemBlockBase::new).identifier("engine").create();
 
 	private EnergyBlocks() {
 	}

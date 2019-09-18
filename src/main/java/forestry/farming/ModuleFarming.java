@@ -60,9 +60,9 @@ import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
 import forestry.core.items.EnumElectronTube;
 import forestry.farming.blocks.BlockMushroom;
-import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.circuits.CircuitFarmLogic;
+import forestry.farming.features.FarmingBlocks;
 import forestry.farming.gui.FarmingContainerTypes;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.FarmLogicArboreal;
@@ -101,8 +101,6 @@ public class ModuleFarming extends BlankForestryModule {
 	public static ProxyFarming proxy;
 
 	@Nullable
-	private static BlockRegistryFarming blocks;
-	@Nullable
 	private static TileRegistryFarming tiles;
 	@Nullable
 	private static FarmingContainerTypes containerTypes;
@@ -116,11 +114,6 @@ public class ModuleFarming extends BlankForestryModule {
 	public static TileRegistryFarming getTiles() {
 		Preconditions.checkNotNull(tiles);
 		return tiles;
-	}
-
-	public static BlockRegistryFarming getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
 	}
 
 	public static FarmingContainerTypes getContainerTypes() {
@@ -140,8 +133,8 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryFarming();
+	public void registerFeatures() {
+		FarmingBlocks.FARM.getClass();
 	}
 
 	@Override
@@ -162,8 +155,6 @@ public class ModuleFarming extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		BlockRegistryFarming blocks = getBlocks();
-
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
 		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
@@ -177,10 +168,10 @@ public class ModuleFarming extends BlankForestryModule {
 			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
 			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
 
-		BlockState plantedBrownMushroom = blocks.mushroom.getDefaultState().with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
+		BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
 
-		BlockState plantedRedMushroom = blocks.mushroom.getDefaultState().with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
+		BlockState plantedRedMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
 
 		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));

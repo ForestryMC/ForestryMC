@@ -7,12 +7,13 @@ import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.IStringSerializable;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public enum EnumFarmBlockType implements IStringSerializable {
+import forestry.api.core.IBlockSubtype;
+
+public enum EnumFarmBlockType implements IBlockSubtype {
 	PLAIN,
 	BAND,
 	GEARBOX,

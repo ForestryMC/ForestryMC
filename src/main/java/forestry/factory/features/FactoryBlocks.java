@@ -1,9 +1,5 @@
 package forestry.factory.features;
 
-import java.util.function.Function;
-
-import net.minecraft.item.BlockItem;
-
 import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockForestry;
@@ -19,8 +15,8 @@ import forestry.modules.features.ModFeatureRegistry;
 public class FactoryBlocks {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.FACTORY);
 
-	public static final FeatureBlockGroup<BlockFactoryTESR, BlockTypeFactoryTesr> TESR = REGISTRY.blockGroup(BlockFactoryTESR::new, BlockTypeFactoryTesr.VALUES).setItem(ItemBlockBase::new).create();
-	public static final FeatureBlockGroup<BlockFactoryPlain, BlockTypeFactoryPlain> PLAIN = REGISTRY.blockGroup(BlockFactoryPlain::new, BlockTypeFactoryPlain.VALUES).setItem((Function<BlockFactoryPlain, BlockItem>) ItemBlockForestry::new).create();
+	public static final FeatureBlockGroup<BlockFactoryTESR, BlockTypeFactoryTesr> TESR = REGISTRY.blockGroup(BlockFactoryTESR::new, BlockTypeFactoryTesr.VALUES).itemWithType(ItemBlockBase::new).create();
+	public static final FeatureBlockGroup<BlockFactoryPlain, BlockTypeFactoryPlain> PLAIN = REGISTRY.blockGroup(BlockFactoryPlain::new, BlockTypeFactoryPlain.VALUES).item(ItemBlockForestry::new).create();
 
 	private FactoryBlocks() {
 	}

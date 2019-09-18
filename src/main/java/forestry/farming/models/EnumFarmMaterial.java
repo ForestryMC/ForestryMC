@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.models;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 import net.minecraft.block.Blocks;
@@ -24,7 +23,10 @@ import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-public enum EnumFarmBlockTexture {
+
+import forestry.api.core.IBlockSubtype;
+
+public enum EnumFarmMaterial implements IBlockSubtype {
 	BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY),
 	BRICK_MOSSY(new ItemStack(Blocks.MOSSY_STONE_BRICKS), TextFormatting.DARK_GRAY),
 	BRICK_CRACKED(new ItemStack(Blocks.CRACKED_STONE_BRICKS), TextFormatting.DARK_GRAY),
@@ -40,7 +42,7 @@ public enum EnumFarmBlockTexture {
 	private final ItemStack base;
 	private final TextFormatting formatting;
 
-	EnumFarmBlockTexture(ItemStack base, TextFormatting formatting) {
+	EnumFarmMaterial(ItemStack base, TextFormatting formatting) {
 		this.base = base;
 		this.formatting = formatting;
 	}
@@ -53,7 +55,7 @@ public enum EnumFarmBlockTexture {
 	 * @return The texture sprite from the material of the farm block
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static TextureAtlasSprite getSprite(EnumFarmBlockTexture texture, int side) {
+	public static TextureAtlasSprite getSprite(EnumFarmMaterial texture, int side) {
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 		switch (texture) {
 			case BRICK:
@@ -108,8 +110,13 @@ public enum EnumFarmBlockTexture {
 		compound.putInt("FarmBlock", this.ordinal());
 	}
 
-	public ITextComponent getName() {
+	public ITextComponent getDisplayName() {
 		return base.getItem().getDisplayName(base);
+	}
+
+	@Override
+	public String getName() {
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 
 	public String getUid() {
@@ -118,16 +125,5 @@ public enum EnumFarmBlockTexture {
 
 	public ItemStack getBase() {
 		return base;
-	}
-
-	public static EnumFarmBlockTexture getFromCompound(@Nullable CompoundNBT compound) {
-		if (compound != null) {
-			int farmBlockOrdinal = compound.getInt("FarmBlock");
-			if (farmBlockOrdinal < EnumFarmBlockTexture.values().length) {
-				return EnumFarmBlockTexture.values()[farmBlockOrdinal];
-			}
-		}
-
-		return EnumFarmBlockTexture.BRICK_STONE;
 	}
 }

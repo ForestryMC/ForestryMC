@@ -107,12 +107,12 @@ public class ModFeatureRegistry {
 
 		@Override
 		public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, Collection<S> types) {
-			return new FeatureBlockGroup.Builder<>(this, constructor).addType(types);
+			return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
 		}
 
 		@Override
 		public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, S[] types) {
-			return new FeatureBlockGroup.Builder<>(this, constructor).addType(types);
+			return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
 		}
 
 		@Override
@@ -132,16 +132,27 @@ public class ModFeatureRegistry {
 
 		@Override
 		public <I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(Function<S, I> constructor, String identifier, S[] subTypes) {
-			FeatureItemGroup<I, S> group = new FeatureItemGroup<>(this, identifier, constructor, subTypes);
-			group.getFeatures().forEach(this::register);
-			return group;
+			return itemGroup(constructor, subTypes).identifier(identifier).create();
+		}
+
+		@Override
+		public <I extends Item, S extends IItemSubtype> FeatureItemGroup.Builder<I, S> itemGroup(Function<S, I> constructor, S[] subTypes) {
+			return (FeatureItemGroup.Builder<I, S>) new FeatureItemGroup.Builder<>(this, constructor).types(subTypes);
 		}
 
 		@Override
 		public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes, String identifier) {
-			FeatureItemTable<I, R, C> group = new FeatureItemTable<>(this, identifier, constructor, rowTypes, columnTypes);
-			group.getFeatures().forEach(this::register);
-			return group;
+			return itemTable(constructor, rowTypes, columnTypes).identifier(identifier).create();
+		}
+
+		@Override
+		public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable.Builder<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes) {
+			return (FeatureItemTable.Builder<I, R, C>) new FeatureItemTable.Builder<>(this, constructor).rowTypes(rowTypes).columnTypes(columnTypes);
+		}
+
+		@Override
+		public <B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(BiFunction<R, C, B> constructor, R[] rowTypes, C[] columnTypes) {
+			return (FeatureBlockTable.Builder<B, R, C>) new FeatureBlockTable.Builder<>(this, constructor).rowTypes(rowTypes).columnTypes(columnTypes);
 		}
 
 		@Override

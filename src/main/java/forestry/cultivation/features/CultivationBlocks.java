@@ -12,7 +12,7 @@ import forestry.modules.features.ModFeatureRegistry;
 public class CultivationBlocks {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.CULTIVATION);
 
-	public static final FeatureBlockGroup<BlockPlanter, BlockTypePlanter> PLANTER = REGISTRY.blockGroup(BlockPlanter::new, BlockTypePlanter.values()).setItem(ItemBlockPlanter::new).create();
+	public static final FeatureBlockGroup<BlockPlanter, BlockTypePlanter> PLANTER = REGISTRY.blockGroup(BlockPlanter::new, BlockTypePlanter.values()).item(ItemBlockPlanter::new).create();
 
 	private CultivationBlocks() {
 	}
