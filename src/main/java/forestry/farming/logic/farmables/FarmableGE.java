@@ -10,9 +10,18 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
+import com.google.common.collect.Sets;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -23,11 +32,23 @@ import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
+import forestry.api.genetics.AlleleManager;
 import forestry.farming.logic.crops.CropDestroy;
 
-//import forestry.arboriculture.ModuleArboriculture;
-
 public class FarmableGE implements IFarmable {
+
+	private final Set<Item> windfall = new HashSet<>();
+
+	//TODO would be nice to make this class more granular so windfall and germling checks could be more specific
+	public FarmableGE() {
+		windfall.addAll(AlleleManager.geneticRegistry.getRegisteredFruitFamilies().values().stream()
+				.map(TreeManager.treeRoot::getFruitProvidersForFruitFamily)
+				.flatMap(Collection::stream)
+				.map(p -> Sets.union(p.getProducts().keySet(), p.getSpecialty().keySet()))
+				.flatMap(Collection::stream)
+				.map(ItemStack::getItem)
+				.collect(Collectors.toSet()));
+	}
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
@@ -36,6 +57,7 @@ public class FarmableGE implements IFarmable {
 	}
 
 	@Override
+	@Nullable
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
 
@@ -62,7 +84,7 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean isWindfall(ItemStack itemstack) {
-		return false;
+		return windfall.contains(itemstack.getItem());
 	}
 
 }
