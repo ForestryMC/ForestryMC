@@ -323,11 +323,6 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 		return tanks.get(tankIndex).getFluid();
 	}
 
-	//TODO unused?
-	public int getFluidAmount(int tankIndex) {
-		return tanks.get(tankIndex).getFluidAmount();
-	}
-
 	@Override
 	public boolean canFillFluidType(FluidStack fluidStack) {
 		for (StandardTank tank : tanks) {

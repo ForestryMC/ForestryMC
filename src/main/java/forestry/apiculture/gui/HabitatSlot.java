@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -66,7 +67,6 @@ public class HabitatSlot extends Widget {
 		}
 
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
-		//TODO how to do the border maths for this
-		//		manager.gui.blit(startX + xPos, startY + yPos, getIcon(), 16, 16);
+		AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
 	}
 }

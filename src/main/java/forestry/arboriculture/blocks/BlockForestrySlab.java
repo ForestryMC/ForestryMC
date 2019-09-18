@@ -22,8 +22,6 @@ public class BlockForestrySlab extends SlabBlock implements IWoodTyped {
 		this.fireproof = plank.isFireproof();
 		this.woodType = plank.getWoodType();
 
-		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
-		//		setHarvestLevel("axe", 0);	TODO harvest level
 		//		useNeighborBrightness = true;	//TODO where has this moved.
 	}
 

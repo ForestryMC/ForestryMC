@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.worktable.gui.widgets;
 
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 
@@ -46,7 +47,7 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 
 		if (recipeMemory.isLocked(slotNumber)) {
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			//			manager.gui.blit(startX + xPos, startY + yPos, lockIcon, 16, 16); TODO blit with altas sprite
+			AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, lockIcon);
 		}
 
 		GlStateManager.enableDepthTest();

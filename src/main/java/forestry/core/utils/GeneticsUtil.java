@@ -35,6 +35,7 @@ import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
+import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
@@ -173,7 +174,7 @@ public class GeneticsUtil {
 		return Optional.empty();
 	}
 
-	public static Optional<IIndividual> getGeneticEquivalent(ItemStack itemStack) {
+	public static <I extends IIndividual> Optional<I> getGeneticEquivalent(ItemStack itemStack) {
 		Item item = itemStack.getItem();
 		if (item instanceof ItemGE) {
 			return GeneticHelper.getIndividual(itemStack);
@@ -183,8 +184,8 @@ public class GeneticsUtil {
 			if (!definition.isRootPresent()) {
 				continue;
 			}
-			IIndividualRoot<IIndividual> root = definition.get();
-			Optional<IIndividual> individual = root.getTranslator().translateMember(itemStack);
+			IIndividualRoot<I> root = definition.get();
+			Optional<I> individual = root.getTranslator().translateMember(itemStack);
 			if (individual.isPresent()) {
 				return individual;
 			}
@@ -193,13 +194,20 @@ public class GeneticsUtil {
 		return Optional.empty();
 	}
 
+	//unfortunately quite a few unchecked casts
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
 		if (!GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(foreign).isRootPresent()) {
-			Optional<IIndividual> optionalIndividual = getGeneticEquivalent(foreign);
+			Optional<? extends IIndividual> optionalIndividual = getGeneticEquivalent(foreign);
+
 			if (optionalIndividual.isPresent()) {
-				ItemStack equivalent = TreeManager.treeRoot.getTypes().createStack((ITree) optionalIndividual.get(), EnumGermlingType.SAPLING);
-				equivalent.setCount(foreign.getCount());
-				return equivalent;
+				IIndividual individual = optionalIndividual.get();
+				IIndividualRoot root = individual.getRoot();
+				Optional<IOrganismType> type = root.getTypes().getType(foreign);
+				if(type.isPresent()) {
+					ItemStack equivalent = root.getTypes().createStack(individual, type.get());
+					equivalent.setCount(foreign.getCount());
+					return equivalent;
+				}
 			}
 		}
 		return foreign;

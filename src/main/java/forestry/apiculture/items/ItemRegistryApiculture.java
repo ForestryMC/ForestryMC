@@ -119,8 +119,6 @@ public class ItemRegistryApiculture extends ItemRegistry {
 
 		// TOOLS
 		scoop = registerItem(new ItemScoop(), "scoop");
-		//		scoop.setHarvestLevel("scoop", 3);
-		//TODO - harvest stuff
 		smoker = registerItem(new ItemSmoker(), "smoker");
 
 		// register some common oreDict names for our recipes

@@ -24,20 +24,20 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.IItemModelRegister;
 import forestry.api.core.IModelManager;
 
 public class BlockResourceOre extends Block implements IItemModelRegister {
-	public static final EnumProperty<EnumResourceType> ORE_RESOURCES = EnumProperty.create("resource", EnumResourceType.class, input -> input != null && input.hasOre());
-
 	private final EnumResourceType type;
 
 	public BlockResourceOre(EnumResourceType type) {
 		super(Block.Properties.create(Material.ROCK)
-			.hardnessAndResistance(3f, 5f));
+				.hardnessAndResistance(3f, 5f)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(1));
 		this.type = type;
-		//		setCreativeTab(CreativeTabForestry.tabForestry);	TODO item
 	}
 
 	@Override
@@ -76,14 +76,4 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 	//			}
 	//		}
 	//	}
-
-	//TODO needed?
-	/* MODLES */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0, "ores/apatite");
-		manager.registerItemModel(item, 1, "ores/copper");
-		manager.registerItemModel(item, 2, "ores/tin");
-	}
 }

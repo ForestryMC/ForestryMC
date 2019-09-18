@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Direction;
@@ -58,7 +59,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 		textureManager.bindTexture(selectable.getTextureMap());
 
 		TextureAtlasSprite sprite = selectable.getSprite();
-		//		gui.blit(x, y, sprite, 16, 16);	//TODO how to do this with sprite again.
+		AbstractGui.blit(x, y, gui.getBlitOffset(), 16, 16, sprite);
 	}
 
 	@Override

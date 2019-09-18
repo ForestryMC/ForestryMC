@@ -15,6 +15,8 @@ import net.minecraft.block.DoorBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
+import net.minecraftforge.common.ToolType;
+
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
@@ -27,12 +29,11 @@ public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 
 	public BlockForestryDoor(EnumForestryWoodType woodType) {
 		super(Block.Properties.create(Material.WOOD)
-			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD));
+				.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+				.sound(SoundType.WOOD)
+				.harvestTool(ToolType.AXE)
+				.harvestLevel(0));
 		this.woodType = woodType;
-
-		//		setHarvestLevel("axe", 0);	TODO harvest level
-		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
 	}
 
 	@Override

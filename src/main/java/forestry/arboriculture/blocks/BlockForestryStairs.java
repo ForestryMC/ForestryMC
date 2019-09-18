@@ -20,8 +20,6 @@ public class BlockForestryStairs extends StairsBlock implements IWoodTyped {
 		super(plank.getDefaultState(), Block.Properties.from(plank));
 		this.fireproof = plank.isFireproof();
 		this.woodType = plank.getWoodType();
-		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
-		//		setHarvestLevel("axe", 0); TODO harvest level
 	}
 
 	@Override
