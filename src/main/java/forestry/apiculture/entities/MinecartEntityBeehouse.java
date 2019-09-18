@@ -29,7 +29,8 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.blocks.BlockTypeApiculture;
+import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
@@ -59,7 +60,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 
 	@Override
 	public BlockState getDisplayTile() {
-		return ModuleApiculture.getBlocks().beeHouse.getDefaultState();
+		return ApicultureBlocks.BASE.get(BlockTypeApiculture.BEE_HOUSE).defaultState();
 	}
 
 	@Override

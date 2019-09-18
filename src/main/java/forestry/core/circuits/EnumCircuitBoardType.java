@@ -15,9 +15,10 @@ import java.util.Locale;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.IItemSubtype;
 import forestry.core.render.ColourProperties;
 
-public enum EnumCircuitBoardType {
+public enum EnumCircuitBoardType implements IItemSubtype {
 	BASIC(1),
 	ENHANCED(2),
 	REFINED(3),

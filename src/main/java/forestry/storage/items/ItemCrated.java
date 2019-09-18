@@ -10,20 +10,15 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -31,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.IModelManager;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.ItemStackUtil;
@@ -83,19 +77,19 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	}
 
 	//TODO I think this needs ItemOverrides or something?
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		if (contained.isEmpty()) {
-			manager.registerItemModel(item, 0);
-			manager.registerItemModel(item, 1, "crate-filled");
-		} else {
-			ResourceLocation location = Preconditions.checkNotNull(getRegistryName());
-			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", location.getPath());
-			//			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
-			//			ModelBakery.registerItemVariants(item, modelLocation);
-		}
-	}
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		if (contained.isEmpty()) {
+	//			manager.registerItemModel(item, 0);
+	//			manager.registerItemModel(item, 1, "crate-filled");
+	//		} else {
+	//			ResourceLocation location = Preconditions.checkNotNull(getRegistryName());
+	//			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", location.getPath());
+	//			//			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
+	//			//			ModelBakery.registerItemVariants(item, modelLocation);
+	//		}
+	//	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

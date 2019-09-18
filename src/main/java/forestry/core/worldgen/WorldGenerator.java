@@ -22,10 +22,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-import forestry.core.ModuleCore;
-import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Config;
+import forestry.core.features.CoreBlocks;
 import forestry.modules.ModuleManager;
 
 //import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
@@ -76,11 +75,9 @@ public class WorldGenerator implements IWorldGenerator {
 		}
 
 		if (false) {//apatiteGenerator == null || copperGenerator == null || tinGenerator == null) {
-			BlockRegistryCore registry = ModuleCore.getBlocks();
-
-			BlockState apatiteBlockState = registry.resourceOre.get(EnumResourceType.APATITE).getDefaultState();
-			BlockState copperBlockState = registry.resourceOre.get(EnumResourceType.COPPER).getDefaultState();
-			BlockState tinBlockState = registry.resourceOre.get(EnumResourceType.TIN).getDefaultState();
+			BlockState apatiteBlockState = CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState();
+			BlockState copperBlockState = CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState();
+			BlockState tinBlockState = CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState();
 			//			apatiteGenerator = new OreFeature(apatiteBlockState, 36);
 			//			copperGenerator = new OreFeature(copperBlockState, 6);
 			//			tinGenerator = new OreFeature(tinBlockState, 6);

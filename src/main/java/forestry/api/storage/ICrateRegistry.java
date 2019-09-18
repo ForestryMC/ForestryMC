@@ -9,6 +9,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.core.IItemProvider;
+
 /**
  * Makes a new crate, registers it with the game registry,
  * and creates crating and uncrating recipes for the Carpenter.
@@ -26,6 +28,8 @@ public interface ICrateRegistry {
 	void registerCrate(ItemStack stack);
 
 	void registerCrate(String oreDictName);
+
+	void registerCrate(IItemProvider provider);
 
 	/**
 	 * prevent a crate from being registered

@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
-package forestry.modules.features.constructors;
+@MethodsReturnNonnullByDefault
+package forestry.energy.features;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

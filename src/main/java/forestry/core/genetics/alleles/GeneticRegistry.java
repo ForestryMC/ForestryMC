@@ -36,8 +36,8 @@ import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IGeneticRegistry;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -148,11 +148,11 @@ public class GeneticRegistry implements IGeneticRegistry {
 	/* RESEARCH */
 	@Override
 	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleForestrySpecies species) {
-		return EnumNoteType.createSpeciesNoteStack(ModuleCore.getItems().researchNote, researcher, species);
+		return EnumNoteType.createSpeciesNoteStack(CoreItems.RESEARCH_NOTE.item(), researcher, species);
 	}
 
 	@Override
 	public ItemStack getMutationNoteStack(GameProfile researcher, IMutation mutation) {
-		return EnumNoteType.createMutationNoteStack(ModuleCore.getItems().researchNote, researcher, mutation);
+		return EnumNoteType.createMutationNoteStack(CoreItems.RESEARCH_NOTE.item(), researcher, mutation);
 	}
 }

@@ -14,7 +14,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
-import forestry.cultivation.blocks.BlockRegistryCultivation;
+import forestry.cultivation.features.CultivationBlocks;
 import forestry.cultivation.gui.CultivationContainerTypes;
 import forestry.cultivation.gui.GuiPlanter;
 import forestry.cultivation.tiles.TileRegistryCultivation;
@@ -24,16 +24,9 @@ import forestry.modules.ForestryModuleUids;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CULTIVATION, name = "Cultivation", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.cultivation.description")
 public class ModuleCultivation extends BlankForestryModule {
 	@Nullable
-	private static BlockRegistryCultivation blocks;
-	@Nullable
 	private static TileRegistryCultivation tiles;
 	@Nullable
 	private static CultivationContainerTypes containerTypes;
-
-	public static BlockRegistryCultivation getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
-	}
 
 	public static TileRegistryCultivation getTiles() {
 		Preconditions.checkNotNull(tiles);
@@ -46,8 +39,8 @@ public class ModuleCultivation extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryCultivation();
+	public void registerFeatures() {
+		CultivationBlocks.PLANTER.getClass();
 	}
 
 	@Override
@@ -69,19 +62,5 @@ public class ModuleCultivation extends BlankForestryModule {
 	public Set<ResourceLocation> getDependencyUids() {
 		return ImmutableSet.of(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE),
 			new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING));
-	}
-
-	@Override
-	public void doInit() {
-		BlockRegistryCultivation blocks = getBlocks();
-
-		blocks.arboretum.init();
-		blocks.farmCrops.init();
-		blocks.farmMushroom.init();
-		blocks.farmNether.init();
-		blocks.farmGourd.init();
-		blocks.farmEnder.init();
-		//blocks.plantation.init();
-		blocks.peatBog.init();
 	}
 }

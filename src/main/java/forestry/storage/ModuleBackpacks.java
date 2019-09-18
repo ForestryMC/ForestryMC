@@ -27,7 +27,6 @@ import java.util.function.Predicate;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -42,16 +41,14 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.blocks.BlockRegistryApiculture;
+import forestry.apiculture.features.ApicultureBlocks;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
+import forestry.core.features.CoreItems;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.items.ItemRegistryCore;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -60,17 +57,16 @@ import forestry.core.utils.Translator;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import forestry.modules.features.FeatureItem;
+import forestry.storage.features.BackpackItems;
 import forestry.storage.gui.BackPackContainerTypes;
 import forestry.storage.gui.GuiBackpack;
-import forestry.storage.items.ItemRegistryBackpacks;
 
 @ForestryModule(moduleID = ForestryModuleUids.BACKPACKS, containerID = Constants.MOD_ID, name = "Backpack", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.backpacks.description", lootTable = "storage")
 public class ModuleBackpacks extends BlankForestryModule {
 
 	private static final String CONFIG_CATEGORY = "backpacks";
 
-	@Nullable
-	private static ItemRegistryBackpacks items;
 	@Nullable
 	private static BackPackContainerTypes containerTypes;
 
@@ -85,11 +81,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 		BackpackManager.ADVENTURER_UID,
 		BackpackManager.BUILDER_UID
 	);
-
-	public static ItemRegistryBackpacks getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
 
 	public static BackPackContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
@@ -136,8 +127,8 @@ public class ModuleBackpacks extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItems() {
-		items = new ItemRegistryBackpacks();
+	public void registerFeatures() {
+		BackpackItems.ADVENTURER_BACKPACK.getClass();
 	}
 
 	@Override
@@ -180,8 +171,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 
 	//TODO - in 1.13 just ship json file that people can edit, don't have config in code.
 	private void setDefaultsForConfig() {
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.MINER_UID, Arrays.asList(
 			"obsidian",
 			"ore[A-Z].*",
@@ -259,9 +248,9 @@ public class ModuleBackpacks extends BlankForestryModule {
 		backpackAcceptedItemDefaults.put(BackpackManager.MINER_UID, getItemStrings(Arrays.asList(
 			new ItemStack(Blocks.COAL_ORE),
 			new ItemStack(Items.COAL),
-			coreItems.bronzePickaxe.getItemStack(),
-			coreItems.kitPickaxe.getItemStack(),
-			coreItems.brokenBronzePickaxe.getItemStack()
+			CoreItems.BRONZE_PICKAXE.stack(),
+			CoreItems.KIT_PICKAXE.stack(),
+			CoreItems.BROKEN_BRONZE_PICKAXE.stack()
 		)));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.DIGGER_UID, getItemStrings(Arrays.asList(
@@ -272,9 +261,9 @@ public class ModuleBackpacks extends BlankForestryModule {
 			new ItemStack(Blocks.SOUL_SAND),
 			new ItemStack(Blocks.CLAY),
 			new ItemStack(Blocks.SNOW),
-			coreItems.bronzeShovel.getItemStack(),
-			coreItems.kitShovel.getItemStack(),
-			coreItems.brokenBronzeShovel.getItemStack()
+			CoreItems.BRONZE_SHOVEL.stack(),
+			CoreItems.KIT_SHOVEL.stack(),
+			CoreItems.BROKEN_BRONZE_SHOVEL.stack()
 		)));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.FORESTER_UID, getItemStrings(Arrays.asList(
@@ -392,10 +381,9 @@ public class ModuleBackpacks extends BlankForestryModule {
 		)));
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			BlockRegistryApiculture beeBlocks = ModuleApiculture.getBlocks();
 			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
-				new ItemStack(beeBlocks.candle),    //TODO tag
-				new ItemStack(beeBlocks.stump)
+				ApicultureBlocks.CANDLE.stack(),    //TODO tag
+				ApicultureBlocks.STUMP.stack()
 			)));
 		}
 
@@ -516,19 +504,17 @@ public class ModuleBackpacks extends BlankForestryModule {
 		// / CARPENTER
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / BACKPACKS WOVEN
-			addT2BackpackRecipe(items.minerBackpack, items.minerBackpackT2);
-			addT2BackpackRecipe(items.diggerBackpack, items.diggerBackpackT2);
-			addT2BackpackRecipe(items.foresterBackpack, items.foresterBackpackT2);
-			addT2BackpackRecipe(items.hunterBackpack, items.hunterBackpackT2);
-			addT2BackpackRecipe(items.adventurerBackpack, items.adventurerBackpackT2);
-			addT2BackpackRecipe(items.builderBackpack, items.builderBackpackT2);
+			addT2BackpackRecipe(BackpackItems.MINER_BACKPACK, BackpackItems.MINER_BACKPACK_T_2);
+			addT2BackpackRecipe(BackpackItems.DIGGER_BACKPACK, BackpackItems.DIGGER_BACKPACK_T_2);
+			addT2BackpackRecipe(BackpackItems.FORESTER_BACKPACK, BackpackItems.FORESTER_BACKPACK_T_2);
+			addT2BackpackRecipe(BackpackItems.HUNTER_BACKPACK, BackpackItems.HUNTER_BACKPACK_T_2);
+			addT2BackpackRecipe(BackpackItems.ADVENTURER_BACKPACK, BackpackItems.ADVENTURER_BACKPACK_T_2);
+			addT2BackpackRecipe(BackpackItems.BUILDER_BACKPACK, BackpackItems.BUILDER_BACKPACK_T_2);
 		}
 	}
 
-	private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-
-		ItemStack wovenSilk = coreItems.getCraftingMaterial(EnumCraftingMaterial.WOVEN_SILK, 1);
+	private static void addT2BackpackRecipe(FeatureItem backpackT1, FeatureItem backpackT2) {
+		ItemStack wovenSilk = CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1);
 		//		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(backpackT2),
 		//				"WXW",
 		//				"WTW",

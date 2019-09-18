@@ -53,8 +53,8 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
-import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.tiles.TileCocoon;
 
 public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButterflyRoot, IBreedingTrackerHandler {
@@ -130,20 +130,18 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 			return BlockPos.ZERO;
 		}
 
-		BlockRegistryLepidopterology blocks = ModuleLepidopterology.getBlocks();
-
 		BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner, createNursery);
 		if (pos == BlockPos.ZERO) {
 			return pos;
 		}
-		BlockState state = blocks.cocoon.getDefaultState();
+		BlockState state = LepidopterologyBlocks.COCOON.defaultState();
 		boolean placed = world.setBlockState(pos, state, 18);
 		if (!placed) {
 			return BlockPos.ZERO;
 		}
 
 		Block block = world.getBlockState(pos).getBlock();
-		if (blocks.cocoon != block) {
+		if (!LepidopterologyBlocks.COCOON.blockEqual(block)) {
 			return BlockPos.ZERO;
 		}
 

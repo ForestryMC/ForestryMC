@@ -42,8 +42,8 @@ import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.items.EnumCraftingMaterial;
 
@@ -333,7 +333,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(() -> BEE_COMBS.stack(EnumHoneyComb.SIMMERING, 1), 0.55f)
-				.addProduct(() -> ModuleCore.getItems().ash.getItemStack(), 0.15f)
+				.addProduct(CoreItems.ASH::stack, 0.15f)
 				.setTemperature(EnumTemperature.HELLISH)
 				.setHumidity(EnumHumidity.ARID);
 		}
@@ -589,7 +589,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(() -> BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1), 0.20f)
-				.addProduct(() -> ModuleCore.getItems().getCraftingMaterial(EnumCraftingMaterial.ICE_SHARD, 1), 0.20f)
+				.addProduct(() -> CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 1), 0.20f)
 				.setTemperature(EnumTemperature.ICY);
 		}
 
@@ -609,7 +609,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(() -> BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1), 0.20f)
-				.addProduct(() -> ModuleCore.getItems().getCraftingMaterial(EnumCraftingMaterial.ICE_SHARD, 1), 0.40f)
+				.addProduct(() -> CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 1), 0.40f)
 				.setTemperature(EnumTemperature.ICY)
 				.setHasEffect();
 		}
@@ -718,7 +718,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(() -> BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1), 0.30f)
-				.addProduct(() -> ModuleCore.getItems().getCraftingMaterial(EnumCraftingMaterial.ICE_SHARD, 1), 0.20f)
+				.addProduct(() -> CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 1), 0.20f)
 				.setTemperature(EnumTemperature.ICY)
 				.setHasEffect()
 				.setIsNotCounted();
@@ -747,7 +747,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(() -> BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1), 0.30f)
-				.addProduct(() -> ModuleCore.getItems().getCraftingMaterial(EnumCraftingMaterial.ICE_SHARD, 1), 0.20f)
+				.addProduct(() -> CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 1), 0.20f)
 				.setTemperature(EnumTemperature.ICY)
 				.setHasEffect()
 				.setIsNotCounted();
@@ -909,7 +909,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesBuilder beeSpecies) {
 			beeSpecies.addProduct(() -> BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1), 0.39f)
-				.addSpecialty(() -> ModuleCore.getItems().peat.getItemStack(), 0.08f)
+				.addSpecialty(CoreItems.PEAT::stack, 0.08f)
 				.setHumidity(EnumHumidity.DAMP);
 		}
 

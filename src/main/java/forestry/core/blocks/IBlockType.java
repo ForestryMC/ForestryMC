@@ -1,7 +1,7 @@
 package forestry.core.blocks;
 
-import net.minecraft.util.IStringSerializable;
+import forestry.api.core.IBlockSubtype;
 
-public interface IBlockType extends IStringSerializable {
+public interface IBlockType extends IBlockSubtype {
 	IMachineProperties<?> getMachineProperties();
 }

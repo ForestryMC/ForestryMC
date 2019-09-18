@@ -34,6 +34,7 @@ import forestry.api.mail.PostManager;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
+import forestry.mail.features.MailItems;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class PostRegistry implements IPostRegistry {
@@ -235,6 +236,6 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public boolean isLetter(ItemStack itemstack) {
-		return itemstack.getItem() == ModuleMail.getItems().letters;
+		return MailItems.LETTERS.itemEqual(itemstack);
 	}
 }

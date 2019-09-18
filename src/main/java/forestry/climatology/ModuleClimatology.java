@@ -26,6 +26,8 @@ import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.modules.ForestryModule;
 import forestry.climatology.blocks.BlockRegistryClimatology;
+import forestry.climatology.features.ClimatologyBlocks;
+import forestry.climatology.features.ClimatologyItems;
 import forestry.climatology.gui.ClimatologyContainerTypes;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.items.ItemRegistryClimatology;
@@ -33,12 +35,10 @@ import forestry.climatology.network.PacketRegistryClimatology;
 import forestry.climatology.proxy.ProxyClimatology;
 import forestry.climatology.proxy.ProxyClimatologyClient;
 import forestry.climatology.tiles.TileRegistryClimatology;
-import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.climate.FakeClimateListener;
 import forestry.core.climate.FakeClimateTransformer;
 import forestry.core.config.Constants;
-import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -63,16 +63,6 @@ public class ModuleClimatology extends BlankForestryModule {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyClimatologyClient(), () -> () -> new ProxyClimatology());
 	}
 
-	public static BlockRegistryClimatology getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
-	}
-
-	public static ItemRegistryClimatology getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
-
 	public static ClimatologyContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
@@ -84,13 +74,9 @@ public class ModuleClimatology extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryClimatology();
-	}
-
-	@Override
-	public void registerItems() {
-		items = new ItemRegistryClimatology();
+	public void registerFeatures() {
+		ClimatologyItems.HABITAT_SCREEN.getClass();
+		ClimatologyBlocks.HABITATFORMER.getClass();
 	}
 
 	@Override
@@ -119,8 +105,6 @@ public class ModuleClimatology extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-		BlockRegistryClimatology blockRegistry = getBlocks();
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			//			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(FluidRegistry.WATER, 2000), ItemStack.EMPTY, getItems().habitatScreen.getItemStack(),

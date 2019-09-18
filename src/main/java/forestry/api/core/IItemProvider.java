@@ -1,9 +1,11 @@
-package forestry.modules.features;
+package forestry.api.core;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import forestry.modules.features.StackOption;
 
 public interface IItemProvider<I extends Item> {
 	boolean hasItem();

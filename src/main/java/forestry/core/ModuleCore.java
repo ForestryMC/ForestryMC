@@ -38,7 +38,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.circuits.ChipsetManager;
@@ -49,14 +48,14 @@ import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.core.blocks.BlockBogEarth;
-import forestry.core.blocks.BlockRegistryCore;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
+import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.gui.CoreContainerTypes;
@@ -65,7 +64,6 @@ import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.items.ItemRegistryCore;
 import forestry.core.loot.SetSpeciesNBT;
 import forestry.core.models.ModelManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
@@ -91,10 +89,6 @@ import forestry.modules.ModuleHelper;
 public class ModuleCore extends BlankForestryModule {
 	//	public static final RootCommand rootCommand = new RootCommand();
 	@Nullable
-	private static ItemRegistryCore items;
-	@Nullable
-	private static BlockRegistryCore blocks;
-	@Nullable
 	private static TileRegistryCore tiles;
 	@Nullable    //TODO - there are lots of these. Make helper class/map or something?
 	private static CoreContainerTypes containerTypes;
@@ -102,16 +96,6 @@ public class ModuleCore extends BlankForestryModule {
 	public ModuleCore() {
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static ItemRegistryCore getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
-
-	public static BlockRegistryCore getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
 	}
 
 	public static TileRegistryCore getTiles() {
@@ -151,13 +135,9 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryCore();
-	}
-
-	@Override
-	public void registerItems() {
-		items = new ItemRegistryCore();
+	public void registerFeatures() {
+		CoreBlocks.RESOURCE_ORE.getClass();
+		CoreItems.PEAT.getClass();
 	}
 
 	@Override
@@ -183,7 +163,6 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-
 		GameProfileDataSerializer.register();
 
 		MinecraftForge.EVENT_BUS.register(this);
@@ -195,12 +174,6 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-
-		BlockRegistryCore blocks = getBlocks();
-
-		blocks.analyzer.init();
-		blocks.escritoire.init();
-
 		ForestryModEnvWarningCallable.register();
 
 		Proxies.render.initRendering();
@@ -216,21 +189,19 @@ public class ModuleCore extends BlankForestryModule {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 
 		// forestry items
-		ItemRegistryCore items = getItems();
-		crateRegistry.registerCrate(items.peat);
-		crateRegistry.registerCrate(items.apatite);
-		crateRegistry.registerCrate(items.fertilizerCompound);
-		crateRegistry.registerCrate(items.mulch);
-		crateRegistry.registerCrate(items.phosphor);
-		crateRegistry.registerCrate(items.ash);
+		crateRegistry.registerCrate(CoreItems.PEAT);
+		crateRegistry.registerCrate(CoreItems.APATITE);
+		crateRegistry.registerCrate(CoreItems.FERTILIZER_COMPOUND);
+		crateRegistry.registerCrate(CoreItems.MULCH);
+		crateRegistry.registerCrate(CoreItems.PHOSPHOR);
+		crateRegistry.registerCrate(CoreItems.ASH);
 		crateRegistry.registerCrate(OreDictUtil.INGOT_TIN);
 		crateRegistry.registerCrate(OreDictUtil.INGOT_COPPER);
 		crateRegistry.registerCrate(OreDictUtil.INGOT_BRONZE);
 
 		// forestry blocks
-		BlockRegistryCore blocks = getBlocks();
-		crateRegistry.registerCrate(blocks.humus);
-		crateRegistry.registerCrate(blocks.bogEarth.get(BlockBogEarth.SoilType.BOG_EARTH, 1));
+		crateRegistry.registerCrate(CoreBlocks.HUMUS);
+		crateRegistry.registerCrate(CoreBlocks.BOG_EARTH);
 
 		// vanilla items
 		crateRegistry.registerCrate(OreDictUtil.CROP_WHEAT);
@@ -286,18 +257,15 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		BlockRegistryCore blocks = getBlocks();
-		ItemRegistryCore items = getItems();
-
 		/* SMELTING RECIPES */
-		RecipeUtil.addSmelting(blocks.getOre(EnumResourceType.APATITE, 1), items.apatite, 0.5f);
-		RecipeUtil.addSmelting(blocks.getOre(EnumResourceType.COPPER, 1), items.ingotCopper, 0.5f);
-		RecipeUtil.addSmelting(blocks.getOre(EnumResourceType.TIN, 1), items.ingotTin, 0.5f);
-		RecipeUtil.addSmelting(new ItemStack(items.peat), items.ash, 0.0f);
+		RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.APATITE, 1), CoreItems.APATITE.stack(), 0.5f);
+		RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.COPPER, 1), CoreItems.INGOT_COPPER.stack(), 0.5f);
+		RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.TIN, 1), CoreItems.INGOT_TIN.stack(), 0.5f);
+		RecipeUtil.addSmelting(CoreItems.PEAT.stack(), CoreItems.ASH.stack(), 0.0f);
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CARPENTER
 			// Portable ANALYZER
-			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, items.portableAlyzer.getItemStack(),
+			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, CoreItems.PORTABLE_ALYZER.stack(),
 				"X#X", "X#X", "RDR",
 				'#', OreDictUtil.PANE_GLASS,
 				'X', OreDictUtil.INGOT_TIN,
@@ -306,13 +274,13 @@ public class ModuleCore extends BlankForestryModule {
 			// Camouflaged Paneling
 			FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
 			if (!biomass.isEmpty()) {
-				RecipeManagers.squeezerManager.addRecipe(8, items.getCraftingMaterial(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1), biomass);
+				RecipeManagers.squeezerManager.addRecipe(8, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1), biomass);
 			}
 		}
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-				items.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 1), 0.15f
+				CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1), 0.15f
 			));
 		}
 
@@ -357,19 +325,12 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// research note items are not useful without actually having completed research
-		hiddenItems.add(new ItemStack(getItems().researchNote));
+		hiddenItems.add(CoreItems.RESEARCH_NOTE.stack());
 	}
 
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void onBakeModels(ModelBakeEvent event) {
 		ModelManager.getInstance().onBakeModels(event);
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onClientSetup(FMLClientSetupEvent event) {
-		blocks.analyzer.clientInit();
-		blocks.escritoire.clientInit();
 	}
 }

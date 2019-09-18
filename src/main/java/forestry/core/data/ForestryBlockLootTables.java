@@ -11,16 +11,17 @@ import java.util.function.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTables;
 
-import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
-import forestry.arboriculture.blocks.BlockRegistryArboriculture;
+import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import forestry.modules.features.FeatureBlock;
 
 public class ForestryBlockLootTables extends BlockLootTables {
 	private Set<Block> knownBlocks = new HashSet<>();
@@ -28,9 +29,8 @@ public class ForestryBlockLootTables extends BlockLootTables {
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			BlockRegistryArboriculture registry = ModuleArboriculture.getBlocks();
-			for (Map.Entry<TreeDefinition, BlockDecorativeLeaves> leaves : registry.leavesDecorative.entrySet()) {
-				this.registerLootTable(leaves.getValue(), (block) -> func_218540_a(block, Blocks.AIR, field_218579_g));
+			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDecorativeLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getBlockByType().entrySet()) {
+				this.registerLootTable(leaves.getValue().block(), (block) -> func_218540_a(block, Blocks.AIR, field_218579_g));
 			}
 		}
 

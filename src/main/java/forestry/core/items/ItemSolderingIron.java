@@ -17,6 +17,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
@@ -31,8 +32,8 @@ import forestry.core.inventory.ItemInventorySolderingIron;
 
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 
-	public ItemSolderingIron(Properties properties) {
-		super(properties.group(ItemGroupForestry.tabForestry));
+	public ItemSolderingIron() {
+		super(new Item.Properties().maxDamage(5).group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

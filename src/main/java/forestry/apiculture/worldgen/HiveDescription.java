@@ -37,12 +37,11 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.HiveConfig;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
 
 public enum HiveDescription implements IHiveDescription {
-
 	FOREST(IHiveRegistry.HiveType.FOREST, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
 		@Override
 		public void postGen(World world, Random rand, BlockPos pos) {
@@ -110,7 +109,7 @@ public enum HiveDescription implements IHiveDescription {
 	private final IHiveRegistry.HiveType hiveType;
 
 	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
-		this.blockState = ModuleApiculture.getBlocks().beehives.get(hiveType).getDefaultState();
+		this.blockState = ApicultureBlocks.BEEHIVE.get(hiveType).defaultState();
 		this.genChance = genChance;
 		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;

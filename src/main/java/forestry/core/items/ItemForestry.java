@@ -23,34 +23,39 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
 import forestry.core.utils.ItemTooltipUtil;
 
-public class ItemForestry extends Item implements IItemModelRegister {
-	public ItemForestry(Item.Properties properties) {
-		//TODO - do the below at registration
-		super(properties);
-	}
+public class ItemForestry extends Item {
 
-	public ItemForestry(ItemGroup group) {
-		this(new Item.Properties(), group);
-	}
+	private final int burnTime;
 
 	//TODO may be worth removing this
 	public ItemForestry() {
 		this(ItemGroupForestry.tabForestry);
 	}
 
-	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
-		super(properties.group(creativeTab));
+	public ItemForestry(ItemGroup group) {
+		this(new Item.Properties(), group);
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
+		this(properties.group(creativeTab));
+	}
+
+	public ItemForestry(Item.Properties properties) {
+		//TODO - do the below at registration
+		super(properties);
+		if (properties instanceof ItemProperties) {
+			this.burnTime = ((ItemProperties) properties).burnTime;
+		} else {
+			burnTime = 0;
+		}
+	}
+
 	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
+	public int getBurnTime(ItemStack itemStack) {
+		return burnTime;
 	}
 
 	public ItemStack getItemStack() {
@@ -72,4 +77,5 @@ public class ItemForestry extends Item implements IItemModelRegister {
 		super.addInformation(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
+
 }

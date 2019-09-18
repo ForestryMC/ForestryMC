@@ -1,5 +1,9 @@
 package forestry.modules.features;
 
+import java.util.function.Supplier;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -19,7 +23,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 public interface IModFeature<O> {
 	String getIdentifier();
 
-	IFeatureConstructor<O> getConstructor();
+	Supplier<O> getConstructor();
 
 	FeatureType getType();
 
@@ -35,5 +39,9 @@ public interface IModFeature<O> {
 
 	default boolean isEnabled() {
 		return ModFeatureRegistry.get(getModId()).isEnabled(this);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	default void clientSetup() {
 	}
 }

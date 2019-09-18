@@ -3,8 +3,8 @@ package forestry.mail.tiles;
 import net.minecraft.tileentity.TileEntityType;
 
 import forestry.core.tiles.TileRegistry;
-import forestry.mail.ModuleMail;
-import forestry.mail.blocks.BlockRegistryMail;
+import forestry.mail.blocks.BlockTypeMail;
+import forestry.mail.features.MailBlocks;
 
 public class TileRegistryMail extends TileRegistry {
 
@@ -13,9 +13,8 @@ public class TileRegistryMail extends TileRegistry {
 	public final TileEntityType<TileTrader> TRADER;
 
 	public TileRegistryMail() {
-		BlockRegistryMail blocks = ModuleMail.getBlocks();
-		MAILBOX = registerTileEntityType(TileMailbox::new, "mailbox", blocks.mailbox);
-		STAMP_COLLECTOR = registerTileEntityType(TileStampCollector::new, "stamp_collector", blocks.stampCollector);
-		TRADER = registerTileEntityType(TileTrader::new, "trader", blocks.tradeStation);
+		MAILBOX = registerTileEntityType(TileMailbox::new, "mailbox", MailBlocks.BASE.get(BlockTypeMail.MAILBOX).block());
+		STAMP_COLLECTOR = registerTileEntityType(TileStampCollector::new, "stamp_collector", MailBlocks.BASE.get(BlockTypeMail.PHILATELIST).block());
+		TRADER = registerTileEntityType(TileTrader::new, "trader", MailBlocks.BASE.get(BlockTypeMail.TRADE_STATION).block());
 	}
 }

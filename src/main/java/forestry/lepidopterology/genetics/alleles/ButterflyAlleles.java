@@ -11,9 +11,8 @@ import genetics.api.alleles.IAlleleRegistry;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyEffect;
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreItems;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.items.ItemRegistryCore;
 
 public class ButterflyAlleles {
 	public static final IAlleleButterflyCocoon cocoonDefault;
@@ -39,9 +38,8 @@ public class ButterflyAlleles {
 		cocoonDefault.addLoot(new ItemStack(Items.STRING), 0.75F);
 		cocoonDefault.addLoot(new ItemStack(Items.STRING, 3), 0.25F);
 
-		ItemRegistryCore itemRegistry = ModuleCore.getItems();
-		cocoonSilk.addLoot(itemRegistry.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 3), 0.75F);
-		cocoonSilk.addLoot(itemRegistry.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 2), 0.25F);
+		cocoonSilk.addLoot(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 3), 0.75F);
+		cocoonSilk.addLoot(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 2), 0.25F);
 	}
 
 }

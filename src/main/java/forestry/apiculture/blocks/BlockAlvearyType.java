@@ -2,7 +2,9 @@ package forestry.apiculture.blocks;
 
 import java.util.Locale;
 
-public enum BlockAlvearyType {
+import forestry.api.core.IBlockSubtype;
+
+public enum BlockAlvearyType implements IBlockSubtype {
 	PLAIN(false),
 	SWARMER(true),
 	FAN(true),
@@ -21,6 +23,11 @@ public enum BlockAlvearyType {
 
 	@Override
 	public String toString() {
+		return super.toString().toLowerCase(Locale.ENGLISH);
+	}
+
+	@Override
+	public String getName() {
 		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
 }

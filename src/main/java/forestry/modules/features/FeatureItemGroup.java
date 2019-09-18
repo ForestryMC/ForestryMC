@@ -10,12 +10,14 @@ import java.util.function.Function;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.core.IItemSubtype;
+
 public class FeatureItemGroup<I extends Item, S extends IItemSubtype> {
 
 	private final Map<S, FeatureItem<I>> itemByType = new HashMap<>();
 
-	public FeatureItemGroup(IFeatureRegistry registry, String identifier, Function<S, IFeatureConstructor<I>> constructor, S[] subTypes) {
-		Arrays.stream(subTypes).forEach(subType -> itemByType.put(subType, registry.item(constructor.apply(subType), identifier + '_' + subType.getUid())));
+	public FeatureItemGroup(IFeatureRegistry registry, String identifier, Function<S, I> constructor, S[] subTypes) {
+		Arrays.stream(subTypes).forEach(subType -> itemByType.put(subType, registry.item(() -> constructor.apply(subType), (identifier.isEmpty() ? "" : identifier + '_') + subType.getName())));
 	}
 
 	public boolean has(S subType) {

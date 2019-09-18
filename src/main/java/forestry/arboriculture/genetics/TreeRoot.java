@@ -62,10 +62,9 @@ import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IPollinatable;
-import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockFruitPod;
-import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.blocks.BlockSapling;
+import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.genetics.root.BreedingTrackerManager;
@@ -159,8 +158,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
-		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
-		BlockState state = blocks.saplingGE.getDefaultState().with(BlockSapling.TREE, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
+		BlockState state = ArboricultureBlocks.SAPLING_GE.with(BlockSapling.TREE, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;
@@ -168,7 +166,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (blocks.saplingGE != block) {
+		if (!ArboricultureBlocks.SAPLING_GE.blockEqual(block)) {
 			return false;
 		}
 
@@ -189,12 +187,11 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	@Override
 	public boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
-		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
 
 		Direction facing = BlockUtil.getValidPodFacing(world, pos);
-		if (facing != null) {
+		if (facing != null && ArboricultureBlocks.PODS.has(allele)) {
 
-			BlockFruitPod fruitPod = blocks.getFruitPod(allele);
+			BlockFruitPod fruitPod = ArboricultureBlocks.PODS.get(allele).getBlock();
 			if (fruitPod != null) {
 
 				BlockState state = fruitPod.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);

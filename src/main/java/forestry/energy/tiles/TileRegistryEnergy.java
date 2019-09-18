@@ -4,8 +4,8 @@ import net.minecraft.tileentity.TileEntityType;
 
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileRegistry;
-import forestry.energy.ModuleEnergy;
-import forestry.energy.blocks.BlockRegistryEnergy;
+import forestry.energy.blocks.BlockTypeEngine;
+import forestry.energy.features.EnergyBlocks;
 
 public class TileRegistryEnergy extends TileRegistry {
 
@@ -18,10 +18,8 @@ public class TileRegistryEnergy extends TileRegistry {
 	//	public final TileEntityType<TileEuGenerator> generator;
 
 	public TileRegistryEnergy() {
-		BlockRegistryEnergy blocks = ModuleEnergy.getBlocks();
-
-		biogasEngine = registerTileEntityType(TileEngineBiogas::new, "biogas_engine", blocks.biogasEngine);
-		clockworkEngine = registerTileEntityType(TileEngineClockwork::new, "clockwork_engine", blocks.clockworkEngine);
-		peatEngine = registerTileEntityType(TileEnginePeat::new, "peat_engine", blocks.peatEngine);
+		biogasEngine = registerTileEntityType(TileEngineBiogas::new, "biogas_engine", EnergyBlocks.ENGINES.get(BlockTypeEngine.BIOGAS).block());
+		clockworkEngine = registerTileEntityType(TileEngineClockwork::new, "clockwork_engine", EnergyBlocks.ENGINES.get(BlockTypeEngine.CLOCKWORK).block());
+		peatEngine = registerTileEntityType(TileEnginePeat::new, "peat_engine", EnergyBlocks.ENGINES.get(BlockTypeEngine.PEAT).block());
 	}
 }

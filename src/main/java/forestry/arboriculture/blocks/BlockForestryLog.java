@@ -10,6 +10,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraftforge.common.ToolType;
+
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
@@ -22,15 +24,14 @@ public class BlockForestryLog extends LogBlock implements IWoodTyped {
 	private final boolean fireproof;
 	private final IWoodType woodType;
 
-	protected BlockForestryLog(boolean fireproof, IWoodType woodType) {
+	public BlockForestryLog(boolean fireproof, IWoodType woodType) {
 		super(MaterialColor.WOOD, Block.Properties.create(Material.WOOD)
 			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD));
+			.sound(SoundType.WOOD)
+			.harvestTool(ToolType.AXE)
+			.harvestLevel(0));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
-
-		//		setHarvestLevel("axe", 0);	TODO harvest level
-		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
 	}
 
 

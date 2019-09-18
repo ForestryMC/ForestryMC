@@ -21,7 +21,7 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Config;
 import forestry.core.genetics.analyzer.DatabasePlugin;
 import forestry.core.genetics.analyzer.MutationsTab;
-import forestry.lepidopterology.ModuleLepidopterology;
+import forestry.lepidopterology.features.LepidopterologyItems;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyPlugin extends DatabasePlugin<IButterfly> {
@@ -35,7 +35,7 @@ public class ButterflyPlugin extends DatabasePlugin<IButterfly> {
 			new ButterflyProductsTab(),
 			new MutationsTab(() -> ButterflyDefinition.Glasswing.getMemberStack(EnumFlutterType.COCOON)));
 		NonNullList<ItemStack> butterflyList = NonNullList.create();
-		ModuleLepidopterology.getItems().butterflyGE.addCreativeItems(butterflyList, false);
+		LepidopterologyItems.BUTTERFLY_GE.item().addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
 			IOrganism<?> organism = GeneticHelper.getOrganism(butterflyStack);
 			if (organism.isEmpty()) {

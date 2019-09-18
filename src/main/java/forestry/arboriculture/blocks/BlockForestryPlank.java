@@ -18,7 +18,7 @@ public class BlockForestryPlank extends Block implements IWoodTyped {
 	private final boolean fireproof;
 	private final IWoodType woodType;
 
-	protected BlockForestryPlank(boolean fireproof, IWoodType woodType) {
+	public BlockForestryPlank(boolean fireproof, IWoodType woodType) {
 		super(Block.Properties.create(Material.WOOD)
 			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
 			.sound(SoundType.WOOD));

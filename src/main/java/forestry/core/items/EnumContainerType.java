@@ -12,7 +12,9 @@ package forestry.core.items;
 
 import java.util.Locale;
 
-public enum EnumContainerType {
+import forestry.api.core.IItemSubtype;
+
+public enum EnumContainerType implements IItemSubtype {
 	GLASS, JAR, CAN, CAPSULE, REFRACTORY;
 
 	private final String name;

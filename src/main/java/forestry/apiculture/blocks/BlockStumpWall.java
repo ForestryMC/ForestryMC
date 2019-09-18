@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
 
@@ -39,7 +39,7 @@ public class BlockStumpWall extends WallTorchBlock {
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		ItemStack heldItem = playerIn.getHeldItem(hand);
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
-			BlockState activatedState = ModuleApiculture.getBlocks().candleWall.getDefaultState().with(BlockCandle.STATE, BlockCandle.State.ON).with(HORIZONTAL_FACING, state.get(HORIZONTAL_FACING));
+			BlockState activatedState = ApicultureBlocks.CANDLE_WALL.with(BlockCandle.STATE, BlockCandle.State.ON).with(HORIZONTAL_FACING, state.get(HORIZONTAL_FACING));
 			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
 			TileCandle tc = new TileCandle();
 			tc.setColour(16777215); // default to white

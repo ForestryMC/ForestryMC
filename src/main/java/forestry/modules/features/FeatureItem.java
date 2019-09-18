@@ -1,6 +1,7 @@
 package forestry.modules.features;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 import net.minecraft.item.Item;
 
@@ -9,11 +10,11 @@ import forestry.core.config.Constants;
 public class FeatureItem<I extends Item> implements IItemFeature<I, I> {
 	private final String moduleID;
 	private final String identifier;
-	private final IFeatureConstructor<I> constructor;
+	private final Supplier<I> constructor;
 	@Nullable
 	private I item;
 
-	public FeatureItem(String moduleID, String identifier, IFeatureConstructor<I> constructor) {
+	public FeatureItem(String moduleID, String identifier, Supplier<I> constructor) {
 		this.moduleID = moduleID;
 		this.identifier = identifier;
 		this.constructor = constructor;
@@ -41,7 +42,7 @@ public class FeatureItem<I extends Item> implements IItemFeature<I, I> {
 	}
 
 	@Override
-	public IFeatureConstructor<I> getConstructor() {
+	public Supplier<I> getConstructor() {
 		return constructor;
 	}
 

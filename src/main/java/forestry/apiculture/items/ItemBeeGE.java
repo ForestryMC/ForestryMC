@@ -31,15 +31,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.genetics.IBeeRoot;
-import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
@@ -148,17 +145,17 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	/* MODELS */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
-			if (allele instanceof IAlleleBeeSpecies) {
-				((IAlleleBeeSpecies) allele).registerModels(item, manager);
-			}
-		}
-		//TODO - flatten or something custom rendering I think
-		//		manager.registerItemModel(item, new BeeMeshDefinition(?));
-	}
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
+	//			if (allele instanceof IAlleleBeeSpecies) {
+	//				((IAlleleBeeSpecies) allele).registerModels(item, manager);
+	//			}
+	//		}
+	//		//TODO - flatten or something custom rendering I think
+	//		//		manager.registerItemModel(item, new BeeMeshDefinition(?));
+	//	}
 
 	//	@OnlyIn(Dist.CLIENT)
 	//	private class BeeMeshDefinition implements ItemMeshDefinition {

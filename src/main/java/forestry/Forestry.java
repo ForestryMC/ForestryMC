@@ -31,12 +31,12 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -152,6 +152,7 @@ public class Forestry {
 
 		ModuleManager.getModuleHandler().runSetup();
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus));
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
@@ -187,6 +188,11 @@ public class Forestry {
 		//TODO put these here for now
 		ModuleManager.getModuleHandler().runInit();
 		ModuleManager.getModuleHandler().runPostInit();
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public void setupClient(FMLClientSetupEvent event) {
+		ModuleManager.getModuleHandler().runClientSetup();
 	}
 
 	private void gatherData(GatherDataEvent event) {

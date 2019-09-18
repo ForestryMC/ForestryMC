@@ -10,22 +10,12 @@
  ******************************************************************************/
 package forestry.core;
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -37,18 +27,18 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
+import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluid;
 import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.ItemRegistryCore;
-import forestry.core.items.ItemRegistryFluids;
+import forestry.core.items.EnumContainerType;
 import forestry.core.proxy.Proxies;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
+//TODO: Move the fluid and block creation to the new feature system if the fluid system is more final (Do we really need a source and a flowing fluid ?)
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.fluids.description")
 public class ModuleFluids extends BlankForestryModule {
-	@Nullable
-	private static ItemRegistryFluids items;
 
 	private static void createFluids(ForestryFluids definition) {
 		/*if (definition.getFluid() == null && Config.isFluidEnabled(definition)) {
@@ -130,14 +120,14 @@ public class ModuleFluids extends BlankForestryModule {
 		return fluidBlock;
 	}
 
-	public static ItemRegistryFluids getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
-
 	@Override
 	public boolean canBeDisabled() {
 		return false;
+	}
+
+	@Override
+	public void registerFeatures() {
+		FluidsItems.CONTAINERS.getClass();
 	}
 
 	@Override
@@ -145,11 +135,6 @@ public class ModuleFluids extends BlankForestryModule {
 		for (ForestryFluids fluidType : ForestryFluids.values()) {
 			createBlocks(fluidType);
 		}
-	}
-
-	@Override
-	public void registerItems() {
-		items = new ItemRegistryFluids();
 	}
 
 	public static void registerFluids() {
@@ -166,10 +151,9 @@ public class ModuleFluids extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		if (RecipeManagers.squeezerManager != null) {
-			ItemRegistryCore itemRegistryCore = ModuleCore.getItems();
-			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().canEmpty.getItemStack(), itemRegistryCore.ingotTin.copy(), 0.05f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().waxCapsuleEmpty.getItemStack(), itemRegistryCore.beeswax.getItemStack(), 0.10f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, getItems().refractoryEmpty.getItemStack(), itemRegistryCore.refractoryWax.getItemStack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAN), CoreItems.INGOT_TIN.stack(), 0.05f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE), CoreItems.BEESWAX.stack(), 0.10f);
+			RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY), CoreItems.REFRACTORY_WAX.stack(), 0.10f);
 		}
 
 		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
@@ -182,21 +166,6 @@ public class ModuleFluids extends BlankForestryModule {
 		if (!biomass.isEmpty()) {
 			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
 			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
-		}
-	}
-
-	//TODO - register event handler
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void registerTextures(TextureStitchEvent.Pre event) {
-		AtlasTexture map = event.getMap();
-		for (ForestryFluids fluids : ForestryFluids.values()) {
-			Fluid fluid = fluids.getFluid();
-			if (fluid == Fluids.EMPTY) {
-				//TODO fluid textures
-				//				map.registerSprite(fluid.getStill());
-				//				map.registerSprite(fluid.getFlowing());
-			}
 		}
 	}
 }

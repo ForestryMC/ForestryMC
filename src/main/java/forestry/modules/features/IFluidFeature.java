@@ -5,21 +5,23 @@
 //import net.minecraftforge.fluids.FluidAttributes;
 //import net.minecraftforge.fluids.FluidStack;
 //
-//public interface IFluidDefinition extends IModFeature<FluidType> {
+//import forestry.core.fluids.ForestryFluid;
+//
+//public interface IFluidFeature extends IModFeature<FluidType> {
 //
 //	default FluidType apply(FluidType fluid) {
 //		return fluid;
 //	}
 //
-//	void setFluid(FluidType fluid);
+//	void setFluid(ForestryFluid fluid);
 //
 //	@Nullable
-//	FluidType getFluid();
+//	ForestryFluid getFluid();
 //
 //	boolean hasFluid();
 //
-//	default FluidType fluid() {
-//		FluidType block = getFluid();
+//	default ForestryFluid fluid() {
+//		ForestryFluid block = getFluid();
 //		if (block == null) {
 //			throw new IllegalStateException("Called feature getter method before content creation.");
 //		}
@@ -28,7 +30,7 @@
 //
 //	default FluidStack stack(int amount) {
 //		if (hasFluid()) {
-//			return new FluidStack(fluid().getFluid(), amount);
+//			return new FluidStack(fluid(), amount);
 //		}
 //		return FluidStack.EMPTY;
 //	}

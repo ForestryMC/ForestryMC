@@ -16,7 +16,6 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.ToolType;
 
@@ -79,18 +78,5 @@ public class BlockRegistryApiculture extends BlockRegistry {
 			registerBlock(block, new ItemBlockForestry<>(block, new Item.Properties().group(ItemGroups.tabApiculture)), "alveary_" + block.getType());
 			alvearyBlockMap.put(type, block);
 		}
-	}
-
-	public ItemStack getCombBlock(EnumHoneyComb honeyComb) {
-		return new ItemStack(beeCombs.get(honeyComb));
-	}
-
-	public BlockAlveary getAlvearyBlock(BlockAlvearyType type) {
-		return alvearyBlockMap.get(type);
-	}
-
-	public ItemStack getAlvearyBlockStack(BlockAlvearyType type) {
-		BlockAlveary alvearyBlock = alvearyBlockMap.get(type);
-		return new ItemStack(alvearyBlock);
 	}
 }
