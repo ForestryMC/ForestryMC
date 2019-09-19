@@ -61,9 +61,11 @@ import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
+import forestry.core.data.BlockStateProvider;
 import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootTableProvider;
+import forestry.core.data.WoodModelProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
@@ -202,6 +204,8 @@ public class Forestry {
 			generator.addProvider(new ForestryBlockTagsProvider(generator));
 			generator.addProvider(new ForestryItemTagsProvider(generator));
 			generator.addProvider(new ForestryLootTableProvider(generator));
+			generator.addProvider(new BlockStateProvider(generator));
+			generator.addProvider(new WoodModelProvider(generator));
 			try {
 				generator.run();
 			} catch (Exception e) {

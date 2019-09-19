@@ -51,12 +51,6 @@ public class BlockHumus extends Block {
 		return 500;
 	}
 
-	//TODO - loot tables
-	//	@Override
-	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-	//		drops.add(new ItemStack(Blocks.DIRT));
-	//	}
-
 	@Override
 	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(140) != 0) {
@@ -111,10 +105,4 @@ public class BlockHumus extends Block {
 		PlantType plantType = plantable.getPlantType(world, pos);
 		return plantType == PlantType.Crop || plantType == PlantType.Plains;
 	}
-
-	//TODO - loot tables?
-	//	@Override
-	//	public boolean canSilkHarvest(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-	//		return false;
-	//	}
 }

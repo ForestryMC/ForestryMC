@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "forestry:block/arboriculture/slabs/acacia_top"
+    },
+    "type=bottom": {
+      "model": "forestry:block/arboriculture/slabs/acacia"
+    },
+    "type=double": {
+      "model": "forestry:block/arboriculture/planks/acacia"
+    }
+  }
+}

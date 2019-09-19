@@ -11,19 +11,14 @@
 package forestry.apiculture.genetics;
 
 import java.util.EnumMap;
-import java.util.Locale;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.core.IModelManager;
-import forestry.apiculture.items.ItemBeeGE;
-import forestry.core.config.Constants;
 
 public class DefaultBeeModelProvider implements IBeeModelProvider {
 
@@ -37,7 +32,7 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 
 	}
 
-	@Override
+	/*@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerModels(Item item, IModelManager manager) {
 		EnumBeeType beeType = ((ItemBeeGE) item).getType();
@@ -46,7 +41,7 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 		models.put(beeType, new ModelResourceLocation(Constants.MOD_ID + ":" + modelLocation, "inventory"));
 		//TODO flatten or work out what this maps to
 		//		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
-	}
+	}*/
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

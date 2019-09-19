@@ -60,21 +60,6 @@ public class BlockBogEarth extends Block {
 		return 500;
 	}
 
-	//TODO - loot tables for drops (at least for easy cases like this
-	//	@Override
-	//	public List<ItemStack> getDrops(BlockState state, ServerWorld world, BlockPos pos, TileEntity te) {
-	//		Integer maturity = state.getComb(MATURITY);
-	//		SoilType type = SoilType.fromMaturity(maturity);
-	//
-	//		if (type == SoilType.PEAT) {
-	//			drops.add(ModuleCore.getItems().peat.getItemStack(2));
-	//			drops.add(new ItemStack(Blocks.DIRT));
-	//		} else {
-	//			drops.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
-	//		}
-	//		return new ArrayList<>();
-	//	}
-
 	@Override
 	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(13) != 0) {

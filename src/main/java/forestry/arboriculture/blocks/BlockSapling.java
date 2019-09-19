@@ -39,11 +39,10 @@ import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.models.IStateMapperRegister;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister {
+public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");

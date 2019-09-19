@@ -105,10 +105,11 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	//		return !hasTESR && !hasCustom;
 	//	}
 
-	//	@Override
-	//	public boolean isNormalCube(BlockState state) {
-	//		return !hasTESR && !hasCustom;
-	//	}
+	//TODO: Still needed? Should be replaced with voxel shapes vor every tesr or custom block
+	@Override
+	public boolean isNormalCube(BlockState state, IBlockReader reader, BlockPos pos) {
+		return !hasTESR && !hasCustom;
+	}
 
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
@@ -266,12 +267,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		Direction facing = state.get(FACING);
 		return state.with(FACING, rot.rotate(facing));
 	}
-
-	//TODO block methods
-	//	@Override
-	//	public boolean getUseNeighborBrightness(BlockState state) {
-	//		return hasTESR;
-	//	}
 
 	/* Particles */
 	@OnlyIn(Dist.CLIENT)

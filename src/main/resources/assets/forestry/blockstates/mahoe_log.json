@@ -1,28 +1,16 @@
 {
   "variants": {
-    "axis=y": {
-      "textures": {
-        "side": "forestry:block/wood/%s_bark",
-        "end": "forestry:block/wood/%s_heart"
-      },
-      "model": "forestry:block/arboriculture/log"
-    },
-    "axis=z": {
-      "textures": {
-        "side": "forestry:block/wood/%s_bark",
-        "end": "forestry:block/wood/%s_heart"
-      },
-      "model": "forestry:block/arboriculture/log",
-      "x": 90
-    },
     "axis=x": {
-      "textures": {
-        "side": "forestry:block/wood/%s_bark",
-        "end": "forestry:block/wood/%s_heart"
-      },
-      "model": "forestry:block/arboriculture/log",
+      "model": "forestry:block/arboriculture/logs/mahoe",
       "x": 90,
       "y": 90
+    },
+    "axis=y": {
+      "model": "forestry:block/arboriculture/logs/mahoe"
+    },
+    "axis=z": {
+      "model": "forestry:block/arboriculture/logs/mahoe",
+      "x": 90
     }
   }
 }
