@@ -40,6 +40,7 @@ import forestry.arboriculture.blocks.BlockForestryLog;
 import forestry.arboriculture.blocks.BlockForestryPlank;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
+import forestry.modules.features.FeatureBlockGroup;
 
 public class WoodAccess implements IWoodAccess {
 	@Nullable
@@ -68,23 +69,20 @@ public class WoodAccess implements IWoodAccess {
 		}
 	}
 
-	public <V extends Enum<V> & IWoodType> void registerPlanks(Collection<? extends BlockForestryPlank> blocks) {
+	public void registerPlanks(Collection<? extends BlockForestryPlank> blocks) {
 		for (BlockForestryPlank block : blocks) {
-			//noinspection unchecked
 			registerWithoutVariants(block, WoodBlockKind.PLANKS);
 		}
 	}
 
 	public void registerSlabs(Collection<? extends BlockForestrySlab> blocks) {
 		for (BlockForestrySlab block : blocks) {
-			//noinspection unchecked
 			registerWithoutVariants(block, WoodBlockKind.SLAB);
 		}
 	}
 
 	public void registerFences(Collection<? extends BlockForestryFence> blocks) {
 		for (BlockForestryFence block : blocks) {
-			//noinspection unchecked
 			registerWithoutVariants(block, WoodBlockKind.FENCE);
 		}
 	}
@@ -104,6 +102,12 @@ public class WoodAccess implements IWoodAccess {
 	public void registerDoors(Collection<BlockForestryDoor> blocks) {
 		for (BlockForestryDoor block : blocks) {
 			registerWithoutVariants(block, WoodBlockKind.DOOR);
+		}
+	}
+
+	public <T extends Block & IWoodTyped> void registerFeatures(FeatureBlockGroup<? extends T, ? extends IWoodType> featureGroup, WoodBlockKind kind) {
+		for (T block : featureGroup.getBlocks()) {
+			registerWithoutVariants(block, kind);
 		}
 	}
 

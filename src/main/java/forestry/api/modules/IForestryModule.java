@@ -15,6 +15,8 @@ import net.minecraft.util.ResourceLocation;
 
 import com.mojang.brigadier.Command;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -100,6 +102,11 @@ public interface IForestryModule {
 	}
 
 	default void doInit() {
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	default void clientSetup() {
+
 	}
 
 	/**

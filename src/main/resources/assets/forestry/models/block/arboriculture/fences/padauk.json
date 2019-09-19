@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence",
+  "textures": {
+    "texture": "forestry:block/wood/planks.padauk"
+  }
+}

@@ -26,10 +26,10 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import forestry.api.fuels.FuelManager;
-import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.features.CoreItems;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.wrappers.InventoryMapper;
@@ -81,7 +81,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 				return i;
 			}
 
-			if (waste.getItem() != ModuleCore.getItems().ash) {
+			if (!CoreItems.ASH.itemEqual(waste)) {
 				continue;
 			}
 
@@ -188,7 +188,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			IInventoryAdapter inventory = getInternalInventory();
 			ItemStack wasteStack = inventory.getStackInSlot(wasteSlot);
 			if (wasteStack.isEmpty()) {
-				inventory.setInventorySlotContents(wasteSlot, ModuleCore.getItems().ash.getItemStack());
+				inventory.setInventorySlotContents(wasteSlot, CoreItems.ASH.stack());
 			} else {
 				wasteStack.grow(1);
 			}

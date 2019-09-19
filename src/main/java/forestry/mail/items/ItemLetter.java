@@ -12,6 +12,7 @@ package forestry.mail.items;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,6 +39,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import forestry.api.core.IItemSubtype;
 import forestry.api.mail.ILetter;
 import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
@@ -47,12 +49,22 @@ import forestry.mail.inventory.ItemInventoryLetter;
 
 public class ItemLetter extends ItemWithGui {
 
-	public enum State {
-		FRESH, STAMPED, OPENED, EMPTIED
+	public enum State implements IItemSubtype {
+		FRESH, STAMPED, OPENED, EMPTIED;
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
-	public enum Size {
-		EMPTY, SMALL, BIG
+	public enum Size implements IItemSubtype {
+		EMPTY, SMALL, BIG;
+
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
 	private Size size;

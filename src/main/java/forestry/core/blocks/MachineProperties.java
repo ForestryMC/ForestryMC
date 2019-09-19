@@ -1,24 +1,16 @@
 package forestry.core.blocks;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
@@ -63,15 +55,6 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	@Override
 	public void clientSetup() {
 
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		ResourceLocation itemNameFromRegistry = item.getRegistryName();
-		Preconditions.checkNotNull(itemNameFromRegistry, "No registry name for item");
-		String identifier = itemNameFromRegistry.getPath();
-		manager.registerItemModel(item, 0, identifier);
 	}
 
 	@Override

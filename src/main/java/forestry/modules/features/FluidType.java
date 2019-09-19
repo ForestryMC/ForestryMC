@@ -7,12 +7,14 @@
 //import net.minecraft.block.Block;
 //import net.minecraft.fluid.Fluid;
 //import net.minecraft.util.ResourceLocation;
+//import net.minecraft.util.text.ITextComponent;
+//import net.minecraft.util.text.TranslationTextComponent;
 //
+//import net.minecraftforge.fluids.FluidAttributes;
 //import net.minecraftforge.fluids.FluidStack;
 //
 //import forestry.core.config.Constants;
-//
-//import com.sun.imageio.plugins.common.I18N;
+//import forestry.core.items.EnumContainerType;
 //
 //
 //public class FluidType implements IFeatureObject {
@@ -116,8 +118,8 @@
 //	}
 //
 //	/* NAMES */
-//	public String getDisplayName() {
-//		return I18N.localise(unlocalizedName);
+//	public ITextComponent getDisplayName() {
+//		return new TranslationTextComponent(unlocalizedName);
 //	}
 //
 //	public String getTranslationKey() {
@@ -131,7 +133,7 @@
 //
 //	@Override
 //	public String toString() {
-//		return getDisplayName();
+//		return unlocalizedName;
 //	}
 //
 //	public FluidStack stack(int amount) {
@@ -143,7 +145,7 @@
 //	}
 //
 //	public FluidStack stack() {
-//		return stack(Fluid.BUCKET_VOLUME);
+//		return stack(FluidAttributes.BUCKET_VOLUME);
 //	}
 //
 //	/* COLORS */
@@ -190,19 +192,19 @@
 //		return this;
 //	}
 //
-//	public boolean canPlaceIn(FluidContainerType type) {
+//	public boolean canPlaceIn(EnumContainerType type) {
 //		return placeHandler.canPlaceIn(type);
 //	}
 //
-//	public boolean showInCreative(FluidContainerType type) {
+//	public boolean showInCreative(EnumContainerType type) {
 //		return showHandler.showInCreative(type);
 //	}
 //
 //	public interface ContainerShowHandler {
-//		boolean showInCreative(FluidContainerType type);
+//		boolean showInCreative(EnumContainerType type);
 //	}
 //
 //	public interface ContainerPlaceHandler {
-//		boolean canPlaceIn(FluidContainerType type);
+//		boolean canPlaceIn(EnumContainerType type);
 //	}
 //}

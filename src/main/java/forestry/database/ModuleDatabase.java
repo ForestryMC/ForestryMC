@@ -12,7 +12,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import forestry.database.blocks.BlockRegistryDatabase;
+import forestry.database.features.DatabaseBlocks;
 import forestry.database.gui.DatabaseContainerTypes;
 import forestry.database.gui.GuiDatabase;
 import forestry.database.network.PacketRegistryDatabase;
@@ -23,16 +23,9 @@ import forestry.modules.ForestryModuleUids;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.DATABASE, name = "Database", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.database.description")
 public class ModuleDatabase extends BlankForestryModule {
 	@Nullable
-	private static BlockRegistryDatabase blocks;
-	@Nullable
 	private static DatabaseContainerTypes containerTypes;
 	@Nullable
 	private static TileRegistryDatabase tiles;
-
-	public static BlockRegistryDatabase getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
-	}
 
 	public static DatabaseContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
@@ -55,20 +48,13 @@ public class ModuleDatabase extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryDatabase();
+	public void registerFeatures() {
+		DatabaseBlocks.DATABASE.getClass();
 	}
 
 	@Override
 	public void registerTiles() {
 		tiles = new TileRegistryDatabase();
-	}
-
-	@Override
-	public void doInit() {
-		BlockRegistryDatabase blocks = getBlocks();
-
-		blocks.database.init();
 	}
 
 	@Override

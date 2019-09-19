@@ -51,13 +51,13 @@ import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
-import forestry.arboriculture.blocks.BlockRegistryArboriculture;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
+import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.items.ItemRegistryArboriculture;
 import forestry.arboriculture.models.SaplingModelLoader;
 import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.models.WoodTextureManager;
@@ -87,10 +87,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public static final List<Block> validFences = new ArrayList<>();
 
 	@Nullable
-	private static ItemRegistryArboriculture items;
-	@Nullable
-	private static BlockRegistryArboriculture blocks;
-	@Nullable
 	private static TileRegistryArboriculture tiles;
 	@Nullable
 	public static VillagerProfession villagerArborist;
@@ -98,16 +94,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public ModuleArboriculture() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyArboricultureClient(), () -> () -> new ProxyArboriculture());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static ItemRegistryArboriculture getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
-
-	public static BlockRegistryArboriculture getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
 	}
 
 	public static TileRegistryArboriculture getTiles() {
@@ -129,37 +115,9 @@ public class ModuleArboriculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryArboriculture();
-
-		WoodAccess woodAccess = WoodAccess.getInstance();
-
-		woodAccess.registerLogs(blocks.logs.values());
-		woodAccess.registerPlanks(blocks.planks.values());
-		woodAccess.registerSlabs(blocks.slabs.values());
-		woodAccess.registerFences(blocks.fences.values());
-		woodAccess.registerFenceGates(blocks.fenceGates.values());
-		woodAccess.registerStairs(blocks.stairs.values());
-		woodAccess.registerDoors(blocks.doors.values());
-
-		woodAccess.registerLogs(blocks.logsFireproof.values());
-		woodAccess.registerPlanks(blocks.planksFireproof.values());
-		woodAccess.registerSlabs(blocks.slabsFireproof.values());
-		woodAccess.registerFences(blocks.fencesFireproof.values());
-		woodAccess.registerFenceGates(blocks.fenceGatesFireproof.values());
-		woodAccess.registerStairs(blocks.stairsFireproof.values());
-
-		woodAccess.registerLogs(blocks.logsVanillaFireproof.values());
-		woodAccess.registerPlanks(blocks.planksVanillaFireproof.values());
-		woodAccess.registerSlabs(blocks.slabsVanillaFireproof.values());
-		woodAccess.registerFences(blocks.fencesVanillaFireproof.values());
-		woodAccess.registerFenceGates(blocks.fenceGatesVanillaFireproof.values());
-		woodAccess.registerStairs(blocks.stairsVanillaFireproof.values());
-	}
-
-	@Override
-	public void registerItems() {
-		items = new ItemRegistryArboriculture();
+	public void registerFeatures() {
+		ArboricultureBlocks.PLANKS_FIREPROOF.getClass();
+		ArboricultureItems.SAPLING.getClass();
 	}
 
 	@Override
@@ -200,10 +158,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public void doInit() {
 		TreeDefinition.initTrees();
 
-		ItemRegistryArboriculture items = getItems();
-		BlockRegistryArboriculture blocks = getBlocks();
-
-		blocks.treeChest.init();
+		ArboricultureBlocks.TREE_CHEST.block().init();
 
 		if (Config.enableVillagers) {
 			//TODO: villagers
@@ -362,7 +317,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// sapling itemBlock is different from the normal item
-		hiddenItems.add(new ItemStack(getBlocks().saplingGE));
+		hiddenItems.add(ArboricultureBlocks.SAPLING_GE.stack());
 	}
 
 	@SubscribeEvent
@@ -410,7 +365,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@OnlyIn(Dist.CLIENT)
 	public void onClientSetup(FMLClientSetupEvent event) {
 		ModelLoaderRegistry.registerLoader(SaplingModelLoader.INSTANCE);
-		blocks.treeChest.clientInit();
+		ArboricultureBlocks.TREE_CHEST.block().clientSetup();
 	}
 
 	@Override

@@ -2,8 +2,7 @@ package forestry.arboriculture.tiles;
 
 import net.minecraft.tileentity.TileEntityType;
 
-import forestry.arboriculture.ModuleArboriculture;
-import forestry.arboriculture.blocks.BlockRegistryArboriculture;
+import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.core.tiles.TileRegistry;
 
 public class TileRegistryArboriculture extends TileRegistry {
@@ -14,11 +13,9 @@ public class TileRegistryArboriculture extends TileRegistry {
 	public final TileEntityType<TileArboristChest> arboristChest;
 
 	public TileRegistryArboriculture() {
-		BlockRegistryArboriculture blocks = ModuleArboriculture.getBlocks();
-
-		sapling = registerTileEntityType(TileSapling::new, "sapling", blocks.saplingGE);
-		leaves = registerTileEntityType(TileLeaves::new, "leaves", blocks.leaves);
-		pods = registerTileEntityType(TileFruitPod::new, "pods", blocks.getPods());
-		arboristChest = registerTileEntityType(TileArboristChest::new, "arb_chest", blocks.treeChest);
+		sapling = registerTileEntityType(TileSapling::new, "sapling", ArboricultureBlocks.SAPLING_GE.block());
+		leaves = registerTileEntityType(TileLeaves::new, "leaves", ArboricultureBlocks.LEAVES.block());
+		pods = registerTileEntityType(TileFruitPod::new, "pods", ArboricultureBlocks.PODS.getBlocks());
+		arboristChest = registerTileEntityType(TileArboristChest::new, "arb_chest", ArboricultureBlocks.TREE_CHEST.block());
 	}
 }

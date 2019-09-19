@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "forestry:block/arboriculture/slabs/birch_top"
+    },
+    "type=bottom": {
+      "model": "forestry:block/arboriculture/slabs/birch"
+    },
+    "type=double": {
+      "model": "forestry:block/arboriculture/planks/birch"
+    }
+  }
+}

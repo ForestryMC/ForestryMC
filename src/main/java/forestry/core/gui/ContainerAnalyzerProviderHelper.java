@@ -15,7 +15,7 @@ import genetics.api.root.IRootDefinition;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreItems;
 import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.gui.slots.SlotLockable;
 import forestry.core.inventory.ItemInventoryAlyzer;
@@ -40,7 +40,7 @@ public class ContainerAnalyzerProviderHelper {
 		int analyzerIndex = -1;
 		for (int i = 0; i < playerInventory.getSizeInventory(); i++) {
 			ItemStack stack = playerInventory.getStackInSlot(i);
-			if (stack.isEmpty() || stack.getItem() != ModuleCore.getItems().portableAlyzer) {
+			if (stack.isEmpty() || !CoreItems.PORTABLE_ALYZER.itemEqual(stack)) {
 				continue;
 			}
 			analyzerIndex = i;

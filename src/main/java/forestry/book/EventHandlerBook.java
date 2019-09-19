@@ -1,13 +1,13 @@
 package forestry.book;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import forestry.book.features.BookItems;
 import forestry.core.config.Config;
 
 public class EventHandlerBook {
@@ -21,7 +21,7 @@ public class EventHandlerBook {
 			CompoundNBT data = playerData.contains(PlayerEntity.PERSISTED_NBT_TAG) ? playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG) : new CompoundNBT();
 
 			if (!data.getBoolean(HAS_BOOK)) {
-				ItemHandlerHelper.giveItemToPlayer(event.getPlayer(), new ItemStack(ModuleBook.getItems().book));
+				ItemHandlerHelper.giveItemToPlayer(event.getPlayer(), BookItems.BOOK.stack());
 				data.putBoolean(HAS_BOOK, true);
 				playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
 			}

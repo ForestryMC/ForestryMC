@@ -49,9 +49,6 @@ public class ForestryAPI {
 	@OnlyIn(Dist.CLIENT)
 	public static ITextureManager textureManager;
 
-	@OnlyIn(Dist.CLIENT)
-	public static IModelManager modelManager;
-
 	/**
 	 * Instance of the module manager of forestry.
 	 * This can be used to register {@link IModuleContainer}s in the constructor of your mod.

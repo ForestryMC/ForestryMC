@@ -8,12 +8,15 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -41,6 +44,7 @@ public class CommonModuleHandler {
 		PRE_INIT, // register handlers, triggers, definitions, and anything that depends on basic items
 		BACKPACKS_CRATES, // backpacks, crates
 		INIT, // anything that depends on PreInit stages, recipe registration
+		CLIENT_SETUP, // setup anything that only exists on the client side
 		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
 		FINISHED
 	}
@@ -92,10 +96,6 @@ public class CommonModuleHandler {
 
 	public void registerBlocks() {
 		for (IForestryModule module : modules) {
-			module.registerFeatures();
-		}
-		registry.createObjects();
-		for (IForestryModule module : modules) {
 			module.registerBlocks();
 		}
 	}
@@ -107,6 +107,12 @@ public class CommonModuleHandler {
 	}
 
 	public <T extends IForgeRegistryEntry<T>> void onObjectRegistration(RegistryEvent.Register<T> event) {
+		if (Block.class.isAssignableFrom(event.getRegistry().getRegistrySuperType())) {
+			for (IForestryModule module : modules) {
+				module.registerFeatures();
+			}
+			registry.createObjects();
+		}
 		registry.onRegister(event);
 	}
 
@@ -186,6 +192,17 @@ public class CommonModuleHandler {
 			module.registerRecipes();
 			Log.debug("Init Complete: {}", module);
 		}
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public void runClientSetup() {
+		stage = Stage.CLIENT_SETUP;
+		for (IForestryModule module : modules) {
+			Log.debug("Init Start: {}", module);
+			module.clientSetup();
+			Log.debug("Init Complete: {}", module);
+		}
+		registry.clientSetup();
 	}
 
 	public void runPostInit() {

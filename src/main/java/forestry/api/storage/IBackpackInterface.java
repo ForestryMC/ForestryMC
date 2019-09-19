@@ -68,11 +68,11 @@ public interface IBackpackInterface {
 	 * The backpack's definition must first be registered with {@link #registerBackpackDefinition(String, IBackpackDefinition)}.
 	 *
 	 * @param backpackUid The unique ID of the backpack.
-	 * @param speciesRoot The species root.
+	 * @param rootUid The species root.
 	 * @param tab
 	 * @return Created backpack item.
 	 */
-	Item createNaturalistBackpack(String backpackUid, IForestrySpeciesRoot speciesRoot, ItemGroup tab);
+	Item createNaturalistBackpack(String backpackUid, String rootUid, ItemGroup tab);
 
 	/**
 	 * Makes a new configurable backpack filter. Useful for implementing {@link IBackpackDefinition}.

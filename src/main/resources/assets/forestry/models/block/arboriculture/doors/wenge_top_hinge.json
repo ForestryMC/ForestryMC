@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_rh",
+  "textures": {
+    "top": "forestry:block/doors/wenge_upper",
+    "bottom": "forestry:block/doors/wenge_lower"
+  }
+}

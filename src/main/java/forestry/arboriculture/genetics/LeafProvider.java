@@ -9,7 +9,8 @@ import genetics.api.alleles.IAllele;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.ModuleArboriculture;
+import forestry.api.core.IItemProvider;
+import forestry.arboriculture.features.ArboricultureBlocks;
 
 public class LeafProvider implements ILeafProvider {
 
@@ -27,7 +28,7 @@ public class LeafProvider implements ILeafProvider {
 		if (allele == null) {
 			allele = TreeDefinition.Oak.getTemplate().get(TreeChromosomes.SPECIES);
 		}
-		return ModuleArboriculture.getBlocks().getDecorativeLeaves(allele.getRegistryName().toString());
+		return ArboricultureBlocks.LEAVES_DECORATIVE.findFeature(allele.getRegistryName().toString()).map(IItemProvider::stack).orElse(ItemStack.EMPTY);
 	}
 
 }

@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreItems;
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
@@ -52,7 +52,7 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public boolean canHarvestBlock(BlockState block) {
-		if (this == ModuleCore.getItems().bronzePickaxe) {
+		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = block.getMaterial();
 			return material == Material.ROCK || material == Material.IRON || material == Material.ANVIL;
 		}
@@ -66,7 +66,7 @@ public class ItemForestryTool extends ItemForestry {
 				return efficiencyOnProperMaterial;
 			}
 		}
-		if (this == ModuleCore.getItems().bronzePickaxe) {
+		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = state.getMaterial();
 			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
@@ -81,7 +81,7 @@ public class ItemForestryTool extends ItemForestry {
 		World world = context.getWorld();
 		Direction facing = context.getFace();
 
-		if (this == ModuleCore.getItems().bronzeShovel) {
+		if (CoreItems.BRONZE_SHOVEL.itemEqual(this)) {
 			ItemStack heldItem = player.getHeldItem(hand);
 			if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
 				return ActionResultType.FAIL;

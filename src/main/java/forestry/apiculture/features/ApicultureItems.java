@@ -49,8 +49,8 @@ public class ApicultureItems {
 	public static final FeatureItem<ItemHiveFrame> FRAME_PROVEN = REGISTRY.item(() -> new ItemHiveFrame(720, 0.3f), "frame_proven");
 
 	// / BEE RESOURCES
-	public static final FeatureItemGroup<ItemOverlay, EnumHoneyDrop> HONEY_DROPS = REGISTRY.itemGroup((type) -> () -> new ItemOverlay(ItemGroups.tabApiculture, type), "honey_drop", EnumHoneyDrop.values());
-	public static final FeatureItemGroup<ItemPropolis, EnumPropolis> PROPOLIS = REGISTRY.itemGroup((type) -> () -> new ItemPropolis(type), "propolis", EnumPropolis.values());
+	public static final FeatureItemGroup<ItemOverlay, EnumHoneyDrop> HONEY_DROPS = REGISTRY.itemGroup((type) -> new ItemOverlay(ItemGroups.tabApiculture, type), "honey_drop", EnumHoneyDrop.values());
+	public static final FeatureItemGroup<ItemPropolis, EnumPropolis> PROPOLIS = REGISTRY.itemGroup(ItemPropolis::new, "propolis", EnumPropolis.values());
 	public static final FeatureItem<ItemForestry> HONEYDEW = REGISTRY.item(() -> new ItemForestry(ItemGroups.tabApiculture), "honeydew");
 	//		OreDictionary.registerOre(OreDictUtil.DROP_HONEYDEW, honeydew);
 
@@ -58,8 +58,8 @@ public class ApicultureItems {
 	//		OreDictionary.registerOre(OreDictUtil.DROP_ROYAL_JELLY, royalJelly);
 
 	public static final FeatureItem<ItemWaxCast> WAX_CAST = REGISTRY.item(ItemWaxCast::new, "wax_cast");
-	public static final FeatureItemGroup<ItemPollenCluster, EnumPollenCluster> POLLEN_CLUSTER = REGISTRY.itemGroup((type) -> () -> new ItemPollenCluster(type), "pollen_cluster", EnumPollenCluster.VALUES);
-	public static final FeatureItemGroup<ItemHoneyComb, EnumHoneyComb> BEE_COMBS = REGISTRY.itemGroup((type) -> () -> new ItemHoneyComb(type), "bee_comb", EnumHoneyComb.VALUES);
+	public static final FeatureItemGroup<ItemPollenCluster, EnumPollenCluster> POLLEN_CLUSTER = REGISTRY.itemGroup(ItemPollenCluster::new, "pollen_cluster", EnumPollenCluster.VALUES);
+	public static final FeatureItemGroup<ItemHoneyComb, EnumHoneyComb> BEE_COMBS = REGISTRY.itemGroup(ItemHoneyComb::new, "bee_comb", EnumHoneyComb.VALUES);
 	//		OreDictionary.registerOre(OreDictUtil.BEE_COMB, beeComb.getWildcard());
 	//TODO - tags
 

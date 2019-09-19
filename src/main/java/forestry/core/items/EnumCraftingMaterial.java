@@ -2,9 +2,9 @@ package forestry.core.items;
 
 import java.util.Locale;
 
-import net.minecraft.util.IStringSerializable;
+import forestry.api.core.IItemSubtype;
 
-public enum EnumCraftingMaterial implements IStringSerializable {
+public enum EnumCraftingMaterial implements IItemSubtype {
 	PULSATING_DUST,
 	PULSATING_MESH,
 	SILK_WISP,

@@ -29,6 +29,7 @@ import forestry.api.mail.IPostalState;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
+import forestry.mail.features.MailItems;
 import forestry.mail.items.EnumStampDefinition;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
@@ -138,7 +139,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 			if (collected > 0) {
 				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				return ModuleMail.getItems().getStamp(stampDefinition, collected);
+				return MailItems.STAMPS.stack(stampDefinition, collected);
 			}
 		}
 

@@ -35,7 +35,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreItems;
 import forestry.core.items.ItemFruit;
 import forestry.core.tiles.TileUtil;
 import forestry.farming.logic.crops.CropFruit;
@@ -124,7 +124,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return ModuleCore.getItems().getFruit(ItemFruit.EnumFruit.CHERRY, 1);    //TODO which fruit to use?
+		return CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY, 1);    //TODO which fruit to use?
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import forestry.cultivation.tiles.TilePlanter;
 
 public enum BlockTypePlanter implements IBlockTypeCustom {
 	ARBORETUM(TileArboretum.class, "arboretum"),
-	FARM_CROPS(TileFarmCrops.class, "farm_crop"),
+	FARM_CROPS(TileFarmCrops.class, "farm_crops"),
 	FARM_MUSHROOM(TileFarmMushroom.class, "farm_mushroom"),
 	FARM_GOURD(TileFarmGourd.class, "farm_gourd"),
 	FARM_NETHER(TileFarmNether.class, "farm_nether"),

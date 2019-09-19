@@ -31,12 +31,12 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,10 +61,12 @@ import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
+import forestry.core.data.BlockStateProvider;
 import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootTableProvider;
 import forestry.core.data.ForestryRecipeProvider;
+import forestry.core.data.WoodModelProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
@@ -153,6 +155,7 @@ public class Forestry {
 
 		ModuleManager.getModuleHandler().runSetup();
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus));
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
@@ -190,6 +193,11 @@ public class Forestry {
 		ModuleManager.getModuleHandler().runPostInit();
 	}
 
+	@OnlyIn(Dist.CLIENT)
+	public void setupClient(FMLClientSetupEvent event) {
+		ModuleManager.getModuleHandler().runClientSetup();
+	}
+
 	private void gatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
 
@@ -198,6 +206,9 @@ public class Forestry {
 			generator.addProvider(new ForestryItemTagsProvider(generator));
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			generator.addProvider(new ForestryRecipeProvider(generator));
+			generator.addProvider(new BlockStateProvider(generator));
+			generator.addProvider(new WoodModelProvider(generator));
+
 			try {
 				generator.run();
 			} catch (Exception e) {

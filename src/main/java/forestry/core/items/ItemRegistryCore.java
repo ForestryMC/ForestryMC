@@ -157,12 +157,12 @@ public class ItemRegistryCore extends ItemRegistry {
 			circuitboards.put(type, board);
 		}
 
-		solderingIron = new ItemSolderingIron((new Item.Properties()).maxDamage(5));
+		solderingIron = new ItemSolderingIron();
 		registerItem(solderingIron, "soldering_iron");
 
 		for (EnumElectronTube def : EnumElectronTube.VALUES) {
 			ItemElectronTube tube = new ItemElectronTube(def);
-			registerItem(tube, "electron_tube_" + def.getUid());
+			registerItem(tube, "electron_tube_" + def.getName());
 			electronTubes.put(def, tube);
 		}    //TODO tags?
 

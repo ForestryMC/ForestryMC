@@ -17,19 +17,14 @@ import javax.annotation.Nullable;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
-import forestry.energy.blocks.BlockRegistryEnergy;
+import forestry.energy.features.EnergyBlocks;
 import forestry.energy.gui.EnergyContainerTypes;
 import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.gui.GuiEngineElectric;
@@ -48,8 +43,6 @@ public class ModuleEnergy extends BlankForestryModule {
 	public static ProxyEnergy proxy;
 
 	@Nullable
-	public static BlockRegistryEnergy blocks;
-	@Nullable
 	public static TileRegistryEnergy tiles;
 	@Nullable
 	public static EnergyContainerTypes containerTypes;
@@ -58,11 +51,6 @@ public class ModuleEnergy extends BlankForestryModule {
 		//set up proxies as early as possible
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyEnergyClient(), () -> () -> new ProxyEnergy());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static BlockRegistryEnergy getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
 	}
 
 	public static TileRegistryEnergy getTiles() {
@@ -75,10 +63,9 @@ public class ModuleEnergy extends BlankForestryModule {
 		return containerTypes;
 	}
 
-
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryEnergy();
+	public void registerFeatures() {
+		EnergyBlocks.ENGINES.getClass();
 	}
 
 	@Override
@@ -99,28 +86,5 @@ public class ModuleEnergy extends BlankForestryModule {
 		ScreenManager.registerFactory(containerTypes.ENGINE_PEAT, GuiEnginePeat::new);
 		ScreenManager.registerFactory(containerTypes.GENERATOR, GuiGenerator::new);
 	}
-
-	@Override
-	public void doInit() {
-		BlockRegistryEnergy blocks = getBlocks();
-		blocks.peatEngine.init();
-		blocks.biogasEngine.init();
-
-		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			blocks.clockworkEngine.init();
-		}
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onClientSetup(FMLClientSetupEvent event) {
-		blocks.peatEngine.clientInit();
-		blocks.biogasEngine.clientInit();
-
-		if (ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-			blocks.clockworkEngine.clientInit();
-		}
-	}
-
 
 }

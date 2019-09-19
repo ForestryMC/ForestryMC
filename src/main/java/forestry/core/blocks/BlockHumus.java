@@ -10,7 +10,6 @@ import net.minecraft.block.LogBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
@@ -19,18 +18,14 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 
-public class BlockHumus extends Block implements IItemModelRegister {
+public class BlockHumus extends Block {
 	private static final int degradeDelimiter = Config.humusDegradeDelimiter;
 	public static final IntegerProperty DEGRADE = IntegerProperty.create("degrade", 0, degradeDelimiter); // degradation level of humus
 
@@ -55,12 +50,6 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	public int tickRate(IWorldReader world) {
 		return 500;
 	}
-
-	//TODO - loot tables
-	//	@Override
-	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-	//		drops.add(new ItemStack(Blocks.DIRT));
-	//	}
 
 	@Override
 	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
@@ -115,20 +104,5 @@ public class BlockHumus extends Block implements IItemModelRegister {
 	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
 		PlantType plantType = plantable.getPlantType(world, pos);
 		return plantType == PlantType.Crop || plantType == PlantType.Plains;
-	}
-
-	//TODO - loot tables?
-	//	@Override
-	//	public boolean canSilkHarvest(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-	//		return false;
-	//	}
-
-	/* MODELS */
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < degradeDelimiter; i++) {
-			manager.registerItemModel(item, i, "soil/humus");
-		}
 	}
 }

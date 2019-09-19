@@ -37,8 +37,15 @@ import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemBlockForestry<B extends Block> extends BlockItem {
 
+	private final int burnTime;
+
 	public ItemBlockForestry(B block, Item.Properties builder) {
 		super(block, builder);
+		if (properties instanceof ItemProperties) {
+			this.burnTime = ((ItemProperties) properties).burnTime;
+		} else {
+			burnTime = -1;
+		}
 	}
 
 	public ItemBlockForestry(B block) {
@@ -52,8 +59,8 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack itemstack) {
-		return getBlock().getTranslationKey();
+	public int getBurnTime(ItemStack itemStack) {
+		return burnTime;
 	}
 
 	@Override

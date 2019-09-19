@@ -14,13 +14,13 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.Item;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ItemGroups;
-import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackInterface;
+import forestry.apiculture.genetics.BeeRoot;
 import forestry.core.items.ItemRegistry;
+import forestry.lepidopterology.genetics.ButterflyRoot;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -48,13 +48,13 @@ public class ItemRegistryBackpacks extends ItemRegistry {
 		IBackpackInterface backpackInterface = BackpackManager.backpackInterface;
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			apiaristBackpack = registerItem(backpackInterface.createNaturalistBackpack("apiarist", BeeManager.beeRoot, ItemGroups.tabApiculture), "apiarist_bag");
+			apiaristBackpack = registerItem(backpackInterface.createNaturalistBackpack("apiarist", BeeRoot.UID, ItemGroups.tabApiculture), "apiarist_bag");
 		} else {
 			apiaristBackpack = null;
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			lepidopteristBackpack = registerItem(backpackInterface.createNaturalistBackpack("lepidopterist", ButterflyManager.butterflyRoot, ItemGroups.tabLepidopterology), "lepidopterist_bag");
+			lepidopteristBackpack = registerItem(backpackInterface.createNaturalistBackpack("lepidopterist", ButterflyRoot.UID, ItemGroups.tabLepidopterology), "lepidopterist_bag");
 		} else {
 			lepidopteristBackpack = null;
 		}

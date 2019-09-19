@@ -24,12 +24,11 @@ import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ISaveEventHandler;
-import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
-import forestry.mail.blocks.BlockRegistryMail;
+import forestry.mail.features.MailBlocks;
+import forestry.mail.features.MailItems;
 import forestry.mail.gui.GuiCatalogue;
 import forestry.mail.gui.GuiLetter;
 import forestry.mail.gui.GuiMailbox;
@@ -37,7 +36,6 @@ import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.gui.MailContainerTypes;
-import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.tiles.TileRegistryMail;
 import forestry.mail.triggers.MailTriggers;
@@ -47,23 +45,9 @@ import forestry.modules.ForestryModuleUids;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.mail.description")
 public class ModuleMail extends BlankForestryModule {
 	@Nullable
-	private static ItemRegistryMail items;
-	@Nullable
-	private static BlockRegistryMail blocks;
-	@Nullable
 	private static MailContainerTypes containerTypes;
 	@Nullable
 	private static TileRegistryMail tiles;
-
-	public static ItemRegistryMail getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
-
-	public static BlockRegistryMail getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
-	}
 
 	public static MailContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
@@ -83,13 +67,9 @@ public class ModuleMail extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItems() {
-		items = new ItemRegistryMail();
-	}
-
-	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryMail();
+	public void registerFeatures() {
+		MailBlocks.BASE.getClass();
+		MailItems.STAMPS.getClass();
 	}
 
 	@Override
@@ -129,23 +109,12 @@ public class ModuleMail extends BlankForestryModule {
 	}
 
 	@Override
-	public void doInit() {
-		BlockRegistryMail blocks = getBlocks();
-		blocks.mailbox.init();
-		blocks.tradeStation.init();
-		blocks.stampCollector.init();
-	}
-
-	@Override
 	public IPacketRegistry getPacketRegistry() {
 		return new PacketRegistryMail();
 	}
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-		ItemRegistryMail items = getItems();
-
 		// Carpenter
 		//		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 250), ItemStack.EMPTY, items.letters.getItemStack(), "###", "###", '#', coreItems.woodPulp);
 	}

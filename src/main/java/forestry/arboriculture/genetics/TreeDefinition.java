@@ -20,7 +20,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.feature.Feature;
@@ -57,8 +56,9 @@ import forestry.api.arboriculture.genetics.ITreeMutationBuilder;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IBlockSubtype;
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.models.ModelProviderFactory;
 import forestry.arboriculture.tiles.TileLeaves;
@@ -103,7 +103,7 @@ import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.RenderUtil;
 
-public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSerializable {
+public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSubtype {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.OAK) {
 		@Override
 		public Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree) {
@@ -1040,18 +1040,18 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IStringSe
 
 	@Override
 	public boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
-		if (owner == null && new TemplateMatcher(genome).matches()) {
+		if (owner != null && new TemplateMatcher(genome).matches()) {
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			String speciesUid = genome.getPrimary().getRegistryName().toString();
 			BlockState defaultLeaves;
 			if (fruitProvider.isFruitLeaf(genome, world, pos) && rand.nextFloat() <= fruitProvider.getFruitChance(genome, world, pos)) {
-				defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeavesFruit(speciesUid);
+				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.findState(speciesUid);
 			} else {
-				defaultLeaves = ModuleArboriculture.getBlocks().getDefaultLeaves(speciesUid);
+				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.findState(speciesUid);
 			}
 			return world.setBlockState(pos, defaultLeaves, 18);
 		} else {
-			BlockState leaves = ModuleArboriculture.getBlocks().leaves.getDefaultState();
+			BlockState leaves = ArboricultureBlocks.LEAVES.defaultState();
 			boolean placed = world.setBlockState(pos, leaves, 18);
 			if (!placed) {
 				return false;

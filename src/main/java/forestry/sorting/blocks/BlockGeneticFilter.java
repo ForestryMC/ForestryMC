@@ -7,7 +7,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -20,13 +19,11 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.sorting.tiles.TileGeneticFilter;
 
-public class BlockGeneticFilter extends BlockForestry implements IItemModelRegister {
+public class BlockGeneticFilter extends BlockForestry {
 	public static final BooleanProperty NORTH = BooleanProperty.create("north");
 	public static final BooleanProperty EAST = BooleanProperty.create("east");
 	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
@@ -142,11 +139,6 @@ public class BlockGeneticFilter extends BlockForestry implements IItemModelRegis
 	//		}
 	//		return aabb.offset(pos);
 	//	}
-
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
-	}
 
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {

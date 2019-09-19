@@ -1,10 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "forestry:block/arboriculture/planks",
-      "textures": {
-        "all": "forestry:/block/wood/cocobolo_planks"
-      }
+      "model": "forestry:block/arboriculture/planks/cocobolo"
     }
   }
 }

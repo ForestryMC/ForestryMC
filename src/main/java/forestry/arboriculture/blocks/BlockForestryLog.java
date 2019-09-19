@@ -24,12 +24,12 @@ public class BlockForestryLog extends LogBlock implements IWoodTyped {
 	private final boolean fireproof;
 	private final IWoodType woodType;
 
-	protected BlockForestryLog(boolean fireproof, IWoodType woodType) {
+	public BlockForestryLog(boolean fireproof, IWoodType woodType) {
 		super(MaterialColor.WOOD, Block.Properties.create(Material.WOOD)
-				.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-				.sound(SoundType.WOOD)
-				.harvestLevel(0)
-				.harvestTool(ToolType.AXE));
+			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+			.sound(SoundType.WOOD)
+			.harvestTool(ToolType.AXE)
+			.harvestLevel(0));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
 	}

@@ -1,10 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "forestry:block/arboriculture/planks",
-      "textures": {
-        "all": "forestry:/block/wood/acacia_forestry_planks"
-      }
+      "model": "forestry:block/arboriculture/planks/acacia_forestry"
     }
   }
 }

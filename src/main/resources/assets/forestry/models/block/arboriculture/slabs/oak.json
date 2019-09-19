@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "side": "forestry:block/wood/planks.oak",
+    "top": "forestry:block/wood/planks.oak",
+    "bottom": "forestry:block/wood/planks.oak",
+    "particle": "forestry:block/wood/planks.oak"
+  }
+}

@@ -22,11 +22,16 @@ import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.core.ItemGroups;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
+import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -76,13 +81,13 @@ public class ItemGroupForestry extends ItemGroup {
 			case 3:
 				return TreeManager.treeRoot.getTypes().createStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
 			case 4:
-				return ItemStack.EMPTY;//ButterflyManager.butterflyRoot.getMemberStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
+				return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
 			default:
 				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizer_compound"));
 				break;
 		}
 		if (iconItem == null) {
-			iconItem = ModuleCore.getItems().wrench;
+			iconItem = CoreItems.WRENCH.item();
 		}
 		return new ItemStack(iconItem);
 	}

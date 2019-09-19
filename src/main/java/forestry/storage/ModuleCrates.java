@@ -1,10 +1,8 @@
 package forestry.storage;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +24,8 @@ import forestry.core.utils.IMCUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import forestry.storage.features.CreateItems;
 import forestry.storage.items.ItemCrated;
-import forestry.storage.items.ItemRegistryCrates;
 import forestry.storage.proxy.ProxyCrates;
 import forestry.storage.proxy.ProxyCratesClient;
 
@@ -44,14 +42,6 @@ public class ModuleCrates extends BlankForestryModule {
 	@SuppressWarnings("NullableProblems")
 	public static ProxyCrates proxy;
 
-	@Nullable
-	private static ItemRegistryCrates items;
-
-	public static ItemRegistryCrates getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
-
 	public ModuleCrates() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyCratesClient(), () -> () -> new ProxyCrates());
 	}
@@ -63,8 +53,8 @@ public class ModuleCrates extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItems() {
-		items = new ItemRegistryCrates();
+	public void registerFeatures() {
+		CreateItems.CRATE.getClass();
 	}
 
 	@Override
@@ -172,8 +162,6 @@ public class ModuleCrates extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCrates items = getItems();
-
 		// / CARPENTER
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			// / CRATES

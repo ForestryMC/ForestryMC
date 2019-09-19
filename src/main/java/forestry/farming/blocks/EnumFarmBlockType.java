@@ -1,18 +1,21 @@
 package forestry.farming.blocks;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
+
 import java.util.Locale;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
-public enum EnumFarmBlockType implements IStringSerializable {
+import forestry.api.core.IBlockSubtype;
+import forestry.core.config.Constants;
+
+public enum EnumFarmBlockType implements IBlockSubtype {
 	PLAIN,
 	BAND,
 	GEARBOX,
@@ -32,21 +35,32 @@ public enum EnumFarmBlockType implements IStringSerializable {
 	private static final int TYPE_CONTROL = 7;
 
 	@OnlyIn(Dist.CLIENT)
-	private static List<TextureAtlasSprite> sprites;
+	private static ImmutableList<TextureAtlasSprite> sprites = ImmutableList.of();
 
 	@OnlyIn(Dist.CLIENT)
-	public static void registerSprites() {
-		AtlasTexture map = Minecraft.getInstance().getTextureMap();
-		sprites = Arrays.asList(
-			//TODO - dynamic textures
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")),
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")),
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/top")),
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/band")),
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/gears")),
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/hatch")),
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/valve")),
-			//			map.registerSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/control"))
+	public static void gatherSprites(TextureStitchEvent.Pre event) {
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain"));
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse"));
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/top"));
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/band"));
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/gears"));
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/hatch"));
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/valve"));
+		event.addSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/control"));
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static void fillSprites(TextureStitchEvent.Post event) {
+		AtlasTexture map = event.getMap();
+		sprites = ImmutableList.of(
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")),
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")),
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/top")),
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/band")),
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/gears")),
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/hatch")),
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/valve")),
+			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/control"))
 		);
 	}
 
@@ -61,9 +75,8 @@ public enum EnumFarmBlockType implements IStringSerializable {
 					return sprites.get(TYPE_REVERSE);
 				} else if (side == 0 || side == 1) {
 					return sprites.get(TYPE_TOP);
-				} else {
-					return sprites.get(TYPE_PLAIN);
 				}
+				return sprites.get(TYPE_PLAIN);
 			}
 			case BAND:
 				return sprites.get(TYPE_BAND);
@@ -78,6 +91,14 @@ public enum EnumFarmBlockType implements IStringSerializable {
 			default:
 				return sprites.get(TYPE_PLAIN);
 		}
+	}
+
+	public TextureAtlasSprite[] getSprites() {
+		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
+		for (int side = 0; side < textures.length; side++) {
+			textures[side] = getSprite(this, side);
+		}
+		return textures;
 	}
 
 	@Override

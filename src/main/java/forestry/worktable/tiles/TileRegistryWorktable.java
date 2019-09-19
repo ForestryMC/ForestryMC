@@ -3,17 +3,14 @@ package forestry.worktable.tiles;
 import net.minecraft.tileentity.TileEntityType;
 
 import forestry.core.tiles.TileRegistry;
-import forestry.worktable.ModuleWorktable;
-import forestry.worktable.blocks.BlockRegistryWorktable;
+import forestry.worktable.features.WorktableBlocks;
 
 public class TileRegistryWorktable extends TileRegistry {
 
 	public final TileEntityType<TileWorktable> WORKTABLE;
 
 	public TileRegistryWorktable() {
-		BlockRegistryWorktable blocks = ModuleWorktable.getBlocks();
-
-		WORKTABLE = registerTileEntityType(TileWorktable::new, "worktable", blocks.worktable);
+		WORKTABLE = registerTileEntityType(TileWorktable::new, "worktable", WorktableBlocks.WORKTABLE.block());
 	}
 
 }

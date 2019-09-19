@@ -42,7 +42,8 @@ import forestry.core.utils.BlockUtil;
 public class FruitProviderPod extends FruitProviderNone {
 
 	public enum EnumPodType {
-		COCOA, DATES, PAPAYA;//, COCONUT;
+		COCOA, DATES, PAPAYA;
+		//, COCONUT;
 
 		public String getModelName() {
 			return toString().toLowerCase(Locale.ENGLISH);

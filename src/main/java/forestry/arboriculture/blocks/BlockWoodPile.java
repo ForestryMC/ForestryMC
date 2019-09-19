@@ -30,7 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.ModuleCharcoal;
+import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.config.Config;
 
 public class BlockWoodPile extends Block {
@@ -128,7 +128,7 @@ public class BlockWoodPile extends Block {
 				if (state.get(AGE) < 7) {
 					world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), 2);
 				} else {
-					BlockState ashState = ModuleCharcoal.getBlocks().getAshState(Math.round(Config.charcoalAmountBase + getCharcoalAmount(world, pos)));
+					BlockState ashState = CharcoalBlocks.ASH.with(BlockAsh.AMOUNT, Math.min(Math.round(Config.charcoalAmountBase + getCharcoalAmount(world, pos)), 63));
 					world.setBlockState(pos, ashState, 2);
 				}
 			}

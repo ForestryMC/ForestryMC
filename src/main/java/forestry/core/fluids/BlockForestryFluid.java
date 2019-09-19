@@ -21,7 +21,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.Item;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -32,14 +31,9 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.entities.ParticleColoredDripParticle;
 
-public class BlockForestryFluid extends FlowingFluidBlock implements IItemModelRegister {
+public class BlockForestryFluid extends FlowingFluidBlock {
 
 	private final boolean flammable;
 	private final int flammability;
@@ -147,12 +141,6 @@ public class BlockForestryFluid extends FlowingFluidBlock implements IItemModelR
 		} else {
 			return super.getMaterial(state);
 		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-
 	}
 
 	@Override

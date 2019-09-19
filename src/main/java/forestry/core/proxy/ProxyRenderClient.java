@@ -16,12 +16,11 @@ import net.minecraft.client.renderer.texture.AtlasTexture;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
 
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
-import forestry.core.models.ModelManager;
+import forestry.core.models.ClientManager;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
@@ -84,13 +83,8 @@ public class ProxyRenderClient extends ProxyRender {
 	}
 
 	@Override
-	public void registerModels(ModelBakeEvent event) {
-		ModelManager.getInstance().registerModels(event);
-	}
-
-	@Override
 	public void registerItemAndBlockColors() {
-		ModelManager.getInstance().registerItemAndBlockColors();
+		ClientManager.getInstance().registerItemAndBlockColors();
 	}
 
 	@Override

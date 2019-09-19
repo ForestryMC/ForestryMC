@@ -10,15 +10,11 @@
  ******************************************************************************/
 package forestry.farming.proxy;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.models.BlockModelEntry;
-import forestry.core.models.ModelManager;
-import forestry.farming.ModuleFarming;
-import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.core.models.ClientManager;
+import forestry.farming.features.FarmingBlocks;
 import forestry.farming.models.ModelFarmBlock;
 
 @SuppressWarnings("unused")
@@ -27,8 +23,12 @@ public class ProxyFarmingClient extends ProxyFarming {
 
 	@Override
 	public void initializeModels() {
-		ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
-			new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-			ModuleFarming.getBlocks().farms.get(EnumFarmBlockType.PLAIN)));    //TODO need to register all of them here?
+		ClientManager.getInstance().registerModel(new ModelFarmBlock(), FarmingBlocks.FARM);
+		/*for(FeatureBlock<BlockFarm, BlockItem> feature : FarmingBlocks.FARM.getFeatures()) {
+			ModelManager.getInstance().registerModel(new ModelFarmBlock(), feature.block(), feature.item());
+			ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
+				new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
+				block));
+		}*/
 	}
 }

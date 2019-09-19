@@ -18,7 +18,7 @@ import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.sorting.blocks.BlockRegistrySorting;
+import forestry.sorting.features.SortingBlocks;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.SortingContainerTypes;
 import forestry.sorting.network.PacketRegistrySorting;
@@ -27,16 +27,9 @@ import forestry.sorting.tiles.TileRegistrySorting;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.SORTING, name = "Sorting", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.sorting.description")
 public class ModuleSorting extends BlankForestryModule {
 	@Nullable
-	private static BlockRegistrySorting blocks;
-	@Nullable
 	private static SortingContainerTypes containerTypes;
 	@Nullable
 	private static TileRegistrySorting tiles;
-
-	public static BlockRegistrySorting getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
-	}
 
 	public static SortingContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
@@ -64,8 +57,8 @@ public class ModuleSorting extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistrySorting();
+	public void registerFeatures() {
+		SortingBlocks.FILTER.getClass();
 	}
 
 	@Override

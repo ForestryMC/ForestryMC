@@ -15,21 +15,14 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-
-public class BlockResourceOre extends Block implements IItemModelRegister {
+public class BlockResourceOre extends Block {
 	private final EnumResourceType type;
 
 	public BlockResourceOre(EnumResourceType type) {
@@ -48,32 +41,4 @@ public class BlockResourceOre extends Block implements IItemModelRegister {
 		}
 		return super.getExpDrop(state, reader, pos, fortune, silktouch);
 	}
-
-	//TODO - loot tables (or whatever is necessary for ore
-	//	@Override
-	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-	//		EnumResourceType type = state.getComb(ORE_RESOURCES);
-	//		switch (type) {
-	//			case APATITE: {
-	//				int fortuneModifier = RANDOM.nextInt(fortune + 2) - 1;
-	//				if (fortuneModifier < 0) {
-	//					fortuneModifier = 0;
-	//				}
-	//
-	//				int amount = (2 + RANDOM.nextInt(5)) * (fortuneModifier + 1);
-	//				if (amount > 0) {
-	//					drops.add(ModuleCore.getItems().apatite.getItemStack(amount));
-	//				}
-	//				break;
-	//			}
-	//			case TIN: {
-	//				drops.add(new ItemStack(this, 1, damageDropped(state)));
-	//				break;
-	//			}
-	//			case COPPER: {
-	//				drops.add(new ItemStack(this, 1, damageDropped(state)));
-	//				break;
-	//			}
-	//		}
-	//	}
 }

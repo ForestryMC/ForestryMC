@@ -21,14 +21,13 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.core.IItemModelRegister;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
 
-public abstract class BlockForestry extends Block implements IItemModelRegister { //TODO - note deprecation messages in ITileEntityProvider {
+public abstract class BlockForestry extends Block { //TODO - note deprecation messages in ITileEntityProvider {
 
 	protected BlockForestry(Block.Properties properties) {
 		super(properties

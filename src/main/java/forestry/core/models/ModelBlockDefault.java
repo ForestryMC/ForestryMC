@@ -38,8 +38,6 @@ import net.minecraftforge.client.model.data.IModelData;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.models.baker.ModelBakerModel;
 
-//import net.minecraftforge.common.property.IExtendedBlockState;
-
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {
 	@Nullable
@@ -58,12 +56,6 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	protected IBakedModel bakeModel(BlockState state, K key, B block, IModelData extraData) {
 		ModelBaker baker = new ModelBaker();
-
-		//		if (state instanceof IExtendedBlockState) {
-		//			IExtendedBlockState stateExtended = (IExtendedBlockState) state;
-		//			IBlockReader world = stateExtended.getValue(UnlistedBlockAccess.BLOCKACCESS);
-		//			BlockPos pos = stateExtended.getValue(UnlistedBlockPos.POS);
-		//		}
 
 		bakeBlock(block, extraData, key, baker, false);
 
@@ -133,7 +125,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		if (blockModel != null) {
 			return blockModel.getParticleTexture();
 		}
-		return Minecraft.getInstance().getTextureMap().getAtlasSprite("error");    //TODO - where is missing texture stored
+		return Minecraft.getInstance().getTextureMap().missingImage;
 	}
 
 	@Override

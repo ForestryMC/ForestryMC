@@ -26,8 +26,8 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 
 import forestry.core.config.Constants;
+import forestry.core.models.ClientManager;
 import forestry.core.models.DefaultTextureGetter;
-import forestry.core.models.ModelManager;
 import forestry.core.utils.ModelUtil;
 import forestry.storage.items.ItemCrated;
 
@@ -92,7 +92,7 @@ public class ModelCrate implements IUnbakedModel {
 			quads.addAll(contentModel.getQuads(null, null, new Random(0)));
 			model = new ModelCrateBaked(quads);
 		}
-		return new PerspectiveMapWrapper(model, ModelManager.getInstance().getDefaultItemState());
+		return new PerspectiveMapWrapper(model, ClientManager.getInstance().getDefaultItemState());
 	}
 
 	//TODO for these

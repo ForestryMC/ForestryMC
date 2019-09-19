@@ -13,13 +13,13 @@ package forestry.core.items;
 import java.util.Locale;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.IStringSerializable;
 
+import forestry.api.core.IItemSubtype;
 import forestry.core.utils.OreDictUtil;
 
 public class ItemFruit extends ItemForestryFood {
 
-	public enum EnumFruit implements IStringSerializable {
+	public enum EnumFruit implements IItemSubtype {
 		CHERRY(OreDictUtil.CROP_CHERRY),
 		WALNUT(OreDictUtil.CROP_WALNUT),
 		CHESTNUT(OreDictUtil.CROP_CHESTNUT),

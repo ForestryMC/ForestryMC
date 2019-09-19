@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "forestry:block/arboriculture/slabs/dark_oak_top"
+    },
+    "type=bottom": {
+      "model": "forestry:block/arboriculture/slabs/dark_oak"
+    },
+    "type=double": {
+      "model": "forestry:block/arboriculture/planks/dark_oak"
+    }
+  }
+}

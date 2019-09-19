@@ -13,14 +13,11 @@ package forestry.farming.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -28,12 +25,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.ItemGroups;
+import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.farming.models.EnumFarmBlockTexture;
+import forestry.farming.blocks.BlockFarm;
 
-public class ItemBlockFarm extends BlockItem {
+public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
-	public ItemBlockFarm(Block block) {
+	public ItemBlockFarm(BlockFarm block) {
 		super(block, new Item.Properties().group(ItemGroups.tabAgriculture));
 	}
 
@@ -41,20 +39,18 @@ public class ItemBlockFarm extends BlockItem {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.tooltip"));
-			if (stack.getTag() == null) {
-				return;
-			}
-			EnumFarmBlockTexture texture = EnumFarmBlockTexture.getFromCompound(stack.getTag());
-
-			tooltip.add(new TranslationTextComponent("block.forestry.ffarm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(texture.getFormatting())).appendText(" " + texture.getName()));
+			tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip"));
+			/*BlockFarm block = getBlock();
+			EnumFarmMaterial material = block.getFarmMaterial();
+			tooltip.add(new TranslationTextComponent("block.forestry.farm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(material.getFormatting())).appendText(" " + WordUtils.capitalize(material.getName().replace("_", ""))));*/
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack itemstack) {
-		return super.getTranslationKey(itemstack) + "." + 0;// TODO flatten itemstack.getItemDamage();
+	public String getTranslationKey() {
+		BlockFarm block = getBlock();
+		return "block.forestry.farm_" + block.getType().getName();
 	}
 }

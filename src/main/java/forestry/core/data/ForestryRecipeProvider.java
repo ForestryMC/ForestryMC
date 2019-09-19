@@ -37,39 +37,35 @@ import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.blocks.BlockAlvearyType;
-import forestry.apiculture.blocks.BlockRegistryApiculture;
+import forestry.apiculture.blocks.BlockTypeApiculture;
+import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
-import forestry.arboriculture.ModuleArboriculture;
-import forestry.arboriculture.ModuleCharcoal;
-import forestry.arboriculture.blocks.BlockRegistryArboriculture;
-import forestry.arboriculture.blocks.BlockRegistryCharcoal;
-import forestry.arboriculture.items.ItemRegistryArboriculture;
-import forestry.climatology.ModuleClimatology;
-import forestry.climatology.blocks.BlockRegistryClimatology;
-import forestry.climatology.items.ItemRegistryClimatology;
-import forestry.core.ModuleCore;
-import forestry.core.ModuleFluids;
-import forestry.core.blocks.BlockRegistryCore;
+import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.arboriculture.features.ArboricultureItems;
+import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.climatology.features.ClimatologyBlocks;
+import forestry.climatology.features.ClimatologyItems;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
+import forestry.core.features.CoreItems;
+import forestry.core.features.FluidsItems;
+import forestry.core.items.EnumContainerType;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
-import forestry.core.items.ItemRegistryCore;
 import forestry.core.recipes.ModuleEnabledCondition;
-import forestry.food.ModuleFood;
-import forestry.food.items.ItemRegistryFood;
-import forestry.lepidopterology.ModuleLepidopterology;
+import forestry.food.features.FoodItems;
+import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.modules.ForestryModuleUids;
-import forestry.storage.ModuleBackpacks;
-import forestry.storage.items.ItemRegistryBackpacks;
+import forestry.storage.features.BackpackItems;
 
 public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
@@ -91,24 +87,21 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
 		registerCombRecipes(helper);
-
-		BlockRegistryApiculture blocks = ModuleApiculture.getBlocks();
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-
-		BlockAlveary plain = blocks.getAlvearyBlock(BlockAlvearyType.PLAIN);
-		Item goldElectronTube = coreItems.electronTubes.get(EnumElectronTube.GOLD);
+		
+		BlockAlveary plain = ApicultureBlocks.ALVEARY.get(BlockAlvearyType.PLAIN).getBlock();
+		Item goldElectronTube = CoreItems.ELECTRON_TUBES.get(EnumElectronTube.GOLD).getItem();
 
 
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(plain)
-						.key('X', coreItems.impregnatedCasing)
-						.key('#', coreItems.craftingMaterials.get(EnumCraftingMaterial.SCENTED_PANELING))
+						.key('X', CoreItems.IMPREGNATED_CASING.getItem())
+						.key('#', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SCENTED_PANELING).getItem())
 						.patternLine("###").patternLine("#X#").patternLine("###")
-						.addCriterion("has_casing", this.hasItem(coreItems.impregnatedCasing))
+						.addCriterion("has_casing", this.hasItem(CoreItems.IMPREGNATED_CASING.getItem()))
 						.setGroup("alveary")::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.getAlvearyBlock(BlockAlvearyType.FAN))
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.ALVEARY.get(BlockAlvearyType.FAN).getBlock())
 						.key('#', goldElectronTube)
 						.key('X', plain)
 						.key('I', Tags.Items.INGOTS_IRON)
@@ -117,7 +110,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.setGroup("alveary")::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.getAlvearyBlock(BlockAlvearyType.HEATER))
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.ALVEARY.get(BlockAlvearyType.HEATER).getBlock())
 						.key('#', goldElectronTube)
 						.key('I', Tags.Items.INGOTS_IRON)
 						.key('X', plain)
@@ -127,7 +120,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.setGroup("alveary")::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.getAlvearyBlock(BlockAlvearyType.HYGRO))
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.ALVEARY.get(BlockAlvearyType.HYGRO).getBlock())
 						.key('G', Tags.Items.GLASS)
 						.key('X', plain)
 						.key('I', Tags.Items.INGOTS_IRON)
@@ -136,8 +129,8 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.setGroup("alveary")::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.getAlvearyBlock(BlockAlvearyType.SIEVE))
-						.key('W', coreItems.craftingMaterials.get(EnumCraftingMaterial.WOVEN_SILK))
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.ALVEARY.get(BlockAlvearyType.SIEVE).getBlock())
+						.key('W', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.WOVEN_SILK).getItem())
 						.key('X', plain)
 						.key('I', Tags.Items.INGOTS_IRON)
 						.patternLine("III").patternLine(" X ").patternLine("WWW")
@@ -145,7 +138,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.setGroup("alveary")::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.getAlvearyBlock(BlockAlvearyType.STABILISER))
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.ALVEARY.get(BlockAlvearyType.STABILISER).getBlock())
 						.key('X', plain)
 						.key('G', Tags.Items.GEMS_QUARTZ)
 						.patternLine("G G").patternLine("GXG").patternLine("G G")
@@ -153,8 +146,8 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.setGroup("alveary")::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.getAlvearyBlock(BlockAlvearyType.SWARMER))
-						.key('#', coreItems.electronTubes.get(EnumElectronTube.DIAMOND))
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.ALVEARY.get(BlockAlvearyType.SWARMER).getBlock())
+						.key('#', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.DIAMOND).getItem())
 						.key('X', plain)
 						.key('G', Tags.Items.INGOTS_GOLD)
 						.patternLine("#G#").patternLine(" X ").patternLine("#G#")
@@ -162,7 +155,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.setGroup("alveary")::build,
 				ForestryModuleUids.APICULTURE);
 
-		Item wovenSilk = coreItems.craftingMaterials.get(EnumCraftingMaterial.WOVEN_SILK);
+		Item wovenSilk = CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.WOVEN_SILK).getItem();
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ApicultureItems.APIARIST_HELMET.getItem())
 						.key('#', wovenSilk)
@@ -191,17 +184,17 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has silk", this.hasItem(wovenSilk))
 						.setGroup("apiarist_armour")::build,
 				ForestryModuleUids.APICULTURE);
-
+		
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.apiary)
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).getBlock())
 						.key('S', ItemTags.WOODEN_SLABS)
 						.key('P', ItemTags.PLANKS)
-						.key('C', coreItems.impregnatedCasing)
+						.key('C', CoreItems.IMPREGNATED_CASING.getItem())
 						.patternLine("SSS").patternLine("PCP").patternLine("PPP")
-						.addCriterion("has_casing", this.hasItem(coreItems.impregnatedCasing))::build,
+						.addCriterion("has_casing", this.hasItem(CoreItems.IMPREGNATED_CASING.getItem()))::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.beeHouse)
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.BASE.get(BlockTypeApiculture.BEE_HOUSE).getBlock())
 						.key('S', ItemTags.WOODEN_SLABS)
 						.key('P', ItemTags.PLANKS)
 						.key('C', ForestryTags.Items.BEE_COMBS)
@@ -211,7 +204,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		//TODO minecarts and candles once they are flattened
 
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(blocks.beeChest)
+				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.BEE_CHEST.getBlock())
 						.key('G', Tags.Items.GLASS)
 						.key('X', ForestryTags.Items.BEE_COMBS)
 						.key('Y', Tags.Items.CHESTS_WOODEN)
@@ -221,9 +214,9 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 		Item propolis = ApicultureItems.PROPOLIS.get(EnumPropolis.NORMAL).getItem();
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(coreItems.bituminousPeat)
+				ShapedRecipeBuilder.shapedRecipe(CoreItems.BITUMINOUS_PEAT.getItem())
 						.key('#', ForestryTags.Items.ASH)
-						.key('X', coreItems.peat)
+						.key('X', CoreItems.PEAT.getItem())
 						.key('Y', propolis)
 						.patternLine(" # ").patternLine("XYX").patternLine(" # ")
 						.addCriterion("has_propolis", this.hasItem(propolis))::build,
@@ -231,17 +224,17 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ApicultureItems.FRAME_IMPREGNATED.getItem())
-						.key('#', coreItems.stickImpregnated)
+						.key('#', CoreItems.STICK_IMPREGNATED.getItem())
 						.key('S', Tags.Items.STRING)
 						.patternLine("###").patternLine("#S#").patternLine("###")
-						.addCriterion("has_impregnated_stick", this.hasItem(coreItems.stickImpregnated))::build,
+						.addCriterion("has_impregnated_stick", this.hasItem(CoreItems.STICK_IMPREGNATED.getItem()))::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ApicultureItems.FRAME_UNTREATED.getItem())
 						.key('#', Tags.Items.RODS_WOODEN)
 						.key('S', Tags.Items.STRING)
 						.patternLine("###").patternLine("#S#").patternLine("###")
-						.addCriterion("has_impregnated_stick", this.hasItem(coreItems.stickImpregnated))::build,
+						.addCriterion("has_impregnated_stick", this.hasItem(CoreItems.STICK_IMPREGNATED.getItem()))::build,
 				ForestryModuleUids.APICULTURE);
 
 		helper.moduleConditionRecipe(
@@ -252,7 +245,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE))::build,
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(coreItems.craftingMaterials.get(EnumCraftingMaterial.PULSATING_MESH))
+				ShapedRecipeBuilder.shapedRecipe(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.PULSATING_MESH).getItem())
 						.key('#', ApicultureItems.PROPOLIS.get(EnumPropolis.PULSATING).getItem())
 						.patternLine("# #").patternLine(" # ").patternLine("# #")
 						.addCriterion("has_pulsating_propolis", this.hasItem(ApicultureItems.PROPOLIS.get(EnumPropolis.PULSATING).getItem()))::build,
@@ -290,7 +283,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_melon", this.hasItem(Items.MELON_SLICE))::build,
 				ForestryModuleUids.APICULTURE);
 
-		Item beesWax = coreItems.beeswax;
+		Item beesWax = CoreItems.BEESWAX.getItem();
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(Items.TORCH, 3)
 						.key('#', beesWax)
@@ -309,7 +302,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	private void registerCombRecipes(RecipeDataHelper helper) {
 		for (EnumHoneyComb honeyComb : EnumHoneyComb.VALUES) {
 			Item comb = ApicultureItems.BEE_COMBS.get(honeyComb).getItem();
-			Block combBlock = ModuleApiculture.getBlocks().beeCombs.get(honeyComb);
+			Block combBlock = ApicultureBlocks.BEE_COMB.get(honeyComb).getBlock();
 			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(combBlock).key('#', comb).patternLine("###").patternLine("###").patternLine("###").addCriterion("has_at_least_9_comb", this.hasItem(MinMaxBounds.IntBound.atLeast(9), comb)).setGroup("combs")::build,
 					ForestryModuleUids.APICULTURE
@@ -319,19 +312,16 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 	private void registerArboricultureRecipes(RecipeDataHelper helper) {
 		registerWoodRecipes(helper);
-
-		ItemRegistryArboriculture treeItems = ModuleArboriculture.getItems();
-		BlockRegistryArboriculture treeBlocks = ModuleArboriculture.getBlocks();
-
+		
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(treeItems.grafter)
+				ShapedRecipeBuilder.shapedRecipe(ArboricultureItems.GRAFTER.getItem())
 						.key('B', ForestryTags.Items.INGOT_BRONZE)
 						.key('#', Tags.Items.RODS_WOODEN)
 						.patternLine("  B").patternLine(" # ").patternLine("#  ")
 						.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE))::build,
 				ForestryModuleUids.ARBORICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(treeBlocks.treeChest)
+				ShapedRecipeBuilder.shapedRecipe(ArboricultureBlocks.TREE_CHEST.getBlock())
 						.key('#', Tags.Items.GLASS)
 						.key('X', ItemTags.SAPLINGS)
 						.key('Y', Tags.Items.CHESTS_WOODEN)
@@ -401,14 +391,12 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	}
 
 	private void registerFoodRecipes(RecipeDataHelper helper) {
-
-		ItemRegistryFood foodItems = ModuleFood.getItems();
-
-		Item waxCapsule = ModuleFluids.getItems().waxCapsuleEmpty;
+		
+		Item waxCapsule = FluidsItems.CONTAINERS.get(EnumContainerType.CAPSULE).getItem();
 		Item honeyDrop = ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).getItem();
 
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(foodItems.ambrosia)
+				ShapedRecipeBuilder.shapedRecipe(FoodItems.AMBROSIA.getItem())
 						.key('#', ApicultureItems.HONEYDEW.getItem())
 						.key('X', ApicultureItems.ROYAL_JELLY.getItem())
 						.key('Y', waxCapsule)
@@ -416,14 +404,14 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has royal_jelly", this.hasItem(ApicultureItems.ROYAL_JELLY.getItem()))::build,
 				ForestryModuleUids.FOOD);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(foodItems.honeyPot)
+				ShapedRecipeBuilder.shapedRecipe(FoodItems.HONEY_POT.getItem())
 						.key('#', honeyDrop)
 						.key('X', waxCapsule)
 						.patternLine("# #").patternLine(" X ").patternLine("# #")
 						.addCriterion("has_drop", this.hasItem(honeyDrop))::build,
 				ForestryModuleUids.FOOD);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(foodItems.honeyedSlice)
+				ShapedRecipeBuilder.shapedRecipe(FoodItems.HONEYED_SLICE.getItem())
 						.key('#', honeyDrop)
 						.key('X', Items.BREAD)
 						.patternLine("###").patternLine("#X#").patternLine("###")
@@ -432,10 +420,9 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	}
 
 	private void registerBackpackRecipes(RecipeDataHelper helper) {
-		ItemRegistryBackpacks backpackItems = ModuleBackpacks.getItems();
 
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.adventurerBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.ADVENTURER_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', Tags.Items.BONES)
 						.key('X', Tags.Items.STRING)
@@ -444,9 +431,9 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_bone", this.hasItem(Tags.Items.BONES))::build,
 				ForestryModuleUids.BACKPACKS);
 
-		Block beeChest = ModuleApiculture.getBlocks().beeChest;
+		Block beeChest = ArboricultureBlocks.TREE_CHEST.getBlock();
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.apiaristBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.APIARIST_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', Tags.Items.RODS_WOODEN)
 						.key('X', Tags.Items.STRING)
@@ -455,7 +442,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_bee_chest", this.hasItem(beeChest))::build,
 				ForestryModuleUids.BACKPACKS, ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.builderBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.BUILDER_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', Items.CLAY_BALL)
 						.key('X', Tags.Items.STRING)
@@ -464,7 +451,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_clay", this.hasItem(Items.CLAY_BALL))::build,
 				ForestryModuleUids.BACKPACKS);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.diggerBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.DIGGER_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', Tags.Items.STONE)
 						.key('X', Tags.Items.STRING)
@@ -473,7 +460,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_stone", this.hasItem(Tags.Items.STONE))::build,
 				ForestryModuleUids.BACKPACKS);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.foresterBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.FORESTER_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', ItemTags.LOGS)
 						.key('X', Tags.Items.STRING)
@@ -482,7 +469,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_log", this.hasItem(ItemTags.LOGS))::build,
 				ForestryModuleUids.BACKPACKS);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.hunterBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.HUNTER_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', Tags.Items.FEATHERS)
 						.key('X', Tags.Items.STRING)
@@ -491,9 +478,9 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_feather", this.hasItem(Tags.Items.FEATHERS))::build,
 				ForestryModuleUids.BACKPACKS);
 
-		Block butterflyChest = ModuleLepidopterology.getBlocks().butterflyChest;
+		Block butterflyChest = LepidopterologyBlocks.BUTTERFLY_CHEST.getBlock();
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.lepidopteristBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.LEPIDOPTERIST_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', butterflyChest)
 						.key('X', Tags.Items.STRING)
@@ -502,7 +489,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_butterfly_chest", this.hasItem(butterflyChest))::build,
 				ForestryModuleUids.BACKPACKS, ForestryModuleUids.LEPIDOPTEROLOGY);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(backpackItems.minerBackpack)
+				ShapedRecipeBuilder.shapedRecipe(BackpackItems.MINER_BACKPACK.getItem())
 						.key('#', ItemTags.WOOL)
 						.key('V', Tags.Items.INGOTS_IRON)
 						.key('X', Tags.Items.STRING)
@@ -513,11 +500,9 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	}
 
 	private void registerCharcoalRecipes(RecipeDataHelper helper) {
-		BlockRegistryCharcoal charcoalBlocks = ModuleCharcoal.getBlocks();
-		ItemRegistryCore coreItems = ModuleCore.getItems();
 
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.charcoal)
+				ShapedRecipeBuilder.shapedRecipe(CharcoalBlocks.CHARCOAL.getBlock())
 						.key('#', Items.CHARCOAL)
 						.patternLine("###").patternLine("###").patternLine("###")
 						.addCriterion("has_enough_charcoal", this.hasItem(MinMaxBounds.IntBound.atLeast(9), Items.CHARCOAL))::build,
@@ -528,50 +513,47 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_charcoal_block", this.hasItem(ForestryTags.Items.CHARCOAL))::build,
 				ForestryModuleUids.CHARCOAL);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.loam)
+				ShapedRecipeBuilder.shapedRecipe(CharcoalBlocks.LOAM.getBlock())
 						.key('C', Items.CLAY_BALL)
 						.key('S', ItemTags.SAND)
-						.key('F', coreItems.compost)
+						.key('F', CoreItems.COMPOST.getItem())
 						.patternLine("CFC").patternLine("SCS").patternLine("CFC")
-						.addCriterion("has_compost", this.hasItem(coreItems.compost))::build,
+						.addCriterion("has_compost", this.hasItem(CoreItems.COMPOST.getItem()))::build,
 				ForestryModuleUids.CHARCOAL);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(charcoalBlocks.woodPile)
+				ShapedRecipeBuilder.shapedRecipe(CharcoalBlocks.WOOD_PILE.getBlock())
 						.key('L', ItemTags.LOGS)
 						.patternLine("LL").patternLine("LL")
 						.addCriterion("has_log", this.hasItem(ItemTags.LOGS))::build,
 				ForestryModuleUids.CHARCOAL);
 		helper.moduleConditionRecipe(
-				ShapelessRecipeBuilder.shapelessRecipe(charcoalBlocks.woodPileDecorative)
-						.addIngredient(charcoalBlocks.woodPile)
-						.addCriterion("was_wood_pile", this.hasItem(charcoalBlocks.woodPile))::build,
+				ShapelessRecipeBuilder.shapelessRecipe(CharcoalBlocks.WOOD_PILE_DECORATIVE.getBlock())
+						.addIngredient(CharcoalBlocks.WOOD_PILE.getBlock())
+						.addCriterion("was_wood_pile", this.hasItem(CharcoalBlocks.WOOD_PILE.getBlock()))::build,
 				ForestryModuleUids.CHARCOAL);
 		helper.moduleConditionRecipe(
-				ShapelessRecipeBuilder.shapelessRecipe(charcoalBlocks.woodPile)
-						.addIngredient(charcoalBlocks.woodPileDecorative)
-						.addCriterion("has_decorative", this.hasItem(charcoalBlocks.woodPileDecorative))::build,
+				ShapelessRecipeBuilder.shapelessRecipe(CharcoalBlocks.WOOD_PILE.getBlock())
+						.addIngredient(CharcoalBlocks.WOOD_PILE_DECORATIVE.getBlock())
+						.addCriterion("has_decorative", this.hasItem(CharcoalBlocks.WOOD_PILE_DECORATIVE.getBlock()))::build,
 				new ResourceLocation(Constants.MOD_ID, "wood_pile_from_decorative"), ForestryModuleUids.CHARCOAL);
 	}
 
 	private void addClimatologyRecipes(RecipeDataHelper helper) {
-		BlockRegistryClimatology climatologyBlocks = ModuleClimatology.getBlocks();
-		ItemRegistryClimatology climatologyItems = ModuleClimatology.getItems();
-		ItemRegistryCore coreItems = ModuleCore.getItems();
 
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shapedRecipe(climatologyBlocks.habitatformer)
-						.key('S', coreItems.sturdyCasing)
+				ShapedRecipeBuilder.shapedRecipe(ClimatologyBlocks.HABITATFORMER.getBlock())
+						.key('S', CoreItems.STURDY_CASING.getItem())
 						.key('G', Tags.Items.GLASS)
 						.key('B', ForestryTags.Items.GEAR_BRONZE)
 						.key('R', Tags.Items.DUSTS_REDSTONE)
-						.key('C', coreItems.circuitboards.get(EnumCircuitBoardType.BASIC))
-						.key('T', coreItems.electronTubes.get(EnumElectronTube.IRON))
+						.key('C', CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.BASIC).getItem())
+						.key('T', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.IRON).getItem())
 						.patternLine("GRG").patternLine("TST").patternLine("BCB")
-						.addCriterion("has_casing", this.hasItem(coreItems.sturdyCasing))::build,
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.getItem()))::build,
 				ForestryModuleUids.CLIMATOLOGY);
 		//TODO if carpenter recipes are in json then can just use that here
 		helper.simpleConditionalRecipe(
-				ShapedRecipeBuilder.shapedRecipe(climatologyItems.habitatScreen)
+				ShapedRecipeBuilder.shapedRecipe(ClimatologyItems.HABITAT_SCREEN.getItem())
 						.key('G', ForestryTags.Items.GEAR_BRONZE)
 						.key('P', Tags.Items.GLASS_PANES)
 						.key('I', ForestryTags.Items.INGOT_BRONZE)
@@ -585,53 +567,51 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	private void registerCoreRecipes(RecipeDataHelper helper) {
 		Consumer<IFinishedRecipe> consumer = helper.getConsumer();
 
-		BlockRegistryCore coreBlocks = ModuleCore.getBlocks();
-		ItemRegistryCore coreItems = ModuleCore.getItems();
 		//don't need conditions here generally since core is always enabled
-		ShapedRecipeBuilder.shapedRecipe(coreBlocks.analyzer)
-				.key('T', coreItems.portableAlyzer)
+		ShapedRecipeBuilder.shapedRecipe(CoreBlocks.BASE.get(BlockTypeCoreTesr.ANALYZER).getBlock())
+				.key('T', CoreItems.PORTABLE_ALYZER.getItem())
 				.key('X', ForestryTags.Items.INGOT_BRONZE)
-				.key('Y', coreItems.sturdyCasing)
+				.key('Y', CoreItems.STURDY_CASING.getItem())
 				.patternLine("XTX").patternLine(" Y ").patternLine("X X")
-				.addCriterion("has_casing", this.hasItem(coreItems.sturdyCasing)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreBlocks.ashBrick)
+				.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.getItem())).build(consumer);
+		ShapedRecipeBuilder.shapedRecipe(CoreBlocks.ASH_BRICK.getBlock())
 				.key('A', ForestryTags.Items.ASH)
 				.key('#', Tags.Items.INGOTS_BRICK)
 				.patternLine("A#A").patternLine("# #").patternLine("A#A")
 				.addCriterion("has_ash", this.hasItem(ForestryTags.Items.ASH)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreBlocks.ashStairs, 4)
-				.key('#', coreBlocks.ashBrick)
+		ShapedRecipeBuilder.shapedRecipe(CoreBlocks.ASH_STAIRS.getBlock(), 4)
+				.key('#', CoreBlocks.ASH_BRICK.getBlock())
 				.patternLine("#  ").patternLine("## ").patternLine("###")
-				.addCriterion("has_brick", this.hasItem(coreBlocks.ashBrick)).build(consumer);
+				.addCriterion("has_brick", this.hasItem(CoreBlocks.ASH_BRICK.getBlock())).build(consumer);
 		//TODO how to deal with variable output. Options: wrapper recipe, custom recipe type, leave up to data packs.
-		ShapedRecipeBuilder.shapedRecipe(coreBlocks.resourceStorage.get(EnumResourceType.APATITE))
+		ShapedRecipeBuilder.shapedRecipe(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.APATITE).getBlock())
 				.key('#', ForestryTags.Items.GEM_APATITE)
 				.patternLine("###").patternLine("###").patternLine("###")
 				.addCriterion("has_apatite", this.hasItem(ForestryTags.Items.GEM_APATITE)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreBlocks.resourceStorage.get(EnumResourceType.BRONZE))
+		ShapedRecipeBuilder.shapedRecipe(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).getBlock())
 				.key('#', ForestryTags.Items.INGOT_BRONZE)
 				.patternLine("###").patternLine("###").patternLine("###")
 				.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreBlocks.resourceStorage.get(EnumResourceType.COPPER))
+		ShapedRecipeBuilder.shapedRecipe(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).getBlock())
 				.key('#', ForestryTags.Items.INGOT_COPPER)
 				.patternLine("###").patternLine("###").patternLine("###")
 				.addCriterion("has_copper", this.hasItem(ForestryTags.Items.INGOT_COPPER)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreBlocks.resourceStorage.get(EnumResourceType.TIN))
+		ShapedRecipeBuilder.shapedRecipe(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).getBlock())
 				.key('#', ForestryTags.Items.INGOT_TIN)
 				.patternLine("###").patternLine("###").patternLine("###")
 				.addCriterion("has_apatite", this.hasItem(ForestryTags.Items.INGOT_TIN)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreItems.bronzePickaxe)
+		ShapedRecipeBuilder.shapedRecipe(CoreItems.BRONZE_PICKAXE.getItem())
 				.key('#', ForestryTags.Items.INGOT_BRONZE)
 				.key('X', Tags.Items.RODS_WOODEN)
 				.patternLine("###").patternLine(" X ").patternLine(" X ")
 				.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreItems.bronzeShovel)
+		ShapedRecipeBuilder.shapedRecipe(CoreItems.BRONZE_SHOVEL.getItem())
 				.key('#', ForestryTags.Items.INGOT_BRONZE)
 				.key('X', Tags.Items.RODS_WOODEN)
 				.patternLine(" # ").patternLine(" X ").patternLine(" X ")
 				.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE)).build(consumer);
 		helper.simpleConditionalRecipe(
-				ShapedRecipeBuilder.shapedRecipe(coreItems.craftingMaterials.get(EnumCraftingMaterial.CAMOUFLAGED_PANELING))
+				ShapedRecipeBuilder.shapedRecipe(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.CAMOUFLAGED_PANELING).getItem())
 						.key('W', ItemTags.PLANKS)
 						.key('Y', Tags.Items.DYES_YELLOW)
 						.key('B', Tags.Items.DYES_BLUE)
@@ -644,13 +624,13 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		ConditionalRecipe.builder()
 				.addCondition(new NotCondition(new TagEmptyCondition("forge", "gears/stone")))
 				.addRecipe(
-						ShapedRecipeBuilder.shapedRecipe(coreItems.gearBronze)
+						ShapedRecipeBuilder.shapedRecipe(CoreItems.GEAR_BRONZE.getItem())
 								.key('#', ForestryTags.Items.INGOT_BRONZE)
 								.key('X', ForestryTags.Items.GEAR_STONE)
 								.patternLine(" # ").patternLine("#X#").patternLine(" # ")
 								.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE))::build)
 				.addCondition(new TagEmptyCondition("forge", "gears/stone"))    //TODO can this be replaced with true since the array is scanned in order?
-				.addRecipe(ShapedRecipeBuilder.shapedRecipe(coreItems.gearBronze)
+				.addRecipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.GEAR_BRONZE.getItem())
 						.key('#', ForestryTags.Items.INGOT_BRONZE)
 						.key('X', ForestryTags.Items.INGOT_COPPER)
 						.patternLine(" # ").patternLine("#X#").patternLine(" # ")
@@ -659,13 +639,13 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		ConditionalRecipe.builder()
 				.addCondition(new NotCondition(new TagEmptyCondition("forge", "gears/stone")))
 				.addRecipe(
-						ShapedRecipeBuilder.shapedRecipe(coreItems.gearCopper)
+						ShapedRecipeBuilder.shapedRecipe(CoreItems.GEAR_COPPER.getItem())
 								.key('#', ForestryTags.Items.INGOT_COPPER)
 								.key('X', ForestryTags.Items.GEAR_STONE)
 								.patternLine(" # ").patternLine("#X#").patternLine(" # ")
 								.addCriterion("has_copper", this.hasItem(ForestryTags.Items.INGOT_COPPER))::build)
 				.addCondition(new TagEmptyCondition("forge", "gears/stone"))    //TODO can this be replaced with true since the array is scanned in order?
-				.addRecipe(ShapedRecipeBuilder.shapedRecipe(coreItems.gearCopper)
+				.addRecipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.GEAR_COPPER.getItem())
 						.key('#', ForestryTags.Items.INGOT_COPPER)
 						.key('X', ForestryTags.Items.INGOT_COPPER)
 						.patternLine(" # ").patternLine("#X#").patternLine(" # ")
@@ -674,20 +654,20 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		ConditionalRecipe.builder()
 				.addCondition(new NotCondition(new TagEmptyCondition("forge", "gears/stone")))
 				.addRecipe(
-						ShapedRecipeBuilder.shapedRecipe(coreItems.gearTin)
+						ShapedRecipeBuilder.shapedRecipe(CoreItems.GEAR_TIN.getItem())
 								.key('#', ForestryTags.Items.INGOT_TIN)
 								.key('X', ForestryTags.Items.GEAR_STONE)
 								.patternLine(" # ").patternLine("#X#").patternLine(" # ")
 								.addCriterion("has_tin", this.hasItem(ForestryTags.Items.INGOT_TIN))::build)
 				.addCondition(new TagEmptyCondition("forge", "gears/stone"))    //TODO can this be replaced with true since the array is scanned in order?
-				.addRecipe(ShapedRecipeBuilder.shapedRecipe(coreItems.gearTin)
+				.addRecipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.GEAR_TIN.getItem())
 						.key('#', ForestryTags.Items.INGOT_TIN)
 						.key('X', ForestryTags.Items.INGOT_COPPER)
 						.patternLine(" # ").patternLine("#X#").patternLine(" # ")
 						.addCriterion("has_tin", this.hasItem(ForestryTags.Items.INGOT_TIN))::build)
 				.build(helper.getConsumer(), new ResourceLocation(Constants.MOD_ID, "gear_tin"));
 
-		ShapelessRecipeBuilder.shapelessRecipe(coreItems.ingotBronze)
+		ShapelessRecipeBuilder.shapelessRecipe(CoreItems.INGOT_BRONZE.getItem())
 				.addIngredient(ForestryTags.Items.INGOT_TIN)
 				.addIngredient(ForestryTags.Items.INGOT_COPPER)
 				.addIngredient(ForestryTags.Items.INGOT_COPPER)
@@ -695,38 +675,38 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 				.addCriterion("has_tin", this.hasItem(ForestryTags.Items.INGOT_TIN))
 				.build(consumer, new ResourceLocation(Constants.MOD_ID, "ingot_bronze_alloying"));
 
-		ShapelessRecipeBuilder.shapelessRecipe(coreItems.apatite, 9)
+		ShapelessRecipeBuilder.shapelessRecipe(CoreItems.APATITE.getItem(), 9)
 				.addIngredient(ForestryTags.Items.STORAGE_BLOCK_APATITE)
 				.addCriterion("has_block", this.hasItem(ForestryTags.Items.STORAGE_BLOCK_APATITE)).build(consumer);
-		ShapelessRecipeBuilder.shapelessRecipe(coreItems.ingotBronze, 9)
+		ShapelessRecipeBuilder.shapelessRecipe(CoreItems.INGOT_BRONZE.getItem(), 9)
 				.addIngredient(ForestryTags.Items.STORAGE_BLOCK_BRONZE)
 				.addCriterion("has_block", this.hasItem(ForestryTags.Items.STORAGE_BLOCK_BRONZE)).build(consumer);
-		ShapelessRecipeBuilder.shapelessRecipe(coreItems.ingotCopper, 9)
+		ShapelessRecipeBuilder.shapelessRecipe(CoreItems.INGOT_COPPER.getItem(), 9)
 				.addIngredient(ForestryTags.Items.STORAGE_BLOCK_COPPER)
 				.addCriterion("has_block", this.hasItem(ForestryTags.Items.STORAGE_BLOCK_COPPER)).build(consumer);
-		ShapelessRecipeBuilder.shapelessRecipe(coreItems.ingotTin, 9)
+		ShapelessRecipeBuilder.shapelessRecipe(CoreItems.INGOT_TIN.getItem(), 9)
 				.addIngredient(ForestryTags.Items.STORAGE_BLOCK_TIN)
 				.addCriterion("has_block", this.hasItem(ForestryTags.Items.STORAGE_BLOCK_TIN)).build(consumer);
-		ShapelessRecipeBuilder.shapelessRecipe(coreItems.kitPickaxe)
-				.addIngredient(coreItems.bronzePickaxe)
-				.addIngredient(coreItems.carton)
-				.addCriterion("has_pickaxe", this.hasItem(coreItems.bronzePickaxe)).build(consumer);
-		ShapelessRecipeBuilder.shapelessRecipe(coreItems.kitShovel)
-				.addIngredient(coreItems.bronzeShovel)
-				.addIngredient(coreItems.carton)
-				.addCriterion("has_shovel", this.hasItem(coreItems.bronzeShovel)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreItems.spectacles)
+		ShapelessRecipeBuilder.shapelessRecipe(CoreItems.KIT_PICKAXE.getItem())
+				.addIngredient(CoreItems.BRONZE_PICKAXE.getItem())
+				.addIngredient(CoreItems.CARTON.getItem())
+				.addCriterion("has_pickaxe", this.hasItem(CoreItems.BRONZE_PICKAXE.getItem())).build(consumer);
+		ShapelessRecipeBuilder.shapelessRecipe(CoreItems.KIT_SHOVEL.getItem())
+				.addIngredient(CoreItems.BRONZE_SHOVEL.getItem())
+				.addIngredient(CoreItems.CARTON.getItem())
+				.addCriterion("has_shovel", this.hasItem(CoreItems.BRONZE_SHOVEL.getItem())).build(consumer);
+		ShapedRecipeBuilder.shapedRecipe(CoreItems.SPECTACLES.getItem())
 				.key('X', ForestryTags.Items.INGOT_BRONZE)
 				.key('Y', Tags.Items.GLASS_PANES)
 				.patternLine(" X ").patternLine("Y Y")
 				.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE)).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreItems.pipette)
+		ShapedRecipeBuilder.shapedRecipe(CoreItems.PIPETTE.getItem())
 				.key('#', ItemTags.WOOL)
 				.key('X', Tags.Items.GLASS_PANES)
 				.patternLine("  #").patternLine(" X ").patternLine("X  ")
 				.addCriterion("has_wool", this.hasItem(ItemTags.WOOL)).build(consumer);
 		helper.simpleConditionalRecipe(
-				ShapedRecipeBuilder.shapedRecipe(coreItems.portableAlyzer)
+				ShapedRecipeBuilder.shapedRecipe(CoreItems.PORTABLE_ALYZER.getItem())
 						.key('#', Tags.Items.GLASS_PANES)
 						.key('X', ForestryTags.Items.INGOT_TIN)
 						.key('R', Tags.Items.DUSTS_REDSTONE)
@@ -735,18 +715,18 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_diamond", this.hasItem(Tags.Items.GEMS_DIAMOND))::build,
 				new NotCondition(new ModuleEnabledCondition(Constants.MOD_ID, ForestryModuleUids.FACTORY)));
 		ShapedRecipeBuilder.shapedRecipe(Items.STRING)
-				.key('#', coreItems.craftingMaterials.get(EnumCraftingMaterial.SILK_WISP))
+				.key('#', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).getItem())
 				.patternLine(" # ").patternLine(" # ").patternLine(" # ")
-				.addCriterion("has_wisp", this.hasItem(coreItems.craftingMaterials.get(EnumCraftingMaterial.SILK_WISP))).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreItems.sturdyCasing)
+				.addCriterion("has_wisp", this.hasItem(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).getItem())).build(consumer);
+		ShapedRecipeBuilder.shapedRecipe(CoreItems.STURDY_CASING.getItem())
 				.key('#', ForestryTags.Items.INGOT_BRONZE)
 				.patternLine("###").patternLine("# #").patternLine("###")
 				.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE)).build(consumer);
 		ShapedRecipeBuilder.shapedRecipe(Items.COBWEB, 4)
-				.key('#', coreItems.craftingMaterials.get(EnumCraftingMaterial.SILK_WISP))
+				.key('#', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).getItem())
 				.patternLine("# #").patternLine(" # ").patternLine("# #")
-				.addCriterion("has_wisp", this.hasItem(coreItems.craftingMaterials.get(EnumCraftingMaterial.SILK_WISP))).build(consumer);
-		ShapedRecipeBuilder.shapedRecipe(coreItems.wrench)
+				.addCriterion("has_wisp", this.hasItem(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).getItem())).build(consumer);
+		ShapedRecipeBuilder.shapedRecipe(CoreItems.WRENCH.getItem())
 				.key('#', ForestryTags.Items.INGOT_BRONZE)
 				.patternLine("# #").patternLine(" # ").patternLine(" # ")
 				.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE)).build(consumer);

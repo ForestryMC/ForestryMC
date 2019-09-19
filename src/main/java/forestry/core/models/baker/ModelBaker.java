@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.models.ModelManager;
+import forestry.core.models.ClientManager;
 
 
 /**
@@ -46,7 +46,7 @@ public final class ModelBaker {
 
 	private final List<ModelBakerFace> faces = new ArrayList<>();
 
-	private final ModelBakerModel currentModel = new ModelBakerModel(ModelManager.getInstance().getDefaultBlockState());
+	private final ModelBakerModel currentModel = new ModelBakerModel(ClientManager.getInstance().getDefaultBlockState());
 
 	private int colorIndex = -1;
 

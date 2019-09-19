@@ -1,10 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "forestry:block/arboriculture/planks",
-      "textures": {
-        "all": "forestry:/block/wood/palm_planks"
-      }
+      "model": "forestry:block/arboriculture/planks/palm"
     }
   }
 }

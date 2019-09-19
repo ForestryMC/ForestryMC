@@ -7,7 +7,9 @@ package forestry.api.genetics;
 
 import genetics.api.alleles.IAllele;
 
-public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, Comparable<A> {
+import forestry.api.core.IBlockSubtype;
+
+public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, Comparable<A>, IBlockSubtype {
 
 	/**
 	 * To compare the allele for the properties
@@ -15,4 +17,8 @@ public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, 
 	@Override
 	int compareTo(A o);
 
+	@Override
+	default String getName() {
+		return getRegistryName().toString().replace(":", "_");
+	}
 }

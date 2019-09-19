@@ -9,7 +9,7 @@ import genetics.api.individual.IIndividual;
 
 import forestry.api.genetics.IDatabaseTab;
 import forestry.api.gui.IDatabaseElement;
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreItems;
 
 public enum AnalyzerTab implements IDatabaseTab {
 	ANALYZE {
@@ -20,7 +20,7 @@ public enum AnalyzerTab implements IDatabaseTab {
 
 		@Override
 		public ItemStack getIconStack() {
-			return new ItemStack(ModuleCore.getItems().portableAlyzer);
+			return CoreItems.PORTABLE_ALYZER.stack();
 		}
 	};
 

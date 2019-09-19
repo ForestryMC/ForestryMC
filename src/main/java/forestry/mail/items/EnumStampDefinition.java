@@ -62,7 +62,7 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	}
 
 	@Override
-	public String getUid() {
+	public String getName() {
 		return name;
 	}
 
