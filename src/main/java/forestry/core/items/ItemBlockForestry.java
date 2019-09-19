@@ -64,11 +64,6 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack itemstack) {
-		return getBlock().getTranslationKey();
-	}
-
-	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);

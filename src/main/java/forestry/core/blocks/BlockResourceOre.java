@@ -15,21 +15,14 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-
-public class BlockResourceOre extends Block implements IItemModelRegister {
+public class BlockResourceOre extends Block {
 	private final EnumResourceType type;
 
 	public BlockResourceOre(EnumResourceType type) {

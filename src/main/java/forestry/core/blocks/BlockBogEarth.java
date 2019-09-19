@@ -28,14 +28,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IItemModelRegister;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
 
 /**
  * bog earth, which becomes peat
  */
-public class BlockBogEarth extends Block implements IItemModelRegister {
+public class BlockBogEarth extends Block {
 	private static final int maturityDelimiter = 3; //maturity at which bogEarth becomes peat
 	public static final IntegerProperty MATURITY = IntegerProperty.create("maturity", 0, maturityDelimiter);
 

@@ -9,9 +9,12 @@ package forestry.core.models;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+@Deprecated
 public interface IStateMapperRegister {
 
 	@OnlyIn(Dist.CLIENT)
-	void registerStateMapper();
+	default void registerStateMapper() {
+
+	}
 
 }

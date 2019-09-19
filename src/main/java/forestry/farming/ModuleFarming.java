@@ -22,6 +22,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.NetherWartBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.IFruitProvider;
@@ -107,6 +109,7 @@ public class ModuleFarming extends BlankForestryModule {
 
 	public ModuleFarming() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyFarmingClient(), () -> () -> new ProxyFarming());
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -351,7 +354,19 @@ public class ModuleFarming extends BlankForestryModule {
 
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
-	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		EnumFarmBlockType.registerSprites();
+	public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
+		if (event.getMap() != Minecraft.getInstance().getTextureMap()) {
+			return;
+		}
+		EnumFarmBlockType.gatherSprites(event);
+	}
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void handleTextureStitchPost(TextureStitchEvent.Post event) {
+		if (event.getMap() != Minecraft.getInstance().getTextureMap()) {
+			return;
+		}
+		EnumFarmBlockType.fillSprites(event);
 	}
 }

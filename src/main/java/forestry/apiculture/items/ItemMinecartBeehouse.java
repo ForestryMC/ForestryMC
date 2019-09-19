@@ -25,16 +25,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.apiculture.entities.MinecartEntityApiary;
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.apiculture.entities.MinecartEntityBeehouse;
 
-public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegister {
+public class ItemMinecartBeehouse extends MinecartItem {
 	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
 
 	private static final IDispenseItemBehavior dispenserMinecartBehavior = (source, stack) -> stack;
@@ -89,15 +84,6 @@ public class ItemMinecartBeehouse extends MinecartItem implements IItemModelRegi
 		//		} else {
 		//			return "item.forestry." + definition[stack.getItemDamage()];
 		//		}
-	}
-
-	/* MODELS */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < definition.length; i++) {
-			manager.registerItemModel(item, i, definition[i]);
-		}
 	}
 
 	@Override

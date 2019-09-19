@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.Locale;
 
@@ -24,8 +23,13 @@ import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.IModelManager;
 import forestry.apiculture.items.ItemBeeGE;
+import forestry.core.config.Constants;
 
 public class DefaultBeeModelProvider implements IBeeModelProvider {
+
+	@OnlyIn(Dist.CLIENT)
+	private static final EnumMap<EnumBeeType, ModelResourceLocation> models = new EnumMap<>(EnumBeeType.class);
+	public static final String MODEL_DIR = "bees/default/";
 
 	public static final DefaultBeeModelProvider instance = new DefaultBeeModelProvider();
 
@@ -33,22 +37,13 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Nullable
-	private static EnumMap<EnumBeeType, ModelResourceLocation> models;
-
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerModels(Item item, IModelManager manager) {
-		String beeIconDir = "bees/default/";
 		EnumBeeType beeType = ((ItemBeeGE) item).getType();
-		String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
+		String modelLocation = MODEL_DIR + beeType.toString().toLowerCase(Locale.ENGLISH);
 
-		if (models == null) {
-			models = new EnumMap<>(EnumBeeType.class);
-		}
-
-		models.put(beeType, manager.getModelLocation(beeTypeNameBase));
+		models.put(beeType, new ModelResourceLocation(Constants.MOD_ID + ":" + modelLocation, "inventory"));
 		//TODO flatten or work out what this maps to
 		//		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
 	}

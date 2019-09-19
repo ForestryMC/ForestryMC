@@ -32,13 +32,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
 import forestry.core.utils.ItemTooltipUtil;
 
-public class ItemArmorNaturalist extends ArmorItem implements IItemModelRegister {
+public class ItemArmorNaturalist extends ArmorItem {
 
 	public ItemArmorNaturalist() {
 		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties())
@@ -49,12 +47,6 @@ public class ItemArmorNaturalist extends ArmorItem implements IItemModelRegister
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
 		return Constants.MOD_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
 	}
 
 	//TODO - maybe IDyeableArmorItem?

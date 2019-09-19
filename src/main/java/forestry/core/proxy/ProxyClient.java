@@ -24,7 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import forestry.core.ClimateHandlerClient;
 import forestry.core.TickHandlerCoreClient;
-import forestry.core.models.ModelManager;
+import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.multiblock.MultiblockEventHandlerClient;
 import forestry.core.render.TextureManagerForestry;
@@ -49,7 +49,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void registerBlock(Block block) {
-		ModelManager.getInstance().registerBlockClient(block);
+		ClientManager.getInstance().registerBlockClient(block);
 		if (Minecraft.getInstance() != null) {
 			TextureManagerForestry.getInstance().registerBlock(block);
 		}
@@ -57,7 +57,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void registerItem(Item item) {
-		ModelManager.getInstance().registerItemClient(item);
+		ClientManager.getInstance().registerItemClient(item);
 		if (Minecraft.getInstance() != null) {
 			TextureManagerForestry.getInstance().registerItem(item);
 		}

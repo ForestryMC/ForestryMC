@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.farming.models;
+package forestry.farming.blocks;
 
 import java.util.Locale;
 
@@ -59,31 +59,31 @@ public enum EnumFarmMaterial implements IBlockSubtype {
 		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 		switch (texture) {
 			case BRICK:
-				return map.getAtlasSprite("minecraft:block/brick");
+				return map.getAtlasSprite("minecraft:block/bricks");
 			case BRICK_STONE:
-				return map.getAtlasSprite("minecraft:block/stonebrick");
+				return map.getAtlasSprite("minecraft:block/stone_bricks");
 			case BRICK_CHISELED:
-				return map.getAtlasSprite("minecraft:block/stonebrick_carved");
+				return map.getAtlasSprite("minecraft:block/chiseled_stone_bricks");
 			case BRICK_CRACKED:
-				return map.getAtlasSprite("minecraft:block/stonebrick_cracked");
+				return map.getAtlasSprite("minecraft:block/cracked_stone_bricks");
 			case BRICK_MOSSY:
-				return map.getAtlasSprite("minecraft:block/stonebrick_mossy");
+				return map.getAtlasSprite("minecraft:block/mossy_stone_bricks");
 			case BRICK_NETHER:
-				return map.getAtlasSprite("minecraft:block/nether_brick");
+				return map.getAtlasSprite("minecraft:block/nether_bricks");
 			case SANDSTONE_CHISELED:
 				if (side == 0) {
 					return map.getAtlasSprite("minecraft:block/sandstone_bottom");
 				} else if (side == 1) {
 					return map.getAtlasSprite("minecraft:block/sandstone_top");
 				}
-				return map.getAtlasSprite("minecraft:block/sandstone_carved");
+				return map.getAtlasSprite("minecraft:block/chiseled_sandstone");
 			case SANDSTONE_SMOOTH:
 				if (side == 0) {
 					return map.getAtlasSprite("minecraft:block/sandstone_bottom");
 				} else if (side == 1) {
 					return map.getAtlasSprite("minecraft:block/sandstone_top");
 				}
-				return map.getAtlasSprite("minecraft:block/sandstone_smooth");
+				return map.getAtlasSprite("minecraft:block/cut_sandstone");
 			case QUARTZ:
 				if (side == 0) {
 					return map.getAtlasSprite("minecraft:block/quartz_block_bottom");
@@ -93,17 +93,25 @@ public enum EnumFarmMaterial implements IBlockSubtype {
 				return map.getAtlasSprite("minecraft:block/quartz_block_side");
 			case QUARTZ_CHISELED:
 				if (side == 0 || side == 1) {
-					return map.getAtlasSprite("minecraft:block/quartz_block_chiseled_top");
+					return map.getAtlasSprite("minecraft:block/chiseled_quartz_block_top");
 				}
-				return map.getAtlasSprite("minecraft:block/quartz_block_chiseled");
+				return map.getAtlasSprite("minecraft:block/chiseled_quartz_block");
 			case QUARTZ_LINES:
 				if (side == 0 || side == 1) {
-					return map.getAtlasSprite("minecraft:block/quartz_block_lines_top");
+					return map.getAtlasSprite("minecraft:block/quartz_pillar_top");
 				}
-				return map.getAtlasSprite("minecraft:block/quartz_block_lines");
+				return map.getAtlasSprite("minecraft:block/quartz_pillar");
 			default:
 				return null;
 		}
+	}
+
+	public TextureAtlasSprite[] getSprites() {
+		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
+		for (int side = 0; side < textures.length; side++) {
+			textures[side] = getSprite(this, side);
+		}
+		return textures;
 	}
 
 	public void saveToCompound(CompoundNBT compound) {

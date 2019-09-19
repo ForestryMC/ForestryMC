@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -40,28 +40,23 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.model.IModelState;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.blocks.IColoredBlock;
-import forestry.core.config.Constants;
 import forestry.core.items.IColoredItem;
 import forestry.core.utils.ModelUtil;
-
-//import net.minecraft.client.renderer.ItemMeshDefinition;
-//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import forestry.modules.features.FeatureBlock;
+import forestry.modules.features.FeatureGroup;
+import forestry.modules.features.FeatureItem;
+import forestry.modules.features.FeatureTable;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelManager implements IModelManager {
+public class ClientManager {
 
-	private static final ModelManager instance = new ModelManager();
+	private static final ClientManager instance = new ClientManager();
 
 	/* CUSTOM MODELS*/
 	private final List<BlockModelEntry> customBlockModels = new ArrayList<>();
 	private final List<ModelEntry> customModels = new ArrayList<>();
 	/* ITEM AND BLOCK REGISTERS*/
-	private final Set<IItemModelRegister> itemModelRegisters = new HashSet<>();
-	private final Set<IStateMapperRegister> stateMapperRegisters = new HashSet<>();
 	private final Set<IColoredBlock> blockColorList = new HashSet<>();
 	private final Set<IColoredItem> itemColorList = new HashSet<>();
 	/* DEFAULT ITEM AND BLOCK MODEL STATES*/
@@ -70,64 +65,12 @@ public class ModelManager implements IModelManager {
 	@Nullable
 	private IModelState defaultItemState;
 
-	static {
-		ForestryAPI.modelManager = instance;
-	}
-
-	public static ModelManager getInstance() {
+	public static ClientManager getInstance() {
 		return instance;
-	}
-
-	@Override
-	public void registerItemModel(Item item, int meta, String identifier) {
-		//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(identifier));
-		//TODO models
-	}
-
-	@Override
-	public void registerItemModel(Item item, int meta, String modID, String identifier) {
-		//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(modID, identifier));
-		//TODO models
-	}
-
-	@Override
-	public void registerItemModel(Item item, int meta) {
-		//		ModelLoader.setCustomModelResourceLocation(item, meta, getModelLocation(item));
-		//TODO models
-	}
-
-	//TODO - models
-	//	@Override
-	//	public void registerItemModel(Item item, ItemMeshDefinition definition) {
-	//		ModelLoader.setCustomMeshDefinition(item, definition);
-	//	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(Item item) {
-		ResourceLocation resourceLocation = item.getRegistryName();
-		Preconditions.checkNotNull(resourceLocation);
-		String itemName = resourceLocation.getPath();
-		return getModelLocation(itemName);
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(String identifier) {
-		return getModelLocation(Constants.MOD_ID, identifier);
-	}
-
-	@Override
-	public ModelResourceLocation getModelLocation(String modID, String identifier) {
-		return new ModelResourceLocation(modID + ":" + identifier, "inventory");
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public void registerBlockClient(Block block) {
-		if (block instanceof IItemModelRegister) {
-			itemModelRegisters.add((IItemModelRegister) block);
-		}
-		if (block instanceof IStateMapperRegister) {
-			stateMapperRegisters.add((IStateMapperRegister) block);
-		}
 		if (block instanceof IColoredBlock) {
 			blockColorList.add((IColoredBlock) block);
 		}
@@ -135,31 +78,8 @@ public class ModelManager implements IModelManager {
 
 	@OnlyIn(Dist.CLIENT)
 	public void registerItemClient(Item item) {
-		if (item instanceof IItemModelRegister) {
-			itemModelRegisters.add((IItemModelRegister) item);
-		}
 		if (item instanceof IColoredItem) {
 			itemColorList.add((IColoredItem) item);
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public void registerModels(ModelBakeEvent event) {
-		for (IItemModelRegister itemModelRegister : itemModelRegisters) {
-			Item item = null;
-			if (itemModelRegister instanceof Block) {
-				item = Item.getItemFromBlock((Block) itemModelRegister);
-			} else if (itemModelRegister instanceof Item) {
-				item = (Item) itemModelRegister;
-			}
-
-			if (item != null) {
-				itemModelRegister.registerModel(item, this);
-			}
-		}
-
-		for (IStateMapperRegister stateMapperRegister : stateMapperRegisters) {
-			stateMapperRegister.registerStateMapper();
 		}
 	}
 
@@ -198,29 +118,47 @@ public class ModelManager implements IModelManager {
 		return defaultItemState;
 	}
 
-	public void registerCustomBlockModel(BlockModelEntry index) {
-		customBlockModels.add(index);
-		if (index.addStateMapper) {
-			//			StateMapperBase ignoreState = new BlockModeStateMapper(index);
-			//			ModelLoader.setCustomStateMapper(index.block, ignoreState);
-			//TODO models
+	public void registerModel(IBakedModel model, Object feature) {
+		if (feature instanceof FeatureGroup) {
+			FeatureGroup<?, ?, ?> group = (FeatureGroup) feature;
+			group.getFeatures().forEach(f -> registerModel(model, f));
+		} else if (feature instanceof FeatureTable) {
+			FeatureTable<?, ?, ?, ?> group = (FeatureTable) feature;
+			group.getFeatures().forEach(f -> registerModel(model, f));
+		} else if (feature instanceof FeatureBlock) {
+			FeatureBlock block = (FeatureBlock) feature;
+			registerModel(model, block.block(), block.getItem());
+		} else if (feature instanceof FeatureItem) {
+			FeatureItem item = (FeatureItem) feature;
+			registerModel(model, item.item());
 		}
 	}
 
-	public void registerCustomModel(ModelEntry index) {
-		customModels.add(index);
+	public void registerModel(IBakedModel model, Block block, @Nullable BlockItem item) {
+		registerModel(model, block, item, block.getStateContainer().getValidStates());
+	}
+
+	public void registerModel(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
+		customBlockModels.add(new BlockModelEntry(model, block, item, states));
+	}
+
+	public void registerModel(IBakedModel model, Item item) {
+		customModels.add(new ModelEntry(new ModelResourceLocation(item.getRegistryName(), "inventory"), model));
 	}
 
 	public void onBakeModels(ModelBakeEvent event) {
 		//register custom models
 		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		for (final BlockModelEntry entry : customBlockModels) {
-			for (BlockState state : entry.block.getStateContainer().getValidStates()) {
-				IBakedModel model = registry.get(BlockModelShapes.getModelLocation(state));
+			for (BlockState state : entry.states) {
 				registry.put(BlockModelShapes.getModelLocation(state), entry.model);
 			}
-			if (entry.itemModelLocation != null) {
-				registry.put(entry.itemModelLocation, entry.model);
+			if (entry.item != null) {
+				ResourceLocation registryName = entry.item.getRegistryName();
+				if (registryName == null) {
+					continue;
+				}
+				registry.put(new ModelResourceLocation(registryName, "inventory"), entry.model);
 			}
 		}
 
@@ -264,18 +202,4 @@ public class ModelManager implements IModelManager {
 			return 0xffffff;
 		}
 	}
-
-	//TODO models
-	//	private static class BlockModeStateMapper extends StateMapperBase {
-	//		private final BlockModelEntry index;
-	//
-	//		public BlockModeStateMapper(BlockModelEntry index) {
-	//			this.index = index;
-	//		}
-	//
-	//		@Override
-	//		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
-	//			return index.blockModelLocation;
-	//		}
-	//	}
 }

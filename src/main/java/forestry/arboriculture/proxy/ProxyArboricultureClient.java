@@ -24,7 +24,6 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.FoliageColors;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,19 +40,14 @@ import forestry.api.arboriculture.IWoodStateMapper;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.blocks.BlockDecorativeLeaves;
-import forestry.arboriculture.blocks.BlockDefaultLeaves;
-import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.models.ModelDecorativeLeaves;
 import forestry.arboriculture.models.ModelDefaultLeaves;
 import forestry.arboriculture.models.ModelDefaultLeavesFruit;
 import forestry.arboriculture.models.ModelLeaves;
 import forestry.arboriculture.models.ModelSapling;
-import forestry.core.config.Constants;
-import forestry.core.models.BlockModelEntry;
+import forestry.core.models.ClientManager;
 import forestry.core.models.DefaultTextureGetter;
-import forestry.core.models.ModelManager;
 import forestry.core.models.WoodModelEntry;
 
 @OnlyIn(Dist.CLIENT)
@@ -64,7 +58,12 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 
 	@Override
 	public void initializeModels() {
-		{
+		ClientManager clientManager = ClientManager.getInstance();
+		clientManager.registerModel(new ModelLeaves(), ArboricultureBlocks.LEAVES);
+		clientManager.registerModel(new ModelDecorativeLeaves(), ArboricultureBlocks.LEAVES_DECORATIVE);
+		clientManager.registerModel(new ModelDefaultLeaves(), ArboricultureBlocks.LEAVES_DEFAULT);
+		clientManager.registerModel(new ModelDefaultLeavesFruit(), ArboricultureBlocks.LEAVES_DEFAULT_FRUIT);
+		/*{
 			ResourceLocation blockModelLocation = new ResourceLocation(Constants.MOD_ID, "block/leaves");
 			ModelResourceLocation itemModelLocation = new ModelResourceLocation(Constants.MOD_ID + ":item/leaves", "inventory");
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModelLocation,
@@ -97,7 +96,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 			BlockModelEntry blockModelIndex = new BlockModelEntry(blockModelLocation, itemModeLocation,
 				new ModelDefaultLeavesFruit(), leaves);
 			ModelManager.getInstance().registerCustomBlockModel(blockModelIndex);
-		}
+		}*/
 
 		//		ModelLoaderRegistry.registerLoader(WoodModelLoader.INSTANCE);
 		//TODO data generators?

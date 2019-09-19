@@ -17,10 +17,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
@@ -34,9 +32,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockStructure;
-import forestry.farming.models.EnumFarmMaterial;
 import forestry.farming.tiles.TileFarmControl;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmHatch;
@@ -48,8 +44,6 @@ import forestry.farming.tiles.TileFarmValve;
 //import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BlockFarm extends BlockStructure {
-
-	public static final EnumProperty<EnumFarmBlockType> META = EnumProperty.create("meta", EnumFarmBlockType.class);
 	private final EnumFarmBlockType type;
 	private final EnumFarmMaterial farmMaterial;
 
@@ -130,44 +124,32 @@ public class BlockFarm extends BlockStructure {
 	//		return ret;
 	//	}
 
-		@Override
-		public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-			switch (state.get(META)) {
-				case GEARBOX:
-					return new TileFarmGearbox();
-				case HATCH:
-					return new TileFarmHatch();
-				case VALVE:
-					return new TileFarmValve();
-				case CONTROL:
-					return new TileFarmControl();
-				default:
-					return new TileFarmPlain();
-			}
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		switch (type) {
+			case GEARBOX:
+				return new TileFarmGearbox();
+			case HATCH:
+				return new TileFarmHatch();
+			case VALVE:
+				return new TileFarmValve();
+			case CONTROL:
+				return new TileFarmControl();
+			default:
+				return new TileFarmPlain();
 		}
+	}
 
-		@Override
-		public boolean hasTileEntity(BlockState state) {
-			return true;
-		}
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
 
 	/* MODELS */
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < 6; i++) {
-			if (i == 1) {
-				continue;
-			}
-			//TODO
-			//			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
-		}
 	}
 
 	@Override

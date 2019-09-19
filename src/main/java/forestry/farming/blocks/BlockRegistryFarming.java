@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.farming.items.ItemBlockFarm;
-import forestry.farming.models.EnumFarmMaterial;
 
 public class BlockRegistryFarming extends BlockRegistry {
 	public final BlockMushroom mushroom;

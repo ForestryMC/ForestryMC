@@ -65,7 +65,7 @@ import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.loot.SetSpeciesNBT;
-import forestry.core.models.ModelManager;
+import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
@@ -331,6 +331,6 @@ public class ModuleCore extends BlankForestryModule {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void onBakeModels(ModelBakeEvent event) {
-		ModelManager.getInstance().onBakeModels(event);
+		ClientManager.getInstance().onBakeModels(event);
 	}
 }

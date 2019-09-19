@@ -22,7 +22,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -46,12 +45,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidUtil;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ITextureManager;
 import forestry.core.circuits.ISocketable;
-import forestry.core.models.IStateMapperRegister;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.render.MachineParticleCallback;
@@ -61,7 +57,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 
-public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements IItemModelRegister, ISpriteRegister, IStateMapperRegister, IBlockRotatable {
+public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements ISpriteRegister, IBlockRotatable {
 	/**
 	 * use this instead of {@link HorizontalBlock#HORIZONTAL_FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */
@@ -256,22 +252,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	public void clientSetup() {
 		blockType.getMachineProperties().clientSetup();
-	}
-
-	/* ITEM MODELS */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		blockType.getMachineProperties().registerModel(item, manager);
-	}
-
-	/* STATES */
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerStateMapper() {
-
-		//ModelLoader.setCustomStateMapper(this, new MachineStateMapper<>(blockType));
-		//TODO statemapper
 	}
 
 	//TODO isFullCube, block methods
