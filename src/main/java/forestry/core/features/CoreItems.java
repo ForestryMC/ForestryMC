@@ -82,9 +82,9 @@ public class CoreItems {
 	public static final FeatureItem<ItemArmorNaturalist> SPECTACLES = REGISTRY.item(ItemArmorNaturalist::new, "naturalist_helmet");
 
 	/* Peat */
-	public static final FeatureItem<ItemForestry> PEAT = REGISTRY.item(() -> new ItemForestry(new ItemProperties().burnTime(2000)), "peat");
+	public static final FeatureItem<ItemForestry> PEAT = REGISTRY.item(() -> new ItemForestry(new ItemProperties().burnTime(2000).group(ItemGroupForestry.tabForestry)), "peat");
 	public static final FeatureItem<ItemForestry> ASH = REGISTRY.item(ItemForestry::new, "ash");
-	public static final FeatureItem<ItemForestry> BITUMINOUS_PEAT = REGISTRY.item(() -> new ItemForestry(new ItemProperties().burnTime(4200)), "bituminous_peat");
+	public static final FeatureItem<ItemForestry> BITUMINOUS_PEAT = REGISTRY.item(() -> new ItemForestry(new ItemProperties().burnTime(4200).group(ItemGroupForestry.tabForestry)), "bituminous_peat");
 
 	/* Moistener */
 	public static final FeatureItem<ItemForestry> MOULDY_WHEAT = REGISTRY.item(ItemForestry::new, "mouldy_wheat");

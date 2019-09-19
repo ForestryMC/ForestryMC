@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.data;
 
+import com.google.common.base.Preconditions;
+
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -213,6 +215,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 				ForestryModuleUids.APICULTURE);
 
 		Item propolis = ApicultureItems.PROPOLIS.get(EnumPropolis.NORMAL).getItem();
+
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(CoreItems.BITUMINOUS_PEAT.getItem())
 						.key('#', ForestryTags.Items.ASH)
