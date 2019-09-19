@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -22,10 +21,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IModelManager;
 import forestry.core.tiles.TileForestry;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
@@ -37,9 +32,6 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	void registerTileEntity();
 
 	void clientSetup();
-
-	@OnlyIn(Dist.CLIENT)
-	void registerModel(Item item, IModelManager manager);
 
 	TileEntity createTileEntity();
 

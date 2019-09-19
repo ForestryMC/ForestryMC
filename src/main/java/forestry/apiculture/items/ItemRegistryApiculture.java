@@ -75,14 +75,14 @@ public class ItemRegistryApiculture extends ItemRegistry {
 		// / BEE RESOURCES
 		for (EnumHoneyDrop drop : EnumHoneyDrop.VALUES) {
 			ItemOverlay honeyDrop = new ItemOverlay(ItemGroups.tabApiculture, drop);
-			registerItem(honeyDrop, "honey_drop_" + drop.getUid());
+			registerItem(honeyDrop, "honey_drop_" + drop.getName());
 			honeyDrops.put(drop, honeyDrop);
 		}    //TODO tag
 		//		OreDictionary.registerOre(OreDictUtil.DROP_HONEY, honeyDrop);
 
 		for (EnumPropolis type : EnumPropolis.VALUES) {
 			ItemPropolis prop = new ItemPropolis(type);
-			registerItem(prop, "propolis_" + type.getUid());
+			registerItem(prop, "propolis_" + type.getName());
 			propolis.put(type, prop);
 		}    //TODO tag
 
@@ -97,7 +97,7 @@ public class ItemRegistryApiculture extends ItemRegistry {
 
 		for (EnumPollenCluster type : EnumPollenCluster.VALUES) {
 			ItemPollenCluster pollen = new ItemPollenCluster(type);
-			registerItem(pollen, "pollen_cluster_" + type.getUid());
+			registerItem(pollen, "pollen_cluster_" + type.getName());
 			pollenClusters.put(type, pollen);
 		}    //TODO tag
 

@@ -34,6 +34,7 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Constants;
 import forestry.core.genetics.root.IResearchPlugin;
 import forestry.core.genetics.root.ResearchHandler;
+import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.lepidopterology.genetics.ButterflyBranchDefinition;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyHelper;
@@ -68,10 +69,10 @@ public class ButterflyPlugin implements IGeneticPlugin {
 			.setRootFactory(ButterflyRoot::new)
 			.setSpeciesType(ButterflyChromosomes.SPECIES)
 			.addListener(ComponentKeys.TYPES, (IOrganismTypes<IButterfly> builder) -> {
-				builder.registerType(EnumFlutterType.SERUM, () -> new ItemStack(ModuleLepidopterology.getItems().serumGE));
-				builder.registerType(EnumFlutterType.CATERPILLAR, () -> new ItemStack(ModuleLepidopterology.getItems().caterpillarGE));
-				builder.registerType(EnumFlutterType.COCOON, () -> new ItemStack(ModuleLepidopterology.getItems().cocoonGE));
-				builder.registerType(EnumFlutterType.BUTTERFLY, () -> new ItemStack(ModuleLepidopterology.getItems().butterflyGE));
+				builder.registerType(EnumFlutterType.SERUM, LepidopterologyItems.SERUM_GE::stack);
+				builder.registerType(EnumFlutterType.CATERPILLAR, LepidopterologyItems.CATERPILLAR_GE::stack);
+				builder.registerType(EnumFlutterType.COCOON, LepidopterologyItems.COCOON_GE::stack);
+				builder.registerType(EnumFlutterType.BUTTERFLY, LepidopterologyItems.BUTTERFLY_GE::stack);
 			})
 			.addComponent(ComponentKeys.TRANSLATORS)
 			.addComponent(ComponentKeys.MUTATIONS)

@@ -54,7 +54,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import genetics.api.GeneticsAPI;
@@ -71,8 +70,9 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.blocks.BlockRegistryApiculture;
+import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
+import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -103,15 +103,14 @@ import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
 import forestry.core.ItemGroupForestry;
-import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.entities.ParticleSnow;
+import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.items.ItemRegistryCore;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
@@ -129,8 +128,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	private static TextureAtlasSprite beeSprite;
-	@Nullable
-	private static BlockRegistryApiculture blocks;
 	@Nullable
 	private static TileRegistryApiculture tiles;
 	@Nullable
@@ -155,11 +152,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerProfession villagerApiarist;
-
-	public static BlockRegistryApiculture getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
-	}
 
 	public static TileRegistryApiculture getTiles() {
 		Preconditions.checkNotNull(tiles);
@@ -207,11 +199,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		//TODO: Remove this workaround to load the classes
 		ItemGroupForestry.tabForestry.getClass();
 		ApicultureItems.REGISTRY.getClass();
-	}
-
-	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryApiculture();
+		ApicultureBlocks.BASE.getClass();
 	}
 
 	@Override
@@ -316,8 +304,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		createHives();
 		registerBeehiveDrops();
 
-		BlockRegistryApiculture blocks = getBlocks();
-
 		// Inducers for swarmer
 		BeeManager.inducers.put(ApicultureItems.ROYAL_JELLY.stack(), 10);
 
@@ -377,10 +363,6 @@ public class ModuleApiculture extends BlankForestryModule {
 			//				new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
 			//			);
 		}
-
-		blocks.apiary.init();
-		blocks.beeHouse.init();
-		blocks.beeChest.init();
 	}
 
 	@Override
@@ -457,10 +439,8 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void registerCrates() {
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(coreItems.beeswax.getItemStack());
+		crateRegistry.registerCrate(CoreItems.BEESWAX.stack());
 		crateRegistry.registerCrate(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL));
 		crateRegistry.registerCrate(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE));
 		crateRegistry.registerCrate(ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL));
@@ -481,14 +461,11 @@ public class ModuleApiculture extends BlankForestryModule {
 		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1));
 		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MELLOW, 1));
 
-		crateRegistry.registerCrate(coreItems.refractoryWax.getItemStack());
+		crateRegistry.registerCrate(CoreItems.REFRACTORY_WAX.stack());
 	}
 
 	@Override
 	public void registerRecipes() {
-		ItemRegistryCore coreItems = ModuleCore.getItems();
-		BlockRegistryApiculture blocks = getBlocks();
-
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 
 			ItemStack honeyDrop = ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1);
@@ -499,7 +476,7 @@ public class ModuleApiculture extends BlankForestryModule {
 				RecipeManagers.squeezerManager.addRecipe(10, ApicultureItems.HONEYDEW.stack(), honeyDropFluid);
 			}
 
-			ItemStack phosphor = coreItems.phosphor.getItemStack(2);
+			ItemStack phosphor = CoreItems.PHOSPHOR.stack(2);
 			NonNullList<ItemStack> lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
 			lavaIngredients.add(new ItemStack(Blocks.SAND));
@@ -517,41 +494,41 @@ public class ModuleApiculture extends BlankForestryModule {
 			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 1600));
 
 			// / CARPENTER
-			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.HONEY.getFluid(500), ItemStack.EMPTY, coreItems.getCraftingMaterial(EnumCraftingMaterial.SCENTED_PANELING, 1),
+			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.HONEY.getFluid(500), ItemStack.EMPTY, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SCENTED_PANELING, 1),
 				" J ", "###", "WPW",
 				'#', OreDictUtil.PLANK_WOOD,
 				'J', ApicultureItems.ROYAL_JELLY.stack(),
-				'W', coreItems.beeswax,
+				'W', CoreItems.BEESWAX.stack(),
 				'P', ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1));
 
-			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(Fluids.WATER, 600), ItemStack.EMPTY, blocks.candle.getUnlitCandle(24),
+			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(Fluids.WATER, 600), ItemStack.EMPTY, ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY, 24),
 				" X ",
 				"###",
 				"###",
-				'#', coreItems.beeswax,
+				'#', CoreItems.BEESWAX.stack(),
 				'X', Items.STRING);
-			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(Fluids.WATER, 200), ItemStack.EMPTY, blocks.candle.getUnlitCandle(6),
+			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(Fluids.WATER, 200), ItemStack.EMPTY, ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY, 6),
 				"#X#",
-				'#', coreItems.beeswax,
-				'X', coreItems.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 1));
+				'#', CoreItems.BEESWAX.stack(),
+				'X', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1));
 
 			// / CENTRIFUGE
 			// Honey combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
+				CoreItems.BEESWAX.stack(), 1.0f,
 				honeyDrop, 0.9f
 			));
 
 			// Cocoa combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.COCOA, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
+				CoreItems.BEESWAX.stack(), 1.0f,
 				new ItemStack(Items.COCOA_BEANS), 0.5f
 			));
 
 			// Simmering combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SIMMERING, 1), ImmutableMap.of(
-				coreItems.refractoryWax.getItemStack(), 1.0f,
-				coreItems.phosphor.getItemStack(2), 0.7f
+				CoreItems.REFRACTORY_WAX.stack(), 1.0f,
+				CoreItems.PHOSPHOR.stack(2), 0.7f
 			));
 
 			// Stringy combs
@@ -568,7 +545,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			// Frozen combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 0.8f,
+				CoreItems.BEESWAX.stack(), 0.8f,
 				honeyDrop, 0.7f,
 				new ItemStack(Items.SNOWBALL), 0.4f,
 				ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
@@ -582,7 +559,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			// Parched combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
+				CoreItems.BEESWAX.stack(), 1.0f,
 				honeyDrop, 0.9f
 			));
 
@@ -599,33 +576,33 @@ public class ModuleApiculture extends BlankForestryModule {
 			// Powdery combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.POWDERY, 1), ImmutableMap.of(
 				honeyDrop, 0.2f,
-				coreItems.beeswax.getItemStack(), 0.2f,
+				CoreItems.BEESWAX.stack(), 0.2f,
 				new ItemStack(Items.GUNPOWDER), 0.9f
 			));
 
 			// Wheaten Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.WHEATEN, 1), ImmutableMap.of(
 				honeyDrop, 0.2f,
-				coreItems.beeswax.getItemStack(), 0.2f,
+				CoreItems.BEESWAX.stack(), 0.2f,
 				new ItemStack(Items.WHEAT), 0.8f
 			));
 
 			// Mossy Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1), ImmutableMap.of(
-				coreItems.beeswax.getItemStack(), 1.0f,
+				CoreItems.BEESWAX.stack(), 1.0f,
 				honeyDrop, 0.9f
 			));
 
 			// Mellow Combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MELLOW, 1), ImmutableMap.of(
 				ApicultureItems.HONEYDEW.stack(), 0.6f,
-				coreItems.beeswax.getItemStack(), 0.2f,
+				CoreItems.BEESWAX.stack(), 0.2f,
 				new ItemStack(Items.QUARTZ), 0.3f
 			));
 
 			// Silky Propolis
 			RecipeManagers.centrifugeManager.addRecipe(5, ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1), ImmutableMap.of(
-				coreItems.getCraftingMaterial(EnumCraftingMaterial.SILK_WISP, 1), 0.6f,
+				CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1), 0.6f,
 				ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 0.1f
 			));
 
@@ -840,12 +817,6 @@ public class ModuleApiculture extends BlankForestryModule {
 			//			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
 		}
 		//		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onClientSetup(FMLClientSetupEvent event) {
-		blocks.beeChest.clientInit();
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

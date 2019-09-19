@@ -43,12 +43,6 @@ public abstract class BlockStructure extends BlockForestry {
 		super(properties.hardnessAndResistance(1f));
 	}
 
-	//TODO - dunno
-	//	@Override
-	//	public boolean canSilkHarvest(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-	//		return false;
-	//	}
-
 	protected long previousMessageTick = 0;
 
 	@Override

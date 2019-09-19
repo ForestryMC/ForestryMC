@@ -12,13 +12,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-
-public class BlockDecorativeWoodPile extends RotatedPillarBlock implements IItemModelRegister {
+public class BlockDecorativeWoodPile extends RotatedPillarBlock {
 	public static final EnumProperty<Direction.Axis> AXIS = EnumProperty.create("axis", Direction.Axis.class);
 
 	public BlockDecorativeWoodPile() {
@@ -47,14 +41,6 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock implements IItem
 	@Override
 	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return 25;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		for (int i = 0; i < 3; i++) {
-			manager.registerItemModel(item, i, "wood_pile");
-		}
 	}
 
 

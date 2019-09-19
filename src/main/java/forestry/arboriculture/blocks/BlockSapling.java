@@ -21,7 +21,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -34,22 +33,16 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.models.IStateMapperRegister;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockSapling extends BlockTreeContainer implements IGrowable, IStateMapperRegister, IItemModelRegister {
+public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	/* PROPERTYS */
 	public static final PropertyTree TREE = new PropertyTree("tree");
@@ -106,20 +99,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable, IStat
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(TREE);
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerStateMapper() {
-		//	ModelLoader.setCustomStateMapper(this, new SaplingStateMapper());
-	}
-
-	/* MODELS */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		//To delete the error message
-		manager.registerItemModel(item, 0, "germlings/sapling.tree_larch");
 	}
 
 	/* PLANTING */

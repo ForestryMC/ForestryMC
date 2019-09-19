@@ -8,7 +8,6 @@ package forestry.api.apiculture.genetics;
 import java.util.Map;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,7 +16,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.IModelManager;
 import forestry.api.genetics.IAlleleForestrySpecies;
 
 public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
@@ -52,7 +50,4 @@ public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 
 	@OnlyIn(Dist.CLIENT)
 	ModelResourceLocation getModel(EnumBeeType type);
-
-	@OnlyIn(Dist.CLIENT)
-	void registerModels(Item item, IModelManager manager);
 }

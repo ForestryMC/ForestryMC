@@ -12,12 +12,10 @@ package forestry.farming.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -39,12 +37,9 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.ITitled;
 import forestry.farming.gui.ContainerFarm;
-import forestry.farming.models.EnumFarmBlockTexture;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
-	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
-
 	protected TileFarm() {
 		super(new MultiblockLogicFarm());
 	}
@@ -72,29 +67,6 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 		return getMultiblockLogic().getController().getInternalInventory();
 	}
 
-	/* SAVING & LOADING */
-	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
-		farmBlockTexture = EnumFarmBlockTexture.getFromCompound(compoundNBT);
-	}
-
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
-		farmBlockTexture.saveToCompound(compoundNBT);
-		return compoundNBT;
-	}
-
-	/* CONSTRUCTION MATERIAL */
-
-	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
-		if (this.farmBlockTexture != farmBlockTexture) {
-			this.farmBlockTexture = farmBlockTexture;
-			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());    //TODO correct?
-		}
-	}
-
 	//	public EnumFarmBlockTexture getFarmBlockTexture() {
 	//		return farmBlockTexture;
 	//	}
@@ -102,21 +74,6 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 	//	public EnumFarmBlockType getFarmBlockType() {
 	//		return EnumFarmBlockType.VALUES[getBlockMetadata()];
 	//	}
-
-	/* TILEFORESTRY */
-
-	@Override
-	protected void encodeDescriptionPacket(CompoundNBT packetData) {
-		super.encodeDescriptionPacket(packetData);
-		farmBlockTexture.saveToCompound(packetData);
-	}
-
-	@Override
-	protected void decodeDescriptionPacket(CompoundNBT packetData) {
-		super.decodeDescriptionPacket(packetData);
-		EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.getFromCompound(packetData);
-		setFarmBlockTexture(farmBlockTexture);
-	}
 
 	/* ISocketable */
 	@Override

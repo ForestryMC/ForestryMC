@@ -42,7 +42,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import genetics.api.GeneticsAPI;
@@ -62,14 +61,14 @@ import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import forestry.lepidopterology.blocks.BlockRegistryLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.features.LepidopterologyBlocks;
+import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
 import forestry.lepidopterology.genetics.ButterflyMutationFactory;
 import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
-import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterologyClient;
 import forestry.lepidopterology.render.ModelButterflyItem;
@@ -99,25 +98,11 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public static final EntityType<EntityButterfly> BUTTERFLY_ENTITY_TYPE = EntityType.Builder.create(EntityButterfly::new, EntityClassification.CREATURE).size(1.0f, 0.4f).build("butterfly");
 
 	@Nullable
-	private static ItemRegistryLepidopterology items;
-	@Nullable
-	private static BlockRegistryLepidopterology blocks;
-	@Nullable
 	private static TileRegistryLepidopterology tiles;
 
 	public ModuleLepidopterology() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyLepidopterologyClient(), () -> () -> new ProxyLepidopterology());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static ItemRegistryLepidopterology getItems() {
-		Preconditions.checkNotNull(items);
-		return items;
-	}
-
-	public static BlockRegistryLepidopterology getBlocks() {
-		Preconditions.checkNotNull(blocks);
-		return blocks;
 	}
 
 	public static TileRegistryLepidopterology getTiles() {
@@ -132,13 +117,9 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerItems() {
-		items = new ItemRegistryLepidopterology();
-	}
-
-	@Override
-	public void registerBlocks() {
-		blocks = new BlockRegistryLepidopterology();
+	public void registerFeatures() {
+		LepidopterologyBlocks.BUTTERFLY_CHEST.getClass();
+		LepidopterologyItems.BUTTERFLY_GE.getClass();
 	}
 
 	@Override
@@ -177,8 +158,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		BlockRegistryLepidopterology blocks = getBlocks();
-
 		//TODO commands
 		//		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 
@@ -189,8 +168,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
 		ButterflyAlleles.createLoot();
-
-		blocks.butterflyChest.init();
 
 		if (spawnButterflysFromLeaves) {
 			TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
@@ -330,15 +307,13 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void registerRecipes() {
 		//		ForgeRegistries.RECIPES.register(new MatingRecipe());    //TODO - JSON this?
 	}
-
-	@Override
-	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		BlockRegistryLepidopterology blocks = getBlocks();
-
-		// cocoon itemBlock is different from the normal item
-		hiddenItems.add(new ItemStack(blocks.cocoon));
-		hiddenItems.add(new ItemStack(blocks.solidCocoon));
-	}
+	//
+	//	@Override
+	//	public void getHiddenItems(List<ItemStack> hiddenItems) {
+	//		// cocoon itemBlock is different from the normal item
+	//		hiddenItems.add(new ItemStack(blocks.cocoon));
+	//		hiddenItems.add(new ItemStack(blocks.solidCocoon));
+	//	}
 
 	public static boolean isPollinationAllowed() {
 		return allowPollination;
@@ -375,11 +350,5 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	@OnlyIn(Dist.CLIENT)
 	public void onModelBake(ModelBakeEvent event) {
 		ModelButterflyItem.onModelBake(event);
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onClientSetup(FMLClientSetupEvent event) {
-		blocks.butterflyChest.clientInit();
 	}
 }

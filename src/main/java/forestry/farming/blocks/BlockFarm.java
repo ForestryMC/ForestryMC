@@ -16,13 +16,9 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.EnumProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
@@ -30,40 +26,31 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IModelManager;
 import forestry.core.blocks.BlockStructure;
-import forestry.core.tiles.TileUtil;
-import forestry.farming.models.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileFarm;
 import forestry.farming.tiles.TileFarmControl;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
 
-//import net.minecraftforge.common.property.ExtendedBlockState;
-//import net.minecraftforge.common.property.IExtendedBlockState;
-//import net.minecraftforge.common.property.IUnlistedProperty;
-
 public class BlockFarm extends BlockStructure {
 
 	private final EnumFarmBlockType type;
-	private final EnumFarmBlockTexture texture;
+	private final EnumFarmMaterial farmMaterial;
 
-	public BlockFarm(EnumFarmBlockType type, EnumFarmBlockTexture texture) {
+	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
 		super(Block.Properties.create(Material.ROCK)
 				.hardnessAndResistance(1.0f)
 				.harvestTool(ToolType.PICKAXE)
 				.harvestLevel(0));
 		this.type = type;
-		this.texture = texture;
+		this.farmMaterial = farmMaterial;
 	}
 
 	//TODO - either flatten or work out how extended states work
@@ -79,15 +66,22 @@ public class BlockFarm extends BlockStructure {
 	//			new ModelProperty<>()[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	//	}
 
+	@Override
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
+		if (type == EnumFarmBlockType.BAND) {
+			return;
+		}
+		super.fillItemGroup(tab, list);
+	}
+
 	public EnumFarmBlockType getType() {
 		return type;
 	}
 
-	public EnumFarmBlockTexture getTexture() {
-		return texture;
+	public EnumFarmMaterial getFarmMaterial() {
+		return farmMaterial;
 	}
 
-	//TODO needed after flattening?
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		List<ItemStack> drops = getDrops(world.getBlockState(pos), (ServerWorld) world, pos, world.getTileEntity(pos));    //TODO this call is not safe
@@ -95,16 +89,6 @@ public class BlockFarm extends BlockStructure {
 			return super.getPickBlock(state, target, world, pos, player);
 		}
 		return drops.get(0);
-	}
-
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(world, pos, state, placer, stack);
-
-		TileFarm tile = TileUtil.getTile(world, pos, TileFarm.class);
-		if (tile != null) {
-			tile.setFarmBlockTexture(texture);
-		}
 	}
 
 	//TODO - idk
@@ -137,26 +121,26 @@ public class BlockFarm extends BlockStructure {
 	//		return ret;
 	//	}
 
-		@Override
-		public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-			switch (type) {
-				case GEARBOX:
-					return new TileFarmGearbox();
-				case HATCH:
-					return new TileFarmHatch();
-				case VALVE:
-					return new TileFarmValve();
-				case CONTROL:
-					return new TileFarmControl();
-				default:
-					return new TileFarmPlain();
-			}
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		switch (type) {
+			case GEARBOX:
+				return new TileFarmGearbox();
+			case HATCH:
+				return new TileFarmHatch();
+			case VALVE:
+				return new TileFarmValve();
+			case CONTROL:
+				return new TileFarmControl();
+			default:
+				return new TileFarmPlain();
 		}
+	}
 
-		@Override
-		public boolean hasTileEntity(BlockState state) {
-			return true;
-		}
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
 
 	/* MODELS */
 	@Override
@@ -164,18 +148,6 @@ public class BlockFarm extends BlockStructure {
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-
-//	@OnlyIn(Dist.CLIENT)
-//	@Override
-//	public void registerModel(Item item, IModelManager manager) {
-//		for (int i = 0; i < 6; i++) {
-//			if (i == 1) {
-//				continue;
-//			}
-//			//TODO
-//			//			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation("forestry:ffarm", "inventory"));
-//		}
-//	}
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {

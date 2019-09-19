@@ -29,33 +29,25 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-public abstract class ModelProvider<T extends IForgeRegistryEntry<T>> implements IDataProvider {
+public abstract class ModelProvider implements IDataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-	protected final IForgeRegistry<T> registry;
 	protected final String folder;
-	protected final Map<T, ModelBuilder<T>> entryToBuilder = Maps.newLinkedHashMap();
+	protected final Map<String, ModelBuilder> pathToBuilder = Maps.newLinkedHashMap();
 	protected final DataGenerator generator;
 
-	public ModelProvider(DataGenerator generator, IForgeRegistry<T> registry, String folder) {
+	public ModelProvider(DataGenerator generator, String folder) {
 		this.generator = generator;
-		this.registry = registry;
 		this.folder = folder;
 	}
 
 	@Override
 	public void act(DirectoryCache cache) throws IOException {
-		this.entryToBuilder.clear();
+		this.pathToBuilder.clear();
 		this.registerModels();
-		entryToBuilder.forEach((key, builder) -> {
-			if (key.getRegistryName() == null) {
-				return;
-			}
+		pathToBuilder.forEach((key, builder) -> {
 			JsonObject jsonobject = builder.serialize();
-			Path path = this.makePath(key.getRegistryName());
+			Path path = this.makePath(key);
 			try {
 				String s = GSON.toJson(jsonobject);
 				String s1 = HASH_FUNCTION.hashUnencodedChars(s).toString();
@@ -77,8 +69,12 @@ public abstract class ModelProvider<T extends IForgeRegistryEntry<T>> implements
 
 	protected abstract void registerModels();
 
-	protected Path makePath(ResourceLocation location) {
-		return this.generator.getOutputFolder().resolve("assets/" + location.getNamespace() + "/models/" + folder + "/" + location.getPath() + ".json");
+	protected void registerModel(String path, ModelBuilder builder) {
+		pathToBuilder.put(path, builder);
+	}
+
+	protected Path makePath(String location) {
+		return this.generator.getOutputFolder().resolve("assets/forestry/models/" + folder + "/" + location + ".json");
 	}
 
 	@Override
@@ -86,38 +82,38 @@ public abstract class ModelProvider<T extends IForgeRegistryEntry<T>> implements
 		return "Model Provider";
 	}
 
-	public static class ModelBuilder<T extends IForgeRegistryEntry<T>> {
-		public final T entry;
+	public static class ModelBuilder {
 		@Nullable
 		public ResourceLocation parent;
 		public final Map<String, ResourceLocation> textures = new HashMap<>();
 		public final List<Element> elements = new LinkedList<>();
-		private boolean ambientOcclusion = true;
+		@Nullable
+		private Boolean ambientOcclusion = null;
 
-		public ModelBuilder(T entry) {
-			this.entry = entry;
-		}
-
-		public ModelBuilder<T> element(Element element) {
+		public ModelBuilder element(Element element) {
 			this.elements.add(element);
 			return this;
 		}
 
-		public ModelBuilder<T> ambientOcclusion(boolean ambientOcclusion) {
+		public ModelBuilder ambientOcclusion(boolean ambientOcclusion) {
 			this.ambientOcclusion = ambientOcclusion;
 			return this;
 		}
 
-		public ModelBuilder<T> parent(ResourceLocation parent) {
+		public ModelBuilder parent(String parent) {
+			return parent(new ResourceLocation(parent));
+		}
+
+		public ModelBuilder parent(ResourceLocation parent) {
 			this.parent = parent;
 			return this;
 		}
 
-		public ModelBuilder<T> particle(ResourceLocation location) {
+		public ModelBuilder particle(ResourceLocation location) {
 			return texture("particle", location);
 		}
 
-		public ModelBuilder<T> texture(String key, ResourceLocation location) {
+		public ModelBuilder texture(String key, ResourceLocation location) {
 			textures.put(key, location);
 			return this;
 		}
@@ -131,13 +127,17 @@ public abstract class ModelProvider<T extends IForgeRegistryEntry<T>> implements
 			for (Map.Entry<String, ResourceLocation> texture : textures.entrySet()) {
 				texturesObj.addProperty(texture.getKey(), texture.getValue().toString());
 			}
-			object.add("textures", object);
-			object.addProperty("ambientocclusion", ambientOcclusion);
-			JsonArray elementsArray = new JsonArray();
-			for (Element element : elements) {
-				elementsArray.add(element.serialize());
+			object.add("textures", texturesObj);
+			if (ambientOcclusion != null) {
+				object.addProperty("ambientocclusion", ambientOcclusion);
 			}
-			object.add("elements", elementsArray);
+			if (!elements.isEmpty()) {
+				JsonArray elementsArray = new JsonArray();
+				for (Element element : elements) {
+					elementsArray.add(element.serialize());
+				}
+				object.add("elements", elementsArray);
+			}
 			return object;
 		}
 	}
@@ -196,8 +196,10 @@ public abstract class ModelProvider<T extends IForgeRegistryEntry<T>> implements
 		private Vec3i origin = Vec3i.NULL_VECTOR;
 		@Nullable
 		private Direction.Axis axis;
-		private float angle;
-		private boolean rescale = false;
+		@Nullable
+		private Float angle;
+		@Nullable
+		private Boolean rescale = null;
 
 		public Rotation origin(Vec3i origin) {
 			this.origin = origin;
@@ -227,8 +229,12 @@ public abstract class ModelProvider<T extends IForgeRegistryEntry<T>> implements
 			if (origin == Vec3i.NULL_VECTOR) {
 				obj.add("origin", serializeVex(origin));
 			}
-			obj.addProperty("angle", angle);
-			obj.addProperty("rescale", rescale);
+			if (angle != null) {
+				obj.addProperty("angle", angle);
+			}
+			if (rescale != null) {
+				obj.addProperty("rescale", rescale);
+			}
 			return obj;
 		}
 	}

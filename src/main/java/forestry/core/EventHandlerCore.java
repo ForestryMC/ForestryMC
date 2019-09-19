@@ -47,7 +47,6 @@ import forestry.apiculture.ModuleApiculture;
 import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.models.ModelBlockCached;
-import forestry.core.models.ModelBlockCustomCached;
 import forestry.core.render.TextureManagerForestry;
 import forestry.modules.ModuleManager;
 
@@ -131,7 +130,6 @@ public class EventHandlerCore {
 			TextureManagerForestry.initDefaultSprites(event);
 		}
 		ModelBlockCached.clear();
-		ModelBlockCustomCached.clear();
 	}
 
 	@SubscribeEvent

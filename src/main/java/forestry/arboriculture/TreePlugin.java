@@ -7,6 +7,7 @@ import java.util.function.Function;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -37,6 +38,9 @@ import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IResearchHandler;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
+import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
+import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeHelper;
@@ -47,6 +51,7 @@ import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.genetics.root.ResearchHandler;
+import forestry.modules.features.FeatureBlock;
 
 @GeneticPlugin(modId = Constants.MOD_ID)
 public class TreePlugin implements IGeneticPlugin {
@@ -82,8 +87,8 @@ public class TreePlugin implements IGeneticPlugin {
 			.setRootFactory(TreeRoot::new)
 			.setSpeciesType(TreeChromosomes.SPECIES)
 			.addListener(ComponentKeys.TYPES, (IOrganismTypes<ITree> builder) -> {
-				builder.registerType(EnumGermlingType.SAPLING, () -> new ItemStack(ModuleArboriculture.getItems().sapling));
-				builder.registerType(EnumGermlingType.POLLEN, () -> new ItemStack(ModuleArboriculture.getItems().pollenFertile));
+				builder.registerType(EnumGermlingType.SAPLING, ArboricultureItems.SAPLING::stack);
+				builder.registerType(EnumGermlingType.POLLEN, ArboricultureItems.POLLEN_FERTILE::stack);
 			})
 			.addComponent(ComponentKeys.TRANSLATORS)
 			.addComponent(ComponentKeys.MUTATIONS)
@@ -150,9 +155,12 @@ public class TreePlugin implements IGeneticPlugin {
 					builder.registerTranslator(saplingFactory.apply(TreeDefinition.Acacia), Items.ACACIA_LEAVES);
 					builder.registerTranslator(saplingFactory.apply(TreeDefinition.DarkOak), Items.DARK_OAK_LEAVES);
 
-					for (Map.Entry<TreeDefinition, BlockDefaultLeaves> leaves : ModuleArboriculture.getBlocks().leavesDefault.entrySet()) {
-						builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue());
-					}
+				for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT.getFeatureByType().entrySet()) {
+					builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
+				}
+				for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
+					builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
+				}
 				}
 			)
 			.setDefaultTemplate(TreeHelper::createDefaultTemplate);

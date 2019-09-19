@@ -20,7 +20,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
@@ -29,14 +28,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
 
 /**
  * bog earth, which becomes peat
  */
-public class BlockBogEarth extends Block implements IItemModelRegister {
+public class BlockBogEarth extends Block {
 	private static final int maturityDelimiter = 3; //maturity at which bogEarth becomes peat
 	public static final IntegerProperty MATURITY = IntegerProperty.create("maturity", 0, maturityDelimiter);
 
@@ -62,21 +60,6 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 		return 500;
 	}
 
-	//TODO - loot tables for drops (at least for easy cases like this
-	//	@Override
-	//	public List<ItemStack> getDrops(BlockState state, ServerWorld world, BlockPos pos, TileEntity te) {
-	//		Integer maturity = state.getComb(MATURITY);
-	//		SoilType type = SoilType.fromMaturity(maturity);
-	//
-	//		if (type == SoilType.PEAT) {
-	//			drops.add(ModuleCore.getItems().peat.getItemStack(2));
-	//			drops.add(new ItemStack(Blocks.DIRT));
-	//		} else {
-	//			drops.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
-	//		}
-	//		return new ArrayList<>();
-	//	}
-
 	@Override
 	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(13) != 0) {
@@ -86,7 +69,7 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 		int maturity = state.get(MATURITY);
 		if (isMoistened(world, pos)) {
 			if (maturity == maturityDelimiter - 1) {
-				world.setBlockState(pos, ModuleCore.getBlocks().peat.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+				world.setBlockState(pos, CoreBlocks.PEAT.defaultState(), Constants.FLAG_BLOCK_SYNC);
 			} else {
 				world.setBlockState(pos, state.with(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNC);
 			}
@@ -109,10 +92,4 @@ public class BlockBogEarth extends Block implements IItemModelRegister {
 	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
 		return false;
 	}
-
-	//TODO - loot tables
-	//	@Override
-	//	public boolean canSilkHarvest(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-	//		return false;
-	//	}
 }

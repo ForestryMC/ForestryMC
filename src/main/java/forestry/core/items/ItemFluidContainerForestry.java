@@ -11,7 +11,6 @@
 package forestry.core.items;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -48,7 +47,6 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
 import forestry.core.fluids.ForestryFluids;
@@ -63,14 +61,14 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	/* Models */
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		String identifier = "liquids/" + type.toString().toLowerCase(Locale.ENGLISH);
-		manager.registerItemModel(item, 0, identifier + "_empty");
-		//		ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, identifier), "inventory"));
-		//TODO 1.14 - commented out in source
-	}
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		String identifier = "liquids/" + type.toString().toLowerCase(Locale.ENGLISH);
+	//		manager.registerItemModel(item, 0, identifier + "_empty");
+	//		//		ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, identifier), "inventory"));
+	//		//TODO 1.14 - commented out in source
+	//	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override

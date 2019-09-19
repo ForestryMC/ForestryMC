@@ -15,14 +15,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.core.ItemGroupForestry;
 
-public class ItemForestryFood extends Item implements IItemModelRegister {
+public class ItemForestryFood extends Item {
 
 	private boolean isDrink = false;
 
@@ -59,12 +54,6 @@ public class ItemForestryFood extends Item implements IItemModelRegister {
 	public ItemForestryFood setIsDrink() {
 		isDrink = true;
 		return this;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
 	}
 
 }

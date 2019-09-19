@@ -11,6 +11,7 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
+import forestry.api.farming.ISoil;
 
 public class FakeFarmProperties implements IFarmProperties {
 	private final IFarmLogic logic;
@@ -24,7 +25,7 @@ public class FakeFarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public void registerSoil(Block soil) {
+	public void registerSoil(ItemStack resource, BlockState soil) {
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class FakeFarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public boolean isAcceptedSoil(Block block) {
+	public boolean isAcceptedSoil(BlockState state) {
 		return false;
 	}
 
@@ -58,7 +59,7 @@ public class FakeFarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public Collection<Block> getSoils() {
+	public Collection<ISoil> getSoils() {
 		return Collections.emptySet();
 	}
 

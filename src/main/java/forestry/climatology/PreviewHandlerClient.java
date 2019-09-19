@@ -36,6 +36,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.IClimateTransformer;
+import forestry.climatology.features.ClimatologyItems;
 import forestry.climatology.items.ItemHabitatScreen;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.TickHelper;
@@ -57,7 +58,7 @@ public class PreviewHandlerClient {
 		if (tickHelper.updateOnInterval(100)) {
 			ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
 			if (stack.isEmpty()
-				|| stack.getItem() != ModuleClimatology.getItems().habitatScreen
+				|| !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
 				|| !ItemHabitatScreen.isValid(stack, player.world)
 				|| !ItemHabitatScreen.isPreviewModeActive(stack)) {
 				renderer.clearPreview();

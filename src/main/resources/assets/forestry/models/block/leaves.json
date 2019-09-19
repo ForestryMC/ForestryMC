@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-      "all": "block/stone_bricks"
+      "all": "forestry:block/leaves/deciduous.plain"
     }
 }

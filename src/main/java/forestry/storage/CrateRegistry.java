@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
+import forestry.api.core.IItemProvider;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
@@ -78,6 +79,13 @@ public class CrateRegistry implements ICrateRegistry {
 	@Override
 	public void registerCrate(Item item) {
 		registerCrate(new ItemStack(item), null);
+	}
+
+	@Override
+	public void registerCrate(IItemProvider provider) {
+		if (provider.hasItem()) {
+			registerCrate(provider.item());
+		}
 	}
 
 	@Override

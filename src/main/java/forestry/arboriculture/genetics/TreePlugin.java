@@ -17,9 +17,9 @@ import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.DatabaseMode;
-import forestry.arboriculture.ModuleArboriculture;
-import forestry.core.ModuleCore;
+import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Config;
+import forestry.core.features.CoreItems;
 import forestry.core.genetics.analyzer.DatabasePlugin;
 import forestry.core.genetics.analyzer.MutationsTab;
 import forestry.core.genetics.analyzer.ProductsTab;
@@ -34,10 +34,10 @@ public class TreePlugin extends DatabasePlugin<ITree> {
 	private TreePlugin() {
 		super(new TreeDatabaseTab(DatabaseMode.ACTIVE),
 			new TreeDatabaseTab(DatabaseMode.INACTIVE),
-			new ProductsTab(() -> ModuleCore.getItems().getFruit(ItemFruit.EnumFruit.CHERRY, 1)),
-			new MutationsTab(() -> ModuleArboriculture.getItems().grafter.getItemStack()));
+			new ProductsTab(() -> CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY, 1)),
+			new MutationsTab(ArboricultureItems.GRAFTER::stack));
 		NonNullList<ItemStack> treeList = NonNullList.create();
-		ModuleArboriculture.getItems().sapling.addCreativeItems(treeList, false);
+		ArboricultureItems.SAPLING.item().addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
 			IOrganism<?> organism = GeneticHelper.getOrganism(treeStack);
 			if (organism.isEmpty()) {

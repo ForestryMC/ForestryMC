@@ -8,12 +8,12 @@ package forestry.api.apiculture.hives;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.util.IStringSerializable;
+import forestry.api.core.IBlockSubtype;
 
 public interface IHiveRegistry {
 
 	/* Forestry Hive Names */
-	enum HiveType implements IStringSerializable {
+	enum HiveType implements IBlockSubtype {
 		FOREST("forestry:forest", "forestry.speciesForest"),
 		MEADOWS("forestry:meadows", "forestry.speciesMeadows"),
 		DESERT("forestry:desert", "forestry.speciesModest"),

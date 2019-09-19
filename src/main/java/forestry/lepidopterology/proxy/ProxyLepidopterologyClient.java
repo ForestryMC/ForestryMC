@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.proxy;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
-import forestry.core.models.ModelEntry;
-import forestry.core.models.ModelManager;
+import forestry.core.models.ClientManager;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.lepidopterology.render.RenderButterflyEntity;
 
@@ -30,9 +28,7 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology {
 	@Override
 	public void preInitializeRendering() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, new RenderButterflyEntity.Factory());
-		ModelManager modelManager = ModelManager.getInstance();
-		ModelResourceLocation butterflyGE = modelManager.getModelLocation("butterfly_ge");
-		ModelEntry modelEntry = new ModelEntry(butterflyGE, new ModelButterflyItem());
-		modelManager.registerCustomModel(modelEntry);
+		ClientManager clientManager = ClientManager.getInstance();
+		clientManager.registerModel(new ModelButterflyItem(), LepidopterologyItems.BUTTERFLY_GE);
 	}
 }

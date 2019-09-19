@@ -14,13 +14,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.mail.ILetter;
+import forestry.mail.features.MailItems;
 import forestry.mail.items.ItemLetter;
 
 public class LetterProperties {
 
 	public static ItemStack createStampedLetterStack(ILetter letter) {
 		ItemLetter.Size size = getSize(letter);
-		return ModuleMail.getItems().getLetter(size, ItemLetter.State.STAMPED, 1);
+		return MailItems.LETTERS.stack(size, ItemLetter.State.STAMPED, 1);
 	}
 
 	public static ItemStack closeLetter(ItemStack parent, ILetter letter) {
@@ -49,7 +50,7 @@ public class LetterProperties {
 				break;
 			case EMPTIED:
 		}
-		ItemStack ret = ModuleMail.getItems().getLetter(size, state, parent.getCount());
+		ItemStack ret = MailItems.LETTERS.stack(size, state, parent.getCount());
 		ret.setTag(parent.getTag());
 		letter.write(parent.getTag());
 		return ret;
@@ -65,7 +66,7 @@ public class LetterProperties {
 		ItemLetter.State state = itemLetter.getState();
 		if (state == ItemLetter.State.FRESH || state == ItemLetter.State.STAMPED) {
 			ItemLetter.Size size = itemLetter.getSize();
-			ItemStack ret = ModuleMail.getItems().getLetter(size, state, parent.getCount());
+			ItemStack ret = MailItems.LETTERS.stack(size, state, parent.getCount());
 			ret.setTag(parent.getTag());
 			return ret;
 		} else {

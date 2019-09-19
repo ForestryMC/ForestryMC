@@ -24,23 +24,19 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.features.ApicultureItems;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 import forestry.core.items.EnumCraftingMaterial;
 
-public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
+public class ItemArmorApiarist extends ArmorItem {
 
 	public static final class ApiaristArmorMaterial implements IArmorMaterial {
 
@@ -68,7 +64,7 @@ public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 
 		@Override
 		public Ingredient getRepairMaterial() {
-			return Ingredient.fromStacks(ModuleCore.getItems().getCraftingMaterial(EnumCraftingMaterial.WOVEN_SILK, 1));
+			return Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1));
 		}
 
 		@Override
@@ -93,12 +89,6 @@ public class ItemArmorApiarist extends ArmorItem implements IItemModelRegister {
 		} else {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
 		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, 0);
 	}
 
 	@Override

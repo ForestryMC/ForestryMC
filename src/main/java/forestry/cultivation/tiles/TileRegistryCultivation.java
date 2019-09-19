@@ -3,8 +3,8 @@ package forestry.cultivation.tiles;
 import net.minecraft.tileentity.TileEntityType;
 
 import forestry.core.tiles.TileRegistry;
-import forestry.cultivation.ModuleCultivation;
-import forestry.cultivation.blocks.BlockRegistryCultivation;
+import forestry.cultivation.blocks.BlockTypePlanter;
+import forestry.cultivation.features.CultivationBlocks;
 
 public class TileRegistryCultivation extends TileRegistry {
 
@@ -18,15 +18,13 @@ public class TileRegistryCultivation extends TileRegistry {
 	//	public final TileEntityType<TilePlantation> PLANTATION;
 
 	public TileRegistryCultivation() {
-		BlockRegistryCultivation blocks = ModuleCultivation.getBlocks();
-
-		ARBORETUM = registerTileEntityType(TileArboretum::new, "arboretum", blocks.arboretum);
-		BOG = registerTileEntityType(TileBog::new, "bog", blocks.peatBog);
-		CROPS = registerTileEntityType(TileFarmCrops::new, "crops", blocks.farmCrops);
-		ENDER = registerTileEntityType(TileFarmEnder::new, "ender", blocks.farmEnder);
-		GOURD = registerTileEntityType(TileFarmGourd::new, "gourd", blocks.farmGourd);
-		MUSHROOM = registerTileEntityType(TileFarmMushroom::new, "mushroom", blocks.farmMushroom);
-		NETHER = registerTileEntityType(TileFarmNether::new, "nether", blocks.farmNether);
+		ARBORETUM = registerTileEntityType(TileArboretum::new, "arboretum", CultivationBlocks.PLANTER.get(BlockTypePlanter.ARBORETUM).block());
+		BOG = registerTileEntityType(TileBog::new, "bog", CultivationBlocks.PLANTER.get(BlockTypePlanter.PEAT_POG).block());
+		CROPS = registerTileEntityType(TileFarmCrops::new, "crops", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_CROPS).block());
+		ENDER = registerTileEntityType(TileFarmEnder::new, "ender", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_ENDER).block());
+		GOURD = registerTileEntityType(TileFarmGourd::new, "gourd", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_GOURD).block());
+		MUSHROOM = registerTileEntityType(TileFarmMushroom::new, "mushroom", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_MUSHROOM).block());
+		NETHER = registerTileEntityType(TileFarmNether::new, "nether", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_NETHER).block());
 	}
 
 

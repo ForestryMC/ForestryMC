@@ -28,7 +28,7 @@ public class ItemRegistryMail extends ItemRegistry {
 	public ItemRegistryMail() {
 		for (EnumStampDefinition def : EnumStampDefinition.VALUES) {
 			ItemStamp stamp = new ItemStamp(def);
-			registerItem(stamp, "stamp_" + def.getUid());
+			registerItem(stamp, "stamp_" + def.getName());
 			stamps.put(def, stamp);
 		}
 

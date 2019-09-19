@@ -5,13 +5,13 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.util.IStringSerializable;
+import forestry.api.core.IBlockSubtype;
 
 /**
  * @see EnumForestryWoodType
  * @see EnumVanillaWoodType
  */
-public interface IWoodType extends IStringSerializable {
+public interface IWoodType extends IBlockSubtype {
 	float getHardness();
 
 	String getPlankTexture();

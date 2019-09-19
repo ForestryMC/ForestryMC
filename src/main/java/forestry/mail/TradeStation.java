@@ -36,6 +36,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
+import forestry.mail.features.MailItems;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
 
@@ -232,7 +233,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			if (count > 0) {
 				EnumPostage postage = EnumPostage.values()[i];
 				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				mail.addStamps(ModuleMail.getItems().getStamp(stampDefinition, count));
+				mail.addStamps(MailItems.STAMPS.stack(stampDefinition, count));
 			}
 		}
 
@@ -282,7 +283,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			orderFilledMessage = orderFilledMessage.replace("%SENDER", letter.getSender().getName());
 
 			confirm.setText(orderFilledMessage);
-			confirm.addStamps(ModuleMail.getItems().getStamp(EnumStampDefinition.P_1, 1));
+			confirm.addStamps(MailItems.STAMPS.stack(EnumStampDefinition.P_1, 1));
 			confirm.write(compoundNBT);
 
 			ItemStack confirmstack = LetterProperties.createStampedLetterStack(confirm);

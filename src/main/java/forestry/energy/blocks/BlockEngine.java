@@ -16,8 +16,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -29,6 +32,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ToolType;
 
+import forestry.api.core.ForestryAPI;
 import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
@@ -49,6 +53,14 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	public BlockEngine(BlockTypeEngine blockType) {
 		super(blockType, Properties.create(Material.IRON).harvestTool(ToolType.PICKAXE).harvestLevel(0));
+	}
+
+	@Override
+	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
+		if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null && !ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+			return;
+		}
+		super.fillItemGroup(group, stacks);
 	}
 
 	@Override

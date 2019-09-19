@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic.crops;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -18,8 +17,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
+import forestry.core.features.CoreItems;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 
@@ -31,14 +31,14 @@ public class CropPeat extends Crop {
 
 	@Override
 	protected boolean isCrop(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
-		return block == ModuleCore.getBlocks().peat;
+		BlockState blockState = world.getBlockState(pos);
+		return CoreBlocks.PEAT.blockEqual(blockState);
 	}
 
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		drops.add(ModuleCore.getItems().peat.getItemStack());
+		drops.add(CoreItems.PEAT.stack());
 
 		BlockState blockState = world.getBlockState(pos);
 

@@ -39,7 +39,7 @@ public enum EnumHoneyDrop implements ItemOverlay.IOverlayInfo {
 	}
 
 	@Override
-	public String getUid() {
+	public String getName() {
 		return name;
 	}
 

@@ -17,7 +17,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 
 import forestry.climatology.gui.GuiHabitatFormer;
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreItems;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.elements.ButtonElement;
@@ -31,7 +31,7 @@ public class HabitatFormerButton extends ButtonElement {
 
 	public HabitatFormerButton(int xPos, int yPos, boolean selectionButton, Consumer<Boolean> onClicked) {
 		super(xPos, yPos, 22, 22, DISABLED_BUTTON, ENABLED_BUTTON, button -> onClicked.accept(selectionButton));
-		this.iconStack = selectionButton ? ModuleCore.getItems().getElectronTube(EnumElectronTube.GOLD, 1) : ModuleCore.getItems().gearBronze;
+		this.iconStack = selectionButton ? CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 1) : CoreItems.GEAR_BRONZE.stack();
 	}
 
 	@Override

@@ -20,16 +20,14 @@ import forestry.core.tiles.TileEngine;
 import forestry.energy.ModuleEnergy;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineClockwork;
-import forestry.energy.tiles.TileEngineElectric;
 import forestry.energy.tiles.TileEnginePeat;
-import forestry.energy.tiles.TileEuGenerator;
 
 public enum BlockTypeEngine implements IBlockTypeTesr {
 	PEAT(createEngineProperties(TileEnginePeat.class, "peat", "/engine_copper")),
 	BIOGAS(createEngineProperties(TileEngineBiogas.class, "biogas", "/engine_bronze")),
 	CLOCKWORK(createEngineProperties(TileEngineClockwork.class, "clockwork", "/engine_clock")),
-	ELECTRICAL(createEngineProperties(TileEngineElectric.class, "electrical", "/engine_tin")),
-	GENERATOR(createMachineProperties(TileEuGenerator.class, "generator", "/generator"));
+	/*ELECTRICAL(createEngineProperties(TileEngineElectric.class, "electrical", "/engine_tin")),
+	GENERATOR(createMachineProperties(TileEuGenerator.class, "generator", "/generator"))*/;
 
 	public static final BlockTypeEngine[] VALUES = values();
 

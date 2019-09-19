@@ -5,8 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.cultivation.gui.widgets.GhostItemStackWidget;
@@ -59,7 +59,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 			}
 		}
 
-		widgetManager.add(new GhostItemStackWidget(widgetManager, 83, 22, new ItemStack(ModuleCore.getItems().fertilizerCompound), getContainer().getSlot(36 + InventoryPlanter.SLOT_FERTILIZER)));
+		widgetManager.add(new GhostItemStackWidget(widgetManager, 83, 22, CoreItems.FERTILIZER_COMPOUND.stack(), getContainer().getSlot(36 + InventoryPlanter.SLOT_FERTILIZER)));
 	}
 
 	@Override

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top",
+  "textures": {
+    "top": "forestry:block/doors/giganteum_upper",
+    "bottom": "forestry:block/doors/giganteum_lower"
+  }
+}

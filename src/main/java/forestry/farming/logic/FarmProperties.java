@@ -16,10 +16,11 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
+import forestry.api.farming.ISoil;
 import forestry.farming.FarmRegistry;
 
 public final class FarmProperties implements IFarmProperties {
-	private final Set<Block> soils = new HashSet<>();
+	private final Set<ISoil> soils = new HashSet<>();
 	private final Set<String> farmablesIdentifiers;
 	private final IFarmLogic manualLogic;
 	private final IFarmLogic managedLogic;
@@ -68,8 +69,8 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public void registerSoil(Block soil) {
-		soils.add(soil);
+	public void registerSoil(ItemStack resource, BlockState state) {
+		soils.add(new Soil(resource, state));
 	}
 
 	@Override
@@ -93,9 +94,10 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public boolean isAcceptedSoil(Block ground) {
-		for (Block soil : soils) {
-			if (soil == ground) {
+	public boolean isAcceptedSoil(BlockState ground) {
+		for(ISoil soil : soils) {
+			BlockState soilState = soil.getSoilState();
+			if(soilState.getBlock() == ground.getBlock()) {
 				return true;
 			}
 		}
@@ -104,9 +106,9 @@ public final class FarmProperties implements IFarmProperties {
 
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
-		for (Block soil : soils) {
+		for (ISoil soil : soils) {
 			//TODO this is deprecated??
-			if (Item.getItemFromBlock(soil) == itemstack.getItem()) {
+			if (soil.getResource().isItemEqual(itemstack)) {
 				return true;
 			}
 		}
@@ -114,7 +116,7 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public Collection<Block> getSoils() {
+	public Collection<ISoil> getSoils() {
 		return soils;
 	}
 }

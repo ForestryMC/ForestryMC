@@ -12,9 +12,9 @@ package forestry.core.blocks;
 
 import java.util.Locale;
 
-import net.minecraft.util.IStringSerializable;
+import forestry.api.core.IBlockSubtype;
 
-public enum EnumResourceType implements IStringSerializable {
+public enum EnumResourceType implements IBlockSubtype {
 	APATITE(0, true),
 	COPPER(1, true),
 	TIN(2, true),

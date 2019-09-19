@@ -19,7 +19,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,7 +37,6 @@ import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.genetics.IBeeProductProvider;
 import forestry.api.apiculture.genetics.IBeeRoot;
-import forestry.api.core.IModelManager;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
@@ -171,12 +169,6 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	@Override
 	public boolean isJubilant(IGenome genome, IBeeHousing housing) {
 		return jubilanceProvider.isJubilant(this, genome, housing);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModels(Item item, IModelManager manager) {
-		beeModelProvider.registerModels(item, manager);
 	}
 
 	@Override

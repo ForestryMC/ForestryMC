@@ -11,31 +11,26 @@
 package forestry.core.models;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.BlockItem;
 
 public class BlockModelEntry {
 
-	public final ResourceLocation blockModelLocation;
-	@Nullable
-	public final ModelResourceLocation itemModelLocation;
 	public final IBakedModel model;
-	public final boolean addStateMapper;
 	public final Block block;
+	public final Collection<BlockState> states;
+	@Nullable
+	public final BlockItem item;
 
-	public BlockModelEntry(ResourceLocation blockModelLocation, ModelResourceLocation itemModelLocation, IBakedModel model, Block block) {
-		this(blockModelLocation, itemModelLocation, model, block, true);
-	}
-
-	public BlockModelEntry(ResourceLocation blockModelLocation, @Nullable ModelResourceLocation itemModelLocation, IBakedModel model, Block block, boolean addStateMapper) {
-		this.blockModelLocation = blockModelLocation;
-		this.itemModelLocation = itemModelLocation;
+	public BlockModelEntry(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
 		this.model = model;
 		this.block = block;
-		this.addStateMapper = addStateMapper;
+		this.item = item;
+		this.states = states;
 	}
 
 }

@@ -13,7 +13,6 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +21,8 @@ import net.minecraft.world.World;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmProperties;
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreBlocks;
+import forestry.core.features.CoreItems;
 import forestry.farming.logic.crops.CropPeat;
 
 public class FarmLogicPeat extends FarmLogicWatered {
@@ -59,9 +59,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 				return crops;
 			}
 			BlockState blockState = world.getBlockState(position);
-			Block block = blockState.getBlock();
-
-			if (block == ModuleCore.getBlocks().peat) {
+			if (CoreBlocks.PEAT.blockEqual(blockState)) {
 				crops.push(new CropPeat(world, position));
 			}
 		}
@@ -70,6 +68,6 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(ModuleCore.getItems().peat);
+		return CoreItems.PEAT.stack();
 	}
 }

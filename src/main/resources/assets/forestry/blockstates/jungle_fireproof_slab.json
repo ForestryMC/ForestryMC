@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "forestry:block/arboriculture/slabs/jungle_top"
+    },
+    "type=bottom": {
+      "model": "forestry:block/arboriculture/slabs/jungle"
+    },
+    "type=double": {
+      "model": "forestry:block/arboriculture/planks/jungle"
+    }
+  }
+}
