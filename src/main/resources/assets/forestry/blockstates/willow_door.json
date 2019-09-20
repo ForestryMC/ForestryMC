@@ -1,124 +1,124 @@
 {
   "variants": {
-    "facing=east,half=lower,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_bottom"
+    "half=upper,open=true,hinge=left,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge"
     },
-    "facing=south,half=lower,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_bottom",
-      "y": 90
-    },
-    "facing=west,half=lower,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_bottom",
-      "y": 180
-    },
-    "facing=north,half=lower,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_bottom",
+    "half=upper,open=false,hinge=left,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_top",
       "y": 270
     },
-    "facing=east,half=lower,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_bottom_rh"
-    },
-    "facing=south,half=lower,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_bottom_rh",
-      "y": 90
-    },
-    "facing=west,half=lower,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_bottom_rh",
+    "half=upper,open=true,hinge=right,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_top",
       "y": 180
     },
-    "facing=north,half=lower,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_bottom_rh",
+    "half=upper,open=false,hinge=right,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge",
       "y": 270
     },
-    "facing=east,half=lower,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_bottom_rh",
-      "y": 90
+    "half=lower,open=true,hinge=left,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge"
     },
-    "facing=south,half=lower,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_bottom_rh",
+    "half=lower,open=false,hinge=left,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom",
+      "y": 270
+    },
+    "half=lower,open=true,hinge=right,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom",
       "y": 180
     },
-    "facing=west,half=lower,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_bottom_rh",
+    "half=lower,open=false,hinge=right,facing=north": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge",
       "y": 270
     },
-    "facing=north,half=lower,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_bottom_rh"
-    },
-    "facing=east,half=lower,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_bottom",
-      "y": 270
-    },
-    "facing=south,half=lower,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_bottom"
-    },
-    "facing=west,half=lower,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_bottom",
-      "y": 90
-    },
-    "facing=north,half=lower,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_bottom",
+    "half=upper,open=true,hinge=left,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge",
       "y": 180
     },
-    "facing=east,half=upper,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_top"
-    },
-    "facing=south,half=upper,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_top",
+    "half=upper,open=false,hinge=left,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_top",
       "y": 90
     },
-    "facing=west,half=upper,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_top",
-      "y": 180
+    "half=upper,open=true,hinge=right,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_top"
     },
-    "facing=north,half=upper,hinge=left,open=false": {
-      "model": "forestry:arboriculture/door_top",
-      "y": 270
-    },
-    "facing=east,half=upper,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_top_rh"
-    },
-    "facing=south,half=upper,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_top_rh",
+    "half=upper,open=false,hinge=right,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge",
       "y": 90
     },
-    "facing=west,half=upper,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_top_rh",
+    "half=lower,open=true,hinge=left,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge",
       "y": 180
     },
-    "facing=north,half=upper,hinge=right,open=false": {
-      "model": "forestry:arboriculture/door_top_rh",
-      "y": 270
-    },
-    "facing=east,half=upper,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_top_rh",
+    "half=lower,open=false,hinge=left,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom",
       "y": 90
     },
-    "facing=south,half=upper,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_top_rh",
-      "y": 180
+    "half=lower,open=true,hinge=right,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom"
     },
-    "facing=west,half=upper,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_top_rh",
-      "y": 270
-    },
-    "facing=north,half=upper,hinge=left,open=true": {
-      "model": "forestry:arboriculture/door_top_rh"
-    },
-    "facing=east,half=upper,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_top",
-      "y": 270
-    },
-    "facing=south,half=upper,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_top"
-    },
-    "facing=west,half=upper,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_top",
+    "half=lower,open=false,hinge=right,facing=south": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge",
       "y": 90
     },
-    "facing=north,half=upper,hinge=right,open=true": {
-      "model": "forestry:arboriculture/door_top",
+    "half=upper,open=true,hinge=left,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge",
+      "y": 270
+    },
+    "half=upper,open=false,hinge=left,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_top",
       "y": 180
+    },
+    "half=upper,open=true,hinge=right,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_top",
+      "y": 90
+    },
+    "half=upper,open=false,hinge=right,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge",
+      "y": 180
+    },
+    "half=lower,open=true,hinge=left,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge",
+      "y": 270
+    },
+    "half=lower,open=false,hinge=left,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom",
+      "y": 180
+    },
+    "half=lower,open=true,hinge=right,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom",
+      "y": 90
+    },
+    "half=lower,open=false,hinge=right,facing=west": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge",
+      "y": 180
+    },
+    "half=upper,open=true,hinge=left,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge",
+      "y": 90
+    },
+    "half=upper,open=false,hinge=left,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_top"
+    },
+    "half=upper,open=true,hinge=right,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_top",
+      "y": 270
+    },
+    "half=upper,open=false,hinge=right,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_top_hinge"
+    },
+    "half=lower,open=true,hinge=left,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge",
+      "y": 90
+    },
+    "half=lower,open=false,hinge=left,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom"
+    },
+    "half=lower,open=true,hinge=right,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom",
+      "y": 270
+    },
+    "half=lower,open=false,hinge=right,facing=east": {
+      "model": "forestry:block/arboriculture/doors/willow_bottom_hinge"
     }
   }
 }

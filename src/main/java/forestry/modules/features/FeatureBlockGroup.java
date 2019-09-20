@@ -28,6 +28,10 @@ public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends
 		return featureByType.values().stream().map(IBlockFeature::block).collect(Collectors.toList());
 	}
 
+	public Collection<BlockItem> getItems() {
+		return featureByType.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(Collectors.toList());
+	}
+
 	@Nullable
 	public BlockState findState(String typeName) {
 		Optional<FeatureBlock> block = featureByType.entrySet().stream()

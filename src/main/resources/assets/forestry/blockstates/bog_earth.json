@@ -1,16 +1,7 @@
 {
 	"variants": {
-      "maturity=0": {
+      "": {
         "model": "forestry:block/soil/bog"
-      },
-      "maturity=1": {
-        "model": "forestry:block/soil/bog"
-      },
-      "maturity=2": {
-        "model": "forestry:block/soil/bog"
-      },
-      "maturity=3": {
-        "model": "forestry:block/soil/peat"
       }
 	}
 }

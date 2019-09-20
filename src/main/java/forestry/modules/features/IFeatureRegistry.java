@@ -46,7 +46,9 @@ public interface IFeatureRegistry {
 
 	<B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(BiFunction<R, C, B> constructor, R[] rowTypes, C[] columnTypes);
 
-	void addListener(FeatureType type, Consumer<RegistryEvent> listener);
+	FeatureFluid.Builder fluid(String identifier);
+
+	void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener);
 
 	<F extends IModFeature> F register(F feature);
 }

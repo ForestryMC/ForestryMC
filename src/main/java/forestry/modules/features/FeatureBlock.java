@@ -16,8 +16,8 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 
 public class FeatureBlock<B extends Block, I extends BlockItem> implements IBlockFeature<B, I> {
-	private final String moduleID;
-	private final String identifier;
+	protected final String moduleID;
+	protected final String identifier;
 	@Nullable
 	private final Function<B, I> constructorItem;
 	private final Supplier<B> constructorBlock;
@@ -66,7 +66,7 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 	}
 
 	@Override
-	public Supplier<B> getConstructor() {
+	public Supplier<B> getBlockConstructor() {
 		return constructorBlock;
 	}
 
@@ -102,7 +102,7 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 
 	@Nullable
 	@Override
-	public Function<B, I> getItemConstructor() {
+	public Function<B, I> getItemBlockConstructor() {
 		return constructorItem;
 	}
 

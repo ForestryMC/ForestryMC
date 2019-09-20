@@ -21,10 +21,12 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.model.BlockFaceUV;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
+import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
@@ -69,6 +71,14 @@ public abstract class ModelProvider implements IDataProvider {
 
 	protected abstract void registerModels();
 
+	protected void registerModel(Item item, ModelBuilder builder) {
+		registerModel(item.getRegistryName().getPath(), builder);
+	}
+
+	protected void registerModel(Block block, ModelBuilder builder) {
+		registerModel(block.getRegistryName().getPath(), builder);
+	}
+
 	protected void registerModel(String path, ModelBuilder builder) {
 		pathToBuilder.put(path, builder);
 	}
@@ -111,6 +121,15 @@ public abstract class ModelProvider implements IDataProvider {
 
 		public ModelBuilder particle(ResourceLocation location) {
 			return texture("particle", location);
+		}
+
+		public ModelBuilder item() {
+			return parent("item/generated");
+		}
+
+		public ModelBuilder layer(int index, ResourceLocation location) {
+			textures.put("layer" + index, location);
+			return this;
 		}
 
 		public ModelBuilder texture(String key, ResourceLocation location) {
