@@ -78,7 +78,7 @@ public class ParticleBeeExplore extends Particle {
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.95;
 		} else {
-			// getComb to origin
+			// get to origin
 			this.motionX = (origin.x - this.posX) * 0.03;
 			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;

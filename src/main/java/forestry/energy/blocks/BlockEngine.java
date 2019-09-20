@@ -72,8 +72,8 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	//TODO raytracing
 	//	@Override
 	//	public void addCollisionBoxToList(BlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
-	//		Direction orientation = state.getComb(FACING);
-	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.getComb(orientation);
+	//		Direction orientation = state.get(FACING);
+	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 	//		if (boundingBoxes == null) {
 	//			return;
 	//		}
@@ -89,8 +89,8 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	//TODO potentially getRayTraceResult
 	//	@Override
 	//	public RayTraceResult collisionRayTrace(BlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-	//		Direction orientation = blockState.getComb(FACING);
-	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.getComb(orientation);
+	//		Direction orientation = blockState.get(FACING);
+	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 	//		if (boundingBoxes == null) {
 	//			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
 	//		}
@@ -161,7 +161,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	//	@Override
 	//	public boolean isSideSolid(BlockState base_state, IBlockReader world, BlockPos pos, Direction side) {
 	//		BlockState blockState = world.getBlockState(pos);
-	//		Direction facing = blockState.getComb(BlockBase.FACING);
+	//		Direction facing = blockState.get(BlockBase.FACING);
 	//		return facing.getOpposite() == side;
 	//	}
 

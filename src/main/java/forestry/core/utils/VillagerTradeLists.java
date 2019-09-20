@@ -19,7 +19,7 @@
 //	/**
 //	 * Copy of {@link VillagerTrades.ItemsForEmeraldsTrade}
 //	 * that takes ItemStacks as parameters and has emerald price info
-//	 * TODO - can we just AT the villager trade now? (or perhaps getComb it from a registry?
+//	 * TODO - can we just AT the villager trade now? (or perhaps get it from a registry?
 //	 * or just use provided constructor in fact????
 //	 */
 //	static class ItemsForEmeraldsTrade implements VillagerTrades.ITrade {

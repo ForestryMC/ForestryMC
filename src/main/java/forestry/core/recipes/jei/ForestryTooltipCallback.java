@@ -18,14 +18,14 @@
 //
 //	@Override
 //	public void onTooltip(int index, boolean input, ItemStack ingredient, List<String> tooltip) {
-//		List<String> tip = tooltips.getComb(index);
+//		List<String> tip = tooltips.get(index);
 //		if (!tip.isEmpty()) {
 //			tooltip.addAll(tip);
 //		}
 //	}
 //
 //	public void addFortuneTooltip(int index) {
-//		tooltips.getComb(index).add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.jei.fortune"));
+//		tooltips.get(index).add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.jei.fortune"));
 //	}
 //
 //	public void addChanceTooltip(int index, float chance) {
@@ -39,7 +39,7 @@
 //		percentFormat.setMaximumFractionDigits(2);
 //		String chanceString = String.valueOf(percentFormat.format(chance));
 //
-//		tooltips.getComb(index).add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.jei.chance", chanceString));
+//		tooltips.get(index).add(TextFormatting.GRAY + Translator.translateToLocalFormatted("for.jei.chance", chanceString));
 //	}
 //
 //}

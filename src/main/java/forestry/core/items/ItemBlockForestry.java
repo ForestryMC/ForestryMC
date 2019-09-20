@@ -83,7 +83,7 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 		Direction side = context.getFace();
 
 		if (placed == ActionResultType.SUCCESS) {
-			if (getBlock().hasTileEntity(getBlock().getDefaultState())) {    //TODO how to getComb the state??
+			if (getBlock().hasTileEntity(getBlock().getDefaultState())) {    //TODO how to get the state??
 				if (stack.getItem() instanceof ItemBlockNBT && stack.getTag() != null) {
 					TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 					if (tile != null) {

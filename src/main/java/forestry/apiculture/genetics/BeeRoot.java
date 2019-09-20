@@ -172,7 +172,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 			return activeBeekeepingMode;
 		}
 
-		// No beekeeping mode yet, getComb it.
+		// No beekeeping mode yet, get it.
 		IApiaristTracker tracker = getBreedingTracker(world, null);
 		String modeName = tracker.getModeName();
 		IBeekeepingMode mode = getBeekeepingMode(modeName);

@@ -113,7 +113,7 @@ public abstract class InventoryUtil {
 		//		}
 		//
 		//		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
-		//		Map.Entry<Direction, IPipeTile> pipe = pipes.getComb(choice);
+		//		Map.Entry<Direction, IPipeTile> pipe = pipes.get(choice);
 		//		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
 		//			if (removeOneItem(source, stackToMove) != null) {
 		//				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);

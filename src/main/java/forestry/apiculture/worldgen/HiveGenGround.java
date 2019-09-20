@@ -42,7 +42,7 @@ public class HiveGenGround extends HiveGen {
 
 	@Override
 	public BlockPos getPosForHive(World world, int x, int z) {
-		// getComb to the ground
+		// get to the ground
 		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;

@@ -64,23 +64,23 @@ public class BlockRegistryCore extends BlockRegistry {
 		}
 		//TODO register tag for these
 
-		//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.getComb(EnumResourceType.APATITE, 1));
-		//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.getComb(EnumResourceType.COPPER, 1));
-		//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.getComb(EnumResourceType.TIN, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_APATITE, resources.get(EnumResourceType.APATITE, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_COPPER, resources.get(EnumResourceType.COPPER, 1));
+		//		OreDictionary.registerOre(OreDictUtil.ORE_TIN, resources.get(EnumResourceType.TIN, 1));
 
 		//		BlockResourceStorage resourceStorage = new BlockResourceStorage();
 		//		registerBlock(resourceStorage, new ItemBlockForestry<>(resourceStorage), "resource_storage");
 
-		//		resourceStorageApatite = resourceStorage.getComb(EnumResourceType.APATITE);
+		//		resourceStorageApatite = resourceStorage.get(EnumResourceType.APATITE);
 		//		OreDictionary.registerOre(OreDictUtil.BLOCK_APATITE, resourceStorageApatite);
 
-		//		resourceStorageCopper = resourceStorage.getComb(EnumResourceType.COPPER);
+		//		resourceStorageCopper = resourceStorage.get(EnumResourceType.COPPER);
 		//		OreDictionary.registerOre(OreDictUtil.BLOCK_COPPER, resourceStorageCopper);
 
-		//		resourceStorageTin = resourceStorage.getComb(EnumResourceType.TIN);
+		//		resourceStorageTin = resourceStorage.get(EnumResourceType.TIN);
 		//		OreDictionary.registerOre(OreDictUtil.BLOCK_TIN, resourceStorageTin);
 
-		//		resourceStorageBronze = resourceStorage.getComb(EnumResourceType.BRONZE);
+		//		resourceStorageBronze = resourceStorage.get(EnumResourceType.BRONZE);
 		//		OreDictionary.registerOre(OreDictUtil.BLOCK_BRONZE, resourceStorageBronze);
 
 		ashBrick = new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE)

@@ -284,7 +284,7 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	/**
-	 * Called if this element getComb updated on the client side.
+	 * Called if this element get updated on the client side.
 	 */
 	@OnlyIn(Dist.CLIENT)
 	protected void onUpdateClient() {

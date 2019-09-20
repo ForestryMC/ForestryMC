@@ -213,7 +213,7 @@
 //	@Override
 //	public IConfigEntry getListEntry(int index)
 //	{
-//		return this.listEntries.getComb(index);
+//		return this.listEntries.get(index);
 //	}
 //
 //	@Override
@@ -370,7 +370,7 @@
 //		private BooleanEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement)
 //		{
 //			super(owningScreen, owningEntryList, configElement);
-//			this.beforeValue = Boolean.valueOf(configElement.getComb().toString());
+//			this.beforeValue = Boolean.valueOf(configElement.get().toString());
 //			this.currentValue = beforeValue;
 //			this.btnValue.enabled = enabled();
 //			updateValueButtonText();
@@ -461,7 +461,7 @@
 //		private CycleValueEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement)
 //		{
 //			super(owningScreen, owningEntryList, configElement);
-//			beforeIndex = getIndex(configElement.getComb().toString());
+//			beforeIndex = getIndex(configElement.get().toString());
 //			defaultIndex = getIndex(configElement.getDefault().toString());
 //			currentIndex = beforeIndex;
 //			this.btnValue.enabled = enabled();
@@ -597,8 +597,8 @@
 //		public SelectValueEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement, Map<Object, String> selectableValues)
 //		{
 //			super(owningScreen, owningEntryList, configElement);
-//			beforeValue = configElement.getComb().toString();
-//			currentValue = configElement.getComb().toString();
+//			beforeValue = configElement.get().toString();
+//			currentValue = configElement.get().toString();
 //			this.selectableValues = selectableValues;
 //			updateValueButtonText();
 //		}
@@ -799,12 +799,12 @@
 //		{
 //			super(owningScreen, owningEntryList, configElement, new GuiSlider(0, owningEntryList.controlX, 0, owningEntryList.controlWidth, 18,
 //					"", "", Double.valueOf(configElement.getMinValue().toString()), Double.valueOf(configElement.getMaxValue().toString()),
-//					Double.valueOf(configElement.getComb().toString()), configElement.getType() == ConfigGuiType.DOUBLE, true));
+//					Double.valueOf(configElement.get().toString()), configElement.getType() == ConfigGuiType.DOUBLE, true));
 //
 //			if (configElement.getType() == ConfigGuiType.INTEGER)
-//				this.beforeValue = Integer.valueOf(configElement.getComb().toString());
+//				this.beforeValue = Integer.valueOf(configElement.get().toString());
 //			else
-//				this.beforeValue = Double.valueOf(configElement.getComb().toString());
+//				this.beforeValue = Double.valueOf(configElement.get().toString());
 //		}
 //
 //		@Override
@@ -896,7 +896,7 @@
 //		public ButtonEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement)
 //		{
 //			this(owningScreen, owningEntryList, configElement, new GuiButtonExt(0, owningEntryList.controlX, 0, owningEntryList.controlWidth, 18,
-//					configElement.getComb() != null ? I18n.format(String.valueOf(configElement.getComb())) : ""));
+//					configElement.get() != null ? I18n.format(String.valueOf(configElement.get())) : ""));
 //		}
 //
 //		public ButtonEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement, GuiButtonExt button)
@@ -985,7 +985,7 @@
 //		public IntegerEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement)
 //		{
 //			super(owningScreen, owningEntryList, configElement);
-//			this.beforeValue = Integer.valueOf(configElement.getComb().toString());
+//			this.beforeValue = Integer.valueOf(configElement.get().toString());
 //		}
 //
 //		@Override
@@ -1072,7 +1072,7 @@
 //						this.configElement.setToDefault();
 //					}
 //
-//				return configElement.requiresMcRestart() && beforeValue != Integer.parseInt(configElement.getComb().toString());
+//				return configElement.requiresMcRestart() && beforeValue != Integer.parseInt(configElement.get().toString());
 //			}
 //			return false;
 //		}
@@ -1090,7 +1090,7 @@
 //		public DoubleEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement)
 //		{
 //			super(owningScreen, owningEntryList, configElement);
-//			this.beforeValue = Double.valueOf(configElement.getComb().toString());
+//			this.beforeValue = Double.valueOf(configElement.get().toString());
 //		}
 //
 //		@Override
@@ -1177,7 +1177,7 @@
 //						this.configElement.setToDefault();
 //					}
 //
-//				return configElement.requiresMcRestart() && beforeValue != Double.parseDouble(configElement.getComb().toString());
+//				return configElement.requiresMcRestart() && beforeValue != Double.parseDouble(configElement.get().toString());
 //			}
 //			return false;
 //		}
@@ -1196,7 +1196,7 @@
 //		public StringEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement)
 //		{
 //			super(owningScreen, owningEntryList, configElement);
-//			beforeValue = configElement.getComb().toString();
+//			beforeValue = configElement.get().toString();
 //			this.textFieldValue = new GuiTextField(10, this.mc.fontRenderer, this.owningEntryList.controlX + 1, 0, this.owningEntryList.controlWidth - 3, 16);
 //			this.textFieldValue.setMaxStringLength(10000);
 //			this.textFieldValue.setText(configElement.getComb().toString());

@@ -27,7 +27,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
 
-public abstract class BlockForestry extends Block { //TODO - note deprecation messages in ITileEntityProvider {
+public abstract class BlockForestry extends Block {
 
 	protected BlockForestry(Block.Properties properties) {
 		super(properties

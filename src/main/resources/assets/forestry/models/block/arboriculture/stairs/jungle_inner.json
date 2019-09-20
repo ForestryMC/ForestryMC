@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "side": "forestry:block/wood/planks.jungle",
+    "top": "forestry:block/wood/planks.jungle",
+    "bottom": "forestry:block/wood/planks.jungle",
+    "particle": "forestry:block/wood/planks.jungle"
+  }
+}

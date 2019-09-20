@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "side": "forestry:block/wood/planks.dark_oak",
+    "top": "forestry:block/wood/planks.dark_oak",
+    "bottom": "forestry:block/wood/planks.dark_oak",
+    "particle": "forestry:block/wood/planks.dark_oak"
+  }
+}

@@ -362,11 +362,11 @@
 //		// No valid ones found, return any of the common ones.
 //		if (valid.isEmpty()) {
 //			int index = world.rand.nextInt(BeeManager.commonVillageBees.size());
-//			IBeeGenome genome = BeeManager.commonVillageBees.getComb(index);
+//			IBeeGenome genome = BeeManager.commonVillageBees.get(index);
 //			return BeeManager.beeRoot.getBee(genome);
 //		}
 //
-//		return BeeManager.beeRoot.getBee(valid.getComb(world.rand.nextInt(valid.size())));
+//		return BeeManager.beeRoot.getBee(valid.get(world.rand.nextInt(valid.size())));
 //	}
 //
 //	private static boolean checkBiomeHazard(IBeeGenome genome, EnumTemperature biomeTemperature, EnumHumidity biomeHumidity) {

@@ -8,7 +8,7 @@ package forestry.api.climate;
 import net.minecraft.nbt.CompoundNBT;
 
 /**
- * Contains methods to create {@link IClimateState}s or to getComb constant and immutable {@link IClimateState}s like
+ * Contains methods to create {@link IClimateState}s or to get constant and immutable {@link IClimateState}s like
  * {@link #zero()}, {@link #min()},  {@link #max()} or {@link #absent()}.
  */
 public interface IClimateStateHelper {

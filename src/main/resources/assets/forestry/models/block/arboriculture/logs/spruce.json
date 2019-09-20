@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "side": "forestry:block/wood/bark.spruce",
+    "end": "forestry:block/wood/heart.spruce"
+  }
+}
