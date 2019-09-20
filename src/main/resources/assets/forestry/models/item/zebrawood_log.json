@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/zebrawood",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/zebrawood"
 }

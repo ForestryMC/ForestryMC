@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/padauk",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/padauk"
 }

@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fence_gates/zebrawood",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fence_gates/zebrawood"
 }

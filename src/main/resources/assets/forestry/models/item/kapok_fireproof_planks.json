@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/planks/kapok",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/planks/kapok"
 }

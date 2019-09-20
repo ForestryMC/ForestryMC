@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/stairs/wenge",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/stairs/wenge"
 }

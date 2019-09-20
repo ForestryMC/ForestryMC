@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/slabs/teak",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/slabs/teak"
 }

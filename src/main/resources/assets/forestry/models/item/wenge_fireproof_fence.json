@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fences/wenge_inventory",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fences/wenge_inventory"
 }

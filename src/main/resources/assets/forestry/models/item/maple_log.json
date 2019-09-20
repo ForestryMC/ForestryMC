@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/maple",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/maple"
 }

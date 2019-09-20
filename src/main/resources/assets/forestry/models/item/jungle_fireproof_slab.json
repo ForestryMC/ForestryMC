@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/slabs/jungle",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/slabs/jungle"
 }

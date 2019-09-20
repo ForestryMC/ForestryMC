@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/planks/oak",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/planks/oak"
 }

@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fence_gates/kapok",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fence_gates/kapok"
 }

@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fence_gates/sequoia",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fence_gates/sequoia"
 }

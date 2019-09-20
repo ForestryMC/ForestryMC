@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/slabs/mahoe",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/slabs/mahoe"
 }

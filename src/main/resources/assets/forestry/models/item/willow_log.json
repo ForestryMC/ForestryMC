@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/willow",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/willow"
 }

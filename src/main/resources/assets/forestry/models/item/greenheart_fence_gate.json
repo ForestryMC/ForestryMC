@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fence_gates/greenheart",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fence_gates/greenheart"
 }

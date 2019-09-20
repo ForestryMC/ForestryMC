@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/slabs/lime",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/slabs/lime"
 }

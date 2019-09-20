@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/stairs/cherry",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/stairs/cherry"
 }

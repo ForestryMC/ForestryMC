@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/planks/pine",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/planks/pine"
 }

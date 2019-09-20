@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/papaya",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/papaya"
 }

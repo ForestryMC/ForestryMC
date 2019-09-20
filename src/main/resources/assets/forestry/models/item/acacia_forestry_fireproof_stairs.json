@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/stairs/acacia_forestry",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/stairs/acacia_forestry"
 }

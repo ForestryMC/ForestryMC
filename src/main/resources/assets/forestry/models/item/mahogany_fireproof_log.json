@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/mahogany",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/mahogany"
 }

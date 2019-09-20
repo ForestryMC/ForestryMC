@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/poplar",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/poplar"
 }

@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/chestnut",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/chestnut"
 }

@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fences/papaya_inventory",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fences/papaya_inventory"
 }

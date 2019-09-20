@@ -143,10 +143,12 @@ public abstract class ModelProvider implements IDataProvider {
 				object.addProperty("parent", parent.toString());
 			}
 			JsonObject texturesObj = new JsonObject();
-			for (Map.Entry<String, ResourceLocation> texture : textures.entrySet()) {
-				texturesObj.addProperty(texture.getKey(), texture.getValue().toString());
+			if (!textures.isEmpty()) {
+				for (Map.Entry<String, ResourceLocation> texture : textures.entrySet()) {
+					texturesObj.addProperty(texture.getKey(), texture.getValue().toString());
+				}
+				object.add("textures", texturesObj);
 			}
-			object.add("textures", texturesObj);
 			if (ambientOcclusion != null) {
 				object.addProperty("ambientocclusion", ambientOcclusion);
 			}

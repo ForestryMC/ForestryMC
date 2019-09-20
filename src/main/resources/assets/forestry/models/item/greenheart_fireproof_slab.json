@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/slabs/greenheart",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/slabs/greenheart"
 }

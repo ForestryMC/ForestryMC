@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fence_gates/chestnut",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fence_gates/chestnut"
 }

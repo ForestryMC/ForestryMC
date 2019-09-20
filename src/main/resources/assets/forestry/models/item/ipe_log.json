@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/ipe",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/ipe"
 }

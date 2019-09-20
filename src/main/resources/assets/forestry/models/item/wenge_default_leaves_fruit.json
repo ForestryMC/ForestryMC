@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/leaves",
-  "textures": {}
+  "parent": "forestry:block/leaves"
 }

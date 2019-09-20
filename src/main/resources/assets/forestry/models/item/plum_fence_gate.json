@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fence_gates/plum",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fence_gates/plum"
 }

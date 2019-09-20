@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fences/acacia_forestry_inventory",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fences/acacia_forestry_inventory"
 }

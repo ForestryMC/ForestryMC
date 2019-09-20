@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fences/lime_inventory",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fences/lime_inventory"
 }

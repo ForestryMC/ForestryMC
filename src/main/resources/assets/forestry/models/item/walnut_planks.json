@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/planks/walnut",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/planks/walnut"
 }

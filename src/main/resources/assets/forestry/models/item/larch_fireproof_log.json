@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/larch",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/logs/larch"
 }

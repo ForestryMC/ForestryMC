@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/planks/giganteum",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/planks/giganteum"
 }

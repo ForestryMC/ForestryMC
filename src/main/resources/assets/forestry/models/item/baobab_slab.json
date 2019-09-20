@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/slabs/baobab",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/slabs/baobab"
 }

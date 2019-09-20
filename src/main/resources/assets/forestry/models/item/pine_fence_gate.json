@@ -1,4 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/fence_gates/pine",
-  "textures": {}
+  "parent": "forestry:block/arboriculture/fence_gates/pine"
 }
