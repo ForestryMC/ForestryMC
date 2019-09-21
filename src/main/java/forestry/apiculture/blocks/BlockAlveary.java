@@ -23,6 +23,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
@@ -51,9 +52,9 @@ import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.RenderUtil;
 
 public class BlockAlveary extends BlockStructure {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
@@ -157,7 +158,7 @@ public class BlockAlveary extends BlockStructure {
 			} else {
 				BlockState blockStateAbove = world.getBlockState(pos.up());
 				Block blockAbove = blockStateAbove.getBlock();
-				if (BlockUtil.isWoodSlabBlock(blockStateAbove, blockAbove, world, pos)) {
+					if (blockAbove.isIn(BlockTags.WOODEN_SLABS)) {
 					List<Direction> blocksTouching = getBlocksTouching(world, pos);
 					switch (blocksTouching.size()) {
 						case 3:
@@ -180,7 +181,6 @@ public class BlockAlveary extends BlockStructure {
 				}
 			}
 		}
-
 		return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
 	}
 
@@ -195,30 +195,6 @@ public class BlockAlveary extends BlockStructure {
 		}
 		return touching;
 	}
-
-	//	@Override
-	//	@OnlyIn(Dist.CLIENT)
-	//	public void registerStateMapper() {
-	//		ModelLoader.setCustomStateMapper(this, new AlvearyStateMapper(getType()));
-	//	}
-	//
-	//	@OnlyIn(Dist.CLIENT)
-	//	private static class AlvearyStateMapper extends StateMapperBase {
-	//		private final BlockAlvearyType type;
-	//
-	//		public AlvearyStateMapper(BlockAlvearyType type) {
-	//			this.type = type;
-	//		}
-	//
-	//		@Override
-	//		protected ModelResourceLocation getModelResourceLocation(BlockState state) {
-	//			String resourceDomain = ForgeRegistries.BLOCKS.getKey(state.getBlock()).getNamespace();
-	//			String resourceLocation = "apiculture/alveary_" + type;
-	//			String propertyString = getPropertyString(state.getProperties());
-	//			return new ModelResourceLocation(resourceDomain + ':' + resourceLocation, propertyString);
-	//		}
-	//
-	//	}
 
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
