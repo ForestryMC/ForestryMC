@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.data;
 
-import com.google.common.base.Preconditions;
-
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -51,6 +49,7 @@ import forestry.apiculture.items.EnumPropolis;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.book.features.BookItems;
 import forestry.climatology.features.ClimatologyBlocks;
 import forestry.climatology.features.ClimatologyItems;
 import forestry.core.blocks.BlockTypeCoreTesr;
@@ -66,6 +65,7 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.food.features.FoodItems;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
+import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.modules.ForestryModuleUids;
 import forestry.storage.features.BackpackItems;
 
@@ -85,11 +85,12 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerCharcoalRecipes(helper);
 		addClimatologyRecipes(helper);
 		registerCoreRecipes(helper);
+		registerBookRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
 		registerCombRecipes(helper);
-		
+
 		BlockAlveary plain = ApicultureBlocks.ALVEARY.get(BlockAlvearyType.PLAIN).getBlock();
 		Item goldElectronTube = CoreItems.ELECTRON_TUBES.get(EnumElectronTube.GOLD).getItem();
 
@@ -186,7 +187,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has silk", this.hasItem(wovenSilk))
 						.setGroup("apiarist_armour")::build,
 				ForestryModuleUids.APICULTURE);
-		
+
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).getBlock())
 						.key('S', ItemTags.WOODEN_SLABS)
@@ -315,7 +316,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 	private void registerArboricultureRecipes(RecipeDataHelper helper) {
 		registerWoodRecipes(helper);
-		
+
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(ArboricultureItems.GRAFTER.getItem())
 						.key('B', ForestryTags.Items.INGOT_BRONZE)
@@ -394,7 +395,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	}
 
 	private void registerFoodRecipes(RecipeDataHelper helper) {
-		
+
 		Item waxCapsule = FluidsItems.CONTAINERS.get(EnumContainerType.CAPSULE).getItem();
 		Item honeyDrop = ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).getItem();
 
@@ -734,5 +735,30 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 				.patternLine("# #").patternLine(" # ").patternLine(" # ")
 				.addCriterion("has_bronze", this.hasItem(ForestryTags.Items.INGOT_BRONZE)).build(consumer);
 
+	}
+
+	private void registerBookRecipes(RecipeDataHelper helper) {
+
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(BookItems.BOOK.item())
+						.addIngredient(Items.BOOK)
+						.addIngredient(ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).item())
+						.addCriterion("has_book", this.hasItem(Items.BOOK))::build,
+				new ResourceLocation(Constants.MOD_ID, "book_forester_drop"),
+				ForestryModuleUids.BOOK, ForestryModuleUids.APICULTURE);
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(BookItems.BOOK.item())
+						.addIngredient(Items.BOOK)
+						.addIngredient(ItemTags.SAPLINGS)
+						.addCriterion("has_book", this.hasItem(Items.BOOK))::build,
+				new ResourceLocation(Constants.MOD_ID, "book_forester_sapling"),
+				ForestryModuleUids.BOOK);
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(BookItems.BOOK.item())
+						.addIngredient(Items.BOOK)
+						.addIngredient(LepidopterologyItems.BUTTERFLY_GE.item())
+						.addCriterion("has_book", this.hasItem(Items.BOOK))::build,
+				new ResourceLocation(Constants.MOD_ID, "book_forester_butterfly"),
+				ForestryModuleUids.BOOK, ForestryModuleUids.LEPIDOPTEROLOGY);
 	}
 }
