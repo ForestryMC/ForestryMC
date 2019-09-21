@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -22,6 +24,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -32,7 +35,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -57,7 +59,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 
-public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements ISpriteRegister, IBlockRotatable {
+public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements ISpriteRegister {
 	/**
 	 * use this instead of {@link HorizontalBlock#HORIZONTAL_FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */
@@ -188,26 +190,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return false;
 	}
 
+	@Nullable
 	@Override
-	public void rotateAfterPlacement(PlayerEntity player, World world, BlockPos pos, Direction side) {
-		BlockState state = world.getBlockState(pos);
-
-		Direction facing = getPlacementRotation(player, world, pos, side);
-		world.setBlockState(pos, state.with(FACING, facing));
-	}
-
-	protected Direction getPlacementRotation(PlayerEntity player, World world, BlockPos pos, Direction side) {
-		int l = MathHelper.floor(player.rotationYaw * 4F / 360F + 0.5D) & 3;
-		if (l == 1) {
-			return Direction.EAST;
-		}
-		if (l == 2) {
-			return Direction.SOUTH;
-		}
-		if (l == 3) {
-			return Direction.WEST;
-		}
-		return Direction.NORTH;
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
 	}
 
 	//TODO think this is the correct method

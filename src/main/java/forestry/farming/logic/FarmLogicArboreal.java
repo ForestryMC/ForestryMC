@@ -107,7 +107,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			return Collections.emptyList();
 		}
 
-		// getComb all crops of the same type that are connected to the first one
+		// get all crops of the same type that are connected to the first one
 		Stack<BlockPos> knownCropPositions = new Stack<>();
 		knownCropPositions.add(position);
 

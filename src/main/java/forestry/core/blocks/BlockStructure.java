@@ -58,7 +58,7 @@ public abstract class BlockStructure extends BlockForestry {
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
 		ItemStack heldItem = playerIn.getHeldItem(hand);
-		// If the player's hands are empty and they right-click on a multiblock, they getComb a
+		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
 		if (heldItem.isEmpty()) {
 			if (controller != null) {

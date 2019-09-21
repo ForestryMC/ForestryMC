@@ -3,71 +3,50 @@ package forestry.core.data;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Table;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
-import net.minecraft.item.BlockItem;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.Property;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
-import net.minecraft.state.properties.SlabType;
-import net.minecraft.state.properties.StairsShape;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.feature.Feature;
 
-import com.mojang.datafixers.util.Pair;
-
-import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IWoodType;
-import forestry.arboriculture.blocks.BlockDecorativeLeaves;
-import forestry.arboriculture.blocks.BlockDefaultLeaves;
-import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
-import forestry.arboriculture.blocks.BlockForestryDoor;
-import forestry.arboriculture.blocks.BlockForestryFenceGate;
-import forestry.arboriculture.blocks.BlockForestryLog;
-import forestry.arboriculture.blocks.BlockForestryPlank;
-import forestry.arboriculture.blocks.BlockForestrySlab;
-import forestry.arboriculture.blocks.BlockForestryStairs;
-import forestry.arboriculture.features.ArboricultureBlocks;
-import forestry.cultivation.blocks.BlockPlanter;
-import forestry.cultivation.blocks.BlockTypePlanter;
-import forestry.cultivation.features.CultivationBlocks;
-import forestry.modules.features.FeatureBlock;
-
-public class BlockStateProvider implements IDataProvider {
+public abstract class BlockStateProvider implements IDataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-	protected final Map<Block, Builder> blockToBuilder = Maps.newLinkedHashMap();
+	protected final Map<Block, IBuilder> blockToBuilder = Maps.newLinkedHashMap();
 	protected final DataGenerator generator;
 
 	public BlockStateProvider(DataGenerator generator) {
@@ -103,162 +82,14 @@ public class BlockStateProvider implements IDataProvider {
 		});
 	}
 
-	public void registerStates() {
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS.getFeatureByType().entrySet()) {
-			addPlank(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS_FIREPROOF.getFeatureByType().entrySet()) {
-			addPlank(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
-			addPlank(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS.getFeatureByType().entrySet()) {
-			addLog(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS_FIREPROOF.getFeatureByType().entrySet()) {
-			addLog(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
-			addLog(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS.getFeatureByType().entrySet()) {
-			addStair(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS_FIREPROOF.getFeatureByType().entrySet()) {
-			addStair(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
-			addStair(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS.getFeatureByType().entrySet()) {
-			addSlab(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS_FIREPROOF.getFeatureByType().entrySet()) {
-			addSlab(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
-			addSlab(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES.getFeatureByType().entrySet()) {
-			addFenceGate(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES_FIREPROOF.getFeatureByType().entrySet()) {
-			addFenceGate(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
-			addFenceGate(stair.getValue(), stair.getKey());
-		}
-		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryDoor, BlockItem>> stair : ArboricultureBlocks.DOORS.getFeatureByType().entrySet()) {
-			addDoor(stair.getValue(), stair.getKey());
-		}
-		//Replaced by the model loader later
-		for (BlockDecorativeLeaves leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks()) {
-			addVariants(leaves, new Builder().always(variant -> variant.model = "forestry:block/leaves"));
-		}
-		for (BlockDefaultLeavesFruit leaves : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks()) {
-			addVariants(leaves, new Builder().always(variant -> variant.model = "forestry:block/leaves"));
-		}
-		for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
-			addVariants(leaves, new Builder().always(variant -> variant.model = "forestry:block/leaves"));
-		}
-		for(Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
-			addCultivationBlock(cell.getValue(), cell.getRowKey());
-		}
-	}
-
-	private void addPlank(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		addVariants(feature.block(), new Builder().always((variant -> variant.model = "forestry:block/arboriculture/planks/" + type.getName())));
-	}
-
-	private void addLog(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		addVariants(feature.block(), new Builder()
-			.always((variant) -> variant.model = "forestry:block/arboriculture/logs/" + type.getName())
-			.property(BlockStateProperties.AXIS, Direction.Axis.X, (variant) -> variant.x = variant.y = 90)
-			.property(BlockStateProperties.AXIS, Direction.Axis.Z, (variant) -> variant.x = 90));
-	}
-
-	private void addStair(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/stairs/" + type.getName();
-		BlockState defaultState = feature.defaultState();
-		addVariants(feature.block(), new Builder()
-			.ignore(StairsBlock.WATERLOGGED)
-			.always((variant) -> variant.uvLock = true)
-			.property(StairsBlock.HALF, Half.TOP, (variant) -> variant.x = 180)
-			.property(StairsBlock.SHAPE, StairsShape.INNER_LEFT, (variant) -> variant.model = modelLocation + "_inner")
-			.property(StairsBlock.SHAPE, StairsShape.INNER_RIGHT, (variant) -> variant.model = modelLocation + "_inner")
-			.property(StairsBlock.SHAPE, StairsShape.OUTER_LEFT, (variant) -> variant.model = modelLocation + "_outer")
-			.property(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT, (variant) -> variant.model = modelLocation + "_outer")
-			.property(StairsBlock.SHAPE, StairsShape.STRAIGHT, (variant) -> variant.model = modelLocation)
-			.property(StairsBlock.FACING, Direction.WEST, (variant) -> variant.y = 180)
-			.property(StairsBlock.FACING, Direction.SOUTH, (variant) -> variant.y = 90)
-			.property(StairsBlock.FACING, Direction.NORTH, (variant) -> variant.y = 270)
-			.state(defaultState.with(StairsBlock.FACING, Direction.EAST).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.y = 270)
-			.state(defaultState.with(StairsBlock.FACING, Direction.WEST).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.y = 90)
-			.state(defaultState.with(StairsBlock.FACING, Direction.SOUTH).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.y = 0)
-			.state(defaultState.with(StairsBlock.FACING, Direction.NORTH).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.y = 180)
-			.state(defaultState.with(StairsBlock.FACING, Direction.EAST).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.y = 270)
-			.state(defaultState.with(StairsBlock.FACING, Direction.WEST).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.y = 90)
-			.state(defaultState.with(StairsBlock.FACING, Direction.SOUTH).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.y = 0)
-			.state(defaultState.with(StairsBlock.FACING, Direction.NORTH).with(StairsBlock.HALF, Half.BOTTOM).with(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.y = 180)
-			.state(defaultState.with(StairsBlock.FACING, Direction.EAST).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.y = 90)
-			.state(defaultState.with(StairsBlock.FACING, Direction.WEST).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.y = 270)
-			.state(defaultState.with(StairsBlock.FACING, Direction.SOUTH).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.y = 180)
-			.state(defaultState.with(StairsBlock.FACING, Direction.NORTH).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.y = 0)
-			.state(defaultState.with(StairsBlock.FACING, Direction.EAST).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.y = 90)
-			.state(defaultState.with(StairsBlock.FACING, Direction.WEST).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.y = 270)
-			.state(defaultState.with(StairsBlock.FACING, Direction.SOUTH).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.y = 180)
-			.state(defaultState.with(StairsBlock.FACING, Direction.NORTH).with(StairsBlock.HALF, Half.TOP).with(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.y = 0)
-		);
-	}
-
-	private void addSlab(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/slabs/" + type.getName();
-		addVariants(feature.block(), new Builder()
-			.ignore(SlabBlock.WATERLOGGED)
-			.property(SlabBlock.TYPE, SlabType.TOP, (variant) -> variant.model = modelLocation + "_top")
-			.property(SlabBlock.TYPE, SlabType.BOTTOM, (variant) -> variant.model = modelLocation)
-			.property(SlabBlock.TYPE, SlabType.DOUBLE, (variant) -> variant.model = "forestry:block/arboriculture/planks/" + type.getName()));
-	}
-
-	private void addFenceGate(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/fence_gates/" + type.getName();
-		addVariants(feature.block(), new Builder()
-			.always((variant) -> variant.uvLock = true)
-			.property(FenceGateBlock.HORIZONTAL_FACING, Direction.WEST, (variant) -> variant.y = 90)
-			.property(FenceGateBlock.HORIZONTAL_FACING, Direction.EAST, (variant) -> variant.y = 270)
-			.property(FenceGateBlock.HORIZONTAL_FACING, Direction.NORTH, (variant) -> variant.y = 180)
-			.property(FenceGateBlock.IN_WALL, false, FenceGateBlock.OPEN, false, (variant) -> variant.model = modelLocation)
-			.property(FenceGateBlock.IN_WALL, false, FenceGateBlock.OPEN, true, (variant) -> variant.model = modelLocation + "_open")
-			.property(FenceGateBlock.IN_WALL, true, FenceGateBlock.OPEN, false, (variant) -> variant.model = modelLocation + "_wall")
-			.property(FenceGateBlock.IN_WALL, true, FenceGateBlock.OPEN, true, (variant) -> variant.model = modelLocation + "_wall_open"));
-	}
-
-	private void addDoor(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		/*String modelLocation = "forestry:block/arboriculture/doors/" + type.getName();
-		addVariants(feature.block(), new Builder()
-			.property(DoorBlock.FACING, Direction.SOUTH, (variant)-> variant.y = 90)
-			.property(DoorBlock.FACING, Direction.WEST, (variant)-> variant.y = 180)
-			.property(DoorBlock.FACING, Direction.NORTH, (variant)-> variant.y = 270)
-			.property());*/
-	}
-
-	private void addCultivationBlock(FeatureBlock<? extends Block, BlockItem> feature, BlockTypePlanter planter) {
-		addVariants(feature.block(), new Builder()
-				.always((variant) -> variant.model = "forestry:block/" + planter.getName())
-				.property(BlockStateProperties.FACING, Direction.EAST, (variant) -> variant.y = 90)
-				.property(BlockStateProperties.FACING, Direction.SOUTH, (variant) -> variant.y = 180)
-				.property(BlockStateProperties.FACING, Direction.WEST, (variant) -> variant.y = 270));
-
-	}
+	public abstract void registerStates();
 
 	protected Path makePath(ResourceLocation location) {
 		return this.generator.getOutputFolder().resolve("assets/" + location.getNamespace() + "/blockstates/" + location.getPath() + ".json");
 	}
 
-	public void addVariants(Block block, Builder builder) {
+	public void addVariants(Block block, IBuilder builder) {
 		blockToBuilder.put(block, builder);
-		builder.defaultState = block.getDefaultState();
 	}
 
 	@Override
@@ -266,72 +97,102 @@ public class BlockStateProvider implements IDataProvider {
 		return "Block State Provider";
 	}
 
-	public static class Builder {
-		private final Multimap<Integer, Pair<Predicate<BlockState>, Consumer<Variant>>> variants = HashMultimap.create();
-		private final List<Property> ignored = new LinkedList<>();
-		private BlockState defaultState;
+	public static class Builder implements IBuilder {
+		private final List<Consumer<Variant>> always = new LinkedList<>();
+		private final Map<Predicate<BlockState>, Consumer<Variant>> variants = new HashMap<>();
+		private final Multimap<BlockState, Consumer<Variant>> blockStateVariants = HashMultimap.create();
+		private final Deque<List<Property>> ignored = new ArrayDeque<>();
+		private final List<Property> alwaysIgnore = new LinkedList<>();
 
-		public <T extends Comparable<T>> Builder property(Property<T> property, T value, Consumer<Variant> consumer) {
-			return condition(1, (state) -> state.get(property) == value, consumer);
-		}
-
-		public <T extends Comparable<T>, V extends Comparable<V>> Builder property(Property<T> property, T value, Property<V> propertyTwo, V valueTwo, Consumer<Variant> consumer) {
-			return condition(1, (state) -> state.get(property) == value && state.get(propertyTwo) == valueTwo, consumer);
-		}
-
-		public <T extends Comparable<T>> Builder state(BlockState state, Consumer<Variant> consumer) {
-			return condition(0, (s) -> areStateEqual(s, state), consumer);
-		}
-
-		@SuppressWarnings("unchecked")
-		private boolean areStateEqual(BlockState a, BlockState b) {
-			for (Property i : ignored) {
-				a = withDefault(a, i);
-				b = withDefault(b, i);
-			}
-			return a.equals(b);
-		}
-
-		private <V extends Comparable<V>> BlockState withDefault(BlockState state, Property<V> property) {
-			return state.with(property, defaultState.get(property));
-		}
-
-		public Builder always(Consumer<Variant> consumer) {
-			return condition(2, (state) -> true, consumer);
-		}
-
-		public Builder ignore(Property property) {
-			ignored.add(property);
+		public Builder push() {
+			ignored.addFirst(new LinkedList<>());
 			return this;
 		}
 
-		public Builder condition(int priority, Predicate<BlockState> predicate, Consumer<Variant> consumer) {
-			variants.put(priority, Pair.of(predicate, consumer));
+		public Builder popIgnore() {
+			ignored.pop();
+			return this;
+		}
+
+		public Builder alwaysIgnore(Property... properties) {
+			alwaysIgnore.addAll(Arrays.asList(properties));
+			return this;
+		}
+
+		public <T extends Comparable<T>> Builder property(Property<T> property, T value, Consumer<Variant> consumer) {
+			return condition((state) -> state.get(property) == value, consumer);
+		}
+
+		public <T extends Comparable<T>, V extends Comparable<V>> Builder property(Property<T> property, T value, Property<V> propertyTwo, V valueTwo, Consumer<Variant> consumer) {
+			return condition((state) -> state.get(property) == value && state.get(propertyTwo) == valueTwo, consumer);
+		}
+
+		public <T extends Comparable<T>> Builder state(BlockState state, Consumer<Variant> consumer) {
+			Set<BlockState> mappedStates = new HashSet<>();
+			mappedStates.add(state);
+			List<Property> ignoredProperties = new LinkedList<>();
+			ignored.forEach(ignoredProperties::addAll);
+			ignoredProperties.addAll(alwaysIgnore);
+			for (Property property : ignoredProperties) {
+				//noinspection unchecked
+				mappedStates = mapStates(property, mappedStates);
+			}
+			mappedStates.forEach(mappedState -> blockStateVariants.put(mappedState, consumer));
+			return this;
+		}
+
+		private <V extends Comparable<V>> Set<BlockState> mapStates(Property<V> property, Set<BlockState> states) {
+			Set<BlockState> mappedStates = new HashSet<>();
+			for (V value : property.getAllowedValues()) {
+				states.forEach(mappedState -> mappedStates.add(mappedState.with(property, value)));
+			}
+			return mappedStates;
+		}
+
+		public Builder always(Consumer<Variant> consumer) {
+			always.add(consumer);
+			return this;
+		}
+
+		public Builder ignore(Property property) {
+			List<Property> properties;
+			if (ignored.isEmpty()) {
+				ignored.addFirst(properties = new LinkedList<>());
+			} else {
+				properties = ignored.getFirst();
+			}
+			properties.add(property);
+			return this;
+		}
+
+		public Builder condition(Predicate<BlockState> predicate, Consumer<Variant> consumer) {
+			variants.put(predicate, consumer);
 			return this;
 		}
 
 		public JsonObject serialize(Block block) {
 			JsonObject obj = new JsonObject();
-			JsonObject variants = new JsonObject();
+			JsonObject variantsObj = new JsonObject();
+			Variant defaultVariant = new Variant();
+			always.forEach(consumer -> consumer.accept(defaultVariant));
 			for (BlockState state : block.getStateContainer().getValidStates()) {
-				Variant variant = new Variant();
-				for (int i = 2; i >= 0; i--) {
-					for (Pair<Predicate<BlockState>, Consumer<Variant>> entry : this.variants.get(i)) {
-						if (entry.getFirst().test(state)) {
-							entry.getSecond().accept(variant);
-						}
+				Variant variant = defaultVariant.copy();
+				for (Map.Entry<Predicate<BlockState>, Consumer<Variant>> entry : this.variants.entrySet()) {
+					if (entry.getKey().test(state)) {
+						entry.getValue().accept(variant);
 					}
 				}
+				blockStateVariants.get(state).forEach(consumer -> consumer.accept(variant));
 				Map<IProperty<?>, Comparable<?>> properties = new HashMap<>(state.getValues());
-				ignored.forEach(properties::remove);
-				variants.add(BlockModelShapes.getPropertyMapString(properties), variant.serialize());
+				alwaysIgnore.forEach(properties::remove);
+				variantsObj.add(BlockModelShapes.getPropertyMapString(properties), variant.serialize());
 			}
-			obj.add("variants", variants);
+			obj.add("variants", variantsObj);
 			return obj;
 		}
 	}
 
-	private static class Variant {
+	public static class Variant {
 		private String model = "block/block";
 		@Nullable
 		private Boolean uvLock = null;
@@ -355,6 +216,16 @@ public class BlockStateProvider implements IDataProvider {
 				obj.addProperty("y", y);
 			}
 			return obj;
+		}
+
+		private Variant copy() {
+			Variant variant = new Variant();
+			variant.uvLock = uvLock;
+			variant.model = model;
+			variant.weight = weight;
+			variant.x = x;
+			variant.y = y;
+			return variant;
 		}
 
 		public Variant model(String model) {
@@ -383,21 +254,178 @@ public class BlockStateProvider implements IDataProvider {
 		}
 	}
 
-	public static class MultipartBuilder {
+	public static class MultipartBuilder implements IBuilder {
 		public final List<Selector> selectors = new LinkedList<>();
+
+		public <V extends Comparable<V>> MultipartBuilder always(UnaryOperator<Variant> builder) {
+			selectors.add(new Selector(null, Collections.singletonList(builder.apply(new Variant()))));
+			return this;
+		}
+
+		public <V extends Comparable<V>> MultipartBuilder property(UnaryOperator<Variant> builder, Property<V> property, V... values) {
+			return and(builder, new ConditionBuilder().property(property, values));
+		}
+
+		public MultipartBuilder or(UnaryOperator<Variant> builder, ConditionBuilder condition) {
+			selectors.add(new Selector(new OrCondition(condition.conditions), Collections.singletonList(builder.apply(new Variant()))));
+			return this;
+		}
+
+		public MultipartBuilder and(UnaryOperator<Variant> builder, ConditionBuilder condition) {
+			selectors.add(new Selector(new AndCondition(condition.conditions, false), Collections.singletonList(builder.apply(new Variant()))));
+			return this;
+		}
+
+		public JsonObject serialize(Block block) {
+			JsonObject obj = new JsonObject();
+			JsonArray selectorsArray = new JsonArray();
+			selectors.forEach(selector -> selectorsArray.add(selector.serialize()));
+			obj.add("multipart", selectorsArray);
+			return obj;
+		}
+
+	}
+
+	public static class ConditionBuilder {
+		private final List<ICondition> conditions = new LinkedList<>();
+
+		public <V extends Comparable<V>> ConditionBuilder property(Property<V> property, V... values) {
+			conditions.add(new PropertyValueCondition<>(property, false, values));
+			return this;
+		}
+
+		public <V extends Comparable<V>> ConditionBuilder propertyNegated(Property<V> property, V... values) {
+			conditions.add(new PropertyValueCondition<>(property, true, values));
+			return this;
+		}
+
+		public ConditionBuilder or(ConditionBuilder condition) {
+			conditions.add(new OrCondition(condition.conditions));
+			return this;
+		}
+
+		public ConditionBuilder and(ConditionBuilder condition) {
+			conditions.add(new AndCondition(condition.conditions, true));
+			return this;
+		}
 	}
 
 	public static class Selector {
+		@Nullable
 		private final ICondition condition;
 		private final List<Variant> variantList;
 
-		public Selector(ICondition condition, List<Variant> variantList) {
+		public Selector(@Nullable ICondition condition, List<Variant> variantList) {
 			this.condition = condition;
 			this.variantList = variantList;
+		}
+
+		public JsonElement serialize() {
+			JsonObject obj = new JsonObject();
+			if (condition != null) {
+				obj.add("when", condition.serialize());
+			}
+			if (variantList.size() > 1) {
+				JsonArray variantArray = new JsonArray();
+				variantList.forEach(variant -> variantArray.add(variant.serialize()));
+				obj.add("apply", variantArray);
+			} else {
+				obj.add("apply", variantList.get(0).serialize());
+			}
+			return obj;
 		}
 	}
 
 	public interface ICondition {
+		JsonElement serialize();
 
+		String getName();
+	}
+
+	public static class AndCondition implements ICondition {
+		private final Iterable<ICondition> conditions;
+		private final boolean nested;
+
+		public AndCondition(Iterable<ICondition> conditions, boolean nested) {
+			this.conditions = conditions;
+			this.nested = nested;
+		}
+
+		@Override
+		public JsonElement serialize() {
+			JsonObject obj = new JsonObject();
+			if (nested) {
+				JsonArray conditionArray = new JsonArray();
+				conditions.forEach(condition -> conditionArray.add(condition.serialize()));
+				obj.add("AND", conditionArray);
+			} else {
+				conditions.forEach(condition -> obj.add(condition.getName(), condition.serialize()));
+			}
+			return obj;
+		}
+
+		@Override
+		public String getName() {
+			return "AND";
+		}
+	}
+
+	public static class OrCondition implements ICondition {
+		private final Iterable<ICondition> conditions;
+
+		public OrCondition(Iterable<ICondition> conditions) {
+			this.conditions = conditions;
+		}
+
+		@Override
+		public JsonElement serialize() {
+			JsonObject obj = new JsonObject();
+			JsonArray conditionArray = new JsonArray();
+			conditions.forEach(condition -> conditionArray.add(condition.serialize()));
+			obj.add("OR", conditionArray);
+			return obj;
+		}
+
+		@Override
+		public String getName() {
+			return "OR";
+		}
+	}
+
+	public static class PropertyValueCondition<V extends Comparable<V>> implements ICondition {
+		private final Property<V> property;
+		private final V[] values;
+		private final boolean negated;
+
+		public PropertyValueCondition(Property<V> property, boolean negated, V... values) {
+			this.property = property;
+			this.values = values;
+			this.negated = negated;
+		}
+
+		@Override
+		public JsonElement serialize() {
+			StringBuilder valueName = new StringBuilder();
+			if (negated) {
+				valueName.append('!');
+			}
+			for (int i = 0; i < values.length; i++) {
+				V value = values[i];
+				if (i > 0) {
+					valueName.append('|');
+				}
+				valueName.append(property.getName(value));
+			}
+			return new JsonPrimitive(valueName.toString());
+		}
+
+		@Override
+		public String getName() {
+			return property.getName();
+		}
+	}
+
+	public interface IBuilder {
+		JsonObject serialize(Block block);
 	}
 }

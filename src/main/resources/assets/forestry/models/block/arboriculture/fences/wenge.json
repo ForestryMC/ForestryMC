@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/fence",
+  "parent": "minecraft:block/fence_post",
   "textures": {
     "texture": "forestry:block/wood/planks.wenge"
   }

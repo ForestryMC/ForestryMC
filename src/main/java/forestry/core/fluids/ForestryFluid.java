@@ -19,22 +19,24 @@ import net.minecraft.world.IWorldReader;
 
 import net.minecraftforge.fluids.FluidAttributes;
 
+import forestry.modules.features.FeatureFluid;
+
 public abstract class ForestryFluid extends FlowingFluid {
 	public final boolean flowing;
-	public final ForestryFluids definition;
+	public final FeatureFluid definition;
 
-	public ForestryFluid(ForestryFluids definition, boolean flowing) {
+	public ForestryFluid(FeatureFluid definition, boolean flowing) {
 		this.definition = definition;
 		this.flowing = flowing;
 	}
 
 	@Override
 	protected FluidAttributes createAttributes(Fluid fluid) {
-		ResourceLocation[] resources = definition.getResources();
-		return FluidAttributes.builder(fluid.getRegistryName().getPath(), resources[0], definition.flowTextureExists() ? resources[1] : resources[0])
-			.density(definition.getDensity())
-			.viscosity(definition.getViscosity())
-			.temperature(definition.getTemperature())
+		ResourceLocation[] resources = definition.getProperties().resources;
+		return FluidAttributes.builder(fluid.getRegistryName().getPath(), resources[0], resources[1])
+			.density(definition.getProperties().density)
+			.viscosity(definition.getProperties().viscosity)
+			.temperature(definition.getProperties().temperature)
 			.build();
 	}
 
@@ -43,7 +45,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 		if (flowing) {
 			return this;
 		}
-		return definition.getFlowing();
+		return definition.flowing();
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 		if (!flowing) {
 			return this;
 		}
-		return definition.getFluid();
+		return definition.fluid();
 	}
 
 	@Override
@@ -102,7 +104,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	public Block getBlock() {
-		return flowing ? definition.flowingBlock : definition.sourceBlock;
+		return definition.fluidBlock().block();
 	}
 
 	@Override
@@ -111,7 +113,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	public static class Flowing extends ForestryFluid {
-		public Flowing(ForestryFluids definition) {
+		public Flowing(FeatureFluid definition) {
 			super(definition, true);
 		}
 
@@ -132,7 +134,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	public static class Source extends ForestryFluid {
-		public Source(ForestryFluids definition) {
+		public Source(FeatureFluid definition) {
 			super(definition, false);
 		}
 

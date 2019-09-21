@@ -34,7 +34,7 @@ public class HiveGenTree extends HiveGen {
 
 	@Override
 	public BlockPos getPosForHive(World world, int x, int z) {
-		// getComb top leaf block
+		// get top leaf block
 		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z)).down();
 		if (topPos.getY() <= 0) {
 			return null;
@@ -45,7 +45,7 @@ public class HiveGenTree extends HiveGen {
 			return null;
 		}
 
-		// getComb to the bottom of the leaves
+		// get to the bottom of the leaves
 		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
 		do {
 			pos.move(Direction.DOWN);

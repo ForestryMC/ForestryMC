@@ -82,7 +82,7 @@
 //		}
 //
 //		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
-//		guiItemStacks.set(craftOutputSlot, outputs.getComb(0));
+//		guiItemStacks.set(craftOutputSlot, outputs.get(0));
 //
 //		IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 //
@@ -91,7 +91,7 @@
 //
 //		List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
 //		if (!fluidInputs.isEmpty()) {
-//			guiFluidStacks.set(inputTank, fluidInputs.getComb(0));
+//			guiFluidStacks.set(inputTank, fluidInputs.get(0));
 //		}
 //	}
 //

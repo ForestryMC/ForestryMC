@@ -689,7 +689,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 			// vanilla
 		}
 	},
-	Acacia(TreeBranchDefinition.ACACIA, "desertAcacia", "erioloba", true, EnumLeafType.DECIDUOUS, new Color(0x748C1C), new Color(0xb3b302), EnumForestryWoodType.ACACIA_FORESTRY) {
+	Acacia(TreeBranchDefinition.ACACIA, "desertAcacia", "erioloba", true, EnumLeafType.DECIDUOUS, new Color(0x748C1C), new Color(0xb3b302), EnumForestryWoodType.ACACIA_DESERT) {
 		@Override
 		public Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree) {
 			return new FeatureAcacia(tree);

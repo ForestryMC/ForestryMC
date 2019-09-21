@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 
@@ -19,7 +18,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
-import forestry.core.fluids.ForestryFluids;
 import forestry.core.models.ClientManager;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
@@ -86,40 +84,4 @@ public class ProxyRenderClient extends ProxyRender {
 	public void registerItemAndBlockColors() {
 		ClientManager.getInstance().registerItemAndBlockColors();
 	}
-
-	@Override
-	public void registerFluidStateMapper(Block block, ForestryFluids fluid) {
-		//		final ModelResourceLocation fluidLocation = new ModelResourceLocation("forestry:blockforestryfluid", fluid.getTag());
-		//TODO - fluids
-		// StateMapperBase ignoreState = new FluidStateMapper(fluidLocation);
-		//		ModelLoader.setCustomStateMapper(block, ignoreState);
-		//		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(block), new FluidItemMeshDefinition(fluidLocation));
-		//		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), fluidLocation);
-	}
-
-	//	private static class FluidStateMapper extends StateMapperBase {
-	//		private final ModelResourceLocation fluidLocation;
-	//
-	//		public FluidStateMapper(ModelResourceLocation fluidLocation) {
-	//			this.fluidLocation = fluidLocation;
-	//		}
-	//
-	//		@Override
-	//		protected ModelResourceLocation getModelResourceLocation(BlockState BlockState) {
-	//			return fluidLocation;
-	//		}
-	//	}
-
-	//	private static class FluidItemMeshDefinition implements ItemMeshDefinition {
-	//		private final ModelResourceLocation fluidLocation;
-	//
-	//		public FluidItemMeshDefinition(ModelResourceLocation fluidLocation) {
-	//			this.fluidLocation = fluidLocation;
-	//		}
-	//
-	//		@Override
-	//		public ModelResourceLocation getModelLocation(ItemStack stack) {
-	//			return fluidLocation;
-	//		}
-	//	}
 }

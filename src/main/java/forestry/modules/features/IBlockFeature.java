@@ -2,6 +2,7 @@ package forestry.modules.features;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,7 +16,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import forestry.api.core.IBlockProvider;
 import forestry.core.proxy.Proxies;
 
-public interface IBlockFeature<B extends Block, I extends BlockItem> extends IItemFeature<B, I>, IBlockProvider<B, I> {
+public interface IBlockFeature<B extends Block, I extends BlockItem> extends IItemFeature<I>, IBlockProvider<B, I> {
 
 	default B block() {
 		B block = getBlock();
@@ -30,14 +31,24 @@ public interface IBlockFeature<B extends Block, I extends BlockItem> extends IIt
 		return (T) block();
 	}
 
-	default B apply(B block) {
-		return block;
-	}
-
 	void setBlock(B block);
 
+	Supplier<B> getBlockConstructor();
+
 	@Nullable
-	Function<B, I> getItemConstructor();
+	default Supplier<I> getItemConstructor() {
+		if (!hasBlock()) {
+			return null;
+		}
+		Function<B, I> itemBlockConstructor = getItemBlockConstructor();
+		if (itemBlockConstructor == null) {
+			return null;
+		}
+		return () -> itemBlockConstructor.apply(block());
+	}
+
+	@Nullable
+	Function<B, I> getItemBlockConstructor();
 
 	@Override
 	@SuppressWarnings("unchecked")

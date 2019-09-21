@@ -178,7 +178,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 		} else if (secondParent.getRegistryName().equals(allele.getRegistryName())) {
 			return firstParent;
 		} else {
-			throw new IllegalArgumentException("Tried to getComb partner for allele that is not part of this mutation.");
+			throw new IllegalArgumentException("Tried to get partner for allele that is not part of this mutation.");
 		}
 	}
 

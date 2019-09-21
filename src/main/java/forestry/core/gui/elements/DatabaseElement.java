@@ -235,8 +235,8 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
 		Map<String, ItemStack> iconStacks = chromosome.getSpeciesRoot().getAlyzerPlugin().getIconStacks();
 
-		GuiUtil.drawItemStack(this, iconStacks.getComb(primary.getUID()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
-		GuiUtil.drawItemStack(this, iconStacks.getComb(secondary.getUID()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
+		GuiUtil.drawItemStack(this, iconStacks.get(primary.getUID()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
+		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getUID()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
 
 		String primaryName = customPrimaryName == null ? primary.getAlleleName() : customPrimaryName;
 		String secondaryName = customSecondaryName == null ? secondary.getAlleleName() : customSecondaryName;

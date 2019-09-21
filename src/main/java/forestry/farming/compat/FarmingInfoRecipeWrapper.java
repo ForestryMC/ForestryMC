@@ -78,7 +78,7 @@
 //			int index = startIndex + i % 4;
 //			ItemStack stack;
 //			if (values.size() > i) {
-//				stack = itemFunction.apply(values.getComb(i));
+//				stack = itemFunction.apply(values.get(i));
 //			} else {
 //				stack = null;
 //			}
@@ -89,7 +89,7 @@
 //	private static void addItemToList(List<List<ItemStack>> items, int index, @Nullable ItemStack stack) {
 //		List<ItemStack> itemList;
 //		if (items.size() > index) {
-//			itemList = items.getComb(index);
+//			itemList = items.get(index);
 //			if (itemList == null) {
 //				itemList = new ArrayList<>();
 //				items.set(index, itemList);

@@ -66,7 +66,7 @@ public class CropBasicGrowthCraft extends Crop {
 		}
 
 		if (isRice) {
-			// TODO: GrowthCraft for MC 1.9. Don't use meta, getComb the actual block state.
+			// TODO: GrowthCraft for MC 1.9. Don't use meta, get the actual block state.
 			world.setBlockState(pos.down(), block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
 			//TODO flatten
 		}

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "forestry:block/arboriculture/planks/spruce"
+      "model": "block/spruce_planks"
     }
   }
 }

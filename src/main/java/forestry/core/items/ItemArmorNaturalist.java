@@ -49,12 +49,6 @@ public class ItemArmorNaturalist extends ArmorItem {
 		return Constants.MOD_ID + ":" + Constants.TEXTURE_NATURALIST_ARMOR_PRIMARY;
 	}
 
-	//TODO - maybe IDyeableArmorItem?
-	//	@Override
-	//	public boolean hasColor(ItemStack itemstack) {
-	//		return false;
-	//	}
-
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {

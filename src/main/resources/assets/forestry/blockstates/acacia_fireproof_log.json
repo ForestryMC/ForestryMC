@@ -1,15 +1,15 @@
 {
   "variants": {
     "axis=x": {
-      "model": "forestry:block/arboriculture/logs/acacia",
+      "model": "block/acacia_log",
       "x": 90,
       "y": 90
     },
     "axis=y": {
-      "model": "forestry:block/arboriculture/logs/acacia"
+      "model": "block/acacia_log"
     },
     "axis=z": {
-      "model": "forestry:block/arboriculture/logs/acacia",
+      "model": "block/acacia_log",
       "x": 90
     }
   }

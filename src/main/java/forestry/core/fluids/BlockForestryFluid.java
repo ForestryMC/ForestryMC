@@ -20,7 +20,6 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -32,28 +31,25 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import forestry.core.entities.ParticleColoredDripParticle;
+import forestry.modules.features.FeatureFluid;
+import forestry.modules.features.FluidProperties;
 
 public class BlockForestryFluid extends FlowingFluidBlock {
 
+	private final FeatureFluid feature;
 	private final boolean flammable;
 	private final int flammability;
 	private final Color color;
 
-	public BlockForestryFluid(ForestryFluids forestryFluid) {
-		this(forestryFluid, 0, false);
-	}
+	public BlockForestryFluid(FeatureFluid feature) {
+		super(feature.fluid(), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		this.feature = feature;
 
-	public BlockForestryFluid(ForestryFluids forestryFluid, int flammability, boolean flammable) {
-		this((FlowingFluid) forestryFluid.getFluid(), flammability, flammable, forestryFluid.getParticleColor());
-	}
+		FluidProperties properties = feature.getProperties();
+		this.flammability = properties.flammability;
+		this.flammable = properties.flammable;
 
-	public BlockForestryFluid(FlowingFluid fluid, int flammability, boolean flammable, Color color) {
-		super(fluid, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
-
-		this.flammability = flammability;
-		this.flammable = flammable;
-
-		this.color = color;
+		this.color = properties.particleColor;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package forestry.modules.features;
 
+import java.util.function.Supplier;
+
 import net.minecraft.item.Item;
 
 import net.minecraftforge.event.RegistryEvent;
@@ -9,11 +11,9 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import forestry.api.core.IItemProvider;
 import forestry.core.proxy.Proxies;
 
-public interface IItemFeature<O, I extends Item> extends IModFeature<O>, IItemProvider<I> {
+public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider<I> {
 
-	default I apply(I item) {
-		return item;
-	}
+	Supplier<I> getItemConstructor();
 
 	void setItem(I item);
 
