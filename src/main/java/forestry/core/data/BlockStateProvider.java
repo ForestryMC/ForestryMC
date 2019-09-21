@@ -3,6 +3,7 @@ package forestry.core.data;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Table;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -41,6 +42,7 @@ import net.minecraft.state.properties.SlabType;
 import net.minecraft.state.properties.StairsShape;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.feature.Feature;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -57,6 +59,9 @@ import forestry.arboriculture.blocks.BlockForestryPlank;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
 import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.cultivation.blocks.BlockPlanter;
+import forestry.cultivation.blocks.BlockTypePlanter;
+import forestry.cultivation.features.CultivationBlocks;
 import forestry.modules.features.FeatureBlock;
 
 public class BlockStateProvider implements IDataProvider {
@@ -157,6 +162,9 @@ public class BlockStateProvider implements IDataProvider {
 		for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
 			addVariants(leaves, new Builder().always(variant -> variant.model = "forestry:block/leaves"));
 		}
+		for(Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
+			addCultivationBlock(cell.getValue(), cell.getRowKey());
+		}
 	}
 
 	private void addPlank(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
@@ -233,6 +241,15 @@ public class BlockStateProvider implements IDataProvider {
 			.property(DoorBlock.FACING, Direction.WEST, (variant)-> variant.y = 180)
 			.property(DoorBlock.FACING, Direction.NORTH, (variant)-> variant.y = 270)
 			.property());*/
+	}
+
+	private void addCultivationBlock(FeatureBlock<? extends Block, BlockItem> feature, BlockTypePlanter planter) {
+		addVariants(feature.block(), new Builder()
+				.always((variant) -> variant.model = "forestry:block/" + planter.getName())
+				.property(BlockStateProperties.FACING, Direction.EAST, (variant) -> variant.y = 90)
+				.property(BlockStateProperties.FACING, Direction.SOUTH, (variant) -> variant.y = 180)
+				.property(BlockStateProperties.FACING, Direction.WEST, (variant) -> variant.y = 270));
+
 	}
 
 	protected Path makePath(ResourceLocation location) {

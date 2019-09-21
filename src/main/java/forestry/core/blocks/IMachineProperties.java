@@ -29,6 +29,7 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	/**
 	 * Registers the tile entity with MC.
 	 */
+	//TODO remove
 	void registerTileEntity();
 
 	void clientSetup();

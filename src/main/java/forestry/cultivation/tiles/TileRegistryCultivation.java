@@ -18,13 +18,13 @@ public class TileRegistryCultivation extends TileRegistry {
 	//	public final TileEntityType<TilePlantation> PLANTATION;
 
 	public TileRegistryCultivation() {
-		ARBORETUM = registerTileEntityType(TileArboretum::new, "arboretum", CultivationBlocks.PLANTER.get(BlockTypePlanter.ARBORETUM).block());
-		BOG = registerTileEntityType(TileBog::new, "bog", CultivationBlocks.PLANTER.get(BlockTypePlanter.PEAT_POG).block());
-		CROPS = registerTileEntityType(TileFarmCrops::new, "crops", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_CROPS).block());
-		ENDER = registerTileEntityType(TileFarmEnder::new, "ender", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_ENDER).block());
-		GOURD = registerTileEntityType(TileFarmGourd::new, "gourd", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_GOURD).block());
-		MUSHROOM = registerTileEntityType(TileFarmMushroom::new, "mushroom", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_MUSHROOM).block());
-		NETHER = registerTileEntityType(TileFarmNether::new, "nether", CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_NETHER).block());
+		ARBORETUM = registerTileEntityType(TileArboretum::new, "arboretum", CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.ARBORETUM));
+		BOG = registerTileEntityType(TileBog::new, "bog", CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.PEAT_POG));
+		CROPS = registerTileEntityType(TileFarmCrops::new, "crops", CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_CROPS));
+		ENDER = registerTileEntityType(TileFarmEnder::new, "ender", CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_ENDER));
+		GOURD = registerTileEntityType(TileFarmGourd::new, "gourd", CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_GOURD));
+		MUSHROOM = registerTileEntityType(TileFarmMushroom::new, "mushroom", CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_MUSHROOM));
+		NETHER = registerTileEntityType(TileFarmNether::new, "nether", CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_NETHER));
 	}
 
 
