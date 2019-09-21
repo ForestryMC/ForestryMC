@@ -1,15 +1,15 @@
 {
   "variants": {
     "axis=x": {
-      "model": "forestry:block/arboriculture/logs/birch",
+      "model": "block/birch_log",
       "x": 90,
       "y": 90
     },
     "axis=y": {
-      "model": "forestry:block/arboriculture/logs/birch"
+      "model": "block/birch_log"
     },
     "axis=z": {
-      "model": "forestry:block/arboriculture/logs/birch",
+      "model": "block/birch_log",
       "x": 90
     }
   }

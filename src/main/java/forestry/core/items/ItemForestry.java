@@ -58,19 +58,6 @@ public class ItemForestry extends Item {
 		return burnTime;
 	}
 
-	public ItemStack getItemStack() {
-		return new ItemStack(this);
-	}
-
-	public ItemStack getItemStack(int amount) {
-		return new ItemStack(this, amount);
-	}
-
-	//TODO - figure out how tags fit into this
-	public ItemStack getWildcard() {
-		return new ItemStack(this, 1);
-	}
-
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {

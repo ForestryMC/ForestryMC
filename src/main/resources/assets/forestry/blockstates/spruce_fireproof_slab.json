@@ -1,10 +1,10 @@
 {
   "variants": {
     "type=top": {
-      "model": "forestry:block/arboriculture/slabs/spruce_top"
+      "model": "block/spruce_slab_top"
     },
     "type=bottom": {
-      "model": "forestry:block/arboriculture/slabs/spruce"
+      "model": "block/spruce_slab"
     },
     "type=double": {
       "model": "forestry:block/arboriculture/planks/spruce"

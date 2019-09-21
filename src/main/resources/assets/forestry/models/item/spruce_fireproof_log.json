@@ -1,3 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/logs/spruce"
+  "parent": "minecraft:block/spruce_log"
 }

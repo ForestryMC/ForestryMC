@@ -24,6 +24,7 @@ import net.minecraft.util.Direction;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
@@ -112,24 +113,35 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 		for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
 			addVariants(leaves, new Builder().always(variant -> variant.model("forestry:block/leaves")).alwaysIgnore(LeavesBlock.DISTANCE, LeavesBlock.PERSISTENT));
 		}
-		for (Block pod : ArboricultureBlocks.PODS.getBlocks()) {
-			//addVariants(pod, new Builder().always());
+	}
+
+	private String getLocation(IWoodType type, WoodBlockKind kind) {
+		String location;
+		if (type instanceof EnumVanillaWoodType) {
+			location = "block/" + type.getName() + "_" + kind.getName();
+		} else {
+			String kindName = kind.getName();
+			if (!kindName.endsWith("s")) {
+				kindName = kindName + "s";
+			}
+			location = "forestry:block/arboriculture/" + kindName + "/" + type.getName();
 		}
+		return location;
 	}
 
 	private void addPlank(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		addVariants(feature.block(), new Builder().always((variant -> variant.model("forestry:block/arboriculture/planks/" + type.getName()))));
+		addVariants(feature.block(), new Builder().always((variant -> variant.model(getLocation(type, WoodBlockKind.PLANKS)))));
 	}
 
 	private void addLog(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
 		addVariants(feature.block(), new Builder()
-			.always((variant) -> variant.model("forestry:block/arboriculture/logs/" + type.getName()))
+			.always((variant) -> variant.model(getLocation(type, WoodBlockKind.LOG)))
 			.property(BlockStateProperties.AXIS, Direction.Axis.X, (variant) -> variant.rotationX(90).rotationY(90))
 			.property(BlockStateProperties.AXIS, Direction.Axis.Z, (variant) -> variant.rotationX(90)));
 	}
 
 	private void addStair(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/stairs/" + type.getName();
+		String modelLocation = getLocation(type, WoodBlockKind.STAIRS);
 		BlockState defaultState = feature.defaultState();
 		addVariants(feature.block(), new Builder()
 			.alwaysIgnore(StairsBlock.WATERLOGGED)
@@ -163,7 +175,7 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 	}
 
 	private void addSlab(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/slabs/" + type.getName();
+		String modelLocation = getLocation(type, WoodBlockKind.SLAB);
 		addVariants(feature.block(), new Builder()
 			.alwaysIgnore(SlabBlock.WATERLOGGED)
 			.property(SlabBlock.TYPE, SlabType.TOP, (variant) -> variant.model(modelLocation + "_top"))
@@ -172,7 +184,7 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 	}
 
 	private void addFence(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/fences/" + type.getName();
+		String modelLocation = getLocation(type, WoodBlockKind.FENCE);
 		addVariants(feature.block(), new MultipartBuilder()
 			.always(variant -> variant.model(modelLocation))
 			.property(variant -> variant.model(modelLocation + "_side").lock(true), FourWayBlock.NORTH, true)
@@ -182,7 +194,7 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 	}
 
 	private void addFenceGate(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/fence_gates/" + type.getName();
+		String modelLocation = getLocation(type, WoodBlockKind.FENCE_GATE);
 		addVariants(feature.block(), new Builder()
 			.always((variant) -> variant.lock(true))
 			.alwaysIgnore(FenceGateBlock.POWERED)
@@ -196,7 +208,7 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 	}
 
 	private void addDoor(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
-		String modelLocation = "forestry:block/arboriculture/doors/" + type.getName();
+		String modelLocation = getLocation(type, WoodBlockKind.DOOR);
 		BlockState defaultState = feature.block().getDefaultState();
 		addVariants(feature.block(), new Builder()
 			.alwaysIgnore(DoorBlock.POWERED)

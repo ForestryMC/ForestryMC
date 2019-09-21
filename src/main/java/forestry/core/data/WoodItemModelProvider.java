@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.blocks.BlockForestryDoor;
 import forestry.arboriculture.blocks.BlockForestryFence;
 import forestry.arboriculture.blocks.BlockForestryFenceGate;
@@ -17,7 +18,6 @@ import forestry.arboriculture.blocks.BlockForestryPlank;
 import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
 import forestry.arboriculture.features.ArboricultureBlocks;
-import forestry.core.config.Constants;
 import forestry.modules.features.FeatureBlock;
 
 public class WoodItemModelProvider extends ModelProvider {
@@ -97,31 +97,47 @@ public class WoodItemModelProvider extends ModelProvider {
 		}
 	}
 
+	private String getLocation(IWoodType type, WoodBlockKind kind) {
+		String location;
+		if (type instanceof EnumVanillaWoodType) {
+			location = "block/" + type.getName() + "_" + kind.getName();
+		} else if (kind == WoodBlockKind.DOOR) {
+			location = "forestry:item/doors/" + type.getName();
+		} else {
+			String kindName = kind.getName();
+			if (!kindName.endsWith("s")) {
+				kindName = kindName + "s";
+			}
+			location = "forestry:block/arboriculture/" + kindName + "/" + type.getName();
+		}
+		return location;
+	}
+
 	private void addPlank(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/arboriculture/planks/" + type.getName())));
+		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.PLANKS))));
 	}
 
 	private void addLog(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/arboriculture/logs/" + type.getName())));
+		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.LOG))));
 	}
 
 	private void addStair(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/arboriculture/stairs/" + type.getName())));
+		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.STAIRS))));
 	}
 
 	private void addSlab(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/arboriculture/slabs/" + type.getName())));
+		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.SLAB))));
 	}
 
 	private void addFence(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/arboriculture/fences/" + type.getName() + "_inventory")));
+		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE) + "_inventory")));
 	}
 
 	private void addFenceGate(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/arboriculture/fence_gates/" + type.getName())));
+		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE_GATE))));
 	}
 
 	private void addDoor(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().item().layer(0, new ResourceLocation(Constants.MOD_ID, "item/doors/" + type.getName())));
+		registerModel(item, new ModelBuilder().item().layer(0, new ResourceLocation(getLocation(type, WoodBlockKind.DOOR))));
 	}
 }

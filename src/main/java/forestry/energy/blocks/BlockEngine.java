@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -120,7 +121,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation rot) {
-		return rotate(world, pos);    //TODO check
+		return rotate(state, world, pos);    //TODO check
 	}
 
 	private static boolean isOrientedAtEnergyReciever(IWorld world, BlockPos pos, Direction orientation) {
@@ -129,32 +130,28 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
 	}
 
-	private static BlockState rotate(IWorld world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		Direction blockFacing = blockState.get(FACING);
+	private static BlockState rotate(BlockState state, IWorld world, BlockPos pos) {
+		Direction blockFacing = state.get(FACING);
 		for (int i = blockFacing.ordinal() + 1; i <= blockFacing.ordinal() + 6; ++i) {
 			Direction orientation = Direction.values()[i % 6];
 			if (isOrientedAtEnergyReciever(world, pos, orientation)) {
-				BlockState newState = blockState.with(FACING, orientation);
-				if (world.setBlockState(pos, blockState, 3)) {//;	//TODO flags
-					return newState;
-				}
+				return state.with(FACING, orientation);
 			}
 		}
-		return blockState;
+		return state;
 	}
 
+	@Nullable
 	@Override
-	public void rotateAfterPlacement(PlayerEntity player, World world, BlockPos pos, Direction side) {
-		Direction orientation = side.getOpposite();
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		Direction orientation = context.getFace().getOpposite();
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
 		if (isOrientedAtEnergyReciever(world, pos, orientation)) {
 			BlockState blockState = world.getBlockState(pos);
-			blockState = blockState.with(FACING, orientation);
-			world.setBlockState(pos, blockState);
-		} else {
-			super.rotateAfterPlacement(player, world, pos, side);
-			rotate(world, pos);
+			return blockState.with(FACING, orientation);
 		}
+		return rotate(getDefaultState().with(FACING, context.getPlacementHorizontalFacing()), world, pos);
 	}
 
 	//TODO voxelShapes?

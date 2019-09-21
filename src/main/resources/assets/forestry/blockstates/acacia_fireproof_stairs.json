@@ -1,213 +1,213 @@
 {
   "variants": {
-    "shape=straight,half=top,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=north,half=top,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=inner_left,half=top,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=north,half=top,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=inner_right,half=top,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=north,half=top,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180
     },
-    "shape=outer_left,half=top,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=north,half=top,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=outer_right,half=top,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=north,half=top,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180
     },
-    "shape=straight,half=bottom,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=north,half=bottom,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true,
       "y": 270
     },
-    "shape=inner_left,half=bottom,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=north,half=bottom,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "y": 180
     },
-    "shape=inner_right,half=bottom,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=north,half=bottom,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "y": 270
     },
-    "shape=outer_left,half=bottom,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=north,half=bottom,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "y": 180
     },
-    "shape=outer_right,half=bottom,facing=north": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=north,half=bottom,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "y": 270
     },
-    "shape=straight,half=top,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=south,half=top,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=inner_left,half=top,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=south,half=top,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=inner_right,half=top,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=south,half=top,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=outer_left,half=top,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=south,half=top,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=outer_right,half=top,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=south,half=top,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=straight,half=bottom,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=south,half=bottom,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true,
       "y": 90
     },
-    "shape=inner_left,half=bottom,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=south,half=bottom,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true
     },
-    "shape=inner_right,half=bottom,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=south,half=bottom,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "y": 90
     },
-    "shape=outer_left,half=bottom,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=south,half=bottom,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true
     },
-    "shape=outer_right,half=bottom,facing=south": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=south,half=bottom,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "y": 90
     },
-    "shape=straight,half=top,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=west,half=top,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=inner_left,half=top,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=west,half=top,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=inner_right,half=top,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=west,half=top,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=outer_left,half=top,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=west,half=top,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=outer_right,half=top,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=west,half=top,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=straight,half=bottom,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=west,half=bottom,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true,
       "y": 180
     },
-    "shape=inner_left,half=bottom,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=west,half=bottom,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "y": 90
     },
-    "shape=inner_right,half=bottom,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=west,half=bottom,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "y": 180
     },
-    "shape=outer_left,half=bottom,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=west,half=bottom,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "y": 90
     },
-    "shape=outer_right,half=bottom,facing=west": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=west,half=bottom,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "y": 180
     },
-    "shape=straight,half=top,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=east,half=top,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true,
       "x": 180
     },
-    "shape=inner_left,half=top,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=east,half=top,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180
     },
-    "shape=inner_right,half=top,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=east,half=top,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=outer_left,half=top,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=east,half=top,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180
     },
-    "shape=outer_right,half=top,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=east,half=top,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=straight,half=bottom,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia",
+    "facing=east,half=bottom,shape=straight": {
+      "model": "block/acacia_stairs",
       "uvlock": true
     },
-    "shape=inner_left,half=bottom,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=east,half=bottom,shape=inner_left": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true,
       "y": 270
     },
-    "shape=inner_right,half=bottom,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_inner",
+    "facing=east,half=bottom,shape=inner_right": {
+      "model": "block/acacia_stairs_inner",
       "uvlock": true
     },
-    "shape=outer_left,half=bottom,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=east,half=bottom,shape=outer_left": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true,
       "y": 270
     },
-    "shape=outer_right,half=bottom,facing=east": {
-      "model": "forestry:block/arboriculture/stairs/acacia_outer",
+    "facing=east,half=bottom,shape=outer_right": {
+      "model": "block/acacia_stairs_outer",
       "uvlock": true
     }
   }

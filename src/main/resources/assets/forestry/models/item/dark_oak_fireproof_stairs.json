@@ -1,3 +1,3 @@
 {
-  "parent": "forestry:block/arboriculture/stairs/dark_oak"
+  "parent": "minecraft:block/dark_oak_stairs"
 }

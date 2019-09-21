@@ -14,11 +14,18 @@ import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.Placement;
 
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraftforge.fml.common.IWorldGenerator;
 
@@ -40,7 +47,14 @@ public class WorldGenerator implements IWorldGenerator {
 	//	private OreFeature tinGenerator;
 
 	public WorldGenerator() {
-		MinecraftForge.EVENT_BUS.register(this);
+		for (Biome biome : ForgeRegistries.BIOMES) {
+			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.END)) {
+				continue;
+			}
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36), Placement.RANDOM_COUNT_RANGE, new CountRangeConfig(4, 56, 0, 184)));
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6), Placement.RANDOM_COUNT_RANGE, new CountRangeConfig(20, 32, 0, 76)));
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6), Placement.RANDOM_COUNT_RANGE, new CountRangeConfig(20, 16, 0, 76)));
+		}
 	}
 
 	@Override

@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "forestry:block/arboriculture/fences/acacia"
+        "model": "block/acacia_fence"
       }
     },
     {
@@ -10,7 +10,7 @@
         "north": "true"
       },
       "apply": {
-        "model": "forestry:block/arboriculture/fences/acacia_side",
+        "model": "block/acacia_fence_side",
         "uvlock": true
       }
     },
@@ -19,7 +19,7 @@
         "east": "true"
       },
       "apply": {
-        "model": "forestry:block/arboriculture/fences/acacia_side",
+        "model": "block/acacia_fence_side",
         "uvlock": true,
         "y": 90
       }
@@ -29,7 +29,7 @@
         "south": "true"
       },
       "apply": {
-        "model": "forestry:block/arboriculture/fences/acacia_side",
+        "model": "block/acacia_fence_side",
         "uvlock": true,
         "y": 180
       }
@@ -39,7 +39,7 @@
         "west": "true"
       },
       "apply": {
-        "model": "forestry:block/arboriculture/fences/acacia_side",
+        "model": "block/acacia_fence_side",
         "uvlock": true,
         "y": 270
       }

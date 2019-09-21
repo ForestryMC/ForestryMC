@@ -4,7 +4,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.core.config.Constants;
 
@@ -24,14 +23,6 @@ public class WoodBlockModelProvider extends ModelProvider {
 			addFence(type);
 			addFenceGate(type);
 			addDoor(type);
-		}
-		for (EnumVanillaWoodType type : EnumVanillaWoodType.VALUES) {
-			addPlank(type);
-			addLog(type);
-			addStair(type);
-			addSlab(type);
-			addFence(type);
-			addFenceGate(type);
 		}
 		registerModel("leaves", new ModelBuilder()
 			.parent("block/cube_all")
