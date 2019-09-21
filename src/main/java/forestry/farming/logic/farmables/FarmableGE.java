@@ -53,7 +53,7 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
-		return ArboricultureBlocks.SAPLING_GE.getBlock() == blockState.getBlock();
+		return ArboricultureBlocks.SAPLING_GE.blockEqual(blockState);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class FarmableGE implements IFarmable {
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
 
-		if (!block.getTags().contains(BlockTags.LOGS.getId())) {
+		if (!block.isIn(BlockTags.LOGS)) {
 			return null;
 		}
 
