@@ -178,6 +178,7 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
+		Proxies.common.registerTickHandlers(null);
 		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);

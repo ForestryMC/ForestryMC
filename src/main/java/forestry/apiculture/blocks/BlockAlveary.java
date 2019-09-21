@@ -30,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -48,7 +49,9 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
+import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
 
@@ -78,10 +81,10 @@ public class BlockAlveary extends BlockStructure {
 
 	public BlockAlveary(BlockAlvearyType type) {
 		super(Block.Properties.create(MaterialBeehive.BEEHIVE_ALVEARY)
-			.hardnessAndResistance(1f)
-			.sound(SoundType.WOOD)
-			.harvestTool(ToolType.AXE)
-			.harvestLevel(0));
+				.hardnessAndResistance(1f)
+				.sound(SoundType.WOOD)
+				.harvestTool(ToolType.AXE)
+				.harvestLevel(0));
 		this.type = type;
 		BlockState defaultState = this.getStateContainer().getBaseState();
 		if (type == BlockAlvearyType.PLAIN) {
@@ -129,52 +132,57 @@ public class BlockAlveary extends BlockStructure {
 		}
 	}
 
-	//TODO not sure how actual state works anymore, probably just means flattening
-	//	@Override
-	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		TileAlveary tile = TileUtil.getTile(world, pos, TileAlveary.class);
-	//		if (tile == null) {
-	//			return super.getActualState(state, world, pos);
-	//		}
-	//
-	//		if (tile instanceof IActivatable) {
-	//			if (((IActivatable) tile).isActive()) {
-	//				state = state.with(STATE, State.ON);
-	//			} else {
-	//				state = state.with(STATE, State.OFF);
-	//			}
-	//		} else if (getType() == BlockAlvearyType.PLAIN) {
-	//			if (!tile.getMultiblockLogic().getController().isAssembled()) {
-	//				state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-	//			} else {
-	//				BlockState blockStateAbove = world.getBlockState(pos.up());
-	//				Block blockAbove = blockStateAbove.getBlock();
-	//				if (BlockUtil.isWoodSlabBlock(blockStateAbove, blockAbove, world, pos)) {
-	//					List<Direction> blocksTouching = getBlocksTouching(world, pos);
-	//					switch (blocksTouching.size()) {
-	//						case 3:
-	//							state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE);
-	//							break;
-	//						case 2:
-	//							if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) ||
-	//								blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
-	//								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
-	//							} else {
-	//								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
-	//							}
-	//							break;
-	//						default:
-	//							state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-	//							break;
-	//					}
-	//				} else {
-	//					state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
-	//				}
-	//			}
-	//		}
-	//
-	//		return super.getActualState(state, world, pos);
-	//	}
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+
+
+	@Override
+	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+		TileAlveary tile = TileUtil.getTile(world, pos, TileAlveary.class);
+		if (tile == null) {
+			return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+		}
+
+		if (tile instanceof IActivatable) {
+			if (((IActivatable) tile).isActive()) {
+				state = state.with(STATE, State.ON);
+			} else {
+				state = state.with(STATE, State.OFF);
+			}
+		} else if (getType() == BlockAlvearyType.PLAIN) {
+			if (!tile.getMultiblockLogic().getController().isAssembled()) {
+				state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+			} else {
+				BlockState blockStateAbove = world.getBlockState(pos.up());
+				Block blockAbove = blockStateAbove.getBlock();
+				if (BlockUtil.isWoodSlabBlock(blockStateAbove, blockAbove, world, pos)) {
+					List<Direction> blocksTouching = getBlocksTouching(world, pos);
+					switch (blocksTouching.size()) {
+						case 3:
+							state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE);
+							break;
+						case 2:
+							if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) ||
+									blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
+								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
+							} else {
+								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
+							}
+							break;
+						default:
+							state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+							break;
+					}
+				} else {
+					state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+				}
+			}
+		}
+
+		return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+	}
 
 
 	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
