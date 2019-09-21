@@ -1,15 +1,15 @@
 {
   "variants": {
     "axis=x": {
-      "model": "forestry:block/arboriculture/logs/dark_oak",
+      "model": "block/dark_oak_log",
       "x": 90,
       "y": 90
     },
     "axis=y": {
-      "model": "forestry:block/arboriculture/logs/dark_oak"
+      "model": "block/dark_oak_log"
     },
     "axis=z": {
-      "model": "forestry:block/arboriculture/logs/dark_oak",
+      "model": "block/dark_oak_log",
       "x": 90
     }
   }

@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -83,7 +84,7 @@ public class ModFeatureRegistry {
 	private static class ModuleFeatures implements IFeatureRegistry {
 		private final HashMap<String, IModFeature> featureById = new LinkedHashMap<>();
 		private final Multimap<FeatureType, IModFeature> featureByType = LinkedListMultimap.create();
-		private final Multimap<FeatureType, Consumer<RegistryEvent>> listenerByType = LinkedListMultimap.create();
+		private final Multimap<FeatureType, Consumer<RegistryEvent>> registryListeners = LinkedListMultimap.create();
 		private final String moduleID;
 
 		public ModuleFeatures(String moduleID) {
@@ -156,8 +157,13 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public void addListener(FeatureType type, Consumer<RegistryEvent> listener) {
-			listenerByType.put(type, listener);
+		public FeatureFluid.Builder fluid(String identifier) {
+			return new FeatureFluid.Builder(this, moduleID, identifier);
+		}
+
+		@Override
+		public void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener) {
+			registryListeners.put(type, listener);
 		}
 
 		public <F extends IModFeature> F register(F feature) {
@@ -182,22 +188,32 @@ public class ModFeatureRegistry {
 				return;
 			}
 			if (feature instanceof IBlockFeature) {
-				Supplier<Block> blockConstructor = feature.getConstructor();
-				Block block = initObject(feature, ((IBlockFeature) feature).apply(blockConstructor.get()));
+				IBlockFeature blockFeature = (IBlockFeature<?, ?>) feature;
+				Supplier<Block> blockConstructor = blockFeature.getBlockConstructor();
+				Block block = blockConstructor.get();
 				block.setRegistryName(feature.getModId(), feature.getIdentifier());
-				((IBlockFeature) feature).setBlock(block);
-				Function<Block, Item> constructor = ((IBlockFeature) feature).getItemConstructor();
+				blockFeature.setBlock(block);
+				Function<Block, Item> constructor = blockFeature.getItemBlockConstructor();
 				if (constructor != null) {
-					Item item = initObject(feature, ((IBlockFeature) feature).apply(constructor.apply(block)));
+					Item item = constructor.apply(block);
 					if (item.getRegistryName() == null && block.getRegistryName() != null) {
 						item.setRegistryName(block.getRegistryName());
 					}
-					((IBlockFeature) feature).setItem(item);
+					blockFeature.setItem(item);
 				}
 			} else if (feature instanceof IItemFeature) {
-				Item item = initObject(feature, ((IItemFeature) feature).apply((Item) feature.getConstructor().get()));
+				IItemFeature itemFeature = (IItemFeature<?>) feature;
+				Item item = (Item) itemFeature.getItemConstructor().get();
 				item.setRegistryName(feature.getModId(), feature.getIdentifier());
-				((IItemFeature) feature).setItem(item);
+				itemFeature.setItem(item);
+			} else if (feature instanceof IFluidFeature) {
+				IFluidFeature fluidFeature = (IFluidFeature) feature;
+				FlowingFluid fluid = fluidFeature.getFluidConstructor(false).get();
+				FlowingFluid flowing = fluidFeature.getFluidConstructor(true).get();
+				fluid.setRegistryName(feature.getModId(), feature.getIdentifier());
+				flowing.setRegistryName(feature.getModId(), feature.getIdentifier() + "_flowing");
+				fluidFeature.setFluid(fluid);
+				fluidFeature.setFlowing(flowing);
 			}
 			//			if (feature instanceof IMachineFeature) {
 			//				MachineGroup group = initObject(feature, ((IMachineFeature) feature).apply(((IMachineFeature) feature).getConstructor().createObject()));
@@ -210,27 +226,13 @@ public class ModFeatureRegistry {
 
 		}
 
-		@SuppressWarnings("unchecked")
-		private <O, F extends IModFeature<O>> O initObject(F feature, O object) {
-			if (object instanceof IFeatureObject) {
-				((IFeatureObject<F>) object).init(feature);
-			}
-			feature.init();
-			if (object instanceof IChildFeature) {
-				IModFeature modFeature = (IModFeature) object;
-				((IChildFeature) modFeature).setParent(feature);
-				register(modFeature);
-			}
-			return object;
-		}
-
 		public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
 			for (FeatureType type : FeatureType.values()) {
 				for (IModFeature feature : featureByType.get(type)) {
 					feature.register(event);
 				}
 				if (type.superType.isAssignableFrom(event.getRegistry().getRegistrySuperType())) {
-					listenerByType.get(type).forEach(listener -> listener.accept(event));
+					registryListeners.get(type).forEach(listener -> listener.accept(event));
 				}
 			}
 		}

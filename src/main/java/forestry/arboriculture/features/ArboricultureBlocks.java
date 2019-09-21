@@ -102,7 +102,7 @@ public class ArboricultureBlocks {
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> registerWood(FeatureBlockGroup<B, S> group, WoodBlockKind kind) {
-		REGISTRY.addListener(FeatureType.ITEM, event -> WoodAccess.getInstance().registerFeatures(group, kind));
+		REGISTRY.addRegistryListener(FeatureType.ITEM, event -> WoodAccess.getInstance().registerFeatures(group, kind));
 		return group;
 	}
 

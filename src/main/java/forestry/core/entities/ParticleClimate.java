@@ -11,7 +11,7 @@
 //		this(world, x, y, z, 0x37485a);
 //	}
 //
-//	//TODO redstone constructor private but has factory method, and I can't getComb the AT to work
+//	//TODO redstone constructor private but has factory method, and I can't get the AT to work
 //	public ParticleClimate(World worldIn, double x, double y, double z, int color) {
 //		super(worldIn, x, y, z, 0.0F, 0.0F, 0.0F);
 //		particleRed = ColourUtil.getRedAsFloat(color);

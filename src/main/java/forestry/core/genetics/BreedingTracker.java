@@ -90,7 +90,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	/**
 	 * Returns the common tracker
 	 *
-	 * @param player used to getComb world
+	 * @param player used to get world
 	 * @return common tracker for this breeding system
 	 */
 	protected abstract IBreedingTracker getBreedingTracker(PlayerEntity player);

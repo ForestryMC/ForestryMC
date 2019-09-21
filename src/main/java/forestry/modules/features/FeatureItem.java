@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 
 import forestry.core.config.Constants;
 
-public class FeatureItem<I extends Item> implements IItemFeature<I, I> {
+public class FeatureItem<I extends Item> implements IItemFeature<I> {
 	private final String moduleID;
 	private final String identifier;
 	private final Supplier<I> constructor;
@@ -42,7 +42,7 @@ public class FeatureItem<I extends Item> implements IItemFeature<I, I> {
 	}
 
 	@Override
-	public Supplier<I> getConstructor() {
+	public Supplier<I> getItemConstructor() {
 		return constructor;
 	}
 

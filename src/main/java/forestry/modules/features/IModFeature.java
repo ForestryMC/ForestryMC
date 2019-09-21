@@ -1,7 +1,5 @@
 package forestry.modules.features;
 
-import java.util.function.Supplier;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
@@ -12,27 +10,21 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
  * of this class for every game objects.
  * <p>
  * Features are automatically loaded by the modules if you annotate the class that contains the public static final fields.
- * Events like {@link #register(RegistryEvent.Register)} and {@link #create()} are automatically fired by modules.
+ * Events like {@link #register(RegistryEvent.Register)} are automatically fired by modules.
  *
  * @see IBlockFeature
  * @see IItemFeature
- * @see binnie.core.liquid.IFluidDefinition
- * @see IMachineFeature
+ * @see IFluidFeature
  * @see FeatureType
  */
-public interface IModFeature<O> {
+public interface IModFeature {
 	String getIdentifier();
-
-	Supplier<O> getConstructor();
 
 	FeatureType getType();
 
 	String getModId();
 
 	String getModuleId();
-
-	default void init() {
-	}
 
 	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
 	}

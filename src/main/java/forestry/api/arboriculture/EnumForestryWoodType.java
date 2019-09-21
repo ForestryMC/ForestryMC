@@ -11,7 +11,7 @@ import java.util.Random;
 public enum EnumForestryWoodType implements IWoodType {
 	LARCH,
 	TEAK,
-	ACACIA_FORESTRY,    //TODO needs different name to avoid clashing with vanilla. Perhaps this tree should be removed?
+	ACACIA_DESERT,
 	LIME,
 	CHESTNUT,
 	WENGE,

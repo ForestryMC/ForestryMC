@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "forestry:block/arboriculture/planks/oak"
+      "model": "block/oak_planks"
     }
   }
 }

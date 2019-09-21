@@ -43,14 +43,18 @@ public class ItemWrench extends ItemForestry {//implements IToolWrench {
 		World worldIn = context.getWorld();
 		BlockPos pos = context.getPos();
 		PlayerEntity player = context.getPlayer();
+		if (player == null) {
+			return ActionResultType.FAIL;
+		}
 		Direction facing = context.getFace();
 		Hand hand = context.getHand();
 
 		BlockState state = worldIn.getBlockState(pos);
 		Block block = state.getBlock();
-
-		if (block.rotate(state, worldIn, pos, Rotation.CLOCKWISE_90) != state) {    //TODO - how to rotate based onn a direction, might need helper method
+		BlockState rotatedState = block.rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
+		if (rotatedState != state) {    //TODO - how to rotate based on a direction, might need helper method
 			player.swingArm(hand);
+			worldIn.setBlockState(pos, rotatedState, 2);
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.FAIL;

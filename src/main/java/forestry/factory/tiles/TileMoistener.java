@@ -143,7 +143,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			FluidHelper.drainContainers(tankManager, this, InventoryMoistener.SLOT_PRODUCT);
 		}
 
-		// Let's getComb to work
+		// Let's get to work
 		//TODO correct method?
 		int lightvalue = world.getLightValue(getPos().up());
 

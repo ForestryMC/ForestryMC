@@ -62,7 +62,7 @@
 //
 //		guiItemStacks.init(inputSlot, true, 4, 18);
 //		List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
-//		guiItemStacks.set(inputSlot, inputs.getComb(0));
+//		guiItemStacks.set(inputSlot, inputs.get(0));
 //
 //		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
 //		Map<ItemStack, Float> products = recipeWrapper.getRecipe().getAllProducts();

@@ -22,7 +22,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -53,7 +52,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EventHandlerCore;
-import forestry.core.ModuleFluids;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
@@ -61,12 +59,16 @@ import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
-import forestry.core.data.BlockStateProvider;
+import forestry.core.data.ForestryBlockModelProvider;
+import forestry.core.data.ForestryBlockStateProvider;
 import forestry.core.data.ForestryBlockTagsProvider;
+import forestry.core.data.ForestryItemModelProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootTableProvider;
 import forestry.core.data.ForestryRecipeProvider;
-import forestry.core.data.WoodModelProvider;
+import forestry.core.data.WoodBlockModelProvider;
+import forestry.core.data.WoodBlockStateProvider;
+import forestry.core.data.WoodItemModelProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
@@ -206,9 +208,13 @@ public class Forestry {
 			generator.addProvider(new ForestryItemTagsProvider(generator));
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			generator.addProvider(new ForestryRecipeProvider(generator));
-			generator.addProvider(new BlockStateProvider(generator));
-			generator.addProvider(new WoodModelProvider(generator));
 
+			generator.addProvider(new WoodBlockStateProvider(generator));
+			generator.addProvider(new WoodBlockModelProvider(generator));
+			generator.addProvider(new WoodItemModelProvider(generator));
+			generator.addProvider(new ForestryBlockStateProvider(generator));
+			generator.addProvider(new ForestryBlockModelProvider(generator));
+			generator.addProvider(new ForestryItemModelProvider(generator));
 			try {
 				generator.run();
 			} catch (Exception e) {
@@ -236,11 +242,6 @@ public class Forestry {
 		@SuppressWarnings("unchecked")
 		public static void onRegister(RegistryEvent.Register event) {
 			ModuleManager.getModuleHandler().onObjectRegistration(event);
-		}
-
-		@SubscribeEvent
-		public static void registerFluids(RegistryEvent.Register<Fluid> event) {
-			ModuleFluids.registerFluids();
 		}
 
 		@SubscribeEvent

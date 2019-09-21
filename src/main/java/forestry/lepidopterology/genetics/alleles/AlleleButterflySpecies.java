@@ -100,7 +100,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies
 
 	@Override
 	public String getItemTexture() {
-		return getRegistryName().getNamespace() + ":items/" + texture;
+		return getRegistryName().getNamespace() + ":item/" + texture;
 	}
 
 	@Override

@@ -1,154 +1,78 @@
 {
   "variants": {
-    "powered=true,open=true,in_wall=true,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=true,in_wall=true,facing=north": {
+      "model": "block/oak_fence_gate_wall_open",
       "uvlock": true,
       "y": 180
     },
-    "powered=false,open=true,in_wall=true,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=false,in_wall=true,facing=north": {
+      "model": "block/oak_fence_gate_wall",
       "uvlock": true,
       "y": 180
     },
-    "powered=true,open=false,in_wall=true,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
+    "open=true,in_wall=false,facing=north": {
+      "model": "block/oak_fence_gate_open",
       "uvlock": true,
       "y": 180
     },
-    "powered=false,open=false,in_wall=true,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
+    "open=false,in_wall=false,facing=north": {
+      "model": "block/oak_fence_gate",
       "uvlock": true,
       "y": 180
     },
-    "powered=true,open=true,in_wall=false,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=false,open=true,in_wall=false,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=true,open=false,in_wall=false,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=false,open=false,in_wall=false,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=true,open=true,in_wall=true,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=true,in_wall=true,facing=south": {
+      "model": "block/oak_fence_gate_wall_open",
       "uvlock": true
     },
-    "powered=false,open=true,in_wall=true,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=false,in_wall=true,facing=south": {
+      "model": "block/oak_fence_gate_wall",
       "uvlock": true
     },
-    "powered=true,open=false,in_wall=true,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
+    "open=true,in_wall=false,facing=south": {
+      "model": "block/oak_fence_gate_open",
       "uvlock": true
     },
-    "powered=false,open=false,in_wall=true,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
+    "open=false,in_wall=false,facing=south": {
+      "model": "block/oak_fence_gate",
       "uvlock": true
     },
-    "powered=true,open=true,in_wall=false,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true
-    },
-    "powered=false,open=true,in_wall=false,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true
-    },
-    "powered=true,open=false,in_wall=false,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
-      "uvlock": true
-    },
-    "powered=false,open=false,in_wall=false,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
-      "uvlock": true
-    },
-    "powered=true,open=true,in_wall=true,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=true,in_wall=true,facing=west": {
+      "model": "block/oak_fence_gate_wall_open",
       "uvlock": true,
       "y": 90
     },
-    "powered=false,open=true,in_wall=true,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=false,in_wall=true,facing=west": {
+      "model": "block/oak_fence_gate_wall",
       "uvlock": true,
       "y": 90
     },
-    "powered=true,open=false,in_wall=true,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
+    "open=true,in_wall=false,facing=west": {
+      "model": "block/oak_fence_gate_open",
       "uvlock": true,
       "y": 90
     },
-    "powered=false,open=false,in_wall=true,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
+    "open=false,in_wall=false,facing=west": {
+      "model": "block/oak_fence_gate",
       "uvlock": true,
       "y": 90
     },
-    "powered=true,open=true,in_wall=false,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=false,open=true,in_wall=false,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=true,open=false,in_wall=false,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=false,open=false,in_wall=false,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=true,open=true,in_wall=true,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=true,in_wall=true,facing=east": {
+      "model": "block/oak_fence_gate_wall_open",
       "uvlock": true,
       "y": 270
     },
-    "powered=false,open=true,in_wall=true,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall_open",
+    "open=false,in_wall=true,facing=east": {
+      "model": "block/oak_fence_gate_wall",
       "uvlock": true,
       "y": 270
     },
-    "powered=true,open=false,in_wall=true,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
+    "open=true,in_wall=false,facing=east": {
+      "model": "block/oak_fence_gate_open",
       "uvlock": true,
       "y": 270
     },
-    "powered=false,open=false,in_wall=true,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_wall",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=true,open=true,in_wall=false,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=false,open=true,in_wall=false,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak_open",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=true,open=false,in_wall=false,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=false,open=false,in_wall=false,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/oak",
+    "open=false,in_wall=false,facing=east": {
+      "model": "block/oak_fence_gate",
       "uvlock": true,
       "y": 270
     }

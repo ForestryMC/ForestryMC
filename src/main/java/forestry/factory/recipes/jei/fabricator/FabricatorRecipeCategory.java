@@ -78,7 +78,7 @@
 //
 //		List<ItemStack> smeltingInput = new ArrayList<>();
 //		Fluid recipeFluid = recipe.getLiquid().getFluid();
-//		for (IFabricatorSmeltingRecipe s : getSmeltingInputs().getComb(recipeFluid)) {
+//		for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipeFluid)) {
 //			smeltingInput.add(s.getResource());
 //		}
 //		if (!smeltingInput.isEmpty()) {
@@ -86,14 +86,14 @@
 //		}
 //
 //		List<List<ItemStack>> itemOutputs = ingredients.getOutputs(VanillaTypes.ITEM);
-//		guiItemStacks.set(craftOutputSlot, itemOutputs.getComb(0));
+//		guiItemStacks.set(craftOutputSlot, itemOutputs.get(0));
 //
 //		List<List<ItemStack>> itemStackInputs = ingredients.getInputs(VanillaTypes.ITEM);
 //		craftingGridHelper.setInputs(guiItemStacks, itemStackInputs, recipe.getWidth(), recipe.getHeight());
 //
 //		List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
 //		if (!fluidInputs.isEmpty()) {
-//			guiFluidStacks.set(inputTank, fluidInputs.getComb(0));
+//			guiFluidStacks.set(inputTank, fluidInputs.get(0));
 //		}
 //	}
 //
@@ -104,7 +104,7 @@
 //			if (!smeltingInputs.containsKey(fluid)) {
 //				smeltingInputs.put(fluid, new ArrayList<>());
 //			}
-//			smeltingInputs.getComb(fluid).add(smelting);
+//			smeltingInputs.get(fluid).add(smelting);
 //		}
 //		return smeltingInputs;
 //	}

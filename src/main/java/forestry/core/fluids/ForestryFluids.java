@@ -12,32 +12,25 @@ package forestry.core.fluids;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.FluidStack;
-
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import forestry.core.config.Constants;
 import forestry.core.items.DrinkProperties;
-import forestry.core.render.ForestryResource;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.features.FeatureFluid;
+import forestry.modules.features.ModFeatureRegistry;
 
 public enum ForestryFluids {
 	BIO_ETHANOL(new Color(255, 111, 0), 790, 1000, 300),
@@ -79,28 +72,15 @@ public enum ForestryFluids {
 	};
 
 	private static final Map<ResourceLocation, ForestryFluids> tagToFluid = new HashMap<>();
-	private static final Map<ResourceLocation, ForestryFluids> tagToFluidFlowing = new HashMap<>();
 
 	static {
 		for (ForestryFluids fluidDefinition : ForestryFluids.values()) {
-			tagToFluid.put(fluidDefinition.getFluid().getRegistryName(), fluidDefinition);
-		}
-		for (ForestryFluids fluidDefinition : ForestryFluids.values()) {
-			tagToFluidFlowing.put(fluidDefinition.getFlowing().getRegistryName(), fluidDefinition);
+			tagToFluid.put(new ResourceLocation(Constants.MOD_ID, fluidDefinition.feature.getIdentifier()), fluidDefinition);
 		}
 	}
 
 	private final ResourceLocation tag;
-	private final int density, viscosity, flammability;
-	Block sourceBlock = Blocks.AIR;
-	Block flowingBlock = Blocks.AIR;
-	Fluid sourceFluid = net.minecraft.fluid.Fluids.EMPTY;
-	Fluid flowingFluid = net.minecraft.fluid.Fluids.EMPTY;
-
-
-	private final Color particleColor;
-
-	private final ResourceLocation[] resources = new ResourceLocation[2];
+	private final FeatureFluid feature;
 
 	ForestryFluids(Color particleColor) {
 		this(particleColor, 1000, 1000);
@@ -111,32 +91,15 @@ public enum ForestryFluids {
 	}
 
 	ForestryFluids(Color particleColor, int density, int viscosity, int flammability) {
-		this.tag = new ResourceLocation(Constants.MOD_ID, name().toLowerCase(Locale.ENGLISH).replace('_', '.'));
-		this.particleColor = particleColor;
-		this.density = density;
-		this.viscosity = viscosity;
-		this.flammability = flammability;
-
-		resources[0] = new ForestryResource("block/liquid/" + getTag().getPath() + "_still");
-		if (flowTextureExists()) {
-			resources[1] = new ForestryResource("block/liquid/" + getTag().getPath() + "_flow");
-		}
-	}
-
-	public void setFlowingBlock(Block flowingBlock) {
-		this.flowingBlock = flowingBlock;
-	}
-
-	public void setSourceBlock(Block sourceBlock) {
-		this.sourceBlock = sourceBlock;
-	}
-
-	public void setSourceFluid(Fluid sourceFluid) {
-		this.sourceFluid = sourceFluid;
-	}
-
-	public void setFlowingFluid(Fluid flowingFluid) {
-		this.flowingFluid = flowingFluid;
+		this.feature = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.FLUIDS)
+			.fluid(name().toLowerCase(Locale.ENGLISH))
+			.flammability(flammability)
+			.viscosity(viscosity)
+			.density(density)
+			.temperature(getTemperature())
+			.particleColor(particleColor)
+			.create();
+		this.tag = new ResourceLocation(Constants.MOD_ID, feature.getIdentifier());
 	}
 
 	public int getTemperature() {
@@ -147,24 +110,13 @@ public enum ForestryFluids {
 		return tag;
 	}
 
-	public final int getDensity() {
-		return density;
-	}
-
-	public final int getViscosity() {
-		return viscosity;
+	public FeatureFluid getFeature() {
+		return feature;
 	}
 
 	//@Nullable
 	public final Fluid getFluid() {
-		//return ForgeRegistries.FLUIDS.getValue(new ResourceLocation(Constants.MOD_ID, getTag()));
-		return sourceFluid;
-	}
-
-	//@Nullable
-	public final Fluid getFlowing() {
-		//return ForgeRegistries.FLUIDS.getValue(new ResourceLocation(Constants.MOD_ID, getTag() + "_flowing"));
-		return flowingFluid;
+		return feature.fluid();
 	}
 
 	public final FluidStack getFluid(int mb) {
@@ -176,7 +128,7 @@ public enum ForestryFluids {
 	}
 
 	public final Color getParticleColor() {
-		return particleColor;
+		return feature.getProperties().particleColor;
 	}
 
 	public final boolean is(Fluid fluid) {
@@ -194,11 +146,7 @@ public enum ForestryFluids {
 	@Nullable
 	public static ForestryFluids getFluidDefinition(Fluid fluid) {
 		if (fluid instanceof ForestryFluid) {
-			if (((ForestryFluid) fluid).flowing) {
-				return tagToFluidFlowing.get(fluid.getRegistryName());
-			} else {
-				return tagToFluid.get(fluid.getRegistryName());
-			}
+			return tagToFluid.get(fluid.getRegistryName());
 		}
 
 		return null;
@@ -221,41 +169,10 @@ public enum ForestryFluids {
 	}
 
 	/**
-	 * Create a FluidBlock for this fluid.
-	 *
-	 * @param flowing
-	 */
-	@Nullable
-	public Block makeBlock(boolean flowing) {
-		return new BlockForestryFluid((FlowingFluid) (flowing ? flowingFluid : sourceFluid), Math.max(flammability, 0), flammability > 0, particleColor);
-	}
-
-	/**
 	 * Get the properties for an ItemFluidContainerForestry before it gets registered.
 	 */
 	@Nullable
 	public DrinkProperties getDrinkProperties() {
-		return null;
-	}
-
-	public boolean flowTextureExists() {
-		if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-			return true;
-		}
-		try {
-			ResourceLocation resourceLocation = new ForestryResource("block/liquid/" + getTag().getPath() + "_flow");
-			Minecraft minecraft = Minecraft.getInstance();
-			if (minecraft != null) {    //TODO - is it correct
-				IResourceManager resourceManager = minecraft.getResourceManager();
-				return resourceManager.getResource(resourceLocation) != null;
-			}
-			return false;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
-	public ResourceLocation[] getResources() {
-		return resources;
+		return feature.getProperties().properties;
 	}
 }

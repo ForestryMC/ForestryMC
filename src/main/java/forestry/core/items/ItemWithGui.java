@@ -45,7 +45,7 @@ public abstract class ItemWithGui extends ItemForestry {
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack itemstack, PlayerEntity player) {
-		if (itemstack != null &&
+		if (!itemstack.isEmpty() &&
 			player instanceof ServerPlayerEntity &&
 			player.openContainer instanceof ContainerItemInventory) {
 			player.closeScreen();

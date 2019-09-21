@@ -29,7 +29,7 @@
 //
 //		registry.addRecipes(FarmingInfoRecipeMaker.getRecipes(), FarmingInfoRecipeCategory.UID);
 //
-//		registry.addRecipeCatalyst(ModuleCore.getItems().circuitboards.getComb(EnumCircuitBoardType.INTRICATE), FarmingInfoRecipeCategory.UID);
+//		registry.addRecipeCatalyst(ModuleCore.getItems().circuitboards.get(EnumCircuitBoardType.INTRICATE), FarmingInfoRecipeCategory.UID);
 //	}
 //
 //	@Override

@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -72,8 +73,8 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	//TODO raytracing
 	//	@Override
 	//	public void addCollisionBoxToList(BlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
-	//		Direction orientation = state.getComb(FACING);
-	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.getComb(orientation);
+	//		Direction orientation = state.get(FACING);
+	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 	//		if (boundingBoxes == null) {
 	//			return;
 	//		}
@@ -89,8 +90,8 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	//TODO potentially getRayTraceResult
 	//	@Override
 	//	public RayTraceResult collisionRayTrace(BlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-	//		Direction orientation = blockState.getComb(FACING);
-	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.getComb(orientation);
+	//		Direction orientation = blockState.get(FACING);
+	//		List<AxisAlignedBB> boundingBoxes = boundingBoxesForDirections.get(orientation);
 	//		if (boundingBoxes == null) {
 	//			return super.collisionRayTrace(blockState, worldIn, pos, start, end);
 	//		}
@@ -120,7 +121,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	@Override
 	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation rot) {
-		return rotate(world, pos);    //TODO check
+		return rotate(state, world, pos);    //TODO check
 	}
 
 	private static boolean isOrientedAtEnergyReciever(IWorld world, BlockPos pos, Direction orientation) {
@@ -129,39 +130,35 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
 	}
 
-	private static BlockState rotate(IWorld world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		Direction blockFacing = blockState.get(FACING);
+	private static BlockState rotate(BlockState state, IWorld world, BlockPos pos) {
+		Direction blockFacing = state.get(FACING);
 		for (int i = blockFacing.ordinal() + 1; i <= blockFacing.ordinal() + 6; ++i) {
 			Direction orientation = Direction.values()[i % 6];
 			if (isOrientedAtEnergyReciever(world, pos, orientation)) {
-				BlockState newState = blockState.with(FACING, orientation);
-				if (world.setBlockState(pos, blockState, 3)) {//;	//TODO flags
-					return newState;
-				}
+				return state.with(FACING, orientation);
 			}
 		}
-		return blockState;
+		return state;
 	}
 
+	@Nullable
 	@Override
-	public void rotateAfterPlacement(PlayerEntity player, World world, BlockPos pos, Direction side) {
-		Direction orientation = side.getOpposite();
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		Direction orientation = context.getFace().getOpposite();
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
 		if (isOrientedAtEnergyReciever(world, pos, orientation)) {
 			BlockState blockState = world.getBlockState(pos);
-			blockState = blockState.with(FACING, orientation);
-			world.setBlockState(pos, blockState);
-		} else {
-			super.rotateAfterPlacement(player, world, pos, side);
-			rotate(world, pos);
+			return blockState.with(FACING, orientation);
 		}
+		return rotate(getDefaultState().with(FACING, context.getPlacementHorizontalFacing()), world, pos);
 	}
 
 	//TODO voxelShapes?
 	//	@Override
 	//	public boolean isSideSolid(BlockState base_state, IBlockReader world, BlockPos pos, Direction side) {
 	//		BlockState blockState = world.getBlockState(pos);
-	//		Direction facing = blockState.getComb(BlockBase.FACING);
+	//		Direction facing = blockState.get(BlockBase.FACING);
 	//		return facing.getOpposite() == side;
 	//	}
 

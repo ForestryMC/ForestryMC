@@ -23,7 +23,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 		field.setEnableBackgroundDrawing(false);
 		this.addSelfEventHandler(GuiEvent.KeyEvent.class, event -> {
 			String oldText = field.getText();
-			//TODO - find a way to getComb the right char because this seems dodgy
+			//TODO - find a way to get the right char because this seems dodgy
 			this.field.charTyped((char) event.getMouseKey().getKeyCode(), event.getMouseKey().getKeyCode());
 			final String text = field.getText();
 			if (!text.equals(oldText)) {

@@ -27,6 +27,10 @@ public class FeatureBlockTable<B extends Block, R extends IBlockSubtype, C exten
 		return featureByTypes.values().stream().map(IBlockFeature::block).collect(Collectors.toList());
 	}
 
+	public Collection<BlockItem> getItems() {
+		return featureByTypes.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(Collectors.toList());
+	}
+
 	public Collection<B> getRowBlocks(R rowType) {
 		return getRowFeatures(rowType).stream().map(IBlockFeature::block).collect(Collectors.toList());
 	}

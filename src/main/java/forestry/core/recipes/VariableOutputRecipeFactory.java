@@ -77,7 +77,7 @@
 //
 //		String[] pattern = new String[patternJ.size()];
 //		for (int x = 0; x < pattern.length; ++x) {
-//			String line = JSONUtils.getString(patternJ.getComb(x), "pattern[" + x + "]");
+//			String line = JSONUtils.getString(patternJ.get(x), "pattern[" + x + "]");
 //			if (x > 0 && pattern[0].length() != line.length()) {
 //				throw new JsonSyntaxException("Invalid pattern: each row must  be the same width");
 //			}
@@ -96,7 +96,7 @@
 //		int x = 0;
 //		for (String line : pattern) {
 //			for (char chr : line.toCharArray()) {
-//				Ingredient ing = ingMap.getComb(chr);
+//				Ingredient ing = ingMap.get(chr);
 //				if (ing == null) {
 //					throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
 //				}

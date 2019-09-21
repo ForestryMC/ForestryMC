@@ -69,7 +69,7 @@ public class ParticleBeeRoundTrip extends Particle {
 			this.motionY = (this.motionY + 0.3 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.92 + 0.2D * rand.nextFloat();
 		} else if (this.age < this.maxAge * 0.5) {
-			// getComb to flower destination
+			// get to flower destination
 			this.motionX = (destination.getX() + 0.5 - this.posX) * 0.03;
 			this.motionY = (destination.getY() + 0.5 - this.posY) * 0.1;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
@@ -81,7 +81,7 @@ public class ParticleBeeRoundTrip extends Particle {
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 			this.motionZ *= 0.95;
 		} else {
-			// getComb to origin
+			// get to origin
 			this.motionX = (origin.x - this.posX) * 0.03;
 			this.motionY = (origin.y - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;

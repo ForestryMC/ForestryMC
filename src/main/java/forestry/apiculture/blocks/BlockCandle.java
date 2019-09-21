@@ -217,7 +217,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
 	//TODO - is this fixed?
 	/* DROP HANDLING */
-	// Hack: 	When harvesting we need to getComb the drops in onBlockHarvested,
+	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
 	private final ThreadLocal<ItemStack> drop = new ThreadLocal<>();
 
@@ -237,7 +237,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 		drop.remove();
 		List<ItemStack> drops = new ArrayList<>();
 
-		// not harvested, getComb drops normally
+		// not harvested, get drops normally
 		if (dropStack == null) {
 			dropStack = getCandleDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
 		}

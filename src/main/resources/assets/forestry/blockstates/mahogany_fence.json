@@ -2,63 +2,46 @@
   "multipart": [
     {
       "apply": {
-        "model": "forestry:arboriculture/fence_post",
-        "textures": {
-          "particle": "forestry:block/wood/mahogany_planks",
-          "texture": "forestry:block/wood/mahogany_planks"
-        },
+        "model": "forestry:block/arboriculture/fences/mahogany"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "forestry:block/arboriculture/fences/mahogany_side",
         "uvlock": true
       }
     },
     {
-      "apply": {
-        "model": "forestry:arboriculture/fence_side",
-        "uvlock": true,
-        "textures": {
-          "texture": "forestry:block/wood/mahogany_planks"
-        }
-      },
-      "when": {
-        "north": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "forestry:arboriculture/fence_side",
-        "uvlock": true,
-        "textures": {
-          "texture": "forestry:block/wood/mahogany_planks"
-        },
-        "y": 90
-      },
       "when": {
         "east": "true"
+      },
+      "apply": {
+        "model": "forestry:block/arboriculture/fences/mahogany_side",
+        "uvlock": true,
+        "y": 90
       }
     },
     {
-      "apply": {
-        "model": "forestry:arboriculture/fence_side",
-        "uvlock": true,
-        "textures": {
-          "texture": "forestry:block/wood/mahogany_planks"
-        },
-        "y": 180
-      },
       "when": {
         "south": "true"
+      },
+      "apply": {
+        "model": "forestry:block/arboriculture/fences/mahogany_side",
+        "uvlock": true,
+        "y": 180
       }
     },
     {
-      "apply": {
-        "model": "forestry:arboriculture/fence_side",
-        "uvlock": true,
-        "textures": {
-          "texture": "forestry:block/wood/mahogany_planks"
-        },
-        "y": 270
-      },
       "when": {
         "west": "true"
+      },
+      "apply": {
+        "model": "forestry:block/arboriculture/fences/mahogany_side",
+        "uvlock": true,
+        "y": 270
       }
     }
   ]

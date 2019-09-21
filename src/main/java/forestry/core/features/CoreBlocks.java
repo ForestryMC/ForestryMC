@@ -41,7 +41,7 @@ public class CoreBlocks {
 		.sound(SoundType.STONE)), ItemBlockForestry::new, "ash_brick");
 	public static final FeatureBlock<StairsBlock, ItemBlockForestry> ASH_STAIRS = REGISTRY.block(() -> new BlockStairs(ASH_BRICK.defaultState()), ItemBlockForestry::new, "ash_stairs");
 	public static final FeatureBlockGroup<BlockResourceStorage, EnumResourceType> RESOURCE_STORAGE = REGISTRY.blockGroup(BlockResourceStorage::new, EnumResourceType.VALUES).item(ItemBlockForestry::new).identifier("resource_storage").create();
-	public static final FeatureBlockGroup<BlockResourceOre, EnumResourceType> RESOURCE_ORE = REGISTRY.blockGroup(BlockResourceOre::new, EnumResourceType.VALUES).item(ItemBlockForestry::new).identifier("resource_ore").create();
+	public static final FeatureBlockGroup<BlockResourceOre, EnumResourceType> RESOURCE_ORE = REGISTRY.blockGroup(BlockResourceOre::new, new EnumResourceType[]{EnumResourceType.APATITE, EnumResourceType.COPPER, EnumResourceType.TIN}).item(ItemBlockForestry::new).identifier("resource_ore").create();
 
 	private CoreBlocks() {
 	}

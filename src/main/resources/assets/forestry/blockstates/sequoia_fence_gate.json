@@ -1,153 +1,77 @@
 {
   "variants": {
-    "powered=true,open=true,in_wall=true,facing=north": {
+    "open=true,in_wall=true,facing=north": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
       "uvlock": true,
       "y": 180
     },
-    "powered=false,open=true,in_wall=true,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=true,open=false,in_wall=true,facing=north": {
+    "open=false,in_wall=true,facing=north": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
       "uvlock": true,
       "y": 180
     },
-    "powered=false,open=false,in_wall=true,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=true,open=true,in_wall=false,facing=north": {
+    "open=true,in_wall=false,facing=north": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
       "uvlock": true,
       "y": 180
     },
-    "powered=false,open=true,in_wall=false,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=true,open=false,in_wall=false,facing=north": {
+    "open=false,in_wall=false,facing=north": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia",
       "uvlock": true,
       "y": 180
     },
-    "powered=false,open=false,in_wall=false,facing=north": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia",
-      "uvlock": true,
-      "y": 180
-    },
-    "powered=true,open=true,in_wall=true,facing=south": {
+    "open=true,in_wall=true,facing=south": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
       "uvlock": true
     },
-    "powered=false,open=true,in_wall=true,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
-      "uvlock": true
-    },
-    "powered=true,open=false,in_wall=true,facing=south": {
+    "open=false,in_wall=true,facing=south": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
       "uvlock": true
     },
-    "powered=false,open=false,in_wall=true,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
-      "uvlock": true
-    },
-    "powered=true,open=true,in_wall=false,facing=south": {
+    "open=true,in_wall=false,facing=south": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
       "uvlock": true
     },
-    "powered=false,open=true,in_wall=false,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
-      "uvlock": true
-    },
-    "powered=true,open=false,in_wall=false,facing=south": {
+    "open=false,in_wall=false,facing=south": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia",
       "uvlock": true
     },
-    "powered=false,open=false,in_wall=false,facing=south": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia",
-      "uvlock": true
-    },
-    "powered=true,open=true,in_wall=true,facing=west": {
+    "open=true,in_wall=true,facing=west": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
       "uvlock": true,
       "y": 90
     },
-    "powered=false,open=true,in_wall=true,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=true,open=false,in_wall=true,facing=west": {
+    "open=false,in_wall=true,facing=west": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
       "uvlock": true,
       "y": 90
     },
-    "powered=false,open=false,in_wall=true,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=true,open=true,in_wall=false,facing=west": {
+    "open=true,in_wall=false,facing=west": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
       "uvlock": true,
       "y": 90
     },
-    "powered=false,open=true,in_wall=false,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=true,open=false,in_wall=false,facing=west": {
+    "open=false,in_wall=false,facing=west": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia",
       "uvlock": true,
       "y": 90
     },
-    "powered=false,open=false,in_wall=false,facing=west": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia",
-      "uvlock": true,
-      "y": 90
-    },
-    "powered=true,open=true,in_wall=true,facing=east": {
+    "open=true,in_wall=true,facing=east": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
       "uvlock": true,
       "y": 270
     },
-    "powered=false,open=true,in_wall=true,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall_open",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=true,open=false,in_wall=true,facing=east": {
+    "open=false,in_wall=true,facing=east": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
       "uvlock": true,
       "y": 270
     },
-    "powered=false,open=false,in_wall=true,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_wall",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=true,open=true,in_wall=false,facing=east": {
+    "open=true,in_wall=false,facing=east": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
       "uvlock": true,
       "y": 270
     },
-    "powered=false,open=true,in_wall=false,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia_open",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=true,open=false,in_wall=false,facing=east": {
-      "model": "forestry:block/arboriculture/fence_gates/sequoia",
-      "uvlock": true,
-      "y": 270
-    },
-    "powered=false,open=false,in_wall=false,facing=east": {
+    "open=false,in_wall=false,facing=east": {
       "model": "forestry:block/arboriculture/fence_gates/sequoia",
       "uvlock": true,
       "y": 270
