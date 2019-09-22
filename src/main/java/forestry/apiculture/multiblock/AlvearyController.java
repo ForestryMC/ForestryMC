@@ -16,6 +16,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -48,7 +49,6 @@ import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.ParticleRender;
-import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Translator;
 
 public class AlvearyController extends RectangularMultiblockControllerBase implements IAlvearyControllerInternal, IClimateControlled {
@@ -181,12 +181,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				BlockPos pos = new BlockPos(slabX, slabY, slabZ);
 				BlockState state = world.getBlockState(pos);
 				Block block = state.getBlock();
-				if (!BlockUtil.isWoodSlabBlock(state, block, world, pos)) {
-					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
-				}
-
-				int meta = 0;//TODO flatten block.getMetaFromState(state); probably needs tag
-				if ((meta & 8) != 0) {
+				if (!block.isIn(BlockTags.WOODEN_SLABS)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 			}

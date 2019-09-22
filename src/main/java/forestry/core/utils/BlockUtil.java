@@ -19,6 +19,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IProperty;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -78,29 +79,7 @@ public abstract class BlockUtil {
 		}
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		//TODO - tags or something
-		//block.isWood(world, pos);
-		return block == Blocks.JUNGLE_LOG;
-	}
-
-	public static boolean isWoodSlabBlock(BlockState blockState, Block block, IBlockReader world, BlockPos pos) {
-		if (block.isAir(blockState, world, pos)) {
-			return false;
-		}
-
-		ItemStack stack = new ItemStack(block);
-		if (stack.isEmpty()) {
-			return false;
-		}
-
-		int[] oreIds = new int[0];//TODO - tags OreDictionary.getOreIDs(stack);
-		for (int oreId : oreIds) {
-			if (oreId == slabWoodId) {
-				return true;
-			}
-		}
-
-		return false;
+		return block.isIn(BlockTags.JUNGLE_LOGS);
 	}
 
 	public static boolean isBreakableBlock(World world, BlockPos pos) {
