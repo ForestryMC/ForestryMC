@@ -15,6 +15,9 @@ import genetics.api.alleles.IAllele;
 import genetics.api.classification.IClassification;
 import genetics.api.mutation.IMutation;
 
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleHandler;
+
 /**
  * Manages {@link IForestrySpeciesRoot}, {@link IAllele}s, {@link IFruitFamily}s, {@link IClassification}, the blacklist and allows creation of research notes.
  *

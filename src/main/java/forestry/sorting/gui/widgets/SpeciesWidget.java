@@ -18,10 +18,10 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
 
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;

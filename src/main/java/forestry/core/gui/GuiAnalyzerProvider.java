@@ -10,8 +10,8 @@ import net.minecraft.inventory.container.Slot;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import forestry.api.genetics.IGeneticAnalyzer;
-import forestry.api.genetics.IGeneticAnalyzerProvider;
+import forestry.api.genetics.gatgets.IGeneticAnalyzer;
+import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.api.gui.IGuiElement;
 import forestry.core.gui.buttons.GuiToggleButton;
 import forestry.core.gui.elements.GeneticAnalyzer;

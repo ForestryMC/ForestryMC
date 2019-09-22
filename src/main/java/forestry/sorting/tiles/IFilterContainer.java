@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.inventory.IInventory;
 
 import forestry.api.core.ILocatable;
-import forestry.api.genetics.IFilterLogic;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.tiles.ITitled;
 
 public interface IFilterContainer extends ILocatable, ITitled {

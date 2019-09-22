@@ -4,9 +4,9 @@ import net.minecraft.item.ItemStack;
 
 import genetics.api.individual.IIndividual;
 
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterRule;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterRule;
+import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IButterfly;

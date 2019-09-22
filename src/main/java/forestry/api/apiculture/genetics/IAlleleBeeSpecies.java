@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 

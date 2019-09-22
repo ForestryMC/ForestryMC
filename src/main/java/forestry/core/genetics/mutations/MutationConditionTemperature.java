@@ -18,8 +18,8 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IMutationCondition;
+import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.utils.Translator;
 
 public class MutationConditionTemperature implements IMutationCondition {

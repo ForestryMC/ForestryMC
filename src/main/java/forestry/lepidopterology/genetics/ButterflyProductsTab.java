@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
 import forestry.api.gui.IElementLayoutHelper;

@@ -7,9 +7,9 @@ import genetics.api.individual.IIndividual;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBee;
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterRule;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterRule;
+import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.sorting.DefaultFilterRuleType;
 
 public enum ApicultureFilterRule implements IFilterRule {

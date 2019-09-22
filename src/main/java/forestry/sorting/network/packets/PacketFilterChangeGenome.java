@@ -12,7 +12,7 @@ import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 
 import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.IFilterLogic;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;

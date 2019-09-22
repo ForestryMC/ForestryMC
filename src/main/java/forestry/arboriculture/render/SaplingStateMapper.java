@@ -14,7 +14,7 @@
 //import net.minecraftforge.api.distmarker.OnlyIn;
 //
 //import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-//import forestry.api.genetics.AlleleManager;
+//import forestry.api.genetics.alleles.AlleleManager;
 //import forestry.api.genetics.IAllele;
 //import forestry.arboriculture.blocks.BlockSapling;
 //import forestry.core.render.ForestryStateMapper;

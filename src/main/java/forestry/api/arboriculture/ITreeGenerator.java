@@ -18,8 +18,6 @@ import com.mojang.authlib.GameProfile;
 
 import genetics.api.individual.IGenome;
 
-import forestry.api.world.ITreeGenData;
-
 /**
  * Implements the tree generation for a tree species.
  */

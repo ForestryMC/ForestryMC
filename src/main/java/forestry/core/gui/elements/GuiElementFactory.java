@@ -11,13 +11,13 @@ import genetics.api.alleles.IAlleleValue;
 import genetics.api.mutation.IMutation;
 
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IDatabasePlugin;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IGeneticAnalyzer;
-import forestry.api.genetics.IGeneticAnalyzerProvider;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IGeneticAnalyzer;
+import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.api.gui.GuiConstants;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IElementGroup;

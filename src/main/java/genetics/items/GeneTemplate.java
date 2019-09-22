@@ -20,6 +20,8 @@ import genetics.ApiInstance;
 import genetics.Genetics;
 
 public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<CompoundNBT> {
+	public static final IGeneTemplate EMPTY = new Empty();
+
 	private static final String ALLELE_NBT_KEY = "Allele";
 	private static final String TYPE_NBT_KEY = "Type";
 	private static final String DEFINITION_NBT_KEY = "Definition";
@@ -88,5 +90,27 @@ public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<Comp
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction facing) {
 		return Genetics.GENE_TEMPLATE.orEmpty(cap, holder);
+	}
+
+	private static class Empty implements IGeneTemplate {
+		@Override
+		public Optional<IAllele> getAllele() {
+			return Optional.empty();
+		}
+
+		@Override
+		public Optional<IChromosomeType> getType() {
+			return Optional.empty();
+		}
+
+		@Override
+		public Optional<IIndividualRoot> getRoot() {
+			return Optional.empty();
+		}
+
+		@Override
+		public void setAllele(@Nullable IChromosomeType type, @Nullable IAllele allele) {
+			//Default Implementation
+		}
 	}
 }

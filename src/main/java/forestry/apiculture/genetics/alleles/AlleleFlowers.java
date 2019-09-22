@@ -14,8 +14,8 @@ import net.minecraft.util.text.ITextComponent;
 
 import genetics.api.alleles.AlleleCategorizedValue;
 
-import forestry.api.genetics.IAlleleFlowers;
-import forestry.api.genetics.IFlowerProvider;
+import forestry.api.genetics.alleles.IAlleleFlowers;
+import forestry.api.genetics.flowers.IFlowerProvider;
 
 public class AlleleFlowers<P extends IFlowerProvider> extends AlleleCategorizedValue<P> implements IAlleleFlowers {
 

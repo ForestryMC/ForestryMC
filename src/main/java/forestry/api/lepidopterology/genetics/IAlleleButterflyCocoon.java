@@ -10,7 +10,7 @@ import java.util.Map;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.IAlleleProperty;
+import forestry.api.genetics.alleles.IAlleleProperty;
 
 public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
 

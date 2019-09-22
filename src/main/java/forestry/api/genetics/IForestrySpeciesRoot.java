@@ -18,6 +18,8 @@ import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+
 /**
  * Describes a class of species (i.e. bees, trees, butterflies), provides helper functions and access to common functionality.
  */

@@ -16,7 +16,7 @@ import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.root.IIndividualRoot;
 
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.IButterflyMutation;
 import forestry.api.lepidopterology.genetics.IButterflyMutationBuilder;

@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IWorld;
 
-import forestry.api.world.ITreeGenData;
+import forestry.api.arboriculture.ITreeGenData;
 import forestry.arboriculture.worldgen.ITreeBlockType;
 import forestry.arboriculture.worldgen.TreeBlockType;
 import forestry.core.utils.VectUtil;

@@ -41,7 +41,7 @@ import genetics.api.individual.IIndividual;
 
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ItemGroups;
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;

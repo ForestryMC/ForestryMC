@@ -13,7 +13,7 @@ import genetics.api.individual.IChromosomeList;
 import genetics.api.individual.IChromosomeValue;
 
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAlleleFlowers;
+import forestry.api.genetics.alleles.IAlleleFlowers;
 
 /**
  * Enum representing the order of chromosomes in a bee's genome and what they control.

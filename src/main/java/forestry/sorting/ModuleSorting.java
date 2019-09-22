@@ -10,8 +10,8 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFilterLogic;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.modules.ForestryModule;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;

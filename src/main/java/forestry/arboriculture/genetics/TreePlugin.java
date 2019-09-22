@@ -16,7 +16,7 @@ import genetics.api.organism.IOrganism;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.genetics.DatabaseMode;
+import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Config;
 import forestry.core.features.CoreItems;

@@ -6,10 +6,10 @@ import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.IFilterLogic;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.IForestryPacketServer;

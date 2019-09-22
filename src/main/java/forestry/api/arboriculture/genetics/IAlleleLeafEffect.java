@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 
 import genetics.api.individual.IGenome;
 
-import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.alleles.IAlleleEffect;
 
 /**
  * Simple allele encapsulating a leaf effect. (Not implemented)

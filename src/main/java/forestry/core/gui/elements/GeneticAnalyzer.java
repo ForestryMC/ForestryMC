@@ -13,11 +13,11 @@ import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
 
-import forestry.api.genetics.IDatabasePlugin;
-import forestry.api.genetics.IDatabaseTab;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IGeneticAnalyzer;
-import forestry.api.genetics.IGeneticAnalyzerProvider;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IDatabaseTab;
+import forestry.api.genetics.gatgets.IGeneticAnalyzer;
+import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.GuiEvent;

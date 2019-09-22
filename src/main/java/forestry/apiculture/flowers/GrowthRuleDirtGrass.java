@@ -18,8 +18,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.genetics.IFlowerGrowthHelper;
-import forestry.api.genetics.IFlowerGrowthRule;
+import forestry.api.genetics.flowers.IFlowerGrowthHelper;
+import forestry.api.genetics.flowers.IFlowerGrowthRule;
 
 public class GrowthRuleDirtGrass implements IFlowerGrowthRule {
 

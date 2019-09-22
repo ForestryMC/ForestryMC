@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public interface IStatsSaveHelper {
 

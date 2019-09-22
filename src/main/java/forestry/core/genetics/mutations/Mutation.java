@@ -30,9 +30,9 @@ import genetics.api.mutation.IMutation;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public abstract class Mutation implements IMutation, IMutationBuilder {
 

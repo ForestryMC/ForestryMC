@@ -10,9 +10,9 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Direction;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFilterLogic;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;

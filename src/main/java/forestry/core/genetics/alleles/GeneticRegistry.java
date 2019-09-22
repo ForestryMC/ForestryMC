@@ -31,10 +31,10 @@ import genetics.api.mutation.IMutation;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.genetics.IAlleleForestrySpecies;
-import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IGeneticRegistry;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleHandler;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;

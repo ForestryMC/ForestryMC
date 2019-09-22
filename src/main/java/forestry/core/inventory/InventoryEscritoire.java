@@ -20,8 +20,8 @@ import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 
 import forestry.api.genetics.ForestryComponentKeys;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;

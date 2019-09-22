@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 import forestry.api.core.ILocatable;
-import forestry.api.genetics.IFilterLogic;
-import forestry.api.genetics.IFilterRegistry;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.api.genetics.filter.IFilterRegistry;
+import forestry.api.genetics.filter.IFilterRuleType;
 
 public class DummyFilterRegistry implements IFilterRegistry {
 	@Override

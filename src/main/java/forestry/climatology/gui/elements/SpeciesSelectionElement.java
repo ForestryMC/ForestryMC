@@ -29,7 +29,7 @@ import genetics.api.individual.IIndividual;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.gui.events.GuiEvent;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;

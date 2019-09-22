@@ -37,7 +37,7 @@
 //import forestry.api.arboriculture.genetics.ITree;
 //import forestry.api.arboriculture.genetics.ITreeGenome;
 //import forestry.api.arboriculture.genetics.TreeChromosomes;
-//import forestry.api.genetics.AlleleManager;
+//import forestry.api.genetics.alleles.AlleleManager;
 //import forestry.api.genetics.IAllele;
 //import forestry.arboriculture.TreeConfig;
 //import forestry.arboriculture.commands.TreeGenHelper;

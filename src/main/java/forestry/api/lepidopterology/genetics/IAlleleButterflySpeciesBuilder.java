@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 
 public interface IAlleleButterflySpeciesBuilder extends IAlleleSpeciesBuilder {
 

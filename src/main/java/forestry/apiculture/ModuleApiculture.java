@@ -65,7 +65,7 @@ import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.genetics.IFlowerAcceptableRule;
+import forestry.api.genetics.flowers.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;

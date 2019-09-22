@@ -51,7 +51,7 @@ import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IBreedingTrackerHandler;
-import forestry.api.genetics.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.apiculture.BeeHousingListener;
 import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;

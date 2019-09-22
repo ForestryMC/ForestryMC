@@ -10,8 +10,8 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 
-import forestry.api.genetics.DatabaseMode;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.gui.style.ITextStyle;
 
 //TODO textcomponents?
