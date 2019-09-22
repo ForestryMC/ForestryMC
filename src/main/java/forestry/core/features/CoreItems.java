@@ -5,9 +5,9 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.ToolType;
 
 import forestry.core.ItemGroupForestry;
+import forestry.core.ModuleCore;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.config.Constants;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
@@ -24,14 +24,15 @@ import forestry.core.items.ItemPipette;
 import forestry.core.items.ItemProperties;
 import forestry.core.items.ItemSolderingIron;
 import forestry.core.items.ItemWrench;
-import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureItem;
 import forestry.modules.features.FeatureItemGroup;
+import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 
+@FeatureProvider
 public class CoreItems {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.CORE);
+	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCore.class);
 
 	/* Fertilizer */
 	public static final FeatureItem<ItemForestry> COMPOST = REGISTRY.item(ItemForestry::new, "fertilizer_bio");

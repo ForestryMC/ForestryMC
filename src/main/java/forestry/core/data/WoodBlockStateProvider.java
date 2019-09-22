@@ -176,17 +176,23 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 
 	private void addSlab(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
 		String modelLocation = getLocation(type, WoodBlockKind.SLAB);
+		String plankLocation;
+		if (type instanceof EnumVanillaWoodType) {
+			plankLocation = "block/" + type.getName() + "_planks";
+		} else {
+			plankLocation = "forestry:block/arboriculture/planks/" + type.getName();
+		}
 		addVariants(feature.block(), new Builder()
 			.alwaysIgnore(SlabBlock.WATERLOGGED)
 			.property(SlabBlock.TYPE, SlabType.TOP, (variant) -> variant.model(modelLocation + "_top"))
 			.property(SlabBlock.TYPE, SlabType.BOTTOM, (variant) -> variant.model(modelLocation))
-			.property(SlabBlock.TYPE, SlabType.DOUBLE, (variant) -> variant.model("forestry:block/arboriculture/planks/" + type.getName())));
+			.property(SlabBlock.TYPE, SlabType.DOUBLE, (variant) -> variant.model(plankLocation)));
 	}
 
 	private void addFence(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
 		String modelLocation = getLocation(type, WoodBlockKind.FENCE);
 		addVariants(feature.block(), new MultipartBuilder()
-			.always(variant -> variant.model(modelLocation))
+			.always(variant -> variant.model(modelLocation + (type instanceof EnumVanillaWoodType ? "_post" : "")))
 			.property(variant -> variant.model(modelLocation + "_side").lock(true), FourWayBlock.NORTH, true)
 			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(90), FourWayBlock.EAST, true)
 			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(180), FourWayBlock.SOUTH, true)

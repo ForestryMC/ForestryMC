@@ -25,8 +25,6 @@ import net.minecraftforge.fml.DistExecutor;
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.modules.ForestryModule;
-import forestry.climatology.features.ClimatologyBlocks;
-import forestry.climatology.features.ClimatologyItems;
 import forestry.climatology.gui.ClimatologyContainerTypes;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.network.PacketRegistryClimatology;
@@ -65,12 +63,6 @@ public class ModuleClimatology extends BlankForestryModule {
 	public static TileRegistryClimatology getTiles() {
 		Preconditions.checkNotNull(tiles);
 		return tiles;
-	}
-
-	@Override
-	public void registerFeatures() {
-		ClimatologyItems.HABITAT_SCREEN.getClass();
-		ClimatologyBlocks.HABITATFORMER.getClass();
 	}
 
 	@Override

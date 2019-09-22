@@ -1,4 +1,7 @@
 {
+  "textures": {
+    "butterfly": "forestry:item/butterflies/lepi_brimstone"
+  },
 	"elements": [
 		{
 			"from": [ 0.5, 14, 1 ],

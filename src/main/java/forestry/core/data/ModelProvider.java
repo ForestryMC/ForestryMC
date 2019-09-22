@@ -31,6 +31,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 
+import forestry.modules.features.FeatureItem;
+
 public abstract class ModelProvider implements IDataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
@@ -77,6 +79,10 @@ public abstract class ModelProvider implements IDataProvider {
 
 	protected void registerModel(Block block, ModelBuilder builder) {
 		registerModel(block.getRegistryName().getPath(), builder);
+	}
+
+	protected void registerModel(FeatureItem feature, ModelBuilder builder) {
+		registerModel(feature.item(), builder);
 	}
 
 	protected void registerModel(String path, ModelBuilder builder) {

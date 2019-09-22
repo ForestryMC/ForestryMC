@@ -127,11 +127,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerFeatures() {
-		BackpackItems.ADVENTURER_BACKPACK.getClass();
-	}
-
-	@Override
 	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
 		containerTypes = new BackPackContainerTypes(registry);
 	}

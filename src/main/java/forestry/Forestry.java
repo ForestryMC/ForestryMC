@@ -23,7 +23,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
@@ -82,6 +81,7 @@ import forestry.core.proxy.ProxyRenderClient;
 import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.TextureManagerForestry;
+import forestry.modules.ForestryModuleUids;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -179,7 +179,8 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
-		configFolder = new File("."); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
+		Proxies.common.registerTickHandlers(null);
+		configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
 
@@ -238,22 +239,23 @@ public class Forestry {
 
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
 	public static class RegistryEvents {
+
 		@SubscribeEvent(priority = EventPriority.HIGH)
-		@SuppressWarnings("unchecked")
-		public static void onRegister(RegistryEvent.Register event) {
-			ModuleManager.getModuleHandler().onObjectRegistration(event);
+		public static void createFeatures(RegistryEvent.Register<Block> event) {
+			ModuleManager.getModuleHandler().createFeatures();
 		}
 
-		@SubscribeEvent
-		public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
-			ModuleManager.getModuleHandler().registerBlocks();
-		}
-
-		@SubscribeEvent
-		public static void registerItems(RegistryEvent.Register<Item> event) {
-			ModuleManager.getModuleHandler().registerItems();
-
+		@SubscribeEvent(priority = EventPriority.LOW)
+		public static void createObjects(RegistryEvent.Register<Block> event) {
+			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
 			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
+			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+		}
+
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public static void registerObjects(RegistryEvent.Register event) {
+			//noinspection unchecked
+			ModuleManager.getModuleHandler().registerObjects(event);
 		}
 
 		@SubscribeEvent

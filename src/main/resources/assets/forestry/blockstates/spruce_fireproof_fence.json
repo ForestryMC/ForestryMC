@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "block/spruce_fence"
+        "model": "block/spruce_fence_post"
       }
     },
     {

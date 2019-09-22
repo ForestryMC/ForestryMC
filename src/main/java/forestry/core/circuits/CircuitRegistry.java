@@ -41,7 +41,6 @@ public class CircuitRegistry implements ICircuitRegistry {
 	//TODO - dimensionsavedddatamanager? check later
 	@Override
 	public ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName) {
-
 		return world.getSavedData().getOrCreate(() -> new CircuitLibrary(playerName), "CircuitLibrary_" + playerName);
 	}
 

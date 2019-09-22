@@ -38,13 +38,13 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 	}
 
 	protected static IMachinePropertiesTesr<?> createEngineProperties(Class<? extends TileEngine> teClass, String name, String textureName) {
-		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks" + textureName + ".0", false);
+		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block" + textureName + ".0", false);
 		ModuleEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCK + textureName + "_");
 		return machinePropertiesEngine;
 	}
 
 	protected static IMachinePropertiesTesr<?> createMachineProperties(Class<? extends TileBase> teClass, String name, String textureName) {
-		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":blocks" + textureName + ".0");
+		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block" + textureName + ".0");
 		Proxies.render.setRenderDefaultMachine(machinePropertiesTesr, Constants.TEXTURE_PATH_BLOCK + textureName + "_");
 		return machinePropertiesTesr;
 	}

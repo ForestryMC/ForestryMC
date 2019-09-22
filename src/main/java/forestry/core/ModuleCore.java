@@ -143,12 +143,6 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerFeatures() {
-		CoreBlocks.RESOURCE_ORE.getClass();
-		CoreItems.PEAT.getClass();
-	}
-
-	@Override
 	public void registerTiles() {
 		tiles = new TileRegistryCore();
 	}

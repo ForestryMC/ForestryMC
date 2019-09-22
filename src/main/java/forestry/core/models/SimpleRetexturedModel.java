@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.client.model.IModel;
 
-public class SimpleRetexturedModel extends BlankModel {
+public class SimpleRetexturedModel extends AbstractBakedModel {
 
 	public final IModel model;
 	@Nullable

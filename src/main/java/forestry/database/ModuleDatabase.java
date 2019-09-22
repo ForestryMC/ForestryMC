@@ -12,7 +12,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import forestry.database.features.DatabaseBlocks;
 import forestry.database.gui.DatabaseContainerTypes;
 import forestry.database.gui.GuiDatabase;
 import forestry.database.network.PacketRegistryDatabase;
@@ -45,11 +44,6 @@ public class ModuleDatabase extends BlankForestryModule {
 	@Override
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(getContainerTypes().DATABASE, GuiDatabase::new);
-	}
-
-	@Override
-	public void registerFeatures() {
-		DatabaseBlocks.DATABASE.getClass();
 	}
 
 	@Override

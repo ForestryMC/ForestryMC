@@ -4,6 +4,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.ItemGroups;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
@@ -19,19 +20,19 @@ import forestry.apiculture.items.ItemPollenCluster;
 import forestry.apiculture.items.ItemPropolis;
 import forestry.apiculture.items.ItemSmoker;
 import forestry.apiculture.items.ItemWaxCast;
-import forestry.core.config.Constants;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemScoop;
-import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureItem;
 import forestry.modules.features.FeatureItemGroup;
+import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 
+@FeatureProvider
 public class ApicultureItems {
 	// / BEES
-	public static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.APICULTURE);
+	public static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleApiculture.class);
 	public static final FeatureItem<ItemBeeGE> BEE_QUEEN = REGISTRY.item(() -> new ItemBeeGE(EnumBeeType.QUEEN), "bee_queen_ge");
 	public static final FeatureItem<ItemBeeGE> BEE_DRONE = REGISTRY.item(() -> new ItemBeeGE(EnumBeeType.DRONE), "bee_drone_ge");
 	public static final FeatureItem<ItemBeeGE> BEE_PRINCESS = REGISTRY.item(() -> new ItemBeeGE(EnumBeeType.PRINCESS), "bee_princess_ge");

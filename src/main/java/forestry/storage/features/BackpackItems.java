@@ -4,15 +4,16 @@ import forestry.api.core.ItemGroups;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.apiculture.genetics.BeeRoot;
-import forestry.core.config.Constants;
 import forestry.lepidopterology.genetics.ButterflyRoot;
-import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureItem;
+import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
+import forestry.storage.ModuleBackpacks;
 
+@FeatureProvider
 public class BackpackItems {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.BACKPACKS);
+	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleBackpacks.class);
 
 	//TODO there is a race condition here: If Backpacks loads before apiculture then the group is null.
 	public static final FeatureItem APIARIST_BACKPACK = REGISTRY.naturalistBackpack("apiarist", BeeRoot.UID, ItemGroups.tabApiculture, "apiarist_bag");

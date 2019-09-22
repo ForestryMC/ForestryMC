@@ -13,7 +13,7 @@ package forestry.core.climate;
 import com.google.common.base.MoreObjects;
 
 import javax.annotation.concurrent.Immutable;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import forestry.api.climate.IClimateState;
 
@@ -68,7 +68,7 @@ public final class AbsentClimateState implements IClimateState {
 	}
 
 	@Override
-	public IClimateState map(Function<Float, Float> mapper) {
+	public IClimateState map(UnaryOperator<Float> mapper) {
 		return this;
 	}
 

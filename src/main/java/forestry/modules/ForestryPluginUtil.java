@@ -19,6 +19,7 @@ import net.minecraftforge.fml.ModList;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Log;
+import forestry.modules.features.FeatureProvider;
 
 import org.objectweb.asm.Type;
 
@@ -35,6 +36,28 @@ public class ForestryPluginUtil {
 			modules.computeIfAbsent(info.containerID(), k -> new ArrayList<>()).add(module);
 		}
 		return modules;
+	}
+
+	public static void loadFeatureProviders() {
+		Type annotationType = Type.getType(FeatureProvider.class);
+		List<ModFileScanData> allScanData = ModList.get().getAllScanData();
+		Set<String> pluginClassNames = new HashSet<>();
+
+		for (ModFileScanData scanData : allScanData) {
+			Set<ModFileScanData.AnnotationData> annotationData = scanData.getAnnotations();
+			for (ModFileScanData.AnnotationData data : annotationData) {
+				if (Objects.equals(data.getAnnotationType(), annotationType)) {
+					pluginClassNames.add(data.getMemberName());
+				}
+			}
+		}
+		for (String className : pluginClassNames) {
+			try {
+				Class.forName(className);
+			} catch (ClassNotFoundException e) {
+				Log.error("Failed to load: {}", className, e);
+			}
+		}
 	}
 
 
@@ -65,7 +88,7 @@ public class ForestryPluginUtil {
 		Type annotationType = Type.getType(annotationClass);
 
 		List<ModFileScanData> allScanData = ModList.get().getAllScanData();
-		List<String> pluginClassNames = new ArrayList<>();
+		Set<String> pluginClassNames = new HashSet<>();
 
 		for (ModFileScanData scanData : allScanData) {
 			Set<ModFileScanData.AnnotationData> annotationData = scanData.getAnnotations();
@@ -76,18 +99,13 @@ public class ForestryPluginUtil {
 			}
 		}
 
-		Set<String> loadedClasses = new HashSet<>();//TODO: Remove
 		List<T> instances = new ArrayList<>();
 		for (String className : pluginClassNames) {
-			if (loadedClasses.contains(className)) {
-				continue;
-			}
 			try {
 				Class<?> asmClass = Class.forName(className);
 				Class<? extends T> asmInstanceClass = asmClass.asSubclass(instanceClass);
 				T instance = asmInstanceClass.newInstance();
 				instances.add(instance);
-				loadedClasses.add(className);
 			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
 				Log.error("Failed to load: {}", className, e);
 			}

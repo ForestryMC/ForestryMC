@@ -17,11 +17,11 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.BakedItemModel;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-import forestry.core.models.BlankModel;
+import forestry.core.models.AbstractBakedModel;
 import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.ModelUtil;
 
-public class ModelCrateBaked extends BlankModel {
+public class ModelCrateBaked extends AbstractBakedModel {
 	private static final float CONTENT_RENDER_OFFSET_X = 1f/16f; // how far to offset content model from the left edge of the crate model
 	private static final float CONTENT_RENDER_OFFSET_Z = 1f/128f; // how far to render the content model away from the crate model
 	private static final float CONTENT_RENDER_BLOCK_Z_SCALE = 1f/16f + (2f * CONTENT_RENDER_OFFSET_Z); // how much to scale down blocks so they look flat on the crate model
@@ -47,7 +47,7 @@ public class ModelCrateBaked extends BlankModel {
 		return contentModel.getQuads();
 	}
 
-	private class ContentModel {
+	private static class ContentModel {
 		final List<BakedQuad> quads;
 
 		private ContentModel(List<BakedQuad> quads) {
@@ -67,7 +67,7 @@ public class ModelCrateBaked extends BlankModel {
 		}
 	}
 
-	private class RawContentModel extends ContentModel {
+	private static class RawContentModel extends ContentModel {
 		private final ItemStack content;
 
 		private RawContentModel(List<BakedQuad> quads, ItemStack content) {

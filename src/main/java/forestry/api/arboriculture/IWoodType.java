@@ -14,15 +14,5 @@ import forestry.api.core.IBlockSubtype;
 public interface IWoodType extends IBlockSubtype {
 	float getHardness();
 
-	String getPlankTexture();
-
-	String getDoorLowerTexture();
-
-	String getDoorUpperTexture();
-
-	String getBarkTexture();
-
-	String getHeartTexture();
-
 	String toString();
 }

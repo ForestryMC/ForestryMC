@@ -14,13 +14,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
@@ -28,8 +25,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.ItemGroupForestry;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemBlockForestry<B extends Block> extends BlockItem {
@@ -65,19 +60,5 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
-	}
-
-	@Override
-	protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState blockState) {
-		if (getBlock().hasTileEntity(blockState)) {
-			if (stack.getItem() instanceof ItemBlockNBT && stack.getTag() != null) {
-				TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
-				if (tile != null) {
-					tile.read(stack.getTag());
-					tile.setPos(pos);
-				}
-			}
-		}
-		return super.onBlockPlaced(pos, world, player, stack, blockState);
 	}
 }

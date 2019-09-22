@@ -48,13 +48,13 @@ import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Constants;
-import forestry.core.models.BlankModel;
+import forestry.core.models.AbstractBakedModel;
 import forestry.core.models.DefaultTextureGetter;
 import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.ModelUtil;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelButterflyItem extends BlankModel {
+public class ModelButterflyItem extends AbstractBakedModel {
 	@Nullable
 	private static IModel modelButterfly;
 

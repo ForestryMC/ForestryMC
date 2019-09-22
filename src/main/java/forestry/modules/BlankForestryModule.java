@@ -55,12 +55,6 @@ public class BlankForestryModule implements IForestryModule {
 	}
 
 	/**
-	 * Can be used to register items to the backpack via the {@link forestry.api.storage.IBackpackInterface}.
-	 */
-	public void registerBackpackItems() {
-	}
-
-	/**
 	 * Can be used to register crates via the {@link forestry.api.storage.ICrateRegistry}.
 	 */
 	public void registerCrates() {

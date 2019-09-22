@@ -24,7 +24,7 @@ import forestry.core.utils.IMCUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-import forestry.storage.features.CreateItems;
+import forestry.modules.features.FeatureItem;
 import forestry.storage.items.ItemCrated;
 import forestry.storage.proxy.ProxyCrates;
 import forestry.storage.proxy.ProxyCratesClient;
@@ -37,7 +37,7 @@ public class ModuleCrates extends BlankForestryModule {
 	public static final List<String> cratesRejectedOreDict = new ArrayList<>();
 	public static Multimap<Item, ItemStack> cratesRejectedItem = HashMultimap.create();
 
-	private static final List<ItemCrated> crates = new ArrayList<>();
+	public static final List<FeatureItem<ItemCrated>> crates = new ArrayList<>();
 
 	@SuppressWarnings("NullableProblems")
 	public static ProxyCrates proxy;
@@ -50,11 +50,6 @@ public class ModuleCrates extends BlankForestryModule {
 	public void setupAPI() {
 		StorageManager.crateRegistry = new CrateRegistry();
 		proxy.registerCrateModel();
-	}
-
-	@Override
-	public void registerFeatures() {
-		CreateItems.CRATE.getClass();
 	}
 
 	@Override
@@ -171,12 +166,12 @@ public class ModuleCrates extends BlankForestryModule {
 		}
 	}
 
-	public static void registerCrate(ItemCrated crate) {
+	public static void registerCrate(FeatureItem<ItemCrated> crate) {
 		crates.add(crate);
 	}
 
 	public static void createCrateRecipes() {
-		for (ItemCrated crate : crates) {
+		/*for (ItemCrated crate : crates) {
 			ItemStack crateStack = new ItemStack(crate);
 			ItemStack uncrated = crate.getContained();
 			if (!uncrated.isEmpty()) {
@@ -187,7 +182,7 @@ public class ModuleCrates extends BlankForestryModule {
 				}
 				addUncrating(crateStack, uncrated);
 			}
-		}
+		}*/
 	}
 
 

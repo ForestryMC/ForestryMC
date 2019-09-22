@@ -5,7 +5,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.modules.ForestryModule;
-import forestry.book.features.BookItems;
 import forestry.book.proxy.ProxyBook;
 import forestry.book.proxy.ProxyBookClient;
 import forestry.core.config.Constants;
@@ -25,11 +24,6 @@ public class ModuleBook extends BlankForestryModule {
 	@Override
 	public void setupAPI() {
 		proxy.setupAPI();
-	}
-
-	@Override
-	public void registerFeatures() {
-		BookItems.BOOK.getClass();
 	}
 
 	@Override
