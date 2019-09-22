@@ -6,6 +6,7 @@
 package forestry.api.climate;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import net.minecraft.world.biome.Biome;
 
@@ -15,7 +16,7 @@ import forestry.api.core.EnumTemperature;
 /**
  * A {@link IClimateState} is used to store and handle temperature and humidity.
  * <p>
- * The values are oriented on the values of {@link Biome#getDefaultTemperature()} and {@link Biome#getRainfall()}.
+ * The values are oriented on the values of {@link Biome#getDefaultTemperature()} and {@link Biome#getDownfall()}}.
  * <p>
  * If any of the two values would be Float.NAN after an operation {@link IClimateStateHelper#absent()} will be returned
  * instead of the state.
@@ -176,7 +177,7 @@ public interface IClimateState {
 	 * @return The absent state if any of the two climate values would be Float.NAN otherwise if this state is
 	 * {@link #isMutable()} this state or if it isn't a immutable copy of the state with the new values.
 	 */
-	IClimateState map(Function<Float, Float> mapper);
+	IClimateState map(UnaryOperator<Float> mapper);
 
 	/**
 	 * @param mutable If the copy of this state should be mutable or immutable.

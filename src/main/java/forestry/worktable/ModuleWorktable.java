@@ -38,11 +38,6 @@ public class ModuleWorktable extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerFeatures() {
-		WorktableBlocks.WORKTABLE.getClass();
-	}
-
-	@Override
 	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
 		containers = new WorktableContainerTypes(registry);
 	}

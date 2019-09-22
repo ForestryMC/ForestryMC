@@ -10,13 +10,12 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
 
+import forestry.api.core.ISpriteRegister;
 import forestry.api.genetics.IAlleleForestrySpecies;
 
-public interface IAlleleButterflySpecies extends IAlleleForestrySpecies {
+public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISpriteRegister {
 
 	/**
 	 * @return the IButterflyRoot
@@ -70,7 +69,4 @@ public interface IAlleleButterflySpecies extends IAlleleForestrySpecies {
 	 * @return The loot that drops if you destroy a leaf that contains a caterpillar.
 	 */
 	Map<ItemStack, Float> getCaterpillarLoot();
-
-	@OnlyIn(Dist.CLIENT)
-	void registerSprites();
 }

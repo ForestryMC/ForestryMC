@@ -145,7 +145,7 @@ public class TRSRBakedModel implements IBakedModel {
 		public Transformer(TRSRTransformation transformation, VertexFormat format) {
 			super(new UnpackedBakedQuad.Builder(format));
 			// position transform
-			this.transformation = TRSRTransformation.getMatrix(Direction.UP/*this.parent.getVertexFormat()*/);    //TODO how to access direction
+			this.transformation = transformation.getMatrixVec();
 			// normal transform
 			this.normalTransformation = new Matrix3f();
 			this.transformation.getRotationScale(this.normalTransformation);

@@ -25,11 +25,6 @@ public class ModuleCharcoal extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerFeatures() {
-		CharcoalBlocks.LOAM.getClass();
-	}
-
-	@Override
 	public void postInit() {
 		ICharcoalManager manager = TreeManager.charcoalManager;
 		if (manager != null) {

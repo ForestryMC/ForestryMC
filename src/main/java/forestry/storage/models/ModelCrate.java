@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -46,7 +47,7 @@ public class ModelCrate implements IUnbakedModel {
 	private final ItemCrated crated;
 	private final ItemStack contained;
 
-	ModelCrate(ItemCrated crated) {
+	public ModelCrate(ItemCrated crated) {
 		this.crated = crated;
 		this.contained = crated.getContained();
 	}
@@ -75,11 +76,12 @@ public class ModelCrate implements IUnbakedModel {
 	@Override
 	public IBakedModel bake(ModelBakery bakery, Function spriteGetter, ISprite sprite, VertexFormat format) {
 		if (bakedQuads.isEmpty()) {
-			IModel crateModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation(Constants.MOD_ID + ":item/crate-filled"));
-			IBakedModel bakedModel = crateModel.bake(bakery, DefaultTextureGetter.INSTANCE, sprite, DefaultVertexFormats.ITEM);
-			//Set the crate color index to 100
-			for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L))) {
-				bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
+			IBakedModel bakedModel = bakery.getBakedModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), sprite, DefaultTextureGetter.INSTANCE, DefaultVertexFormats.ITEM);
+			if (bakedModel != null) {
+				//Set the crate color index to 100
+				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L))) {
+					bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
+				}
 			}
 		}
 		IBakedModel model;
@@ -87,7 +89,6 @@ public class ModelCrate implements IUnbakedModel {
 		IBakedModel contentModel = getCustomContentModel(bakery, sprite);
 		if (contentModel == null) {
 			model = new ModelCrateBaked(quads, contained);
-
 		} else {
 			quads.addAll(contentModel.getQuads(null, null, new Random(0)));
 			model = new ModelCrateBaked(quads);

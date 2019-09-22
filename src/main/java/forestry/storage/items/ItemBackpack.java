@@ -17,10 +17,8 @@ import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -33,7 +31,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -42,8 +39,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.IItemHandler;
-
-import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -87,12 +82,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
-	protected void openGui(ServerPlayerEntity playerEntity, ItemStack stack) {
-		NetworkHooks.openGui(playerEntity, new ContainerProvider(stack), b -> {
-			PacketBufferForestry p = new PacketBufferForestry(b);
-			p.writeEnum(type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT, ContainerBackpack.Size.values());
-			p.writeItemStack(stack);
-		});
+	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
+		buffer.writeEnum(type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT, ContainerBackpack.Size.values());
+		buffer.writeItemStack(stack);
 	}
 
 	@Override
@@ -280,43 +272,16 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
 		Item item = heldItem.getItem();
 		if (!(item instanceof ItemBackpack)) {
-			return null;    //TODO OK?
+			return null;
 		}
 		ItemBackpack backpack = (ItemBackpack) item;
-		EnumBackpackType type = backpack.type;
-		switch (type) {
+		switch (backpack.type) {
 			case NORMAL:
 				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
 			case WOVEN:
 				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
 			default:
 				return null;
-		}
-	}
-
-	//TODO see if this can be deduped. Given we pass in the held item etc.
-	public static class ContainerProvider implements INamedContainerProvider {
-
-		private ItemStack heldItem;
-
-		public ContainerProvider(ItemStack heldItem) {
-			this.heldItem = heldItem;
-		}
-
-		@Override
-		public ITextComponent getDisplayName() {
-			return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
-		}
-
-		@Nullable
-		@Override
-		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-			Item item = heldItem.getItem();
-			if (!(item instanceof ItemBackpack)) {
-				return null;
-			}
-			ItemBackpack backpack = (ItemBackpack) item;
-			return backpack.getContainer(windowId, playerEntity, heldItem);
 		}
 	}
 }

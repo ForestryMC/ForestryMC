@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Set;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -126,8 +127,9 @@ public class EventHandlerCore {
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		if (event.getMap() == TextureManagerForestry.getInstance().getTextureMap()) {
 			ErrorStateRegistry.initSprites(event);
-			TextureManagerForestry.getInstance().registerSprites(event);
 			TextureManagerForestry.initDefaultSprites(event);
+		} else if (event.getMap() == Minecraft.getInstance().getTextureMap()) {
+			TextureManagerForestry.getInstance().registerSprites(event);
 		}
 		ModelBlockCached.clear();
 	}

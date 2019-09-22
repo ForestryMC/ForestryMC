@@ -91,7 +91,6 @@ public class ClientManager {
 		for (IColoredBlock blockColor : blockColorList) {
 			if (blockColor instanceof Block) {
 				blockColors.register(ColoredBlockBlockColor.INSTANCE, (Block) blockColor);
-				//TODO models
 			}
 		}
 
@@ -99,7 +98,6 @@ public class ClientManager {
 		for (IColoredItem itemColor : itemColorList) {
 			if (itemColor instanceof Item) {
 				itemColors.register(ColoredItemItemColor.INSTANCE, (Item) itemColor);
-				//TODO models
 			}
 		}
 	}
@@ -167,7 +165,6 @@ public class ClientManager {
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private static class ColoredItemItemColor implements IItemColor {
 		public static final ColoredItemItemColor INSTANCE = new ColoredItemItemColor();
 
@@ -185,7 +182,6 @@ public class ClientManager {
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private static class ColoredBlockBlockColor implements IBlockColor {
 		public static final ColoredBlockBlockColor INSTANCE = new ColoredBlockBlockColor();
 
@@ -201,5 +197,34 @@ public class ClientManager {
 			}
 			return 0xffffff;
 		}
+	}
+
+	private static class BlockModelEntry {
+
+		private final IBakedModel model;
+		private final Block block;
+		private final Collection<BlockState> states;
+		@Nullable
+		private final BlockItem item;
+
+		private BlockModelEntry(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
+			this.model = model;
+			this.block = block;
+			this.item = item;
+			this.states = states;
+		}
+
+	}
+
+	private static class ModelEntry {
+
+		private final ModelResourceLocation modelLocation;
+		private final IBakedModel model;
+
+		private ModelEntry(ModelResourceLocation modelLocation, IBakedModel model) {
+			this.modelLocation = modelLocation;
+			this.model = model;
+		}
+
 	}
 }

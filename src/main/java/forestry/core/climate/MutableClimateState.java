@@ -2,7 +2,7 @@ package forestry.core.climate;
 
 import com.google.common.base.MoreObjects;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import forestry.api.climate.IClimateState;
 
@@ -93,7 +93,7 @@ class MutableClimateState implements IClimateState {
 	}
 
 	@Override
-	public IClimateState map(Function<Float, Float> mapper) {
+	public IClimateState map(UnaryOperator<Float> mapper) {
 		temperature = mapper.apply(temperature);
 		humidity = mapper.apply(humidity);
 		return this;
