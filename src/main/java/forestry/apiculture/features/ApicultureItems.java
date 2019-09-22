@@ -4,6 +4,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.ItemGroups;
+import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
@@ -14,7 +15,7 @@ import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemHiveFrame;
 import forestry.apiculture.items.ItemHoneyComb;
 import forestry.apiculture.items.ItemImprinter;
-import forestry.apiculture.items.ItemMinecartBeehouse;
+import forestry.apiculture.items.ItemMinecartBeehousing;
 import forestry.apiculture.items.ItemPollenCluster;
 import forestry.apiculture.items.ItemPropolis;
 import forestry.apiculture.items.ItemSmoker;
@@ -40,8 +41,7 @@ public class ApicultureItems {
 	public static final FeatureItem<ItemHabitatLocator> HABITAT_LOCATOR = REGISTRY.item(ItemHabitatLocator::new, "habitat_locator");
 	public static final FeatureItem<ItemImprinter> IMPRINTER = REGISTRY.item(ItemImprinter::new, "imprinter");
 
-	//TODO: Flatten Minecarts
-	public static final FeatureItem<ItemMinecartBeehouse> MINECART_BEEHOUSE = REGISTRY.item(ItemMinecartBeehouse::new, "cart.beehouse");
+	public static final FeatureItemGroup<ItemMinecartBeehousing, ItemMinecartBeehousing.Type> MINECART_BEEHOUSING = REGISTRY.itemGroup(ItemMinecartBeehousing::new, "cart", ItemMinecartBeehousing.Type.values());
 
 	// / COMB FRAMES
 	public static final FeatureItem<ItemHiveFrame> FRAME_UNTREATED = REGISTRY.item(() -> new ItemHiveFrame(80, 0.9f), "frame_untreated");

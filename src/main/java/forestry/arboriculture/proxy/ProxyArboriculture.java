@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import net.minecraft.block.Block;
-
-import forestry.arboriculture.IWoodTyped;
-
 public class ProxyArboriculture {
 
 	public void initializeModels() {

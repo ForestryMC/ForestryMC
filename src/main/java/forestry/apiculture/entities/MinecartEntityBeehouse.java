@@ -13,6 +13,7 @@ package forestry.apiculture.entities;
 import java.util.Collections;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -29,11 +30,13 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.apiculture.BeehouseBeeModifier;
 import forestry.apiculture.InventoryBeeHousing;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
+import forestry.apiculture.items.ItemMinecartBeehousing;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.PacketBufferForestry;
 
@@ -42,14 +45,13 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	private static final IBeeListener beeListener = new DefaultBeeListener();
 	private final InventoryBeeHousing beeInventory = new InventoryBeeHousing(9);
 
-	@SuppressWarnings("unused")
-	public MinecartEntityBeehouse(World world) {
-		super(world);
+	public MinecartEntityBeehouse(EntityType<? extends MinecartEntityBeehouse> type, World world) {
+		super(type, world);
 		beeInventory.disableAutomation();
 	}
 
 	public MinecartEntityBeehouse(World world, double posX, double posY, double posZ) {
-		super(world, posX, posY, posZ);
+		super(ModuleApiculture.getEntityTypes().BEE_HOUSE_MINECART, world, posX, posY, posZ);
 		beeInventory.disableAutomation();
 	}
 
@@ -65,7 +67,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 
 	@Override
 	public ItemStack getCartItem() {
-		return ApicultureItems.MINECART_BEEHOUSE.item().getBeeHouseMinecart();
+		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.BEE_HOUSE).stack();
 	}
 
 	/* IBeeHousing */

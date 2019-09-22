@@ -10,37 +10,50 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import java.util.Locale;
+
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.MinecartItem;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.core.IItemSubtype;
+import forestry.api.core.ItemGroups;
 import forestry.apiculture.entities.MinecartEntityApiary;
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.apiculture.entities.MinecartEntityBeehouse;
 
-public class ItemMinecartBeehouse extends MinecartItem {
-	private final String[] definition = new String[]{"cart.beehouse", "cart.apiary"};
+public class ItemMinecartBeehousing extends MinecartItem {
 
-	private static final IDispenseItemBehavior dispenserMinecartBehavior = (source, stack) -> stack;
+	//TODO merge with BlockTypeApiculture?
+	public enum Type implements IItemSubtype {
+		BEE_HOUSE,
+		APIARY;
 
-	public ItemMinecartBeehouse() {
-		super(MinecartEntity.Type.CHEST, (new Item.Properties()).maxDamage(0));
-		//		setHasSubtypes(true);
-
-		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, dispenserMinecartBehavior);
+		@Override
+		public String getName() {
+			return toString().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
+	private Type type;
+
+	public ItemMinecartBeehousing(Type type) {
+		super(null, (new Item.Properties()).maxDamage(0).group(ItemGroups.tabApiculture));
+		this.type = type;
+
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
+	}
+
+	//TODO world.addEntity returns successfully here but nothing ever appears in the world
 	@Override
 	public ActionResultType onItemUse(ItemUseContext context) {
 		World world = context.getWorld();
@@ -57,8 +70,7 @@ public class ItemMinecartBeehouse extends MinecartItem {
 		if (!context.getWorld().isRemote) {
 			MinecartEntityBeeHousingBase minecart;
 
-			//TODO flatten
-			if (true) {//stack.getItem() == 0) {
+			if (type == Type.BEE_HOUSE) {
 				minecart = new MinecartEntityBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
 			} else {
 				minecart = new MinecartEntityApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
@@ -70,7 +82,9 @@ public class ItemMinecartBeehouse extends MinecartItem {
 				minecart.setCustomName(stack.getDisplayName());
 			}
 
-			world.addEntity(minecart);
+			if(!world.addEntity(minecart)) {
+				return ActionResultType.FAIL;
+			}
 		}
 
 		stack.shrink(1);
@@ -79,29 +93,6 @@ public class ItemMinecartBeehouse extends MinecartItem {
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		//		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
-			return "item.forestry.unknown";
-		//		} else {
-		//			return "item.forestry." + definition[stack.getItemDamage()];
-		//		}
-	}
-
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
-			for (int i = 0; i < definition.length; i++) {
-				subItems.add(new ItemStack(this, 1)); //TODO
-			}
-		}
-	}
-
-	//TODO
-	public ItemStack getBeeHouseMinecart() {
-		return new ItemStack(this, 1);
-	}
-
-	//TODO
-	public ItemStack getApiaryMinecart() {
-		return new ItemStack(this, 1);
+		return "cart." + type.getName();
 	}
 }

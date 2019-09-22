@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -34,6 +35,7 @@ import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
+import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
@@ -41,6 +43,7 @@ import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
+import forestry.apiculture.items.ItemMinecartBeehousing;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.PacketBufferForestry;
 
@@ -51,13 +54,12 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
 	private final InventoryApiary inventory = new InventoryApiary();
 
-	@SuppressWarnings("unused")
-	public MinecartEntityApiary(World world) {
-		super(world);
+	public MinecartEntityApiary(EntityType<? extends MinecartEntityApiary> type, World world) {
+		super(type, world);
 	}
 
 	public MinecartEntityApiary(World world, double posX, double posY, double posZ) {
-		super(world, posX, posY, posZ);
+		super(ModuleApiculture.getEntityTypes().APIARY_MINECART, world, posX, posY, posZ);
 	}
 
 	@Override
@@ -87,7 +89,7 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 
 	@Override
 	public ItemStack getCartItem() {
-		return ApicultureItems.MINECART_BEEHOUSE.item().getApiaryMinecart();
+		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.APIARY).stack();
 	}
 
 	@Override
