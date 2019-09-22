@@ -22,7 +22,7 @@ public class ApicultureEntityTypes {
 	}
 
 	private <T extends Entity> EntityType<T> register(EntityType.Builder<T> builder, String name) {
-		EntityType<T> type = builder.build(null);	//TODO what to pass in. Null crashes on current forge
+		EntityType<T> type = builder.build(name);
 		type.setRegistryName(name);
 		registry.register(type);
 		return type;
