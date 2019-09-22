@@ -40,10 +40,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.IItemHandler;
 
+import forestry.api.core.ItemGroups;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
@@ -62,7 +62,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final EnumBackpackType type;
 
 	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
-		this(definition, type, ItemGroupForestry.tabForestry);
+		this(definition, type, ItemGroups.tabStorage);
 	}
 
 	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type, ItemGroup tab) {
