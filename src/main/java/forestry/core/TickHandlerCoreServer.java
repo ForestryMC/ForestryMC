@@ -76,7 +76,7 @@ public class TickHandlerCoreServer {
 					if (canDecorate(world, coords)) {
 						iterator.remove();
 						Random random = getRetrogenRandom(world, coords);
-						worldGenerator.retroGen(random, coords.x, coords.z, world);
+//						worldGenerator.retroGen(random, coords.x, coords.z, world);
 					}
 				}
 				checkForRetrogen.remove(dimId);
