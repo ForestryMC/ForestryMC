@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "block/acacia_fence"
+        "model": "block/acacia_fence_post"
       }
     },
     {

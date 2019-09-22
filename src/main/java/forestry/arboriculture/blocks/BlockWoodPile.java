@@ -14,6 +14,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -36,13 +37,14 @@ import forestry.core.config.Config;
 public class BlockWoodPile extends Block {
 
 	public static final BooleanProperty IS_ACTIVE = BooleanProperty.create("active");
-	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 7);
+	public static final IntegerProperty AGE = BlockStateProperties.AGE_0_7;
 	public static final int RANDOM_TICK = 160;
 
 	public BlockWoodPile() {
 		super(Block.Properties.create(Material.WOOD)
 			.hardnessAndResistance(1.5f)
 			.sound(SoundType.WOOD));
+		setDefaultState(getStateContainer().getBaseState().with(AGE, 0).with(IS_ACTIVE, false));
 	}
 
 	@Override

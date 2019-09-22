@@ -28,7 +28,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class BlankModel implements IBakedModel {
+public abstract class AbstractBakedModel implements IBakedModel {
 	@Nullable
 	protected ItemOverrideList overrideList;
 

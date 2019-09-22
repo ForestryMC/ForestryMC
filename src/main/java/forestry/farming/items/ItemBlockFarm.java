@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.ItemGroups;
+import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.farming.blocks.BlockFarm;
@@ -32,7 +32,7 @@ import forestry.farming.blocks.BlockFarm;
 public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
 	public ItemBlockFarm(BlockFarm block) {
-		super(block, new Item.Properties().group(ItemGroups.tabAgriculture));
+		super(block, new Item.Properties().group(ItemGroupForestry.tabForestry));
 	}
 
 	@OnlyIn(Dist.CLIENT)

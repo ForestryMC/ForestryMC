@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "block/dark_oak_fence"
+        "model": "block/dark_oak_fence_post"
       }
     },
     {

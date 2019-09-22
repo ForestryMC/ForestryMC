@@ -8,6 +8,7 @@ import net.minecraft.block.material.MaterialColor;
 
 import net.minecraftforge.common.ToolType;
 
+import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
 import forestry.core.blocks.BlockCore;
 import forestry.core.blocks.BlockHumus;
@@ -16,17 +17,17 @@ import forestry.core.blocks.BlockResourceStorage;
 import forestry.core.blocks.BlockStairs;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.EnumResourceType;
-import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockForestry;
-import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureBlockGroup;
+import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 
+@FeatureProvider
 public class CoreBlocks {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.CORE);
+	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCore.class);
 
 	public static final FeatureBlockGroup<BlockCore, BlockTypeCoreTesr> BASE = REGISTRY.blockGroup(BlockCore::new, BlockTypeCoreTesr.VALUES).itemWithType(ItemBlockBase::new).create();
 	public static final FeatureBlock<BlockBogEarth, ItemBlockForestry> BOG_EARTH = REGISTRY.block(BlockBogEarth::new, ItemBlockForestry::new, "bog_earth");

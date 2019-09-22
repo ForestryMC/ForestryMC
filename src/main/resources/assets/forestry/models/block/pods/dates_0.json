@@ -1,5 +1,5 @@
 {
-  "parent": "block/cocoa_age0_s",
+  "parent": "block/cocoa_stage0",
   "textures": {
     "particle": "forestry:block/pods/dates.0",
     "cocoa": "forestry:block/pods/dates.0"

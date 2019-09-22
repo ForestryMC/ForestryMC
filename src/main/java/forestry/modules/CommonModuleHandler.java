@@ -6,9 +6,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
@@ -30,6 +30,7 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
+import forestry.modules.features.FeatureType;
 import forestry.modules.features.ModFeatureRegistry;
 //import forestry.plugins.ForestryCompatPlugins;
 
@@ -94,25 +95,15 @@ public class CommonModuleHandler {
 
 	}
 
-	public void registerBlocks() {
-		for (IForestryModule module : modules) {
-			module.registerBlocks();
-		}
+	public void createFeatures() {
+		ForestryPluginUtil.loadFeatureProviders();
 	}
 
-	public void registerItems() {
-		for (IForestryModule module : modules) {
-			module.registerItems();
-		}
+	public void createObjects(BiPredicate<FeatureType, String> filter) {
+		registry.createObjects(filter);
 	}
 
-	public <T extends IForgeRegistryEntry<T>> void onObjectRegistration(RegistryEvent.Register<T> event) {
-		if (Block.class.isAssignableFrom(event.getRegistry().getRegistrySuperType())) {
-			for (IForestryModule module : modules) {
-				module.registerFeatures();
-			}
-			registry.createObjects();
-		}
+	public <T extends IForgeRegistryEntry<T>> void registerObjects(RegistryEvent.Register<T> event) {
 		registry.onRegister(event);
 	}
 
@@ -218,12 +209,6 @@ public class CommonModuleHandler {
 	public void runRegisterBackpacksAndCrates() {
 		stage = Stage.BACKPACKS_CRATES;
 		for (BlankForestryModule module : modules) {
-			if (moduleManager.isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.BACKPACKS)) {
-				Log.debug("Backpacks Start: {}", module);
-				module.registerBackpackItems();
-				Log.debug("Backpacks Complete: {}", module);
-			}
-
 			if (moduleManager.isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.CRATE)) {
 				Log.debug("Crates Start: {}", module);
 				module.registerCrates();

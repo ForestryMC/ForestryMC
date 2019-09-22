@@ -53,6 +53,18 @@ public interface IIndividualRoot<I extends IIndividual> {
 		return getTypes().createIndividual(stack);
 	}
 
+	default ItemStack createStack(I individual, IOrganismType type) {
+		return getTypes().createStack(individual, type);
+	}
+
+	default Optional<IOrganismType> getType(ItemStack itemStack) {
+		return getTypes().getType(itemStack);
+	}
+
+	default IAllele[] getTemplate(String identifier) {
+		return getTemplates().getTemplate(identifier);
+	}
+
 	Class<? extends I> getMemberClass();
 
 	/**

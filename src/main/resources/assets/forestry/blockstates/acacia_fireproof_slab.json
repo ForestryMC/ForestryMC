@@ -7,7 +7,7 @@
       "model": "block/acacia_slab"
     },
     "type=double": {
-      "model": "forestry:block/arboriculture/planks/acacia"
+      "model": "block/acacia_planks"
     }
   }
 }

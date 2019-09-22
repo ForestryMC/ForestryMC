@@ -18,7 +18,6 @@ import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.sorting.features.SortingBlocks;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.SortingContainerTypes;
 import forestry.sorting.network.PacketRegistrySorting;
@@ -54,11 +53,6 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	public void disabledSetupAPI() {
 		AlleleManager.filterRegistry = new DummyFilterRegistry();
-	}
-
-	@Override
-	public void registerFeatures() {
-		SortingBlocks.FILTER.getClass();
 	}
 
 	@Override

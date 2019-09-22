@@ -16,12 +16,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 
 import genetics.api.classification.IClassification;
@@ -160,9 +160,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void registerSprites() {
-		String spriteName = getItemTexture();
-		AtlasTexture textureMap = Minecraft.getInstance().getTextureMap();
-		//		textureMap.registerSprite(new ResourceLocation(spriteName));	//TODO textures
+	public void registerSprites(TextureStitchEvent.Pre event) {
+		event.addSprite(new ResourceLocation(getItemTexture()));
 	}
 }

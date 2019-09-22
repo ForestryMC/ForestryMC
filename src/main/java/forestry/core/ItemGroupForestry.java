@@ -34,18 +34,14 @@ import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import forestry.modules.features.FeatureProvider;
 
-//import forestry.arboriculture.genetics.Tree;
-//import forestry.arboriculture.genetics.TreeDefinition;
-//import forestry.lepidopterology.genetics.Butterfly;
-//import forestry.lepidopterology.genetics.ButterflyDefinition;
-
+//Provides no features but needs to be loaded
+@FeatureProvider
 public class ItemGroupForestry extends ItemGroup {
 
 	static {
-		if (ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
-			ItemGroups.tabAgriculture = new ItemGroupForestry(1, "agriculture");
-		}
+		ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
@@ -74,7 +70,11 @@ public class ItemGroupForestry extends ItemGroup {
 		Item iconItem;
 		switch (icon) {
 			case 1:
-				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizer_bio"));
+				if (ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
+					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "miner_bag"));
+				} else {
+					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "crate"));
+				}
 				break;
 			case 2:
 				return BeeManager.beeRoot.getTypes().createStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);

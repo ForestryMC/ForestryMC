@@ -17,9 +17,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -32,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -45,10 +44,10 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ITextureManager;
 import forestry.core.circuits.ISocketable;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
@@ -193,7 +192,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
 	}
 
 	//TODO think this is the correct method
@@ -279,13 +278,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void registerSprites(ITextureManager manager) {
+	public void registerSprites(TextureStitchEvent.Pre event) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-			AtlasTexture textureMapBlocks = Minecraft.getInstance().getTextureMap();
-			String particleTextureLocation = ((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation();
-			//			textureMapBlocks.registerSprite(new ResourceLocation(particleTextureLocation));
-			//TODO textures
+			event.addSprite(new ResourceLocation(((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation()));
 		}
 	}
 }

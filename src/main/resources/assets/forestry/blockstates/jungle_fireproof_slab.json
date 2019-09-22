@@ -7,7 +7,7 @@
       "model": "block/jungle_slab"
     },
     "type=double": {
-      "model": "forestry:block/arboriculture/planks/jungle"
+      "model": "block/jungle_planks"
     }
   }
 }

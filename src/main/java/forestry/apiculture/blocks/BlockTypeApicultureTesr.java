@@ -28,7 +28,7 @@ public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr<?> machineProperties;
 
 	<T extends TileApiaristChest> BlockTypeApicultureTesr(Class<T> teClass, String name, String textureName, VoxelShape shape) {
-		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, shape, Constants.MOD_ID + ":blocks/" + name + ".0", false);
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, shape, Constants.MOD_ID + ":block/" + name + ".0", false);
 		Proxies.render.setRenderChest(machineProperties, textureName);
 		this.machineProperties = machineProperties;
 	}

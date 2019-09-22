@@ -43,12 +43,6 @@ public class ModuleFluids extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerFeatures() {
-		ForestryFluids.BIO_ETHANOL.getClass();
-		FluidsItems.CONTAINERS.getClass();
-	}
-
-	@Override
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}

@@ -133,7 +133,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture {
 	}
 
 	@SubscribeEvent
-	public <T extends Block & IWoodTyped> void onModelBake(ModelBakeEvent event) {
+	public void onModelBake(ModelBakeEvent event) {
 		//TODO: Remove if forge fixes the model loaders
 		IBakedModel model = new ModelSapling().bake(event.getModelLoader(), DefaultTextureGetter.INSTANCE, ModelRotation.X0_Y0, DefaultVertexFormats.BLOCK);
 		for (BlockState state : ArboricultureBlocks.SAPLING_GE.block().getStateContainer().getValidStates()) {

@@ -27,8 +27,6 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import forestry.mail.features.MailBlocks;
-import forestry.mail.features.MailItems;
 import forestry.mail.gui.GuiCatalogue;
 import forestry.mail.gui.GuiLetter;
 import forestry.mail.gui.GuiMailbox;
@@ -64,12 +62,6 @@ public class ModuleMail extends BlankForestryModule {
 		PostManager.postRegistry = new PostRegistry();
 		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
 		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
-	}
-
-	@Override
-	public void registerFeatures() {
-		MailBlocks.BASE.getClass();
-		MailItems.STAMPS.getClass();
 	}
 
 	@Override
