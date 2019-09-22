@@ -12,6 +12,7 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.WoodAccess;
 import forestry.arboriculture.blocks.BlockArboriculture;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
@@ -35,18 +36,18 @@ import forestry.arboriculture.items.ItemBlockLeaves;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodDoor;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
-import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockBase;
-import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureBlockGroup;
 import forestry.modules.features.FeatureGroup;
+import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 
+@FeatureProvider
 public class ArboricultureBlocks {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.ARBORICULTURE);
+	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleArboriculture.class);
 	/* WOOD */
 	public static final FeatureBlockGroup<BlockForestryLog, EnumForestryWoodType> LOGS = woodGroup(BlockForestryLog::new, WoodBlockKind.LOG, false, EnumForestryWoodType.VALUES);
 	public static final FeatureBlockGroup<BlockForestryLog, EnumForestryWoodType> LOGS_FIREPROOF = woodGroup(BlockForestryLog::new, WoodBlockKind.LOG, true, EnumForestryWoodType.VALUES);

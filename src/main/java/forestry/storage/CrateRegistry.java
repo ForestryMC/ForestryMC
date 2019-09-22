@@ -17,13 +17,12 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.registries.ForgeRegistries;
-
 import forestry.api.core.IItemProvider;
 import forestry.api.storage.ICrateRegistry;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.modules.features.IFeatureRegistry;
+import forestry.modules.features.ModFeatureRegistry;
 import forestry.storage.items.ItemCrated;
 
 public class CrateRegistry implements ICrateRegistry {
@@ -47,13 +46,8 @@ public class CrateRegistry implements ICrateRegistry {
 			crateName = "crated." + itemName;
 		}
 
-		ItemCrated crate = new ItemCrated(stack, oreDictName);
-		crate.setRegistryName(crateName);
-
-
-		ForgeRegistries.ITEMS.register(crate);
-		Proxies.common.registerItem(crate);
-		ModuleCrates.registerCrate(crate);
+		IFeatureRegistry registry = ModFeatureRegistry.get(ModuleCrates.class);
+		ModuleCrates.registerCrate(registry.item(() -> new ItemCrated(stack, oreDictName), crateName));
 	}
 
 	@Override

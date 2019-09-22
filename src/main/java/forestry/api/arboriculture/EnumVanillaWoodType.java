@@ -45,29 +45,4 @@ public enum EnumVanillaWoodType implements IWoodType {
 	public float getHardness() {
 		return 2.0F;
 	}
-
-	@Override
-	public String getPlankTexture() {
-		return "block/" + getName() + "_planks";
-	}
-
-	@Override
-	public String getDoorLowerTexture() {
-		return "block/" + getName() + "_door_lower";
-	}
-
-	@Override
-	public String getDoorUpperTexture() {
-		return "block/" + getName() + "_door_upper";
-	}
-
-	@Override
-	public String getBarkTexture() {
-		return "block/" + getName() + "_log";
-	}
-
-	@Override
-	public String getHeartTexture() {
-		return "block/" + getName() + "_log_top";
-	}
 }

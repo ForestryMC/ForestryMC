@@ -30,7 +30,7 @@ import genetics.api.individual.IKaryotype;
 import genetics.api.root.IIndividualRoot;
 
 import forestry.api.core.INbtWritable;
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 

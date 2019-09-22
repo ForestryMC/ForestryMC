@@ -26,12 +26,14 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.core.ModuleFluids;
 import forestry.core.config.Constants;
 import forestry.core.items.DrinkProperties;
-import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureFluid;
+import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.ModFeatureRegistry;
 
+@FeatureProvider
 public enum ForestryFluids {
 	BIO_ETHANOL(new Color(255, 111, 0), 790, 1000, 300),
 	BIOMASS(new Color(100, 132, 41), 400, 6560, 100),
@@ -91,7 +93,7 @@ public enum ForestryFluids {
 	}
 
 	ForestryFluids(Color particleColor, int density, int viscosity, int flammability) {
-		this.feature = ModFeatureRegistry.get(Constants.MOD_ID).getRegistry(ForestryModuleUids.FLUIDS)
+		this.feature = ModFeatureRegistry.get(ModuleFluids.class)
 			.fluid(name().toLowerCase(Locale.ENGLISH))
 			.flammability(flammability)
 			.viscosity(viscosity)

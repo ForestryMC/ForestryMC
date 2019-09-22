@@ -25,8 +25,8 @@ import genetics.api.individual.IIndividual;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.ForestryComponentKeys;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 

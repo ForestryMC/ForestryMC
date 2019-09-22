@@ -62,8 +62,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.lepidopterology.features.LepidopterologyBlocks;
-import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
 import forestry.lepidopterology.genetics.ButterflyMutationFactory;
@@ -114,12 +112,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void setupAPI() {
 		ButterflyManager.butterflyFactory = new ButterflyFactory();
 		ButterflyManager.butterflyMutationFactory = new ButterflyMutationFactory();
-	}
-
-	@Override
-	public void registerFeatures() {
-		LepidopterologyBlocks.BUTTERFLY_CHEST.getClass();
-		LepidopterologyItems.BUTTERFLY_GE.getClass();
 	}
 
 	@Override

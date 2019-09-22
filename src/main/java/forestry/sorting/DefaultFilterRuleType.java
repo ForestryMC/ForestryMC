@@ -11,10 +11,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterRule;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterRule;
+import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.render.TextureManagerForestry;
 
 public enum DefaultFilterRuleType implements IFilterRuleType {

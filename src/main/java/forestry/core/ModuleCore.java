@@ -49,7 +49,7 @@ import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.circuits.ChipsetManager;
-import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
 import forestry.api.recipes.IHygroregulatorManager;
@@ -140,12 +140,6 @@ public class ModuleCore extends BlankForestryModule {
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 
 		RecipeManagers.hygroregulatorManager = new HygroregulatorManager();
-	}
-
-	@Override
-	public void registerFeatures() {
-		CoreBlocks.RESOURCE_ORE.getClass();
-		CoreItems.PEAT.getClass();
 	}
 
 	@Override

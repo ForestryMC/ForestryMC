@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import genetics.api.individual.IIndividual;
 
-import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.gui.IDatabaseElement;
 import forestry.core.features.CoreItems;
 

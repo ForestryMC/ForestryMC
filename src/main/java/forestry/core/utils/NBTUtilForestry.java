@@ -86,7 +86,7 @@ public abstract class NBTUtilForestry {
 
 		public NBTList(ListNBT nbtList) {
 			//TODO shouldn't need this here
-			backingList = ObfuscationReflectionHelper.getPrivateValue(ListNBT.class, nbtList, 1);
+			backingList = ObfuscationReflectionHelper.getPrivateValue(ListNBT.class, nbtList, 0);
 		}
 
 		@Override

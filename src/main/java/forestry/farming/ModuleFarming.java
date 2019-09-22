@@ -136,11 +136,6 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerFeatures() {
-		FarmingBlocks.FARM.getClass();
-	}
-
-	@Override
 	public void registerTiles() {
 		tiles = new TileRegistryFarming();
 	}

@@ -8,8 +8,8 @@ package forestry.api.arboriculture.genetics;
 import net.minecraftforge.common.PlantType;
 
 import forestry.api.arboriculture.IGrowthProvider;
-import forestry.api.genetics.IAlleleSpeciesBuilder;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 
 public interface IAlleleTreeSpeciesBuilder extends IAlleleSpeciesBuilder {
 

@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -25,7 +24,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -45,22 +43,18 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.Forestry;
-import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.features.ArboricultureBlocks;
-import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.models.SaplingModelLoader;
 import forestry.arboriculture.models.TextureLeaves;
-import forestry.arboriculture.models.WoodTextureManager;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
@@ -112,12 +106,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public void disabledSetupAPI() {
 		TreeManager.woodAccess = WoodAccess.getInstance();
-	}
-
-	@Override
-	public void registerFeatures() {
-		ArboricultureBlocks.PLANKS_FIREPROOF.getClass();
-		ArboricultureItems.SAPLING.getClass();
 	}
 
 	@Override
@@ -327,25 +315,8 @@ public class ModuleArboriculture extends BlankForestryModule {
 			return;
 		}
 		TextureLeaves.registerAllSprites(event);
-		WoodTextureManager.parseFile();
 		for (IAlleleFruit alleleFruit : AlleleFruits.getFruitAlleles()) {
 			alleleFruit.getProvider().registerSprites(event);
-		}
-		List<ResourceLocation> textures = new ArrayList<>();
-		for (IWoodType type : TreeManager.woodAccess.getRegisteredWoodTypes()) {
-			textures.add(new ResourceLocation(type.getHeartTexture()));
-			textures.add(new ResourceLocation(type.getBarkTexture()));
-			textures.add(new ResourceLocation(type.getDoorLowerTexture()));
-			textures.add(new ResourceLocation(type.getDoorUpperTexture()));
-			textures.add(new ResourceLocation(type.getPlankTexture()));
-			for (WoodBlockKind kind : WoodBlockKind.values()) {
-				for (Entry<String, String> loc : WoodTextureManager.getTextures(type, kind).entrySet()) {
-					textures.add(new ResourceLocation(loc.getValue()));
-				}
-			}
-		}
-		for (ResourceLocation loc : textures) {
-			event.addSprite(loc);
 		}
 	}
 

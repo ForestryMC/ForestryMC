@@ -23,25 +23,24 @@ import genetics.api.root.IRootDefinition;
 public class SetSpeciesNBT implements ILootFunction {
 	private final String speciesUid;
 
-	public SetSpeciesNBT(String speciesUid) {
+	private SetSpeciesNBT(String speciesUid) {
 		this.speciesUid = speciesUid;
 	}
 
 	@Override
 	public ItemStack apply(ItemStack stack, LootContext context) {
 		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stack);
-		if (definition.isRootPresent()) {
-			IIndividualRoot<IIndividual> speciesRoot = definition.get();
-			Optional<IOrganismType> speciesType = speciesRoot.getTypes().getType(stack);
-			if (speciesType.isPresent()) {
-				IAllele[] template = speciesRoot.getTemplates().getTemplate(speciesUid);
+		return definition.map((root) -> {
+			Optional<IOrganismType> speciesType = root.getType(stack);
+			return speciesType.map((type) -> {
+				IAllele[] template = root.getTemplate(speciesUid);
 				if (template.length > 0) {
-					IIndividual individual = speciesRoot.templateAsIndividual(template);
-					return speciesRoot.getTypes().createStack(individual, speciesType.get());
+					IIndividual individual = root.templateAsIndividual(template);
+					return root.createStack(individual, speciesType.get());
 				}
-			}
-		}
-		return stack;
+				return stack;
+			}).orElse(stack);
+		}).orElse(stack);
 	}
 
 	public static class Serializer extends ILootFunction.Serializer<SetSpeciesNBT> {

@@ -21,8 +21,8 @@ import genetics.api.classification.IClassification;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IAlleleForestrySpecies;
-import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 import forestry.core.utils.GeneticsUtil;
 
 public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleForestrySpecies {

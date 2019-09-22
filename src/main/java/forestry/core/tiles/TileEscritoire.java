@@ -31,8 +31,8 @@ import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
 
 import forestry.api.genetics.ForestryComponentKeys;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.ModuleCore;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.inventory.InventoryAnalyzer;

@@ -20,9 +20,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
+import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.errors.EnumErrorCode;
 
 public class ClimateUtil implements IClimateHelper {

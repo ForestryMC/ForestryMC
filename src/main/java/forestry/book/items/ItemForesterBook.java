@@ -19,6 +19,7 @@ import forestry.book.gui.GuiForesterBook;
 import forestry.book.gui.GuiForestryBookCategories;
 import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
+import forestry.core.network.PacketBufferForestry;
 
 public class ItemForesterBook extends ItemWithGui {
 
@@ -38,6 +39,10 @@ public class ItemForesterBook extends ItemWithGui {
 	@Override
 	protected void openGui(ServerPlayerEntity PlayerEntity, ItemStack stack) {
 		return;    //TODO hopefully use vanilla hacky method instead
+	}
+
+	@Override
+	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
 	}
 
 	private void bookOpenGui(PlayerEntity player, ItemStack stack) {

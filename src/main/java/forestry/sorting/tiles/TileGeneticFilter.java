@@ -29,9 +29,9 @@ import genetics.api.organism.IOrganismType;
 import genetics.api.root.IRootDefinition;
 
 import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;

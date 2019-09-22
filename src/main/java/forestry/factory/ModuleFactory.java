@@ -71,7 +71,6 @@ import forestry.core.utils.datastructures.DummyMap;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
-import forestry.factory.features.FactoryBlocks;
 import forestry.factory.gui.FactoryContainerTypes;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.gui.GuiCarpenter;
@@ -156,11 +155,6 @@ public class ModuleFactory extends BlankForestryModule {
 		FuelManager.bronzeEngineFuel = new FluidMap<>();
 		FuelManager.copperEngineFuel = new ItemStackMap<>();
 		FuelManager.generatorFuel = new FluidMap<>();
-	}
-
-	@Override
-	public void registerFeatures() {
-		FactoryBlocks.PLAIN.getClass();
 	}
 
 	@Override

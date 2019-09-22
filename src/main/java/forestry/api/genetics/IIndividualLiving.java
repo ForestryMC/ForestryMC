@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 
 import genetics.api.individual.IIndividual;
 
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+
 public interface IIndividualLiving extends IIndividual {
 
 	/**

@@ -23,8 +23,8 @@ import genetics.api.alleles.IAllele;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.commands.IStatsSaveHelper;
 
 public class TreeStatsSaveHelper implements IStatsSaveHelper {

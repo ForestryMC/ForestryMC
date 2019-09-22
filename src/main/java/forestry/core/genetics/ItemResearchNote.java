@@ -45,9 +45,9 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
 
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.NetworkUtil;

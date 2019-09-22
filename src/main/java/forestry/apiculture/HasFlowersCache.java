@@ -32,7 +32,7 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.core.IBlockPosPredicate;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.api.genetics.IFlowerProvider;
+import forestry.api.genetics.flowers.IFlowerProvider;
 import forestry.core.utils.TickHelper;
 
 public class HasFlowersCache implements INbtWritable, INbtReadable {

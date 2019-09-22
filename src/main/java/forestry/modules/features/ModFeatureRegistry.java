@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -27,14 +28,25 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
+import forestry.api.modules.ForestryModule;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
+import forestry.core.config.Constants;
+import forestry.modules.ForestryModuleUids;
 
 public class ModFeatureRegistry {
 	private static final HashMap<String, ModFeatureRegistry> registries = new LinkedHashMap<>();
 
 	public static ModFeatureRegistry get(String modId) {
 		return registries.computeIfAbsent(modId, ModFeatureRegistry::new);
+	}
+
+	public static IFeatureRegistry get(Class<?> clazz) {
+		ForestryModule module = clazz.getAnnotation(ForestryModule.class);
+		if (module != null) {
+			return get(module.containerID()).getRegistry(module.moduleID());
+		}
+		return get(Constants.MOD_ID).getRegistry(ForestryModuleUids.CORE);
 	}
 
 	public IFeatureRegistry getRegistry(String moduleID) {
@@ -61,10 +73,14 @@ public class ModFeatureRegistry {
 		return ForestryAPI.moduleManager.isModuleEnabled(modId, feature.getModuleId());
 	}
 
-	public void createObjects() {
+	public void createObjects(BiPredicate<FeatureType, String> filter) {
 		for (FeatureType type : FeatureType.values()) {
-			modules.values().forEach(features -> features.createObjects(type));
-			MinecraftForge.EVENT_BUS.post(new FeatureCreationEvent(modId, type));
+			modules.values().forEach(features -> {
+				if (filter.test(type, features.moduleID)) {
+					features.createObjects(type);
+					MinecraftForge.EVENT_BUS.post(new FeatureCreationEvent(modId, features.moduleID, type));
+				}
+			});
 		}
 	}
 

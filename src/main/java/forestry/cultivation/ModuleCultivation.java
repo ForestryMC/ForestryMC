@@ -14,7 +14,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
-import forestry.cultivation.features.CultivationBlocks;
 import forestry.cultivation.gui.CultivationContainerTypes;
 import forestry.cultivation.gui.GuiPlanter;
 import forestry.cultivation.tiles.TileRegistryCultivation;
@@ -36,11 +35,6 @@ public class ModuleCultivation extends BlankForestryModule {
 	public static CultivationContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	@Override
-	public void registerFeatures() {
-		CultivationBlocks.PLANTER.getClass();
 	}
 
 	@Override

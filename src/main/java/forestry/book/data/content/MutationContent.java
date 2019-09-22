@@ -13,8 +13,8 @@ import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.book.BookContent;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IGuiElementFactory;

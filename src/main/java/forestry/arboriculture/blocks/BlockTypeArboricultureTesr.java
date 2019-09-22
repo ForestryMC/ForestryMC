@@ -28,7 +28,7 @@ public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr<?> machineProperties;
 
 	<T extends TileNaturalistChest> BlockTypeArboricultureTesr(Class<T> teClass, String name, String renderName, VoxelShape shape) {
-		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, shape, Constants.MOD_ID + ":blocks/" + name + ".0", false);
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, shape, Constants.MOD_ID + ":block/" + name + ".0", false);
 		Proxies.render.setRenderChest(machineProperties, renderName);
 		this.machineProperties = machineProperties;
 	}

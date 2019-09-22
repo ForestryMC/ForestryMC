@@ -81,17 +81,7 @@ public abstract class BlockUtil {
 		}
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		//TODO - tags or something
-		//block.isWood(world, pos);
-		return block == Blocks.JUNGLE_LOG;
-	}
-
-	public static boolean isWoodSlabBlock(BlockState blockState, Block block, IBlockReader world, BlockPos pos) {
-		if (block.isAir(blockState, world, pos)) {
-			return false;
-		}
-
-		return block.isIn(BlockTags.WOODEN_SLABS);
+		return block.isIn(BlockTags.JUNGLE_LOGS);
 	}
 
 	public static boolean isBreakableBlock(World world, BlockPos pos) {

@@ -12,7 +12,7 @@ import net.minecraft.item.ItemGroup;
  */
 public class ItemGroups {
 
-	public static ItemGroup tabAgriculture;
+	public static ItemGroup tabStorage;
 	public static ItemGroup tabApiculture;
 	public static ItemGroup tabArboriculture;
 	public static ItemGroup tabLepidopterology;

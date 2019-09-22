@@ -47,7 +47,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.core.ItemGroupForestry;
+import forestry.api.core.ItemGroups;
 import forestry.core.config.Config;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.Translator;
@@ -56,19 +56,9 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
 
 	public ItemFluidContainerForestry(EnumContainerType type) {
-		super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
+		super((new Item.Properties()).group(ItemGroups.tabStorage));
 		this.type = type;
 	}
-
-	/* Models */
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public void registerModel(Item item, IModelManager manager) {
-	//		String identifier = "liquids/" + type.toString().toLowerCase(Locale.ENGLISH);
-	//		manager.registerItemModel(item, 0, identifier + "_empty");
-	//		//		ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, identifier), "inventory"));
-	//		//TODO 1.14 - commented out in source
-	//	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override

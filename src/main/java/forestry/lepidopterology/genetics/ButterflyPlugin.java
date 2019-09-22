@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.GeneticHelper;
 import genetics.api.organism.IOrganism;
 
-import forestry.api.genetics.DatabaseMode;
+import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;

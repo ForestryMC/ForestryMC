@@ -22,6 +22,7 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -29,6 +30,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import genetics.api.GeneticHelper;
@@ -38,9 +40,8 @@ import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 
 import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ITextureManager;
 import forestry.api.core.ItemGroups;
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
@@ -69,6 +70,9 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	public ItemButterflyGE(EnumFlutterType type) {
 		super(new Properties().group(ItemGroups.tabLepidopterology));
 		this.type = type;
+		if (type == EnumFlutterType.COCOON) {
+			addPropertyOverride(new ResourceLocation("age"), (stack, world, livingEntity) -> getAge(stack));
+		}
 	}
 
 	@Override
@@ -284,13 +288,14 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	/**
 	 * Register butterfly item sprites
+	 * @param event
 	 */
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void registerSprites(ITextureManager manager) {
+	public void registerSprites(TextureStitchEvent.Pre event) {
 		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleButterflySpecies) {
-				((IAlleleButterflySpecies) allele).registerSprites();
+				((IAlleleButterflySpecies) allele).registerSprites(event);
 			}
 		}
 	}

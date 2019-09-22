@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.ItemGroups;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.ItemStackUtil;
@@ -36,6 +37,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final String oreDictName;
 
 	public ItemCrated(ItemStack contained, @Nullable String oreDictName) {
+		super(ItemGroups.tabStorage);
 		this.contained = contained;
 		this.oreDictName = oreDictName;
 	}

@@ -7,8 +7,8 @@ package forestry.api.arboriculture;
 
 import net.minecraft.client.resources.I18n;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.alleles.AlleleManager;
 
 public enum EnumFruitFamily implements IFruitFamily {
 	PRUNES("prunes", "Prunus domestica"),

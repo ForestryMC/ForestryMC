@@ -111,7 +111,7 @@ public class TextureManagerForestry extends ReloadListener<AtlasTexture.SheetDat
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		for (ISpriteRegister spriteRegister : spriteRegisters) {
-			spriteRegister.registerSprites(getInstance());
+			spriteRegister.registerSprites(event);
 		}
 	}
 

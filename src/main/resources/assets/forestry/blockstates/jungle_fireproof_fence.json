@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "block/jungle_fence"
+        "model": "block/jungle_fence_post"
       }
     },
     {

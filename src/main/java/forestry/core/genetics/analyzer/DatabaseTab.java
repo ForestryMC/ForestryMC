@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import genetics.api.individual.IIndividual;
 
-import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.gatgets.IDatabaseTab;
 
 //TODO: Rework the database and the analyser
 public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab<I> {

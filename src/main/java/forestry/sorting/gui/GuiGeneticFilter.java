@@ -11,7 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import forestry.api.genetics.IFilterLogic;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiForestryTitled;

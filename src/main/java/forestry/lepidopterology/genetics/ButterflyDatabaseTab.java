@@ -9,10 +9,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.alleles.IAlleleValue;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.DatabaseMode;
-import forestry.api.genetics.IAlleleForestrySpecies;
-import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.gatgets.DatabaseMode;
+import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;

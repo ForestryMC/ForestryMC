@@ -61,18 +61,6 @@ public interface IForestryModule {
 	default void disabledSetupAPI() {
 	}
 
-	default void registerFeatures() {
-
-	}
-
-	default void registerBlocks() {
-
-	}
-
-	default void registerItems() {
-
-	}
-
 	default void registerTiles() {
 
 	}

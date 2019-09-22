@@ -65,7 +65,7 @@ import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.genetics.IFlowerAcceptableRule;
+import forestry.api.genetics.flowers.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
@@ -103,7 +103,6 @@ import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
-import forestry.core.ItemGroupForestry;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -200,14 +199,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
 		BeeManager.jubilanceFactory = new JubilanceFactory();
 		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
-	}
-
-	@Override
-	public void registerFeatures() {
-		//TODO: Remove this workaround to load the classes
-		ItemGroupForestry.tabForestry.getClass();
-		ApicultureItems.REGISTRY.getClass();
-		ApicultureBlocks.BASE.getClass();
 	}
 
 	@Override

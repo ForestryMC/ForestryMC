@@ -11,9 +11,9 @@ import net.minecraft.util.Direction;
 
 import genetics.api.alleles.IAllele;
 
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterLogic;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.api.genetics.filter.IFilterRuleType;
 
 public final class FakeFilterLogic implements IFilterLogic {
 	public static final FakeFilterLogic INSTANCE = new FakeFilterLogic();

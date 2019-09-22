@@ -24,7 +24,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
-import forestry.energy.features.EnergyBlocks;
 import forestry.energy.gui.EnergyContainerTypes;
 import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.gui.GuiEngineElectric;
@@ -61,11 +60,6 @@ public class ModuleEnergy extends BlankForestryModule {
 	public static EnergyContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	@Override
-	public void registerFeatures() {
-		EnergyBlocks.ENGINES.getClass();
 	}
 
 	@Override

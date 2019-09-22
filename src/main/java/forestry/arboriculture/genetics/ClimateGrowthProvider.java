@@ -13,8 +13,8 @@ import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.alleles.AlleleManager;
 
 public class ClimateGrowthProvider implements IGrowthProvider {
 

@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
-import forestry.api.genetics.IAlleleSpeciesBuilder;
+import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 
 public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder {
 
