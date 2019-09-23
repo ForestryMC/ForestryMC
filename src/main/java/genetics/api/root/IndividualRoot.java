@@ -135,6 +135,12 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends IIndividualRoot> T cast() {
+		return (T) this;
+	}
+
+	@Override
 	public boolean hasComponent(ComponentKey key) {
 		return components.has(key);
 	}

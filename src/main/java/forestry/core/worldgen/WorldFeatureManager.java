@@ -15,9 +15,7 @@ import java.util.Random;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
@@ -27,8 +25,6 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.common.IWorldGenerator;
-
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Config;
 import forestry.core.features.CoreBlocks;
@@ -37,7 +33,7 @@ import forestry.modules.ModuleManager;
 //import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 //import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
-public class WorldGenerator implements IWorldGenerator {
+public class WorldFeatureManager {
 	//TODO - worldgen
 	//	@Nullable
 	//	private OreFeature apatiteGenerator;
@@ -46,7 +42,7 @@ public class WorldGenerator implements IWorldGenerator {
 	//	@Nullable
 	//	private OreFeature tinGenerator;
 
-	public WorldGenerator() {
+	public WorldFeatureManager() {
 		for (Biome biome : ForgeRegistries.BIOMES) {
 			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.END)) {
 				continue;
@@ -57,9 +53,16 @@ public class WorldGenerator implements IWorldGenerator {
 		}
 	}
 
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider) {
-		generateWorld(random, chunkX, chunkZ, world);
+	public static void addDecorations() {
+		for (Biome biome : ForgeRegistries.BIOMES) {
+			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.END)) {
+				continue;
+			}
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36), Placement.RANDOM_COUNT_RANGE, new CountRangeConfig(4, 56, 0, 184)));
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6), Placement.RANDOM_COUNT_RANGE, new CountRangeConfig(20, 32, 0, 76)));
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6), Placement.RANDOM_COUNT_RANGE, new CountRangeConfig(20, 16, 0, 76)));
+			ModuleManager.getModuleHandler().addBiomeDecorations(biome);
+		}
 	}
 
 	//TODO - I think we just register decorators and generators now?

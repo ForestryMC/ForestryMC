@@ -33,7 +33,7 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 
 		Map<String, IRootDefinition> definitions = GeneticsAPI.apiInstance.getRoots();
 		for (IRootDefinition definition : definitions.values()) {
-			if (!definition.isRootPresent()) {
+			if (!definition.isPresent()) {
 				continue;
 			}
 			IIndividualRoot root = definition.get();
@@ -55,7 +55,7 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 	public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(Class<? extends IIndividual> individualClass, Class<? extends R> rootClass) {
 		Map<String, IRootDefinition> definitions = GeneticsAPI.apiInstance.getRoots();
 		for (IRootDefinition rootDefinition : definitions.values()) {
-			if (!rootDefinition.isRootPresent()) {
+			if (!rootDefinition.isPresent()) {
 				continue;
 			}
 			IIndividualRoot<?> root = rootDefinition.get();
@@ -82,7 +82,7 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 
 	@Override
 	public boolean isIndividual(ItemStack stack) {
-		return getSpeciesRoot(stack).isRootPresent();
+		return getSpeciesRoot(stack).isPresent();
 	}
 
 	@Override

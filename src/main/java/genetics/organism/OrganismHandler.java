@@ -31,7 +31,7 @@ public class OrganismHandler<I extends IIndividual> implements IOrganismHandler<
 	@Override
 	public Optional<I> createIndividual(ItemStack itemStack) {
 		CompoundNBT tagCompound = itemStack.getChildTag(INDIVIDUAL_KEY);
-		if (tagCompound == null || !optionalRoot.isRootPresent()) {
+		if (tagCompound == null || !optionalRoot.isPresent()) {
 			return Optional.empty();
 		}
 		IIndividualRoot<I> root = this.optionalRoot.get();

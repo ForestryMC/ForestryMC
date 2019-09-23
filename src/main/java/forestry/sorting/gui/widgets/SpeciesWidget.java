@@ -48,7 +48,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		this.gui = gui;
 		ImmutableSet.Builder<IAlleleSpecies> entries = ImmutableSet.builder();
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isRootPresent() || !(definition.get() instanceof IForestrySpeciesRoot)) {
+			if (!definition.isPresent() || !(definition.get() instanceof IForestrySpeciesRoot)) {
 				continue;
 			}
 			IForestrySpeciesRoot root = (IForestrySpeciesRoot) definition.get();
@@ -143,7 +143,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	private static ImmutableMap<IAlleleSpecies, ItemStack> createEntries() {
 		ImmutableMap.Builder<IAlleleSpecies, ItemStack> entries = ImmutableMap.builder();
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isRootPresent() || !(definition.get() instanceof IForestrySpeciesRoot)) {
+			if (!definition.isPresent() || !(definition.get() instanceof IForestrySpeciesRoot)) {
 				continue;
 			}
 			IForestrySpeciesRoot<IIndividual> root = (IForestrySpeciesRoot<IIndividual>) definition.get();

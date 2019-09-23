@@ -19,6 +19,7 @@ public class BackpackFilterNaturalist implements Predicate<ItemStack> {
 	@Override
 	public boolean test(ItemStack itemStack) {
 		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(speciesRootUid);
-		return definition.isRootPresent() && definition.get().isMember(itemStack);
+		return definition.test(root -> root.isMember(itemStack));
 	}
+
 }

@@ -59,12 +59,11 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 				String type = nbt.getString(BreedingTracker.TYPE_KEY);
 
 				IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(type);
-
-				if (definition.isRootPresent()) {
-					IBreedingTracker tracker = definition.get().getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+				definition.ifPresent(root -> {
+					IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 					tracker.decodeFromNBT(nbt);
 					MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
-				}
+				});
 			}
 		}
 	}

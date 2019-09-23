@@ -28,14 +28,14 @@ import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.multiblock.MultiblockEventHandlerClient;
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.worldgen.WorldGenerator;
+import forestry.core.worldgen.WorldFeatureManager;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
 public class ProxyClient extends ProxyCommon {
 
 	@Override
-	public void registerTickHandlers(WorldGenerator worldGenerator) {
+	public void registerTickHandlers(WorldFeatureManager worldGenerator) {
 		super.registerTickHandlers(worldGenerator);
 		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
 		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());

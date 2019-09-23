@@ -22,9 +22,9 @@ import genetics.Genetics;
 public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<CompoundNBT> {
 	public static final IGeneTemplate EMPTY = new Empty();
 
-	private static final String ALLELE_NBT_KEY = "Allele";
-	private static final String TYPE_NBT_KEY = "Type";
-	private static final String DEFINITION_NBT_KEY = "Definition";
+	private static final String NBT_ALLELE = "Allele";
+	private static final String NBT_TYPE = "Type";
+	private static final String NBT_DEFINITION = "Definition";
 
 	private final LazyOptional<IGeneTemplate> holder = LazyOptional.of(() -> this);
 
@@ -65,25 +65,25 @@ public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<Comp
 	public CompoundNBT serializeNBT() {
 		CompoundNBT compound = new CompoundNBT();
 		if (allele != null) {
-			compound.putString(ALLELE_NBT_KEY, allele.getRegistryName().toString());
+			compound.putString(NBT_ALLELE, allele.getRegistryName().toString());
 		}
 		if (type != null && root != null) {
-			compound.putByte(TYPE_NBT_KEY, (byte) type.getIndex());
-			compound.putString(DEFINITION_NBT_KEY, root.getUID());
+			compound.putByte(NBT_TYPE, (byte) type.getIndex());
+			compound.putString(NBT_DEFINITION, root.getUID());
 		}
 		return compound;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundNBT compound) {
-		if (compound.contains(TYPE_NBT_KEY) && compound.contains(DEFINITION_NBT_KEY)) {
-			ApiInstance.INSTANCE.getRoot(compound.getString(DEFINITION_NBT_KEY)).maybe().ifPresent(def -> {
+		if (compound.contains(NBT_TYPE) && compound.contains(NBT_DEFINITION)) {
+			ApiInstance.INSTANCE.getRoot(compound.getString(NBT_DEFINITION)).ifPresent(def -> {
 				this.root = def;
-				type = def.getKaryotype().getChromosomeTypes()[compound.getByte(TYPE_NBT_KEY)];
+				type = def.getKaryotype().getChromosomeTypes()[compound.getByte(NBT_TYPE)];
 			});
 		}
-		if (compound.contains(ALLELE_NBT_KEY)) {
-			allele = ApiInstance.INSTANCE.getAlleleRegistry().getAllele(compound.getString(ALLELE_NBT_KEY)).orElse(null);
+		if (compound.contains(NBT_ALLELE)) {
+			allele = ApiInstance.INSTANCE.getAlleleRegistry().getAllele(compound.getString(NBT_ALLELE)).orElse(null);
 		}
 	}
 

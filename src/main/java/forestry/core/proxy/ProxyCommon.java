@@ -20,7 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
-import forestry.core.worldgen.WorldGenerator;
+import forestry.core.worldgen.WorldFeatureManager;
 
 public class ProxyCommon {
 	public void registerItem(Item item) {
@@ -31,7 +31,7 @@ public class ProxyCommon {
 
 	}
 
-	public void registerTickHandlers(WorldGenerator worldGenerator) {
+	public void registerTickHandlers(WorldFeatureManager worldGenerator) {
 		TickHandlerCoreServer tickHandlerCoreServer = new TickHandlerCoreServer(worldGenerator);
 		MinecraftForge.EVENT_BUS.register(tickHandlerCoreServer);
 

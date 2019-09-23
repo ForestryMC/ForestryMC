@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 
 import net.minecraftforge.fml.InterModComms;
@@ -43,6 +44,9 @@ public class BlankForestryModule implements IForestryModule {
 
 	public boolean processIMCMessage(InterModComms.IMCMessage message) {
 		return false;
+	}
+
+	public void addBiomeDecorations(Biome biome) {
 	}
 
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {

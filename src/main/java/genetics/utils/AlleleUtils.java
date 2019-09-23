@@ -1,13 +1,39 @@
 package genetics.utils;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
+import net.minecraft.util.ResourceLocation;
+
+import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 
 public class AlleleUtils {
 
 	private AlleleUtils() {
+	}
+
+	@Nullable
+	public static <A extends IAllele> A getAllele(String registryName) {
+		return getAllele(new ResourceLocation(registryName));
+	}
+
+	@Nullable
+	@SuppressWarnings("unchecked")
+	public static <A extends IAllele> A getAllele(ResourceLocation registryName) {
+		Optional<IAllele> optional = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(registryName);
+		return (A) optional.orElse(null);
+	}
+
+	public static <A extends IAllele> A getAllele(String registryName, A fallback) {
+		return getAllele(new ResourceLocation(registryName), fallback);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <A extends IAllele> A getAllele(ResourceLocation registryName, A fallback) {
+		Optional<IAllele> optional = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(registryName);
+		return optional.map(allele -> (A) allele).orElse(fallback);
 	}
 
 	/**

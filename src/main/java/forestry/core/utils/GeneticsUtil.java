@@ -40,6 +40,8 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
 
+import genetics.utils.RootUtils;
+
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IArmorNaturalist;
@@ -48,6 +50,7 @@ import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRootPollinatable;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
 
@@ -62,7 +65,7 @@ public class GeneticsUtil {
 		final IArmorNaturalist armorNaturalist;
 		LazyOptional<IArmorNaturalist> armorCap = armorItemStack.getCapability(ArboricultureCapabilities.ARMOR_NATURALIST);
 		if (armorCap.isPresent()) {
-			armorNaturalist = armorCap.orElse(null);
+			armorNaturalist = armorCap.orElse(ArmorNaturalist.INSTANCE);
 		} else {
 			return false;
 		}
@@ -161,8 +164,8 @@ public class GeneticsUtil {
 
 		BlockState blockState = world.getBlockState(pos);
 
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			IIndividualRoot<IIndividual> root = definition.get();
+		for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			IIndividualRoot<IIndividual> root = definition.cast();
 			Optional<IIndividual> individual = root.getTranslator().translateMember(blockState);
 			if (individual.isPresent()) {
 				return individual;
@@ -178,11 +181,11 @@ public class GeneticsUtil {
 			return GeneticHelper.getIndividual(itemStack);
 		}
 
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isRootPresent()) {
+		for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			if (!definition.isPresent()) {
 				continue;
 			}
-			IIndividualRoot<I> root = definition.get();
+			IIndividualRoot<I> root = definition.cast();
 			Optional<I> individual = root.getTranslator().translateMember(itemStack);
 			if (individual.isPresent()) {
 				return individual;
@@ -194,19 +197,19 @@ public class GeneticsUtil {
 
 	//unfortunately quite a few unchecked casts
 	public static ItemStack convertToGeneticEquivalent(ItemStack foreign) {
-		if (!GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(foreign).isRootPresent()) {
+		if (!RootUtils.hasRoot(foreign)) {
 			Optional<? extends IIndividual> optionalIndividual = getGeneticEquivalent(foreign);
 
-			if (optionalIndividual.isPresent()) {
-				IIndividual individual = optionalIndividual.get();
-				IIndividualRoot root = individual.getRoot();
-				Optional<IOrganismType> type = root.getTypes().getType(foreign);
+			return optionalIndividual.map(individual -> {
+				IIndividualRoot<? super IIndividual> root = individual.getRoot().cast();
+				Optional<IOrganismType> type = root.getType(foreign);
 				if(type.isPresent()) {
-					ItemStack equivalent = root.getTypes().createStack(individual, type.get());
+					ItemStack equivalent = root.createStack(individual, type.get());
 					equivalent.setCount(foreign.getCount());
 					return equivalent;
 				}
-			}
+				return null;
+			}).orElse(foreign);
 		}
 		return foreign;
 	}
@@ -219,7 +222,8 @@ public class GeneticsUtil {
 		int highest = 0;
 		exclude.add(species);
 
-		IMutationContainer<IIndividual, ? extends IMutation> container = ((IIndividualRoot<IIndividual>) species.getRoot()).getComponent(ComponentKeys.MUTATIONS);
+		IIndividualRoot<IIndividual> root = species.getRoot().cast();
+		IMutationContainer<IIndividual, ? extends IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
 		for (IMutation mutation : container.getPaths(species, speciesChromosome)) {
 			highest = getHighestAdvancement(mutation.getFirstParent(), highest, exclude, speciesChromosome);
 			highest = getHighestAdvancement(mutation.getSecondParent(), highest, exclude, speciesChromosome);

@@ -54,6 +54,7 @@ import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
+import genetics.api.root.EmptyRootDefinition;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
@@ -75,6 +76,13 @@ import forestry.lepidopterology.genetics.ButterflyHelper;
 //TODO minecraft has flying entities (bat, parrot). Can some of their logic be reused here?
 //TODO getMaxSpawnedInChunk?
 public class EntityButterfly extends CreatureEntity implements IEntityButterfly {
+
+	private static final String NBT_BUTTERFLY = "BTFLY";
+	private static final String NBT_ROOT = "ROT";
+	private static final String NBT_POLLEN = "PLN";
+	private static final String NBT_STATE = "STATE";
+	private static final String NBT_EXHAUSTION = "EXH";
+	private static final String NBT_HOME = "HOME";
 
 	/* CONSTANTS */
 	public static final int COOLDOWNS = 1500;
@@ -161,19 +169,19 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 		CompoundNBT bio = new CompoundNBT();
 		contained.write(bio);
-		compoundNBT.put("BTFLY", bio);
+		compoundNBT.put(NBT_BUTTERFLY, bio);
 
 		if (pollen != null) {
 			CompoundNBT pln = new CompoundNBT();
-			pln.putString("Root", pollen.getRoot().getUID());
+			pln.putString(NBT_ROOT, pollen.getRoot().getUID());
 			pollen.write(pln);
-			compoundNBT.put("PLN", pln);
+			compoundNBT.put(NBT_POLLEN, pln);
 		}
 
-		compoundNBT.putByte("STATE", (byte) getState().ordinal());
-		compoundNBT.putInt("EXH", exhaustion);
+		compoundNBT.putByte(NBT_STATE, (byte) getState().ordinal());
+		compoundNBT.putInt(NBT_EXHAUSTION, exhaustion);
 
-		compoundNBT.putLong("home", getHomePosition().toLong());
+		compoundNBT.putLong(NBT_HOME, getHomePosition().toLong());
 	}
 
 	@Override
@@ -181,32 +189,30 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		super.readAdditional(compoundNBT);
 
 		IButterfly butterfly = null;
-		if (compoundNBT.contains("BTFLY")) {
-			butterfly = new Butterfly((CompoundNBT) compoundNBT.get("BTFLY"));
+		if (compoundNBT.contains(NBT_BUTTERFLY)) {
+			butterfly = new Butterfly(compoundNBT.getCompound(NBT_BUTTERFLY));
 		}
 		setIndividual(butterfly);
 
-		if (compoundNBT.contains("PLN")) {
-			CompoundNBT pollenNBT = compoundNBT.getCompound("PLN");
-			IIndividualRoot root;
-			if (pollenNBT.contains("Root")) {
-				root = GeneticsAPI.apiInstance.getRoot(pollenNBT.getString("Root")).get();
-			} else {
-				root = TreeManager.treeRoot;
+		if (compoundNBT.contains(NBT_POLLEN)) {
+			CompoundNBT pollenNBT = compoundNBT.getCompound(NBT_POLLEN);
+			IRootDefinition<? super IIndividualRoot<?>> definition = EmptyRootDefinition.empty();
+			if (pollenNBT.contains(NBT_ROOT)) {
+				definition = GeneticsAPI.apiInstance.getRoot(pollenNBT.getString(NBT_ROOT));
 			}
-			pollen = root.create(pollenNBT);
+			pollen = definition.orElse(TreeManager.treeRoot).create(pollenNBT);
 		}
 
-		EnumButterflyState state = EnumButterflyState.VALUES[compoundNBT.getByte("STATE")];
-		setState(state);
-		exhaustion = compoundNBT.getInt("EXH");
-		BlockPos home = BlockPos.fromLong(compoundNBT.getLong("home"));
+		EnumButterflyState butterflyState = EnumButterflyState.VALUES[compoundNBT.getByte(NBT_STATE)];
+		setState(butterflyState);
+		exhaustion = compoundNBT.getInt(NBT_EXHAUSTION);
+		BlockPos home = BlockPos.fromLong(compoundNBT.getLong(NBT_HOME));
 		setHomePosAndDistance(home, ModuleLepidopterology.maxDistance);
 	}
 
-	public float getWingFlap(float partialTicktime) {
+	public float getWingFlap(float partialTickTime) {
 		int offset = species != null ? species.getRegistryName().toString().hashCode() : world.rand.nextInt();
-		return getState().getWingFlap(this, offset, partialTicktime);
+		return getState().getWingFlap(this, offset, partialTickTime);
 	}
 
 	/* STATE - Used for AI and rendering */
@@ -333,7 +339,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	/* EXHAUSTION */
 	@Override
 	public void changeExhaustion(int change) {
-		exhaustion = exhaustion + change > 0 ? exhaustion + change : 0;
+		exhaustion = Math.max(exhaustion + change, 0);
 	}
 
 	@Override
@@ -465,12 +471,14 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		// Drop pollen if any
 		IIndividual pollen = getPollen();
 		if (pollen != null) {
-			IRootDefinition root = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
-			if (!root.isRootPresent()) {
+			IRootDefinition<? extends IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
+			if (!definition.isPresent()) {
 				return;
 			}
-			ItemStack pollenStack = root.get().getTypes().createStack(pollen, EnumGermlingType.POLLEN);
-			ItemStackUtil.dropItemStackAsEntity(pollenStack, world, posX, posY, posZ);
+			definition.ifPresent(root -> {
+				ItemStack pollenStack = root.createStack(pollen, EnumGermlingType.POLLEN);
+				ItemStackUtil.dropItemStackAsEntity(pollenStack, world, posX, posY, posZ);
+			});
 		}
 	}
 
@@ -594,10 +602,10 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 	@Override
 	public boolean canMateWith(IEntityButterfly butterfly) {
-		if (butterfly.getButterfly().getMate() != null) {
+		if (butterfly.getButterfly().getMate().isPresent()) {
 			return false;
 		}
-		if (getButterfly().getMate() != null) {
+		if (getButterfly().getMate().isPresent()) {
 			return false;
 		}
 		return !getButterfly().isGeneticEqual(butterfly.getButterfly());

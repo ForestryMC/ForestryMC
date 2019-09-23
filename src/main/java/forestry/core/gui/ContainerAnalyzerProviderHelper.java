@@ -86,7 +86,7 @@ public class ContainerAnalyzerProviderHelper {
 
 		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
 		// No individual, abort
-		if (!definition.isRootPresent()) {
+		if (!definition.isPresent()) {
 			return;
 		}
 		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();

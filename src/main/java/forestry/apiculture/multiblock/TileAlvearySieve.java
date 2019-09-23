@@ -74,7 +74,7 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 			}
 
 			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
-			if (!definition.isRootPresent()) {
+			if (!definition.isPresent()) {
 				return false;
 			}
 			IForestrySpeciesRoot<IIndividual> root = definition.get();

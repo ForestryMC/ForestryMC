@@ -64,7 +64,7 @@ public class Genetics {
 	@SuppressWarnings("unused")
 	private void setupCommon(FMLCommonSetupEvent event) {
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isRootPresent()) {
+			if (!definition.isPresent()) {
 				continue;
 			}
 			definition.get().getComponentContainer().onStage(DefaultStage.SETUP);
@@ -74,7 +74,7 @@ public class Genetics {
 	@SuppressWarnings("unused")
 	private void loadComplete(FMLLoadCompleteEvent event) {
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isRootPresent()) {
+			if (!definition.isPresent()) {
 				continue;
 			}
 			definition.get().getComponentContainer().onStage(DefaultStage.COMPLETION);

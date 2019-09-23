@@ -3,6 +3,7 @@ package genetics.api.root;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * A empty instance of an {@link IRootDefinition}.
@@ -30,8 +31,28 @@ public final class EmptyRootDefinition implements IRootDefinition {
 	}
 
 	@Override
-	public boolean isRootPresent() {
+	public IIndividualRoot cast() {
+		return get();
+	}
+
+	@Override
+	public boolean isPresent() {
 		return false;
+	}
+
+	@Override
+	public IIndividualRoot orElse(IIndividualRoot other) {
+		return other;
+	}
+
+	@Override
+	public boolean test(Predicate predicate) {
+		return false;
+	}
+
+	@Override
+	public Optional filter(Predicate predicate) {
+		return Optional.empty();
 	}
 
 	@Override
