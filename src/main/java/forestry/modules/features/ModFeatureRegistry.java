@@ -41,6 +41,7 @@ import forestry.api.storage.EnumBackpackType;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
 
+//TODO: Sort Registries and Features
 public class ModFeatureRegistry {
 	private static final HashMap<String, ModFeatureRegistry> registries = new LinkedHashMap<>();
 
@@ -258,15 +259,6 @@ public class ModFeatureRegistry {
 				containerType.setRegistryName(feature.getModId(), feature.getIdentifier());
 				containerTypeFeature.setContainerType(containerType);
 			}
-			//			if (feature instanceof IMachineFeature) {
-			//				MachineGroup group = initObject(feature, ((IMachineFeature) feature).apply(((IMachineFeature) feature).getConstructor().createObject()));
-			//				((IMachineFeature) feature).setGroup(group);
-			//			}
-			//			if (feature instanceof IFluidDefinition) {
-			//				FluidType fluid = initObject(feature, ((IFluidDefinition) feature).apply(((IFluidDefinition) feature).getConstructor().createObject()));
-			//				((IFluidDefinition) feature).setFluid(fluid);
-			//			}
-
 		}
 
 		public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {

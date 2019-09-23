@@ -58,6 +58,10 @@ public class ItemGroupForestry extends ItemGroup {
 
 	public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
 
+	public static void create() {
+		//Needed to load the groups before the feature creation
+	}
+
 	private final int icon;
 
 	private ItemGroupForestry(int icon, String label) {
