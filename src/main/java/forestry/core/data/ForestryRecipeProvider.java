@@ -42,6 +42,7 @@ import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.circuits.ICircuit;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.blocks.BlockTypeApiculture;
@@ -60,6 +61,7 @@ import forestry.climatology.features.ClimatologyItems;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.EnumCircuitBoardType;
+import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
@@ -83,8 +85,14 @@ import forestry.farming.features.FarmingBlocks;
 import forestry.food.features.FoodItems;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.features.LepidopterologyItems;
+import forestry.mail.blocks.BlockTypeMail;
+import forestry.mail.features.MailBlocks;
+import forestry.mail.features.MailItems;
+import forestry.mail.items.EnumStampDefinition;
+import forestry.mail.items.ItemLetter;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureBlock;
+import forestry.modules.features.FeatureItem;
 import forestry.storage.features.BackpackItems;
 
 public class ForestryRecipeProvider extends ForgeRecipeProvider {
@@ -111,6 +119,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerFarmingRecipes(helper);
 		registerFluidsRecipes(helper);
 		registerLepidopterologyRecipes(helper);
+		registerMailRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -1056,6 +1065,61 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.patternLine(" # ").patternLine("XYX").patternLine("XXX")
 						.addCriterion("has_butterfly", this.hasItem(LepidopterologyItems.BUTTERFLY_GE.item()))::build,
 				ForestryModuleUids.LEPIDOPTEROLOGY);
+	}
+
+	private void registerMailRecipes(RecipeDataHelper helper) {
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(MailItems.CATALOGUE.item())
+				.addIngredient(Items.BOOK)
+				.addIngredient(ForestryTags.Items.STAMPS)
+				.addCriterion("has_book", this.hasItem(Items.BOOK))::build,
+				ForestryModuleUids.MAIL);
+
+		//TODO fallback ingredient
+		helper.moduleConditionRecipe(
+				ShapelessRecipeBuilder.shapelessRecipe(MailItems.LETTERS.get(ItemLetter.Size.EMPTY, ItemLetter.State.FRESH).item())
+				.addIngredient(Items.PAPER)
+				.addIngredient(Ingredient.merge(Lists.newArrayList(Ingredient.fromTag(ForestryTags.Items.PROPOLIS), Ingredient.fromTag(Tags.Items.SLIMEBALLS))))
+				.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
+				ForestryModuleUids.MAIL);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(MailBlocks.BASE.get(BlockTypeMail.MAILBOX).block())
+				.key('#', ForestryTags.Items.INGOT_TIN)
+				.key('X', Tags.Items.CHESTS_WOODEN)
+				.key('Y', CoreItems.STURDY_CASING.item())
+				.patternLine(" # ").patternLine("#Y#").patternLine("XXX")
+				.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.MAIL);
+		Item[] emptiedLetter = MailItems.LETTERS.getRowFeatures(ItemLetter.Size.EMPTY).stream().map(FeatureItem::getItem).toArray(Item[]::new);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(Items.PAPER)
+				.key('#', Ingredient.fromItems(emptiedLetter))
+				.patternLine(" # ").patternLine(" # ").patternLine(" # ")
+				.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
+				ForestryModuleUids.MAIL);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(MailBlocks.BASE.get(BlockTypeMail.TRADE_STATION).block())
+				.key('#', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.BRONZE).getItem())
+				.key('X', Tags.Items.CHESTS_WOODEN)
+				.key('Y', CoreItems.STURDY_CASING.item())
+				.key('Z', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.IRON).item())
+				.key('W', createNbtIngredient(ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{})))
+				.patternLine("Z#Z").patternLine("#Y#").patternLine("XWX")
+				.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.MAIL);
+
+		//TODO fallback
+		Ingredient glue = Ingredient.merge(Lists.newArrayList(Ingredient.fromTag(ForestryTags.Items.DROP_HONEY), Ingredient.fromItems(Items.SLIME_BALL)));
+		for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(MailItems.STAMPS.get(stampDefinition).item(), 9)
+					.key('X', stampDefinition.getCraftingIngredient())
+					.key('#', Items.PAPER)
+					.key('Z', glue)
+					.patternLine("XXX").patternLine("###").patternLine("ZZZ")
+					.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
+					ForestryModuleUids.MAIL);
+		}
 	}
 
 }
