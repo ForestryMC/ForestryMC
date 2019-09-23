@@ -24,7 +24,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.event.ForgeEventFactory;
 
-import forestry.api.world.ITreeGenData;
+import forestry.api.arboriculture.ITreeGenData;
 import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.tiles.TileTreeContainer;
 import forestry.core.tiles.TileUtil;

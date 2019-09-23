@@ -13,9 +13,9 @@ package forestry.core.genetics.alleles;
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeType;
 
-import forestry.api.genetics.IAlleleFactory;
-import forestry.api.genetics.IAlleleFlowers;
-import forestry.api.genetics.IFlowerProvider;
+import forestry.api.genetics.alleles.IAlleleFactory;
+import forestry.api.genetics.alleles.IAlleleFlowers;
+import forestry.api.genetics.flowers.IFlowerProvider;
 import forestry.apiculture.genetics.alleles.AlleleFlowers;
 
 public class AlleleFactory implements IAlleleFactory {

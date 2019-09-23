@@ -31,7 +31,7 @@
 //import net.minecraft.util.math.BlockPos;
 //import net.minecraft.world.World;
 //
-//import forestry.api.genetics.AlleleManager;
+//import forestry.api.genetics.alleles.AlleleManager;
 //import forestry.api.genetics.IAlleleSpecies;
 //import forestry.api.genetics.IBreedingTracker;
 //import forestry.core.config.Constants;

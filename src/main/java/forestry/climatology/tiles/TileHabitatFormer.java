@@ -39,7 +39,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IHygroregulatorRecipe;
-import forestry.climatology.ModuleClimatology;
+import forestry.climatology.features.ClimatologyTiles;
 import forestry.climatology.gui.ContainerHabitatFormer;
 import forestry.climatology.inventory.InventoryHabitatFormer;
 import forestry.core.climate.ClimateTransformer;
@@ -66,7 +66,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	private final TankManager tankManager;
 
 	public TileHabitatFormer() {
-		super(ModuleClimatology.getTiles().HABITAT_FORMER, 1200, 10000);
+		super(ClimatologyTiles.HABITAT_FORMER.tileType(), 1200, 10000);
 		this.transformer = new ClimateTransformer(this);
 		setInternalInventory(new InventoryHabitatFormer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());

@@ -10,7 +10,6 @@ import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,6 +26,7 @@ import forestry.api.modules.IForestryModule;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
+import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
@@ -96,6 +96,7 @@ public class CommonModuleHandler {
 	}
 
 	public void createFeatures() {
+		ItemGroupForestry.create();
 		ForestryPluginUtil.loadFeatureProviders();
 	}
 
@@ -107,23 +108,9 @@ public class CommonModuleHandler {
 		registry.onRegister(event);
 	}
 
-	//TODO generics or something on these registry events
-	//TODO possible to do this for modules too?
-	public void registerTileEntities() {
-		for (IForestryModule module : modules) {
-			module.registerTiles();
-		}
-	}
-
 	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
 		for (IForestryModule module : modules) {
 			module.registerEntityTypes(registry);
-		}
-	}
-
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		for (IForestryModule module : modules) {
-			module.registerContainerTypes(registry);
 		}
 	}
 

@@ -11,9 +11,6 @@
 package forestry.farming;
 
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.List;
 
@@ -24,7 +21,6 @@ import net.minecraft.block.CropsBlock;
 import net.minecraft.block.NetherWartBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -33,7 +29,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -65,7 +60,7 @@ import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.features.FarmingBlocks;
-import forestry.farming.gui.FarmingContainerTypes;
+import forestry.farming.features.FarmingContainers;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCocoa;
@@ -88,7 +83,6 @@ import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
-import forestry.farming.tiles.TileRegistryFarming;
 import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -102,26 +96,10 @@ public class ModuleFarming extends BlankForestryModule {
 	@SuppressWarnings("NullableProblems")
 	public static ProxyFarming proxy;
 
-	@Nullable
-	private static TileRegistryFarming tiles;
-	@Nullable
-	private static FarmingContainerTypes containerTypes;
-
 	public ModuleFarming() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyFarmingClient(), () -> () -> new ProxyFarming());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-
-	public static TileRegistryFarming getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
-
-	public static FarmingContainerTypes getContainerTypes() {
-		Preconditions.checkNotNull(containerTypes);
-		return containerTypes;
 	}
 
 
@@ -136,19 +114,8 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryFarming();
-	}
-
-	@Override
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		containerTypes = new FarmingContainerTypes(registry);
-	}
-
-	@Override
 	public void registerGuiFactories() {
-		FarmingContainerTypes containerTypes = getContainerTypes();
-		ScreenManager.registerFactory(containerTypes.FARM, GuiFarm::new);
+		ScreenManager.registerFactory(FarmingContainers.FARM.containerType(), GuiFarm::new);
 	}
 
 	@Override
@@ -161,10 +128,10 @@ public class ModuleFarming extends BlankForestryModule {
 		}
 
 		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-			new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
+				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
 
 		BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));

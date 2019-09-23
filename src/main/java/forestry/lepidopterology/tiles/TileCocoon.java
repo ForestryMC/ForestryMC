@@ -47,7 +47,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
-import forestry.lepidopterology.ModuleLepidopterology;
+import forestry.lepidopterology.features.LepidopterologyTiles;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 
@@ -59,11 +59,11 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	private boolean isSolid;
 
 	public TileCocoon() {
-		super(ModuleLepidopterology.getTiles().COCOON);
+		super(LepidopterologyTiles.COCOON.tileType());
 	}
 
 	public TileCocoon(boolean isSolid) {
-		super(isSolid ? ModuleLepidopterology.getTiles().SOLID_COCOON : ModuleLepidopterology.getTiles().COCOON);
+		super(isSolid ? LepidopterologyTiles.SOLID_COCOON.tileType() : LepidopterologyTiles.COCOON.tileType());
 		this.isSolid = isSolid;
 		if (isSolid) {
 			this.age = 2;

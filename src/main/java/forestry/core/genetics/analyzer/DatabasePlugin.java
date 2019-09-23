@@ -6,8 +6,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.individual.IIndividual;
 
-import forestry.api.genetics.IDatabasePlugin;
-import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IDatabaseTab;
 
 
 @OnlyIn(Dist.CLIENT)

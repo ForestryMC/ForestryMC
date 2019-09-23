@@ -16,7 +16,7 @@ import genetics.api.organism.IOrganism;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
-import forestry.api.genetics.DatabaseMode;
+import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.config.Config;

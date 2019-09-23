@@ -40,8 +40,8 @@ import forestry.core.tiles.TileBase;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.MailAddress;
-import forestry.mail.ModuleMail;
 import forestry.mail.TradeStation;
+import forestry.mail.features.MailTiles;
 import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.gui.ContainerTrader;
 import forestry.mail.inventory.InventoryTradeStation;
@@ -52,7 +52,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	private IMailAddress address;
 
 	public TileTrader() {
-		super(ModuleMail.getTiles().TRADER);
+		super(MailTiles.TRADER.tileType());
 		address = new MailAddress();
 		setInternalInventory(new InventoryTradeStation());
 	}

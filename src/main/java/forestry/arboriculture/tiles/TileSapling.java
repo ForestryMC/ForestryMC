@@ -31,7 +31,7 @@ import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.arboriculture.worldgen.FeatureArboriculture;
 import forestry.core.worldgen.FeatureBase;
 
@@ -41,7 +41,7 @@ public class TileSapling extends TileTreeContainer {
 	private int timesTicked = 0;
 
 	public TileSapling() {
-		super(ModuleArboriculture.getTiles().sapling);
+		super(ArboricultureTiles.SAPLING.tileType());
 	}
 
 	/* SAVING & LOADING */

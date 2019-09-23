@@ -52,7 +52,7 @@
 //import forestry.api.arboriculture.WoodBlockKind;
 //import forestry.api.core.EnumHumidity;
 //import forestry.api.core.EnumTemperature;
-//import forestry.api.genetics.AlleleManager;
+//import forestry.api.genetics.alleles.AlleleManager;
 //import forestry.apiculture.ModuleApiculture;
 //import forestry.apiculture.flowers.Flower;
 //import forestry.apiculture.flowers.FlowerRegistry;

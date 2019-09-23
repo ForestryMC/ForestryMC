@@ -8,7 +8,7 @@ import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
-import forestry.api.genetics.IFilterData;
+import forestry.api.genetics.filter.IFilterData;
 
 public class FilterData implements IFilterData {
 	private IRootDefinition definition;

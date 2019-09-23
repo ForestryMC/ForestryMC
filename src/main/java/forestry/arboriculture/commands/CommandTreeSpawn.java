@@ -29,7 +29,7 @@
 //import com.mojang.brigadier.builder.ArgumentBuilder;
 //
 //import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-//import forestry.api.genetics.AlleleManager;
+//import forestry.api.genetics.alleles.AlleleManager;
 //import forestry.api.genetics.IAllele;
 //import forestry.core.commands.CommandHelpers;
 //import forestry.core.commands.SpeciesNotFoundException;

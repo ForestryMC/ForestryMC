@@ -8,7 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.IFilterLogic;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketHandlerClient;

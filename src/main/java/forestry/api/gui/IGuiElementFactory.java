@@ -15,10 +15,10 @@ import genetics.api.alleles.IAlleleValue;
 import genetics.api.mutation.IMutation;
 
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAlleleForestrySpecies;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IGeneticAnalyzer;
-import forestry.api.genetics.IGeneticAnalyzerProvider;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.gatgets.IGeneticAnalyzer;
+import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.api.gui.style.ITextStyle;
 
 /**

@@ -23,7 +23,7 @@ public interface IIndividualBuilder<I extends IIndividual> {
 	 * @param type   The position at the chromosome array.
 	 * @param active True if you want to set the active allele, false otherwise.
 	 */
-	void setAllele(IChromosomeType type, IAllele allele, boolean active);
+	IIndividualBuilder<I> set(IChromosomeType type, IAllele allele, boolean active);
 
 	/**
 	 * Sets a allele at a position of the chromosome.
@@ -32,7 +32,7 @@ public interface IIndividualBuilder<I extends IIndividual> {
 	 * @param type         The position at the chromosome array.
 	 * @param active       True if you want to set the active allele, false otherwise.
 	 */
-	void setAllele(IChromosomeType type, ResourceLocation registryName, boolean active);
+	IIndividualBuilder<I> set(IChromosomeType type, ResourceLocation registryName, boolean active);
 
 	/**
 	 * @return The {@link IIndividual} that was used to create this builder.

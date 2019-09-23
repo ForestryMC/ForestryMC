@@ -29,9 +29,9 @@ import genetics.api.organism.IOrganismType;
 import genetics.api.root.IRootDefinition;
 
 import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterLogic;
 import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
@@ -40,7 +40,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.sorting.FilterData;
 import forestry.sorting.FilterLogic;
-import forestry.sorting.ModuleSorting;
+import forestry.sorting.features.SortingTiles;
 import forestry.sorting.gui.ContainerGeneticFilter;
 import forestry.sorting.inventory.InventoryFilter;
 import forestry.sorting.inventory.ItemHandlerFilter;
@@ -52,7 +52,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	private final AdjacentInventoryCache inventoryCache;
 
 	public TileGeneticFilter() {
-		super(ModuleSorting.getTiles().GENETIC_FILTER);
+		super(SortingTiles.GENETIC_FILTER.tileType());
 		this.inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 		this.logic = new FilterLogic(this, (logic1, server, player) -> sendToPlayers(server, player));
 		setInternalInventory(new InventoryFilter(this));

@@ -39,7 +39,7 @@ import genetics.api.root.IndividualRoot;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IBreedingTrackerHandler;
-import forestry.api.genetics.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;

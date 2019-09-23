@@ -15,15 +15,22 @@ import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import net.minecraftforge.fml.network.IContainerFactory;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IBlockSubtype;
@@ -34,6 +41,7 @@ import forestry.api.storage.EnumBackpackType;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
 
+//TODO: Sort Registries and Features
 public class ModFeatureRegistry {
 	private static final HashMap<String, ModFeatureRegistry> registries = new LinkedHashMap<>();
 
@@ -188,6 +196,16 @@ public class ModFeatureRegistry {
 			return feature;
 		}
 
+		@Override
+		public <T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
+			return register(new FeatureTileType<>(moduleID, identifier, constuctor, validBlocks));
+		}
+
+		@Override
+		public <C extends Container> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier) {
+			return register(new FeatureContainerType<>(moduleID, identifier, factory));
+		}
+
 		public IModFeature getFeature(String identifier) {
 			return featureById.get(identifier);
 		}
@@ -230,16 +248,17 @@ public class ModFeatureRegistry {
 				flowing.setRegistryName(feature.getModId(), feature.getIdentifier() + "_flowing");
 				fluidFeature.setFluid(fluid);
 				fluidFeature.setFlowing(flowing);
+			} else if (feature instanceof ITileTypeFeature) {
+				ITileTypeFeature tileTypeFeature = (ITileTypeFeature<?>) feature;
+				TileEntityType<?> tileEntityType = (TileEntityType<?>) tileTypeFeature.getTileTypeConstructor().build(null);
+				tileEntityType.setRegistryName(feature.getModId(), feature.getIdentifier());
+				tileTypeFeature.setTileType(tileEntityType);
+			} else if (feature instanceof IContainerTypeFeature) {
+				IContainerTypeFeature containerTypeFeature = (IContainerTypeFeature<?>) feature;
+				ContainerType<?> containerType = (ContainerType<?>) IForgeContainerType.create(containerTypeFeature.getContainerFactory());
+				containerType.setRegistryName(feature.getModId(), feature.getIdentifier());
+				containerTypeFeature.setContainerType(containerType);
 			}
-			//			if (feature instanceof IMachineFeature) {
-			//				MachineGroup group = initObject(feature, ((IMachineFeature) feature).apply(((IMachineFeature) feature).getConstructor().createObject()));
-			//				((IMachineFeature) feature).setGroup(group);
-			//			}
-			//			if (feature instanceof IFluidDefinition) {
-			//				FluidType fluid = initObject(feature, ((IFluidDefinition) feature).apply(((IFluidDefinition) feature).getConstructor().createObject()));
-			//				((IFluidDefinition) feature).setFluid(fluid);
-			//			}
-
 		}
 
 		public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {

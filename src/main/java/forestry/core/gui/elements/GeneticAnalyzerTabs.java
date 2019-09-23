@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import forestry.api.genetics.IDatabasePlugin;
-import forestry.api.genetics.IDatabaseTab;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.events.GuiEvent;
 import forestry.core.genetics.analyzer.AnalyzerTab;

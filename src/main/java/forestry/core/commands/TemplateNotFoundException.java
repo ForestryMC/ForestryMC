@@ -13,7 +13,7 @@ package forestry.core.commands;
 import net.minecraft.command.CommandException;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public class TemplateNotFoundException extends CommandException {
 

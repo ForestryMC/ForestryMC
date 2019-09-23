@@ -19,7 +19,7 @@ import net.minecraft.world.IWorld;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.world.ITreeGenData;
+import forestry.api.arboriculture.ITreeGenData;
 
 public class TreeBlockTypeLeaf implements ITreeBlockType {
 	private final ITreeGenData tree;

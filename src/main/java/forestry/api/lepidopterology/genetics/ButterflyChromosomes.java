@@ -11,7 +11,7 @@ import genetics.api.individual.IChromosomeList;
 import genetics.api.individual.IChromosomeValue;
 
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAlleleFlowers;
+import forestry.api.genetics.alleles.IAlleleFlowers;
 
 public class ButterflyChromosomes {
 	public static final IChromosomeList TYPES = GeneticsAPI.apiInstance.getChromosomeList("rootButterflies");

@@ -17,7 +17,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
-import forestry.api.world.ITreeGenData;
+import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
 
 public class FeatureBalsa extends FeatureTree {

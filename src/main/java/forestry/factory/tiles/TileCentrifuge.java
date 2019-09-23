@@ -43,7 +43,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
@@ -65,7 +65,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
 	public TileCentrifuge() {
-		super(ModuleFactory.getTiles().centrifuge, 800, Constants.MACHINE_MAX_ENERGY);
+		super(FactoryTiles.CENTRIFUGE.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
 		craftPreviewInventory = new CraftResultInventory();
 	}

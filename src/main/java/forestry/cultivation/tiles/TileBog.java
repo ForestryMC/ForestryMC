@@ -5,12 +5,12 @@ import net.minecraft.util.NonNullList;
 
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
-import forestry.cultivation.ModuleCultivation;
+import forestry.cultivation.features.CultivationTiles;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileBog extends TilePlanter {
 	public TileBog() {
-		super(ModuleCultivation.getTiles().BOG, ForestryFarmIdentifier.PEAT);
+		super(CultivationTiles.BOG.tileType(), ForestryFarmIdentifier.PEAT);
 	}
 
 	@Override

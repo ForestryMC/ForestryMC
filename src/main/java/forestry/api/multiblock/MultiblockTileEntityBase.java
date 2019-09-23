@@ -9,12 +9,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.farming.ModuleFarming;
 
 /**
  * Base logic class for Multiblock-connected tile entities.
@@ -24,8 +23,8 @@ import forestry.farming.ModuleFarming;
 public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> extends TileEntity implements IMultiblockComponent {
 	private final T multiblockLogic;
 
-	public MultiblockTileEntityBase(T multiblockLogic) {
-		super(ModuleFarming.getTiles().plain);    //TODO tileentitytype?
+	public MultiblockTileEntityBase(TileEntityType<?> tileEntityType, T multiblockLogic) {
+		super(tileEntityType);
 		this.multiblockLogic = multiblockLogic;
 	}
 

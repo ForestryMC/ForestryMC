@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import forestry.api.world.ITreeGenData;
+import forestry.api.arboriculture.ITreeGenData;
 
 public abstract class FeatureTreeVanilla extends FeatureTree {
 	protected FeatureTreeVanilla(ITreeGenData tree) {

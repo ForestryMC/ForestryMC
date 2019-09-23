@@ -3,12 +3,16 @@ package forestry.core.utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraftforge.api.distmarker.Dist;
+
+import net.minecraftforge.fml.DistExecutor;
+
 public class RenderUtil {
 
 	private RenderUtil() {
 	}
 
 	public static void markForUpdate(BlockPos pos) {
-		Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ()));
 	}
 }

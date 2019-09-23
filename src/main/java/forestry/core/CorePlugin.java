@@ -7,7 +7,7 @@ import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.classification.IClassificationRegistry;
 
-import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.GeneticRegistry;
 

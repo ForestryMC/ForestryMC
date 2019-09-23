@@ -25,7 +25,7 @@ import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.tiles.TileCarpenter;
 
@@ -37,7 +37,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 	}
 
 	public ContainerCarpenter(int windowId, PlayerInventory inventoryplayer, TileCarpenter tile) {
-		super(windowId, ModuleFactory.getContainerTypes().CARPENTER, inventoryplayer, tile, 8, 136);
+		super(windowId, FactoryContainers.CARPENTER.containerType(), inventoryplayer, tile, 8, 136);
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {

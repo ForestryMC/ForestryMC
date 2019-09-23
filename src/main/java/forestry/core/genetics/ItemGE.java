@@ -29,7 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.items.ItemForestry;
 
 public abstract class ItemGE extends ItemForestry {

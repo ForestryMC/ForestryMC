@@ -20,11 +20,11 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.utils.ItemStackUtil;
 
 public class ResearchHandler<I extends IIndividual> implements IResearchHandler<I> {

@@ -28,7 +28,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -51,7 +50,6 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -65,7 +63,7 @@ import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.genetics.IFlowerAcceptableRule;
+import forestry.api.genetics.flowers.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
@@ -73,6 +71,7 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.features.ApicultureBlocks;
+import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -80,7 +79,6 @@ import forestry.apiculture.genetics.BeeFactory;
 import forestry.apiculture.genetics.BeeMutationFactory;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.genetics.JubilanceFactory;
-import forestry.apiculture.gui.ApicultureContainerTypes;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiAlveary;
@@ -95,7 +93,6 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.network.PacketRegistryApiculture;
-import forestry.apiculture.tiles.TileRegistryApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
@@ -128,10 +125,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Nullable
 	private static TextureAtlasSprite beeSprite;
 	@Nullable
-	private static TileRegistryApiculture tiles;
-	@Nullable
-	private static ApicultureContainerTypes containerTypes;
-	@Nullable
 	private static HiveRegistry hiveRegistry;
 
 	public static String beekeepingMode = "NORMAL";
@@ -151,16 +144,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerProfession villagerApiarist;
-
-	public static TileRegistryApiculture getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
-
-	public static ApicultureContainerTypes getContainerTypes() {
-		Preconditions.checkNotNull(containerTypes);
-		return containerTypes;
-	}
 
 	public static HiveRegistry getHiveRegistry() {
 		Preconditions.checkNotNull(hiveRegistry);
@@ -194,26 +177,15 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryApiculture();
-	}
-
-	@Override
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		containerTypes = new ApicultureContainerTypes(registry);
-	}
-
-	@Override
 	public void registerGuiFactories() {
-		ApicultureContainerTypes containerTypes = getContainerTypes();
-		ScreenManager.registerFactory(containerTypes.ALVEARY, GuiAlveary::new);
-		ScreenManager.registerFactory(containerTypes.ALVEARY_HYGROREGULATOR, GuiAlvearyHygroregulator::new);
-		ScreenManager.registerFactory(containerTypes.ALVEARY_SIEVE, GuiAlvearySieve::new);
-		ScreenManager.registerFactory(containerTypes.ALVEARY_SWARMER, GuiAlvearySwarmer::new);
-		ScreenManager.registerFactory(containerTypes.BEE_HOUSING, GuiBeeHousing<ContainerBeeHousing>::new);
-		ScreenManager.registerFactory(containerTypes.HABITAT_LOCATOR, GuiHabitatLocator::new);
-		ScreenManager.registerFactory(containerTypes.IMPRINTER, GuiImprinter::new);
-		ScreenManager.registerFactory(containerTypes.BEEHOUSE_MINECART, GuiBeeHousing<ContainerMinecartBeehouse>::new);
+		ScreenManager.registerFactory(ApicultureContainers.ALVEARY.containerType(), GuiAlveary::new);
+		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(), GuiAlvearyHygroregulator::new);
+		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_SIEVE.containerType(), GuiAlvearySieve::new);
+		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_SWARMER.containerType(), GuiAlvearySwarmer::new);
+		ScreenManager.registerFactory(ApicultureContainers.BEE_HOUSING.containerType(), GuiBeeHousing<ContainerBeeHousing>::new);
+		ScreenManager.registerFactory(ApicultureContainers.HABITAT_LOCATOR.containerType(), GuiHabitatLocator::new);
+		ScreenManager.registerFactory(ApicultureContainers.IMPRINTER.containerType(), GuiImprinter::new);
+		ScreenManager.registerFactory(ApicultureContainers.BEEHOUSE_MINECART.containerType(), GuiBeeHousing<ContainerMinecartBeehouse>::new);
 	}
 
 	@Override

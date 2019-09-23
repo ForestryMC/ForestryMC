@@ -20,7 +20,7 @@ import net.minecraft.state.IProperty;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 
-import forestry.api.genetics.IAlleleProperty;
+import forestry.api.genetics.alleles.IAlleleProperty;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IProperty<A> {
 	protected final String name;

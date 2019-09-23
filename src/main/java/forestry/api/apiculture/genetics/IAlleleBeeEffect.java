@@ -12,8 +12,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.alleles.IAlleleEffect;
 
 public interface IAlleleBeeEffect extends IAlleleEffect {
 

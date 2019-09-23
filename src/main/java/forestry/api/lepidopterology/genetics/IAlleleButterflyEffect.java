@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.alleles.IAlleleEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
 
 public interface IAlleleButterflyEffect extends IAlleleEffect {

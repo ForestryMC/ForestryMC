@@ -23,10 +23,10 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
 import forestry.api.core.ILocatable;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterLogic;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.utils.NetworkUtil;
 import forestry.sorting.network.packets.PacketFilterChangeGenome;
 import forestry.sorting.network.packets.PacketFilterChangeRule;

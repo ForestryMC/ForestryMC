@@ -16,9 +16,9 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 
-import forestry.api.genetics.DatabaseMode;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IDatabaseElement;
 import forestry.api.gui.IElementGroup;

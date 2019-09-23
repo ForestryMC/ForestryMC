@@ -29,15 +29,17 @@ public final class IndividualBuilder<I extends IIndividual> implements IIndividu
 	}
 
 	@Override
-	public void setAllele(IChromosomeType type, IAllele allele, boolean active) {
+	public IIndividualBuilder<I> set(IChromosomeType type, IAllele allele, boolean active) {
 		IAlleleTemplateBuilder builder = active ? activeBuilder : inactiveBuilder;
 		builder.set(type, allele);
+		return this;
 	}
 
 	@Override
-	public void setAllele(IChromosomeType type, ResourceLocation registryName, boolean active) {
+	public IIndividualBuilder<I> set(IChromosomeType type, ResourceLocation registryName, boolean active) {
 		IAlleleTemplateBuilder builder = active ? activeBuilder : inactiveBuilder;
 		builder.set(type, registryName);
+		return this;
 	}
 
 	@Override

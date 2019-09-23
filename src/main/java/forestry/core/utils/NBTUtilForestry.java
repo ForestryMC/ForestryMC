@@ -34,8 +34,6 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
@@ -85,8 +83,8 @@ public abstract class NBTUtilForestry {
 		private final ArrayList<T> backingList;
 
 		public NBTList(ListNBT nbtList) {
-			//TODO shouldn't need this here
-			backingList = ObfuscationReflectionHelper.getPrivateValue(ListNBT.class, nbtList, 0);
+			//noinspection unchecked
+			backingList = new ArrayList<>((List<T>) nbtList.tagList);
 		}
 
 		@Override

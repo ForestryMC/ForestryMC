@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.BiomeDictionary;
 
 import forestry.api.core.ISpriteRegister;
-import forestry.api.genetics.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISpriteRegister {
 

@@ -11,10 +11,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFilterData;
-import forestry.api.genetics.IFilterRule;
-import forestry.api.genetics.IFilterRuleType;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterRule;
+import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.render.TextureManagerForestry;
 
 public enum ApicultureFilterRuleType implements IFilterRuleType {

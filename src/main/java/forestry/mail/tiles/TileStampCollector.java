@@ -22,13 +22,13 @@ import forestry.api.mail.PostManager;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
-import forestry.mail.ModuleMail;
+import forestry.mail.features.MailTiles;
 import forestry.mail.gui.ContainerStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
 
 public class TileStampCollector extends TileBase implements IInventory {
 	public TileStampCollector() {
-		super(ModuleMail.getTiles().STAMP_COLLECTOR);
+		super(MailTiles.STAMP_COLLECTOR.tileType());
 		setInternalInventory(new InventoryStampCollector(this));
 	}
 

@@ -19,9 +19,9 @@ import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenerator;
-import forestry.api.genetics.IAlleleForestrySpecies;
-import forestry.api.genetics.IAlleleProperty;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleProperty;
 
 public interface IAlleleTreeSpecies extends IAlleleForestrySpecies, IAlleleProperty<IAlleleTreeSpecies> {
 

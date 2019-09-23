@@ -13,7 +13,6 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -45,6 +44,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlvearyType;
+import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
@@ -63,8 +63,9 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 		this(BlockAlvearyType.PLAIN);
 	}
 
+	//TODO maybe needs splitting for sub blocks.
 	public TileAlveary(BlockAlvearyType type) {
-		super(new MultiblockLogicAlveary());
+		super(ApicultureTiles.ALVEARY.tileType(), new MultiblockLogicAlveary());
 		this.unlocalizedTitle = "block.forestry.alveary." + type;
 	}
 
@@ -89,8 +90,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 		if (world.isRemote) {
 			//TODO
 			BlockPos pos = getPos();
-			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-			//			this.world.markForRerender(getPos());
+			RenderUtil.markForUpdate(pos);
 		}
 		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
 		markDirty();

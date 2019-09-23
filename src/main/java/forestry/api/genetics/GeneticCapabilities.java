@@ -8,6 +8,8 @@ package forestry.api.genetics;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
+import forestry.api.genetics.filter.IFilterLogic;
+
 public class GeneticCapabilities {
 	/**
 	 * Capability for {@link IFilterLogic}.

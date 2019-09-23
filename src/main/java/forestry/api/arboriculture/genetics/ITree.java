@@ -26,8 +26,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
 
+import forestry.api.arboriculture.ITreeGenData;
 import forestry.api.genetics.IEffectData;
-import forestry.api.world.ITreeGenData;
 
 public interface ITree extends IIndividual, ITreeGenData {
 

@@ -29,7 +29,7 @@
 //import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 //import forestry.api.apiculture.genetics.IBee;
 //import forestry.api.apiculture.genetics.IBeeGenome;
-//import forestry.api.genetics.AlleleManager;
+//import forestry.api.genetics.alleles.AlleleManager;
 //import forestry.api.genetics.IAllele;
 //import forestry.core.commands.CommandHelpers;
 //import forestry.core.commands.SpeciesNotFoundException;

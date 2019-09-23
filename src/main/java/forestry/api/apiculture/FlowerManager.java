@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.genetics.IFlowerRegistry;
+import forestry.api.genetics.flowers.IFlowerRegistry;
 
 public class FlowerManager {
 	/**
