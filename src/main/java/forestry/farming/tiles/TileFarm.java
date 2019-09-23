@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -40,8 +41,9 @@ import forestry.farming.gui.ContainerFarm;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
-	protected TileFarm() {
-		super(new MultiblockLogicFarm());
+
+	protected TileFarm(TileEntityType<?> tileEntityType) {
+		super(tileEntityType, new MultiblockLogicFarm());
 	}
 
 	//TODO don't know

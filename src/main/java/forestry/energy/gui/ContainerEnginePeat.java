@@ -18,7 +18,7 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
-import forestry.energy.ModuleEnergy;
+import forestry.energy.features.EnergyContainers;
 import forestry.energy.tiles.TileEnginePeat;
 
 public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
@@ -30,7 +30,7 @@ public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 	}
 
 	public ContainerEnginePeat(int id, PlayerInventory player, TileEnginePeat tile) {
-		super(id, ModuleEnergy.getContainerTypes().ENGINE_PEAT, player, tile, 8, 84);
+		super(id, EnergyContainers.ENGINE_PEAT.containerType(), player, tile, 8, 84);
 
 		this.addSlot(new SlotFiltered(tile, 0, 44, 46));
 

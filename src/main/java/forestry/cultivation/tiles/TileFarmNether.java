@@ -5,12 +5,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 
-import forestry.cultivation.ModuleCultivation;
+import forestry.cultivation.features.CultivationTiles;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmNether extends TilePlanter {
 	public TileFarmNether() {
-		super(ModuleCultivation.getTiles().NETHER, ForestryFarmIdentifier.INFERNAL);
+		super(CultivationTiles.NETHER.tileType(), ForestryFarmIdentifier.INFERNAL);
 	}
 
 	@Override

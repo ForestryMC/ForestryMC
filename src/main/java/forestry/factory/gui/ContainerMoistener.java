@@ -24,7 +24,7 @@ import forestry.core.gui.slots.SlotWatched;
 import forestry.core.gui.slots.SlotWorking;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryContainers;
 import forestry.factory.tiles.TileMoistener;
 
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
@@ -35,7 +35,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	}
 
 	public ContainerMoistener(int windowId, PlayerInventory player, TileMoistener tile) {
-		super(windowId, ModuleFactory.getContainerTypes().MOISTENER, player, tile, 8, 84);
+		super(windowId, FactoryContainers.MOISTENER.containerType(), player, tile, 8, 84);
 
 		// Stash
 		for (int l = 0; l < 2; l++) {

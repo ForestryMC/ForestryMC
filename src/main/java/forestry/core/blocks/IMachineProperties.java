@@ -26,11 +26,6 @@ import forestry.core.tiles.TileForestry;
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
 	Class<T> getTeClass();
 
-	/**
-	 * Registers the tile entity with MC.
-	 */
-	void registerTileEntity();
-
 	void clientSetup();
 
 	TileEntity createTileEntity();

@@ -22,6 +22,7 @@ import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
+import forestry.farming.features.FarmingTiles;
 
 public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
@@ -35,6 +36,7 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 	private int workCounter;
 
 	public TileFarmGearbox() {
+		super(FarmingTiles.GEARBOX.tileType());
 		energyManager = new EnergyManager(200, 10000);
 	}
 

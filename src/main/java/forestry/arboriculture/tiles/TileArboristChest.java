@@ -11,11 +11,11 @@
 package forestry.arboriculture.tiles;
 
 import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class TileArboristChest extends TileNaturalistChest {
 	public TileArboristChest() {
-		super(ModuleArboriculture.getTiles().arboristChest, TreeManager.treeRoot);
+		super(ArboricultureTiles.ARBORIST_CHEST.tileType(), TreeManager.treeRoot);
 	}
 }

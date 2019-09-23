@@ -64,6 +64,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.WorldgenBeekeepingLogic;
 import forestry.apiculture.blocks.BlockBeeHive;
+import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.config.Config;
@@ -93,7 +94,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	private int calmTime;
 
 	public TileHive() {
-		super(ModuleApiculture.getTiles().hive);
+		super(ApicultureTiles.HIVE.tileType());
 		inventory = new HiveBeeHousingInventory(this);
 		beeLogic = new WorldgenBeekeepingLogic(this);
 		errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();

@@ -17,7 +17,7 @@ import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
-import forestry.energy.ModuleEnergy;
+import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.energy.tiles.TileEngineElectric;
 
@@ -30,7 +30,7 @@ public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectri
 	}
 
 	public ContainerEngineElectric(int windowId, PlayerInventory player, TileEngineElectric tile) {
-		super(windowId, ModuleEnergy.getContainerTypes().ENGINE_ELECTRIC, player, tile, 8, 84);
+		super(windowId, EnergyContainers.ENGINE_ELECTRIC.containerType(), player, tile, 8, 84);
 
 		this.addSlot(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
 	}

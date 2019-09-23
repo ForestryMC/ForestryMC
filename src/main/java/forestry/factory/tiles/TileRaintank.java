@@ -46,7 +46,7 @@ import forestry.core.fluids.TankManager;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileBase;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.inventory.InventoryRaintank;
 
@@ -66,7 +66,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	private int fillingProgress;
 
 	public TileRaintank() {
-		super(ModuleFactory.getTiles().rainTank);
+		super(FactoryTiles.RAIN_TANK.tileType());
 		setInternalInventory(new InventoryRaintank(this));
 
 		//TODO fluids

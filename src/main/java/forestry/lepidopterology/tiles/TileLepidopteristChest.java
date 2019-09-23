@@ -12,10 +12,10 @@ package forestry.lepidopterology.tiles;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.core.tiles.TileNaturalistChest;
-import forestry.lepidopterology.ModuleLepidopterology;
+import forestry.lepidopterology.features.LepidopterologyTiles;
 
 public class TileLepidopteristChest extends TileNaturalistChest {
 	public TileLepidopteristChest() {
-		super(ModuleLepidopterology.getTiles().LEPIDOPTERIST_CHEST, ButterflyManager.butterflyRoot);
+		super(LepidopterologyTiles.LEPIDOPTERIST_CHEST.tileType(), ButterflyManager.butterflyRoot);
 	}
 }

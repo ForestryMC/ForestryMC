@@ -45,7 +45,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 import forestry.factory.recipes.FermenterRecipeManager;
@@ -69,7 +69,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	private int fuelCurrentFerment = 0;
 
 	public TileFermenter() {
-		super(ModuleFactory.getTiles().fermenter, 2000, 8000);
+		super(FactoryTiles.FERMENTER.tileType(), 2000, 8000);
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
 

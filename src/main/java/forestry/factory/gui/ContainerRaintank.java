@@ -21,7 +21,7 @@ import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryRaintank;
 import forestry.factory.tiles.TileRaintank;
 
@@ -33,7 +33,7 @@ public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 	}
 
 	public ContainerRaintank(int windowId, PlayerInventory player, TileRaintank tile) {
-		super(windowId, ModuleFactory.getContainerTypes().RAINTANK, player, tile, 8, 84);
+		super(windowId, FactoryContainers.RAINTANK.containerType(), player, tile, 8, 84);
 
 		this.addSlot(new SlotEmptyLiquidContainerIn(this.tile, InventoryRaintank.SLOT_RESOURCE, 116, 19));
 		this.addSlot(new SlotOutput(this.tile, InventoryRaintank.SLOT_PRODUCT, 116, 55));

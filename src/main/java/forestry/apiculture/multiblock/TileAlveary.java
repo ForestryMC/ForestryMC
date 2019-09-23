@@ -44,6 +44,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlvearyType;
+import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
@@ -62,8 +63,9 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 		this(BlockAlvearyType.PLAIN);
 	}
 
+	//TODO maybe needs splitting for sub blocks.
 	public TileAlveary(BlockAlvearyType type) {
-		super(new MultiblockLogicAlveary());
+		super(ApicultureTiles.ALVEARY.tileType(), new MultiblockLogicAlveary());
 		this.unlocalizedTitle = "block.forestry.alveary." + type;
 	}
 

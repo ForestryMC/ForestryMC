@@ -1,6 +1,8 @@
 package forestry.modules.features;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -18,12 +20,18 @@ import forestry.core.proxy.Proxies;
 
 public interface IBlockFeature<B extends Block, I extends BlockItem> extends IItemFeature<I>, IBlockProvider<B, I> {
 
+	@Override
 	default B block() {
 		B block = getBlock();
 		if (block == null) {
 			throw new IllegalStateException("Called feature getter method before content creation.");
 		}
 		return block;
+	}
+
+	@Override
+	default Collection<B> collect() {
+		return Collections.singleton(block());
 	}
 
 	@SuppressWarnings("unchecked")

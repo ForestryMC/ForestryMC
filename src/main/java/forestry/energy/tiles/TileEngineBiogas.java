@@ -42,7 +42,7 @@ import forestry.core.fluids.TankManager;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileEngine;
-import forestry.energy.ModuleEnergy;
+import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;
 
@@ -55,7 +55,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	private boolean shutdown; // true if the engine is too cold and needs to warm itself up.
 
 	public TileEngineBiogas() {
-		super(ModuleEnergy.getTiles().biogasEngine, "engine.bronze", Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
+		super(EnergyTiles.BIOGAS_ENGINE.tileType(), "engine.bronze", Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
 
 		setInternalInventory(new InventoryEngineBiogas(this));
 

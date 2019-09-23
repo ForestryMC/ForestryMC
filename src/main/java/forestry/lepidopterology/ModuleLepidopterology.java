@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,7 +68,6 @@ import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterologyClient;
 import forestry.lepidopterology.render.ModelButterflyItem;
-import forestry.lepidopterology.tiles.TileRegistryLepidopterology;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -95,28 +92,15 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	//TODO temp
 	public static final EntityType<EntityButterfly> BUTTERFLY_ENTITY_TYPE = EntityType.Builder.create(EntityButterfly::new, EntityClassification.CREATURE).size(1.0f, 0.4f).build("butterfly");
 
-	@Nullable
-	private static TileRegistryLepidopterology tiles;
-
 	public ModuleLepidopterology() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyLepidopterologyClient(), () -> () -> new ProxyLepidopterology());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static TileRegistryLepidopterology getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	@Override
 	public void setupAPI() {
 		ButterflyManager.butterflyFactory = new ButterflyFactory();
 		ButterflyManager.butterflyMutationFactory = new ButterflyMutationFactory();
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryLepidopterology();
 	}
 
 	@Override

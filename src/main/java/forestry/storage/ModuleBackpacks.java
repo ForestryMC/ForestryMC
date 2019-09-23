@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.storage;
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
@@ -26,12 +23,10 @@ import java.util.function.Predicate;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 
@@ -58,18 +53,14 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.modules.features.FeatureItem;
+import forestry.storage.features.BackpackContainers;
 import forestry.storage.features.BackpackItems;
-import forestry.storage.gui.BackPackContainerTypes;
 import forestry.storage.gui.GuiBackpack;
 
 @ForestryModule(moduleID = ForestryModuleUids.BACKPACKS, containerID = Constants.MOD_ID, name = "Backpack", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.backpacks.description", lootTable = "storage")
 public class ModuleBackpacks extends BlankForestryModule {
 
 	private static final String CONFIG_CATEGORY = "backpacks";
-
-	@Nullable
-	private static BackPackContainerTypes containerTypes;
-
 	private final Map<String, List<String>> backpackAcceptedOreDictRegexpDefaults = new HashMap<>();
 	private final Map<String, List<String>> backpackAcceptedItemDefaults = new HashMap<>();
 
@@ -81,11 +72,6 @@ public class ModuleBackpacks extends BlankForestryModule {
 		BackpackManager.ADVENTURER_UID,
 		BackpackManager.BUILDER_UID
 	);
-
-	public static BackPackContainerTypes getContainerTypes() {
-		Preconditions.checkNotNull(containerTypes);
-		return containerTypes;
-	}
 
 	@Override
 	public void setupAPI() {
@@ -127,14 +113,8 @@ public class ModuleBackpacks extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		containerTypes = new BackPackContainerTypes(registry);
-	}
-
-	@Override
 	public void registerGuiFactories() {
-		BackPackContainerTypes containerTypes = getContainerTypes();
-		ScreenManager.registerFactory(containerTypes.BACKPACK, GuiBackpack::new);
+		ScreenManager.registerFactory(BackpackContainers.BACKPACK.containerType(), GuiBackpack::new);
 	}
 
 	@Override
