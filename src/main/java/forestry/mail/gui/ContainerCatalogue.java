@@ -36,7 +36,7 @@ import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.utils.NetworkUtil;
-import forestry.mail.ModuleMail;
+import forestry.mail.features.MailContainers;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
@@ -74,7 +74,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	public ContainerCatalogue(int windowId, PlayerInventory inv) {
-		super(ModuleMail.getContainerTypes().CATALOGUE, windowId);
+		super(MailContainers.CATALOGUE.containerType(), windowId);
 		this.player = inv.player;
 
 		if (!player.world.isRemote) {

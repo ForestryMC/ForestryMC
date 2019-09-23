@@ -30,15 +30,15 @@ import forestry.api.mail.PostManager;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.tiles.TileBase;
 import forestry.mail.EnumDeliveryState;
-import forestry.mail.ModuleMail;
 import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
+import forestry.mail.features.MailTiles;
 import forestry.mail.gui.ContainerMailbox;
 
 public class TileMailbox extends TileBase {
 
 	public TileMailbox() {
-		super(ModuleMail.getTiles().MAILBOX);
+		super(MailTiles.MAILBOX.tileType());
 		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
 	}
 

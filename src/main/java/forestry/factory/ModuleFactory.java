@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.factory;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +21,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -71,7 +67,7 @@ import forestry.core.utils.datastructures.DummyMap;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
-import forestry.factory.gui.FactoryContainerTypes;
+import forestry.factory.features.FactoryContainers;
 import forestry.factory.gui.GuiBottler;
 import forestry.factory.gui.GuiCarpenter;
 import forestry.factory.gui.GuiCentrifuge;
@@ -90,7 +86,6 @@ import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
-import forestry.factory.tiles.TileRegistryFactory;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -100,21 +95,6 @@ import forestry.storage.ModuleCrates;
 public class ModuleFactory extends BlankForestryModule {
 
 	public static final Map<String, Boolean> MACHINE_ENABLED = Maps.newHashMap();
-
-	@Nullable
-	private static TileRegistryFactory tiles;
-	@Nullable
-	private static FactoryContainerTypes containerTypes;
-
-	public static TileRegistryFactory getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
-
-	public static FactoryContainerTypes getContainerTypes() {
-		Preconditions.checkNotNull(containerTypes);
-		return containerTypes;
-	}
 
 	public ModuleFactory() {
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
@@ -158,27 +138,16 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryFactory();
-	}
-
-	@Override
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		containerTypes = new FactoryContainerTypes(registry);
-	}
-
-	@Override
 	public void registerGuiFactories() {
-		FactoryContainerTypes containerTypes = getContainerTypes();
-		ScreenManager.registerFactory(containerTypes.BOTTLER, GuiBottler::new);
-		ScreenManager.registerFactory(containerTypes.CARPENTER, GuiCarpenter::new);
-		ScreenManager.registerFactory(containerTypes.CENTRIFUGE, GuiCentrifuge::new);
-		ScreenManager.registerFactory(containerTypes.FABRICATOR, GuiFabricator::new);
-		ScreenManager.registerFactory(containerTypes.FERMENTER, GuiFermenter::new);
-		ScreenManager.registerFactory(containerTypes.MOISTENER, GuiMoistener::new);
-		ScreenManager.registerFactory(containerTypes.RAINTANK, GuiRaintank::new);
-		ScreenManager.registerFactory(containerTypes.SQUEEZER, GuiSqueezer::new);
-		ScreenManager.registerFactory(containerTypes.STILL, GuiStill::new);
+		ScreenManager.registerFactory(FactoryContainers.BOTTLER.containerType(), GuiBottler::new);
+		ScreenManager.registerFactory(FactoryContainers.CARPENTER.containerType(), GuiCarpenter::new);
+		ScreenManager.registerFactory(FactoryContainers.CENTRIFUGE.containerType(), GuiCentrifuge::new);
+		ScreenManager.registerFactory(FactoryContainers.FABRICATOR.containerType(), GuiFabricator::new);
+		ScreenManager.registerFactory(FactoryContainers.FERMENTER.containerType(), GuiFermenter::new);
+		ScreenManager.registerFactory(FactoryContainers.MOISTENER.containerType(), GuiMoistener::new);
+		ScreenManager.registerFactory(FactoryContainers.RAINTANK.containerType(), GuiRaintank::new);
+		ScreenManager.registerFactory(FactoryContainers.SQUEEZER.containerType(), GuiSqueezer::new);
+		ScreenManager.registerFactory(FactoryContainers.STILL.containerType(), GuiStill::new);
 	}
 
 	@Override

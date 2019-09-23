@@ -10,15 +10,9 @@
  ******************************************************************************/
 package forestry.mail;
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
@@ -27,35 +21,20 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
+import forestry.mail.features.MailContainers;
 import forestry.mail.gui.GuiCatalogue;
 import forestry.mail.gui.GuiLetter;
 import forestry.mail.gui.GuiMailbox;
 import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
-import forestry.mail.gui.MailContainerTypes;
 import forestry.mail.network.PacketRegistryMail;
-import forestry.mail.tiles.TileRegistryMail;
 import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.mail.description")
 public class ModuleMail extends BlankForestryModule {
-	@Nullable
-	private static MailContainerTypes containerTypes;
-	@Nullable
-	private static TileRegistryMail tiles;
-
-	public static MailContainerTypes getContainerTypes() {
-		Preconditions.checkNotNull(containerTypes);
-		return containerTypes;
-	}
-
-	public static TileRegistryMail getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
 
 	@Override
 	public void setupAPI() {
@@ -65,24 +44,13 @@ public class ModuleMail extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryMail();
-	}
-
-	@Override
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		containerTypes = new MailContainerTypes(registry);
-	}
-
-	@Override
 	public void registerGuiFactories() {
-		MailContainerTypes containers = getContainerTypes();
-		ScreenManager.registerFactory(containers.CATALOGUE, GuiCatalogue::new);
-		ScreenManager.registerFactory(containers.LETTER, GuiLetter::new);
-		ScreenManager.registerFactory(containers.MAILBOX, GuiMailbox::new);
-		ScreenManager.registerFactory(containers.STAMP_COLLECTOR, GuiStampCollector::new);
-		ScreenManager.registerFactory(containers.TRADE_NAME, GuiTradeName::new);
-		ScreenManager.registerFactory(containers.TRADER, GuiTrader::new);
+		ScreenManager.registerFactory(MailContainers.CATALOGUE.containerType(), GuiCatalogue::new);
+		ScreenManager.registerFactory(MailContainers.LETTER.containerType(), GuiLetter::new);
+		ScreenManager.registerFactory(MailContainers.MAILBOX.containerType(), GuiMailbox::new);
+		ScreenManager.registerFactory(MailContainers.STAMP_COLLECTOR.containerType(), GuiStampCollector::new);
+		ScreenManager.registerFactory(MailContainers.TRADE_NAME.containerType(), GuiTradeName::new);
+		ScreenManager.registerFactory(MailContainers.TRADER.containerType(), GuiTrader::new);
 	}
 
 	@Override

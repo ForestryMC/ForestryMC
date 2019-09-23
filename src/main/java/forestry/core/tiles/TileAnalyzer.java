@@ -36,10 +36,10 @@ import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 
 import forestry.api.arboriculture.TreeManager;
-import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
+import forestry.core.features.CoreTiles;
 import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ForestryFluids;
@@ -70,7 +70,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		super(ModuleCore.getTiles().analyzer, 800, Constants.MACHINE_MAX_ENERGY);
+		super(CoreTiles.ANALYZER.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryAnalyzer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);

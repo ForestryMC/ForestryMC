@@ -24,9 +24,9 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SlotUtil;
-import forestry.mail.ModuleMail;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
+import forestry.mail.features.MailContainers;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import forestry.mail.tiles.TileMailbox;
 
@@ -44,7 +44,7 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 	}
 
 	public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
-		super(windowId, ModuleMail.getContainerTypes().MAILBOX, playerInventory, tile, 35, 145);
+		super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
 		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.world, playerInventory.player.getGameProfile());
 
 		if (inventory instanceof POBox) {

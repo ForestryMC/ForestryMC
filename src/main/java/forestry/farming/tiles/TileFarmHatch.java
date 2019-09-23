@@ -27,6 +27,7 @@ import forestry.api.multiblock.IFarmComponent;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
+import forestry.farming.features.FarmingTiles;
 
 //import net.minecraftforge.fml.common.Optional;
 
@@ -45,6 +46,7 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	private final AdjacentInventoryCache inventoryCache;
 
 	public TileFarmHatch() {
+		super(FarmingTiles.HATCH.tileType());
 		this.tileCache = new AdjacentTileCache(this);
 		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY());
 	}

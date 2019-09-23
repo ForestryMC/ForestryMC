@@ -22,11 +22,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -253,16 +251,6 @@ public class Forestry {
 		public static void registerObjects(RegistryEvent.Register event) {
 			//noinspection unchecked
 			ModuleManager.getModuleHandler().registerObjects(event);
-		}
-
-		@SubscribeEvent
-		public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-			ModuleManager.getModuleHandler().registerTileEntities();
-		}
-
-		@SubscribeEvent
-		public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event) {
-			ModuleManager.getModuleHandler().registerContainerTypes(event.getRegistry());
 		}
 
 		@SubscribeEvent

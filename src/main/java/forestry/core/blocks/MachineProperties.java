@@ -47,12 +47,6 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public void registerTileEntity() {
-		//TODO - need to make sure that everything that used to call this is now a registered TileEntityType
-		//		TileUtil.registerTile(teClass, name);
-	}
-
-	@Override
 	public void clientSetup() {
 
 	}

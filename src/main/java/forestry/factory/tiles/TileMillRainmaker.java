@@ -22,7 +22,7 @@ import net.minecraft.util.SoundEvents;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileMill;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryTiles;
 import forestry.factory.inventory.InventoryRainmaker;
 
 public class TileMillRainmaker extends TileMill {
@@ -30,7 +30,7 @@ public class TileMillRainmaker extends TileMill {
 	private boolean reverse;
 
 	public TileMillRainmaker() {
-		super(ModuleFactory.getTiles().rainmaker);
+		super(FactoryTiles.RAINMAKER.tileType());
 		speed = 0.01f;
 		setInternalInventory(new InventoryRainmaker(this));
 	}

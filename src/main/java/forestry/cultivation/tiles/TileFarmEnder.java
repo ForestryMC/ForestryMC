@@ -5,12 +5,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 
-import forestry.cultivation.ModuleCultivation;
+import forestry.cultivation.features.CultivationTiles;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmEnder extends TilePlanter {
 	public TileFarmEnder() {
-		super(ModuleCultivation.getTiles().ENDER, ForestryFarmIdentifier.ENDER);
+		super(CultivationTiles.ENDER.tileType(), ForestryFarmIdentifier.ENDER);
 	}
 
 	@Override

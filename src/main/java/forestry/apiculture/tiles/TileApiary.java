@@ -32,7 +32,7 @@ import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.inventory.IApiaryInventory;
@@ -49,7 +49,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final InventoryApiary inventory = new InventoryApiary();
 
 	public TileApiary() {
-		super(ModuleApiculture.getTiles().apiary, "apiary");
+		super(ApicultureTiles.APIARY.tileType(), "apiary");
 		setInternalInventory(inventory);
 	}
 

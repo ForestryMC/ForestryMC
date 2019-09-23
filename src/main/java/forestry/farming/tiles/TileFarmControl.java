@@ -21,12 +21,14 @@ import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.farming.blocks.BlockFarm;
+import forestry.farming.features.FarmingTiles;
 
 public class TileFarmControl extends TileFarm implements IFarmComponent.Listener {
 
 	private final IFarmListener farmListener;
 
 	public TileFarmControl() {
+		super(FarmingTiles.CONTROL.tileType());
 		this.farmListener = new ControlFarmListener(this);
 	}
 

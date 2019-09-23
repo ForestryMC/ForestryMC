@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.core;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +19,6 @@ import java.util.Set;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -43,7 +40,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -63,10 +59,10 @@ import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
+import forestry.core.features.CoreContainers;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.genetics.alleles.AlleleFactory;
-import forestry.core.gui.CoreContainerTypes;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
@@ -81,7 +77,6 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.TileRegistryCore;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
@@ -96,24 +91,10 @@ import forestry.modules.ModuleHelper;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
 	//	public static final RootCommand rootCommand = new RootCommand();
-	@Nullable
-	private static TileRegistryCore tiles;
-	@Nullable    //TODO - there are lots of these. Make helper class/map or something?
-	private static CoreContainerTypes containerTypes;
 
 	public ModuleCore() {
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static TileRegistryCore getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
-
-	public static CoreContainerTypes getContainerTypes() {
-		Preconditions.checkNotNull(containerTypes);
-		return containerTypes;
 	}
 
 	@Override
@@ -143,23 +124,12 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryCore();
-	}
-
-	@Override
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		containerTypes = new CoreContainerTypes(registry);
-	}
-
-	@Override
 	public void registerGuiFactories() {
-		CoreContainerTypes containerTypes = getContainerTypes();
-		ScreenManager.registerFactory(containerTypes.ALYZER, GuiAlyzer::new);
-		ScreenManager.registerFactory(containerTypes.ANALYZER, GuiAnalyzer::new);
-		ScreenManager.registerFactory(containerTypes.NATURALIST_INVENTORY, GuiNaturalistInventory::new);
-		ScreenManager.registerFactory(containerTypes.ESCRITOIRE, GuiEscritoire::new);
-		ScreenManager.registerFactory(containerTypes.SOLDERING_IRON, GuiSolderingIron::new);
+		ScreenManager.registerFactory(CoreContainers.ALYZER.containerType(), GuiAlyzer::new);
+		ScreenManager.registerFactory(CoreContainers.ANALYZER.containerType(), GuiAnalyzer::new);
+		ScreenManager.registerFactory(CoreContainers.NATURALIST_INVENTORY.containerType(), GuiNaturalistInventory::new);
+		ScreenManager.registerFactory(CoreContainers.ESCRITOIRE.containerType(), GuiEscritoire::new);
+		ScreenManager.registerFactory(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
 	}
 
 

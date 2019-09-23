@@ -17,7 +17,7 @@ import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
-import forestry.energy.ModuleEnergy;
+import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryEngineBiogas;
 import forestry.energy.tiles.TileEngineBiogas;
 
@@ -30,7 +30,7 @@ public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas
 	}
 
 	public ContainerEngineBiogas(int windowId, PlayerInventory player, TileEngineBiogas engine) {
-		super(windowId, ModuleEnergy.getContainerTypes().ENGINE_BIOGAS, player, engine, 8, 84);
+		super(windowId, EnergyContainers.ENGINE_BIOGAS.containerType(), player, engine, 8, 84);
 
 		this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
 	}

@@ -18,14 +18,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureTiles;
 
 public class TileCandle extends TileEntity {
 	private int colour;
 	private boolean lit;
 
 	public TileCandle() {
-		super(ModuleApiculture.getTiles().candle);
+		super(ApicultureTiles.CANDLE.tileType());
 	}
 
 	@Override
