@@ -18,7 +18,7 @@ public enum BlockTypePlanter implements IBlockTypeCustom {
 	FARM_GOURD(TileFarmGourd.class, "farm_gourd"),
 	FARM_NETHER(TileFarmNether.class, "farm_nether"),
 	FARM_ENDER(TileFarmEnder.class, "farm_ender"),
-	PEAT_POG(TileBog.class, "peat_bog"),
+	PEAT_BOG(TileBog.class, "peat_bog"),
 
 	//TODO Add ic2 integration
 	/*PLANTATION(TilePlantation.class, "plantation")*/;

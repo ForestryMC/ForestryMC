@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.data;
 
+import com.google.common.collect.Lists;
+
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -62,11 +64,17 @@ import forestry.core.features.FluidsItems;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
+import forestry.core.items.ItemFruit;
 import forestry.core.recipes.ModuleEnabledCondition;
+import forestry.cultivation.blocks.BlockTypePlanter;
+import forestry.database.features.DatabaseBlocks;
+import forestry.energy.blocks.BlockTypeEngine;
+import forestry.energy.features.EnergyBlocks;
 import forestry.food.features.FoodItems;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.features.FeatureBlock;
 import forestry.storage.features.BackpackItems;
 
 public class ForestryRecipeProvider extends ForgeRecipeProvider {
@@ -86,6 +94,9 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		addClimatologyRecipes(helper);
 		registerCoreRecipes(helper);
 		registerBookRecipes(helper);
+		registerCultivationRecipes(helper);
+		registerDatabaseRecipes(helper);
+		registerEnergyRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -738,7 +749,6 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	}
 
 	private void registerBookRecipes(RecipeDataHelper helper) {
-
 		helper.moduleConditionRecipe(
 				ShapelessRecipeBuilder.shapelessRecipe(BookItems.BOOK.item())
 						.addIngredient(Items.BOOK)
@@ -760,5 +770,100 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_book", this.hasItem(Items.BOOK))::build,
 				new ResourceLocation(Constants.MOD_ID, "book_forester_butterfly"),
 				ForestryModuleUids.BOOK, ForestryModuleUids.LEPIDOPTEROLOGY);
+	}
+
+	private EnumElectronTube getElectronTube(BlockTypePlanter planter) {
+		switch (planter) {
+			case ARBORETUM:
+				return EnumElectronTube.GOLD;
+			case FARM_CROPS:
+				return EnumElectronTube.BRONZE;
+			case PEAT_BOG:
+				return EnumElectronTube.OBSIDIAN;
+			case FARM_MUSHROOM:
+				return EnumElectronTube.APATITE;
+			case FARM_GOURD:
+				return EnumElectronTube.LAPIS;
+			case FARM_NETHER:
+				return EnumElectronTube.BLAZE;
+			case FARM_ENDER:
+				return EnumElectronTube.ENDER;
+			default:
+				return null;
+		}
+	}
+
+	private void registerCultivationRecipes(RecipeDataHelper helper) {
+		for (BlockTypePlanter planter : BlockTypePlanter.values()) {
+			//TODO needs flattening PR
+			//			helper.moduleConditionRecipe(
+			//					ShapedRecipeBuilder.shapedRecipe(CultivationBlocks.PLANTER.get(planter, Mode.MANAGED).block())
+			//					.key('G', Tags.Items.GLASS)
+			//					.key('T', CoreItems.ELECTRON_TUBES.get(getElectronTube(planter)).item())
+			//					.key('C', CoreItems.FLEXIBLE_CASING.item())
+			//					.key('B', CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.BASIC).item())
+			//					.patternLine("GTG").patternLine("TCT").patternLine("GBG")
+			//					.addCriterion("has_casing", this.hasItem(CoreItems.FLEXIBLE_CASING.item()))::build,
+			//					ForestryModuleUids.CULTIVATION);
+		}
+	}
+
+	private void registerDatabaseRecipes(RecipeDataHelper helper) {
+		//TODO create FallbackIngredient implementation
+		List<FeatureBlock<?, ?>> features = Lists.newArrayList(ApicultureBlocks.BEE_CHEST, ArboricultureBlocks.TREE_CHEST, LepidopterologyBlocks.BUTTERFLY_CHEST);
+		List<Ingredient> possibleSpecials = Lists.newArrayList(Ingredient.fromItems(ApicultureItems.ROYAL_JELLY.getItem()), Ingredient.fromItems(CoreItems.FRUITS.get(ItemFruit.EnumFruit.PLUM).getItem()), Ingredient.fromTag(Tags.Items.CHESTS_WOODEN));
+		Ingredient possibleSpecial = Ingredient.merge(possibleSpecials);
+		for (FeatureBlock<?, ?> featureBlock1 : features) {
+			for (FeatureBlock<?, ?> featureBlock2 : features) {
+				if (featureBlock1.equals(featureBlock2)) {
+					continue;
+				}
+
+				helper.moduleConditionRecipe(
+						ShapedRecipeBuilder.shapedRecipe(DatabaseBlocks.DATABASE.block())
+								.key('#', CoreItems.PORTABLE_ALYZER.item())
+								.key('C', possibleSpecial)
+								.key('S', featureBlock1.block())
+								.key('F', featureBlock2.block())
+								.key('W', ItemTags.PLANKS)
+								.key('I', ForestryTags.Items.INGOT_BRONZE)
+								.key('Y', CoreItems.STURDY_CASING.item())
+								.patternLine("I#I").patternLine("FYS").patternLine("WCW")
+								.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+						new ResourceLocation(Constants.MOD_ID, "database_" + featureBlock1.getIdentifier() + "_" + featureBlock2.getIdentifier()),
+						ForestryModuleUids.DATABASE, featureBlock1.getModuleId(), featureBlock2.getModuleId());
+			}
+		}
+	}
+
+	private void registerEnergyRecipes(RecipeDataHelper helper) {
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(EnergyBlocks.ENGINES.get(BlockTypeEngine.BIOGAS).block())
+						.key('#', ForestryTags.Items.INGOT_BRONZE)
+						.key('V', Items.PISTON)
+						.key('X', Tags.Items.GLASS)
+						.key('Y', ForestryTags.Items.GEAR_BRONZE)
+						.patternLine("###").patternLine(" X ").patternLine("YVY")
+						.addCriterion("has_piston", this.hasItem(Items.PISTON))::build,
+				ForestryModuleUids.ENERGY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(EnergyBlocks.ENGINES.get(BlockTypeEngine.CLOCKWORK).block())
+						.key('#', ItemTags.PLANKS)
+						.key('V', Items.PISTON)
+						.key('X', Tags.Items.GLASS)
+						.key('Y', Items.CLOCK)
+						.key('Z', ForestryTags.Items.GEAR_COPPER)
+						.patternLine("###").patternLine(" X ").patternLine("ZVY")
+						.addCriterion("has_piston", this.hasItem(Items.PISTON))::build,
+				ForestryModuleUids.ENERGY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(EnergyBlocks.ENGINES.get(BlockTypeEngine.PEAT).block())
+						.key('#', ForestryTags.Items.INGOT_COPPER)
+						.key('V', Items.PISTON)
+						.key('X', Tags.Items.GLASS)
+						.key('Y', ForestryTags.Items.GEAR_COPPER)
+						.patternLine("###").patternLine(" X ").patternLine("YVY")
+						.addCriterion("has_piston", this.hasItem(Items.PISTON))::build,
+				ForestryModuleUids.ENERGY);
 	}
 }
