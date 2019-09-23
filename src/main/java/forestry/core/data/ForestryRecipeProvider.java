@@ -70,6 +70,9 @@ import forestry.cultivation.blocks.BlockTypePlanter;
 import forestry.database.features.DatabaseBlocks;
 import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.features.EnergyBlocks;
+import forestry.factory.blocks.BlockTypeFactoryPlain;
+import forestry.factory.blocks.BlockTypeFactoryTesr;
+import forestry.factory.features.FactoryBlocks;
 import forestry.food.features.FoodItems;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.features.LepidopterologyItems;
@@ -866,4 +869,89 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.addCriterion("has_piston", this.hasItem(Items.PISTON))::build,
 				ForestryModuleUids.ENERGY);
 	}
+
+	private void registerFactoryRecipes(RecipeDataHelper helper) {
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER).block())
+				.key('#', Tags.Items.GLASS)
+				.key('X', FluidsItems.CONTAINERS.get(EnumContainerType.CAN).item())
+				.key('Y', CoreItems.STURDY_CASING.item())
+				.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
+				.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', ForestryTags.Items.INGOT_BRONZE)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("XYX").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CENTRIFUGE).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', ForestryTags.Items.INGOT_COPPER)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("XYX").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', Tags.Items.INGOTS_GOLD)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.key('Z', Tags.Items.CHESTS_WOODEN)
+						.patternLine("X#X").patternLine("#Y#").patternLine("XZX")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', ForestryTags.Items.GEAR_BRONZE)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.MOISTENER).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', ForestryTags.Items.GEAR_COPPER)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', ForestryTags.Items.GEAR_TIN)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.RAINTANK).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', Tags.Items.INGOTS_IRON)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("XYX").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', ForestryTags.Items.INGOT_TIN)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("XYX").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', Tags.Items.DUSTS_REDSTONE)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+				ForestryModuleUids.FACTORY);
+	}
+
 }
