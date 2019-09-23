@@ -33,7 +33,7 @@ import genetics.api.root.IIndividualRoot;
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.ModuleCore;
+import forestry.core.features.CoreTiles;
 import forestry.core.gui.ContainerEscritoire;
 import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.inventory.InventoryEscritoire;
@@ -50,7 +50,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	public TileEscritoire() {
-		super(ModuleCore.getTiles().escritoire);
+		super(CoreTiles.ESCRITOIRE.tileType());
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 

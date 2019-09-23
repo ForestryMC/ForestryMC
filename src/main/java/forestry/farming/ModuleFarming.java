@@ -88,7 +88,6 @@ import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
-import forestry.farming.tiles.TileRegistryFarming;
 import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -103,20 +102,12 @@ public class ModuleFarming extends BlankForestryModule {
 	public static ProxyFarming proxy;
 
 	@Nullable
-	private static TileRegistryFarming tiles;
-	@Nullable
 	private static FarmingContainerTypes containerTypes;
 
 	public ModuleFarming() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyFarmingClient(), () -> () -> new ProxyFarming());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-
-	public static TileRegistryFarming getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	public static FarmingContainerTypes getContainerTypes() {
@@ -133,11 +124,6 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	public void disabledSetupAPI() {
 		ForestryAPI.farmRegistry = new DummyFarmRegistry();
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryFarming();
 	}
 
 	@Override

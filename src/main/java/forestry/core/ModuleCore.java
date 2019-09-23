@@ -81,7 +81,6 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.TileRegistryCore;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.OreDictUtil;
@@ -96,19 +95,12 @@ import forestry.modules.ModuleHelper;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
 	//	public static final RootCommand rootCommand = new RootCommand();
-	@Nullable
-	private static TileRegistryCore tiles;
 	@Nullable    //TODO - there are lots of these. Make helper class/map or something?
 	private static CoreContainerTypes containerTypes;
 
 	public ModuleCore() {
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static TileRegistryCore getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	public static CoreContainerTypes getContainerTypes() {
@@ -140,11 +132,6 @@ public class ModuleCore extends BlankForestryModule {
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 
 		RecipeManagers.hygroregulatorManager = new HygroregulatorManager();
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryCore();
 	}
 
 	@Override

@@ -30,7 +30,6 @@ import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.network.PacketRegistryClimatology;
 import forestry.climatology.proxy.ProxyClimatology;
 import forestry.climatology.proxy.ProxyClimatologyClient;
-import forestry.climatology.tiles.TileRegistryClimatology;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.climate.FakeClimateListener;
 import forestry.core.climate.FakeClimateTransformer;
@@ -48,9 +47,6 @@ public class ModuleClimatology extends BlankForestryModule {
 
 	@Nullable
 	private static ClimatologyContainerTypes containerTypes;
-	@Nullable
-	private static TileRegistryClimatology tiles;
-
 	public ModuleClimatology() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyClimatologyClient(), () -> () -> new ProxyClimatology());
 	}
@@ -58,11 +54,6 @@ public class ModuleClimatology extends BlankForestryModule {
 	public static ClimatologyContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	public static TileRegistryClimatology getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	@Override
@@ -73,11 +64,6 @@ public class ModuleClimatology extends BlankForestryModule {
 	@Override
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(getContainerTypes().HABITAT_FORMER, GuiHabitatFormer::new);
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryClimatology();
 	}
 
 	@Override

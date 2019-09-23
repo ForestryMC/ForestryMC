@@ -12,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.utils.Log;
 
+//TODO remove
 public abstract class TileRegistry {
 
 	public <T extends TileEntity> TileEntityType<T> registerTileEntityType(TileEntityType<T> tileEntityType, String name) {

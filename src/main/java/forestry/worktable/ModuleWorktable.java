@@ -18,33 +18,20 @@ import forestry.worktable.features.WorktableBlocks;
 import forestry.worktable.gui.GuiWorktable;
 import forestry.worktable.gui.WorktableContainerTypes;
 import forestry.worktable.network.PacketRegistryWorktable;
-import forestry.worktable.tiles.TileRegistryWorktable;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.WORKTABLE, name = "Worktable", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.worktable.description")
 public class ModuleWorktable extends BlankForestryModule {
 	@Nullable
 	private static WorktableContainerTypes containers;
-	@Nullable
-	private static TileRegistryWorktable tiles;
 
 	public static WorktableContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containers);
 		return containers;
 	}
 
-	public static TileRegistryWorktable getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
-
 	@Override
 	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
 		containers = new WorktableContainerTypes(registry);
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryWorktable();
 	}
 
 	@Override

@@ -16,30 +16,16 @@ import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.cultivation.gui.CultivationContainerTypes;
 import forestry.cultivation.gui.GuiPlanter;
-import forestry.cultivation.tiles.TileRegistryCultivation;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CULTIVATION, name = "Cultivation", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.cultivation.description")
-public class ModuleCultivation extends BlankForestryModule {
-	@Nullable
-	private static TileRegistryCultivation tiles;
-	@Nullable
+public class ModuleCultivation extends BlankForestryModule { @Nullable
 	private static CultivationContainerTypes containerTypes;
-
-	public static TileRegistryCultivation getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
 
 	public static CultivationContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryCultivation();
 	}
 
 	@Override

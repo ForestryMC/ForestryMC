@@ -18,6 +18,8 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -188,6 +190,11 @@ public class ModFeatureRegistry {
 			return feature;
 		}
 
+		@Override
+		public <T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
+			return register(new FeatureTileType<>(moduleID, identifier, constuctor, validBlocks));
+		}
+
 		public IModFeature getFeature(String identifier) {
 			return featureById.get(identifier);
 		}
@@ -230,6 +237,11 @@ public class ModFeatureRegistry {
 				flowing.setRegistryName(feature.getModId(), feature.getIdentifier() + "_flowing");
 				fluidFeature.setFluid(fluid);
 				fluidFeature.setFlowing(flowing);
+			} else if (feature instanceof ITileTypeFeature) {
+				ITileTypeFeature tileTypeFeature = (ITileTypeFeature<?>) feature;
+				TileEntityType<?> tileEntityType = (TileEntityType<?>) tileTypeFeature.getTileTypeConstructor().build(null);
+				tileEntityType.setRegistryName(feature.getModId(), feature.getIdentifier());
+				tileTypeFeature.setTileType(tileEntityType);
 			}
 			//			if (feature instanceof IMachineFeature) {
 			//				MachineGroup group = initObject(feature, ((IMachineFeature) feature).apply(((IMachineFeature) feature).getConstructor().createObject()));

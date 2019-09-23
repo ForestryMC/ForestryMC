@@ -90,7 +90,6 @@ import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
-import forestry.factory.tiles.TileRegistryFactory;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -102,14 +101,7 @@ public class ModuleFactory extends BlankForestryModule {
 	public static final Map<String, Boolean> MACHINE_ENABLED = Maps.newHashMap();
 
 	@Nullable
-	private static TileRegistryFactory tiles;
-	@Nullable
 	private static FactoryContainerTypes containerTypes;
-
-	public static TileRegistryFactory getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
 
 	public static FactoryContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
@@ -155,11 +147,6 @@ public class ModuleFactory extends BlankForestryModule {
 		FuelManager.bronzeEngineFuel = new FluidMap<>();
 		FuelManager.copperEngineFuel = new ItemStackMap<>();
 		FuelManager.generatorFuel = new FluidMap<>();
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryFactory();
 	}
 
 	@Override

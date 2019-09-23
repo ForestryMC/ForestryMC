@@ -35,7 +35,6 @@ import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.gui.MailContainerTypes;
 import forestry.mail.network.PacketRegistryMail;
-import forestry.mail.tiles.TileRegistryMail;
 import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -44,17 +43,10 @@ import forestry.modules.ForestryModuleUids;
 public class ModuleMail extends BlankForestryModule {
 	@Nullable
 	private static MailContainerTypes containerTypes;
-	@Nullable
-	private static TileRegistryMail tiles;
 
 	public static MailContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	public static TileRegistryMail getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	@Override
@@ -62,11 +54,6 @@ public class ModuleMail extends BlankForestryModule {
 		PostManager.postRegistry = new PostRegistry();
 		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
 		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryMail();
 	}
 
 	@Override

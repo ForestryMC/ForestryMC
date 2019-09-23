@@ -95,7 +95,6 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.network.PacketRegistryApiculture;
-import forestry.apiculture.tiles.TileRegistryApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
@@ -128,8 +127,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Nullable
 	private static TextureAtlasSprite beeSprite;
 	@Nullable
-	private static TileRegistryApiculture tiles;
-	@Nullable
 	private static ApicultureContainerTypes containerTypes;
 	@Nullable
 	private static HiveRegistry hiveRegistry;
@@ -151,11 +148,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static int maxFlowersSpawnedPerHive = 20;
 	@Nullable
 	public static VillagerProfession villagerApiarist;
-
-	public static TileRegistryApiculture getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
 
 	public static ApicultureContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
@@ -191,11 +183,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
 		BeeManager.jubilanceFactory = new JubilanceFactory();
 		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryApiculture();
 	}
 
 	@Override

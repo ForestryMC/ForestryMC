@@ -20,8 +20,13 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
+import forestry.farming.features.FarmingTiles;
 
 public class TileFarmValve extends TileFarm implements ILiquidTankTile {
+	public TileFarmValve() {
+		super(FarmingTiles.VALVE.tileType());
+	}
+
 	@Override
 	public ITankManager getTankManager() {
 		return getMultiblockLogic().getController().getTankManager();

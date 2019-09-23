@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.event.RegistryEvent;
 
@@ -51,4 +52,6 @@ public interface IFeatureRegistry {
 	void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener);
 
 	<F extends IModFeature> F register(F feature);
+
+	<T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks);
 }

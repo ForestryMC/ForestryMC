@@ -21,23 +21,15 @@ import forestry.modules.ForestryModuleUids;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.SortingContainerTypes;
 import forestry.sorting.network.PacketRegistrySorting;
-import forestry.sorting.tiles.TileRegistrySorting;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.SORTING, name = "Sorting", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.sorting.description")
 public class ModuleSorting extends BlankForestryModule {
 	@Nullable
 	private static SortingContainerTypes containerTypes;
-	@Nullable
-	private static TileRegistrySorting tiles;
 
 	public static SortingContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	public static TileRegistrySorting getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	@Override
@@ -63,11 +55,6 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(getContainerTypes().GENETIC_FILTER, GuiGeneticFilter::new);
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistrySorting();
 	}
 
 	@Override

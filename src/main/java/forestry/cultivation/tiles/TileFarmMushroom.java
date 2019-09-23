@@ -4,12 +4,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import forestry.cultivation.ModuleCultivation;
+import forestry.cultivation.features.CultivationTiles;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmMushroom extends TilePlanter {
 	public TileFarmMushroom() {
-		super(ModuleCultivation.getTiles().MUSHROOM, ForestryFarmIdentifier.SHROOM);
+		super(CultivationTiles.MUSHROOM.tileType(), ForestryFarmIdentifier.SHROOM);
 	}
 
 	@Override

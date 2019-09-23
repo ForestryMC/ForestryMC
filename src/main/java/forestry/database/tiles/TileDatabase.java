@@ -7,14 +7,14 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 
 import forestry.core.tiles.TileBase;
-import forestry.database.ModuleDatabase;
+import forestry.database.features.DatabaseTiles;
 import forestry.database.gui.ContainerDatabase;
 import forestry.database.inventory.InventoryDatabase;
 
 public class TileDatabase extends TileBase {
 
 	public TileDatabase() {
-		super(ModuleDatabase.getTiles().DATABASE);
+		super(DatabaseTiles.DATABASE.tileType());
 		setInternalInventory(new InventoryDatabase(this));
 	}
 

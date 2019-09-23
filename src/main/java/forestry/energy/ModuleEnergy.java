@@ -31,7 +31,6 @@ import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.gui.GuiGenerator;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.proxy.ProxyEnergyClient;
-import forestry.energy.tiles.TileRegistryEnergy;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -42,8 +41,6 @@ public class ModuleEnergy extends BlankForestryModule {
 	public static ProxyEnergy proxy;
 
 	@Nullable
-	public static TileRegistryEnergy tiles;
-	@Nullable
 	public static EnergyContainerTypes containerTypes;
 
 	public ModuleEnergy() {
@@ -52,19 +49,9 @@ public class ModuleEnergy extends BlankForestryModule {
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
-	public static TileRegistryEnergy getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
-	}
-
 	public static EnergyContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryEnergy();
 	}
 
 	@Override

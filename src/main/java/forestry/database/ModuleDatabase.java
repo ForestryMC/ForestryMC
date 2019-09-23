@@ -15,7 +15,6 @@ import forestry.core.network.IPacketRegistry;
 import forestry.database.gui.DatabaseContainerTypes;
 import forestry.database.gui.GuiDatabase;
 import forestry.database.network.PacketRegistryDatabase;
-import forestry.database.tiles.TileRegistryDatabase;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -23,17 +22,10 @@ import forestry.modules.ForestryModuleUids;
 public class ModuleDatabase extends BlankForestryModule {
 	@Nullable
 	private static DatabaseContainerTypes containerTypes;
-	@Nullable
-	private static TileRegistryDatabase tiles;
 
 	public static DatabaseContainerTypes getContainerTypes() {
 		Preconditions.checkNotNull(containerTypes);
 		return containerTypes;
-	}
-
-	public static TileRegistryDatabase getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	@Override
@@ -44,11 +36,6 @@ public class ModuleDatabase extends BlankForestryModule {
 	@Override
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(getContainerTypes().DATABASE, GuiDatabase::new);
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryDatabase();
 	}
 
 	@Override
