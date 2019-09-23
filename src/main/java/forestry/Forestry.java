@@ -36,6 +36,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -200,6 +201,8 @@ public class Forestry {
 	}
 
 	private void gatherData(GatherDataEvent event) {
+		CapabilityFluidHandler.register();	//TODO test
+
 		DataGenerator generator = event.getGenerator();
 
 		if (event.includeServer()) {

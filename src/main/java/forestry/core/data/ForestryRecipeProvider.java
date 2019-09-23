@@ -12,8 +12,10 @@ package forestry.core.data;
 
 import com.google.common.collect.Lists;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.logging.LogManager;
 
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.block.Block;
@@ -22,6 +24,7 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
@@ -29,6 +32,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
+import net.minecraftforge.common.crafting.IngredientNBT;
 import net.minecraftforge.common.crafting.conditions.AndCondition;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
@@ -61,6 +65,7 @@ import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
 import forestry.core.features.FluidsItems;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
@@ -105,6 +110,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerEnergyRecipes(helper);
 		registerFactoryRecipes(helper);
 		registerFarmingRecipes(helper);
+		registerFluidsRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -1002,6 +1008,42 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 							.patternLine(" # ").patternLine("XTX")
 							.addCriterion("has_tin_gear", this.hasItem(ForestryTags.Items.GEAR_TIN))::build,
 					ForestryModuleUids.FARMING);
+		}
+	}
+
+	//TODO maybe I'm missing something, but this seems like the only reasonable way to do it...
+	private IngredientNBT createNbtIngredient(ItemStack stack) {
+		Constructor<IngredientNBT> constructor;
+		try {
+			constructor = IngredientNBT.class.getDeclaredConstructor(ItemStack.class);
+			constructor.setAccessible(true);
+			return constructor.newInstance(stack);
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+
+	private void registerFluidsRecipes(RecipeDataHelper helper) {
+		ForestryFluids milk = ForestryFluids.MILK;
+		for (EnumContainerType containerType : EnumContainerType.values()) {
+			if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
+				continue;
+			}
+			ItemStack filled = FluidsItems.getContainer(containerType, milk);
+			Ingredient ingredientNBT = createNbtIngredient(filled);
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(Items.CAKE)
+							.key('A', ingredientNBT)
+							.key('B', Items.SUGAR)
+							.key('C', Items.WHEAT)
+							.key('E', Items.EGG)
+							.patternLine("AAA").patternLine("BEB").patternLine("CCC")
+							.addCriterion("has_wheat", this.hasItem(Items.WHEAT))::build,
+					new ResourceLocation(Constants.MOD_ID, "cake_" + containerType.getName()),
+					ForestryModuleUids.FLUIDS);
 		}
 	}
 
