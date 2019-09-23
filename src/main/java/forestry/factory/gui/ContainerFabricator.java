@@ -27,6 +27,7 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.tiles.TileUtil;
 import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.tiles.TileFabricator;
 
@@ -38,7 +39,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 	}
 
 	public ContainerFabricator(int windowId, PlayerInventory playerInventory, TileFabricator tile) {
-		super(windowId, ModuleFactory.getContainerTypes().FABRICATOR, playerInventory, tile, 8, 129);
+		super(windowId, FactoryContainers.FABRICATOR.containerType(), playerInventory, tile, 8, 129);
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {

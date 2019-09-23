@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
 import forestry.core.ModuleCore;
+import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
@@ -30,7 +31,7 @@ public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 	}
 
 	public ContainerAnalyzer(int windowId, PlayerInventory player, TileAnalyzer tile) {
-		super(windowId, ModuleCore.getContainerTypes().ANALYZER, player, tile, 8, 94);
+		super(windowId, CoreContainers.ANALYZER.containerType(), player, tile, 8, 94);
 
 		// Input buffer
 		for (int i = 0; i < 3; i++) {

@@ -31,6 +31,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.worktable.ModuleWorktable;
+import forestry.worktable.features.WorktableContainers;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.inventory.InventoryWorktable;
 import forestry.worktable.network.packets.PacketWorktableMemoryUpdate;
@@ -51,7 +52,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	public ContainerWorktable(int windowId, PlayerInventory inv, TileWorktable tile) {
-		super(windowId, ModuleWorktable.getContainerTypes().WORKTABLE, inv, tile, 8, 136);
+		super(windowId, WorktableContainers.WORKTABLE.containerType(), inv, tile, 8, 136);
 
 		IInventory craftingDisplay = tile.getCraftingDisplay();
 		IInventory internalInventory = tile.getInternalInventory();

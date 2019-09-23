@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.gui.ContainerTile;
@@ -30,7 +31,7 @@ public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 	}
 
 	public ContainerAlvearySieve(int windowId, PlayerInventory player, TileAlvearySieve tile) {
-		super(windowId, ModuleApiculture.getContainerTypes().ALVEARY_SIEVE, player, tile, 8, 87);
+		super(windowId, ApicultureContainers.ALVEARY_SIEVE.containerType(), player, tile, 8, 87);
 
 		ISlotPickupWatcher crafter = tile.getCrafter();
 

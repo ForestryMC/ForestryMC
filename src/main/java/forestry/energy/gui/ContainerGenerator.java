@@ -18,6 +18,7 @@ import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.ModuleEnergy;
+import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.energy.tiles.TileEuGenerator;
 
@@ -30,7 +31,7 @@ public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 	}
 
 	public ContainerGenerator(int windowId, PlayerInventory player, TileEuGenerator tile) {
-		super(windowId, ModuleEnergy.getContainerTypes().GENERATOR, player, tile, 8, 84);
+		super(windowId, EnergyContainers.GENERATOR.containerType(), player, tile, 8, 84);
 
 		this.addSlot(new SlotLiquidIn(tile, InventoryGenerator.SLOT_CAN, 22, 38));
 	}

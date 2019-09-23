@@ -6,6 +6,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 
 import forestry.core.ModuleCore;
+import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.inventory.ItemInventoryAlyzer;
 
@@ -19,7 +20,7 @@ public class ContainerAlyzer extends ContainerItemInventory<ItemInventoryAlyzer>
 	}
 
 	public ContainerAlyzer(int windowId, ItemInventoryAlyzer inventory, PlayerEntity player) {
-		super(windowId, inventory, player.inventory, 43, 156, ModuleCore.getContainerTypes().ALYZER);
+		super(windowId, inventory, player.inventory, 43, 156, CoreContainers.ALYZER.containerType());
 
 		final int xPosLeftSlots = 223;
 

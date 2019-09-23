@@ -17,6 +17,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
 import forestry.core.gui.ContainerItemInventory;
@@ -36,7 +37,7 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 	}
 
 	public ContainerImprinter(int windowId, PlayerInventory inventoryplayer, ItemInventoryImprinter inventory) {
-		super(windowId, inventory, inventoryplayer, 8, 103, ModuleApiculture.getContainerTypes().IMPRINTER);
+		super(windowId, inventory, inventoryplayer, 8, 103, ApicultureContainers.IMPRINTER.containerType());
 
 		// Input
 		this.addSlot(new SlotFiltered(inventory, 0, 152, 12));

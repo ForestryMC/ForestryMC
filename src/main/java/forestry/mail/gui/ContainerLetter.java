@@ -39,6 +39,7 @@ import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.Letter;
 import forestry.mail.ModuleMail;
+import forestry.mail.features.MailContainers;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import forestry.mail.network.packets.PacketLetterTextSet;
@@ -57,7 +58,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	public ContainerLetter(int windowId, PlayerEntity player, ItemInventoryLetter inventory) {
-		super(windowId, inventory, player.inventory, 17, 145, ModuleMail.getContainerTypes().LETTER);
+		super(windowId, inventory, player.inventory, 17, 145, MailContainers.LETTER.containerType());
 
 		// Init slots
 

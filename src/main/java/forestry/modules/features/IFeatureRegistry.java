@@ -8,12 +8,15 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.event.RegistryEvent;
+
+import net.minecraftforge.fml.network.IContainerFactory;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
@@ -47,11 +50,13 @@ public interface IFeatureRegistry {
 
 	<B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(BiFunction<R, C, B> constructor, R[] rowTypes, C[] columnTypes);
 
+	<T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks);
+
+	<C extends Container> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier);
+
 	FeatureFluid.Builder fluid(String identifier);
 
 	void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener);
 
 	<F extends IModFeature> F register(F feature);
-
-	<T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks);
 }

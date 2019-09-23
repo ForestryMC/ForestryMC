@@ -18,6 +18,7 @@ import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.network.PacketBuffer;
 
 import forestry.core.ModuleCore;
+import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.tiles.TileNaturalistChest;
@@ -35,7 +36,7 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	private int maxPage;
 
 	public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int page) {
-		super(windowId, ModuleCore.getContainerTypes().NATURALIST_INVENTORY, player, tile, 18, 120);
+		super(windowId, CoreContainers.NATURALIST_INVENTORY.containerType(), player, tile, 18, 120);
 
 		this.page = page;
 		this.maxPage = 5;

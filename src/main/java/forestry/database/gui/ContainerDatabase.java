@@ -13,6 +13,7 @@ import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.database.ModuleDatabase;
+import forestry.database.features.DatabaseContainers;
 import forestry.database.tiles.TileDatabase;
 
 public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
@@ -24,7 +25,7 @@ public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 	}
 
 	public ContainerDatabase(int windowId, PlayerInventory playerInventory, TileDatabase tileForestry) {
-		super(windowId, ModuleDatabase.getContainerTypes().DATABASE, playerInventory, tileForestry, 29, 120);
+		super(windowId, DatabaseContainers.DATABASE.containerType(), playerInventory, tileForestry, 29, 120);
 
 		addInventory(this, tileForestry);
 	}

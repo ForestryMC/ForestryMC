@@ -16,6 +16,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
@@ -31,7 +32,7 @@ public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventor
 	}
 
 	public ContainerHabitatLocator(int windowId, PlayerEntity player, ItemInventoryHabitatLocator inventory) {
-		super(windowId, inventory, player.inventory, 8, 102, ModuleApiculture.getContainerTypes().HABITAT_LOCATOR);
+		super(windowId, inventory, player.inventory, 8, 102, ApicultureContainers.HABITAT_LOCATOR.containerType());
 
 		// Energy
 		this.addSlot(new SlotFiltered(inventory, 2, 152, 8));

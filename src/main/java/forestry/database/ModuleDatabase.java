@@ -1,18 +1,11 @@
 package forestry.database;
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
-
-import net.minecraftforge.registries.IForgeRegistry;
 
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import forestry.database.gui.DatabaseContainerTypes;
+import forestry.database.features.DatabaseContainers;
 import forestry.database.gui.GuiDatabase;
 import forestry.database.network.PacketRegistryDatabase;
 import forestry.modules.BlankForestryModule;
@@ -20,22 +13,9 @@ import forestry.modules.ForestryModuleUids;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.DATABASE, name = "Database", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.database.description")
 public class ModuleDatabase extends BlankForestryModule {
-	@Nullable
-	private static DatabaseContainerTypes containerTypes;
-
-	public static DatabaseContainerTypes getContainerTypes() {
-		Preconditions.checkNotNull(containerTypes);
-		return containerTypes;
-	}
-
-	@Override
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		containerTypes = new DatabaseContainerTypes(registry);
-	}
-
 	@Override
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(getContainerTypes().DATABASE, GuiDatabase::new);
+		ScreenManager.registerFactory(DatabaseContainers.DATABASE.containerType(), GuiDatabase::new);
 	}
 
 	@Override

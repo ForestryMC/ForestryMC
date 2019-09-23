@@ -18,6 +18,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.IClimateListener;
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.gui.ContainerAnalyzerProvider;
@@ -41,7 +42,7 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 
 	//TODO hack icon in GUI by checking title. Then it isn't needed here.
 	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
-		super(windowId, ModuleApiculture.getContainerTypes().BEE_HOUSING, player, tile, 8, 108);
+		super(windowId, ApicultureContainers.BEE_HOUSING.containerType(), player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();
