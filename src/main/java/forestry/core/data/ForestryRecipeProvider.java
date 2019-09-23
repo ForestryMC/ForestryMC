@@ -15,7 +15,6 @@ import com.google.common.collect.Lists;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.logging.LogManager;
 
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.block.Block;
@@ -111,6 +110,7 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerFactoryRecipes(helper);
 		registerFarmingRecipes(helper);
 		registerFluidsRecipes(helper);
+		registerLepidopterologyRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -1045,6 +1045,17 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 					new ResourceLocation(Constants.MOD_ID, "cake_" + containerType.getName()),
 					ForestryModuleUids.FLUIDS);
 		}
+	}
+
+	private void registerLepidopterologyRecipes(RecipeDataHelper helper) {
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(LepidopterologyBlocks.BUTTERFLY_CHEST.block())
+						.key('#', Tags.Items.GLASS)
+						.key('X', LepidopterologyItems.BUTTERFLY_GE.item())    //TODO tag?
+						.key('Y', Tags.Items.CHESTS_WOODEN)
+						.patternLine(" # ").patternLine("XYX").patternLine("XXX")
+						.addCriterion("has_butterfly", this.hasItem(LepidopterologyItems.BUTTERFLY_GE.item()))::build,
+				ForestryModuleUids.LEPIDOPTEROLOGY);
 	}
 
 }
