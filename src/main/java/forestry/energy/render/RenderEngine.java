@@ -27,7 +27,7 @@ import forestry.core.config.Constants;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.IForestryRenderer;
 import forestry.core.tiles.TemperatureState;
-import forestry.core.tiles.TileEngine;
+import forestry.energy.tiles.TileEngine;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
 	private final RendererModel boiler;
