@@ -93,7 +93,9 @@ import forestry.mail.items.ItemLetter;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureItem;
+import forestry.sorting.features.SortingBlocks;
 import forestry.storage.features.BackpackItems;
+import forestry.worktable.features.WorktableBlocks;
 
 public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
@@ -120,6 +122,8 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerFluidsRecipes(helper);
 		registerLepidopterologyRecipes(helper);
 		registerMailRecipes(helper);
+		registerSortingRecipes(helper);
+		registerWorktableRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -1120,6 +1124,32 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 					.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
 					ForestryModuleUids.MAIL);
 		}
+	}
+
+	private void registerSortingRecipes(RecipeDataHelper helper) {
+		Ingredient ing = Ingredient.merge(Lists.newArrayList(Ingredient.fromItems(LepidopterologyItems.CATERPILLAR_GE.item(), ApicultureItems.PROPOLIS.get(EnumPropolis.NORMAL).item()), Ingredient.fromTag(ForestryTags.Items.FRUITS)));
+
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(SortingBlocks.FILTER.block(), 2)
+				.key('B', ForestryTags.Items.GEAR_BRONZE)
+				.key('D', Tags.Items.GEMS_DIAMOND)
+				.key('F', ing)
+				.key('W', ItemTags.PLANKS)
+				.key('G', Tags.Items.GLASS)
+				.patternLine("WDW").patternLine("FGF").patternLine("BDB")
+				.addCriterion("has_diamond", this.hasItem(Tags.Items.GEMS_DIAMOND))::build,
+				ForestryModuleUids.SORTING);
+	}
+
+	private void registerWorktableRecipes(RecipeDataHelper helper) {
+		helper.moduleConditionRecipe(
+				ShapedRecipeBuilder.shapedRecipe(WorktableBlocks.WORKTABLE.block())
+				.key('B', Items.BOOK)
+				.key('C', Tags.Items.CHESTS_WOODEN)
+				.key('W', Items.CRAFTING_TABLE)
+				.patternLine("B").patternLine("W").patternLine("C")
+				.addCriterion("has_crafting_table", this.hasItem(Items.CRAFTING_TABLE))::build,
+				ForestryModuleUids.WORKTABLE);
 	}
 
 }

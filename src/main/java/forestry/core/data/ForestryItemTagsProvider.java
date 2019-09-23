@@ -62,6 +62,8 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		getBuilder(ForestryTags.Items.GEAR_TIN).add(CoreItems.GEAR_TIN.item());
 		
 		getBuilder(ForestryTags.Items.STAMPS).add(MailItems.STAMPS.getFeatures().stream().map(FeatureItem::item).toArray(Item[]::new));
+
+		getBuilder(ForestryTags.Items.FRUITS).add(CoreItems.FRUITS.getFeatures().stream().map(FeatureItem::item).toArray(Item[]::new));
 	}
 
 	@Override

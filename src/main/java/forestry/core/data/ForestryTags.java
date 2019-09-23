@@ -61,6 +61,8 @@ public class ForestryTags {
 
 		public static final Tag<Item> STAMPS = tag("stamps");
 
+		public static final Tag<Item> FRUITS = tag("forestry_fruits");
+
 		private static Tag<Item> tag(String name) {
 			//TODO not sure we want mod id here? maybe forge instead?
 			return new ItemTags.Wrapper(new ResourceLocation(Constants.MOD_ID, name));
