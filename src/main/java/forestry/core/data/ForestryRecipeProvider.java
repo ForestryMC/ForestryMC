@@ -73,6 +73,9 @@ import forestry.energy.features.EnergyBlocks;
 import forestry.factory.blocks.BlockTypeFactoryPlain;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
+import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.farming.blocks.EnumFarmMaterial;
+import forestry.farming.features.FarmingBlocks;
 import forestry.food.features.FoodItems;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.features.LepidopterologyItems;
@@ -100,6 +103,8 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		registerCultivationRecipes(helper);
 		registerDatabaseRecipes(helper);
 		registerEnergyRecipes(helper);
+		registerFactoryRecipes(helper);
+		registerFarmingRecipes(helper);
 	}
 
 	private void registerApicultureRecipes(RecipeDataHelper helper) {
@@ -873,11 +878,11 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	private void registerFactoryRecipes(RecipeDataHelper helper) {
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER).block())
-				.key('#', Tags.Items.GLASS)
-				.key('X', FluidsItems.CONTAINERS.get(EnumContainerType.CAN).item())
-				.key('Y', CoreItems.STURDY_CASING.item())
-				.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
-				.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+						.key('#', Tags.Items.GLASS)
+						.key('X', FluidsItems.CONTAINERS.get(EnumContainerType.CAN).item())
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
 				ForestryModuleUids.FACTORY);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block())
@@ -952,6 +957,52 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 						.patternLine("X#X").patternLine("#Y#").patternLine("X#X")
 						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
 				ForestryModuleUids.FACTORY);
+	}
+
+	private void registerFarmingRecipes(RecipeDataHelper helper) {
+		for (EnumFarmMaterial material : EnumFarmMaterial.values()) {
+			Item base = material.getBase().getItem();
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, material).block())
+							.key('#', base)
+							.key('C', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.TIN).item())
+							.key('W', ItemTags.WOODEN_SLABS)
+							.key('I', ForestryTags.Items.INGOT_COPPER)
+							.patternLine("I#I").patternLine("WCW")
+							.addCriterion("has_copper", this.hasItem(ForestryTags.Items.INGOT_COPPER))::build,
+					ForestryModuleUids.FARMING);
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(FarmingBlocks.FARM.get(EnumFarmBlockType.GEARBOX, material).block())
+							.key('#', base)
+							.key('T', ForestryTags.Items.GEAR_TIN)
+							.patternLine(" # ").patternLine("TTT")
+							.addCriterion("has_tin_gear", this.hasItem(ForestryTags.Items.GEAR_TIN))::build,
+					ForestryModuleUids.FARMING);
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(FarmingBlocks.FARM.get(EnumFarmBlockType.HATCH, material).block())
+							.key('#', base)
+							.key('T', ForestryTags.Items.GEAR_TIN)
+							.key('D', ItemTags.WOODEN_TRAPDOORS)
+							.patternLine(" # ").patternLine("TDT")
+							.addCriterion("has_tin_gear", this.hasItem(ForestryTags.Items.GEAR_TIN))::build,
+					ForestryModuleUids.FARMING);
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(FarmingBlocks.FARM.get(EnumFarmBlockType.VALVE, material).block())
+							.key('#', base)
+							.key('T', ForestryTags.Items.GEAR_TIN)
+							.key('X', Tags.Items.GLASS)
+							.patternLine(" # ").patternLine("XTX")
+							.addCriterion("has_tin_gear", this.hasItem(ForestryTags.Items.GEAR_TIN))::build,
+					ForestryModuleUids.FARMING);
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(FarmingBlocks.FARM.get(EnumFarmBlockType.CONTROL, material).block())
+							.key('#', base)
+							.key('T', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.GOLD).item())
+							.key('X', Tags.Items.DUSTS_REDSTONE)
+							.patternLine(" # ").patternLine("XTX")
+							.addCriterion("has_tin_gear", this.hasItem(ForestryTags.Items.GEAR_TIN))::build,
+					ForestryModuleUids.FARMING);
+		}
 	}
 
 }
