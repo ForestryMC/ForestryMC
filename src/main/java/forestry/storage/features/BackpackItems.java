@@ -15,7 +15,6 @@ import forestry.storage.ModuleBackpacks;
 public class BackpackItems {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleBackpacks.class);
 
-	//TODO there is a race condition here: If Backpacks loads before apiculture then the group is null.
 	public static final FeatureItem APIARIST_BACKPACK = REGISTRY.naturalistBackpack("apiarist", BeeRoot.UID, ItemGroups.tabApiculture, "apiarist_bag");
 	public static final FeatureItem LEPIDOPTERIST_BACKPACK = REGISTRY.naturalistBackpack("lepidopterist", ButterflyRoot.UID, ItemGroups.tabLepidopterology, "lepidopterist_bag");
 
