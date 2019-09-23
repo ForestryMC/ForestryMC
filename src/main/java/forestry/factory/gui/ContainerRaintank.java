@@ -21,7 +21,6 @@ import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryRaintank;
 import forestry.factory.tiles.TileRaintank;

@@ -19,7 +19,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.IGuiSelectable;
-import forestry.storage.ModuleBackpacks;
 import forestry.storage.features.BackpackContainers;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
 import forestry.storage.items.ItemBackpackNaturalist;

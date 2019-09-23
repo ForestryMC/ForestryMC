@@ -13,7 +13,6 @@ package forestry.apiculture.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
-import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gui.ContainerTile;

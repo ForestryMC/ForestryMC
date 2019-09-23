@@ -10,7 +10,6 @@ import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -107,23 +106,9 @@ public class CommonModuleHandler {
 		registry.onRegister(event);
 	}
 
-	//TODO generics or something on these registry events
-	//TODO possible to do this for modules too?
-	public void registerTileEntities() {
-		for (IForestryModule module : modules) {
-			module.registerTiles();
-		}
-	}
-
 	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
 		for (IForestryModule module : modules) {
 			module.registerEntityTypes(registry);
-		}
-	}
-
-	public void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
-		for (IForestryModule module : modules) {
-			module.registerContainerTypes(registry);
 		}
 	}
 

@@ -17,7 +17,6 @@ import net.minecraft.network.PacketBuffer;
 import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerTile;
 import forestry.core.tiles.TileUtil;
-import forestry.mail.ModuleMail;
 import forestry.mail.features.MailContainers;
 import forestry.mail.tiles.TileTrader;
 

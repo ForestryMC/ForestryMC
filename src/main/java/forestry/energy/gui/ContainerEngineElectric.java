@@ -17,7 +17,6 @@ import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
-import forestry.energy.ModuleEnergy;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.energy.tiles.TileEngineElectric;

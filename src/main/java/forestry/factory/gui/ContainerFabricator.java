@@ -26,7 +26,6 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.tiles.TileFabricator;

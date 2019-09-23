@@ -13,7 +13,6 @@ package forestry.core.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
-import forestry.core.ModuleCore;
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;

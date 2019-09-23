@@ -38,7 +38,6 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.Letter;
-import forestry.mail.ModuleMail;
 import forestry.mail.features.MailContainers;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoResponse;

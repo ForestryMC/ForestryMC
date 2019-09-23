@@ -30,7 +30,6 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.worktable.ModuleWorktable;
 import forestry.worktable.features.WorktableContainers;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.inventory.InventoryWorktable;

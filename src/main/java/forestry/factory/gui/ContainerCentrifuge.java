@@ -21,7 +21,6 @@ import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.tiles.TileCentrifuge;
 

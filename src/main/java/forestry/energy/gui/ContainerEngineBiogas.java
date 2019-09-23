@@ -17,7 +17,6 @@ import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
-import forestry.energy.ModuleEnergy;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryEngineBiogas;
 import forestry.energy.tiles.TileEngineBiogas;

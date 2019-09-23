@@ -17,7 +17,6 @@ import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
-import forestry.mail.ModuleMail;
 import forestry.mail.features.MailContainers;
 import forestry.mail.inventory.InventoryStampCollector;
 import forestry.mail.tiles.TileStampCollector;

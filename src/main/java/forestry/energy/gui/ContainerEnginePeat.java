@@ -18,7 +18,6 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
-import forestry.energy.ModuleEnergy;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.tiles.TileEnginePeat;
 

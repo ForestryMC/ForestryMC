@@ -18,7 +18,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
 
-import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.core.gui.ContainerAnalyzerProviderHelper;

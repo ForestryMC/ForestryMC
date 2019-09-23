@@ -36,7 +36,6 @@ import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.utils.NetworkUtil;
-import forestry.mail.ModuleMail;
 import forestry.mail.features.MailContainers;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 

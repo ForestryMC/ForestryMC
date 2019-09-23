@@ -12,7 +12,6 @@ import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TileUtil;
-import forestry.database.ModuleDatabase;
 import forestry.database.features.DatabaseContainers;
 import forestry.database.tiles.TileDatabase;
 

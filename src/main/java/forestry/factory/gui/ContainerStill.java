@@ -18,7 +18,6 @@ import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.tiles.TileStill;

@@ -17,7 +17,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.IClimateListener;
-import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.tiles.TileBeeHousingBase;
 import forestry.core.climate.ClimateRoot;

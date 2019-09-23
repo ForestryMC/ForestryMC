@@ -24,7 +24,6 @@ import forestry.core.gui.slots.SlotWatched;
 import forestry.core.gui.slots.SlotWorking;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.tiles.TileMoistener;
 

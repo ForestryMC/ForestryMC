@@ -22,7 +22,6 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
-import forestry.climatology.ModuleClimatology;
 import forestry.climatology.features.ClimatologyContainers;
 import forestry.climatology.inventory.InventoryHabitatFormer;
 import forestry.climatology.tiles.TileHabitatFormer;

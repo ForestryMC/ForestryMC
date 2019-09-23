@@ -17,7 +17,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.network.PacketBuffer;
 
-import forestry.core.ModuleCore;
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.core.tiles.IFilterSlotDelegate;

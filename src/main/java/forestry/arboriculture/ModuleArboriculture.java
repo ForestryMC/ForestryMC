@@ -131,8 +131,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public void doInit() {
 		TreeDefinition.initTrees();
 
-		ArboricultureBlocks.TREE_CHEST.block().init();
-
 		if (Config.enableVillagers) {
 			//TODO: villagers
 			//			villagerArborist = new VillagerProfession(Constants.ID_VILLAGER_ARBORIST, Constants.TEXTURE_SKIN_LUMBERJACK, Constants.TEXTURE_SKIN_ZOMBIE_LUMBERJACK);

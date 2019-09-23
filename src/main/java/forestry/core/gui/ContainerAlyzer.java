@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 
-import forestry.core.ModuleCore;
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.inventory.ItemInventoryAlyzer;

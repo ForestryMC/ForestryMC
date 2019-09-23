@@ -24,7 +24,6 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SlotUtil;
-import forestry.mail.ModuleMail;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
 import forestry.mail.features.MailContainers;

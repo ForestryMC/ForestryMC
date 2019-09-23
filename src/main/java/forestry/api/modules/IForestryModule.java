@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.brigadier.Command;
@@ -61,15 +60,7 @@ public interface IForestryModule {
 	default void disabledSetupAPI() {
 	}
 
-	default void registerTiles() {
-
-	}
-
 	default void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
-
-	}
-
-	default void registerContainerTypes(IForgeRegistry<ContainerType<?>> registry) {
 
 	}
 

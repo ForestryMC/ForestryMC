@@ -7,7 +7,6 @@ import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.worktable.features.WorktableBlocks;
 import forestry.worktable.features.WorktableContainers;
 import forestry.worktable.gui.GuiWorktable;
 import forestry.worktable.network.PacketRegistryWorktable;
@@ -23,10 +22,5 @@ public class ModuleWorktable extends BlankForestryModule {
 	@Override
 	public IPacketRegistry getPacketRegistry() {
 		return new PacketRegistryWorktable();
-	}
-
-	@Override
-	public void doInit() {
-		WorktableBlocks.WORKTABLE.block().init();
 	}
 }
