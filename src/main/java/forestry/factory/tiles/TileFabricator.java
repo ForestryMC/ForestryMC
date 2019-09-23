@@ -52,7 +52,7 @@ import forestry.core.recipes.RecipePair;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFabricator;
 import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.recipes.FabricatorRecipeManager;
@@ -68,7 +68,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	private int meltingPoint = 0;
 
 	public TileFabricator() {
-		super(ModuleFactory.getTiles().fabricator, 1100, 3300);
+		super(FactoryTiles.FABRICATOR.tileType(), 1100, 3300);
 		setEnergyPerWorkCycle(200);
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));

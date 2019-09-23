@@ -11,11 +11,11 @@
 package forestry.apiculture.tiles;
 
 import forestry.api.apiculture.BeeManager;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.features.ApicultureTiles;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class TileApiaristChest extends TileNaturalistChest {
 	public TileApiaristChest() {
-		super(ModuleApiculture.getTiles().apiaristChest, BeeManager.beeRoot);
+		super(ApicultureTiles.APIARIST_CHEST.tileType(), BeeManager.beeRoot);
 	}
 }

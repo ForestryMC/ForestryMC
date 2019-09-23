@@ -41,8 +41,6 @@ import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.ICheckPollinatable;

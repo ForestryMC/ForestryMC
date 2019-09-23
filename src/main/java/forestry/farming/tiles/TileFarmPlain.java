@@ -18,8 +18,13 @@ import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.blocks.EnumFarmMaterial;
 import forestry.farming.features.FarmingBlocks;
+import forestry.farming.features.FarmingTiles;
 
 public class TileFarmPlain extends TileFarm {
+	public TileFarmPlain() {
+		super(FarmingTiles.PLAIN.tileType());
+	}
+
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		super.onMachineAssembled(multiblockController, minCoord, maxCoord);

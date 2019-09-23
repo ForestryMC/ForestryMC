@@ -37,7 +37,7 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.InventoryUtil;
-import forestry.energy.ModuleEnergy;
+import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 
@@ -54,7 +54,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
 	public TileEnginePeat() {
-		super(ModuleEnergy.getTiles().peatEngine, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
+		super(EnergyTiles.PEAT_ENGINE.tileType(), "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
 		ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
 		setInternalInventory(new InventoryEnginePeat(this));

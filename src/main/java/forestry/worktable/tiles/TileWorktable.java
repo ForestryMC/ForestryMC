@@ -40,7 +40,7 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.worktable.ModuleWorktable;
+import forestry.worktable.features.WorktableTiles;
 import forestry.worktable.gui.ContainerWorktable;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.inventory.InventoryWorktable;
@@ -54,7 +54,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private MemorizedRecipe currentRecipe;
 
 	public TileWorktable() {
-		super(ModuleWorktable.getTiles().WORKTABLE);
+		super(WorktableTiles.WORKTABLE.tileType());
 		setInternalInventory(new InventoryWorktable(this));
 
 		craftingDisplay = new InventoryGhostCrafting<>(this, 10);

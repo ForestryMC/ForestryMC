@@ -21,7 +21,7 @@ import forestry.core.config.Constants;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.DamageSourceForestry;
-import forestry.energy.ModuleEnergy;
+import forestry.energy.features.EnergyTiles;
 
 public class TileEngineClockwork extends TileEngine {
 
@@ -39,7 +39,7 @@ public class TileEngineClockwork extends TileEngine {
 	private short delay = 0;
 
 	public TileEngineClockwork() {
-		super(ModuleEnergy.getTiles().clockworkEngine, "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
 	//TODO needs to be in onactivated or similar

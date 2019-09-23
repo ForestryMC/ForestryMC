@@ -37,7 +37,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
-import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.core.config.Constants;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
@@ -57,7 +57,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	private float yield;
 
 	public TileFruitPod() {
-		super(ModuleArboriculture.getTiles().pods);
+		super(ArboricultureTiles.PODS.tileType());
 	}
 
 	public void setProperties(IGenome genome, IAlleleFruit allele, float yield) {

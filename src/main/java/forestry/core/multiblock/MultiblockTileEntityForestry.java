@@ -18,6 +18,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,8 +40,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	@Nullable
 	private GameProfile owner;
 
-	public MultiblockTileEntityForestry(T multiblockLogic) {
-		super(multiblockLogic);
+	public MultiblockTileEntityForestry(TileEntityType<?> tileEntityType, T multiblockLogic) {
+		super(tileEntityType, multiblockLogic);
 	}
 
 	/**

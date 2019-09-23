@@ -232,10 +232,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		}
 	}
 
-	public void init() {
-		blockType.getMachineProperties().registerTileEntity();
-	}
-
 	public void clientSetup() {
 		blockType.getMachineProperties().clientSetup();
 	}

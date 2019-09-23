@@ -21,7 +21,7 @@ import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
-import forestry.farming.ModuleFarming;
+import forestry.farming.features.FarmingContainers;
 import forestry.farming.multiblock.InventoryFarm;
 import forestry.farming.tiles.TileFarm;
 
@@ -33,7 +33,7 @@ public class ContainerFarm extends ContainerSocketed<TileFarm> {
 	}
 
 	public ContainerFarm(int windowId, PlayerInventory playerInventory, TileFarm data) {
-		super(windowId, ModuleFarming.getContainerTypes().FARM, playerInventory, data, 28, 138);
+		super(windowId, FarmingContainers.FARM.containerType(), playerInventory, data, 28, 138);
 
 		// Resources
 		for (int i = 0; i < 3; i++) {

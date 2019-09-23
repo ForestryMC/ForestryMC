@@ -55,7 +55,7 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.apiculture.ModuleApiculture;
-import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.network.IRipeningPacketReceiver;
 import forestry.arboriculture.network.PacketRipeningUpdate;
@@ -94,7 +94,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private IEffectData[] effectData = new IEffectData[2];
 
 	public TileLeaves() {
-		super(ModuleArboriculture.getTiles().leaves);
+		super(ArboricultureTiles.LEAVES.tileType());
 	}
 
 	/* SAVING & LOADING */

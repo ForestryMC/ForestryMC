@@ -18,7 +18,7 @@ import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
-import forestry.factory.ModuleFactory;
+import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryStill;
 import forestry.factory.tiles.TileStill;
 
@@ -31,7 +31,7 @@ public class ContainerStill extends ContainerLiquidTanks<TileStill> {
 	}
 
 	public ContainerStill(int windowId, PlayerInventory player, TileStill tile) {
-		super(windowId, ModuleFactory.getContainerTypes().STILL, player, tile, 8, 84);
+		super(windowId, FactoryContainers.STILL.containerType(), player, tile, 8, 84);
 
 		this.addSlot(new SlotOutput(tile, InventoryStill.SLOT_PRODUCT, 150, 54));
 		this.addSlot(new SlotEmptyLiquidContainerIn(tile, InventoryStill.SLOT_RESOURCE, 150, 18));

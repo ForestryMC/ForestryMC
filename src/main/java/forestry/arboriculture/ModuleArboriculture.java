@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import com.google.common.base.Preconditions;
-
 import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
@@ -58,7 +56,6 @@ import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.arboriculture.tiles.TileRegistryArboriculture;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -81,18 +78,11 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public static final List<Block> validFences = new ArrayList<>();
 
 	@Nullable
-	private static TileRegistryArboriculture tiles;
-	@Nullable
 	public static VillagerProfession villagerArborist;
 
 	public ModuleArboriculture() {
 		proxy = DistExecutor.runForDist(() -> () -> new ProxyArboricultureClient(), () -> () -> new ProxyArboriculture());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-	}
-
-	public static TileRegistryArboriculture getTiles() {
-		Preconditions.checkNotNull(tiles);
-		return tiles;
 	}
 
 	@Override
@@ -106,11 +96,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public void disabledSetupAPI() {
 		TreeManager.woodAccess = WoodAccess.getInstance();
-	}
-
-	@Override
-	public void registerTiles() {
-		tiles = new TileRegistryArboriculture();
 	}
 
 	@Override
@@ -145,8 +130,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	@Override
 	public void doInit() {
 		TreeDefinition.initTrees();
-
-		ArboricultureBlocks.TREE_CHEST.block().init();
 
 		if (Config.enableVillagers) {
 			//TODO: villagers

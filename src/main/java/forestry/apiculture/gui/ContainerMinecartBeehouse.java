@@ -18,8 +18,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
 
-import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
+import forestry.apiculture.features.ApicultureContainers;
 import forestry.core.gui.ContainerAnalyzerProviderHelper;
 import forestry.core.gui.ContainerEntity;
 import forestry.core.gui.slots.SlotLockable;
@@ -45,7 +45,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 	}
 
 	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {
-		super(windowId, ModuleApiculture.getContainerTypes().BEEHOUSE_MINECART, entity, player, 8, 108);
+		super(windowId, ApicultureContainers.BEEHOUSE_MINECART.containerType(), entity, player, 8, 108);
 		providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 
 		ContainerBeeHelper.addSlots(this, entity, hasFrames);
