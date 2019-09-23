@@ -144,19 +144,6 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		return species.getSpriteColour(tintIndex);
 	}
 
-	/* MODELS */
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public void registerModel(Item item, IModelManager manager) {
-	//		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
-	//			if (allele instanceof IAlleleBeeSpecies) {
-	//				((IAlleleBeeSpecies) allele).registerModels(item, manager);
-	//			}
-	//		}
-	//		//TODO - flatten or something custom rendering I think
-	//		//		manager.registerItemModel(item, new BeeMeshDefinition(?));
-	//	}
-
 	public final EnumBeeType getType() {
 		return type;
 	}

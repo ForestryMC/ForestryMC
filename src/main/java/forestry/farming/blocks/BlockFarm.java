@@ -53,19 +53,6 @@ public class BlockFarm extends BlockStructure {
 		this.farmMaterial = farmMaterial;
 	}
 
-	//TODO - either flatten or work out how extended states work
-	//	@Override
-	//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).with(UnlistedBlockPos.POS, pos)
-	//			.with(UnlistedBlockAccess.BLOCKACCESS, world);
-	//	}
-	//
-	//	@Override
-	//	protected BlockStateContainer createBlockState() {
-	//		return new ExtendedBlockState(this, new IProperty[]{META},
-	//			new ModelProperty<>()[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
-	//	}
-
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
 		if (type == EnumFarmBlockType.BAND) {

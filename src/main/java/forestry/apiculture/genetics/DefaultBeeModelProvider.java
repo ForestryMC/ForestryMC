@@ -32,17 +32,6 @@ public class DefaultBeeModelProvider implements IBeeModelProvider {
 
 	}
 
-	/*@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerModels(Item item, IModelManager manager) {
-		EnumBeeType beeType = ((ItemBeeGE) item).getType();
-		String modelLocation = MODEL_DIR + beeType.toString().toLowerCase(Locale.ENGLISH);
-
-		models.put(beeType, new ModelResourceLocation(Constants.MOD_ID + ":" + modelLocation, "inventory"));
-		//TODO flatten or work out what this maps to
-		//		ModelBakery.registerItemVariants(item, new ResourceLocation("forestry:" + beeTypeNameBase));
-	}*/
-
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ModelResourceLocation getModel(EnumBeeType type) {
