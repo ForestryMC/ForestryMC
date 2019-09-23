@@ -13,7 +13,6 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -89,8 +88,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 		if (world.isRemote) {
 			//TODO
 			BlockPos pos = getPos();
-			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-			//			this.world.markForRerender(getPos());
+			RenderUtil.markForUpdate(pos);
 		}
 		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
 		markDirty();
