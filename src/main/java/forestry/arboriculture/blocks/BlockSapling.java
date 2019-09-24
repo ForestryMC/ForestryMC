@@ -22,12 +22,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -36,16 +34,12 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
-	/* PROPERTYS */
-	public static final PropertyTree TREE = new PropertyTree("tree");
 
 	public BlockSapling() {
 		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
@@ -71,34 +65,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
-	}
-
-	/* STATES */
-	//	@Override
-	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-	//		if (sapling != null && sapling.getTree() != null) {
-	//			state = state.with(TREE, sapling.getTree().getGenome().getPrimary());
-	//		} else {
-	//			state = state.with(TREE, TreeDefinition.Oak.getGenome().getPrimary());
-	//		}
-	//		return state;
-	//	}
-
-	@Override
-	public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vec3d viewpoint) {
-		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-		if (sapling != null && sapling.getTree() != null) {
-			state = state.with(TREE, sapling.getTree().getGenome().getActiveAllele(TreeChromosomes.SPECIES));
-		} else {
-			state = state.with(TREE, TreeDefinition.Oak.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
-		}
-		return state;
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(TREE);
 	}
 
 	/* PLANTING */

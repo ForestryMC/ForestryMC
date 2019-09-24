@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -31,6 +30,7 @@ import net.minecraft.world.World;
 
 import com.mojang.datafixers.util.Pair;
 
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 
 import genetics.api.GeneticHelper;
@@ -40,7 +40,6 @@ import genetics.api.organism.IOrganism;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileSapling;
 
@@ -104,17 +103,14 @@ public class ModelSapling implements IUnbakedModel {
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData extraData) {
 			IAlleleTreeSpecies species = extraData.getData(TileSapling.TREE_SPECIES);
 			if (species == null) {
-				return getQuads(state, side, rand);
+				species = TreeDefinition.Oak.getSpecies();
 			}
 			return blockModels.get(species).getQuads(state, side, rand);
 		}
 
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-			if (state == null) {
-				return Collections.emptyList();
-			}
-			return blockModels.get(state.get(BlockSapling.TREE)).getQuads(state, side, rand);
+			return getQuads(state, side, rand, EmptyModelData.INSTANCE);
 		}
 
 		@Override

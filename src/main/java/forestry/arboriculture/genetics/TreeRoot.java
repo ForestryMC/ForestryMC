@@ -63,7 +63,6 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.arboriculture.blocks.BlockFruitPod;
-import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.tiles.TileFruitPod;
 import forestry.arboriculture.tiles.TileSapling;
@@ -158,7 +157,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
-		BlockState state = ArboricultureBlocks.SAPLING_GE.with(BlockSapling.TREE, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES));
+		BlockState state = ArboricultureBlocks.SAPLING_GE.defaultState();
 		boolean placed = world.setBlockState(pos, state);
 		if (!placed) {
 			return false;
