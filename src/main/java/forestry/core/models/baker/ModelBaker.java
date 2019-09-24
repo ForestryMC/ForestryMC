@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.BakedQuad;
@@ -24,8 +22,6 @@ import net.minecraft.client.renderer.model.FaceBakery;
 import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,41 +46,27 @@ public final class ModelBaker {
 
 	private int colorIndex = -1;
 
-	private void setColorIndex(int colorIndex) {
+	public ModelBaker addBlockModel(TextureAtlasSprite[] textures, int colorIndex) {
 		this.colorIndex = colorIndex;
-	}
 
-	public void addBlockModel(@Nullable BlockPos pos, TextureAtlasSprite[] textures, int colorIndex) {
-		setColorIndex(colorIndex);
-
-		if (pos != null) {
-			World world = Minecraft.getInstance().world;
-			BlockState state = world.getBlockState(pos);
-			for (Direction facing : Direction.VALUES) {
-				if (state.doesSideBlockRendering(world, pos, facing)) {
-					addFace(facing, textures[facing.ordinal()]);
-				}
-			}
-		} else {
-			for (Direction facing : Direction.VALUES) {
-				addFace(facing, textures[facing.ordinal()]);
-			}
+		for (Direction facing : Direction.VALUES) {
+			addFace(facing, textures[facing.ordinal()]);
 		}
-
+		return this;
 	}
 
-	public void addBlockModel(@Nullable BlockPos pos, TextureAtlasSprite texture, int colorIndex) {
-		addBlockModel(pos, new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture},
-			colorIndex);
+	public ModelBaker addBlockModel(TextureAtlasSprite texture, int colorIndex) {
+		return addBlockModel(new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
 	}
 
-	public void addFace(Direction facing, TextureAtlasSprite sprite) {
+	public ModelBaker addFace(Direction facing, TextureAtlasSprite sprite) {
 		if (sprite != Minecraft.getInstance().getTextureMap().missingImage) {
 			faces.add(new ModelBakerFace(facing, colorIndex, sprite));
 		}
+		return this;
 	}
 
-	public ModelBakerModel bakeModel(boolean flip) {
+	public ModelBakerModel bake(boolean flip) {
 		ModelRotation modelRotation = ModelRotation.X0_Y0;
 
 		if (flip) {
