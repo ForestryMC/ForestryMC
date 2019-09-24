@@ -41,6 +41,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -153,8 +154,9 @@ public class Forestry {
 		Proxies.common = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyCommon());
 
 		ModuleManager.getModuleHandler().runSetup();
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus));
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
+		modEventBus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, evt -> networkHandler.serverPacketHandler());
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
@@ -220,7 +222,7 @@ public class Forestry {
 		}
 	}
 
-	private void clientInit(IEventBus modEventBus) {
+	private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
 		modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
 			Minecraft minecraft = Minecraft.getInstance();
 			IResourceManager resourceManager = minecraft.getResourceManager();
@@ -230,6 +232,7 @@ public class Forestry {
 				reloadableManager.addReloadListener(TextureManagerForestry.getInstance());
 			}
 		});
+		modEventBus.addListener(EventPriority.NORMAL, false, FMLLoadCompleteEvent.class, fmlLoadCompleteEvent -> networkHandler.clientPacketHandler());
 	}
 
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
