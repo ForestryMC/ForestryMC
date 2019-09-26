@@ -54,33 +54,8 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 		}
 	}
 
-	//	/* Models */
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public void registerModel(Item item, IModelManager manager) {
-	//		for (int i = 0; i < overlays.length; i++) {
-	//			manager.registerItemModel(item, i);
-	//		}
-	//	}
-
-	//	@Override
-	//	public String getTranslationKey(ItemStack stack) {
-	////		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
-	////			return super.getTranslationKey(stack);
-	////		}
-	////
-	////		return super.getTranslationKey(stack) + "." + overlays[stack.getItemDamage()].getUid();
-	//		return super.getTranslationKey(stack); //TODO flatten
-	//	}
-
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
-		//		int meta = -1;//TODO flatten stack.getMetadata();
-		//		if (meta < 0 || meta >= overlays.length) {
-		//			return 0xffffff;
-		//		}
-
-		//		IOverlayInfo overlayInfo = overlays[meta];
 		if (tintIndex == 0 || overlay.getSecondaryColor() == 0) {
 			return overlay.getPrimaryColor();
 		} else {

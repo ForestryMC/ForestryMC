@@ -33,6 +33,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
+import net.minecraftforge.common.Tags;
+
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 

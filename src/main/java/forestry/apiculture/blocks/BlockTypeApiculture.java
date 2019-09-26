@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import forestry.api.core.IItemSubtype;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
 import forestry.core.blocks.IBlockType;

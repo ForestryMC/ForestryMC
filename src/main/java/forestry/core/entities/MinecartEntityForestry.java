@@ -13,6 +13,7 @@ package forestry.core.entities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -22,17 +23,16 @@ import net.minecraft.world.World;
 
 import forestry.core.tiles.ITitled;
 
-public abstract class MinecartEntityForestry extends MinecartEntity implements ITitled {
+//TODO - check nothing missing from MinecartEntity now that this extends AbstractMinecartEntity
+public abstract class MinecartEntityForestry extends AbstractMinecartEntity implements ITitled {
 
-	//TODO - create entity type?
-	@SuppressWarnings("unused")
-	public MinecartEntityForestry(World world) {
-		super(EntityType.MINECART, world);
+	public MinecartEntityForestry(EntityType<? extends MinecartEntityForestry> type, World world) {
+		super(type, world);
 		setHasDisplayTile(true);
 	}
 
-	public MinecartEntityForestry(World world, double posX, double posY, double posZ) {
-		super(world, posX, posY, posZ);
+	public MinecartEntityForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
+		super(type, world, posX, posY, posZ);
 		setHasDisplayTile(true);
 	}
 
@@ -93,9 +93,8 @@ public abstract class MinecartEntityForestry extends MinecartEntity implements I
 		return cartItem.getTranslationKey();
 	}
 
-	//TODO see if something actually uses this.
-	//	@Override
-	public int getIdOfEntity() {
-		return getEntityId();
+	@Override
+	public Type getMinecartType() {
+		return null;
 	}
 }

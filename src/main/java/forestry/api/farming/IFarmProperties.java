@@ -2,6 +2,7 @@ package forestry.api.farming;
 
 import java.util.Collection;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
@@ -10,17 +11,13 @@ import net.minecraft.item.ItemStack;
  */
 public interface IFarmProperties {
 
-	/**
-	 * Can be used to register a {@link BlockState} as a valid soil.
-	 */
-	default void registerSoil(ItemStack resource, BlockState soilState) {
-		registerSoil(resource, soilState, false);
+	default void registerSoil(Block block) {
+		registerSoil(new ItemStack(block), block.getDefaultState());
 	}
-
 	/**
-	 * Can be used to register a {@link BlockState} as a valid soil.
+	 * Can be used to register a {@link Block} as a valid soil.
 	 */
-	void registerSoil(ItemStack resource, BlockState soilState, boolean hasMetaData);
+	void registerSoil(ItemStack resource, BlockState soilState);
 
 	void addGermlings(ItemStack... germlings);
 
@@ -38,7 +35,7 @@ public interface IFarmProperties {
 	/**
 	 * @return true if the given block state is a valid soil state.
 	 */
-	boolean isAcceptedSoil(BlockState blockState);
+	boolean isAcceptedSoil(BlockState block);
 
 	/**
 	 * @return true if the given stack is the {@link ItemStack} of a soil.

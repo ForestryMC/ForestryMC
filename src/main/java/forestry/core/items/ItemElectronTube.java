@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.ItemGroupForestry;
@@ -89,14 +90,9 @@ public class ItemElectronTube extends ItemOverlay {
 		}
 	}
 
-
-	//TODO can this not be static now?
 	private static Multimap<ICircuitLayout, ICircuit> getCircuits(ItemStack itemStack) {
 		Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
-		//TODO circuitRegistry is populated at setupAPI which is called after this is used to fill creative tab
-		//TODO so perhaps needs to be initialised earlier
-		//of course, or we could flatten...
-		Collection<ICircuitLayout> allLayouts = Collections.emptyList();//ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
+		Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
 		for (ICircuitLayout circuitLayout : allLayouts) {
 			ICircuit circuit = SolderManager.getCircuit(circuitLayout, itemStack);
 			if (circuit != null) {

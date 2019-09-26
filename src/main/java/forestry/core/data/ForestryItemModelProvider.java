@@ -1,12 +1,19 @@
 package forestry.core.data;
 
+import com.google.common.collect.Table;
+
+import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.cultivation.blocks.BlockPlanter;
+import forestry.cultivation.blocks.BlockTypePlanter;
+import forestry.cultivation.features.CultivationBlocks;
+import forestry.farming.features.FarmingBlocks;
+import forestry.modules.features.FeatureBlock;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;
-import forestry.farming.features.FarmingBlocks;
 import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.modules.features.FeatureItem;
 import forestry.storage.ModuleCrates;
@@ -34,6 +41,11 @@ public class ForestryItemModelProvider extends ModelProvider {
 		for (FeatureItem<ItemCrated> featureCrated : ModuleCrates.crates) {
 			registerModel(featureCrated, new ModelBuilder()
 				.parent(Constants.MOD_ID + ":item/crate-filled"));
+		}
+
+		for(Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
+			Block block = cell.getValue().block();
+			registerModel(block, new ModelBuilder().parent("forestry:block/" + cell.getRowKey().getName()));
 		}
 	}
 }

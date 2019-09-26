@@ -57,6 +57,7 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.VectUtil;
+import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.gui.ContainerPlanter;
 import forestry.cultivation.inventory.InventoryPlanter;
 import forestry.farming.FarmHelper;
@@ -84,27 +85,27 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	private int platformHeight = -1;
 	private Stage stage = Stage.CULTIVATE;
-	private boolean isManual;
+	private BlockPlanter.Mode mode;
 	private IFarmLogic logic;
 	@Nullable
 	private Vec3i offset;
 	@Nullable
 	private Vec3i area;
 
-	public void setManual(boolean manual) {
-		isManual = manual;
-		logic = FarmRegistry.getInstance().getProperties(identifier).getLogic(manual);
+	public void setManual(BlockPlanter.Mode mode) {
+		this.mode = mode;
+		logic = FarmRegistry.getInstance().getProperties(identifier).getLogic(this.mode == BlockPlanter.Mode.MANUAL);
 	}
 
 	protected TilePlanter(TileEntityType type, String identifier) {
 		super(type, 150, 1500);
 		this.identifier = identifier;
-		setManual(false);
+		mode = BlockPlanter.Mode.MANAGED;
 		setInternalInventory(inventory = new InventoryPlanter(this));
 		this.hydrationManager = new FarmHydrationManager(this);
 		this.fertilizerManager = new FarmFertilizerManager();
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters((Fluid) null/*FluidRegistry.WATER TODO fluids*/);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
 
 		this.tankManager = new TankManager(this, resourceTank);
 		setEnergyPerWorkCycle(10);
@@ -211,7 +212,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		tankManager.write(data);
 		fertilizerManager.write(data);
 		ownerHandler.write(data);
-		data.putBoolean("isManual", isManual);
+		data.putInt("mode", mode.ordinal());
 		return data;
 	}
 
@@ -222,7 +223,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 		tankManager.read(data);
 		fertilizerManager.read(data);
 		ownerHandler.read(data);
-		setManual(data.getBoolean("isManual"));
+		setManual(BlockPlanter.Mode.values()[data.getInt("mode")]);
 	}
 
 	@Override
@@ -410,7 +411,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	@Override
 	public boolean canPlantSoil(boolean manual) {
-		return !isManual;
+		return mode == BlockPlanter.Mode.MANAGED;
 	}
 
 	@Override

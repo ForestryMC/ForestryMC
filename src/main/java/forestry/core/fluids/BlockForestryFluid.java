@@ -62,7 +62,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 			int i = blockState.get(LEVEL);
 
 			if (i > 0 && i < 8) {
-				if (fluid.getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
+				if (getFluid().getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
 					world.playSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {
@@ -132,7 +132,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	public Material getMaterial(BlockState state) {
 		// Fahrenheit 451 = 505.928 Kelvin
 		// The temperature at which book-paper catches fire, and burns.
-		if (fluid.getAttributes().getTemperature() > 505) {
+		if (getFluid().getAttributes().getTemperature() > 505) {
 			return Material.LAVA;
 		} else {
 			return super.getMaterial(state);

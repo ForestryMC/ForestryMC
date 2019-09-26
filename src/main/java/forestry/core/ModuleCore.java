@@ -247,11 +247,11 @@ public class ModuleCore extends BlankForestryModule {
 			// / CARPENTER
 			// Portable ANALYZER
 			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, CoreItems.PORTABLE_ALYZER.stack(),
-				"X#X", "X#X", "RDR",
-				'#', OreDictUtil.PANE_GLASS,
-				'X', OreDictUtil.INGOT_TIN,
-				'R', OreDictUtil.DUST_REDSTONE,
-				'D', OreDictUtil.GEM_DIAMOND);
+					"X#X", "X#X", "RDR",
+					'#', OreDictUtil.PANE_GLASS,
+					'X', OreDictUtil.INGOT_TIN,
+					'R', OreDictUtil.DUST_REDSTONE,
+					'D', OreDictUtil.GEM_DIAMOND);
 			// Camouflaged Paneling
 			FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
 			if (!biomass.isEmpty()) {
@@ -261,7 +261,7 @@ public class ModuleCore extends BlankForestryModule {
 		// alternate recipes
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-				CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1), 0.15f
+					CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1), 0.15f
 			));
 		}
 

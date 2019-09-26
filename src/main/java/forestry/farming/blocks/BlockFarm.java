@@ -39,11 +39,8 @@ import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
 
-//import net.minecraftforge.common.property.ExtendedBlockState;
-//import net.minecraftforge.common.property.IExtendedBlockState;
-//import net.minecraftforge.common.property.IUnlistedProperty;
-
 public class BlockFarm extends BlockStructure {
+
 	private final EnumFarmBlockType type;
 	private final EnumFarmMaterial farmMaterial;
 
@@ -55,19 +52,6 @@ public class BlockFarm extends BlockStructure {
 		this.type = type;
 		this.farmMaterial = farmMaterial;
 	}
-
-	//TODO - either flatten or work out how extended states work
-	//	@Override
-	//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		return ((IExtendedBlockState) super.getExtendedState(state, world, pos)).with(UnlistedBlockPos.POS, pos)
-	//			.with(UnlistedBlockAccess.BLOCKACCESS, world);
-	//	}
-	//
-	//	@Override
-	//	protected BlockStateContainer createBlockState() {
-	//		return new ExtendedBlockState(this, new IProperty[]{META},
-	//			new ModelProperty<>()[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
-	//	}
 
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
@@ -106,7 +90,7 @@ public class BlockFarm extends BlockStructure {
 	//		return world.setBlockToAir(pos);
 	//	}
 
-	//TODO not sjure about this
+	//TODO not sure about this
 	//	@Override
 	//	public static List<ItemStack> getDrops(BlockState state, ServerWorld worldIn, BlockPos pos, @Nullable TileEntity tileEntityIn) {
 	////		int meta = getMetaFromState(state);

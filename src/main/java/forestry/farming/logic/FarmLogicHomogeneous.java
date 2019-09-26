@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;

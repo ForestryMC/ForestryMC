@@ -164,7 +164,7 @@ public abstract class FarmLogic implements IFarmLogic {
 			}
 
 			//TODO not sure if this key still exists
-			if (entity.getPersistantData().getBoolean("PreventRemoteMovement")) {
+			if (entity.getPersistentData().getBoolean("PreventRemoteMovement")) {
 				return false;
 			}
 
