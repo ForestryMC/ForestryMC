@@ -322,7 +322,7 @@ public class ItemResearchNote extends ItemForestry {
 		if (note.registerResults(worldIn, playerIn)) {
 			playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
 			// Notify player that his inventory has changed.
-			NetworkUtil.inventoryChangeNotify(playerIn);
+			NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);	//TODO not sure this is right
 		}
 
 		return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);

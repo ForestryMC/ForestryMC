@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -26,6 +27,8 @@ import net.minecraftforge.common.util.FakePlayer;
 
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketHandlerClient;
+import forestry.core.network.PacketHandlerServer;
 
 //import net.minecraft.server.management.PlayerChunkMap;
 
@@ -58,14 +61,12 @@ public class NetworkUtil {
 		}
 
 		ServerPlayerEntity player = (ServerPlayerEntity) PlayerEntity;
-		//TODO - packets
-		//		Forestry.getPacketHandler().sendPacket(packet.getPacket(), player);
+		PacketHandlerServer.sendPacket(packet, player);
 	}
 
-	public static void inventoryChangeNotify(PlayerEntity player) {
+	public static void inventoryChangeNotify(PlayerEntity player, Container container) {
 		if (player instanceof ServerPlayerEntity) {
-			//TODO network
-			//			((ServerPlayerEntity) player).sendContainerToPlayer(player.inventory);
+			((ServerPlayerEntity) player).sendContainerToPlayer(container);
 		}
 	}
 
@@ -73,7 +74,6 @@ public class NetworkUtil {
 	public static void sendToServer(IForestryPacketServer packet) {
 		ClientPlayNetHandler netHandler = Minecraft.getInstance().getConnection();
 		Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
-		//TODO packets
-		//		netHandler.sendPacket(packet);
+		PacketHandlerClient.sendPacket(packet);
 	}
 }
