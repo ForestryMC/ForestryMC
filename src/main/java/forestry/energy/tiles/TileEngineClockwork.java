@@ -14,12 +14,15 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraftforge.common.util.FakePlayer;
 
 import forestry.core.config.Constants;
 import forestry.core.tiles.TemperatureState;
-import forestry.core.tiles.TileEngine;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.energy.features.EnergyTiles;
 
@@ -42,33 +45,28 @@ public class TileEngineClockwork extends TileEngine {
 		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
-	//TODO needs to be in onactivated or similar
-	//	@Override
-	//	public void openGui(PlayerEntity player, ItemStack heldItem) {
-	//		if (!(player instanceof ServerPlayerEntity)) {
-	//			return;
-	//		}
-	//
-	//		if (player instanceof FakePlayer) {
-	//			return;
-	//		}
-	//
-	//		if (tension <= 0) {
-	//			tension = WIND_TENSION_BASE;
-	//		} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
-	//			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
-	//		} else {
-	//			return;
-	//		}
-	//
-	//		player.addExhaustion(WIND_EXHAUSTION);
-	//		if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
-	//			player.attackEntityFrom(damageSourceEngineClockwork, 6);
-	//		}
-	//		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
-	//		delay = WIND_DELAY;
-	//		setNeedsNetworkUpdate();
-	//	}
+	@Override
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		if (player instanceof FakePlayer) {
+				return;
+			}
+
+			if (tension <= 0) {
+				tension = WIND_TENSION_BASE;
+			} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
+				tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
+			} else {
+				return;
+			}
+
+			player.addExhaustion(WIND_EXHAUSTION);
+			if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
+				player.attackEntityFrom(damageSourceEngineClockwork, 6);
+			}
+			tension = Math.min(tension, ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE);
+			delay = WIND_DELAY;
+			setNeedsNetworkUpdate();
+		}
 
 	/* LOADING & SAVING */
 	@Override

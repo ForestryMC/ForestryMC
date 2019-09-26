@@ -11,7 +11,7 @@
 package forestry.energy.proxy;
 
 import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.tiles.TileEngine;
+import forestry.energy.tiles.TileEngine;
 
 public class ProxyEnergy {
 	public void setRenderDefaultEngine(MachinePropertiesTesr<? extends TileEngine> machineProperties, String gfxBase) {

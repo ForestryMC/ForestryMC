@@ -32,7 +32,6 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TemperatureState;
-import forestry.core.tiles.TileEngine;
 import forestry.energy.gui.ContainerEngineElectric;
 import forestry.energy.inventory.InventoryEngineElectric;
 //import forestry.plugins.ForestryCompatPlugins;

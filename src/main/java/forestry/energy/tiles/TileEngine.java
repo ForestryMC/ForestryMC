@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.tiles;
+package forestry.energy.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -31,12 +31,14 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketActiveUpdate;
+import forestry.core.tiles.IActivatable;
+import forestry.core.tiles.TemperatureState;
+import forestry.core.tiles.TileBase;
 import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
 
-//TODO - move to energy module?
 public abstract class TileEngine extends TileBase implements IActivatable, IStreamableGui {
 	private static final int CANT_SEND_ENERGY_TIME = 20;
 

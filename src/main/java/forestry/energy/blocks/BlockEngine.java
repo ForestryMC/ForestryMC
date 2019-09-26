@@ -35,7 +35,7 @@ import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.blocks.BlockBase;
-import forestry.core.tiles.TileEngine;
+import forestry.energy.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
