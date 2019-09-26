@@ -38,6 +38,7 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.genetics.IBeeMutationBuilder;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.products.IMutableProductList;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.apiculture.items.EnumHoneyComb;
@@ -1016,6 +1017,9 @@ public enum BeeDefinition implements IBeeDefinition {
 	protected abstract void setAlleles(IAlleleTemplateBuilder template);
 
 	protected abstract void registerMutations();
+
+	protected void addProducts(IMutableProductList products) {
+	}
 
 	protected boolean isSecret() {
 		return false;

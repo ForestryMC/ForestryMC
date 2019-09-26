@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -64,6 +63,7 @@ import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
 import forestry.core.genetics.TemplateMatcher;
@@ -379,12 +379,12 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public Map<ItemStack, Float> getProducts() {
+	public IProductList getProducts() {
 		return genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getProducts();
 	}
 
 	@Override
-	public Map<ItemStack, Float> getSpecialties() {
+	public IProductList getSpecialties() {
 		return genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getSpecialty();
 	}
 

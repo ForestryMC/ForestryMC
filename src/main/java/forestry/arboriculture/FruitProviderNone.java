@@ -11,9 +11,7 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
@@ -34,6 +32,8 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.EmptyProductList;
+import forestry.api.genetics.products.IProductList;
 import forestry.core.config.Constants;
 
 public class FruitProviderNone implements IFruitProvider {
@@ -117,13 +117,13 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public Map<ItemStack, Float> getProducts() {
-		return Collections.emptyMap();
+	public IProductList getProducts() {
+		return EmptyProductList.INSTANCE;
 	}
 
 	@Override
-	public Map<ItemStack, Float> getSpecialty() {
-		return Collections.emptyMap();
+	public IProductList getSpecialty() {
+		return EmptyProductList.INSTANCE;
 	}
 
 	@Override

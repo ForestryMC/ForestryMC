@@ -299,8 +299,8 @@ public class ModuleFarming extends BlankForestryModule {
 					IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 					if (fruitProvider != AlleleFruits.fruitNone.getProvider()) {
 						orchardFarm.addGermlings(treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING));
-						orchardFarm.addProducts(fruitProvider.getProducts().keySet());
-						orchardFarm.addProducts(fruitProvider.getSpecialty().keySet());
+						orchardFarm.addProducts(fruitProvider.getProducts().getPossibleStacks());
+						orchardFarm.addProducts(fruitProvider.getSpecialty().getPossibleStacks());
 					}
 				}
 			}

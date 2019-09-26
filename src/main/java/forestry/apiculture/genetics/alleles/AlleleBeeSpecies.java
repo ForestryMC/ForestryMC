@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -35,20 +29,18 @@ import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
-import forestry.api.apiculture.genetics.IBeeProductProvider;
 import forestry.api.apiculture.genetics.IBeeRoot;
+import forestry.api.core.ISetupListener;
+import forestry.api.genetics.products.IDynamicProductList;
 import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
+import forestry.core.genetics.ProductListWrapper;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
-public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder {
-	@Nullable
-	private Map<ItemStack, Float> productChances;
-	@Nullable
-	private Map<ItemStack, Float> specialtyChances;
-	private final List<IBeeProductProvider> providers = new LinkedList<>();
-
+public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, IAlleleBeeSpeciesBuilder, ISetupListener {
+	private ProductListWrapper products;
+	private ProductListWrapper specialties;
 	private IBeeModelProvider beeModelProvider;
 	private IBeeSpriteColourProvider beeSpriteColourProvider;
 	private IJubilanceProvider jubilanceProvider;
@@ -60,6 +52,8 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 		beeModelProvider = DefaultBeeModelProvider.instance;
 		beeSpriteColourProvider = new DefaultBeeSpriteColourProvider(primaryColor, secondaryColor);
 		jubilanceProvider = JubilanceDefault.instance;
+		products = ProductListWrapper.create();
+		specialties = ProductListWrapper.create();
 	}
 
 	@Override
@@ -69,35 +63,25 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	}
 
 	@Override
+	public void onFinishSetup() {
+		products = products.bake();
+		specialties = specialties.bake();
+	}
+
+	@Override
 	public IBeeRoot getRoot() {
 		return BeeManager.beeRoot;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesBuilder addProduct(IBeeProductProvider provider) {
-		this.providers.add(provider);
-		return this;
-	}
-
-	@Override
 	public IAlleleBeeSpeciesBuilder addProduct(Supplier<ItemStack> product, Float chance) {
-		addProduct(new IBeeProductProvider() {
-			@Override
-			public void addProducts(BiConsumer<ItemStack, Float> registry) {
-				registry.accept(product.get(), chance);
-			}
-		});
+		products.addProduct(product, chance);
 		return this;
 	}
 
 	@Override
 	public IAlleleBeeSpeciesBuilder addSpecialty(Supplier<ItemStack> specialty, Float chance) {
-		addProduct(new IBeeProductProvider() {
-			@Override
-			public void addSpecialties(BiConsumer<ItemStack, Float> registry) {
-				registry.accept(specialty.get(), chance);
-			}
-		});
+		specialties.addProduct(specialty, chance);
 		return this;
 	}
 
@@ -132,38 +116,13 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	}
 
 	@Override
-	public Map<ItemStack, Float> getProductChances() {
-		if (productChances == null) {
-			this.productChances = new HashMap<>();
-			BiConsumer<ItemStack, Float> addProduct = (product, chance) -> {
-				if (product.isEmpty()) {
-					throw new IllegalArgumentException("Tried to add empty product");
-				}
-				if (chance <= 0.0f || chance > 1.0f) {
-					throw new IllegalArgumentException("chance must be in the range (0, 1]");
-				}
-				productChances.put(product, chance);
-			};
-			providers.forEach(provider -> provider.addProducts(addProduct));
-		}
-		return productChances;
+	public IDynamicProductList getProducts() {
+		return products;
 	}
 
 	@Override
-	public Map<ItemStack, Float> getSpecialtyChances() {
-		if (specialtyChances == null) {
-			BiConsumer<ItemStack, Float> addProduct = (product, chance) -> {
-				if (product.isEmpty()) {
-					throw new IllegalArgumentException("Tried to add empty specialty");
-				}
-				if (chance <= 0.0f || chance > 1.0f) {
-					throw new IllegalArgumentException("chance must be in the range (0, 1]");
-				}
-				specialtyChances.put(product, chance);
-			};
-			providers.forEach(provider -> provider.addSpecialties(addProduct));
-		}
-		return specialtyChances;
+	public IDynamicProductList getSpecialties() {
+		return specialties;
 	}
 
 	@Override

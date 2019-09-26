@@ -37,6 +37,7 @@ import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.products.IProductList;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
 import forestry.arboriculture.features.ArboricultureBlocks;
@@ -105,14 +106,14 @@ public class TreePlugin implements IGeneticPlugin {
 					for (IFruitFamily fruitFamily : suitableFruit) {
 						Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
 						for (IFruitProvider fruitProvider : fruitProviders) {
-							Map<ItemStack, Float> products = fruitProvider.getProducts();
-							for (ItemStack stack : products.keySet()) {
+							IProductList products = fruitProvider.getProducts();
+							for (ItemStack stack : products.getPossibleStacks()) {
 								if (stack.isItemEqual(itemstack)) {
 									return 1.0f;
 								}
 							}
-							Map<ItemStack, Float> specialtyChances = fruitProvider.getSpecialty();
-							for (ItemStack stack : specialtyChances.keySet()) {
+							IProductList specialtyChances = fruitProvider.getSpecialty();
+							for (ItemStack stack : specialtyChances.getPossibleStacks()) {
 								if (stack.isItemEqual(itemstack)) {
 									return 1.0f;
 								}

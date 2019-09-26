@@ -106,12 +106,12 @@ public class BeePlugin implements IGeneticPlugin {
 					}
 
 					IAlleleBeeSpecies beeSpecies = (IAlleleBeeSpecies) species;
-					for (ItemStack stack : beeSpecies.getProductChances().keySet()) {
+					for (ItemStack stack : beeSpecies.getProducts().getPossibleStacks()) {
 						if (stack.isItemEqual(itemStack)) {
 							return 1.0f;
 						}
 					}
-					for (ItemStack stack : beeSpecies.getSpecialtyChances().keySet()) {
+					for (ItemStack stack : beeSpecies.getSpecialties().getPossibleStacks()) {
 						if (stack.isItemEqual(itemStack)) {
 							return 1.0f;
 						}
@@ -125,11 +125,11 @@ public class BeePlugin implements IGeneticPlugin {
 					IAlleleBeeSpecies beeSpecies = (IAlleleBeeSpecies) species;
 					NonNullList<ItemStack> bounty = NonNullList.create();
 					if (bountyLevel > 10) {
-						for (ItemStack stack : beeSpecies.getSpecialtyChances().keySet()) {
+						for (ItemStack stack : beeSpecies.getSpecialties().getPossibleStacks()) {
 							bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 						}
 					}
-					for (ItemStack stack : beeSpecies.getProductChances().keySet()) {
+					for (ItemStack stack : beeSpecies.getProducts().getPossibleStacks()) {
 						bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 					}
 					return bounty;

@@ -5,10 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import java.util.Map;
-
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -17,6 +14,7 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.products.IDynamicProductList;
 
 public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 
@@ -32,14 +30,14 @@ public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 	boolean isNocturnal();
 
 	/**
-	 * @return Map of possible products with the chance for drop each bee cycle. (0 - 1]
+	 * @return List of possible products with the chance for drop each bee cycle. (0 - 1]
 	 */
-	Map<ItemStack, Float> getProductChances();
+	IDynamicProductList getProducts();
 
 	/**
-	 * @return Map of possible specialities with the chance for drop each bee cycle. (0 - 1]
+	 * @return List of possible specialities with the chance for drop each bee cycle. (0 - 1]
 	 */
-	Map<ItemStack, Float> getSpecialtyChances();
+	IDynamicProductList getSpecialties();
 
 	/**
 	 * Only jubilant bees produce specialities.

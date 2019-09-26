@@ -11,9 +11,6 @@
 package forestry.arboriculture;
 
 import java.awt.Color;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
@@ -26,22 +23,25 @@ import net.minecraft.world.World;
 import genetics.api.individual.IGenome;
 
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
+import forestry.core.genetics.ProductListWrapper;
 
-//TODO this class is a massive hack. Hopefully temporary until I work out how to separate AlleleFruits Block/Item dependancy problem
-//TODO double supplier probably not needed here...
 public class FruitProviderRipening extends FruitProviderNone {
-	private final Map<ItemStack, Float> products = new HashMap<>();
-	private final Supplier<ItemStack> product;
-	private final float modifier;
 	private int colourCallow = 0xffffff;
 	private int diffR;
 	private int diffG;
 	private int diffB;
+	private ProductListWrapper products;
 
 	public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, Supplier<ItemStack> product, float modifier) {
 		super(unlocalizedDescription, family);
-		this.product = product;
-		this.modifier = modifier;
+		this.products = ProductListWrapper.create();
+		this.products.addProduct(product, modifier);
+	}
+
+	@Override
+	public void onStartSetup() {
+		this.products = products.bake();
 	}
 
 	public FruitProviderRipening setColours(Color ripe, Color callow) {
@@ -71,21 +71,14 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-		for (Map.Entry<ItemStack, Float> entry : getProducts().entrySet()) {
-			if (world.rand.nextFloat() <= entry.getValue()) {
-				product.add(entry.getKey().copy());
-			}
-		}
+		products.addProducts(world, pos, product, (p -> p.chance), world.rand);
 
 		return product;
 	}
 
 	@Override
-	public Map<ItemStack, Float> getProducts() {
-		if (products.isEmpty()) {
-			products.put(product.get(), modifier);
-		}
-		return Collections.unmodifiableMap(products);
+	public IProductList getProducts() {
+		return products;
 	}
 
 	@Override

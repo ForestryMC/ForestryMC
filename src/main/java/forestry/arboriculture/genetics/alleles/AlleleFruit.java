@@ -18,8 +18,9 @@ import genetics.api.alleles.AlleleCategorized;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.core.ISetupListener;
 
-public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
+public class AlleleFruit extends AlleleCategorized implements IAlleleFruit, ISetupListener {
 	private final IFruitProvider provider;
 
 	public AlleleFruit(String name, IFruitProvider provider) {
@@ -50,5 +51,15 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit {
 	@Override
 	public int compareTo(IAlleleFruit o) {
 		return 0;
+	}
+
+	@Override
+	public void onStartSetup() {
+		provider.onStartSetup();
+	}
+
+	@Override
+	public void onFinishSetup() {
+		provider.onFinishSetup();
 	}
 }

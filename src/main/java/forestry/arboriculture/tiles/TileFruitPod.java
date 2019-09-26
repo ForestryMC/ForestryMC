@@ -11,7 +11,6 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -37,6 +36,8 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
+import forestry.api.genetics.products.Product;
 import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.core.config.Constants;
 import forestry.core.network.IStreamable;
@@ -113,14 +114,14 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	public ItemStack getPickBlock() {
-		Map<ItemStack, Float> products = allele.getProvider().getProducts();
+		IProductList products = allele.getProvider().getProducts();
 
 		ItemStack pickBlock = ItemStack.EMPTY;
-		Float maxChance = 0.0f;
-		for (Map.Entry<ItemStack, Float> product : products.entrySet()) {
-			if (maxChance < product.getValue()) {
-				maxChance = product.getValue();
-				pickBlock = product.getKey().copy();
+		float maxChance = 0.0f;
+		for (Product product : products.getPossibleProducts()) {
+			if (maxChance < product.getChance()) {
+				maxChance = product.getChance();
+				pickBlock = product.getStack().copy();
 			}
 		}
 

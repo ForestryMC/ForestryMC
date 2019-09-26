@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
-import com.google.common.collect.Sets;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -33,6 +32,7 @@ import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.products.Product;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.farming.logic.crops.CropDestroy;
 
@@ -45,9 +45,8 @@ public class FarmableGE implements IFarmable {
 		windfall.addAll(AlleleManager.geneticRegistry.getRegisteredFruitFamilies().values().stream()
 				.map(TreeManager.treeRoot::getFruitProvidersForFruitFamily)
 				.flatMap(Collection::stream)
-				.map(p -> Sets.union(p.getProducts().keySet(), p.getSpecialty().keySet()))
-				.flatMap(Collection::stream)
-				.map(ItemStack::getItem)
+			.flatMap(p -> Stream.concat(p.getProducts().getPossibleProducts().stream(), p.getSpecialty().getPossibleProducts().stream()))
+			.map(Product::getItem)
 				.collect(Collectors.toSet()));
 	}
 

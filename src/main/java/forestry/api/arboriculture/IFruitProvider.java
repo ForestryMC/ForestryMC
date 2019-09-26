@@ -6,7 +6,6 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
@@ -26,12 +25,14 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.api.core.ISetupListener;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
 
 /**
  * Provides all information that is needed to spawn a fruit leaves / pod block in the world.
  */
-public interface IFruitProvider {
+public interface IFruitProvider extends ISetupListener {
 	/**
 	 * @return The fruit family of this fruit.
 	 */
@@ -82,18 +83,18 @@ public interface IFruitProvider {
 	int getRipeningPeriod();
 
 	/**
-	 * A unmodifiable map that contains all products and their associated drop chances.
+	 * A unmodifiable list that contains all products and their associated drop chances.
 	 *
-	 * @return A unmodifiable map that contains all products and their associated drop chances.
+	 * @return A unmodifiable list that contains all products and their associated drop chances.
 	 */
-	Map<ItemStack, Float> getProducts();
+	IProductList getProducts();
 
 	/**
-	 * A unmodifiable map that contains all specialties and their associated drop chances.
+	 * A unmodifiable list that contains all specialties and their associated drop chances.
 	 *
-	 * @return A unmodifiable map that contains all products and their associated drop chances.
+	 * @return A unmodifiable list that contains all products and their associated drop chances.
 	 */
-	Map<ItemStack, Float> getSpecialty();
+	IProductList getSpecialty();
 
 	/**
 	 * Returns all drops of this block if you harvest it.

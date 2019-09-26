@@ -47,8 +47,12 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISetupListener;
 import forestry.core.EventHandlerCore;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
@@ -188,16 +192,32 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
 		//TODO - DistExecutor
+		callSetupListeners(true);
 		ModuleManager.getModuleHandler().runPreInit();
 		Proxies.render.registerItemAndBlockColors();
 		//TODO put these here for now
 		ModuleManager.getModuleHandler().runInit();
+		callSetupListeners(false);
 		ModuleManager.getModuleHandler().runPostInit();
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public void setupClient(FMLClientSetupEvent event) {
 		ModuleManager.getModuleHandler().runClientSetup();
+	}
+
+	//TODO: Move to somewhere else
+	private void callSetupListeners(boolean start) {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles()) {
+			if (allele instanceof ISetupListener) {
+				ISetupListener listener = (ISetupListener) allele;
+				if (start) {
+					listener.onStartSetup();
+				} else {
+					listener.onFinishSetup();
+				}
+			}
+		}
 	}
 
 	private void gatherData(GatherDataEvent event) {
