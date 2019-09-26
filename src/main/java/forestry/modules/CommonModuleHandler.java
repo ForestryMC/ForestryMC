@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -228,6 +229,12 @@ public class CommonModuleHandler {
 	//			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
 	//		}
 	//	}
+
+	public void addBiomeDecorations(Biome biome) {
+		for (BlankForestryModule module : modules) {
+			module.addBiomeDecorations(biome);
+		}
+	}
 
 	public void decorateBiome(World world, Random rand, BlockPos pos) {
 		for (BlankForestryModule module : modules) {

@@ -37,7 +37,7 @@ import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockCocoon extends Block {
 	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
-	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
+	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
 
 	public BlockCocoon() {
 		super(Block.Properties.create(MaterialCocoon.INSTANCE)

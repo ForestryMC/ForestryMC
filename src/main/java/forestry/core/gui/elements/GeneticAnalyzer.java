@@ -130,7 +130,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		}
 		ItemStack stack = provider.getSpecimen(selectedSlot);
 		IRootDefinition<IForestrySpeciesRoot> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stack);
-		if (definition.isRootPresent()) {
+		if (definition.isPresent()) {
 			IForestrySpeciesRoot root = definition.get();
 			IDatabasePlugin databasePlugin = root.getSpeciesPlugin();
 			if (databasePlugin != null) {

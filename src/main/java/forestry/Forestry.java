@@ -42,13 +42,18 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISetupListener;
 import forestry.core.EventHandlerCore;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
@@ -155,8 +160,9 @@ public class Forestry {
 		Proxies.common = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyCommon());
 
 		ModuleManager.getModuleHandler().runSetup();
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus));
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
+		modEventBus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, evt -> networkHandler.serverPacketHandler());
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
@@ -188,16 +194,32 @@ public class Forestry {
 		ForestryAPI.activeMode = new GameMode(gameMode);
 
 		//TODO - DistExecutor
+		callSetupListeners(true);
 		ModuleManager.getModuleHandler().runPreInit();
 		Proxies.render.registerItemAndBlockColors();
 		//TODO put these here for now
 		ModuleManager.getModuleHandler().runInit();
+		callSetupListeners(false);
 		ModuleManager.getModuleHandler().runPostInit();
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public void setupClient(FMLClientSetupEvent event) {
 		ModuleManager.getModuleHandler().runClientSetup();
+	}
+
+	//TODO: Move to somewhere else
+	private void callSetupListeners(boolean start) {
+		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles()) {
+			if (allele instanceof ISetupListener) {
+				ISetupListener listener = (ISetupListener) allele;
+				if (start) {
+					listener.onStartSetup();
+				} else {
+					listener.onFinishSetup();
+				}
+			}
+		}
 	}
 
 	private void gatherData(GatherDataEvent event) {
@@ -226,7 +248,7 @@ public class Forestry {
 		}
 	}
 
-	private void clientInit(IEventBus modEventBus) {
+	private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
 		modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
 			Minecraft minecraft = Minecraft.getInstance();
 			IResourceManager resourceManager = minecraft.getResourceManager();
@@ -236,6 +258,7 @@ public class Forestry {
 				reloadableManager.addReloadListener(TextureManagerForestry.getInstance());
 			}
 		});
+		modEventBus.addListener(EventPriority.NORMAL, false, FMLLoadCompleteEvent.class, fmlLoadCompleteEvent -> networkHandler.clientPacketHandler());
 	}
 
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)

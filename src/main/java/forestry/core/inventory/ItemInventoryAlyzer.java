@@ -70,7 +70,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
 		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
-		if (!definition.isRootPresent()) {
+		if (!definition.isPresent()) {
 			return false;
 		}
 		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
@@ -104,7 +104,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
 		// No individual, abort
-		if (!definition.isRootPresent()) {
+		if (!definition.isPresent()) {
 			return;
 		}
 		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
@@ -152,7 +152,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		} else {
 			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(getSpecimen());
-			if (definition.isRootPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+			if (definition.isPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
 				errorStates.add(EnumErrorCode.NO_HONEY);
 			}
 		}

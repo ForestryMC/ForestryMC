@@ -16,7 +16,7 @@ import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileEngine;
+import forestry.energy.tiles.TileEngine;
 import forestry.energy.ModuleEnergy;
 import forestry.energy.tiles.TileEngineBiogas;
 import forestry.energy.tiles.TileEngineClockwork;

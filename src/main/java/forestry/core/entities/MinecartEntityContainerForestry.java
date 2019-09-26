@@ -11,6 +11,7 @@
 package forestry.core.entities;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
@@ -35,25 +36,24 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	 */
 	private boolean dropContentsWhenDead = true;
 
-	@SuppressWarnings("unused")
-	public MinecartEntityContainerForestry(World world) {
-		super(world);
+	public MinecartEntityContainerForestry(EntityType<? extends MinecartEntityContainerForestry> type, World world) {
+		super(type, world);
 	}
 
-	public MinecartEntityContainerForestry(World world, double posX, double posY, double posZ) {
-		super(world, posX, posY, posZ);
-	}
-
-	@Override
-	protected void readAdditional(CompoundNBT CompoundNBT) {
-		super.read(CompoundNBT);
-		getInternalInventory().read(CompoundNBT);
+	public MinecartEntityContainerForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
+		super(type, world, posX, posY, posZ);
 	}
 
 	@Override
-	protected void writeAdditional(CompoundNBT CompoundNBT) {
-		super.writeAdditional(CompoundNBT);
-		getInternalInventory().write(CompoundNBT);
+	protected void readAdditional(CompoundNBT compoundNBT) {
+		super.read(compoundNBT);
+		getInternalInventory().read(compoundNBT);
+	}
+
+	@Override
+	protected void writeAdditional(CompoundNBT compoundNBT) {
+		super.writeAdditional(compoundNBT);
+		getInternalInventory().write(compoundNBT);
 	}
 
 	@Override

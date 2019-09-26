@@ -15,6 +15,6 @@ public class ItemBlockPlanter extends ItemBlockForestry<BlockPlanter> {
 
 	@Override
 	public ITextComponent getDisplayName(ItemStack stack) {
-		return new TranslationTextComponent("block.forestry.planter." + (/*TODO BlockPlanter.isManual(stack)*/ true ? "manual" : "managed"), super.getDisplayName(stack));
+		return new TranslationTextComponent("block.forestry.planter." + (getBlock().getMode().getName()), super.getDisplayName(stack));
 	}
 }

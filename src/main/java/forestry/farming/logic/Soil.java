@@ -8,23 +8,19 @@ import forestry.api.farming.ISoil;
 class Soil implements ISoil {
 	private final ItemStack resource;
 	private final BlockState soilState;
-	private final boolean hasMetaData;
 
-	public Soil(ItemStack resource, BlockState soilState, boolean hasMetaData) {
+	public Soil(ItemStack resource, BlockState soilState) {
 		this.resource = resource;
 		this.soilState = soilState;
-		this.hasMetaData = hasMetaData;
 	}
 
+	@Override
 	public ItemStack getResource() {
 		return resource;
 	}
 
+	@Override
 	public BlockState getSoilState() {
 		return soilState;
-	}
-
-	public boolean hasMetaData() {
-		return this.hasMetaData;
 	}
 }

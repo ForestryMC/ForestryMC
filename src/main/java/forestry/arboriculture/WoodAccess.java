@@ -14,7 +14,6 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -23,23 +22,13 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-
-import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodAccess;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.blocks.BlockForestryDoor;
-import forestry.arboriculture.blocks.BlockForestryFence;
-import forestry.arboriculture.blocks.BlockForestryFenceGate;
-import forestry.arboriculture.blocks.BlockForestryLog;
-import forestry.arboriculture.blocks.BlockForestryPlank;
-import forestry.arboriculture.blocks.BlockForestrySlab;
-import forestry.arboriculture.blocks.BlockForestryStairs;
 import forestry.modules.features.FeatureBlockGroup;
 
 public class WoodAccess implements IWoodAccess {
@@ -61,48 +50,6 @@ public class WoodAccess implements IWoodAccess {
 			woodMaps.put(woodBlockKind, new WoodMap(woodBlockKind));
 		}
 		registerVanilla();
-	}
-
-	public void registerLogs(Collection<? extends BlockForestryLog> blocks) {
-		for (BlockForestryLog block : blocks) {
-			registerWithoutVariants(block, WoodBlockKind.LOG);
-		}
-	}
-
-	public void registerPlanks(Collection<? extends BlockForestryPlank> blocks) {
-		for (BlockForestryPlank block : blocks) {
-			registerWithoutVariants(block, WoodBlockKind.PLANKS);
-		}
-	}
-
-	public void registerSlabs(Collection<? extends BlockForestrySlab> blocks) {
-		for (BlockForestrySlab block : blocks) {
-			registerWithoutVariants(block, WoodBlockKind.SLAB);
-		}
-	}
-
-	public void registerFences(Collection<? extends BlockForestryFence> blocks) {
-		for (BlockForestryFence block : blocks) {
-			registerWithoutVariants(block, WoodBlockKind.FENCE);
-		}
-	}
-
-	public void registerFenceGates(Collection<BlockForestryFenceGate> blocks) {
-		for (BlockForestryFenceGate block : blocks) {
-			registerWithoutVariants(block, WoodBlockKind.FENCE_GATE);
-		}
-	}
-
-	public void registerStairs(Collection<? extends BlockForestryStairs> blocks) {
-		for (BlockForestryStairs block : blocks) {
-			registerWithoutVariants(block, WoodBlockKind.STAIRS);
-		}
-	}
-
-	public void registerDoors(Collection<BlockForestryDoor> blocks) {
-		for (BlockForestryDoor block : blocks) {
-			registerWithoutVariants(block, WoodBlockKind.DOOR);
-		}
 	}
 
 	public <T extends Block & IWoodTyped> void registerFeatures(FeatureBlockGroup<? extends T, ? extends IWoodType> featureGroup, WoodBlockKind kind) {
@@ -139,7 +86,7 @@ public class WoodAccess implements IWoodAccess {
 		register(EnumVanillaWoodType.JUNGLE, WoodBlockKind.LOG, false, Blocks.JUNGLE_LOG.getDefaultState(), new ItemStack(Blocks.JUNGLE_LOG));
 		register(EnumVanillaWoodType.ACACIA, WoodBlockKind.LOG, false, Blocks.ACACIA_LOG.getDefaultState(), new ItemStack(Blocks.ACACIA_LOG));
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.LOG, false, Blocks.DARK_OAK_LOG.getDefaultState(), new ItemStack(Blocks.DARK_OAK_LOG));
-		
+
 		register(EnumVanillaWoodType.OAK, WoodBlockKind.FENCE, false, Blocks.OAK_FENCE.getDefaultState(), new ItemStack(Blocks.OAK_FENCE));
 		register(EnumVanillaWoodType.SPRUCE, WoodBlockKind.FENCE, false, Blocks.SPRUCE_FENCE.getDefaultState(), new ItemStack(Blocks.SPRUCE_FENCE));
 		register(EnumVanillaWoodType.BIRCH, WoodBlockKind.FENCE, false, Blocks.BIRCH_FENCE.getDefaultState(), new ItemStack(Blocks.BIRCH_FENCE));
@@ -169,20 +116,6 @@ public class WoodAccess implements IWoodAccess {
 		register(EnumVanillaWoodType.DARK_OAK, WoodBlockKind.DOOR, false, Blocks.DARK_OAK_DOOR.getDefaultState(), new ItemStack(Items.DARK_OAK_DOOR));
 	}
 
-	//	private <T extends Block & IWoodTyped, V extends Enum<V> & IWoodType> void registerWithVariants(T woodTyped, WoodBlockKind woodBlockKind, PropertyWoodType<V> property) {
-	//		boolean fireproof = woodTyped.isFireproof();
-	//
-	//		for (V value : property.getAllowedValues()) {
-	//			BlockState blockState = woodTyped.getDefaultState().with(property, value);
-	//			IWoodType woodType = woodTyped.getWoodType();
-	//			ItemStack itemStack = new ItemStack(woodTyped, 1, meta);
-	//			if (!(woodType instanceof EnumVanillaWoodType)) {
-	//				ModuleArboriculture.proxy.registerWoodModel(woodTyped, true);
-	//			}
-	//			register(woodType, woodBlockKind, fireproof, blockState, itemStack);
-	//		}
-	//	}
-
 	/**
 	 * Register wood blocks that have no variant property
 	 */
@@ -191,12 +124,7 @@ public class WoodAccess implements IWoodAccess {
 		BlockState blockState = woodTyped.getDefaultState();
 		IWoodType woodType = woodTyped.getWoodType();
 		ItemStack itemStack = new ItemStack(woodTyped);
-		if (!(woodType instanceof EnumVanillaWoodType)) {
-			ModuleArboriculture.proxy.registerWoodModel(woodTyped, false);
-		}
 		if (itemStack.isEmpty()) {
-			Block block = ForgeRegistries.BLOCKS.getValue(woodTyped.getBlock().getRegistryName());
-			Item item = woodTyped.asItem();
 			new ItemStack(woodTyped);
 		}
 		register(woodType, woodBlockKind, fireproof, blockState, itemStack);

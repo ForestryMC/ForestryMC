@@ -11,6 +11,4 @@ public interface ISoil {
 	ItemStack getResource();
 
 	BlockState getSoilState();
-
-	boolean hasMetaData();
 }

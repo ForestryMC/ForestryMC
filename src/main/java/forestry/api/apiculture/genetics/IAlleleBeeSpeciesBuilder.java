@@ -19,8 +19,6 @@ public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder {
 	@Override
 	IAlleleBeeSpecies build();
 
-	IAlleleBeeSpeciesBuilder addProduct(IBeeProductProvider provider);
-
 	/**
 	 * Add a product for this bee species.
 	 * Chance is between 0 and 1.

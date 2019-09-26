@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class ModelBakerModel implements IBakedModel {
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
 
-	public ModelBakerModel(IModelState modelState) {
+	ModelBakerModel(IModelState modelState) {
 		models = new ArrayList<>();
 		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(Direction.class);
@@ -73,18 +74,18 @@ public class ModelBakerModel implements IBakedModel {
 		}
 	}
 
-	private ModelBakerModel(List<Pair<BlockState, IBakedModel>> models, List<Pair<BlockState, IBakedModel>> modelsPost, Map<Direction, List<BakedQuad>> faceQuads, List<BakedQuad> generalQuads, boolean isGui3d, boolean isAmbientOcclusion, IModelState modelState, float[] rotation, float[] translation, float[] scale, TextureAtlasSprite particleSprite) {
-		this.models = models;
-		this.modelsPost = modelsPost;
-		this.faceQuads = faceQuads;
-		this.generalQuads = generalQuads;
-		this.isGui3d = isGui3d;
-		this.isAmbientOcclusion = isAmbientOcclusion;
-		this.rotation = rotation;
-		this.translation = translation;
-		this.scale = scale;
-		this.particleSprite = particleSprite;
-		setModelState(modelState);
+	private ModelBakerModel(ModelBakerModel old) {
+		this.models = new ArrayList<>(old.models);
+		this.modelsPost = new ArrayList<>(old.modelsPost);
+		this.faceQuads = new EnumMap<>(old.faceQuads);
+		this.generalQuads = new ArrayList<>(old.generalQuads);
+		this.isGui3d = old.isGui3d;
+		this.isAmbientOcclusion = old.isAmbientOcclusion;
+		this.rotation = Arrays.copyOf(old.rotation, 3);
+		this.translation = Arrays.copyOf(old.translation, 3);
+		this.scale = Arrays.copyOf(old.scale, 3);
+		this.particleSprite = old.particleSprite;
+		setModelState(old.modelState);
 	}
 
 	@Override
@@ -161,7 +162,7 @@ public class ModelBakerModel implements IBakedModel {
 		return scale;
 	}
 
-	public void setModelState(@Nullable IModelState modelState) {
+	public void setModelState(IModelState modelState) {
 		this.modelState = modelState;
 		this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
 	}
@@ -197,7 +198,7 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	public ModelBakerModel copy() {
-		return new ModelBakerModel(models, modelsPost, faceQuads, generalQuads, isGui3d, isAmbientOcclusion, modelState, rotation, translation, scale, particleSprite);
+		return new ModelBakerModel(this);
 	}
 
 	@Override

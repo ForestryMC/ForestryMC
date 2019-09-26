@@ -16,6 +16,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -42,20 +43,14 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 
 		BlockState state = world.getBlockState(pos);
 		Block ground = state.getBlock();
-		int groundMeta;
 		for (Block b : this.allowedItems) {
-			if (b == ground) {
-				groundMeta = 0;//TODO flatten ground.getMetaFromState(state); Want the maturity property instead?
-				if (groundMeta > 6) {
-					return false;
+			if (b == ground && b instanceof IGrowable) {
+				IGrowable growable = (IGrowable) b;
+				if (growable.canGrow(world, pos, state, false)) {//TODO what to put for isClient
+					for (int i = 0; i < world.rand.nextInt(2) + 1; i++) {
+						growable.grow(world, world.rand, pos, state);
+					}
 				}
-				if (groundMeta < 6) {
-					groundMeta += world.rand.nextInt(2) + 1;
-				} else {
-					groundMeta = 7;
-				}
-
-				return world.setBlockState(pos, ground.getDefaultState(), 2); //TODO flatten ground.getStateFromMeta(groundMeta), 2);
 			}
 		}
 

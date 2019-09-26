@@ -18,11 +18,11 @@ import forestry.modules.features.ModFeatureRegistry;
 public class CultivationTiles {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCultivation.class);
 
-	public static final FeatureTileType<TileArboretum> ARBORETUM = REGISTRY.tile(TileArboretum::new, "arboretum", () -> CultivationBlocks.PLANTER.get(BlockTypePlanter.ARBORETUM).collect());
-	public static final FeatureTileType<TileBog> BOG = REGISTRY.tile(TileBog::new, "bog", () -> CultivationBlocks.PLANTER.get(BlockTypePlanter.PEAT_BOG).collect());
-	public static final FeatureTileType<TileFarmCrops> CROPS = REGISTRY.tile(TileFarmCrops::new, "crops", () -> CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_CROPS).collect());
-	public static final FeatureTileType<TileFarmEnder> ENDER = REGISTRY.tile(TileFarmEnder::new, "ender", () -> CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_ENDER).collect());
-	public static final FeatureTileType<TileFarmGourd> GOURD = REGISTRY.tile(TileFarmGourd::new, "gourd", () -> CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_GOURD).collect());
-	public static final FeatureTileType<TileFarmMushroom> MUSHROOM = REGISTRY.tile(TileFarmMushroom::new, "mushroom", () -> CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_MUSHROOM).collect());
-	public static final FeatureTileType<TileFarmNether> NETHER = REGISTRY.tile(TileFarmNether::new, "nether", () -> CultivationBlocks.PLANTER.get(BlockTypePlanter.FARM_NETHER).collect());
+	public static final FeatureTileType<TileArboretum> ARBORETUM = REGISTRY.tile(TileArboretum::new, "arboretum", () -> CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.ARBORETUM));
+	public static final FeatureTileType<TileBog> BOG = REGISTRY.tile(TileBog::new, "bog", () -> CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.PEAT_BOG));
+	public static final FeatureTileType<TileFarmCrops> CROPS = REGISTRY.tile(TileFarmCrops::new, "crops", () -> CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_CROPS));
+	public static final FeatureTileType<TileFarmEnder> ENDER = REGISTRY.tile(TileFarmEnder::new, "ender", () -> CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_ENDER));
+	public static final FeatureTileType<TileFarmGourd> GOURD = REGISTRY.tile(TileFarmGourd::new, "gourd", () -> CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_GOURD));
+	public static final FeatureTileType<TileFarmMushroom> MUSHROOM = REGISTRY.tile(TileFarmMushroom::new, "mushroom", () -> CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_MUSHROOM));
+	public static final FeatureTileType<TileFarmNether> NETHER = REGISTRY.tile(TileFarmNether::new, "nether", () -> CultivationBlocks.PLANTER.getRowBlocks(BlockTypePlanter.FARM_NETHER));
 }

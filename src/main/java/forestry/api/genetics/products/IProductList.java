@@ -1,0 +1,40 @@
+package forestry.api.genetics.products;
+
+import java.util.Collection;
+import java.util.Random;
+import java.util.function.Function;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+/**
+ * A list of products that a bee or tree produces.
+ */
+public interface IProductList {
+
+	/**
+	 * @return A collection with all constant products of this list.
+	 */
+	Collection<Product> getConstantProducts();
+
+	default Collection<Product> getPossibleProducts() {
+		return getConstantProducts();
+	}
+
+	default NonNullList<ItemStack> getPossibleStacks() {
+		NonNullList<ItemStack> stacks = NonNullList.create();
+		getPossibleProducts().forEach(product -> stacks.add(product.stack));
+		return stacks;
+	}
+
+	/**
+	 * Adds the products of this provider to the given {@link NonNullList} that contains all products of the provider
+	 * that are produced in this cycle.
+	 *
+	 * @param stacks   All products of the provider that are produced in this cycle.
+	 * @param modifier A function that is used by the provider to modify the chance of the product.
+	 * @param rand     The instance of {@link Random} that should be used. In the most cases this is
+	 *                 {@link net.minecraft.world.World#rand}.
+	 */
+	void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand);
+}

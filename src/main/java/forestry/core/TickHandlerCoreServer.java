@@ -38,16 +38,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.worldgen.WorldGenerator;
+import forestry.core.worldgen.WorldFeatureManager;
 import forestry.modules.ModuleManager;
 
 public class TickHandlerCoreServer {
 
-	private final WorldGenerator worldGenerator;
+	private final WorldFeatureManager worldGenerator;
 	private final LinkedListMultimap<ResourceLocation, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
 	private final Set<ResourceLocation> checkForRetrogen = new HashSet<>();
 
-	public TickHandlerCoreServer(WorldGenerator worldGenerator) {
+	public TickHandlerCoreServer(WorldFeatureManager worldGenerator) {
 		this.worldGenerator = worldGenerator;
 	}
 

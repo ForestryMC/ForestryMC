@@ -154,7 +154,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		ItemStack stackInSlot = itemInventory.getStackInSlot(specimenSlot);
 		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot);
-		if (definition.isRootPresent()) {
+		if (definition.isPresent()) {
 			return;
 		}
 		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
@@ -193,7 +193,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 			}
 
 			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot);
-			if (!definition.isRootPresent()) {
+			if (!definition.isPresent()) {
 				continue;
 			}
 			IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
@@ -501,7 +501,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		ItemStack specimen = itemInventory.getSpecimen();
 		if (!specimen.isEmpty()) {
 			IRootDefinition<IForestrySpeciesRoot> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
-			if (definition.isRootPresent()) {
+			if (definition.isPresent()) {
 				IAlyzerPlugin alyzerPlugin = definition.get().getAlyzerPlugin();
 				return alyzerPlugin.getHints();
 			}

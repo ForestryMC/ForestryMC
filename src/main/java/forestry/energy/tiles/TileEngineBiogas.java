@@ -41,7 +41,6 @@ import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TileEngine;
 import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEngineBiogas;
 import forestry.energy.inventory.InventoryEngineBiogas;

@@ -7,7 +7,6 @@ package forestry.api.arboriculture.genetics;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -28,6 +27,7 @@ import genetics.api.individual.IIndividual;
 
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.products.IProductList;
 
 public interface ITree extends IIndividual, ITreeGenData {
 
@@ -47,10 +47,10 @@ public interface ITree extends IIndividual, ITreeGenData {
 	List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
 
 	// Products, Chance
-	Map<ItemStack, Float> getProducts();
+	IProductList getProducts();
 
 	// Specialties, Chance
-	Map<ItemStack, Float> getSpecialties();
+	IProductList getSpecialties();
 
 	NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
 

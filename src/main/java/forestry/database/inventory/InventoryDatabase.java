@@ -17,7 +17,7 @@ public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		return GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack).isRootPresent();
+		return GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack).isPresent();
 	}
 
 	@Override

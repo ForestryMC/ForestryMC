@@ -26,8 +26,8 @@ public class JsonUtil {
 		}
 		try {
 			Item item = JSONUtils.getItem(object, "item");
-			int meta = JSONUtils.getInt(object, "data", 0);
-			ItemStack stack = new ItemStack(item, 1);//TODO flatten, meta);
+			int count = JSONUtils.getInt(object, "count", 1);
+			ItemStack stack = new ItemStack(item, count);
 			stack.setTag(JsonUtils.readNBT(object, "nbt"));
 			return stack;
 		} catch (JsonSyntaxException e) {

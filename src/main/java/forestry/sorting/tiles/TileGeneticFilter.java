@@ -145,7 +145,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
 		IIndividual individual = null;
 		IOrganismType type = null;
-		if (definition.isRootPresent()) {
+		if (definition.isPresent()) {
 			IForestrySpeciesRoot<IIndividual> root = definition.get();
 			individual = root.create(itemStack).orElse(null);
 			type = root.getTypes().getType(itemStack).orElse(null);

@@ -11,10 +11,7 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -36,9 +33,10 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
+import forestry.core.genetics.ProductListWrapper;
 import forestry.core.utils.BlockUtil;
 
-//TODO this is horribly hacky. Cleanup once dependancy issues with AlleleFruits is fixed.
 public class FruitProviderPod extends FruitProviderNone {
 
 	public enum EnumPodType {
@@ -51,15 +49,19 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	private final EnumPodType type;
-	private final Supplier<ItemStack> dropOnMature;
 
-	private final Map<ItemStack, Float> drops;
+	private ProductListWrapper products;
 
 	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack> dropOnMature) {
 		super(unlocalizedDescription, family);
 		this.type = type;
-		this.drops = new HashMap<>();
-		this.dropOnMature = dropOnMature;
+		this.products = ProductListWrapper.create();
+		this.products.addProduct(dropOnMature, 1.0F);
+	}
+
+	@Override
+	public void onStartSetup() {
+		products = products.bake();
 	}
 
 	@Override
@@ -69,16 +71,8 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	@Override
 	public NonNullList<ItemStack> getFruits(@Nullable IGenome genome, World world, BlockPos pos, int ripeningTime) {
-		if (drops.isEmpty()) {
-			return NonNullList.create();
-		}
-
 		if (ripeningTime >= 2) {
-			NonNullList<ItemStack> products = NonNullList.create();
-			for (ItemStack aDrop : this.drops.keySet()) {
-				products.add(aDrop.copy());
-			}
-			return products;
+			return products.getPossibleStacks();
 		}
 
 		return NonNullList.create();
@@ -109,11 +103,8 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public Map<ItemStack, Float> getProducts() {
-		if (drops.isEmpty()) {
-			drops.put(dropOnMature.get(), 1.0F);
-		}
-		return Collections.unmodifiableMap(drops);
+	public IProductList getProducts() {
+		return products;
 	}
 
 	@Override

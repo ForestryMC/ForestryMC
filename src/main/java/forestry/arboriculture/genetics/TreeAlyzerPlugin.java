@@ -252,7 +252,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 
 			int x = GuiAlyzer.COLUMN_0;
-			for (ItemStack stack : tree.getProducts().keySet()) {
+			for (ItemStack stack : tree.getProducts().getPossibleStacks()) {
 				widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), stack));
 				x += 18;
 				if (x > 148) {
@@ -270,7 +270,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 
 			x = GuiAlyzer.COLUMN_0;
-			for (ItemStack stack : tree.getSpecialties().keySet()) {
+			for (ItemStack stack : tree.getSpecialties().getPossibleStacks()) {
 				Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(stack, guiAlyzer.getGuiLeft() + x, guiAlyzer.getGuiTop() + textLayout.getLineY());
 				x += 18;
 				if (x > 148) {

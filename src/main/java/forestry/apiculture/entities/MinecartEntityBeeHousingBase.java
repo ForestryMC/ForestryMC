@@ -12,6 +12,7 @@ package forestry.apiculture.entities;
 
 import java.util.Optional;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -72,13 +73,12 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	private int breedingProgressPercent = 0;
 	private boolean needsActiveUpdate = true;
 
-	@SuppressWarnings("unused")
-	public MinecartEntityBeeHousingBase(World world) {
-		super(world);
+	public MinecartEntityBeeHousingBase(EntityType<? extends MinecartEntityBeeHousingBase> type, World world) {
+		super(type, world);
 	}
 
-	public MinecartEntityBeeHousingBase(World world, double posX, double posY, double posZ) {
-		super(world, posX, posY, posZ);
+	public MinecartEntityBeeHousingBase(EntityType<?> type, World world, double posX, double posY, double posZ) {
+		super(type, world, posX, posY, posZ);
 	}
 
 	@Override

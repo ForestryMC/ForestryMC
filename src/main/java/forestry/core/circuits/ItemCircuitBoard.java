@@ -40,6 +40,10 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 		this.type = type;
 	}
 
+	public EnumCircuitBoardType getType() {
+		return type;
+	}
+
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
 		if (this.isInGroup(tab)) {

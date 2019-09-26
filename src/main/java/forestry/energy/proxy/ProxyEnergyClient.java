@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.tiles.TileEngine;
+import forestry.energy.tiles.TileEngine;
 import forestry.energy.render.RenderEngine;
 
 @SuppressWarnings("unused")

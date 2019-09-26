@@ -48,7 +48,7 @@ public class ProductsTab extends DatabaseTab {
 			return bee.getSpecialtyList();
 		} else if (individual instanceof ITree) {
 			ITree tree = (ITree) individual;
-			return tree.getSpecialties().keySet();
+			return tree.getSpecialties().getPossibleStacks();
 		}
 		return Collections.emptyList();
 	}
@@ -59,7 +59,7 @@ public class ProductsTab extends DatabaseTab {
 			return bee.getProduceList();
 		} else if (individual instanceof ITree) {
 			ITree tree = (ITree) individual;
-			return tree.getProducts().keySet();
+			return tree.getProducts().getPossibleStacks();
 		}
 		return Collections.emptyList();
 	}

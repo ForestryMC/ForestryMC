@@ -319,7 +319,7 @@ public final class Genome implements IGenome {
 	@Override
 	public <W extends IGenomeWrapper> W asWrapper(Class<? extends W> wrapperClass) {
 		IRootDefinition definition = GeneticsAPI.apiInstance.getRoot(karyotype.getUID());
-		if (!definition.isRootPresent()) {
+		if (!definition.isPresent()) {
 			throw new IllegalStateException();
 		}
 		IIndividualRoot root = definition.get();

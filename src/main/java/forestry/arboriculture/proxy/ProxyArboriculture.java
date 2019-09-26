@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import net.minecraft.block.Block;
-
-import forestry.arboriculture.IWoodTyped;
-
 public class ProxyArboriculture {
 
 	public void initializeModels() {
@@ -29,8 +25,5 @@ public class ProxyArboriculture {
 
 	public int getFoliageColorSpruce() {
 		return 6396257;
-	}
-
-	public <T extends Block & IWoodTyped> void registerWoodModel(T woodTyped, boolean withVariants) {
 	}
 }

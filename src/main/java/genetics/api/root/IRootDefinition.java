@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import genetics.api.IGeneticApiInstance;
 
@@ -27,12 +28,20 @@ public interface IRootDefinition<R extends IIndividualRoot> {
 	 */
 	R get();
 
+	<T extends IIndividualRoot> T cast();
+
+	R orElse(R other);
+
 	/**
 	 * Return {@code true} if there is a definition present, otherwise {@code false}.
 	 *
 	 * @return {@code true} if there is a definition present, otherwise {@code false}
 	 */
-	boolean isRootPresent();
+	boolean isPresent();
+
+	boolean test(Predicate<? super R> predicate);
+
+	Optional<R> filter(Predicate<? super R> predicate);
 
 	void ifPresent(Consumer<R> consumer);
 

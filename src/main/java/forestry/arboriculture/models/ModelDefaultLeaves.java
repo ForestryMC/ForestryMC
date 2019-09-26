@@ -103,7 +103,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
 
 		// Render the plain leaf block.
-		baker.addBlockModel(null, leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
+		baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
 		// Set the particle sprite
 		baker.setParticleSprite(leafSprite);
@@ -116,7 +116,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 
 		bakeBlock(block, extraData, key, baker, false);
 
-		blockModel = baker.bakeModel(false);
+		blockModel = baker.bake(false);
 		onCreateModel(blockModel);
 		return blockModel;
 	}

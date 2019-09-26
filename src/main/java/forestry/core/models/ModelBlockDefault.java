@@ -59,7 +59,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 		bakeBlock(block, extraData, key, baker, false);
 
-		blockModel = baker.bakeModel(false);
+		blockModel = baker.bake(false);
 		onCreateModel(blockModel);
 		return blockModel;
 	}
@@ -79,7 +79,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		B bBlock = blockClass.cast(block);
 		bakeBlock(bBlock, EmptyModelData.INSTANCE, key, baker, true);
 
-		return itemModel = baker.bakeModel(true);
+		return itemModel = baker.bake(true);
 	}
 
 	protected IBakedModel getModel(ItemStack stack, World world) {

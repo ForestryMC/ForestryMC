@@ -11,7 +11,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Config;
-import forestry.core.tiles.TileEngine;
+import forestry.energy.tiles.TileEngine;
 import forestry.energy.compat.mj.MjHelper;
 import forestry.energy.compat.tesla.TeslaHelper;
 

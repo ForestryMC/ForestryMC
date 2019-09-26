@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -420,9 +419,9 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getActiveAllele(BeeChromosomes.SPECIES);
 		IAlleleBeeSpecies secondary = genome.getInactiveAllele(BeeChromosomes.SPECIES);
 
-		products.addAll(primary.getProductChances().keySet());
+		products.addAll(primary.getProducts().getPossibleStacks());
 
-		Set<ItemStack> secondaryProducts = secondary.getProductChances().keySet();
+		NonNullList<ItemStack> secondaryProducts = secondary.getProducts().getPossibleStacks();
 		// Remove duplicates
 		for (ItemStack second : secondaryProducts) {
 			boolean skip = false;
@@ -445,10 +444,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public NonNullList<ItemStack> getSpecialtyList() {
-		Set<ItemStack> specialties = genome.getActiveAllele(BeeChromosomes.SPECIES).getSpecialtyChances().keySet();
-		NonNullList<ItemStack> specialtyList = NonNullList.create();
-		specialtyList.addAll(specialties);
-		return specialtyList;
+		return genome.getActiveAllele(BeeChromosomes.SPECIES).getSpecialties().getPossibleStacks();
 	}
 
 	@Override
@@ -468,25 +464,13 @@ public class Bee extends IndividualLiving implements IBee {
 		float speed = genome.getActiveValue(BeeChromosomes.SPEED) * beeHousingModifier.getProductionModifier(genome, 1f) * beeModeModifier.getProductionModifier(genome, 1f);
 
 		// / Primary Products
-		for (Map.Entry<ItemStack, Float> entry : primary.getProductChances().entrySet()) {
-			if (world.rand.nextFloat() < entry.getValue() * speed) {
-				products.add(entry.getKey().copy());
-			}
-		}
+		primary.getProducts().addProducts(world, housing.getCoordinates(), products, (product) -> product.chance * speed, world.rand);
 		// / Secondary Products
-		for (Map.Entry<ItemStack, Float> entry : secondary.getProductChances().entrySet()) {
-			if (world.rand.nextFloat() < Math.round(entry.getValue() / 2) * speed) {
-				products.add(entry.getKey().copy());
-			}
-		}
+		secondary.getProducts().addProducts(world, housing.getCoordinates(), products, (product) -> Math.round(product.chance / 2) * speed, world.rand);
 
 		// / Specialty products
 		if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
-			for (Map.Entry<ItemStack, Float> entry : primary.getSpecialtyChances().entrySet()) {
-				if (world.rand.nextFloat() < entry.getValue() * speed) {
-					products.add(entry.getKey().copy());
-				}
-			}
+			primary.getSpecialties().addProducts(world, housing.getCoordinates(), products, (product) -> product.chance * speed, world.rand);
 		}
 
 		BlockPos housingCoordinates = housing.getCoordinates();

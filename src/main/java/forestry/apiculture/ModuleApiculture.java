@@ -34,7 +34,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -50,6 +49,7 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -70,6 +70,7 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
+import forestry.apiculture.entities.ApicultureEntityTypes;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureItems;
@@ -126,6 +127,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static TextureAtlasSprite beeSprite;
 	@Nullable
 	private static HiveRegistry hiveRegistry;
+	@Nullable
+	private static ApicultureEntityTypes entityTypes;
 
 	public static String beekeepingMode = "NORMAL";
 
@@ -148,6 +151,11 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static HiveRegistry getHiveRegistry() {
 		Preconditions.checkNotNull(hiveRegistry);
 		return hiveRegistry;
+	}
+
+	public static ApicultureEntityTypes getEntityTypes() {
+		Preconditions.checkNotNull(entityTypes);
+		return entityTypes;
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -174,6 +182,11 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
 		BeeManager.jubilanceFactory = new JubilanceFactory();
 		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
+	}
+
+	@Override
+	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
+		entityTypes = new ApicultureEntityTypes(registry);
 	}
 
 	@Override
@@ -269,12 +282,6 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// Inducers for swarmer
 		BeeManager.inducers.put(ApicultureItems.ROYAL_JELLY.stack(), 10);
-
-		//TODO EntityType.MinecatyEntity or similar
-		ResourceLocation beeHouseCartResource = new ResourceLocation(Constants.MOD_ID, "cart.beehouse");
-		EntityUtil.registerEntity(beeHouseCartResource, EntityType.MINECART, "cart.beehouse", 1, 0x000000, 0xffffff, 256, 3, true);
-		ResourceLocation apiaryCartResource = new ResourceLocation(Constants.MOD_ID, "cart.apiary");
-		EntityUtil.registerEntity(apiaryCartResource, EntityType.MINECART, "cart.apiary", 2, 0x000000, 0xffffff, 256, 3, true);
 
 		BeeManager.commonVillageBees.add(BeeDefinition.FOREST.getGenome());
 		BeeManager.commonVillageBees.add(BeeDefinition.MEADOWS.getGenome());

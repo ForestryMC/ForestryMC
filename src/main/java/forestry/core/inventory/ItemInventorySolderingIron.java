@@ -105,12 +105,14 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			return;
 		}
 
-		// Illegal type
-		//		if (inputCircuitBoard.getItemDamage() < 0 || inputCircuitBoard.getItemDamage() >= EnumCircuitBoardType.values().length) {
-		//			return;
-		//		} TODO flatten
+		Item item = inputCircuitBoard.getItem();
+		if(!(item instanceof ItemCircuitBoard)) {
+			return;
+		}
 
-		EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];// TODO flatten inputCircuitBoard.getItemDamage()];
+		ItemCircuitBoard circuitBoard = ((ItemCircuitBoard) item);
+
+		EnumCircuitBoardType type = circuitBoard.getType();
 		if (getCircuitCount() != type.getSockets()) {
 			return;
 		}
@@ -147,7 +149,11 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		if (blankCircuitBoard.isEmpty()) {
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
 		} else {
-			EnumCircuitBoardType type = EnumCircuitBoardType.values()[0];//TODO flatten blankCircuitBoard.getItemDamage()];
+			Item item = blankCircuitBoard.getItem();
+			if(!(item instanceof ItemCircuitBoard)) {
+				return errorStates.build();
+			}
+			EnumCircuitBoardType type = ((ItemCircuitBoard) item).getType();
 
 			int circuitCount = 0;
 			for (short i = 0; i < type.getSockets(); i++) {

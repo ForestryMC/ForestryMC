@@ -25,7 +25,7 @@ public class FilterData implements IFilterData {
 
 	@Override
 	public IIndividualRoot getRoot() {
-		if (!definition.isRootPresent()) {
+		if (!definition.isPresent()) {
 			throw new NoSuchElementException("No root present");
 		}
 		return definition.get();
@@ -54,6 +54,6 @@ public class FilterData implements IFilterData {
 
 	@Override
 	public boolean isPresent() {
-		return !definition.isRootPresent() && individual != null && type != null;
+		return !definition.isPresent() && individual != null && type != null;
 	}
 }

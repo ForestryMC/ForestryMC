@@ -101,13 +101,13 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
 
 		// Render the plain leaf block.
-		baker.addBlockModel(null, leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
+		baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
 		// Render overlay for fruit leaves.
 		ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
 		if (fruitSpriteLocation != null) {
 			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
-			baker.addBlockModel(null, fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
+			baker.addBlockModel(fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
 		}
 
 		// Set the particle sprite
@@ -120,7 +120,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 
 		bakeBlock(block, extraData, key, baker, false);
 
-		blockModel = baker.bakeModel(false);
+		blockModel = baker.bake(false);
 		onCreateModel(blockModel);
 		return blockModel;
 	}

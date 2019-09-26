@@ -86,7 +86,7 @@ public class EventHandlerCore {
 	private static void syncBreedingTrackers(PlayerEntity player) {
 		Collection<IRootDefinition> speciesRoots = GeneticsAPI.apiInstance.getRoots().values();
 		for (IRootDefinition definition : speciesRoots) {
-			if (!definition.isRootPresent()) {
+			if (!definition.isPresent()) {
 				continue;
 			}
 			IIndividualRoot root = definition.get();

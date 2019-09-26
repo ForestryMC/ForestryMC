@@ -177,4 +177,6 @@ public interface IIndividualRoot<I extends IIndividual> {
 	IDisplayHelper getDisplayHelper();
 
 	IRootDefinition<? extends IIndividualRoot<I>> getDefinition();
+
+	<T extends IIndividualRoot> T cast();
 }
