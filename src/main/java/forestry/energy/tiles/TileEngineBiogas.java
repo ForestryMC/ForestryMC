@@ -16,6 +16,7 @@ import java.io.IOException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
@@ -59,7 +60,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 		setInternalInventory(new InventoryEngineBiogas(this));
 
 		fuelTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY).setFilters(FuelManager.bronzeEngineFuel.keySet());
-		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(/*FluidRegistry.LAVA TODO fluids*/);
+		heatingTank = new FilteredTank(Constants.ENGINE_TANK_CAPACITY, true, false).setFilters(Fluids.LAVA);
 		burnTank = new StandardTank(FluidAttributes.BUCKET_VOLUME, false, false);
 
 		this.tankManager = new TankManager(this, fuelTank, heatingTank, burnTank);

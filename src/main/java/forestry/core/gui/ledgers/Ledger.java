@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import java.awt.Rectangle;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -86,9 +86,9 @@ public abstract class Ledger {
 		maxTextWidth = maxWidth - 18;
 	}
 
-	public Rectangle getArea() {
+	public Rectangle2d getArea() {
 		GuiForestry gui = manager.gui;
-		return new Rectangle(gui.getGuiLeft() + x, gui.getGuiTop() + y, (int) currentWidth, (int) currentHeight);
+		return new Rectangle2d(gui.getGuiLeft() + x, gui.getGuiTop() + y, (int) currentWidth, (int) currentHeight);
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)

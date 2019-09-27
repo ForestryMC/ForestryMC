@@ -32,6 +32,10 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		this.stackLimit = stackLimit;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	public boolean isEmpty() {
 		for (ItemStack stack : contents) {
@@ -70,12 +74,6 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		contents.set(slotId, itemstack);
 	}
 
-	//TODO - inventory name
-	//	@Override
-	//	public String getName() {
-	//		return name;
-	//	}
-
 	@Override
 	public int getInventoryStackLimit() {
 		return stackLimit;
@@ -95,60 +93,26 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 		return this.getStackInSlot(slotIndex);
 	}
 
-	//TODO inventory title
-	//	@Override
-	//	public boolean hasCustomName() {
-	//		return true;
-	//	}
-	//
-	//	@Override
-	//	public ITextComponent getDisplayName() {
-	//		return new StringTextComponent(getName());
-	//	}
-
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
 
-	@Override
-	public void openInventory(PlayerEntity player) {
-	}
-
-	@Override
-	public void closeInventory(PlayerEntity player) {
-	}
-
 	/* INBTagable */
 	@Override
 	public void read(CompoundNBT CompoundNBT) {
-		InventoryUtil.readFromNBT(this, CompoundNBT);
+		InventoryUtil.readFromNBT(this, name, CompoundNBT);
 	}
 
 	@Override
 	public CompoundNBT write(CompoundNBT CompoundNBT) {
-		InventoryUtil.writeToNBT(this, CompoundNBT);
+		InventoryUtil.writeToNBT(this, name, CompoundNBT);
 		return CompoundNBT;
 	}
 
 	/* Fields */
-
-	//TODO - inventory fields
-	//	@Override
-	//	public int getField(int id) {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return 0;
-	//	}
-
 	@Override
 	public void clear() {
+		contents.clear();
 	}
 }

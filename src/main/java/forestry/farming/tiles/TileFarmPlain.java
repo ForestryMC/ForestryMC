@@ -15,11 +15,10 @@ import net.minecraft.util.math.BlockPos;
 
 import forestry.api.multiblock.IMultiblockController;
 import forestry.farming.blocks.BlockFarm;
-import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.blocks.EnumFarmMaterial;
-import forestry.farming.features.FarmingBlocks;
 import forestry.farming.features.FarmingTiles;
 
+//TODO: Fix band: currently breaks multiblocks because removes the old tile and adds a new tile, this causes a ConcurrentModificationException (attachBlock, detachBlock)
 public class TileFarmPlain extends TileFarm {
 	public TileFarmPlain() {
 		super(FarmingTiles.PLAIN.tileType());
@@ -37,7 +36,7 @@ public class TileFarmPlain extends TileFarm {
 			if (block instanceof BlockFarm) {
 				material = ((BlockFarm) block).getFarmMaterial();
 			}
-			this.world.setBlockState(getPos(), FarmingBlocks.FARM.get(EnumFarmBlockType.BAND, material).defaultState(), 2);
+			//this.world.setBlockState(getPos(), FarmingBlocks.FARM.get(EnumFarmBlockType.BAND, material).defaultState(), 2);
 		}
 	}
 
@@ -51,6 +50,6 @@ public class TileFarmPlain extends TileFarm {
 		if (block instanceof BlockFarm) {
 			material = ((BlockFarm) block).getFarmMaterial();
 		}
-		this.world.setBlockState(getPos(), FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, material).defaultState(), 2);
+		//this.world.setBlockState(getPos(), FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, material).defaultState(), 2);
 	}
 }

@@ -18,7 +18,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.IProperty;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -32,8 +31,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
-
-import net.minecraftforge.common.Tags;
 
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
@@ -105,7 +102,7 @@ public abstract class BlockUtil {
 	/**
 	 * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
 	 */
-	//TODO - looks pretty copy pasted. Find new version as well?
+	//TODO - looks pretty copy pasted. Find new version as well? Is this still needed ?
 	@Nullable
 	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
@@ -334,18 +331,5 @@ public abstract class BlockUtil {
 			return true;
 		}
 		return false;
-	}
-
-	@Nullable
-	public static <T extends Comparable<T>> IProperty<T> getProperty(Block block, String propertyName, Class<T> valueClass) {
-		for (IProperty<?> property : block.getStateContainer().getProperties()) {
-			if (property.getName().equals(propertyName)) {
-				if (property.getValueClass().isAssignableFrom(valueClass)) {
-					//noinspection unchecked
-					return (IProperty<T>) property;
-				}
-			}
-		}
-		return null;
 	}
 }

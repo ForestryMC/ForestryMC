@@ -35,10 +35,10 @@ import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.blocks.BlockBase;
-import forestry.energy.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
+import forestry.energy.tiles.TileEngine;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	private static final EnumMap<Direction, VoxelShape> SHAPE_FOR_DIRECTIONS = new EnumMap<>(Direction.class);
@@ -148,8 +148,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 		World world = context.getWorld();
 		BlockPos pos = context.getPos();
 		if (isOrientedAtEnergyReciever(world, pos, orientation)) {
-			BlockState blockState = world.getBlockState(pos);
-			return blockState.with(FACING, orientation);
+			return getDefaultState().with(FACING, orientation);
 		}
 		return rotate(getDefaultState().with(FACING, context.getPlacementHorizontalFacing()), world, pos);
 	}

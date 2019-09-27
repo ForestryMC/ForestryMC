@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -69,6 +70,9 @@ public class ItemFluidContainerForestry extends ItemForestry {
 
 			// filled
 			for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
+				if (fluid instanceof FlowingFluid && ((FlowingFluid) fluid).getStillFluid() != fluid) {
+					continue;
+				}
 				ItemStack itemStack = new ItemStack(this);
 				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
 				if (fluidHandler.fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidAttributes.BUCKET_VOLUME) {

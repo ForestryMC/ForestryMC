@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
+import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.NetworkUtil;
@@ -50,7 +51,8 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	// CLIENT
 	private boolean active;
 
-	protected TileAlvearyClimatiser(IClimitiserDefinition definition) {
+	protected TileAlvearyClimatiser(BlockAlvearyType alvearyType, IClimitiserDefinition definition) {
+		super(alvearyType);
 		this.definition = definition;
 
 		this.energyManager = new EnergyManager(1000, 2000);

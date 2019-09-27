@@ -274,7 +274,7 @@
   "for.gui.tolerance": "Tolerance",
   "for.gui.temptol": "Temperature Tol.",
   "for.gui.tooltip.tmi": "Hold shift for details",
-  "for.gui.tooltip.liquid.amount": "%,d / %,d mB",
+  "for.gui.tooltip.liquid.amount": "%1$s / %2$s mB",
   "for.gui.triple": "Triple",
   "for.gui.unknown": "Unknown genome",
   "for.gui.warm": "Warm",

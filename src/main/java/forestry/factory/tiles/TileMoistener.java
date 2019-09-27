@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
@@ -70,7 +71,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	public TileMoistener() {
 		super(FactoryTiles.MOISTENER.tileType());
 		setInternalInventory(new InventoryMoistener(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(/* TODO fluids FluidRegistry.WATER*/);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
 		tankManager = new TankManager(this, resourceTank);
 	}
 

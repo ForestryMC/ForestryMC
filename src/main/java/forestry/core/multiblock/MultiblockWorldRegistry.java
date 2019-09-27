@@ -314,8 +314,7 @@ public class MultiblockWorldRegistry {
 	public void onPartAdded(IMultiblockComponent part) {
 		BlockPos worldLocation = part.getCoordinates();
 
-		//TODO loaded boolean
-		if (world.getChunkProvider().getChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4, true) == null) {
+		if (!world.getChunkProvider().chunkExists(worldLocation.getX() >> 4, worldLocation.getZ() >> 4)) {
 			// Part goes into the waiting-for-chunk-load list
 			Set<IMultiblockComponent> partSet;
 			long chunkHash = ChunkPos.asLong(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);

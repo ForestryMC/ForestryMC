@@ -395,7 +395,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		if (referenceCoord != null) {
 			//TODO think 3rd param means will be loaded
 			//also TODO - is this the source of multiblock chunk loading stuff
-			if (world.getChunkProvider().getChunk(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4, true) != null) {
+			if (world.getChunkProvider().chunkExists(referenceCoord.getX() >> 4, referenceCoord.getZ() >> 4)) {
 				TileUtil.actOnTile(world, referenceCoord, IMultiblockComponent.class, part -> {
 					MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
 					logic.forfeitMultiblockSaveDelegate();
@@ -415,17 +415,6 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * @param assimilated The controller whose uniqueness was added to our own.
 	 */
 	protected abstract void onAssimilate(IMultiblockControllerInternal assimilated);
-
-	/**
-	 * Callback. Called after this controller is assimilated into another controller.
-	 * All blocks have been stripped out of this object and handed over to the
-	 * other controller.
-	 * This is intended primarily for cleanup.
-	 *
-	 * @param assimilator The controller which has assimilated this controller.
-	 */
-	@Override
-	public abstract void onAssimilated(IMultiblockControllerInternal assimilator);
 
 	@Override
 	public final void updateMultiblockEntity() {

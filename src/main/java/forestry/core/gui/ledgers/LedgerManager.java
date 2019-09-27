@@ -11,9 +11,10 @@
 package forestry.core.gui.ledgers;
 
 import javax.annotation.Nullable;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.client.renderer.Rectangle2d;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
@@ -120,11 +121,11 @@ public class LedgerManager {
 		return null;
 	}
 
-	public List<Rectangle> getLedgerAreas() {
-		List<Rectangle> areas = new ArrayList<>();
+	public List<Rectangle2d> getLedgerAreas() {
+		List<Rectangle2d> areas = new ArrayList<>();
 		for (Ledger ledger : ledgers) {
 			if (ledger.isVisible()) {
-				Rectangle area = ledger.getArea();
+				Rectangle2d area = ledger.getArea();
 				areas.add(area);
 			}
 		}

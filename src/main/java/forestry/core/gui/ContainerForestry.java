@@ -15,12 +15,14 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.network.IForestryPacketClient;
+import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SlotUtil;
 
 //import invtweaks.api.container.ContainerSection;
@@ -115,12 +117,11 @@ public abstract class ContainerForestry extends Container {
 	protected abstract boolean canAccess(PlayerEntity player);
 
 	protected final void sendPacketToListeners(IForestryPacketClient packet) {
-		//TODO - needs AT or maybe detectandsend in super can help?
-		//		for (IContainerListener listener : listeners) {
-		//			if (listener instanceof PlayerEntity) {
-		//				NetworkUtil.sendToPlayer(packet, (PlayerEntity) listener);
-		//			}
-		//		}
+		for (IContainerListener listener : listeners) {
+			if (listener instanceof PlayerEntity) {
+				NetworkUtil.sendToPlayer(packet, (PlayerEntity) listener);
+			}
+		}
 	}
 
 	//	@SuppressWarnings("unused") // inventory tweaks

@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -37,6 +38,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 	private int tankIndex;
 	private final boolean canFill;
 	private final boolean canDrain;
+	//Used to bypass a second validator test
 	private boolean internalTest;
 
 	@OnlyIn(Dist.CLIENT)
@@ -94,7 +96,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Override
 	public boolean isFluidValid(FluidStack stack) {
-		return !internalTest && validator.test(stack);
+		return internalTest || validator.test(stack);
 	}
 
 	public boolean canFill() {
@@ -166,7 +168,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	protected boolean hasFluid() {
 		FluidStack fluid = getFluid();
-		return !fluid.isEmpty() && fluid.getAmount() > 0 && fluid.getFluid() != null;
+		return !fluid.isEmpty() && fluid.getAmount() > 0 && fluid.getFluid() != Fluids.EMPTY;
 	}
 
 	@Override

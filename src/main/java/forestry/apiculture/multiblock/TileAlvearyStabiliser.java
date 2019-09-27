@@ -15,10 +15,15 @@ import genetics.api.individual.IGenome;
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.multiblock.IAlvearyComponent;
+import forestry.apiculture.blocks.BlockAlvearyType;
 
 public class TileAlvearyStabiliser extends TileAlveary implements IAlvearyComponent.BeeModifier {
 
 	private static final IBeeModifier beeModifier = new AlvearyStabiliserBeeModifier();
+
+	public TileAlvearyStabiliser() {
+		super(BlockAlvearyType.STABILISER);
+	}
 
 	@Override
 	public IBeeModifier getBeeModifier() {

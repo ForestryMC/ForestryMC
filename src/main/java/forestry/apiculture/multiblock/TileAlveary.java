@@ -44,7 +44,6 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlvearyType;
-import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.MultiblockTileEntityForestry;
@@ -59,23 +58,19 @@ import forestry.core.utils.RenderUtil;
 public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
 
-	public TileAlveary() {
-		this(BlockAlvearyType.PLAIN);
-	}
-
 	//TODO maybe needs splitting for sub blocks.
 	public TileAlveary(BlockAlvearyType type) {
-		super(ApicultureTiles.ALVEARY.tileType(), new MultiblockLogicAlveary());
+		super(type.getTileType().tileType(), new MultiblockLogicAlveary());
 		this.unlocalizedTitle = "block.forestry.alveary." + type;
 	}
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
+		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
 		// Re-render this block on the client
 		if (world.isRemote) {
 			RenderUtil.markForUpdate(getPos());
 		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
 	}
 
 	//TODO refreshing

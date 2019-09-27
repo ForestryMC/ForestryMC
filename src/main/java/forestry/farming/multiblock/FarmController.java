@@ -29,7 +29,7 @@ import java.util.Stack;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
@@ -119,7 +119,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	public FarmController(World world) {
 		super(world, FarmMultiblockSizeLimits.instance);
 
-		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(/* TODO fluids FluidRegistry.WATER*/);
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
 
 		this.tankManager = new TankManager(this, resourceTank);
 
@@ -505,7 +505,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
-			final FluidStack liquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, liquidConsumption);
+			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
 				// Check fertilizer and water
@@ -573,7 +573,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
 		int waterConsumption = provider.getWaterConsumption(hydrationModifier);
-		FluidStack requiredLiquid = new FluidStack((Fluid) null/*TODO fluids FluidRegistry.WATER*/, waterConsumption);
+		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
 		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
 		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {

@@ -11,12 +11,10 @@
 package forestry.farming.blocks;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -24,9 +22,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -68,45 +64,6 @@ public class BlockFarm extends BlockStructure {
 	public EnumFarmMaterial getFarmMaterial() {
 		return farmMaterial;
 	}
-
-	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-		List<ItemStack> drops = getDrops(world.getBlockState(pos), (ServerWorld) world, pos, world.getTileEntity(pos));    //TODO this call is not safe
-		if (drops.isEmpty()) {
-			return super.getPickBlock(state, target, world, pos, player);
-		}
-		return drops.get(0);
-	}
-
-	//TODO - idk
-	//	@Override
-	//	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest) {
-	//		if (!world.isRemote && canHarvestBlock(world, pos, player)) {
-	//			List<ItemStack> drops = getDrops(world, pos, world.getBlockState(pos), 0);
-	//			for (ItemStack drop : drops) {
-	//				ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-	//			}
-	//		}
-	//		return world.setBlockToAir(pos);
-	//	}
-
-	//TODO not sure about this
-	//	@Override
-	//	public static List<ItemStack> getDrops(BlockState state, ServerWorld worldIn, BlockPos pos, @Nullable TileEntity tileEntityIn) {
-	////		int meta = getMetaFromState(state);
-	//
-	//		List<ItemStack> ret = new ArrayList<>();
-	//		if(!(tileEntityIn instanceof TileFarm)) {
-	//			return ret;
-	//		}
-	//
-	//		ItemStack stack = new ItemStack(state.getBlock());
-	//		CompoundNBT compound = new CompoundNBT();
-	//		((TileFarm) te).getFarmBlockTexture().saveToCompound(compound);
-	//		stack.setTag(compound);
-	//		ret.add(stack);
-	//		return ret;
-	//	}
 
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {

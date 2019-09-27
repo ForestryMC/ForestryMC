@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import forestry.apiculture.blocks.BlockAlvearyType;
+
 public class TileAlvearyFan extends TileAlvearyClimatiser {
 
 	private static final FanDefinition definition = new FanDefinition();
 
 	public TileAlvearyFan() {
-		super(definition);
+		super(BlockAlvearyType.FAN, definition);
 	}
 
 	private static class FanDefinition implements IClimitiserDefinition {

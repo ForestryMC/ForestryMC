@@ -17,6 +17,7 @@ import java.util.Set;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -61,7 +62,7 @@ public class FilteredTank extends StandardTank {
 	}
 
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource.getFluid() != null && filters.contains(resource.getFluid().getRegistryName());
+		return resource.getFluid() != Fluids.EMPTY && filters.contains(resource.getFluid().getRegistryName());
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class FilteredTank extends StandardTank {
 				if (rarity == null) {
 					rarity = Rarity.COMMON;
 				}
-				FluidStack filterFluidStack = new FluidStack(fluidFilter, 0);
+				FluidStack filterFluidStack = new FluidStack(fluidFilter, 1);
 				toolTip.add(filterFluidStack.getDisplayName(), rarity.color);
 			}
 		} else {

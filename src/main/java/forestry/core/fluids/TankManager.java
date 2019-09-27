@@ -29,7 +29,6 @@ import net.minecraft.nbt.ListNBT;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;

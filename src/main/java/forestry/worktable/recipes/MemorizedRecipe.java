@@ -144,7 +144,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	/* INbtWritable */
 	@Override
 	public final void read(CompoundNBT compoundNBT) {
-		InventoryUtil.readFromNBT(craftMatrix, compoundNBT);
+		InventoryUtil.readFromNBT(craftMatrix, "inventory", compoundNBT);
 		lastUsed = compoundNBT.getLong("LastUsed");
 		locked = compoundNBT.getBoolean("Locked");
 
@@ -172,7 +172,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 
 	@Override
 	public CompoundNBT write(CompoundNBT compoundNBT) {
-		InventoryUtil.writeToNBT(craftMatrix, compoundNBT);
+		InventoryUtil.writeToNBT(craftMatrix, "inventory", compoundNBT);
 		compoundNBT.putLong("LastUsed", lastUsed);
 		compoundNBT.putBoolean("Locked", locked);
 		compoundNBT.putInt("SelectedRecipe", selectedRecipe);

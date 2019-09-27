@@ -3,6 +3,8 @@ package forestry.apiculture.blocks;
 import java.util.Locale;
 
 import forestry.api.core.IBlockSubtype;
+import forestry.apiculture.features.ApicultureTiles;
+import forestry.modules.features.FeatureTileType;
 
 public enum BlockAlvearyType implements IBlockSubtype {
 	PLAIN(false),
@@ -29,5 +31,25 @@ public enum BlockAlvearyType implements IBlockSubtype {
 	@Override
 	public String getName() {
 		return super.toString().toLowerCase(Locale.ENGLISH);
+	}
+
+	public FeatureTileType<?> getTileType() {
+		switch (this) {
+			default:
+			case PLAIN:
+				return ApicultureTiles.ALVEARY_PLAIN;
+			case SWARMER:
+				return ApicultureTiles.ALVEARY_SWARMER;
+			case FAN:
+				return ApicultureTiles.ALVEARY_FAN;
+			case HEATER:
+				return ApicultureTiles.ALVEARY_HEATER;
+			case HYGRO:
+				return ApicultureTiles.ALVEARY_HYGROREGULATOR;
+			case STABILISER:
+				return ApicultureTiles.ALVEARY_STABILISER;
+			case SIEVE:
+				return ApicultureTiles.ALVEARY_SIEVE;
+		}
 	}
 }

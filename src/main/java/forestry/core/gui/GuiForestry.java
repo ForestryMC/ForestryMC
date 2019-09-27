@@ -11,12 +11,12 @@
 package forestry.core.gui;
 
 import javax.annotation.Nullable;
-import java.awt.Rectangle;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.util.InputMappings;
@@ -209,7 +209,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Nullable
-	public FluidStack getFluidStackAtPosition(int mouseX, int mouseY) {
+	public FluidStack getFluidStackAtPosition(double mouseX, double mouseY) {
 		for (Widget widget : widgetManager.getWidgets()) {
 			if (widget instanceof TankWidget && widget.isMouseOver(mouseX - guiLeft, mouseY - guiTop)) {
 				TankWidget tankWidget = (TankWidget) widget;
@@ -342,7 +342,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		return blitOffset;
 	}
 
-	public List<Rectangle> getExtraGuiAreas() {
+	public List<Rectangle2d> getExtraGuiAreas() {
 		return ledgerManager.getLedgerAreas();
 	}
 

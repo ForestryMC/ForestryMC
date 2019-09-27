@@ -1,8 +1,23 @@
 package forestry.factory.recipes.jei;
 
 
+import javax.annotation.Nullable;
+import java.util.List;
+
+import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.config.Constants;
+import forestry.core.gui.GuiForestry;
+import forestry.modules.ForestryModuleUids;
+
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
 //import forestry.core.utils.JeiUtil;
 //import forestry.factory.recipes.jei.bottler.BottlerRecipeCategory;
 //import forestry.factory.recipes.jei.bottler.BottlerRecipeMaker;
@@ -28,17 +43,38 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 //import mezz.jei.api.IGuiHelper;
 //import mezz.jei.api.IJeiHelpers;
-//import mezz.jei.api.IModPlugin;
 //import mezz.jei.api.IModRegistry;
-//import mezz.jei.api.JEIPlugin;
-//import mezz.jei.api.gui.IAdvancedGuiHandler;
 //import mezz.jei.api.recipe.IRecipeCategory;
 //import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 //import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 
-//@JEIPlugin
+@JeiPlugin
 @OnlyIn(Dist.CLIENT)
-public class FactoryJeiPlugin {//implements {IModPlugin {
+public class FactoryJeiPlugin implements IModPlugin {
+
+	@Override
+	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+		registration.addGuiContainerHandler(GuiForestry.class, new ForestryAdvancedGuiHandler());
+	}
+
+	@Override
+	public ResourceLocation getPluginUid() {
+		return new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY);
+	}
+
+	private static class ForestryAdvancedGuiHandler implements IGuiContainerHandler<GuiForestry> {
+		@Override
+		public List<Rectangle2d> getGuiExtraAreas(GuiForestry guiContainer) {
+			return ((GuiForestry<?>) guiContainer).getExtraGuiAreas();
+		}
+
+		@Nullable
+		@Override
+		public Object getIngredientUnderMouse(GuiForestry guiContainer, double mouseX, double mouseY) {
+			return guiContainer.getFluidStackAtPosition(mouseX, mouseY);
+		}
+	}
+
 	//	@Nullable
 	//	public static IJeiHelpers jeiHelpers;
 	//
@@ -187,23 +223,4 @@ public class FactoryJeiPlugin {//implements {IModPlugin {
 	//
 	//	}
 	//
-	//	private static class ForestryAdvancedGuiHandler implements IAdvancedGuiHandler<GuiForestry> {
-	//
-	//		@Override
-	//		public Class<GuiForestry> getGuiContainerClass() {
-	//			return GuiForestry.class;
-	//		}
-	//
-	//		@Nullable
-	//		@Override
-	//		public List<Rectangle> getGuiExtraAreas(GuiForestry guiContainer) {
-	//			return ((GuiForestry<?>) guiContainer).getExtraGuiAreas();
-	//		}
-	//
-	//		@Nullable
-	//		@Override
-	//		public Object getIngredientUnderMouse(GuiForestry guiContainer, int mouseX, int mouseY) {
-	//			return guiContainer.getFluidStackAtPosition(mouseX, mouseY);
-	//		}
-	//	}
 }
