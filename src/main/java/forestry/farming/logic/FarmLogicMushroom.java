@@ -46,9 +46,7 @@ public class FarmLogicMushroom extends FarmLogicArboreal {
 
 	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		NonNullList<ItemStack> products = produce;
-		produce = NonNullList.create();
-		return products;
+		return NonNullList.create();
 	}
 
 }

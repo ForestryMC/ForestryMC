@@ -30,9 +30,9 @@ public final class FarmProperties implements IFarmProperties {
 	private Collection<IFarmableInfo> farmableInfo;
 
 	public FarmProperties(BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers, String identifier) {
-		this.farmablesIdentifiers = farmablesIdentifiers;
 		this.manualLogic = logicFactory.apply(this, true);
 		this.managedLogic = logicFactory.apply(this, false);
+		this.farmablesIdentifiers = farmablesIdentifiers;
 		this.defaultInfo = FarmRegistry.getInstance().getFarmableInfo(identifier);
 	}
 

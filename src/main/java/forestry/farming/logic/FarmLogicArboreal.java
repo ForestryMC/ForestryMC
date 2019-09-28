@@ -73,9 +73,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		NonNullList<ItemStack> products = produce;
-		produce = collectEntityItems(world, farmHousing, true);
-		return products;
+		return collectEntityItems(world, farmHousing, true);
 	}
 
 	private final Map<BlockPos, Integer> lastExtentsHarvest = new HashMap<>();

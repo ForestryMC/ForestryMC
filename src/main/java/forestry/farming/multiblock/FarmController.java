@@ -601,6 +601,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
+	public void addPendingProduce(ItemStack stack) {
+		pendingProduce.push(stack);
+	}
+
+	@Override
 	public boolean hasLiquid(FluidStack liquid) {
 		FluidStack drained = resourceTank.drainInternal(liquid, false);
 		return liquid.isFluidStackIdentical(drained);
