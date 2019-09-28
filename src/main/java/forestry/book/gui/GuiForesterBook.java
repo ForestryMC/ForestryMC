@@ -87,7 +87,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 		boolean unicode = minecraft.fontRenderer.getBidiFlag();
 		minecraft.fontRenderer.setBidiFlag(true);
 		//TODO textcomponent
-		drawCenteredString(minecraft.fontRenderer, TextFormatting.UNDERLINE + getTitle().toString(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
+		drawCenteredString(minecraft.fontRenderer, title.applyTextStyle(TextFormatting.UNDERLINE).getFormattedText(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 
 		drawText();
 

@@ -17,6 +17,8 @@ import net.minecraft.world.World;
  * <p>
  * Every farm block has only ony one logic a multi-block farm has four, one for every direction.
  */
+//TODO: Add cleaning function that removes all crops and cultivation blocks
+//TODO: Clean Up
 public interface IFarmLogic {
 
 	/**
