@@ -1,65 +1,76 @@
 package forestry.farming.logic;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
+import java.util.function.ToIntBiFunction;
+import java.util.function.ToIntFunction;
 
-import net.minecraft.block.Block;
+import org.apache.commons.lang3.text.WordUtils;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
+import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmPropertiesBuilder;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
-import forestry.api.farming.ISoil;
+import forestry.api.farming.Soil;
 import forestry.farming.FarmRegistry;
 
 public final class FarmProperties implements IFarmProperties {
-	private final Set<ISoil> soils = new HashSet<>();
-	private final Set<String> farmablesIdentifiers;
+	private final Set<Soil> soils;
 	private final IFarmLogic manualLogic;
 	private final IFarmLogic managedLogic;
-	private final IFarmableInfo defaultInfo;
-	@Nullable
-	private Collection<IFarmable> farmables;
-	@Nullable
-	private Collection<IFarmableInfo> farmableInfo;
+	private final Supplier<ItemStack> icon;
+	private final Collection<IFarmable> farmables;
+	private final Collection<IFarmableInfo> farmableInfo;
+	private final ToIntFunction<IFarmHousing> fertilizerConsumption;
+	private final ToIntBiFunction<IFarmHousing, Float> waterConsumption;
+	private final String translationKey;
 
-	public FarmProperties(BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, Set<String> farmablesIdentifiers, String identifier) {
-		this.farmablesIdentifiers = farmablesIdentifiers;
-		this.manualLogic = logicFactory.apply(this, true);
-		this.managedLogic = logicFactory.apply(this, false);
-		this.defaultInfo = FarmRegistry.getInstance().getFarmableInfo(identifier);
-	}
-
-	@Override
-	public void registerFarmables(String identifier) {
-		farmablesIdentifiers.add(identifier);
+	public FarmProperties(Builder builder) {
+		Preconditions.checkNotNull(builder.factory);
+		Preconditions.checkNotNull(builder.icon);
+		Preconditions.checkNotNull(builder.waterConsumption);
+		Preconditions.checkNotNull(builder.fertilizerConsumption);
+		Preconditions.checkNotNull(builder.translationKey);
+		FarmRegistry registry = FarmRegistry.getInstance();
+		this.manualLogic = builder.factory.apply(this, true);
+		this.managedLogic = builder.factory.apply(this, false);
+		this.soils = ImmutableSet.copyOf(builder.soils);
+		ImmutableSet.Builder<IFarmable> farmableBuilder = new ImmutableSet.Builder<>();
+		ImmutableSet.Builder<IFarmableInfo> infoBuilder = new ImmutableSet.Builder<>();
+		for (String farmableIdentifier : builder.farmablesIdentifiers) {
+			farmableBuilder.addAll(registry.getFarmables(farmableIdentifier));
+			infoBuilder.add(registry.getFarmableInfo(farmableIdentifier));
+		}
+		this.farmables = farmableBuilder.build();
+		this.farmableInfo = infoBuilder.build();
+		this.fertilizerConsumption = builder.fertilizerConsumption;
+		this.waterConsumption = builder.waterConsumption;
+		this.translationKey = builder.translationKey;
+		this.icon = builder.icon;
 	}
 
 	@Override
 	public Collection<IFarmable> getFarmables() {
-		if (farmables == null) {
-			farmables = farmablesIdentifiers.stream()
-					.map(FarmRegistry.getInstance()::getFarmables)
-					.flatMap(Collection::stream)
-					.collect(Collectors.toSet());
-		}
 		return farmables;
 	}
 
 	@Override
 	public Collection<IFarmableInfo> getFarmableInfo() {
-		if (farmableInfo == null) {
-			farmableInfo = farmablesIdentifiers.stream()
-					.map(FarmRegistry.getInstance()::getFarmableInfo)
-					.collect(Collectors.toSet());
-		}
 		return farmableInfo;
 	}
 
@@ -69,33 +80,8 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public void registerSoil(ItemStack resource, BlockState state) {
-		soils.add(new Soil(resource, state));
-	}
-
-	@Override
-	public void addGermlings(ItemStack... germlings) {
-		defaultInfo.addGermlings(germlings);
-	}
-
-	@Override
-	public void addGermlings(Collection<ItemStack> germlings) {
-		defaultInfo.addGermlings(germlings);
-	}
-
-	@Override
-	public void addProducts(ItemStack... products) {
-		defaultInfo.addProducts(products);
-	}
-
-	@Override
-	public void addProducts(Collection<ItemStack> products) {
-		defaultInfo.addProducts(products);
-	}
-
-	@Override
 	public boolean isAcceptedSoil(BlockState ground) {
-		for(ISoil soil : soils) {
+		for (Soil soil : soils) {
 			BlockState soilState = soil.getSoilState();
 			if(soilState.getBlock() == ground.getBlock()) {
 				return true;
@@ -106,7 +92,7 @@ public final class FarmProperties implements IFarmProperties {
 
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
-		for (ISoil soil : soils) {
+		for (Soil soil : soils) {
 			//TODO this is deprecated??
 			if (soil.getResource().isItemEqual(itemstack)) {
 				return true;
@@ -116,7 +102,161 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public Collection<ISoil> getSoils() {
+	public int getFertilizerConsumption(IFarmHousing housing) {
+		return fertilizerConsumption.applyAsInt(housing);
+	}
+
+	@Override
+	public int getWaterConsumption(IFarmHousing housing, float hydrationModifier) {
+		return waterConsumption.applyAsInt(housing, hydrationModifier);
+	}
+
+	@Override
+	public ITextComponent getDisplayName(boolean manual) {
+		String unformatted = manual ? "for.farm.grammar.manual" : "for.farm.grammar.managed";
+		return new TranslationTextComponent(unformatted, new TranslationTextComponent(translationKey));
+	}
+
+	@Override
+	public String getTranslationKey() {
+		return translationKey;
+	}
+
+	@Override
+	public ItemStack getIcon() {
+		return icon.get();
+	}
+
+	@Override
+	public boolean isAcceptedSeedling(ItemStack itemstack) {
+		for (IFarmable farmable : farmables) {
+			if (farmable.isGermling(itemstack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isAcceptedWindfall(ItemStack itemstack) {
+		for (IFarmable farmable : farmables) {
+			if (farmable.isWindfall(itemstack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Collection<Soil> getSoils() {
 		return soils;
+	}
+
+	public static class Builder implements IFarmPropertiesBuilder {
+		private final String identifier;
+		private final Set<Soil> soils = new HashSet<>();
+		private final Set<String> farmablesIdentifiers = new HashSet<>();
+		private final IFarmableInfo defaultInfo;
+		@Nullable
+		private BiFunction<IFarmProperties, Boolean, IFarmLogic> factory;
+		@Nullable
+		private Supplier<ItemStack> icon;
+		@Nullable
+		private ToIntFunction<IFarmHousing> fertilizerConsumption;
+		@Nullable
+		private ToIntBiFunction<IFarmHousing, Float> waterConsumption;
+		@Nullable
+		private String translationKey;
+
+		public Builder(String identifier) {
+			this.identifier = identifier;
+			this.defaultInfo = FarmRegistry.getInstance().getFarmableInfo(identifier);
+		}
+
+		@Override
+		public IFarmPropertiesBuilder addFarmables(String... identifiers) {
+			farmablesIdentifiers.addAll(Arrays.asList(identifiers));
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder setFactory(BiFunction<IFarmProperties, Boolean, IFarmLogic> factory) {
+			this.factory = factory;
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder setIcon(Supplier<ItemStack> stackSupplier) {
+			this.icon = stackSupplier;
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder setFertilizer(ToIntFunction<IFarmHousing> consumption) {
+			this.fertilizerConsumption = consumption;
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder setWater(ToIntBiFunction<IFarmHousing, Float> waterConsumption) {
+			this.waterConsumption = waterConsumption;
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder setTranslationKey(String translationKey) {
+			this.translationKey = translationKey;
+			return this;
+		}
+
+		/*@Override
+	public IFarmPropertiesBuilder setResourcePredicate(Predicate<ItemStack> isResource) {
+		return this;
+	}
+
+	@Override
+	public IFarmPropertiesBuilder setSeedlingPredicate(Predicate<ItemStack> isSeedling) {
+		return null;
+	}
+
+	@Override
+	public IFarmPropertiesBuilder setWindfallPredicate(Predicate<ItemStack> isWindfall) {
+		return null;
+	}*/
+
+		@Override
+		public IFarmPropertiesBuilder addSoil(ItemStack resource, BlockState soilState) {
+			soils.add(new Soil(resource, soilState));
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder addSeedlings(ItemStack... seedling) {
+			defaultInfo.addSeedlings(seedling);
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder addSeedlings(Collection<ItemStack> seedling) {
+			defaultInfo.addSeedlings(seedling);
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder addProducts(ItemStack... products) {
+			defaultInfo.addProducts(products);
+			return this;
+		}
+
+		@Override
+		public IFarmPropertiesBuilder addProducts(Collection<ItemStack> products) {
+			defaultInfo.addProducts(products);
+			return this;
+		}
+
+		@Override
+		public IFarmProperties create() {
+			return FarmRegistry.getInstance().registerProperties("farm" + WordUtils.capitalize(identifier), new FarmProperties(this));
+		}
 	}
 }

@@ -29,26 +29,6 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.orchid";
-	}
-
-	@Override
-	public ItemStack getIconItemStack() {
-		return ItemStack.EMPTY;//PluginExtraUtilities.orchidStack;
-	}
-
-	@Override
-	public int getFertilizerConsumption() {
-		return 20;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return 0;
-	}
-
-	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return NonNullList.create();
 	}

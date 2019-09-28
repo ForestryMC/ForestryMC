@@ -56,7 +56,7 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public void addInformation(IFarmableInfo info) {
-		info.addGermlings(seed);
+		info.addSeedlings(seed);
 		info.addProducts(new ItemStack(fruit));
 	}
 

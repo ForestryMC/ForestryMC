@@ -14,7 +14,7 @@ public interface IFarmInventory {
 
 	void removeResources(NonNullList<ItemStack> resources);
 
-	boolean acceptsAsGermling(ItemStack itemstack);
+	boolean acceptsAsSeedling(ItemStack itemstack);
 
 	boolean acceptsAsResource(ItemStack itemstack);
 

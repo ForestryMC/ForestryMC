@@ -65,7 +65,7 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
 			return acceptsAsFertilizer(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
-			return acceptsAsGermling(itemStack);
+			return acceptsAsSeedling(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
@@ -91,13 +91,13 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 	}
 
 	@Override
-	public boolean acceptsAsGermling(ItemStack itemstack) {
+	public boolean acceptsAsSeedling(ItemStack itemstack) {
 		if (itemstack.isEmpty()) {
 			return false;
 		}
 
 		IFarmLogic logic = housing.getFarmLogic();
-		return logic.isAcceptedGermling(itemstack);
+		return logic.getProperties().isAcceptedSeedling(itemstack);
 
 	}
 
@@ -108,7 +108,7 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 		}
 
 		IFarmLogic logic = housing.getFarmLogic();
-		return logic.isAcceptedResource(itemstack);
+		return logic.getProperties().isAcceptedResource(itemstack);
 
 	}
 

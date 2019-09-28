@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -49,26 +48,6 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			this.farmables = new ArrayList<>(properties.getFarmables());
 		}
 		return farmables;
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.arboretum";
-	}
-
-	@Override
-	public ItemStack getIconItemStack() {
-		return new ItemStack(Blocks.OAK_SAPLING);
-	}
-
-	@Override
-	public int getFertilizerConsumption() {
-		return 10;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return (int) (10 * hydrationModifier);
 	}
 
 	@Override

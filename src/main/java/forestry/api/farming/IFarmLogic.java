@@ -22,30 +22,6 @@ import net.minecraft.world.World;
 public interface IFarmLogic {
 
 	/**
-	 * @return The amount of fertilizer that the {@link IFarmHousing} automatically removes after this logic cultivated
-	 * a block or harvested a crop.
-	 */
-	int getFertilizerConsumption();
-
-	/**
-	 * @param hydrationModifier A modifier that depends on the weather and the biome of the farm.
-	 * @return The amount of water that the {@link IFarmHousing} automatically removes after this logic cultivated
-	 * a block or harvested a crop.
-	 */
-	int getWaterConsumption(float hydrationModifier);
-
-	/**
-	 * Checks if the given stack is a resource or a soil that this logic uses to grow plants on or to create other
-	 * products like peat.
-	 */
-	boolean isAcceptedResource(ItemStack itemstack);
-
-	/**
-	 * Checks if the given stack is a germling (plantable sapling, seed, etc.) for any {@link IFarmable} of this farm.
-	 */
-	boolean isAcceptedGermling(ItemStack itemstack);
-
-	/**
 	 * Collects all items that are laying on the ground and are in the {@link IFarmHousing#getArea()} of the farm.
 	 *
 	 * @param world       The world of the farm.
@@ -83,27 +59,8 @@ public interface IFarmLogic {
 	 * Returns the {@link IFarmProperties} that created this logic.
 	 *
 	 * @return Returns the {@link IFarmProperties} that created this logic.
-	 * @since Forestry 5.8
 	 */
 	IFarmProperties getProperties();
 
-	default boolean isManual() {
-		return false;
-	}
-
-	default String getUnlocalizedName() {
-		return "";
-	}
-
-	/**
-	 * @return Localized short, human-readable identifier used in the farm gui and in tooltips.
-	 */
-	String getName();
-
-	/* GUI ONLY */
-
-	/**
-	 * @return the itemStack that represents this farm logic. Used as an icon for the farm logic.
-	 */
-	ItemStack getIconItemStack();
+	boolean isManual();
 }

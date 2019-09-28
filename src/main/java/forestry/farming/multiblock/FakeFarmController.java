@@ -164,7 +164,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		}
 
 		@Override
-		public boolean acceptsAsGermling(ItemStack itemstack) {
+		public boolean acceptsAsSeedling(ItemStack itemstack) {
 			return false;
 		}
 

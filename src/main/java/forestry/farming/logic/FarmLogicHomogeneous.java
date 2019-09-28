@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -21,7 +20,7 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
-import forestry.api.farming.ISoil;
+import forestry.api.farming.Soil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
@@ -29,26 +28,6 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 
 	public FarmLogicHomogeneous(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public boolean isAcceptedGermling(ItemStack itemstack) {
-		for (IFarmable germling : getFarmables()) {
-			if (germling.isGermling(itemstack)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedWindfall(ItemStack itemstack) {
-		for (IFarmable germling : getFarmables()) {
-			if (germling.isWindfall(itemstack)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	protected boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
@@ -71,7 +50,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 			return false;
 		}
 
-		for (ISoil soil : getSoils()) {
+		for (Soil soil : getSoils()) {
 			NonNullList<ItemStack> resources = NonNullList.create();
 			resources.add(soil.getResource());
 			if (!farmHousing.getFarmInventory().hasResources(resources)) {

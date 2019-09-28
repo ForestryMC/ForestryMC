@@ -12,6 +12,8 @@ package forestry.farming.circuits;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.util.text.ITextComponent;
+
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmCircuit;
 import forestry.api.farming.IFarmHousing;
@@ -21,27 +23,30 @@ import forestry.core.circuits.Circuit;
 
 public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 
+	private final IFarmProperties properties;
 	private final IFarmLogic logic;
 
 	public CircuitFarmLogic(String uid, IFarmProperties instance, boolean manual) {
 		super(uid);
 		this.logic = instance.getLogic(manual);
+		this.properties = instance;
 	}
 
 	@SuppressWarnings("unused")
 	public CircuitFarmLogic(String uid, IFarmLogic logic) {
 		super(uid);
 		this.logic = logic;
+		this.properties = logic.getProperties();
 	}
 
 	@Override
-	public String getUnlocalizedName() {
-		return logic.getUnlocalizedName();
+	public String getTranslationKey() {
+		return properties.getTranslationKey();
 	}
 
 	@Override
-	public String getLocalizedName() {
-		return logic.getName();
+	public ITextComponent getDisplayName() {
+		return properties.getDisplayName(logic.isManual());
 	}
 
 	@Override

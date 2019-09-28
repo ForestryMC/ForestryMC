@@ -11,7 +11,6 @@
 package forestry.farming.logic;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,41 +23,6 @@ public class FarmLogicGourd extends FarmLogic {
 
 	public FarmLogicGourd(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.MELON);
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.gourd";
-	}
-
-	@Override
-	public int getFertilizerConsumption() {
-		return 10;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return (int) (40 * hydrationModifier);
-	}
-
-	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedGermling(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedWindfall(ItemStack stack) {
-		return false;
 	}
 
 	@Override

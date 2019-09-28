@@ -60,7 +60,7 @@ public class FarmableRusticSapling implements IFarmable {
 
 	@Override
 	public void addInformation(IFarmableInfo info) {
-		info.addGermlings(new ItemStack(germling));
+		info.addSeedlings(new ItemStack(germling));
 		info.addProducts(windfall);
 	}
 

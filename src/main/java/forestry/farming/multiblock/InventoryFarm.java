@@ -73,7 +73,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
 			return acceptsAsFertilizer(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
-			return acceptsAsGermling(itemStack);
+			return acceptsAsSeedling(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
@@ -99,14 +99,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	@Override
-	public boolean acceptsAsGermling(ItemStack itemstack) {
+	public boolean acceptsAsSeedling(ItemStack itemstack) {
 		if (itemstack.isEmpty()) {
 			return false;
 		}
 
 		for (FarmDirection farmDirection : FarmDirection.values()) {
 			IFarmLogic logic = farmController.getFarmLogic(farmDirection);
-			if (logic.isAcceptedGermling(itemstack)) {
+			if (logic.getProperties().isAcceptedSeedling(itemstack)) {
 				return true;
 			}
 		}
@@ -122,7 +122,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
 		for (FarmDirection farmDirection : FarmDirection.values()) {
 			IFarmLogic logic = farmController.getFarmLogic(farmDirection);
-			if (logic.isAcceptedResource(itemstack)) {
+			if (logic.getProperties().isAcceptedResource(itemstack)) {
 				return true;
 			}
 		}

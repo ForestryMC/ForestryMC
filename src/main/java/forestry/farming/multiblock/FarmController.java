@@ -71,13 +71,12 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
+import forestry.farming.FarmDefinition;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmHelper.FarmWorkStatus;
 import forestry.farming.FarmHelper.Stage;
-import forestry.farming.FarmRegistry;
 import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
-import forestry.farming.logic.ForestryFarmIdentifier;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmPlain;
 
@@ -503,8 +502,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
-			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier);
-			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
+			final int fertilizerConsumption = Math.round(logic.getProperties().getFertilizerConsumption(this) * Config.fertilizerModifier);
+			final int liquidConsumption = logic.getProperties().getWaterConsumption(this, hydrationModifier);
 			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {
@@ -560,7 +559,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			}
 		}
 
-		final int fertilizerConsumption = Math.round(provider.getFertilizerConsumption() * Config.fertilizerModifier);
+		final int fertilizerConsumption = Math.round(provider.getProperties().getFertilizerConsumption(this) * Config.fertilizerModifier);
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -572,7 +571,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
-		int waterConsumption = provider.getWaterConsumption(hydrationModifier);
+		int waterConsumption = provider.getProperties().getWaterConsumption(this, hydrationModifier);
 		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
 		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
@@ -632,7 +631,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public void resetFarmLogic(FarmDirection direction) {
-		setFarmLogic(direction, FarmRegistry.getInstance().getProperties(ForestryFarmIdentifier.ARBOREAL).getLogic(false));
+		setFarmLogic(direction, FarmDefinition.ARBOREAL.getProperties().getLogic(false));
 	}
 
 	@Override

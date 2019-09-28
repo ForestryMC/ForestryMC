@@ -22,7 +22,6 @@ public class Circuits {
 	public static ICircuit farmGourdManaged;
 	public static ICircuit farmCocoaManaged;
 
-
 	public static ICircuit farmArborealManual;
 	public static ICircuit farmOrchardManual;
 	public static ICircuit farmShroomManual;
@@ -41,4 +40,6 @@ public class Circuits {
 	public static ICircuit machineSpeedUpgrade2;
 	public static ICircuit machineEfficiencyUpgrade1;
 
+	private Circuits() {
+	}
 }

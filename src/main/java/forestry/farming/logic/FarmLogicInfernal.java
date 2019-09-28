@@ -15,7 +15,6 @@ import java.util.Stack;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -31,26 +30,6 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	public FarmLogicInfernal(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.infernal";
-	}
-
-	@Override
-	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.NETHER_WART);
-	}
-
-	@Override
-	public int getFertilizerConsumption() {
-		return 20;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return 0;
 	}
 
 	@Override

@@ -54,7 +54,7 @@ public class FarmableChorus implements IFarmable {
 
 	@Override
 	public void addInformation(IFarmableInfo info) {
-		info.addGermlings(germling);
+		info.addSeedlings(germling);
 		info.addProducts(germling, fruit);
 	}
 

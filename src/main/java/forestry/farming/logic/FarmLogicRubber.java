@@ -44,46 +44,6 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public ItemStack getIconItemStack() {
-		//		if (ModUtil.isModLoaded(PluginIC2.MOD_ID)) {
-		//			return PluginIC2.resin;
-		//		} else if (ModUtil.isModLoaded(PluginTechReborn.MOD_ID)) {
-		//			return PluginTechReborn.sap;
-		//		}
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.rubber";
-	}
-
-	@Override
-	public int getFertilizerConsumption() {
-		return 40;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return (int) (5 * hydrationModifier);
-	}
-
-	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedGermling(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedWindfall(ItemStack stack) {
-		return false;
-	}
-
-	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return NonNullList.create();
 	}

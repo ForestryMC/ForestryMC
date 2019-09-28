@@ -104,7 +104,7 @@ public class FarmableSapling implements IFarmable {
 		if (germlings.isEmpty()) {
 			germlings.add(germling);
 		}
-		info.addGermlings(germlings);
+		info.addSeedlings(germlings);
 		info.addProducts(windfall);
 	}
 

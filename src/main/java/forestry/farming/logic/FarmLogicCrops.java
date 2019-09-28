@@ -12,7 +12,6 @@ package forestry.farming.logic;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,26 +26,6 @@ public class FarmLogicCrops extends FarmLogicWatered {
 
 	public FarmLogicCrops(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public boolean isAcceptedGermling(ItemStack itemstack) {
-		for (IFarmable germling : getFarmables()) {
-			if (germling.isGermling(itemstack)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedWindfall(ItemStack itemstack) {
-		for (IFarmable germling : getFarmables()) {
-			if (germling.isWindfall(itemstack)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -86,15 +65,5 @@ public class FarmLogicCrops extends FarmLogicWatered {
 		}
 
 		return false;
-	}
-
-	@Override
-	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.WHEAT);
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.crops";
 	}
 }

@@ -38,6 +38,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -85,6 +86,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	private int platformHeight = -1;
 	private Stage stage = Stage.CULTIVATE;
 	private BlockPlanter.Mode mode;
+	private IFarmProperties properties;
 	private IFarmLogic logic;
 	@Nullable
 	private Vec3i offset;
@@ -94,6 +96,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	public void setManual(BlockPlanter.Mode mode) {
 		this.mode = mode;
 		logic = FarmRegistry.getInstance().getProperties(identifier).getLogic(this.mode == BlockPlanter.Mode.MANUAL);
+		properties = logic.getProperties();
 	}
 
 	protected TilePlanter(TileEntityType type, String identifier) {
@@ -259,7 +262,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	}
 
 	private boolean cullCrop(ICrop crop) {
-		final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
+		final int fertilizerConsumption = Math.round(properties.getFertilizerConsumption(this) * Config.fertilizerModifier * 2);
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -271,7 +274,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 		// Check water
 		float hydrationModifier = hydrationManager.getHydrationModifier();
-		int waterConsumption = logic.getWaterConsumption(hydrationModifier);
+		int waterConsumption = properties.getWaterConsumption(this, hydrationModifier);
 		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
 		boolean hasLiquid = requiredLiquid.getAmount() == 0 || hasLiquid(requiredLiquid);
 
@@ -316,8 +319,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, Collections.emptySet())) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
-			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
-			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
+			final int fertilizerConsumption = Math.round(properties.getFertilizerConsumption(this) * Config.fertilizerModifier * 2);
+			final int liquidConsumption = properties.getWaterConsumption(this, hydrationModifier);
 			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
 			for (FarmTarget target : farmTargets) {

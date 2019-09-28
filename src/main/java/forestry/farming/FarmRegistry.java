@@ -10,28 +10,23 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.BiFunction;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmPropertiesBuilder;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
-import forestry.api.farming.ISimpleFarmLogic;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import forestry.farming.logic.FarmLogicSimple;
 import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
 
@@ -43,6 +38,7 @@ public final class FarmRegistry implements IFarmRegistry {
 	private final Map<String, IFarmableInfo> farmableInfo = new LinkedHashMap<>();
 	private final Map<ItemStack, Integer> fertilizers = new LinkedHashMap<>();
 	private final Map<String, IFarmProperties> farmInstances = new HashMap<>();
+	private final Map<String, IFarmPropertiesBuilder> propertiesBuilders = new HashMap<>();
 	private FertilizerConfig fertilizer = FertilizerConfig.DUMMY;
 
 	public static FarmRegistry getInstance() {
@@ -69,11 +65,6 @@ public final class FarmRegistry implements IFarmRegistry {
 	}
 
 	@Override
-	public IFarmLogic createCropLogic(IFarmProperties instance, boolean isManual, ISimpleFarmLogic simpleFarmLogic) {
-		return new FarmLogicSimple(instance, isManual, simpleFarmLogic);
-	}
-
-	@Override
 	public void registerFertilizer(ItemStack itemStack, int value) {
 		if (itemStack.isEmpty()) {
 			return;
@@ -93,12 +84,13 @@ public final class FarmRegistry implements IFarmRegistry {
 	}
 
 	@Override
-	public IFarmProperties registerLogic(String identifier, BiFunction<IFarmProperties, Boolean, IFarmLogic> logicFactory, String... farmablesIdentifiers) {
-		Set<String> identifiers = new HashSet<>(Arrays.asList(farmablesIdentifiers));
-		identifiers.add(identifier);
-		IFarmProperties instance = new FarmProperties(logicFactory, identifiers, identifier);
-		farmInstances.put(identifier, instance);
-		return instance;
+	public IFarmPropertiesBuilder getPropertiesBuilder(String identifier) {
+		return propertiesBuilders.computeIfAbsent(identifier, FarmProperties.Builder::new);
+	}
+
+	public IFarmProperties registerProperties(String identifier, IFarmProperties properties) {
+		farmInstances.put(identifier, properties);
+		return properties;
 	}
 
 	@Override

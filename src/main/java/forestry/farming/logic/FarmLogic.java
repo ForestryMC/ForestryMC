@@ -34,32 +34,26 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
-import forestry.api.farming.ISoil;
-import forestry.core.utils.Translator;
+import forestry.api.farming.Soil;
 import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
-	private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
+	private final EntitySelectorFarm entitySelectorFarm;
 	protected final IFarmProperties properties;
 	protected final boolean isManual;
 
 	public FarmLogic(IFarmProperties properties, boolean isManual) {
 		this.properties = properties;
 		this.isManual = isManual;
+		this.entitySelectorFarm = new EntitySelectorFarm(properties);
 	}
 
 	protected Collection<IFarmable> getFarmables() {
 		return properties.getFarmables();
 	}
 
-	protected Collection<ISoil> getSoils() {
+	protected Collection<Soil> getSoils() {
 		return properties.getSoils();
-	}
-
-	@Override
-	public String getName() {
-		String unformatted = isManual ? "for.farm.grammar.manual" : "for.farm.grammar.managed";
-		return Translator.translateToLocalFormatted(unformatted, Translator.translateToLocal(getUnlocalizedName()));
 	}
 
 	@Override
@@ -100,7 +94,10 @@ public abstract class FarmLogic implements IFarmLogic {
 		return null;
 	}
 
-	public abstract boolean isAcceptedWindfall(ItemStack stack);
+	@Deprecated
+	public boolean isAcceptedWindfall(ItemStack stack) {
+		return false;
+	}
 
 	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
 		if (!world.isBlockLoaded(position)) {
@@ -147,14 +144,14 @@ public abstract class FarmLogic implements IFarmLogic {
 	// for debugging
 	@Override
 	public String toString() {
-		return getName();
+		return properties.getTranslationKey();
 	}
 
 	private static class EntitySelectorFarm implements Predicate<ItemEntity> {
-		private final FarmLogic farmLogic;
+		private final IFarmProperties properties;
 
-		public EntitySelectorFarm(FarmLogic farmLogic) {
-			this.farmLogic = farmLogic;
+		public EntitySelectorFarm(IFarmProperties properties) {
+			this.properties = properties;
 		}
 
 		@Override
@@ -169,7 +166,7 @@ public abstract class FarmLogic implements IFarmLogic {
 			}
 
 			ItemStack contained = entity.getItem();
-			return farmLogic.isAcceptedGermling(contained) || farmLogic.isAcceptedWindfall(contained);
+			return properties.isAcceptedSeedling(contained) || properties.isAcceptedWindfall(contained);
 		}
 	}
 }

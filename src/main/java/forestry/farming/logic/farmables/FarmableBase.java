@@ -47,7 +47,7 @@ public abstract class FarmableBase implements IFarmable {
 
 	@Override
 	public void addInformation(IFarmableInfo info) {
-		info.addGermlings(germling);
+		info.addSeedlings(germling);
 	}
 
 	@Override

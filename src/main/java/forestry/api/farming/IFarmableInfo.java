@@ -6,8 +6,8 @@ import java.util.Collection;
 import net.minecraft.item.ItemStack;
 
 /**
- * IFarmableInfo describes the valid germlings and possible products of an IFarmable. This is mainly used by the jei farming
- * category to display the valid germlings and possible products.
+ * IFarmableInfo describes the valid seedlings and possible products of an IFarmable. This is mainly used by the jei farming
+ * category to display the valid seedlings and possible products.
  */
 public interface IFarmableInfo {
 
@@ -16,16 +16,16 @@ public interface IFarmableInfo {
 	 */
 	String getIdentifier();
 
-	default void addGermlings(ItemStack... germlings) {
-		addGermlings(Arrays.asList(germlings));
+	default void addSeedlings(ItemStack... seedlings) {
+		addSeedlings(Arrays.asList(seedlings));
 	}
 
-	void addGermlings(Collection<ItemStack> germlings);
+	void addSeedlings(Collection<ItemStack> seedlings);
 
 	/**
-	 * @return a collection that contains all valid germlings of a farmable.
+	 * @return a collection that contains all valid seedlings of a farmable.
 	 */
-	Collection<ItemStack> getGermlings();
+	Collection<ItemStack> getSeedlings();
 
 	default void addProducts(ItemStack... products) {
 		addProducts(Arrays.asList(products));

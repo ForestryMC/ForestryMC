@@ -35,8 +35,6 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
-import forestry.core.features.CoreItems;
-import forestry.core.items.ItemFruit;
 import forestry.core.tiles.TileUtil;
 import forestry.farming.logic.crops.CropFruit;
 
@@ -69,31 +67,6 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public int getFertilizerConsumption() {
-		return 10;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return (int) (40 * hydrationModifier);
-	}
-
-	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedGermling(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedWindfall(ItemStack stack) {
-		return false;
-	}
-
-	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return NonNullList.create();
 	}
@@ -120,16 +93,6 @@ public class FarmLogicOrchard extends FarmLogic {
 		lastExtents.put(pos, lastExtent);
 
 		return crops;
-	}
-
-	@Override
-	public ItemStack getIconItemStack() {
-		return CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY, 1);    //TODO which fruit to use?
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.orchard";
 	}
 
 	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {

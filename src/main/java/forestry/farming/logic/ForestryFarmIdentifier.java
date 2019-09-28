@@ -14,4 +14,7 @@ public class ForestryFarmIdentifier {
 	public static final String COCOA = "farmCocoa";
 	public static final String RUBBER = "farmRubber";
 	public static final String ORCHID = "farmOrchid";
+
+	private ForestryFarmIdentifier() {
+	}
 }

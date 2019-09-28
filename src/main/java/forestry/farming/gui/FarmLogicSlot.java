@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
 import forestry.core.config.Config;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
@@ -39,8 +40,12 @@ public class FarmLogicSlot extends Widget {
 		return farmController.getFarmLogic(farmDirection);
 	}
 
+	private IFarmProperties getProperties() {
+		return getLogic().getProperties();
+	}
+
 	private ItemStack getStackIndex() {
-		return getLogic().getIconItemStack();
+		return getProperties().getIcon();
 	}
 
 	@Override
@@ -67,9 +72,9 @@ public class FarmLogicSlot extends Widget {
 		@Override
 		public void refresh() {
 			toolTip.clear();
-			toolTip.add(getLogic().getName());
-			toolTip.add("Fertilizer: " + Math.round(getLogic().getFertilizerConsumption() * Config.fertilizerModifier));
-			toolTip.add("Water: " + getLogic().getWaterConsumption(farmController.getFarmLedgerDelegate().getHydrationModifier()));
+			toolTip.add(getProperties().getDisplayName(getLogic().isManual()));
+			toolTip.add("Fertilizer: " + Math.round(getProperties().getFertilizerConsumption(farmController) * Config.fertilizerModifier));
+			toolTip.add("Water: " + getProperties().getWaterConsumption(farmController, farmController.getFarmLedgerDelegate().getHydrationModifier()));
 		}
 	};
 }

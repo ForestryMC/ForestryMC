@@ -34,17 +34,17 @@ public abstract class Circuit implements ICircuit {
 	}
 
 	@Override
-	public String getUnlocalizedName() {
+	public String getTranslationKey() {
 		return "for.circuit." + this.uid;
 	}
 
 	@Override
 	public void addTooltip(List<ITextComponent> list) {
-		list.add(new TranslationTextComponent(getUnlocalizedName()));
+		list.add(new TranslationTextComponent(getTranslationKey()));
 
 		int i = 1;
 		while (true) {
-			String unlocalizedDescription = getUnlocalizedName() + ".description." + i;
+			String unlocalizedDescription = getTranslationKey() + ".description." + i;
 			list.add(new StringTextComponent(" - ").appendSibling(new TranslationTextComponent(unlocalizedDescription)));
 			i++;
 		}

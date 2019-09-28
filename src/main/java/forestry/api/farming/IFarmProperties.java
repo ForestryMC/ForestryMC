@@ -2,35 +2,33 @@ package forestry.api.farming;
 
 import java.util.Collection;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
-/**
- * @since Forestry 5.8
- */
 public interface IFarmProperties {
 
-	default void registerSoil(Block block) {
-		registerSoil(new ItemStack(block), block.getDefaultState());
-	}
 	/**
-	 * Can be used to register a {@link Block} as a valid soil.
+	 * @return The amount of fertilizer that the {@link IFarmHousing} automatically removes after this logic cultivated
+	 * a block or harvested a crop.
 	 */
-	void registerSoil(ItemStack resource, BlockState soilState);
-
-	void addGermlings(ItemStack... germlings);
-
-	void addGermlings(Collection<ItemStack> germlings);
-
-	void addProducts(ItemStack... products);
-
-	void addProducts(Collection<ItemStack> products);
+	int getFertilizerConsumption(IFarmHousing housing);
 
 	/**
-	 * Adds the {@link IFarmable}s that where registered with the given identifier.
+	 * @param hydrationModifier A modifier that depends on the weather and the biome of the farm.
+	 * @return The amount of water that the {@link IFarmHousing} automatically removes after this logic cultivated
+	 * a block or harvested a crop.
 	 */
-	void registerFarmables(String identifier);
+	int getWaterConsumption(IFarmHousing housing, float hydrationModifier);
+
+	ITextComponent getDisplayName(boolean manual);
+
+	String getTranslationKey();
+
+	/**
+	 * @return the itemStack that represents this farm logic. Used as an icon for the farm logic.
+	 */
+	ItemStack getIcon();
 
 	/**
 	 * @return true if the given block state is a valid soil state.
@@ -42,7 +40,14 @@ public interface IFarmProperties {
 	 */
 	boolean isAcceptedResource(ItemStack itemStack);
 
-	Collection<ISoil> getSoils();
+	/**
+	 * Checks if the given stack is a seedling (plantable sapling, seed, etc.) for any {@link IFarmable} of this farm.
+	 */
+	boolean isAcceptedSeedling(ItemStack itemstack);
+
+	boolean isAcceptedWindfall(ItemStack itemstack);
+
+	Collection<Soil> getSoils();
 
 	Collection<IFarmable> getFarmables();
 

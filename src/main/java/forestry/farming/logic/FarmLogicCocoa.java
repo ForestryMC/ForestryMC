@@ -23,7 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -36,49 +36,12 @@ import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.farming.logic.farmables.FarmableCocoa;
 
-//import net.minecraft.block.BlockOldLog;
-//import net.minecraft.block.BlockPlanks;
 
 public class FarmLogicCocoa extends FarmLogic {
 	private final IFarmable cocoa = new FarmableCocoa();
 
 	public FarmLogicCocoa(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public ItemStack getIconItemStack() {
-		return new ItemStack(Items.COCOA_BEANS);
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "for.farm.cocoa";
-	}
-
-	@Override
-	public int getFertilizerConsumption() {
-		return 120;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return (int) (20 * hydrationModifier);
-	}
-
-	@Override
-	public boolean isAcceptedResource(ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
-	public boolean isAcceptedGermling(ItemStack itemstack) {
-		return cocoa.isGermling(itemstack);
-	}
-
-	@Override
-	public boolean isAcceptedWindfall(ItemStack stack) {
-		return false;
 	}
 
 	@Override
@@ -167,8 +130,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		Block block = blockState.getBlock();
 
 		ICrop crop = null;
-		//TODO - probably needs tag
-		if (false) {//!block.isWood(world, position)) {
+		if (!block.isIn(BlockTags.LOGS)) {
 			crop = cocoa.getCropAt(world, position, blockState);
 			if (crop == null) {
 				return crops;
@@ -227,8 +189,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						crops.push(crop);
 						candidates.add(candidate);
 						seen.add(candidate);
-						//TODO - probably needs TAG
-					} else if (false) {//blockState.getBlock().isWood(world, candidate)) {
+					} else if (blockState.getBlock().isIn(BlockTags.LOGS)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

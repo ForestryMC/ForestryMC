@@ -53,7 +53,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
 			} else {
-				description = recipe.getCircuit().getLocalizedName();
+				description = recipe.getCircuit().getDisplayName().getFormattedText();
 			}
 
 			int row = i * 20;

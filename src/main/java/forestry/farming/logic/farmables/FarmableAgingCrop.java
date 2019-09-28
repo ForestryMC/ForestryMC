@@ -100,7 +100,7 @@ public class FarmableAgingCrop implements IFarmable {
 	@Override
 	public void addInformation(IFarmableInfo info) {
 		info.addProducts(products);
-		info.addGermlings(germling);
+		info.addSeedlings(germling);
 	}
 
 	@Override

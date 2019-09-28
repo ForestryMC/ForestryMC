@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.ISoil;
+import forestry.api.farming.Soil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
@@ -34,16 +34,6 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 	public FarmLogicWatered(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public int getFertilizerConsumption() {
-		return 5;
-	}
-
-	@Override
-	public int getWaterConsumption(float hydrationModifier) {
-		return (int) (20 * hydrationModifier);
 	}
 
 	@Override
@@ -72,7 +62,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 			return false;
 		}
 
-		for (ISoil soil : getSoils()) {
+		for (Soil soil : getSoils()) {
 			NonNullList<ItemStack> resources = NonNullList.create();
 			resources.add(soil.getResource());
 

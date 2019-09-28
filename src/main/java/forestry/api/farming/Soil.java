@@ -1,11 +1,9 @@
-package forestry.farming.logic;
+package forestry.api.farming;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.farming.ISoil;
-
-class Soil implements ISoil {
+public final class Soil {
 	private final ItemStack resource;
 	private final BlockState soilState;
 
@@ -14,12 +12,10 @@ class Soil implements ISoil {
 		this.soilState = soilState;
 	}
 
-	@Override
 	public ItemStack getResource() {
 		return resource;
 	}
 
-	@Override
 	public BlockState getSoilState() {
 		return soilState;
 	}
