@@ -437,13 +437,25 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		Collections.shuffle(farmDirections, world.rand);
 		for (FarmDirection farmSide : farmDirections) {
 			IFarmLogic logic = getFarmLogic(farmSide);
+			List<FarmTarget> farmTargets = targets.get(farmSide);
+
+			if (stage == Stage.CULTIVATE) {
+				for (FarmTarget target : farmTargets) {
+					if (target.getExtent() > 0) {
+						farmWorkStatus.hasFarmland = true;
+						break;
+					}
+				}
+			}
+
+			if (FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+				continue;
+			}
 
 			// Always try to collect windfall.
 			if (collectWindfall(logic)) {
 				farmWorkStatus.didWork = true;
 			}
-
-			List<FarmTarget> farmTargets = targets.get(farmSide);
 
 			if (stage == Stage.HARVEST) {
 				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, this, farmTargets, logic, farmListeners);
@@ -491,16 +503,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	private FarmWorkStatus cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic, FarmDirection farmSide) {
-		boolean hasFarmland = false;
-		for (FarmTarget target : farmTargets) {
-			if (target.getExtent() > 0) {
-				hasFarmland = true;
-				farmWorkStatus.hasFarmland = true;
-				break;
-			}
-		}
-
-		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+		if (farmWorkStatus.hasFarmland) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);

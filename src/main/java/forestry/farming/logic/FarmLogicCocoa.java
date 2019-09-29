@@ -15,10 +15,8 @@ import com.google.common.collect.Table;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -88,15 +86,16 @@ public class FarmLogicCocoa extends FarmLogic {
 		return NonNullList.create();
 	}
 
-	private final Map<BlockPos, Integer> lastExtentsCultivation = new HashMap<>();
+	private final Table<BlockPos, BlockPos, Integer> lastExtentsCultivation = HashBasedTable.create();
 
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		if (!lastExtentsCultivation.containsKey(pos)) {
-			lastExtentsCultivation.put(pos, 0);
+		BlockPos farmPos = farmHousing.getCoords();
+		if (!lastExtentsCultivation.contains(farmPos, pos)) {
+			lastExtentsCultivation.put(farmPos, pos, 0);
 		}
 
-		int lastExtent = lastExtentsCultivation.get(pos);
+		int lastExtent = lastExtentsCultivation.get(farmPos, pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
@@ -105,7 +104,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		boolean result = tryPlantingCocoa(world, farmHousing, position, direction);
 
 		lastExtent++;
-		lastExtentsCultivation.put(pos, lastExtent);
+		lastExtentsCultivation.put(farmPos, pos, lastExtent);
 
 		return result;
 	}

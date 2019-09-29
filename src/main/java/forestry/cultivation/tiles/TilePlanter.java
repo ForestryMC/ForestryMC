@@ -318,7 +318,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 			}
 		}
 
-		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, Collections.emptySet())) {
+		if (hasFarmland) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getFertilizerConsumption() * Config.fertilizerModifier * 2);
 			final int liquidConsumption = logic.getWaterConsumption(hydrationModifier);
