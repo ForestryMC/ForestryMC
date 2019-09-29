@@ -51,9 +51,7 @@ public class FarmLogicCrops extends FarmLogicWatered {
 
 	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		NonNullList<ItemStack> products = produce;
-		produce = collectEntityItems(world, farmHousing, false);
-		return products;
+		return collectEntityItems(world, farmHousing, false);
 	}
 
 	@Override

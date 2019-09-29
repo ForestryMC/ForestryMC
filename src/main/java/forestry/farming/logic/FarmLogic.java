@@ -116,6 +116,15 @@ public abstract class FarmLogic implements IFarmLogic {
 		return block == Blocks.WATER;
 	}
 
+	protected final boolean isIceBlock(World world, BlockPos position) {
+		if (!world.isBlockLoaded(position)) {
+			return false;
+		}
+		IBlockState blockState = world.getBlockState(position);
+		Block block = blockState.getBlock();
+		return block == Blocks.ICE;
+	}
+
 	protected final BlockPos translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
 		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
 	}
