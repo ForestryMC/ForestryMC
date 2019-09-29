@@ -201,9 +201,9 @@ public class FarmHelper {
 		return false;
 	}
 
-	public static Collection<ICrop> harvestTargets(World world, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	public static Collection<ICrop> harvestTargets(World world, IFarmHousing housing, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		for (FarmTarget target : farmTargets) {
-			Collection<ICrop> harvested = harvestTarget(world, target, logic, farmListeners);
+			Collection<ICrop> harvested = harvestTarget(world, housing, target, logic, farmListeners);
 			if (!harvested.isEmpty()) {
 				return harvested;
 			}
@@ -212,9 +212,9 @@ public class FarmHelper {
 		return Collections.emptyList();
 	}
 
-	public static Collection<ICrop> harvestTarget(World world, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	public static Collection<ICrop> harvestTarget(World world, IFarmHousing housing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		BlockPos pos = target.getStart().add(0, target.getYOffset(), 0);
-		Collection<ICrop> harvested = logic.harvest(world, pos, target.getDirection(), target.getExtent());
+		Collection<ICrop> harvested = logic.harvest(world, housing, pos, target.getDirection(), target.getExtent());
 		if (!harvested.isEmpty()) {
 			// Let event handlers know.
 			for (IFarmListener listener : farmListeners) {

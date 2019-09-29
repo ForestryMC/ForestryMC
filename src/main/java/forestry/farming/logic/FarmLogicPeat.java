@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.ModuleCore;
 import forestry.core.blocks.BlockBogEarth;
@@ -52,7 +53,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);

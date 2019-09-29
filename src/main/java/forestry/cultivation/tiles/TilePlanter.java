@@ -181,7 +181,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 			List<FarmTarget> farmTargets = targets.get(farmSide);
 
 			if (stage == Stage.HARVEST) {
-				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, farmTargets, logic, Collections.emptySet());
+				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, this, farmTargets, logic, Collections.emptySet());
 				farmWorkStatus.didWork = !harvested.isEmpty();
 				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -107,15 +110,16 @@ public class FarmLogicCocoa extends FarmLogic {
 		return result;
 	}
 
-	private final Map<BlockPos, Integer> lastExtentsHarvest = new HashMap<>();
+	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		if (!lastExtentsHarvest.containsKey(pos)) {
-			lastExtentsHarvest.put(pos, 0);
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, BlockPos pos, FarmDirection direction, int extent) {
+		BlockPos farmPos = housing.getCoords();
+		if (!lastExtentsHarvest.contains(farmPos, pos)) {
+			lastExtentsHarvest.put(farmPos, pos, 0);
 		}
 
-		int lastExtent = lastExtentsHarvest.get(pos);
+		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
@@ -123,7 +127,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		lastExtent++;
-		lastExtentsHarvest.put(pos, lastExtent);
+		lastExtentsHarvest.put(farmPos, pos, lastExtent);
 
 		return crops;
 	}

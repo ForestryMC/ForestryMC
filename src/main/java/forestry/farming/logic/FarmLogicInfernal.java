@@ -59,7 +59,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, BlockPos pos, FarmDirection direction, int extent) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);

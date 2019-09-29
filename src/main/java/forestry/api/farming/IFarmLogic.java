@@ -83,7 +83,14 @@ public interface IFarmLogic {
 	 *                  The positions of the next blocks are having a offset in the given direction.
 	 * @return True if the logic has cultivated any block.
 	 */
-	Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent);
+	@Deprecated
+	default Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
+		return NonNullList.create();
+	}
+
+	default Collection<ICrop> harvest(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+		return harvest(world, pos, direction, extent);
+	}
 
 	/**
 	 * Returns the {@link IFarmProperties} that created this logic.
