@@ -51,13 +51,14 @@ public interface IFarmLogic {
 	 * Tries to harvest one or more blocks at the given position and with the given extent.
 	 *
 	 * @param world     The world of the farm.
-	 * @param pos       The position at that the logic should start to harvest.
+	 * @param housing
 	 * @param direction The direction of the extension.
 	 * @param extent    How many blocks this logic tries to harvest after it has tried to harvested the block at the given position.
 	 *                  The positions of the next blocks are having a offset in the given direction.
+	 * @param pos       The position at that the logic should start to harvest.
 	 * @return True if the logic has cultivated any block.
 	 */
-	Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent);
+	Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos);
 
 	/**
 	 * Returns the {@link IFarmProperties} that created this logic.

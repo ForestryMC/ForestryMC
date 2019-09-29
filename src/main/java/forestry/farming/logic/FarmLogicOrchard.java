@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Table;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
@@ -37,7 +39,6 @@ import forestry.farming.logic.crops.CropFruit;
 
 public class FarmLogicOrchard extends FarmLogic {
 
-	private final HashMap<BlockPos, Integer> lastExtents = new HashMap<>();
 	private final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard(IFarmProperties properties, boolean isManual) {
@@ -63,13 +64,16 @@ public class FarmLogicOrchard extends FarmLogic {
 		this.traversalBlocks = traversalBlocksBuilder.build();
 	}
 
+	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
+
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		if (!lastExtents.containsKey(pos)) {
-			lastExtents.put(pos, 0);
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+		BlockPos farmPos = housing.getCoords();
+		if (!lastExtentsHarvest.contains(farmPos, pos)) {
+			lastExtentsHarvest.put(farmPos, pos, 0);
 		}
 
-		int lastExtent = lastExtents.get(pos);
+		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
@@ -77,7 +81,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		lastExtent++;
-		lastExtents.put(pos, lastExtent);
+		lastExtentsHarvest.put(farmPos, pos, lastExtent);
 
 		return crops;
 	}

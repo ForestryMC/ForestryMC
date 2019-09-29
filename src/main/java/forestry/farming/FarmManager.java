@@ -134,16 +134,28 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable {
 		Collections.shuffle(farmDirections, world.rand);
 		for (FarmDirection farmSide : farmDirections) {
 			IFarmLogic logic = housing.getFarmLogic(farmSide);
+			List<FarmTarget> farmTargets = targets.get(farmSide);
+
+			if (stage == Stage.CULTIVATE) {
+				for (FarmTarget target : farmTargets) {
+					if (target.getExtent() > 0) {
+						farmWorkStatus.hasFarmland = true;
+						break;
+					}
+				}
+			}
+
+			if (FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+				continue;
+			}
 
 			// Always try to collect windfall.
 			if (collectWindfall(logic)) {
 				farmWorkStatus.didWork = true;
 			}
 
-			List<FarmTarget> farmTargets = targets.get(farmSide);
-
 			if (stage == Stage.HARVEST) {
-				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, farmTargets, logic, farmListeners);
+				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, housing, farmTargets, logic, farmListeners);
 				farmWorkStatus.didWork = !harvested.isEmpty();
 				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);
@@ -174,16 +186,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable {
 
 	private void cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic, FarmDirection farmSide) {
 		World world = housing.getWorldObj();
-		boolean hasFarmland = false;
-		for (FarmTarget target : farmTargets) {
-			if (target.getExtent() > 0) {
-				hasFarmland = true;
-				farmWorkStatus.hasFarmland = true;
-				break;
-			}
-		}
-
-		if (hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+		if (farmWorkStatus.hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getProperties().getWaterConsumption(housing, hydrationModifier);

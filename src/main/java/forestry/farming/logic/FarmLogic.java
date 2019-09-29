@@ -67,7 +67,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);
@@ -106,6 +106,15 @@ public abstract class FarmLogic implements IFarmLogic {
 		BlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
 		return block == Blocks.WATER;
+	}
+
+	protected final boolean isIceBlock(World world, BlockPos position) {
+		if (!world.isBlockLoaded(position)) {
+			return false;
+		}
+		BlockState blockState = world.getBlockState(position);
+		Block block = blockState.getBlock();
+		return block == Blocks.ICE;
 	}
 
 	protected final BlockPos translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {

@@ -54,7 +54,7 @@ public class FarmHelper {
 		public boolean hasLiquid = true;
 	}
 
-	private static FarmDirection getLayoutDirection(FarmDirection farmSide) {
+	public static FarmDirection getLayoutDirection(FarmDirection farmSide) {
 		switch (farmSide) {
 			case NORTH:
 				return FarmDirection.WEST;
@@ -64,6 +64,20 @@ public class FarmHelper {
 				return FarmDirection.EAST;
 			case EAST:
 				return FarmDirection.NORTH;
+		}
+		return null;
+	}
+
+	public static FarmDirection getReversedLayoutDirection(FarmDirection farmSide) {
+		switch (farmSide) {
+			case NORTH:
+				return FarmDirection.EAST;
+			case WEST:
+				return FarmDirection.NORTH;
+			case SOUTH:
+				return FarmDirection.WEST;
+			case EAST:
+				return FarmDirection.SOUTH;
 		}
 		return null;
 	}
@@ -201,9 +215,9 @@ public class FarmHelper {
 		return false;
 	}
 
-	public static Collection<ICrop> harvestTargets(World world, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	public static Collection<ICrop> harvestTargets(World world, IFarmHousing housing, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		for (FarmTarget target : farmTargets) {
-			Collection<ICrop> harvested = harvestTarget(world, target, logic, farmListeners);
+			Collection<ICrop> harvested = harvestTarget(world, housing, target, logic, farmListeners);
 			if (!harvested.isEmpty()) {
 				return harvested;
 			}
@@ -212,9 +226,9 @@ public class FarmHelper {
 		return Collections.emptyList();
 	}
 
-	public static Collection<ICrop> harvestTarget(World world, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	public static Collection<ICrop> harvestTarget(World world, IFarmHousing housing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		BlockPos pos = target.getStart().add(0, target.getYOffset(), 0);
-		Collection<ICrop> harvested = logic.harvest(world, pos, target.getDirection(), target.getExtent());
+		Collection<ICrop> harvested = logic.harvest(world, housing, target.getDirection(), target.getExtent(), pos);
 		if (!harvested.isEmpty()) {
 			// Let event handlers know.
 			for (IFarmListener listener : farmListeners) {

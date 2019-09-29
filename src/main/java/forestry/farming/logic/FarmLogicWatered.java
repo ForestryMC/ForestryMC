@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
@@ -132,46 +134,66 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 	}
 
 	private boolean trySetWater(World world, IFarmHousing farmHousing, BlockPos position) {
-		if (isWaterSourceBlock(world, position) || !canPlaceWater(world, position)) {
+		if (isWaterSourceBlock(world, position)) {
 			return false;
 		}
+		Pair<WaterStatus, BlockPos> waterPair = canPlaceWater(world, position);
+		WaterStatus status = waterPair.getKey();
+		if (status == WaterStatus.NO_WATER) {
+			if (!farmHousing.hasLiquid(STACK_WATER)) {
+				return false;
+			}
 
-		if (!farmHousing.hasLiquid(STACK_WATER)) {
-			return false;
+			BlockUtil.getBlockDrops(world, position).forEach(farmHousing::addPendingProduct);
+			BlockUtil.setBlockWithPlaceSound(world, position, Blocks.WATER.getDefaultState());
+			farmHousing.removeLiquid(STACK_WATER);
+			return true;
+		} else if (status == WaterStatus.ICE) {
+			BlockUtil.setBlockWithPlaceSound(world, waterPair.getValue(), Blocks.WATER.getDefaultState());
 		}
-
-		BlockUtil.getBlockDrops(world, position).forEach(farmHousing::addPendingProduct);
-		BlockUtil.setBlockWithPlaceSound(world, position, Blocks.WATER.getDefaultState());
-		farmHousing.removeLiquid(STACK_WATER);
-		return true;
+		return false;
 	}
 
-	private boolean canPlaceWater(World world, BlockPos position) {
+	private Pair<WaterStatus, BlockPos> canPlaceWater(World world, BlockPos position) {
 		// don't place water close to other water
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				BlockPos offsetPosition = position.add(x, 0, z);
 				if (isWaterSourceBlock(world, offsetPosition)) {
-					return false;
+					return Pair.of(WaterStatus.WATER_SOURCE, BlockPos.ZERO);
+				}
+				if (isIceBlock(world, offsetPosition) && !couldFlow(world, offsetPosition)) {
+					return Pair.of(WaterStatus.ICE, offsetPosition);
 				}
 			}
 		}
 
 		// don't place water if it can flow into blocks next to it
+		if (couldFlow(world, position)) {
+			return Pair.of(WaterStatus.AIR, BlockPos.ZERO);
+		}
+
+		return Pair.of(WaterStatus.NO_WATER, BlockPos.ZERO);
+	}
+
+	private boolean couldFlow(World world, BlockPos position) {
 		for (int x = -1; x <= 1; x++) {
 			BlockPos offsetPosition = position.add(x, 0, 0);
 			if (world.isAirBlock(offsetPosition)) {
-				return false;
+				return true;
 			}
 		}
 		for (int z = -1; z <= 1; z++) {
 			BlockPos offsetPosition = position.add(0, 0, z);
 			if (world.isAirBlock(offsetPosition)) {
-				return false;
+				return true;
 			}
 		}
+		return false;
+	}
 
-		return true;
+	private enum WaterStatus {
+		NO_WATER, WATER_SOURCE, AIR, ICE
 	}
 
 }
