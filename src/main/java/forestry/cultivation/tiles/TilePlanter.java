@@ -534,4 +534,9 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 
 	public abstract NonNullList<ItemStack> createProductionStacks();
 
+	@Override
+	public void addPendingProduce(ItemStack stack) {
+		pendingProduce.push(stack);
+	}
+
 }

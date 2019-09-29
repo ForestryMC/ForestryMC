@@ -24,8 +24,6 @@ import forestry.api.farming.ISoil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
-	protected NonNullList<ItemStack> produce = NonNullList.create();
-
 	public FarmLogicHomogeneous(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
 	}
@@ -94,7 +92,9 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 					break;
 				}
 
-				produce.addAll(BlockUtil.getBlockDrops(world, position));
+				for(ItemStack stack : BlockUtil.getBlockDrops(world, position)) {
+					farmHousing.addPendingProduce(stack);
+				}
 
 				BlockUtil.setBlockWithPlaceSound(world, position, soil.getSoilState());
 				farmHousing.getFarmInventory().removeResources(resources);

@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -76,4 +77,8 @@ public interface IFarmHousing extends IErrorLogicSource {
 
 	/* GUI */
 	int getStoredFertilizerScaled(int scale);
+
+	default void addPendingProduce(ItemStack stack) {
+
+	}
 }
