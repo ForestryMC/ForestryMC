@@ -22,10 +22,8 @@ import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -42,11 +40,6 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	public FarmLogicCocoa(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
 	}
 
 	private final Map<BlockPos, Integer> lastExtentsCultivation = new HashMap<>();

@@ -173,7 +173,7 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 		produce.shrink(added);
 	}
 
-	public void stowHarvest(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
+	public void stowProducts(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
 		for (ItemStack harvest : harvested) {
 			int added = InventoryUtil.addStack(productInventory, harvest, true);
 			harvest.shrink(added);

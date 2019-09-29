@@ -14,8 +14,6 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -30,11 +28,6 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	public FarmLogicInfernal(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
 	}
 
 	@Override

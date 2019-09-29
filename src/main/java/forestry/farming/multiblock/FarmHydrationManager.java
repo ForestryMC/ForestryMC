@@ -18,7 +18,7 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.IClimatised;
+import forestry.cultivation.IFarmHousingInternal;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
 public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, INbtReadable, IStreamable {
@@ -26,15 +26,17 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	private static final float RAINFALL_MODIFIER_MAX = 15f;
 	private static final float RAINFALL_MODIFIER_MIN = 0.5f;
 
-	private final IClimatised climatised;
+	private final IFarmHousingInternal housing;
 	private int hydrationDelay = 0;
 	private int ticksSinceRainfall = 0;
 
-	public FarmHydrationManager(IClimatised climatised) {
-		this.climatised = climatised;
+	public FarmHydrationManager(IFarmHousingInternal housing) {
+		this.housing = housing;
 	}
 
-	public void updateServer(World world, BlockPos coordinates) {
+	public void updateServer() {
+		World world = housing.getWorldObj();
+		BlockPos coordinates = housing.getTopCoord();
 		if (world.isRainingAt(coordinates.up())) {
 			if (hydrationDelay > 0) {
 				hydrationDelay--;
@@ -56,14 +58,14 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 
 	@Override
 	public float getHydrationTempModifier() {
-		float temperature = climatised.getExactTemperature();
-		return temperature > 0.8f ? temperature : 0.8f;
+		float temperature = housing.getExactTemperature();
+		return Math.max(temperature, 0.8f);
 	}
 
 	@Override
 	public float getHydrationHumidModifier() {
-		float mod = 1 / climatised.getExactHumidity();
-		return mod < 2.0f ? mod : 2.0f;
+		float mod = 1 / housing.getExactHumidity();
+		return Math.min(mod, 2.0f);
 	}
 
 	@Override

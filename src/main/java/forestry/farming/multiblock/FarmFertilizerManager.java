@@ -16,16 +16,19 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+import forestry.cultivation.IFarmHousingInternal;
 
 public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
 	private static final int BUFFER_FERTILIZER = 200;
+	private final IFarmInventoryInternal inventory;
 	private int storedFertilizer;
 
-	public FarmFertilizerManager() {
+	public FarmFertilizerManager(IFarmHousingInternal housing) {
+		this.inventory = housing.getFarmInventory();
 		storedFertilizer = 0;
 	}
 
-	public boolean hasFertilizer(IFarmInventoryInternal inventory, int amount) {
+	public boolean hasFertilizer(int amount) {
 		if (inventory.getFertilizerValue() < 0) {
 			return true;
 		}
@@ -33,7 +36,7 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 		return storedFertilizer >= amount;
 	}
 
-	public void removeFertilizer(IFarmInventoryInternal inventory, int amount) {
+	public void removeFertilizer(int amount) {
 		if (inventory.getFertilizerValue() < 0) {
 			return;
 		}
@@ -44,7 +47,7 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 		}
 	}
 
-	public boolean maintainFertilizer(IFarmInventoryInternal inventory) {
+	public boolean maintainFertilizer() {
 		if (storedFertilizer <= BUFFER_FERTILIZER) {
 			int fertilizerValue = inventory.getFertilizerValue();
 			if (fertilizerValue < 0) {

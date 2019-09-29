@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -22,7 +26,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmInventory;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
 import forestry.core.fluids.FakeTankManager;
@@ -31,6 +34,7 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.farming.FarmRegistry;
+import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
@@ -77,8 +81,27 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public IFarmInventory getFarmInventory() {
+	public IFarmInventoryInternal getFarmInventory() {
 		return FakeFarmInventory.instance;
+	}
+
+	@Override
+	public void setUpFarmlandTargets(Map<FarmDirection, List<FarmTarget>> targets) {
+	}
+
+	@Override
+	public BlockPos getTopCoord() {
+		return BlockPos.ZERO;
+	}
+
+	@Override
+	public BlockPos getCoordinates() {
+		return BlockPos.ZERO;
+	}
+
+	@Override
+	public void addPendingProduct(ItemStack stack) {
+
 	}
 
 	@Override
@@ -146,7 +169,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		return false;
 	}
 
-	private static class FakeFarmInventory implements IFarmInventory {
+	private static class FakeFarmInventory implements IFarmInventoryInternal {
 		public static final FakeFarmInventory instance = new FakeFarmInventory();
 
 		private FakeFarmInventory() {
@@ -196,6 +219,26 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		@Override
 		public IInventory getFertilizerInventory() {
 			return FakeInventoryAdapter.instance();
+		}
+
+		@Override
+		public int getFertilizerValue() {
+			return 0;
+		}
+
+		@Override
+		public boolean useFertilizer() {
+			return false;
+		}
+
+		@Override
+		public void stowProducts(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
+
+		}
+
+		@Override
+		public boolean tryAddPendingProduce(Stack<ItemStack> pendingProduce) {
+			return false;
 		}
 	}
 

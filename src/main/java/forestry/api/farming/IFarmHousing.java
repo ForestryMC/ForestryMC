@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -30,6 +31,10 @@ public interface IFarmHousing extends IErrorLogicSource {
 
 	void removeLiquid(FluidStack liquid);
 
+	float getExactTemperature();
+
+	float getExactHumidity();
+
 	/**
 	 * Callback for {@link IFarmLogic}s to plant a sapling, seed, germling, stem.
 	 * Will remove the appropriate germling from the farm's inventory.
@@ -53,6 +58,8 @@ public interface IFarmHousing extends IErrorLogicSource {
 
 	/* INTERACTION WITH HATCHES */
 	IFarmInventory getFarmInventory();
+
+	void addPendingProduct(ItemStack stack);
 
 	/* LOGIC */
 	void setFarmLogic(FarmDirection direction, IFarmLogic logic);

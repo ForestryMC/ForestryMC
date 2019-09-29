@@ -10,28 +10,11 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicGourd extends FarmLogic {
 
 	public FarmLogicGourd(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
-	}
-
-	@Override
-	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		return false;
 	}
 }

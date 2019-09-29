@@ -17,14 +17,11 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.farming.logic.crops.CropRubber;
 //import forestry.plugins.PluginIC2;
@@ -41,16 +38,6 @@ public class FarmLogicRubber extends FarmLogic {
 		//			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
 		//			active = false;
 		//		}
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
-	}
-
-	@Override
-	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		return false;
 	}
 
 	private final Map<BlockPos, Integer> lastExtents = new HashMap<>();
