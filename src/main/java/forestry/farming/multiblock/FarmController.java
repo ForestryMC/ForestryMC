@@ -446,7 +446,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 			List<FarmTarget> farmTargets = targets.get(farmSide);
 
 			if (stage == Stage.HARVEST) {
-				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, farmTargets, logic, farmListeners);
+				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, this, farmTargets, logic, farmListeners);
 				farmWorkStatus.didWork = !harvested.isEmpty();
 				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);
@@ -598,11 +598,6 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public int getStoredFertilizerScaled(int scale) {
 		return fertilizerManager.getStoredFertilizerScaled(inventory, scale);
-	}
-
-	@Override
-	public void addPendingProduce(ItemStack stack) {
-		pendingProduce.push(stack);
 	}
 
 	@Override

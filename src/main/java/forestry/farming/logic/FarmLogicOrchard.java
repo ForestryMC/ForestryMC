@@ -103,7 +103,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, BlockPos pos, FarmDirection direction, int extent) {
 		if (!lastExtents.containsKey(pos)) {
 			lastExtents.put(pos, 0);
 		}

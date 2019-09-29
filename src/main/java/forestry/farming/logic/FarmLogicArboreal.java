@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -76,15 +77,16 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return collectEntityItems(world, farmHousing, true);
 	}
 
-	private final Map<BlockPos, Integer> lastExtentsHarvest = new HashMap<>();
+	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
-		if (!lastExtentsHarvest.containsKey(pos)) {
-			lastExtentsHarvest.put(pos, 0);
+	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+		BlockPos farmPos = farmHousing.getCoords();
+		if (!lastExtentsHarvest.contains(farmPos, pos)) {
+			lastExtentsHarvest.put(farmPos, pos, 0);
 		}
 
-		int lastExtent = lastExtentsHarvest.get(pos);
+		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
@@ -92,7 +94,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = harvestBlocks(world, position);
 		lastExtent++;
-		lastExtentsHarvest.put(pos, lastExtent);
+		lastExtentsHarvest.put(farmPos, pos, lastExtent);
 
 		return crops;
 	}

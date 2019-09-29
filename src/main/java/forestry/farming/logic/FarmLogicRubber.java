@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
@@ -96,19 +98,19 @@ public class FarmLogicRubber extends FarmLogic {
 		return false;
 	}
 
-	private final Map<BlockPos, Integer> lastExtents = new HashMap<>();
+	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
 
 	@Override
-	public Collection<ICrop> harvest(World world, BlockPos pos, FarmDirection direction, int extent) {
+	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		if (!active) {
-			return null;
+			return Collections.emptyList();
+		}
+		BlockPos farmPos = farmHousing.getCoords();
+		if (!lastExtentsHarvest.contains(farmPos, pos)) {
+			lastExtentsHarvest.put(farmPos, pos, 0);
 		}
 
-		if (!lastExtents.containsKey(pos)) {
-			lastExtents.put(pos, 0);
-		}
-
-		int lastExtent = lastExtents.get(pos);
+		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
 		if (lastExtent > extent) {
 			lastExtent = 0;
 		}
@@ -116,7 +118,7 @@ public class FarmLogicRubber extends FarmLogic {
 		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		lastExtent++;
-		lastExtents.put(pos, lastExtent);
+		lastExtentsHarvest.put(farmPos, pos, lastExtent);
 
 		return crops;
 	}
