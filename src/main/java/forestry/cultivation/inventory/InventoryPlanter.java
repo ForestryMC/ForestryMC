@@ -23,6 +23,7 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.cultivation.tiles.TilePlanter;
+import forestry.farming.FarmHelper;
 import forestry.farming.multiblock.IFarmInventoryInternal;
 
 public class InventoryPlanter extends InventoryAdapterRestricted implements IFarmInventoryInternal {
@@ -154,7 +155,7 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 	}
 
 	public boolean plantGermling(IFarmable germling, EntityPlayer player, BlockPos pos, FarmDirection direction) {
-		int index = direction.ordinal();
+		int index = FarmHelper.getReversedLayoutDirection(direction).ordinal();
 		ItemStack germlingStack = germlingsInventory.getStackInSlot(index);
 		if (germlingStack.isEmpty() || !germling.isGermling(germlingStack)) {
 			return false;

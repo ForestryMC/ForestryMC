@@ -68,6 +68,20 @@ public class FarmHelper {
 		return null;
 	}
 
+	public static FarmDirection getReversedLayoutDirection(FarmDirection farmSide) {
+		switch (farmSide) {
+			case NORTH:
+				return FarmDirection.EAST;
+			case WEST:
+				return FarmDirection.NORTH;
+			case SOUTH:
+				return FarmDirection.WEST;
+			case EAST:
+				return FarmDirection.SOUTH;
+		}
+		return null;
+	}
+
 	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
 		Blocks.BRICK_BLOCK,
 		Blocks.STONEBRICK,
