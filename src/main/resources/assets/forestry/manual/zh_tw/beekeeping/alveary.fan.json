@@ -1,5 +1,5 @@
 {
-	"title": "Alveary Fan",
+	"title": "蜂箱組風扇",
 	"icon":{
 		"item": "forestry:alveary.fan"
 	},
@@ -12,12 +12,12 @@
 				]
 			},
 			{
-				"text": "The Alveary Fan does the exact opposite of the Alveary Heater: It cools down the temperature of the Alveary. To use it, replace one of the blocks of the Alveary in the bottom two layers of the Alveary by the Alveary Fan Block."
+				"text": "蜂箱組風扇做的事和蜂箱組加熱器完全相反：它會降低蜂箱組的溫度。要使用它，請以蜂箱組風扇方塊取代蜂箱組底部兩層的其中一個方塊。"
 			}
 		],
 		[
 			{
-				"text": "The fan requires about 5 RF/tick keep the alveary continuously cooled 1 step."
+				"text": "蜂箱組風扇需要大約 5 RF/t 以保持蜂箱組持續冷卻一個級距。"
 			}
 		]
 	]

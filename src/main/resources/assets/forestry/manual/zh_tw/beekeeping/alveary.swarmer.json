@@ -1,5 +1,5 @@
 {
-	"title": "Alveary Swarmer",
+	"title": "蜂箱組分蜂室",
 	"icon":{
 		"item": "forestry:alveary.swarmer"
 	},
@@ -12,15 +12,15 @@
 				]
 			},
 			{
-				"text": "The Swarmer is a special Alveary block, which has a 1% chance of spawning a Swarm Hive near the Apiary per Royal Jelly that's inside it. The bees found in those Swarms are the same as the one in the Alveary, but the princesses are always Ignoble."
+				"text": "分蜂室是一種特別的蜂箱組方塊，在其中的每一個蜂王漿能讓它有 1% 的機率在蜂箱組附近生成蜂巢。在那些蜂巢中的蜜蜂會和蜂箱組裡的一樣，但公主蜂一定會是混血種。"
 			}
 		],
 		[
 			{
-				"text": "Similar to the Alveary Fan and Alveary Heater Blocks, the Swarmer replaces one of the blocks in the Apiary. Right-click it to access its inventory, and place Royal Jelly inside it for it to operate."
+				"text": "與蜂箱組風扇和蜂箱組加熱器方塊相似，分蜂室取代了一個蜂箱組的方塊。右鍵點擊它以存取它的物品欄，並放置蜂王漿在其中讓它運轉。"
 			},
 			{
-				"text": "When a hive is ready to spawn and a new hive will appear in the world somewhere nearby, within about 25 blocks of the alveary. It will contain only the new princess.",
+				"text": "當一個蜂巢準備好要生成時，一個新的蜂巢會在附近的某個地方出現，大概在蜂箱組的25格方塊內。它只會包含一隻公主蜂。",
 				"paragraph": true
 			}
 		]

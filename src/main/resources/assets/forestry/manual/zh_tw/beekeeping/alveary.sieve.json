@@ -1,5 +1,5 @@
 {
-	"title": "Alveary Sieve",
+	"title": "蜂箱組濾網",
 	"icon":{
 		"item": "forestry:alveary.sieve"
 	},
@@ -12,12 +12,12 @@
 				]
 			},
 			{
-				"text": "The Alveary Sieve collects pollen from nearby trees that would've pollinated a other tree and stores it in its inventory. To use it, replace one of the blocks of the Alveary in the bottom two layers of the multiblock structure and place a"
+				"text": "蜂箱組濾網會從附近向其他樹木授粉的樹木收集花粉，並將之儲存在它的物品欄中。要使用它，請以蜂箱組濾網方塊取代蜂箱組底部兩層的其中一個方塊，並放置一個"
 			}
 		],
 		[
 			{
-				"text": "Woven Silk in its left item slot."
+				"text": "絲綢在它左側的物品槽中。"
 			}
 		]
 	]

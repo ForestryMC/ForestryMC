@@ -1,5 +1,5 @@
 {
-	"title": "Alveary Stabiliser",
+	"title": "蜂箱組穩定器",
 	"icon":{
 		"item": "forestry:alveary.stabiliser"
 	},
@@ -12,7 +12,7 @@
 				]
 			},
 			{
-				"text": "The Alveary Stabiliser prevents the offsprings of the queen from mutate to new species. To use it, replace one of the blocks of the Alveary in the bottom two layers of the Alveary by the Alveary Stabiliser Block."
+				"text": "蜂箱組穩定器會防止蜂后的後代變異為新的物種。要使用它，請以蜂箱組穩定器方塊取代蜂箱組底部兩層的其中一個方塊。"
 			}
 		]
 	]
