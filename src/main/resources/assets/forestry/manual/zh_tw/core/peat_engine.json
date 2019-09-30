@@ -1,0 +1,29 @@
+{
+	"title": "泥炭引擎",
+	"icon": {
+		"item": "forestry:engine_peat"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:peat_engine"
+				]
+			},
+			{
+				"text": "泥炭引擎消耗泥炭（或它的升級版，瀝青質泥炭）燃料，並產生副產物灰燼。"
+			},
+			{
+				"text": "一塊泥炭可燃燒 5000 刻，此時引擎的產出是 10 RF/t；平均一塊泥炭會產出 0.66 灰燼，換言之燃燒三塊泥炭會產生兩份灰燼。",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "瀝青質泥炭一塊可燃燒 6000 tick，此時引擎的產出是 20 RF/t。",
+				"paragraph": true
+			}
+		]
+	]
+}

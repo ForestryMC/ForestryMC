@@ -1,0 +1,19 @@
+{
+	"title": "驅蜂煙霧",
+	"icon":{
+		"item": "forestry:smoker"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:smoker"
+				]
+			},
+			{
+				"text": "你若是跟蜂巢靠得太近，蜜蜂們會輕輕地盯你一下，這點傷僅靠自然恢復就足以應付。但若是你不用煙霧先驅趕她們，上來就去拆蜂巢，她們就會為此對你使出會心一擊。"
+			}
+		]
+	]
+}

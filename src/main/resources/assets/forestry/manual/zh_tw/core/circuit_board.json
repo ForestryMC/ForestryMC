@@ -1,0 +1,38 @@
+{
+	"title": "電子板",
+	"icon":{
+		"item": "forestry:chipsets"
+	},
+	"content": [
+		[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:chipsets",
+						"data": 0,
+						"nbt": "{\"T\":0s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 1,
+						"nbt": "{\"T\":1s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 2,
+						"nbt": "{\"T\":2s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 3,
+						"nbt": "{\"T\":3s}"
+					}
+				]
+			},
+			{
+				"text": "使用電烙鐵可以在電子板上安裝電子管。安裝有電子管的電子板可通過 GUI 插入設備的插槽中。要從設備中拆除電子板，請用電烙鐵。"
+			}
+		]
+	]
+}

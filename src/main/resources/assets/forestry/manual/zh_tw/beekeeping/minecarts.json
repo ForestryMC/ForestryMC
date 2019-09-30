@@ -1,0 +1,18 @@
+{
+	"title": "蜂箱車",
+	"icon": {
+		"item": "forestry:cart.beehouse"
+	},
+	"content": [[
+		{
+			"text": "我這次發明了一個簡單玩意兒：蜂箱車。沒錯，就是把蜂箱放進礦車裡。"
+		},
+		{
+			"type": "crafting",
+			"locations": [
+				"forestry:bee_house_minecart",
+				"forestry:apiary_minecart"
+			]
+		}
+	]]
+}

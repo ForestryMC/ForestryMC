@@ -1,0 +1,23 @@
+{
+	"title": "集雨蓄水槽",
+	"icon": {
+		"item": "forestry:raintank"
+	},
+	"content": [
+		[
+			{
+				"text": "集雨蓄水槽會在下雨時收集雨水到它裡面。"
+			},
+			{
+				"text": "集雨蓄水槽不需要能量即可將水裝罐。",
+				"paragraph": true
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:raintank"
+				]
+			}
+		]
+	]
+}

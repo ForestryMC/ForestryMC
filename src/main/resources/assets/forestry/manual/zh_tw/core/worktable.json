@@ -1,0 +1,25 @@
+{
+	"title": "工作台",
+	"icon":{
+		"item": "forestry:worktable"
+	},
+	"content": [
+		[
+			{
+				"text": "這個用來手動合成物品的工作台可以記住最後九個使用的配方。左擊右邊顯示的合成配方可快速填充左邊的合成網格；右擊則可以鎖定合成，防止被新來的合成覆蓋掉。"
+			},
+			{
+				"text": "參與合成的物品需要放進工作台自己的物品欄裡；合成網格只是用來顯示合成的。",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:worktable"
+				]
+			}
+		]
+	]
+}
