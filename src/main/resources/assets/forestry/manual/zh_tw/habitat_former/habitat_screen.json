@@ -1,18 +1,18 @@
 {
-	"title": "Habitat Screen",
-	"icon":{
+	"title": "棲息地顯示幕",
+	"icon": {
 		"item": "forestry:habitat_screen"
 	},
 	"content": [
 		[
 			{
 				"type": "carpenter",
-				"stack":{
+				"stack": {
 					"item": "forestry:habitat_screen"
 				}
 			},
 			{
-				"text": "The Habitat Screen can be used to get the climate at a position by right clicking on a block."
+				"text": "棲息地顯示幕能藉由右鍵點擊一個方塊來取得一個地方的氣候。"
 			},
 			{
 				"text": "\n"
@@ -20,7 +20,7 @@
 		],
 		[
 			{
-				"text": "Additionally you can link the screen to a habitat former by sneaking and right clicking the habitat former. After that you can enable and disable an area preview to see how big the area is that the former manipulates."
+				"text": "另外，你可以藉由潛行(按住Shift)並右鍵點擊一個棲息地塑造器將顯示幕連結到棲息地塑造器上。在那之後你便可以啟用或停用區域預覽來看看那個棲息地塑造器所操縱的區域有多大。"
 			}
 		]
 	]

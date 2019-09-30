@@ -1,6 +1,6 @@
 {
-	"title": "Habitat Former",
-	"icon":{
+	"title": "棲息地塑造器",
+	"icon": {
 		"item": "forestry:habitat_former"
 	},
 	"content": [
@@ -12,35 +12,35 @@
 				]
 			},
 			{
-				"text": "The Habitat Formert can be used to manipulate the climate in an specific region. The size (1-16) and the shape (square or circle) of the area can be change with the slider and the button on the upper left side of the gui."
+				"text": "棲息地塑造器能被用來操縱一個特定區域內的氣候。該區域的大小（1~16）和形狀（方形或圓形）可以被位於GUI左上方的滑桿和按鈕改變。"
 			}
 		],
 		[
 			{
-				"text": "The former always tries to reach the targeted climate. It needs two things to reach this climate."
+				"text": "塑造器會一直試著去達到目標氣候。它需要兩樣東西來達到這個氣候。"
 			},
 			{
 				"text": "\n"
 			},
-				{
-				"text": "\n"
-			},
-			{
-				"text": "The first is a Fluid (water, lava or crushed ice) to change the humidity of the area."
-			},
 			{
 				"text": "\n"
 			},
-				{
+			{
+				"text": "第一項是流體（水、熔岩或碎冰）來改變該區域的濕度。"
+			},
+			{
 				"text": "\n"
 			},
 			{
-				"text": "The second is Energy (FE/RF/Tesla/MJ) to change the temperature of the area."
+				"text": "\n"
+			},
+			{
+				"text": "第二項是能量（FE/RF/Tesla/MJ）來改變該區域的氣溫。"
 			}
 		],
 		[
 			{
-				"text": "The former needs more resources (fluid/energy) for bigger areas. Currently there are 4 ways to select the targeted climate."
+				"text": "對於更大的區域，塑造器需要更多資源（流體/能量）。目前有四種方法來選擇目標氣候。"
 			},
 			{
 				"text": "\n"
@@ -49,21 +49,21 @@
 				"text": "\n"
 			},
 			{
-				"text": "1. You can change the targeted climate by clicking on one of the bars in the upper center of the gui."
+				"text": "1. 你可以藉由點擊位於GUI中上方的其中一個滑桿來改變目標氣候。"
 			},
 			{
 				"text": "\n"
 			},
-				{
+			{
 				"text": "\n"
 			},
 			{
-				"text": "2. You can use one of the two text fields to type the targeted climate. (Number from 0 - 200)"
+				"text": "2. 你可以使用其中一個文字輸入框來輸入目標氣候。（介於 0~200 的數字）"
 			}
 		],
 		[
 			{
-				"text": "3. You can select one of the default habitats next to the text fields."
+				"text": "3. 你可以從文字輸入框旁邊選擇一個預設的棲息地。"
 			},
 			{
 				"text": "\n"
@@ -72,7 +72,7 @@
 				"text": "\n"
 			},
 			{
-				"text": "4. You can click with a bee in the hand on the slot with the shape of a hexagon next to the habitats. That changes the targeted climate automatically to the preferred climate of the bee."
+				"text": "4. 你可以手持一隻蜜蜂點擊棲息地旁一個六角形的格子。它會自動將目標氣候改變為該蜜蜂偏好的氣候。"
 			}
 		]
 	]

@@ -1,12 +1,12 @@
 {
-	"title": "Climate Particles",
-	"icon":{
+	"title": "氣候粒子",
+	"icon": {
 		"item": "minecraft:redstone"
 	},
 	"content": [
 		[
 			{
-				"text": "To visualize the change of the climate particles are spawned around the player if he is located in an area that currently is affected by a habitatformer. The particles have the color of the current climate in the area."
+				"text": "為了表現氣候的變化，如果玩家在一個目前被棲息地塑造器影響的區域內，則粒子會在該玩家的周圍被生成。粒子會帶有代表當前該區域氣候的顏色。"
 			}
 		]
 	]
