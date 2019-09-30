@@ -72,7 +72,9 @@ import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemFruit;
 import forestry.core.recipes.ModuleEnabledCondition;
+import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockTypePlanter;
+import forestry.cultivation.features.CultivationBlocks;
 import forestry.database.features.DatabaseBlocks;
 import forestry.energy.blocks.BlockTypeEngine;
 import forestry.energy.features.EnergyBlocks;
@@ -822,16 +824,30 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 	private void registerCultivationRecipes(RecipeDataHelper helper) {
 		for (BlockTypePlanter planter : BlockTypePlanter.values()) {
-			//TODO needs flattening PR
-			//			helper.moduleConditionRecipe(
-			//					ShapedRecipeBuilder.shapedRecipe(CultivationBlocks.PLANTER.get(planter, Mode.MANAGED).block())
-			//					.key('G', Tags.Items.GLASS)
-			//					.key('T', CoreItems.ELECTRON_TUBES.get(getElectronTube(planter)).item())
-			//					.key('C', CoreItems.FLEXIBLE_CASING.item())
-			//					.key('B', CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.BASIC).item())
-			//					.patternLine("GTG").patternLine("TCT").patternLine("GBG")
-			//					.addCriterion("has_casing", this.hasItem(CoreItems.FLEXIBLE_CASING.item()))::build,
-			//					ForestryModuleUids.CULTIVATION);
+			Block managed = CultivationBlocks.PLANTER.get(planter, BlockPlanter.Mode.MANAGED).block();
+			Block manual = CultivationBlocks.PLANTER.get(planter, BlockPlanter.Mode.MANUAL).block();
+
+			helper.moduleConditionRecipe(
+					ShapedRecipeBuilder.shapedRecipe(managed)
+							.key('G', Tags.Items.GLASS)
+							.key('T', CoreItems.ELECTRON_TUBES.get(getElectronTube(planter)).item())
+							.key('C', CoreItems.FLEXIBLE_CASING.item())
+							.key('B', CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.BASIC).item())
+							.patternLine("GTG").patternLine("TCT").patternLine("GBG")
+							.addCriterion("has_casing", this.hasItem(CoreItems.FLEXIBLE_CASING.item()))::build,
+					ForestryModuleUids.CULTIVATION);
+
+			helper.moduleConditionRecipe(
+					ShapelessRecipeBuilder.shapelessRecipe(manual)
+							.addIngredient(managed)
+							.addCriterion("has_managed", this.hasItem(managed))::build,
+					ForestryModuleUids.CULTIVATION);
+			helper.moduleConditionRecipe(
+					ShapelessRecipeBuilder.shapelessRecipe(managed)
+							.addIngredient(manual)
+							.addCriterion("has_manual", this.hasItem(manual))::build,
+					new ResourceLocation(Constants.MOD_ID, managed.getRegistryName().getPath() + "_from_manual"),
+					ForestryModuleUids.CULTIVATION);
 		}
 	}
 
@@ -1074,42 +1090,42 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 	private void registerMailRecipes(RecipeDataHelper helper) {
 		helper.moduleConditionRecipe(
 				ShapelessRecipeBuilder.shapelessRecipe(MailItems.CATALOGUE.item())
-				.addIngredient(Items.BOOK)
-				.addIngredient(ForestryTags.Items.STAMPS)
-				.addCriterion("has_book", this.hasItem(Items.BOOK))::build,
+						.addIngredient(Items.BOOK)
+						.addIngredient(ForestryTags.Items.STAMPS)
+						.addCriterion("has_book", this.hasItem(Items.BOOK))::build,
 				ForestryModuleUids.MAIL);
 
 		//TODO fallback ingredient
 		helper.moduleConditionRecipe(
 				ShapelessRecipeBuilder.shapelessRecipe(MailItems.LETTERS.get(ItemLetter.Size.EMPTY, ItemLetter.State.FRESH).item())
-				.addIngredient(Items.PAPER)
-				.addIngredient(Ingredient.merge(Lists.newArrayList(Ingredient.fromTag(ForestryTags.Items.PROPOLIS), Ingredient.fromTag(Tags.Items.SLIMEBALLS))))
-				.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
+						.addIngredient(Items.PAPER)
+						.addIngredient(Ingredient.merge(Lists.newArrayList(Ingredient.fromTag(ForestryTags.Items.PROPOLIS), Ingredient.fromTag(Tags.Items.SLIMEBALLS))))
+						.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
 				ForestryModuleUids.MAIL);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(MailBlocks.BASE.get(BlockTypeMail.MAILBOX).block())
-				.key('#', ForestryTags.Items.INGOT_TIN)
-				.key('X', Tags.Items.CHESTS_WOODEN)
-				.key('Y', CoreItems.STURDY_CASING.item())
-				.patternLine(" # ").patternLine("#Y#").patternLine("XXX")
-				.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+						.key('#', ForestryTags.Items.INGOT_TIN)
+						.key('X', Tags.Items.CHESTS_WOODEN)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.patternLine(" # ").patternLine("#Y#").patternLine("XXX")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
 				ForestryModuleUids.MAIL);
 		Item[] emptiedLetter = MailItems.LETTERS.getRowFeatures(ItemLetter.Size.EMPTY).stream().map(FeatureItem::getItem).toArray(Item[]::new);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(Items.PAPER)
-				.key('#', Ingredient.fromItems(emptiedLetter))
-				.patternLine(" # ").patternLine(" # ").patternLine(" # ")
-				.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
+						.key('#', Ingredient.fromItems(emptiedLetter))
+						.patternLine(" # ").patternLine(" # ").patternLine(" # ")
+						.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
 				ForestryModuleUids.MAIL);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(MailBlocks.BASE.get(BlockTypeMail.TRADE_STATION).block())
-				.key('#', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.BRONZE).getItem())
-				.key('X', Tags.Items.CHESTS_WOODEN)
-				.key('Y', CoreItems.STURDY_CASING.item())
-				.key('Z', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.IRON).item())
-				.key('W', createNbtIngredient(ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{})))
-				.patternLine("Z#Z").patternLine("#Y#").patternLine("XWX")
-				.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
+						.key('#', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.BRONZE).getItem())
+						.key('X', Tags.Items.CHESTS_WOODEN)
+						.key('Y', CoreItems.STURDY_CASING.item())
+						.key('Z', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.IRON).item())
+						.key('W', createNbtIngredient(ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{})))
+						.patternLine("Z#Z").patternLine("#Y#").patternLine("XWX")
+						.addCriterion("has_casing", this.hasItem(CoreItems.STURDY_CASING.item()))::build,
 				ForestryModuleUids.MAIL);
 
 		//TODO fallback
@@ -1117,11 +1133,11 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 		for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
 			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shapedRecipe(MailItems.STAMPS.get(stampDefinition).item(), 9)
-					.key('X', stampDefinition.getCraftingIngredient())
-					.key('#', Items.PAPER)
-					.key('Z', glue)
-					.patternLine("XXX").patternLine("###").patternLine("ZZZ")
-					.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
+							.key('X', stampDefinition.getCraftingIngredient())
+							.key('#', Items.PAPER)
+							.key('Z', glue)
+							.patternLine("XXX").patternLine("###").patternLine("ZZZ")
+							.addCriterion("has_paper", this.hasItem(Items.PAPER))::build,
 					ForestryModuleUids.MAIL);
 		}
 	}
@@ -1131,24 +1147,24 @@ public class ForestryRecipeProvider extends ForgeRecipeProvider {
 
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(SortingBlocks.FILTER.block(), 2)
-				.key('B', ForestryTags.Items.GEAR_BRONZE)
-				.key('D', Tags.Items.GEMS_DIAMOND)
-				.key('F', ing)
-				.key('W', ItemTags.PLANKS)
-				.key('G', Tags.Items.GLASS)
-				.patternLine("WDW").patternLine("FGF").patternLine("BDB")
-				.addCriterion("has_diamond", this.hasItem(Tags.Items.GEMS_DIAMOND))::build,
+						.key('B', ForestryTags.Items.GEAR_BRONZE)
+						.key('D', Tags.Items.GEMS_DIAMOND)
+						.key('F', ing)
+						.key('W', ItemTags.PLANKS)
+						.key('G', Tags.Items.GLASS)
+						.patternLine("WDW").patternLine("FGF").patternLine("BDB")
+						.addCriterion("has_diamond", this.hasItem(Tags.Items.GEMS_DIAMOND))::build,
 				ForestryModuleUids.SORTING);
 	}
 
 	private void registerWorktableRecipes(RecipeDataHelper helper) {
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shapedRecipe(WorktableBlocks.WORKTABLE.block())
-				.key('B', Items.BOOK)
-				.key('C', Tags.Items.CHESTS_WOODEN)
-				.key('W', Items.CRAFTING_TABLE)
-				.patternLine("B").patternLine("W").patternLine("C")
-				.addCriterion("has_crafting_table", this.hasItem(Items.CRAFTING_TABLE))::build,
+						.key('B', Items.BOOK)
+						.key('C', Tags.Items.CHESTS_WOODEN)
+						.key('W', Items.CRAFTING_TABLE)
+						.patternLine("B").patternLine("W").patternLine("C")
+						.addCriterion("has_crafting_table", this.hasItem(Items.CRAFTING_TABLE))::build,
 				ForestryModuleUids.WORKTABLE);
 	}
 
