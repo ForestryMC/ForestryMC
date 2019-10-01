@@ -1042,12 +1042,12 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	public boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
 		if (owner != null && new TemplateMatcher(genome).matches()) {
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-			String speciesUid = genome.getPrimary().getRegistryName().toString();
+			String name = this.getName();
 			BlockState defaultLeaves;
 			if (fruitProvider.isFruitLeaf(genome, world, pos) && rand.nextFloat() <= fruitProvider.getFruitChance(genome, world, pos)) {
-				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.findState(speciesUid);
+				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.findState(name);
 			} else {
-				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.findState(speciesUid);
+				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.findState(name);
 			}
 			return world.setBlockState(pos, defaultLeaves, 18);
 		} else {
@@ -1140,16 +1140,5 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	@Override
 	public String getName() {
 		return name().toLowerCase(Locale.ENGLISH);
-	}
-
-	public int getMetadata() {
-		return ordinal();
-	}
-
-	public static TreeDefinition byMetadata(int meta) {
-		if (meta < 0 || meta >= VALUES.length) {
-			meta = 0;
-		}
-		return VALUES[meta];
 	}
 }
