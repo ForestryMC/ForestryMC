@@ -12,6 +12,7 @@ package forestry.factory.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockRenderLayer;
 
 import net.minecraftforge.common.ToolType;
 
@@ -23,4 +24,10 @@ public class BlockFactoryTESR extends BlockBase<BlockTypeFactoryTesr> {
 				.harvestTool(ToolType.PICKAXE)
 				.harvestLevel(0));
 	}
+
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
+	}
+
 }
