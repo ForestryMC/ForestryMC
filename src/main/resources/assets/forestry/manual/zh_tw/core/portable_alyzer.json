@@ -1,13 +1,13 @@
 {
 	"title": "可攜式分析儀",
-	"icon":{
+	"icon": {
 		"item": "forestry:portable_alyzer"
 	},
 	"content": [
 		[
 			{
 				"type": "carpenter",
-				"stack":{
+				"stack": {
 					"item": "forestry:portable_alyzer"
 				}
 			},

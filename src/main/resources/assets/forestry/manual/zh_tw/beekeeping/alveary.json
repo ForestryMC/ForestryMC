@@ -1,6 +1,6 @@
 {
 	"title": "蜂箱組",
-	"icon":{
+	"icon": {
 		"item": "forestry:alveary.plain"
 	},
 	"content": [
@@ -42,11 +42,11 @@
 		],
 		[
 			{
-				"text": "每個蜂箱組方塊都十分昂貴，需要用海量蜂蜜打造飄香鑲板，還需要用種子油製造大量浸漬部件。"
+				"text": "每個蜂箱組方塊都十分昂貴，需要用大量蜂蜜打造飄香鑲板，還需要用種子油製造大量浸漬部件。"
 			},
 			{
 				"type": "carpenter",
-				"stack":{
+				"stack": {
 					"item": "forestry:crafting_material",
 					"data": 6
 				}

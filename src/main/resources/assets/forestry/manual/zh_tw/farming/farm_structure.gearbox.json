@@ -16,13 +16,14 @@
 			{
 				"text": "Redstone Flux (RF)",
 				"color": "red",
+				"bold": true,
 				"paragraph": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "每個農場齒輪箱都需要有 Redstone Flux (RF) 的輸入方能工作。只需要讓某種 RF 能量源接上去就可以了。",
+				"text": "每個農場齒輪箱都需要有 Redstone Flux (RF) 的輸入方能工作。只需要讓某種RF能量源接上去就可以了。",
 				"color": "red"
 			}
 		],
@@ -35,7 +36,7 @@
 				"text": "\n"
 			},
 			{
-				"text": "一個齒輪箱會讓農場以 1 個單位的速度工作；所以多個齒輪箱就會讓農場的工作速度變得更快。",
+				"text": "一個齒輪箱會讓農場以1個單位的速度工作；所以多個齒輪箱就會讓農場的工作速度變得更快。",
 				"color": "dark_purple"
 			},
 			{

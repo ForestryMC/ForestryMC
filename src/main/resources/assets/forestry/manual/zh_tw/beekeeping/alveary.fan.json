@@ -1,6 +1,6 @@
 {
 	"title": "蜂箱組風扇",
-	"icon":{
+	"icon": {
 		"item": "forestry:alveary.fan"
 	},
 	"content": [
@@ -17,7 +17,7 @@
 		],
 		[
 			{
-				"text": "蜂箱組風扇需要大約 5 RF/t 以保持蜂箱組持續冷卻一個級距。"
+				"text": "風扇需要大約5RF/t以保持蜂箱組持續冷卻一個級距。"
 			}
 		]
 	]

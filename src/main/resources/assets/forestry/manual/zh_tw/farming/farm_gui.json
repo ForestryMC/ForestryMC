@@ -1,6 +1,6 @@
 {
 	"title": "農場 GUI",
-	"icon":{
+	"icon": {
 		"item": "glass"
 	},
 	"content": [
@@ -53,7 +53,7 @@
 		],
 		[
 			{
-				"text": "GUI 分成下面若干部分："
+				"text": "GUI分成下面若干部分："
 			},
 			{
 				"text": "I - 輸水口",

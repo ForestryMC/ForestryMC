@@ -1,6 +1,6 @@
 {
 	"title": "蜜蜂基因",
-	"icon":{
+	"icon": {
 		"item": "forestry:bee_larvae_ge",
 		"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.speciesDiligent\",UID0:\"forestry.speciesDiligent\",Slot:0b}]}}"
 	},

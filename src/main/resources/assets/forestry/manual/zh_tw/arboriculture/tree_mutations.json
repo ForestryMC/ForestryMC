@@ -1,8 +1,8 @@
 {
 	"title": "樹木突變",
-	"icon":{
-			"item": "forestry:sapling",
-			"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeTeak\",UID0:\"forestry..treeTeak\",Slot:0b}]}}"
+	"icon": {
+		"item": "forestry:sapling",
+		"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeTeak\",UID0:\"forestry..treeTeak\",Slot:0b}]}}"
 	},
 	"content": [
 		[

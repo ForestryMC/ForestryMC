@@ -1,6 +1,6 @@
 {
 	"title": "資源方塊",
-	"icon":{
+	"icon": {
 		"item": "forestry:resource_storage",
 		"data": 3
 	},
