@@ -58,6 +58,35 @@ public abstract class ItemStackUtil {
 		return ItemStack.areItemStackTagsEqual(lhs, rhs);
 	}
 
+	//TODO this is horrible and hopefully can be removed in 1.14, since it copy pastes a lot of vanilla code
+	public static boolean isIdenticalItemIgnoreCaps(ItemStack lhs, ItemStack rhs) {
+		if (lhs == rhs) {
+			return true;
+		}
+
+		if (lhs.isEmpty() || rhs.isEmpty()) {
+			return false;
+		}
+
+		if (lhs.getItem() != rhs.getItem()) {
+			return false;
+		}
+
+		if (lhs.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+			if (lhs.getItemDamage() != rhs.getItemDamage()) {
+				return false;
+			}
+		}
+
+
+		//copy of lower part of ItemStack::areItemStackTagsEqual without the caps check
+		if (lhs.getTagCompound() == null && rhs.getTagCompound() != null) {
+			return false;
+		} else {
+			return (lhs.getTagCompound() == null || lhs.getTagCompound().equals(rhs.getTagCompound()));
+		}
+	}
+
 
 	//TODO - move towards resourcelocations anyway as they are safer in some ways
 
@@ -491,6 +520,7 @@ public abstract class ItemStackUtil {
 	}
 
 	//TODO - just use a copy and set the count to make code simpler?
+
 	/**
 	 * Checks like {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}
 	 * but ignores stack size (count).

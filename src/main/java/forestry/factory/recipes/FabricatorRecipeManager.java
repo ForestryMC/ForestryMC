@@ -62,7 +62,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 
 	public static boolean isPlan(ItemStack plan) {
 		for (IFabricatorRecipe recipe : recipes) {
-			if (ItemStackUtil.isIdenticalItem(recipe.getPlan(), plan)) {
+			if (ItemStackUtil.isIdenticalItemIgnoreCaps(recipe.getPlan(), plan)) {
 				return true;
 			}
 		}
