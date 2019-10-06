@@ -20,7 +20,7 @@ Before pull requests can be accepted, the contributor needs to sign a contributo
 
 ### How do I sign?
 
-To keep the hassle for everyone involved to a minimum, Forestry uses CLAHub to manage the agreements. To get started, <a href="https://www.clahub.com/agreements/ForestryMC/ForestryMC">sign the Contributor License Agreement</a>.
+To keep the hassle for everyone involved to a minimum, Forestry uses CLA Assistant to manage the agreements. To get started, <a href="https://cla-assistant.io/ForestryMC/ForestryMC">sign the Contributor License Agreement</a>.
 
 ### Why is this needed?
 
