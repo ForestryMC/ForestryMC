@@ -11,11 +11,11 @@ buildscript {
 
 plugins {
 	id "com.matthewprenger.cursegradle" version "1.0.9"
+	id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.64'
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'idea'
 apply plugin: 'maven'
-apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 if (project.hasProperty('buildQualifier')) {
@@ -147,7 +147,7 @@ def getBuildNumber() {
 }
 
 task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
-	filePath = "changelog.html"
+	file = new File("changelog.html")
 	untaggedName = "Current release ${project.version}"
 	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
 	toRef = "HEAD"
