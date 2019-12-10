@@ -41,6 +41,12 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private final RecipeMemory recipeMemory;
 	private final InventoryAdapterTile craftingDisplay;
 	private MemorizedRecipe currentRecipe;
+    private long savedTick = 0;
+    private long savedSystemTimeExpiration = 0;
+    private boolean isDirty=true;
+    
+    // Maximum crafting time of 750ms before ejecting out and stop hard-locking the server
+    static long WORKTABLE_MAX_CRAFT_TIME = 750 * 1000 * 1000;
 
 	public TileWorktable() {
 		super("worktable");
@@ -121,9 +127,28 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
+        long currentTick = worldObj.getTotalWorldTime();
+        if (currentTick == savedTick){
+            // Processing in the same tick, second call, start expiration timer
+            long currentTime = System.nanoTime();
+            if(currentTime > savedSystemTimeExpiration) {
+                // Time to craft has expired, stop crafting loop
+                return false;
+            }
+            
+        } else {
+            // New tick has arrived, so reset data & mark as dirty so recipe is rechecked.
+            savedTick=currentTick;
+            savedSystemTimeExpiration = System.nanoTime() + WORKTABLE_MAX_CRAFT_TIME;
+            isDirty = true;
+        }
+
 		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
 		ItemStack[] inventory = InventoryUtil.getStacks(this);
 		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
+
+        // Craft is validated, mark as clean
+        isDirty = false;
 		return crafting != null;
 	}
 
