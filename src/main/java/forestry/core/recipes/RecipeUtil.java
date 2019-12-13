@@ -36,7 +36,7 @@ import forestry.core.utils.Log;
 import forestry.factory.inventory.InventoryCraftingForestry;
 
 public abstract class RecipeUtil {
-
+    static List<Object> cachedRecipes = new ArrayList<Object>();
 	public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null) {
 			return;
@@ -158,7 +158,21 @@ public abstract class RecipeUtil {
         int index = 0;
         // Check across the whole cached recipe map
         // Add each recipe to the matchingRecipes list
-        
+        for (Object recipe : cachedRecipes) {
+			IRecipe irecipe = (IRecipe) recipe;
+
+			if (irecipe.matches(inventory, world)) {
+				ItemStack result = irecipe.getCraftingResult(inventory);
+				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
+					matchingRecipes.add(result);
+				}
+			}
+        }
+        if( matchingRecipes.size() > 0 ) {
+            // If we found recipes here, we found all the potential recipes, so we can just return immediately.
+            return matchingRecipes;
+        }
+
         // Only do this if there were no cached recipes hit
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			IRecipe irecipe = (IRecipe) recipe;
@@ -190,6 +204,9 @@ public abstract class RecipeUtil {
                     recipeMap.add(0,matchingRecipeMap.get(index));
                 }
             }
+            // However, we should always add found recipes to the front of the cached recipe map
+            // Location doesn't matter since we have to scan the whole cached recipe map anyways.
+            cachedRecipes.addAll(matchingRecipeMap);
         }
 		return matchingRecipes;
 	}
