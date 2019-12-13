@@ -153,11 +153,9 @@ public abstract class RecipeUtil {
 		}
 
 		List<ItemStack> matchingRecipes = new ArrayList<>();
-        List<int> matchingIndex=new ArrayList();
-        List matchingRecipeMap = new ArrayList();
+        List<Integer> matchingIndex=new ArrayList();
+        List<Object> matchingRecipeMap = new ArrayList();
         int index = 0;
-
-
         // Check across the whole cached recipe map
         // Add each recipe to the matchingRecipes list
         
@@ -172,22 +170,24 @@ public abstract class RecipeUtil {
                     // Add to the back of the list. That way when we cycle through the list
                     // moving items to the front, the index locations for the following items doesn't change
                     matchingRecipeMap.add(recipe);
-                    matchingIndex.add(index);
-                    break;
+                    matchingIndex.add(new Integer(index));
 				}
 			}
             index++;
 		}
-
-        if (matchingIndex.size() > 0 )
+        if (matchingRecipeMap.size() > 0 )
         {
             // Only move the recipes if the last one was beyond 500 in the recipeMap (in GTNH about 57k recipes)
-            if (index > 500) {
-                System.out.println( "Highest recipe found at " + index + ", moving " + matchingIndex.size() + "  to front" );
-                for (index = 0; index < matchingIndex.size(); index++) {
+            if (matchingIndex.get(matchingIndex.size()-1) > 500) {
+            	List recipeMap = CraftingManager.getInstance().getRecipeList();
+                System.out.println( "Highest recipe found at " + matchingIndex.get(matchingIndex.size()-1) + ", moving " + matchingIndex.size() + " to front" );
+                System.out.println("Size of recipe map " + recipeMap.size() );
+                for (index = 0; index < matchingIndex.size(); index++) { // index is reused here, it goes through the matching groups.
                     // Remove recipe and add back at the front
-                    CraftingManager.getInstance().getRecipeList().remove(matchingIndex.get(index));
-                    CraftingManager.getInstance().getRecipeList().add(0,matchingRecipeMap.get(index));
+                    int target = matchingIndex.get(index); // remove requires int
+                    System.out.println("Removing recipe at " + target);
+                    recipeMap.remove(target);
+                    recipeMap.add(0,matchingRecipeMap.get(index));
                 }
             }
         }
