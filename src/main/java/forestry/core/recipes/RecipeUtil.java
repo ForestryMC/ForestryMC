@@ -99,7 +99,6 @@ public abstract class RecipeUtil {
 		if (ItemStackUtil.containsSets(recipeItems, availableItems, true, true) == 0) {
 			return null;
 		}
-
 		// Check that it doesn't make a different recipe.
 		// For example:
 		// Wood Logs are all ore dictionary equivalent with each other,
@@ -140,7 +139,6 @@ public abstract class RecipeUtil {
 				}
 			}
 		}
-
 		List<ItemStack> outputs = findMatchingRecipes(crafting, world);
 		if (!ItemStackUtil.containsItemStack(outputs, recipeOutput)) {
 			return null;
@@ -155,7 +153,15 @@ public abstract class RecipeUtil {
 		}
 
 		List<ItemStack> matchingRecipes = new ArrayList<>();
+        List<int> matchingIndex=new ArrayList();
+        List matchingRecipeMap = new ArrayList();
+        int index = 0;
 
+
+        // Check across the whole cached recipe map
+        // Add each recipe to the matchingRecipes list
+        
+        // Only do this if there were no cached recipes hit
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			IRecipe irecipe = (IRecipe) recipe;
 
@@ -163,10 +169,28 @@ public abstract class RecipeUtil {
 				ItemStack result = irecipe.getCraftingResult(inventory);
 				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
 					matchingRecipes.add(result);
+                    // Add to the back of the list. That way when we cycle through the list
+                    // moving items to the front, the index locations for the following items doesn't change
+                    matchingRecipeMap.add(recipe);
+                    matchingIndex.add(index);
+                    break;
 				}
 			}
+            index++;
 		}
 
+        if (matchingIndex.size() > 0 )
+        {
+            // Only move the recipes if the last one was beyond 500 in the recipeMap (in GTNH about 57k recipes)
+            if (index > 500) {
+                System.out.println( "Highest recipe found at " + index + ", moving " + matchingIndex.size() + "  to front" );
+                for (index = 0; index < matchingIndex.size(); index++) {
+                    // Remove recipe and add back at the front
+                    CraftingManager.getInstance().getRecipeList().remove(matchingIndex.get(index));
+                    CraftingManager.getInstance().getRecipeList().add(0,matchingRecipeMap.get(index));
+                }
+            }
+        }
 		return matchingRecipes;
 	}
 
