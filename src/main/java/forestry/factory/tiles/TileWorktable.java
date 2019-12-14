@@ -43,9 +43,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private MemorizedRecipe currentRecipe;
     private long savedTick = 0;
     private long savedSystemTimeExpiration = 0;
-    private boolean isDirty=true;
-    private long cleanCount = 0;
-    private long totalCount = 0;
     
     // Maximum crafting time of 750ms before ejecting out and stop hard-locking the server
     static long WORKTABLE_MAX_CRAFT_TIME = 750 * 1000 * 1000;
@@ -131,37 +128,23 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
         long currentTick = worldObj.getTotalWorldTime();
         if (currentTick == savedTick){
-            // Processing in the same tick, second call, start expiration timer
+            // Processing in the same tick, second call, check expiration timer
             long currentTime = System.nanoTime();
             if(currentTime > savedSystemTimeExpiration) {
                 // Time to craft has expired, stop crafting loop
                 return false;
             }
-            
         } else {
-            // New tick has arrived, so reset data & mark as dirty so recipe is rechecked.
+            // New tick has arrived, so reset timer data
             savedTick=currentTick;
             savedSystemTimeExpiration = System.nanoTime() + WORKTABLE_MAX_CRAFT_TIME;
-            isDirty = true;
-            System.out.println("cleanCount " + cleanCount + " totalCount " + totalCount);
-            cleanCount = 0;
-            totalCount = 0;
         }
 
-        totalCount++;
-        
-        if (isDirty) {
-    		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
-    		ItemStack[] inventory = InventoryUtil.getStacks(this);
-    		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
+		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
+		ItemStack[] inventory = InventoryUtil.getStacks(this);
+		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
 
-            // Craft is validated, mark as clean
-            isDirty = false;
-            return crafting != null;
-        } else {
-            cleanCount++;
-            return true;
-        }
+        return crafting != null;
 	}
 
 	@Override
@@ -184,9 +167,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (removed == null) {
 			return false;
 		}
-        
-        // Contents have changed, have to revalidate recipe
-        isDirty = true;
 		// update crafting display to match the ingredients that were actually used
 		setCraftingDisplay(crafting);
 		return true;
