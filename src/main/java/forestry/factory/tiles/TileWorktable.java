@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
+import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
@@ -41,7 +42,9 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private final RecipeMemory recipeMemory;
 	private final InventoryAdapterTile craftingDisplay;
 	private MemorizedRecipe currentRecipe;
-
+    private long savedTick = 0;
+    private long savedSystemTimeExpiration = 0;
+    
 	public TileWorktable() {
 		super("worktable");
 		setInternalInventory(new InventoryWorktable(this));
@@ -121,10 +124,27 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
+        if( Config.enableCraftingTimeout ) {
+            long currentTick = worldObj.getTotalWorldTime();
+            if (currentTick == savedTick){
+                // Processing in the same tick, second call, check expiration timer
+                long currentTime = System.nanoTime();
+                if(currentTime > savedSystemTimeExpiration) {
+                    // Time to craft has expired, stop crafting loop
+                    return false;
+                }
+            } else {
+                // New tick has arrived, so reset timer data
+                savedTick=currentTick;
+                savedSystemTimeExpiration = System.nanoTime() + Config.craftingTimeout * 1000000;
+            }
+        }
+
 		ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
 		ItemStack[] inventory = InventoryUtil.getStacks(this);
 		InventoryCraftingForestry crafting = RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
-		return crafting != null;
+
+        return crafting != null;
 	}
 
 	@Override
@@ -147,7 +167,6 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		if (removed == null) {
 			return false;
 		}
-
 		// update crafting display to match the ingredients that were actually used
 		setCraftingDisplay(crafting);
 		return true;

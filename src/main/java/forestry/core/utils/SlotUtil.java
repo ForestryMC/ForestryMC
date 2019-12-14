@@ -265,6 +265,7 @@ public abstract class SlotUtil {
 	// if mergeOnly = true, don't shift into empty slots.
 	private static boolean shiftToMachineInventory(List inventorySlots, ItemStack stackToShift, int numSlots, boolean mergeOnly) {
 		for (int machineIndex = playerInventorySize; machineIndex < numSlots; machineIndex++) {
+//            System.out.println("SlotUtil::shiftToMachineinventory");
 			Slot slot = (Slot) inventorySlots.get(machineIndex);
 			if (mergeOnly && slot.getStack() == null) {
 				continue;
