@@ -30,6 +30,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Config;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -156,23 +157,25 @@ public abstract class RecipeUtil {
         List<Integer> matchingIndex=new ArrayList();
         List<Object> matchingRecipeMap = new ArrayList();
         int index = 0;
-        // Check across the whole cached recipe map
-        // Add each recipe to the matchingRecipes list
-        for (Object recipe : cachedRecipes) {
-			IRecipe irecipe = (IRecipe) recipe;
 
-			if (irecipe.matches(inventory, world)) {
-				ItemStack result = irecipe.getCraftingResult(inventory);
-				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
-					matchingRecipes.add(result);
-				}
-			}
-        }
-        if( matchingRecipes.size() > 0 ) {
-            // If we found recipes here, we found all the potential recipes, so we can just return immediately.
-            return matchingRecipes;
-        }
+        if(Config.cacheWorktableRecipes) {
+            // Check across the whole cached recipe map
+            // Add each recipe to the matchingRecipes list
+            for (Object recipe : cachedRecipes) {
+    			IRecipe irecipe = (IRecipe) recipe;
 
+    			if (irecipe.matches(inventory, world)) {
+    				ItemStack result = irecipe.getCraftingResult(inventory);
+    				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
+    					matchingRecipes.add(result);
+    				}
+    			}
+            }
+            if( matchingRecipes.size() > 0 ) {
+                // If we found recipes here, we found all the potential recipes, so we can just return immediately.
+                return matchingRecipes;
+            }
+        }
         // Only do this if there were no cached recipes hit
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			IRecipe irecipe = (IRecipe) recipe;
@@ -181,32 +184,38 @@ public abstract class RecipeUtil {
 				ItemStack result = irecipe.getCraftingResult(inventory);
 				if (!ItemStackUtil.containsItemStack(matchingRecipes, result)) {
 					matchingRecipes.add(result);
-                    // Add to the back of the list. That way when we cycle through the list
-                    // moving items to the front, the index locations for the following items doesn't change
-                    matchingRecipeMap.add(recipe);
-                    matchingIndex.add(new Integer(index));
+                    if(Config.promoteWorktableRecipesToFrontOfGlobalRecipemap || Config.cacheWorktableRecipes) {
+                        // Add to the back of the list. That way when we cycle through the list
+                        // moving items to the front, the index locations for the following items doesn't change
+                        matchingRecipeMap.add(recipe);
+                        matchingIndex.add(new Integer(index));
+                    }
 				}
 			}
             index++;
 		}
         if (matchingRecipeMap.size() > 0 )
         {
-            // Only move the recipes if the last one was beyond 500 in the recipeMap (in GTNH about 57k recipes)
-            if (matchingIndex.get(matchingIndex.size()-1) > 500) {
-            	List recipeMap = CraftingManager.getInstance().getRecipeList();
-                System.out.println( "Highest recipe found at " + matchingIndex.get(matchingIndex.size()-1) + ", moving " + matchingIndex.size() + " to front" );
-                System.out.println("Size of recipe map " + recipeMap.size() );
-                for (index = 0; index < matchingIndex.size(); index++) { // index is reused here, it goes through the matching groups.
-                    // Remove recipe and add back at the front
-                    int target = matchingIndex.get(index); // remove requires int
-                    System.out.println("Removing recipe at " + target);
-                    recipeMap.remove(target);
-                    recipeMap.add(0,matchingRecipeMap.get(index));
+            if (Config.promoteWorktableRecipesToFrontOfGlobalRecipemap) {
+                // Only move the recipes if the last one was beyond 500 in the recipeMap (in GTNH about 57k recipes)
+                if (matchingIndex.get(matchingIndex.size()-1) > 500) {
+                    List recipeMap = CraftingManager.getInstance().getRecipeList();
+                    System.out.println( "Highest recipe found at " + matchingIndex.get(matchingIndex.size()-1) + ", moving " + matchingIndex.size() + " to front" );
+                    System.out.println( "Size of recipe map " + recipeMap.size() );
+                    for (index = 0; index < matchingIndex.size(); index++) { // index is reused here, it goes through the matching groups.
+                        // Remove recipe and add back at the front
+                        int target = matchingIndex.get(index); // remove requires int
+                        System.out.println("Removing recipe at " + target);
+                        recipeMap.remove(target);
+                        recipeMap.add(0,matchingRecipeMap.get(index));
+                    }
                 }
             }
-            // However, we should always add found recipes to the front of the cached recipe map
-            // Location doesn't matter since we have to scan the whole cached recipe map anyways.
-            cachedRecipes.addAll(matchingRecipeMap);
+            if(Config.cacheWorktableRecipes) {
+                // However, we should always add found recipes the cached recipe map
+                // Location doesn't matter since we have to scan the whole cached recipe map anyways.
+                cachedRecipes.addAll(matchingRecipeMap);
+            }
         }
 		return matchingRecipes;
 	}

@@ -77,6 +77,12 @@ public class Config {
 	// Performance
 	public static boolean enableBackpackResupply = true;
 
+    // Optimization
+    public static boolean enableCraftingTimeout = true;
+    public static int craftingTimeout = 200; // Time given in ms
+    public static boolean cacheWorktableRecipes = true;
+    public static boolean promoteWorktableRecipesToFrontOfGlobalRecipemap = true;
+
 	// Customization
 	private static boolean craftingBronzeEnabled = true;
 
@@ -214,6 +220,11 @@ public class Config {
 		dungeonLootRare = configCommon.getBooleanLocalized("difficulty", "loot.rare", dungeonLootRare);
 
 		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
+
+        enableCraftingTimeout = configCommon.getBooleanLocalized("optimization","enable.crafting.timeout", enableCraftingTimeout);
+        craftingTimeout = configCommon.getIntLocalized("optimization","crafting.timeout",craftingTimeout, 50, 2000 ); // min 50ms, default 200ms, max 2000 ms. Integer.MAX_VALUE is ~ 2100 ms because of multiplication by 1,000,000
+        cacheWorktableRecipes = configCommon.getBooleanLocalized("optimization","cache.worktable.recipes", cacheWorktableRecipes);
+        promoteWorktableRecipesToFrontOfGlobalRecipemap = configCommon.getBooleanLocalized("optimization","promote.worktable.recipes",promoteWorktableRecipesToFrontOfGlobalRecipemap);
 
 		// move legacy mail property
 		configCommon.moveProperty("tweaks.gui", "mail.alert", "tweaks.gui.mail.alert");
