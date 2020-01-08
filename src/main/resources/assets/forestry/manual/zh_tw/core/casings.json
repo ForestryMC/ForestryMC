@@ -1,0 +1,38 @@
+{
+	"title": "機械部件",
+	"icon": {
+		"item": "forestry:sturdy_machine"
+	},
+	"content": [
+		[
+			{
+				"text": "機械部件是幾乎所有林業設備的基礎。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:sturdy_casing"
+				]
+			}
+		],[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:hardened_machine"
+					},
+					{
+						"item": "forestry:impregnated_casing"
+					}
+				]
+			},
+			{
+				"type": "fabricator",
+				"stack": {
+					"item": "forestry:flexible_casing"
+				}
+
+			}
+		]
+	]
+}

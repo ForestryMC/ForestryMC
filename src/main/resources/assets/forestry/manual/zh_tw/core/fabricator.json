@@ -1,0 +1,21 @@
+{
+	"title": "熱電子加工台",
+	"icon": {
+		"item": "forestry:fabricator"
+	},
+	"content": [
+		[
+			{
+				"text": "熱電子加工台可製作真空管和染色玻璃。它需要 Redstone Flux (RF) 才能工作。它在預熱後還需要保持一定的熱量才能工作。產生熱量的多寡與你提供的能量有關；若能量不足，溫度會緩慢下降。"
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:fabricator"
+				]
+			}
+		]
+	]
+}

@@ -1,0 +1,25 @@
+{
+	"title": "加濕器",
+	"icon": {
+		"item": "forestry:moistener"
+	},
+	"content": [
+		[
+			{
+				"text": "加濕器可利用小麥、種子等和水加工出菌絲，供蘑菇農場使用。它也可以製作苔石和苔石磚。"
+			},
+			{
+				"text": "加濕器在黑暗中工作效率最高。",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:moistener"
+				]
+			}
+		]
+	]
+}

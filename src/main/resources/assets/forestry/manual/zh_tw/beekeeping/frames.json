@@ -1,0 +1,25 @@
+{
+	"title": "框架",
+	"icon": {
+		"item": "forestry:frame_untreated"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:frame_untreated",
+					"forestry:frame_impregnated"
+				]
+			},
+			{
+				"text": "木製框架可以讓蜂箱裡的蜂后加快生產速度。用作框架的木頭品質越好，蜂后的工作速度就越快。"
+			}
+		],
+		[
+			{
+				"text": "我至今仍未成功將框架塞進蜂房或蜂箱組中。我目前一共發現了三種框架：未處理框架、浸漬框架和標定框架。"
+			}
+		]
+	]
+}

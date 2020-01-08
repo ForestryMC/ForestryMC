@@ -1,0 +1,50 @@
+{
+	"title": "農場齒輪箱（能量輸入）",
+	"icon": {
+		"item": "forestry:ffarm",
+		"data": 2
+	},
+	"content": [
+		[
+			{
+				"text": "你需要農場齒輪箱才能驅動農場，並讓它自動收穫作物。"
+			},
+			{
+				"text": "多個齒輪箱可以加快農場工作速度。",
+				"paragraph": true
+			},
+			{
+				"text": "Redstone Flux (RF)",
+				"color": "red",
+				"bold": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "每個農場齒輪箱都需要有 Redstone Flux (RF) 的輸入方能工作。只需要讓某種RF能量源接上去就可以了。",
+				"color": "red"
+			}
+		],
+		[
+			{
+				"text": "農場工作加速",
+				"color": "dark_purple"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "一個齒輪箱會讓農場以1個單位的速度工作；所以多個齒輪箱就會讓農場的工作速度變得更快。",
+				"color": "dark_purple"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_gearbox_brick"
+				]
+			}
+		]
+	]
+}

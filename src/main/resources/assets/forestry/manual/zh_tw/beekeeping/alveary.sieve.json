@@ -1,0 +1,24 @@
+{
+	"title": "蜂箱組濾網",
+	"icon": {
+		"item": "forestry:alveary.sieve"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_sieve"
+				]
+			},
+			{
+				"text": "蜂箱組濾網會從附近向其他樹木授粉的樹木收集花粉，並將之儲存在它的物品欄中。"
+			}
+		],
+		[
+			{
+				"text": "要使用它，請以蜂箱組濾網方塊取代蜂箱組底部兩層的其中一個方塊，並放置一個絲綢在它左側的物品槽中。"
+			}
+		]
+	]
+}

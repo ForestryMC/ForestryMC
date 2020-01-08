@@ -1,0 +1,38 @@
+{
+	"title": "生物質發電機",
+	"icon": {
+		"item": "forestry:engine_generator"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:ic2_generator"
+				]
+			},
+			{
+				"text": "如果你裝了 IndustrialCraft2，你可以利用這生物質發電機，使用生物質或生質酒精來驅動 IndustrialCraft2 的機器。"
+			},
+			{
+				"text": "它產出的能量多寡與燃料有關；生質酒精的能量產出比生物質高。",
+				"paragraph": true
+			},
+			{
+				"text": "與 IndustrialCraft2 電線連接",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "生物質發電機可與 IndustrialCraft2 的機器、儲電單元或支持低壓（LV）的電線（例如銅線）直接相連。"
+			},
+			{
+				"text": "不要將超低壓電線與生物質發電機相連！",
+				"paragraph": true
+			}
+		]
+	]
+}

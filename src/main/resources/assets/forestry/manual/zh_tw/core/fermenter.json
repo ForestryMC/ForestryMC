@@ -1,0 +1,32 @@
+{
+	"title": "發酵機",
+	"icon": {
+		"item": "forestry:fermenter"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:fermenter"
+				]
+			},
+			{
+				"text": "發酵機可將樹苗、甘蔗等有機物質加工成生物質，可用作生物燃油引擎或生物質發電機的燃料。"
+			}
+		],
+		[
+			{
+				"text": "它還可以將蜜露或液體蜂蜜加工成蜂蜜酒。"
+			},
+			{
+				"text": "肥料、覆蓋物或堆肥等物品在發酵過程中起催化作用。不同物品的效果不盡相同。",
+				"paragraph": true
+			},
+			{
+				"text": "發酵機產出的液體可直接裝罐，也可用 BuildCraft 的防水管線抽出。",
+				"paragraph": true
+			}
+		]
+	]
+}

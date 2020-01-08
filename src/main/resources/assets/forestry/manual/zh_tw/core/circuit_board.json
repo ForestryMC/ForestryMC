@@ -1,0 +1,38 @@
+{
+	"title": "電路板",
+	"icon": {
+		"item": "forestry:chipsets"
+	},
+	"content": [
+		[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:chipsets",
+						"data": 0,
+						"nbt": "{\"T\":0s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 1,
+						"nbt": "{\"T\":1s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 2,
+						"nbt": "{\"T\":2s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 3,
+						"nbt": "{\"T\":3s}"
+					}
+				]
+			},
+			{
+				"text": "使用電烙鐵可以在電路板上安裝真空管。安裝有真空管的電路板可透過GUI插入設備的插槽中。要從設備中拆除電路板，請用電烙鐵。"
+			}
+		]
+	]
+}

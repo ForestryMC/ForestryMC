@@ -1,0 +1,30 @@
+{
+	"title": "資料庫",
+	"icon": {
+		"item": "forestry:database"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:database_bee_chest_tree_chest_royal_jelly",
+					"forestry:database_bee_chest_tree_chest_fruits",
+					"forestry:database_bee_chest_butterfly_chest_royal_jelly",
+					"forestry:database_bee_chest_butterfly_chest_fruits",
+					"forestry:database_tree_chest_bee_chest_royal_jelly",
+					"forestry:database_tree_chest_bee_chest_fruits",
+					"forestry:database_tree_chest_butterfly_chest_royal_jelly",
+					"forestry:database_tree_chest_butterfly_chest_fruits",
+					"forestry:database_butterfly_chest_bee_chest_royal_jelly",
+					"forestry:database_butterfly_chest_bee_chest_fruits",
+					"forestry:database_butterfly_chest_tree_chest_royal_jelly",
+					"forestry:database_butterfly_chest_tree_chest_fruits"
+				]
+			},
+			{
+				"text": "資料庫是用來儲存蜜蜂、樹苗、蝴蝶等帶基因物品的方塊。它最多能儲存136種不同類型的物品，並配有一個搜尋列。"
+			}
+		]
+	]
+}

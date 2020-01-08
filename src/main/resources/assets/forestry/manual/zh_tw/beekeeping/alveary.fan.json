@@ -1,0 +1,24 @@
+{
+	"title": "蜂箱組風扇",
+	"icon": {
+		"item": "forestry:alveary.fan"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_fan"
+				]
+			},
+			{
+				"text": "蜂箱組風扇做的事和蜂箱組加熱器完全相反：它會降低蜂箱組的溫度。要使用它，請以蜂箱組風扇方塊取代蜂箱組底部兩層的其中一個方塊。"
+			}
+		],
+		[
+			{
+				"text": "風扇需要大約5RF/t以保持蜂箱組持續冷卻一個級距。"
+			}
+		]
+	]
+}

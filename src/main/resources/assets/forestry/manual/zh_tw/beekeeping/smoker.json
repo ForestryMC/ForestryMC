@@ -1,0 +1,19 @@
+{
+	"title": "蜜蜂煙燻器",
+	"icon": {
+		"item": "forestry:smoker"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:smoker"
+				]
+			},
+			{
+				"text": "你若是跟蜂巢靠得太近，蜜蜂們就會輕輕地叮你一下，這點傷僅靠自然恢復就足以應付。但你若是不先用煙燻一下牠們，一上來就拆蜂巢，牠們就會為此對你使出會心一擊。"
+			}
+		]
+	]
+}

@@ -1,0 +1,15 @@
+{
+	"size": [3, 4, 3],
+	"structure": [
+		{
+			"pos": [0, 0, 0],
+			"endPos": [2, 2, 2],
+			"block": "forestry:alveary.plain"
+		},
+		{
+			"pos": [0, 2, 0],
+			"endPos": [2, 3, 2],
+			"block": "wooden_slab"
+		}
+	]
+}
