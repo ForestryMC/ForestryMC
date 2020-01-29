@@ -122,8 +122,13 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 	}
 
 	@Override
-	public String getNameFromMeta(int meta) {
-		EnumResourceType resourceType = getStateFromMeta(meta).getValue(ORE_RESOURCES);
-		return resourceType.getName();
+	public String getNameFromMeta(final int meta) {
+    try {
+      final EnumResourceType resourceType = getStateFromMeta(meta).getValue(ORE_RESOURCES);
+		  return resourceType.getName();
+    } catch (final IllegalArgumentException ex) {
+      System.out.println("[Forestry] Erroneous PropertyEnum on ItemStack resource type.\nThis is a bug!");
+      return "invalid_itemstack_meta";
+    }
 	}
 }
