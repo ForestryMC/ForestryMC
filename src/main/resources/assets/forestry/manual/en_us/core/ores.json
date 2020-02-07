@@ -50,10 +50,10 @@
 				"text": "\n"
 			},
 			{
-				"text": "Tin is a mineral that is commonly used in making Bronze, tools and Cans.<p>It occurs on layers above level 16, and when mined, it drops a block of Tin Ore."
+				"text": "Tin is a mineral that is commonly used in making Bronze, tools and Cans."
 			},
 			{
-				"text": "It occurs on layers above level 32, and when mined, it drops a block of Copper Ore.",
+				"text": "It occurs on layers above level 16, and when mined, it drops a block of Tin Ore.",
 				"paragraph": true
 			}
 		]
