@@ -1,9 +1,13 @@
 package forestry.arboriculture.blocks;
 
-import java.util.Random;
-
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IStateMapperRegister;
+import forestry.core.ModuleCore;
+import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -18,17 +22,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.model.ModelLoader;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IStateMapperRegister;
-import forestry.core.ModuleCore;
-import forestry.core.config.Constants;
+import java.util.Random;
 
 public class BlockAsh extends Block implements IStateMapperRegister, IItemModelRegister {
 
@@ -83,6 +81,11 @@ public class BlockAsh extends Block implements IStateMapperRegister, IItemModelR
 			drops.add(new ItemStack(ModuleCore.getItems().ash, 1 + rand.nextInt(Math.max(amount / 4, 1))));
 		}
 	}
+
+    @Override
+    public EnumPushReaction getPushReaction(IBlockState state) {
+        return EnumPushReaction.DESTROY;
+    }
 
 	@SideOnly(Side.CLIENT)
 	@Override
