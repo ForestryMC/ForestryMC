@@ -157,7 +157,7 @@ public class EscritoireGameToken implements INBTTagable, IStreamable {
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeEnum(state, State.VALUES);
-		data.writeItemStack(tokenStack);
+		data.writeItemStack(isVisible() ? tokenStack : null);
 	}
 
 	@Override
