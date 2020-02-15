@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.Random;
-
+import forestry.api.core.IItemModelRegister;
+import forestry.api.core.IModelManager;
+import forestry.core.CreativeTabForestry;
+import forestry.core.ModuleCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -25,14 +27,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import forestry.api.core.IItemModelRegister;
-import forestry.api.core.IModelManager;
-import forestry.core.CreativeTabForestry;
-import forestry.core.ModuleCore;
+import java.util.Random;
 
 public class BlockResourceOre extends Block implements IItemModelRegister, IBlockWithMeta {
 	public static final PropertyEnum<EnumResourceType> ORE_RESOURCES = PropertyEnum.create("resource", EnumResourceType.class, input -> input != null && input.hasOre());
@@ -85,14 +83,13 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 				}
 				break;
 			}
+			case COPPER:
 			case TIN: {
 				drops.add(new ItemStack(this, 1, damageDropped(state)));
 				break;
 			}
-			case COPPER: {
-				drops.add(new ItemStack(this, 1, damageDropped(state)));
+			default:
 				break;
-			}
 		}
 	}
 
@@ -123,6 +120,9 @@ public class BlockResourceOre extends Block implements IItemModelRegister, IBloc
 
 	@Override
 	public String getNameFromMeta(int meta) {
+		if (meta < 0 || meta >= EnumResourceType.BRONZE.getMeta()) {
+			return "Invalid Item Meta";
+		}
 		EnumResourceType resourceType = getStateFromMeta(meta).getValue(ORE_RESOURCES);
 		return resourceType.getName();
 	}
