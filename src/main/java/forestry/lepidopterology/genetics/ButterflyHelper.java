@@ -149,7 +149,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return EntityUtil.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+		return EntityUtil.spawnEntity(world, new EntityButterfly(world, butterfly, (int)x, (int)y, (int)z), x, y, z);
 	}
 
 	@Override

@@ -133,7 +133,7 @@ public class ItemButterflyGE extends ItemGE {
 			return false;
 		}
 
-		if (EntityUtil.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
+		if (EntityUtil.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly, (int)entityItem.posX, (int)entityItem.posY, (int)entityItem.posZ), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
 			if (entityItem.getEntityItem().stackSize > 1) {
 				entityItem.getEntityItem().stackSize--;
 			} else {

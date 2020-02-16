@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -69,6 +70,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	public static final int EXHAUSTION_REST = 1000;
 	public static final int EXHAUSTION_CONSUMPTION = 100 * EXHAUSTION_REST;
 	public static final int MAX_LIFESPAN = 24000 * 7; // one minecraft week in ticks
+	private int maximumHomeDistance = 64;
 
 	private Vec3 flightTarget;
 	private int exhaustion;
@@ -89,10 +91,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		setDefaults();
 	}
 
-	public EntityButterfly(World world, IButterfly butterfly) {
+	public EntityButterfly(World world, IButterfly butterfly, int x, int y, int z) {
 		super(world);
 		setDefaults();
 		setIndividual(butterfly);
+		setHomeArea(x, y, z, maximumHomeDistance);
 	}
 
 	@Override
@@ -194,6 +197,13 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
 		float weight = 0.0f;
+		final ChunkCoordinates home = getHomePosition();
+		double distanceToHome = home.getDistanceSquared(x, y, z);
+
+		if(!isWithinHomeDistanceFromPosition(distanceToHome)){
+
+			weight -= 7.5f + 0.005 * (distanceToHome / 4);
+		}
 
 		if (!getButterfly().isAcceptedEnvironment(worldObj, x, y, z)) {
 			weight -= 15.0f;
@@ -230,6 +240,10 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		weight += worldObj.getLightBrightness(x, y, z);
 		return weight;
+	}
+
+	private boolean isWithinHomeDistanceFromPosition(double distanceToHome) {
+		return distanceToHome < (maximumHomeDistance * maximumHomeDistance);
 	}
 
 	private int getFluidDepth(int x, int z) {

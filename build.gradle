@@ -257,3 +257,7 @@ def getBuildNumber() {
 	return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
 }
 
+sourceSets {
+	main { output.resourcesDir = output.classesDir }
+}
+

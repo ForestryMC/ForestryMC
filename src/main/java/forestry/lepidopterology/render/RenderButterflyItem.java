@@ -81,7 +81,7 @@ public class RenderButterflyItem implements IItemRenderer {
 		}
 		
 		if (entity == null) {
-			entity = new EntityButterfly(Proxies.common.getRenderWorld(), butterfly);
+			entity = new EntityButterfly(Proxies.common.getRenderWorld(), butterfly, 0, 0, 0);
 		} else {
 			entity.setIndividual(butterfly);
 		}
