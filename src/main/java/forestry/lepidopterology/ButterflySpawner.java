@@ -28,7 +28,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 		if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
 			return false;
 		}
-		
+
 		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(world.rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
 		if (world.rand.nextFloat() >= spawn.getGenome().getPrimary().getRarity() * 0.5f) {
 			return false;
