@@ -1,16 +1,17 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -23,21 +24,14 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
  */
-//eg    public static final Block BIRCH_LEAVES = register("birch_leaves", new LeavesBlock(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT)));
+//TODO merge some leaf blocks, do we really need 4 block classes ?
 public abstract class BlockAbstractLeaves extends LeavesBlock implements IColoredBlock {
 	public static final int FOLIAGE_COLOR_INDEX = 0;
 	public static final int FRUIT_COLOR_INDEX = 2;
@@ -115,12 +109,6 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	//		return (Proxies.render.fancyGraphicsEnabled() || blockAccess.getBlockState(pos.offset(side)).getBlock() != this) &&
 	//				BlockUtil.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	//	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public final BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT_MIPPED; // fruit overlays require CUTOUT_MIPPED, even in Fast graphics
-	}
 
 	/* PROPERTIES */
 	@Override

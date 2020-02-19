@@ -10,24 +10,7 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.ForestryAPI;
@@ -39,6 +22,20 @@ import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.StringUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class HabitatSelectionElement extends ElementGroup {
@@ -117,12 +114,12 @@ public class HabitatSelectionElement extends ElementGroup {
 
 		@Override
 		public void drawElement(int mouseX, int mouseY) {
-			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 			textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 			blit(0, 0, 204, 46, 20, 20);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			blit(2, 2, blitOffset, 16, 16, climate.getSprite());
+            blit(2, 2, getBlitOffset(), 16, 16, climate.getSprite());
 		}
 
 		private double getComparingCode() {

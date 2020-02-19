@@ -10,25 +10,47 @@
  ******************************************************************************/
 package forestry.farming.proxy;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.models.ClientManager;
+import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.features.FarmingBlocks;
 import forestry.farming.models.ModelFarmBlock;
+import forestry.modules.IClientModuleHandler;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
-public class ProxyFarmingClient extends ProxyFarming {
+public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHandler {
 
 	@Override
-	public void initializeModels() {
+    public void registerModels(ModelRegistryEvent event) {
 		ClientManager.getInstance().registerModel(new ModelFarmBlock(), FarmingBlocks.FARM);
-		/*for(FeatureBlock<BlockFarm, BlockItem> feature : FarmingBlocks.FARM.getFeatures()) {
-			ModelManager.getInstance().registerModel(new ModelFarmBlock(), feature.block(), feature.item());
-			ModelManager.getInstance().registerCustomBlockModel(new BlockModelEntry(new ModelResourceLocation("forestry:ffarm"),
-				new ModelResourceLocation("forestry:ffarm", "inventory"), new ModelFarmBlock(),
-				block));
-		}*/
+    }
+
+    @Override
+    public void setupClient(FMLClientSetupEvent event) {
+        FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+    }
+
+    @Override
+    public void registerSprites(TextureStitchEvent.Pre event) {
+        if (event.getMap().getBasePath() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+            return;
+        }
+        EnumFarmBlockType.gatherSprites(event);
+    }
+
+    @Override
+    public void handleSprites(TextureStitchEvent.Post event) {
+        if (event.getMap().getBasePath() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+            return;
+        }
+        EnumFarmBlockType.fillSprites(event);
 	}
 }

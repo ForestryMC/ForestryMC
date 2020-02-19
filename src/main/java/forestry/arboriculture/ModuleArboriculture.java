@@ -10,39 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
@@ -50,9 +19,6 @@ import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeMutationFactory;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.models.SaplingModelLoader;
-import forestry.arboriculture.models.TextureLeaves;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
@@ -63,7 +29,23 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
+import net.minecraft.block.Block;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.*;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
@@ -291,37 +273,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 		hiddenItems.add(ArboricultureBlocks.SAPLING_GE.stack());
 	}
 
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap() != Minecraft.getInstance().getTextureMap()) {
-			return;
-		}
-		TextureLeaves.registerAllSprites(event);
-		for (IAlleleFruit alleleFruit : AlleleFruits.getFruitAlleles()) {
-			alleleFruit.getProvider().registerSprites(event);
-		}
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onModelBake(ModelBakeEvent event) {
-		((ProxyArboricultureClient) proxy).onModelBake(event);
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onModelRegister(ModelRegistryEvent event) {
-		((ProxyArboricultureClient) proxy).onModelRegister();
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onClientSetup(FMLClientSetupEvent event) {
-		ModelLoaderRegistry.registerLoader(SaplingModelLoader.INSTANCE);
-		ArboricultureBlocks.TREE_CHEST.block().clientSetup();
-	}
-
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
 		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
@@ -356,4 +307,9 @@ public class ModuleArboriculture extends BlankForestryModule {
 		//			}
 		//		}
 	}
+
+    @Override
+    public ISidedModuleHandler getModuleHandler() {
+        return proxy;
+    }
 }

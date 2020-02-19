@@ -10,26 +10,23 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.TextureManagerForestry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.List;
 
 /**
  * Side ledger for guis
@@ -205,7 +202,7 @@ public abstract class Ledger {
 		float colorG = (overlayColor >> 8 & 255) / 255.0F;
 		float colorB = (overlayColor & 255) / 255.0F;
 
-		GlStateManager.color4f(colorR, colorG, colorB, 1.0F);
+        RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
 
 		Minecraft.getInstance().getTextureManager().bindTexture(texture);
 
@@ -218,7 +215,7 @@ public abstract class Ledger {
 
 		manager.gui.blit(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
-		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
 	protected void drawSprite(TextureAtlasSprite sprite, int x, int y) {
@@ -226,7 +223,7 @@ public abstract class Ledger {
 	}
 
 	protected void drawSprite(ResourceLocation textureMap, TextureAtlasSprite sprite, int x, int y) {
-		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
 		AbstractGui.blit(x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
 	}

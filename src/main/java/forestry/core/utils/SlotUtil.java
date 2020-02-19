@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.List;
-
+import forestry.core.gui.slots.SlotForestry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
@@ -19,9 +18,7 @@ import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.slots.SlotForestry;
-
-//import forestry.core.gui.slots.SlotCrafter;
+import java.util.List;
 
 public abstract class SlotUtil {
 
@@ -73,7 +70,7 @@ public abstract class SlotUtil {
 			return ItemStack.EMPTY;
 		}
 
-		boolean fromCraftingSlot = slot instanceof CraftingResultSlot || false;//slot instanceof SlotCrafter;
+        boolean fromCraftingSlot = slot instanceof CraftingResultSlot;
 
 		int numSlots = inventorySlots.size();
 		ItemStack stackInSlot = slot.getStack();
@@ -216,38 +213,38 @@ public abstract class SlotUtil {
 		return changed;
 	}
 
-	private static final int playerInventorySize = 9 * 4;
-	private static final int playerHotbarSize = 9;
+    private static final int PLAYER_INVENTORY_SIZE = 9 * 4;
+    private static final int PLAYER_HOTBAR_SIZE = 9;
 
 	private static boolean isInPlayerInventory(int slotIndex) {
-		return slotIndex < playerInventorySize;
+        return slotIndex < PLAYER_INVENTORY_SIZE;
 	}
 
 	private static boolean isInPlayerHotbar(int slotIndex) {
-		return SlotUtil.isSlotInRange(slotIndex, playerInventorySize - playerHotbarSize, playerInventorySize);
+        return SlotUtil.isSlotInRange(slotIndex, PLAYER_INVENTORY_SIZE - PLAYER_HOTBAR_SIZE, PLAYER_INVENTORY_SIZE);
 	}
 
 	private static boolean shiftToPlayerInventory(List<Slot> inventorySlots, ItemStack stackInSlot) {
-		int playerHotbarStart = playerInventorySize - playerHotbarSize;
+        int playerHotbarStart = PLAYER_INVENTORY_SIZE - PLAYER_HOTBAR_SIZE;
 
 		// try to merge with existing stacks, hotbar first
-		boolean shifted = shiftItemStackToRangeMerge(inventorySlots, stackInSlot, playerHotbarStart, playerHotbarSize);
+        boolean shifted = shiftItemStackToRangeMerge(inventorySlots, stackInSlot, playerHotbarStart, PLAYER_HOTBAR_SIZE);
 		shifted |= shiftItemStackToRangeMerge(inventorySlots, stackInSlot, 0, playerHotbarStart);
 
 		// shift to open slots, hotbar first
-		shifted |= shiftItemStackToRangeOpenSlots(inventorySlots, stackInSlot, playerHotbarStart, playerHotbarSize);
+        shifted |= shiftItemStackToRangeOpenSlots(inventorySlots, stackInSlot, playerHotbarStart, PLAYER_HOTBAR_SIZE);
 		shifted |= shiftItemStackToRangeOpenSlots(inventorySlots, stackInSlot, 0, playerHotbarStart);
 		return shifted;
 	}
 
 	private static boolean shiftToPlayerInventoryNoHotbar(List<Slot> inventorySlots, ItemStack stackInSlot) {
-		int playerHotbarStart = playerInventorySize - playerHotbarSize;
+        int playerHotbarStart = PLAYER_INVENTORY_SIZE - PLAYER_HOTBAR_SIZE;
 		return shiftItemStackToRange(inventorySlots, stackInSlot, 0, playerHotbarStart);
 	}
 
 	private static boolean shiftToHotbar(List<Slot> inventorySlots, ItemStack stackInSlot) {
-		int playerHotbarStart = playerInventorySize - playerHotbarSize;
-		return shiftItemStackToRange(inventorySlots, stackInSlot, playerHotbarStart, playerHotbarSize);
+        int playerHotbarStart = PLAYER_INVENTORY_SIZE - PLAYER_HOTBAR_SIZE;
+        return shiftItemStackToRange(inventorySlots, stackInSlot, playerHotbarStart, PLAYER_HOTBAR_SIZE);
 	}
 
 	private static boolean shiftToMachineInventory(List<Slot> inventorySlots, ItemStack stackToShift, int numSlots) {
@@ -263,7 +260,7 @@ public abstract class SlotUtil {
 
 	// if mergeOnly = true, don't shift into empty slots.
 	private static boolean shiftToMachineInventory(List<Slot> inventorySlots, ItemStack stackToShift, int numSlots, boolean mergeOnly) {
-		for (int machineIndex = playerInventorySize; machineIndex < numSlots; machineIndex++) {
+        for (int machineIndex = PLAYER_INVENTORY_SIZE; machineIndex < numSlots; machineIndex++) {
 			Slot slot = inventorySlots.get(machineIndex);
 			if (mergeOnly && slot.getStack().isEmpty()) {
 				continue;

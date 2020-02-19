@@ -11,33 +11,16 @@
 package forestry.core.utils;
 
 import com.google.common.collect.ForwardingList;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import io.netty.buffer.Unpooled;
+import net.minecraft.nbt.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.ByteNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.nbt.EndNBT;
-import net.minecraft.nbt.FloatNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.LongArrayNBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.nbt.ShortNBT;
-import net.minecraft.nbt.StringNBT;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-
-import io.netty.buffer.Unpooled;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -69,13 +52,6 @@ public abstract class NBTUtilForestry {
 	public static <T extends INBT> NBTList<T> getNBTList(CompoundNBT nbt, String tag, EnumNBTType type) {
 		ListNBT nbtList = nbt.getList(tag, type.ordinal());
 		return new NBTList<>(nbtList);
-	}
-
-	public static long[] getLongArray(INBT nbt) {
-		if (!(nbt instanceof LongArrayNBT)) {
-			return new long[0];
-		}
-		return ((LongArrayNBT) nbt).getAsLongArray();
 	}
 
 	public static class NBTList<T extends INBT> extends ForwardingList<T> {

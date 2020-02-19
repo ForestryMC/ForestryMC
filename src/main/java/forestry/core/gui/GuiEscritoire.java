@@ -10,14 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
 import forestry.core.gui.widgets.ProbeButton;
@@ -27,6 +20,11 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireTextSource;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.Translator;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	private final ItemStack LEVEL_ITEM = new ItemStack(Items.PAPER);
@@ -91,8 +89,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 
 		textLayout.startPage();
 		{
-			GlStateManager.scaled(0.5, 0.5, 0.5);
-			GlStateManager.translated(guiLeft + 170, guiTop + 10, 0.0);
+            RenderSystem.scaled(0.5, 0.5, 0.5);
+            RenderSystem.translated(guiLeft + 170, guiTop + 10, 0.0);
 
 			textLayout.newLine();
 			textLayout.newLine();

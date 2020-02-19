@@ -11,13 +11,9 @@
 package forestry.core;
 
 import com.google.common.collect.LinkedListMultimap;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.modules.ModuleManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -29,27 +25,18 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
-
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.worldgen.WorldFeatureManager;
-import forestry.modules.ModuleManager;
+import java.util.*;
 
 public class TickHandlerCoreServer {
 
-	private final WorldFeatureManager worldGenerator;
 	private final LinkedListMultimap<ResourceLocation, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
 	private final Set<ResourceLocation> checkForRetrogen = new HashSet<>();
 
-	public TickHandlerCoreServer(WorldFeatureManager worldGenerator) {
-		this.worldGenerator = worldGenerator;
-	}
 
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {

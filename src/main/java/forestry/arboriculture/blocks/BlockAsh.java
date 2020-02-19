@@ -5,9 +5,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-
 import net.minecraftforge.common.ToolType;
 
 public class BlockAsh extends Block {
@@ -22,6 +22,11 @@ public class BlockAsh extends Block {
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(AMOUNT);
 	}
+
+    @Override
+    public PushReaction getPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
+    }
 
 	//TODO maybe loot table
 	//	@Override

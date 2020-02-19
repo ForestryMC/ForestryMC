@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.climatology.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.climate.IClimateHousing;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
+import forestry.core.climate.ClimateRoot;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,18 +35,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTransformer;
-import forestry.core.climate.ClimateRoot;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.StringUtil;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
@@ -58,7 +56,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	}
 
 	public static void setPreviewMode(ItemStack itemStack, boolean preview) {
-		itemStack.setTagInfo(PREVIEW_KEY, new ByteNBT((byte) (preview ? 1 : 0)));
+        itemStack.setTagInfo(PREVIEW_KEY, ByteNBT.valueOf((byte) (preview ? 1 : 0)));
 	}
 
 	@Nullable
@@ -95,7 +93,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
-		if (!player.isSneaking()) {
+        if (!player.func_225608_bj_()) {
 			boolean previewModeActive = isPreviewModeActive(itemStack);
 			setPreviewMode(itemStack, !previewModeActive);
 
@@ -105,7 +103,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			}
 		}
 
-		return ActionResult.newResult(ActionResultType.SUCCESS, itemStack);
+        return ActionResult.func_226248_a_(itemStack);
 	}
 
 	@Override
@@ -114,12 +112,12 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 		World world = context.getWorld();
 		BlockPos pos = context.getPos();
 
-		if (player.isSneaking()) {
+        if (player.func_225608_bj_()) {
 			IClimateHousing housing = TileUtil.getTile(world, pos, IClimateHousing.class);
 			if (housing != null) {
 				ItemStack heldItem = player.getHeldItem(context.getHand());
 				heldItem.setTagInfo(POSITION_KEY, NBTUtil.writeBlockPos(pos));
-				heldItem.setTagInfo(DIMENSION_KEY, new IntNBT(world.getDimension().getType().getId()));
+                heldItem.setTagInfo(DIMENSION_KEY, IntNBT.valueOf(world.getDimension().getType().getId()));
 			}
 		}
 		if (!world.isRemote) {

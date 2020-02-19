@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import java.util.EnumSet;
-
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import net.minecraft.entity.player.PlayerEntity;
 
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import java.util.EnumSet;
 
 public class AIButterflyFlee extends AIButterflyMovement {
 
@@ -29,7 +28,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 
 		PlayerEntity player = entity.world.getClosestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
 
-		if (player == null || player.isSneaking()) {
+        if (player == null || player.func_225608_bj_()) {
 			return false;
 		}
 

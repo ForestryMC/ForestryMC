@@ -1,13 +1,12 @@
 package forestry.core.gui.elements;
 
-import java.util.function.Consumer;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.gui.events.GuiEvent;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.utils.SoundUtil;
+
+import java.util.function.Consumer;
 
 public class ButtonElement extends GuiElement {
 	/* Attributes - Final */
@@ -68,12 +67,12 @@ public class ButtonElement extends GuiElement {
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-		GlStateManager.enableAlphaTest();
+        RenderSystem.enableAlphaTest();
 		boolean mouseOver = isMouseOver();
 		int hoverState = getHoverState(mouseOver);
 		Drawable drawable = textures[hoverState];
 		drawable.draw(0, 0);
-		GlStateManager.disableAlphaTest();
+        RenderSystem.disableAlphaTest();
 	}
 
 	@Override

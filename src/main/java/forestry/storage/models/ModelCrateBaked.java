@@ -1,25 +1,24 @@
 package forestry.storage.models;
 
 import com.google.common.collect.ImmutableList;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Vector3f;
-import java.util.List;
-import java.util.Random;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.models.AbstractBakedModel;
+import forestry.core.models.TRSRBakedModel;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.TransformationMatrix;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.client.model.BakedItemModel;
-import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.common.model.TransformationHelper;
 
-import forestry.core.models.AbstractBakedModel;
-import forestry.core.models.TRSRBakedModel;
-import forestry.core.utils.ModelUtil;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class ModelCrateBaked extends AbstractBakedModel {
 	private static final float CONTENT_RENDER_OFFSET_X = 1f/16f; // how far to offset content model from the left edge of the crate model
@@ -77,24 +76,25 @@ public class ModelCrateBaked extends AbstractBakedModel {
 
 		@Override
 		public ContentModel bake() {
-			IBakedModel bakedModel = ModelUtil.getModel(content);
+            IBakedModel bakedModel = ResourceUtil.getModel(content);
 			if (bakedModel != null) {
-				IBakedModel guiModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI).getKey();
+                IBakedModel guiModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI, new MatrixStack());
 				if (bakedModel instanceof BakedItemModel) {
-					TRSRTransformation frontTransform = new TRSRTransformation(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z),
+                    TransformationMatrix frontTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z),
 						null,
 						new Vector3f(0.5F, 0.5F, 1F),
 						null);
 					TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
 					quads.addAll(frontModel.getQuads(null, null, new Random(0L)));
-					TRSRTransformation backTransform = new TRSRTransformation(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
+                    TransformationMatrix backTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
 						null,
 						new Vector3f(0.5F, 0.5F, 1f),
-						TRSRTransformation.quatFromYXZ((float) Math.PI, 0, 0));
+                            TransformationHelper.quatFromXYZ(new Vector3f(0, (float) Math.PI, 0), false)
+                            /*TransformationMatrix.quatFromYXZ((float) Math.PI, 0, 0)*/);//TODO: Test if this works
 					TRSRBakedModel backModel = new TRSRBakedModel(guiModel, backTransform);
 					quads.addAll(backModel.getQuads(null, null, new Random(0L)));
 				} else {
-					TRSRTransformation frontTransform = new TRSRTransformation(
+                    TransformationMatrix frontTransform = new TransformationMatrix(
 						new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, 0),
 						null,
 						new Vector3f(0.5F, 0.5F, CONTENT_RENDER_BLOCK_Z_SCALE),

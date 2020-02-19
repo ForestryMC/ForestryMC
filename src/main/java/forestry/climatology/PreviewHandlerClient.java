@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.climatology;
 
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.api.climate.ClimateCapabilities;
+import forestry.api.climate.IClimateTransformer;
+import forestry.climatology.features.ClimatologyItems;
+import forestry.climatology.items.ItemHabitatScreen;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.TickHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -22,9 +26,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -34,12 +35,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import forestry.api.climate.ClimateCapabilities;
-import forestry.api.climate.IClimateTransformer;
-import forestry.climatology.features.ClimatologyItems;
-import forestry.climatology.items.ItemHabitatScreen;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.TickHelper;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
 public class PreviewHandlerClient {
@@ -153,24 +151,24 @@ public class PreviewHandlerClient {
 			}
 			float partialTicks = event.getPartialTicks();
 			PlayerEntity player = Minecraft.getInstance().player;
-			double playerX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
-			double playerY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
-			double playerZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-			GlStateManager.pushMatrix();
-			GlStateManager.translated(-playerX, -playerY, -playerZ);
-			GlStateManager.enableBlend();
-			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-			GlStateManager.lineWidth(6.0F);
-			GlStateManager.disableDepthTest();
+            double playerX = player.lastTickPosX + (player.getPosX() - player.lastTickPosX) * partialTicks;
+            double playerY = player.lastTickPosY + (player.getPosY() - player.lastTickPosY) * partialTicks;
+            double playerZ = player.lastTickPosZ + (player.getPosZ() - player.lastTickPosZ) * partialTicks;
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(-playerX, -playerY, -playerZ);
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            RenderSystem.lineWidth(6.0F);
+            RenderSystem.disableDepthTest();
 
 			for (BlockPos position : previewPositions) {
 				AxisAlignedBB boundingBox = this.boundingBox.offset(position);
 				//				WorldRenderer.renderFilledBox(boundingBox, 0.75F, 0.5F, 0.0F, 0.45F);
 				//TODO rendering
 			}
-			GlStateManager.enableDepthTest();
-			GlStateManager.disableBlend();
-			GlStateManager.popMatrix();
+            RenderSystem.enableDepthTest();
+            RenderSystem.disableBlend();
+            RenderSystem.popMatrix();
 
 		}
 	}

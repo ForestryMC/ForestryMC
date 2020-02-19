@@ -10,22 +10,20 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.DiggingParticle;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTesr;
+import forestry.core.utils.ResourceUtil;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.particle.DiggingParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase> {
 
@@ -41,11 +39,9 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 	protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-			Minecraft minecraft = Minecraft.getInstance();
-			AtlasTexture textureMapBlocks = minecraft.getTextureMap();
 			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
 			String particleTextureLocation = machinePropertiesTesr.getParticleTextureLocation();
-			TextureAtlasSprite particleTexture = textureMapBlocks.getAtlasSprite(particleTextureLocation);
+            TextureAtlasSprite particleTexture = ResourceUtil.getBlockSprite(new ResourceLocation(particleTextureLocation));
 			fx.sprite = particleTexture;
 		}
 	}

@@ -8,23 +8,9 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.models;
+package forestry.apiculture.proxy;
 
-import net.minecraft.block.Block;
+import forestry.modules.ISidedModuleHandler;
 
-//import forestry.arboriculture.IWoodTyped;
-
-/**
- * Only to storage data's to register a model later.
- */
-public class WoodModelEntry<T extends Block> {//& IWoodTyped> {
-
-	public final T woodTyped;
-	public final boolean withVariants;
-
-	public WoodModelEntry(T woodTyped, boolean withVariants) {
-		this.woodTyped = woodTyped;
-		this.withVariants = withVariants;
-	}
-
+public class ProxyApiculture implements ISidedModuleHandler {
 }

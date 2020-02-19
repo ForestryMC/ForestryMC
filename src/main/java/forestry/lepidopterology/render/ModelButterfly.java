@@ -10,89 +10,92 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import forestry.lepidopterology.entities.EntityButterfly;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.lepidopterology.entities.EntityButterfly;
-
 @OnlyIn(Dist.CLIENT)
-public class ModelButterfly extends EntityModel<EntityButterfly> {
+public class ModelButterfly extends SegmentedModel<EntityButterfly> {
 
-	private final RendererModel wingRight;
-	private final RendererModel eyeRight;
-	private final RendererModel eyeLeft;
-	private final RendererModel wingLeft;
-	private final RendererModel body;
+    private final ModelRenderer wingRight;
+    private final ModelRenderer eyeRight;
+    private final ModelRenderer eyeLeft;
+    private final ModelRenderer wingLeft;
+    private final ModelRenderer body;
+    private final ImmutableList<ModelRenderer> parts;
 
 	private float scale;
 
-	public ModelButterfly() {
-		textureWidth = 64;
-		textureHeight = 32;
+    public ModelButterfly() {
+        textureWidth = 64;
+        textureHeight = 32;
 
-		wingRight = new RendererModel(this, 0, 0);
-		wingRight.addBox(-7F, 0F, -6F, 7, 1, 13);
-		wingRight.setRotationPoint(-0.5F, 0.5F, 0F);
-		wingRight.setTextureSize(64, 32);
-		wingRight.mirror = true;
-		setRotation(wingRight, 0F, 0F, 0F);
-		eyeRight = new RendererModel(this, 40, 9);
-		eyeRight.addBox(0F, 0F, 0F, 1, 1, 1);
-		eyeRight.setRotationPoint(-1.1F, -0.5F, -4.5F);
-		eyeRight.setTextureSize(64, 32);
-		eyeRight.mirror = true;
-		setRotation(eyeRight, 0F, 0F, 0F);
-		eyeLeft = new RendererModel(this, 40, 7);
-		eyeLeft.addBox(0F, 0F, 0F, 1, 1, 1);
-		eyeLeft.setRotationPoint(0.1F, -0.5F, -4.5F);
-		eyeLeft.setTextureSize(64, 32);
-		eyeLeft.mirror = true;
-		setRotation(eyeLeft, 0F, 0F, 0F);
-		wingLeft = new RendererModel(this, 0, 14);
-		wingLeft.addBox(0F, 0F, -6F, 7, 1, 13);
-		wingLeft.setRotationPoint(0.5F, 0.5F, 0F);
-		wingLeft.setTextureSize(64, 32);
-		wingLeft.mirror = true;
-		setRotation(wingLeft, 0F, 0F, 0F);
-		body = new RendererModel(this, 40, 0);
-		body.addBox(0F, 0F, -4F, 1, 1, 6);
-		body.setRotationPoint(0F, 0F, 0F);
-		body.setTextureSize(64, 32);
-		body.mirror = true;
-		setRotation(body, 0F, 0F, 0.7853982F);
-	}
+        wingRight = new ModelRenderer(this, 0, 0);
+        wingRight.addBox(-7F, 0F, -6F, 7, 1, 13);
+        wingRight.setRotationPoint(-0.5F, 0.5F, 0F);
+        wingRight.setTextureSize(64, 32);
+        wingRight.mirror = true;
+
+        setRotation(wingRight, 0F, 0F, 0F);
+        eyeRight = new ModelRenderer(this, 40, 9);
+        eyeRight.addBox(0F, 0F, 0F, 1, 1, 1);
+        eyeRight.setRotationPoint(-1.1F, -0.5F, -4.5F);
+        eyeRight.setTextureSize(64, 32);
+        eyeRight.mirror = true;
+        setRotation(eyeRight, 0F, 0F, 0F);
+        eyeLeft = new ModelRenderer(this, 40, 7);
+        eyeLeft.addBox(0F, 0F, 0F, 1, 1, 1);
+        eyeLeft.setRotationPoint(0.1F, -0.5F, -4.5F);
+        eyeLeft.setTextureSize(64, 32);
+        eyeLeft.mirror = true;
+        setRotation(eyeLeft, 0F, 0F, 0F);
+        wingLeft = new ModelRenderer(this, 0, 14);
+        wingLeft.addBox(0F, 0F, -6F, 7, 1, 13);
+        wingLeft.setRotationPoint(0.5F, 0.5F, 0F);
+        wingLeft.setTextureSize(64, 32);
+        wingLeft.mirror = true;
+        setRotation(wingLeft, 0F, 0F, 0F);
+        body = new ModelRenderer(this, 40, 0);
+        body.addBox(0F, 0F, -4F, 1, 1, 6);
+        body.setRotationPoint(0F, 0F, 0F);
+        body.setTextureSize(64, 32);
+        body.mirror = true;
+        setRotation(body, 0F, 0F, 0.7853982F);
+        parts = ImmutableList.of(wingRight, eyeLeft, eyeRight, wingLeft, body);
+    }
+
+    @Override
+    public Iterable<ModelRenderer> func_225601_a_() {
+        return parts;
+    }
 
 	public void setScale(float scale) {
 		this.scale = scale;
 	}
 
 	@Override
-	public void render(EntityButterfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    public void render(MatrixStack transformation, IVertexBuilder builder, int packedLight, int packetLight2, float ageInTicks, float netHeadYaw, float headPitch, float alpha) {
+        transformation.scale(this.scale, this.scale, this.scale);
+        transformation.translate(0.0F, 20.0f / this.scale * scale, 0.0F);
 
-		//body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing * 0.1F) * 0.15F;
-		//body.rotateAngleY = 0.0F;
-		wingRight.rotateAngleZ = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;
-		wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
+        super.render(transformation, builder, packedLight, packetLight2, ageInTicks, netHeadYaw, headPitch, alpha);
+    }
 
-		GlStateManager.pushMatrix();
-		GlStateManager.scalef(this.scale, this.scale, this.scale);
-		GlStateManager.translatef(0.0F, 20.0f / this.scale * scale, 0.0F);
-		wingRight.render(scale);
-		eyeRight.render(scale);
-		eyeLeft.render(scale);
-		wingLeft.render(scale);
-		body.render(scale);
-		GlStateManager.popMatrix();
-	}
+    @Override
+    public void render(EntityButterfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        //body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing * 0.1F) * 0.15F;
+        //body.rotateAngleY = 0.0F;
+        wingRight.rotateAngleZ = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;
+        wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
+    }
 
-	private static void setRotation(RendererModel model, float x, float y, float z) {
+    private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

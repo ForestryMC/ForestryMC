@@ -11,24 +11,6 @@
 package forestry.arboriculture.models;
 
 import com.google.common.base.Preconditions;
-
-import java.util.Objects;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -38,6 +20,19 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.ResourceUtil;
+import genetics.api.individual.IGenome;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
+
+import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeaves, ModelDecorativeLeaves.Key> {
@@ -91,14 +86,13 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	@Override
 	protected void bakeBlock(BlockDecorativeLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
-		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 
 		IGenome genome = treeDefinition.getGenome();
 		IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
 		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
 		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
-		TextureAtlasSprite leafSprite = map.getAtlasSprite(leafSpriteLocation.toString());
+		TextureAtlasSprite leafSprite = ResourceUtil.getBlockSprite(leafSpriteLocation);
 
 		// Render the plain leaf block.
 		baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
@@ -106,7 +100,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 		// Render overlay for fruit leaves.
 		ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
 		if (fruitSpriteLocation != null) {
-			TextureAtlasSprite fruitSprite = map.getAtlasSprite(fruitSpriteLocation.toString());
+			TextureAtlasSprite fruitSprite = ResourceUtil.getBlockSprite(fruitSpriteLocation);
 			baker.addBlockModel(fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
 		}
 

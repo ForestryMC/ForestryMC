@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,14 +45,19 @@ public class ParticleSmoke extends Particle {
 		return 240 | j << 16;
 	}
 
-	@Override
+	/*@Override
 	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float f6 = (this.age + partialTicks) / this.maxAge;
 		//TODO particles
 		//		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
 		//		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 		//TODO now abstract
-	}
+	}*/
+
+    @Override
+    public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
+
+    }
 
 	@Override
 	public IParticleRenderType getRenderType() {

@@ -10,31 +10,14 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.core.genetics.mutations.EnumMutateChance;
+import forestry.core.items.ItemForestry;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.Translator;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
@@ -44,17 +27,24 @@ import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
-
 import genetics.utils.AlleleUtils;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.*;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.genetics.mutations.EnumMutateChance;
-import forestry.core.items.ItemForestry;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Translator;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -247,7 +237,7 @@ public class ItemResearchNote extends ItemForestry {
 		public ResearchNote(@Nullable CompoundNBT compound) {
 			if (compound != null) {
 				if (compound.contains(NBT_RESEARCHER)) {
-					this.researcher = PlayerUtil.readGameProfile(compound.getCompound(NBT_RESEARCHER));
+                    this.researcher = NBTUtil.readGameProfile(compound.getCompound(NBT_RESEARCHER));
 				} else {
 					this.researcher = null;
 				}
@@ -263,7 +253,7 @@ public class ItemResearchNote extends ItemForestry {
 		public CompoundNBT writeToNBT(CompoundNBT compound) {
 			if (this.researcher != null) {
 				CompoundNBT nbt = new CompoundNBT();
-				PlayerUtil.writeGameProfile(nbt, researcher);
+                NBTUtil.writeGameProfile(nbt, researcher);
 				compound.put(NBT_RESEARCHER, nbt);
 			}
 			compound.putByte(NBT_TYPE, (byte) type.ordinal());
@@ -315,7 +305,7 @@ public class ItemResearchNote extends ItemForestry {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (worldIn.isRemote) {
-			return ActionResult.newResult(ActionResultType.PASS, heldItem);
+            return ActionResult.func_226250_c_(heldItem);
 		}
 
 		ResearchNote note = new ResearchNote(heldItem.getTag());
@@ -325,6 +315,6 @@ public class ItemResearchNote extends ItemForestry {
 			NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);	//TODO not sure this is right
 		}
 
-		return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);
+        return ActionResult.func_226248_a_(heldItem);
 	}
 }

@@ -17,36 +17,32 @@ import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileMill;
-import forestry.factory.tiles.TileBottler;
-import forestry.factory.tiles.TileCarpenter;
-import forestry.factory.tiles.TileCentrifuge;
-import forestry.factory.tiles.TileFermenter;
-import forestry.factory.tiles.TileMillRainmaker;
-import forestry.factory.tiles.TileMoistener;
-import forestry.factory.tiles.TileSqueezer;
-import forestry.factory.tiles.TileStill;
+import forestry.factory.features.FactoryTiles;
+import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
-	BOTTLER(TileBottler.class, "bottler"),
-	CARPENTER(TileCarpenter.class, "carpenter"),
-	CENTRIFUGE(TileCentrifuge.class, "centrifuge"),
-	FERMENTER(TileFermenter.class, "fermenter"),
-	MOISTENER(TileMoistener.class, "moistener"),
-	SQUEEZER(TileSqueezer.class, "squeezer"),
-	STILL(TileStill.class, "still"),
-	RAINMAKER(TileMillRainmaker.class, "rainmaker", Constants.TEXTURE_PATH_BLOCK + "/rainmaker_");
+    BOTTLER(() -> FactoryTiles.BOTTLER, "bottler"),
+    CARPENTER(() -> FactoryTiles.CARPENTER, "carpenter"),
+    CENTRIFUGE(() -> FactoryTiles.CENTRIFUGE, "centrifuge"),
+    FERMENTER(() -> FactoryTiles.FERMENTER, "fermenter"),
+    MOISTENER(() -> FactoryTiles.MOISTENER, "moistener"),
+    SQUEEZER(() -> FactoryTiles.SQUEEZER, "squeezer"),
+    STILL(() -> FactoryTiles.STILL, "still"),
+    RAINMAKER(() -> FactoryTiles.RAINMAKER, "rainmaker", Constants.TEXTURE_PATH_BLOCK + "/rainmaker_");
 
 	public static final BlockTypeFactoryTesr[] VALUES = values();
 
 	private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileBase> BlockTypeFactoryTesr(Class<T> teClass, String name) {
+    <T extends TileBase> BlockTypeFactoryTesr(Supplier<FeatureTileType<? extends T>> teClass, String name) {
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block/" + name + ".0");
 		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCK + "/" + name + "_");
 		this.machineProperties = machineProperties;
 	}
 
-	<T extends TileMill> BlockTypeFactoryTesr(Class<T> teClass, String name, String renderMillTexture) {
+    <T extends TileMill> BlockTypeFactoryTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String renderMillTexture) {
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block/" + name + ".0");
 		Proxies.render.setRenderMill(machineProperties, renderMillTexture);
 		this.machineProperties = machineProperties;

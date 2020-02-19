@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-
-import net.minecraftforge.common.ToolType;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
+import net.minecraft.block.Block;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraftforge.common.ToolType;
 
-//eg    public static final Block OAK_DOOR = register("oak_door", new DoorBlock(Block.Properties.create(Material.WOOD, OAK_PLANKS.materialColor).hardnessAndResistance(3.0F).sound(SoundType.WOOD)));
 public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 
 	private final EnumForestryWoodType woodType;

@@ -2,30 +2,27 @@ package forestry.cultivation.blocks;
 
 import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
-import forestry.cultivation.tiles.TileArboretum;
-import forestry.cultivation.tiles.TileBog;
-import forestry.cultivation.tiles.TileFarmCrops;
-import forestry.cultivation.tiles.TileFarmEnder;
-import forestry.cultivation.tiles.TileFarmGourd;
-import forestry.cultivation.tiles.TileFarmMushroom;
-import forestry.cultivation.tiles.TileFarmNether;
+import forestry.cultivation.features.CultivationTiles;
 import forestry.cultivation.tiles.TilePlanter;
+import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypePlanter implements IBlockTypeCustom {
-	ARBORETUM(TileArboretum.class, "arboretum"),
-	FARM_CROPS(TileFarmCrops.class, "farm_crops"),
-	FARM_MUSHROOM(TileFarmMushroom.class, "farm_mushroom"),
-	FARM_GOURD(TileFarmGourd.class, "farm_gourd"),
-	FARM_NETHER(TileFarmNether.class, "farm_nether"),
-	FARM_ENDER(TileFarmEnder.class, "farm_ender"),
-	PEAT_POG(TileBog.class, "peat_bog"),
+    ARBORETUM(() -> CultivationTiles.ARBORETUM, "arboretum"),
+    FARM_CROPS(() -> CultivationTiles.CROPS, "farm_crops"),
+    FARM_MUSHROOM(() -> CultivationTiles.MUSHROOM, "farm_mushroom"),
+    FARM_GOURD(() -> CultivationTiles.GOURD, "farm_gourd"),
+    FARM_NETHER(() -> CultivationTiles.NETHER, "farm_nether"),
+    FARM_ENDER(() -> CultivationTiles.ENDER, "farm_ender"),
+    PEAT_POG(() -> CultivationTiles.BOG, "peat_bog"),
 
 	//TODO Add ic2 integration
 	/*PLANTATION(TilePlantation.class, "plantation")*/;
 
 	private final IMachineProperties machineProperties;
 
-	BlockTypePlanter(Class<? extends TilePlanter> teClass, String name) {
+    BlockTypePlanter(Supplier<FeatureTileType<? extends TilePlanter>> teClass, String name) {
 		this.machineProperties = new PlanterProperties<>(teClass, name);
 	}
 

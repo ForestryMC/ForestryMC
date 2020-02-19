@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -34,6 +35,11 @@ public class ParticleSnow extends Particle {
 	}
 
 	@Override
+    public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
+
+    }
+
+	/*@Override
 	//TODO particles
 	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		double x = this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX;
@@ -56,7 +62,7 @@ public class ParticleSnow extends Particle {
 		for (int i = 0; i < 5; i++) {
 			renderParticle(buffer, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale, partialTicks);
 		}
-	}
+	}*/
 
 	@Override
 	public IParticleRenderType getRenderType() {

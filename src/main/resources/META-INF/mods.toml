@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[28,)"
+loaderVersion="[31,)"
 issueTrackerURL="https://github.com/ForestryMC/ForestryMC/issues"
 
 [[mods]]
@@ -30,4 +30,11 @@ issueTrackerURL="https://github.com/ForestryMC/ForestryMC/issues"
     mandatory=true
     versionRange="1.0.0"
     ordering="BEFORE"
+    side="BOTH"
+
+[[dependencies.forestry]]
+	modId="forge"
+    mandatory=true
+    versionRange="[31.0.0,)"
+    ordering="NONE"
     side="BOTH"

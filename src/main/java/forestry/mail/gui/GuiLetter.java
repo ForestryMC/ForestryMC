@@ -10,18 +10,6 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.util.ArrayList;
-
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.config.Constants;
@@ -35,8 +23,16 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
 
 public class GuiLetter extends GuiForestry<ContainerLetter> {
 	private final ItemInventoryLetter itemInventory;
@@ -86,36 +82,36 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 	}
 
 	@Override
-	public boolean keyPressed(int eventCharacter, int eventKey, int int3) {
+    public boolean keyPressed(int key, int scanCode, int modifiers) {
 
 		// Set focus or enter text into address
 		if (this.address.isFocused()) {
-			if (eventKey == GLFW.GLFW_KEY_ENTER) {
+            if (scanCode == GLFW.GLFW_KEY_ENTER) {
 				this.address.focused = false;
 			} else {
-				this.address.keyPressed(eventCharacter, eventKey, int3);
+                this.address.keyPressed(key, scanCode, modifiers);
 			}
 			return true;
 		}
 
 		if (this.text.isFocused()) {
-			if (eventKey == GLFW.GLFW_KEY_ENTER) {
+            if (scanCode == GLFW.GLFW_KEY_ENTER) {
 				if (hasShiftDown()) {
 					text.setText(text.getText() + "\n");
 				} else {
 					this.text.focused = false;
 				}
-			} else if (eventKey == GLFW.GLFW_KEY_DOWN) {
+            } else if (scanCode == GLFW.GLFW_KEY_DOWN) {
 				text.advanceLine();
-			} else if (eventKey == GLFW.GLFW_KEY_UP) {
+            } else if (scanCode == GLFW.GLFW_KEY_UP) {
 				text.regressLine();
-			} else if (text.moreLinesAllowed() || eventKey == GLFW.GLFW_KEY_DELETE || eventKey == GLFW.GLFW_KEY_BACKSLASH) {
-				this.text.keyPressed(eventCharacter, eventKey, int3);
+            } else if (text.moreLinesAllowed() || scanCode == GLFW.GLFW_KEY_DELETE || scanCode == GLFW.GLFW_KEY_BACKSLASH) {
+                this.text.keyPressed(key, scanCode, modifiers);
 			}
 			return true;
 		}
 
-		return super.keyPressed(eventCharacter, eventKey, int3);
+        return super.keyPressed(key, scanCode, modifiers);
 	}
 
 	@Override

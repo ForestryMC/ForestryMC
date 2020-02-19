@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -29,9 +30,9 @@ public class ParticleBeeTargetEntity extends Particle {
 		this.origin = origin;
 		this.entity = entity;
 
-		this.motionX = (entity.posX - this.posX) * 0.015;
-		this.motionY = (entity.posY + 1.62F - this.posY) * 0.015;
-		this.motionZ = (entity.posZ - this.posZ) * 0.015;
+        //this.motionX = (entity.posX - this.posX) * 0.015;
+        //this.motionY = (entity.posY + 1.62F - this.posY) * 0.015;
+        //this.motionZ = (entity.posZ - this.posZ) * 0.015;
 
 		particleRed = (color >> 16 & 255) / 255.0F;
 		particleGreen = (color >> 8 & 255) / 255.0F;
@@ -65,11 +66,11 @@ public class ParticleBeeTargetEntity extends Particle {
 
 		if (this.age < this.maxAge * 0.5) {
 			// fly near the entity
-			this.motionX = (entity.posX - this.posX) * 0.09;
+            this.motionX = (entity.getPosX() - this.posX) * 0.09;
 			this.motionX = (this.motionX + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionY = (entity.posY + 1.62F - this.posY) * 0.03;
+            this.motionY = (entity.getPosY() + 1.62F - this.posY) * 0.03;
 			this.motionY = (this.motionY + 0.4 * (-0.5 + rand.nextFloat())) / 4;
-			this.motionZ = (entity.posZ - this.posZ) * 0.09;
+            this.motionZ = (entity.getPosZ() - this.posZ) * 0.09;
 			this.motionZ = (this.motionZ + 0.2 * (-0.5 + rand.nextFloat())) / 2;
 		} else if (this.age < this.maxAge * 0.75) {
 			// venture back
@@ -89,7 +90,16 @@ public class ParticleBeeTargetEntity extends Particle {
 			this.setExpired();
 		}
 	}
-	@Override
+
+    @Override
+    public void renderParticle(IVertexBuilder builder, ActiveRenderInfo renderInfo, float partialTicks) {
+        Vec3d projectedView = renderInfo.getProjectedView();
+        float xPos = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - projectedView.getX());
+        float yPos = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - projectedView.getY());
+        float zPos = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - projectedView.getZ());
+    }
+
+	/*@Override
 	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo info, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		float minU = 0;
 		float maxU = 1;
@@ -116,7 +126,7 @@ public class ParticleBeeTargetEntity extends Particle {
 		buffer.pos(f11 - rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 - rotationYZ * f10 + rotationXZ * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		buffer.pos(f11 + rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 + rotationYZ * f10 + rotationXZ * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
 		buffer.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-	}
+	}*/
 
 	// avoid calculating lighting for bees, it is too much processing
 	@Override

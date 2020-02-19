@@ -12,39 +12,6 @@ package forestry.lepidopterology;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
-
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGenerator;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
-
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -67,10 +34,27 @@ import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterologyClient;
-import forestry.lepidopterology.render.ModelButterflyItem;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
@@ -320,11 +304,5 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		if (event.getEntity() instanceof EntityButterfly) {
 			event.setCanceled(true);
 		}
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onModelBake(ModelBakeEvent event) {
-		ModelButterflyItem.onModelBake(event);
 	}
 }

@@ -10,25 +10,27 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nullable;
-
+import forestry.core.tiles.TileForestry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
-import forestry.core.tiles.TileForestry;
+import javax.annotation.Nullable;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
-	Class<T> getTeClass();
+    TileEntityType<? extends T> getTeType();
 
-	void clientSetup();
+    default void clientSetup() {
+    }
 
-	TileEntity createTileEntity();
+    @Nullable
+    TileEntity createTileEntity();
 
 	void setBlock(Block block);
 

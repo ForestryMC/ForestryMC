@@ -1,4 +1,4 @@
-package forestry.core.utils;
+package forestry.core.utils.datastructures;
 
 import java.util.Objects;
 import java.util.function.Function;

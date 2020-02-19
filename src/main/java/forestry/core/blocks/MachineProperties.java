@@ -1,31 +1,33 @@
 package forestry.core.blocks;
 
-import javax.annotation.Nullable;
-
+import forestry.core.tiles.TileForestry;
+import forestry.modules.features.FeatureTileType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
-import forestry.core.tiles.TileForestry;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 	private final String name;
-	private final Class<T> teClass;
+    private final Supplier<FeatureTileType<? extends T>> teType;
 	private final VoxelShape shape;
 	@Nullable
 	private Block block;
 
-	public MachineProperties(Class<T> teClass, String name) {
-		this(teClass, name, VoxelShapes.fullCube());
-	}
+    public MachineProperties(Supplier<FeatureTileType<? extends T>> teType, String name) {
+        this(teType, name, VoxelShapes.fullCube());
+    }
 
-	public MachineProperties(Class<T> teClass, String name, VoxelShape shape) {
-		this.teClass = teClass;
+    public MachineProperties(Supplier<FeatureTileType<? extends T>> teType, String name, VoxelShape shape) {
+        this.teType = teType;
 		this.name = name;
 		this.shape = shape;
 	}
@@ -47,22 +49,13 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public void clientSetup() {
-
-	}
-
-	@Override
 	public TileEntity createTileEntity() {
-		try {
-			return teClass.getConstructor().newInstance();
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Failed to instantiate tile entity of class " + teClass.getName(), e);
-		}
+        return teType.get().getTileType().create();
 	}
 
 	@Override
-	public Class<T> getTeClass() {
-		return teClass;
+    public TileEntityType<? extends T> getTeType() {
+        return teType.get().getTileType();
 	}
 
 	@Override

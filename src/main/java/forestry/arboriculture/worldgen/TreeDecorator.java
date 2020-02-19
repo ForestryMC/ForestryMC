@@ -100,7 +100,7 @@
 //			return null;
 //		}
 //
-//		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
+//		final BlockPos.Mutable pos = new BlockPos.Mutable(topPos);
 //
 //		BlockState blockState = world.getBlockState(pos);
 //		while (BlockUtil.canReplace(blockState, world, pos)) {

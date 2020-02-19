@@ -10,21 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.components.ComponentKeys;
-
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
@@ -37,6 +22,18 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
 
 public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInventory> {
 	private final IForestrySpeciesRoot<IIndividual> speciesRoot;
@@ -74,7 +71,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		}
 
 		if (individual != null) {
-			RenderHelper.enableGUIStandardItemLighting();
+            //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 			textLayout.startPage();
 
 			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdentifier()), 10);

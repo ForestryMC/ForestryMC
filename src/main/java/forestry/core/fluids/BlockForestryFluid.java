@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import java.awt.Color;
-import java.util.Random;
-
+import forestry.core.entities.ParticleColoredDripParticle;
+import forestry.modules.features.FeatureFluid;
+import forestry.modules.features.FluidProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,10 +29,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-import forestry.core.entities.ParticleColoredDripParticle;
-import forestry.modules.features.FeatureFluid;
-import forestry.modules.features.FluidProperties;
+import java.awt.*;
+import java.util.Random;
 
 public class BlockForestryFluid extends FlowingFluidBlock {
 
@@ -53,7 +53,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState blockState, World world, BlockPos pos, Random rand) {
+    public void randomTick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
 		double d0 = pos.getX();
 		double d1 = pos.getY();
 		double d2 = pos.getZ();
@@ -84,7 +84,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 			}
 		}
 
-		if (rand.nextInt(10) == 0 && Block.func_220055_a(world, pos.down(), Direction.DOWN)) {
+        if (rand.nextInt(10) == 0 && Block.hasEnoughSolidSide(world, pos.down(), Direction.DOWN)) {
 			Material material = world.getBlockState(pos.down(2)).getMaterial();
 
 			if (!material.blocksMovement() && !material.isLiquid()) {
@@ -140,7 +140,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		super.tick(state, world, pos, rand);
 
 		int x = pos.getX();

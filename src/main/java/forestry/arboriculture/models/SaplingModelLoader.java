@@ -1,14 +1,12 @@
 package forestry.arboriculture.models;
 
-import net.minecraft.client.renderer.model.IUnbakedModel;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.IModelLoader;
+import net.minecraftforge.client.model.geometry.IModelGeometry;
 
-import net.minecraftforge.client.model.ICustomModelLoader;
-
-import forestry.core.config.Constants;
-
-public enum SaplingModelLoader implements ICustomModelLoader {
+public enum SaplingModelLoader implements IModelLoader {
 	INSTANCE;
 
 
@@ -18,12 +16,7 @@ public enum SaplingModelLoader implements ICustomModelLoader {
 	}
 
 	@Override
-	public boolean accepts(ResourceLocation modelLocation) {
-		return modelLocation.getNamespace().equals(Constants.MOD_ID) && modelLocation.getPath().equals("block/sapling_ge");
-	}
-
-	@Override
-	public IUnbakedModel loadModel(ResourceLocation modelLocation) throws Exception {
+    public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
 		return new ModelSapling();
 	}
 }

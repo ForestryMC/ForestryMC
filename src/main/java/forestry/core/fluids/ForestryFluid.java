@@ -1,5 +1,6 @@
 package forestry.core.fluids;
 
+import forestry.modules.features.FeatureFluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -9,17 +10,13 @@ import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
-
 import net.minecraftforge.fluids.FluidAttributes;
-
-import forestry.modules.features.FeatureFluid;
 
 public abstract class ForestryFluid extends FlowingFluid {
 	public final boolean flowing;
@@ -78,18 +75,12 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
-	}
-
-	@Override
 	public Item getFilledBucket() {
 		return null;    //TODO fluids
 	}
 
-	//Checks if the fluid can flow in this direction
 	@Override
-	protected boolean func_215665_a(IFluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
+    protected boolean canDisplace(IFluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
 		return false;
 	}
 

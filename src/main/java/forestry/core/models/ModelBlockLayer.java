@@ -1,17 +1,15 @@
 package forestry.core.models;
 
-import javax.annotation.Nullable;
-
+import forestry.core.models.baker.ModelBaker;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.client.model.data.IModelData;
 
-import forestry.core.models.baker.ModelBaker;
+import javax.annotation.Nullable;
 
 public class ModelBlockLayer<K> extends ModelBlockCached<Block, K> {
 
@@ -38,7 +36,7 @@ public class ModelBlockLayer<K> extends ModelBlockCached<Block, K> {
 			TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
 			for (Direction direction : Direction.VALUES) {
 				TextureAtlasSprite texture = provider.getSprite(key, direction, layer);
-				textures[direction.getIndex()] = texture != null ? texture : Minecraft.getInstance().getTextureMap().missingImage;
+                textures[direction.getIndex()] = texture != null ? texture : ResourceUtil.getMissingTexture();
 			}
 			baker.addBlockModel(textures, provider.getColorIndex(key, layer));
 		}

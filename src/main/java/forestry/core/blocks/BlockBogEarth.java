@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.Random;
-
+import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -24,12 +24,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
 
-import forestry.core.config.Constants;
-import forestry.core.features.CoreBlocks;
+import java.util.Random;
 
 /**
  * bog earth, which becomes peat
@@ -61,7 +60,7 @@ public class BlockBogEarth extends Block {
 	}
 
 	@Override
-	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(13) != 0) {
 			return;
 		}

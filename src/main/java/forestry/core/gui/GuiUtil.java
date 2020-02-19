@@ -10,27 +10,23 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
-import net.minecraftforge.fml.client.config.GuiUtils;
-
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiUtil {
@@ -57,13 +53,13 @@ public class GuiUtil {
 		//TODO textcomponent
 		List<String> lines = toolTips.getLines().stream().map(ITextComponent::getFormattedText).collect(Collectors.toList());
 		if (!lines.isEmpty()) {
-			GlStateManager.pushMatrix();
+            RenderSystem.pushMatrix();
 			if (provider == null || provider.isRelativeToGui()) {
-				GlStateManager.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
+                RenderSystem.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
-			MainWindow window = Minecraft.getInstance().mainWindow;    //TODO - more resolution stuff to check
+            MainWindow window = Minecraft.getInstance().getMainWindow();    //TODO - more resolution stuff to check
 			GuiUtils.drawHoveringText(lines, mouseX, mouseY, window.getScaledWidth(), window.getScaledHeight(), -1, gui.getMC().fontRenderer);
-			GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
 		}
 	}
 

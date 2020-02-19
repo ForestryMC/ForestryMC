@@ -10,22 +10,21 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractBakedModel implements IBakedModel {
@@ -59,6 +58,11 @@ public abstract class AbstractBakedModel implements IBakedModel {
 		return true;
 	}
 
+    @Override
+    public boolean func_230044_c_() {
+        return false;//TODO: Find out what this does. Flat gui lightning ?
+    }
+
 	@Override
 	public boolean isBuiltInRenderer() {
 		return false;
@@ -66,7 +70,7 @@ public abstract class AbstractBakedModel implements IBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return Minecraft.getInstance().getTextureMap().missingImage;
+        return ResourceUtil.getMissingTexture();
 	}
 
 	@Override

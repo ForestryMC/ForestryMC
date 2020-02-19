@@ -10,23 +10,24 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import forestry.api.core.IItemSubtype;
-import forestry.apiculture.tiles.TileApiary;
-import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.apiculture.features.ApicultureTiles;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
+import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeApiculture implements IBlockType {
-	APIARY(TileApiary.class, "apiary"),
-	BEE_HOUSE(TileBeeHouse.class, "bee_house");
+    APIARY(() -> ApicultureTiles.APIARY, "apiary"),
+    BEE_HOUSE(() -> ApicultureTiles.BEE_HOUSE, "bee_house");
 
 	public static final BlockTypeApiculture[] VALUES = values();
 
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeApiculture(Class<T> teClass, String name) {
+    <T extends TileForestry> BlockTypeApiculture(Supplier<FeatureTileType<? extends T>> teClass, String name) {
 		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 

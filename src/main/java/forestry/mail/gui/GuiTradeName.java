@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
@@ -23,7 +17,10 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
-
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
@@ -49,19 +46,19 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	}
 
 	@Override
-	public boolean keyPressed(int eventCharacter, int eventKey, int int3) {
+    public boolean keyPressed(int key, int scanCode, int modifiers) {
 
 		// Set focus or enter text into address
 		if (addressNameField.isFocused()) {
-			if (eventKey == GLFW.GLFW_KEY_ENTER) {
+            if (scanCode == GLFW.GLFW_KEY_ENTER) {
 				setAddress();
 			} else {
-				addressNameField.keyPressed(eventCharacter, eventKey, int3);
+                addressNameField.keyPressed(key, scanCode, modifiers);
 			}
 			return true;
 		}
 
-		return super.keyPressed(eventCharacter, eventKey, int3);
+        return super.keyPressed(key, scanCode, modifiers);
 	}
 
 	@Override

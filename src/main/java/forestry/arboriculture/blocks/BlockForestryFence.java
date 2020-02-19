@@ -1,5 +1,8 @@
 package forestry.arboriculture.blocks;
 
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.arboriculture.IWoodTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FenceBlock;
@@ -8,14 +11,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.IWoodTyped;
-
-//eg    public static final Block BIRCH_FENCE = register("birch_fence", new FenceBlock(Block.Properties.create(Material.WOOD, BIRCH_PLANKS.materialColor).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)));
 public class BlockForestryFence extends FenceBlock implements IWoodTyped {
 
 	private final boolean fireproof;

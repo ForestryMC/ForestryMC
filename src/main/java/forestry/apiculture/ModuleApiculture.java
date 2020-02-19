@@ -12,50 +12,6 @@ package forestry.apiculture;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.ChunkGenerator;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.IForgeRegistry;
-
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import genetics.api.GeneticsAPI;
-
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
@@ -75,25 +31,15 @@ import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.flowers.FlowerRegistry;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.genetics.BeeFactory;
-import forestry.apiculture.genetics.BeeMutationFactory;
-import forestry.apiculture.genetics.HiveDrop;
-import forestry.apiculture.genetics.JubilanceFactory;
-import forestry.apiculture.gui.ContainerBeeHousing;
-import forestry.apiculture.gui.ContainerMinecartBeehouse;
-import forestry.apiculture.gui.GuiAlveary;
-import forestry.apiculture.gui.GuiAlvearyHygroregulator;
-import forestry.apiculture.gui.GuiAlvearySieve;
-import forestry.apiculture.gui.GuiAlvearySwarmer;
-import forestry.apiculture.gui.GuiBeeHousing;
-import forestry.apiculture.gui.GuiHabitatLocator;
-import forestry.apiculture.gui.GuiImprinter;
+import forestry.apiculture.genetics.*;
+import forestry.apiculture.gui.*;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.network.PacketRegistryApiculture;
+import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
@@ -104,18 +50,51 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.entities.ParticleSnow;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.network.IPacketRegistry;
-import forestry.core.utils.EntityUtil;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
+import genetics.api.GeneticsAPI;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.*;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.apiculture.description", lootTable = "apiculture")
 public class ModuleApiculture extends BlankForestryModule {
@@ -148,6 +127,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Nullable
 	public static VillagerProfession villagerApiarist;
 
+    public static ProxyApiculture proxy;
+
 	public static HiveRegistry getHiveRegistry() {
 		Preconditions.checkNotNull(hiveRegistry);
 		return hiveRegistry;
@@ -165,6 +146,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	public ModuleApiculture() {
+        proxy = DistExecutor.runForDist(() -> () -> new ProxyApicultureClient(), () -> () -> new ProxyApiculture());
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
@@ -778,15 +760,9 @@ public class ModuleApiculture extends BlankForestryModule {
 		}
 	}
 
-	//TODO - register event handler
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void textureHook(TextureStitchEvent.Pre event) {
-		//TODO textures
-		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
-			//			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
-		}
-		//		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+    @Override
+    public ISidedModuleHandler getModuleHandler() {
+        return proxy;
 	}
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {

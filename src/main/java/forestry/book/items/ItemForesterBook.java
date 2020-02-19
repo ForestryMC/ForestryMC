@@ -1,18 +1,5 @@
 package forestry.book.items;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-
 import forestry.api.book.IForesterBook;
 import forestry.book.BookLoader;
 import forestry.book.gui.GuiForesterBook;
@@ -20,6 +7,17 @@ import forestry.book.gui.GuiForestryBookCategories;
 import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
 import forestry.core.network.PacketBufferForestry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class ItemForesterBook extends ItemWithGui {
 
@@ -33,7 +31,7 @@ public class ItemForesterBook extends ItemWithGui {
 		bookOpenGui(playerIn, playerIn.getHeldItem(handIn));
 
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		return ActionResult.newResult(ActionResultType.SUCCESS, stack);
+        return ActionResult.func_226248_a_(stack);
 	}
 
 	@Override

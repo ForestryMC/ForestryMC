@@ -10,26 +10,23 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import javax.annotation.Nullable;
-
+import forestry.api.core.ItemGroups;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemForestry;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.ItemGroups;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemForestry;
-import forestry.core.utils.ItemStackUtil;
+import javax.annotation.Nullable;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
@@ -56,16 +53,16 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (!worldIn.isRemote) {
 			if (contained.isEmpty() || heldItem.isEmpty()) {
-				return ActionResult.newResult(ActionResultType.PASS, heldItem);
+                return ActionResult.func_226250_c_(heldItem);
 			}
 
 			heldItem.shrink(1);
 
 			ItemStack dropStack = contained.copy();
 			dropStack.setCount(9);
-			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, 40);
-		}
-		return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);
+            ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), 40);
+        }
+        return ActionResult.func_226248_a_(heldItem);
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package forestry.book.gui;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-
+import forestry.api.book.IForesterBook;
+import forestry.book.gui.buttons.GuiButtonBack;
+import forestry.book.gui.buttons.GuiButtonPage;
+import forestry.core.config.Constants;
+import forestry.core.gui.GuiWindow;
+import forestry.core.gui.IGuiSizable;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -11,18 +13,13 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
-import net.minecraftforge.fml.client.config.GuiUtils;
-
-import forestry.api.book.IForesterBook;
-import forestry.book.gui.buttons.GuiButtonBack;
-import forestry.book.gui.buttons.GuiButtonPage;
-import forestry.core.config.Constants;
-import forestry.core.gui.GuiWindow;
-import forestry.core.gui.IGuiSizable;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
@@ -104,7 +101,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 		if (playerInv.getItemStack().isEmpty()) {
 			List<String> tooltip = getTooltip(mouseX, mouseY);
 			if (!tooltip.isEmpty()) {
-				MainWindow mainWindow = getMC().mainWindow;
+                MainWindow mainWindow = getMC().getMainWindow();
 				GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, mainWindow.getScaledWidth(), mainWindow.getScaledHeight(), -1, getMC().fontRenderer);
 			}
 		}

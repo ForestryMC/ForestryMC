@@ -1,13 +1,6 @@
 package forestry.core.gui.elements;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.gui.IGuiElement;
@@ -17,6 +10,11 @@ import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 import forestry.core.utils.SoundUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 public class GeneticAnalyzerTabs extends VerticalLayout {
 	private static final Drawable SELECTED_BACKGROUND = new Drawable(GeneticAnalyzer.TEXTURE, 0, 166, 35, 26);
@@ -122,7 +120,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 			}
 			background.draw(x, 0);
 			if (!displayStack.isEmpty()) {
-				RenderHelper.enableGUIStandardItemLighting();
+                //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 				GlStateManager.enableRescaleNormal();
 				GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, displayStack, x + 9, 5);
 				RenderHelper.disableStandardItemLighting();

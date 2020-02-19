@@ -10,19 +10,22 @@
  ******************************************************************************/
 package forestry.climatology.blocks;
 
-import forestry.climatology.tiles.TileHabitatFormer;
+import forestry.climatology.features.ClimatologyTiles;
 import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
+import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeClimatology implements IBlockTypeCustom {
-	HABITAT_FORMER(TileHabitatFormer.class, "habitat_former");
+    HABITAT_FORMER(() -> ClimatologyTiles.HABITAT_FORMER, "habitat_former");
 
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeClimatology(Class<T> teClass, String name) {
-		this.machineProperties = new MachineProperties<>(teClass, name);
+    <T extends TileForestry> BlockTypeClimatology(Supplier<FeatureTileType<? extends T>> feature, String name) {
+        this.machineProperties = new MachineProperties<>(feature, name);
 	}
 
 	@Override

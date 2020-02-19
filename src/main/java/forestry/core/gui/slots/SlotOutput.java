@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -32,10 +30,9 @@ public class SlotOutput extends SlotWatched {
 		return false;
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
 	@Nullable
-	public TextureAtlasSprite getBackgroundSprite() {
+    @Override
+    public Pair<ResourceLocation, ResourceLocation> func_225517_c_() {
 		return null;
 	}
 }

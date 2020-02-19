@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.worktable.recipes;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -27,13 +28,11 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.NBTUtilForestry;
-import forestry.worktable.inventory.CraftingInventoryForestry;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
 	private CraftingInventoryForestry craftMatrix = new CraftingInventoryForestry();
@@ -180,7 +179,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		ListNBT recipesNbt = new ListNBT();
 		for (IRecipe recipe : recipes) {
 			ResourceLocation recipeKey = recipe.getId();
-			recipesNbt.add(new StringNBT(recipeKey.toString()));
+            recipesNbt.add(StringNBT.valueOf(recipeKey.toString()));
 		}
 		compoundNBT.put("Recipes", recipesNbt);
 

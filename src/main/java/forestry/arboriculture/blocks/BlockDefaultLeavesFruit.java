@@ -1,30 +1,6 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.TreeManager;
@@ -36,6 +12,27 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 import forestry.modules.features.FeatureBlock;
+import genetics.api.individual.IGenome;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -48,12 +45,13 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
-			.tickRandomly());
+                .tickRandomly()
+                .func_226896_b_());
 		this.definition = definition;
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult traceResult) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult traceResult) {
 		ItemStack mainHand = player.getHeldItem(Hand.MAIN_HAND);
 		ItemStack offHand = player.getHeldItem(Hand.OFF_HAND);
 		if (mainHand.isEmpty() && offHand.isEmpty()) {
@@ -61,7 +59,7 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			ITree tree = getTree(world, pos);
 			if (tree == null) {
-				return false;
+                return ActionResultType.FAIL;
 			}
 			IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			NonNullList<ItemStack> products = tree.produceStacks(world, pos, fruitProvider.getRipeningPeriod());
@@ -69,10 +67,10 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			for (ItemStack fruit : products) {
 				ItemHandlerHelper.giveItemToPlayer(player, fruit);
 			}
-			return true;
+            return ActionResultType.SUCCESS;
 		}
 
-		return false;
+        return ActionResultType.PASS;
 	}
 
 	@Override

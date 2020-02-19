@@ -6,15 +6,13 @@
 package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IErrorState {
+public interface IErrorState extends ISpriteRegister {
 
 	short getID();
 
@@ -23,9 +21,6 @@ public interface IErrorState {
 	String getUnlocalizedDescription();
 
 	String getUnlocalizedHelp();
-
-	@OnlyIn(Dist.CLIENT)
-	void registerSprite(TextureStitchEvent.Pre event);
 
 	/**
 	 * Sprite registered to the Gui Texture Map at {@link ITextureManager}

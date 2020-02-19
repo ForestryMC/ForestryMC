@@ -2,17 +2,14 @@ package forestry.modules.features;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IBlockSubtype;
+import forestry.api.core.IItemSubtype;
+import forestry.api.modules.ForestryModule;
+import forestry.api.storage.BackpackManager;
+import forestry.api.storage.EnumBackpackType;
+import forestry.core.config.Constants;
+import forestry.modules.ForestryModuleUids;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.inventory.container.Container;
@@ -22,24 +19,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import net.minecraftforge.fml.network.IContainerFactory;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IBlockSubtype;
-import forestry.api.core.IItemSubtype;
-import forestry.api.modules.ForestryModule;
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.EnumBackpackType;
-import forestry.core.config.Constants;
-import forestry.modules.ForestryModuleUids;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.function.*;
 
 //TODO: Sort Registries and Features
 public class ModFeatureRegistry {
@@ -197,8 +189,8 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public <T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
-			return register(new FeatureTileType<>(moduleID, identifier, constuctor, validBlocks));
+        public <T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constructor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
+            return register(new FeatureTileType<>(moduleID, identifier, constructor, validBlocks));
 		}
 
 		@Override

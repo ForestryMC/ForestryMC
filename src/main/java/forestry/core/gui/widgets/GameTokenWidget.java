@@ -10,19 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
@@ -31,6 +19,15 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireGameToken;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 public class GameTokenWidget extends Widget {
 	private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.BOOK);
@@ -68,10 +65,10 @@ public class GameTokenWidget extends Widget {
 		textureManager.bindTexture(manager.gui.textureFile);
 
 		//TODO not sure if this works...
-		GlStateManager.enableDepthTest();
-		GlStateManager.color3f(colorR, colorG, colorB);
+        RenderSystem.enableDepthTest();
+        RenderSystem.color3f(colorR, colorG, colorB);
 		manager.gui.blit(startX + xPos, startY + yPos, 228, 0, 22, 22);
-		GlStateManager.color3f(1.0f, 1.0f, 1.0f);
+        RenderSystem.color3f(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
 		if (token.isVisible()) {
@@ -80,14 +77,14 @@ public class GameTokenWidget extends Widget {
 
 		GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
 
-		GlStateManager.disableDepthTest();
+        RenderSystem.disableDepthTest();
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
 			//TODO no idea if this is right at all
 			manager.gui.blit(startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
 		}
-		GlStateManager.enableDepthTest();
+        RenderSystem.enableDepthTest();
 	}
 
 	@Override

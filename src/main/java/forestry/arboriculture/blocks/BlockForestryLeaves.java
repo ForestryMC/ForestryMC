@@ -10,32 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemHandlerHelper;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
@@ -49,6 +24,30 @@ import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
@@ -56,7 +55,8 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
-			.tickRandomly());
+                .tickRandomly()
+                .func_226896_b_());
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		super.tick(state, world, pos, rand);
 
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
@@ -81,13 +81,6 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 			tileLeaves.onBlockTick(world, pos, state, rand);
 		}
 	}
-
-	//TODO extended state
-	//	@Override
-	//	public BlockState getExtendedState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		return super.getExtendedState(state, world, pos).with(UnlistedBlockPos.POS, pos)
-	//				.with(UnlistedBlockAccess.BLOCKACCESS, world);
-	//	}
 
 	/* TILE ENTITY */
 	@Override
@@ -127,15 +120,8 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		}
 	}
 
-	/* MODELS */
-	//	@Override
-	//	@OnlyIn(Dist.CLIENT)
-	//	public void registerModel(Item item, IModelManager manager) {
-	//		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("forestry:leaves", "inventory"));
-	//	}
-
 	@Override
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			IButterfly caterpillar = leaves.getCaterpillar();
@@ -148,17 +134,17 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					for (ItemStack fruit : leaves.pickFruit(ItemStack.EMPTY)) {
 						ItemHandlerHelper.giveItemToPlayer(player, fruit);
 					}
-					return true;
+                    return ActionResultType.SUCCESS;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
 				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
-				return true;
+                return ActionResultType.SUCCESS;
 			}
 		}
 
-		return false;
+        return ActionResultType.PASS;
 	}
 
 	/* IGrowable */
@@ -175,7 +161,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	public void grow(World world, Random rand, BlockPos pos, BlockState state) {
+    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			leafTile.addRipeness(0.5f);

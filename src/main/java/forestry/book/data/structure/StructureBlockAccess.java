@@ -12,22 +12,19 @@
  ******************************************************************************/
 package forestry.book.data.structure;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
-import net.minecraft.world.LightType;
-import net.minecraft.world.biome.Biome;
-
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
+
 @OnlyIn(Dist.CLIENT)
-public class StructureBlockAccess implements IEnviromentBlockReader {
+public class StructureBlockAccess implements IBlockReader {
 
 	private final StructureInfo data;
 	private final BlockState[][][] structure;
@@ -48,8 +45,7 @@ public class StructureBlockAccess implements IEnviromentBlockReader {
 	}
 
 	@Override
-	public int getCombinedLight(BlockPos pos, int lightValue) {
-		// full brightness always
+    public int getLightValue(BlockPos pos) {
 		return 15 << 20 | 15 << 4;
 	}
 
@@ -75,17 +71,6 @@ public class StructureBlockAccess implements IEnviromentBlockReader {
 	@Override
 	public IFluidState getFluidState(BlockPos blockPos) {
 		return null;
-	}
-
-	@Override
-	public Biome getBiome(BlockPos pos) {
-		return null;
-	}
-
-	@Override
-	public int getLightFor(LightType lightType, BlockPos blockPos) {
-		// full brightness always
-		return 15 << 20 | 15 << 4;
 	}
 
 }

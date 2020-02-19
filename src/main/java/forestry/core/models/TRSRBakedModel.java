@@ -15,31 +15,25 @@ package forestry.core.models;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.TransformationMatrix;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
-import net.minecraftforge.client.model.pipeline.VertexTransformer;
-import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
+import net.minecraftforge.client.model.pipeline.TRSRTransformer;
+import net.minecraftforge.common.model.TransformationHelper;
+
+import javax.annotation.Nullable;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Random;
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
 @OnlyIn(Dist.CLIENT)
 public class TRSRBakedModel implements IBakedModel {
@@ -57,28 +51,29 @@ public class TRSRBakedModel implements IBakedModel {
 	}
 
 	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
-		this(original, new TRSRTransformation(new Vector3f(x, y, z),
+        this(original, new TransformationMatrix(new Vector3f(x, y, z),
 			null,
 			new Vector3f(scaleX, scaleY, scaleZ),
-			TRSRTransformation.quatFromYXZ(rotY, rotX, rotZ)));
-	}
+                TransformationHelper.quatFromXYZ(new Vector3f(rotX, rotY, rotZ), false)));
+    }
 
-	public TRSRBakedModel(IBakedModel original, TRSRTransformation transform) {
+    public TRSRBakedModel(IBakedModel original, TransformationMatrix transform) {
 		this.original = original;
 
 		ImmutableList.Builder<BakedQuad> builder;
 		builder = ImmutableList.builder();
 
-		transform = TRSRTransformation.blockCenterToCorner(transform);
+        //transform = TransformationHelper.blockCenterToCorner(transform);
 
 		// face quads
 		EnumMap<Direction, ImmutableList<BakedQuad>> faces = Maps.newEnumMap(Direction.class);
 		for (Direction face : Direction.values()) {
 			if (!original.isBuiltInRenderer()) {
 				for (BakedQuad quad : original.getQuads(null, face, new Random())) {
-					Transformer transformer = new Transformer(transform, quad.getFormat());
+                    BakedQuadBuilder quadBuilder = new BakedQuadBuilder();
+                    TRSRTransformer transformer = new TRSRTransformer(quadBuilder, transform);
 					quad.pipe(transformer);
-					builder.add(transformer.build());
+                    builder.add(quadBuilder.build());
 				}
 			}
 			//faces.put(face, builder.build());
@@ -89,9 +84,10 @@ public class TRSRBakedModel implements IBakedModel {
 		//builder = ImmutableList.builder();
 		if (!original.isBuiltInRenderer()) {
 			for (BakedQuad quad : original.getQuads(null, null, new Random())) {
-				Transformer transformer = new Transformer(transform, quad.getFormat());
+                BakedQuadBuilder quadBuilder = new BakedQuadBuilder();
+                TRSRTransformer transformer = new TRSRTransformer(quadBuilder, transform);
 				quad.pipe(transformer);
-				builder.add(transformer.build());
+                builder.add(quadBuilder.build());
 			}
 		}
 
@@ -117,6 +113,11 @@ public class TRSRBakedModel implements IBakedModel {
 		return original.isGui3d();
 	}
 
+    @Override
+    public boolean func_230044_c_() {
+        return false;
+    }
+
 	@Override
 	public boolean isBuiltInRenderer() {
 		return original.isBuiltInRenderer();
@@ -135,47 +136,5 @@ public class TRSRBakedModel implements IBakedModel {
 	@Override
 	public ItemOverrideList getOverrides() {
 		return original.getOverrides();
-	}
-
-	public static class Transformer extends VertexTransformer {
-
-		protected final Matrix4f transformation;
-		protected final Matrix3f normalTransformation;
-
-		public Transformer(TRSRTransformation transformation, VertexFormat format) {
-			super(new UnpackedBakedQuad.Builder(format));
-			// position transform
-			this.transformation = transformation.getMatrixVec();
-			// normal transform
-			this.normalTransformation = new Matrix3f();
-			this.transformation.getRotationScale(this.normalTransformation);
-			this.normalTransformation.invert();
-			this.normalTransformation.transpose();
-		}
-
-		@Override
-		public void put(int element, float... data) {
-			VertexFormatElement.Usage usage = parent.getVertexFormat().getElement(element).getUsage();
-
-			// transform normals and position
-			if (usage == VertexFormatElement.Usage.POSITION && data.length >= 3) {
-				Vector4f vec = new Vector4f(data);
-				vec.setW(1.0f);
-				transformation.transform(vec);
-				data = new float[4];
-				vec.get(data);
-			} else if (usage == VertexFormatElement.Usage.NORMAL && data.length >= 3) {
-				Vector3f vec = new Vector3f(data);
-				normalTransformation.transform(vec);
-				vec.normalize();
-				data = new float[4];
-				vec.get(data);
-			}
-			super.put(element, data);
-		}
-
-		public UnpackedBakedQuad build() {
-			return ((UnpackedBakedQuad.Builder) parent).build();
-		}
 	}
 }

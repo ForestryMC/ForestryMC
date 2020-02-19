@@ -1,16 +1,6 @@
 package forestry.cultivation.gui.widgets;
 
-import javax.annotation.Nullable;
-import java.util.Locale;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.farming.FarmDirection;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ItemStackWidget;
@@ -18,6 +8,14 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 import forestry.cultivation.inventory.InventoryPlanter;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.Locale;
 
 public class GhostItemStackWidget extends ItemStackWidget {
 	private final Slot slot;
@@ -32,9 +30,9 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		if (!slot.getHasStack()) {
 			super.draw(startX, startY);
 		}
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepthTest();
-		GlStateManager.enableBlend();
+        RenderSystem.disableLighting();
+        RenderSystem.disableDepthTest();
+        RenderSystem.enableBlend();
 
 		String directionString = getDirectionString();
 		if (!directionString.isEmpty()) {
@@ -42,15 +40,15 @@ public class GhostItemStackWidget extends ItemStackWidget {
 			fontRenderer.drawStringWithShadow(getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
 
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
 
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
 		manager.gui.blit(xPos + startX, yPos + startY, 206, 0, 16, 16);
 
-		GlStateManager.disableBlend();
-		GlStateManager.enableDepthTest();
-		GlStateManager.enableLighting();
+        RenderSystem.disableBlend();
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableLighting();
 	}
 
 	private String getDirectionString() {

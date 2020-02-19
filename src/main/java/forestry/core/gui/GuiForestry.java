@@ -10,27 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.api.gui.IGuiElement;
@@ -38,11 +18,7 @@ import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.config.Config;
 import forestry.core.gui.elements.Window;
-import forestry.core.gui.ledgers.ClimateLedger;
-import forestry.core.gui.ledgers.HintLedger;
-import forestry.core.gui.ledgers.LedgerManager;
-import forestry.core.gui.ledgers.OwnerLedger;
-import forestry.core.gui.ledgers.PowerLedger;
+import forestry.core.gui.ledgers.*;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
@@ -51,6 +27,22 @@ import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.util.InputMappings;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class GuiForestry<C extends Container> extends ContainerScreen<C> implements IGuiSizable {
 	protected final C container;
@@ -195,16 +187,22 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		//TODO - what to return
 	}
 
-	//TODO hopefully this is correct
 	@Override
-	public boolean keyPressed(int keyPressed_1, int keyPressed_2, int keyPressed_3) {
-		InputMappings.Input mouseKey = InputMappings.getInputByCode(keyPressed_1, keyPressed_2);
-		if (keyPressed_1 == 256 || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
+    public boolean keyPressed(int key, int scanCode, int modifiers) {
+        InputMappings.Input mouseKey = InputMappings.getInputByCode(key, scanCode);
+        if (key == 256 || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
 			this.minecraft.player.closeScreen();
 			return true;
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.KeyEvent(origin, keyPressed_1, keyPressed_2), GuiEventDestination.ALL);
+        window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
+        return true;
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+        window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
 		return true;
 	}
 
@@ -262,18 +260,18 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 		widgetManager.updateWidgets(mouseX - guiLeft, mouseY - guiTop);
 
-		RenderHelper.enableGUIStandardItemLighting();
-		GlStateManager.disableLighting();
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.pushMatrix();
-		{
-			GlStateManager.translatef(guiLeft, guiTop, 0.0F);
+        //RenderHelper.enableGUIStandardItemLighting(); //TODO: Is there an replacement ?
+        RenderSystem.disableLighting();
+        RenderSystem.enableRescaleNormal();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.pushMatrix();
+        {
+            RenderSystem.translatef(guiLeft, guiTop, 0.0F);
 			drawWidgets();
 		}
-		GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
-		GlStateManager.color3f(1.0F, 1.0F, 1.0F);
+        RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		window.draw(mouseX, mouseY);
 
 		bindTexture(textureFile);
@@ -293,7 +291,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(texturePath);
 	}
@@ -304,7 +302,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	//TODO - or it involves the first line, hard to tell which yet
 	public void setZLevel(int level) {
 		this.itemRenderer.zLevel = 9999999999f;    //TODO
-		this.blitOffset = level;
+        this.setBlitOffset(level);
 	}
 
 	@Override
@@ -330,16 +328,6 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	@Override
 	public Minecraft getMC() {
 		return minecraft;
-	}
-
-	//TODO - not needed but I think this is fillGradient(...)
-	//	@Override
-	//	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
-	//		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
-	//	}
-
-	public int getBlitOffset() {
-		return blitOffset;
 	}
 
 	public List<Rectangle2d> getExtraGuiAreas() {

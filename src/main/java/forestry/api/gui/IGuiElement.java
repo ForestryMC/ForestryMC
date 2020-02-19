@@ -5,21 +5,20 @@
  ******************************************************************************/
 package forestry.api.gui;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
-
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.gui.events.GuiElementEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.api.gui.events.GuiEventHandler;
 import forestry.api.gui.events.GuiEventOrigin;
+import forestry.core.utils.Log;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * A <em>gui element</em> is an object having a graphical representation that can be displayed on the screen and that
@@ -298,7 +297,11 @@ public interface IGuiElement {
 	 * Distributes the event to the elements that are defined by the {@link GuiEventDestination}.
 	 */
 	default void postEvent(GuiElementEvent event, GuiEventDestination destination) {
-		destination.sendEvent(this, event);
+        try {
+            destination.sendEvent(this, event);
+        } catch (Exception e) {
+            Log.error("An error has occurred during the posting of the event.", e);
+        }
 	}
 
 	default void postEvent(GuiElementEvent event) {

@@ -1,11 +1,10 @@
 package forestry.core.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -47,9 +46,9 @@ public class Drawable {
 		textureManager.bindTexture(textureLocation);
 
 		// Enable correct lighting.
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		//TODO - it's one of these methods. Work out the border maths..
-		//		GuiUtils.drawContinuousTexturedBox(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
+        AbstractGui.blit(xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+        //AbstractGui.blit(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
 	}
 }

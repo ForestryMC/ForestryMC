@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.Locale;
-import java.util.regex.Pattern;
-
+import forestry.api.gui.style.ITextStyle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Locale;
+import java.util.regex.Pattern;
 public class StringUtil {
 
 	private static final Pattern camelCaseToUnderscores = Pattern.compile("(.)([A-Z])");
@@ -71,4 +72,25 @@ public class StringUtil {
 
 		return lineCount * fontRenderer.FONT_HEIGHT;
 	}
+
+    public static String getFormattedString(ITextStyle style, String rawText) {
+        StringBuilder modifiers = new StringBuilder();
+        if (style.isBold()) {
+            modifiers.append(TextFormatting.BOLD);
+        }
+        if (style.isItalic()) {
+            modifiers.append(TextFormatting.ITALIC);
+        }
+        if (style.isUnderlined()) {
+            modifiers.append(TextFormatting.UNDERLINE);
+        }
+        if (style.isStrikethrough()) {
+            modifiers.append(TextFormatting.STRIKETHROUGH);
+        }
+        if (style.isObfuscated()) {
+            modifiers.append(TextFormatting.OBFUSCATED);
+        }
+        modifiers.append(rawText);
+        return modifiers.toString();
+    }
 }

@@ -14,10 +14,13 @@ import net.minecraft.world.IWorld;
 
 public interface ISaveEventHandler {
 
-	void onWorldLoad(IWorld world);
+    default void onWorldLoad(IWorld world) {
+    }
 
-	void onWorldUnload(IWorld world);
+    default void onWorldUnload(IWorld world) {
+    }
 
-	void onWorldSave(IWorld world);
+    default void onWorldSave(IWorld world) {
+    }
 
 }

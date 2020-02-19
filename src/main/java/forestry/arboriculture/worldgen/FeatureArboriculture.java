@@ -10,26 +10,23 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.arboriculture.blocks.BlockSapling;
+import forestry.arboriculture.tiles.TileTreeContainer;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.VectUtil;
+import forestry.core.worldgen.FeatureBase;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraftforge.event.ForgeEventFactory;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-
-import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.event.ForgeEventFactory;
-
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.arboriculture.blocks.BlockSapling;
-import forestry.arboriculture.tiles.TileTreeContainer;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.TopDownBlockPosComparator;
-import forestry.core.worldgen.FeatureBase;
 
 public abstract class FeatureArboriculture extends FeatureBase {
 
@@ -63,7 +60,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 		if (genPos != null) {
 			clearSaplings(world, genPos);
 			List<BlockPos> branchEnds = new ArrayList<>(generateTrunk(world, rand, wood, genPos));
-			branchEnds.sort(TopDownBlockPosComparator.INSTANCE);
+            branchEnds.sort(VectUtil.TOP_DOWN_COMPARATOR);
 			generateLeaves(world, rand, leaf, branchEnds, genPos);
 			generateExtras(world, rand, genPos);
 			return true;

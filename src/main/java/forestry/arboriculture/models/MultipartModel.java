@@ -28,7 +28,7 @@
 //import net.minecraftforge.api.distmarker.OnlyIn;
 //import net.minecraftforge.client.model.IModel;
 //import net.minecraftforge.common.model.IModelState;
-//import net.minecraftforge.common.model.TRSRTransformation;
+//import net.minecraftforge.common.model.TransformationMatrix;
 //@OnlyIn(Dist.CLIENT)
 //public class MultipartModel implements IModel {
 //
@@ -96,7 +96,7 @@
 //
 //	@Override
 //	public IModelState getDefaultState() {
-//		return TRSRTransformation.identity();
+//		return TransformationMatrix.identity();
 //	}
 //
 //}

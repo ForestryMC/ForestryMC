@@ -10,8 +10,14 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nullable;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.circuits.ISocketable;
+import forestry.core.multiblock.MultiblockTileEntityForestry;
+import forestry.core.multiblock.MultiblockUtil;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -20,6 +26,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -27,15 +34,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.circuits.ISocketable;
-import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.multiblock.MultiblockUtil;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -46,14 +45,14 @@ public abstract class BlockStructure extends BlockForestry {
 	protected long previousMessageTick = 0;
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
-		if (playerIn.isSneaking()) {
-			return false;
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+        if (playerIn.func_225608_bj_()) { //isSneaking
+            return ActionResultType.PASS;
 		}
 
 		MultiblockTileEntityForestry part = TileUtil.getTile(worldIn, pos, MultiblockTileEntityForestry.class);
 		if (part == null) {
-			return false;
+            return ActionResultType.FAIL;
 		}
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
@@ -70,24 +69,24 @@ public abstract class BlockStructure extends BlockForestry {
 							playerIn.sendMessage(new StringTextComponent(validationError));
 							previousMessageTick = tick;
 						}
-						return true;
+                        return ActionResultType.SUCCESS;
 					}
 				}
 			} else {
 				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"));
-				return true;
+                return ActionResultType.SUCCESS;
 			}
 		}
 
 		// Don't open the GUI if the multiblock isn't assembled
 		if (controller == null || !controller.isAssembled()) {
-			return false;
+            return ActionResultType.PASS;
 		}
 
 		if (!worldIn.isRemote) {
 			part.openGui((ServerPlayerEntity) playerIn, pos);    //TODO cast is safe because on server?
 		}
-		return true;
+        return ActionResultType.SUCCESS;
 	}
 
 	@Override

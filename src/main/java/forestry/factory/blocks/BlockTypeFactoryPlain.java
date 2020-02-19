@@ -14,18 +14,20 @@ import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
-import forestry.factory.tiles.TileFabricator;
-import forestry.factory.tiles.TileRaintank;
+import forestry.factory.features.FactoryTiles;
+import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeFactoryPlain implements IBlockType {
-	FABRICATOR(TileFabricator.class, "fabricator"),
-	RAINTANK(TileRaintank.class, "raintank");
+    FABRICATOR(() -> FactoryTiles.FABRICATOR, "fabricator"),
+    RAINTANK(() -> FactoryTiles.RAIN_TANK, "raintank");
 
 	public static final BlockTypeFactoryPlain[] VALUES = values();
 
 	private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeFactoryPlain(Class<T> teClass, String name) {
+    <T extends TileForestry> BlockTypeFactoryPlain(Supplier<FeatureTileType<? extends T>> teClass, String name) {
 		this.machineProperties = new MachineProperties<>(teClass, name);
 	}
 

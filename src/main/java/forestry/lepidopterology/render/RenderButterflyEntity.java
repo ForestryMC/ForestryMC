@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.lepidopterology.entities.EntityButterfly;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import forestry.lepidopterology.entities.EntityButterfly;
 
 public class RenderButterflyEntity extends MobRenderer<EntityButterfly, ModelButterfly> {
 
@@ -25,22 +25,19 @@ public class RenderButterflyEntity extends MobRenderer<EntityButterfly, ModelBut
 		super(manager, new ModelButterfly(), 0.25f);
 	}
 
-	private void renderButterfly(EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
+
+    @Override
+    public void render(EntityButterfly entity, float entityYaw, float partialTickTime, MatrixStack transform, IRenderTypeBuffer buffer, int packedLight) {
 		if (!entity.isRenderable()) {
 			return;
 		}
 
 		entityModel.setScale(entity.getSize());
-		super.doRender(entity, x, y, z, light, partialTickTime);
+        super.render(entity, entityYaw, partialTickTime, transform, buffer, packedLight);
 	}
 
 	@Override
-	public void doRender(EntityButterfly entity, double x, double y, double z, float entityYaw, float partialTickTime) {
-		this.renderButterfly(entity, x, y, z, entityYaw, partialTickTime);
-	}
-
-	@Override
-	protected ResourceLocation getEntityTexture(EntityButterfly entity) {
+    public ResourceLocation getEntityTexture(EntityButterfly entity) {
 		return entity.getTexture();
 	}
 

@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.farming.proxy;
 
-public class ProxyFarming {
+import forestry.modules.ISidedModuleHandler;
 
-	public void initializeModels() {
-	}
+public class ProxyFarming implements ISidedModuleHandler {
 }

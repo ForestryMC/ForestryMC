@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nullable;
-
+import forestry.core.gui.ContainerItemInventory;
+import forestry.core.network.PacketBufferForestry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -20,15 +20,12 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.core.gui.ContainerItemInventory;
-import forestry.core.network.PacketBufferForestry;
+import javax.annotation.Nullable;
 
 public abstract class ItemWithGui extends ItemForestry {
 
@@ -45,7 +42,7 @@ public abstract class ItemWithGui extends ItemForestry {
 			openGui(sPlayer, stack);
 		}
 
-		return ActionResult.newResult(ActionResultType.SUCCESS, stack);
+        return ActionResult.func_226248_a_(stack);
 	}
 
 	protected void openGui(ServerPlayerEntity player, ItemStack stack) {

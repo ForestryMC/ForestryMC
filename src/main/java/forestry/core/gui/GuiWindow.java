@@ -1,17 +1,14 @@
 package forestry.core.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.elements.Window;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -59,10 +56,10 @@ public class GuiWindow extends Screen implements IGuiSizable {
 
 		if (playerInv.getItemStack().isEmpty()) {
 			GuiUtil.drawToolTips(this, buttons, mouseX, mouseY);
-			GlStateManager.pushMatrix();
-			GlStateManager.translatef(guiLeft, guiTop, 0.0F);
+            RenderSystem.pushMatrix();
+            RenderSystem.translatef(guiLeft, guiTop, 0.0F);
 			window.drawTooltip(mouseX, mouseY);
-			GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
 		}
 	}
 
@@ -82,10 +79,8 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	@Override
-	//	protected void keyTyped(char typedChar, int keyCode) {
-	//TODO these are the params I belive
-	public boolean keyPressed(int keyCode, int scanCode, int mods) {    //TODO resolve this method
-		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {    //TODO - keybinds?
+    public boolean keyPressed(int key, int scanCode, int modifiers) {
+        if (key == GLFW.GLFW_KEY_ESCAPE) {    //TODO - keybinds?
 			this.minecraft.displayGuiScreen(null);
 
 			if (this.minecraft.currentScreen == null) {
@@ -93,8 +88,15 @@ public class GuiWindow extends Screen implements IGuiSizable {
 			}
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.KeyEvent(origin, keyCode, scanCode), GuiEventDestination.ALL);
-		return true; //TODO return type
+        window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
+        return true;
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+        window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
+        return true;
 	}
 
 	//TODO onMouseClicked
@@ -120,7 +122,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	public boolean mouseScrolled(double x, double y, double w) {
 		super.mouseScrolled(x, y, w);
 		if (w != 0) {
-			window.postEvent(new GuiEvent.WheelEvent(window, w), GuiEventDestination.ALL);
+            window.postEvent(new GuiEvent.WheelEvent(window, x, y, w), GuiEventDestination.ALL);
 
 		}
 		return true;

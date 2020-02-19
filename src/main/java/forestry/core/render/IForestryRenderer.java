@@ -6,17 +6,39 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Handler for the rendering of a forestry tile entity and its item.
+ *
+ * @param <T> The type of the tile entity
+ */
 public interface IForestryRenderer<T extends TileEntity> {
 
-	void renderTile(T tile, double x, double y, double z, float partialTicks, int destroyStage);
+    @Deprecated
+    default void renderTile(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    }
 
-	void renderItem(ItemStack stack);
+    /**
+     * Renders the given tile entity.
+     *
+     * @param tile The tile entity that this handler renders.
+     */
+    void renderTile(T tile, RenderHelper helper);
 
-	default void bindTexture(ResourceLocation location) {
-		TextureManager texturemanager = Minecraft.getInstance().textureManager;
-		if (texturemanager != null) {
-			texturemanager.bindTexture(location);
-		}
+    /**
+     * Renders the given stack of the tile entity
+     *
+     * @param stack The item stack of the tile entity.
+     */
+    void renderItem(ItemStack stack, RenderHelper helper);
 
-	}
+    default void renderItem(ItemStack stack) {
+    }
+
+    default void bindTexture(ResourceLocation location) {
+        TextureManager texturemanager = Minecraft.getInstance().textureManager;
+        if (texturemanager != null) {
+            texturemanager.bindTexture(location);
+        }
+
+    }
 }

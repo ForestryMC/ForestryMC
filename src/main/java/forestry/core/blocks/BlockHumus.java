@@ -1,13 +1,8 @@
 package forestry.core.blocks;
 
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.LogBlock;
-import net.minecraft.block.SoundType;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.state.IntegerProperty;
@@ -17,13 +12,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.ToolType;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
+import java.util.Random;
 
 public class BlockHumus extends Block {
 	private static final int degradeDelimiter = Config.humusDegradeDelimiter;
@@ -52,7 +46,7 @@ public class BlockHumus extends Block {
 	}
 
 	@Override
-	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(140) != 0) {
 			return;
 		}

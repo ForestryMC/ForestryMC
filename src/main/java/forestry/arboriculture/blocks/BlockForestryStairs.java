@@ -1,5 +1,8 @@
 package forestry.arboriculture.blocks;
 
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.arboriculture.IWoodTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
@@ -7,11 +10,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.IWoodTyped;
-
-//eg    public static final Block OAK_STAIRS = register("oak_stairs", new StairsBlock(OAK_PLANKS.getDefaultState(), Block.Properties.from(OAK_PLANKS)));
 public class BlockForestryStairs extends StairsBlock implements IWoodTyped {
 	private final boolean fireproof;
 	private final IWoodType woodType;

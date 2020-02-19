@@ -1,16 +1,14 @@
 package forestry.core.gui.elements;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.MathHelper;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.gui.IWindowElement;
+import forestry.api.gui.events.GuiEvent;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.widgets.IScrollable;
+import net.minecraft.util.math.MathHelper;
+
+import javax.annotation.Nullable;
 
 public class ScrollBarElement extends ElementGroup {
 	/* Attributes - Final */
@@ -31,6 +29,7 @@ public class ScrollBarElement extends ElementGroup {
 	private int maxValue;
 	private int step;
 	private boolean initialised = false;
+    private boolean mouseDown = false;
 
 	public ScrollBarElement(int xPos, int yPos, int width, int height, Drawable sliderTexture) {
 		super(xPos, yPos, width, height);
@@ -40,22 +39,51 @@ public class ScrollBarElement extends ElementGroup {
 		wasClicked = false;
 		visible = true;
 		slider = interactionField.drawable(sliderTexture);
+        addListeners();
 	}
 
-	public ScrollBarElement(int xPos, int yPos, Drawable backgroundTexture, boolean hasBorder, Drawable sliderTexture) {
-		super(xPos, yPos, backgroundTexture.uWidth, backgroundTexture.vHeight);
+    public ScrollBarElement(int xPos, int yPos, Drawable backgroundTexture, boolean hasBorder, Drawable sliderTexture) {
+        super(xPos, yPos, backgroundTexture.uWidth, backgroundTexture.vHeight);
 
-		int offset = hasBorder ? 1 : 0;
+        int offset = hasBorder ? 1 : 0;
 
-		interactionField = new ElementGroup(offset, offset, hasBorder ? width - 2 : width, hasBorder ? height - 2 : height);
-		isScrolling = false;
-		wasClicked = false;
-		visible = true;
+        interactionField = new ElementGroup(offset, offset, hasBorder ? width - 2 : width, hasBorder ? height - 2 : height);
+        isScrolling = false;
+        wasClicked = false;
+        visible = true;
 
-		drawable(backgroundTexture);
-		slider = interactionField.drawable(sliderTexture);
-		add(interactionField);
-	}
+        drawable(backgroundTexture);
+        slider = interactionField.drawable(sliderTexture);
+        add(interactionField);
+        addListeners();
+    }
+
+    protected void addListeners() {
+        slider.addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+            int pos = (int) (vertical ? event.getX() - interactionField.getX() : event.getY() - interactionField.getY());
+            isScrolling = true;
+            initialMouseClick = vertical ? pos - slider.getX() : pos - slider.getY();
+        });
+        slider.addSelfEventHandler(GuiEvent.UpEvent.class, event -> {
+            isScrolling = false;
+        });
+        addEventHandler(GuiEvent.DownEvent.class, event -> {
+            mouseDown = true;
+        });
+        addEventHandler(GuiEvent.UpEvent.class, event -> {
+            mouseDown = false;
+        });
+        addEventHandler(GuiEvent.WheelEvent.class, event -> {
+            if (listener == null || listener.isFocused((int) event.getX(), (int) event.getY()) || isMouseOver(event.getX(), event.getY())) {
+                double wheel = event.getDWheel();
+                if (wheel > 0) {
+                    setValue(currentValue - step);
+                } else if (wheel < 0) {
+                    setValue(currentValue + step);
+                }
+            }
+        });
+    }
 
 	public ScrollBarElement setVertical() {
 		this.vertical = true;
@@ -121,14 +149,12 @@ public class ScrollBarElement extends ElementGroup {
 		IWindowElement window = getWindow();
 		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		super.drawElement(mouseX, mouseY);
 	}
 
 	private void updateSlider(int mouseX, int mouseY) {
-		boolean mouseDown = Minecraft.getInstance().mouseHelper.isLeftDown();
-
-		if (listener == null || listener.isFocused(mouseX, mouseY)) {
+		/*if (listener == null || listener.isFocused(mouseX, mouseY)) {
 			//TODO - scrolling?? I think this maybe needs an event now?
 			int wheel = 0; //Mouse.getDWheel();
 			if (wheel > 0) {
@@ -138,7 +164,7 @@ public class ScrollBarElement extends ElementGroup {
 				setValue(currentValue + step);
 				return;
 			}
-		}
+		}*/
 
 		//The position of the mouse relative to the position of the widget
 		int pos = vertical ? mouseX - interactionField.getX() : mouseY - interactionField.getY();
@@ -148,9 +174,9 @@ public class ScrollBarElement extends ElementGroup {
 		}
 
 		//Not clicked and scrolling -> stop scrolling
-		if (!mouseDown && isScrolling) {
+		/*if (!mouseDown && isScrolling) {
 			this.isScrolling = false;
-		}
+		}*/
 
 		//Clicked on the slider and scrolling
 		if (this.isScrolling) {
@@ -164,12 +190,12 @@ public class ScrollBarElement extends ElementGroup {
 			} else {
 				setValue((int) (minValue + (float) step * Math.round(value)));
 			}
-		} else if (slider.isMouseOver()) { //clicked on the slider
+        } /*else if (slider.isMouseOver()) { //clicked on the slider
 			if (mouseDown) {
 				isScrolling = true;
 				initialMouseClick = vertical ? pos - slider.getX() : pos - slider.getY();
 			}
-		} else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
+		} */ else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
 			int range = maxValue - minValue;
 			float value = ((float) pos - (vertical ? slider.width : slider.height) / 2.0F) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
 			value *= (float) range;

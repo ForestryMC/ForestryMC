@@ -10,8 +10,18 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nullable;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ISpriteRegistry;
+import forestry.core.circuits.ISocketable;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.render.MachineParticleCallback;
+import forestry.core.render.ParticleHelper;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -27,11 +37,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -39,24 +45,11 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.FluidUtil;
 
-import forestry.api.core.ISpriteRegister;
-import forestry.core.circuits.ISocketable;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.ParticleHelper;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
 
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements ISpriteRegister {
 	/**
@@ -167,26 +160,25 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	/* INTERACTION */
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
-		if (tile != null) {
-			if (TileUtil.isUsableByPlayer(playerIn, tile)) {
+        if (tile == null) {
+            return ActionResultType.FAIL;
+        }
+        if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
-				ItemStack heldItem = playerIn.getHeldItem(hand);
-				if (!playerIn.isSneaking()) {
-					if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
-						return true;
-					}
-				}
+            if (!playerIn.func_225608_bj_()) { //isSneaking
+                if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
+                    return ActionResultType.SUCCESS;
+                }
+            }
 
-				if (!worldIn.isRemote) {
-					ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO - hopefully safe because it's the server?
-					tile.openGui(sPlayer, pos);
-				}
-				return true;
-			}
-		}
-		return false;
+            if (!worldIn.isRemote) {
+                ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO - hopefully safe because it's the server?
+                tile.openGui(sPlayer, pos);
+            }
+        }
+        return ActionResultType.SUCCESS;
 	}
 
 	@Nullable
@@ -274,10 +266,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void registerSprites(TextureStitchEvent.Pre event) {
+    public void registerSprites(ISpriteRegistry registry) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-			event.addSprite(new ResourceLocation(((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation()));
+            registry.addSprite(new ResourceLocation(((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation()));
 		}
 	}
 }

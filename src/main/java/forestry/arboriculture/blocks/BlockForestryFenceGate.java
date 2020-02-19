@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.arboriculture.IWoodTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FenceGateBlock;
@@ -19,11 +22,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.IWoodTyped;
-
-//   public static final Block SPRUCE_FENCE_GATE = register("spruce_fence_gate", new FenceGateBlock(Block.Properties.create(Material.WOOD, SPRUCE_PLANKS.materialColor).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)));
 public class BlockForestryFenceGate extends FenceGateBlock implements IWoodTyped {
 
 	private final boolean fireproof;

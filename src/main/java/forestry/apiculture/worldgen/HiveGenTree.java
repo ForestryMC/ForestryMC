@@ -46,7 +46,7 @@ public class HiveGenTree extends HiveGen {
 		}
 
 		// get to the bottom of the leaves
-		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos);
+        final BlockPos.Mutable pos = new BlockPos.Mutable(topPos);
 		do {
 			pos.move(Direction.DOWN);
 			blockState = world.getBlockState(pos);

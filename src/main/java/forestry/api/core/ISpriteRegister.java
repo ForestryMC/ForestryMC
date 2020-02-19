@@ -8,11 +8,10 @@ package forestry.api.core;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 
 public interface ISpriteRegister {
 
 	@OnlyIn(Dist.CLIENT)
-	void registerSprites(TextureStitchEvent.Pre event);
+    void registerSprites(ISpriteRegistry registry);
 
 }

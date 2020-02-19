@@ -10,21 +10,28 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.net.URL;
-import java.util.Collection;
-import java.util.Set;
-
-import net.minecraft.client.Minecraft;
+import forestry.api.core.ISpriteRegistry;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.apiculture.ApiaristAI;
+import forestry.apiculture.ModuleApiculture;
+import forestry.core.config.Constants;
+import forestry.core.models.ModelBlockCached;
+import forestry.core.render.TextureManagerForestry;
+import forestry.modules.ModuleManager;
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -37,19 +44,9 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.apiculture.ApiaristAI;
-import forestry.apiculture.ModuleApiculture;
-import forestry.core.config.Constants;
-import forestry.core.errors.ErrorStateRegistry;
-import forestry.core.models.ModelBlockCached;
-import forestry.core.render.TextureManagerForestry;
-import forestry.modules.ModuleManager;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Set;
 
 public class EventHandlerCore {
 
@@ -64,7 +61,7 @@ public class EventHandlerCore {
 		}
 
 		for (IPickupHandler handler : ModuleManager.pickupHandlers) {
-			if (handler.onItemPickup(event.getEntityPlayer(), event.getItem())) {
+            if (handler.onItemPickup(event.getPlayer(), event.getItem())) {
 				event.setResult(Event.Result.ALLOW);
 				return;
 			}
@@ -125,13 +122,10 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		if (event.getMap() == TextureManagerForestry.getInstance().getTextureMap()) {
-			ErrorStateRegistry.initSprites(event);
-			TextureManagerForestry.initDefaultSprites(event);
-		} else if (event.getMap() == Minecraft.getInstance().getTextureMap()) {
-			TextureManagerForestry.getInstance().registerSprites(event);
-		}
-		ModelBlockCached.clear();
+        if (event.getMap().getBasePath() == PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+            TextureManagerForestry.getInstance().registerSprites(ISpriteRegistry.fromEvent(event));
+            ModelBlockCached.clear();
+        }
 	}
 
 	@SubscribeEvent

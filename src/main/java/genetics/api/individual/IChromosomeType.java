@@ -3,6 +3,7 @@ package genetics.api.individual;
 import genetics.api.alleles.IAllele;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * Interface to be implemented by the enums representing the various chromosomes.
@@ -22,6 +23,8 @@ public interface IChromosomeType {
 	 * @return Short identifier.
 	 */
 	String getName();
+
+    ITextComponent getDisplayName();
 
 	/**
 	 * @return The definition that contains this type in the {@link IKaryotype}.

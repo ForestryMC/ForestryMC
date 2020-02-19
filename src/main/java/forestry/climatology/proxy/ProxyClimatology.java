@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.climatology.proxy;
 
-public class ProxyClimatology {
+import forestry.modules.ISidedModuleHandler;
+
+public class ProxyClimatology implements ISidedModuleHandler {
 
 	public void preInit() {
 	}

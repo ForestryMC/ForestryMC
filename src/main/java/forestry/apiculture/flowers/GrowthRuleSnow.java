@@ -10,21 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import java.util.Collection;
-
+import forestry.api.genetics.flowers.IFlowerGrowthHelper;
+import forestry.api.genetics.flowers.IFlowerGrowthRule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-import forestry.api.genetics.flowers.IFlowerGrowthHelper;
-import forestry.api.genetics.flowers.IFlowerGrowthRule;
+import java.util.Collection;
 
 public class GrowthRuleSnow implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+    public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		return isValidSpot(world, pos) &&
 			helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
 	}

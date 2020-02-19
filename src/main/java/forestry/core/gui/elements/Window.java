@@ -1,28 +1,6 @@
 package forestry.core.gui.elements;
 
-import javax.annotation.Nullable;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.Collectors;
-
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.text.ITextComponent;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraftforge.fml.client.config.GuiUtils;
-
 import forestry.api.gui.IElementGroup;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.IWindowElement;
@@ -31,7 +9,19 @@ import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.layouts.ElementGroup;
+import net.minecraft.client.MainWindow;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -246,7 +236,7 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
 			//TODO test
-			MainWindow window = Minecraft.getInstance().mainWindow;
+            MainWindow window = Minecraft.getInstance().getMainWindow();
 			GuiUtils.drawHoveringText(strings, mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
 			GlStateManager.popMatrix();
 		}

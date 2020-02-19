@@ -10,20 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import javax.annotation.Nullable;
-
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraftforge.fml.loading.FMLEnvironment;
-
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.render.TextureManagerForestry;
+import javax.annotation.Nullable;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 
@@ -36,9 +30,6 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
-		if (FMLEnvironment.dist == Dist.CLIENT) {
-			setBackgroundLocation(TextureManagerForestry.getInstance().getGuiTextureMap());
-		}
 		this.stackLimit = -1;
 	}
 

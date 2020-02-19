@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.core.*;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.apiculture.gui.ContainerHabitatLocator;
+import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
+import forestry.core.items.ItemWithGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,20 +28,11 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ItemGroups;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.apiculture.gui.ContainerHabitatLocator;
-import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
-import forestry.apiculture.render.TextureHabitatLocator;
-import forestry.core.items.ItemWithGui;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private static final String iconName = "forestry:items/biomefinder";
@@ -66,8 +58,8 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	/* SPRITES */
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void registerSprites(TextureStitchEvent.Pre event) {
-		TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
+    public void registerSprites(ISpriteRegistry registry) {
+        //TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
 		//		Minecraft.getInstance().getTextureMap().setTextureEntry(texture);
 		//TODO textures
 	}

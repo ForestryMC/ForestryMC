@@ -11,25 +11,29 @@
 package forestry.core.blocks;
 
 import forestry.core.config.Constants;
+import forestry.core.features.CoreTiles;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
+import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeCoreTesr implements IBlockTypeTesr {
-	ANALYZER(createAnalyzerProperties(TileAnalyzer.class, "analyzer")),
-	ESCRITOIRE(createEscritoireProperties(TileEscritoire.class, "escritoire"));
+    ANALYZER(createAnalyzerProperties(() -> CoreTiles.ANALYZER, "analyzer")),
+    ESCRITOIRE(createEscritoireProperties(() -> CoreTiles.ESCRITOIRE, "escritoire"));
 
 	public static final BlockTypeCoreTesr[] VALUES = values();
 
 	private final IMachinePropertiesTesr machineProperties;
 
-	private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Class<? extends TileAnalyzer> teClass, String name) {
+    private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Supplier<FeatureTileType<? extends TileAnalyzer>> teClass, String name) {
 		MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block/" + name + ".0");
 		Proxies.render.setRendererAnalyzer(machineProperties);    //TODO distexecutor
 		return machineProperties;
 	}
 
-	private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(Class<? extends TileEscritoire> teClass, String name) {
+    private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(Supplier<FeatureTileType<? extends TileEscritoire>> teClass, String name) {
 		MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block/" + name + ".0");
 		Proxies.render.setRenderEscritoire(machineProperties); //TODO distexecutor
 		return machineProperties;

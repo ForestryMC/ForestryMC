@@ -1,25 +1,7 @@
 package forestry.core.gui.elements;
 
 import com.google.common.base.MoreObjects;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.IGuiElement;
 import forestry.api.gui.ITooltipSupplier;
@@ -27,8 +9,21 @@ import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.ElementEvent;
 import forestry.api.gui.events.GuiElementEvent;
 import forestry.api.gui.events.GuiEventDestination;
-
+import net.minecraft.client.MainWindow;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiElement extends AbstractGui implements IGuiElement {
@@ -120,13 +115,13 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 		if (!isVisible()) {
 			return;
 		}
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef(getX(), getY(), 0.0F);
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef(getX(), getY(), 0.0F);
 		if (isCropped()) {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			Minecraft mc = Minecraft.getInstance();
 			//TODO - resolution stuff again, check gameSettings.guiscale too
-			MainWindow window = mc.mainWindow;
+            MainWindow window = mc.getMainWindow();
 			double scaleWidth = ((double) window.getWidth()) / window.getScaledWidth();
 			double scaleHeight = ((double) window.getHeight()) / window.getScaledHeight();
 			IGuiElement cropRelative = cropElement != null ? cropElement : this;
@@ -141,7 +136,7 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		}
 
-		GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 	}
 
 	public void drawElement(int mouseX, int mouseY) {

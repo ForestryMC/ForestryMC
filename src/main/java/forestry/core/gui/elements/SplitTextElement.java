@@ -1,18 +1,16 @@
 package forestry.core.gui.elements;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.api.gui.GuiElementAlignment;
+import forestry.api.gui.ITextElement;
+import forestry.api.gui.style.ITextStyle;
+import forestry.core.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.ITextElement;
-import forestry.api.gui.style.ITextStyle;
-import forestry.core.utils.GuiElementUtil;
 
 import static forestry.core.gui.elements.LabelElement.FONT_RENDERER;
 
@@ -29,7 +27,7 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 		setAlign(align);
 		boolean uni = FONT_RENDERER.getBidiFlag();
 		FONT_RENDERER.setBidiFlag(style.isUnicode());
-		this.lines.addAll(FONT_RENDERER.listFormattedStringToWidth(GuiElementUtil.getFormattedString(style, rawText), width));
+        this.lines.addAll(FONT_RENDERER.listFormattedStringToWidth(StringUtil.getFormattedString(style, rawText), width));
 		FONT_RENDERER.setBidiFlag(uni);
 		setHeight(lines.size() * FONT_RENDERER.FONT_HEIGHT);
 	}
@@ -45,7 +43,7 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 		boolean uni = FONT_RENDERER.getBidiFlag();
 		FONT_RENDERER.setBidiFlag(style.isUnicode());
 		lines.clear();
-		lines.addAll(FONT_RENDERER.listFormattedStringToWidth(GuiElementUtil.getFormattedString(style, rawText), width));
+        lines.addAll(FONT_RENDERER.listFormattedStringToWidth(StringUtil.getFormattedString(style, rawText), width));
 		FONT_RENDERER.setBidiFlag(uni);
 		setHeight(lines.size() * FONT_RENDERER.FONT_HEIGHT);
 		return this;
@@ -68,6 +66,6 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 			posY += FONT_RENDERER.FONT_HEIGHT;
 		}
 		FONT_RENDERER.setBidiFlag(unicode);
-		GlStateManager.color3f(1.0f, 1.0f, 1.0f);
+        RenderSystem.color3f(1.0f, 1.0f, 1.0f);
 	}
 }

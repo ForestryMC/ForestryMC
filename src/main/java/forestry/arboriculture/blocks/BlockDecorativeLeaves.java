@@ -1,17 +1,17 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -19,24 +19,18 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IShearable;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 //TODO shearing
 public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShearable {
@@ -45,7 +39,8 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	public BlockDecorativeLeaves(TreeDefinition definition) {
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
-			.sound(SoundType.PLANT));
+				.sound(SoundType.PLANT)
+				.func_226896_b_());
 		//		this.setCreativeTab(Tabs.tabArboriculture);
 		//		this.setLightOpacity(1);	//TODO block stuff);
 		this.definition = definition;
@@ -82,16 +77,6 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	@Override
 	public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return false;
-	}
-
-	@Override
-	public boolean doesSideBlockRendering(BlockState state, IEnviromentBlockReader world, BlockPos pos, Direction face) {
-		return (Proxies.render.fancyGraphicsEnabled() || world.getBlockState(pos.offset(face)).getBlock() != this) && Block.shouldSideBeRendered(state, world, pos, face);
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT_MIPPED; // fruit overlays require CUTOUT_MIPPED, even in Fast graphics
 	}
 
 	@Override

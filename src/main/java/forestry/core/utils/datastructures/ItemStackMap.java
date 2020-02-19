@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.utils.ItemStackUtil;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagCollection;
+import net.minecraft.util.ResourceLocation;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 	private static final long serialVersionUID = -8511966739130702305L;
@@ -28,12 +31,19 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 			return a.getItem() == b;
 		}
 		if (b instanceof String) {
-			//TODO - tags
-			//			for (ItemStack stack : OreDictionary.getOres((String) b)) {
-			//				if (areEqual(a, stack)) {
-			//					return true;
-			//				}
-			//			}
+            return areEqual(a, new ResourceLocation((String) b));
+        }
+        if (b instanceof ResourceLocation) {
+            TagCollection<Item> collection = ItemTags.getCollection();
+            Tag<Item> itemTag = collection.get((ResourceLocation) b);
+            if (itemTag == null) {
+                return false;
+            }
+            for (Item item : itemTag.getAllElements()) {
+                if (areEqual(a, item)) {
+                    return true;
+                }
+            }
 			return false;
 		}
 		return false;
@@ -41,7 +51,7 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 
 	@Override
 	protected boolean isValidKey(Object key) {
-		return key instanceof ItemStack || key instanceof Item || key instanceof String;
+        return key instanceof ItemStack || key instanceof Item || key instanceof String || key instanceof ResourceLocation;
 	}
 
 	@Override

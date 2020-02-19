@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
@@ -20,6 +17,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.Vec3d;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 public class AIAvoidPlayers extends Goal {
 
@@ -59,7 +59,7 @@ public class AIAvoidPlayers extends Goal {
 		}
 
 		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-			new Vec3d(player.posX, player.posY, player.posZ));
+                new Vec3d(player.getPosition()));
 
 		if (randomTarget == null) {
 			return false;
@@ -69,7 +69,7 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		path = pathNavigator.func_225466_a(randomTarget.x, randomTarget.y, randomTarget.z, 0);    //TODO what does the 4th param mean?
+        path = pathNavigator.getPathToPos(randomTarget.x, randomTarget.y, randomTarget.z, 0);    //TODO what does the 4th param mean?
 		return path != null;
 	}
 

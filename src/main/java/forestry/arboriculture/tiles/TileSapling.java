@@ -10,21 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import javax.annotation.Nonnull;
-import java.util.Random;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
-import net.minecraftforge.client.model.data.ModelProperty;
-
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -34,9 +19,23 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.arboriculture.worldgen.FeatureArboriculture;
 import forestry.core.worldgen.FeatureBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class TileSapling extends TileTreeContainer {
-	public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<IAlleleTreeSpecies>();
+	public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<>();
 
 	private int timesTicked = 0;
 
@@ -114,7 +113,7 @@ public class TileSapling extends TileTreeContainer {
 		if (generator instanceof FeatureBase) {
 			generated = ((FeatureBase) generator).place(world, random, getPos(), false);
 		} else {
-			generated = generator.place(world, world.getChunkProvider().getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
+			generated = generator.place(world, ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
 		}
 
 		if (generated) {

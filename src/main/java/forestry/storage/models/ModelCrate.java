@@ -1,40 +1,28 @@
 package forestry.storage.models;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Function;
-
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.ISprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
-
+import com.mojang.datafixers.util.Pair;
 import forestry.core.config.Constants;
 import forestry.core.models.ClientManager;
-import forestry.core.models.DefaultTextureGetter;
-import forestry.core.utils.ModelUtil;
+import forestry.core.utils.ResourceUtil;
 import forestry.storage.items.ItemCrated;
+import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.IModelConfiguration;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
+import net.minecraftforge.client.model.geometry.IModelGeometry;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Function;
 
 //TODO this is pretty broken probably
 @OnlyIn(Dist.CLIENT)
-public class ModelCrate implements IUnbakedModel {
+public class ModelCrate implements IModelGeometry<ModelCrate> {
 
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
@@ -53,40 +41,39 @@ public class ModelCrate implements IUnbakedModel {
 	}
 
 	@Nullable
-	private IBakedModel getCustomContentModel(ModelBakery bakery, ISprite sprite) {
+    private IBakedModel getCustomContentModel(ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform transform) {
 		ResourceLocation registryName = crated.getRegistryName();
 		if (registryName == null) {
 			return null;
 		}
 		String containedName = registryName.getPath().replace("crated.", "");
 		ResourceLocation location = new ResourceLocation(CUSTOM_CRATES + containedName);
-		IModel model;
-		if (!ModelUtil.resourceExists(new ResourceLocation(location.getNamespace(), "models/" + location.getPath() + ".json"))) {
+        IUnbakedModel model;
+        if (!ResourceUtil.resourceExists(new ResourceLocation(location.getNamespace(), "models/" + location.getPath() + ".json"))) {
 			return null;
 		}
 		try {
-			model = ModelLoaderRegistry.getModel(location);
+            model = ModelLoader.instance().getUnbakedModel(location);
 		} catch (Exception e) {
 			return null;
 		}
-		return model.bake(bakery, DefaultTextureGetter.INSTANCE, sprite, DefaultVertexFormats.ITEM);
-	}
+        return model.func_225613_a_(bakery, spriteGetter, transform, location);
+    }
 
-	@Nullable
-	@Override
-	public IBakedModel bake(ModelBakery bakery, Function spriteGetter, ISprite sprite, VertexFormat format) {
+    @Override
+    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform transform, ItemOverrideList overrides, ResourceLocation modelLocation) {
 		if (bakedQuads.isEmpty()) {
-			IBakedModel bakedModel = bakery.getBakedModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), sprite, DefaultTextureGetter.INSTANCE, DefaultVertexFormats.ITEM);
+            IBakedModel bakedModel = bakery.getBakedModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), transform, spriteGetter);
 			if (bakedModel != null) {
 				//Set the crate color index to 100
 				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L))) {
-					bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat()));
+                    bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.func_187508_a(), quad.shouldApplyDiffuseLighting()));
 				}
 			}
 		}
 		IBakedModel model;
 		List<BakedQuad> quads = new LinkedList<>(bakedQuads);
-		IBakedModel contentModel = getCustomContentModel(bakery, sprite);
+        IBakedModel contentModel = getCustomContentModel(bakery, spriteGetter, transform);
 		if (contentModel == null) {
 			model = new ModelCrateBaked(quads, contained);
 		} else {
@@ -96,14 +83,8 @@ public class ModelCrate implements IUnbakedModel {
 		return new PerspectiveMapWrapper(model, ClientManager.getInstance().getDefaultItemState());
 	}
 
-	//TODO for these
-	@Override
-	public Collection<ResourceLocation> getDependencies() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
-		return Collections.emptyList();
-	}
+    @Override
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        return Collections.emptyList();
+    }
 }

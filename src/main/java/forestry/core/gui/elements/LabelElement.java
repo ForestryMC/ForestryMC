@@ -1,18 +1,16 @@
 package forestry.core.gui.elements;
 
 import com.google.common.collect.ImmutableMap;
+import forestry.api.gui.GuiElementAlignment;
+import forestry.api.gui.ILabelElement;
+import forestry.api.gui.style.ITextStyle;
+import forestry.core.utils.StringUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.ILabelElement;
-import forestry.api.gui.style.ITextStyle;
-import forestry.core.utils.GuiElementUtil;
 
 public class LabelElement extends GuiElement implements ILabelElement {
 	/* Constants */
@@ -34,7 +32,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 		textLength = width < 0;
 		this.style = style;
 		this.rawText = text;
-		this.text = GuiElementUtil.getFormattedString(style, text);
+        this.text = StringUtil.getFormattedString(style, text);
 		setAlign(align);
 		if (textLength) {
 			//TODO - think this is bidi flag
@@ -48,7 +46,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 	@Override
 	public ILabelElement setStyle(ITextStyle style) {
 		this.style = style;
-		this.text = GuiElementUtil.getFormattedString(style, rawText);
+        this.text = StringUtil.getFormattedString(style, rawText);
 		if (textLength) {
 			//TODO - think this is bidi now
 			boolean uni = FONT_RENDERER.getBidiFlag();
@@ -72,7 +70,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 	@Override
 	public ILabelElement setText(String text) {
 		this.rawText = text;
-		this.text = GuiElementUtil.getFormattedString(style, text);
+        this.text = StringUtil.getFormattedString(style, text);
 		if (textLength) {
 			//TODO think this is bidi now
 			boolean uni = FONT_RENDERER.getBidiFlag();
@@ -103,7 +101,11 @@ public class LabelElement extends GuiElement implements ILabelElement {
 		//TODO think this is bidi now
 		boolean unicode = FONT_RENDERER.getBidiFlag();
 		FONT_RENDERER.setBidiFlag(style.isUnicode());
-		FONT_RENDERER.drawString(text, 0, 0, style.getColor());
+        if (style.isShadow()) {
+            FONT_RENDERER.drawStringWithShadow(text, 0, 0, style.getColor());
+        } else {
+            FONT_RENDERER.drawString(text, 0, 0, style.getColor());
+        }
 		FONT_RENDERER.setBidiFlag(unicode);
 	}
 }

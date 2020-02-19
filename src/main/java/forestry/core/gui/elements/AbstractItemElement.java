@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui.elements;
 
-import java.util.List;
-
+import com.mojang.blaze3d.platform.GlStateManager;
+import forestry.core.gui.GuiUtil;
+import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.GuiUtil;
-import forestry.core.utils.ItemTooltipUtil;
+import java.util.List;
 
 public abstract class AbstractItemElement extends GuiElement {
 
@@ -39,7 +36,7 @@ public abstract class AbstractItemElement extends GuiElement {
 	public void drawElement(int mouseX, int mouseY) {
 		ItemStack itemStack = getStack();
 		if (!itemStack.isEmpty()) {
-			RenderHelper.enableGUIStandardItemLighting();
+            //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 			GlStateManager.enableRescaleNormal();
 			GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, itemStack, 0, 0);
 			RenderHelper.disableStandardItemLighting();

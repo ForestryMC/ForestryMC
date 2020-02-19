@@ -11,24 +11,13 @@
 package forestry.apiculture.blocks;
 
 import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nullable;
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.TorchBlock;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.RenderUtil;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -37,24 +26,23 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class BlockCandle extends TorchBlock implements IColoredBlock {
 
@@ -129,7 +117,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	//	}
 
 	@Override
-	public int getLightValue(BlockState state, IEnviromentBlockReader world, BlockPos pos) {
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
 		TileCandle candle = TileUtil.getTile(world, pos, TileCandle.class);
 		if (candle != null && candle.isLit()) {
 			return 14;
@@ -138,14 +126,14 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle == null) {
-			return false;
+            return ActionResultType.FAIL;
 		}
 		final boolean isLit = tileCandle.isLit();
 
-		boolean flag = false;
+        ActionResultType flag = ActionResultType.PASS;
 		boolean toggleLitState = true;
 
 		ItemStack heldItem = playerIn.getHeldItem(hand);
@@ -171,28 +159,24 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 				} else {
 					toggleLitState = true;
 				}
-				flag = true;
+                flag = ActionResultType.SUCCESS;
 			} else {
 				boolean dyed = tryDye(heldItem, isLit, tileCandle);
 				if (dyed) {
-					//TODO
-					Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-					//					worldIn.markForRerender(pos);
+                    RenderUtil.markForUpdate(pos);
 					toggleLitState = false;
-					flag = true;
+                    flag = ActionResultType.SUCCESS;
 				}
 			}
 		}
 
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
-			//TODO
-			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-			//			worldIn.markForRerender(pos);
+            RenderUtil.markForUpdate(pos);
 			worldIn.getProfiler().startSection("checkLight");
 			worldIn.getChunkProvider().getLightManager().checkBlock(pos);
 			worldIn.getProfiler().endSection();
-			flag = true;
+            flag = ActionResultType.SUCCESS;
 		}
 		return flag;
 	}

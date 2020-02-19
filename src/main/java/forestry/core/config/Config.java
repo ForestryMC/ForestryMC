@@ -12,28 +12,6 @@ package forestry.core.config;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-
 import forestry.Forestry;
 import forestry.apiculture.HiveConfig;
 import forestry.core.config.forge_old.Property;
@@ -42,6 +20,12 @@ import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.factory.ModuleFactory;
 import forestry.mail.gui.GuiMailboxInfo;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+
+import javax.annotation.Nullable;
+import java.io.*;
+import java.util.*;
 
 public class Config {
 
@@ -207,14 +191,14 @@ public class Config {
 		loadHints();
 	}
 
-	@SubscribeEvent    //TODO - register event handler
+	/*@SubscribeEvent    //TODO - config
 	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (!event.getModID().equals(Constants.MOD_ID)) {
 			return;
 		}
 		loadConfigCommon(FMLEnvironment.dist);    //TODO - correct?
 		loadConfigFluids();
-	}
+	}*/
 
 	private static void loadConfigCommon(Dist side) {
 

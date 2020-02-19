@@ -11,28 +11,6 @@
 package forestry.farming;
 
 
-import java.io.File;
-import java.util.List;
-
-import net.minecraft.block.BeetrootBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -46,24 +24,28 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.features.CoreItems;
 import forestry.farming.blocks.BlockMushroom;
-import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.features.FarmingBlocks;
 import forestry.farming.features.FarmingContainers;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.ForestryFarmIdentifier;
-import forestry.farming.logic.farmables.FarmableAgingCrop;
-import forestry.farming.logic.farmables.FarmableChorus;
-import forestry.farming.logic.farmables.FarmableGE;
-import forestry.farming.logic.farmables.FarmableGourd;
-import forestry.farming.logic.farmables.FarmableStacked;
-import forestry.farming.logic.farmables.FarmableVanillaMushroom;
-import forestry.farming.logic.farmables.FarmableVanillaSapling;
+import forestry.farming.logic.farmables.*;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
+import net.minecraft.block.*;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.io.File;
+import java.util.List;
 
 //import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
@@ -131,8 +113,6 @@ public class ModuleFarming extends BlankForestryModule {
 		//TODO - tags
 		registry.registerFertilizer(CoreItems.FERTILIZER_COMPOUND.stack(), 500);
 
-		proxy.initializeModels();
-
 		// Layouts
 		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed", CircuitSocketType.FARM);
 		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
@@ -169,21 +149,8 @@ public class ModuleFarming extends BlankForestryModule {
 		//TODO - tag
 	}
 
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
-		if (event.getMap() != Minecraft.getInstance().getTextureMap()) {
-			return;
-		}
-		EnumFarmBlockType.gatherSprites(event);
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void handleTextureStitchPost(TextureStitchEvent.Post event) {
-		if (event.getMap() != Minecraft.getInstance().getTextureMap()) {
-			return;
-		}
-		EnumFarmBlockType.fillSprites(event);
+    @Override
+    public ISidedModuleHandler getModuleHandler() {
+        return proxy;
 	}
 }

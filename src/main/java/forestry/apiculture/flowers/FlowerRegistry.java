@@ -13,27 +13,6 @@ package forestry.apiculture.flowers;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
-
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -45,9 +24,21 @@ import forestry.api.genetics.flowers.IFlowerAcceptableRule;
 import forestry.api.genetics.flowers.IFlowerGrowthHelper;
 import forestry.api.genetics.flowers.IFlowerGrowthRule;
 import forestry.api.genetics.flowers.IFlowerRegistry;
-import forestry.core.utils.BlockStateSet;
 import forestry.core.utils.VectUtil;
-import forestry.core.utils.WeightedCollection;
+import forestry.core.utils.datastructures.BlockStateSet;
+import forestry.core.utils.datastructures.WeightedCollection;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelper {
 	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules;
@@ -136,7 +127,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public Iterator<BlockPos.MutableBlockPos> getAreaIterator(IBeeHousing beeHousing, IBee bee) {
+    public Iterator<BlockPos.Mutable> getAreaIterator(IBeeHousing beeHousing, IBee bee) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
 		Vec3i area = getArea(bee.getGenome(), beeModifier);
 		BlockPos minPos = beeHousing.getCoordinates().add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
@@ -172,7 +163,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		List<IFlowerGrowthRule> growthRules = this.growthRules.get(flowerType);
 		Collections.shuffle(growthRules);
 		for (IFlowerGrowthRule rule : growthRules) {
-			if (rule.growFlower(this, flowerType, world, pos, potentialFlowers)) {
+            if (rule.growFlower(this, flowerType, (ServerWorld) world, pos, potentialFlowers)) {
 				return true;
 			}
 		}

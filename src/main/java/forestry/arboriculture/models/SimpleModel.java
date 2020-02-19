@@ -37,7 +37,7 @@
 //import net.minecraftforge.client.model.ModelLoaderRegistry;
 //import net.minecraftforge.client.model.MultiModelState;
 //import net.minecraftforge.common.model.IModelState;
-//import net.minecraftforge.common.model.TRSRTransformation;
+//import net.minecraftforge.common.model.TransformationMatrix;
 //@OnlyIn(Dist.CLIENT)
 //public class SimpleModel implements IModel {
 //
@@ -94,7 +94,7 @@
 //		if (this.variants.size() == 0) {
 //			IModel missing = ModelLoaderRegistry.getMissingModel();
 //			modelsBuilder.add(missing);
-//			builder.add(Pair.of(missing, TRSRTransformation.identity()));
+//			builder.add(Pair.of(missing, TransformationMatrix.identity()));
 //		}
 //
 //		defaultState = new MultiModelState(builder.build());
@@ -169,7 +169,7 @@
 //		if (models.isEmpty()) {
 //			IModel missing = ModelLoaderRegistry.getMissingModel();
 //			models.add(missing);
-//			builder.add(Pair.of(missing, TRSRTransformation.identity()));
+//			builder.add(Pair.of(missing, TransformationMatrix.identity()));
 //		}
 //		return new SimpleModel(locations, models, variants, new MultiModelState(builder.build()));
 //	}

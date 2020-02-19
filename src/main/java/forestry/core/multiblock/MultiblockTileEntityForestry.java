@@ -10,23 +10,7 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.fml.network.NetworkHooks;
-
 import forestry.api.core.ILocatable;
 import forestry.api.multiblock.IMultiblockLogic;
 import forestry.api.multiblock.MultiblockTileEntityBase;
@@ -34,7 +18,20 @@ import forestry.core.config.Constants;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.utils.PlayerUtil;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
+
+import javax.annotation.Nullable;
 
 public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, INamedContainerProvider {
 	@Nullable
@@ -57,7 +54,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 		if (data.contains("owner")) {
 			CompoundNBT ownerNbt = data.getCompound("owner");
-			this.owner = PlayerUtil.readGameProfile(ownerNbt);
+            this.owner = NBTUtil.readGameProfile(ownerNbt);
 		}
 
 		getInternalInventory().read(data);
@@ -69,7 +66,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 		if (this.owner != null) {
 			CompoundNBT nbt = new CompoundNBT();
-			PlayerUtil.writeGameProfile(nbt, owner);
+            NBTUtil.writeGameProfile(nbt, owner);
 			data.put("owner", nbt);
 		}
 

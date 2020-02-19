@@ -11,18 +11,23 @@
 package forestry.core.utils;
 
 import com.google.common.collect.AbstractIterator;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.Random;
-
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Random;
+
 public final class VectUtil {
+    public static final Comparator<BlockPos> TOP_DOWN_COMPARATOR = (BlockPos a, BlockPos b) -> Integer.compare(b.getY(), a.getY());
+
+    private VectUtil() {
+    }
+
 	public static BlockPos getRandomPositionInArea(Random random, Vec3i area) {
 		int x = random.nextInt(area.getX());
 		int y = random.nextInt(area.getY());
@@ -60,14 +65,14 @@ public final class VectUtil {
 		}
 	}
 
-	public static Iterator<BlockPos.MutableBlockPos> getAllInBoxFromCenterMutable(World world, final BlockPos from, final BlockPos center, final BlockPos to) {
+    public static Iterator<BlockPos.Mutable> getAllInBoxFromCenterMutable(World world, final BlockPos from, final BlockPos center, final BlockPos to) {
 		final BlockPos minPos = new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()));
 		final BlockPos maxPos = new BlockPos(Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()));
 
 		return new MutableBlockPosSpiralIterator(world, center, maxPos, minPos);
 	}
 
-	private static class MutableBlockPosSpiralIterator extends AbstractIterator<BlockPos.MutableBlockPos> {
+    private static class MutableBlockPosSpiralIterator extends AbstractIterator<BlockPos.Mutable> {
 		private final World world;
 		private final BlockPos center;
 		private final BlockPos maxPos;
@@ -77,7 +82,7 @@ public final class VectUtil {
 		private int direction;
 
 		@Nullable
-		private BlockPos.MutableBlockPos theBlockPos;
+        private BlockPos.Mutable theBlockPos;
 
 		public MutableBlockPosSpiralIterator(World world, BlockPos center, BlockPos maxPos, BlockPos minPos) {
 			this.world = world;
@@ -93,8 +98,8 @@ public final class VectUtil {
 
 		@Override
 		@Nullable
-		protected BlockPos.MutableBlockPos computeNext() {
-			BlockPos.MutableBlockPos pos;
+        protected BlockPos.Mutable computeNext() {
+            BlockPos.Mutable pos;
 
 			do {
 				pos = nextPos();
@@ -105,9 +110,9 @@ public final class VectUtil {
 		}
 
 		@Nullable
-		protected BlockPos.MutableBlockPos nextPos() {
+        protected BlockPos.Mutable nextPos() {
 			if (this.theBlockPos == null) {
-				this.theBlockPos = new BlockPos.MutableBlockPos(center.getX(), maxPos.getY(), center.getZ());
+                this.theBlockPos = new BlockPos.Mutable(center.getX(), maxPos.getY(), center.getZ());
 				int y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.theBlockPos).getY());
 				this.theBlockPos.setY(y);
 				return this.theBlockPos;

@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,26 +19,19 @@ import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.util.math.*;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
+import java.util.List;
 
-//import net.minecraft.block.BlockStaticLiquid;
 
 public abstract class BlockUtil {
 
-	private static final int slabWoodId = -Integer.MAX_VALUE;//TODO - tagsOreDictionary.getOreID("slabWood");
 
 	public static List<ItemStack> getBlockDrops(IWorld world, BlockPos posBlock) {
 		BlockState blockState = world.getBlockState(posBlock);
@@ -236,7 +228,7 @@ public abstract class BlockUtil {
 
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
 		BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
-		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
+        final BlockPos.Mutable newPos = new BlockPos.Mutable(pos);
 		BlockState blockState = world.getBlockState(newPos);
 
 		while (!BlockUtil.canReplace(blockState, world, newPos)) {
@@ -252,7 +244,7 @@ public abstract class BlockUtil {
 
 	@Nullable
 	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
-		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos(pos);
+        final BlockPos.Mutable newPos = new BlockPos.Mutable(pos);
 
 		BlockState blockState = world.getBlockState(newPos);
 		while (canReplace(blockState, world, newPos)) {
@@ -265,46 +257,6 @@ public abstract class BlockUtil {
 		return newPos.up();
 	}
 
-	/**
-	 * Copied from {@link Block#shouldSideBeRendered}
-	 */
-	public static boolean shouldSideBeRendered(BlockState blockState, IEnviromentBlockReader blockAccess, BlockPos pos, Direction side) {
-		AxisAlignedBB axisalignedbb = blockState.getShape(blockAccess, pos).getBoundingBox();
-
-		switch (side) {
-			case DOWN:
-				if (axisalignedbb.minY > 0.0D) {
-					return true;
-				}
-				break;
-			case UP:
-				if (axisalignedbb.maxY < 1.0D) {
-					return true;
-				}
-				break;
-			case NORTH:
-				if (axisalignedbb.minZ > 0.0D) {
-					return true;
-				}
-				break;
-			case SOUTH:
-				if (axisalignedbb.maxZ < 1.0D) {
-					return true;
-				}
-				break;
-			case WEST:
-				if (axisalignedbb.minX > 0.0D) {
-					return true;
-				}
-				break;
-			case EAST:
-				if (axisalignedbb.maxX < 1.0D) {
-					return true;
-				}
-		}
-
-		return !blockAccess.getBlockState(pos.offset(side)).doesSideBlockRendering(blockAccess, pos.offset(side), side.getOpposite());
-	}
 
 	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, BlockState blockState) {
 		if (world.setBlockState(pos, blockState)) {

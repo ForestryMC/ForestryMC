@@ -11,35 +11,6 @@
 package forestry.storage.items;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.items.IItemHandler;
-
 import forestry.api.core.ItemGroups;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -56,6 +27,28 @@ import forestry.core.tiles.TileUtil;
 import forestry.storage.BackpackMode;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.inventory.ItemInventoryBackpack;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.items.IItemHandler;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final IBackpackDefinition definition;
@@ -89,12 +82,12 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if (!playerIn.isSneaking()) {
+        if (!playerIn.func_225608_bj_()) {
 			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
 			ItemStack heldItem = playerIn.getHeldItem(handIn);
 			switchMode(heldItem);
-			return ActionResult.newResult(ActionResultType.SUCCESS, heldItem);
+            return ActionResult.func_226248_a_(heldItem);
 		}
 	}
 
@@ -110,7 +103,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
 		// We only do this when shift is clicked
-		if (player.isSneaking()) {
+        if (player.func_225608_bj_()) {
 			ItemStack heldItem = player.getHeldItem(context.getHand());
 			return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
 		}

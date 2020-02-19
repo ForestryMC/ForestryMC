@@ -5,10 +5,11 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
+import forestry.api.core.INbtWritable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
-import forestry.api.core.INbtWritable;
+import javax.annotation.Nullable;
 
 /**
  * Multiblock Logic implements the basic logic for IMultiblockComponent tile entities.
@@ -27,6 +28,7 @@ public interface IMultiblockLogic extends INbtWritable {
 	/**
 	 * @return the multiblock controller for this logic
 	 */
+    @Nullable
 	IMultiblockController getController();
 
 	/* Updating and Synchronization */

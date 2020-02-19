@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ItemTooltipUtil;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class ItemStackWidgetBase extends Widget {
 	public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {
@@ -31,7 +29,7 @@ public abstract class ItemStackWidgetBase extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack itemStack = getItemStack();
 		if (!itemStack.isEmpty()) {
-			RenderHelper.enableGUIStandardItemLighting();
+            //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 			GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
 			RenderHelper.disableStandardItemLighting();
 		}

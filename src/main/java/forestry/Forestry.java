@@ -11,48 +11,10 @@
 package forestry;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.io.File;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
+import forestry.book.gui.chromsomes.categories.EntriesCategory;
 import forestry.core.EventHandlerCore;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
@@ -61,31 +23,48 @@ import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
-import forestry.core.data.ForestryBlockModelProvider;
-import forestry.core.data.ForestryBlockStateProvider;
-import forestry.core.data.ForestryBlockTagsProvider;
-import forestry.core.data.ForestryItemModelProvider;
-import forestry.core.data.ForestryItemTagsProvider;
-import forestry.core.data.ForestryLootTableProvider;
-import forestry.core.data.WoodBlockModelProvider;
-import forestry.core.data.WoodBlockStateProvider;
-import forestry.core.data.WoodItemModelProvider;
+import forestry.core.data.*;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
-import forestry.core.proxy.Proxies;
-import forestry.core.proxy.ProxyClient;
-import forestry.core.proxy.ProxyCommon;
-import forestry.core.proxy.ProxyRender;
-import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.proxy.*;
 import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.core.render.ColourProperties;
+import forestry.core.render.ForestrySpriteUploader;
 import forestry.core.render.TextureManagerForestry;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.*;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nullable;
+import java.io.File;
 //import forestry.plugins.ForestryCompatPlugins;
 //import forestry.plugins.PluginBuildCraftFuels;
 //import forestry.plugins.PluginIC2;
@@ -182,7 +161,7 @@ public class Forestry {
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 		MinecraftForge.EVENT_BUS.register(Config.class);
 		Proxies.common.registerEventHandlers();
-		Proxies.common.registerTickHandlers(null);
+        Proxies.common.registerTickHandlers();
 		configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
@@ -245,12 +224,17 @@ public class Forestry {
 	private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
 		modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
 			Minecraft minecraft = Minecraft.getInstance();
+            ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
+            TextureManagerForestry.getInstance().init(spriteUploader);
 			IResourceManager resourceManager = minecraft.getResourceManager();
 			if(resourceManager instanceof IReloadableResourceManager) {
 				IReloadableResourceManager reloadableManager = (IReloadableResourceManager) resourceManager;
 				reloadableManager.addReloadListener(ColourProperties.INSTANCE);
-				reloadableManager.addReloadListener(TextureManagerForestry.getInstance());
+                reloadableManager.addReloadListener(spriteUploader);
 			}
+            EntriesCategory.registerSearchTree();
+            ModuleManager.getModuleHandler().runClientInit();
+
 		});
 		modEventBus.addListener(EventPriority.NORMAL, false, FMLLoadCompleteEvent.class, fmlLoadCompleteEvent -> networkHandler.clientPacketHandler());
 	}
@@ -286,13 +270,6 @@ public class Forestry {
 			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
 		}
 
-	}
-
-
-	//client
-	@SubscribeEvent
-	public void registerModels(ModelBakeEvent event) {
-		Proxies.render.registerModels(event);
 	}
 
 	//split

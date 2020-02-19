@@ -10,40 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Stack;
-
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.classification.IClassification;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.components.ComponentKeys;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.EnumTolerance;
@@ -57,6 +24,29 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.classification.IClassification;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
@@ -309,7 +299,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.drawLine(Translator.translateToLocal("for.gui.beealyzer.mutations") + ":", COLUMN_0);
 		textLayout.newLine();
 
-		RenderHelper.enableGUIStandardItemLighting();
+		//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 
 		IGenome genome = individual.getGenome();
 		IForestrySpeciesRoot<IIndividual> speciesRoot = (IForestrySpeciesRoot) individual.getRoot();
@@ -405,7 +395,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
 			getFontRenderer().drawString("+", x + 9, y + 1, 0);
-			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 
@@ -415,7 +405,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		String text = "(" + toleranceAllele.getDisplayName().getFormattedText() + ")";
 
 		// Enable correct lighting.
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		switch (tolerance) {
 			case BOTH_1:
@@ -471,7 +461,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	public void drawFertilityInfo(int fertility, int x, int textColor, int texOffset) {
 		// Enable correct lighting.
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = fertility + " x";
 

@@ -10,33 +10,28 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nullable;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
@@ -60,11 +55,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return false;
-	}
-
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
 	}
 
 	/* PLANTING */
@@ -153,7 +143,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public void grow(World world, Random rand, BlockPos pos, BlockState state) {
+    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState blockState) {
 		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (saplingTile != null) {
 			saplingTile.tryGrow(rand, true);

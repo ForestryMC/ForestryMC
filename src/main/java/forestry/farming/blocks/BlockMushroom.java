@@ -11,17 +11,8 @@
 package forestry.farming.blocks;
 
 import com.google.common.collect.Lists;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
+import forestry.core.config.Constants;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -33,18 +24,17 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 
-import forestry.core.config.Constants;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 //import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 
@@ -131,7 +121,7 @@ public class BlockMushroom extends BushBlock implements IGrowable {
 	}
 
 	@Override
-	public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (world.isRemote || rand.nextInt(2) != 0) {
 			return;
 		}
@@ -178,8 +168,7 @@ public class BlockMushroom extends BushBlock implements IGrowable {
 	}
 
 	@Override
-	public void grow(World worldIn, Random rand, BlockPos pos, BlockState state) {
-		this.grow(worldIn, pos, state, rand);
+    public void grow(ServerWorld serverWorld, Random random, BlockPos blockPos, BlockState blockState) {
 	}
 
 	@Override

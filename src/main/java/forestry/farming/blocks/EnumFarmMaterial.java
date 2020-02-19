@@ -10,21 +10,18 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import java.util.Locale;
-
+import forestry.api.core.IBlockSubtype;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.IBlockSubtype;
+import java.util.Locale;
 
 public enum EnumFarmMaterial implements IBlockSubtype {
 	BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY),
@@ -56,51 +53,50 @@ public enum EnumFarmMaterial implements IBlockSubtype {
 	 */
 	@OnlyIn(Dist.CLIENT)
 	public static TextureAtlasSprite getSprite(EnumFarmMaterial texture, int side) {
-		AtlasTexture map = Minecraft.getInstance().getTextureMap();
 		switch (texture) {
 			case BRICK:
-				return map.getAtlasSprite("minecraft:block/bricks");
+                return ResourceUtil.getBlockSprite("block/bricks");
 			case BRICK_STONE:
-				return map.getAtlasSprite("minecraft:block/stone_bricks");
+                return ResourceUtil.getBlockSprite("block/stone_bricks");
 			case BRICK_CHISELED:
-				return map.getAtlasSprite("minecraft:block/chiseled_stone_bricks");
+                return ResourceUtil.getBlockSprite("block/chiseled_stone_bricks");
 			case BRICK_CRACKED:
-				return map.getAtlasSprite("minecraft:block/cracked_stone_bricks");
+                return ResourceUtil.getBlockSprite("block/cracked_stone_bricks");
 			case BRICK_MOSSY:
-				return map.getAtlasSprite("minecraft:block/mossy_stone_bricks");
+                return ResourceUtil.getBlockSprite("block/mossy_stone_bricks");
 			case BRICK_NETHER:
-				return map.getAtlasSprite("minecraft:block/nether_bricks");
+                return ResourceUtil.getBlockSprite("block/nether_bricks");
 			case SANDSTONE_CHISELED:
 				if (side == 0) {
-					return map.getAtlasSprite("minecraft:block/sandstone_bottom");
+                    return ResourceUtil.getBlockSprite("block/sandstone_bottom");
 				} else if (side == 1) {
-					return map.getAtlasSprite("minecraft:block/sandstone_top");
+                    return ResourceUtil.getBlockSprite("block/sandstone_top");
 				}
-				return map.getAtlasSprite("minecraft:block/chiseled_sandstone");
+                return ResourceUtil.getBlockSprite("block/chiseled_sandstone");
 			case SANDSTONE_SMOOTH:
 				if (side == 0) {
-					return map.getAtlasSprite("minecraft:block/sandstone_bottom");
+                    return ResourceUtil.getBlockSprite("block/sandstone_bottom");
 				} else if (side == 1) {
-					return map.getAtlasSprite("minecraft:block/sandstone_top");
+                    return ResourceUtil.getBlockSprite("block/sandstone_top");
 				}
-				return map.getAtlasSprite("minecraft:block/cut_sandstone");
+                return ResourceUtil.getBlockSprite("block/cut_sandstone");
 			case QUARTZ:
 				if (side == 0) {
-					return map.getAtlasSprite("minecraft:block/quartz_block_bottom");
+                    return ResourceUtil.getBlockSprite("block/quartz_block_bottom");
 				} else if (side == 1) {
-					return map.getAtlasSprite("minecraft:block/quartz_block_top");
+                    return ResourceUtil.getBlockSprite("block/quartz_block_top");
 				}
-				return map.getAtlasSprite("minecraft:block/quartz_block_side");
+                return ResourceUtil.getBlockSprite("block/quartz_block_side");
 			case QUARTZ_CHISELED:
 				if (side == 0 || side == 1) {
-					return map.getAtlasSprite("minecraft:block/chiseled_quartz_block_top");
+                    return ResourceUtil.getBlockSprite("block/chiseled_quartz_block_top");
 				}
-				return map.getAtlasSprite("minecraft:block/chiseled_quartz_block");
+                return ResourceUtil.getBlockSprite("block/chiseled_quartz_block");
 			case QUARTZ_LINES:
 				if (side == 0 || side == 1) {
-					return map.getAtlasSprite("minecraft:block/quartz_pillar_top");
+                    return ResourceUtil.getBlockSprite("block/quartz_pillar_top");
 				}
-				return map.getAtlasSprite("minecraft:block/quartz_pillar");
+                return ResourceUtil.getBlockSprite("block/quartz_pillar");
 			default:
 				return null;
 		}

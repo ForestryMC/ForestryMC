@@ -10,33 +10,30 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import java.awt.Color;
-import java.util.EnumMap;
-import java.util.Locale;
-
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.tiles.IRenderableTile;
+import forestry.core.tiles.TileBase;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.model.RendererModel;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.tiles.IRenderableTile;
-import forestry.core.tiles.TileBase;
+import java.awt.*;
+import java.util.EnumMap;
+import java.util.Locale;
 
 public class RenderMachine implements IForestryRenderer<TileBase> {
 
-	private final RendererModel basefront;
-	private final RendererModel baseback;
-	private final RendererModel resourceTank;
-	private final RendererModel productTank;
+    private final ModelRenderer basefront;
+    private final ModelRenderer baseback;
+    private final ModelRenderer resourceTank;
+    private final ModelRenderer productTank;
 
 	private final ResourceLocation textureBase;
 	private final ResourceLocation textureResourceTank;
@@ -45,125 +42,97 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 	private final EnumMap<EnumTankLevel, ResourceLocation> texturesTankLevels = new EnumMap<>(EnumTankLevel.class);
 
 	public RenderMachine(String baseTexture) {
-		Model model = new RenderModelBase();
+        int textureWidth = 64;
+        int textureHeight = 32;
 
-		basefront = new RendererModel(model, 0, 0);
+        basefront = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
 		basefront.rotationPointX = 8;
 		basefront.rotationPointY = 8;
 		basefront.rotationPointZ = 8;
 
-		baseback = new RendererModel(model, 0, 0);
+        baseback = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		baseback.addBox(-8F, 4F, -8F, 16, 4, 16);
 		baseback.rotationPointX = 8;
 		baseback.rotationPointY = 8;
 		baseback.rotationPointZ = 8;
 
-		resourceTank = new RendererModel(model, 0, 0);
+        resourceTank = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		resourceTank.addBox(-6F, -8F, -6F, 12, 16, 6);
 		resourceTank.rotationPointX = 8;
 		resourceTank.rotationPointY = 8;
 		resourceTank.rotationPointZ = 8;
 
-		productTank = new RendererModel(model, 0, 0);
+        productTank = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		productTank.addBox(-6F, -8F, 0F, 12, 16, 6);
 		productTank.rotationPointX = 8;
 		productTank.rotationPointY = 8;
 		productTank.rotationPointZ = 8;
 
-		textureBase = new ForestryResource(baseTexture + "base.png");
-		textureProductTank = new ForestryResource(baseTexture + "tank_product_empty.png");
-		textureResourceTank = new ForestryResource(baseTexture + "tank_resource_empty.png");
+        textureBase = new ResourceLocation(Constants.MOD_ID, baseTexture + "base.png");
+        textureProductTank = new ResourceLocation(Constants.MOD_ID, baseTexture + "tank_product_empty.png");
+        textureResourceTank = new ResourceLocation(Constants.MOD_ID, baseTexture + "tank_resource_empty.png");
 
 		for (EnumTankLevel tankLevel : EnumTankLevel.values()) {
 			if (tankLevel == EnumTankLevel.EMPTY) {
 				continue;
 			}
 			String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
-			texturesTankLevels.put(tankLevel, new ForestryResource("textures/block/machine_tank_" + tankLevelString + ".png"));
+            texturesTankLevels.put(tankLevel, new ResourceLocation(Constants.MOD_ID, "textures/block/machine_tank_" + tankLevelString + ".png"));
 		}
 	}
 
 	@Override
-	public void renderTile(TileBase tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderTile(TileBase tile, RenderHelper helper) {
 		IRenderableTile generator = (IRenderableTile) tile;
 		World worldObj = tile.getWorldObj();
 		BlockState blockState = worldObj.getBlockState(tile.getPos());
 		if (blockState.getBlock() instanceof BlockBase) {
 			Direction facing = blockState.get(BlockBase.FACING);
-			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, x, y, z, destroyStage);
+            render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, helper);
 		}
 	}
 
 	@Override
-	public void renderItem(ItemStack stack) {
-		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, Direction.SOUTH, 0, 0, 0, -1);
-	}
+    public void renderItem(ItemStack stack, RenderHelper helper) {
+        render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, Direction.SOUTH, helper);
+    }
 
-	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, Direction orientation, double x, double y, double z, int destroyStage) {
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef((float) x, (float) y, (float) z);
-		float[] angle = {0, 0, 0};
+    private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, Direction orientation, RenderHelper helper) {
+        Vector3f rotation = new Vector3f(0, 0, 0);
 
 		switch (orientation) {
 			case EAST:
-				angle[1] = (float) Math.PI;
-				angle[2] = (float) -Math.PI / 2;
+                rotation.set(0, (float) Math.PI, (float) -Math.PI / 2);
 				break;
 			case WEST:
-				angle[2] = (float) Math.PI / 2;
+                rotation.set(0, 0, (float) Math.PI / 2);
 				break;
 			case UP:
 				break;
 			case DOWN:
-				angle[2] = (float) Math.PI;
+                rotation.set(0, 0, (float) Math.PI);
 				break;
 			case SOUTH:
-				angle[0] = (float) Math.PI / 2;
-				angle[2] = (float) Math.PI / 2;
+                rotation.set((float) Math.PI / 2, 0, (float) Math.PI / 2);
 				break;
 			case NORTH:
 			default:
-				angle[0] = (float) -Math.PI / 2;
-				angle[2] = (float) Math.PI / 2;
+                rotation.set((float) -Math.PI / 2, 0, (float) Math.PI / 2);
 				break;
 		}
 
-		basefront.rotateAngleX = angle[0];
-		basefront.rotateAngleY = angle[1];
-		basefront.rotateAngleZ = angle[2];
+        helper.setRotation(rotation);
+        helper.renderModel(textureBase, basefront, baseback);
 
-		baseback.rotateAngleX = angle[0];
-		baseback.rotateAngleY = angle[1];
-		baseback.rotateAngleZ = angle[2];
+        renderTank(resourceTank, textureResourceTank, resourceTankInfo, helper);
+        renderTank(productTank, textureProductTank, productTankInfo, helper);
 
-		resourceTank.rotateAngleX = angle[0];
-		resourceTank.rotateAngleY = angle[1];
-		resourceTank.rotateAngleZ = angle[2];
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    }
 
-		productTank.rotateAngleX = angle[0];
-		productTank.rotateAngleY = angle[1];
-		productTank.rotateAngleZ = angle[2];
-
-		float factor = (float) (1.0 / 16.0);
-
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(textureBase);
-
-		basefront.render(factor);
-		baseback.render(factor);
-
-		renderTank(resourceTank, textureResourceTank, resourceTankInfo, factor);
-		renderTank(productTank, textureProductTank, productTankInfo, factor);
-
-		GlStateManager.popMatrix();
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-	}
-
-	private void renderTank(RendererModel tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(textureBase);
-		tankModel.render(factor);
+    private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, RenderHelper helper) {
+        helper.renderModel(textureBase, tankModel);
 
 		ResourceLocation textureResourceTankLevel = texturesTankLevels.get(renderInfo.getLevel());
 		if (textureResourceTankLevel == null) {
@@ -175,14 +144,10 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 		Color primaryTankColor = fluidDefinition == null ? Color.BLUE : fluidDefinition.getParticleColor();
 		float[] colors = new float[3];
 		primaryTankColor.getRGBColorComponents(colors);
-		GlStateManager.color4f(colors[0], colors[1], colors[2], 1.0f);
+        RenderSystem.color4f(colors[0], colors[1], colors[2], 1.0f);
 
-		textureManager.bindTexture(textureResourceTankLevel);
-		tankModel.render(factor);
+        helper.renderModel(textureResourceTankLevel, tankModel);
 
-		GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-
-	private static class RenderModelBase extends Model {
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }

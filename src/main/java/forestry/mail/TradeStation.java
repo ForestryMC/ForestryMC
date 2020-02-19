@@ -10,35 +10,25 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
-
 import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.EnumPostage;
-import forestry.api.mail.EnumTradeStationState;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.IPostalState;
-import forestry.api.mail.IStamps;
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.PostManager;
+import forestry.api.mail.*;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.features.MailItems;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.WorldSavedData;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
 	public static final String SAVE_NAME = "trade_po_";
@@ -85,7 +75,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	@Override
 	public void read(CompoundNBT compoundNBT) {
 		if (compoundNBT.contains("owner")) {
-			owner = PlayerUtil.readGameProfile(compoundNBT.getCompound("owner"));
+            owner = NBTUtil.readGameProfile(compoundNBT.getCompound("owner"));
 		}
 
 		if (compoundNBT.contains("address")) {
@@ -101,7 +91,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public CompoundNBT write(CompoundNBT compoundNBT) {
 		if (owner != null) {
 			CompoundNBT nbt = new CompoundNBT();
-			PlayerUtil.writeGameProfile(nbt, owner);
+            NBTUtil.writeGameProfile(nbt, owner);
 			compoundNBT.put("owner", nbt);
 		}
 

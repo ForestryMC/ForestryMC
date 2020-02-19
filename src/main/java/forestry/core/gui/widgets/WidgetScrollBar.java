@@ -1,13 +1,11 @@
 package forestry.core.gui.widgets;
 
-import javax.annotation.Nullable;
-
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.gui.Drawable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import forestry.core.gui.Drawable;
+import javax.annotation.Nullable;
 
 public class WidgetScrollBar extends Widget {
 	@Nullable
@@ -99,7 +97,7 @@ public class WidgetScrollBar extends Widget {
 		if (!isVisible()) {
 			return;
 		}
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if (background != null) {
 			background.draw(startX + xPos, startY + yPos);
 		}

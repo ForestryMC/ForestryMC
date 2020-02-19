@@ -11,33 +11,21 @@
 package forestry.core.models.baker;
 
 import com.google.common.collect.ImmutableMap;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import org.apache.commons.lang3.tuple.Pair;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.TransformationMatrix;
+import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.model.TRSRTransformation;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelBakerModel implements IBakedModel {
@@ -46,9 +34,8 @@ public class ModelBakerModel implements IBakedModel {
 	private boolean isAmbientOcclusion;
 	private TextureAtlasSprite particleSprite;
 	@Nullable
-	private IModelState modelState;
-	@Nullable
-	private ImmutableMap<TransformType, TRSRTransformation> transforms;
+    private IModelTransform modelState;
+    private ImmutableMap<TransformType, TransformationMatrix> transforms = ImmutableMap.of();
 
 	private final Map<Direction, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
@@ -59,12 +46,12 @@ public class ModelBakerModel implements IBakedModel {
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
 
-	ModelBakerModel(IModelState modelState) {
+    ModelBakerModel(IModelTransform modelState) {
 		models = new ArrayList<>();
 		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(Direction.class);
 		generalQuads = new ArrayList<>();
-		particleSprite = Minecraft.getInstance().getTextureMap().missingImage;
+        particleSprite = ResourceUtil.getMissingTexture();
 		isGui3d = true;
 		isAmbientOcclusion = false;
 		setModelState(modelState);
@@ -92,6 +79,11 @@ public class ModelBakerModel implements IBakedModel {
 	public boolean isGui3d() {
 		return isGui3d;
 	}
+
+    @Override
+    public boolean func_230044_c_() {
+        return true;
+    }
 
 	public void setAmbientOcclusion(boolean ambientOcclusion) {
 		this.isAmbientOcclusion = ambientOcclusion;
@@ -162,7 +154,7 @@ public class ModelBakerModel implements IBakedModel {
 		return scale;
 	}
 
-	public void setModelState(IModelState modelState) {
+    public void setModelState(IModelTransform modelState) {
 		this.modelState = modelState;
 		this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
 	}
@@ -202,7 +194,12 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	@Override
-	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-		return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType);
+    public IBakedModel handlePerspective(TransformType cameraTransformType, MatrixStack mat) {
+        return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType, mat);
+    }
+
+    @Override
+    public boolean doesHandlePerspectives() {
+        return true; //TODO: test if this is needed
 	}
 }

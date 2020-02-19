@@ -10,33 +10,30 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import java.io.File;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-
 import forestry.core.ClimateHandlerClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.multiblock.MultiblockEventHandlerClient;
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.worldgen.WorldFeatureManager;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.io.File;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
 public class ProxyClient extends ProxyCommon {
 
 	@Override
-	public void registerTickHandlers(WorldFeatureManager worldGenerator) {
-		super.registerTickHandlers(worldGenerator);
+    public void registerTickHandlers() {
+        super.registerTickHandlers();
 		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
 		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
 	}

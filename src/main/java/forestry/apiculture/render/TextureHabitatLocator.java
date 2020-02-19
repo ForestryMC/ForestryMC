@@ -10,18 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-@OnlyIn(Dist.CLIENT)
+/*@OnlyIn(Dist.CLIENT)
 public class TextureHabitatLocator extends TextureAtlasSprite {
 
 	private static TextureHabitatLocator instance;
@@ -53,7 +42,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		Minecraft minecraft = Minecraft.getInstance();
 
 		if (minecraft.world != null && minecraft.player != null) {
-			updateCompass(minecraft.world, minecraft.player.posX, minecraft.player.posZ, minecraft.player.rotationYaw);
+			BlockPos pos = minecraft.player.getPosition();
+			updateCompass(minecraft.world, pos.getX(), pos.getZ(), minecraft.player.rotationYaw);
 		} else {
 			updateCompass(null, 0.0d, 0.0d, 0.0d);
 		}
@@ -113,4 +103,4 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		}
 
 	}
-}
+}*/

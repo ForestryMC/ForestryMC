@@ -10,36 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.Random;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.PlantType;
-import net.minecraftforge.common.util.Constants;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-
-import forestry.api.arboriculture.EnumFruitFamily;
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ILeafTickHandler;
-import forestry.api.arboriculture.ITreekeepingMode;
-import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.*;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
@@ -65,6 +36,30 @@ import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.RenderUtil;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.common.PlantType;
+import net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.Random;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 	private static final String NBT_RIPENING = "RT";
@@ -72,6 +67,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private static final String NBT_FRUIT_LEAF = "FL";
 	private static final String NBT_MATURATION = "CATMAT";
 	private static final String NBT_CATERPILLAR = "CATER";
+
+	public static final ModelProperty<ILeafSpriteProvider> SPRITE_PROVIDER = new ModelProperty<>();
+	public static final ModelProperty<Boolean> POLLINATED = new ModelProperty<>();
+	public static final ModelProperty<ResourceLocation> FRUIT_TEXTURE = new ModelProperty<>();
 
 	private int colourFruits;
 
@@ -208,6 +207,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		} else if (world != null && world.isRemote) {
 			fruitSprite = null;
 		}
+		requestModelDataUpdate();
 
 		markDirty();
 	}
@@ -274,6 +274,38 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Nullable
 	public ResourceLocation getFruitSprite() {
 		return fruitSprite;
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static ResourceLocation getLeaveSprite(IModelData data, boolean fancy) {
+		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider(data);
+		final Boolean pollinated = data.getData(POLLINATED);
+		return leafSpriteProvider.getSprite(pollinated != null && pollinated, fancy);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	private static ILeafSpriteProvider getLeafSpriteProvider(IModelData data) {
+		final ILeafSpriteProvider leafSpriteProvider = data.getData(SPRITE_PROVIDER);
+		if (leafSpriteProvider != null) {
+			return leafSpriteProvider;
+		} else {
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
+			return oakSpecies.getLeafSpriteProvider();
+		}
+	}
+
+	@Nullable
+	public static ResourceLocation getFruitSprite(IModelData data) {
+		return data.getData(FRUIT_TEXTURE);
+	}
+
+	@Override
+	public IModelData getModelData() {
+		ModelDataMap.Builder builder = new ModelDataMap.Builder();
+		builder.withInitial(SPRITE_PROVIDER, getLeafSpriteProvider());
+		builder.withInitial(POLLINATED, isPollinatedState);
+		builder.withInitial(FRUIT_TEXTURE, fruitSprite);
+		return builder.build();
 	}
 
 	public int getRipeningTime() {
@@ -545,7 +577,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public EnumHumidity getHumidity() {
 		return EnumHumidity.getFromValue(getBiome().getDownfall());
 	}
-
 
 	@Override
 	public World getWorldObj() {

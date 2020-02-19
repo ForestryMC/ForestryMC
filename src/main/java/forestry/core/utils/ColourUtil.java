@@ -12,14 +12,17 @@ package forestry.core.utils;
 
 public class ColourUtil {
 
+    private ColourUtil() {
+    }
+
 	public static int addRGBComponents(int colour, int r, int g, int b) {
 		r = getRed(colour) + r;
 		g = getGreen(colour) + g;
 		b = getBlue(colour) + b;
 
-		r = r <= 255 ? r : 255;
-		g = g <= 255 ? g : 255;
-		b = b <= 255 ? b : 255;
+        r = Math.min(r, 255);
+        g = Math.min(g, 255);
+        b = Math.min(b, 255);
 
 		return (r & 0x0ff) << 16 | (g & 0x0ff) << 8 | b & 0x0ff;
 	}
@@ -29,9 +32,9 @@ public class ColourUtil {
 		int g = (int) (getGreen(colour) * factor);
 		int b = (int) (getBlue(colour) * factor);
 
-		r = r <= 255 ? r : 255;
-		g = g <= 255 ? g : 255;
-		b = b <= 255 ? b : 255;
+        r = Math.min(r, 255);
+        g = Math.min(g, 255);
+        b = Math.min(b, 255);
 
 		return (r & 0x0ff) << 16 | (g & 0x0ff) << 8 | b & 0x0ff;
 	}

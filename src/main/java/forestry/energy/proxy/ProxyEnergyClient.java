@@ -11,18 +11,17 @@
 package forestry.energy.proxy;
 
 
+import forestry.core.blocks.MachinePropertiesTesr;
+import forestry.energy.render.RenderEngine;
+import forestry.energy.tiles.TileEngine;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.energy.tiles.TileEngine;
-import forestry.energy.render.RenderEngine;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
 public class ProxyEnergyClient extends ProxyEnergy {
 	@Override
-	public void setRenderDefaultEngine(MachinePropertiesTesr<? extends TileEngine> machineProperties, String gfxBase) {
-		machineProperties.setRenderer(new RenderEngine(gfxBase));
+    public void setRenderDefaultEngine(MachinePropertiesTesr<? extends TileEngine> machineProperties, String baseTexture) {
+        machineProperties.setRenderer(new RenderEngine(baseTexture));
 	}
 }

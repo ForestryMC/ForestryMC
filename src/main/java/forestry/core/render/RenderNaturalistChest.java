@@ -10,22 +10,18 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.tileentity.model.ChestModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileNaturalistChest;
-
 public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
 
-	private final ChestModel chestModel = new ChestModel();
 	private final ResourceLocation texture;
 
 	public RenderNaturalistChest(String textureName) {
@@ -33,27 +29,27 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 	}
 
 	@Override
-	public void renderTile(TileNaturalistChest tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderTile(TileNaturalistChest tile, RenderHelper helper) {
 		World worldObj = tile.getWorldObj();
 		BlockState blockState = worldObj.getBlockState(tile.getPos());
 		if (blockState.getBlock() instanceof BlockBase) {
 			Direction facing = blockState.get(BlockBase.FACING);
-			render(facing, tile.prevLidAngle, tile.lidAngle, x, y, z, partialTicks);
+            render(facing, tile.prevLidAngle, tile.lidAngle, helper, helper.partialTicks);
 		}
 	}
 
 	@Override
-	public void renderItem(ItemStack stack) {
-		render(Direction.SOUTH, 0, 0, 0, 0, 0, 0);
-	}
+    public void renderItem(ItemStack stack, RenderHelper helper) {
+        render(Direction.SOUTH, 0, 0, helper, helper.partialTicks);
+    }
 
-	public void render(Direction orientation, float prevLidAngle, float lidAngle, double x, double y, double z, float partialTick) {
-		GlStateManager.pushMatrix();
+    public void render(Direction orientation, float prevLidAngle, float lidAngle, RenderHelper helper, float partialTick) {
+        helper.push();
 		bindTexture(texture);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.translatef((float) x, (float) y + 1.0F, (float) z + 1.0F);
-		GlStateManager.scalef(1.0F, -1.0F, -1.0F);
-		GlStateManager.translatef(0.5F, 0.5F, 0.5F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        helper.translate(0, 1.0F, 1.0F);
+        helper.scale(1.0F, -1.0F, -1.0F);
+        helper.translate(0.5F, 0.5F, 0.5F);
 
 		int rotation;
 		switch (orientation) {
@@ -72,15 +68,16 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 				break;
 		}
 
-		GlStateManager.rotatef(rotation, 0.0F, 1.0F, 0.0F);
-		GlStateManager.translatef(-0.5F, -0.5F, -0.5F);
+        RenderSystem.rotatef(rotation, 0.0F, 1.0F, 0.0F);
+        helper.translate(-0.5F, -0.5F, -0.5F);
 
 		float angle = prevLidAngle + (lidAngle - prevLidAngle) * partialTick;
 		angle = 1.0F - angle;
 		angle = 1.0F - angle * angle * angle;
-		chestModel.getLid().rotateAngleX = -(angle * (float) Math.PI / 2.0F);
+		/*chestModel.getLid().rotateAngleX = -(angle * (float) Math.PI / 2.0F);
 		chestModel.renderAll();
+		ChestTileEntityRenderer*/
 
-		GlStateManager.popMatrix();
+        helper.pop();
 	}
 }

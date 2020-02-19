@@ -12,14 +12,8 @@ package forestry.farming.logic;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-
+import forestry.api.farming.*;
+import forestry.farming.logic.farmables.FarmableCocoa;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -28,12 +22,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.IFarmable;
-import forestry.farming.logic.farmables.FarmableCocoa;
+import java.util.*;
 
 
 public class FarmLogicCocoa extends FarmLogic {
@@ -89,7 +78,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
-		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos(position);
+        BlockPos.Mutable current = new BlockPos.Mutable(position);
 		BlockState blockState = world.getBlockState(current);
 		while (isJungleTreeTrunk(blockState)) {
 			for (Direction direction : Direction.Plane.HORIZONTAL) {

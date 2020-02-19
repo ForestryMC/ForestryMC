@@ -10,16 +10,12 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import forestry.core.blocks.MachinePropertiesTesr;
+import forestry.core.tiles.*;
+import forestry.modules.ISidedModuleHandler;
 import net.minecraftforge.client.event.ModelBakeEvent;
 
-import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.tiles.TileAnalyzer;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileEscritoire;
-import forestry.core.tiles.TileMill;
-import forestry.core.tiles.TileNaturalistChest;
-
-public class ProxyRender {
+public class ProxyRender implements ISidedModuleHandler {
 
 	public boolean fancyGraphicsEnabled() {
 		return false;
@@ -28,13 +24,10 @@ public class ProxyRender {
 	public void initRendering() {
 	}
 
-	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String gfxBase) {
-	}
+    public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
+    }
 
-	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase) {
-	}
-
-	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String gfxBase, byte charges) {
+    public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
 	}
 
 	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {

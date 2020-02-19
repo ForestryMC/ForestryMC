@@ -1,25 +1,9 @@
 package forestry.apiculture.features;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-
-import net.minecraftforge.common.ToolType;
-
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.blocks.BlockAlveary;
-import forestry.apiculture.blocks.BlockAlvearyType;
-import forestry.apiculture.blocks.BlockApiculture;
-import forestry.apiculture.blocks.BlockBeeHive;
-import forestry.apiculture.blocks.BlockCandle;
-import forestry.apiculture.blocks.BlockCandleWall;
-import forestry.apiculture.blocks.BlockHoneyComb;
-import forestry.apiculture.blocks.BlockStump;
-import forestry.apiculture.blocks.BlockStumpWall;
-import forestry.apiculture.blocks.BlockTypeApiculture;
-import forestry.apiculture.blocks.BlockTypeApicultureTesr;
+import forestry.apiculture.blocks.*;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.ItemBlockCandle;
 import forestry.apiculture.items.ItemBlockHoneyComb;
@@ -27,11 +11,11 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.items.ItemBlockBase;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.ItemBlockWallForestry;
-import forestry.modules.features.FeatureBlock;
-import forestry.modules.features.FeatureBlockGroup;
-import forestry.modules.features.FeatureProvider;
-import forestry.modules.features.IFeatureRegistry;
-import forestry.modules.features.ModFeatureRegistry;
+import forestry.modules.features.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.ToolType;
 
 @FeatureProvider
 public class ApicultureBlocks {

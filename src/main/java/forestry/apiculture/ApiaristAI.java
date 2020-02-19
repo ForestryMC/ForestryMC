@@ -11,6 +11,12 @@
 
 package forestry.apiculture;
 
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.items.ItemBeeGE;
+import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -19,13 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.apiculture.blocks.BlockApiculture;
-import forestry.apiculture.items.ItemBeeGE;
-import forestry.apiculture.tiles.TileBeeHouse;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
 
 public class ApiaristAI extends MoveToBlockGoal {
 	private final VillagerEntity villager;
@@ -41,7 +40,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 	public ApiaristAI(VillagerEntity villager, double speed) {
 		super(villager, speed, 16);
 		this.villager = villager;
-		villagerInventory = villager.func_213715_ed();
+        villagerInventory = villager.getVillagerInventory();
 	}
 
 	@Override

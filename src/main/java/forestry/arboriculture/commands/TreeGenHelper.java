@@ -10,8 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import java.util.Optional;
-
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.utils.BlockUtil;
+import forestry.core.worldgen.FeatureBase;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -22,18 +30,9 @@ import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.server.ServerChunkProvider;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.core.commands.SpeciesNotFoundException;
-import forestry.core.utils.BlockUtil;
-import forestry.core.worldgen.FeatureBase;
+import java.util.Optional;
 
 public final class TreeGenHelper {
 
@@ -66,7 +65,7 @@ public final class TreeGenHelper {
 
 	public static boolean generateTree(ITree tree, World world, BlockPos pos) {
 		Feature<NoFeatureConfig> gen = tree.getTreeGenerator(world, pos, true);
-		ChunkGenerator<? extends GenerationSettings> generator = world.getChunkProvider().getChunkGenerator();
+        ChunkGenerator<? extends GenerationSettings> generator = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator();
 
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)) {

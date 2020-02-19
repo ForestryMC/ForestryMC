@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-public class ProxyArboriculture {
+import forestry.modules.ISidedModuleHandler;
+
+public class ProxyArboriculture implements ISidedModuleHandler {
 
 	public void initializeModels() {
 	}
