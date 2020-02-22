@@ -1,6 +1,21 @@
 package forestry.modules;
 
 import com.google.common.collect.ImmutableSet;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
+
+import net.minecraftforge.fml.InterModComms;
+
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.IPickupHandler;
@@ -8,18 +23,6 @@ import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraftforge.fml.InterModComms;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 public class BlankForestryModule implements IForestryModule {
 
@@ -87,8 +90,8 @@ public class BlankForestryModule implements IForestryModule {
 		return null;
 	}
 
-    @Nullable
-    public ISidedModuleHandler getModuleHandler() {
-        return null;
-    }
+	@Nullable
+	public ISidedModuleHandler getModuleHandler() {
+		return null;
+	}
 }

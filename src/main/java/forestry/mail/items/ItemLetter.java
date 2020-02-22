@@ -10,13 +10,10 @@
  ******************************************************************************/
 package forestry.mail.items;
 
-import forestry.api.core.IItemSubtype;
-import forestry.api.mail.ILetter;
-import forestry.core.ItemGroupForestry;
-import forestry.core.items.ItemWithGui;
-import forestry.mail.Letter;
-import forestry.mail.gui.ContainerLetter;
-import forestry.mail.inventory.ItemInventoryLetter;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Locale;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -32,12 +29,17 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Locale;
+import forestry.api.core.IItemSubtype;
+import forestry.api.mail.ILetter;
+import forestry.core.ItemGroupForestry;
+import forestry.core.items.ItemWithGui;
+import forestry.mail.Letter;
+import forestry.mail.gui.ContainerLetter;
+import forestry.mail.inventory.ItemInventoryLetter;
 
 public class ItemLetter extends ItemWithGui {
 
@@ -90,7 +92,7 @@ public class ItemLetter extends ItemWithGui {
 			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
 			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"));
-            return ActionResult.func_226251_d_(heldItem);
+			return ActionResult.func_226251_d_(heldItem);
 		}
 	}
 

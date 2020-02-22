@@ -10,7 +10,17 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
@@ -18,13 +28,6 @@ import forestry.api.gui.events.GuiEvent;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.utils.StringUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ClimateBarElement extends GuiElement {
@@ -72,7 +75,7 @@ public class ClimateBarElement extends GuiElement {
 	public void drawElement(int mouseX, int mouseY) {
 		handleMouse(mouseX - getX(), mouseY - getY());
 
-        RenderSystem.enableAlphaTest();
+		RenderSystem.enableAlphaTest();
 		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(gui.textureFile);
@@ -81,11 +84,11 @@ public class ClimateBarElement extends GuiElement {
 		int progressScaled = getProgressScaled();
 		blit(1, 1, 177, 69, progressScaled, 10);
 
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		blit(1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
 		blit(1 + getPointerPosition(), 1, 229, 69, 1, 10);
 		blit(1, 1, 177, 80, 50, 10);
-        RenderSystem.disableAlphaTest();
+		RenderSystem.disableAlphaTest();
 	}
 
 	private int getProgressScaled() {
@@ -108,7 +111,7 @@ public class ClimateBarElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-        RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.color4f(red, green, blue, 1.0F);
 	}
 
 	private void handleMouse(int mouseX, int mouseY) {

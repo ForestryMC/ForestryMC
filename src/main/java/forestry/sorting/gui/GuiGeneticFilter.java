@@ -1,6 +1,16 @@
 package forestry.sorting.gui;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
@@ -11,14 +21,6 @@ import forestry.sorting.gui.widgets.RuleWidget;
 import forestry.sorting.gui.widgets.SelectionWidget;
 import forestry.sorting.gui.widgets.SpeciesWidget;
 import forestry.sorting.tiles.IFilterContainer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import javax.annotation.Nullable;
 
 public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> {
 
@@ -108,21 +110,21 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.disableLighting();
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.disableLighting();
 		if (searchField != null) {
 			this.searchField.render(mouseX, mouseY, f);    //TODO correct?
 		}
 	}
 
 	@Override
-    public boolean keyPressed(int key, int scanCode, int modifiers) {
-        if (searchField != null && this.searchField.keyPressed(key, scanCode, modifiers)) {
+	public boolean keyPressed(int key, int scanCode, int modifiers) {
+		if (searchField != null && this.searchField.keyPressed(key, scanCode, modifiers)) {
 			scrollBar.setValue(0);
 			selection.filterEntries(searchField.getText());
 			return true;
 		} else {
-            return super.keyPressed(key, scanCode, modifiers);
+			return super.keyPressed(key, scanCode, modifiers);
 		}
 	}
 

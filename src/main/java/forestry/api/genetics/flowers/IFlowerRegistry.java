@@ -5,17 +5,19 @@
  ******************************************************************************/
 package forestry.api.genetics.flowers;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.core.IBlockPosPredicate;
-import genetics.api.individual.IIndividual;
+import java.util.Collection;
+import java.util.Iterator;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collection;
-import java.util.Iterator;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.core.IBlockPosPredicate;
 
 // See {@link forestry.api.apiculture.FlowerManager}.FlowerType___ for basic Forestry flower types.
 // Each IFlowerProvider has one flower type, and multiple IFlowerProviders may share one type.
@@ -74,7 +76,7 @@ public interface IFlowerRegistry {
 	 * @return an iterator over the area a bee can travel from its beeHousing.
 	 * @since Forestry 5.5.2
 	 */
-    Iterator<BlockPos.Mutable> getAreaIterator(IBeeHousing beeHousing, IBee bee);
+	Iterator<BlockPos.Mutable> getAreaIterator(IBeeHousing beeHousing, IBee bee);
 
 	/**
 	 * Checks a single coordinate to see if it is an accepted flower.

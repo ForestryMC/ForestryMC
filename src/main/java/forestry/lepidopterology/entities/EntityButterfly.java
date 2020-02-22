@@ -10,26 +10,21 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.core.IToolScoop;
-import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.api.lepidopterology.genetics.*;
-import forestry.core.utils.ItemStackUtil;
-import forestry.lepidopterology.ModuleLepidopterology;
-import forestry.lepidopterology.genetics.Butterfly;
-import forestry.lepidopterology.genetics.ButterflyHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.EmptyRootDefinition;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-import net.minecraft.block.*;
+import javax.annotation.Nullable;
+import java.util.Optional;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.*;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -40,18 +35,43 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.EmptyRootDefinition;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.core.IToolScoop;
+import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
+import forestry.core.utils.ItemStackUtil;
+import forestry.lepidopterology.ModuleLepidopterology;
+import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyHelper;
 
 //TODO minecraft has flying entities (bat, parrot). Can some of their logic be reused here?
 //TODO getMaxSpawnedInChunk?
@@ -329,7 +349,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 	/* FLYING ABILITY */
 	public boolean canFly() {
-        return contained.canTakeFlight(world, getPosX(), getPosY(), getPosZ());
+		return contained.canTakeFlight(world, getPosX(), getPosY(), getPosZ());
 	}
 
 	public void setIndividual(@Nullable IButterfly butterfly) {
@@ -430,7 +450,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 				ItemStack itemStack = root.getTypes().createStack(contained.copy(), EnumFlutterType.BUTTERFLY);
 
 				tracker.registerCatch(contained);
-                ItemStackUtil.dropItemStackAsEntity(itemStack, world, getPosX(), getPosY(), getPosZ());
+				ItemStackUtil.dropItemStackAsEntity(itemStack, world, getPosX(), getPosY(), getPosZ());
 				this.dead = true;
 			} else {
 				player.swingArm(hand);
@@ -445,7 +465,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	@Override
 	protected void dropSpecialItems(DamageSource source, int looting, boolean recentlyHitIn) {
 		for (ItemStack stack : contained.getLootDrop(this, recentlyHitIn, looting)) {
-            ItemStackUtil.dropItemStackAsEntity(stack, world, getPosX(), getPosY(), getPosZ());
+			ItemStackUtil.dropItemStackAsEntity(stack, world, getPosX(), getPosY(), getPosZ());
 		}
 
 		// Drop pollen if any
@@ -457,7 +477,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			}
 			definition.ifPresent(root -> {
 				ItemStack pollenStack = root.createStack(pollen, EnumGermlingType.POLLEN);
-                ItemStackUtil.dropItemStackAsEntity(pollenStack, world, getPosX(), getPosY(), getPosZ());
+				ItemStackUtil.dropItemStackAsEntity(pollenStack, world, getPosX(), getPosY(), getPosZ());
 			});
 		}
 	}
@@ -517,9 +537,9 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		super.updateAITasks();
 
 		if (getState().doesMovement && flightTarget != null) {
-            double diffX = flightTarget.x + 0.5d - getPosX();
-            double diffY = flightTarget.y + 0.1d - getPosY();
-            double diffZ = flightTarget.z + 0.5d - getPosZ();
+			double diffX = flightTarget.x + 0.5d - getPosX();
+			double diffY = flightTarget.y + 0.1d - getPosY();
+			double diffZ = flightTarget.z + 0.5d - getPosZ();
 
 			Vec3d motion = getMotion();
 			double newX = (Math.signum(diffX) * 0.5d - motion.x) * 0.10000000149011612d;
@@ -541,8 +561,8 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	}
 
 	@Override
-    public boolean func_225503_b_(float distance, float damageMultiplier) {
-        return false;
+	public boolean func_225503_b_(float distance, float damageMultiplier) {
+		return false;
 	}
 
 	@Override

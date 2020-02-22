@@ -10,13 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import forestry.api.core.IToolPipette;
-import forestry.core.fluids.StandardTank;
-import forestry.core.gui.IContainerLiquidTanks;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.utils.ResourceUtil;
-import forestry.farming.gui.ContainerFarm;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -31,12 +26,20 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-import javax.annotation.Nullable;
+import forestry.api.core.IToolPipette;
+import forestry.core.fluids.StandardTank;
+import forestry.core.gui.IContainerLiquidTanks;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.utils.ResourceUtil;
+import forestry.farming.gui.ContainerFarm;
 
 /**
  * Slot for liquid tanks
@@ -74,7 +77,7 @@ public class TankWidget extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-        RenderSystem.disableBlend();
+		RenderSystem.disableBlend();
 		IFluidTank tank = getTank();
 		if (tank == null || tank.getCapacity() <= 0) {
 			return;
@@ -86,13 +89,13 @@ public class TankWidget extends Widget {
 		if (!contents.isEmpty() && contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			if (fluid != null) {
-                ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
+				ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
-                    fluidStillSprite = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+					fluidStillSprite = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
 				}
 				if (fluidStillSprite == null) {
-                    fluidStillSprite = ResourceUtil.getMissingTexture();
+					fluidStillSprite = ResourceUtil.getMissingTexture();
 				}
 
 				int fluidColor = fluid.getAttributes().getColor(contents);
@@ -133,15 +136,15 @@ public class TankWidget extends Widget {
 		}
 
 		if (drawOverlay) {
-            RenderSystem.enableAlphaTest();
-            RenderSystem.disableDepthTest();
+			RenderSystem.enableAlphaTest();
+			RenderSystem.disableDepthTest();
 			textureManager.bindTexture(manager.gui.textureFile);
 			manager.gui.blit(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
-            RenderSystem.enableDepthTest();
-            RenderSystem.disableAlphaTest();
+			RenderSystem.enableDepthTest();
+			RenderSystem.disableAlphaTest();
 		}
 
-        RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.color4f(1, 1, 1, 1);
 	}
 
 	@Override
@@ -159,16 +162,16 @@ public class TankWidget extends Widget {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-        RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.color4f(red, green, blue, 1.0F);
 	}
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
-        float uMin = textureSprite.getMinU();
-        float uMax = textureSprite.getMaxU();
-        float vMin = textureSprite.getMinV();
-        float vMax = textureSprite.getMaxV();
-        uMax = uMax - maskRight / 16.0F * (uMax - uMin);
-        vMax = vMax - maskTop / 16.0F * (vMax - vMin);
+		float uMin = textureSprite.getMinU();
+		float uMax = textureSprite.getMaxU();
+		float vMin = textureSprite.getMinV();
+		float vMax = textureSprite.getMaxV();
+		uMax = uMax - maskRight / 16.0F * (uMax - uMin);
+		vMax = vMax - maskTop / 16.0F * (vMax - vMin);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();

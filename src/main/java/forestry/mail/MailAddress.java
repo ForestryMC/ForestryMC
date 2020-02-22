@@ -11,17 +11,21 @@
 package forestry.mail;
 
 import com.google.common.base.Preconditions;
+
+import java.util.Locale;
+import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.INbtWritable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.utils.PlayerUtil;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Locale;
-import java.util.UUID;
 
 public class MailAddress implements INbtWritable, IMailAddress {
 
@@ -63,7 +67,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 			gameProfile = invalidGameProfile;
 		} else if (nbt.contains("profile")) {
 			CompoundNBT profileTag = nbt.getCompound("profile");
-            gameProfile = NBTUtil.readGameProfile(profileTag);
+			gameProfile = NBTUtil.readGameProfile(profileTag);
 			if (gameProfile == null) {
 				gameProfile = invalidGameProfile;
 			}
@@ -127,7 +131,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 
 		if (gameProfile != invalidGameProfile) {
 			CompoundNBT profileNbt = new CompoundNBT();
-            NBTUtil.writeGameProfile(profileNbt, gameProfile);
+			NBTUtil.writeGameProfile(profileNbt, gameProfile);
 			compoundNBT.put("profile", profileNbt);
 		}
 		return compoundNBT;

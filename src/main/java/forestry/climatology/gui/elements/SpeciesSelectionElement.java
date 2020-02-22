@@ -10,7 +10,22 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
+import java.util.Optional;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -19,17 +34,6 @@ import forestry.api.gui.events.GuiEvent;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
 import forestry.core.gui.elements.GuiElement;
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IIndividual;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class SpeciesSelectionElement extends GuiElement {
@@ -93,9 +97,9 @@ public class SpeciesSelectionElement extends GuiElement {
 		super.drawElement(mouseX, mouseY);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
-        RenderSystem.enableAlphaTest();
+		RenderSystem.enableAlphaTest();
 		blit(0, 0, 224, 46, 22, 22);
-        RenderSystem.disableAlphaTest();
+		RenderSystem.disableAlphaTest();
 	}
 
 	@Override

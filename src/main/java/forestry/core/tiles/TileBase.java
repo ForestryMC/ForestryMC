@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import forestry.core.blocks.BlockBase;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nonnull;
+import forestry.core.blocks.BlockBase;
 
 public abstract class TileBase extends TileForestry {
 
@@ -27,15 +29,15 @@ public abstract class TileBase extends TileForestry {
 	}
 
 	public void openGui(ServerPlayerEntity player, BlockPos pos) {
-        if (!hasGui()) {
-            return;
-        }
+		if (!hasGui()) {
+			return;
+		}
 		NetworkHooks.openGui(player, this, pos);
 	}
 
-    protected boolean hasGui() {
-        return true;
-    }
+	protected boolean hasGui() {
+		return true;
+	}
 
 	@Override
 	public String getUnlocalizedTitle() {

@@ -2,9 +2,7 @@ package forestry.core.features;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.StairsBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
 
 import net.minecraftforge.common.ToolType;
 
@@ -14,7 +12,6 @@ import forestry.core.blocks.BlockCore;
 import forestry.core.blocks.BlockHumus;
 import forestry.core.blocks.BlockResourceOre;
 import forestry.core.blocks.BlockResourceStorage;
-import forestry.core.blocks.BlockStairs;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.items.ItemBlockBase;
@@ -37,10 +34,6 @@ public class CoreBlocks {
 		.harvestTool(ToolType.SHOVEL)
 		.harvestLevel(0)), "peat");
 	public static final FeatureBlock<BlockHumus, ItemBlockForestry> HUMUS = REGISTRY.block(BlockHumus::new, ItemBlockForestry::new, "humus");
-	public static final FeatureBlock<Block, ItemBlockForestry> ASH_BRICK = REGISTRY.block(() -> new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE)
-		.hardnessAndResistance(2.0f, 10.0f)
-		.sound(SoundType.STONE)), ItemBlockForestry::new, "ash_brick");
-	public static final FeatureBlock<StairsBlock, ItemBlockForestry> ASH_STAIRS = REGISTRY.block(() -> new BlockStairs(ASH_BRICK.defaultState()), ItemBlockForestry::new, "ash_stairs");
 	public static final FeatureBlockGroup<BlockResourceStorage, EnumResourceType> RESOURCE_STORAGE = REGISTRY.blockGroup(BlockResourceStorage::new, EnumResourceType.VALUES).item(ItemBlockForestry::new).identifier("resource_storage").create();
 	public static final FeatureBlockGroup<BlockResourceOre, EnumResourceType> RESOURCE_ORE = REGISTRY.blockGroup(BlockResourceOre::new, new EnumResourceType[]{EnumResourceType.APATITE, EnumResourceType.COPPER, EnumResourceType.TIN}).item(ItemBlockForestry::new).identifier("resource_ore").create();
 

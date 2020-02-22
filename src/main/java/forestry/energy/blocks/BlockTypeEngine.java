@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
+import java.util.function.Supplier;
+
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
@@ -21,12 +23,10 @@ import forestry.energy.features.EnergyTiles;
 import forestry.energy.tiles.TileEngine;
 import forestry.modules.features.FeatureTileType;
 
-import java.util.function.Supplier;
-
 public enum BlockTypeEngine implements IBlockTypeTesr {
-    PEAT(createEngineProperties(() -> EnergyTiles.PEAT_ENGINE, "peat", "/engine_copper")),
-    BIOGAS(createEngineProperties(() -> EnergyTiles.BIOGAS_ENGINE, "biogas", "/engine_bronze")),
-    CLOCKWORK(createEngineProperties(() -> EnergyTiles.CLOCKWORK_ENGINE, "clockwork", "/engine_clock")),
+	PEAT(createEngineProperties(() -> EnergyTiles.PEAT_ENGINE, "peat", "/engine_copper")),
+	BIOGAS(createEngineProperties(() -> EnergyTiles.BIOGAS_ENGINE, "biogas", "/engine_bronze")),
+	CLOCKWORK(createEngineProperties(() -> EnergyTiles.CLOCKWORK_ENGINE, "clockwork", "/engine_clock")),
 	/*ELECTRICAL(createEngineProperties(TileEngineElectric.class, "electrical", "/engine_tin")),
 	GENERATOR(createMachineProperties(TileEuGenerator.class, "generator", "/generator"))*/;
 
@@ -38,14 +38,19 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 		this.machineProperties = machineProperties;
 	}
 
-    protected static IMachinePropertiesTesr<?> createEngineProperties(Supplier<FeatureTileType<? extends TileEngine>> teClass, String name, String textureName) {
-		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block" + textureName + ".0", false);
+	protected static IMachinePropertiesTesr<?> createEngineProperties(Supplier<FeatureTileType<? extends TileEngine>> teClass, String name, String textureName) {
+		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr.Builder<>(teClass, name)
+			.setParticleTexture(textureName + ".0")
+			.setNotFullCube()
+			.create();
 		ModuleEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCK + textureName + "_");
 		return machinePropertiesEngine;
 	}
 
-    protected static IMachinePropertiesTesr<?> createMachineProperties(Supplier<FeatureTileType<? extends TileBase>> teClass, String name, String textureName) {
-		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr<>(teClass, name, Constants.MOD_ID + ":block" + textureName + ".0");
+	protected static IMachinePropertiesTesr<?> createMachineProperties(Supplier<FeatureTileType<? extends TileBase>> teClass, String name, String textureName) {
+		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr.Builder<>(teClass, name)
+			.setParticleTexture(textureName + ".0")
+			.create();
 		Proxies.render.setRenderDefaultMachine(machinePropertiesTesr, Constants.TEXTURE_PATH_BLOCK + textureName + "_");
 		return machinePropertiesTesr;
 	}

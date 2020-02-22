@@ -10,10 +10,15 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.tiles.*;
-import forestry.modules.ISidedModuleHandler;
 import net.minecraftforge.client.event.ModelBakeEvent;
+
+import forestry.core.blocks.MachinePropertiesTesr;
+import forestry.core.tiles.TileAnalyzer;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileEscritoire;
+import forestry.core.tiles.TileMill;
+import forestry.core.tiles.TileNaturalistChest;
+import forestry.modules.ISidedModuleHandler;
 
 public class ProxyRender implements ISidedModuleHandler {
 
@@ -24,10 +29,10 @@ public class ProxyRender implements ISidedModuleHandler {
 	public void initRendering() {
 	}
 
-    public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
-    }
+	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
+	}
 
-    public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
+	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
 	}
 
 	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {

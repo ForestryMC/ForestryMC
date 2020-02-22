@@ -10,12 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.render.ForestryResource;
-import forestry.core.utils.SoundUtil;
-import forestry.mail.POBoxInfo;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -24,10 +20,17 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.render.ForestryResource;
+import forestry.core.utils.SoundUtil;
+import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends AbstractGui {
 
@@ -62,7 +65,7 @@ public class GuiMailboxInfo extends AbstractGui {
 		int y = 0;
 
 		Minecraft minecraft = Minecraft.getInstance();
-        MainWindow win = minecraft.getMainWindow();
+		MainWindow win = minecraft.getMainWindow();
 		if (Config.mailAlertXPosition == XPosition.RIGHT) {
 			x = win.getScaledWidth() - WIDTH;
 		}
@@ -70,8 +73,8 @@ public class GuiMailboxInfo extends AbstractGui {
 			y = win.getScaledHeight() - HEIGHT;
 		}
 
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.disableLighting();
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.disableLighting();
 		TextureManager textureManager = minecraft.getTextureManager();
 		textureManager.bindTexture(textureAlert);
 

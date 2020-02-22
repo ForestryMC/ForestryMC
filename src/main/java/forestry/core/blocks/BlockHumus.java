@@ -1,10 +1,14 @@
 package forestry.core.blocks;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import net.minecraft.block.*;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.LogBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
@@ -13,11 +17,14 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.ToolType;
 
-import java.util.Random;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.utils.RenderUtil;
 
 public class BlockHumus extends Block {
 	private static final int degradeDelimiter = Config.humusDegradeDelimiter;
@@ -25,11 +32,11 @@ public class BlockHumus extends Block {
 
 	public BlockHumus() {
 		super(Block.Properties.create(Material.EARTH)
-				.tickRandomly()
-				.hardnessAndResistance(0.5f)
-				.sound(SoundType.GROUND)
-				.harvestTool(ToolType.SHOVEL)
-				.harvestLevel(0));
+			.tickRandomly()
+			.hardnessAndResistance(0.5f)
+			.sound(SoundType.GROUND)
+			.harvestTool(ToolType.SHOVEL)
+			.harvestLevel(0));
 
 		setDefaultState(this.getStateContainer().getBaseState().with(DEGRADE, 0));
 	}
@@ -46,7 +53,7 @@ public class BlockHumus extends Block {
 	}
 
 	@Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(140) != 0) {
 			return;
 		}
@@ -89,9 +96,7 @@ public class BlockHumus extends Block {
 			world.setBlockState(pos, blockState.with(DEGRADE, degrade), Constants.FLAG_BLOCK_SYNC);
 		}
 		//TODO: Is this still needed ? Should now be marked with setBlockState
-		Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-
-		//		world.markForRerender(pos);
+		RenderUtil.markForUpdate(pos);
 	}
 
 	@Override

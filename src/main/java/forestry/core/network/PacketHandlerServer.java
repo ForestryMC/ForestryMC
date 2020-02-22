@@ -21,13 +21,9 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import net.minecraftforge.fml.network.ICustomPacket;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
 
 import forestry.core.config.Constants;
 
@@ -58,8 +54,8 @@ public class PacketHandlerServer {
 	//	}
 
 	public PacketHandlerServer() {
-//		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
-//		channel.register(this);
+		//		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
+		//		channel.register(this);
 	}
 
 	public void onPacket(NetworkEvent.ClientCustomPayloadEvent event) {
@@ -90,34 +86,34 @@ public class PacketHandlerServer {
 		player.connection.sendPacket(payload.getThis());
 	}
 
-//	@OnlyIn(Dist.CLIENT)
-//	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, IThreadListener threadListener) {
-//		if (!threadListener.isCallingFromMinecraftThread()) {
-//			data.retain();
-//			threadListener.addScheduledTask(() -> {
-//				try {
-//					PlayerEntity player = Minecraft.getInstance().player;
-//					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
-//					packet.onPacketData(data, player);
-//					data.release();
-//				} catch (IOException e) {
-//					Log.error("Network Error", e);
-//				}
-//			});
-//		}
-//	}
-//
-//	private static void checkThreadAndEnqueue(final IForestryPacketHandlerServer packet, final PacketBufferForestry data, final ServerPlayerEntity player, IThreadListener threadListener) {
-//		if (!threadListener.isCallingFromMinecraftThread()) {
-//			data.retain();
-//			threadListener.addScheduledTask(() -> {
-//				try {
-//					packet.onPacketData(data, player);
-//					data.release();
-//				} catch (IOException e) {
-//					Log.error("Network Error", e);
-//				}
-//			});
-//		}
-//	}
+	//	@OnlyIn(Dist.CLIENT)
+	//	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, IThreadListener threadListener) {
+	//		if (!threadListener.isCallingFromMinecraftThread()) {
+	//			data.retain();
+	//			threadListener.addScheduledTask(() -> {
+	//				try {
+	//					PlayerEntity player = Minecraft.getInstance().player;
+	//					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
+	//					packet.onPacketData(data, player);
+	//					data.release();
+	//				} catch (IOException e) {
+	//					Log.error("Network Error", e);
+	//				}
+	//			});
+	//		}
+	//	}
+	//
+	//	private static void checkThreadAndEnqueue(final IForestryPacketHandlerServer packet, final PacketBufferForestry data, final ServerPlayerEntity player, IThreadListener threadListener) {
+	//		if (!threadListener.isCallingFromMinecraftThread()) {
+	//			data.retain();
+	//			threadListener.addScheduledTask(() -> {
+	//				try {
+	//					packet.onPacketData(data, player);
+	//					data.release();
+	//				} catch (IOException e) {
+	//					Log.error("Network Error", e);
+	//				}
+	//			});
+	//		}
+	//	}
 }

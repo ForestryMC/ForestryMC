@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.text.TranslationTextComponent;
 
 public class ProbeButton extends Widget {
 
@@ -34,7 +36,7 @@ public class ProbeButton extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
 		manager.gui.blit(startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);

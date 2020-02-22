@@ -1,9 +1,12 @@
 package forestry.core.worldgen;
 
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.arboriculture.worldgen.ITreeBlockType;
-import forestry.arboriculture.worldgen.TreeBlockType;
-import forestry.core.utils.VectUtil;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
@@ -12,8 +15,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IWorld;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.arboriculture.worldgen.ITreeBlockType;
+import forestry.arboriculture.worldgen.TreeBlockType;
+import forestry.core.utils.VectUtil;
 //import forestry.arboriculture.worldgen.ITreeBlockType;
 //import forestry.arboriculture.worldgen.TreeBlockType;
 
@@ -65,7 +70,7 @@ public class FeatureHelper {
 		Vec3i start = new Vec3i(center.getX() - radius, center.getY(), center.getZ() - radius);
 		Vec3i area = new Vec3i(radius * 2 + 1, height, radius * 2 + 1);
 
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		for (int x = start.getX(); x < start.getX() + area.getX(); x++) {
 			for (int y = start.getY() + area.getY() - 1; y >= start.getY(); y--) { // generating top-down is faster for lighting calculations
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
@@ -90,7 +95,7 @@ public class FeatureHelper {
 	public static void generateSphere(IWorld world, BlockPos center, int radius, ITreeBlockType block, EnumReplaceMode replace) {
 		Vec3i start = new Vec3i(center.getX() - radius, center.getY() - radius, center.getZ() - radius);
 		Vec3i area = new Vec3i(radius * 2 + 1, radius * 2 + 1, radius * 2 + 1);
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		for (int x = start.getX(); x < start.getX() + area.getX(); x++) {
 			for (int y = start.getY() + area.getY() - 1; y >= start.getY(); y--) { // generating top-down is faster for lighting calculations
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {

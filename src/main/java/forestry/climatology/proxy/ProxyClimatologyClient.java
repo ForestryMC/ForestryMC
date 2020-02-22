@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.climatology.proxy;
 
-import forestry.climatology.PreviewHandlerClient;
-import forestry.climatology.features.ClimatologyBlocks;
-import forestry.modules.IClientModuleHandler;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import forestry.climatology.PreviewHandlerClient;
+import forestry.climatology.features.ClimatologyBlocks;
+import forestry.modules.IClientModuleHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class ProxyClimatologyClient extends ProxyClimatology implements IClientModuleHandler {
@@ -28,9 +31,9 @@ public class ProxyClimatologyClient extends ProxyClimatology implements IClientM
 		MinecraftForge.EVENT_BUS.register(new PreviewHandlerClient());
 	}
 
-    @Override
-    public void setupClient(FMLClientSetupEvent event) {
-        RenderTypeLookup.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.cutout());
-    }
+	@Override
+	public void setupClient(FMLClientSetupEvent event) {
+		RenderTypeLookup.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.cutout());
+	}
 
 }

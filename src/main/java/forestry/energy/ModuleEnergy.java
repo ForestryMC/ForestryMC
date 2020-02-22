@@ -35,7 +35,7 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	public ModuleEnergy() {
 		//set up proxies as early as possible
-		proxy = DistExecutor.runForDist(() -> () -> new ProxyEnergyClient(), () -> () -> new ProxyEnergy());
+		proxy = DistExecutor.runForDist(() -> ProxyEnergyClient::new, () -> ProxyEnergy::new);
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 

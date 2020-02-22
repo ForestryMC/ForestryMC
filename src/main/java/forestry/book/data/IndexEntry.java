@@ -3,6 +3,7 @@ package forestry.book.data;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 /**
  * A entry of an index.
  */

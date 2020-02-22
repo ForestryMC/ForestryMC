@@ -1,8 +1,10 @@
 package forestry.core.gui.elements;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import forestry.core.gui.Drawable;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -17,13 +19,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import forestry.core.gui.Drawable;
+import forestry.core.utils.ResourceUtil;
 
 public class TankElement extends GuiElement {
 	/* Attributes - Final */
@@ -52,10 +55,10 @@ public class TankElement extends GuiElement {
 
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
-        RenderSystem.disableBlend();
-        RenderSystem.enableAlphaTest();
+		RenderSystem.disableBlend();
+		RenderSystem.enableAlphaTest();
 		if (background != null) {
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(0, 0);
 		}
 		if (contents.isEmpty() || capacity <= 0) {
@@ -67,13 +70,13 @@ public class TankElement extends GuiElement {
 		if (contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			FluidAttributes attributes = fluid.getAttributes();
-            ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
+			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
-                fluidStillSprite = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+				fluidStillSprite = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
 			}
 			if (fluidStillSprite == null) {
-                fluidStillSprite = ResourceUtil.getMissingTexture();
+				fluidStillSprite = ResourceUtil.getMissingTexture();
 			}
 
 			int fluidColor = attributes.getColor(contents);
@@ -113,13 +116,13 @@ public class TankElement extends GuiElement {
 		}
 
 		if (overlay != null) {
-            RenderSystem.disableDepthTest();
+			RenderSystem.disableDepthTest();
 			overlay.draw(0, 0);
-            RenderSystem.enableDepthTest();
+			RenderSystem.enableDepthTest();
 		}
 
-        RenderSystem.color4f(1, 1, 1, 1);
-        RenderSystem.disableAlphaTest();
+		RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.disableAlphaTest();
 	}
 
 	@Override
@@ -150,16 +153,16 @@ public class TankElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-        RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.color4f(red, green, blue, 1.0F);
 	}
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
-        float uMin = textureSprite.getMinU();
-        float uMax = textureSprite.getMaxU();
-        float vMin = textureSprite.getMinV();
-        float vMax = textureSprite.getMaxV();
-        uMax = uMax - maskRight / 16.0F * (uMax - uMin);
-        vMax = vMax - maskTop / 16.0F * (vMax - vMin);
+		float uMin = textureSprite.getMinU();
+		float uMax = textureSprite.getMaxU();
+		float vMin = textureSprite.getMinV();
+		float vMax = textureSprite.getMaxV();
+		uMax = uMax - maskRight / 16.0F * (uMax - uMin);
+		vMax = vMax - maskTop / 16.0F * (vMax - vMin);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();

@@ -2,6 +2,8 @@ package forestry.sorting;
 
 import net.minecraft.client.gui.ScreenManager;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import forestry.api.genetics.alleles.AlleleManager;
@@ -35,6 +37,7 @@ public class ModuleSorting extends BlankForestryModule {
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
 	}

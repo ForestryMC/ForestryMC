@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 public interface IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)

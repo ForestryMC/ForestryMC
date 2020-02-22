@@ -1,8 +1,7 @@
 package forestry.sorting.blocks;
 
-import forestry.core.blocks.BlockForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.sorting.tiles.TileGeneticFilter;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -18,9 +17,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nullable;
+import forestry.core.blocks.BlockForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.sorting.tiles.TileGeneticFilter;
 
 public class BlockGeneticFilter extends BlockForestry {
 	public static final BooleanProperty NORTH = BooleanProperty.create("north");
@@ -71,7 +73,7 @@ public class BlockGeneticFilter extends BlockForestry {
 	//	}
 
 	@Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
 		TileGeneticFilter tile = TileUtil.getTile(worldIn, pos, TileGeneticFilter.class);
 		if (tile != null) {
 			if (TileUtil.isUsableByPlayer(playerIn, tile)) {
@@ -79,10 +81,10 @@ public class BlockGeneticFilter extends BlockForestry {
 					ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;
 					NetworkHooks.openGui(sPlayer, tile, pos);
 				}
-                return ActionResultType.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
 		}
-        return ActionResultType.PASS;
+		return ActionResultType.PASS;
 	}
 
 	//TODO bounding boxes

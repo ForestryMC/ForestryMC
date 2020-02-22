@@ -10,7 +10,14 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.core.utils.datastructures.Stack;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -21,13 +28,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import forestry.core.utils.datastructures.Stack;
 
 public abstract class ItemStackUtil {
 
@@ -487,6 +489,7 @@ public abstract class ItemStackUtil {
 	}
 
 	//TODO - just use a copy and set the count to make code simpler?
+
 	/**
 	 * Checks like {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}
 	 * but ignores stack size (count).

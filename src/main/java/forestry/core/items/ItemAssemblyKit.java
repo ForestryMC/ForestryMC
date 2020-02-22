@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.core.ItemGroupForestry;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -18,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+
+import forestry.core.ItemGroupForestry;
 
 public class ItemAssemblyKit extends ItemForestry {
 	private final ItemStack assembled;
@@ -34,9 +35,9 @@ public class ItemAssemblyKit extends ItemForestry {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (!worldIn.isRemote) {
 			heldItem.shrink(1);
-            ItemEntity entity = new ItemEntity(worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), assembled.copy());
+			ItemEntity entity = new ItemEntity(worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), assembled.copy());
 			worldIn.addEntity(entity);
 		}
-        return ActionResult.func_226248_a_(heldItem);
+		return ActionResult.func_226248_a_(heldItem);
 	}
 }

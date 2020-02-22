@@ -1,5 +1,15 @@
 package forestry.core.gui.elements;
 
+import javax.annotation.Nullable;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.mutation.IMutation;
+
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
@@ -8,22 +18,24 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
 import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
-import forestry.api.gui.*;
+import forestry.api.gui.GuiConstants;
+import forestry.api.gui.GuiElementAlignment;
+import forestry.api.gui.IElementGroup;
+import forestry.api.gui.IElementLayout;
+import forestry.api.gui.IGuiElement;
+import forestry.api.gui.IGuiElementFactory;
+import forestry.api.gui.IWindowElement;
 import forestry.api.gui.style.ITextStyle;
 import forestry.api.gui.style.TextStyleBuilder;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.layouts.*;
+import forestry.core.gui.elements.layouts.AbstractElementLayout;
+import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.HorizontalLayout;
+import forestry.core.gui.elements.layouts.PaneLayout;
+import forestry.core.gui.elements.layouts.VerticalLayout;
 import forestry.core.render.ColourProperties;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.mutation.IMutation;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Map;
 
 public class GuiElementFactory implements IGuiElementFactory {
 	/* Constants */
@@ -31,7 +43,7 @@ public class GuiElementFactory implements IGuiElementFactory {
 	public static final ITextStyle RECESSIVE_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.beealyzer.recessive")).build();
 	public static final ITextStyle GUI_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.screen")).build();
 	public static final ITextStyle GUI_TITLE_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.title")).build();
-    public static final ITextStyle DATABASE_TITLE = new TextStyleBuilder().color(0xcfb53b).underlined(true).build();
+	public static final ITextStyle DATABASE_TITLE = new TextStyleBuilder().color(0xcfb53b).underlined(true).build();
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png");
 
 	/* Drawables */

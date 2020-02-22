@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import com.mojang.datafixers.util.Pair;
+import javax.annotation.Nullable;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
+import com.mojang.datafixers.util.Pair;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -31,8 +33,8 @@ public class SlotOutput extends SlotWatched {
 	}
 
 	@Nullable
-    @Override
-    public Pair<ResourceLocation, ResourceLocation> func_225517_c_() {
+	@Override
+	public Pair<ResourceLocation, ResourceLocation> func_225517_c_() {
 		return null;
 	}
 }

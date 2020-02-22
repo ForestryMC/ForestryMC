@@ -1,5 +1,21 @@
 package forestry.core.gui.elements;
 
+import java.util.List;
+import java.util.Optional;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.api.genetics.gatgets.IDatabaseTab;
@@ -16,19 +32,10 @@ import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.glfw.GLFW;
 
-import java.util.List;
-import java.util.Optional;
-
+@OnlyIn(Dist.CLIENT)
 public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, IScrollable {
 	/* Textures */
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/analyzer_screen.png");
@@ -88,7 +95,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			}
 		});
 		addEventHandler(GuiEvent.KeyEvent.class, event -> {
-            int keyCode = event.getKeyCode();
+			int keyCode = event.getKeyCode();
 			if ((keyCode == GLFW.GLFW_KEY_DOWN || keyCode == GLFW.GLFW_KEY_RIGHT) && rightButton.isEnabled()) {
 				rightButton.onPressed();
 			} else if ((keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_LEFT) && leftButton.isEnabled()) {

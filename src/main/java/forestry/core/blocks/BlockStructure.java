@@ -10,14 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.circuits.ISocketable;
-import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.multiblock.MultiblockUtil;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +28,15 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.circuits.ISocketable;
+import forestry.core.multiblock.MultiblockTileEntityForestry;
+import forestry.core.multiblock.MultiblockUtil;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -45,14 +47,14 @@ public abstract class BlockStructure extends BlockForestry {
 	protected long previousMessageTick = 0;
 
 	@Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
-        if (playerIn.func_225608_bj_()) { //isSneaking
-            return ActionResultType.PASS;
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+		if (playerIn.func_225608_bj_()) { //isSneaking
+			return ActionResultType.PASS;
 		}
 
 		MultiblockTileEntityForestry part = TileUtil.getTile(worldIn, pos, MultiblockTileEntityForestry.class);
 		if (part == null) {
-            return ActionResultType.FAIL;
+			return ActionResultType.FAIL;
 		}
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
@@ -69,24 +71,24 @@ public abstract class BlockStructure extends BlockForestry {
 							playerIn.sendMessage(new StringTextComponent(validationError));
 							previousMessageTick = tick;
 						}
-                        return ActionResultType.SUCCESS;
+						return ActionResultType.SUCCESS;
 					}
 				}
 			} else {
 				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"));
-                return ActionResultType.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
 		}
 
 		// Don't open the GUI if the multiblock isn't assembled
 		if (controller == null || !controller.isAssembled()) {
-            return ActionResultType.PASS;
+			return ActionResultType.PASS;
 		}
 
 		if (!worldIn.isRemote) {
 			part.openGui((ServerPlayerEntity) playerIn, pos);    //TODO cast is safe because on server?
 		}
-        return ActionResultType.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override

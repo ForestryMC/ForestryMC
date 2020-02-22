@@ -10,27 +10,24 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import forestry.core.tiles.TileForestry;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
 
-import javax.annotation.Nullable;
+import forestry.core.tiles.TileForestry;
 
-public interface IMachineProperties<T extends TileForestry> extends IStringSerializable {
-    TileEntityType<? extends T> getTeType();
+public interface IMachineProperties<T extends TileForestry> extends IStringSerializable, IShapeProvider {
+	TileEntityType<? extends T> getTeType();
 
-    default void clientSetup() {
-    }
+	default void clientSetup() {
+	}
 
-    @Nullable
-    TileEntity createTileEntity();
+	@Nullable
+	TileEntity createTileEntity();
 
 	void setBlock(Block block);
 
@@ -38,6 +35,4 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
 	Block getBlock();
 
 	boolean isFullCube(BlockState state);
-
-	VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context);
 }

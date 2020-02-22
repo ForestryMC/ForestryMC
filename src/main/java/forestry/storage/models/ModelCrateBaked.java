@@ -1,10 +1,11 @@
 package forestry.storage.models;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import forestry.core.models.AbstractBakedModel;
-import forestry.core.models.TRSRBakedModel;
-import forestry.core.utils.ResourceUtil;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.Vector3f;
@@ -13,17 +14,20 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.client.model.BakedItemModel;
 import net.minecraftforge.common.model.TransformationHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+import forestry.core.models.AbstractBakedModel;
+import forestry.core.models.TRSRBakedModel;
+import forestry.core.utils.ResourceUtil;
 
 public class ModelCrateBaked extends AbstractBakedModel {
-	private static final float CONTENT_RENDER_OFFSET_X = 1f/16f; // how far to offset content model from the left edge of the crate model
-	private static final float CONTENT_RENDER_OFFSET_Z = 1f/128f; // how far to render the content model away from the crate model
-	private static final float CONTENT_RENDER_BLOCK_Z_SCALE = 1f/16f + (2f * CONTENT_RENDER_OFFSET_Z); // how much to scale down blocks so they look flat on the crate model
+	private static final float CONTENT_RENDER_OFFSET_X = 1f / 16f; // how far to offset content model from the left edge of the crate model
+	private static final float CONTENT_RENDER_OFFSET_Z = 1f / 128f; // how far to render the content model away from the crate model
+	private static final float CONTENT_RENDER_BLOCK_Z_SCALE = 1f / 16f + (2f * CONTENT_RENDER_OFFSET_Z); // how much to scale down blocks so they look flat on the crate model
 
 	private ContentModel contentModel;
 
@@ -76,25 +80,25 @@ public class ModelCrateBaked extends AbstractBakedModel {
 
 		@Override
 		public ContentModel bake() {
-            IBakedModel bakedModel = ResourceUtil.getModel(content);
+			IBakedModel bakedModel = ResourceUtil.getModel(content);
 			if (bakedModel != null) {
-                IBakedModel guiModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI, new MatrixStack());
+				IBakedModel guiModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI, new MatrixStack());
 				if (bakedModel instanceof BakedItemModel) {
-                    TransformationMatrix frontTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z),
+					TransformationMatrix frontTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z),
 						null,
 						new Vector3f(0.5F, 0.5F, 1F),
 						null);
 					TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
 					quads.addAll(frontModel.getQuads(null, null, new Random(0L)));
-                    TransformationMatrix backTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
+					TransformationMatrix backTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
 						null,
 						new Vector3f(0.5F, 0.5F, 1f),
-                            TransformationHelper.quatFromXYZ(new Vector3f(0, (float) Math.PI, 0), false)
-                            /*TransformationMatrix.quatFromYXZ((float) Math.PI, 0, 0)*/);//TODO: Test if this works
+						TransformationHelper.quatFromXYZ(new Vector3f(0, (float) Math.PI, 0), false)
+						/*TransformationMatrix.quatFromYXZ((float) Math.PI, 0, 0)*/);//TODO: Test if this works
 					TRSRBakedModel backModel = new TRSRBakedModel(guiModel, backTransform);
 					quads.addAll(backModel.getQuads(null, null, new Random(0L)));
 				} else {
-                    TransformationMatrix frontTransform = new TransformationMatrix(
+					TransformationMatrix frontTransform = new TransformationMatrix(
 						new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, 0),
 						null,
 						new Vector3f(0.5F, 0.5F, CONTENT_RENDER_BLOCK_Z_SCALE),

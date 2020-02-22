@@ -1,9 +1,10 @@
 package forestry.api.gui.events;
 
 
-import forestry.api.gui.IGuiElement;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.gui.IGuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class GuiElementEvent {

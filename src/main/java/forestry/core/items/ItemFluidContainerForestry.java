@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.core.ItemGroups;
-import forestry.core.config.Config;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.utils.Translator;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowingFluid;
@@ -24,13 +22,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.FoodStats;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -43,7 +48,10 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
+import forestry.api.core.ItemGroups;
+import forestry.core.config.Config;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.utils.Translator;
 
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
@@ -125,7 +133,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				if (!worldIn.isRemote) {
 					FoodStats foodStats = player.getFoodStats();
 					foodStats.addStats(drinkProperties.getHealAmount(), drinkProperties.getSaturationModifier());
-                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+					worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 				}
 
 				player.addStat(Stats.ITEM_USED.get(this));
@@ -181,7 +189,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			if (Config.CapsuleFluidPickup) {
 				RayTraceResult target = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
 				if (target.getType() != RayTraceResult.Type.BLOCK) {
-                    return ActionResult.func_226250_c_(heldItem);
+					return ActionResult.func_226250_c_(heldItem);
 				}
 				BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
 				ItemStack singleBucket = heldItem.copy();
@@ -196,7 +204,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 						heldItem.shrink(1);
 					}
 
-                    return ActionResult.func_226248_a_(heldItem);
+					return ActionResult.func_226248_a_(heldItem);
 				}
 			}
 			return super.onItemRightClick(world, player, handIn);

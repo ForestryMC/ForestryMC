@@ -15,15 +15,19 @@ import java.util.Locale;
 import forestry.api.core.IBlockSubtype;
 
 public enum EnumResourceType implements IBlockSubtype {
-	APATITE(0, true),
-	COPPER(1, true),
-	TIN(2, true),
+	APATITE(0),
+	COPPER(1),
+	TIN(2),
 	BRONZE(3, false);
 
 	public static final EnumResourceType[] VALUES = values();
 
 	private final int meta;
 	private final boolean hasOre;
+
+	EnumResourceType(int meta) {
+		this(meta, true);
+	}
 
 	EnumResourceType(int meta, boolean hasOre) {
 		this.meta = meta;

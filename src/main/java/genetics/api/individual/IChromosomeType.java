@@ -1,9 +1,10 @@
 package genetics.api.individual;
 
+import net.minecraft.util.text.ITextComponent;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
-import net.minecraft.util.text.ITextComponent;
 
 /**
  * Interface to be implemented by the enums representing the various chromosomes.
@@ -24,7 +25,7 @@ public interface IChromosomeType {
 	 */
 	String getName();
 
-    ITextComponent getDisplayName();
+	ITextComponent getDisplayName();
 
 	/**
 	 * @return The definition that contains this type in the {@link IKaryotype}.

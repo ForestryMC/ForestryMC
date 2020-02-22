@@ -1,10 +1,7 @@
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.EffectData;
-import forestry.core.utils.VectUtil;
-import genetics.api.individual.IGenome;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,7 +15,12 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.genetics.EffectData;
+import forestry.core.utils.VectUtil;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
@@ -68,7 +70,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 				if (convertToMycelium(world, blockState, pos)) {
 					return;
-                } else if (growGiantMushroom((ServerWorld) world, blockState, pos)) {
+				} else if (growGiantMushroom((ServerWorld) world, blockState, pos)) {
 					return;
 				}
 			}
@@ -93,11 +95,11 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		return false;
 	}
 
-    private static boolean growGiantMushroom(ServerWorld world, BlockState blockState, BlockPos pos) {
+	private static boolean growGiantMushroom(ServerWorld world, BlockState blockState, BlockPos pos) {
 		Block block = blockState.getBlock();
 		if (block instanceof MushroomBlock) {
 			MushroomBlock mushroom = (MushroomBlock) block;
-            mushroom.func_226940_a_(world, pos, blockState, world.rand);
+			mushroom.func_226940_a_(world, pos, blockState, world.rand);
 			return true;
 		}
 		return false;
@@ -110,11 +112,11 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		World world = cow.world;
 		cow.remove();
 		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
-        mooshroom.setLocationAndAngles(cow.getPosX(), cow.getPosY(), cow.getPosZ(), cow.rotationYaw, cow.rotationPitch);
+		mooshroom.setLocationAndAngles(cow.getPosX(), cow.getPosY(), cow.getPosZ(), cow.rotationYaw, cow.rotationPitch);
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
 		world.addEntity(mooshroom);
-        world.addParticle(ParticleTypes.EXPLOSION, cow.getPosX(), cow.getPosY() + cow.getHeight() / 2.0F, cow.getPosZ(), 0.0D, 0.0D, 0.0D);
+		world.addParticle(ParticleTypes.EXPLOSION, cow.getPosX(), cow.getPosY() + cow.getHeight() / 2.0F, cow.getPosZ(), 0.0D, 0.0D, 0.0D);
 		return true;
 	}
 }

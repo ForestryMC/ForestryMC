@@ -11,9 +11,11 @@
 package forestry.core.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import forestry.core.render.ColourProperties;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.render.ColourProperties;
 
 @OnlyIn(Dist.CLIENT)
 public class TextLayoutHelper {
@@ -34,7 +36,7 @@ public class TextLayoutHelper {
 
 	public void startPage() {
 		line = LINE_HEIGHT;
-        RenderSystem.pushMatrix();
+		RenderSystem.pushMatrix();
 	}
 
 	public void startPage(int column0, int column1) {
@@ -66,7 +68,7 @@ public class TextLayoutHelper {
 	}
 
 	public void endPage() {
-        RenderSystem.popMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	public void drawRow(String text0, String text1, String text2, int colour0, int colour1, int colour2) {

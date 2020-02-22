@@ -64,6 +64,7 @@ public interface IForestryModule {
 
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	default void registerGuiFactories() {
 
 	}

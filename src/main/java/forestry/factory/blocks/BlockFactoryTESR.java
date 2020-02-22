@@ -20,7 +20,7 @@ import forestry.core.blocks.BlockBase;
 public class BlockFactoryTESR extends BlockBase<BlockTypeFactoryTesr> {
 	public BlockFactoryTESR(BlockTypeFactoryTesr type) {
 		super(type, Block.Properties.create(Material.IRON)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(0));
+			.harvestTool(ToolType.PICKAXE)
+			.harvestLevel(0));
 	}
 }

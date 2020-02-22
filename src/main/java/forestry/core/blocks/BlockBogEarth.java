@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import forestry.core.config.Constants;
-import forestry.core.features.CoreBlocks;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,10 +25,12 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
 
-import java.util.Random;
+import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
 
 /**
  * bog earth, which becomes peat
@@ -39,11 +41,11 @@ public class BlockBogEarth extends Block {
 
 	public BlockBogEarth() {
 		super(Block.Properties.create(Material.EARTH)
-				.tickRandomly()
-				.hardnessAndResistance(0.5f)
-				.sound(SoundType.GROUND)
-				.harvestTool(ToolType.SHOVEL)
-				.harvestLevel(0));
+			.tickRandomly()
+			.hardnessAndResistance(0.5f)
+			.sound(SoundType.GROUND)
+			.harvestTool(ToolType.SHOVEL)
+			.harvestLevel(0));
 
 		setDefaultState(this.getStateContainer().getBaseState().with(MATURITY, 0));
 	}
@@ -60,7 +62,7 @@ public class BlockBogEarth extends Block {
 	}
 
 	@Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(13) != 0) {
 			return;
 		}

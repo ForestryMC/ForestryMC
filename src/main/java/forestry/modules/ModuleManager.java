@@ -225,7 +225,7 @@ public class ModuleManager implements IModuleManager {
 	public static void runSetup() {
 		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules();
 
-		moduleHandler = DistExecutor.runForDist(() -> () -> new ClientModuleHandler(getInstance()), () -> () -> new CommonModuleHandler(getInstance()));
+		moduleHandler = DistExecutor.runForDist(() -> ClientModuleHandler::new, () -> CommonModuleHandler::new);
 		configureModules(forestryModules);
 	}
 

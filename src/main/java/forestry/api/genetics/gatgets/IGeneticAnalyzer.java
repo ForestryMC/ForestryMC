@@ -2,8 +2,12 @@ package forestry.api.genetics.gatgets;
 
 import net.minecraft.client.gui.screen.Screen;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.gui.IGuiElement;
 
+@OnlyIn(Dist.CLIENT)
 public interface IGeneticAnalyzer extends IGuiElement {
 	IGeneticAnalyzerProvider getProvider();
 

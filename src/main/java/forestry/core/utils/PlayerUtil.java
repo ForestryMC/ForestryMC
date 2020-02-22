@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import com.mojang.authlib.GameProfile;
+import javax.annotation.Nullable;
+import java.util.UUID;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.FakePlayerFactory;
 
-import javax.annotation.Nullable;
-import java.util.UUID;
+import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.util.FakePlayerFactory;
 
 public abstract class PlayerUtil {
 

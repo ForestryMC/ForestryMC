@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core;
 
-import forestry.core.utils.GeneticsUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import forestry.core.utils.GeneticsUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class TickHandlerCoreClient {
@@ -39,8 +41,8 @@ public class TickHandlerCoreClient {
 						WorldRenderer renderGlobal = minecraft.worldRenderer;
 						if (renderGlobal != null) {
 							renderGlobal.markBlockRangeForRenderUpdate(
-                                    (int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32,
-                                    (int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
+								(int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32,
+								(int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
 						}
 					}
 				}

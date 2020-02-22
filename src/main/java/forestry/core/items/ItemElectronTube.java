@@ -15,7 +15,6 @@ import com.google.common.collect.Multimap;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;

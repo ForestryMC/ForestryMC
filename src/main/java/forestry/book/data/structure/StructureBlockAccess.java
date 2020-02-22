@@ -12,16 +12,17 @@
  ******************************************************************************/
 package forestry.book.data.structure;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class StructureBlockAccess implements IBlockReader {
@@ -45,7 +46,7 @@ public class StructureBlockAccess implements IBlockReader {
 	}
 
 	@Override
-    public int getLightValue(BlockPos pos) {
+	public int getLightValue(BlockPos pos) {
 		return 15 << 20 | 15 << 4;
 	}
 

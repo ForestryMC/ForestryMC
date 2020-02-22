@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.core.worldgen.FeatureHelper;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
-import java.util.List;
-import java.util.Random;
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.core.worldgen.FeatureHelper;
 
 public class FeatureBalsa extends FeatureTree {
 
@@ -28,7 +29,7 @@ public class FeatureBalsa extends FeatureTree {
 	@Override
 	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		BlockPos topPos = startPos.add(0, height + 1, 0);
-        BlockPos.Mutable leafCenter = new BlockPos.Mutable(topPos);
+		BlockPos.Mutable leafCenter = new BlockPos.Mutable(topPos);
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		FeatureHelper.addBlock(world, leafCenter, leaf, FeatureHelper.EnumReplaceMode.AIR);

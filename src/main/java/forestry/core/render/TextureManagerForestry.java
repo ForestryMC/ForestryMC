@@ -10,24 +10,26 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ISpriteRegistry;
-import forestry.api.core.ITextureManager;
-import forestry.core.config.Constants;
-import forestry.core.errors.ErrorStateRegistry;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ISpriteRegistry;
+import forestry.api.core.ITextureManager;
+import forestry.core.config.Constants;
+import forestry.core.errors.ErrorStateRegistry;
 
 @OnlyIn(Dist.CLIENT)
 public class TextureManagerForestry implements ITextureManager {
@@ -35,8 +37,8 @@ public class TextureManagerForestry implements ITextureManager {
 	private static final TextureManagerForestry INSTANCE = new TextureManagerForestry();
 	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
 
-    @SuppressWarnings("NullableProblems")
-    private ForestrySpriteUploader spriteUploader;
+	@SuppressWarnings("NullableProblems")
+	private ForestrySpriteUploader spriteUploader;
 
 	static {
 		ForestryAPI.textureManager = INSTANCE;
@@ -50,18 +52,18 @@ public class TextureManagerForestry implements ITextureManager {
 	}
 
 
-    public void init(ForestrySpriteUploader spriteUploader) {
-        ErrorStateRegistry.initSprites(spriteUploader);
-        initDefaultSprites(spriteUploader);
-        this.spriteUploader = spriteUploader;
-    }
+	public void init(ForestrySpriteUploader spriteUploader) {
+		ErrorStateRegistry.initSprites(spriteUploader);
+		initDefaultSprites(spriteUploader);
+		this.spriteUploader = spriteUploader;
+	}
 
-    @Nullable
-    public ForestrySpriteUploader getSpriteUploader() {
-        return spriteUploader;
-    }
+	@Nullable
+	public ForestrySpriteUploader getSpriteUploader() {
+		return spriteUploader;
+	}
 
-    private static void initDefaultSprites(ISpriteRegistry registry) {
+	private static void initDefaultSprites(ISpriteRegistry registry) {
 		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle",
 			"habitats/mushroom", "habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga",
 			"misc/access.shared", "misc/energy", "misc/hint",
@@ -74,13 +76,13 @@ public class TextureManagerForestry implements ITextureManager {
 			"mail/carrier.player", "mail/carrier.trader"
 		};
 		for (String identifier : defaultIconNames) {
-            registry.addSprite(new ResourceLocation(Constants.MOD_ID, identifier));
+			registry.addSprite(new ResourceLocation(Constants.MOD_ID, identifier));
 		}
 	}
 
 	@Override
 	public TextureAtlasSprite getDefault(String identifier) {
-        return spriteUploader.getSprite(new ResourceLocation(Constants.MOD_ID, identifier));
+		return spriteUploader.getSprite(new ResourceLocation(Constants.MOD_ID, identifier));
 	}
 
 	@Override
@@ -107,9 +109,9 @@ public class TextureManagerForestry implements ITextureManager {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-    public void registerSprites(ISpriteRegistry registry) {
+	public void registerSprites(ISpriteRegistry registry) {
 		for (ISpriteRegister spriteRegister : spriteRegisters) {
-            spriteRegister.registerSprites(registry);
-        }
+			spriteRegister.registerSprites(registry);
+		}
 	}
 }

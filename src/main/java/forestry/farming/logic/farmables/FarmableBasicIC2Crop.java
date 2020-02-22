@@ -42,7 +42,6 @@ public class FarmableBasicIC2Crop implements IFarmable {
 	//			}
 	//		}
 	//	}
-
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
 		TileEntity crop = world.getTileEntity(pos);

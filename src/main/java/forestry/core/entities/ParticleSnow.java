@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 public class ParticleSnow extends Particle {
 	public static final TextureAtlasSprite[] sprites = new TextureAtlasSprite[3];
@@ -35,9 +36,9 @@ public class ParticleSnow extends Particle {
 	}
 
 	@Override
-    public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
+	public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
 
-    }
+	}
 
 	/*@Override
 	//TODO particles

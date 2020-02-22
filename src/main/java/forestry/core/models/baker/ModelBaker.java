@@ -10,19 +10,25 @@
  ******************************************************************************/
 package forestry.core.models.baker;
 
-import forestry.core.config.Constants;
-import forestry.core.models.ClientManager;
-import forestry.core.utils.ResourceUtil;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.BlockFaceUV;
+import net.minecraft.client.renderer.model.BlockPartFace;
+import net.minecraft.client.renderer.model.FaceBakery;
+import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.core.config.Constants;
+import forestry.core.models.ClientManager;
+import forestry.core.utils.ResourceUtil;
 
 
 /**
@@ -32,7 +38,7 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public final class ModelBaker {
 
-    private static final ResourceLocation FACE_LOCATION = new ResourceLocation(Constants.MOD_ID, "baker_face");
+	private static final ResourceLocation FACE_LOCATION = new ResourceLocation(Constants.MOD_ID, "baker_face");
 	private static final float[] UVS = new float[]{0.0F, 0.0F, 16.0F, 16.0F, 0.0F, 0.0F, 16.0F, 16.0F};
 	private static final FaceBakery FACE_BAKERY = new FaceBakery();
 	private static final Vector3f POS_FROM = new Vector3f(0.0F, 0.0F, 0.0F);
@@ -58,7 +64,7 @@ public final class ModelBaker {
 	}
 
 	public ModelBaker addFace(Direction facing, TextureAtlasSprite sprite) {
-        if (sprite != ResourceUtil.getMissingTexture()) {
+		if (sprite != ResourceUtil.getMissingTexture()) {
 			faces.add(new ModelBakerFace(facing, colorIndex, sprite));
 		}
 		return this;
@@ -75,7 +81,7 @@ public final class ModelBaker {
 			Direction facing = face.face;
 			BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
 			BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
-            BakedQuad quad = FACE_BAKERY.func_228824_a_(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
+			BakedQuad quad = FACE_BAKERY.func_228824_a_(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
 
 			currentModel.addQuad(facing, quad);
 		}

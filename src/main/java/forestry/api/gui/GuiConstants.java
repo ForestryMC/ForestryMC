@@ -7,7 +7,7 @@ import forestry.api.gui.style.TextStyleBuilder;
 public class GuiConstants {
 	public static final ITextStyle DEFAULT_STYLE = new ImmutableTextStyle();
 	public static final ITextStyle BLACK_STYLE = new TextStyleBuilder().color(0x000000).build();
-    public static final ITextStyle GRAY_STYLE = new TextStyleBuilder().color(0x666666).build();
+	public static final ITextStyle GRAY_STYLE = new TextStyleBuilder().color(0x666666).build();
 	public static final ITextStyle UNICODE_STYLE = new TextStyleBuilder().unicode(true).build();
 	public static final ITextStyle UNDERLINED_STYLE = new TextStyleBuilder().underlined(true).build();
 	public static final ITextStyle BOLD_BLACK_STYLE = new TextStyleBuilder(BLACK_STYLE).bold(true).build();

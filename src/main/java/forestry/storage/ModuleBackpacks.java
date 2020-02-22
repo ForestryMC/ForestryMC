@@ -26,6 +26,8 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.fml.InterModComms;
@@ -113,6 +115,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(BackpackContainers.BACKPACK.containerType(), GuiBackpack::new);
 	}

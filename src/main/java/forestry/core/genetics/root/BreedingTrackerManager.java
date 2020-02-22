@@ -27,7 +27,7 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	INSTANCE;
 
 	BreedingTrackerManager() {
-		sidedHandler = DistExecutor.runForDist(() -> () -> new ClientHandler(), () -> () -> new ServerHandler());
+		sidedHandler = DistExecutor.runForDist(() -> ClientHandler::new, () -> ServerHandler::new);
 	}
 
 	private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();

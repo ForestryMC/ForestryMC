@@ -18,6 +18,7 @@ import net.minecraft.util.SoundEvents;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 public class SoundUtil {
 	@OnlyIn(Dist.CLIENT)
 	public static void playButtonClick() {

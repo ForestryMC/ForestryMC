@@ -11,9 +11,12 @@
 package forestry.core.models;
 
 import com.google.common.base.Preconditions;
-import forestry.core.models.baker.ModelBaker;
-import forestry.core.models.baker.ModelBakerModel;
-import forestry.core.utils.ResourceUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -26,15 +29,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+import forestry.core.models.baker.ModelBaker;
+import forestry.core.models.baker.ModelBakerModel;
+import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {
@@ -118,17 +121,17 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 			(blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
 	}
 
-    @Override
-    public boolean func_230044_c_() {
-        return itemModel != null && itemModel.func_230044_c_();
-    }
+	@Override
+	public boolean func_230044_c_() {
+		return itemModel != null && itemModel.func_230044_c_();
+	}
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		if (blockModel != null) {
 			return blockModel.getParticleTexture();
 		}
-        return ResourceUtil.getMissingTexture();
+		return ResourceUtil.getMissingTexture();
 	}
 
 	@Override

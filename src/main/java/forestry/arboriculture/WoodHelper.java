@@ -1,9 +1,5 @@
 package forestry.arboriculture;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -12,7 +8,6 @@ import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.core.config.Constants;
 import forestry.core.utils.Translator;
 
 public class WoodHelper {

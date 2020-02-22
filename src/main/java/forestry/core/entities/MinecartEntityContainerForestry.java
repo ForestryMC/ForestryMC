@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.utils.InventoryUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,6 +23,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.utils.InventoryUtil;
 
 //TODO: large type hierarchy here. If no other modules use other than apiculture then compress this.
 public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements ISidedInventory, IFilterSlotDelegate, INamedContainerProvider {
@@ -58,7 +59,7 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	@Override
 	public void remove() {
 		if (dropContentsWhenDead && !world.isRemote) {
-            InventoryUtil.dropInventory(getInternalInventory(), world, getPosX(), getPosY(), getPosZ());
+			InventoryUtil.dropInventory(getInternalInventory(), world, getPosX(), getPosY(), getPosZ());
 		}
 		super.remove();
 	}

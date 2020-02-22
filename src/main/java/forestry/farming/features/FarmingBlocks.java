@@ -1,13 +1,18 @@
 package forestry.farming.features;
 
+import net.minecraft.item.BlockItem;
+
 import forestry.farming.ModuleFarming;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.BlockMushroom;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.blocks.EnumFarmMaterial;
 import forestry.farming.items.ItemBlockFarm;
-import forestry.modules.features.*;
-import net.minecraft.item.BlockItem;
+import forestry.modules.features.FeatureBlock;
+import forestry.modules.features.FeatureBlockTable;
+import forestry.modules.features.FeatureProvider;
+import forestry.modules.features.IFeatureRegistry;
+import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class FarmingBlocks {

@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 /**
  * Get the instance from {@link ForestryAPI#textureManager}.
  */

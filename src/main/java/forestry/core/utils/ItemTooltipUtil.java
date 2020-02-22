@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 public class ItemTooltipUtil {
 	@OnlyIn(Dist.CLIENT)
 	public static void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {

@@ -18,7 +18,8 @@ apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
 
-version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
+String semver = "${version_major}.${version_minor}.${version_patch}"
+version = "${semver}.${getBuildNumber()}"
 if (project.hasProperty('buildQualifier')) {
 	version = project.version + '-' + project.buildQualifier
 }
@@ -121,6 +122,8 @@ dependencies {
 	/*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"*/
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 configurations {
@@ -138,12 +141,12 @@ allprojects {
 jar {
 	manifest {
 		attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Title": "Forestry",
+            "Specification-Vendor": "SirSengir",
+            "Specification-Version": "${semver}",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"SirSengir",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
 			"FMLAT": 'forestry_at.cfg'
         ])

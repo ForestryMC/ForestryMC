@@ -10,11 +10,8 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import forestry.api.fuels.RainSubstrate;
-import forestry.core.render.ParticleRender;
-import forestry.core.tiles.TileMill;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.inventory.InventoryRainmaker;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -22,7 +19,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 
-import javax.annotation.Nullable;
+import forestry.api.fuels.RainSubstrate;
+import forestry.core.render.ParticleRender;
+import forestry.core.tiles.TileMill;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.inventory.InventoryRainmaker;
 
 public class TileMillRainmaker extends TileMill {
 	private int duration;
@@ -116,8 +117,8 @@ public class TileMillRainmaker extends TileMill {
 		return null;
 	}
 
-    @Override
-    protected boolean hasGui() {
-        return false;
-    }
+	@Override
+	protected boolean hasGui() {
+		return false;
+	}
 }

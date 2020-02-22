@@ -11,9 +11,9 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Config;
-import forestry.energy.tiles.TileEngine;
 import forestry.energy.compat.mj.MjHelper;
 import forestry.energy.compat.tesla.TeslaHelper;
+import forestry.energy.tiles.TileEngine;
 
 public class EnergyHelper {
 	public static int scaleForDifficulty(int energyValue) {

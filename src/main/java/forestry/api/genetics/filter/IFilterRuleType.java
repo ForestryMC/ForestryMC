@@ -5,6 +5,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 public interface IFilterRuleType extends IFilterRule {
 	void addLogic(IFilterRule logic);
 

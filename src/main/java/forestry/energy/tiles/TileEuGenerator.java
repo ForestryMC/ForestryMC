@@ -170,7 +170,7 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 	public int getStoredScaled(int i) {
 		//		if (ic2EnergySource == null) {
-			return 0;
+		return 0;
 		//		}
 		//
 		//		return (int) (ic2EnergySource.getEnergyStored() * i) / maxEnergy;

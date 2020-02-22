@@ -11,6 +11,25 @@
 package forestry.farming;
 
 
+import java.io.File;
+import java.util.List;
+
+import net.minecraft.block.BeetrootBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CropsBlock;
+import net.minecraft.block.NetherWartBlock;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -28,7 +47,13 @@ import forestry.farming.features.FarmingBlocks;
 import forestry.farming.features.FarmingContainers;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.ForestryFarmIdentifier;
-import forestry.farming.logic.farmables.*;
+import forestry.farming.logic.farmables.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableChorus;
+import forestry.farming.logic.farmables.FarmableGE;
+import forestry.farming.logic.farmables.FarmableGourd;
+import forestry.farming.logic.farmables.FarmableStacked;
+import forestry.farming.logic.farmables.FarmableVanillaMushroom;
+import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.farming.triggers.FarmingTriggers;
@@ -36,16 +61,6 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
-import net.minecraft.block.*;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import java.io.File;
-import java.util.List;
 
 //import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
@@ -56,7 +71,7 @@ public class ModuleFarming extends BlankForestryModule {
 	public static ProxyFarming proxy;
 
 	public ModuleFarming() {
-		proxy = DistExecutor.runForDist(() -> () -> new ProxyFarmingClient(), () -> () -> new ProxyFarming());
+		proxy = DistExecutor.runForDist(() -> ProxyFarmingClient::new, () -> ProxyFarming::new);
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -73,6 +88,7 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(FarmingContainers.FARM.containerType(), GuiFarm::new);
 	}
@@ -87,10 +103,10 @@ public class ModuleFarming extends BlankForestryModule {
 		}
 
 		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
+			new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
+			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
 
 		BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
@@ -149,8 +165,8 @@ public class ModuleFarming extends BlankForestryModule {
 		//TODO - tag
 	}
 
-    @Override
-    public ISidedModuleHandler getModuleHandler() {
-        return proxy;
+	@Override
+	public ISidedModuleHandler getModuleHandler() {
+		return proxy;
 	}
 }

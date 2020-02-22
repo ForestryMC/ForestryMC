@@ -1,7 +1,6 @@
 package forestry.api.core;
 
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 
 import net.minecraft.block.Block;

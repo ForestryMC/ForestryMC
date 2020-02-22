@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 public interface IStreamableGui {
 	void writeGuiData(PacketBufferForestry data);
 

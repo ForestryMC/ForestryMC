@@ -15,6 +15,7 @@ import net.minecraft.util.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 /**
  * A face of a {@link ModelBakerModel }
  */

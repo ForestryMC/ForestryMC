@@ -10,7 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.renderer.Rectangle2d;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;
@@ -18,13 +28,6 @@ import forestry.core.errors.FakeErrorSource;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class LedgerManager {
@@ -138,7 +141,7 @@ public class LedgerManager {
 				continue;
 			}
 
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
 			ledger.draw();
 			yPos += ledger.getHeight();
@@ -161,11 +164,11 @@ public class LedgerManager {
 				continue;
 			}
 
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			errorLedger.draw(-errorLedger.getWidth(), yPos);
 			yPos += errorLedger.getHeight();
 		}
-        RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.color4f(1, 1, 1, 1);
 	}
 
 	public void drawTooltips(int mouseX, int mouseY) {

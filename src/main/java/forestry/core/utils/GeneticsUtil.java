@@ -203,7 +203,7 @@ public class GeneticsUtil {
 			return optionalIndividual.map(individual -> {
 				IIndividualRoot<? super IIndividual> root = individual.getRoot().cast();
 				Optional<IOrganismType> type = root.getType(foreign);
-				if(type.isPresent()) {
+				if (type.isPresent()) {
 					ItemStack equivalent = root.createStack(individual, type.get());
 					equivalent.setCount(foreign.getCount());
 					return equivalent;

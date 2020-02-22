@@ -1,13 +1,15 @@
 package forestry.api.gui;
 
-import forestry.api.gui.style.ITextStyle;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.gui.style.ITextStyle;
 
 @OnlyIn(Dist.CLIENT)
 public interface IElementGroup extends IGuiElement {
@@ -61,7 +63,7 @@ public interface IElementGroup extends IGuiElement {
 		return item(0, 0, itemStack);
 	}
 
-    ITextStyle defaultStyle();
+	ITextStyle defaultStyle();
 
 	/**
 	 * Adds a single line of text.

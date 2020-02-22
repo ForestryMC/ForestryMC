@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -17,9 +20,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class HiveGenGround extends HiveGen {
 
@@ -48,7 +48,7 @@ public class HiveGenGround extends HiveGen {
 			return null;
 		}
 
-        final BlockPos.Mutable pos = new BlockPos.Mutable(topPos);
+		final BlockPos.Mutable pos = new BlockPos.Mutable(topPos);
 
 		BlockState blockState = world.getBlockState(pos);
 		while (isTreeBlock(blockState, world, pos) || canReplace(blockState, world, pos)) {

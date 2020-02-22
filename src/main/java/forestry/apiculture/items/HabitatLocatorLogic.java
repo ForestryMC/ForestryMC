@@ -10,21 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.genetics.IBee;
-import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
 import net.minecraftforge.common.BiomeDictionary;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
+import forestry.core.utils.NetworkUtil;
 
 public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;
@@ -73,7 +75,7 @@ public class HabitatLocatorLogic {
 
 		// reset the locator coordinates
 		if (player.world.isRemote) {
-            //TextureHabitatLocator.getInstance().setTargetCoordinates(null);//TODO: TextureHabitatLocator
+			//TextureHabitatLocator.getInstance().setTargetCoordinates(null);//TODO: TextureHabitatLocator
 		}
 	}
 

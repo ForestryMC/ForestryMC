@@ -72,6 +72,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 		super(context);
 		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
 	}
+
 	@Override
 	public Class<? extends IBee> getMemberClass() {
 		return IBee.class;
@@ -92,7 +93,6 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 
 		return beeSpeciesCount;
 	}
-
 
 
 	@Override

@@ -1,16 +1,29 @@
 package forestry.core.gui.elements.layouts;
 
-import forestry.api.gui.*;
-import forestry.api.gui.style.ITextStyle;
-import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.*;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.gui.GuiConstants;
+import forestry.api.gui.GuiElementAlignment;
+import forestry.api.gui.IElementGroup;
+import forestry.api.gui.IElementLayoutHelper;
+import forestry.api.gui.IGuiElement;
+import forestry.api.gui.IItemElement;
+import forestry.api.gui.ILabelElement;
+import forestry.api.gui.ITextElement;
+import forestry.api.gui.style.ITextStyle;
+import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.DrawableElement;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.ItemElement;
+import forestry.core.gui.elements.LabelElement;
+import forestry.core.gui.elements.SplitTextElement;
 
 @OnlyIn(Dist.CLIENT)
 public class ElementGroup extends GuiElement implements IElementGroup {
@@ -84,14 +97,14 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 		return element;
 	}
 
-    @Override
-    public ITextStyle defaultStyle() {
-        return GuiConstants.DEFAULT_STYLE;
-    }
+	@Override
+	public ITextStyle defaultStyle() {
+		return GuiConstants.DEFAULT_STYLE;
+	}
 
 	@Override
 	public ILabelElement label(String text) {
-        return label(text, defaultStyle());
+		return label(text, defaultStyle());
 	}
 
 	@Override
@@ -101,7 +114,7 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 
 	@Override
 	public ILabelElement label(String text, GuiElementAlignment align) {
-        return label(text, align, defaultStyle());
+		return label(text, align, defaultStyle());
 	}
 
 	@Override
@@ -121,7 +134,7 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 
 	@Override
 	public ITextElement splitText(String text, int width) {
-        return splitText(text, width, defaultStyle());
+		return splitText(text, width, defaultStyle());
 	}
 
 	@Override

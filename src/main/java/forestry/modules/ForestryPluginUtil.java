@@ -54,7 +54,7 @@ public class ForestryPluginUtil {
 		for (String className : pluginClassNames) {
 			try {
 				Class.forName(className);
-			} catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException | ExceptionInInitializerError e) {
 				Log.error("Failed to load: {}", className, e);
 			}
 		}

@@ -1,60 +1,52 @@
 package forestry.core.blocks;
 
-import forestry.core.render.IForestryRenderer;
-import forestry.core.render.RenderForestryItem;
-import forestry.core.render.RenderForestryTile;
-import forestry.core.tiles.TileForestry;
-import forestry.modules.features.FeatureTileType;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+
+import forestry.core.config.Constants;
+import forestry.core.render.IForestryRenderer;
+import forestry.core.render.RenderForestryItem;
+import forestry.core.render.RenderForestryTile;
+import forestry.core.tiles.TileForestry;
+import forestry.modules.features.FeatureTileType;
+
 public class MachinePropertiesTesr<T extends TileForestry> extends MachineProperties<T> implements IMachinePropertiesTesr<T> {
+
+	private final ResourceLocation particleTexture;
+	private final boolean isFullCube;
 
 	@Nullable
 	@OnlyIn(Dist.CLIENT)
 	private IForestryRenderer<? super T> renderer;
 	@Nullable
 	@OnlyIn(Dist.CLIENT)
-    private Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super T>> tileRenderer;
+	private Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super T>> tileRenderer;
 
-	private final String particleTextureLocation;
-	private final boolean isFullCube;
-
-    public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, String particleTextureLocation) {
-        this(teType, name, particleTextureLocation, true);
-    }
-
-    public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, VoxelShape shape, String particleTextureLocation) {
-        this(teType, name, shape, particleTextureLocation, true);
-    }
-
-    public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, String particleTextureLocation, boolean isFullCube) {
-        super(teType, name);
-		this.particleTextureLocation = particleTextureLocation;
-		this.isFullCube = isFullCube;
-	}
-
-    public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, VoxelShape shape, String particleTextureLocation, boolean isFullCube) {
-        super(teType, name, shape);
-		this.particleTextureLocation = particleTextureLocation;
+	public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, IShapeProvider shape, ResourceLocation particleTexture, boolean isFullCube) {
+		super(teType, name, shape);
+		this.particleTexture = particleTexture;
 		this.isFullCube = isFullCube;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public void setRenderer(IForestryRenderer<? super T> renderer) {
 		this.renderer = renderer;
-        this.tileRenderer = (dispatcher) -> new RenderForestryTile<>(dispatcher, renderer);
+		this.tileRenderer = (dispatcher) -> new RenderForestryTile<>(dispatcher, renderer);
 	}
 
 	@Override
@@ -67,13 +59,13 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	public void clientSetup() {
 		super.clientSetup();
 		if (tileRenderer != null) {
-            ClientRegistry.bindTileEntityRenderer(getTeType(), tileRenderer);
+			ClientRegistry.bindTileEntityRenderer(getTeType(), tileRenderer);
 		}
 	}
 
 	@Override
-	public String getParticleTextureLocation() {
-		return particleTextureLocation;
+	public ResourceLocation getParticleTexture() {
+		return particleTexture;
 	}
 
 	@Override
@@ -82,14 +74,53 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	}
 
 	public static Item.Properties setRenderer(Item.Properties properties, IBlockType type) {
-		IMachineProperties machineProperties = type.getMachineProperties();
-		if (FMLEnvironment.dist == Dist.DEDICATED_SERVER || !(machineProperties instanceof IMachinePropertiesTesr)) {
-			return properties;
+		DistExecutor.runWhenOn(Dist.CLIENT, () ->
+			() -> {
+				IMachineProperties machineProperties = type.getMachineProperties();
+				if (!(machineProperties instanceof IMachinePropertiesTesr)) {
+					return;
+				}
+				IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
+				if (machinePropertiesTesr.getRenderer() == null) {
+					return;
+				}
+				properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
+			});
+		return properties;
+	}
+
+	public static class Builder<T extends TileForestry> extends MachineProperties.Builder<T, Builder<T>> {
+		@Nullable
+		private ResourceLocation particleTexture;
+		private boolean isFullCube = true;
+
+		public Builder(Supplier<FeatureTileType<? extends T>> type, String name) {
+			super(type, name);
 		}
-		IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-		if (machinePropertiesTesr.getRenderer() == null) {
-			return properties;
+
+		public Builder() {
 		}
-        return properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
+
+		public Builder<T> setParticleTexture(String particleTexture) {
+			return setParticleTexture(new ResourceLocation(Constants.MOD_ID, "block/" + particleTexture));
+		}
+
+		public Builder<T> setParticleTexture(ResourceLocation particleTexture) {
+			this.particleTexture = particleTexture;
+			return this;
+		}
+
+		public Builder<T> setNotFullCube() {
+			isFullCube = false;
+			return this;
+		}
+
+		public MachinePropertiesTesr<T> create() {
+			Preconditions.checkNotNull(type);
+			Preconditions.checkNotNull(name);
+			Preconditions.checkNotNull(shape);
+			Preconditions.checkNotNull(particleTexture);
+			return new MachinePropertiesTesr<>(type, name, shape, particleTexture, isFullCube);
+		}
 	}
 }

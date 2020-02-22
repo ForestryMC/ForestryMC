@@ -18,7 +18,7 @@ public class ModuleBook extends BlankForestryModule {
 	public static ProxyBook proxy;
 
 	public ModuleBook() {
-		proxy = DistExecutor.runForDist(() -> () -> new ProxyBookClient(), () -> () -> new ProxyBook());
+		proxy = DistExecutor.runForDist(() -> ProxyBookClient::new, () -> ProxyBook::new);
 	}
 
 	@Override

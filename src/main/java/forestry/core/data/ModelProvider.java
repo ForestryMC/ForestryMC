@@ -1,8 +1,26 @@
 package forestry.core.data;
 
 import com.google.common.collect.Maps;
-import com.google.gson.*;
-import forestry.modules.features.FeatureItem;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import javax.annotation.Nullable;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.model.BlockFaceUV;
 import net.minecraft.data.DataGenerator;
@@ -12,15 +30,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
+import forestry.modules.features.FeatureItem;
 
 public abstract class ModelProvider implements IDataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -52,7 +63,7 @@ public abstract class ModelProvider implements IDataProvider {
 					}
 				}
 
-                cache.recordHash(path, s1);
+				cache.recordHash(path, s1);
 			} catch (IOException ioexception) {
 				LOGGER.error("Couldn't save models to {}", path, ioexception);
 			}
@@ -90,10 +101,10 @@ public abstract class ModelProvider implements IDataProvider {
 	public static class ModelBuilder {
 		@Nullable
 		public ResourceLocation parent;
-        @Nullable
-        public ResourceLocation loader;
+		@Nullable
+		public ResourceLocation loader;
 		public final Map<String, ResourceLocation> textures = new HashMap<>();
-        public final Map<String, JsonElement> loaderData = new HashMap<>();
+		public final Map<String, JsonElement> loaderData = new HashMap<>();
 		public final List<Element> elements = new LinkedList<>();
 		@Nullable
 		private Boolean ambientOcclusion = null;
@@ -108,14 +119,14 @@ public abstract class ModelProvider implements IDataProvider {
 			return this;
 		}
 
-        public ModelBuilder loader(ResourceLocation loader) {
-            return parent(loader);
-        }
+		public ModelBuilder loader(ResourceLocation loader) {
+			return parent(loader);
+		}
 
-        public ModelBuilder loaderData(String key, JsonElement element) {
-            loaderData.put(key, element);
-            return this;
-        }
+		public ModelBuilder loaderData(String key, JsonElement element) {
+			loaderData.put(key, element);
+			return this;
+		}
 
 		public ModelBuilder parent(String parent) {
 			return parent(new ResourceLocation(parent));
@@ -149,14 +160,14 @@ public abstract class ModelProvider implements IDataProvider {
 			if (parent != null) {
 				object.addProperty("parent", parent.toString());
 			}
-            if (loader != null) {
-                object.addProperty("loader", loader.toString());
-            }
-            if (!loaderData.isEmpty()) {
-                for (Map.Entry<String, JsonElement> entry : loaderData.entrySet()) {
-                    object.add(entry.getKey(), entry.getValue());
-                }
-            }
+			if (loader != null) {
+				object.addProperty("loader", loader.toString());
+			}
+			if (!loaderData.isEmpty()) {
+				for (Map.Entry<String, JsonElement> entry : loaderData.entrySet()) {
+					object.add(entry.getKey(), entry.getValue());
+				}
+			}
 			JsonObject texturesObj = new JsonObject();
 			if (!textures.isEmpty()) {
 				for (Map.Entry<String, ResourceLocation> texture : textures.entrySet()) {

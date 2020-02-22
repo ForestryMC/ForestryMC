@@ -10,6 +10,34 @@
  ******************************************************************************/
 package forestry.lepidopterology.items;
 
+import javax.annotation.Nullable;
+import java.util.Random;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ISpriteRegistry;
 import forestry.api.core.ItemGroups;
@@ -31,31 +59,6 @@ import forestry.core.utils.Translator;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyHelper;
-import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 
@@ -135,7 +138,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return false;
 		}
 
-        if (butterfly.canTakeFlight(entityItem.world, entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ())) {
+		if (butterfly.canTakeFlight(entityItem.world, entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ())) {
 			return false;
 		}
 
@@ -144,7 +147,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		EntityUtil.spawnEntity(entityItem.world,
-                EntityButterfly.create(ModuleLepidopterology.BUTTERFLY_ENTITY_TYPE, entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
+			EntityButterfly.create(ModuleLepidopterology.BUTTERFLY_ENTITY_TYPE, entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
 		if (!entityItem.getItem().isEmpty()) {
 			entityItem.getItem().shrink(1);
 		} else {
@@ -284,14 +287,15 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	/**
 	 * Register butterfly item sprites
-     * @param registry
-     */
+	 *
+	 * @param registry
+	 */
 	@Override
 	@OnlyIn(Dist.CLIENT)
-    public void registerSprites(ISpriteRegistry registry) {
+	public void registerSprites(ISpriteRegistry registry) {
 		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleButterflySpecies) {
-                ((IAlleleButterflySpecies) allele).registerSprites(registry);
+				((IAlleleButterflySpecies) allele).registerSprites(registry);
 			}
 		}
 	}

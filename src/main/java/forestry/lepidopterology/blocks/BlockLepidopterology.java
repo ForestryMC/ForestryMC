@@ -20,7 +20,7 @@ import forestry.core.blocks.BlockBase;
 public class BlockLepidopterology extends BlockBase<BlockTypeLepidopterologyTesr> {
 	public BlockLepidopterology(BlockTypeLepidopterologyTesr type) {
 		super(type, Block.Properties.create(Material.WOOD)
-		.harvestTool(ToolType.AXE)
-		.harvestLevel(0));
+			.harvestTool(ToolType.AXE)
+			.harvestLevel(0));
 	}
 }

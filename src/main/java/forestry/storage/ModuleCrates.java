@@ -43,7 +43,7 @@ public class ModuleCrates extends BlankForestryModule {
 	public static ProxyCrates proxy;
 
 	public ModuleCrates() {
-		proxy = DistExecutor.runForDist(() -> () -> new ProxyCratesClient(), () -> () -> new ProxyCrates());
+		proxy = DistExecutor.runForDist(() -> ProxyCratesClient::new, () -> ProxyCrates::new);
 	}
 
 	@Override

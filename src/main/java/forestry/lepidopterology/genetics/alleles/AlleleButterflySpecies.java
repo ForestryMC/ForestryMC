@@ -10,6 +10,21 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.BiomeDictionary;
+
+import genetics.api.classification.IClassification;
+
 import forestry.api.core.ISpriteRegistry;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
@@ -17,18 +32,6 @@ import forestry.api.lepidopterology.genetics.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.genetics.IButterflyRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
-import genetics.api.classification.IClassification;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.BiomeDictionary;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class AlleleButterflySpecies extends AlleleForestrySpecies
 	implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
@@ -157,7 +160,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-    public void registerSprites(ISpriteRegistry registry) {
-        registry.addSprite(new ResourceLocation(getItemTexture()));
+	public void registerSprites(ISpriteRegistry registry) {
+		registry.addSprite(new ResourceLocation(getItemTexture()));
 	}
 }

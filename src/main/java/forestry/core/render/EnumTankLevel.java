@@ -13,7 +13,6 @@ package forestry.core.render;
 import net.minecraftforge.fluids.IFluidTank;
 
 public enum EnumTankLevel {
-
 	EMPTY(0),
 	LOW(25),
 	MEDIUM(50),

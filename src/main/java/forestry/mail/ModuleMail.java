@@ -12,6 +12,8 @@ package forestry.mail;
 
 import net.minecraft.client.gui.ScreenManager;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
 import forestry.api.mail.EnumAddressee;
@@ -44,6 +46,7 @@ public class ModuleMail extends BlankForestryModule {
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(MailContainers.CATALOGUE.containerType(), GuiCatalogue::new);
 		ScreenManager.registerFactory(MailContainers.LETTER.containerType(), GuiLetter::new);

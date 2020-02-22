@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 /**
  * IForesterBook is the interface that the forestry guide book class implements.
  * <p>

@@ -10,14 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.EnumFlutterType;
-import forestry.api.lepidopterology.genetics.IButterfly;
-import forestry.core.tiles.TileUtil;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
-import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
-import forestry.lepidopterology.items.ItemButterflyGE;
-import forestry.lepidopterology.tiles.TileCocoon;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -32,7 +26,14 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Random;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.core.tiles.TileUtil;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+import forestry.lepidopterology.items.ItemButterflyGE;
+import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockCocoon extends Block {
 	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
@@ -76,7 +77,7 @@ public class BlockCocoon extends Block {
 	//	}
 
 	@Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		TileCocoon tileCocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tileCocoon == null) {
 			return;

@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CocoaBlock;
@@ -33,9 +31,12 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
 
 //eg    public static final Block COCOA = register("cocoa", new CocoaBlock(Block.Properties.create(Material.PLANTS).tickRandomly().hardnessAndResistance(0.2F, 3.0F).sound(SoundType.WOOD)));
 public class BlockFruitPod extends CocoaBlock {
@@ -73,7 +74,7 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (!isValidPosition(state, world, pos)) {
 			spawnDrops(state, world, pos);
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -139,7 +140,7 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (podTile != null) {
 			podTile.addRipeness(0.5f);

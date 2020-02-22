@@ -1,5 +1,11 @@
 package forestry.arboriculture.features;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
+
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodType;
@@ -8,17 +14,36 @@ import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.WoodAccess;
-import forestry.arboriculture.blocks.*;
+import forestry.arboriculture.blocks.BlockArboriculture;
+import forestry.arboriculture.blocks.BlockDecorativeLeaves;
+import forestry.arboriculture.blocks.BlockDefaultLeaves;
+import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
+import forestry.arboriculture.blocks.BlockForestryDoor;
+import forestry.arboriculture.blocks.BlockForestryFence;
+import forestry.arboriculture.blocks.BlockForestryFenceGate;
+import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.blocks.BlockForestryLog;
+import forestry.arboriculture.blocks.BlockForestryPlank;
+import forestry.arboriculture.blocks.BlockForestrySlab;
+import forestry.arboriculture.blocks.BlockForestryStairs;
+import forestry.arboriculture.blocks.BlockFruitPod;
+import forestry.arboriculture.blocks.BlockSapling;
+import forestry.arboriculture.blocks.BlockTypeArboricultureTesr;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.items.*;
+import forestry.arboriculture.items.ItemBlockDecorativeLeaves;
+import forestry.arboriculture.items.ItemBlockLeaves;
+import forestry.arboriculture.items.ItemBlockWood;
+import forestry.arboriculture.items.ItemBlockWoodDoor;
+import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.items.ItemBlockBase;
-import forestry.modules.features.*;
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import forestry.modules.features.FeatureBlock;
+import forestry.modules.features.FeatureBlockGroup;
+import forestry.modules.features.FeatureGroup;
+import forestry.modules.features.FeatureProvider;
+import forestry.modules.features.FeatureType;
+import forestry.modules.features.IFeatureRegistry;
+import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class ArboricultureBlocks {

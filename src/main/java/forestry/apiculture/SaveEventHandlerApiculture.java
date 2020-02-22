@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import net.minecraft.world.IWorld;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.core.ISaveEventHandler;
-import net.minecraft.world.IWorld;
 
 public class SaveEventHandlerApiculture implements ISaveEventHandler {
 

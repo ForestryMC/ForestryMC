@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -18,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 public class ParticleBeeRoundTrip extends Particle {
 	private final Vec3d origin;
@@ -94,13 +95,13 @@ public class ParticleBeeRoundTrip extends Particle {
 		}
 	}
 
-    @Override
-    public void renderParticle(IVertexBuilder builder, ActiveRenderInfo renderInfo, float partialTicks) {
-        Vec3d projectedView = renderInfo.getProjectedView();
-        float xPos = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - projectedView.getX());
-        float yPos = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - projectedView.getY());
-        float zPos = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - projectedView.getZ());
-    }
+	@Override
+	public void renderParticle(IVertexBuilder builder, ActiveRenderInfo renderInfo, float partialTicks) {
+		Vec3d projectedView = renderInfo.getProjectedView();
+		float xPos = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - projectedView.getX());
+		float yPos = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - projectedView.getY());
+		float zPos = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - projectedView.getZ());
+	}
 
 	/*@Override
 	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {

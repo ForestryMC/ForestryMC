@@ -13,6 +13,7 @@ package forestry.core.utils.datastructures;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -38,7 +39,7 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 
 	@Override
 	protected boolean isValidKey(Object key) {
-        return key instanceof FluidStack || key instanceof Fluid || key instanceof String || key instanceof ResourceLocation;
+		return key instanceof FluidStack || key instanceof Fluid || key instanceof String || key instanceof ResourceLocation;
 	}
 
 	@Override

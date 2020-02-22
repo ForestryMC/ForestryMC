@@ -1,33 +1,49 @@
 package forestry.arboriculture.models;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.arboriculture.tiles.TileSapling;
-import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.organism.IOrganism;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IModelTransform;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.model.Material;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import com.mojang.datafixers.util.Pair;
+
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.organism.IOrganism;
+
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.tiles.TileSapling;
 
 public class ModelSapling implements IModelGeometry<ModelSapling> {
 
@@ -41,15 +57,15 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	}
 
 	@Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+	public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
 		ImmutableMap.Builder<IAlleleTreeSpecies, IBakedModel> itemModels = new ImmutableMap.Builder<>();
 		ImmutableMap.Builder<IAlleleTreeSpecies, IBakedModel> blockModels = new ImmutableMap.Builder<>();
 		for (Map.Entry<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> entry : modelsBySpecies.entrySet()) {
-            IBakedModel blockModel = bakery.getBakedModel(entry.getValue().getFirst(), ModelRotation.X0_Y0, spriteGetter);
+			IBakedModel blockModel = bakery.getBakedModel(entry.getValue().getFirst(), ModelRotation.X0_Y0, spriteGetter);
 			if (blockModel != null) {
 				blockModels.put(entry.getKey(), blockModel);
 			}
-            IBakedModel itemModel = bakery.getBakedModel(entry.getValue().getSecond(), ModelRotation.X0_Y0, spriteGetter);
+			IBakedModel itemModel = bakery.getBakedModel(entry.getValue().getSecond(), ModelRotation.X0_Y0, spriteGetter);
 			if (itemModel != null) {
 				itemModels.put(entry.getKey(), itemModel);
 			}
@@ -57,17 +73,17 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		return new Baked(itemModels.build(), blockModels.build());
 	}
 
-    public Collection<ResourceLocation> getDependencies() {
-        return modelsBySpecies.values().stream()
-                .flatMap(pair -> Stream.of(pair.getFirst(), pair.getSecond())).collect(Collectors.toSet());
-    }
+	public Collection<ResourceLocation> getDependencies() {
+		return modelsBySpecies.values().stream()
+			.flatMap(pair -> Stream.of(pair.getFirst(), pair.getSecond())).collect(Collectors.toSet());
+	}
 
-    @Override
-    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-        return getDependencies().stream()
-                .flatMap(location -> modelGetter.apply(location).func_225614_a_(modelGetter, missingTextureErrors).stream())
-                .collect(Collectors.toSet());
-    }
+	@Override
+	public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		return getDependencies().stream()
+			.flatMap(location -> modelGetter.apply(location).func_225614_a_(modelGetter, missingTextureErrors).stream())
+			.collect(Collectors.toSet());
+	}
 
 	public static class Baked implements IBakedModel {
 		private final Map<IAlleleTreeSpecies, IBakedModel> itemModels;
@@ -108,10 +124,10 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 			return defaultItem.isGui3d();
 		}
 
-        @Override
-        public boolean func_230044_c_() {
-            return false;
-        }
+		@Override
+		public boolean func_230044_c_() {
+			return false;
+		}
 
 		@Override
 		public boolean isBuiltInRenderer() {

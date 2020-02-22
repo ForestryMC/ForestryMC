@@ -10,16 +10,18 @@
  ******************************************************************************/
 package forestry.worktable.gui.widgets;
 
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.core.gui.widgets.ItemStackWidgetBase;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
 import forestry.worktable.gui.ContainerWorktable;
 import forestry.worktable.recipes.RecipeMemory;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
 
 public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	private static final TextureAtlasSprite lockIcon = TextureManagerForestry.getInstance().getDefault("slots/locked");
@@ -41,14 +43,14 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	public void draw(int startX, int startY) {
 		super.draw(startX, startY);
 
-        RenderSystem.disableDepthTest();
+		RenderSystem.disableDepthTest();
 
 		if (recipeMemory.isLocked(slotNumber)) {
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
 			AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, lockIcon);
 		}
 
-        RenderSystem.enableDepthTest();
+		RenderSystem.enableDepthTest();
 	}
 
 	@Override

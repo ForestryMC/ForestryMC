@@ -10,19 +10,21 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import forestry.core.gui.ledgers.Ledger;
-import forestry.core.gui.ledgers.LedgerManager;
-import forestry.core.utils.ResourceUtil;
-import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.gui.ledgers.Ledger;
+import forestry.core.gui.ledgers.LedgerManager;
+import forestry.core.utils.ResourceUtil;
+import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 
 public class FarmLedger extends Ledger {
 	private final IFarmLedgerDelegate delegate;
@@ -50,7 +52,7 @@ public class FarmLedger extends Ledger {
 
 		// Draw icon
 		Minecraft minecraft = Minecraft.getInstance();
-        TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("items/bucket_water");
+		TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("items/bucket_water");
 		drawSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, textureAtlasSprite, xIcon, y);
 		y += 4;
 

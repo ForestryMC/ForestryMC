@@ -48,25 +48,25 @@ public class TileEngineClockwork extends TileEngine {
 	@Override
 	public void openGui(ServerPlayerEntity player, BlockPos pos) {
 		if (player instanceof FakePlayer) {
-				return;
-			}
-
-			if (tension <= 0) {
-				tension = WIND_TENSION_BASE;
-			} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
-				tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
-			} else {
-				return;
-			}
-
-			player.addExhaustion(WIND_EXHAUSTION);
-			if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
-				player.attackEntityFrom(damageSourceEngineClockwork, 6);
-			}
-			tension = Math.min(tension, ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE);
-			delay = WIND_DELAY;
-			setNeedsNetworkUpdate();
+			return;
 		}
+
+		if (tension <= 0) {
+			tension = WIND_TENSION_BASE;
+		} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
+			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
+		} else {
+			return;
+		}
+
+		player.addExhaustion(WIND_EXHAUSTION);
+		if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
+			player.attackEntityFrom(damageSourceEngineClockwork, 6);
+		}
+		tension = Math.min(tension, ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE);
+		delay = WIND_DELAY;
+		setNeedsNetworkUpdate();
+	}
 
 	/* LOADING & SAVING */
 	@Override

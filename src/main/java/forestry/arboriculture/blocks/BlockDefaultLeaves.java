@@ -1,13 +1,8 @@
 package forestry.arboriculture.blocks;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -17,11 +12,20 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -34,8 +38,8 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
-                .tickRandomly()
-                .func_226896_b_());
+			.tickRandomly()
+			.func_226896_b_());
 		this.definition = definition;
 	}
 

@@ -1,11 +1,10 @@
 package forestry.arboriculture.blocks;
 
 import com.google.common.base.Preconditions;
-import forestry.api.arboriculture.ICharcoalManager;
-import forestry.api.arboriculture.ICharcoalPileWall;
-import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.features.CharcoalBlocks;
-import forestry.core.config.Config;
+
+import java.util.Collection;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,11 +24,15 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collection;
-import java.util.Random;
+import forestry.api.arboriculture.ICharcoalManager;
+import forestry.api.arboriculture.ICharcoalPileWall;
+import forestry.api.arboriculture.TreeManager;
+import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.core.config.Config;
 
 public class BlockWoodPile extends Block {
 
@@ -103,7 +106,7 @@ public class BlockWoodPile extends Block {
 	}
 
 	@Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (state.get(IS_ACTIVE)) {
 			for (Direction facing : Direction.VALUES) {
 				BlockPos position = pos.offset(facing);
@@ -118,7 +121,7 @@ public class BlockWoodPile extends Block {
 					} else if (!blockState.get(IS_ACTIVE) && state.get(IS_ACTIVE)) {
 						activatePile(blockState, world, position, true);
 					}
-                } else if (world.isAirBlock(position) || !Block.hasEnoughSolidSide(world, position, facing.getOpposite()) || block.isFlammable(state, world, position, facing.getOpposite())) {
+				} else if (world.isAirBlock(position) || !Block.hasEnoughSolidSide(world, position, facing.getOpposite()) || block.isFlammable(state, world, position, facing.getOpposite())) {
 					world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 					return;
 				}
@@ -151,7 +154,7 @@ public class BlockWoodPile extends Block {
 	}
 
 	@Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
 		if (state.get(IS_ACTIVE)) {
 			return 10;
 		}
@@ -190,7 +193,7 @@ public class BlockWoodPile extends Block {
 		ICharcoalManager charcoalManager = Preconditions.checkNotNull(TreeManager.charcoalManager);
 		Collection<ICharcoalPileWall> walls = charcoalManager.getWalls();
 
-        BlockPos.Mutable testPos = new BlockPos.Mutable(pos);
+		BlockPos.Mutable testPos = new BlockPos.Mutable(pos);
 		testPos.move(facing);
 		int i = 0;
 		while (i < Config.charcoalWallCheckRange && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)) {

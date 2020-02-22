@@ -1,33 +1,34 @@
 package forestry.core.render;
 
-import forestry.api.core.ISpriteRegistry;
-import net.minecraft.client.renderer.texture.SpriteUploader;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import net.minecraft.client.renderer.texture.SpriteUploader;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.ResourceLocation;
+
+import forestry.api.core.ISpriteRegistry;
+
 public class ForestrySpriteUploader extends SpriteUploader implements ISpriteRegistry {
-    private final Set<ResourceLocation> registeredSprites = new HashSet<>();
+	private final Set<ResourceLocation> registeredSprites = new HashSet<>();
 
-    public ForestrySpriteUploader(TextureManager manager, ResourceLocation atlasLocation, String prefix) {
-        super(manager, atlasLocation, prefix);
-    }
+	public ForestrySpriteUploader(TextureManager manager, ResourceLocation atlasLocation, String prefix) {
+		super(manager, atlasLocation, prefix);
+	}
 
-    public boolean addSprite(ResourceLocation location) {
-        return this.registeredSprites.add(location);
-    }
+	public boolean addSprite(ResourceLocation location) {
+		return this.registeredSprites.add(location);
+	}
 
-    protected Stream<ResourceLocation> func_225640_a_() {
-        return Collections.unmodifiableSet(this.registeredSprites).stream();
-    }
+	protected Stream<ResourceLocation> func_225640_a_() {
+		return Collections.unmodifiableSet(this.registeredSprites).stream();
+	}
 
-    @Override
-    public TextureAtlasSprite getSprite(ResourceLocation location) {
-        return super.getSprite(location);
-    }
+	@Override
+	public TextureAtlasSprite getSprite(ResourceLocation location) {
+		return super.getSprite(location);
+	}
 }

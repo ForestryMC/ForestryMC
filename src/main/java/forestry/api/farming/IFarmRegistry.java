@@ -25,7 +25,6 @@ public interface IFarmRegistry {
 	 * @param identifier           Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
 	 * @param logicFactory         factory that creates the corresponding instance of logic
 	 * @param farmablesIdentifiers Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-	 *
 	 */
 	IFarmPropertiesBuilder getPropertiesBuilder(String identifier);
 

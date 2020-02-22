@@ -48,10 +48,10 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
 
 	private void addCultivationBlock(FeatureBlock<? extends Block, BlockItem> feature, BlockTypePlanter planter) {
 		addVariants(feature.block(), new Builder()
-				.always((variant) -> variant.model("forestry:block/" + planter.getName()))
-				.property(BlockStateProperties.FACING, Direction.EAST, (variant) -> variant.rotationY(90))
-				.property(BlockStateProperties.FACING, Direction.SOUTH, (variant) -> variant.rotationY(180))
-				.property(BlockStateProperties.FACING, Direction.WEST, (variant) -> variant.rotationY(270)));
+			.always((variant) -> variant.model("forestry:block/" + planter.getName()))
+			.property(BlockStateProperties.FACING, Direction.EAST, (variant) -> variant.rotationY(90))
+			.property(BlockStateProperties.FACING, Direction.SOUTH, (variant) -> variant.rotationY(180))
+			.property(BlockStateProperties.FACING, Direction.WEST, (variant) -> variant.rotationY(270)));
 	}
 
 	private void addCocoon(FeatureBlock<? extends Block, BlockItem> feature) {

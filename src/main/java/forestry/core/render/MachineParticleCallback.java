@@ -10,20 +10,21 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.client.particle.DiggingParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.utils.ResourceUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.particle.DiggingParticle;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase> {
 
@@ -40,8 +41,7 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
 			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-			String particleTextureLocation = machinePropertiesTesr.getParticleTextureLocation();
-            TextureAtlasSprite particleTexture = ResourceUtil.getBlockSprite(new ResourceLocation(particleTextureLocation));
+			TextureAtlasSprite particleTexture = ResourceUtil.getBlockSprite(machinePropertiesTesr.getParticleTexture());
 			fx.sprite = particleTexture;
 		}
 	}

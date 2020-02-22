@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import forestry.apiculture.features.ApicultureBlocks;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.config.Constants;
+import java.util.Random;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.WallTorchBlock;
@@ -25,7 +24,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import forestry.apiculture.features.ApicultureBlocks;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.config.Constants;
 
 public class BlockStumpWall extends WallTorchBlock {
 
@@ -36,7 +37,7 @@ public class BlockStumpWall extends WallTorchBlock {
 	}
 
 	@Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		ItemStack heldItem = playerIn.getHeldItem(hand);
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
 			BlockState activatedState = ApicultureBlocks.CANDLE_WALL.with(BlockCandle.STATE, BlockCandle.State.ON).with(HORIZONTAL_FACING, state.get(HORIZONTAL_FACING));
@@ -45,10 +46,10 @@ public class BlockStumpWall extends WallTorchBlock {
 			tc.setColour(16777215); // default to white
 			tc.setLit(true);
 			worldIn.setTileEntity(pos, tc);
-            return ActionResultType.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
 
-        return ActionResultType.PASS;
+		return ActionResultType.PASS;
 	}
 
 	@Override

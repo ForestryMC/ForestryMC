@@ -1,12 +1,7 @@
 package forestry.core.multiblock;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.Log;
+import java.util.Set;
+
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,13 +12,21 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Set;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
 public class MultiblockEventHandlerClient {
@@ -62,34 +65,34 @@ public class MultiblockEventHandlerClient {
 				if (!controllers.isEmpty()) {
 					float partialTicks = event.getPartialTicks();
 					PlayerEntity player = Minecraft.getInstance().player;
-                    double playerX = player.lastTickPosX + (player.getPosX() - player.lastTickPosX) * partialTicks;
-                    double playerY = player.lastTickPosY + (player.getPosY() - player.lastTickPosY) * partialTicks;
-                    double playerZ = player.lastTickPosZ + (player.getPosZ() - player.lastTickPosZ) * partialTicks;
+					double playerX = player.lastTickPosX + (player.getPosX() - player.lastTickPosX) * partialTicks;
+					double playerY = player.lastTickPosY + (player.getPosY() - player.lastTickPosY) * partialTicks;
+					double playerZ = player.lastTickPosZ + (player.getPosZ() - player.lastTickPosZ) * partialTicks;
 
-                    RenderSystem.pushMatrix();
-                    RenderSystem.enableBlend();
-                    RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                    RenderSystem.disableTexture();
-                    RenderSystem.lineWidth(2.0F);
-                    RenderSystem.depthMask(false);
+					RenderSystem.pushMatrix();
+					RenderSystem.enableBlend();
+					RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+					RenderSystem.disableTexture();
+					RenderSystem.lineWidth(2.0F);
+					RenderSystem.depthMask(false);
 					for (IMultiblockController controller : controllers) {
 						if (controller != null) {
 							BlockPos lastErrorPosition = controller.getLastValidationErrorPosition();
 							if (lastErrorPosition != null) {
 								if (world.isBlockLoaded(lastErrorPosition) && player.getDistanceSq(lastErrorPosition.getX(), lastErrorPosition.getZ(), lastErrorPosition.getZ()) < 64F) {
 									AxisAlignedBB box = VoxelShapes.fullCube().getBoundingBox().offset(lastErrorPosition.getX() - playerX, lastErrorPosition.getY() - playerY, lastErrorPosition.getZ() - playerZ);
-                                    //WorldRenderer.drawSelectionBoundingBox(box, 1.0F, 0.0F, 0.0F, 0.25F);
-                                    //WorldRenderer.drawBoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, 1.0F, 0.0F, 0.0F, 0.125F);    //TODO right method?
-                                    //TODO: Rendering
+									//WorldRenderer.drawSelectionBoundingBox(box, 1.0F, 0.0F, 0.0F, 0.25F);
+									//WorldRenderer.drawBoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, 1.0F, 0.0F, 0.0F, 0.125F);    //TODO right method?
+									//TODO: Rendering
 								}
 							}
 						}
 					}
 
-                    RenderSystem.depthMask(true);
-                    RenderSystem.enableTexture();
-                    RenderSystem.disableBlend();
-                    RenderSystem.popMatrix();
+					RenderSystem.depthMask(true);
+					RenderSystem.enableTexture();
+					RenderSystem.disableBlend();
+					RenderSystem.popMatrix();
 				}
 			} catch (Exception e) {
 				Log.error("Failed to render the position of a multiblock exception.", e);

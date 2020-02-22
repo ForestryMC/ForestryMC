@@ -8,6 +8,7 @@ import forestry.energy.EnergyManager;
 
 //@Optional.Interface(iface = "buildcraft.api.mj.IMjPassiveProvider", modid = Constants.BCLIB_MOD_ID)
 public class MjPassiveProviderWrapper extends MjConnectorWrapper {//implements IMjPassiveProvider {
+
 	public MjPassiveProviderWrapper(EnergyManager energyManager) {
 		super(energyManager);
 	}

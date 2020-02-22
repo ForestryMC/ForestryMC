@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -53,10 +55,10 @@ public class ParticleIgnition extends Particle {
 		//		super.renderParticle(buffer, renderInfo, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 	}*/
 
-    @Override
-    public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
+	@Override
+	public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
 
-    }
+	}
 
 	@Override
 	public IParticleRenderType getRenderType() {

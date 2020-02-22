@@ -10,6 +10,28 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
@@ -31,21 +53,6 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
-import net.minecraft.block.Block;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
@@ -63,7 +70,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public static VillagerProfession villagerArborist;
 
 	public ModuleArboriculture() {
-		proxy = DistExecutor.runForDist(() -> () -> new ProxyArboricultureClient(), () -> () -> new ProxyArboriculture());
+		proxy = DistExecutor.runForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
@@ -308,8 +315,8 @@ public class ModuleArboriculture extends BlankForestryModule {
 		//		}
 	}
 
-    @Override
-    public ISidedModuleHandler getModuleHandler() {
-        return proxy;
-    }
+	@Override
+	public ISidedModuleHandler getModuleHandler() {
+		return proxy;
+	}
 }

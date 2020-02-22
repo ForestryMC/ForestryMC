@@ -11,9 +11,13 @@
 package forestry.core;
 
 import com.google.common.collect.LinkedListMultimap;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.modules.ModuleManager;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -25,12 +29,16 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import java.util.*;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.modules.ModuleManager;
 
 public class TickHandlerCoreServer {
 
@@ -63,7 +71,7 @@ public class TickHandlerCoreServer {
 					if (canDecorate(world, coords)) {
 						iterator.remove();
 						Random random = getRetrogenRandom(world, coords);
-//						worldGenerator.retroGen(random, coords.x, coords.z, world);
+						//						worldGenerator.retroGen(random, coords.x, coords.z, world);
 					}
 				}
 				checkForRetrogen.remove(dimId);

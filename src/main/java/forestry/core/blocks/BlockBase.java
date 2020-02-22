@@ -10,18 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ISpriteRegistry;
-import forestry.core.circuits.ISocketable;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.ParticleHelper;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -37,7 +27,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -45,11 +39,24 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidUtil;
 
-import javax.annotation.Nullable;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ISpriteRegistry;
+import forestry.core.circuits.ISocketable;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.render.MachineParticleCallback;
+import forestry.core.render.ParticleHelper;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements ISpriteRegister {
 	/**
@@ -72,11 +79,14 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 		this.hasTESR = blockType instanceof IBlockTypeTesr;
 		this.hasCustom = blockType instanceof IBlockTypeCustom;
-		//		this.lightOpacity = (!hasTESR && !hasCustom) ? 255 : 0;
-		//TODO opacity
 
 		particleCallback = new MachineParticleCallback<>(this, blockType);
 
+	}
+
+	@Override
+	public int getOpacity(BlockState state, IBlockReader world, BlockPos pos) {
+		return (!hasTESR && !hasCustom) ? super.getOpacity(state, world, pos) : 0;
 	}
 
 	@Override
@@ -160,25 +170,25 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 	/* INTERACTION */
 
 	@Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
-        if (tile == null) {
-            return ActionResultType.FAIL;
-        }
-        if (TileUtil.isUsableByPlayer(playerIn, tile)) {
+		if (tile == null) {
+			return ActionResultType.FAIL;
+		}
+		if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
-            if (!playerIn.func_225608_bj_()) { //isSneaking
-                if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
-                    return ActionResultType.SUCCESS;
-                }
-            }
+			if (!playerIn.func_225608_bj_()) { //isSneaking
+				if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
+					return ActionResultType.SUCCESS;
+				}
+			}
 
-            if (!worldIn.isRemote) {
-                ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO - hopefully safe because it's the server?
-                tile.openGui(sPlayer, pos);
-            }
-        }
-        return ActionResultType.SUCCESS;
+			if (!worldIn.isRemote) {
+				ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO - hopefully safe because it's the server?
+				tile.openGui(sPlayer, pos);
+			}
+		}
+		return ActionResultType.SUCCESS;
 	}
 
 	@Nullable
@@ -266,10 +276,10 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-    public void registerSprites(ISpriteRegistry registry) {
+	public void registerSprites(ISpriteRegistry registry) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
 		if (machineProperties instanceof IMachinePropertiesTesr) {
-            registry.addSprite(new ResourceLocation(((IMachinePropertiesTesr) machineProperties).getParticleTextureLocation()));
+			registry.addSprite(((IMachinePropertiesTesr) machineProperties).getParticleTexture());
 		}
 	}
 }

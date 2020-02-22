@@ -151,6 +151,7 @@ public interface IFruitProvider extends ISetupListener {
 	/**
 	 * Can be used to register the sprite/s that can be returned with
 	 * {@link #getSprite(IGenome, IBlockReader, BlockPos, int)}.
+	 *
 	 * @param event
 	 */
 	@OnlyIn(Dist.CLIENT)

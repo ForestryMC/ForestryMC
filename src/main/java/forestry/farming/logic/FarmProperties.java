@@ -83,7 +83,7 @@ public final class FarmProperties implements IFarmProperties {
 	public boolean isAcceptedSoil(BlockState ground) {
 		for (Soil soil : soils) {
 			BlockState soilState = soil.getSoilState();
-			if(soilState.getBlock() == ground.getBlock()) {
+			if (soilState.getBlock() == ground.getBlock()) {
 				return true;
 			}
 		}

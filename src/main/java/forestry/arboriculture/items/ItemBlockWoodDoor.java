@@ -16,7 +16,6 @@ public class ItemBlockWoodDoor extends ItemBlockWood<BlockForestryDoor> {
 
 	/**
 	 * Copy of {@link net.minecraft.item.TallBlockItem#placeBlock(BlockItemUseContext, BlockState)}
-	 *
 	 */
 	@Override
 	protected boolean placeBlock(BlockItemUseContext p_195941_1_, BlockState p_195941_2_) {

@@ -1,6 +1,15 @@
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
 import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.api.gui.IGuiElement;
@@ -10,13 +19,6 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.tiles.ITitled;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-
-import javax.annotation.Nullable;
 
 public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForestryTitled<C> implements IGeneticAnalyzerProvider, ISlotChangeWatcher {
 	/* Attributes - Constants */
@@ -140,7 +142,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
-        RenderSystem.color3f(1.0F, 1.0F, 1.0F);
+		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();
 			if (selectedSlot >= 0) {

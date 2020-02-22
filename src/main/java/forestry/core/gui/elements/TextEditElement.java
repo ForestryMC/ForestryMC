@@ -1,15 +1,16 @@
 package forestry.core.gui.elements;
 
+import java.util.function.Predicate;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+
 import forestry.api.gui.IValueElement;
 import forestry.api.gui.IWindowElement;
 import forestry.api.gui.events.ElementEvent;
 import forestry.api.gui.events.GuiEvent;
 import forestry.api.gui.events.GuiEventDestination;
 import forestry.api.gui.events.TextEditEvent;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-
-import java.util.function.Predicate;
 
 public class TextEditElement extends GuiElement implements IValueElement<String> {
 
@@ -22,15 +23,15 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 		field.setEnableBackgroundDrawing(false);
 		this.addSelfEventHandler(GuiEvent.KeyEvent.class, event -> {
 			String oldText = field.getText();
-            this.field.keyPressed(event.getKeyCode(), event.getScanCode(), event.getModifiers());
-            final String text = field.getText();
-            if (!text.equals(oldText)) {
-                postEvent(new TextEditEvent(this, text, oldText), GuiEventDestination.ALL);
-            }
-        });
-        this.addSelfEventHandler(GuiEvent.CharEvent.class, event -> {
-            String oldText = field.getText();
-            this.field.charTyped(event.getCharacter(), event.getModifiers());
+			this.field.keyPressed(event.getKeyCode(), event.getScanCode(), event.getModifiers());
+			final String text = field.getText();
+			if (!text.equals(oldText)) {
+				postEvent(new TextEditEvent(this, text, oldText), GuiEventDestination.ALL);
+			}
+		});
+		this.addSelfEventHandler(GuiEvent.CharEvent.class, event -> {
+			String oldText = field.getText();
+			this.field.charTyped(event.getCharacter(), event.getModifiers());
 			final String text = field.getText();
 			if (!text.equals(oldText)) {
 				postEvent(new TextEditEvent(this, text, oldText), GuiEventDestination.ALL);
@@ -51,7 +52,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	}
 
 	public TextEditElement setValidator(Predicate<String> validator) {
-        field.setValidator(validator);
+		field.setValidator(validator);
 		return this;
 	}
 

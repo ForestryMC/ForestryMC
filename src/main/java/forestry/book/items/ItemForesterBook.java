@@ -1,12 +1,7 @@
 package forestry.book.items;
 
-import forestry.api.book.IForesterBook;
-import forestry.book.BookLoader;
-import forestry.book.gui.GuiForesterBook;
-import forestry.book.gui.GuiForestryBookCategories;
-import forestry.core.ItemGroupForestry;
-import forestry.core.items.ItemWithGui;
-import forestry.core.network.PacketBufferForestry;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,7 +12,16 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.book.IForesterBook;
+import forestry.book.BookLoader;
+import forestry.book.gui.GuiForesterBook;
+import forestry.book.gui.GuiForestryBookCategories;
+import forestry.core.ItemGroupForestry;
+import forestry.core.items.ItemWithGui;
+import forestry.core.network.PacketBufferForestry;
 
 public class ItemForesterBook extends ItemWithGui {
 
@@ -31,7 +35,7 @@ public class ItemForesterBook extends ItemWithGui {
 		bookOpenGui(playerIn, playerIn.getHeldItem(handIn));
 
 		ItemStack stack = playerIn.getHeldItem(handIn);
-        return ActionResult.func_226248_a_(stack);
+		return ActionResult.func_226248_a_(stack);
 	}
 
 	@Override
@@ -43,6 +47,7 @@ public class ItemForesterBook extends ItemWithGui {
 	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	private void bookOpenGui(PlayerEntity player, ItemStack stack) {
 		IForesterBook book = BookLoader.INSTANCE.loadBook();
 		GuiForesterBook guiScreen = GuiForesterBook.getGuiScreen();

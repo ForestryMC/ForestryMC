@@ -24,9 +24,7 @@ import forestry.core.utils.StringUtil;
 public class ModelProviderGermling implements IGermlingModelProvider {
 
 	private final ILeafSpriteProvider leafSpriteProvider;
-	@OnlyIn(Dist.CLIENT)
 	private ResourceLocation itemModel;
-	@OnlyIn(Dist.CLIENT)
 	private ResourceLocation blockModel;
 
 	public ModelProviderGermling(String uid, ILeafSpriteProvider leafSpriteProvider) {

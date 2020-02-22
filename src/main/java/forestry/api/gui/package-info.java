@@ -6,7 +6,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 //@API(apiVersion = "5.8.0", owner = "ForestryAPI|core", provides = "ForestryAPI|gui")
-package forestry.api.gui;
+	package forestry.api.gui;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

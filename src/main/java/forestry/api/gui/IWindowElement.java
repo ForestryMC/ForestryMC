@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 /**
  * The window element is the root element of the containment hierarchy. Its the only element the gui interacts with
  * directly.

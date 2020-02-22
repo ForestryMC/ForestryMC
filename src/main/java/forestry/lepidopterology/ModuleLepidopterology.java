@@ -12,6 +12,36 @@ package forestry.lepidopterology;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
+
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -37,24 +67,6 @@ import forestry.lepidopterology.proxy.ProxyLepidopterologyClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.IForgeRegistry;
-
-import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
@@ -77,7 +89,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public static final EntityType<EntityButterfly> BUTTERFLY_ENTITY_TYPE = EntityType.Builder.create(EntityButterfly::new, EntityClassification.CREATURE).size(1.0f, 0.4f).build("butterfly");
 
 	public ModuleLepidopterology() {
-		proxy = DistExecutor.runForDist(() -> () -> new ProxyLepidopterologyClient(), () -> () -> new ProxyLepidopterology());
+		proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
 		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
@@ -123,7 +135,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 		ResourceLocation butterflyResourceLocation = new ResourceLocation(Constants.MOD_ID, "butterflyge");
 		EntityUtil.registerEntity(butterflyResourceLocation, BUTTERFLY_ENTITY_TYPE, "butterflyge", 0, 0x000000,
-				0xffffff, 50, 1, true);
+			0xffffff, 50, 1, true);
 
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
@@ -146,7 +158,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-			boolean hasVillageGenerated) {
+		boolean hasVillageGenerated) {
 		if (generateCocoons) {
 			if (generateCocoonsAmount > 0.0) {
 				//TODO worldgen
@@ -173,15 +185,15 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
 		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
 		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
-				spawnButterflysFromLeaves);
+			spawnButterflysFromLeaves);
 
 		generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
 		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
-				0.0f, 10.0f);
+			0.0f, 10.0f);
 
 		serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
 		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
-				100.0f);
+			100.0f);
 
 		parseRarity(config);
 		parseCooconLoots(config);

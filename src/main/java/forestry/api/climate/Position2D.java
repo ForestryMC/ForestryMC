@@ -19,9 +19,13 @@ import forestry.api.core.INbtWritable;
 @Immutable
 public class Position2D implements Comparable<Position2D>, INbtWritable {
 	public static final Position2D NULL_POSITION = new Position2D(0, 0);
-	/** X coordinate */
+	/**
+	 * X coordinate
+	 */
 	private final int x;
-	/** Z coordinate */
+	/**
+	 * Z coordinate
+	 */
 	private final int z;
 
 	public Position2D(Vec3i pos) {

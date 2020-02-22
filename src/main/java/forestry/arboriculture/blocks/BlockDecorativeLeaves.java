@@ -1,11 +1,10 @@
 package forestry.arboriculture.blocks;
 
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
-import genetics.api.individual.IGenome;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -23,14 +22,18 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IShearable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
 
 //TODO shearing
 public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShearable {
@@ -39,8 +42,8 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	public BlockDecorativeLeaves(TreeDefinition definition) {
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
-				.sound(SoundType.PLANT)
-				.func_226896_b_());
+			.sound(SoundType.PLANT)
+			.func_226896_b_());
 		//		this.setCreativeTab(Tabs.tabArboriculture);
 		//		this.setLightOpacity(1);	//TODO block stuff);
 		this.definition = definition;

@@ -10,12 +10,13 @@
  ******************************************************************************/
 package forestry.farming;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
+import javax.annotation.Nullable;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
 
 public class FarmTarget {
 
@@ -54,7 +55,7 @@ public class FarmTarget {
 			return;
 		}
 
-        BlockPos.Mutable position = new BlockPos.Mutable(platformPosition);
+		BlockPos.Mutable position = new BlockPos.Mutable(platformPosition);
 		for (extent = 0; extent < limit; extent++) {
 			if (!world.isBlockLoaded(position)) {
 				break;

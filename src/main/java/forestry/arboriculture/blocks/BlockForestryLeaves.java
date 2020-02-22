@@ -10,20 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.core.IToolScoop;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.EnumFlutterType;
-import forestry.api.lepidopterology.genetics.IButterfly;
-import forestry.arboriculture.ModuleArboriculture;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
@@ -41,13 +31,26 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.core.IToolScoop;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
@@ -55,8 +58,8 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
-                .tickRandomly()
-                .func_226896_b_());
+			.tickRandomly()
+			.func_226896_b_());
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		super.tick(state, world, pos, rand);
 
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
@@ -121,7 +124,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			IButterfly caterpillar = leaves.getCaterpillar();
@@ -134,17 +137,17 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					for (ItemStack fruit : leaves.pickFruit(ItemStack.EMPTY)) {
 						ItemHandlerHelper.giveItemToPlayer(player, fruit);
 					}
-                    return ActionResultType.SUCCESS;
+					return ActionResultType.SUCCESS;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
 				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
-                return ActionResultType.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
 		}
 
-        return ActionResultType.PASS;
+		return ActionResultType.PASS;
 	}
 
 	/* IGrowable */
@@ -161,7 +164,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			leafTile.addRipeness(0.5f);

@@ -2,6 +2,9 @@ package forestry.worktable;
 
 import net.minecraft.client.gui.ScreenManager;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
@@ -15,6 +18,7 @@ import forestry.worktable.network.PacketRegistryWorktable;
 public class ModuleWorktable extends BlankForestryModule {
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(WorktableContainers.WORKTABLE.containerType(), GuiWorktable::new);
 	}

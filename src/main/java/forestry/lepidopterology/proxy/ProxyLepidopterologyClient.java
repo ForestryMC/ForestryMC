@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.lepidopterology.proxy;
 
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+
 import forestry.core.config.Constants;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.render.ModelButterflyLoader;
 import forestry.lepidopterology.render.RenderButterflyEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
@@ -26,7 +29,7 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology {
 
 	@Override
 	public void preInitializeRendering() {
-        RenderingRegistry.registerEntityRenderingHandler(ModuleLepidopterology.BUTTERFLY_ENTITY_TYPE, new RenderButterflyEntity.Factory());
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_ge"), new ModelButterflyLoader());
+		RenderingRegistry.registerEntityRenderingHandler(ModuleLepidopterology.BUTTERFLY_ENTITY_TYPE, new RenderButterflyEntity.Factory());
+		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_ge"), new ModelButterflyLoader());
 	}
 }

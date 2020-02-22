@@ -15,7 +15,6 @@ import java.util.Locale;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IDispenseItemBehavior;
-import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -82,7 +81,7 @@ public class ItemMinecartBeehousing extends MinecartItem {
 				minecart.setCustomName(stack.getDisplayName());
 			}
 
-			if(!world.addEntity(minecart)) {
+			if (!world.addEntity(minecart)) {
 				return ActionResultType.FAIL;
 			}
 		}

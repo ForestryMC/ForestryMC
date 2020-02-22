@@ -1,6 +1,20 @@
 package forestry.database.gui;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.Drawable;
@@ -14,18 +28,6 @@ import forestry.database.gui.buttons.DatabaseButton;
 import forestry.database.gui.buttons.GuiDatabaseButton;
 import forestry.database.gui.widgets.WidgetDatabaseSlot;
 import forestry.database.tiles.TileDatabase;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implements IScrollable {
 	/* Attributes - Constants */
@@ -208,13 +210,13 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	}
 
 	@Override
-    public boolean keyPressed(int key, int scanCode, int modifiers) {
-        if (searchField != null && this.searchField.keyPressed(key, scanCode, modifiers)) {
+	public boolean keyPressed(int key, int scanCode, int modifiers) {
+		if (searchField != null && this.searchField.keyPressed(key, scanCode, modifiers)) {
 			scrollBar.setValue(0);
 			markForSorting();
 			return true;
 		} else {
-            return super.keyPressed(key, scanCode, modifiers);
+			return super.keyPressed(key, scanCode, modifiers);
 		}
 	}
 
@@ -239,8 +241,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
 		if (searchField != null) {
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.disableLighting();
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.disableLighting();
 			this.searchField.render(mouseX, mouseY, f);
 		}
 	}

@@ -126,7 +126,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 			int currentCost = getFluidCost(changedState);
 			if (!resourceTank.drain(currentCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
 				IClimateState simulatedState = /*changedState.add(ClimateType.HUMIDITY, climateChange)*/
-						changedState.toImmutable().add(manipulator.addChange(true));
+					changedState.toImmutable().add(manipulator.addChange(true));
 				int fluidCost = getFluidCost(simulatedState);
 				if (!resourceTank.drain(fluidCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
 					cachedStack = resourceTank.drain(fluidCost, IFluidHandler.FluidAction.EXECUTE);

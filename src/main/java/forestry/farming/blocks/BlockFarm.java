@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import forestry.core.blocks.BlockStructure;
-import forestry.farming.tiles.*;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -22,9 +22,15 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
+import forestry.core.blocks.BlockStructure;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 
@@ -33,9 +39,9 @@ public class BlockFarm extends BlockStructure {
 
 	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
 		super(Block.Properties.create(Material.ROCK)
-				.hardnessAndResistance(1.0f)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(0));
+			.hardnessAndResistance(1.0f)
+			.harvestTool(ToolType.PICKAXE)
+			.harvestLevel(0));
 		this.type = type;
 		this.farmMaterial = farmMaterial;
 	}

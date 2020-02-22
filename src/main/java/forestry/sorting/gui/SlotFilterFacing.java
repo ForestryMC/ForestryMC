@@ -1,14 +1,16 @@
 package forestry.sorting.gui;
 
-import com.mojang.datafixers.util.Pair;
-import forestry.core.config.Constants;
-import forestry.core.render.TextureManagerForestry;
+import javax.annotation.Nullable;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
+import com.mojang.datafixers.util.Pair;
+
+import forestry.core.config.Constants;
+import forestry.core.render.TextureManagerForestry;
 
 public class SlotFilterFacing extends Slot {
 
@@ -21,9 +23,9 @@ public class SlotFilterFacing extends Slot {
 		return false;
 	}
 
-    @Nullable
+	@Nullable
 	@Override
-    public Pair<ResourceLocation, ResourceLocation> func_225517_c_() {
-        return Pair.of(TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, new ResourceLocation(Constants.MOD_ID, "slots/bee"));
+	public Pair<ResourceLocation, ResourceLocation> func_225517_c_() {
+		return Pair.of(TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, new ResourceLocation(Constants.MOD_ID, "slots/bee"));
 	}
 }

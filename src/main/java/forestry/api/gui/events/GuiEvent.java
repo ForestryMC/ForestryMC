@@ -1,10 +1,11 @@
 package forestry.api.gui.events;
 
 
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IWindowElement;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.gui.IGuiElement;
+import forestry.api.gui.IWindowElement;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiEvent extends GuiElementEvent {
@@ -13,54 +14,54 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class KeyEvent extends GuiEvent {
-        private final int keyCode;
-        private final int scanCode;
-        private final int modifiers;
+		private final int keyCode;
+		private final int scanCode;
+		private final int modifiers;
 
-        public KeyEvent(IGuiElement origin, int keyCode, int scanCode, int modifiers) {
+		public KeyEvent(IGuiElement origin, int keyCode, int scanCode, int modifiers) {
 			super(origin);
-            this.keyCode = keyCode;
-            this.scanCode = scanCode;
-            this.modifiers = modifiers;
+			this.keyCode = keyCode;
+			this.scanCode = scanCode;
+			this.modifiers = modifiers;
 
-        }
+		}
 
-        public int getKeyCode() {
-            return keyCode;
-        }
+		public int getKeyCode() {
+			return keyCode;
+		}
 
-        public int getScanCode() {
-            return scanCode;
-        }
+		public int getScanCode() {
+			return scanCode;
+		}
 
-        public int getModifiers() {
-            return modifiers;
-        }
-    }
+		public int getModifiers() {
+			return modifiers;
+		}
+	}
 
-    public static class CharEvent extends GuiEvent {
-        private final int keyCode;
-        private final char character;
-        private final int modifiers;
+	public static class CharEvent extends GuiEvent {
+		private final int keyCode;
+		private final char character;
+		private final int modifiers;
 
-        public CharEvent(IGuiElement origin, int keyCode, int modifiers) {
-            super(origin);
-            this.keyCode = keyCode;
-            this.character = (char) keyCode;
-            this.modifiers = modifiers;
+		public CharEvent(IGuiElement origin, int keyCode, int modifiers) {
+			super(origin);
+			this.keyCode = keyCode;
+			this.character = (char) keyCode;
+			this.modifiers = modifiers;
 
-        }
+		}
 
-        public int getKeyCode() {
-            return keyCode;
-        }
+		public int getKeyCode() {
+			return keyCode;
+		}
 
-        public char getCharacter() {
-            return this.character;
-        }
+		public char getCharacter() {
+			return this.character;
+		}
 
-        public int getModifiers() {
-            return modifiers;
+		public int getModifiers() {
+			return modifiers;
 		}
 	}
 
@@ -140,24 +141,24 @@ public class GuiEvent extends GuiElementEvent {
 	}
 
 	public static class WheelEvent extends GuiEvent {
-        private final double x;
-        private final double y;
-        private final double dWheel;
+		private final double x;
+		private final double y;
+		private final double dWheel;
 
-        public WheelEvent(IGuiElement origin, double x, double y, double dWheel) {
+		public WheelEvent(IGuiElement origin, double x, double y, double dWheel) {
 			super(origin);
-            this.x = x;
-            this.y = y;
+			this.x = x;
+			this.y = y;
 			this.dWheel = dWheel / 28;
 		}
 
-        public double getX() {
-            return x;
-        }
+		public double getX() {
+			return x;
+		}
 
-        public double getY() {
-            return y;
-        }
+		public double getY() {
+			return y;
+		}
 
 		public double getDWheel() {
 			return this.dWheel;

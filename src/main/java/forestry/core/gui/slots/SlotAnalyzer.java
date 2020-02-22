@@ -1,11 +1,12 @@
 package forestry.core.gui.slots;
 
-import forestry.core.gui.GuiAnalyzerProvider;
-import forestry.core.inventory.ItemInventoryAlyzer;
+import javax.annotation.Nullable;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import forestry.core.gui.GuiAnalyzerProvider;
+import forestry.core.inventory.ItemInventoryAlyzer;
 
 public class SlotAnalyzer extends SlotFiltered {
 	@Nullable
@@ -17,8 +18,8 @@ public class SlotAnalyzer extends SlotFiltered {
 	}
 
 	public void setPosition(int xPos, int yPos) {
-        //this.xPos = xPos;
-        //this.yPos = yPos;//TODO: Fix analyzer slots
+		//this.xPos = xPos;
+		//this.yPos = yPos;//TODO: Fix analyzer slots
 	}
 
 	public void setGui(@Nullable GuiAnalyzerProvider gui) {

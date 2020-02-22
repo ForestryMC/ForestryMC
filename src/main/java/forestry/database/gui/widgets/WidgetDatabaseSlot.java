@@ -1,6 +1,20 @@
 package forestry.database.gui.widgets;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
@@ -13,16 +27,8 @@ import forestry.database.DatabaseItem;
 import forestry.database.gui.GuiDatabase;
 import forestry.database.network.packets.PacketExtractItem;
 import forestry.database.network.packets.PacketInsertItem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
-
+@OnlyIn(Dist.CLIENT)
 public class WidgetDatabaseSlot extends Widget {
 	public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_inventory.png");
 
@@ -60,7 +66,7 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		manager.minecraft.textureManager.bindTexture(TEXTURE_LOCATION);
 		Drawable texture = SLOT;
 		if (isSelected()) {
@@ -72,7 +78,7 @@ public class WidgetDatabaseSlot extends Widget {
 			Minecraft minecraft = Minecraft.getInstance();
 			TextureManager textureManager = minecraft.getTextureManager();
 			textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-            //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
+			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 			GuiUtil.drawItemStack(manager.gui, itemStack, startX + xPos, startY + yPos);
 			RenderHelper.disableStandardItemLighting();
 		}
@@ -82,11 +88,11 @@ public class WidgetDatabaseSlot extends Widget {
 	}
 
 	private void drawMouseOver() {
-        RenderSystem.disableDepthTest();
-        RenderSystem.colorMask(true, true, true, false);
-//		manager.gui.blit(xPos, yPos, xPos + width, yPos + height, -2130706433, -2130706433);	TODO still not quite right
-        RenderSystem.colorMask(true, true, true, true);
-        RenderSystem.enableDepthTest();
+		RenderSystem.disableDepthTest();
+		RenderSystem.colorMask(true, true, true, false);
+		//		manager.gui.blit(xPos, yPos, xPos + width, yPos + height, -2130706433, -2130706433);	TODO still not quite right
+		RenderSystem.colorMask(true, true, true, true);
+		RenderSystem.enableDepthTest();
 	}
 
 	@Override

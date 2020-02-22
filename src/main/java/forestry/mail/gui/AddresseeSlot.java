@@ -10,7 +10,10 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.client.gui.AbstractGui;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.tooltips.ToolTip;
@@ -19,7 +22,6 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
 import forestry.core.utils.Translator;
-import net.minecraft.client.gui.AbstractGui;
 
 public class AddresseeSlot extends Widget {
 
@@ -36,7 +38,7 @@ public class AddresseeSlot extends Widget {
 	public void draw(int startX, int startY) {
 		IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
 		if (carrier != null) {
-            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
 			AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 32, 32, carrier.getSprite());
 		}

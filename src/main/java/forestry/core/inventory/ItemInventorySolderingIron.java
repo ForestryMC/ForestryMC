@@ -106,7 +106,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		}
 
 		Item item = inputCircuitBoard.getItem();
-		if(!(item instanceof ItemCircuitBoard)) {
+		if (!(item instanceof ItemCircuitBoard)) {
 			return;
 		}
 
@@ -150,7 +150,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
 		} else {
 			Item item = blankCircuitBoard.getItem();
-			if(!(item instanceof ItemCircuitBoard)) {
+			if (!(item instanceof ItemCircuitBoard)) {
 				return errorStates.build();
 			}
 			EnumCircuitBoardType type = ((ItemCircuitBoard) item).getType();
