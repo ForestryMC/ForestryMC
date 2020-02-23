@@ -34,9 +34,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 	MOISTENER(() -> FactoryTiles.MOISTENER, "moistener"),
 	SQUEEZER(() -> FactoryTiles.SQUEEZER, "squeezer"),
 	STILL(() -> FactoryTiles.STILL, "still"),
-	RAINMAKER(() -> FactoryTiles.RAINMAKER, "rainmaker", Constants.TEXTURE_PATH_BLOCK + "/rainmaker_") {
-
-	};
+	RAINMAKER(() -> FactoryTiles.RAINMAKER, "rainmaker", Constants.TEXTURE_PATH_BLOCK + "/rainmaker_");
 
 	public static final BlockTypeFactoryTesr[] VALUES = values();
 

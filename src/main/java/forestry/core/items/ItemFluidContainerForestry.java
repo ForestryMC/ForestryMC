@@ -50,8 +50,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.core.ItemGroups;
 import forestry.core.config.Config;
+import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
-import forestry.core.utils.Translator;
+import forestry.core.utils.ResourceUtil;
 
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
@@ -102,15 +103,13 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
 			if (!fluid.isEmpty()) {
-				String exactTranslationKey = "item.forestry." + type.getName() + '.' + fluid.getFluid().getRegistryName();
-				if (Translator.canTranslateToLocal(exactTranslationKey)) {    //TODO - can't call this on the server!! Maybe make custom textcomponent to handle this?
-					return new TranslationTextComponent(exactTranslationKey);
-				} else {
-					String grammarKey = "item.forestry." + type.getName() + ".grammar";
+				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getName() + '.' + fluid.getFluid().getRegistryName();
+				return ResourceUtil.tryTranslate(exactTranslationKey, () -> {
+					String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getName() + ".grammar";
 					return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
-				}
+				});
 			} else {
-				String unlocalizedname = "item.forestry." + type.getName() + ".empty";
+				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getName() + ".empty";
 				return new TranslationTextComponent(unlocalizedname);
 			}
 		}

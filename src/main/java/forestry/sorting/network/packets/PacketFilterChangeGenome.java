@@ -8,8 +8,9 @@ import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.filter.IFilterLogic;
@@ -64,7 +65,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 			boolean active = data.readBoolean();
 			IAllele allele;
 			if (data.readBoolean()) {
-				allele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(data.readString()).orElse(null);
+				allele = AlleleUtils.getAlleleOrNull(data.readString());
 			} else {
 				allele = null;
 			}

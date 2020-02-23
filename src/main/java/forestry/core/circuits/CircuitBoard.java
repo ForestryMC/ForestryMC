@@ -45,13 +45,13 @@ public class CircuitBoard implements ICircuitBoard {
 		this.circuits = circuits;
 	}
 
-	public CircuitBoard(CompoundNBT CompoundNBT) {
-		type = EnumCircuitBoardType.values()[CompoundNBT.getShort("T")];
+	public CircuitBoard(CompoundNBT compound) {
+		type = EnumCircuitBoardType.values()[compound.getShort("T")];
 
 		// Layout
 		ICircuitLayout layout = null;
-		if (CompoundNBT.contains("LY")) {
-			layout = ChipsetManager.circuitRegistry.getLayout(CompoundNBT.getString("LY"));
+		if (compound.contains("LY")) {
+			layout = ChipsetManager.circuitRegistry.getLayout(compound.getString("LY"));
 		}
 		if (layout == null) {
 			ChipsetManager.circuitRegistry.getDefaultLayout();
@@ -61,10 +61,10 @@ public class CircuitBoard implements ICircuitBoard {
 		circuits = new ICircuit[4];
 
 		for (int i = 0; i < 4; i++) {
-			if (!CompoundNBT.contains("CA.I" + i)) {
+			if (!compound.contains("CA.I" + i)) {
 				continue;
 			}
-			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(CompoundNBT.getString("CA.I" + i));
+			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(compound.getString("CA.I" + i));
 			if (circuit != null) {
 				circuits[i] = circuit;
 			}
@@ -110,13 +110,13 @@ public class CircuitBoard implements ICircuitBoard {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundNBT write(CompoundNBT compound) {
 
-		CompoundNBT.putShort("T", (short) type.ordinal());
+		compound.putShort("T", (short) type.ordinal());
 
 		// Layout
 		if (layout != null) {
-			CompoundNBT.putString("LY", layout.getUID());
+			compound.putString("LY", layout.getUID());
 		}
 
 		// Circuits
@@ -126,9 +126,9 @@ public class CircuitBoard implements ICircuitBoard {
 				continue;
 			}
 
-			CompoundNBT.putString("CA.I" + i, circuit.getUID());
+			compound.putString("CA.I" + i, circuit.getUID());
 		}
-		return CompoundNBT;
+		return compound;
 	}
 
 	@Override

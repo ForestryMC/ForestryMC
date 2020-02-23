@@ -43,7 +43,7 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 		super(Block.Properties.create(Material.LEAVES)
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
-			.func_226896_b_());
+			.notSolid());
 		//		this.setCreativeTab(Tabs.tabArboriculture);
 		//		this.setLightOpacity(1);	//TODO block stuff);
 		this.definition = definition;

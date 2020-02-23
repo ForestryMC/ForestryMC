@@ -10,9 +10,8 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 import forestry.core.config.Constants;
+import forestry.core.utils.ForgeUtils;
 import forestry.modules.features.FeatureItem;
 import forestry.storage.ModuleCrates;
 import forestry.storage.items.ItemCrated;
@@ -22,7 +21,7 @@ import forestry.storage.items.ItemCrated;
 public class ProxyCratesClient extends ProxyCrates {
 
 	public ProxyCratesClient() {
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override

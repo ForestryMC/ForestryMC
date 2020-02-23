@@ -23,10 +23,11 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IRootDefinition;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -142,7 +143,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemStack);
 		IIndividual individual = null;
 		IOrganismType type = null;
 		if (definition.isPresent()) {

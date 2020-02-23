@@ -11,7 +11,6 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.block.BlockState;
@@ -32,10 +31,11 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.util.Constants;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.IFruitProvider;
@@ -433,13 +433,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
 		if (treeTemplate != null) {
 			if (fruitAlleleUID != null) {
-				Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(fruitAlleleUID);
-				if (optionalAllele.isPresent()) {
-					IAllele fruitAllele = optionalAllele.get();
-					if (fruitAllele instanceof IAlleleFruit) {
-						treeTemplate[TreeChromosomes.FRUITS.ordinal()] = fruitAllele;
-					}
-				}
+				AlleleUtils.actOn(new ResourceLocation(fruitAlleleUID), IAlleleFruit.class, fruitAllele -> treeTemplate[TreeChromosomes.FRUITS.getIndex()] = fruitAllele);
 			}
 
 			ITree tree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);

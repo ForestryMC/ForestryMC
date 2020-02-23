@@ -10,21 +10,18 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.commands.IStatsSaveHelper;
 
 public class TreeStatsSaveHelper implements IStatsSaveHelper {
@@ -39,14 +36,8 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 	}
 
 	@Override
-	public Collection<IAlleleForestrySpecies> getSpecies() {
-		Collection<IAlleleForestrySpecies> species = new ArrayList<>();
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
-			if (allele instanceof IAlleleTreeSpecies) {
-				species.add((IAlleleTreeSpecies) allele);
-			}
-		}
-		return species;
+	public Collection<IAlleleTreeSpecies> getSpecies() {
+		return AlleleUtils.getRegisteredAlleles(TreeChromosomes.SPECIES);
 	}
 
 	@Override

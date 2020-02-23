@@ -3,7 +3,7 @@ package forestry.database.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
-import genetics.api.GeneticsAPI;
+import genetics.utils.RootUtils;
 
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.GeneticsUtil;
@@ -17,7 +17,7 @@ public class InventoryDatabase extends InventoryAdapterTile<TileDatabase> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		return GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack).isPresent();
+		return RootUtils.getRoot(itemStack).isPresent();
 	}
 
 	@Override

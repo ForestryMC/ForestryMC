@@ -86,11 +86,13 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 
 		public B setName(String name) {
 			this.name = name;
+			//noinspection unchecked
 			return (B) this;
 		}
 
 		public B setType(Supplier<FeatureTileType<? extends T>> teType) {
 			this.type = teType;
+			//noinspection unchecked
 			return (B) this;
 		}
 
@@ -100,11 +102,13 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 
 		public B setShape(ISimpleShapeProvider shape) {
 			this.shape = shape;
+			//noinspection unchecked
 			return (B) this;
 		}
 
 		public B setShape(IShapeProvider shape) {
 			this.shape = shape;
+			//noinspection unchecked
 			return (B) this;
 		}
 

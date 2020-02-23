@@ -25,7 +25,7 @@ public interface IStatsSaveHelper {
 
 	void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
 
-	Collection<IAlleleForestrySpecies> getSpecies();
+	Collection<? extends IAlleleForestrySpecies> getSpecies();
 
 	String getFileSuffix();
 

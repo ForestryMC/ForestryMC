@@ -32,8 +32,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.core.config.Config;
@@ -94,7 +95,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 		if (!stackToAnalyze.isEmpty()) {
-			specimenToAnalyze = GeneticsAPI.apiInstance.getRootHelper().getIndividual(stackToAnalyze).orElse(null);
+			specimenToAnalyze = RootUtils.getIndividualOrNull(stackToAnalyze);
 		}
 	}
 
@@ -146,7 +147,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private Integer getInputSlotIndex() {
 		for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
 			ItemStack inputStack = invInput.getStackInSlot(slotIndex);
-			if (GeneticsAPI.apiInstance.getRootHelper().isIndividual(inputStack)) {
+			if (RootUtils.isIndividual(inputStack)) {
 				return slotIndex;
 			}
 		}
@@ -227,7 +228,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 
-		specimenToAnalyze = GeneticsAPI.apiInstance.getRootHelper().getIndividual(inputStack).orElse(null);
+		specimenToAnalyze = RootUtils.getIndividualOrNull(inputStack);
 		if (specimenToAnalyze == null) {
 			return;
 		}

@@ -28,13 +28,13 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootContext;
 import genetics.api.root.IndividualRoot;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
@@ -59,7 +59,7 @@ import forestry.lepidopterology.tiles.TileCocoon;
 
 public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButterflyRoot, IBreedingTrackerHandler {
 
-	private static int butterflySpeciesCount = -1;
+	private int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";
 	private static final List<IButterfly> butterflyTemplates = new ArrayList<>();
 
@@ -96,14 +96,8 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	@Override
 	public int getSpeciesCount() {
 		if (butterflySpeciesCount < 0) {
-			butterflySpeciesCount = 0;
-			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.SPECIES)) {
-				if (allele instanceof IAlleleButterflySpecies) {
-					if (((IAlleleButterflySpecies) allele).isCounted()) {
-						butterflySpeciesCount++;
-					}
-				}
-			}
+			butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES)
+				.filter(IAlleleButterflySpecies::isCounted).count();
 		}
 
 		return butterflySpeciesCount;

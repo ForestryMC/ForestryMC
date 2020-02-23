@@ -37,13 +37,13 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootContext;
 import genetics.api.root.IndividualRoot;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
@@ -76,7 +76,7 @@ import forestry.core.utils.RenderUtil;
 
 public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreedingTrackerHandler {
 	public static final String UID = "rootTrees";
-	private static int treeSpeciesCount = -1;
+	private int treeSpeciesCount = -1;
 	@Nullable
 	private static ITreekeepingMode activeTreekeepingMode;
 
@@ -96,14 +96,8 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	@Override
 	public int getSpeciesCount() {
 		if (treeSpeciesCount < 0) {
-			treeSpeciesCount = 0;
-			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
-				if (allele instanceof IAlleleTreeSpecies) {
-					if (((IAlleleTreeSpecies) allele).isCounted()) {
-						treeSpeciesCount++;
-					}
-				}
-			}
+			treeSpeciesCount = (int) AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
+				.filter(IAlleleTreeSpecies::isCounted).count();
 		}
 
 		return treeSpeciesCount;
@@ -334,13 +328,11 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	@Override
 	public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
 		if (providersForFamilies.isEmpty()) {
-			@SuppressWarnings("unchecked")
-			Collection<IAlleleFruit> fruitAlleles = (Collection<IAlleleFruit>) (Object) GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.FRUITS);
-			for (IAlleleFruit alleleFruit : fruitAlleles) {
-				IFruitProvider fruitProvider = alleleFruit.getProvider();
+			AlleleUtils.forEach(TreeChromosomes.FRUITS, (fruit) -> {
+				IFruitProvider fruitProvider = fruit.getProvider();
 				Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());
 				fruitProviders.add(fruitProvider);
-			}
+			});
 		}
 
 		return providersForFamilies.computeIfAbsent(fruitFamily, k -> new ArrayList<>());

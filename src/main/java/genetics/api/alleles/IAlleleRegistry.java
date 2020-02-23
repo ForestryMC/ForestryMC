@@ -87,16 +87,6 @@ public interface IAlleleRegistry {
 	/**
 	 * Gets an allele
 	 *
-	 * @param registryName The registry name of the allele to retrieve as a {@link String}.
-	 * @return A optional that contains the IAllele if found, a empty optional otherwise.
-	 */
-	default Optional<IAllele> getAllele(String registryName) {
-		return getAllele(new ResourceLocation(registryName));
-	}
-
-	/**
-	 * Gets an allele
-	 *
 	 * @param registryName The registry name of the allele to retrieve as a {@link ResourceLocation}.
 	 * @return A optional that contains the IAllele if found, a empty optional otherwise.
 	 */
@@ -146,28 +136,16 @@ public interface IAlleleRegistry {
 	 *
 	 * @param registryName UID of the allele to blacklist.
 	 */
-	void blacklistAllele(String registryName);
-
-	default void blacklistAllele(ResourceLocation registryName) {
-		blacklistAllele(registryName.toString());
-	}
+	void blacklistAllele(ResourceLocation registryName);
 
 	/**
 	 * @return Current blacklisted alleles.
 	 */
-	Collection<String> getAlleleBlacklist();
+	Collection<ResourceLocation> getAlleleBlacklist();
 
 	/**
 	 * @param registryName UID of the species to vet.
 	 * @return true if the allele is blacklisted.
 	 */
-	boolean isBlacklisted(String registryName);
-
-	default boolean isBlacklisted(ResourceLocation registryName) {
-		return isBlacklisted(registryName.toString());
-	}
-
-	default boolean isBlacklisted(IAllele allele) {
-		return isBlacklisted(allele.getRegistryName());
-	}
+	boolean isBlacklisted(ResourceLocation registryName);
 }

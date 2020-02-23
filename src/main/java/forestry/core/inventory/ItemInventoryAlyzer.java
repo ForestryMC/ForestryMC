@@ -18,9 +18,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -69,7 +70,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		}
 
 		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemStack);
 		if (!definition.isPresent()) {
 			return false;
 		}
@@ -102,7 +103,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			specimen = convertedSpecimen;
 		}
 
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(specimen);
 		// No individual, abort
 		if (!definition.isPresent()) {
 			return;
@@ -151,7 +152,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		if (!hasSpecimen()) {
 			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		} else {
-			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(getSpecimen());
+			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(getSpecimen());
 			if (definition.isPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
 				errorStates.add(EnumErrorCode.NO_HONEY);
 			}

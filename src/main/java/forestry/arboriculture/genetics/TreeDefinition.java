@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
@@ -102,6 +103,7 @@ import forestry.core.genetics.TemplateMatcher;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.RenderUtil;
+import forestry.modules.features.FeatureBlockGroup;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSubtype {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.OAK) {
@@ -1035,31 +1037,32 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 		BlockState logBlock = TreeManager.woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof);
 
 		Direction.Axis axis = facing.getAxis();
-		return world.setBlockState(pos, logBlock.with(LogBlock.AXIS, axis), 18);
+		return world.setBlockState(pos, logBlock.with(LogBlock.AXIS, axis), 19);
 	}
 
 	@Override
 	public boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
 		if (owner != null && new TemplateMatcher(genome).matches()) {
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-			String speciesUid = genome.getPrimary().getRegistryName().toString();
 			BlockState defaultLeaves;
+			FeatureBlockGroup<? extends Block, TreeDefinition> leavesGroup;
 			if (fruitProvider.isFruitLeaf(genome, world, pos) && rand.nextFloat() <= fruitProvider.getFruitChance(genome, world, pos)) {
-				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.findState(speciesUid);
+				leavesGroup = ArboricultureBlocks.LEAVES_DEFAULT_FRUIT;
 			} else {
-				defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.findState(speciesUid);
+				leavesGroup = ArboricultureBlocks.LEAVES_DEFAULT;
 			}
-			return world.setBlockState(pos, defaultLeaves, 18);
+			defaultLeaves = leavesGroup.get(this).defaultState();
+			return world.setBlockState(pos, defaultLeaves, 19);
 		} else {
 			BlockState leaves = ArboricultureBlocks.LEAVES.defaultState();
-			boolean placed = world.setBlockState(pos, leaves, 18);
+			boolean placed = world.setBlockState(pos, leaves, 19);
 			if (!placed) {
 				return false;
 			}
 
 			TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 			if (tileLeaves == null) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 19);
 				return false;
 			}
 

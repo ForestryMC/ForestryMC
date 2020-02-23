@@ -36,8 +36,9 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
 import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
 import genetics.api.organism.IOrganism;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
@@ -50,9 +51,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	private final Map<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> modelsBySpecies;
 
 	public ModelSapling() {
-		this.modelsBySpecies = GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES).stream()
-			.filter(allele -> allele instanceof IAlleleTreeSpecies)
-			.map(allele -> (IAlleleTreeSpecies) allele)
+		this.modelsBySpecies = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
 			.collect(Collectors.toMap(allele -> allele, allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())));
 	}
 
@@ -81,7 +80,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	@Override
 	public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 		return getDependencies().stream()
-			.flatMap(location -> modelGetter.apply(location).func_225614_a_(modelGetter, missingTextureErrors).stream())
+			.flatMap(location -> modelGetter.apply(location).getTextures(modelGetter, missingTextureErrors).stream())
 			.collect(Collectors.toSet());
 	}
 

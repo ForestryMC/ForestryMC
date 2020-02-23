@@ -26,9 +26,10 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
@@ -84,7 +85,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 			return;
 		}
 
-		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
+		Optional<IIndividual> optional = RootUtils.getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
 		if (!optional.isPresent()) {
 			return;
 		}

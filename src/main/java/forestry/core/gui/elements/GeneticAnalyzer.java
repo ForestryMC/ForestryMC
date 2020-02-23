@@ -12,9 +12,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.gatgets.IDatabasePlugin;
@@ -133,7 +134,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			return;
 		}
 		ItemStack stack = provider.getSpecimen(selectedSlot);
-		IRootDefinition<IForestrySpeciesRoot> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stack);
+		IRootDefinition<IForestrySpeciesRoot> definition = RootUtils.getRoot(stack);
 		if (definition.isPresent()) {
 			IForestrySpeciesRoot root = definition.get();
 			IDatabasePlugin databasePlugin = root.getSpeciesPlugin();

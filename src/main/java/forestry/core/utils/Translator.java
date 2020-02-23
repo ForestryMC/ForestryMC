@@ -2,7 +2,12 @@ package forestry.core.utils;
 
 import net.minecraft.client.resources.I18n;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 //TODO - sides issues
+@Deprecated
+@OnlyIn(Dist.CLIENT)
 public class Translator {
 	private Translator() {
 

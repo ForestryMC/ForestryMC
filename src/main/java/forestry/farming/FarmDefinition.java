@@ -9,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IStringSerializable;
 
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
@@ -30,6 +28,7 @@ import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemFruit;
+import forestry.core.utils.ForgeUtils;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCocoa;
@@ -203,7 +202,7 @@ public enum FarmDefinition implements IStringSerializable {
 			.setTranslationKey("for.farm." + identifier)
 			.addFarmables("farm" + camelCase);
 		initProperties(builder);
-		FMLJavaModLoadingContext.get().getModEventBus().post(new FarmPropertiesEvent(identifier, builder));
+		ForgeUtils.postEvent(new FarmPropertiesEvent(identifier, builder));
 		this.properties = builder.create();
 		this.managed = new CircuitFarmLogic("managed" + camelCase, properties, false);
 		this.manual = new CircuitFarmLogic("manual" + camelCase, properties, true);

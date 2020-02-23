@@ -30,7 +30,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
@@ -49,6 +48,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.utils.ForgeUtils;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
@@ -71,7 +71,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	public ModuleArboriculture() {
 		proxy = DistExecutor.runForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override

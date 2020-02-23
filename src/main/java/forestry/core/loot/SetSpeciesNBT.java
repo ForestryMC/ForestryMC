@@ -12,12 +12,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.functions.ILootFunction;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
+
+import genetics.utils.RootUtils;
 
 //TODO - loot tables now different
 public class SetSpeciesNBT implements ILootFunction {
@@ -29,7 +30,7 @@ public class SetSpeciesNBT implements ILootFunction {
 
 	@Override
 	public ItemStack apply(ItemStack stack, LootContext context) {
-		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stack);
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = RootUtils.getRoot(stack);
 		return definition.map((root) -> {
 			Optional<IOrganismType> speciesType = root.getType(stack);
 			return speciesType.map((type) -> {

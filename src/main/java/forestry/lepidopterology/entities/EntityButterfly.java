@@ -58,6 +58,8 @@ import genetics.api.root.EmptyRootDefinition;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
+import genetics.utils.AlleleUtils;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.core.IToolScoop;
@@ -491,7 +493,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		if (world.isRemote) {
 			if (species == null) {
 				String speciesUid = dataManager.get(DATAWATCHER_ID_SPECIES);
-				Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(speciesUid);
+				Optional<IAllele> optionalAllele = AlleleUtils.getAllele(speciesUid);
 				if (optionalAllele.isPresent()) {
 					IAllele allele = optionalAllele.get();
 					if (allele instanceof IAlleleButterflySpecies) {
@@ -561,7 +563,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	}
 
 	@Override
-	public boolean func_225503_b_(float distance, float damageMultiplier) {
+	public boolean onLivingFall(float distance, float damageMultiplier) {
 		return false;
 	}
 

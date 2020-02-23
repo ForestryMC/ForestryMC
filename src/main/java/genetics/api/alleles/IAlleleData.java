@@ -9,6 +9,8 @@ import net.minecraftforge.fml.ModLoadingContext;
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeType;
 
+import genetics.utils.AlleleUtils;
+
 /**
  * The IAlleleData is a help interface that provides all information that is required to register a allele at the
  * {@link IAlleleRegistry} using {@link IAlleleRegistry#registerAllele(IAlleleData, IChromosomeType...)}.
@@ -63,6 +65,6 @@ public interface IAlleleData<V> extends IAlleleProvider {
 			return Collections.emptySet();
 		}
 		IAlleleValue<V> alleleValue = optionalAllele.get();
-		return GeneticsAPI.apiInstance.getAlleleRegistry().getChromosomeTypes(alleleValue);
+		return AlleleUtils.getChromosomeTypes(alleleValue);
 	}
 }

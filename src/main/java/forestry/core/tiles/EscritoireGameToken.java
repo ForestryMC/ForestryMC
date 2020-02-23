@@ -18,10 +18,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -72,7 +73,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	private void setTokenSpecies(String speciesUid) {
-		Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(speciesUid);
+		Optional<IAllele> optionalAllele = AlleleUtils.getAllele(speciesUid);
 		if (!optionalAllele.isPresent()) {
 			return;
 		}

@@ -107,6 +107,11 @@ public class ChromosomeTypeBuilder implements IChromosomeTypeBuilder {
 		}
 
 		@Override
+		public A castAllele(IAllele allele) {
+			return alleleClass.cast(allele);
+		}
+
+		@Override
 		public boolean isValid(IAllele allele) {
 			return alleleClass.isInstance(allele);
 		}

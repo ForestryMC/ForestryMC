@@ -9,9 +9,10 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -84,7 +85,7 @@ public class ContainerAnalyzerProviderHelper {
 			specimen = convertedSpecimen;
 		}
 
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(specimen);
 		// No individual, abort
 		if (!definition.isPresent()) {
 			return;

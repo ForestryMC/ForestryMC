@@ -16,16 +16,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import com.mojang.datafixers.util.Pair;
-
 import forestry.core.config.Constants;
-import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.IFilterSlotDelegate;
 
 /**
  * Slot which only takes specific items, specified by the IFilterSlotDelegate.
  */
-public class SlotFiltered extends SlotWatched {
+public class SlotFiltered extends SlotWatched implements ISlotTextured {
 	private final IFilterSlotDelegate filterSlotDelegate;
 	@Nullable
 	private ResourceLocation backgroundTexture = null;
@@ -55,12 +52,12 @@ public class SlotFiltered extends SlotWatched {
 
 	@Nullable
 	@Override
-	public Pair<ResourceLocation, ResourceLocation> func_225517_c_() {
+	public ResourceLocation getBackgroundTexture() {
 		ItemStack stack = getStack();
 		if (!isItemValid(stack)) {
-			return Pair.of(TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, blockedTexture);
+			return blockedTexture;
 		} else if (backgroundTexture != null) {
-			return Pair.of(TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, backgroundTexture);
+			return backgroundTexture;
 		} else {
 			return null;
 		}

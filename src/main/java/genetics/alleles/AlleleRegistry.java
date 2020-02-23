@@ -177,20 +177,20 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	/* BLACKLIST */
-	private final ArrayList<String> blacklist = new ArrayList<>();
+	private final ArrayList<ResourceLocation> blacklist = new ArrayList<>();
 
 	@Override
-	public void blacklistAllele(String registryName) {
+	public void blacklistAllele(ResourceLocation registryName) {
 		blacklist.add(registryName);
 	}
 
 	@Override
-	public Collection<String> getAlleleBlacklist() {
+	public Collection<ResourceLocation> getAlleleBlacklist() {
 		return Collections.unmodifiableCollection(blacklist);
 	}
 
 	@Override
-	public boolean isBlacklisted(String registryName) {
+	public boolean isBlacklisted(ResourceLocation registryName) {
 		return blacklist.contains(registryName);
 	}
 

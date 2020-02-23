@@ -72,7 +72,7 @@ public class ModelCrate implements IModelGeometry<ModelCrate> {
 		} catch (Exception e) {
 			return null;
 		}
-		return model.func_225613_a_(bakery, spriteGetter, transform, location);
+		return model.bakeModel(bakery, spriteGetter, transform, location);
 	}
 
 	@Override

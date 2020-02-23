@@ -22,12 +22,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
 import genetics.api.root.IIndividualRoot;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
@@ -64,7 +65,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	public boolean initialize(ItemStack specimen) {
-		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
+		Optional<IIndividual> optional = RootUtils.getIndividual(specimen);
 		if (!optional.isPresent()) {
 			return false;
 		}

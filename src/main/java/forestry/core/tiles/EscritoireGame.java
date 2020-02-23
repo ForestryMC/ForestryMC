@@ -19,8 +19,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -115,7 +116,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 			return;
 		}
 
-		Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
+		Optional<IIndividual> optional = RootUtils.getIndividual(specimen);
 		if (!optional.isPresent()) {
 			return;
 		}

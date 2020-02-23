@@ -11,6 +11,8 @@
 package forestry.core.render;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -24,9 +26,21 @@ import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
 
+	private final ModelRenderer lid;
+	private final ModelRenderer base;
+	private final ModelRenderer lock;
 	private final ResourceLocation texture;
 
 	public RenderNaturalistChest(String textureName) {
+		this.base = new ModelRenderer(64, 64, 0, 19);
+		this.base.addBox(1.0F, 0.0F, 1.0F, 14.0F, 10.0F, 14.0F, 0.0F);
+		this.lid = new ModelRenderer(64, 64, 0, 0);
+		this.lid.addBox(1.0F, 0.0F, 0.0F, 14.0F, 5.0F, 14.0F, 0.0F);
+		this.lid.rotationPointY = 9.0F;
+		this.lid.rotationPointZ = 1.0F;
+		this.lock = new ModelRenderer(64, 64, 0, 0);
+		this.lock.addBox(7.0F, -1.0F, 15.0F, 2.0F, 4.0F, 1.0F, 0.0F);
+		this.lock.rotationPointY = 8.0F;
 		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/" + textureName + ".png");
 	}
 
@@ -47,38 +61,18 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 
 	public void render(Direction orientation, float prevLidAngle, float lidAngle, RenderHelper helper, float partialTick) {
 		helper.push();
-		bindTexture(texture);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		helper.translate(0, 1.0F, 1.0F);
-		helper.scale(1.0F, -1.0F, -1.0F);
-		helper.translate(0.5F, 0.5F, 0.5F);
+		helper.translate(0.5D, 0.5D, 0.5D);
 
-		int rotation;
-		switch (orientation) {
-			case EAST:
-				rotation = -90;
-				break;
-			case NORTH:
-				rotation = 180;
-				break;
-			case WEST:
-				rotation = 90;
-				break;
-			default:
-			case SOUTH:
-				rotation = 0;
-				break;
-		}
-
-		RenderSystem.rotatef(rotation, 0.0F, 1.0F, 0.0F);
-		helper.translate(-0.5F, -0.5F, -0.5F);
+		helper.rotate(Vector3f.YP.rotation(-orientation.getHorizontalAngle()));
+		helper.translate(-0.5D, -0.5D, -0.5D);
 
 		float angle = prevLidAngle + (lidAngle - prevLidAngle) * partialTick;
 		angle = 1.0F - angle;
 		angle = 1.0F - angle * angle * angle;
-		/*chestModel.getLid().rotateAngleX = -(angle * (float) Math.PI / 2.0F);
-		chestModel.renderAll();
-		ChestTileEntityRenderer*/
+		float rotation = -(angle * (float) Math.PI / 2.0F);
+		helper.renderModel(texture, new Vector3f(rotation, 0.0F, 0.0F), lid, lock);
+		helper.renderModel(texture, base);
 
 		helper.pop();
 	}

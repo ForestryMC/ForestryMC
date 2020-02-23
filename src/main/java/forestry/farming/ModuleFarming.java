@@ -28,7 +28,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
@@ -72,8 +71,6 @@ public class ModuleFarming extends BlankForestryModule {
 
 	public ModuleFarming() {
 		proxy = DistExecutor.runForDist(() -> ProxyFarmingClient::new, () -> ProxyFarming::new);
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "block/oak_sapling"
+      "model": "forestry:block/sapling_ge"
     }
   }
 }

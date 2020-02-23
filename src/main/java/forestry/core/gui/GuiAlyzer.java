@@ -30,7 +30,6 @@ import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
@@ -42,6 +41,9 @@ import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
+
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBeeRoot;
@@ -152,7 +154,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 
 		ItemStack stackInSlot = itemInventory.getStackInSlot(specimenSlot);
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(stackInSlot);
 		if (definition.isPresent()) {
 			return;
 		}
@@ -191,7 +193,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 				continue;
 			}
 
-			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(stackInSlot);
+			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(stackInSlot);
 			if (!definition.isPresent()) {
 				continue;
 			}
@@ -280,7 +282,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		textLayout.newLine();
 		textLayout.drawLine(Translator.translateToLocal("for.gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
-		if (GeneticsAPI.apiInstance.getAlleleRegistry().isBlacklisted(individual.getIdentifier())) {
+		if (AlleleUtils.isBlacklisted(individual.getIdentifier())) {
 			String extinct = ">> " + Translator.translateToLocal("for.gui.alyzer.extinct").toUpperCase(Locale.ENGLISH) + " <<";
 			getFontRenderer().drawStringWithShadow(extinct, guiLeft + 200 - getFontRenderer().getStringWidth(extinct),
 				guiTop + textLayout.getLineY(), ColourProperties.INSTANCE.get("gui.beealyzer.dominant"));
@@ -499,7 +501,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public List<String> getHints() {
 		ItemStack specimen = itemInventory.getSpecimen();
 		if (!specimen.isEmpty()) {
-			IRootDefinition<IForestrySpeciesRoot> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(specimen);
+			IRootDefinition<IForestrySpeciesRoot> definition = RootUtils.getRoot(specimen);
 			if (definition.isPresent()) {
 				IAlyzerPlugin alyzerPlugin = definition.get().getAlyzerPlugin();
 				return alyzerPlugin.getHints();

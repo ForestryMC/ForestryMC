@@ -8,7 +8,6 @@ import java.util.Random;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.individual.IChromosome;
@@ -17,6 +16,7 @@ import genetics.api.individual.IKaryotype;
 import genetics.api.root.ITemplateContainer;
 
 import genetics.ApiInstance;
+import genetics.utils.AlleleUtils;
 
 @Immutable
 public class Chromosome implements IChromosome {
@@ -38,9 +38,8 @@ public class Chromosome implements IChromosome {
 	}
 
 	public static Chromosome create(@Nullable ResourceLocation primarySpeciesUid, @Nullable ResourceLocation secondarySpeciesUid, IChromosomeType type, CompoundNBT nbt) {
-		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
-		IAllele firstAllele = alleleRegistry.getAllele(nbt.getString(ACTIVE_ALLELE_TAG)).orElse(null);
-		IAllele secondAllele = alleleRegistry.getAllele(nbt.getString(INACTIVE_ALLELE_TAG)).orElse(null);
+		IAllele firstAllele = AlleleUtils.getAlleleOrNull(nbt.getString(ACTIVE_ALLELE_TAG));
+		IAllele secondAllele = AlleleUtils.getAlleleOrNull(nbt.getString(INACTIVE_ALLELE_TAG));
 		return create(primarySpeciesUid, secondarySpeciesUid, type, firstAllele, secondAllele);
 	}
 
@@ -86,12 +85,12 @@ public class Chromosome implements IChromosome {
 
 	static Optional<IAllele> getActiveAllele(CompoundNBT chromosomeNBT) {
 		String alleleUid = chromosomeNBT.getString(Chromosome.ACTIVE_ALLELE_TAG);
-		return GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(alleleUid);
+		return AlleleUtils.getAllele(alleleUid);
 	}
 
 	static Optional<IAllele> getInactiveAllele(CompoundNBT chromosomeNBT) {
 		String alleleUid = chromosomeNBT.getString(Chromosome.INACTIVE_ALLELE_TAG);
-		return GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(alleleUid);
+		return AlleleUtils.getAllele(alleleUid);
 	}
 
 	@Override

@@ -16,8 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
@@ -45,12 +46,15 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 			if (specimen.isEmpty()) {
 				return false;
 			}
-			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(specimen);
-			return optional.filter(individual -> ((IResearchHandler) individual.getRoot().getComponent(ForestryComponentKeys.RESEARCH)).getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0).isPresent();
+			Optional<IIndividual> optional = RootUtils.getIndividual(specimen);
+			return optional.filter(individual -> {
+				IResearchHandler handler = ((IResearchHandler) individual.getRoot().getComponent(ForestryComponentKeys.RESEARCH));
+				return handler.getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0;
+			}).isPresent();
 		}
 
 		return slotIndex == SLOT_ANALYZE &&
-			(GeneticsAPI.apiInstance.getRootHelper().isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
+			(RootUtils.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
 
 	}
 
@@ -80,9 +84,9 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		super.setInventorySlotContents(slotIndex, itemstack);
 		if (slotIndex == SLOT_ANALYZE) {
-			if (!GeneticsAPI.apiInstance.getRootHelper().isIndividual(getStackInSlot(SLOT_ANALYZE)) && !getStackInSlot(SLOT_ANALYZE).isEmpty()) {
+			if (!RootUtils.isIndividual(getStackInSlot(SLOT_ANALYZE)) && !getStackInSlot(SLOT_ANALYZE).isEmpty()) {
 				ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
-				if (GeneticsAPI.apiInstance.getRootHelper().isIndividual(ersatz)) {
+				if (RootUtils.isIndividual(ersatz)) {
 					super.setInventorySlotContents(SLOT_ANALYZE, ersatz);
 				}
 			}

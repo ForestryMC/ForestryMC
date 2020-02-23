@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -60,13 +61,17 @@ public class RenderHelper {
 		}
 
 		EntityRendererManager renderManager = Minecraft.getInstance().getRenderManager();
-		renderManager.func_229084_a_(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, transformation, buffer, combinedLight);
+		renderManager.renderEntityStatic(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, transformation, buffer, combinedLight);
 
 		dummyItem.world = null;
 	}
 
 	public void setRotation(Vector3f baseRotation) {
 		this.baseRotation = baseRotation;
+	}
+
+	public void rotate(Quaternion rotation) {
+		transformation.rotate(rotation);
 	}
 
 	public void translate(double x, double y, double z) {
@@ -89,8 +94,8 @@ public class RenderHelper {
 		renderModel(builder, ORIGIN, renderers);
 	}
 
-	public void renderModel(ResourceLocation material, ModelRenderer... renderers) {
-		renderModel(material, ORIGIN, renderers);
+	public void renderModel(ResourceLocation location, ModelRenderer... renderers) {
+		renderModel(location, ORIGIN, renderers);
 	}
 
 	public void renderModel(IVertexBuilder builder, Vector3f rotation, ModelRenderer... renderers) {
@@ -102,7 +107,7 @@ public class RenderHelper {
 		}
 	}
 
-	public void renderModel(ResourceLocation material, Vector3f rotation, ModelRenderer... renderers) {
-		renderModel(buffer.getBuffer(RenderType.entityCutout(material)), rotation, renderers);
+	public void renderModel(ResourceLocation location, Vector3f rotation, ModelRenderer... renderers) {
+		renderModel(buffer.getBuffer(RenderType.entityCutout(location)), rotation, renderers);
 	}
 }

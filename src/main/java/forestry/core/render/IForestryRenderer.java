@@ -1,10 +1,7 @@
 package forestry.core.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * Handler for the rendering of a forestry tile entity and its item.
@@ -32,13 +29,5 @@ public interface IForestryRenderer<T extends TileEntity> {
 	void renderItem(ItemStack stack, RenderHelper helper);
 
 	default void renderItem(ItemStack stack) {
-	}
-
-	default void bindTexture(ResourceLocation location) {
-		TextureManager texturemanager = Minecraft.getInstance().textureManager;
-		if (texturemanager != null) {
-			texturemanager.bindTexture(location);
-		}
-
 	}
 }

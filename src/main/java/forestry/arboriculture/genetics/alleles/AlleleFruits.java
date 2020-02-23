@@ -9,9 +9,9 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -88,14 +88,9 @@ public class AlleleFruits {
 	public static List<IAlleleFruit> getFruitAllelesWithModels() {
 		if (fruitAllelesWithModels == null) {
 			fruitAllelesWithModels = new ArrayList<>();
-			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.FRUITS)) {
-				if (allele instanceof IAlleleFruit) {
-					IAlleleFruit alleleFruit = (IAlleleFruit) allele;
-					if (alleleFruit.getModelName() != null) {
-						fruitAllelesWithModels.add(alleleFruit);
-					}
-				}
-			}
+			AlleleUtils.filteredStream(TreeChromosomes.FRUITS)
+				.filter((allele) -> allele.getModelName() != null)
+				.forEach((allele) -> fruitAllelesWithModels.add(allele));
 		}
 		return fruitAllelesWithModels;
 	}

@@ -141,7 +141,7 @@ public class ModelButterflyItem extends AbstractBakedModel {
 				BlockModel model = new BlockModel(modelBlock.getParentLocation(), modelBlock.getElements(), ImmutableMap.of("butterfly", Either.left(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(texture)))), modelBlock.ambientOcclusion, modelBlock.func_230176_c_(), modelBlock.getAllTransforms(), modelBlock.getOverrides());
 				ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "item/butterfly");
 				IModelTransform transform = ResourceUtil.loadTransform(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
-				subModelBuilder.put(identifier, model.func_228813_a_(bakery, model, spriteGetter, transform, location, true));
+				subModelBuilder.put(identifier, model.bakeModel(bakery, model, spriteGetter, transform, location, true));
 			}
 			return new ModelButterflyItem(subModelBuilder.build());
 		}

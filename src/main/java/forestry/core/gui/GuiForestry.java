@@ -17,11 +17,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
@@ -42,6 +44,7 @@ import forestry.core.gui.ledgers.HintLedger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.gui.ledgers.PowerLedger;
+import forestry.core.gui.slots.ISlotTextured;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
@@ -247,6 +250,23 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	@Override
 	protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int idk) {
 		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, 0);    //TODO - I have no idea what the last param actually does
+	}
+
+	@Override
+	public void drawSlot(Slot slot) {
+		if (slot instanceof ISlotTextured) {
+			ISlotTextured textured = (ISlotTextured) slot;
+			ItemStack stack = slot.getStack();
+			if (stack.isEmpty() && slot.isEnabled()) {
+				ResourceLocation location = textured.getBackgroundTexture();
+				if (location != null) {
+					TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
+					this.minecraft.getTextureManager().bindTexture(sprite.getAtlasTexture().getBasePath());
+					blit(slot.xPos, slot.yPos, this.getBlitOffset(), 16, 16, sprite);
+				}
+			}
+		}
+		super.drawSlot(slot);
 	}
 
 	@Override

@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
@@ -36,14 +34,8 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	}
 
 	@Override
-	public List<IAlleleButterflyCocoon> getAllowedValues() {
-		List<IAlleleButterflyCocoon> trees = new ArrayList<>();
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.COCOON)) {
-			if (allele instanceof IAlleleButterflyCocoon) {
-				trees.add((IAlleleButterflyCocoon) allele);
-			}
-		}
-		return trees;
+	public Collection<IAlleleButterflyCocoon> getAllowedValues() {
+		return AlleleUtils.getRegisteredAlleles(ButterflyChromosomes.COCOON);
 	}
 
 	@Override
@@ -54,11 +46,11 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	@Override
 	public Optional<IAlleleButterflyCocoon> parseValue(String value) {
 		if (namesMap.isEmpty()) {
-			List<IAlleleButterflyCocoon> allowedValues = getAllowedValues();
-			for (IAlleleButterflyCocoon allowedValue : allowedValues) {
-				String propertyName = getName(allowedValue);
-				namesMap.put(propertyName, allowedValue);
-			}
+			// Using the stream here so we can save one 'collect' call in 'getRegisteredAlleles()'
+			AlleleUtils.filteredStream(ButterflyChromosomes.COCOON).forEach(cocoon -> {
+				String propertyName = getName(cocoon);
+				namesMap.put(propertyName, cocoon);
+			});
 		}
 		return Optional.ofNullable(namesMap.get(value));
 	}

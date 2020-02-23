@@ -40,6 +40,7 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
 
+import genetics.utils.AlleleUtils;
 import genetics.utils.RootUtils;
 
 import forestry.api.arboriculture.ArboricultureCapabilities;
@@ -233,7 +234,7 @@ public class GeneticsUtil {
 	}
 
 	private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
-		if (exclude.contains(mutationSpecies) || GeneticsAPI.apiInstance.getAlleleRegistry().isBlacklisted(mutationSpecies.getRegistryName().toString())) {
+		if (exclude.contains(mutationSpecies) || AlleleUtils.isBlacklisted(mutationSpecies.getRegistryName().toString())) {
 			return highest;
 		}
 

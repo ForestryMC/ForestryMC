@@ -62,7 +62,7 @@ public abstract class AbstractBakedModel implements IBakedModel {
 
 	@Override
 	public boolean func_230044_c_() {
-		return false;//TODO: Find out what this does. Flat gui lightning ?
+		return false;
 	}
 
 	@Override

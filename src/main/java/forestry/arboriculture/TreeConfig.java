@@ -12,8 +12,9 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -66,10 +67,7 @@ public class TreeConfig {
 		config.setCategoryComment(CONFIG_CATEGORY_TREE, CONFIG_COMMENT);
 		config.setCategoryComment(CONFIG_CATEGORY_TREE + ".global", "All options defined in the global category are used for all trees.");
 		GLOBAL.parseConfig(config);
-		for (IAllele treeAllele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
-			if (!(treeAllele instanceof IAlleleTreeSpecies)) {
-				continue;
-			}
+		for (IAllele treeAllele : AlleleUtils.getRegisteredAlleles(TreeChromosomes.SPECIES)) {
 			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) treeAllele;
 			configs.put(treeSpecies.getRegistryName(), new TreeConfig(treeSpecies.getRegistryName(), treeSpecies.getRarity()).parseConfig(config));
 		}

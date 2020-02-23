@@ -81,7 +81,7 @@ public final class ModelBaker {
 			Direction facing = face.face;
 			BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
 			BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
-			BakedQuad quad = FACE_BAKERY.func_228824_a_(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
+			BakedQuad quad = FACE_BAKERY.bakeQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
 
 			currentModel.addQuad(facing, quad);
 		}

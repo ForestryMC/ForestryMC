@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
-import genetics.api.GeneticsAPI;
+import genetics.utils.RootUtils;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.core.tiles.TileAnalyzer;
@@ -41,7 +41,7 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
-			return GeneticsAPI.apiInstance.getRootHelper().isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent();
+			return RootUtils.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent();
 		} else if (slotIndex == SLOT_CAN) {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);

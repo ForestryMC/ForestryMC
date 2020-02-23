@@ -16,15 +16,19 @@ import forestry.arboriculture.IWoodTyped;
 
 public class BlockForestryPlank extends Block implements IWoodTyped {
 
+	public static Properties createWoodProperties(IWoodType woodType) {
+		return Block.Properties.create(Material.WOOD)
+			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+			.sound(SoundType.WOOD)
+			.harvestTool(ToolType.AXE)
+			.harvestLevel(0);
+	}
+
 	private final boolean fireproof;
 	private final IWoodType woodType;
 
 	public BlockForestryPlank(boolean fireproof, IWoodType woodType) {
-		super(Block.Properties.create(Material.WOOD)
-			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD)
-			.harvestTool(ToolType.AXE)
-			.harvestLevel(0));
+		super(createWoodProperties(woodType));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
 	}
@@ -58,4 +62,5 @@ public class BlockForestryPlank extends Block implements IWoodTyped {
 		}
 		return 5;
 	}
+
 }

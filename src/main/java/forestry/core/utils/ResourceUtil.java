@@ -18,6 +18,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -31,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,6 +47,37 @@ import net.minecraftforge.client.model.SimpleModelTransform;
 public class ResourceUtil {
 
 	private ResourceUtil() {
+	}
+
+	public static TranslationTextComponent tryTranslate(String optionalKey, String defaultKey) {
+		return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
+	}
+
+	public static TranslationTextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
+		return tryTranslate(optionalKey, () -> new TranslationTextComponent(defaultKey));
+	}
+
+	public static TranslationTextComponent tryTranslate(String optionalKey, Supplier<TranslationTextComponent> defaultKey) {
+		return tryTranslate(() -> new TranslationTextComponent(optionalKey), defaultKey);
+	}
+
+	/**
+	 * Tries to translate the optional key component. Returns the default key component if the first can't be translated.
+	 *
+	 * @return The optional component if it can be translated the other component otherwise.
+	 */
+	public static TranslationTextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<TranslationTextComponent> defaultKey) {
+		TranslationTextComponent component = optionalKey.get();
+		if (canTranslate(component)) {
+			return component;
+		} else {
+			return defaultKey.get();
+		}
+	}
+
+	public static boolean canTranslate(TranslationTextComponent component) {
+		String translatedText = component.getUnformattedComponentText();
+		return !translatedText.startsWith(component.getKey());
 	}
 
 	public static Minecraft client() {

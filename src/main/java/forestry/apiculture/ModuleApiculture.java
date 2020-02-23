@@ -51,7 +51,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import genetics.api.GeneticsAPI;
 
@@ -109,6 +108,7 @@ import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.OreDictUtil;
@@ -168,7 +168,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	public ModuleApiculture() {
 		proxy = DistExecutor.runForDist(() -> ProxyApicultureClient::new, () -> ProxyApiculture::new);
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override

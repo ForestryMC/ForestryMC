@@ -29,6 +29,9 @@ public class ItemFertilizer extends ItemForestry {
 		Hand hand = context.getHand();
 		BlockPos pos = context.getPos();
 		Direction facing = context.getFace();
+		if (player == null) {
+			return ActionResultType.FAIL;
+		}
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
 			return ActionResultType.FAIL;

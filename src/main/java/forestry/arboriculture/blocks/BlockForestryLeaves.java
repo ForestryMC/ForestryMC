@@ -59,7 +59,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
 			.tickRandomly()
-			.func_226896_b_());
+			.notSolid());
 	}
 
 	@Override

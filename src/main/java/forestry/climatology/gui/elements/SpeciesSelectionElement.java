@@ -23,8 +23,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
@@ -45,7 +46,7 @@ public class SpeciesSelectionElement extends GuiElement {
 			if (itemstack.isEmpty()) {
 				return;
 			}
-			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(itemstack);
+			Optional<IIndividual> optional = RootUtils.getIndividual(itemstack);
 			if (!optional.isPresent()) {
 				return;
 			}

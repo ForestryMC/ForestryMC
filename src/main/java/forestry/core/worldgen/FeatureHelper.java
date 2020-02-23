@@ -10,10 +10,14 @@ import java.util.Set;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.DirectionalPlaceContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.arboriculture.worldgen.ITreeBlockType;
@@ -31,8 +35,11 @@ public class FeatureHelper {
 		}
 
 		BlockState blockState = world.getBlockState(pos);
-		type.setBlock(world, pos);
-		return replaceMode.canReplace(blockState, world, pos);
+		if (replaceMode.canReplace(blockState, world, pos)) {
+			type.setBlock(world, pos);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -336,9 +343,10 @@ public class FeatureHelper {
 		SOFT {
 			@Override
 			public boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
-				//TODO: Can't be used because the world generation only provides a IWorld and not a World
-				/*BlockItemUseContext context = new DirectionalPlaceContext((World) world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP);
-				return blockState.isReplaceable(context);*/
+				if (world instanceof World) {
+					BlockItemUseContext context = new DirectionalPlaceContext((World) world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP);
+					return blockState.isReplaceable(context);
+				}
 				return blockState.getMaterial().isReplaceable();
 			}
 		};

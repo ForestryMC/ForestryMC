@@ -37,22 +37,22 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
-import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.utils.EntityUtil;
+import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
@@ -90,7 +90,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	public ModuleLepidopterology() {
 		proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override
@@ -203,12 +203,10 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	private static void parseRarity(LocalizedConfiguration config) {
 		List<String> butterflyRarity = Lists.newArrayList();
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.SPECIES)) {
-			if (allele instanceof IAlleleButterflySpecies) {
-				IAlleleButterflySpecies species = (IAlleleButterflySpecies) allele;
-				butterflyRarity.add(species.getRegistryName().toString().replace(':', '_') + ":" + species.getRarity());
-			}
-		}
+		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (species) -> {
+			String identifier = species.getRegistryName().toString().replace(':', '_');
+			butterflyRarity.add(identifier + ":" + species.getRarity());
+		});
 		Collections.sort(butterflyRarity);
 		String[] defaultRaritys = butterflyRarity.toArray(new String[0]);
 
@@ -229,7 +227,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	}
 
 	private static void parseCooconLoots(LocalizedConfiguration config) {
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.COCOON)) {
+		for (IAllele allele : AlleleUtils.getRegisteredAlleles(ButterflyChromosomes.COCOON)) {
 			if (allele instanceof IAlleleButterflyCocoon) {
 				parseCooconLoot(config, (IAlleleButterflyCocoon) allele);
 			}

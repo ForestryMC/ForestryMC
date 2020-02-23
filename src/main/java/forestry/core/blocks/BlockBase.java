@@ -145,30 +145,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		return definition.getShape(state, reader, pos, context);
 	}
 
-	//TODO - I think this is done by blockstate and voxelshape now, hopefully a bit more automatically based on the model?
-	//	@Nullable
-	//	@Override
-	//	public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockReader worldIn, BlockPos pos) {
-	//		IMachineProperties definition = getDefinition();
-	//		return definition.getBoundingBox(worldIn, pos, blockState);
-	//	}
-	//
-	//
-	//	@Override
-	//	@OnlyIn(Dist.CLIENT)
-	//	public AxisAlignedBB getSelectedBoundingBox(BlockState state, World worldIn, BlockPos pos) {
-	//		IMachineProperties definition = getDefinition();
-	//		return definition.getBoundingBox(worldIn, pos, state).offset(pos);
-	//	}
-	//
-	//	@Override
-	//	public RayTraceResult collisionRayTrace(BlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-	//		IMachineProperties definition = getDefinition();
-	//		return definition.collisionRayTrace(worldIn, pos, blockState, start, end);
-	//	}
-
 	/* INTERACTION */
-
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
@@ -177,7 +154,7 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 		}
 		if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
-			if (!playerIn.func_225608_bj_()) { //isSneaking
+			if (!playerIn.isShiftKeyDown()) { //isSneaking
 				if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
 					return ActionResultType.SUCCESS;
 				}

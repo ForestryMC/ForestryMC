@@ -39,7 +39,7 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 			.hardnessAndResistance(0.2f)
 			.sound(SoundType.PLANT)
 			.tickRandomly()
-			.func_226896_b_());
+			.notSolid());
 		this.definition = definition;
 	}
 

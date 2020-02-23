@@ -30,8 +30,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
@@ -64,6 +62,7 @@ import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.datastructures.DummyMap;
 import forestry.core.utils.datastructures.FluidMap;
@@ -99,7 +98,7 @@ public class ModuleFactory extends BlankForestryModule {
 	public static final Map<String, Boolean> MACHINE_ENABLED = Maps.newHashMap();
 
 	public ModuleFactory() {
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override

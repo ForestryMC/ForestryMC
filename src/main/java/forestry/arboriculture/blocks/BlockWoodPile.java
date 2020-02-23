@@ -27,6 +27,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.ICharcoalPileWall;
@@ -43,7 +44,9 @@ public class BlockWoodPile extends Block {
 	public BlockWoodPile() {
 		super(Block.Properties.create(Material.WOOD)
 			.hardnessAndResistance(1.5f)
-			.sound(SoundType.WOOD));
+			.sound(SoundType.WOOD)
+			.harvestLevel(0)
+			.harvestTool(ToolType.AXE));
 		setDefaultState(getStateContainer().getBaseState().with(AGE, 0).with(IS_ACTIVE, false));
 	}
 

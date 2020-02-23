@@ -10,10 +10,10 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.modules.IForestryModule;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
@@ -21,7 +21,7 @@ public class ClientModuleHandler extends CommonModuleHandler {
 
 	public ClientModuleHandler() {
 		super();
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override

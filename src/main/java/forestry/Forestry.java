@@ -44,17 +44,16 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
 import forestry.book.gui.chromsomes.categories.EntriesCategory;
 import forestry.core.EventHandlerCore;
-import forestry.core.TickHandlerCoreServer;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
@@ -84,6 +83,7 @@ import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestrySpriteUploader;
 import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.ForgeUtils;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
@@ -144,17 +144,15 @@ public class Forestry {
 		ModuleManager.runSetup();
 		NetworkHandler networkHandler = new NetworkHandler();
 		//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
-		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus modEventBus = ForgeUtils.modBus();
 		modEventBus.addListener(this::setup);
 		//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 		modEventBus.addListener(this::processIMCMessages);
 		modEventBus.addListener(this::clientStuff);
 		modEventBus.addListener(this::gatherData);
-		modEventBus.register(TickHandlerCoreServer.class);    //TODO - correct?
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
 		modEventBus.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(this);
-		//TODO - I think this is how it works
 		Proxies.render = DistExecutor.runForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
 		Proxies.common = DistExecutor.runForDist(() -> ProxyClient::new, () -> ProxyCommon::new);
 
@@ -209,7 +207,7 @@ public class Forestry {
 
 	//TODO: Move to somewhere else
 	private void callSetupListeners(boolean start) {
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles()) {
+		for (IAllele allele : AlleleUtils.getRegisteredAlleles()) {
 			if (allele instanceof ISetupListener) {
 				ISetupListener listener = (ISetupListener) allele;
 				if (start) {
@@ -263,6 +261,9 @@ public class Forestry {
 
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
 	public static class RegistryEvents {
+
+		private RegistryEvents() {
+		}
 
 		@SubscribeEvent(priority = EventPriority.HIGH)
 		public static void createFeatures(RegistryEvent.Register<Block> event) {

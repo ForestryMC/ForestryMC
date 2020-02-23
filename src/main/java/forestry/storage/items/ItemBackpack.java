@@ -89,7 +89,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if (!playerIn.func_225608_bj_()) {
+		if (!playerIn.isShiftKeyDown()) {
 			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
 			ItemStack heldItem = playerIn.getHeldItem(handIn);
@@ -110,7 +110,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
 		// We only do this when shift is clicked
-		if (player.func_225608_bj_()) {
+		if (player.isShiftKeyDown()) {
 			ItemStack heldItem = player.getHeldItem(context.getHand());
 			return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
 		}

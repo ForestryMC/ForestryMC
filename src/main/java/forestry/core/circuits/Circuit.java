@@ -18,6 +18,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
+import forestry.core.utils.ResourceUtil;
 
 public abstract class Circuit implements ICircuit {
 	private final String uid;
@@ -45,7 +46,11 @@ public abstract class Circuit implements ICircuit {
 		int i = 1;
 		while (true) {
 			String unlocalizedDescription = getTranslationKey() + ".description." + i;
-			list.add(new StringTextComponent(" - ").appendSibling(new TranslationTextComponent(unlocalizedDescription)));
+			TranslationTextComponent component = new TranslationTextComponent(unlocalizedDescription);
+			if (!ResourceUtil.canTranslate(component)) {
+				break;
+			}
+			list.add(new StringTextComponent(" - ").appendSibling(component));
 			i++;
 		}
 	}

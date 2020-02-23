@@ -28,9 +28,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
@@ -50,7 +51,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	private static final short MAX_MATURITY = 2;
 	private static final IGenome defaultGenome = TreeManager.treeRoot.getKaryotype().getDefaultGenome();
-	private static final IAlleleFruit defaultAllele = (IAlleleFruit) GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(Constants.MOD_ID + ".fruitCocoa").get();
+	private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleUtils.getAllele(Constants.MOD_ID + ".fruitCocoa").get();
 
 	private IGenome genome = defaultGenome;
 	private IAlleleFruit allele = defaultAllele;
@@ -73,7 +74,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	public void read(CompoundNBT compoundNBT) {
 		super.read(compoundNBT);
 
-		Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(compoundNBT.getString("UID"));
+		Optional<IAllele> optionalAllele = AlleleUtils.getAllele(compoundNBT.getString("UID"));
 		if (!optionalAllele.isPresent()) {
 			allele = defaultAllele;
 		} else {
@@ -216,7 +217,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	@Override
 	public void readData(PacketBufferForestry data) {
-		Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(data.readString());
+		Optional<IAllele> optionalAllele = AlleleUtils.getAllele(data.readString());
 		if (!optionalAllele.isPresent()) {
 			allele = defaultAllele;
 		} else {

@@ -18,6 +18,9 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
 
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
@@ -54,7 +57,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 			IForestrySpeciesRoot root = (IForestrySpeciesRoot) definition.get();
 			IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.world, manager.minecraft.player.getGameProfile());
 			for (String uid : tracker.getDiscoveredSpecies()) {
-				IAllele allele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(uid).orElse(null);
+				IAllele allele = AlleleUtils.getAllele(uid).orElse(null);
 				if (allele instanceof IAlleleSpecies) {
 					IAlleleSpecies species = (IAlleleSpecies) allele;
 					entries.add(species);
@@ -124,7 +127,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		ItemStack stack = gui.getMinecraft().player.inventory.getItemStack();
 		if (!stack.isEmpty()) {
-			Optional<IIndividual> optional = GeneticsAPI.apiInstance.getRootHelper().getIndividual(stack);
+			Optional<IIndividual> optional = RootUtils.getIndividual(stack);
 			if (optional.isPresent()) {
 				IIndividual individual = optional.get();
 				IGenome genome = individual.getGenome();

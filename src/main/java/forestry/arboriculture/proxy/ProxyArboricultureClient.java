@@ -26,11 +26,9 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
@@ -94,13 +92,10 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
 	@Override
 	public void registerModels(ModelRegistryEvent event) {
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
-			if (allele instanceof IAlleleTreeSpecies) {
-				IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) allele;
-				ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
-				ModelLoader.addSpecialModel(treeSpecies.getItemModel());
-			}
-		}
+		AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
+			ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
+			ModelLoader.addSpecialModel(treeSpecies.getItemModel());
+		});
 		//ModelLoader.addSpecialModel();
 	}
 

@@ -73,15 +73,15 @@ public class ItemResearchNote extends ItemForestry {
 
 		@Nullable
 		private static IMutation getEncodedMutation(IIndividualRoot<IIndividual> root, CompoundNBT compound) {
-			IAllele allele0 = AlleleUtils.getAllele(compound.getString(NBT_ALLELE_FIRST));
-			IAllele allele1 = AlleleUtils.getAllele(compound.getString(NBT_ALLELE_SECOND));
+			IAllele allele0 = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_FIRST));
+			IAllele allele1 = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_SECOND));
 			if (allele0 == null || allele1 == null) {
 				return null;
 			}
 
 			IAllele result = null;
 			if (compound.contains(NBT_ALLELE_RESULT)) {
-				result = AlleleUtils.getAllele(compound.getString(NBT_ALLELE_RESULT));
+				result = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_RESULT));
 			}
 
 			IMutation encoded = null;
@@ -135,7 +135,7 @@ public class ItemResearchNote extends ItemForestry {
 					}
 				}
 			} else if (this == SPECIES) {
-				IAlleleForestrySpecies alleleFirst = AlleleUtils.getAllele(compound.getString(NBT_ALLELE_FIRST));
+				IAlleleForestrySpecies alleleFirst = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_FIRST));
 				if (alleleFirst == null) {
 					return tooltips;
 				}

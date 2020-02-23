@@ -16,9 +16,10 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
+
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -32,7 +33,7 @@ public class PickupHandlerCore implements IPickupHandler {
 			return false;
 		}
 
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemstack);
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemstack);
 		if (definition.isPresent()) {
 			IForestrySpeciesRoot<IIndividual> root = definition.get();
 			Optional<IIndividual> optionalIndividual = root.create(itemstack);

@@ -75,7 +75,7 @@ public class ModelButterfly extends SegmentedModel<EntityButterfly> {
 	}
 
 	@Override
-	public Iterable<ModelRenderer> func_225601_a_() {
+	public ImmutableList<ModelRenderer> getParts() {
 		return parts;
 	}
 

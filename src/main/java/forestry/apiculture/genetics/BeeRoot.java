@@ -28,14 +28,14 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IRootContext;
 import genetics.api.root.IndividualRoot;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBeeHousing;
@@ -60,7 +60,7 @@ import forestry.core.utils.Log;
 
 public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreedingTrackerHandler {
 
-	private static int beeSpeciesCount = -1;
+	private int beeSpeciesCount = -1;
 	public static final String UID = "rootBees";
 
 	private final List<IBeekeepingMode> beekeepingModes = new ArrayList<>();
@@ -81,14 +81,8 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	@Override
 	public int getSpeciesCount() {
 		if (beeSpeciesCount < 0) {
-			beeSpeciesCount = 0;
-			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(BeeChromosomes.SPECIES)) {
-				if (allele instanceof IAlleleBeeSpecies) {
-					if (((IAlleleBeeSpecies) allele).isCounted()) {
-						beeSpeciesCount++;
-					}
-				}
-			}
+			beeSpeciesCount = (int) AlleleUtils.filteredStream(BeeChromosomes.SPECIES)
+				.filter(IAlleleBeeSpecies::isCounted).count();
 		}
 
 		return beeSpeciesCount;

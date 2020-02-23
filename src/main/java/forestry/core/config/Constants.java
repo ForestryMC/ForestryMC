@@ -37,6 +37,8 @@ public class Constants implements IForestryConstants {
 	public static final int[] SLOTS_NONE = new int[0];
 	public static final String[] EMPTY_STRINGS = new String[0];
 
+	public static final String TRANSLATION_KEY_ITEM = "item.forestry.";
+
 	// Textures
 	public static final String TEXTURE_PATH_GUI = "textures/gui";
 	public static final String TEXTURE_PATH_BLOCK = "textures/block";

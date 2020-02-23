@@ -5,12 +5,13 @@ import javax.annotation.Nullable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.components.ComponentKeys;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.book.BookContent;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -35,7 +36,7 @@ public class MutationContent extends BookContent {
 
 	@Override
 	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
-		IAllele allele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(species).orElse(null);
+		IAllele allele = AlleleUtils.getAlleleOrNull(species);
 		if (!(allele instanceof IAlleleForestrySpecies)) {
 			return false;
 		}

@@ -22,6 +22,9 @@ import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
+
 import forestry.api.core.ILocatable;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterData;
@@ -79,15 +82,14 @@ public class FilterLogic implements IFilterLogic {
 			filterRules[i] = AlleleManager.filterRegistry.getRuleOrDefault(data.getString("TypeFilter" + i));
 		}
 
-		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
 				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 0)) {
-					filter.activeAllele = alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0)).orElse(null);
+					filter.activeAllele = AlleleUtils.getAlleleOrNull(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0));
 				}
 				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 1)) {
-					filter.inactiveAllele = alleleRegistry.getAllele(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1)).orElse(null);
+					filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1));
 				}
 				genomeFilter[i][j] = filter;
 			}
@@ -136,10 +138,10 @@ public class FilterLogic implements IFilterLogic {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
 				if (data.readBoolean()) {
-					filter.activeAllele = alleleRegistry.getAllele(data.readString(1024)).orElse(null);
+					filter.activeAllele = AlleleUtils.getAlleleOrNull(data.readString(1024));
 				}
 				if (data.readBoolean()) {
-					filter.inactiveAllele = alleleRegistry.getAllele(data.readString(1024)).orElse(null);
+					filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.readString(1024));
 				}
 				genomeFilter[i][j] = filter;
 			}
@@ -147,7 +149,7 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	public Collection<Direction> getValidDirections(ItemStack itemStack, Direction from) {
-		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = RootUtils.getRoot(itemStack);
 		IIndividual individual = null;
 		IOrganismType type = null;
 		if (definition.isPresent()) {
@@ -170,7 +172,7 @@ public class FilterLogic implements IFilterLogic {
 
 	@Override
 	public boolean isValid(ItemStack itemStack, Direction facing) {
-		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(itemStack);
+		IRootDefinition<IIndividualRoot<IIndividual>> definition = RootUtils.getRoot(itemStack);
 		IIndividual individual = null;
 		IOrganismType type = null;
 		if (definition.isPresent()) {

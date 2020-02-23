@@ -48,7 +48,7 @@ public abstract class BlockStructure extends BlockForestry {
 
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
-		if (playerIn.func_225608_bj_()) { //isSneaking
+		if (playerIn.isShiftKeyDown()) { //isSneaking
 			return ActionResultType.PASS;
 		}
 

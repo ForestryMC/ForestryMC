@@ -90,6 +90,7 @@ public abstract class TileUtil {
 		return null;
 	}
 
+	@FunctionalInterface
 	public interface ITileAction<T> {
 		void actOnTile(T tile);
 	}

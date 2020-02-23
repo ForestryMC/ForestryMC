@@ -33,10 +33,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ISpriteRegistry;
@@ -46,7 +46,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
-import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -293,11 +292,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(ISpriteRegistry registry) {
-		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(ButterflyChromosomes.SPECIES)) {
-			if (allele instanceof IAlleleButterflySpecies) {
-				((IAlleleButterflySpecies) allele).registerSprites(registry);
-			}
-		}
+		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (allele) -> allele.registerSprites(registry));
 	}
 
 	@Override

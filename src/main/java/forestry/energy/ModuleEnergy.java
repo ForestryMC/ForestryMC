@@ -13,10 +13,10 @@ package forestry.energy;
 import net.minecraft.client.gui.ScreenManager;
 
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
+import forestry.core.utils.ForgeUtils;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.gui.GuiEngineBiogas;
 import forestry.energy.gui.GuiEngineElectric;
@@ -36,7 +36,7 @@ public class ModuleEnergy extends BlankForestryModule {
 	public ModuleEnergy() {
 		//set up proxies as early as possible
 		proxy = DistExecutor.runForDist(() -> ProxyEnergyClient::new, () -> ProxyEnergy::new);
-		FMLJavaModLoadingContext.get().getModEventBus().register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override

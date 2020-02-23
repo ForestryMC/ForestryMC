@@ -24,9 +24,10 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.server.ServerChunkProvider;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -83,12 +84,12 @@ public final class TreeGenHelper {
 	private static IGenome getTreeGenome(ResourceLocation speciesName) throws SpeciesNotFoundException {
 		IAlleleTreeSpecies species = null;
 
-		for (ResourceLocation uid : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredNames()) {
+		for (ResourceLocation uid : AlleleUtils.getRegisteredNames()) {
 			if (!uid.equals(speciesName)) {
 				continue;
 			}
 
-			Optional<IAllele> optionalAllele = GeneticsAPI.apiInstance.getAlleleRegistry().getAllele(uid);
+			Optional<IAllele> optionalAllele = AlleleUtils.getAllele(uid);
 			if (!optionalAllele.isPresent()) {
 				continue;
 			}
@@ -100,12 +101,13 @@ public final class TreeGenHelper {
 		}
 
 		if (species == null) {
-			for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
-				if (allele instanceof IAlleleTreeSpecies && allele.getDisplayName().getFormattedText().replaceAll("\\s", "").equals(speciesName.toString())) {
-					species = (IAlleleTreeSpecies) allele;
-					break;
-				}
-			}
+			species = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
+				.filter(allele -> {
+					String displayName = allele.getDisplayName().getFormattedText().replaceAll("\\s", "");
+					return displayName.equals(speciesName.toString());
+				})
+				.findFirst()
+				.orElse(null);
 		}
 
 		if (species == null) {

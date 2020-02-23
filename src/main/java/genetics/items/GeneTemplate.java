@@ -18,6 +18,7 @@ import genetics.api.root.IIndividualRoot;
 
 import genetics.ApiInstance;
 import genetics.Genetics;
+import genetics.utils.AlleleUtils;
 
 public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<CompoundNBT> {
 	public static final IGeneTemplate EMPTY = new Empty();
@@ -83,7 +84,7 @@ public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<Comp
 			});
 		}
 		if (compound.contains(NBT_ALLELE)) {
-			allele = ApiInstance.INSTANCE.getAlleleRegistry().getAllele(compound.getString(NBT_ALLELE)).orElse(null);
+			allele = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE));
 		}
 	}
 

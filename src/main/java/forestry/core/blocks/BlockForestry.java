@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -32,11 +34,10 @@ public abstract class BlockForestry extends Block {
 	protected BlockForestry(Block.Properties properties) {
 		super(properties
 			.hardnessAndResistance(1.5f));
-		//		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}
