@@ -52,7 +52,7 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 
 	@Override
 	public Collection<IAlleleBeeSpecies> getSpecies() {
-		return AlleleUtils.getRegisteredAlleles(BeeChromosomes.SPECIES);
+		return AlleleUtils.filteredAlleles(BeeChromosomes.SPECIES);
 	}
 
 	@Override

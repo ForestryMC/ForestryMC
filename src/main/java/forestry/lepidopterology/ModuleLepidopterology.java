@@ -227,7 +227,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	}
 
 	private static void parseCooconLoots(LocalizedConfiguration config) {
-		for (IAllele allele : AlleleUtils.getRegisteredAlleles(ButterflyChromosomes.COCOON)) {
+		for (IAllele allele : AlleleUtils.filteredAlleles(ButterflyChromosomes.COCOON)) {
 			if (allele instanceof IAlleleButterflyCocoon) {
 				parseCooconLoot(config, (IAlleleButterflyCocoon) allele);
 			}

@@ -51,6 +51,7 @@ import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.EnumAllele;
+import forestry.core.genetics.root.ResearchHandler;
 import forestry.modules.features.FeatureBlock;
 
 @GeneticPlugin(modId = Constants.MOD_ID)
@@ -92,6 +93,7 @@ public class TreePlugin implements IGeneticPlugin {
 			})
 			.addComponent(ComponentKeys.TRANSLATORS)
 			.addComponent(ComponentKeys.MUTATIONS)
+			.addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new)
 			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<ITree> builder) -> {
 				builder.setResearchSuitability(new ItemStack(Blocks.OAK_SAPLING), 1.0f);
 				builder.addPlugin((species, itemstack) -> {

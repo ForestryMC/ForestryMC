@@ -34,6 +34,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -678,7 +679,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			}
 
 			Log.debug("Blacklisting bee species identified by " + item);
-			GeneticsAPI.apiInstance.getAlleleRegistry().blacklistAllele(item);
+			GeneticsAPI.apiInstance.getAlleleRegistry().blacklistAllele(new ResourceLocation(item));
 		}
 	}
 

@@ -13,9 +13,11 @@ package forestry.factory.blocks;
 import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 
+import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
@@ -41,8 +43,20 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr<?> machineProperties;
 
 	<T extends TileBase> BlockTypeFactoryTesr(Supplier<FeatureTileType<? extends T>> teClass, String name) {
+		final VoxelShape nsBase = Block.makeCuboidShape(2D, 2D, 4D, 14, 14, 12);
+		final VoxelShape nsFront = Block.makeCuboidShape(0D, 0D, 0D, 16, 16, 4);
+		final VoxelShape nsBack = Block.makeCuboidShape(0D, 0D, 12D, 16, 16, 16);
+		final VoxelShape ns = VoxelShapes.or(nsBase, nsFront, nsBack);
+		final VoxelShape ewBase = Block.makeCuboidShape(4D, 2D, 2D, 12, 14, 14);
+		final VoxelShape ewFront = Block.makeCuboidShape(0D, 0D, 0D, 4, 16, 16);
+		final VoxelShape ewBack = Block.makeCuboidShape(12D, 0D, 0D, 16, 16, 16);
+		final VoxelShape ew = VoxelShapes.or(ewBase, ewFront, ewBack);
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
 			.setParticleTexture(name + ".0")
+			.setShape((state, reader, pos, context) -> {
+				Direction direction = state.get(BlockBase.FACING);
+				return (direction == Direction.NORTH || direction == Direction.SOUTH) ? ns : ew;
+			})
 			.create();
 		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCK + "/" + name + "_");
 		this.machineProperties = machineProperties;

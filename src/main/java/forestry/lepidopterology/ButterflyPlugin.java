@@ -33,6 +33,7 @@ import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Constants;
 import forestry.core.genetics.root.IResearchPlugin;
+import forestry.core.genetics.root.ResearchHandler;
 import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.lepidopterology.genetics.ButterflyBranchDefinition;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
@@ -75,6 +76,7 @@ public class ButterflyPlugin implements IGeneticPlugin {
 			})
 			.addComponent(ComponentKeys.TRANSLATORS)
 			.addComponent(ComponentKeys.MUTATIONS)
+			.addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new)
 			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<IButterfly> component) -> {
 				component.addPlugin(new IResearchPlugin() {
 					@Override

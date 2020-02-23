@@ -35,7 +35,7 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 
 	@Override
 	public Collection<IAlleleButterflyCocoon> getAllowedValues() {
-		return AlleleUtils.getRegisteredAlleles(ButterflyChromosomes.COCOON);
+		return AlleleUtils.filteredAlleles(ButterflyChromosomes.COCOON);
 	}
 
 	@Override

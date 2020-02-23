@@ -43,6 +43,7 @@ import forestry.apiculture.items.ItemHoneyComb;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.genetics.root.IResearchPlugin;
+import forestry.core.genetics.root.ResearchHandler;
 import forestry.core.items.ItemOverlay;
 import forestry.core.utils.ItemStackUtil;
 
@@ -90,6 +91,7 @@ public class BeePlugin implements IGeneticPlugin {
 			})
 			.addComponent(ComponentKeys.TRANSLATORS)
 			.addComponent(ComponentKeys.MUTATIONS)
+			.addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new)
 			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<IBee> builder) -> builder.addPlugin(new IResearchPlugin() {
 				@Override
 				public float getResearchSuitability(IAlleleSpecies species, ItemStack itemStack) {

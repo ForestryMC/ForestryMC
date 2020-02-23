@@ -67,7 +67,7 @@ public class TreeConfig {
 		config.setCategoryComment(CONFIG_CATEGORY_TREE, CONFIG_COMMENT);
 		config.setCategoryComment(CONFIG_CATEGORY_TREE + ".global", "All options defined in the global category are used for all trees.");
 		GLOBAL.parseConfig(config);
-		for (IAllele treeAllele : AlleleUtils.getRegisteredAlleles(TreeChromosomes.SPECIES)) {
+		for (IAllele treeAllele : AlleleUtils.filteredAlleles(TreeChromosomes.SPECIES)) {
 			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) treeAllele;
 			configs.put(treeSpecies.getRegistryName(), new TreeConfig(treeSpecies.getRegistryName(), treeSpecies.getRarity()).parseConfig(config));
 		}

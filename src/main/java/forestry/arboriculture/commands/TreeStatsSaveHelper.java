@@ -37,7 +37,7 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 
 	@Override
 	public Collection<IAlleleTreeSpecies> getSpecies() {
-		return AlleleUtils.getRegisteredAlleles(TreeChromosomes.SPECIES);
+		return AlleleUtils.filteredAlleles(TreeChromosomes.SPECIES);
 	}
 
 	@Override

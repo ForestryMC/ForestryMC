@@ -93,7 +93,7 @@ public class AlleleUtils {
 		return GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredNames();
 	}
 
-	public static Collection<IAllele> getRegisteredAlleles() {
+	public static Collection<IAllele> getAlleles() {
 		return GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles();
 	}
 
@@ -101,11 +101,11 @@ public class AlleleUtils {
 		return GeneticsAPI.apiInstance.getAlleleRegistry().getChromosomeTypes(allele);
 	}
 
-	public static Collection<IAllele> getRegisteredAlleles(IChromosomeType type) {
+	public static Collection<IAllele> getAllelesByType(IChromosomeType type) {
 		return GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(type);
 	}
 
-	public static <A extends IAllele> Collection<A> getRegisteredAlleles(IChromosomeAllele<A> type) {
+	public static <A extends IAllele> Collection<A> filteredAlleles(IChromosomeAllele<A> type) {
 		return filteredStream(type).collect(Collectors.toSet());
 	}
 
@@ -114,7 +114,7 @@ public class AlleleUtils {
 	}
 
 	public static <A extends IAllele> Stream<A> filteredStream(IChromosomeAllele<A> type) {
-		return getRegisteredAlleles(type).stream()
+		return getAllelesByType(type).stream()
 			.filter(allele -> type.getAlleleClass().isInstance(allele))
 			.map(type::castAllele);
 	}

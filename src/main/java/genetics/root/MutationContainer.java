@@ -8,9 +8,7 @@ import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
 
-import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
@@ -20,6 +18,8 @@ import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
+
+import genetics.utils.AlleleUtils;
 
 public class MutationContainer<I extends IIndividual, M extends IMutation> implements IMutationContainer<I, M> {
 
@@ -38,13 +38,12 @@ public class MutationContainer<I extends IIndividual, M extends IMutation> imple
 	@Override
 	public boolean registerMutation(M mutation) {
 		IChromosomeType speciesType = root.getKaryotype().getSpeciesType();
-		IAlleleRegistry alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
 		IAllele firstParent = mutation.getFirstParent();
 		IAllele secondParent = mutation.getSecondParent();
 		IAllele resultSpecies = mutation.getTemplate()[speciesType.getIndex()];
-		if (alleleRegistry.isBlacklisted(resultSpecies)
-			|| alleleRegistry.isBlacklisted(firstParent)
-			|| alleleRegistry.isBlacklisted(secondParent)) {
+		if (AlleleUtils.isBlacklisted(resultSpecies)
+			|| AlleleUtils.isBlacklisted(firstParent)
+			|| AlleleUtils.isBlacklisted(secondParent)) {
 			return false;
 		}
 		mutations.add(mutation);
