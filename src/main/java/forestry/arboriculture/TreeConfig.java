@@ -1,24 +1,21 @@
 package forestry.arboriculture;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.utils.Log;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class TreeConfig {
 	public static final String CONFIG_CATEGORY_TREE = "trees";
@@ -98,6 +95,7 @@ public class TreeConfig {
 				Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName + "'. No biome is registered under the registry name '" + biomeName + "'.");
 			}
 		}
+
 		spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity).setMinValue(0.0F).setMaxValue(1.0F).getDouble();
 		return this;
 	}
@@ -120,7 +118,7 @@ public class TreeConfig {
 
 	public static boolean isValidDimension(@Nullable String treeUID, int dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		return GLOBAL.isValidDimension(dimID) && (treeConfig == null || treeConfig.isValidDimension(dimID));
+        return treeConfig != null ? treeConfig.isValidDimension(dimID) : GLOBAL.isValidDimension(dimID);
 	}
 
 	private boolean isValidDimension(int dimID) { //blacklist has priority
@@ -132,7 +130,7 @@ public class TreeConfig {
 
 	public static boolean isValidBiome(@Nullable String treeUID, Biome biome) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		return GLOBAL.isValidBiome(biome) && (treeConfig == null || treeConfig.isValidBiome(biome));
+        return treeUID != null ? treeConfig.isValidBiome(biome) : GLOBAL.isValidBiome(biome);
 	}
 
 	private boolean isValidBiome(Biome biome) {

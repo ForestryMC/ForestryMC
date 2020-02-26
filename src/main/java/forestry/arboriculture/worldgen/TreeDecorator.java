@@ -10,38 +10,24 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
+import forestry.api.arboriculture.*;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.arboriculture.TreeConfig;
+import forestry.arboriculture.commands.TreeGenHelper;
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.IGrowthProvider;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.arboriculture.TreeConfig;
-import forestry.arboriculture.commands.TreeGenHelper;
-import forestry.core.utils.BlockUtil;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class TreeDecorator {
 	private static final List<IAlleleTreeSpecies> SPECIES = new ArrayList<>();
@@ -123,7 +109,7 @@ public class TreeDecorator {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles(EnumTreeChromosome.SPECIES)) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				IAlleleTreeSpecies alleleTreeSpecies = (IAlleleTreeSpecies) allele;
-				if (alleleTreeSpecies.getRarity() > 0) {
+				if (TreeConfig.getSpawnRarity(alleleTreeSpecies.getUID()) > 0) {
 					SPECIES.add(alleleTreeSpecies);
 				}
 			}
