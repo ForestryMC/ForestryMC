@@ -1,3 +1,5 @@
 {
-  "parent": "forestry:item/crate-filled"
+  "parent": "forestry:item/crate-filled",
+  "loader": "forestry:crate-filled",
+  "variant": "crated.forestry.ash"
 }
