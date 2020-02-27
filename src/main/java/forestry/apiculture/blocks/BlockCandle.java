@@ -36,6 +36,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
@@ -226,7 +227,6 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 		}
 	}
 
-	//TODO loot table stuff??
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 		ItemStack dropStack = drop.get();
@@ -235,7 +235,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
 		// not harvested, get drops normally
 		if (dropStack == null) {
-			dropStack = getCandleDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
+			dropStack = getCandleDrop(builder.assertPresent(LootParameters.BLOCK_ENTITY));
 		}
 
 		drops.add(dropStack);
@@ -248,14 +248,18 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	}
 
 	private ItemStack getCandleDrop(IBlockReader world, BlockPos pos) {
-		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
-		if (tileCandle == null) {
+		return getCandleDrop(world.getTileEntity(pos));
+	}
+
+	private ItemStack getCandleDrop(@Nullable TileEntity tileEntity) {
+		if (!(tileEntity instanceof TileCandle)) {
 			return new ItemStack(this);
 		}
+		TileCandle tileCandle = (TileCandle) tileEntity;
 		int colour = tileCandle.getColour();
 
-		int newMeta = tileCandle.isLit() ? 1 : 0;
-		ItemStack itemStack = new ItemStack(this, 1);//TODO flatten, newMeta);
+		//int newMeta = tileCandle.isLit() ? 1 : 0;// todo: meta ?
+		ItemStack itemStack = new ItemStack(this);
 		if (colour != 0xffffff) {
 			// When dropped, tag new item stack with colour. Unless it's white, then do no such thing for maximum stacking.
 			CompoundNBT tag = new CompoundNBT();

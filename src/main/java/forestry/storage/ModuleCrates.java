@@ -23,6 +23,7 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.utils.IMCUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
 import forestry.modules.features.FeatureItem;
 import forestry.storage.items.ItemCrated;
@@ -197,4 +198,9 @@ public class ModuleCrates extends BlankForestryModule {
 		//		ItemStack product = new ItemStack(uncrated.getItem(), 9, uncrated.getDamage());
 		//		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_UNCRATING_CYCLES, ItemStack.EMPTY, product, "#", '#', crateStack);
 	}    //TODO meta
+
+	@Override
+	public ISidedModuleHandler getModuleHandler() {
+		return proxy;
+	}
 }

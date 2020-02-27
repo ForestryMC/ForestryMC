@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -55,7 +56,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	}
 
 	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
-		super(texture, container, inv, titled);
+		super(texture, container, inv, new TranslationTextComponent(titled.getUnlocalizedTitle()));
 		this.buttonX = buttonX;
 		this.buttonY = buttonY;
 		this.screenDistance = screenDistance;

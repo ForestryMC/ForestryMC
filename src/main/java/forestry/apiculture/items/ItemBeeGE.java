@@ -42,7 +42,7 @@ import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
-import forestry.core.utils.Translator;
+import forestry.core.utils.ResourceUtil;
 
 public class ItemBeeGE extends ItemGE implements IColoredItem {
 
@@ -66,23 +66,23 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	//TODO - pretty sure this is still translating on the server atm
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
-		if (itemstack.getTag() == null) {
-			return super.getDisplayName(itemstack);
+	public ITextComponent getDisplayName(ItemStack itemStack) {
+		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
+			return super.getDisplayName(itemStack);
 		}
-		Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemstack);
+		Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemStack);
 		if (!optionalIndividual.isPresent()) {
-			return super.getDisplayName(itemstack);
+			return super.getDisplayName(itemStack);
 		}
 
 		IBee individual = optionalIndividual.get();
 		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
-		if (Translator.canTranslateToLocal(customBeeKey)) {
-			return new TranslationTextComponent(customBeeKey);
-		}
-		ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();
-		ITextComponent beeType = new TranslationTextComponent("for.bees.grammar." + type.getName() + ".type");
-		return new TranslationTextComponent("for.bees.grammar." + type.getName(), beeSpecies, beeType);
+
+		return ResourceUtil.tryTranslate(customBeeKey, () -> {
+			ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();
+			ITextComponent beeType = new TranslationTextComponent("for.bees.grammar." + type.getName() + ".type");
+			return new TranslationTextComponent("for.bees.grammar." + type.getName(), beeSpecies, beeType);
+		});
 	}
 
 	@Override

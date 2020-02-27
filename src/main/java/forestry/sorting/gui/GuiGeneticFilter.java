@@ -31,7 +31,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	private TextFieldWidget searchField;
 
 	public GuiGeneticFilter(ContainerGeneticFilter container, PlayerInventory inventory, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/filter.png", container, inventory, container.getTile());
+		super(Constants.TEXTURE_PATH_GUI + "/filter.png", container, inventory, title);
 		ySize = 222;
 		xSize = 212;
 		this.tile = container.getTile();

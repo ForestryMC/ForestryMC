@@ -57,7 +57,7 @@ import forestry.core.items.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
+import forestry.core.utils.ResourceUtil;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable, IColoredItem {
 
@@ -80,18 +80,17 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
-		if (itemstack.getTag() == null) {
+	public ITextComponent getDisplayName(ItemStack itemStack) {
+		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
 			return new StringTextComponent("Unknown");
 		}
-		IAlleleForestrySpecies species = getSpecies(itemstack);
+		IAlleleForestrySpecies species = getSpecies(itemStack);
 
 		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace("trees.species.", "");
-		if (Translator.canTranslateToLocal(customTreeKey)) {
-			return new TranslationTextComponent(customTreeKey);
-		}
-		ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
-		return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
+		return ResourceUtil.tryTranslate(customTreeKey, () -> {
+			ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
+			return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
+		});
 	}
 
 	@Override

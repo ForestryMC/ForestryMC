@@ -54,7 +54,7 @@ import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
+import forestry.core.utils.ResourceUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyHelper;
@@ -304,12 +304,11 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		IButterfly individual = ButterflyManager.butterflyRoot.getTypes().createIndividual(itemstack).orElse(null);
 		String customKey = "for.butterflies.custom." + type.getName() + "."
 			+ individual.getGenome().getPrimary().getLocalisationKey().replace("butterflies.species.", "");
-		if (Translator.canTranslateToLocal(customKey)) {
-			return new TranslationTextComponent(customKey);
-		}
-		ITextComponent speciesString = individual.getDisplayName();
-		ITextComponent typeString = new TranslationTextComponent("for.butterflies.grammar." + type.getName() + ".type");
-		return new TranslationTextComponent("for.butterflies.grammar." + type.getName(), speciesString, typeString);
+		return ResourceUtil.tryTranslate(customKey, () -> {
+			ITextComponent speciesString = individual.getDisplayName();
+			ITextComponent typeString = new TranslationTextComponent("for.butterflies.grammar." + type.getName() + ".type");
+			return new TranslationTextComponent("for.butterflies.grammar." + type.getName(), speciesString, typeString);
+		});
 	}
 
 	@Override

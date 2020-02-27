@@ -123,7 +123,7 @@
 //		for (IAllele allele : AlleleManager.geneticRegistry.getRegisteredAlleles(TreeChromosomes.SPECIES)) {
 //			if (allele instanceof IAlleleTreeSpecies) {
 //				IAlleleTreeSpecies alleleTreeSpecies = (IAlleleTreeSpecies) allele;
-//				if (alleleTreeSpecies.getRarity() > 0) {
+//				if (TreeConfig.getSpawnRarity(alleleTreeSpecies.getUID()) > 0) {
 //					SPECIES.add(alleleTreeSpecies);
 //				}
 //			}

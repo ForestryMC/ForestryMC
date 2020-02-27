@@ -11,7 +11,10 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowingFluid;
@@ -90,6 +93,20 @@ public class ModFeatureRegistry {
 				}
 			});
 		}
+	}
+
+	public Collection<IModFeature> getFeatures(FeatureType type) {
+		return modules.values().stream()
+			.flatMap((module) -> module.getFeatures(type).stream())
+			.collect(Collectors.toSet());
+	}
+
+	public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
+		return Stream.of(FeatureType.values())
+			.filter(filter)
+			.flatMap((type) -> modules.values().stream()
+				.flatMap((module) -> module.getFeatures(type).stream()))
+			.collect(Collectors.toSet());
 	}
 
 	public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
@@ -208,6 +225,16 @@ public class ModFeatureRegistry {
 
 		public IModFeature getFeature(String identifier) {
 			return featureById.get(identifier);
+		}
+
+		@Override
+		public Collection<IModFeature> getFeatures() {
+			return featureById.values();
+		}
+
+		@Override
+		public Collection<IModFeature> getFeatures(FeatureType type) {
+			return featureByType.get(type);
 		}
 
 		public void createObjects(FeatureType type) {

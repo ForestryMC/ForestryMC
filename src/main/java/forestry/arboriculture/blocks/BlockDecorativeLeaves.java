@@ -21,7 +21,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -80,11 +79,6 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IShea
 	@Override
 	public boolean causesSuffocation(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return false;
-	}
-
-	@Override
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		return Collections.emptyList();
 	}
 
 	/* PROPERTIES */

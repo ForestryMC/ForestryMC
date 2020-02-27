@@ -24,6 +24,8 @@ import forestry.storage.items.ItemCrated;
 public enum ModelLoaderCrate implements IModelLoader {
 	INSTANCE;
 
+	public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "crate-filled");
+
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
 	}

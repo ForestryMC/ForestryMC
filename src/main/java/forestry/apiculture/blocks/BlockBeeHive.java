@@ -17,6 +17,8 @@ import java.util.Random;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -25,6 +27,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -78,9 +83,17 @@ public class BlockBeeHive extends ContainerBlock {
 		return ModuleApiculture.getHiveRegistry().getDrops(hiveName);
 	}
 
-	//TODO loot table drops things. But I need this here I think.
-	//		@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
+	@Override
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+		BlockPos pos = builder.assertPresent(LootParameters.POSITION);
+		ItemStack tool = builder.assertPresent(LootParameters.TOOL);
+		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
+		ServerWorld world = builder.getWorld();
+		return getDrops(world, pos, fortune);
+	}
+
+	private NonNullList<ItemStack> getDrops(IBlockReader world, BlockPos pos, int fortune) {
+		NonNullList<ItemStack> drops = NonNullList.create();
 		Random random = world instanceof World ? ((World) world).rand : RANDOM;
 
 		List<IHiveDrop> hiveDrops = getDropsForHive();
@@ -124,6 +137,7 @@ public class BlockBeeHive extends ContainerBlock {
 				break;
 			}
 		}
+		return drops;
 	}
 
 	public HiveType getType() {

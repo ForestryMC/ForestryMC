@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
@@ -363,48 +364,54 @@ public class ModuleApiculture extends BlankForestryModule {
 		flowerRegistry.registerAcceptableFlower(Blocks.NETHER_WART, FlowerManager.FlowerTypeNether);
 		flowerRegistry.registerAcceptableFlower(Blocks.CACTUS, FlowerManager.FlowerTypeCacti);
 
-		// Register plantable plants
-		//TODO - this now uses the BlockTag SMALL_FLOWERS I believe
-		//		for (FlowerType flowerType : FlowerType.values()) {
-		//			BlockState blockState;
-		//			switch (flowerType.getBlockType()) {
-		//				case RED:
-		//					blockState = Blocks.RED_FLOWER.getDefaultState().with(Blocks.RED_FLOWER.getTypeProperty(), flowerType);
-		//					break;
-		//				case YELLOW:
-		//					blockState = Blocks.YELLOW_FLOWER.getDefaultState().with(Blocks.YELLOW_FLOWER.getTypeProperty(), flowerType);
-		//					break;
-		//				default:
-		//					continue;
-		//			}
-		//			flowerRegistry.registerPlantableFlower(blockState, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		//		}
+		Block[] standardFlowers = new Block[]{
+			Blocks.DANDELION,
+			Blocks.POPPY,
+			Blocks.BLUE_ORCHID,
+			Blocks.ALLIUM,
+			Blocks.AZURE_BLUET,
+			Blocks.RED_TULIP,
+			Blocks.ORANGE_TULIP,
+			Blocks.WHITE_TULIP,
+			Blocks.PINK_TULIP,
+			Blocks.OXEYE_DAISY,
+			Blocks.CORNFLOWER,
+			Blocks.WITHER_ROSE,
+			Blocks.LILY_OF_THE_VALLEY,
+		};
+		Block[] pottedStandardFlowers = new Block[]{
+			Blocks.POTTED_POPPY,
+			Blocks.POTTED_BLUE_ORCHID,
+			Blocks.POTTED_ALLIUM,
+			Blocks.POTTED_AZURE_BLUET,
+			Blocks.POTTED_RED_TULIP,
+			Blocks.POTTED_ORANGE_TULIP,
+			Blocks.POTTED_WHITE_TULIP,
+			Blocks.POTTED_PINK_TULIP,
+			Blocks.POTTED_OXEYE_DAISY,
+			Blocks.POTTED_CORNFLOWER,
+			Blocks.POTTED_LILY_OF_THE_VALLEY,
+			Blocks.POTTED_WITHER_ROSE,
+		};
 
+		// Register plantable plants
+		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
+		for (Block standardFlower : standardFlowers) {
+			flowerRegistry.registerPlantableFlower(standardFlower.getDefaultState(), 1.0, standardTypes);
+		}
 		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
 
 		//Flower Pots
-		BlockState flowerPot = Blocks.FLOWER_POT.getStateContainer().getBaseState();
-		//		EnumProperty<FlowerPotBlock.EnumFlowerType> CONTENTS = FlowerPotBlock.CONTENTS;
-		//		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
-		//
-		//		for (FlowerPotBlock.EnumFlowerType flowerType : FlowerPotBlock.EnumFlowerType.values()) {
-		//			if (flowerType == FlowerPotBlock.EnumFlowerType.EMPTY ||
-		//					flowerType.getName().contains("sapling") ||
-		//					flowerType == FlowerPotBlock.EnumFlowerType.DEAD_BUSH ||
-		//					flowerType == FlowerPotBlock.EnumFlowerType.FERN) {
-		//				//Don't register these as flowers
-		//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_RED ||
-		//					flowerType == FlowerPotBlock.EnumFlowerType.MUSHROOM_BROWN) {
-		//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeMushrooms);
-		//
-		//			} else if (flowerType == FlowerPotBlock.EnumFlowerType.CACTUS) {
-		//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), FlowerManager.FlowerTypeCacti);
-		//			} else {
-		//				flowerRegistry.registerAcceptableFlower(flowerPot.with(CONTENTS, flowerType), standardTypes);
-		//			}
-		//		}
+		for (Block standardFlower : pottedStandardFlowers) {
+			flowerRegistry.registerAcceptableFlower(standardFlower, standardTypes);
+		}
+
+		flowerRegistry.registerAcceptableFlower(Blocks.POTTED_RED_MUSHROOM, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerAcceptableFlower(Blocks.POTTED_BROWN_MUSHROOM, FlowerManager.FlowerTypeMushrooms);
+
+		flowerRegistry.registerAcceptableFlower(Blocks.POTTED_CACTUS, FlowerManager.FlowerTypeCacti);
 	}
 
 	@Override

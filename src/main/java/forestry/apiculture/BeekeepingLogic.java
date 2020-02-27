@@ -35,9 +35,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import genetics.api.GeneticHelper;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
+
+import genetics.organism.OrganismHandler;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IApiaristTracker;
@@ -48,6 +51,7 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
@@ -200,8 +204,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (beeType == EnumBeeType.QUEEN) {
 			if (!isQueenAlive(queenStack)) {
 				IBee dyingQueen = BeeManager.beeRoot.create(queenStack).orElse(null);
-				Collection<ItemStack> spawned = killQueen(dyingQueen, housing, beeListener);
-				spawn.addAll(spawned);
+				if (dyingQueen != null) {
+					Collection<ItemStack> spawned = killQueen(dyingQueen, housing, beeListener);
+					spawn.addAll(spawned);
+				}
 				queenStack = ItemStack.EMPTY;
 			}
 		} else {
@@ -296,14 +302,12 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			pollenHandler.doPollination(queen, housing, beeListener);
 
 			// Age the queen
-			IGenome mate = queen.getMate().get();
+			IGenome mate = queen.getMate().orElse(null);
 			float lifespanModifier = beeModifier.getLifespanModifier(queen.getGenome(), mate, 1.0f);
 			queen.age(world, lifespanModifier);
 
 			// Write the changed queen back into the item stack.
-			CompoundNBT compound = new CompoundNBT();
-			queen.write(compound);
-			queenStack.setTag(compound);
+			GeneticHelper.setIndividual(queenStack, queen);
 			housing.getBeeInventory().setQueen(queenStack);
 		}
 
@@ -350,7 +354,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (compound == null) {
 			return false;
 		}
-		int health = compound.getInt("Health");
+		CompoundNBT individualTag = compound.getCompound(OrganismHandler.INDIVIDUAL_KEY);
+		if (individualTag.isEmpty()) {
+			return false;
+		}
+		int health = individualTag.getInt("Health");
 		return health > 0;
 	}
 
@@ -363,8 +371,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		ItemStack droneStack = beeInventory.getDrone();
 		ItemStack princessStack = beeInventory.getQueen();
 
-		Optional<IOrganismType> droneType = BeeManager.beeRoot.getTypes().getType(droneStack);
-		Optional<IOrganismType> princessType = BeeManager.beeRoot.getTypes().getType(princessStack);
+		IBeeRoot root = BeeManager.beeRoot;
+		Optional<IOrganismType> droneType = root.getTypes().getType(droneStack);
+		Optional<IOrganismType> princessType = root.getTypes().getType(princessStack);
 		if (droneType.filter(type -> type != EnumBeeType.DRONE).isPresent() || princessType.filter(type -> type != EnumBeeType.PRINCESS).isPresent()) {
 			beeProgress = 0;
 			return;
@@ -378,8 +387,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 
 		// Mate and replace princess with queen
-		Optional<IBee> optionalPrincess = BeeManager.beeRoot.create(princessStack);
-		Optional<IBee> optionalDrone = BeeManager.beeRoot.create(droneStack);
+		Optional<IBee> optionalPrincess = root.create(princessStack);
+		Optional<IBee> optionalDrone = root.create(droneStack);
 		if (!optionalPrincess.isPresent() || !optionalDrone.isPresent()) {
 			return;
 		}
@@ -387,15 +396,12 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		IBee drone = optionalDrone.get();
 		princess.mate(drone.getGenome());
 
-		CompoundNBT compound = new CompoundNBT();
-		princess.write(compound);
 		queenStack = ApicultureItems.BEE_QUEEN.stack();
-		queenStack.setTag(compound);
+		GeneticHelper.setIndividual(queenStack, princess);
 
 		beeInventory.setQueen(queenStack);
 
 		// Register the new queen with the breeding tracker
-		//TODO world cast
 		BeeManager.beeRoot.getBreedingTracker(housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
 
 		// Remove drone
@@ -421,9 +427,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
 			ItemStack convert = ApicultureItems.BEE_PRINCESS.stack();
-			CompoundNBT CompoundNBT = new CompoundNBT();
-			queen.write(CompoundNBT);
-			convert.setTag(CompoundNBT);
+			GeneticHelper.setIndividual(convert, queen);
 
 			spawn = Collections.singleton(convert);
 			beeInventory.setQueen(ItemStack.EMPTY);
@@ -440,7 +444,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		World world = beeHousing.getWorldObj();
 
 		Stack<ItemStack> offspring = new Stack<>();
-		//TODO world cast
 		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, beeHousing.getOwner());
 
 		// Princess

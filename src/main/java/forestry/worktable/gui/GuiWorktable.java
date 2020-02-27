@@ -31,8 +31,8 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private final TileWorktable tile;
 	private boolean hasRecipeConflict = false;
 
-	public GuiWorktable(ContainerWorktable container, PlayerInventory inv, ITextComponent name) {
-		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", container, inv, container.getTile());
+	public GuiWorktable(ContainerWorktable container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", container, inv, title);
 		this.tile = container.getTile();
 
 		this.ySize = 218;

@@ -11,6 +11,8 @@
 package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -30,6 +32,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
@@ -82,14 +86,14 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		}
 	}
 
-	/* REMOVING */
-	//	@Override
-	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-	//		ItemStack drop = getDrop(world, pos);
-	//		if (!drop.isEmpty()) {
-	//			drops.add(drop);
-	//		}
-	//	}
+	@Override
+	public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+		ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
+		if (!drop.isEmpty()) {
+			return Collections.singletonList(drop);
+		}
+		return Collections.emptyList();
+	}
 
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {

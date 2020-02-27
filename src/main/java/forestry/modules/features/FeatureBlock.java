@@ -65,6 +65,10 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 		return identifier;
 	}
 
+	public String getTranslationKey() {
+		return block == null ? "block." + Constants.MOD_ID + ":" + identifier : block.getTranslationKey();
+	}
+
 	@Override
 	public Supplier<B> getBlockConstructor() {
 		return constructorBlock;

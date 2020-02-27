@@ -25,8 +25,8 @@ import forestry.energy.tiles.TileEngine;
 public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C> {
 	protected final I tile;
 
-	protected GuiEngine(String texture, C container, PlayerInventory inv, I tile) {
-		super(texture, container, inv, tile);
+	protected GuiEngine(String texture, C container, PlayerInventory inv, I tile, ITextComponent title) {
+		super(texture, container, inv, title);
 		this.tile = tile;
 	}
 

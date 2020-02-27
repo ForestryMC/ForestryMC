@@ -64,7 +64,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	private TextEditElement humidityEdit;
 
 	public GuiHabitatFormer(ContainerHabitatFormer container, PlayerInventory inv, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", container, inv, container.getTile());
+		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", container, inv, title);
 		this.tile = container.getTile();
 		this.transformer = tile.getTransformer();
 		this.ySize = 233;

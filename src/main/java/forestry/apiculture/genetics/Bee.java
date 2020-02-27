@@ -116,7 +116,7 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	private Bee(IGenome genome, @Nullable IGenome mate, boolean isNatural, int generation) {
-		super(genome, mate);
+		super(genome, mate, genome.getActiveValue(BeeChromosomes.LIFESPAN));
 		this.isNatural = isNatural;
 		this.generation = generation;
 	}

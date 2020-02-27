@@ -103,12 +103,6 @@ public class BlockFruitPod extends CocoaBlock {
 		return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
 	}
 
-	//TODO loot table?
-	//	@Override
-	//	public void getDrops(NonNullList<ItemStack> drops, IBlockReader world, BlockPos pos, BlockState state, int fortune) {
-	//
-	//	}
-
 	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
 		Direction facing = state.get(HORIZONTAL_FACING);

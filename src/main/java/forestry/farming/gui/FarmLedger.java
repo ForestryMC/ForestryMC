@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.ITextComponent;
@@ -51,8 +50,7 @@ public class FarmLedger extends Ledger {
 		int xHeader = x + 22;
 
 		// Draw icon
-		Minecraft minecraft = Minecraft.getInstance();
-		TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("items/bucket_water");
+		TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("item/water_bucket");
 		drawSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, textureAtlasSprite, xIcon, y);
 		y += 4;
 

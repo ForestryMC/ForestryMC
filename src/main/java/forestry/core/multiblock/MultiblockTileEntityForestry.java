@@ -131,25 +131,10 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		getInternalInventory().closeInventory(player);
 	}
 
-	//	@Override TODO 1.14
-	//	public final String getName() {
-	//		return getInternalInventory().getName();
-	//	}
-	//
-	//	@Override
-	//	public ITextComponent getDisplayName() {
-	//		return getInternalInventory().getDisplayName();
-	//	}
-
 	@Override
 	public final boolean isUsableByPlayer(PlayerEntity player) {
 		return getInternalInventory().isUsableByPlayer(player);
 	}
-	// TODO 1.14
-	//	@Override
-	//	public final boolean hasCustomName() {
-	//		return getInternalInventory().hasCustomName();
-	//	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -203,22 +188,6 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		this.owner = owner;
 	}
 
-	//TODO 1.14
-	/* Fields */
-	//	@Override
-	//	public int getField(int id) {
-	//		return getInternalInventory().getField(id);
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return getInternalInventory().getFieldCount();
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//		getInternalInventory().setField(id, value);
-	//	}
 
 	@Override
 	public void clear() {

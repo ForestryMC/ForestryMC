@@ -17,6 +17,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -45,6 +47,7 @@ import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.VectUtil;
 import forestry.cultivation.IFarmHousingInternal;
 import forestry.cultivation.blocks.BlockPlanter;
+import forestry.cultivation.blocks.BlockTypePlanter;
 import forestry.cultivation.gui.ContainerPlanter;
 import forestry.cultivation.inventory.InventoryPlanter;
 import forestry.farming.FarmHelper;
@@ -82,6 +85,12 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 		this.manager = new FarmManager(this);
 		setEnergyPerWorkCycle(10);
 		setTicksPerWorkCycle(2);
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		String name = getBlockType(BlockTypePlanter.ARBORETUM).getName();
+		return new TranslationTextComponent("block.forestry.planter." + (mode.getName()), new TranslationTextComponent("block.forestry." + name));
 	}
 
 	@Override

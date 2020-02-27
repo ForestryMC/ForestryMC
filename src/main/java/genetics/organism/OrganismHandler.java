@@ -12,7 +12,7 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
 public class OrganismHandler<I extends IIndividual> implements IOrganismHandler<I> {
-	private static final String INDIVIDUAL_KEY = "Individual";
+	public static final String INDIVIDUAL_KEY = "Individual";
 	private final IRootDefinition<? extends IIndividualRoot<I>> optionalRoot;
 	private final Supplier<ItemStack> stack;
 

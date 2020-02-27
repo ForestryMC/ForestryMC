@@ -27,6 +27,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -54,6 +55,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules;
 	private final HashMultimap<String, Block> acceptableBlocks;
 	private final Map<String, BlockStateSet> acceptableBlockStates;
+	private final HashMultimap<String, Tag<Block>> acceptableBlockTags;
 	private final HashMultimap<String, Flower> plantableFlowers;
 
 	private final ArrayListMultimap<String, IFlowerGrowthRule> growthRules;
@@ -63,6 +65,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		this.registeredRules = HashMultimap.create();
 		this.acceptableBlocks = HashMultimap.create();
 		this.acceptableBlockStates = new HashMap<>();
+		this.acceptableBlockTags = HashMultimap.create();
 		this.plantableFlowers = HashMultimap.create();
 		this.growthRules = ArrayListMultimap.create();
 		this.chances = new HashMap<>();
@@ -78,6 +81,17 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			}
 
 			this.acceptableBlocks.get(flowerType).add(block);
+		}
+	}
+
+	@Override
+	public void registerAcceptableFlower(Tag<Block> block, String... flowerTypes) {
+		for (String flowerType : flowerTypes) {
+			if (flowerType == null) {
+				throw new NullPointerException("Tried to register flower with null type. " + block);
+			}
+
+			this.acceptableBlockTags.get(flowerType).add(block);
 		}
 	}
 
@@ -155,13 +169,14 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
 		Set<BlockState> acceptedBlockStates = this.getAcceptedBlockStates(flowerType);
 		Set<Block> acceptedBlocks = this.acceptableBlocks.get(flowerType);
+		Set<Tag<Block>> acceptedBlockTags = this.acceptableBlockTags.get(flowerType);
 
-		return new AcceptedFlowerPredicate(flowerType, acceptableRules, acceptedBlocks, acceptedBlockStates);
+		return new AcceptedFlowerPredicate(flowerType, acceptableRules, acceptedBlocks, acceptedBlockStates, acceptedBlockTags);
 	}
 
-	private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates) {
+	private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<Tag<Block>> acceptedBlockTags) {
 		Block block = blockState.getBlock();
-		return acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState);
+		return acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState) || acceptedBlockTags.stream().anyMatch(blockTag -> blockTag.contains(block));
 	}
 
 	@Override
@@ -240,19 +255,20 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		private final Set<IFlowerAcceptableRule> acceptableRules;
 		private final Set<Block> acceptedBlocks;
 		private final Set<BlockState> acceptedBlockStates;
+		private final Set<Tag<Block>> acceptedBlockTags;
 
-		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates) {
+		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<Tag<Block>> acceptedBlockTags) {
 			this.flowerType = flowerType;
 			this.acceptableRules = acceptableRules;
 			this.acceptedBlocks = acceptedBlocks;
 			this.acceptedBlockStates = acceptedBlockStates;
+			this.acceptedBlockTags = acceptedBlockTags;
 		}
 
 		@Override
 		public boolean test(World world, BlockPos blockPos) {
 			if (world.isBlockLoaded(blockPos)) {
 				BlockState blockState = world.getBlockState(blockPos);
-				blockState = blockState;//TODO getActualState .getBlock().getActualState(blockState, world, blockPos);
 				if (!blockState.getBlock().isAir(blockState, world, blockPos)) {
 					for (IFlowerAcceptableRule acceptableRule : acceptableRules) {
 						if (acceptableRule.isAcceptableFlower(blockState, world, blockPos, flowerType)) {
@@ -260,7 +276,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 						}
 					}
 
-					return isAcceptedFlower(blockState, acceptedBlocks, acceptedBlockStates);
+					return isAcceptedFlower(blockState, acceptedBlocks, acceptedBlockStates, acceptedBlockTags);
 				}
 			}
 			return false;

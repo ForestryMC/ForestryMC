@@ -30,7 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -58,7 +57,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 
-public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> extends BlockForestry implements ISpriteRegister {
+public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister {
 	/**
 	 * use this instead of {@link HorizontalBlock#HORIZONTAL_FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */

@@ -59,4 +59,8 @@ public interface IFeatureRegistry {
 	void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener);
 
 	<F extends IModFeature> F register(F feature);
+
+	Collection<IModFeature> getFeatures();
+
+	Collection<IModFeature> getFeatures(FeatureType type);
 }

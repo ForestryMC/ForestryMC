@@ -62,16 +62,13 @@ public abstract class ItemGE extends ItemForestry {
 			return;
 		}
 
-		Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack);
-
+		Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack).filter(IIndividual::isAnalyzed);
 		if (optionalIndividual.isPresent()) {
 			IIndividual individual = optionalIndividual.get();
-			if (individual.isAnalyzed()) {
-				if (Screen.hasShiftDown()) {
-					individual.addTooltip(list);
-				} else {
-					list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle((new Style()).setItalic(true)));
-				}
+			if (Screen.hasShiftDown()) {
+				individual.addTooltip(list);
+			} else {
+				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle((new Style()).setItalic(true)));
 			}
 		} else {
 			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >"));

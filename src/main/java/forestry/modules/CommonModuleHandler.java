@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import net.minecraft.entity.EntityType;
@@ -30,6 +31,7 @@ import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.Log;
 import forestry.modules.features.FeatureType;
+import forestry.modules.features.IModFeature;
 import forestry.modules.features.ModFeatureRegistry;
 //import forestry.plugins.ForestryCompatPlugins;
 
@@ -99,6 +101,14 @@ public class CommonModuleHandler {
 
 	public void createObjects(BiPredicate<FeatureType, String> filter) {
 		registry.createObjects(filter);
+	}
+
+	public Collection<IModFeature> getFeatures(FeatureType type) {
+		return registry.getFeatures(type);
+	}
+
+	public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
+		return registry.getFeatures(filter);
 	}
 
 	public <T extends IForgeRegistryEntry<T>> void registerObjects(RegistryEvent.Register<T> event) {

@@ -97,6 +97,7 @@ public class TreeConfig {
 				Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName + "'. No biome is registered under the registry name '" + biomeName + "'.");
 			}
 		}
+
 		spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity).setMinValue(0.0F).setMaxValue(1.0F).getDouble();
 		return this;
 	}
@@ -119,7 +120,7 @@ public class TreeConfig {
 
 	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, int dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		return GLOBAL.isValidDimension(dimID) && (treeConfig == null || treeConfig.isValidDimension(dimID));
+		return treeConfig != null ? treeConfig.isValidDimension(dimID) : GLOBAL.isValidDimension(dimID);
 	}
 
 	private boolean isValidDimension(int dimID) { //blacklist has priority
@@ -131,7 +132,7 @@ public class TreeConfig {
 
 	public static boolean isValidBiome(@Nullable ResourceLocation treeUID, Biome biome) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		return GLOBAL.isValidBiome(biome) && (treeConfig == null || treeConfig.isValidBiome(biome));
+		return treeUID != null ? treeConfig.isValidBiome(biome) : GLOBAL.isValidBiome(biome);
 	}
 
 	private boolean isValidBiome(Biome biome) {

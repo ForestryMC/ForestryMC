@@ -1,6 +1,8 @@
 package forestry.storage.proxy;
 
-public class ProxyCrates {
+import forestry.modules.ISidedModuleHandler;
+
+public class ProxyCrates implements ISidedModuleHandler {
 
 	public void registerCrateModel() {
 	}

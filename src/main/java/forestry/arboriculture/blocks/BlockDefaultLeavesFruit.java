@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,7 +35,6 @@ import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
-import forestry.modules.features.FeatureBlock;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -67,7 +65,7 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			}
 			IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			NonNullList<ItemStack> products = tree.produceStacks(world, pos, fruitProvider.getRipeningPeriod());
-			world.setBlockState(pos, ArboricultureBlocks.LEAVES_DEFAULT.findFeature(tree.getIdentifier()).map(FeatureBlock::defaultState).orElse(Blocks.AIR.getDefaultState()), 2);
+			world.setBlockState(pos, ArboricultureBlocks.LEAVES_DEFAULT.get(definition).defaultState(), 2);
 			for (ItemStack fruit : products) {
 				ItemHandlerHelper.giveItemToPlayer(player, fruit);
 			}

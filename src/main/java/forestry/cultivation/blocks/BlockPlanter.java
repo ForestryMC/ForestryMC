@@ -32,7 +32,6 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 		}
 	}
 
-
 	public BlockPlanter(BlockTypePlanter blockType, Mode mode) {
 		super(blockType, Material.WOOD);
 		this.mode = mode;

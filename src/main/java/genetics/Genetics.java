@@ -3,6 +3,7 @@ package genetics;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 
@@ -52,6 +53,7 @@ public class Genetics {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SuppressWarnings("unused")
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
 		CapabilityManager.INSTANCE.register(IOrganism.class, new NullStorage<>(), () -> GeneticHelper.EMPTY);
 		CapabilityManager.INSTANCE.register(IGeneTemplate.class, new NullStorage<>(), () -> GeneTemplate.EMPTY);
@@ -59,6 +61,17 @@ public class Genetics {
 		PluginManager.create();
 
 		PluginManager.initPlugins();
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SuppressWarnings("unused")
+	public void registerFinished(RegistryEvent.Register<Item> event) {
+		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+			if (!definition.isPresent()) {
+				continue;
+			}
+			definition.get().getComponentContainer().onStage(DefaultStage.REGISTRATION);
+		}
 	}
 
 	@SuppressWarnings("unused")

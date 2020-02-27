@@ -120,7 +120,8 @@ public abstract class ModelProvider implements IDataProvider {
 		}
 
 		public ModelBuilder loader(ResourceLocation loader) {
-			return parent(loader);
+			this.loader = loader;
+			return this;
 		}
 
 		public ModelBuilder loaderData(String key, JsonElement element) {
