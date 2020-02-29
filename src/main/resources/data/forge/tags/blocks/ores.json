@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#forestry:ores/copper",
+    "#forestry:ores/tin",
+    "#forestry:ores/apatite"
+  ]
+}

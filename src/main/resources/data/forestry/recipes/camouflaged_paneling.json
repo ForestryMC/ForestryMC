@@ -1,0 +1,42 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "value": {
+            "module": "factory",
+            "container": "forestry",
+            "type": "forestry:module"
+          },
+          "type": "forge:not"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "WWW",
+          "YBR",
+          "WWW"
+        ],
+        "key": {
+          "W": {
+            "tag": "minecraft:planks"
+          },
+          "Y": {
+            "tag": "forge:dyes/yellow"
+          },
+          "B": {
+            "tag": "forge:dyes/blue"
+          },
+          "R": {
+            "tag": "forge:dyes/red"
+          }
+        },
+        "result": {
+          "item": "forestry:camouflaged_paneling"
+        }
+      }
+    }
+  ]
+}
