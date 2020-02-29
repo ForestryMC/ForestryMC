@@ -73,7 +73,7 @@ public class ArboricultureBlocks {
 	public static final FeatureBlockGroup<BlockForestryStairs, EnumForestryWoodType> STAIRS_FIREPROOF = woodGroup((type) -> new BlockForestryStairs(PLANKS_FIREPROOF.get(type).block()), WoodBlockKind.STAIRS, true, EnumForestryWoodType.VALUES);
 	public static final FeatureBlockGroup<BlockForestryStairs, EnumVanillaWoodType> STAIRS_VANILLA_FIREPROOF = woodGroup((type) -> new BlockForestryStairs(PLANKS_VANILLA_FIREPROOF.get(type).block()), WoodBlockKind.STAIRS, true, EnumVanillaWoodType.VALUES);
 
-	public static final FeatureBlockGroup<BlockForestryDoor, EnumForestryWoodType> DOORS = REGISTRY.blockGroup(BlockForestryDoor::new, EnumForestryWoodType.VALUES).item(ItemBlockWoodDoor::new).identifier("door", FeatureGroup.IdentifierType.AFFIX).create();
+	public static final FeatureBlockGroup<BlockForestryDoor, EnumForestryWoodType> DOORS = woodGroup(BlockForestryDoor::new, ItemBlockWoodDoor::new, WoodBlockKind.DOOR, false, EnumForestryWoodType.VALUES);
 
 	/* GENETICS */
 	public static final FeatureBlock<BlockSapling, BlockItem> SAPLING_GE = REGISTRY.block(BlockSapling::new, "sapling_ge");

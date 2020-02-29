@@ -28,15 +28,9 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 
 	public ItemHoneyComb(EnumHoneyComb type) {
 		super((new Item.Properties())
-			.group(ItemGroups.tabApiculture)
-			.setNoRepair());
+			.group(ItemGroups.tabApiculture));
 
 		this.type = type;
-	}
-
-	@Override
-	public boolean isDamageable() {
-		return false;
 	}
 
 	@Nullable

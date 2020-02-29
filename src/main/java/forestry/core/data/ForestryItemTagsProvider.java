@@ -11,9 +11,12 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.common.Tags;
+
+import forestry.apiculture.features.ApicultureItems;
 import forestry.arboriculture.features.ArboricultureItems;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
+import forestry.core.features.CoreItems;
+import forestry.mail.features.MailItems;
 
 public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	@Nullable
@@ -27,12 +30,40 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	protected void registerTags() {
 		super.registerTags();
 		filter = this.tagToBuilder.keySet().stream().map(Tag::getId).collect(Collectors.toSet());
-		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
-			copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
-		}
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			getBuilder(ItemTags.SAPLINGS).add(ArboricultureItems.SAPLING.item());
-		}
+		getBuilder(ForestryTags.Items.GEARS).add(ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
+		getBuilder(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
+		getBuilder(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());
+		getBuilder(ForestryTags.Items.GEARS_COPPER).add(CoreItems.GEAR_COPPER.item());
+
+		getBuilder(Tags.Items.INGOTS).add(ForestryTags.Items.INGOTS_BRONZE, ForestryTags.Items.INGOTS_COPPER, ForestryTags.Items.INGOTS_TIN);
+		getBuilder(ForestryTags.Items.INGOTS_BRONZE).add(CoreItems.INGOT_BRONZE.item());
+		getBuilder(ForestryTags.Items.INGOTS_TIN).add(CoreItems.INGOT_TIN.item());
+		getBuilder(ForestryTags.Items.INGOTS_COPPER).add(CoreItems.INGOT_COPPER.item());
+
+		getBuilder(ForestryTags.Items.DUSTS_ASH).add(CoreItems.ASH.item());
+		getBuilder(ForestryTags.Items.GEMS_APATITE).add(CoreItems.APATITE.item());
+
+		getBuilder(Tags.Items.STORAGE_BLOCKS).add(ForestryTags.Items.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_TIN);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_APATITE);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_TIN, ForestryTags.Items.STORAGE_BLOCKS_TIN);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_COPPER);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE);
+
+		copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
+
+		getBuilder(ItemTags.SAPLINGS).add(ArboricultureItems.SAPLING.item());
+		getBuilder(ForestryTags.Items.BEE_COMBS).add(ApicultureItems.BEE_COMBS.itemArray());
+		getBuilder(ForestryTags.Items.PROPOLIS).add(ApicultureItems.PROPOLIS.itemArray());
+		getBuilder(ForestryTags.Items.DROP_HONEY).add(ApicultureItems.HONEY_DROPS.itemArray());
+
+		getBuilder(Tags.Items.ORES).add(ForestryTags.Items.ORES_COPPER, ForestryTags.Items.ORES_TIN, ForestryTags.Items.ORES_APATITE);
+		copy(ForestryTags.Blocks.ORES_COPPER, ForestryTags.Items.ORES_COPPER);
+		copy(ForestryTags.Blocks.ORES_TIN, ForestryTags.Items.ORES_TIN);
+		copy(ForestryTags.Blocks.ORES_APATITE, ForestryTags.Items.ORES_APATITE);
+
+		getBuilder(ForestryTags.Items.STAMPS).add(MailItems.STAMPS.itemArray());
+
+		getBuilder(ForestryTags.Items.FRUITS).add(CoreItems.FRUITS.itemArray());
 	}
 
 	@Override

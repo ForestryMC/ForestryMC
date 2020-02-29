@@ -32,6 +32,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 
 import genetics.utils.RootUtils;
@@ -126,9 +127,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 			specimenToAnalyze.analyze();
 
-			CompoundNBT compoundNBT = new CompoundNBT();
-			specimenToAnalyze.write(compoundNBT);
-			stackToAnalyze.setTag(compoundNBT);
+			GeneticHelper.setIndividual(stackToAnalyze, specimenToAnalyze);
 		}
 
 		boolean added = InventoryUtil.tryAddStack(invOutput, stackToAnalyze, true);

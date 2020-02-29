@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
 
@@ -129,9 +130,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 
-					CompoundNBT compound = new CompoundNBT();
-					individual.write(compound);
-					specimen.setTag(compound);
+					GeneticHelper.setIndividual(specimen, individual);
 
 					if (requiresEnergy) {
 						// Decrease energy

@@ -25,7 +25,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -131,11 +130,6 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	@Override
 	public boolean isMember(IIndividual individual) {
 		return individual instanceof ITree;
-	}
-
-	@Override
-	public boolean isMember(ItemStack itemstack) {
-		return getTypes().getType(itemstack).isPresent();
 	}
 
 	/* TREE SPECIFIC */

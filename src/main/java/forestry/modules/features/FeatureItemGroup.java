@@ -1,6 +1,8 @@
 package forestry.modules.features;
 
+import java.util.Collection;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.Item;
 
@@ -10,6 +12,14 @@ public class FeatureItemGroup<I extends Item, S extends IItemSubtype> extends Fe
 
 	public FeatureItemGroup(Builder<I, S> builder) {
 		super(builder);
+	}
+
+	public Collection<I> getItems() {
+		return featureByType.values().stream().map(IItemFeature::item).collect(Collectors.toList());
+	}
+
+	public Item[] itemArray() {
+		return getItems().toArray(new Item[0]);
 	}
 
 	@Override

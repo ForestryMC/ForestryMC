@@ -12,6 +12,13 @@ import forestry.api.core.ITileTypeProvider;
 public interface ITileTypeFeature<T extends TileEntity> extends IModFeature, ITileTypeProvider<T> {
 
 	@Override
+	default void create() {
+		TileEntityType<T> tileEntityType = getTileTypeConstructor().build(null);
+		tileEntityType.setRegistryName(getModId(), getIdentifier());
+		setTileType(tileEntityType);
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	default <R extends IForgeRegistryEntry<R>> void register(RegistryEvent.Register<R> event) {
 		IForgeRegistry<R> registry = event.getRegistry();

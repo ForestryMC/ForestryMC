@@ -55,8 +55,8 @@ import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.ResourceUtil;
-import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.genetics.ButterflyHelper;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
@@ -146,7 +146,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		EntityUtil.spawnEntity(entityItem.world,
-			EntityButterfly.create(ModuleLepidopterology.BUTTERFLY_ENTITY_TYPE, entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
+			EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
 		if (!entityItem.getItem().isEmpty()) {
 			entityItem.getItem().shrink(1);
 		} else {
@@ -313,7 +313,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
-		if (stack.getTag() != null) {
+		if (stack.hasTag()) {
 			IIndividual individual = GeneticHelper.getIndividual(stack).orElse(null);
 			if (individual != null) {
 				IAlleleSpecies species = individual.getGenome().getPrimary();

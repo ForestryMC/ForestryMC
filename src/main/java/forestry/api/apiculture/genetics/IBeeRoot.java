@@ -26,12 +26,6 @@ import forestry.api.genetics.IForestrySpeciesRoot;
 
 public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 
-	/**
-	 * @return true if passed item is a Forestry bee. Equal to getType(ItemStack stack) != null
-	 */
-	@Override
-	boolean isMember(ItemStack stack);
-
 	/* BREEDING TRACKER */
 
 	/**

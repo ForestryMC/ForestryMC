@@ -39,7 +39,6 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	public ItemHiveFrame(int maxDamage, float geneticDecay) {
 		super((new Item.Properties())
-			.maxStackSize(1)
 			.maxDamage(maxDamage)
 			.group(ItemGroups.tabApiculture));
 

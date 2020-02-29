@@ -35,9 +35,9 @@ import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.ApiaryBeeListener;
 import forestry.apiculture.ApiaryBeeModifier;
 import forestry.apiculture.IApiary;
-import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.features.ApicultureBlocks;
+import forestry.apiculture.features.ApicultureEntities;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.gui.ContainerMinecartBeehouse;
 import forestry.apiculture.gui.GuiBeeHousing;
@@ -59,7 +59,7 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	}
 
 	public MinecartEntityApiary(World world, double posX, double posY, double posZ) {
-		super(ModuleApiculture.getEntityTypes().APIARY_MINECART, world, posX, posY, posZ);
+		super(ApicultureEntities.APIARY_MINECART.entityType(), world, posX, posY, posZ);
 	}
 
 	@Override

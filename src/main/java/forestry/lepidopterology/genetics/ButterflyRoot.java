@@ -52,9 +52,9 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
-import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
+import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.tiles.TileCocoon;
 
 public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButterflyRoot, IBreedingTrackerHandler {
@@ -115,7 +115,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 
 	@Override
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return EntityUtil.spawnEntity(world, EntityButterfly.create(ModuleLepidopterology.BUTTERFLY_ENTITY_TYPE, world, butterfly, new BlockPos(x, y, z)), x, y, z);
+		return EntityUtil.spawnEntity(world, EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), world, butterfly, new BlockPos(x, y, z)), x, y, z);
 	}
 
 	@Override

@@ -32,9 +32,8 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	protected final IOverlayInfo overlay;
 
 	public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
-		super((new Item.Properties()).maxDamage(0)
+		super((new Item.Properties())
 			.group(tab)
-			.setNoRepair()
 			.group(ItemGroupForestry.tabForestry));
 
 		this.overlay = overlay;

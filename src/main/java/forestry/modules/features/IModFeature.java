@@ -26,6 +26,8 @@ public interface IModFeature {
 
 	String getModuleId();
 
+	void create();
+
 	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
 	}
 

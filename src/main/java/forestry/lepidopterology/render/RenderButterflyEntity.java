@@ -11,14 +11,11 @@
 package forestry.lepidopterology.render;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import forestry.lepidopterology.entities.EntityButterfly;
 
@@ -47,14 +44,6 @@ public class RenderButterflyEntity extends MobRenderer<EntityButterfly, ModelBut
 	@Override
 	protected float handleRotationFloat(EntityButterfly entity, float partialTickTime) {
 		return entity.getWingFlap(partialTickTime);
-	}
-
-	public static class Factory implements IRenderFactory<EntityButterfly> {
-		@Override
-		public EntityRenderer<? super EntityButterfly> createRenderFor(EntityRendererManager manager) {
-			return new RenderButterflyEntity(manager);
-		}
-
 	}
 
 }

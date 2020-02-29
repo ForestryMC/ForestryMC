@@ -26,7 +26,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -49,7 +48,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -70,7 +68,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
-import forestry.apiculture.entities.ApicultureEntityTypes;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureItems;
@@ -129,8 +126,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static TextureAtlasSprite beeSprite;
 	@Nullable
 	private static HiveRegistry hiveRegistry;
-	@Nullable
-	private static ApicultureEntityTypes entityTypes;
 
 	public static String beekeepingMode = "NORMAL";
 
@@ -155,11 +150,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static HiveRegistry getHiveRegistry() {
 		Preconditions.checkNotNull(hiveRegistry);
 		return hiveRegistry;
-	}
-
-	public static ApicultureEntityTypes getEntityTypes() {
-		Preconditions.checkNotNull(entityTypes);
-		return entityTypes;
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -187,11 +177,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.beeMutationFactory = new BeeMutationFactory();
 		BeeManager.jubilanceFactory = new JubilanceFactory();
 		BeeManager.armorApiaristHelper = new ArmorApiaristHelper();
-	}
-
-	@Override
-	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
-		entityTypes = new ApicultureEntityTypes(registry);
 	}
 
 	@Override

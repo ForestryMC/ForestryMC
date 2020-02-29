@@ -11,8 +11,8 @@ import java.util.function.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.ConstantRange;
@@ -20,6 +20,7 @@ import net.minecraft.world.storage.loot.ItemLootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTables;
+import net.minecraft.world.storage.loot.conditions.TableBonus;
 import net.minecraft.world.storage.loot.functions.SetCount;
 
 import genetics.Log;
@@ -29,10 +30,12 @@ import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
 import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
+import forestry.core.loot.OrganismFunction;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -49,16 +52,16 @@ public class ForestryBlockLootTables extends BlockLootTables {
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			for (BlockDecorativeLeaves leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks()) {
-				this.registerLootTable(leaves, (block) -> droppingWithChancesAndSticks(block, Blocks.AIR, DEFAULT_SAPLING_DROP_RATES));
+				this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getDefinition(), DEFAULT_SAPLING_DROP_RATES));
 			}
 			for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
-				this.registerLootTable(leaves, (block) -> droppingWithChancesAndSticks(block, Blocks.AIR, DEFAULT_SAPLING_DROP_RATES));
+				this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getTreeDefinition(), DEFAULT_SAPLING_DROP_RATES));
 			}
 			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> entry : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
 				FeatureBlock<BlockDefaultLeaves, BlockItem> defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.get(entry.getKey());
 				Block defaultLeavesBlock = defaultLeaves.block();
 				Block fruitLeavesBlock = entry.getValue().block();
-				this.registerLootTable(fruitLeavesBlock, (unusedBlock) -> droppingWithChancesAndSticks(defaultLeavesBlock, Blocks.AIR, DEFAULT_SAPLING_DROP_RATES).addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).acceptCondition(NOT_SILK_TOUCH_OR_SHEARS).addEntry(withSurvivesExplosion(defaultLeavesBlock, ItemLootEntry.builder(Items.APPLE)))));
+				this.registerLootTable(fruitLeavesBlock, (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), DEFAULT_SAPLING_DROP_RATES));
 			}
 		}
 		registerLootTable(CoreBlocks.PEAT, (block) -> new LootTable.Builder().addLootPool(new LootPool.Builder().addEntry(ItemLootEntry.builder(Blocks.DIRT))).addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(ConstantRange.of(2))).addEntry(ItemLootEntry.builder(CoreItems.PEAT.item()))));
@@ -121,6 +124,13 @@ public class ForestryBlockLootTables extends BlockLootTables {
 	public void registerLootTable(Block blockIn, LootTable.Builder builder) {
 		this.knownBlocks.add(blockIn);
 		super.registerLootTable(blockIn, builder);
+	}
+
+	public static LootTable.Builder droppingWithChances(Block block, TreeDefinition definition, float... chances) {
+		return droppingWithSilkTouchOrShears(block,
+			withSurvivesExplosion(block, ItemLootEntry.builder(ArboricultureItems.SAPLING)
+				.acceptFunction(OrganismFunction.fromDefinition(definition)))
+				.acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances)));
 	}
 
 	public void registerSilkTouch(FeatureBlock featureBlock, Block drop) {

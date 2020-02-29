@@ -52,7 +52,7 @@ public class ItemFruit extends ItemForestryFood {
 	private EnumFruit type;
 
 	public ItemFruit(EnumFruit type) {
-		super(1, 0.2f, (new Item.Properties()).maxDamage(0).setNoRepair());
+		super(1, 0.2f, (new Item.Properties()));
 		this.type = type;
 	}
 

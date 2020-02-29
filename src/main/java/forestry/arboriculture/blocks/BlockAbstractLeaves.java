@@ -38,9 +38,6 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	public static final int FOLIAGE_COLOR_INDEX = 0;
 	public static final int FRUIT_COLOR_INDEX = 2;
 
-	public static final int DECAYABLE_FLAG = 4;
-	public static final int CHECK_DECAY_FLAG = 8;
-
 	public BlockAbstractLeaves(Properties properties) {
 		super(properties);
 	}

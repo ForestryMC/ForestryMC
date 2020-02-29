@@ -7,8 +7,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
 
@@ -110,10 +110,8 @@ public class ContainerAnalyzerProviderHelper {
 					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 
-					CompoundNBT CompoundNBT = new CompoundNBT();
-					individual.write(CompoundNBT);
 					specimen = specimen.copy();
-					specimen.setTag(CompoundNBT);
+					GeneticHelper.setIndividual(specimen, individual);
 
 					if (requiresEnergy) {
 						// Decrease energy

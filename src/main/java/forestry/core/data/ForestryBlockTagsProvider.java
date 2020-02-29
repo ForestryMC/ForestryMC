@@ -14,6 +14,8 @@ import net.minecraftforge.common.Tags;
 
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.core.blocks.EnumResourceType;
+import forestry.core.features.CoreBlocks;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -72,10 +74,20 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 			getBuilder(BlockTags.SAPLINGS).add(ArboricultureBlocks.SAPLING_GE.block());
 			getBuilder(BlockTags.LEAVES).add(ArboricultureBlocks.LEAVES.block()).add(ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.blockArray()).add(ArboricultureBlocks.LEAVES_DEFAULT.blockArray()).add(ArboricultureBlocks.LEAVES_DECORATIVE.blockArray());
 
-
 			//getBuilder(Tags.Blocks.CHESTS).add(registry.treeChest);
 			//getBuilder(Tags.Blocks.CHESTS_WOODEN).add(registry.treeChest);
 		}
+
+		getBuilder(Tags.Blocks.ORES).add(ForestryTags.Blocks.ORES_COPPER, ForestryTags.Blocks.ORES_TIN, ForestryTags.Blocks.ORES_APATITE);
+		getBuilder(ForestryTags.Blocks.ORES_COPPER).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
+		getBuilder(ForestryTags.Blocks.ORES_TIN).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
+		getBuilder(ForestryTags.Blocks.ORES_APATITE).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).block());
+
+		getBuilder(Tags.Blocks.STORAGE_BLOCKS).add(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Blocks.STORAGE_BLOCKS_TIN);
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.APATITE).block());
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_TIN).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).block());
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).block());
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).block());
 	}
 
 	/*@Override

@@ -7,8 +7,11 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItem;
 
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import forestry.core.fluids.BlockForestryFluid;
 
@@ -63,5 +66,25 @@ public interface IFluidFeature extends IModFeature {
 
 	default FluidStack fluidStack() {
 		return fluidStack(FluidAttributes.BUCKET_VOLUME);
+	}
+
+	@Override
+	default void create() {
+		FlowingFluid fluid = getFluidConstructor(false).get();
+		FlowingFluid flowing = getFluidConstructor(true).get();
+		fluid.setRegistryName(getModId(), getIdentifier());
+		flowing.setRegistryName(getModId(), getIdentifier() + "_flowing");
+		setFluid(fluid);
+		setFlowing(flowing);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
+		IForgeRegistry<T> registry = event.getRegistry();
+		Class<T> superType = registry.getRegistrySuperType();
+		if (Fluid.class.isAssignableFrom(superType)) {
+			registry.register((T) fluid());
+		}
 	}
 }

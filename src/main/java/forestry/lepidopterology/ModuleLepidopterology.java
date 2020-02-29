@@ -24,8 +24,6 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -34,7 +32,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -51,7 +48,6 @@ import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
-import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -66,6 +62,7 @@ import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterologyClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
@@ -85,9 +82,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	private static float serumChance = 0.55f;
 	private static float secondSerumChance = 0;
 
-	//TODO temp
-	public static final EntityType<EntityButterfly> BUTTERFLY_ENTITY_TYPE = EntityType.Builder.create(EntityButterfly::new, EntityClassification.CREATURE).size(1.0f, 0.4f).build("butterfly");
-
 	public ModuleLepidopterology() {
 		proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
 		ForgeUtils.registerSubscriber(this);
@@ -97,12 +91,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void setupAPI() {
 		ButterflyManager.butterflyFactory = new ButterflyFactory();
 		ButterflyManager.butterflyMutationFactory = new ButterflyMutationFactory();
-	}
-
-	@Override
-	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
-		BUTTERFLY_ENTITY_TYPE.setRegistryName("butterfly");
-		registry.register(BUTTERFLY_ENTITY_TYPE);
 	}
 
 	@Override
@@ -132,10 +120,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void doInit() {
 		//TODO commands
 		//		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
-
-		ResourceLocation butterflyResourceLocation = new ResourceLocation(Constants.MOD_ID, "butterflyge");
-		EntityUtil.registerEntity(butterflyResourceLocation, BUTTERFLY_ENTITY_TYPE, "butterflyge", 0, 0x000000,
-			0xffffff, 50, 1, true);
 
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();
@@ -314,5 +298,10 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		if (event.getEntity() instanceof EntityButterfly) {
 			event.setCanceled(true);
 		}
+	}
+
+	@Override
+	public ISidedModuleHandler getModuleHandler() {
+		return proxy;
 	}
 }

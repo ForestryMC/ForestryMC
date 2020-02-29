@@ -59,6 +59,22 @@ public interface IBlockFeature<B extends Block, I extends BlockItem> extends IIt
 	Function<B, I> getItemBlockConstructor();
 
 	@Override
+	default void create() {
+		Supplier<B> blockConstructor = getBlockConstructor();
+		B block = blockConstructor.get();
+		block.setRegistryName(getModId(), getIdentifier());
+		setBlock(block);
+		Function<B, I> constructor = getItemBlockConstructor();
+		if (constructor != null) {
+			I item = constructor.apply(block);
+			if (item.getRegistryName() == null && block.getRegistryName() != null) {
+				item.setRegistryName(block.getRegistryName());
+			}
+			setItem(item);
+		}
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
 		IItemFeature.super.register(event);

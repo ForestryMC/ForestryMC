@@ -25,6 +25,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,6 +36,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -66,6 +68,7 @@ import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemModelProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootTableProvider;
+import forestry.core.data.ForestryRecipeProvider;
 import forestry.core.data.WoodBlockModelProvider;
 import forestry.core.data.WoodBlockStateProvider;
 import forestry.core.data.WoodItemModelProvider;
@@ -79,6 +82,7 @@ import forestry.core.proxy.ProxyClient;
 import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.recipes.FallbackIngredient;
 import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestrySpriteUploader;
@@ -220,6 +224,7 @@ public class Forestry {
 	}
 
 	private void gatherData(GatherDataEvent event) {
+		CapabilityFluidHandler.register();    //TODO test
 		DataGenerator generator = event.getGenerator();
 
 		if (event.includeServer()) {
@@ -232,10 +237,11 @@ public class Forestry {
 			generator.addProvider(new ForestryBlockStateProvider(generator));
 			generator.addProvider(new ForestryBlockModelProvider(generator));
 			generator.addProvider(new ForestryItemModelProvider(generator));
+			generator.addProvider(new ForestryRecipeProvider(generator));
 			try {
 				generator.run();
 			} catch (Exception e) {
-				LOGGER.error(e);
+				throw new RuntimeException(e);
 			}
 			//generator.run();
 		}
@@ -291,6 +297,7 @@ public class Forestry {
 		@SubscribeEvent
 		public static void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
 			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
+			CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "fallback"), FallbackIngredient.Serializer.INSTANCE);
 		}
 
 	}

@@ -36,6 +36,7 @@ import forestry.modules.features.ModFeatureRegistry;
 @FeatureProvider
 public class ApicultureBlocks {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleApiculture.class);
+
 	public static final FeatureBlockGroup<BlockApiculture, BlockTypeApiculture> BASE = REGISTRY.blockGroup(BlockApiculture::new, BlockTypeApiculture.values()).item((block) -> new ItemBlockForestry<>(block, new Item.Properties().group(ItemGroups.tabApiculture))).create();
 
 	public static final FeatureBlock<BlockBase<BlockTypeApicultureTesr>, ItemBlockBase> BEE_CHEST = REGISTRY.block(() -> new BlockBase<>(BlockTypeApicultureTesr.APIARIST_CHEST, Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0)), (block) -> new ItemBlockBase<>(block, new Item.Properties().group(ItemGroups.tabApiculture), BlockTypeApicultureTesr.APIARIST_CHEST), "bee_chest");

@@ -67,7 +67,7 @@ import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.loot.SetSpeciesNBT;
+import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -117,7 +117,7 @@ public class ModuleCore extends BlankForestryModule {
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
 
-		LootFunctionManager.registerFunction(new SetSpeciesNBT.Serializer());
+		LootFunctionManager.registerFunction(new OrganismFunction.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 

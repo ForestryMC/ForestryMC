@@ -12,7 +12,7 @@ import forestry.core.config.Constants;
 public class FeatureContainerType<C extends Container> implements IContainerTypeFeature<C> {
 	protected final String moduleID;
 	protected final String identifier;
-	private final IContainerFactory<C> containerFactory;
+	protected final IContainerFactory<C> containerFactory;
 	@Nullable
 	private ContainerType<C> containerType;
 

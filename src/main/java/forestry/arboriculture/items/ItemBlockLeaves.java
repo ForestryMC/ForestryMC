@@ -34,7 +34,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemstack) {
-		if (itemstack.getTag() == null) {
+		if (!itemstack.hasTag()) {
 			return new TranslationTextComponent("trees.grammar.leaves.type");
 		}
 

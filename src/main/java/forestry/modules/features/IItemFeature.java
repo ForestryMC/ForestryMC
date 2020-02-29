@@ -11,7 +11,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import forestry.api.core.IItemProvider;
 import forestry.core.proxy.Proxies;
 
-public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider<I> {
+public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider<I>, net.minecraft.util.IItemProvider {
 
 	Supplier<I> getItemConstructor();
 
@@ -23,6 +23,18 @@ public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider
 			throw new IllegalStateException("Called feature getter method before content creation was called in the pre init.");
 		}
 		return item;
+	}
+
+	@Override
+	default Item asItem() {
+		return item();
+	}
+
+	@Override
+	default void create() {
+		I item = getItemConstructor().get();
+		item.setRegistryName(getModId(), getIdentifier());
+		setItem(item);
 	}
 
 	@SuppressWarnings("unchecked")

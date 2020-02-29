@@ -88,7 +88,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		if (itemstack.getTag() == null) {
+		if (!itemstack.hasTag()) {
 			return;
 		}
 
@@ -132,7 +132,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
-		if (itemstack.getTag() == null) {
+		if (!itemstack.hasTag()) {
 			if (tintIndex == 1) {
 				return 0xffdc16;
 			} else {

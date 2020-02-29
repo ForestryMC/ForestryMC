@@ -15,8 +15,8 @@ import java.util.Map;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 
+import genetics.api.GeneticHelper;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 
@@ -124,9 +124,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 
 		IBee imprint = getSelectedBee();
 
-		CompoundNBT CompoundNBT = new CompoundNBT();
-		imprint.write(CompoundNBT);
-		specimen.setTag(CompoundNBT);
+		GeneticHelper.setIndividual(specimen, imprint);
 
 		setInventorySlotContents(imprintedSlot, specimen);
 		setInventorySlotContents(specimenSlot, ItemStack.EMPTY);

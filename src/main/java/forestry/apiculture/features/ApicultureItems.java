@@ -33,6 +33,7 @@ import forestry.modules.features.ModFeatureRegistry;
 public class ApicultureItems {
 	// / BEES
 	public static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleApiculture.class);
+
 	public static final FeatureItem<ItemBeeGE> BEE_QUEEN = REGISTRY.item(() -> new ItemBeeGE(EnumBeeType.QUEEN), "bee_queen_ge");
 	public static final FeatureItem<ItemBeeGE> BEE_DRONE = REGISTRY.item(() -> new ItemBeeGE(EnumBeeType.DRONE), "bee_drone_ge");
 	public static final FeatureItem<ItemBeeGE> BEE_PRINCESS = REGISTRY.item(() -> new ItemBeeGE(EnumBeeType.PRINCESS), "bee_princess_ge");
@@ -70,9 +71,9 @@ public class ApicultureItems {
 	public static final FeatureItem<ItemArmorApiarist> APIARIST_BOOTS = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlotType.FEET), "apiarist_boots");
 
 	// TOOLS
-	public static final FeatureItem<ItemScoop> scoop = REGISTRY.item(ItemScoop::new, "scoop");
+	public static final FeatureItem<ItemScoop> SCOOP = REGISTRY.item(ItemScoop::new, "scoop");
 	//TODO - harvest stuff
-	public static final FeatureItem<ItemSmoker> smoker = REGISTRY.item(ItemSmoker::new, "smoker");
+	public static final FeatureItem<ItemSmoker> SMOKER = REGISTRY.item(ItemSmoker::new, "smoker");
 
 	private ApicultureItems() {
 	}

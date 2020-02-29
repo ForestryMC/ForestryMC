@@ -20,18 +20,11 @@ public class ItemCraftingMaterial extends ItemForestry {
 
 	public ItemCraftingMaterial(EnumCraftingMaterial type) {
 		super((new Item.Properties())
-			.maxDamage(0)
-			.setNoRepair()
 			.group(ItemGroupForestry.tabForestry));
 		this.type = type;
 	}
 
 	public EnumCraftingMaterial getType() {
 		return type;
-	}
-
-	@Override
-	public boolean isDamageable() {
-		return false;
 	}
 }
