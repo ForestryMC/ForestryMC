@@ -13,10 +13,16 @@ package forestry.core.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
+import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.core.utils.OreDictUtil;
 
 public class InventoryNaturalistChest extends InventoryAdapterTile<TileNaturalistChest> {
+	public static final int treeSaplingId = OreDictionary.getOreID(OreDictUtil.TREE_SAPLING);
+
 	private final ISpeciesRoot speciesRoot;
 
 	public InventoryNaturalistChest(TileNaturalistChest tile, ISpeciesRoot speciesRoot) {
@@ -26,7 +32,22 @@ public class InventoryNaturalistChest extends InventoryAdapterTile<TileNaturalis
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
-		return speciesRoot.isMember(itemstack);
+		if (itemstack.isEmpty()) {
+			return false;
+		}
+		if (speciesRoot.isMember(itemstack)) {
+			return true;
+		}
+		if (speciesRoot != TreeManager.treeRoot) {
+			return false;
+		}
+		int[] oreIds = OreDictionary.getOreIDs(itemstack);
+		for (int oreId : oreIds) {
+			if (oreId == treeSaplingId) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

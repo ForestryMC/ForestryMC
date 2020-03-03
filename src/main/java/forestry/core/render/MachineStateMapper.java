@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachinePropertiesTesr;
-import forestry.core.config.Constants;
 
 @SideOnly(Side.CLIENT)
 public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializable> extends ForestryStateMapper {
@@ -50,11 +49,6 @@ public class MachineStateMapper<T extends Enum<T> & IBlockType & IStringSerializ
 				ResourceLocation blockLocation = Block.REGISTRY.getNameForObject(block);
 				String s = String.format("%s:%s", blockLocation.getNamespace(), (directory != null ? directory : "") + blockLocation.getPath());
 				mapStateModelLocations.put(state, new ModelResourceLocation(s, getPropertyString(linkedhashmap)));
-			}
-		} else {
-			for (IBlockState validState : block.getBlockState().getValidStates()) {
-				ResourceLocation blockLocation = Block.REGISTRY.getNameForObject(block);
-				mapStateModelLocations.put(validState, new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, "machines"), blockLocation.getPath()));
 			}
 		}
 

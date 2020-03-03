@@ -20,7 +20,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -309,16 +308,6 @@ public class BlockBase<P extends Enum<P> & IBlockType & IStringSerializable> ext
 			IBlockState blockState = world.getBlockState(pos);
 			return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
 		}
-		return false;
-	}
-
-	@Override
-	public boolean addLandingEffects(IBlockState state, net.minecraft.world.WorldServer worldObj, BlockPos blockPosition, IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles) {
-		return false;
-	}
-
-	@Override
-	public boolean addRunningEffects(IBlockState state, World world, BlockPos pos, Entity entity) {
 		return false;
 	}
 
