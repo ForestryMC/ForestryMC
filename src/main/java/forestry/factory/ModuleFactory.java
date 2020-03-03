@@ -149,14 +149,18 @@ public class ModuleFactory extends BlankForestryModule {
 		// Set fuels and resources for the fermenter
 		ItemStack fertilizerCompound = coreItems.fertilizerCompound.getItemStack();
 		FuelManager.fermenterFuel.put(fertilizerCompound, new FermenterFuel(fertilizerCompound,
-			ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")));
+			ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"),
+			ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")));
 
-		int cyclesCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost");
-		int valueCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost");
 		ItemStack fertilizerBio = coreItems.compost.getItemStack();
+		FuelManager.fermenterFuel.put(fertilizerBio, new FermenterFuel(fertilizerBio,
+			ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost"),
+			ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost")));
+
 		ItemStack mulch = coreItems.mulch.getItemStack();
-		FuelManager.fermenterFuel.put(fertilizerBio, new FermenterFuel(fertilizerBio, valueCompost, cyclesCompost));
-		FuelManager.fermenterFuel.put(mulch, new FermenterFuel(mulch, valueCompost, cyclesCompost));
+		FuelManager.fermenterFuel.put(mulch, new FermenterFuel(mulch,
+			ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.mulch"),
+			ForestryAPI.activeMode.getIntegerSetting("fermenter.value.mulch")));
 
 		// Add moistener resources
 		ItemStack wheat = new ItemStack(Items.WHEAT);

@@ -48,9 +48,11 @@ public class GameMode implements IGameMode {
 
 	private static final int FERMENTATION_DURATION_FERTILIZER = 200;
 	private static final int FERMENTATION_DURATION_COMPOST = 250;
+	private static final int FERMENTATION_DURATION_MULCH = 250;
 
 	private static final int FERMENTED_CYCLE_FERTILIZER = 56;
 	private static final int FERMENTED_CYCLE_COMPOST = 48;
+	private static final int FERMENTED_CYCLE_MULCH = 48;
 
 	private static final int FERMENTED_SAPLING = 250;
 	private static final int FERMENTED_CACTI = 50;
@@ -95,9 +97,11 @@ public class GameMode implements IGameMode {
 
 		initSettingInt(config, "fermenter.cycles", "fertilizer", FERMENTATION_DURATION_FERTILIZER);
 		initSettingInt(config, "fermenter.cycles", "compost", FERMENTATION_DURATION_COMPOST);
+		initSettingInt(config, "fermenter.cycles", "mulch", FERMENTATION_DURATION_MULCH);
 
 		initSettingInt(config, "fermenter.value", "fertilizer", FERMENTED_CYCLE_FERTILIZER);
 		initSettingInt(config, "fermenter.value", "compost", FERMENTED_CYCLE_COMPOST);
+		initSettingInt(config, "fermenter.value", "mulch", FERMENTED_CYCLE_MULCH);
 
 		initSettingInt(config, "fermenter.yield", "sapling", FERMENTED_SAPLING);
 		initSettingInt(config, "fermenter.yield", "cactus", FERMENTED_CACTI);
