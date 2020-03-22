@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IJubilanceProvider;
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
-
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IJubilanceProvider;
-import forestry.core.utils.ItemStackUtil;
+//import forestry.core.utils.ItemStackUtil;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 
@@ -34,6 +34,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorld();
 		ChunkCoordinates housingCoords = housing.getCoordinates();
+/*
 		Block block;
 		TileEntity tile;
 		int meta;
@@ -46,6 +47,12 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 		} while (tile instanceof IBeeHousing);
 
 		return ItemStackUtil.equals(block, meta, blockRequired);
+*/
+		ItemStack stk = BlockUtil.getItemStackFromBlockBelow(world, housingCoords.posX, housingCoords.posY, housingCoords.posZ,
+				(TileEntity tile) -> (tile instanceof IBeeHousing)
+		);
+
+		return blockRequired.equals(stk); //this way to prevent NPEs
 	}
 
 }

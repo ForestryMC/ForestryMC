@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
 
 public class MutationConditionRequiresResourceOreDict implements IMutationCondition {
 
@@ -43,6 +41,7 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 
 	@Override
 	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+/*
 		Block block;
 		int meta;
 		TileEntity tile;
@@ -53,18 +52,20 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 			tile = world.getTileEntity(x, y-i, z);
 			i++;
 		} while (tile instanceof IBeeHousing);
-
-		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block, 1, meta));
-		for (int oreId : oreIds) {
-			if (oreId == this.oreDictId) {
-				return 1;
-			}
-		}
-		return 0;
+*/
+		ItemStack stk = BlockUtil.getItemStackFromBlockBelow(world, x, y, z,
+				(TileEntity tile) -> (tile instanceof IBeeHousing)
+		);
+		int[] oreIds = OreDictionary.getOreIDs(stk);
+		for (int oreId : oreIds)
+			if (oreId == this.oreDictId)
+				return 1f;
+		return 0f;
 	}
 
 	@Override
 	public String getDescription() {
 		return StringUtil.localizeAndFormat("mutation.condition.resource", displayName);
 	}
+
 }

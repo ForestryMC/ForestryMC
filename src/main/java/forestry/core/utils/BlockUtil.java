@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
-
+import cofh.api.energy.IEnergyConnection;
+import cofh.api.energy.IEnergyReceiver;
+import cpw.mods.fml.common.Loader;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileEngine;
+import forestry.core.utils.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockLog;
@@ -22,16 +26,13 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileEngine;
-import forestry.core.utils.vect.Vect;
-
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyReceiver;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public abstract class BlockUtil {
 
@@ -227,5 +228,43 @@ public abstract class BlockUtil {
 	 */
 	private static boolean isVecInsideXYBounds(Vec3 vec, float minX, float minY, float maxX, float maxY) {
 		return vec != null && (vec.xCoord >= minX && vec.xCoord <= maxX && vec.yCoord >= minY && vec.yCoord <= maxY);
+	}
+
+	private static Class<? extends Block> BW_MetaGenerated_WerkstoffBlocksClass;
+	private static Method getDamage;
+	private static Block BWBlocks;
+	private static boolean bw = Loader.isModLoaded("bartworks");
+	static {
+		if (bw)
+			try {
+				BW_MetaGenerated_WerkstoffBlocksClass = (Class<? extends Block>) Class.forName("com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_WerkstoffBlocks");
+				getDamage = BW_MetaGenerated_WerkstoffBlocksClass.getMethod("getDamageValue", World.class, int.class, int.class, int.class);
+				BWBlocks = (Block) Class.forName("com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader").getField("BWBlocks").get(null);
+			} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+	}
+
+	public static ItemStack getItemStackFromBlockBelow(World world, int x, int y, int z, Predicate<TileEntity> stillInside) {
+		TileEntity tile;
+		Block block;
+		int depth = 0;
+
+		do {
+			++depth;
+			tile = world.getTileEntity(x, y - depth, z);
+		} while (stillInside.test(tile));
+		block = world.getBlock(x, y - depth, z);
+
+		if (bw && BW_MetaGenerated_WerkstoffBlocksClass.isInstance(block)) {
+			try {
+				return new ItemStack(BWBlocks, 1, (Integer) getDamage.invoke(block, world, x, y - depth, z));
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		return new ItemStack(block, 1, world.getBlockMetadata(x, y - depth, z));
 	}
 }

@@ -10,17 +10,18 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IMutationCondition;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.StringUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.StringUtil;
+//import forestry.core.utils.ItemStackUtil;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
@@ -32,6 +33,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 
 	@Override
 	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+/*
 		Block block;
 		TileEntity tile;
 		int meta;
@@ -44,6 +46,12 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 		} while (tile instanceof IBeeHousing);
 
 		return ItemStackUtil.equals(block, meta, blockRequired) ? 1 : 0;
+*/
+		ItemStack stk = BlockUtil.getItemStackFromBlockBelow(world, x, y, z,
+				(TileEntity tile) -> (tile instanceof IBeeHousing)
+		);
+
+		return blockRequired.equals(stk) ? 1f : 0f;
 	}
 
 	@Override
