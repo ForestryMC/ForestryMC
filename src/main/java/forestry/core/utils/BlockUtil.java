@@ -238,7 +238,7 @@ public abstract class BlockUtil {
 		if (bw)
 			try {
 				BW_MetaGenerated_WerkstoffBlocksClass = (Class<? extends Block>) Class.forName("com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_WerkstoffBlocks");
-				getDamage = BW_MetaGenerated_WerkstoffBlocksClass.getMethod("getDamageValue", World.class, int.class, int.class, int.class);
+				getDamage = Class.forName("com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_Blocks").getMethod("getDamageValue", World.class, int.class, int.class, int.class);
 				BWBlocks = (Block) Class.forName("com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader").getField("BWBlocks").get(null);
 			} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
 				e.printStackTrace();
