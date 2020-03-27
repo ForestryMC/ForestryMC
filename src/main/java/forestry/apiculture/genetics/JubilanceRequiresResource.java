@@ -15,6 +15,8 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -52,7 +54,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 				(TileEntity tile) -> (tile instanceof IBeeHousing)
 		);
 
-		return blockRequired.equals(stk); //this way to prevent NPEs
+		return InventoryUtil.isItemEqual(blockRequired, stk, true, true); //ffs dont compare itemsstacks with equal >_> and why tf didnt i got this until i debugged it? im getting old..
 	}
 
 }

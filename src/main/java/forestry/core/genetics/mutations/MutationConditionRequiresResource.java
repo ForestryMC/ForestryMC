@@ -15,6 +15,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -51,7 +53,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 				(TileEntity tile) -> (tile instanceof IBeeHousing)
 		);
 
-		return blockRequired.equals(stk) ? 1f : 0f;
+		return InventoryUtil.isItemEqual(blockRequired, stk, true, true) ? 1 : 0;
 	}
 
 	@Override

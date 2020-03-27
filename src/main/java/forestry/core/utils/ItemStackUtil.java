@@ -157,8 +157,8 @@ public abstract class ItemStackUtil {
 
 			int reqCount = 0;
 			for (ItemStack offer : condensedOffered) {
-				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools) && (matchTags ? ItemStack.areItemStackTagsEqual(req, offer) : true)) {
-					int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
+				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools) && (!matchTags || ItemStack.areItemStackTagsEqual(req, offer))) {
+					int stackCount = (int) Math.floor( (float) offer.stackSize / (float) req.stackSize);
 					reqCount = Math.max(reqCount, stackCount);
 				}
 			}
@@ -316,7 +316,7 @@ public abstract class ItemStackUtil {
 	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
 		int size = rand.nextInt(max);
 		ItemStack created = template.copy();
-		created.stackSize = size <= 0 ? 1 : size > created.getMaxStackSize() ? created.getMaxStackSize() : size;
+		created.stackSize = size <= 0 ? 1 : Math.min(size, created.getMaxStackSize());
 		return created;
 	}
 

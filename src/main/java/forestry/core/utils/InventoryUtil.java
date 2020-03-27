@@ -105,10 +105,7 @@ public abstract class InventoryUtil {
 		if (a.getItemDamage() != b.getItemDamage()) {
 			return false;
 		}
-		if (a.stackTagCompound != null && !a.stackTagCompound.equals(b.stackTagCompound)) {
-			return false;
-		}
-		return true;
+		return a.stackTagCompound == null || a.stackTagCompound.equals(b.stackTagCompound);
 	}
 
 	/**
@@ -137,9 +134,7 @@ public abstract class InventoryUtil {
 			if (isWildcard(a) || isWildcard(b)) {
 				return true;
 			}
-			if (a.getItemDamage() != b.getItemDamage()) {
-				return false;
-			}
+			return a.getItemDamage() == b.getItemDamage();
 		}
 		return true;
 	}

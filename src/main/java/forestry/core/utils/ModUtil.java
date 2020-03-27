@@ -35,9 +35,7 @@ public abstract class ModUtil {
 			VersionRange versionRange = VersionParser.parseRange(versionRangeString);
 			DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(modname, versionRange);
 
-			if (!requiredVersion.containsVersion(modVersion)) {
-				return false;
-			}
+			return requiredVersion.containsVersion(modVersion);
 		}
 
 		return true;
@@ -69,9 +67,7 @@ public abstract class ModUtil {
 			DefaultArtifactVersion givenVersion = new DefaultArtifactVersion(apiName, apiVersionString);
 			DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(apiName, versionRange);
 
-			if (!requiredVersion.containsVersion(givenVersion)) {
-				return false;
-			}
+			return requiredVersion.containsVersion(givenVersion);
 		}
 
 		return true;

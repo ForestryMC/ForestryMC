@@ -231,16 +231,14 @@ public abstract class BlockUtil {
 	}
 
 	private static Class<? extends Block> BW_MetaGenerated_WerkstoffBlocksClass;
-	private static Method getDamage;
 	private static Block BWBlocks;
 	private static boolean bw = Loader.isModLoaded("bartworks");
 	static {
 		if (bw)
 			try {
 				BW_MetaGenerated_WerkstoffBlocksClass = (Class<? extends Block>) Class.forName("com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_WerkstoffBlocks");
-				getDamage = Class.forName("com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_Blocks").getMethod("getDamageValue", World.class, int.class, int.class, int.class);
 				BWBlocks = (Block) Class.forName("com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader").getField("BWBlocks").get(null);
-			} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
+			} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
 	}
@@ -257,12 +255,7 @@ public abstract class BlockUtil {
 		block = world.getBlock(x, y - depth, z);
 
 		if (bw && BW_MetaGenerated_WerkstoffBlocksClass.isInstance(block)) {
-			try {
-				return new ItemStack(BWBlocks, 1, (Integer) getDamage.invoke(block, world, x, y - depth, z));
-			} catch (IllegalAccessException | InvocationTargetException e) {
-				e.printStackTrace();
-				return null;
-			}
+			return new ItemStack(BWBlocks, 1, block.getDamageValue(world, x, y - depth, z));
 		}
 
 		return new ItemStack(block, 1, world.getBlockMetadata(x, y - depth, z));
