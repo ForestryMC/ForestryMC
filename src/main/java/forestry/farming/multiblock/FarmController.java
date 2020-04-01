@@ -643,6 +643,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		Preconditions.checkNotNull(direction);
 		Preconditions.checkNotNull(logic, "logic must not be null");
 		farmLogics.put(direction, logic);
+		cleanExtents(direction);
 	}
 
 	@Override
