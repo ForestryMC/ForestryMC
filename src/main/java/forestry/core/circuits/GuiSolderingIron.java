@@ -39,8 +39,8 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		ICircuitLayout layout = container.getLayout();
 		String title = layout.getName();

@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -40,23 +38,11 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		return collectEntityItems(world, farmHousing, true);
 	}
 
-	private final Map<BlockPos, Integer> lastExtentsHarvest = new HashMap<>();
-
 	@Override
-	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
-		if (!lastExtentsHarvest.containsKey(pos)) {
-			lastExtentsHarvest.put(pos, 0);
-		}
-
-		int lastExtent = lastExtentsHarvest.get(pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = harvestBlocks(world, position);
-		lastExtent++;
-		lastExtentsHarvest.put(pos, lastExtent);
+		farmHousing.increaseExtent(direction, pos, extent);
 
 		return crops;
 	}

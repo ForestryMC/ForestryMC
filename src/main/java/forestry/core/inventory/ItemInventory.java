@@ -240,17 +240,6 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		return inventoryStacks.size();
 	}
 
-	//TODO inventory names
-	//	@Override
-	//	public String getName() {
-	//		return "BeeBag";
-	//	}
-	//
-	//	@Override
-	//	public ITextComponent getDisplayName() {
-	//		return new StringTextComponent(getName());
-	//	}
-
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
@@ -262,15 +251,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
+	public boolean isUsableByPlayer(PlayerEntity player) {
 		return true;
 	}
-
-	//TODO inventory names
-	//	@Override
-	//	public boolean hasCustomName() {
-	//		return true;
-	//	}
 
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
@@ -308,24 +291,6 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	/* Fields */
-	//TODO inventory fields
-	//	@Override
-	//	public int getField(int id) {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public void clear() {
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//	}
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {

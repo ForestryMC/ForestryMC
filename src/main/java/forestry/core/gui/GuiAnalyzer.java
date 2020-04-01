@@ -29,8 +29,8 @@ public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 		drawAnalyzeMeter(guiLeft + 64, guiTop + 30, tile.getProgressScaled(46), EnumTankLevel.rateTankLevel(tile.getProgressScaled(100)));
 	}
 

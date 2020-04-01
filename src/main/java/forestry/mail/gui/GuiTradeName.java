@@ -74,15 +74,15 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		super.drawGuiContainerBackgroundLayer(var1, var2, var3);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int var2, int var3) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, var2, var3);
 
 		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
 		textLayout.startPage();
 		textLayout.newLine();
 		textLayout.drawCenteredLine(prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
 		textLayout.endPage();
-		addressNameField.render(var2, var3, var1);    //TODO correct?
+		addressNameField.render(var2, var3, partialTicks);    //TODO correct?
 	}
 
 	@Override

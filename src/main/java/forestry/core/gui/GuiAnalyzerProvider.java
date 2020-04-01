@@ -141,8 +141,8 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();

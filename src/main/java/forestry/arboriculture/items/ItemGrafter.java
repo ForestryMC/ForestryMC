@@ -39,9 +39,7 @@ import forestry.core.items.ItemForestryTool;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 
-	//TODO could expose this in API, but others can just call same method to get same thing
-	//TODO also. It looks like this isn't thread safe
-	public static ToolType GRAFTER = ToolType.get("grafter");
+	public static final ToolType GRAFTER = ToolType.get("grafter");
 
 	public ItemGrafter(int maxDamage) {
 		super(ItemStack.EMPTY, (new Item.Properties())

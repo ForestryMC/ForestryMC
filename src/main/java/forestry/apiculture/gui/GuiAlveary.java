@@ -29,8 +29,8 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
 		drawHealthMeter(guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));

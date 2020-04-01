@@ -28,8 +28,8 @@ public class GuiMoistener extends GuiForestryTitled<ContainerMoistener> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		// Mycelium production progress
 		if (tile.isProducing()) {

@@ -1,5 +1,8 @@
 package forestry.farming;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,6 +20,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -26,6 +30,7 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
+import forestry.api.farming.IExtentCache;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Config;
@@ -42,8 +47,9 @@ import forestry.farming.FarmHelper.Stage;
 import forestry.farming.multiblock.FarmFertilizerManager;
 import forestry.farming.multiblock.FarmHydrationManager;
 
-public class FarmManager implements INbtReadable, INbtWritable, IStreamable {
+public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IExtentCache {
 	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
+	private final Table<FarmDirection, BlockPos, Integer> lastExtents = HashBasedTable.create();
 	private final IFarmHousingInternal housing;
 	@Nullable
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
@@ -311,5 +317,34 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable {
 
 	public void addPendingProduct(ItemStack stack) {
 		this.pendingProduce.add(stack);
+	}
+
+	public BlockPos getFarmCorner(FarmDirection direction) {
+		List<FarmTarget> targetList = this.targets.get(direction);
+		if (targetList.isEmpty()) {
+			return housing.getCoords();
+		}
+		FarmTarget target = targetList.get(0);
+		return target.getStart().offset(direction.getFacing().getOpposite());
+	}
+
+	@Override
+	public int getExtents(FarmDirection direction, BlockPos pos) {
+		if (!lastExtents.contains(direction, pos)) {
+			lastExtents.put(direction, pos, 0);
+			return 0;
+		}
+
+		return lastExtents.get(direction, pos);
+	}
+
+	@Override
+	public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
+		lastExtents.put(direction, pos, extend);
+	}
+
+	@Override
+	public void cleanExtents(FarmDirection direction) {
+		lastExtents.row(direction).clear();
 	}
 }

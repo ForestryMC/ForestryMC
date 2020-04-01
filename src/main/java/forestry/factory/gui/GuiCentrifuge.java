@@ -28,8 +28,8 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		int progress = tile.getProgressScaled(16);
 		blit(guiLeft + 43, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);

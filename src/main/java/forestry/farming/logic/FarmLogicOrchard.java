@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Table;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -64,24 +62,11 @@ public class FarmLogicOrchard extends FarmLogic {
 		this.traversalBlocks = traversalBlocksBuilder.build();
 	}
 
-	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
-
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
-		BlockPos farmPos = housing.getCoords();
-		if (!lastExtentsHarvest.contains(farmPos, pos)) {
-			lastExtentsHarvest.put(farmPos, pos, 0);
-		}
-
-		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
-		lastExtent++;
-		lastExtentsHarvest.put(farmPos, pos, lastExtent);
+		housing.increaseExtent(direction, pos, extent);
 
 		return crops;
 	}

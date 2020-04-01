@@ -54,8 +54,8 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		// Fuel remaining
 		int fertilizerRemain = tile.getMultiblockLogic().getController().getStoredFertilizerScaled(16);

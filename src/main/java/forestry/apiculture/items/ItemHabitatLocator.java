@@ -55,7 +55,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack p_77663_1_, World world, Entity player, int p_77663_4_, boolean p_77663_5_) {
+	public void inventoryTick(ItemStack stack, World world, Entity player, int slot, boolean selected) {
 		if (!world.isRemote) {
 			locatorLogic.onUpdate(world, player);
 		}

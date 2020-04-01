@@ -129,7 +129,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 
 		if (!isProcessedLetter && !checkedSessionVars) {
 			checkedSessionVars = true;
@@ -153,18 +153,18 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		}
 		textFocus = text.isFocused();
 
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		if (this.isProcessedLetter) {
 			minecraft.fontRenderer.drawString(address.getText(), guiLeft + 49, guiTop + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			minecraft.fontRenderer.drawSplitString(text.getText(), guiLeft + 20, guiTop + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		} else {
 			clearTradeInfoWidgets();
-			address.render(mouseX, mouseY, var1);    //TODO correct?
+			address.render(mouseX, mouseY, partialTicks);    //TODO correct?
 			if (container.getCarrierType() == EnumAddressee.TRADER) {
 				drawTradePreview(18, 32);
 			} else {
-				text.render(mouseX, mouseY, var1);
+				text.render(mouseX, mouseY, partialTicks);
 			}
 		}
 	}

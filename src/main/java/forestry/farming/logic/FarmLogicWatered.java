@@ -50,6 +50,10 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 	}
 
+	protected boolean isValidPosition(IFarmHousing housing, FarmDirection direction, BlockPos pos, CultivationType type) {
+		return true;
+	}
+
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		if (!farmHousing.canPlantSoil(isManual)) {
 			return false;
@@ -66,7 +70,11 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 				}
 
 				BlockState state = world.getBlockState(position);
-				if (!BlockUtil.isBreakableBlock(state, world, pos) || isAcceptedSoil(state) || isWaterSourceBlock(world, position) || !farmHousing.getFarmInventory().hasResources(resources)) {
+				if (!isValidPosition(farmHousing, direction, position, CultivationType.SOIL)
+					|| !BlockUtil.isBreakableBlock(state, world, pos)
+					|| isAcceptedSoil(state)
+					|| isWaterSourceBlock(world, position)
+					|| !farmHousing.getFarmInventory().hasResources(resources)) {
 					continue;
 				}
 
@@ -101,6 +109,10 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 			if (!world.isBlockLoaded(position)) {
 				break;
+			}
+
+			if (!isValidPosition(farmHousing, direction, position, CultivationType.WATER)) {
+				continue;
 			}
 
 			BlockPos platformPosition = position.down();
@@ -194,6 +206,10 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 	private enum WaterStatus {
 		NO_WATER, WATER_SOURCE, AIR, ICE
+	}
+
+	public enum CultivationType {
+		WATER, SOIL, CROP
 	}
 
 }

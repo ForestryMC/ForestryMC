@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,8 +20,10 @@ import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,57 +32,128 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmable;
+import forestry.api.farming.Soil;
+import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.farmables.FarmableCocoa;
 
 
-public class FarmLogicCocoa extends FarmLogic {
+public class FarmLogicCocoa extends FarmLogicSoil {
+	private static final int[] LAYOUT_POSITIONS = new int[]{4, 1, 3, 0, 2};
 	private final IFarmable cocoa = new FarmableCocoa();
 
 	public FarmLogicCocoa(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
 	}
 
-	private final Table<BlockPos, BlockPos, Integer> lastExtentsCultivation = HashBasedTable.create();
-
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		BlockPos farmPos = farmHousing.getCoords();
-		if (!lastExtentsCultivation.contains(farmPos, pos)) {
-			lastExtentsCultivation.put(farmPos, pos, 0);
+		if (maintainSoil(world, farmHousing, pos, direction, extent)) {
+			return true;
 		}
-
-		int lastExtent = lastExtentsCultivation.get(farmPos, pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
 		boolean result = tryPlantingCocoa(world, farmHousing, position, direction);
 
-		lastExtent++;
-		lastExtentsCultivation.put(farmPos, pos, lastExtent);
+		farmHousing.increaseExtent(direction, pos, extent);
 
 		return result;
 	}
 
-	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
+	protected boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+		if (!farmHousing.canPlantSoil(isManual)) {
+			return false;
+		}
+		BlockPos cornerPos = farmHousing.getFarmCorner(direction);
+		int distance = getDistanceValue(direction.getFacing().rotateY(), cornerPos, pos) - 1;
+		int layoutExtent = LAYOUT_POSITIONS[distance % LAYOUT_POSITIONS.length];
+		for (Soil soil : getSoils()) {
+			NonNullList<ItemStack> resources = NonNullList.create();
+			resources.add(soil.getResource());
+
+			for (int i = 0; i < extent; i++) {
+				BlockPos position = translateWithOffset(pos, direction, i);
+				if (!world.isBlockLoaded(position)) {
+					break;
+				}
+
+				if (!isValidPosition(direction, position, pos, layoutExtent)
+					|| !farmHousing.getFarmInventory().hasResources(resources)) {
+					continue;
+				}
+
+				BlockPos platformPosition = position.down();
+				if (!farmHousing.isValidPlatform(world, platformPosition)) {
+					break;
+				}
+
+				for (int z = 0; z < 3; z++) {
+					BlockPos location = position.up(z);
+
+					BlockState state = world.getBlockState(location);
+					if (z == 0 && !world.isAirBlock(location)
+						|| z > 0 && isAcceptedSoil(state)
+						|| !BlockUtil.isBreakableBlock(state, world, pos)) {
+						continue;
+					}
+
+					if (!BlockUtil.isReplaceableBlock(state, world, location)) {
+						BlockUtil.getBlockDrops(world, location).forEach(farmHousing::addPendingProduct);
+						world.setBlockState(location, Blocks.AIR.getDefaultState());
+						return trySetSoil(world, farmHousing, location, soil.getResource(), soil.getSoilState());
+					}
+
+					if (!isManual) {
+						return trySetSoil(world, farmHousing, location, soil.getResource(), soil.getSoilState());
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	protected int getDistanceValue(Direction facing, BlockPos posA, BlockPos posB) {
+		BlockPos delta = posA.subtract(posB);
+		int value;
+		switch (facing.getAxis()) {
+			case X:
+				value = delta.getX();
+				break;
+			case Y:
+				value = delta.getY();
+				break;
+			case Z:
+				value = delta.getZ();
+				break;
+			default:
+				value = 0;
+		}
+		return Math.abs(value);
+	}
+
+	//4, 1, 3, 0, 2
+	protected boolean isValidPosition(FarmDirection direction, BlockPos pos, BlockPos logicPos, int layoutExtent) {
+		int distance = getDistanceValue(direction.getFacing(), pos, logicPos);
+		return (distance % LAYOUT_POSITIONS.length) == (layoutExtent);
+	}
+
+	protected boolean trySetSoil(World world, IFarmHousing farmHousing, BlockPos position, ItemStack resource, BlockState ground) {
+		NonNullList<ItemStack> resources = NonNullList.create();
+		resources.add(resource);
+		if (!farmHousing.getFarmInventory().hasResources(resources)) {
+			return false;
+		}
+		if (!BlockUtil.setBlockWithPlaceSound(world, position, ground)) {
+			return false;
+		}
+		farmHousing.getFarmInventory().removeResources(resources);
+		return true;
+	}
 
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
-		BlockPos farmPos = housing.getCoords();
-		if (!lastExtentsHarvest.contains(farmPos, pos)) {
-			lastExtentsHarvest.put(farmPos, pos, 0);
-		}
-
-		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
-		lastExtent++;
-		lastExtentsHarvest.put(farmPos, pos, lastExtent);
+		housing.increaseExtent(direction, pos, extent);
 
 		return crops;
 	}

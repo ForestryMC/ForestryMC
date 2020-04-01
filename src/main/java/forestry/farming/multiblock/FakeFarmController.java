@@ -125,6 +125,11 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
+	public BlockPos getFarmCorner(FarmDirection direction) {
+		return null;
+	}
+
+	@Override
 	public int getSocketCount() {
 		return 0;
 	}

@@ -86,8 +86,8 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
-		return letter.isUsableByPlayer(PlayerEntity);
+	public boolean isUsableByPlayer(PlayerEntity player) {
+		return letter.isUsableByPlayer(player);
 	}
 
 	@Override

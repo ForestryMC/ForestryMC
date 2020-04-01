@@ -381,6 +381,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
+	public BlockPos getFarmCorner(FarmDirection direction) {
+		return manager.getFarmCorner(direction);
+	}
+
+	@Override
 	public boolean hasLiquid(FluidStack liquid) {
 		FluidStack drained = manager.getResourceTank().drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 		return liquid.isFluidStackIdentical(drained);
@@ -412,6 +417,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		Preconditions.checkNotNull(direction);
 		Preconditions.checkNotNull(logic, "logic must not be null");
 		farmLogics.put(direction, logic);
+		cleanExtents(direction);
 	}
 
 	@Override
@@ -478,6 +484,21 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public boolean isSquare() {
 		return Config.squareFarms;
+	}
+
+	@Override
+	public int getExtents(FarmDirection direction, BlockPos pos) {
+		return manager.getExtents(direction, pos);
+	}
+
+	@Override
+	public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
+		manager.setExtents(direction, pos, extend);
+	}
+
+	@Override
+	public void cleanExtents(FarmDirection direction) {
+		manager.cleanExtents(direction);
 	}
 
 	// for debugging

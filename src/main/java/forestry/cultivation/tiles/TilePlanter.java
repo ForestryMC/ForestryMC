@@ -343,4 +343,23 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	public abstract NonNullList<ItemStack> createProductionStacks();
 
+	@Override
+	public BlockPos getFarmCorner(FarmDirection direction) {
+		return pos.down(2);
+	}
+
+	@Override
+	public int getExtents(FarmDirection direction, BlockPos pos) {
+		return manager.getExtents(direction, pos);
+	}
+
+	@Override
+	public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
+		manager.setExtents(direction, pos, extend);
+	}
+
+	@Override
+	public void cleanExtents(FarmDirection direction) {
+		manager.cleanExtents(direction);
+	}
 }

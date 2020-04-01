@@ -29,8 +29,8 @@ public class GuiFermenter extends GuiForestryTitled<ContainerFermenter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		// Fuel remaining
 		int fuelRemain = tile.getBurnTimeRemainingScaled(16);

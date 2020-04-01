@@ -116,8 +116,8 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 		drawCenteredString(Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), xSize / 2, 23);
 		drawCenteredString(Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), xSize / 2, 47);
 	}

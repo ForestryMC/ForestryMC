@@ -29,8 +29,8 @@ public class GuiGenerator extends GuiForestryTitled<ContainerGenerator> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		int progress = tile.getStoredScaled(49);
 		if (progress > 0) {

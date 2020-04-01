@@ -30,8 +30,8 @@ public class GuiFabricator extends GuiForestryTitled<ContainerFabricator> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		int heatScaled = tile.getHeatScaled(52);
 		if (heatScaled > 0) {

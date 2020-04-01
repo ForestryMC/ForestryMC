@@ -107,13 +107,13 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableLighting();
 		if (searchField != null) {
-			this.searchField.render(mouseX, mouseY, f);    //TODO correct?
+			this.searchField.render(mouseX, mouseY, partialTicks);    //TODO correct?
 		}
 	}
 
