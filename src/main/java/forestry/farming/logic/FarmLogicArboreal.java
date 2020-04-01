@@ -26,7 +26,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.CleanerMode;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
@@ -73,14 +72,6 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	@Override
 	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
 		return collectEntityItems(world, farmHousing, true);
-	}
-
-	@Override
-	public Collection<ICrop> clean(CleanerMode mode, IFarmHousing housing, World world, BlockPos pos, FarmDirection direction, int extent) {
-		if (mode.contains(CleanerMode.FOLIAGE)) {
-
-		}
-		return null;
 	}
 
 	@Override
