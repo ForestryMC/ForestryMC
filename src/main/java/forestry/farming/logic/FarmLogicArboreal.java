@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,6 +26,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.farming.CleanerMode;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
@@ -77,24 +75,19 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return collectEntityItems(world, farmHousing, true);
 	}
 
-	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
+	@Override
+	public Collection<ICrop> clean(CleanerMode mode, IFarmHousing housing, World world, BlockPos pos, FarmDirection direction, int extent) {
+		if (mode.contains(CleanerMode.FOLIAGE)) {
+
+		}
+		return null;
+	}
 
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		BlockPos farmPos = farmHousing.getCoords();
-		if (!lastExtentsHarvest.contains(farmPos, pos)) {
-			lastExtentsHarvest.put(farmPos, pos, 0);
-		}
-
-		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = harvestBlocks(world, position);
-		lastExtent++;
-		lastExtentsHarvest.put(farmPos, pos, lastExtent);
+		farmHousing.increaseExtent(direction, pos, extent);
 
 		return crops;
 	}

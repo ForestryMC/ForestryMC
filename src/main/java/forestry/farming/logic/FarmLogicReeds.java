@@ -12,12 +12,7 @@ package forestry.farming.logic;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicReeds extends FarmLogicSoil {
@@ -66,16 +61,6 @@ public class FarmLogicReeds extends FarmLogicSoil {
 
 	@Override
 	public boolean isAcceptedWindfall(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
-	}
-
-	@Override
-	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 

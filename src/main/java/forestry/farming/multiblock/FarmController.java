@@ -12,6 +12,8 @@ package forestry.farming.multiblock;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -83,6 +85,7 @@ import forestry.farming.tiles.TileFarmPlain;
 public class FarmController extends RectangularMultiblockControllerBase implements IFarmControllerInternal, ILiquidTankTile {
 
 	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
+	private final Table<FarmDirection, BlockPos, Integer> lastExtents = HashBasedTable.create();
 	private int allowedExtent = 0;
 	@Nullable
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
@@ -395,6 +398,16 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
+	public BlockPos getFarmCorner(FarmDirection direction) {
+		List<FarmTarget> targetList = this.targets.get(direction);
+		if (targetList.isEmpty()) {
+			return getCoords();
+		}
+		FarmTarget target = targetList.get(0);
+		return target.getStart().offset(direction.getFacing().getOpposite());
+	}
+
+	@Override
 	public String getUnlocalizedType() {
 		return "for.multiblock.farm.type";
 	}
@@ -696,6 +709,26 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public boolean isSquare() {
 		return Config.squareFarms;
+	}
+
+	@Override
+	public int getExtents(FarmDirection direction, BlockPos pos) {
+		if (!lastExtents.contains(direction, pos)) {
+			lastExtents.put(direction, pos, 0);
+			return 0;
+		}
+
+		return lastExtents.get(direction, pos);
+	}
+
+	@Override
+	public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
+		lastExtents.put(direction, pos, extend);
+	}
+
+	@Override
+	public void cleanExtents(FarmDirection direction) {
+		lastExtents.row(direction).clear();
 	}
 
 	// for debugging

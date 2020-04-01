@@ -36,6 +36,10 @@ public class CropDestroy extends Crop {
 
 	protected final ItemStack germling;
 
+	public CropDestroy(World world, IBlockState blockState, BlockPos position) {
+		this(world, blockState, position, null, ItemStack.EMPTY);
+	}
+
 	public CropDestroy(World world, IBlockState blockState, BlockPos position, @Nullable IBlockState replantState) {
 		this(world, blockState, position, replantState, ItemStack.EMPTY);
 	}

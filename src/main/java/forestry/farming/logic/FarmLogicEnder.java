@@ -1,8 +1,6 @@
 package forestry.farming.logic;
 
-import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Table;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -61,24 +59,11 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		return collectEntityItems(world, farmHousing, true);
 	}
 
-	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
-
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		BlockPos farmPos = farmHousing.getCoords();
-		if (!lastExtentsHarvest.contains(farmPos, pos)) {
-			lastExtentsHarvest.put(farmPos, pos, 0);
-		}
-
-		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = harvestBlocks(world, position);
-		lastExtent++;
-		lastExtentsHarvest.put(farmPos, pos, lastExtent);
+		farmHousing.increaseExtent(direction, pos, extent);
 
 		return crops;
 	}

@@ -151,6 +151,19 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		return false;
 	}
 
+	@Override
+	public int getExtents(FarmDirection direction, BlockPos pos) {
+		return 0;
+	}
+
+	@Override
+	public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
+	}
+
+	@Override
+	public void cleanExtents(FarmDirection direction) {
+	}
+
 	private static class FakeFarmInventory implements IFarmInventory {
 		public static final FakeFarmInventory instance = new FakeFarmInventory();
 
