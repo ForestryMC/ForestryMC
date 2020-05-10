@@ -200,12 +200,12 @@ public abstract class RecipeUtil {
                 // Only move the recipes if the last one was beyond 500 in the recipeMap (in GTNH about 57k recipes)
                 if (matchingIndex.get(matchingIndex.size()-1) > 500) {
                     List recipeMap = CraftingManager.getInstance().getRecipeList();
-                    System.out.println( "Highest recipe found at " + matchingIndex.get(matchingIndex.size()-1) + ", moving " + matchingIndex.size() + " to front" );
-                    System.out.println( "Size of recipe map " + recipeMap.size() );
+                    // System.out.println( "Highest recipe found at " + matchingIndex.get(matchingIndex.size()-1) + ", moving " + matchingIndex.size() + " to front" );
+                    // System.out.println( "Size of recipe map " + recipeMap.size() );
                     for (index = 0; index < matchingIndex.size(); index++) { // index is reused here, it goes through the matching groups.
                         // Remove recipe and add back at the front
                         int target = matchingIndex.get(index); // remove requires int
-                        System.out.println("Removing recipe at " + target);
+                        // System.out.println("Removing recipe at " + target);
                         recipeMap.remove(target);
                         recipeMap.add(0,matchingRecipeMap.get(index));
                     }
