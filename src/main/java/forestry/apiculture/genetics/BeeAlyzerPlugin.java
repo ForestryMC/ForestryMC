@@ -69,8 +69,8 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 
 			{
-				String customPrimaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
-				String customSecondaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.", "");
+				String customPrimaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getPrimary().getUnlocalizedName().replace("for.bees.species.", "");
+				String customSecondaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getSecondary().getUnlocalizedName().replace("for.bees.species.", "");
 
 				guiAlyzer.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), bee, EnumBeeChromosome.SPECIES, GuiAlyzer.checkCustomName(customPrimaryBeeKey), GuiAlyzer.checkCustomName(customSecondaryBeeKey));
 				textLayout.newLine();

@@ -80,7 +80,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 		IAlleleSpecies species = getSpecies(itemstack);
 
-		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.", "");
+		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("for.trees.species.", "");
 		if (Translator.canTranslateToLocal(customTreeKey)) {
 			return Translator.translateToLocal(customTreeKey);
 		}

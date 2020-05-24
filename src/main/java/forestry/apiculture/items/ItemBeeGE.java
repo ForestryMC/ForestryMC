@@ -78,7 +78,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 
 		IBee individual = getIndividual(itemstack);
-		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("for.bees.species.", "");
 		if (Translator.canTranslateToLocal(customBeeKey)) {
 			return Translator.translateToLocal(customBeeKey);
 		}
