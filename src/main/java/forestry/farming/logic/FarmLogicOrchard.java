@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Table;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -26,7 +24,6 @@ import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -42,7 +39,6 @@ import forestry.farming.logic.crops.CropFruit;
 
 public class FarmLogicOrchard extends FarmLogic {
 
-	private final Table<BlockPos, BlockPos, Integer> lastExtents = HashBasedTable.create();
 	private final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard(IFarmProperties properties, boolean isManual) {
@@ -94,31 +90,10 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
-	}
-
-	@Override
-	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		return false;
-	}
-
-	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing housing, BlockPos pos, FarmDirection direction, int extent) {
-		BlockPos farmPos = housing.getCoords();
-		if (!lastExtents.contains(farmPos, pos)) {
-			lastExtents.put(farmPos, pos, 0);
-		}
-
-		int lastExtent = lastExtents.get(farmPos, pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
-		lastExtent++;
-		lastExtents.put(farmPos, pos, lastExtent);
+		housing.increaseExtent(direction, pos, extent);
 
 		return crops;
 	}

@@ -1,0 +1,24 @@
+{
+	"title": "蜂箱組加熱器",
+	"icon": {
+		"item": "forestry:alveary.heater"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_heater"
+				]
+			},
+			{
+				"text": "顧名思義，蜂箱組加熱器會提高蜂箱組內的溫度。要使用它，請以蜂箱組加熱器方塊取代蜂箱組底部兩層的其中一個方塊。"
+			}
+		],
+		[
+			{
+				"text": "加熱器需要大約5RF/t以持續加熱蜂箱組一個級距。"
+			}
+		]
+	]
+}

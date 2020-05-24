@@ -12,7 +12,6 @@ package forestry.farming.logic;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -46,11 +45,6 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 	@Override
 	public int getWaterConsumption(float hydrationModifier) {
 		return 0;
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
 	}
 
 	@Override

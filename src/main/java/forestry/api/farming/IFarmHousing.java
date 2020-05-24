@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.IErrorLogicSource;
 
-public interface IFarmHousing extends IErrorLogicSource {
+public interface IFarmHousing extends IErrorLogicSource, IExtentCache {
 
 	BlockPos getCoords();
 
@@ -79,6 +79,9 @@ public interface IFarmHousing extends IErrorLogicSource {
 	int getStoredFertilizerScaled(int scale);
 
 	default void addPendingProduce(ItemStack stack) {
+	}
 
+	default BlockPos getFarmCorner(FarmDirection direction) {
+		return getCoords();
 	}
 }

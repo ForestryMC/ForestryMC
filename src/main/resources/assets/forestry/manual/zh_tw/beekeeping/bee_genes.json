@@ -1,0 +1,202 @@
+{
+	"title": "蜜蜂基因",
+	"icon": {
+		"item": "forestry:bee_larvae_ge",
+		"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.speciesDiligent\",UID0:\"forestry.speciesDiligent\",Slot:0b}]}}"
+	},
+	"content": [
+		[
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "品種",
+						"page": 1
+					},
+					{
+						"title": "工作速度",
+						"page": 1
+					},
+					{
+						"title": "壽命",
+						"page": 1
+					},
+					{
+						"title": "生育能力",
+						"page": 2
+					},
+					{
+						"title": "溫濕度適應性",
+						"page": 2
+					},
+					{
+						"title": "不眠",
+						"page": 3
+					},
+					{
+						"title": "耐雨飛行性",
+						"page": 3
+					},
+					{
+						"title": "穴居性",
+						"page": 3
+					},
+					{
+						"title": "採蜜對象",
+						"page": 4
+					},
+					{
+						"title": "授粉",
+						"page": 4
+					},
+					{
+						"title": "活動範圍",
+						"page": 5
+					},
+					{
+						"title": "特殊效果",
+						"page": 5
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "品種",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "品種決定了蜂后的產物、是否只在夜間活動、以及蜜蜂對氣候的偏好。"
+			},
+			{
+				"text": "工作速度",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "工作速度決定了蜂后產出某種產物所需的時間。"
+			},
+			{
+				"text": "壽命",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "如這個性狀的名字所說，它決定了蜜蜂能活多久。壽命長的蜜蜂能產出更多的資源，壽命短的蜜蜂則適合雜交。"
+			}
+		],
+		[
+			{
+				"text": "生育能力",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "決定了蜂后死後能留下多少雄蜂。"
+			},
+			{
+				"text": "溫濕度適應性",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "蜜蜂能接受的溫度或濕度的範圍，數值上是從零到三，有正有負，也可以是正負都有。"
+			}
+		],
+		[
+			{
+				"text": "不眠",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "這個性狀決定了晝行蜜蜂能否在夜晚工作，或者夜行蜜蜂能否在白天工作。"
+			},
+			{
+				"text": "耐雨飛行性",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "這個性狀決定了蜜蜂能否在下雨的時候工作。"
+			},
+			{
+				"text": "穴居性",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "這個性狀決定了蜜蜂在看不見天空的時候能否工作。"
+			}
+		],
+		[
+			{
+				"text": "採蜜對象",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "這個性狀決定了蜜蜂需要什麼樣的花才能工作。"
+			},
+			{
+				"text": "授粉",
+				"underlined": true,
+				"paragraph": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "有著較高授粉屬性的蜜蜂，會以更快的速度在蜂巢周圍散佈鮮花，並會更經常為附近的樹授粉。"
+			}
+		],
+		[
+			{
+				"text": "活動範圍",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "蜜蜂為花與樹木授粉和給予其他物體特殊效果的範圍。"
+			},
+			{
+				"text": "特殊效果",
+				"paragraph": true,
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "一些蜜蜂會擁有令其他生物中毒或加速作物生長這樣的特殊效果。"
+			}
+		]
+	]
+}

@@ -1,0 +1,140 @@
+{
+	"title": "農場 GUI",
+	"icon": {
+		"item": "glass"
+	},
+	"content": [
+		[
+			{
+				"type": "image",
+					"u": 0,
+					"v": 0,
+					"uWidth": 648,
+					"vHeight": 406,
+					"textureLocation": "forestry:textures/gui/almanac/guis/multi_farm.png",
+					"textureWidth": 648,
+					"textureHeight": 406,
+					"width": 102,
+					"height": 64
+			},
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "I - 輸水口",
+						"page": 1
+					},
+					{
+						"title": "II - 水箱",
+						"page": 1
+					},
+					{
+						"title": "III - 電路板插槽",
+						"page": 2
+					},
+					{
+						"title": "IV - 肥料槽",
+						"page": 3
+					},
+					{
+						"title": "V - 土壤倉",
+						"page": 3
+					},
+					{
+						"title": "VI - 種子/樹苗倉",
+						"page": 4
+					},
+					{
+						"title": "VII - 出貨倉",
+						"page": 4
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "GUI分成下面若干部分："
+			},
+			{
+				"text": "I - 輸水口",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "放入水桶、水箱、水膠囊即可填充農場內部的水箱（圖中 II 所示）。"
+			},
+			{
+				"text": "II - 水箱",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "這裡顯示了農場內部儲水量。水可透過輸水口（圖中 I 所示）或農場水閥輸入。"
+			}
+		],
+		[
+			{
+				"text": "III - 電路板插槽",
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "這一塊區域顯示了當前多功能農場的配置。其中的插槽是用來安裝電路板的，電路板上的真空管會改變農場的行為。參閱農場配置一章以獲得更多資訊。"
+			}
+		],
+		[
+			{
+				"text": "IV - 肥料槽",
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "在大多數農場配置下，肥料是不可或缺的。肥料可以直接放入此槽中，也可以透過管線自動輸入。"
+			},
+			{
+				"text": "V - 土壤倉",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "這裡就是放置泥土的地方，對於自動農場來說，它會自動使用這裡的泥土來鋪設耕地；同時，對於所有的農場來說，這裡的泥土便是替換肥力不足的耕地土壤的來源。"
+			}
+		],
+		[
+			{
+				"text": "VI - 種子/樹苗倉",
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "所有種子、樹苗、仙人掌這樣的東西都要放在這個倉裡。"
+			},
+			{
+				"text": "VII - 出貨倉",
+				"paragraph": true,
+				"bold": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "所有的產物和廢料都會送到這裡。"
+			}
+		]
+	]
+}

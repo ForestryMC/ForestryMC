@@ -81,7 +81,7 @@ for.flowers.vanilla=鮮花
 for.flowers.wheat=小麥
 for.flowers.snow=雪
 
-fluid.bio.ethanol=乙醇
+fluid.bio.ethanol=生質酒精
 fluid.biomass=生物質
 fluid.glass=液態玻璃
 fluid.for.honey=蜂蜜
@@ -91,7 +91,7 @@ fluid.short.mead=蜂蜜酒
 fluid.milk=牛奶
 fluid.seed.oil=種子油
 
-tile.forestry.fluid.bio.ethanol.name=乙醇
+tile.forestry.fluid.bio.ethanol.name=生質酒精
 tile.forestry.fluid.biomass.name=生物質
 tile.forestry.fluid.glass.name=液態玻璃
 tile.forestry.fluid.for.honey.name=蜂蜜
@@ -102,7 +102,7 @@ tile.forestry.fluid.milk.name=牛奶
 tile.forestry.fluid.seed.oil.name=種子油
 
 for.gui.access=權限
-for.gui.active=顯性
+for.gui.active=作用中
 for.gui.addressee.player=玩家
 for.gui.addressee.trader=貿易站
 
@@ -127,8 +127,8 @@ for.gui.beealyzer.natural=自然捕捉
 for.gui.beealyzer.produce=可能的產物
 for.gui.beealyzer.specialty=可能的特產
 
-for.gui.database.tab.active_species.name=顯性物種
-for.gui.database.tab.inactive_species.name=隱性物種
+for.gui.database.tab.active_species.name=作用中物種
+for.gui.database.tab.inactive_species.name=非作用中物種
 for.gui.database.tab.products.name=產物
 for.gui.database.tab.mutations.name=變異
 for.gui.database.mutations.further=變異途徑
@@ -161,8 +161,8 @@ for.gui.fecundated=已交配
 for.gui.fertility=生育能力
 for.gui.fireresist=耐火
 for.gui.flowers=採蜜對象
-for.gui.flyer=飛行耐受性
-for.gui.flyer.tooltip=飛行耐受性
+for.gui.flyer=耐雨飛行性
+for.gui.flyer.tooltip=耐雨飛行性
 for.gui.general=一般
 for.gui.heat=熱量
 for.gui.hellish=地獄
@@ -173,7 +173,7 @@ for.gui.hybrid=混血
 for.gui.icy=嚴寒
 for.gui.imprinter.cheater=(您作弊！)
 for.gui.imprinter.name=染色體變換儀
-for.gui.inactive=隱性
+for.gui.inactive=非作用中
 for.gui.life=生命
 for.gui.lifespan=壽命
 for.gui.normal=普通
@@ -342,7 +342,7 @@ for.hints.crating.tag=將過剩的物品裝箱儲存！
 for.hints.energybuffer.desc=引擎可以暫存少量尚未被傳輸到目標裝置的能量。
 for.hints.energybuffer.tag=暫存能量！
 for.hints.energyunit.desc=引擎輸出能量的單位為 RF/t，表示"RF每刻"。每秒有20刻。
-for.hints.energyunit.tag=所謂RF(Redstone Flux)！
+for.hints.energyunit.tag=所謂 RF (Redstone Flux)！
 for.hints.enginebronzefuels.desc=生物燃油引擎可以使用多種燃料： 生物質，種子油，蜂蜜，牛奶，甚至水！
 for.hints.enginebronzefuels.tag=使用多種燃料！
 for.hints.enginebronzeheatloss.desc=儘管您可以在生物燃油引擎中使用水，但這相當沒有效率還會持續消耗岩漿。
@@ -365,7 +365,7 @@ for.hints.flowernether.desc=地獄花指的是地獄疙瘩。
 for.hints.flowernether.tag=何謂地獄花？
 for.hints.forcedcooldown.desc=引擎產生的能量如果沒有被消耗將會累積大量的熱。達到熔點時將會迫使引擎進入強制冷卻。
 for.hints.forcedcooldown.tag=注意機器過熱！
-for.hints.generatorfuels.desc=生物質引擎可以用生物質和生物燃油作為燃料，後者更高效。
+for.hints.generatorfuels.desc=生物質發電機可以用生物質和生物燃油作為燃料，後者更有效率。
 for.hints.generatorfuels.tag=可使用多種燃料！
 for.hints.habitatlocatoruse.desc=經過一些時間後，棲息地定位儀會指向最近的合適氣候。找到時，上面的指針會旋轉。
 for.hints.habitatlocatoruse.tag=棲息地定位儀簡介！
@@ -454,7 +454,7 @@ tile.for.pile_ash.name=灰燼堆
 
 item.for.habitat_locator.name=棲息地定位儀
 
-item.for.cart.beehouse.name=蜂巢礦車
+item.for.cart.beehouse.name=蜂房礦車
 item.for.cart.apiary.name=蜂箱礦車
 
 item.for.bee_combs.cocoa.name=可可蜂巢
@@ -564,7 +564,7 @@ item.for.kit_shovel.name=鏟子應急袋
 item.for.letters.name=信件
 
 item.for.mouldy_wheat.name=發霉小麥
-item.for.mulch.name=覆蓋戍
+item.for.mulch.name=覆蓋物
 item.for.naturalist_helmet.name=眼鏡
 item.for.naturalist_helmet.tooltip=戴著就能看到已授粉的葉子，和多方塊構造的錯誤。
 item.for.oak_stick.name=浸漬木棍
@@ -589,12 +589,12 @@ item.for.refractory_wax.tooltip=熔點很高的石蠟。
 item.for.research_note.name=%s的筆記
 item.for.research_note.tooltip=拿在手中使用來取得其中的知識。
 item.for.royal_jelly.name=蜂王漿
-item.for.scoop.name=捕蜂網
+item.for.scoop.name=捕蟲網
 item.for.scoop.tooltip=打碎蜂巢來收集蜜蜂。
 item.for.soldering_iron.name=電烙鐵
 item.for.soldering_iron.tooltip=用來將真空管焊到電路板上。
 item.for.smoker.name=蜜蜂煙燻器
-item.for.smoker.tooltip=讓野生的蜜蜂冷靜
+item.for.smoker.tooltip=讓野生的蜜蜂冷靜。
 
 item.for.stamps.1n.name=郵票(1n)
 item.for.stamps.2n.name=郵票(2n)
@@ -652,8 +652,8 @@ tile.for.engine_peat.name=泥炭引擎
 tile.for.engine_peat.tooltip=從泥炭產生 RF。
 tile.for.engine_biogas.name=生物燃油引擎
 tile.for.engine_biogas.tooltip=從有機流體與岩漿產生 RF。
-tile.for.engine_generator.name=生物質引擎
-tile.for.engine_generator.tooltip=從生物質與乙醇產生 EU。
+tile.for.engine_generator.name=生物質發電機
+tile.for.engine_generator.tooltip=從生物質與生質酒精產生 EU。
 tile.for.engine_clockwork.name=發條引擎
 tile.for.engine_clockwork.tooltip=產生微量 RF。右鍵點擊來上發條。
 
@@ -731,7 +731,7 @@ item.for.miner_bag_t2.name=採礦者編織背包
 
 # BEES
 for.errors.is_raining.desc=雨
-for.errors.is_raining.help=只有擁有飛行耐受性的蜜蜂能在雨天工作。
+for.errors.is_raining.help=只有擁有耐雨飛行性的蜜蜂能在雨天工作。
 for.errors.no_drone.desc=沒有雄蜂
 for.errors.no_drone.help=進行交配需要雄蜂存在。
 for.errors.no_flower.desc=沒有花
@@ -1062,7 +1062,7 @@ item.for.bee_queen_ge.name=蜂后
 
 tile.for.alveary.tooltip=多重方塊： 3x3x3，上方放3x1x3的木板
 tile.for.alveary.plain.name=蜂箱組
-tile.for.alveary.swarmer.name=蜂箱組克隆盒
+tile.for.alveary.swarmer.name=蜂箱組分蜂室
 tile.for.alveary.fan.name=蜂箱組風扇
 tile.for.alveary.heater.name=蜂箱組加熱器
 tile.for.alveary.hygro.name=蜂箱組保濕器
@@ -1071,7 +1071,7 @@ tile.for.alveary.sieve.name=蜂箱組濾網
 
 tile.for.apiary.name=蜂箱
 tile.for.bee_chest.name=養蜂人箱子
-tile.for.bee_house.name=簡易蜂房
+tile.for.bee_house.name=蜂房
 
 tile.for.beehives.forest.name=森林蜂巢
 tile.for.beehives.meadows.name=草地蜂巢
@@ -1096,7 +1096,7 @@ item.for.book_forester.name=林務員手冊
 
 for.gui.book.element.crafting=合成
 for.gui.book.about.title=關於本書
-for.gui.book.about=§o這些知識片段是由Binnie取得及編著，並呈現了一位以Sengir先生為世人所知的瘋狂養蜂家所著的 [養蜂入門] 以及 [林務員年鑑] 所留下的內容。§r
+for.gui.book.about=§o這些知識片段是由 Binnie 取得及編著，並呈現了一位以 Sengir 先生為世人所知的瘋狂養蜂家所著的 [養蜂入門] 以及 [林務員年鑑] 所留下的內容。§r
 for.gui.book.about.author=| 編者，Binnie
 for.gui.book.categories=類別
 
@@ -1327,7 +1327,7 @@ for.farm.grammar.manual=手動%s
 for.farm.grammar.managed=自管%s
 
 for.farm.arboretum=植物園
-for.farm.crops=作物農場
+for.farm.crops=農場
 for.farm.shroom=蘑菇農場
 for.farm.succulent=仙人掌農場
 for.farm.peat=泥炭田
@@ -1337,7 +1337,7 @@ for.farm.orchard=果園
 for.farm.gourd=瓜田
 for.farm.cocoa=可可種植園
 for.farm.ender=終界農場
-for.farm.orchid=蘭花園
+for.farm.orchid=蘭花農場
 for.farm.rubber=橡膠種植園
 
 for.gui.farm.title=農場
@@ -1599,11 +1599,11 @@ for.gui.filter.forestry.default.anything=任何
 for.gui.filter.forestry.default.closed=關閉
 for.gui.filter.forestry.default.item=物品
 for.gui.filter.forestry.default.cave=穴居性
-for.gui.filter.forestry.default.flyer=飛行耐受性
+for.gui.filter.forestry.default.flyer=耐雨飛行性
 for.gui.filter.forestry.default.nocturnal=夜行性
 for.gui.filter.forestry.default.pure_breed=純種
 for.gui.filter.forestry.default.pure_cave=純穴居性
-for.gui.filter.forestry.default.pure_flyer=純飛行耐受性
+for.gui.filter.forestry.default.pure_flyer=純耐雨飛行性
 for.gui.filter.forestry.default.pure_nocturnal=純夜行性
 
 for.gui.filter.forestry.apiculture.bee=任何蜜蜂
@@ -1624,40 +1624,40 @@ for.gui.filter.forestry.lepidopterology.cocoon=繭
 ####################
 # MODULES
 ####################
-for.module.apiculture.description=添加蜜蜂、養蜂系統和蜜蜂產物的插件，會影響世界生成。
-for.module.arboriculture.description=添加更多樹木以及相關產物的插件。
-for.module.backpacks.description=添加背包的插件。
-for.module.book.description=添加一本包含了所有其他模組資訊的指導手冊的插件。
-for.module.charcoal.description=添加木材堆、壤土，以及一個木炭的製造方法的插件。
-for.module.core.description=林業插件的核心插件，是其他插件的前置插件。
-for.module.crates.description=添加箱子的插件。
-for.module.cultivation.description=添加能產生多樣產物的自動化農場的插件。
-for.module.database.description=添加一種新的蜜蜂、樹木和蝴蝶的儲存方塊的插件。
-for.module.energy.description=添加一些使用RF能量的引擎的插件。
-for.module.factory.description=添加各種各樣的機器，以合成、生產和加工各種產品的插件。
-for.module.farming.description=添加了自動化農場和收穫設備的插件，可以產出各種各樣的產物。
-for.module.fluids.description=添加流體、流體方塊以及流體容器的插件。
-for.module.food.description=添加食物的插件。
-for.module.greenhouse.description=添加一個溫室多重方塊的插件。
-for.module.lepidopterology.description=蝴蝶插件。璀璨奪目。
-for.module.mail.description=添加林業交易和郵寄系統的插件。
-for.module.sorting.description=添加以遺傳物質排序物品的篩選器的插件。
-for.module.worktable.description=添加一個能儲存8個合成配方的工作台的插件。
+for.module.apiculture.description=添加蜜蜂、養蜂系統和蜜蜂產物的模組，會影響世界生成。
+for.module.arboriculture.description=添加更多樹木以及相關產物的模組。
+for.module.backpacks.description=添加背包的模組。
+for.module.book.description=添加一本包含了所有其他模組資訊的指導手冊的模組。
+for.module.charcoal.description=添加木材堆、壤土，以及一個木炭的製造方法的模組。
+for.module.core.description=林業模組的核心模組，是其他模組的前置模組。
+for.module.crates.description=添加箱子的模組。
+for.module.cultivation.description=添加能產生多樣產物的自動化農場的模組。
+for.module.database.description=添加一種新的蜜蜂、樹木和蝴蝶的儲存方塊的模組。
+for.module.energy.description=添加一些使用RF能量的引擎的模組。
+for.module.factory.description=添加各種各樣的機器，以合成、生產和加工各種產品的模組。
+for.module.farming.description=添加了自動化農場和收穫設備的模組，可以產出各種各樣的產物。
+for.module.fluids.description=添加流體、流體方塊以及流體容器的模組。
+for.module.food.description=添加食物的模組。
+for.module.greenhouse.description=添加一個溫室多重方塊的模組。
+for.module.lepidopterology.description=蝴蝶模組。璀璨奪目。
+for.module.mail.description=添加林業交易和郵寄系統的模組。
+for.module.sorting.description=添加以遺傳物質排序物品的篩選器的模組。
+for.module.worktable.description=添加一個能儲存8個合成配方的工作台的模組。
 
-for.module.actuallyadditions.description=Actually Additions 兼容插件。
-for.module.betterwithmods.description=Better With Mods 兼容插件。啟用後農場能夠支持大麻。
-for.module.buildcraft6.description=BuildCraft(BC6) 兼容插件。目前版本為7.99。
-for.module.biomesoplenty.description=更多生物群系(Biomes O Plenty) 兼容插件。啟用後農場能夠支持BoP的樹苗。
-for.module.enderIO.description=EnderIO 兼容插件。
-for.module.extrautilities.description=更多實用設備(Extra Utilities) 兼容插件。啟用後農場能夠支持終界百合和紅蘭花。
-for.module.harvestcraft.description=潘馬斯的豐收(HarvestCraft) 兼容插件。啟用後農場能夠支持 HarvestCraft 的植物和樹苗。
-for.module.ic2.description=工業模組(IC2) 兼容插件。添加電力引擎和新的發電機用來進行能源轉換。
-for.module.immersiveengineering.description=沉浸工程(Immersive Engineering) 兼容插件。
-for.module.mysticalagriculture.description=Mystical Agriculture 兼容插件。啟用後農場能夠支持 Mystical Agriculture 的作物。
-for.module.natura.description=Natura 兼容插件。啟用後農場能夠支持 Natura 的樹苗。
-for.module.roots.description=Roots 兼容插件。
-for.module.rustic.description=Rustic 兼容插件。
-for.module.techreborn.description=Tech reborn 兼容插件。啟用後能從橡膠樹採集橡膠。
+for.module.actuallyadditions.description=Actually Additions 兼容模組。
+for.module.betterwithmods.description=Better With Mods 兼容模組。啟用後農場能夠支持大麻。
+for.module.buildcraft6.description=BuildCraft(BC6) 兼容模組。目前版本為7.99。
+for.module.biomesoplenty.description=更多生物群系(Biomes O Plenty) 兼容模組。啟用後農場能夠支持BoP的樹苗。
+for.module.enderIO.description=EnderIO 兼容模組。
+for.module.extrautilities.description=更多實用設備(Extra Utilities) 兼容模組。啟用後農場能夠支持終界百合和紅蘭花。
+for.module.harvestcraft.description=潘馬斯的豐收(HarvestCraft) 兼容模組。啟用後農場能夠支持 HarvestCraft 的植物和樹苗。
+for.module.ic2.description=工業模組(IC2) 兼容模組。添加電力引擎和新的發電機用來進行能源轉換。
+for.module.immersiveengineering.description=沉浸工程(Immersive Engineering) 兼容模組。
+for.module.mysticalagriculture.description=Mystical Agriculture 兼容模組。啟用後農場能夠支持 Mystical Agriculture 的作物。
+for.module.natura.description=Natura 兼容模組。啟用後農場能夠支持 Natura 的樹苗。
+for.module.roots.description=Roots 兼容模組。
+for.module.rustic.description=Rustic 兼容模組。
+for.module.techreborn.description=Tech reborn 兼容模組。啟用後能從橡膠樹採集橡膠。
 
 ####################
 # CONFIG FILES
@@ -1672,7 +1672,7 @@ for.config.performance.backpacks.resupply.comment=啟用背包自動補充。您
 for.config.world.generate=世界生成
 
 for.config.world.generate.retrogen.normal=重新生成資源
-for.config.world.generate.retrogen.normal.comment=在插件未安裝前就已生成的區塊內生成林業資源。
+for.config.world.generate.retrogen.normal.comment=在模組未安裝前就已生成的區塊內生成林業資源。
 for.config.world.generate.retrogen.forced=強制重新生成資源
 for.config.world.generate.retrogen.forced.comment=強制所有區塊重新生成林業資源，即使這些地方已生成過林業資源。
 
@@ -1860,9 +1860,9 @@ for.config.gamemode=遊戲模式
 for.config.gamemode.energy.demand.modifier.comment=變更啟動機器所需要的能量以及最大接收量和儲存量。
 for.config.gamemode.farms.fertilizer.modifier.value.comment=變更一份肥料在農場中的持續時間。
 
-for.config.gamemode.fuel.ethanol.generator.comment=變更乙醇在生物質引擎中提供的能量。
-for.config.gamemode.fuel.ethanol.combustion.comment=變更乙醇在BC內燃引擎中提供的能量。
-for.config.gamemode.fuel.biomass.generator.comment=變更生物質在生物質引擎中提供的能量。
+for.config.gamemode.fuel.ethanol.generator.comment=變更生質酒精在生物質發電機中提供的能量。
+for.config.gamemode.fuel.ethanol.combustion.comment=變更生質酒精在BC內燃引擎中提供的能量。
+for.config.gamemode.fuel.biomass.generator.comment=變更生物質在生物質發電機中提供的能量。
 for.config.gamemode.fuel.biomass.biogas.comment=變更生物質在生物燃油引擎中提供的能量。
 
 for.config.gamemode.recipe.output.fertilizer.apatite.comment=使用磷灰石當作配方的肥料產量。
@@ -1881,15 +1881,15 @@ for.config.gamemode.fermenter.cycles.fertilizer.comment=變更肥料能讓發酵
 for.config.gamemode.fermenter.cycles.compost.comment=變更堆肥能讓發酵機運轉的循環次數。
 for.config.gamemode.fermenter.value.fertilizer.comment=變更發酵機使用肥料時每個循環的生物質產量。
 for.config.gamemode.fermenter.value.compost.comment=變更發酵機使用堆肥時每個循環的生物質產量。
-for.config.gamemode.fermenter.yield.sapling.comment=變更一株樹苗在發酵機中能產生的基本生物質量，受含汁量特性影響。
-for.config.gamemode.fermenter.yield.cactus.comment=變更一片仙人掌在發酵機中能產生的生物質量。
-for.config.gamemode.fermenter.yield.wheat.comment=變更一把小麥在發酵機中能產生的生物質量。
-for.config.gamemode.fermenter.yield.cane.comment=變更一段甘蔗在發酵機中能產生的生物質量。
-for.config.gamemode.fermenter.yield.mushroom.comment=變更一朵蘑菇在發酵機中能產生的生物質量。
+for.config.gamemode.fermenter.yield.sapling.comment=變更一株樹苗在發酵機中能產生的基本生物質產量，受含汁量特性影響。
+for.config.gamemode.fermenter.yield.cactus.comment=變更一片仙人掌在發酵機中能產生的生物質產量。
+for.config.gamemode.fermenter.yield.wheat.comment=變更一把小麥在發酵機中能產生的生物質產量。
+for.config.gamemode.fermenter.yield.cane.comment=變更一段甘蔗在發酵機中能產生的生物質產量。
+for.config.gamemode.fermenter.yield.mushroom.comment=變更一朵蘑菇在發酵機中能產生的生物質產量。
 
 for.config.gamemode.squeezer.liquid.seed.comment=變更能從單個種子榨取出的種子油量。其他來源將以此作為基準。
 for.config.gamemode.squeezer.liquid.apple.comment=變更能從單個蘋果榨取出的果汁量。其他來源將以此作為基準。
-for.config.gamemode.squeezer.mulch.apple.comment=變更每個壓榨的蘋果產生覆蓋戍的機率。
+for.config.gamemode.squeezer.mulch.apple.comment=變更每個壓榨的蘋果產生覆蓋物的機率。
 
 for.config.gamemode.energy.engine.clockwork.comment=啟用發條引擎。
 
@@ -1973,8 +1973,8 @@ for.config.machines.enabled.comment=已啟用的機器列表。注意： 如果�
 ####################
 for.jei.description.frames=將林業框架放置到蜂箱內來增加蜜蜂產能並減少混血種的基因衰退。
 for.jei.description.apiarist.suit=養蜂套裝中的每個部位都可保護穿著者，減低來自蜜蜂的負面影響。完整套裝可提供全面保護。
-for.jei.description.habitat_locator=棲息地定位儀能夠為一隻蜜蜂搜尋最接近的理想棲地。當它定位出了一個地點時，它會指出那邊的方向。當目前的地點理想時，它會穩定的轉動。
-for.jei.description.scoop=捕蜂網可用來打碎野生蜂巢，並收集裡面的蜜蜂。它也可以使用右鍵來捕捉蝴蝶。
+for.jei.description.habitat_locator=棲息地定位儀能夠為一隻蜜蜂搜尋最接近的理想棲息地。當它定位出了一個地點時，它會指出那邊的方向。當目前的地點理想時，它會穩定的轉動。
+for.jei.description.scoop=捕蟲網可用來打碎野生蜂巢，並收集裡面的蜜蜂。它也可以使用右鍵來捕捉蝴蝶。
 for.jei.description.imprinter=只用於創造模式。可製造所有種類的混種蜜蜂。
 
 for.jei.description.infuser=用來將蜂蜜酒注入花粉以製成蜂蜜藥酒。
@@ -2016,7 +2016,7 @@ for.jei.description.lepidopterist_bag=會自動撿起蝴蝶的額外背包。
 for.jei.rainmaker.causes.rain=造雨
 for.jei.rainmaker.stops.rain=止雨
 for.jei.rainmaker.speed=速度： %s
-for.jei.rainmaker.duration=時間： %s刻
+for.jei.rainmaker.duration=持續時間： %s刻
 for.jei.farming.name=農業
 for.jei.farming.soil=土壤
 for.jei.farming.germlings=幼體

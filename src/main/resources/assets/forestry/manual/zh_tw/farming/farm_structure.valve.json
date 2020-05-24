@@ -1,0 +1,26 @@
+{
+	"title": "農場水閥（灌溉）",
+	"icon": {
+		"item": "forestry:ffarm",
+		"data": 4
+	},
+	"content": [
+		[
+			{
+				"text": "某些農場配置需要水來灌溉作物。儘管你可以用液體容器來為它手動供水（像是罐子），但你也可以使用農場水閥來自動化這個流程。"
+			},
+			{
+				"text": "將農場水閥與 BuildCraft 的防水管線連接，並向管線中供水，農場的水箱就會自動裝水了。",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_valve_brick"
+				]
+			}
+		]
+	]
+}

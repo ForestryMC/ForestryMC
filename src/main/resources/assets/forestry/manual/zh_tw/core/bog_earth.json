@@ -1,0 +1,30 @@
+{
+	"title": "沼澤泥",
+	"icon": {
+		"item": "forestry:bog_earth"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:bucket_bog_earth",
+					"forestry:can_bog_earth",
+					"forestry:capsule_bog_earth",
+					"forestry:refractory_capsule_bog_earth"
+				]
+			},
+			{
+				"text": "放置在有水的地方附近會慢慢變成泥炭。"
+			}
+		],
+		[
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:bog_earth"
+				}
+			}
+		]
+	]
+}

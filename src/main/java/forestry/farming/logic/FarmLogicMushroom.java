@@ -12,10 +12,7 @@ package forestry.farming.logic;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
 
-import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicMushroom extends FarmLogicArboreal {
@@ -42,11 +39,6 @@ public class FarmLogicMushroom extends FarmLogicArboreal {
 	@Override
 	public int getWaterConsumption(float hydrationModifier) {
 		return (int) (80 * hydrationModifier);
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
 	}
 
 }

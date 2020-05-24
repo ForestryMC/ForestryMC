@@ -1,5 +1,8 @@
 package forestry.cultivation.tiles;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
@@ -73,6 +76,7 @@ import forestry.farming.multiblock.FarmHydrationManager;
 public abstract class TilePlanter extends TilePowered implements IFarmHousing, IClimatised, ILiquidTankTile, IOwnedTile, IStreamableGui {
 
 	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
+	private final Table<FarmDirection, BlockPos, Integer> lastExtents = HashBasedTable.create();
 	private final Stack<ItemStack> pendingProduce = new Stack<>();
 	private final List<ICrop> pendingCrops = new LinkedList<>();
 	private final String identifier;
@@ -376,6 +380,11 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	}
 
 	@Override
+	public BlockPos getFarmCorner(FarmDirection direction) {
+		return pos.down(2);
+	}
+
+	@Override
 	public boolean doWork() {
 		return false;
 	}
@@ -537,6 +546,26 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousing, I
 	@Override
 	public void addPendingProduce(ItemStack stack) {
 		pendingProduce.push(stack);
+	}
+
+	@Override
+	public int getExtents(FarmDirection direction, BlockPos pos) {
+		if (!lastExtents.contains(direction, pos)) {
+			lastExtents.put(direction, pos, 0);
+			return 0;
+		}
+
+		return lastExtents.get(direction, pos);
+	}
+
+	@Override
+	public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
+		lastExtents.put(direction, pos, extend);
+	}
+
+	@Override
+	public void cleanExtents(FarmDirection direction) {
+		lastExtents.row(direction).clear();
 	}
 
 }

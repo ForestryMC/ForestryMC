@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
@@ -20,7 +17,6 @@ import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -89,36 +85,19 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
-	}
-
-	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
-
-	private final Table<BlockPos, BlockPos, Integer> lastExtentsHarvest = HashBasedTable.create();
 
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		if (!active) {
 			return Collections.emptyList();
 		}
-		BlockPos farmPos = farmHousing.getCoords();
-		if (!lastExtentsHarvest.contains(farmPos, pos)) {
-			lastExtentsHarvest.put(farmPos, pos, 0);
-		}
 
-		int lastExtent = lastExtentsHarvest.get(farmPos, pos);
-		if (lastExtent > extent) {
-			lastExtent = 0;
-		}
-
-		BlockPos position = translateWithOffset(pos.up(), direction, lastExtent);
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
-		lastExtent++;
-		lastExtentsHarvest.put(farmPos, pos, lastExtent);
+		farmHousing.increaseExtent(direction, pos, extent);
 
 		return crops;
 	}

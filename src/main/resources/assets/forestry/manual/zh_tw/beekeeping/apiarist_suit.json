@@ -1,0 +1,35 @@
+{
+	"title": "養蜂人套裝",
+	"icon": {
+		"item": "forestry:apiarist_chest"
+	},
+	"content": [
+		[
+			{
+				"text": "受夠了討厭的熱帶蜂的毒？"
+			},
+			{
+				"text": "怕絲縷沒地方用？",
+				"paragraph": true
+			},
+			{
+				"text": "不需要擔心，因為絲縷製成的絲綢可以製成套裝！蜜蜂套裝！穿上養蜂人套裝可以減輕甚至無效化蜜蜂的負面效果（比如熱帶蜂的毒）。",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "套裝越完整，蜜蜂越會離你遠遠的。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:apiarist_hat",
+					"forestry:apiarist_chest",
+					"forestry:apiarist_legs",
+					"forestry:apiarist_boots"
+				]
+			}
+		]
+	]
+}

@@ -10,19 +10,19 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
-import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.BlockUtil;
 
-public class FarmLogicSucculent extends FarmLogicSoil {
+public class FarmLogicSucculent extends FarmLogicHomogeneous {
 	public FarmLogicSucculent(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);
 	}
@@ -48,35 +48,34 @@ public class FarmLogicSucculent extends FarmLogicSoil {
 	}
 
 	@Override
-	public boolean isAcceptedResource(ItemStack itemStack) {
-		if (isManual) {
-			return false;
+	protected boolean maintainGermlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+		for (int i = 0; i < extent; i++) {
+			BlockPos position = translateWithOffset(pos, direction, i);
+			IBlockState state = world.getBlockState(position);
+			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
+				continue;
+			}
+
+			BlockPos soilPos = position.down();
+			IBlockState blockState = world.getBlockState(soilPos);
+			if (!isAcceptedSoil(blockState) || !canPlace(world, position)) {
+				continue;
+			}
+
+			if (trySetCrop(world, farmHousing, position, direction)) {
+				return true;
+			}
 		}
 
-		return super.isAcceptedResource(itemStack);
+		return false;
 	}
 
-	@Override
-	public boolean isAcceptedGermling(ItemStack itemstack) {
-		if (isManual) {
-			return false;
-		}
-
-		return ItemStackUtil.equals(Blocks.CACTUS, itemstack);
+	private boolean canPlace(World world, BlockPos position) {
+		return Blocks.CACTUS.canBlockStay(world, position);
 	}
 
 	@Override
 	public boolean isAcceptedWindfall(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();
-	}
-
-	@Override
-	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
