@@ -79,7 +79,7 @@ public class BlockHumus extends Block implements IItemModelRegister {
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if (world.isRemote || world.rand.nextInt(140) != 0) {
+		if (world.isRemote || world.rand.nextInt(140) == 0) {
 			return;
 		}
 
