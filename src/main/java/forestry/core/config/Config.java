@@ -61,6 +61,7 @@ public class Config {
 
 	// Graphics
 	public static boolean enableParticleFX = true;
+	public static float hiveLightLevel = 0.4F;
 
 	// Humus
 	public static int humusDegradeDelimiter = 3;
@@ -298,6 +299,7 @@ public class Config {
 			enableEnergyStat = configCommon.getBooleanLocalized("tweaks.gui.tabs", "energy", enableEnergyStat);
 
 			enableParticleFX = configCommon.getBooleanLocalized("performance", "particleFX", enableParticleFX);
+			hiveLightLevel = configCommon.getFloatLocalized("performance", "hiveLightLevel", hiveLightLevel, 0.0f, 0.4f);
 		}
 
 		farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
