@@ -71,7 +71,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().getBasePath() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
 			return;
 		}
 		TextureLeaves.registerAllSprites(event);
@@ -105,11 +105,11 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 		ArboricultureBlocks.TREE_CHEST.block().clientSetup();
 
 		// fruit overlays require CUTOUT_MIPPED, even in Fast graphics
-		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
-		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.cutoutMipped());
-		ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
-		ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
-		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.cutout());
-		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.translucent()));
+		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.getCutoutMipped());
+		ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+		ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.getCutout());
+		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent()));
 	}
 }

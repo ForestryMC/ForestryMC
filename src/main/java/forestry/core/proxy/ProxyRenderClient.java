@@ -54,7 +54,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
 	}
 
 	@Override

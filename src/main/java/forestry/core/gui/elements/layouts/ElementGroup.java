@@ -124,7 +124,7 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 
 	@Override
 	public ILabelElement label(String text, int width, int height, GuiElementAlignment align, ITextStyle textStyle) {
-		return label(text, 0, 0, width, height, align, textStyle);
+		return label(text, 0, 0, width, height < 0 ? 12 : height, align, textStyle);
 	}
 
 	@Override

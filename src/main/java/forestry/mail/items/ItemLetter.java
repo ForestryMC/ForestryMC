@@ -92,7 +92,7 @@ public class ItemLetter extends ItemWithGui {
 			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
 			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"));
-			return ActionResult.func_226251_d_(heldItem);
+			return ActionResult.resultFail(heldItem);
 		}
 	}
 

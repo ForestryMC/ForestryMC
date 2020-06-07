@@ -261,7 +261,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 				ResourceLocation location = textured.getBackgroundTexture();
 				if (location != null) {
 					TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
-					this.minecraft.getTextureManager().bindTexture(sprite.getAtlasTexture().getBasePath());
+					this.minecraft.getTextureManager().bindTexture(sprite.getAtlasTexture().getTextureLocation());
 					blit(slot.xPos, slot.yPos, this.getBlitOffset(), 16, 16, sprite);
 				}
 			}

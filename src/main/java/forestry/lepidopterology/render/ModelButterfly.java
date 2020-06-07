@@ -92,7 +92,7 @@ public class ModelButterfly extends SegmentedModel<EntityButterfly> {
 	}
 
 	@Override
-	public void render(EntityButterfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setRotationAngles(EntityButterfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		//body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing * 0.1F) * 0.15F;
 		//body.rotateAngleY = 0.0F;
 		wingRight.rotateAngleZ = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;

@@ -125,7 +125,7 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		if (event.getMap().getBasePath() == PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+		if (event.getMap().getTextureLocation() == PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
 			TextureManagerForestry.getInstance().registerSprites(ISpriteRegistry.fromEvent(event));
 			ModelBlockCached.clear();
 		}

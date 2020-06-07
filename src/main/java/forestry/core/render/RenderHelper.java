@@ -108,6 +108,6 @@ public class RenderHelper {
 	}
 
 	public void renderModel(ResourceLocation location, Vector3f rotation, ModelRenderer... renderers) {
-		renderModel(buffer.getBuffer(RenderType.entityCutout(location)), rotation, renderers);
+		renderModel(buffer.getBuffer(RenderType.getEntityCutout(location)), rotation, renderers);
 	}
 }

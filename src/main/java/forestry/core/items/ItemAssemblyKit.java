@@ -38,6 +38,6 @@ public class ItemAssemblyKit extends ItemForestry {
 			ItemEntity entity = new ItemEntity(worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), assembled.copy());
 			worldIn.addEntity(entity);
 		}
-		return ActionResult.func_226248_a_(heldItem);
+		return ActionResult.resultSuccess(heldItem);
 	}
 }

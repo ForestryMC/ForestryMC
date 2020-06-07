@@ -95,7 +95,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
-		if (!player.isShiftKeyDown()) {
+		if (!player.isSneaking()) {
 			boolean previewModeActive = isPreviewModeActive(itemStack);
 			setPreviewMode(itemStack, !previewModeActive);
 
@@ -105,7 +105,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			}
 		}
 
-		return ActionResult.func_226248_a_(itemStack);
+		return ActionResult.resultSuccess(itemStack);
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 		World world = context.getWorld();
 		BlockPos pos = context.getPos();
 
-		if (player.isShiftKeyDown()) {
+		if (player.isSneaking()) {
 			IClimateHousing housing = TileUtil.getTile(world, pos, IClimateHousing.class);
 			if (housing != null) {
 				ItemStack heldItem = player.getHeldItem(context.getHand());

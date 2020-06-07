@@ -64,7 +64,7 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		helper.translate(0.5D, 0.5D, 0.5D);
 
-		helper.rotate(Vector3f.YP.rotation(-orientation.getHorizontalAngle()));
+		helper.rotate(Vector3f.YP.rotationDegrees(-orientation.getHorizontalAngle()));
 		helper.translate(-0.5D, -0.5D, -0.5D);
 
 		float angle = prevLidAngle + (lidAngle - prevLidAngle) * partialTick;

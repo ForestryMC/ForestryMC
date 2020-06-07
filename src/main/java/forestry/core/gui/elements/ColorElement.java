@@ -14,10 +14,17 @@ public class ColorElement extends GuiElement {
 	private final int startColor;
 	private final int endColor;
 
+
 	public ColorElement(int width, int height, int startColor, int endColor) {
 		super(width, height);
 		this.startColor = startColor;
 		this.endColor = endColor;
+	}
+
+	public ColorElement(int xPos, int yPos, int width, int height, int color) {
+		super(xPos, yPos, width, height);
+		this.startColor = color;
+		this.endColor = color;
 	}
 
 	public ColorElement(int xPos, int yPos, int width, int height, int startColor, int endColor) {

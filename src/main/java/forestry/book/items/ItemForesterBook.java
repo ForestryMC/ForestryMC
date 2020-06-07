@@ -35,7 +35,7 @@ public class ItemForesterBook extends ItemWithGui {
 		bookOpenGui(playerIn, playerIn.getHeldItem(handIn));
 
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		return ActionResult.func_226248_a_(stack);
+		return ActionResult.resultSuccess(stack);
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public class ModuleFluids extends BlankForestryModule {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
-		if (event.getMap().getBasePath() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
 			return;
 		}
 		for (ForestryFluids fluid : ForestryFluids.values()) {

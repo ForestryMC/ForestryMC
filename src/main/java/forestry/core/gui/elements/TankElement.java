@@ -73,7 +73,7 @@ public class TankElement extends GuiElement {
 			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
-				fluidStillSprite = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+				fluidStillSprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
 			}
 			if (fluidStillSprite == null) {
 				fluidStillSprite = ResourceUtil.getMissingTexture();

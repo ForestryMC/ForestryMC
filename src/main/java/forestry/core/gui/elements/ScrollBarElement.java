@@ -61,14 +61,6 @@ public class ScrollBarElement extends ElementGroup {
 	}
 
 	protected void addListeners() {
-		slider.addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
-			int pos = (int) (vertical ? event.getX() - interactionField.getX() : event.getY() - interactionField.getY());
-			isScrolling = true;
-			initialMouseClick = vertical ? pos - slider.getX() : pos - slider.getY();
-		});
-		slider.addSelfEventHandler(GuiEvent.UpEvent.class, event -> {
-			isScrolling = false;
-		});
 		addEventHandler(GuiEvent.DownEvent.class, event -> {
 			mouseDown = true;
 		});
@@ -76,7 +68,7 @@ public class ScrollBarElement extends ElementGroup {
 			mouseDown = false;
 		});
 		addEventHandler(GuiEvent.WheelEvent.class, event -> {
-			if (listener == null || listener.isFocused((int) event.getX(), (int) event.getY()) || isMouseOver(event.getX(), event.getY())) {
+			if (listener == null || listener.isFocused((int) event.getX(), (int) event.getY()) || isMouseOver()) {
 				double wheel = event.getDWheel();
 				if (wheel > 0) {
 					setValue(currentValue - step);
@@ -156,17 +148,6 @@ public class ScrollBarElement extends ElementGroup {
 	}
 
 	private void updateSlider(int mouseX, int mouseY) {
-		/*if (listener == null || listener.isFocused(mouseX, mouseY)) {
-			//TODO - scrolling?? I think this maybe needs an event now?
-			int wheel = 0; //Mouse.getDWheel();
-			if (wheel > 0) {
-				setValue(currentValue - step);
-				return;
-			} else if (wheel < 0) {
-				setValue(currentValue + step);
-				return;
-			}
-		}*/
 
 		//The position of the mouse relative to the position of the widget
 		int pos = vertical ? mouseX - interactionField.getX() : mouseY - interactionField.getY();
@@ -176,9 +157,9 @@ public class ScrollBarElement extends ElementGroup {
 		}
 
 		//Not clicked and scrolling -> stop scrolling
-		/*if (!mouseDown && isScrolling) {
+		if (!mouseDown && isScrolling) {
 			this.isScrolling = false;
-		}*/
+		}
 
 		//Clicked on the slider and scrolling
 		if (this.isScrolling) {
@@ -192,12 +173,12 @@ public class ScrollBarElement extends ElementGroup {
 			} else {
 				setValue((int) (minValue + (float) step * Math.round(value)));
 			}
-		} /*else if (slider.isMouseOver()) { //clicked on the slider
+		} else if (slider.isMouseOver()) { //clicked on the slider
 			if (mouseDown) {
 				isScrolling = true;
 				initialMouseClick = vertical ? pos - slider.getX() : pos - slider.getY();
 			}
-		} */ else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
+		} else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
 			int range = maxValue - minValue;
 			float value = ((float) pos - (vertical ? slider.width : slider.height) / 2.0F) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
 			value *= (float) range;

@@ -58,7 +58,7 @@ public class ForestryLootTableProvider implements IDataProvider {
 
 		validate(map, validationtracker);
 
-		Multimap<String, String> multimap = validationtracker.func_227527_a_();
+		Multimap<String, String> multimap = validationtracker.getProblems();
 		if (!multimap.isEmpty()) {
 			multimap.forEach((location, message) -> Log.warning("Found validation problem in " + location + ": " + message));
 			throw new IllegalStateException("Failed to validate loot tables, see logs");

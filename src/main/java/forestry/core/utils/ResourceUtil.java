@@ -93,7 +93,7 @@ public class ResourceUtil {
 	}
 
 	public static TextureAtlasSprite getSprite(ResourceLocation atlas, ResourceLocation sprite) {
-		return client().getTextureGetter(atlas).apply(sprite);
+		return client().getAtlasSpriteGetter(atlas).apply(sprite);
 	}
 
 	public static TextureAtlasSprite getBlockSprite(ResourceLocation location) {

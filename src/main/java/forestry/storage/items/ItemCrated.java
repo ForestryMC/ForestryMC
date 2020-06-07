@@ -55,7 +55,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (!worldIn.isRemote) {
 			if (contained.isEmpty() || heldItem.isEmpty()) {
-				return ActionResult.func_226250_c_(heldItem);
+				return ActionResult.resultPass(heldItem);
 			}
 
 			heldItem.shrink(1);
@@ -64,7 +64,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 			dropStack.setCount(9);
 			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), 40);
 		}
-		return ActionResult.func_226248_a_(heldItem);
+		return ActionResult.resultSuccess(heldItem);
 	}
 
 	@Override

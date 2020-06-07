@@ -44,7 +44,7 @@ public abstract class ItemWithGui extends ItemForestry {
 			openGui(sPlayer, stack);
 		}
 
-		return ActionResult.func_226248_a_(stack);
+		return ActionResult.resultSuccess(stack);
 	}
 
 	protected void openGui(ServerPlayerEntity player, ItemStack stack) {

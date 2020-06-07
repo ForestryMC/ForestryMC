@@ -188,7 +188,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			if (Config.CapsuleFluidPickup) {
 				RayTraceResult target = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
 				if (target.getType() != RayTraceResult.Type.BLOCK) {
-					return ActionResult.func_226250_c_(heldItem);
+					return ActionResult.resultPass(heldItem);
 				}
 				BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
 				ItemStack singleBucket = heldItem.copy();
@@ -203,7 +203,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 						heldItem.shrink(1);
 					}
 
-					return ActionResult.func_226248_a_(heldItem);
+					return ActionResult.resultSuccess(heldItem);
 				}
 			}
 			return super.onItemRightClick(world, player, handIn);

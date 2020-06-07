@@ -314,7 +314,7 @@ public class ItemResearchNote extends ItemForestry {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack heldItem = playerIn.getHeldItem(handIn);
 		if (worldIn.isRemote) {
-			return ActionResult.func_226250_c_(heldItem);
+			return ActionResult.resultPass(heldItem);
 		}
 
 		ResearchNote note = new ResearchNote(heldItem.getTag());
@@ -324,6 +324,6 @@ public class ItemResearchNote extends ItemForestry {
 			NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);    //TODO not sure this is right
 		}
 
-		return ActionResult.func_226248_a_(heldItem);
+		return ActionResult.resultSuccess(heldItem);
 	}
 }

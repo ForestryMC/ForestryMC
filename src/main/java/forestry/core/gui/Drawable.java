@@ -48,9 +48,11 @@ public class Drawable {
 		textureManager.bindTexture(textureLocation);
 
 		// Enable correct lighting.
+		RenderSystem.enableAlphaTest();
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		AbstractGui.blit(xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+		RenderSystem.disableAlphaTest();
 		//AbstractGui.blit(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
 	}
 }

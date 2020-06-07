@@ -33,7 +33,7 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 	public void setupClient(FMLClientSetupEvent event) {
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
-		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutout()));
+		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
 	}
 
 	@Override

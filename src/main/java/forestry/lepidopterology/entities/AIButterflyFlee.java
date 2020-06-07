@@ -29,7 +29,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 
 		PlayerEntity player = entity.world.getClosestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
 
-		if (player == null || player.isShiftKeyDown()) {
+		if (player == null || player.isSneaking()) {
 			return false;
 		}
 
