@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import forestry.core.config.Config;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -51,10 +52,11 @@ import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHives extends BlockContainer implements IItemModelRegister, IBlockWithMeta {
 	private static final PropertyEnum<HiveType> HIVE_TYPES = PropertyEnum.create("hive", HiveType.class);
+	private static final float LIGHT_LEVEL = Config.hiveLightLevel;
 
 	public BlockBeeHives() {
 		super(new MaterialBeehive(true));
-		setLightLevel(0.4f);
+		setLightLevel(LIGHT_LEVEL);
 		setHardness(2.5f);
 		setCreativeTab(Tabs.tabApiculture);
 		setHarvestLevel("scoop", 0);
