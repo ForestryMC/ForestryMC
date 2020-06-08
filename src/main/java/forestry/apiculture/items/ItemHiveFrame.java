@@ -44,8 +44,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	@Override
 	public ItemStack frameUsed(IBeeHousing housing, ItemStack frame, IBee queen, int wear) {
-		frame.setItemDamage(frame.getItemDamage() + wear);
-		if (frame.getItemDamage() >= frame.getMaxDamage()) {
+		if (frame.isDamageable() && frame.attemptDamageItem(wear, random, null)) {
 			return ItemStack.EMPTY;
 		} else {
 			return frame;
