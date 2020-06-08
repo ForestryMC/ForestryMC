@@ -306,7 +306,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 		IButterfly individual = ButterflyManager.butterflyRoot.getMember(itemstack);
 		String customKey = "for.butterflies.custom." + type.getName() + "."
-			+ individual.getGenome().getPrimary().getUnlocalizedName().replace("butterflies.species.", "");
+			+ individual.getGenome().getPrimary().getUnlocalizedName().replace("for.butterflies.species.", "");
 		if (Translator.canTranslateToLocal(customKey)) {
 			return Translator.translateToLocal(customKey);
 		}
