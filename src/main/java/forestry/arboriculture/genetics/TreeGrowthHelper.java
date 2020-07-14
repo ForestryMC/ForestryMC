@@ -6,7 +6,7 @@ import java.util.Map;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 
 import genetics.api.individual.IGenome;
@@ -31,11 +31,11 @@ public class TreeGrowthHelper {
 	}
 
 	private static boolean hasRoom(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight) {
-		Vec3i area = new Vec3i(expectedGirth, expectedHeight + 1, expectedGirth);
+		Vector3i area = new Vector3i(expectedGirth, expectedHeight + 1, expectedGirth);
 		return checkArea(world, pos.up(), area);
 	}
 
-	private static boolean checkArea(IWorld world, BlockPos start, Vec3i area) {
+	private static boolean checkArea(IWorld world, BlockPos start, Vector3i area) {
 		for (int x = 0; x < area.getX(); x++) {
 			for (int y = 0; y < area.getY(); y++) {
 				for (int z = 0; z < area.getZ(); z++) {

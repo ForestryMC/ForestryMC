@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -123,8 +124,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / SAVING & LOADING
 	@Override
-	public void read(CompoundNBT data) {
-		super.read(data);
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
 		inventory.read(data);
 	}
 
@@ -151,8 +152,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(CompoundNBT tag) {
-		super.handleUpdateTag(tag);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 

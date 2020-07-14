@@ -27,7 +27,7 @@ public class ItemTooltipUtil {
 		if (Translator.canTranslateToLocal(tooltipKey)) {
 			TranslationTextComponent tooltipInfo = new TranslationTextComponent(tooltipKey);
 			Minecraft minecraft = Minecraft.getInstance();
-			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo.getFormattedText(), 150);
+			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo.getString(), 150);
 			tooltipInfoWrapped.forEach(s -> tooltip.add(new StringTextComponent(s).applyTextStyle(TextFormatting.GRAY)));
 		}
 	}

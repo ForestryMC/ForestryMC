@@ -13,6 +13,7 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -162,8 +163,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
-		super.read(nbt);
+	public void read(BlockState state, CompoundNBT nbt) {
+		super.read(state, nbt);
 		energyManager.read(nbt);
 	}
 

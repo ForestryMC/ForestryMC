@@ -60,7 +60,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
 		Function<Boolean, String> toleranceText = a -> {
 			IAlleleForestrySpecies species = a ? primarySpecies : secondarySpecies;
-			return AlleleManager.climateHelper.toDisplay(species.getTemperature()).getFormattedText();    //TODO textcomponents
+			return AlleleManager.climateHelper.toDisplay(species.getTemperature()).getString();    //TODO textcomponents
 		};
 		container.addLine(Translator.translateToLocal("for.gui.climate"), toleranceText, BeeChromosomes.TEMPERATURE_TOLERANCE);
 		container.addToleranceLine(BeeChromosomes.TEMPERATURE_TOLERANCE);

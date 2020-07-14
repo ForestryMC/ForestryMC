@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +24,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
+
+import net.minecraftforge.common.util.ITeleporter;
 
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
@@ -72,10 +76,11 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 		this.setMotion(this.getMotion().mul(drag, 0.0D, drag));
 	}
 
+	@Nullable
 	@Override
-	public Entity changeDimension(DimensionType dimensionIn) {
+	public Entity changeDimension(ServerWorld p_241206_1_, ITeleporter teleporter) {
 		this.dropContentsWhenDead = false;
-		return super.changeDimension(dimensionIn);
+		return super.changeDimension(p_241206_1_, teleporter);
 	}
 
 	/* IInventory */

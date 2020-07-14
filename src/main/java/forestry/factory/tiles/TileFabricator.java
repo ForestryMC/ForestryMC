@@ -13,6 +13,7 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -91,8 +92,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState state, CompoundNBT compound) {
+		super.read(state, compound);
 
 		heat = compound.getInt("Heat");
 		tankManager.read(compound);

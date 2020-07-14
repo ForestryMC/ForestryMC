@@ -12,6 +12,7 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -102,8 +103,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
 		transferTime = compoundNBT.getInt("TransferTime");

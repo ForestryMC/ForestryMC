@@ -18,6 +18,7 @@ import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +34,7 @@ public class BlockStumpWall extends WallTorchBlock {
 	public BlockStumpWall() {
 		super(Properties.create(Material.MISCELLANEOUS)
 			.hardnessAndResistance(0.0f)
-			.sound(SoundType.WOOD));
+			.sound(SoundType.WOOD), ParticleTypes.FLAME);
 	}
 
 	@Override

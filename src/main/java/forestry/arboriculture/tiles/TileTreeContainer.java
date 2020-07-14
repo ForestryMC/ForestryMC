@@ -57,8 +57,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		if (compoundNBT.contains("ContainedTree")) {
 			containedTree = new Tree(compoundNBT.getCompound("ContainedTree"));
@@ -151,8 +151,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(CompoundNBT tag) {
-		super.handleUpdateTag(tag);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 

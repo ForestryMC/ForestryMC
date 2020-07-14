@@ -64,7 +64,7 @@ public class BlockAlveary extends BlockStructure {
 		ON, OFF;
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -73,7 +73,7 @@ public class BlockAlveary extends BlockStructure {
 		NORMAL, ENTRANCE, ENTRANCE_LEFT, ENTRANCE_RIGHT;
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -85,7 +85,8 @@ public class BlockAlveary extends BlockStructure {
 			.hardnessAndResistance(1f)
 			.sound(SoundType.WOOD)
 			.harvestTool(ToolType.AXE)
-			.harvestLevel(0));
+			.harvestLevel(0)
+		);
 		this.type = type;
 		BlockState defaultState = this.getStateContainer().getBaseState();
 		if (type == BlockAlvearyType.PLAIN) {
@@ -106,10 +107,10 @@ public class BlockAlveary extends BlockStructure {
 		return type;
 	}
 
-	@Override
+	/*@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return true;
-	}
+	}*/
 
 	@Nullable
 	@Override

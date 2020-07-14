@@ -20,7 +20,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -96,7 +96,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		if (world.rand.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Vec3d beeFXCoordinates = housing.getBeeFXCoordinates();
+			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
 			ParticleRender.addEntityPotionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z, potionFXColor);
 		}
 		return storedData;

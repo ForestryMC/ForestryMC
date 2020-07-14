@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.List;
 
 import net.minecraft.block.BeetrootBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.NetherWartBlock;
@@ -41,8 +40,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.features.CoreItems;
-import forestry.farming.blocks.BlockMushroom;
-import forestry.farming.features.FarmingBlocks;
 import forestry.farming.features.FarmingContainers;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.ForestryFarmIdentifier;
@@ -51,7 +48,6 @@ import forestry.farming.logic.farmables.FarmableChorus;
 import forestry.farming.logic.farmables.FarmableGE;
 import forestry.farming.logic.farmables.FarmableGourd;
 import forestry.farming.logic.farmables.FarmableStacked;
-import forestry.farming.logic.farmables.FarmableVanillaMushroom;
 import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
@@ -105,11 +101,11 @@ public class ModuleFarming extends BlankForestryModule {
 			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
 			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
 
-		BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
+		/*BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
 
 		BlockState plantedRedMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
-		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));
+		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));*/
 
 		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
 		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON));

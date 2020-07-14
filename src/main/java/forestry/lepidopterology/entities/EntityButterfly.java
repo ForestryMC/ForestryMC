@@ -32,6 +32,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -39,7 +40,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
@@ -101,7 +102,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	public static final int MAX_LIFESPAN = 24000 * 7; // one minecraft week in ticks
 
 	@Nullable
-	private Vec3d flightTarget;
+	private Vector3d flightTarget;
 	private int exhaustion;
 	private IButterfly contained = ButterflyHelper.getKaryotype().getDefaultTemplate().toIndividual(ButterflyHelper.getRoot());
 	@Nullable
@@ -241,11 +242,11 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 	/* DESTINATION */
 	@Nullable
-	public Vec3d getDestination() {
+	public Vector3d getDestination() {
 		return flightTarget;
 	}
 
-	public void setDestination(@Nullable Vec3d destination) {
+	public void setDestination(@Nullable Vector3d destination) {
 		flightTarget = destination;
 	}
 
@@ -439,11 +440,10 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	/* INTERACTION */
 
 	@Override
-	protected boolean processInteract(PlayerEntity player, Hand hand) {
+	protected ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
 		if (dead) {
-			return false;
+			return ActionResultType.FAIL;
 		}
-
 		ItemStack stack = player.getHeldItem(hand);
 		if ((stack.getItem() instanceof IToolScoop)) {
 			if (!world.isRemote) {
@@ -457,10 +457,10 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			} else {
 				player.swingArm(hand);
 			}
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 
-		return false;
+		return super.func_230254_b_(player, hand);
 	}
 
 	/* LOOT */
@@ -510,7 +510,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			}
 		}
 
-		Vec3d motion = getMotion();
+		Vector3d motion = getMotion();
 		setMotion(motion.x, motion.y * 0.6000000238418579d, motion.z);
 
 		// Make sure we die if the butterfly hasn't rested in a long, long time.
@@ -543,7 +543,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			double diffY = flightTarget.y + 0.1d - getPosY();
 			double diffZ = flightTarget.z + 0.5d - getPosZ();
 
-			Vec3d motion = getMotion();
+			Vector3d motion = getMotion();
 			double newX = (Math.signum(diffX) * 0.5d - motion.x) * 0.10000000149011612d;
 			double newY = (Math.signum(diffY) * 0.699999988079071d - motion.y) * 0.10000000149011612d;
 			double newZ = (Math.signum(diffZ) * 0.5d - motion.z) * 0.10000000149011612d;

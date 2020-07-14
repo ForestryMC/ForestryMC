@@ -89,8 +89,8 @@ public class FilteredTank extends StandardTank {
 		} else {
 			//TODO can this be simplified
 			ITextComponent tmiComponent = new StringTextComponent("<")
-				.appendSibling(new TranslationTextComponent("for.gui.tooltip.tmi"))
-				.appendSibling(new StringTextComponent(">"));
+				.func_230529_a_(new TranslationTextComponent("for.gui.tooltip.tmi"))
+				.func_230529_a_(new StringTextComponent(">"));
 			toolTip.add(tmiComponent, TextFormatting.ITALIC);
 		}
 		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));

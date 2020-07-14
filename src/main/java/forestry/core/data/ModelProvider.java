@@ -29,7 +29,7 @@ import net.minecraft.data.IDataProvider;
 import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 import forestry.modules.features.FeatureItem;
 
@@ -191,14 +191,14 @@ public abstract class ModelProvider implements IDataProvider {
 	}
 
 	public static class Element {
-		private final Vec3i from;
-		private final Vec3i to;
+		private final Vector3i from;
+		private final Vector3i to;
 		private final Face[] faces = new Face[6];
 		private boolean shade = true;
 		@Nullable
 		public Rotation rotation;
 
-		public Element(Vec3i from, Vec3i to) {
+		public Element(Vector3i from, Vector3i to) {
 			this.from = from;
 			this.to = to;
 		}
@@ -241,7 +241,7 @@ public abstract class ModelProvider implements IDataProvider {
 	}
 
 	public static class Rotation {
-		private Vec3i origin = Vec3i.NULL_VECTOR;
+		private Vector3i origin = Vector3i.NULL_VECTOR;
 		@Nullable
 		private Direction.Axis axis;
 		@Nullable
@@ -249,7 +249,7 @@ public abstract class ModelProvider implements IDataProvider {
 		@Nullable
 		private Boolean rescale = null;
 
-		public Rotation origin(Vec3i origin) {
+		public Rotation origin(Vector3i origin) {
 			this.origin = origin;
 			return this;
 		}
@@ -274,7 +274,7 @@ public abstract class ModelProvider implements IDataProvider {
 			if (axis != null) {
 				obj.addProperty("axis", axis.getName());
 			}
-			if (origin == Vec3i.NULL_VECTOR) {
+			if (origin == Vector3i.NULL_VECTOR) {
 				obj.add("origin", serializeVex(origin));
 			}
 			if (angle != null) {
@@ -334,7 +334,7 @@ public abstract class ModelProvider implements IDataProvider {
 		}
 	}
 
-	private static JsonElement serializeVex(Vec3i vector) {
+	private static JsonElement serializeVex(Vector3i vector) {
 		JsonArray array = new JsonArray();
 		array.add(vector.getX());
 		array.add(vector.getY());

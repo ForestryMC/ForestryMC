@@ -6,9 +6,13 @@ public interface IGeneticAnalyzerProvider {
 
 	ItemStack getSpecimen(int index);
 
-	boolean onUpdateSelected();
+	default boolean onUpdateSelected() {
+		return false;
+	}
 
-	void onSelection(int index, boolean changed);
+	default void onSelection(int index, boolean changed) {
+
+	}
 
 	int getSelectedSlot(int index);
 

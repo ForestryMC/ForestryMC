@@ -44,7 +44,7 @@ public interface IHiveRegistry {
 		}
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 

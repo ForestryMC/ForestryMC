@@ -13,6 +13,7 @@ package forestry.core.tiles;
 import java.io.IOException;
 import java.util.Optional;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -57,8 +58,8 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		game.read(compoundNBT);
 	}
 

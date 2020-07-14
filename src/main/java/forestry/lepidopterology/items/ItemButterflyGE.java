@@ -22,7 +22,6 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -63,15 +62,20 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	private static final Random rand = new Random();
 	public static final String NBT_AGE = "Age";
+	//private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
 	private final EnumFlutterType type;
 
 	public ItemButterflyGE(EnumFlutterType type) {
 		super(new Properties().group(ItemGroups.tabLepidopterology));
 		this.type = type;
+		/*ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
+		builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)attackSpeedIn, AttributeModifier.Operation.ADDITION));
 		if (type == EnumFlutterType.COCOON) {
 			addPropertyOverride(new ResourceLocation("age"), (stack, world, livingEntity) -> getAge(stack));
 		}
+		this.attributeModifiers = builder.build();*/
 	}
 
 	@Override
@@ -146,7 +150,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		EntityUtil.spawnEntity(entityItem.world,
-			EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
+			EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.world, butterfly, entityItem.func_233580_cy_()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
 		if (!entityItem.getItem().isEmpty()) {
 			entityItem.getItem().shrink(1);
 		} else {

@@ -20,7 +20,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import genetics.api.individual.IGenome;
@@ -59,7 +59,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 
 	private static class FlowerData {
 		public final String flowerType;
-		public final Vec3i territory;
+		public final Vector3i territory;
 		public final IBlockPosPredicate flowerPredicate;
 		public Iterator<BlockPos.Mutable> areaIterator;
 

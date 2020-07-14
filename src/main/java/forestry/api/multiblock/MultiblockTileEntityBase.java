@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -45,8 +46,8 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public abstract void onMachineBroken();
 
 	@Override
-	public void read(CompoundNBT data) {
-		super.read(data);
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
 		multiblockLogic.readFromNBT(data);
 	}
 
@@ -100,8 +101,8 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	}
 
 	@Override
-	public void handleUpdateTag(CompoundNBT tag) {
-		super.handleUpdateTag(tag);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
 		multiblockLogic.decodeDescriptionPacket(tag);
 		this.decodeDescriptionPacket(tag);
 	}

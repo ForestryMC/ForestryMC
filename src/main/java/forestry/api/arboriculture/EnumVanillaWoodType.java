@@ -37,7 +37,7 @@ public enum EnumVanillaWoodType implements IWoodType {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return toString();
 	}
 

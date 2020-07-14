@@ -70,7 +70,7 @@ public enum EnumForestryWoodType implements IWoodType {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return toString();
 	}
 }

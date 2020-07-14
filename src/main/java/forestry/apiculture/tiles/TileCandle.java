@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -38,7 +39,7 @@ public class TileCandle extends TileEntity {
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(nbt);
+		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	@Override
@@ -48,9 +49,9 @@ public class TileCandle extends TileEntity {
 	}
 
 	@Override
-	public void handleUpdateTag(CompoundNBT tag) {
-		super.handleUpdateTag(tag);
-		read(tag);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
+		read(state, tag);
 	}
 
 	public void onPacketUpdate(int colour, boolean isLit) {
@@ -59,8 +60,8 @@ public class TileCandle extends TileEntity {
 	}
 
 	@Override
-	public void read(CompoundNBT tagRoot) {
-		super.read(tagRoot);
+	public void read(BlockState state, CompoundNBT tagRoot) {
+		super.read(state, tagRoot);
 		colour = tagRoot.getInt("colour");
 		lit = tagRoot.getBoolean("lit");
 	}

@@ -19,7 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import genetics.api.individual.IGenome;
@@ -69,8 +69,8 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		World world = housing.getWorldObj();
 		Random rand = world.rand;
 
-		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
-		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
+		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 		BlockPos posHousing = housing.getCoordinates();
 
 		for (int i = 0; i < 20; i++) {

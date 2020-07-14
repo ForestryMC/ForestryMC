@@ -12,8 +12,8 @@ import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -66,13 +66,13 @@ public class ParticleRender {
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
 
-		Vec3d particleStart = housing.getBeeFXCoordinates();
+		Vector3d particleStart = housing.getBeeFXCoordinates();
 
 		// Avoid rendering bee particles that are too far away, they're very small.
 		// At 32+ distance, have no bee particles. Make more particles up close.
 		BlockPos playerPosition = Minecraft.getInstance().player.getPosition();
 		//TODO - correct?
-		double playerDistanceSq = playerPosition.distanceSq(new Vec3i(particleStart.x, particleStart.y, particleStart.z));
+		double playerDistanceSq = playerPosition.distanceSq(new Vector3i(particleStart.x, particleStart.y, particleStart.z));
 		if (world.rand.nextInt(1024) < playerDistanceSq) {
 			return;
 		}
@@ -98,8 +98,8 @@ public class ParticleRender {
 			Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
 			effectRenderer.addEffect(particle);
 		} else {
-			Vec3i area = AlleleEffect.getModifiedArea(genome, housing);
-			Vec3i offset = housing.getCoordinates().add(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+			Vector3i area = AlleleEffect.getModifiedArea(genome, housing);
+			Vector3i offset = housing.getCoordinates().add(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 			BlockPos destination = VectUtil.getRandomPositionInArea(world.rand, area).add(offset);
 			Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
 			effectRenderer.addEffect(particle);

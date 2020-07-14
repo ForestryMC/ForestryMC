@@ -21,6 +21,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -28,8 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -50,7 +50,7 @@ public class BlockBeeHive extends ContainerBlock {
 
 	public BlockBeeHive(HiveType type) {
 		super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
-			.lightValue((int) (0.4f * 15))    //TODO - correct?
+			.setLightLevel((state) -> (int) (0.4f * 15)) //TODO - correct?
 			.hardnessAndResistance(2.5f)
 			.harvestLevel(0)
 			.harvestTool(ItemScoop.SCOOP));

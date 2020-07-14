@@ -71,8 +71,8 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		Optional<IAllele> optionalAllele = AlleleUtils.getAllele(compoundNBT.getString("UID"));
 		if (!optionalAllele.isPresent()) {
@@ -149,8 +149,8 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(CompoundNBT tag) {
-		super.handleUpdateTag(tag);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 
@@ -159,7 +159,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(nbt);
+		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	/* IFRUITBEARER */

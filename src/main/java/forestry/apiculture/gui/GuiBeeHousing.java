@@ -15,6 +15,8 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.GuiAnalyzerProvider;
@@ -52,26 +54,24 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.func_230450_a_(transform, partialTicks, mouseX, mouseY);
 
 		bindTexture(textureFile);
-		drawHealthMeter(guiLeft + 20, guiTop + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
+		drawHealthMeter(transform, guiLeft + 20, guiTop + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
 	}
 
 	@Override
 	protected void drawSelectedSlot(int selectedSlot) {
 		Slot slot = container.getForestrySlot(1 + selectedSlot);
-		if (slot != null) {
-			SELECTED_COMB_SLOT.draw(guiLeft + slot.xPos - 3, guiTop + slot.yPos - 3);
-		}
+		SELECTED_COMB_SLOT.draw(guiLeft + slot.xPos - 3, guiTop + slot.yPos - 3);
 	}
 
-	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {
+	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 
-		this.blit(x, y + 46 - height, i, k + 46 - height, 4, height);
+		this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 	@Override
@@ -91,15 +91,5 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	@Override
 	protected boolean hasErrors() {
 		return delegate.getErrorLogic().hasErrors();
-	}
-
-	@Override
-	public boolean onUpdateSelected() {
-		return false;
-	}
-
-	@Override
-	public void onSelection(int index, boolean changed) {
-
 	}
 }

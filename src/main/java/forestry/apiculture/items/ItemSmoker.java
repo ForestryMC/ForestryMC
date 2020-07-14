@@ -15,7 +15,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
@@ -69,19 +69,19 @@ public class ItemSmoker extends ItemForestry {
 		if (distance <= 0) {
 			return;
 		}
-		Vec3d look = entity.getLookVec();
+		Vector3d look = entity.getLookVec();
 		HandSide handSide = getHandSide(stack, entity);
 
-		Vec3d handOffset;
+		Vector3d handOffset;
 		if (handSide == HandSide.RIGHT) {
-			handOffset = look.crossProduct(new Vec3d(0, 1, 0));
+			handOffset = look.crossProduct(new Vector3d(0, 1, 0));
 		} else {
-			handOffset = look.crossProduct(new Vec3d(0, -1, 0));
+			handOffset = look.crossProduct(new Vector3d(0, -1, 0));
 		}
 
-		Vec3d lookDistance = new Vec3d(look.x * distance, look.y * distance, look.z * distance);
-		Vec3d scaledOffset = handOffset.scale(1.0 / distance);
-		Vec3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
+		Vector3d lookDistance = new Vector3d(look.x * distance, look.y * distance, look.z * distance);
+		Vector3d scaledOffset = handOffset.scale(1.0 / distance);
+		Vector3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
 
 		if (world.isRemote) {
 			ParticleRender.addEntitySmokeFX(world, smokePos.x, smokePos.y + 1, smokePos.z);

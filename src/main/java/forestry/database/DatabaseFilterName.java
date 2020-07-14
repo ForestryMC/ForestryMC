@@ -12,7 +12,7 @@ public class DatabaseFilterName extends DatabaseFilter {
 
 	@Override
 	public boolean test(ItemStack itemStack) {
-		final String name = DatabaseHelper.getItemName(itemStack).getFormattedText();
+		final String name = DatabaseHelper.getItemName(itemStack).getString();
 		return pattern.matcher(name.toLowerCase(Locale.ENGLISH)).find() || itemStack.isEmpty();
 	}
 }

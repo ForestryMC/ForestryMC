@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
@@ -68,14 +69,14 @@ public abstract class BlockStructure extends BlockForestry {
 					if (validationError != null) {
 						long tick = worldIn.getGameTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.sendMessage(new StringTextComponent(validationError));
+							playerIn.sendMessage(new StringTextComponent(validationError), Util.DUMMY_UUID);
 							previousMessageTick = tick;
 						}
 						return ActionResultType.SUCCESS;
 					}
 				}
 			} else {
-				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"));
+				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"), Util.DUMMY_UUID);
 				return ActionResultType.SUCCESS;
 			}
 		}

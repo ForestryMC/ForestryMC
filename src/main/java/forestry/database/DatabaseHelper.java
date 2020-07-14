@@ -23,9 +23,9 @@ public class DatabaseHelper {
 			return -1;
 		}
 		if (ascending) {
-			return getItemName(firstStack.itemStack).getFormattedText().compareToIgnoreCase(getItemName(secondStack.itemStack).getFormattedText());
+			return getItemName(firstStack.itemStack).getString().compareToIgnoreCase(getItemName(secondStack.itemStack).getString());
 		}
-		return getItemName(secondStack.itemStack).getFormattedText().compareToIgnoreCase(getItemName(firstStack.itemStack).getFormattedText());
+		return getItemName(secondStack.itemStack).getString().compareToIgnoreCase(getItemName(firstStack.itemStack).getString());
 	};
 
 	//TODO simplify this?

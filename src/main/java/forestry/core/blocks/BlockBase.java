@@ -70,7 +70,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	private final ParticleHelper.Callback particleCallback;
 
 	public BlockBase(P blockType, Block.Properties properties) {
-		super(properties);
+		super(properties.setOpaque((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) && !(blockType instanceof IBlockTypeCustom)));
 		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
 
 		this.blockType = blockType;
@@ -102,17 +102,12 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		this(blockType, Material.IRON);
 	}
 
-	//TODO - voxelshape stuff I think???
-	//	@Override
-	//	public boolean isOpaqueCube(BlockState state, IBlockReader world, BlockPos pos) {
-	//		return !hasTESR && !hasCustom;
-	//	}
 
 	//TODO: Still needed? Should be replaced with voxel shapes vor every tesr or custom block
-	@Override
+	/*@Override
 	public boolean isNormalCube(BlockState state, IBlockReader reader, BlockPos pos) {
 		return !hasTESR && !hasCustom;
-	}
+	}*/
 
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {

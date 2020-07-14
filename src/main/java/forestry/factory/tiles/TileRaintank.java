@@ -13,6 +13,7 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluids;
@@ -85,8 +86,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		tankManager.read(compoundNBT);
 	}
 

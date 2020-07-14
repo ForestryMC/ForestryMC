@@ -54,7 +54,6 @@ import genetics.utils.AlleleUtils;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
-import forestry.book.gui.chromsomes.categories.EntriesCategory;
 import forestry.core.EventHandlerCore;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
@@ -258,7 +257,7 @@ public class Forestry {
 				reloadableManager.addReloadListener(ColourProperties.INSTANCE);
 				reloadableManager.addReloadListener(spriteUploader);
 			}
-			EntriesCategory.registerSearchTree();
+			//EntriesCategory.registerSearchTree();
 			ModuleManager.getModuleHandler().runClientInit();
 
 		});

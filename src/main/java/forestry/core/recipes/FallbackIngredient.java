@@ -24,7 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
 
@@ -43,11 +43,11 @@ public class FallbackIngredient extends Ingredient {
 		return fromIngredients(Ingredient.fromStacks(primary), Ingredient.fromStacks(fallback));
 	}
 
-	public static Ingredient fromTag(Tag<Item> primary, ItemStack fallback) {
+	public static Ingredient fromTag(ITag<Item> primary, ItemStack fallback) {
 		return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromStacks(fallback));
 	}
 
-	public static Ingredient fromTag(Tag<Item> primary, Tag<Item> fallback) {
+	public static Ingredient fromTag(ITag<Item> primary, ITag<Item> fallback) {
 		return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromTag(fallback));
 	}
 

@@ -12,12 +12,14 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.world.storage.IServerWorldInfo;
 
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.render.ParticleRender;
@@ -51,8 +53,8 @@ public class TileMillRainmaker extends TileMill {
 	//	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		charge = compoundNBT.getInt("Charge");
 		progress = compoundNBT.getFloat("Progress");
@@ -102,7 +104,7 @@ public class TileMillRainmaker extends TileMill {
 				world.getWorldInfo().setRaining(false);
 			} else {
 				world.getWorldInfo().setRaining(true);
-				world.getWorldInfo().setRainTime(duration);
+				((IServerWorldInfo) world.getWorldInfo()).setRainTime(duration);
 			}
 			charge = 0;
 			duration = 0;

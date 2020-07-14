@@ -18,7 +18,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -51,13 +51,13 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public Vec3i getArea() {
-		return Vec3i.NULL_VECTOR;
+	public Vector3i getArea() {
+		return Vector3i.NULL_VECTOR;
 	}
 
 	@Override
-	public Vec3i getOffset() {
-		return Vec3i.NULL_VECTOR;
+	public Vector3i getOffset() {
+		return Vector3i.NULL_VECTOR;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, 
 	int compareTo(A o);
 
 	@Override
-	default String getName() {
+	default String getString() {
 		return getRegistryName().toString().replace(":", "_");
 	}
 }

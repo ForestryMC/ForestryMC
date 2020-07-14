@@ -13,7 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import genetics.api.individual.IGenome;
@@ -44,8 +44,8 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			default:
 		}
 
-		Vec3i area = genome.getActiveValue(BeeChromosomes.TERRITORY);
-		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vector3i area = genome.getActiveValue(BeeChromosomes.TERRITORY);
+		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 		BlockPos housingCoords = housing.getCoordinates();
 
 		for (int i = 0; i < 10; i++) {

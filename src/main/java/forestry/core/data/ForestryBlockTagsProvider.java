@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
@@ -31,7 +31,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 	@Override
 	protected void registerTags() {
 		//super.registerTags();
-		filter = this.tagToBuilder.keySet().stream().map(Tag::getId).collect(Collectors.toSet());
+		filter = this.tagToBuilder.keySet().stream().map(ITag::getId).collect(Collectors.toSet());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			getBuilder(ForestryTags.Blocks.CHARCOAL).add(CharcoalBlocks.CHARCOAL.block());
 		}

@@ -10,12 +10,9 @@
  ******************************************************************************/
 package forestry.core.blocks.properties;
 
-import com.google.common.base.MoreObjects;
-
-import java.util.Collection;
 import java.util.Optional;
 
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 
 import genetics.api.alleles.IAllele;
 
@@ -23,30 +20,10 @@ import genetics.utils.AlleleUtils;
 
 import forestry.api.genetics.alleles.IAlleleProperty;
 
-public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IProperty<A> {
-	protected final String name;
+public abstract class PropertyAllele<A extends IAlleleProperty<A>> extends Property<A> {
 
-	public PropertyAllele(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String getName() {
-		return this.name;
-	}
-
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("name", this.name)
-			.add("clazz", getValueClass())
-			.add("values", this.getAllowedValues())
-			.toString();
-	}
-
-	@Override
-	public final int hashCode() {
-		return 31 * getValueClass().hashCode() + this.name.hashCode();
+	public PropertyAllele(String name, Class<A> valueClass) {
+		super(name, valueClass);
 	}
 
 	@Override
@@ -58,20 +35,5 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> implements IP
 		}
 		return Optional.empty();
 	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		} else if (object != null && this.getClass() == object.getClass()) {
-			PropertyAllele propertyAllele = (PropertyAllele) object;
-			return name.equals(propertyAllele.name);
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public abstract Collection<A> getAllowedValues();
 
 }

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 
 import forestry.core.tiles.TileMill;
 

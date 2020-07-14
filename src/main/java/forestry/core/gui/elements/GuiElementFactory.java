@@ -114,7 +114,7 @@ public class GuiElementFactory implements IGuiElementFactory {
 	public IElementLayout createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele) {
 		ITextStyle textStyle = getStateStyle(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		String text = "(" + toleranceAllele.getDisplayName().getFormattedText() + ")";
+		String text = "(" + toleranceAllele.getDisplayName().getString() + ")";
 
 		IElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
 		switch (tolerance) {

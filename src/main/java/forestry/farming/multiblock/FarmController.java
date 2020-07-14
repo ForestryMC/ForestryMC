@@ -25,7 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -79,9 +79,9 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private int noPowerTime = 0;
 
 	@Nullable
-	private Vec3i offset;
+	private Vector3i offset;
 	@Nullable
-	private Vec3i area;
+	private Vector3i area;
 
 	public FarmController(World world) {
 		super(world, FarmMultiblockSizeLimits.instance);
@@ -332,18 +332,18 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public Vec3i getOffset() {
+	public Vector3i getOffset() {
 		if (offset == null) {
-			Vec3i area = getArea();
-			offset = new Vec3i(-area.getX() / 2, -2, -area.getZ() / 2);
+			Vector3i area = getArea();
+			offset = new Vector3i(-area.getX() / 2, -2, -area.getZ() / 2);
 		}
 		return offset;
 	}
 
 	@Override
-	public Vec3i getArea() {
+	public Vector3i getArea() {
 		if (area == null) {
-			area = new Vec3i(7 + allowedExtent * 2, 13, 7 + allowedExtent * 2);
+			area = new Vector3i(7 + allowedExtent * 2, 13, 7 + allowedExtent * 2);
 		}
 		return area;
 	}

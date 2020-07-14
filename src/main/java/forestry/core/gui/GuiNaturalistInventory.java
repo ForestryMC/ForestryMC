@@ -169,7 +169,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			return;
 		}
 
-		textLayout.drawLine(species.getDisplayName().getFormattedText(), x);
+		textLayout.drawLine(species.getDisplayName().getString(), x);
 		GuiUtil.drawItemStack(this, iconStack, guiLeft + x + 69, guiTop + textLayout.getLineY() - 2);
 
 		textLayout.newLine();

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.config.Constants;
@@ -157,8 +158,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 				int y = invIndex / 4 - currentRow;
 				int yOffset;
 				int xOffset;
+				yOffset = 25;
 				if (startRow == 0) {
-					yOffset = 25;
 					xOffset = 17;
 					if (y % 2 == 1) {
 						xOffset = 38;
@@ -166,7 +167,6 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 						y--;
 					}
 				} else {
-					yOffset = 25;
 					xOffset = 38;
 					if (y % 2 == 1) {
 						yOffset = 38;
@@ -192,7 +192,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	public void init() {
 		super.init();
 
-		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + 101, this.guiTop + 6, 80, this.minecraft.fontRenderer.FONT_HEIGHT, "");
+		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + 101, this.guiTop + 6, 80, this.minecraft.fontRenderer.FONT_HEIGHT, null);
 		this.searchField.setMaxStringLength(50);
 		this.searchField.setEnableBackgroundDrawing(false);
 		this.searchField.setTextColor(16777215);
@@ -203,10 +203,10 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		String searchText = searchField != null ? searchField.getText() : "";
 		updateItems(searchText);
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(transform, mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -237,22 +237,22 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.func_230450_a_(transform, partialTicks, mouseX, mouseY);
 
 		if (searchField != null) {
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderSystem.disableLighting();
-			this.searchField.render(mouseX, mouseY, partialTicks);
+			this.searchField.render(transform, mouseX, mouseY, partialTicks);
 		}
 	}
 
 	/* Methods - Implement GuiForestry */
 	@Override
-	protected void drawBackground() {
+	protected void drawBackground(MatrixStack transform) {
 		bindTexture(textureFile);
 
-		blit(guiLeft, guiTop, 0, 0, xSize, ySize);
+		blit(transform, guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 	@Override

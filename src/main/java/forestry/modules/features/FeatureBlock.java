@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -100,7 +100,7 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 	}
 
 	@Override
-	public <V extends Comparable<V>> BlockState with(IProperty<V> property, V value) {
+	public <V extends Comparable<V>> BlockState with(Property<V> property, V value) {
 		return defaultState().with(property, value);
 	}
 

@@ -24,7 +24,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -37,6 +38,14 @@ import forestry.core.tiles.TileUtil;
 
 public abstract class BlockUtil {
 
+
+	public static boolean alwaysTrue(BlockState state, IBlockReader reader, BlockPos pos) {
+		return true;
+	}
+
+	public static boolean alwaysFalse(BlockState state, IBlockReader reader, BlockPos pos) {
+		return false;
+	}
 
 	public static List<ItemStack> getBlockDrops(IWorld world, BlockPos posBlock) {
 		BlockState blockState = world.getBlockState(posBlock);
@@ -92,7 +101,7 @@ public abstract class BlockUtil {
 	}
 
 	@Nullable
-	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, AxisAlignedBB bounds) {
+	public static RayTraceResult collisionRayTrace(BlockPos pos, Vector3d startVec, Vector3d endVec, AxisAlignedBB bounds) {
 		return collisionRayTrace(pos, startVec, endVec, bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ);
 	}
 
@@ -101,15 +110,15 @@ public abstract class BlockUtil {
 	 */
 	//TODO - looks pretty copy pasted. Find new version as well? Is this still needed ?
 	@Nullable
-	public static RayTraceResult collisionRayTrace(BlockPos pos, Vec3d startVec, Vec3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+	public static RayTraceResult collisionRayTrace(BlockPos pos, Vector3d startVec, Vector3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
 		endVec = endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
-		Vec3d vec32 = startVec;//.getIntermediateWithXValue(endVec, minX);
-		Vec3d vec33 = startVec;//.getIntermediateWithXValue(endVec, maxX);
-		Vec3d vec34 = startVec;//.getIntermediateWithYValue(endVec, minY);
-		Vec3d vec35 = startVec;//.getIntermediateWithYValue(endVec, maxY);
-		Vec3d vec36 = startVec;//.getIntermediateWithZValue(endVec, minZ);
-		Vec3d vec37 = startVec;//.getIntermediateWithZValue(endVec, maxZ);
+		Vector3d vec32 = startVec;//.getIntermediateWithXValue(endVec, minX);
+		Vector3d vec33 = startVec;//.getIntermediateWithXValue(endVec, maxX);
+		Vector3d vec34 = startVec;//.getIntermediateWithYValue(endVec, minY);
+		Vector3d vec35 = startVec;//.getIntermediateWithYValue(endVec, maxY);
+		Vector3d vec36 = startVec;//.getIntermediateWithZValue(endVec, minZ);
+		Vector3d vec37 = startVec;//.getIntermediateWithZValue(endVec, maxZ);
 
 		if (!isVecInsideYZBounds(vec32, minY, minZ, maxY, maxZ)) {
 			vec32 = null;
@@ -135,7 +144,7 @@ public abstract class BlockUtil {
 			vec37 = null;
 		}
 
-		Vec3d minHit = null;
+		Vector3d minHit = null;
 
 		if (vec32 != null) {
 			minHit = vec32;
@@ -197,28 +206,27 @@ public abstract class BlockUtil {
 	/**
 	 * Checks if a vector is within the Y and Z bounds of the block.
 	 */
-	private static boolean isVecInsideYZBounds(@Nullable Vec3d vec, double minY, double minZ, double maxY, double maxZ) {
+	private static boolean isVecInsideYZBounds(@Nullable Vector3d vec, double minY, double minZ, double maxY, double maxZ) {
 		return vec != null && vec.y >= minY && vec.y <= maxY && vec.z >= minZ && vec.z <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Z bounds of the block.
 	 */
-	private static boolean isVecInsideXZBounds(@Nullable Vec3d vec, double minX, double minZ, double maxX, double maxZ) {
+	private static boolean isVecInsideXZBounds(@Nullable Vector3d vec, double minX, double minZ, double maxX, double maxZ) {
 		return vec != null && vec.x >= minX && vec.x <= maxX && vec.z >= minZ && vec.z <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Y bounds of the block.
 	 */
-	private static boolean isVecInsideXYBounds(@Nullable Vec3d vec, double minX, double minY, double maxX, double maxY) {
+	private static boolean isVecInsideXYBounds(@Nullable Vector3d vec, double minX, double minY, double maxX, double maxY) {
 		return vec != null && vec.x >= minX && vec.x <= maxX && vec.y >= minY && vec.y <= maxY;
 	}
 
 	/* CHUNKS */
 
 	public static boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
-		Block block = blockState.getBlock();
 		return world.getBlockState(pos).getMaterial().isReplaceable() && !blockState.getMaterial().isLiquid();
 	}
 
@@ -233,8 +241,8 @@ public abstract class BlockUtil {
 
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
 		BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
-		final BlockPos.Mutable newPos = new BlockPos.Mutable(pos);
-		BlockState blockState = world.getBlockState(newPos);
+		final BlockPos.Mutable newPos = new BlockPos.Mutable();
+		BlockState blockState = world.getBlockState(newPos.setPos(pos));
 
 		while (!BlockUtil.canReplace(blockState, world, newPos)) {
 			newPos.move(Direction.UP);
@@ -249,9 +257,9 @@ public abstract class BlockUtil {
 
 	@Nullable
 	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
-		final BlockPos.Mutable newPos = new BlockPos.Mutable(pos);
+		final BlockPos.Mutable newPos = new BlockPos.Mutable();
 
-		BlockState blockState = world.getBlockState(newPos);
+		BlockState blockState = world.getBlockState(newPos.setPos(pos));
 		while (canReplace(blockState, world, newPos)) {
 			newPos.move(Direction.DOWN);
 			if (newPos.getY() <= 0) {

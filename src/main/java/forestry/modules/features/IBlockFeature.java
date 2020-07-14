@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -88,5 +88,5 @@ public interface IBlockFeature<B extends Block, I extends BlockItem> extends IIt
 
 	BlockState defaultState();
 
-	<V extends Comparable<V>> BlockState with(IProperty<V> property, V value);
+	<V extends Comparable<V>> BlockState with(Property<V> property, V value);
 }

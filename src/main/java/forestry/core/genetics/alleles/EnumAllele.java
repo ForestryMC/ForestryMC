@@ -2,7 +2,7 @@ package forestry.core.genetics.alleles;
 
 import java.util.Locale;
 
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 import genetics.api.alleles.IAlleleData;
 import genetics.api.alleles.IAlleleValue;
@@ -480,13 +480,13 @@ public class EnumAllele {
 		}
 	}
 
-	public enum Territory implements IAlleleData<Vec3i> {
+	public enum Territory implements IAlleleData<Vector3i> {
 		AVERAGE(9, 6, 9),
 		LARGE(11, 8, 11),
 		LARGER(13, 12, 13),
 		LARGEST(15, 13, 15);
 
-		private final Vec3i area;
+		private final Vector3i area;
 		private final boolean dominant;
 
 		Territory(int x, int y, int z) {
@@ -494,12 +494,12 @@ public class EnumAllele {
 		}
 
 		Territory(int x, int y, int z, boolean dominant) {
-			this.area = new Vec3i(x, y, z);
+			this.area = new Vector3i(x, y, z);
 			this.dominant = dominant;
 		}
 
 		@Override
-		public Vec3i getValue() {
+		public Vector3i getValue() {
 			return area;
 		}
 

@@ -13,20 +13,21 @@ package forestry.core.worldgen;
 import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 
 public abstract class FeatureBase extends Feature<NoFeatureConfig> {
 
 	protected FeatureBase() {
-		super(NoFeatureConfig::deserialize);
+		super(NoFeatureConfig.field_236558_a_);
 	}
 
 	@Override
-	public final boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+	public boolean func_230362_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		return place(world, rand, pos, false);
 	}
 

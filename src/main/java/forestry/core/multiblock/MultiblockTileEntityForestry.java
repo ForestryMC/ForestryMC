@@ -12,6 +12,7 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
@@ -52,8 +53,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
-		super.read(data);
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
 
 		if (data.contains("owner")) {
 			CompoundNBT ownerNbt = data.getCompound("owner");

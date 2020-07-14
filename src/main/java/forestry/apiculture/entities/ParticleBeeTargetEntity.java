@@ -13,18 +13,18 @@ package forestry.apiculture.entities;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Vector3d;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 public class ParticleBeeTargetEntity extends Particle {
-	private final Vec3d origin;
+	private final Vector3d origin;
 	private final Entity entity;
 
-	public ParticleBeeTargetEntity(World world, Vec3d origin, Entity entity, int color) {
+	public ParticleBeeTargetEntity(ClientWorld world, Vector3d origin, Entity entity, int color) {
 		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
 		//		setParticleTexture(ModuleApiculture.getBeeSprite());
 		//TODO - particleManager has a TextureManager so register through that?
@@ -94,7 +94,7 @@ public class ParticleBeeTargetEntity extends Particle {
 
 	@Override
 	public void renderParticle(IVertexBuilder builder, ActiveRenderInfo renderInfo, float partialTicks) {
-		Vec3d projectedView = renderInfo.getProjectedView();
+		Vector3d projectedView = renderInfo.getProjectedView();
 		float xPos = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - projectedView.getX());
 		float yPos = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - projectedView.getY());
 		float zPos = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - projectedView.getZ());

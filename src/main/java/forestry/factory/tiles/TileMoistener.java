@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluids;
@@ -101,8 +102,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		burnTime = compoundNBT.getInt("BurnTime");
 		totalTime = compoundNBT.getInt("TotalTime");

@@ -20,7 +20,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,10 +44,10 @@ public class CropRubber extends CropDestroy {
 	//TODO - will this hack still work for ic2 in 1.14? Or will they just have to expose blockstates in their API?
 	private static <T extends Comparable<T>> BlockState getReplantState(BlockState sappyState) {
 		if (hasRubberToHarvest(sappyState)) {
-			for (Map.Entry<IProperty<?>, Comparable<?>> wetPropertyEntry : sappyState.getValues().entrySet()) {
+			for (Map.Entry<Property<?>, Comparable<?>> wetPropertyEntry : sappyState.getValues().entrySet()) {
 				String valueWetString = wetPropertyEntry.getValue().toString();
 				String valueDryString = valueWetString.replace("wet", "dry");
-				IProperty<?> property = wetPropertyEntry.getKey();
+				Property<?> property = wetPropertyEntry.getKey();
 				if (property instanceof BooleanProperty && property.getName().equals("hassap")) {
 					return sappyState.with(BooleanProperty.create("hassap"), false);
 				}
@@ -79,7 +79,7 @@ public class CropRubber extends CropDestroy {
 	}
 
 	@Nullable
-	private static <T extends Comparable<T>> BlockState getStateWithValue(BlockState baseState, IProperty<T> property, String valueString) {
+	private static <T extends Comparable<T>> BlockState getStateWithValue(BlockState baseState, Property<T> property, String valueString) {
 		Optional<T> value = property.parseValue(valueString);
 		return value.map(t -> baseState.with(property, t)).orElse(null);
 	}

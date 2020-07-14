@@ -20,6 +20,6 @@ public class DatabaseFilterToolTip extends DatabaseFilter {
 			return false;
 		}
 		lines.remove(0); // Remove the first line as that states the item name
-		return lines.stream().anyMatch((t) -> pattern.matcher(t.getFormattedText()).find());
+		return lines.stream().anyMatch((t) -> pattern.matcher(t.getString()).find());
 	}
 }

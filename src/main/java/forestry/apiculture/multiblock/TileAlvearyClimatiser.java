@@ -12,6 +12,7 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -77,8 +78,8 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* LOADING & SAVING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		energyManager.read(compoundNBT);
 		workingTime = compoundNBT.getInt("Heating");
 		setActive(workingTime > 0);

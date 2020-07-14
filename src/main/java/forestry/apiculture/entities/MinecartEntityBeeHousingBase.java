@@ -17,7 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -99,6 +99,11 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 		return beeLogic;
 	}
 
+	//TODO: Remove if mappings get fixed
+	public BlockPos getPosition() {
+		return func_233580_cy_();
+	}
+
 	@Override
 	public EnumTemperature getTemperature() {
 		return EnumTemperature.getFromBiome(getBiome(), getPosition());
@@ -161,9 +166,9 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	public Vec3d getBeeFXCoordinates() {
+	public Vector3d getBeeFXCoordinates() {
 		BlockPos pos = getPosition();
-		return new Vec3d(pos.getX(), pos.getY() + 0.25, pos.getZ());
+		return new Vector3d(pos.getX(), pos.getY() + 0.25, pos.getZ());
 	}
 
 	@Override

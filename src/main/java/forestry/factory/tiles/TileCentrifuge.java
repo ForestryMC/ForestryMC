@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftResultInventory;
@@ -93,8 +94,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState state, CompoundNBT compound) {
+		super.read(state, compound);
 
 		ListNBT nbttaglist = compound.getList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {

@@ -14,6 +14,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.render.ColourProperties;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
@@ -23,14 +25,14 @@ public abstract class GuiForestryTitled<C extends Container> extends GuiForestry
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.func_230450_a_(transform, partialTicks, mouseX, mouseY);
 
 		textLayout.line = 6;
 		if (centeredTitle()) {
-			textLayout.drawCenteredLine(title.getFormattedText(), 0, ColourProperties.INSTANCE.get("gui.title"));
+			textLayout.drawCenteredLine(title.getString(), 0, ColourProperties.INSTANCE.get("gui.title"));
 		} else {
-			textLayout.drawLine(title.getFormattedText(), 8, ColourProperties.INSTANCE.get("gui.title"));
+			textLayout.drawLine(title.getString(), 8, ColourProperties.INSTANCE.get("gui.title"));
 		}
 		bindTexture(textureFile);
 	}

@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
@@ -47,8 +48,8 @@ public class TileSapling extends TileTreeContainer {
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		timesTicked = compoundNBT.getInt("TT");
 	}
@@ -115,7 +116,7 @@ public class TileSapling extends TileTreeContainer {
 		if (generator instanceof FeatureBase) {
 			generated = ((FeatureBase) generator).place(world, random, getPos(), false);
 		} else {
-			generated = generator.place(world, ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
+			generated = generator.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
 		}
 
 		if (generated) {

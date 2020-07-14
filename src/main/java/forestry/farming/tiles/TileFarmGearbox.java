@@ -12,6 +12,7 @@ package forestry.farming.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
@@ -42,8 +43,8 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		energyManager.read(compoundNBT);
 
 		activationDelay = compoundNBT.getInt("ActivationDelay");

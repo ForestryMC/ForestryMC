@@ -25,7 +25,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -57,7 +57,7 @@ public class FarmableSapling implements IFarmable {
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		ItemStack copy = germling.copy();
 		player.setHeldItem(Hand.MAIN_HAND, copy);
-		BlockRayTraceResult result = new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos.down(), true);    //TODO isInside
+		BlockRayTraceResult result = new BlockRayTraceResult(Vector3d.ZERO, Direction.UP, pos.down(), true);    //TODO isInside
 		ActionResultType actionResult = copy.onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, result));
 		player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 		if (actionResult == ActionResultType.SUCCESS) {

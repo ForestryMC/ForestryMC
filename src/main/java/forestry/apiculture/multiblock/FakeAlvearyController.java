@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 
@@ -86,8 +86,8 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public Vec3d getBeeFXCoordinates() {
-		return new Vec3d(0, 0, 0);
+	public Vector3d getBeeFXCoordinates() {
+		return new Vector3d(0, 0, 0);
 	}
 
 	@Override

@@ -14,10 +14,10 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -91,7 +91,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		super.onEntityCollision(state, worldIn, pos, entityIn);
-		Vec3d motion = entityIn.getMotion();
+		Vector3d motion = entityIn.getMotion();
 		entityIn.setMotion(motion.getX() * 0.4D, motion.getY(), motion.getZ() * 0.4D);
 	}
 

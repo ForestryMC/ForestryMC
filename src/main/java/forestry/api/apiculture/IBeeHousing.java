@@ -7,7 +7,7 @@ package forestry.api.apiculture;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 import com.mojang.authlib.GameProfile;
 
@@ -52,5 +52,5 @@ public interface IBeeHousing extends IHousing, IErrorLogicSource, IClimateProvid
 	 * @return exact coordinates where bee particle FX should spawn from
 	 * @since Forestry 4.2
 	 */
-	Vec3d getBeeFXCoordinates();
+	Vector3d getBeeFXCoordinates();
 }

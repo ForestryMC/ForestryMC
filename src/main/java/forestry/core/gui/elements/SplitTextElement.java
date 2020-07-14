@@ -7,15 +7,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import forestry.api.gui.GuiElementAlignment;
 import forestry.api.gui.ITextElement;
 import forestry.api.gui.style.ITextStyle;
-import forestry.core.utils.StringUtil;
 
 import static forestry.core.gui.elements.LabelElement.FONT_RENDERER;
 
+//TODO: Fix if mapping are more updated
 public class SplitTextElement extends GuiElement implements ITextElement {
 
 	private List<String> lines = new ArrayList<>();
@@ -27,10 +25,10 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 		this.rawText = rawText;
 		this.style = style;
 		setAlign(align);
-		boolean uni = FONT_RENDERER.getBidiFlag();
+		/*boolean uni = FONT_RENDERER.getBidiFlag();
 		FONT_RENDERER.setBidiFlag(style.isUnicode());
 		this.lines.addAll(FONT_RENDERER.listFormattedStringToWidth(StringUtil.getFormattedString(style, rawText), width));
-		FONT_RENDERER.setBidiFlag(uni);
+		FONT_RENDERER.setBidiFlag(uni);*/
 		setHeight(lines.size() * FONT_RENDERER.FONT_HEIGHT);
 	}
 
@@ -43,10 +41,10 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 	public ITextElement setText(String text) {
 		this.rawText = text;
 		boolean uni = FONT_RENDERER.getBidiFlag();
-		FONT_RENDERER.setBidiFlag(style.isUnicode());
+		/*FONT_RENDERER.setBidiFlag(style.isUnicode());
 		lines.clear();
 		lines.addAll(FONT_RENDERER.listFormattedStringToWidth(StringUtil.getFormattedString(style, rawText), width));
-		FONT_RENDERER.setBidiFlag(uni);
+		FONT_RENDERER.setBidiFlag(uni);*/
 		setHeight(lines.size() * FONT_RENDERER.FONT_HEIGHT);
 		return this;
 	}
@@ -59,7 +57,7 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 	@Override
 	public void drawElement(int mouseX, int mouseY) {
 		boolean unicode = FONT_RENDERER.getBidiFlag();
-		FONT_RENDERER.setBidiFlag(style.isUnicode());
+		/*FONT_RENDERER.setBidiFlag(style.isUnicode());
 		int posY = 0;
 		for (String text : lines) {
 			int posX = width - FONT_RENDERER.getStringWidth(text);
@@ -68,6 +66,6 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 			posY += FONT_RENDERER.FONT_HEIGHT;
 		}
 		FONT_RENDERER.setBidiFlag(unicode);
-		RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+		RenderSystem.color3f(1.0f, 1.0f, 1.0f);*/
 	}
 }

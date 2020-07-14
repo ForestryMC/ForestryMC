@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
@@ -123,8 +123,8 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	private static AxisAlignedBB getHarvestBox(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
 		BlockPos coords = farmHousing.getCoords();
-		Vec3i area = farmHousing.getArea();
-		Vec3i offset = farmHousing.getOffset();
+		Vector3i area = farmHousing.getArea();
+		Vector3i offset = farmHousing.getOffset();
 
 		BlockPos min = coords.add(offset);
 		BlockPos max = min.add(area);

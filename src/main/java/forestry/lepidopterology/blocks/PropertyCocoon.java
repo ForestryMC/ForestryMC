@@ -25,7 +25,7 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	private static final Map<String, IAlleleButterflyCocoon> namesMap = new HashMap<>();
 
 	public PropertyCocoon(String name) {
-		super(name);
+		super(name, IAlleleButterflyCocoon.class);
 	}
 
 	@Override

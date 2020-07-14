@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -69,8 +70,8 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
-		super.read(data);
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
 
 		logic.read(data.getCompound("Logic"));
 	}

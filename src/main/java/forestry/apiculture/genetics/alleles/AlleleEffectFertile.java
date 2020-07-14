@@ -16,7 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
@@ -39,7 +39,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 
 		World world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
-		Vec3i area = getModifiedArea(genome, housing);
+		Vector3i area = getModifiedArea(genome, housing);
 
 		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
 		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());

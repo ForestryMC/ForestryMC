@@ -21,6 +21,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -43,7 +45,9 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	private final Color color;
 
 	public BlockForestryFluid(FeatureFluid feature) {
-		super(feature.fluid(), Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super(feature.fluid(), Block.Properties.create(feature.fluid().getAttributes().getTemperature() > 505 ? Material.LAVA : Material.WATER)
+			.doesNotBlockMovement()
+			.hardnessAndResistance(100.0F).noDrops());
 		this.feature = feature;
 
 		FluidProperties properties = feature.getProperties();
@@ -121,23 +125,12 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	}
 
 	@Override
-	public boolean isFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+	public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
 		return flammable && flammability == 0;
 	}
 
 	public Color getColor() {
 		return color;
-	}
-
-	@Override
-	public Material getMaterial(BlockState state) {
-		// Fahrenheit 451 = 505.928 Kelvin
-		// The temperature at which book-paper catches fire, and burns.
-		if (getFluid().getAttributes().getTemperature() > 505) {
-			return Material.LAVA;
-		} else {
-			return super.getMaterial(state);
-		}
 	}
 
 	@Override
@@ -149,7 +142,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 		int z = pos.getZ();
 
 		// Start fires if the fluid is lava-like
-		if (getMaterial(state) == Material.LAVA) {
+		if (material == Material.LAVA) {
 			int rangeUp = rand.nextInt(3);
 
 			for (int i = 0; i < rangeUp; ++i) {
@@ -206,6 +199,10 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 
 	private static boolean isNearFire(World world, int x, int y, int z) {
 		AxisAlignedBB boundingBox = new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
-		return world.isFlammableWithin(boundingBox);
+		// Copied from 'Entity.move', replaces method 'World.isFlammableWithin'
+		return BlockPos.func_239581_a_(boundingBox.shrink(0.001D)).noneMatch((pos) -> {
+			BlockState state = world.getBlockState(pos);
+			return state.isIn(BlockTags.FIRE) || state.isIn(Blocks.LAVA) || state.isBurning(world, pos);
+		});
 	}
 }

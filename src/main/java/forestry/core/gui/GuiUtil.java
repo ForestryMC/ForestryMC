@@ -55,7 +55,7 @@ public class GuiUtil {
 	//TODO hopefully this is client side...
 	public static void drawToolTips(IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
 		//TODO textcomponent
-		List<String> lines = toolTips.getLines().stream().map(ITextComponent::getFormattedText).collect(Collectors.toList());
+		List<String> lines = toolTips.getLines().stream().map(ITextComponent::getString).collect(Collectors.toList());
 		if (!lines.isEmpty()) {
 			RenderSystem.pushMatrix();
 			if (provider == null || provider.isRelativeToGui()) {

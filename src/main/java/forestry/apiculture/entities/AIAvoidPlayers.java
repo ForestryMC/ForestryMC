@@ -19,7 +19,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class AIAvoidPlayers extends Goal {
 
@@ -58,8 +58,8 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-			new Vec3d(player.getPosition()));
+		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
+			player.getPositionVec());
 
 		if (randomTarget == null) {
 			return false;

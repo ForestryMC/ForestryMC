@@ -18,7 +18,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -336,9 +336,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public Vec3d getBeeFXCoordinates() {
+	public Vector3d getBeeFXCoordinates() {
 		BlockPos coord = getCenterCoord();
-		return new Vec3d(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
+		return new Vector3d(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
 	}
 
 	@Override

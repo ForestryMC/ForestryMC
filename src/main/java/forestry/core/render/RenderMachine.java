@@ -15,11 +15,11 @@ import java.util.EnumMap;
 import java.util.Locale;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 import com.mojang.blaze3d.systems.RenderSystem;

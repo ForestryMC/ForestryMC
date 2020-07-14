@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -85,8 +86,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
 		if (compoundNBT.contains("Buffer")) {

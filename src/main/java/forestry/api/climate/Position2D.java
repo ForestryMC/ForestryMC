@@ -12,7 +12,7 @@ import javax.annotation.concurrent.Immutable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 import forestry.api.core.INbtWritable;
 
@@ -28,7 +28,7 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	 */
 	private final int z;
 
-	public Position2D(Vec3i pos) {
+	public Position2D(Vector3i pos) {
 		this(pos.getX(), pos.getZ());
 	}
 
@@ -49,8 +49,8 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
-		} else if (o instanceof Vec3i) {
-			Vec3i position = (Vec3i) o;
+		} else if (o instanceof Vector3i) {
+			Vector3i position = (Vector3i) o;
 			return this.getX() == position.getX() && this.getZ() == position.getZ();
 		} else if (!(o instanceof Position2D)) {
 			return false;

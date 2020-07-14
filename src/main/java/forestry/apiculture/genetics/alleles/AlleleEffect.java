@@ -15,7 +15,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -64,11 +64,11 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		return storedData;
 	}
 
-	public static Vec3i getModifiedArea(IGenome genome, IBeeHousing housing) {
+	public static Vector3i getModifiedArea(IGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
-		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
+		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
 		int x = area.getX();
 		int y = area.getY();
 		int z = area.getZ();
@@ -83,15 +83,15 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 			z = 1;
 		}
 
-		return new Vec3i(x, y, z);
+		return new Vector3i(x, y, z);
 	}
 
 	public static AxisAlignedBB getBounding(IGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
 
-		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
-		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
+		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 
 		BlockPos min = housing.getCoordinates().add(offset);
 		BlockPos max = min.add(area);

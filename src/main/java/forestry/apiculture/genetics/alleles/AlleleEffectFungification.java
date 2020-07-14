@@ -11,7 +11,7 @@ import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.MooshroomEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -60,8 +60,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	private void doBlockEffect(IGenome genome, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
-		Vec3i area = getModifiedArea(genome, housing);
-		Vec3i halfArea = new Vec3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
+		Vector3i area = getModifiedArea(genome, housing);
+		Vector3i halfArea = new Vector3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area).subtract(halfArea).add(housingCoordinates);

@@ -8,6 +8,8 @@ import java.util.function.Function;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
@@ -147,7 +149,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
 	@Override
 	public final void addLine(String chromosomeName, IChromosomeType chromosome) {
-		addLine(chromosomeName, (allele, b) -> allele.getDisplayName().getFormattedText(), chromosome);
+		addLine(chromosomeName, (allele, b) -> allele.getDisplayName().getString(), chromosome);
 	}
 
 	@Override
@@ -160,8 +162,8 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 	private IElementLayout addSplitText(int width, String text, GuiElementAlignment alignment, ITextStyle style) {
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		IElementLayout vertical = new VerticalLayout(width);
-		for (String splitText : fontRenderer.listFormattedStringToWidth(text, 70)) {
-			vertical.label(splitText, alignment, style);
+		for (ITextProperties splitText : fontRenderer.func_238425_b_(new StringTextComponent(text), 70)) {
+			vertical.label(splitText.getString(), alignment, style);
 		}
 		return vertical;
 	}

@@ -17,7 +17,7 @@ import java.util.Map;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 
 import net.minecraftforge.common.Tags;
 
@@ -51,7 +51,7 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	private final Ingredient craftingIngredient;
 	private final EnumPostage postage;
 
-	EnumStampDefinition(String name, EnumPostage postage, Tag<Item> crafting, Color primaryColor, Color secondaryColor) {
+	EnumStampDefinition(String name, EnumPostage postage, ITag<Item> crafting, Color primaryColor, Color secondaryColor) {
 		this(name, postage, Ingredient.fromTag(crafting), primaryColor, secondaryColor);
 	}
 

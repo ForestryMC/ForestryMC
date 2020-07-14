@@ -13,6 +13,7 @@ package forestry.climatology.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -282,8 +283,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
-		super.read(data);
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
 
 		tankManager.read(data);
 

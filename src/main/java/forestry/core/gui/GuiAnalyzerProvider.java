@@ -9,6 +9,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
@@ -109,7 +110,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		boolean ledger = hasErrors();
 		if (!deactivated && ledger || !ledger && deactivated) {
 			deactivated = ledger;
@@ -125,7 +126,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 			analyzer.update();
 			dirty = false;
 		}
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(transform, mouseX, mouseY, partialTicks);
 	}
 
 	class Handler implements Button.IPressable {
@@ -141,8 +142,8 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.func_230450_a_(transform, partialTicks, mouseX, mouseY);
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();

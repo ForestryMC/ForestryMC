@@ -106,8 +106,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		ripeningTime = compoundNBT.getShort(NBT_RIPENING);
 		damage = compoundNBT.getInt(NBT_DAMAGE);
@@ -325,7 +325,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public PlantType getPlantType() {
 		ITree tree = getTree();
 		if (tree == null) {
-			return PlantType.Plains;
+			return PlantType.PLAINS;
 		}
 
 		return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getPlantType();

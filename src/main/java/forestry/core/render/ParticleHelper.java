@@ -26,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.core.utils.WorldUtils;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -72,7 +74,7 @@ public class ParticleHelper {
 			//         this.addEffect((new DiggingParticle(this.world, d0, d1, d2, 0.0D, 0.0D, 0.0D, blockstate)).setBlockPos(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
-			DiggingParticle fx = new DiggingParticle(world, px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
+			DiggingParticle fx = new DiggingParticle(WorldUtils.asClient(world), px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
 			effectRenderer.addEffect(fx);
 			callback.addHitEffects(fx, world, pos, blockState);
 			fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F);

@@ -23,7 +23,6 @@ import java.util.Random;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IModelTransform;
@@ -32,6 +31,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.vector.TransformationMatrix;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 

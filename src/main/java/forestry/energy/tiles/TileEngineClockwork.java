@@ -12,6 +12,7 @@ package forestry.energy.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -70,8 +71,8 @@ public class TileEngineClockwork extends TileEngine {
 
 	/* LOADING & SAVING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		tension = compoundNBT.getFloat("Wound");
 	}
 

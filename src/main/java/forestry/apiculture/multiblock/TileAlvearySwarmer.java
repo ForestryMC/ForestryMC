@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Stack;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -161,8 +162,8 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		setActive(compoundNBT.getBoolean("Active"));
 
 		ListNBT nbttaglist = compoundNBT.getList("PendingSpawns", 10);

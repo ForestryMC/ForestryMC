@@ -15,7 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,8 +50,8 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			default:
 		}
 
-		Vec3i area = getModifiedArea(genome, housing);
-		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vector3i area = getModifiedArea(genome, housing);
+		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 
 		for (int i = 0; i < 1; i++) {
 
@@ -85,8 +85,8 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorldObj().rand.nextInt(3) == 0) {
-			Vec3i area = getModifiedArea(genome, housing);
-			Vec3i offset = VectUtil.scale(area, -0.5F);
+			Vector3i area = getModifiedArea(genome, housing);
+			Vector3i offset = VectUtil.scale(area, -0.5F);
 
 			BlockPos coordinates = housing.getCoordinates();
 			World world = housing.getWorldObj();

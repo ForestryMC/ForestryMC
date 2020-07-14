@@ -39,7 +39,6 @@ import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
-import net.minecraft.state.IProperty;
 import net.minecraft.state.Property;
 import net.minecraft.util.ResourceLocation;
 
@@ -183,7 +182,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 					}
 				}
 				blockStateVariants.get(state).forEach(consumer -> consumer.accept(variant));
-				Map<IProperty<?>, Comparable<?>> properties = new HashMap<>(state.getValues());
+				Map<Property<?>, Comparable<?>> properties = new HashMap<>(state.getValues());
 				alwaysIgnore.forEach(properties::remove);
 				variantsObj.add(BlockModelShapes.getPropertyMapString(properties), variant.serialize());
 			}

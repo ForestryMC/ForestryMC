@@ -19,7 +19,7 @@ import java.util.Random;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 
@@ -29,18 +29,18 @@ public final class VectUtil {
 	private VectUtil() {
 	}
 
-	public static BlockPos getRandomPositionInArea(Random random, Vec3i area) {
+	public static BlockPos getRandomPositionInArea(Random random, Vector3i area) {
 		int x = random.nextInt(area.getX());
 		int y = random.nextInt(area.getY());
 		int z = random.nextInt(area.getZ());
 		return new BlockPos(x, y, z);
 	}
 
-	public static BlockPos add(Vec3i... vects) {
+	public static BlockPos add(Vector3i... vects) {
 		int x = 0;
 		int y = 0;
 		int z = 0;
-		for (Vec3i vect : vects) {
+		for (Vector3i vect : vects) {
 			x += vect.getX();
 			y += vect.getY();
 			z += vect.getZ();
@@ -48,11 +48,11 @@ public final class VectUtil {
 		return new BlockPos(x, y, z);
 	}
 
-	public static BlockPos scale(Vec3i vect, float factor) {
+	public static BlockPos scale(Vector3i vect, float factor) {
 		return new BlockPos(vect.getX() * factor, vect.getY() * factor, vect.getZ() * factor);
 	}
 
-	public static Direction direction(Vec3i a, Vec3i b) {
+	public static Direction direction(Vector3i a, Vector3i b) {
 		int x = Math.abs(a.getX() - b.getX());
 		int y = Math.abs(a.getY() - b.getY());
 		int z = Math.abs(a.getZ() - b.getZ());

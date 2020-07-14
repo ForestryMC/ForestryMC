@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -16,7 +17,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -68,9 +69,9 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	@Nullable
 	private IFarmLogic logic;
 	@Nullable
-	private Vec3i offset;
+	private Vector3i offset;
 	@Nullable
-	private Vec3i area;
+	private Vector3i area;
 
 	public void setManual(BlockPlanter.Mode mode) {
 		this.mode = mode;
@@ -130,8 +131,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
-		super.read(data);
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
 		manager.read(data);
 		ownerHandler.read(data);
 		setManual(BlockPlanter.Mode.values()[data.getInt("mode")]);
@@ -178,22 +179,22 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public Vec3i getArea() {
+	public Vector3i getArea() {
 		if (area == null) {
 			int basisArea = 5;
 			if (Config.ringFarms) {
 				basisArea = basisArea + 1 + Config.ringSize * 2;
 			}
-			area = new Vec3i(basisArea + Config.planterExtend, 13, basisArea + Config.planterExtend);
+			area = new Vector3i(basisArea + Config.planterExtend, 13, basisArea + Config.planterExtend);
 		}
 		return area;
 	}
 
 	@Override
-	public Vec3i getOffset() {
+	public Vector3i getOffset() {
 		if (offset == null) {
-			Vec3i area = getArea();
-			offset = new Vec3i(-area.getX() / 2, -2, -area.getZ() / 2);
+			Vector3i area = getArea();
+			offset = new Vector3i(-area.getX() / 2, -2, -area.getZ() / 2);
 		}
 		return offset;
 	}

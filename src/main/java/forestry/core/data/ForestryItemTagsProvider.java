@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
@@ -29,7 +29,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	@Override
 	protected void registerTags() {
 		super.registerTags();
-		filter = this.tagToBuilder.keySet().stream().map(Tag::getId).collect(Collectors.toSet());
+		filter = this.tagToBuilder.keySet().stream().map(ITag::getId).collect(Collectors.toSet());
 		getBuilder(ForestryTags.Items.GEARS).add(ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
 		getBuilder(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
 		getBuilder(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());

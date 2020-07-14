@@ -18,7 +18,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -1004,7 +1004,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	private IGenome genome;
 
 	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, IWoodType woodType) {
-		String uid = "tree_" + getName();
+		String uid = "tree_" + getString();
 		String unlocalizedDescription = "for.description.tree" + this;
 		String unlocalizedName = "for.trees.species." + speciesName;
 
@@ -1037,7 +1037,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 		BlockState logBlock = TreeManager.woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof);
 
 		Direction.Axis axis = facing.getAxis();
-		return world.setBlockState(pos, logBlock.with(LogBlock.AXIS, axis), 19);
+		return world.setBlockState(pos, logBlock.with(RotatedPillarBlock.AXIS, axis), 19);
 	}
 
 	@Override
@@ -1089,9 +1089,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 
 	@Override
 	public <C extends IRootComponent<ITree>> void onComponentSetup(C component) {
-		ComponentKey key = component.getKey();
+		ComponentKey<?> key = component.getKey();
 		if (key == ComponentKeys.TEMPLATES) {
-			ITemplateContainer registry = (ITemplateContainer) component;
+			ITemplateContainer<?> registry = (ITemplateContainer<?>) component;
 			IAlleleTemplateBuilder templateBuilder = branch.getTemplateBuilder();
 			templateBuilder.set(TreeChromosomes.SPECIES, species);
 			setAlleles(templateBuilder);
@@ -1141,7 +1141,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 

@@ -27,9 +27,9 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -55,7 +55,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules;
 	private final HashMultimap<String, Block> acceptableBlocks;
 	private final Map<String, BlockStateSet> acceptableBlockStates;
-	private final HashMultimap<String, Tag<Block>> acceptableBlockTags;
+	private final HashMultimap<String, ITag<Block>> acceptableBlockTags;
 	private final HashMultimap<String, Flower> plantableFlowers;
 
 	private final ArrayListMultimap<String, IFlowerGrowthRule> growthRules;
@@ -85,7 +85,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public void registerAcceptableFlower(Tag<Block> block, String... flowerTypes) {
+	public void registerAcceptableFlower(ITag<Block> block, String... flowerTypes) {
 		for (String flowerType : flowerTypes) {
 			if (flowerType == null) {
 				throw new NullPointerException("Tried to register flower with null type. " + block);
@@ -144,8 +144,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		}
 	}
 
-	private static Vec3i getArea(IGenome genome, IBeeModifier beeModifier) {
-		Vec3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
+	private static Vector3i getArea(IGenome genome, IBeeModifier beeModifier) {
+		Vector3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
 		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
 		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
 	}
@@ -153,7 +153,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	@Override
 	public Iterator<BlockPos.Mutable> getAreaIterator(IBeeHousing beeHousing, IBee bee) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
-		Vec3i area = getArea(bee.getGenome(), beeModifier);
+		Vector3i area = getArea(bee.getGenome(), beeModifier);
 		BlockPos minPos = beeHousing.getCoordinates().add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
 		BlockPos maxPos = minPos.add(area);
 		World world = beeHousing.getWorldObj();
@@ -169,12 +169,12 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
 		Set<BlockState> acceptedBlockStates = this.getAcceptedBlockStates(flowerType);
 		Set<Block> acceptedBlocks = this.acceptableBlocks.get(flowerType);
-		Set<Tag<Block>> acceptedBlockTags = this.acceptableBlockTags.get(flowerType);
+		Set<ITag<Block>> acceptedBlockTags = this.acceptableBlockTags.get(flowerType);
 
 		return new AcceptedFlowerPredicate(flowerType, acceptableRules, acceptedBlocks, acceptedBlockStates, acceptedBlockTags);
 	}
 
-	private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<Tag<Block>> acceptedBlockTags) {
+	private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<ITag<Block>> acceptedBlockTags) {
 		Block block = blockState.getBlock();
 		return acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState) || acceptedBlockTags.stream().anyMatch(blockTag -> blockTag.contains(block));
 	}
@@ -255,9 +255,9 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		private final Set<IFlowerAcceptableRule> acceptableRules;
 		private final Set<Block> acceptedBlocks;
 		private final Set<BlockState> acceptedBlockStates;
-		private final Set<Tag<Block>> acceptedBlockTags;
+		private final Set<ITag<Block>> acceptedBlockTags;
 
-		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<Tag<Block>> acceptedBlockTags) {
+		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<ITag<Block>> acceptedBlockTags) {
 			this.flowerType = flowerType;
 			this.acceptableRules = acceptableRules;
 			this.acceptedBlocks = acceptedBlocks;

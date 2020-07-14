@@ -33,7 +33,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -45,8 +48,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -75,7 +76,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 		}
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name;
 		}
 	}
@@ -110,7 +111,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	public BlockCandle() {
 		super(Block.Properties.create(Material.MISCELLANEOUS)
 			.hardnessAndResistance(0.0f)
-			.sound(SoundType.WOOD));
+			.sound(SoundType.WOOD), ParticleTypes.FLAME);
 		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.OFF));
 	}
 

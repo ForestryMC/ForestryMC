@@ -11,103 +11,67 @@
 package forestry.farming.blocks;
 
 import java.util.Locale;
+import java.util.function.Function;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.core.utils.ResourceUtil;
 
 public enum EnumFarmMaterial implements IBlockSubtype {
-	BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY),
-	BRICK_MOSSY(new ItemStack(Blocks.MOSSY_STONE_BRICKS), TextFormatting.DARK_GRAY),
-	BRICK_CRACKED(new ItemStack(Blocks.CRACKED_STONE_BRICKS), TextFormatting.DARK_GRAY),
-	BRICK(new ItemStack(Blocks.BRICKS), TextFormatting.GOLD),
-	SANDSTONE_SMOOTH(new ItemStack(Blocks.SMOOTH_SANDSTONE), TextFormatting.YELLOW),
-	SANDSTONE_CHISELED(new ItemStack(Blocks.CHISELED_SANDSTONE), TextFormatting.YELLOW),
-	BRICK_NETHER(new ItemStack(Blocks.NETHER_BRICKS), TextFormatting.DARK_RED),
-	BRICK_CHISELED(new ItemStack(Blocks.CHISELED_STONE_BRICKS), TextFormatting.GOLD),
-	QUARTZ(new ItemStack(Blocks.QUARTZ_BLOCK), TextFormatting.WHITE),
-	QUARTZ_CHISELED(new ItemStack(Blocks.CHISELED_QUARTZ_BLOCK), TextFormatting.WHITE),
-	QUARTZ_LINES(new ItemStack(Blocks.QUARTZ_PILLAR), TextFormatting.WHITE);
+	BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY, "stone_bricks"),
+	BRICK_MOSSY(new ItemStack(Blocks.MOSSY_STONE_BRICKS), TextFormatting.DARK_GRAY, "mossy_stone_bricks"),
+	BRICK_CRACKED(new ItemStack(Blocks.CRACKED_STONE_BRICKS), TextFormatting.DARK_GRAY, "cracked_stone_bricks"),
+	BRICK(new ItemStack(Blocks.BRICKS), TextFormatting.GOLD, "bricks"),
+	SANDSTONE_SMOOTH(new ItemStack(Blocks.SMOOTH_SANDSTONE), TextFormatting.YELLOW, pillarTexture("cut_sandstone", "sandstone_bottom", "sandstone_top")),
+	SANDSTONE_CHISELED(new ItemStack(Blocks.CHISELED_SANDSTONE), TextFormatting.YELLOW, pillarTexture("chiseled_sandstone", "sandstone_bottom", "sandstone_top")),
+	BRICK_NETHER(new ItemStack(Blocks.NETHER_BRICKS), TextFormatting.DARK_RED, "nether_bricks"),
+	BRICK_CHISELED(new ItemStack(Blocks.CHISELED_STONE_BRICKS), TextFormatting.GOLD, "chiseled_stone_bricks"),
+	QUARTZ(new ItemStack(Blocks.QUARTZ_BLOCK), TextFormatting.WHITE, pillarTexture("quartz_block_side", "quartz_block_bottom", "quartz_block_top")),
+	QUARTZ_CHISELED(new ItemStack(Blocks.CHISELED_QUARTZ_BLOCK), TextFormatting.WHITE, pillarTexture("chiseled_quartz_block", "chiseled_quartz_block_top", "chiseled_quartz_block_top")),
+	QUARTZ_LINES(new ItemStack(Blocks.QUARTZ_PILLAR), TextFormatting.WHITE, pillarTexture("quartz_pillar", "chiseled_quartz_block_top", "chiseled_quartz_block_top"));
 
 	private final ItemStack base;
 	private final TextFormatting formatting;
+	private final Function<Direction, String> texture;
 
-	EnumFarmMaterial(ItemStack base, TextFormatting formatting) {
+	EnumFarmMaterial(ItemStack base, TextFormatting formatting, String texture) {
+		this(base, formatting, (direction) -> texture);
+	}
+
+	EnumFarmMaterial(ItemStack base, TextFormatting formatting, Function<Direction, String> texture) {
 		this.base = base;
 		this.formatting = formatting;
+		this.texture = texture;
 	}
 
 	public TextFormatting getFormatting() {
 		return formatting;
 	}
 
-	/**
-	 * @return The texture sprite from the material of the farm block
-	 */
-	@OnlyIn(Dist.CLIENT)
-	public static TextureAtlasSprite getSprite(EnumFarmMaterial texture, int side) {
-		switch (texture) {
-			case BRICK:
-				return ResourceUtil.getBlockSprite("block/bricks");
-			case BRICK_STONE:
-				return ResourceUtil.getBlockSprite("block/stone_bricks");
-			case BRICK_CHISELED:
-				return ResourceUtil.getBlockSprite("block/chiseled_stone_bricks");
-			case BRICK_CRACKED:
-				return ResourceUtil.getBlockSprite("block/cracked_stone_bricks");
-			case BRICK_MOSSY:
-				return ResourceUtil.getBlockSprite("block/mossy_stone_bricks");
-			case BRICK_NETHER:
-				return ResourceUtil.getBlockSprite("block/nether_bricks");
-			case SANDSTONE_CHISELED:
-				if (side == 0) {
-					return ResourceUtil.getBlockSprite("block/sandstone_bottom");
-				} else if (side == 1) {
-					return ResourceUtil.getBlockSprite("block/sandstone_top");
-				}
-				return ResourceUtil.getBlockSprite("block/chiseled_sandstone");
-			case SANDSTONE_SMOOTH:
-				if (side == 0) {
-					return ResourceUtil.getBlockSprite("block/sandstone_bottom");
-				} else if (side == 1) {
-					return ResourceUtil.getBlockSprite("block/sandstone_top");
-				}
-				return ResourceUtil.getBlockSprite("block/cut_sandstone");
-			case QUARTZ:
-				if (side == 0) {
-					return ResourceUtil.getBlockSprite("block/quartz_block_bottom");
-				} else if (side == 1) {
-					return ResourceUtil.getBlockSprite("block/quartz_block_top");
-				}
-				return ResourceUtil.getBlockSprite("block/quartz_block_side");
-			case QUARTZ_CHISELED:
-				if (side == 0 || side == 1) {
-					return ResourceUtil.getBlockSprite("block/chiseled_quartz_block_top");
-				}
-				return ResourceUtil.getBlockSprite("block/chiseled_quartz_block");
-			case QUARTZ_LINES:
-				if (side == 0 || side == 1) {
-					return ResourceUtil.getBlockSprite("block/quartz_pillar_top");
-				}
-				return ResourceUtil.getBlockSprite("block/quartz_pillar");
-			default:
-				return null;
-		}
+	private static Function<Direction, String> pillarTexture(String side, String bottom, String top) {
+		return direction -> {
+			switch (direction) {
+				case UP:
+					return top;
+				case DOWN:
+					return bottom;
+				default:
+					return side;
+			}
+		};
 	}
 
 	public TextureAtlasSprite[] getSprites() {
 		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
-		for (int side = 0; side < textures.length; side++) {
-			textures[side] = getSprite(this, side);
+		for (Direction direction : Direction.VALUES) {
+			textures[direction.getIndex()] = ResourceUtil.getBlockSprite("block/" + texture.apply(direction));
 		}
 		return textures;
 	}
@@ -121,12 +85,8 @@ public enum EnumFarmMaterial implements IBlockSubtype {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return name().toLowerCase(Locale.ENGLISH);
-	}
-
-	public String getUid() {
-		return toString().toLowerCase(Locale.ENGLISH);
 	}
 
 	public ItemStack getBase() {

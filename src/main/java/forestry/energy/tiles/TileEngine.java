@@ -244,8 +244,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT nbt) {
-		super.read(nbt);
+	public void read(BlockState state, CompoundNBT nbt) {
+		super.read(state, nbt);
 		energyManager.read(nbt);
 
 		heat = nbt.getInt("EngineHeat");

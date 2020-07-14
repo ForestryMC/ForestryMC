@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.CraftingInventory;
@@ -73,8 +74,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		craftingDisplay.read(compoundNBT);
 		recipeMemory = new RecipeMemory(compoundNBT);

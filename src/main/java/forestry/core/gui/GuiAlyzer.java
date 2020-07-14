@@ -107,7 +107,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public final void drawChromosomeRow(String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
-		textLayout.drawRow(chromosomeName, active.getDisplayName().getFormattedText(), inactive.getDisplayName().getFormattedText(),
+		textLayout.drawRow(chromosomeName, active.getDisplayName().getString(), inactive.getDisplayName().getString(),
 			ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
 			getColorCoding(inactive.isDominant()));
 	}
@@ -124,8 +124,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		GuiUtil.drawItemStack(this, iconStacks.get(primary.getRegistryName()), guiLeft + textLayout.column1 + columnwidth - 20, guiTop + 10);
 		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getRegistryName()), guiLeft + textLayout.column2 + columnwidth - 20, guiTop + 10);
 
-		String primaryName = customPrimaryName == null ? primary.getDisplayName().getFormattedText() : customPrimaryName;
-		String secondaryName = customSecondaryName == null ? secondary.getDisplayName().getFormattedText() : customSecondaryName;
+		String primaryName = customPrimaryName == null ? primary.getDisplayName().getString() : customPrimaryName;
+		String secondaryName = customSecondaryName == null ? secondary.getDisplayName().getString() : customSecondaryName;
 
 		drawSplitLine(primaryName, textLayout.column1, columnwidth, individual, chromosome, false);
 		drawSplitLine(secondaryName, textLayout.column2, columnwidth, individual, chromosome, true);
@@ -289,7 +289,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 
 		textLayout.newLine();
-		String description = individual.getGenome().getPrimary().getDescription().getFormattedText();
+		String description = individual.getGenome().getPrimary().getDescription().getString();
 		if (StringUtils.isBlank(description) || description.startsWith("for.description.")) {
 			textLayout.drawSplitLine(Translator.translateToLocal("for.gui.alyzer.nodescription"), 12, 200, 0x666666);
 		} else {
@@ -413,7 +413,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	public void drawToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, int x) {
 		int textColor = getColorCoding(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		String text = "(" + toleranceAllele.getDisplayName().getFormattedText() + ")";
+		String text = "(" + toleranceAllele.getDisplayName().getString() + ")";
 
 		// Enable correct lighting.
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);

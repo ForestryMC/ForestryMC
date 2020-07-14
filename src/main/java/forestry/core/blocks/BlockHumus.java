@@ -6,15 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.LogBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -48,11 +47,6 @@ public class BlockHumus extends Block {
 	}
 
 	@Override
-	public int tickRate(IWorldReader world) {
-		return 500;
-	}
-
-	@Override
 	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (world.isRemote || world.rand.nextInt(140) != 0) {
 			return;
@@ -72,7 +66,7 @@ public class BlockHumus extends Block {
 				BlockPos blockPos = pos.add(i, 1, j);
 				BlockState state = world.getBlockState(blockPos);
 				Block block = state.getBlock();
-				if (block instanceof LogBlock || block instanceof IGrowable) {
+				if (block.isIn(BlockTags.LOGS) || block instanceof IGrowable) {
 					return true;
 				}
 			}
@@ -102,6 +96,6 @@ public class BlockHumus extends Block {
 	@Override
 	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
 		PlantType plantType = plantable.getPlantType(world, pos);
-		return plantType == PlantType.Crop || plantType == PlantType.Plains;
+		return plantType == PlantType.CROP || plantType == PlantType.PLAINS;
 	}
 }

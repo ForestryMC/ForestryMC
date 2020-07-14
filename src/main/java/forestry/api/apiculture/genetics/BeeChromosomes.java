@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeAllele;
@@ -69,7 +69,7 @@ public class BeeChromosomes {
 	/**
 	 * Determines the size of the bee's territory.
 	 */
-	public static final IChromosomeValue<Vec3i> TERRITORY = TYPES.builder().name("territory").asValue(Vec3i.class);
+	public static final IChromosomeValue<Vector3i> TERRITORY = TYPES.builder().name("territory").asValue(Vector3i.class);
 	/**
 	 * Determines the bee's effect.
 	 */

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.EnumMap;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -91,8 +92,8 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState state, CompoundNBT compound) {
+		super.read(state, compound);
 		tankManager.read(compound);
 		checkEmptyRecipe();
 		checkFillRecipe();

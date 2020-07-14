@@ -11,7 +11,7 @@ public enum BlockBeeProductType implements IStringSerializable {
 	public static final BlockBeeProductType[] VALUES = values();
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 

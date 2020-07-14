@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
@@ -242,8 +243,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
-		super.read(nbt);
+	public void read(BlockState state, CompoundNBT nbt) {
+		super.read(state, nbt);
 
 		if (nbt.contains("shutdown")) {
 			shutdown = nbt.getBoolean("shutdown");

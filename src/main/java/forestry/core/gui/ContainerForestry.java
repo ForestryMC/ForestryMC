@@ -100,7 +100,6 @@ public abstract class ContainerForestry extends Container {
 		return getSlot(PLAYER_INV_SLOTS + slot);
 	}
 
-
 	@Override
 	public final ItemStack transferStackInSlot(PlayerEntity player, int slotIndex) {
 		if (!canAccess(player)) {

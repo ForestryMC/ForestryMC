@@ -12,10 +12,11 @@ package forestry.apiculture.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -80,8 +81,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		beeLogic.read(compoundNBT);
 		ownerHandler.read(compoundNBT);
 	}
@@ -96,8 +97,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(CompoundNBT tag) {
-		super.handleUpdateTag(tag);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
 		beeLogic.read(tag);
 		ownerHandler.read(tag);
 	}
@@ -216,7 +217,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public Vec3d getBeeFXCoordinates() {
-		return new Vec3d(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
+	public Vector3d getBeeFXCoordinates() {
+		return new Vector3d(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
 	}
 }

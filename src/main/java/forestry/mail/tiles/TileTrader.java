@@ -14,6 +14,7 @@ import com.google.common.base.Preconditions;
 
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -83,8 +84,8 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		if (compoundNBT.contains("address")) {
 			address = new MailAddress(compoundNBT.getCompound("address"));

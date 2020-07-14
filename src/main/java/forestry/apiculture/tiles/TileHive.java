@@ -22,7 +22,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.ZombiePigmanEntity;
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -35,7 +35,7 @@ import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -188,8 +188,8 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 		contained.read(compoundNBT);
 		beeLogic.read(compoundNBT);
 	}
@@ -282,8 +282,8 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public void handleUpdateTag(CompoundNBT tag) {
-		super.handleUpdateTag(tag);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
 		setActive(tag.getBoolean("active"));
 		beeLogic.read(tag);
 	}
@@ -293,7 +293,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(nbt);
+		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	@Override
@@ -360,9 +360,9 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public Vec3d getBeeFXCoordinates() {
+	public Vector3d getBeeFXCoordinates() {
 		BlockPos pos = getPos();
-		return new Vec3d(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
+		return new Vector3d(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
 	}
 
 	@Override
@@ -392,7 +392,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 					return true;
 				} else if (input instanceof IMob) {
 					// don't attack semi-passive vanilla mobs
-					return !(input instanceof EndermanEntity) && !(input instanceof ZombiePigmanEntity);
+					return !(input instanceof EndermanEntity) && !(input instanceof ZombifiedPiglinEntity);
 				}
 			}
 			return false;

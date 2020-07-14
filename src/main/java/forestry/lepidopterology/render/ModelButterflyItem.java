@@ -23,22 +23,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.minecraft.client.renderer.TransformationMatrix;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.BlockModel;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IModelTransform;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.Material;
 import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.util.math.vector.Vector3f;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
@@ -86,7 +86,7 @@ public class ModelButterflyItem extends AbstractBakedModel {
 		}
 
 		@Override
-		public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
+		public IBakedModel func_239290_a_(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
 			IOrganism<IButterfly> organism = GeneticHelper.getOrganism(stack);
 			IAlleleButterflySpecies species = organism.getAllele(ButterflyChromosomes.SPECIES, true);
 			IAlleleValue<Float> size = organism.getAllele(ButterflyChromosomes.SIZE, true);
@@ -127,7 +127,7 @@ public class ModelButterflyItem extends AbstractBakedModel {
 		}
 
 		@Override
-		public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+		public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
 			IUnbakedModel modelButterfly = bakery.getUnbakedModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
 			if (!(modelButterfly instanceof BlockModel)) {
 				return null;
@@ -138,7 +138,7 @@ public class ModelButterflyItem extends AbstractBakedModel {
 				String identifier = subModel.getKey();
 				String texture = subModel.getValue();
 
-				BlockModel model = new BlockModel(modelBlock.getParentLocation(), modelBlock.getElements(), ImmutableMap.of("butterfly", Either.left(new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(texture)))), modelBlock.ambientOcclusion, modelBlock.func_230176_c_(), modelBlock.getAllTransforms(), modelBlock.getOverrides());
+				BlockModel model = new BlockModel(modelBlock.getParentLocation(), modelBlock.getElements(), ImmutableMap.of("butterfly", Either.left(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(texture)))), modelBlock.ambientOcclusion, modelBlock.func_230176_c_(), modelBlock.getAllTransforms(), modelBlock.getOverrides());
 				ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "item/butterfly");
 				IModelTransform transform = ResourceUtil.loadTransform(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
 				subModelBuilder.put(identifier, model.bakeModel(bakery, model, spriteGetter, transform, location, true));
@@ -147,8 +147,8 @@ public class ModelButterflyItem extends AbstractBakedModel {
 		}
 
 		@Override
-		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-			return subModels.values().stream().map((location) -> new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(location))).collect(Collectors.toSet());
+		public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+			return subModels.values().stream().map((location) -> new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(location))).collect(Collectors.toSet());
 		}
 	}
 }

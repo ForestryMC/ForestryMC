@@ -490,7 +490,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (world != null && !world.isRemote) {
 			if (housing instanceof Entity) {
 				Entity housingEntity = (Entity) this.housing;
-				NetworkUtil.sendNetworkPacket(new PacketBeeLogicActiveEntity(this.housing, housingEntity), housingEntity.getPosition(), world);
+				NetworkUtil.sendNetworkPacket(new PacketBeeLogicActiveEntity(this.housing, housingEntity), housingEntity.func_233580_cy_(), world);
 			} else {
 				NetworkUtil.sendNetworkPacket(new PacketBeeLogicActive(housing), housing.getCoordinates(), world);
 			}

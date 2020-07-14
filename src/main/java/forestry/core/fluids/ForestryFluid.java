@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -82,7 +82,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	protected boolean canDisplace(IFluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
+	protected boolean canDisplace(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
 		return false;
 	}
 
@@ -101,7 +101,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	protected BlockState getBlockState(IFluidState state) {
+	protected BlockState getBlockState(FluidState state) {
 		return getBlock().getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
 	}
 
@@ -111,17 +111,17 @@ public abstract class ForestryFluid extends FlowingFluid {
 		}
 
 		@Override
-		protected void fillStateContainer(StateContainer.Builder<Fluid, IFluidState> builder) {
+		protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
 			super.fillStateContainer(builder);
 			builder.add(LEVEL_1_8);
 		}
 
 		@Override
-		public int getLevel(IFluidState fluidState) {
+		public int getLevel(FluidState fluidState) {
 			return fluidState.get(LEVEL_1_8);
 		}
 
-		public boolean isSource(IFluidState state) {
+		public boolean isSource(FluidState state) {
 			return false;
 		}
 	}
@@ -132,12 +132,12 @@ public abstract class ForestryFluid extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(IFluidState fluidState) {
+		public int getLevel(FluidState fluidState) {
 			return 8;
 		}
 
 		@Override
-		public boolean isSource(IFluidState state) {
+		public boolean isSource(FluidState state) {
 			return true;
 		}
 	}

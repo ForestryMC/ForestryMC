@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import java.io.IOException;
 import java.util.Collection;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -265,8 +266,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	// / LOADING AND SAVING
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		if (compoundNBT.contains("EngineFuelItemStack")) {
 			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");

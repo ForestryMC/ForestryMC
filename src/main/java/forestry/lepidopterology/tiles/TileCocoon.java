@@ -72,8 +72,8 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		if (compoundNBT.contains("Caterpillar")) {
 			caterpillar = new Butterfly(compoundNBT.getCompound("Caterpillar"));
@@ -148,9 +148,9 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(CompoundNBT tag) {
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
 		int oldAge = age;
-		super.handleUpdateTag(tag);
+		super.handleUpdateTag(state, tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 		if (oldAge != age) {
 			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());

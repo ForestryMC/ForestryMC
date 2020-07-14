@@ -11,13 +11,10 @@
 package forestry.core.gui.tooltips;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,7 +23,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 @OnlyIn(Dist.CLIENT)
-public class ToolTip {
+public class ToolTip extends TextCollection {
 
 	private final List<ITextComponent> lines = new ArrayList<>();
 	private final long delay;
@@ -40,41 +37,10 @@ public class ToolTip {
 		this.delay = delay;
 	}
 
-	public void clear() {
-		lines.clear();
-	}
-
 	//TODO - only for porting, remove when cleaning up
 	@Deprecated
 	public boolean add(String s) {
 		return this.add(new StringTextComponent(s));
-	}
-
-	public boolean add(ITextComponent line) {
-		return lines.add(line);
-	}
-
-	public boolean add(ITextComponent line, TextFormatting format) {
-		Style style = new Style();
-		style.setColor(format);
-		return add(line, style);
-	}
-
-	public boolean add(ITextComponent line, Style style) {
-		line.setStyle(style);
-		return lines.add(line);
-	}
-
-	public boolean add(List<ITextComponent> lines) {
-		boolean changed = false;
-		for (ITextComponent line : lines) {
-			changed |= add(line);
-		}
-		return changed;
-	}
-
-	public List<ITextComponent> getLines() {
-		return Collections.unmodifiableList(lines);
 	}
 
 	public void onTick(boolean mouseOver) {

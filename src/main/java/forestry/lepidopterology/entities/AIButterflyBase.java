@@ -17,7 +17,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public abstract class AIButterflyBase extends Goal {
 
@@ -28,13 +28,13 @@ public abstract class AIButterflyBase extends Goal {
 	}
 
 	@Nullable
-	protected Vec3d getRandomDestination() {
+	protected Vector3d getRandomDestination() {
 		if (entity.isInWater()) {
 			return getRandomDestinationUpwards();
 		}
 
-		Vec3d entityPos = new Vec3d(entity.posX, entity.posY, entity.posZ);
-		Vec3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entityPos);
+		Vector3d entityPos = new Vector3d(entity.posX, entity.posY, entity.posZ);
+		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entityPos);
 
 		if (randomTarget != null && validateDestination(randomTarget, false)) {
 			return randomTarget;
@@ -43,8 +43,8 @@ public abstract class AIButterflyBase extends Goal {
 	}
 
 	@Nullable
-	protected Vec3d getRandomDestinationUpwards() {
-		Vec3d destination = new Vec3d(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
+	protected Vector3d getRandomDestinationUpwards() {
+		Vector3d destination = new Vector3d(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
 		if (validateDestination(destination, true)) {
 			return destination;
 		} else {
@@ -52,7 +52,7 @@ public abstract class AIButterflyBase extends Goal {
 		}
 	}
 
-	private boolean validateDestination(Vec3d dest, boolean allowFluids) {
+	private boolean validateDestination(Vector3d dest, boolean allowFluids) {
 		if (dest.y < 1) {
 			return false;
 		}

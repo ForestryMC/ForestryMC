@@ -34,7 +34,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ILightReader;
+import net.minecraft.world.IBlockDisplayReader;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -190,7 +190,7 @@ public class ClientManager {
 		}
 
 		@Override
-		public int getColor(BlockState state, @Nullable ILightReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+		public int getColor(BlockState state, @Nullable IBlockDisplayReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 			Block block = state.getBlock();
 			if (block instanceof IColoredBlock && worldIn != null && pos != null) {
 				return ((IColoredBlock) block).colorMultiplier(state, worldIn, pos, tintIndex);

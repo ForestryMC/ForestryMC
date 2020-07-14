@@ -25,11 +25,9 @@ import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -76,6 +74,7 @@ import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
@@ -259,7 +258,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// / Check for the sky, except if in hell
-		if (!world.dimension.isNether()) {
+		if (!world.func_230315_m_().func_236037_d_()) {//TODO: We used 'isNether' earlier not sure if 'func_236037_d_' is the right replacment method
 			if (!housing.canBlockSeeTheSky() && !canWorkUnderground(beeModifier)) {
 				errorStates.add(EnumErrorCode.NO_SKY);
 			}
@@ -340,10 +339,11 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public void addTooltip(List<ITextComponent> list) {
+		ToolTip toolTip = new ToolTip();
 
 		// No info 4 u!
 		if (!isAnalyzed) {
-			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.unknown")).appendText(">"));
+			toolTip.singleLine().text("<").translated("for.gui.unknown").text(">").end();
 			return;
 		}
 
@@ -351,7 +351,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getActiveAllele(BeeChromosomes.SPECIES);
 		IAlleleBeeSpecies secondary = genome.getInactiveAllele(BeeChromosomes.SPECIES);
 		if (!isPureBred(BeeChromosomes.SPECIES)) {
-			list.add(new TranslationTextComponent("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).applyTextStyle(TextFormatting.BLUE));
+			toolTip.translated("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).style(TextFormatting.BLUE);
 		}
 
 		if (generation > 0) {
@@ -365,8 +365,7 @@ public class Bee extends IndividualLiving implements IBee {
 			} else {
 				rarity = Rarity.COMMON;
 			}
-
-			list.add(new TranslationTextComponent("for.gui.beealyzer.generations", generation).applyTextStyle(rarity.color));
+			toolTip.translated("for.gui.beealyzer.generations", generation).style(rarity.color);
 		}
 
 		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
@@ -378,28 +377,23 @@ public class Bee extends IndividualLiving implements IBee {
 		if (Translator.canTranslateToLocal(unlocalizedCustomSpeed)) {
 			speed = Translator.translateToLocal(unlocalizedCustomSpeed);
 		} else {
-			speed = speedAllele.getDisplayName().getFormattedText() + ' ' + Translator.translateToLocal("for.gui.worker");
+			speed = speedAllele.getDisplayName().getString() + ' ' + Translator.translateToLocal("for.gui.worker");
 		}
 
-		String lifespan = genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName().getFormattedText() + ' ' + Translator.translateToLocal("for.gui.life");
-		String tempTolerance = TextFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(primary.getTemperature()) + " / " + tempToleranceAllele.getDisplayName().getFormattedText();
-		String humidTolerance = TextFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(secondary.getHumidity()) + " / " + humidToleranceAllele.getDisplayName().getFormattedText();
-		ITextComponent flowers = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription();
-
-		//TODO textcomponent many times...
-		list.add(new StringTextComponent(lifespan));
-		list.add(new StringTextComponent(speed));
-		list.add(new StringTextComponent(tempTolerance));
-		list.add(new StringTextComponent(humidTolerance));
-		list.add(flowers);
+		toolTip.singleLine().add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName()).text(" ").translated("for.gui.life").end();
+		toolTip.text(speed);
+		toolTip.singleLine().text("T: ").add(AlleleManager.climateHelper.toDisplay(primary.getTemperature())).text(" / ").add(tempToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).end();
+		toolTip.singleLine().text("H: ").add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(" / ").add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).end();
+		toolTip.add(genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription());
 
 		if (genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
-			list.add(new StringTextComponent(TextFormatting.RED + GenericRatings.rateActivityTime(true, false)));
+			toolTip.text(GenericRatings.rateActivityTime(true, false)).style(TextFormatting.RED);
 		}
 
 		if (genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN)) {
-			list.add(new StringTextComponent(TextFormatting.WHITE + Translator.translateToLocal("for.gui.flyer.tooltip")));
+			toolTip.translated("for.gui.flyer.tooltip").style(TextFormatting.WHITE);
 		}
+		list.addAll(toolTip.getLines());
 	}
 
 	@Override
@@ -626,8 +620,8 @@ public class Bee extends IndividualLiving implements IBee {
 			return Optional.empty();
 		}
 
-		Vec3i area = getArea(genome, beeModifier);
-		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		Vector3i area = getArea(genome, beeModifier);
+		Vector3i offset = new Vector3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 		BlockPos housingPos = housing.getCoordinates();
 
 		IIndividual pollen = null;
@@ -667,8 +661,8 @@ public class Bee extends IndividualLiving implements IBee {
 			return false;
 		}
 
-		Vec3i area = getArea(genome, beeModifier);
-		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		Vector3i area = getArea(genome, beeModifier);
+		Vector3i offset = new Vector3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 		BlockPos housingPos = housing.getCoordinates();
 
 		for (int i = 0; i < 30; i++) {
@@ -714,8 +708,8 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 		// Gather required info
 		IFlowerProvider provider = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider();
-		Vec3i area = getArea(genome, beeModifier);
-		Vec3i offset = new Vec3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		Vector3i area = getArea(genome, beeModifier);
+		Vector3i offset = new Vector3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 		BlockPos housingPos = housing.getCoordinates();
 
 		for (int i = 0; i < 10; i++) {
@@ -729,8 +723,8 @@ public class Bee extends IndividualLiving implements IBee {
 		return Optional.empty();
 	}
 
-	private static Vec3i getArea(IGenome genome, IBeeModifier beeModifier) {
-		Vec3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
+	private static Vector3i getArea(IGenome genome, IBeeModifier beeModifier) {
+		Vector3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
 		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
 		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
 	}

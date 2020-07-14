@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -46,7 +46,7 @@ public interface IFlowerRegistry {
 	/**
 	 * Registers an accepted flower with a particular tag.
 	 */
-	void registerAcceptableFlower(Tag<Block> block, String... flowerTypes);
+	void registerAcceptableFlower(ITag<Block> block, String... flowerTypes);
 
 	/**
 	 * Registers custom logic for accepted flowers.

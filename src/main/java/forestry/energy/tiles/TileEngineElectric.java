@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -71,8 +72,8 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 	// / SAVING / LOADING
 	@Override
-	public void read(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
 		//		if (ic2EnergySink != null) {
 		//			ic2EnergySink.read(compoundNBT);
