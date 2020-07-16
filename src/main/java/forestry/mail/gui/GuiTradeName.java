@@ -16,6 +16,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
@@ -36,16 +38,16 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 		this.xSize = 176;
 		this.ySize = 90;
 
-		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, "");
+		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
 	}
 
 	@Override
 	public void init() {
 		super.init();
 
-		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, "");
+		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
 		addressNameField.setText(container.getAddress().getName());
-		addressNameField.focused = true;
+		addressNameField.setFocused2(true);
 	}
 
 	@Override
@@ -74,15 +76,15 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int var2, int var3) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, var2, var3);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int var3, int var2) {
+		super.func_230450_a_(transform, partialTicks, var3, var2);
 
 		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
 		textLayout.startPage();
 		textLayout.newLine();
-		textLayout.drawCenteredLine(prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
+		textLayout.drawCenteredLine(transform, prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
 		textLayout.endPage();
-		addressNameField.render(var2, var3, partialTicks);    //TODO correct?
+		addressNameField.render(transform, var2, var3, partialTicks);    //TODO correct?
 	}
 
 	@Override

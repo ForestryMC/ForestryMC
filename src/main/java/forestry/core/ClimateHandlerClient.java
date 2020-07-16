@@ -33,7 +33,7 @@ public class ClimateHandlerClient {
 		}
 		PlayerEntity player = event.player;
 		World world = player.world;
-		BlockPos pos = player.getPosition();
+		BlockPos pos = player.func_233580_cy_();
 		if (currentState.isPresent()) {
 			int x = world.rand.nextInt(11) - 5;
 			int y = world.rand.nextInt(5) - 1;

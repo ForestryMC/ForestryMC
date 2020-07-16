@@ -61,10 +61,10 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	/* RENDERING */
-	@Override
+	/*@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return false;
-	}
+	}*/
 
 	/* PLANTING */
 	public static boolean canBlockStay(IBlockReader world, BlockPos pos) {

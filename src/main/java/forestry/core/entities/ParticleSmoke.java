@@ -13,8 +13,8 @@ package forestry.core.entities;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.world.World;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ParticleSmoke extends Particle {
 	private final float ignitionParticleScale = 1.0f;    //TODO particles
 
-	public ParticleSmoke(World world, double x, double y, double z) {
+	public ParticleSmoke(ClientWorld world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
 		this.motionX *= 0.8;
 		this.motionY *= 0.8;

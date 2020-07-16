@@ -21,7 +21,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -40,6 +39,7 @@ public class BlockWoodPile extends Block {
 	public static final BooleanProperty IS_ACTIVE = BooleanProperty.create("active");
 	public static final IntegerProperty AGE = BlockStateProperties.AGE_0_7;
 	public static final int RANDOM_TICK = 160;
+	public static final int TICK_RATE = 960;
 
 	public BlockWoodPile() {
 		super(Block.Properties.create(Material.WOOD)
@@ -53,11 +53,6 @@ public class BlockWoodPile extends Block {
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(IS_ACTIVE, AGE);
-	}
-
-	@Override
-	public int tickRate(IWorldReader world) {
-		return 960;
 	}
 
 	//TODO voxelShape
@@ -88,7 +83,7 @@ public class BlockWoodPile extends Block {
 			}
 		}
 
-		world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+		world.getPendingBlockTicks().scheduleTick(pos, this, TICK_RATE + world.rand.nextInt(RANDOM_TICK));
 	}
 
 	@Override
@@ -104,7 +99,7 @@ public class BlockWoodPile extends Block {
 	private void activatePile(BlockState state, World world, BlockPos pos, boolean scheduleUpdate) {
 		world.setBlockState(pos, state.with(IS_ACTIVE, true), 2);
 		if (scheduleUpdate) {
-			world.getPendingBlockTicks().scheduleTick(pos, this, (this.tickRate(world) + world.rand.nextInt(RANDOM_TICK)) / 4);
+			world.getPendingBlockTicks().scheduleTick(pos, this, (TICK_RATE + world.rand.nextInt(RANDOM_TICK)) / 4);
 		}
 	}
 
@@ -137,7 +132,7 @@ public class BlockWoodPile extends Block {
 					world.setBlockState(pos, ashState, 2);
 				}
 			}
-			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + world.rand.nextInt(RANDOM_TICK));
+			world.getPendingBlockTicks().scheduleTick(pos, this, TICK_RATE + world.rand.nextInt(RANDOM_TICK));
 		}
 	}
 
@@ -196,8 +191,8 @@ public class BlockWoodPile extends Block {
 		ICharcoalManager charcoalManager = Preconditions.checkNotNull(TreeManager.charcoalManager);
 		Collection<ICharcoalPileWall> walls = charcoalManager.getWalls();
 
-		BlockPos.Mutable testPos = new BlockPos.Mutable(pos);
-		testPos.move(facing);
+		BlockPos.Mutable testPos = new BlockPos.Mutable();
+		testPos.setPos(pos).move(facing);
 		int i = 0;
 		while (i < Config.charcoalWallCheckRange && world.isBlockLoaded(testPos) && !world.isAirBlock(testPos)) {
 			BlockState state = world.getBlockState(testPos);

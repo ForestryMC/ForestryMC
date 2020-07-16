@@ -24,6 +24,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -47,7 +48,7 @@ public class ItemLetter extends ItemWithGui {
 		FRESH, STAMPED, OPENED, EMPTIED;
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -56,7 +57,7 @@ public class ItemLetter extends ItemWithGui {
 		EMPTY, SMALL, BIG;
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -91,7 +92,7 @@ public class ItemLetter extends ItemWithGui {
 		if (heldItem.getCount() == 1) {
 			return super.onItemRightClick(worldIn, playerIn, handIn);
 		} else {
-			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"));
+			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"), Util.DUMMY_UUID);
 			return ActionResult.resultFail(heldItem);
 		}
 	}
@@ -103,7 +104,7 @@ public class ItemLetter extends ItemWithGui {
 
 		CompoundNBT compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
-			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.blank").appendText(">")).applyTextStyle(TextFormatting.GRAY));
+			list.add(new StringTextComponent("<").func_230529_a_(new TranslationTextComponent("for.gui.blank").func_240702_b_(">")).func_240699_a_(TextFormatting.GRAY));
 			return;
 		}
 

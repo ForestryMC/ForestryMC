@@ -43,7 +43,7 @@ public enum EnumResourceType implements IBlockSubtype {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

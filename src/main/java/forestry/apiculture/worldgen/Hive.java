@@ -24,7 +24,6 @@ import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.HiveConfig;
 
 public final class Hive {
 
@@ -68,9 +67,10 @@ public final class Hive {
 	}
 
 	public boolean isValidLocation(World world, BlockPos pos) {
-		if (!HiveConfig.isDimAllowed(world.dimension.getType().getRegistryName())) {
+		//TODO: Find a way to get the dimension type name
+		/*if (!HiveConfig.isDimAllowed(world.func_230315_m_().getRegistryName())) {
 			return false;
-		}
+		}*/
 		return hiveDescription.getHiveGen().isValidLocation(world, pos);
 	}
 

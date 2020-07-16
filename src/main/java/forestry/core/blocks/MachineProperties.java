@@ -60,7 +60,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return name;
 	}
 

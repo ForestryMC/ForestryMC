@@ -2,8 +2,8 @@ package forestry.core.gui.event;
 
 import javax.annotation.Nullable;
 
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.events.GuiElementEvent;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.events.GuiElementEvent;
 
 public class EventValueChanged<V> extends GuiElementEvent {
 	@Nullable

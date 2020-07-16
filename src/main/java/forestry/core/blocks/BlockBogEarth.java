@@ -22,7 +22,6 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -54,11 +53,6 @@ public class BlockBogEarth extends Block {
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		super.fillStateContainer(builder);
 		builder.add(MATURITY);
-	}
-
-	@Override
-	public int tickRate(IWorldReader world) {
-		return 500;
 	}
 
 	@Override

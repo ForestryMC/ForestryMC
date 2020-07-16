@@ -17,11 +17,11 @@ import genetics.api.root.components.ComponentKeys;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.gui.GuiConstants;
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IDatabaseElement;
-import forestry.api.gui.IElementLayoutHelper;
 import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IDatabaseElement;
+import forestry.core.gui.elements.lib.IElementLayoutHelper;
 import forestry.core.utils.Translator;
 
 public class MutationsTab extends DatabaseTab {

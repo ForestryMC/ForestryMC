@@ -9,7 +9,9 @@ import java.util.Optional;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.LootFunctionType;
 import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.functions.LootFunctionManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -54,14 +56,17 @@ public class OrganismFunction extends LootFunction {
 		}).orElse(stack);
 	}
 
+	@Override
+	public LootFunctionType func_230425_b_() {
+		return LootFunctionManager.APPLY_BONUS;
+	}
+
 	public static class Serializer extends LootFunction.Serializer<OrganismFunction> {
-		public Serializer() {
-			super(new ResourceLocation("set_species_nbt"), OrganismFunction.class);
-		}
 
 		@Override
-		public void serialize(JsonObject object, OrganismFunction functionClazz, JsonSerializationContext serializationContext) {
-			object.addProperty("speciesUid", functionClazz.speciesUid.toString());
+		public void func_230424_a_(JsonObject object, OrganismFunction function, JsonSerializationContext context) {
+			super.func_230424_a_(object, function, context);
+			object.addProperty("speciesUid", function.speciesUid.toString());
 		}
 
 		@Override

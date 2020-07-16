@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.fluids.FluidAttributes;
@@ -47,8 +48,8 @@ public class PipetteContents {
 	}
 
 	public void addTooltip(List<ITextComponent> list) {
-		ITextComponent descr = new TranslationTextComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
-		descr.appendText(" (" + contents.getAmount() + " mb)");
+		TextComponent descr = new TranslationTextComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
+		descr.func_240702_b_(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);
 	}

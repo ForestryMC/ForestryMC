@@ -47,11 +47,11 @@ public class FlowerProvider implements IFlowerProvider {
 
 		switch (flowerType) {
 			case FlowerManager.FlowerTypeNether:
-				return plantType == PlantType.Nether;
+				return plantType == PlantType.NETHER;
 			case FlowerManager.FlowerTypeCacti:
-				return plantType == PlantType.Desert;
+				return plantType == PlantType.DESERT;
 			default:
-				return plantType != PlantType.Nether;
+				return plantType != PlantType.NETHER;
 		}
 	}
 

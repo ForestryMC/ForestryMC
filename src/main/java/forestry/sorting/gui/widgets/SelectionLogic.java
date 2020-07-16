@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.IScrollable;
@@ -94,9 +96,9 @@ public class SelectionLogic<S> implements IScrollable {
 		return widget.isMouseOver(mouseX, mouseY);
 	}
 
-	public void draw() {
+	public void draw(MatrixStack transform) {
 		for (SelectableWidget selectable : visible) {
-			selectable.draw(widget.gui);
+			selectable.draw(widget.gui, transform);
 		}
 	}
 
@@ -132,8 +134,8 @@ public class SelectionLogic<S> implements IScrollable {
 			this.yPos = yPos;
 		}
 
-		public void draw(GuiForestry gui) {
-			provider.draw(gui, selectable, xPos, yPos);
+		public void draw(GuiForestry gui, MatrixStack transform) {
+			provider.draw(gui, selectable, transform, yPos, xPos);
 		}
 
 		public boolean isMouseOver(double mouseX, double mouseY) {

@@ -118,13 +118,13 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 	private String getLocation(IWoodType type, WoodBlockKind kind) {
 		String location;
 		if (type instanceof EnumVanillaWoodType) {
-			location = "block/" + type.getName() + "_" + kind.getName();
+			location = "block/" + type.getString() + "_" + kind.getString();
 		} else {
-			String kindName = kind.getName();
+			String kindName = kind.getString();
 			if (!kindName.endsWith("s")) {
 				kindName = kindName + "s";
 			}
-			location = "forestry:block/arboriculture/" + kindName + "/" + type.getName();
+			location = "forestry:block/arboriculture/" + kindName + "/" + type.getString();
 		}
 		return location;
 	}
@@ -178,9 +178,9 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 		String modelLocation = getLocation(type, WoodBlockKind.SLAB);
 		String plankLocation;
 		if (type instanceof EnumVanillaWoodType) {
-			plankLocation = "block/" + type.getName() + "_planks";
+			plankLocation = "block/" + type.getString() + "_planks";
 		} else {
-			plankLocation = "forestry:block/arboriculture/planks/" + type.getName();
+			plankLocation = "forestry:block/arboriculture/planks/" + type.getString();
 		}
 		addVariants(feature.block(), new Builder()
 			.alwaysIgnore(SlabBlock.WATERLOGGED)

@@ -9,8 +9,10 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -76,44 +78,44 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		TextureManager manager = this.minecraft.textureManager;
 
 		manager.bindTexture(TEXTURE);
-		blit(guiLeft, guiTop, 0, 0, X_SIZE, Y_SIZE);
+		blit(transform, guiLeft, guiTop, 0, 0, X_SIZE, Y_SIZE);
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.render(transform, mouseX, mouseY, partialTicks);
 
 		boolean unicode = minecraft.fontRenderer.getBidiFlag();
-		minecraft.fontRenderer.setBidiFlag(true);
+		//minecraft.fontRenderer.setBidiFlag(true);
 		//TODO textcomponent
-		drawCenteredString(minecraft.fontRenderer, title.applyTextStyle(TextFormatting.UNDERLINE).getString(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
+		//drawCenteredString(minecraft.fontRenderer, title.applyTextStyle(TextFormatting.UNDERLINE).getString(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 
-		drawText();
+		drawText(transform);
 
-		minecraft.fontRenderer.setBidiFlag(unicode);
+		//minecraft.fontRenderer.setBidiFlag(unicode);
 
-		drawTooltips(mouseX, mouseY);
+		drawTooltips(transform, mouseY, mouseX);
 	}
 
 	@Override
-	protected void drawTooltips(int mouseX, int mouseY) {
-		super.drawTooltips(mouseX, mouseY);
+	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
+		super.drawTooltips(transform, mouseY, mouseX);
 		PlayerInventory playerInv = minecraft.player.inventory;
 
 		if (playerInv.getItemStack().isEmpty()) {
-			List<String> tooltip = getTooltip(mouseX, mouseY);
+			List<ITextComponent> tooltip = getTooltip(mouseX, mouseY);
 			if (!tooltip.isEmpty()) {
 				MainWindow mainWindow = getMC().getMainWindow();
-				GuiUtils.drawHoveringText(tooltip, mouseX, mouseY, mainWindow.getScaledWidth(), mainWindow.getScaledHeight(), -1, getMC().fontRenderer);
+				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getScaledWidth(), mainWindow.getScaledHeight(), -1, getMC().fontRenderer);
 			}
 		}
 	}
 
-	protected void drawText() {
+	protected void drawText(MatrixStack transform) {
 	}
 
-	protected List<String> getTooltip(int mouseX, int mouseY) {
+	protected List<ITextComponent> getTooltip(int mouseX, int mouseY) {
 		return Collections.emptyList();
 	}
 

@@ -11,6 +11,9 @@
 package forestry.core.genetics.mutations;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import genetics.api.alleles.IAllele;
@@ -43,15 +46,15 @@ public class MutationConditionTemperature implements IMutationCondition {
 	}
 
 	@Override
-	public String getDescription() {
+	public ITextComponent getDescription() {
 		//TODO textcomponent
 		String minString = AlleleManager.climateHelper.toDisplay(minTemperature).getString();
 
 		if (minTemperature != maxTemperature) {
 			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature).getString();
-			return Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString);
+			return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString));
 		} else {
-			return Translator.translateToLocalFormatted("for.mutation.condition.temperature.single", minString);
+			return new TranslationTextComponent("for.mutation.condition.temperature.single", minString);
 		}
 	}
 }

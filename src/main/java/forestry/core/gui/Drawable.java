@@ -5,6 +5,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,11 +40,11 @@ public class Drawable {
 		this.textureHeight = textureHeight;
 	}
 
-	public void draw(int xOffset, int yOffset) {
-		draw(xOffset, yOffset, uWidth, vHeight);
+	public void draw(MatrixStack transform, int yOffset, int xOffset) {
+		draw(transform, yOffset, uWidth, vHeight, xOffset);
 	}
 
-	public void draw(int xOffset, int yOffset, int width, int height) {
+	public void draw(MatrixStack transform, int yOffset, int width, int height, int xOffset) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(textureLocation);
 
@@ -51,7 +52,7 @@ public class Drawable {
 		RenderSystem.enableAlphaTest();
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		AbstractGui.blit(xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+		AbstractGui.blit(transform, xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
 		RenderSystem.disableAlphaTest();
 		//AbstractGui.blit(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
 	}

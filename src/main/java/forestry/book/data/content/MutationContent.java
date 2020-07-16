@@ -16,10 +16,10 @@ import genetics.utils.AlleleUtils;
 import forestry.api.book.BookContent;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IGuiElementFactory;
 import forestry.book.gui.elements.MutationElement;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
 
 /**
  * A book content that displays one or more mutations.

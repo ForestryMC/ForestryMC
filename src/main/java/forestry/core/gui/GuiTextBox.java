@@ -14,6 +14,11 @@ import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 public class GuiTextBox extends TextFieldWidget {
 	private static final int enabledColor = 14737632;
@@ -26,7 +31,7 @@ public class GuiTextBox extends TextFieldWidget {
 	private int maxLines = 0;
 
 	public GuiTextBox(FontRenderer fontRenderer, int startX, int startY, int width, int height) {
-		super(fontRenderer, startX, startY, width, height, "A_TEST_STRING");
+		super(fontRenderer, startX, startY, width, height, null);
 		this.fontRenderer = fontRenderer;
 		this.startX = startX;
 		this.startY = startY;
@@ -51,7 +56,7 @@ public class GuiTextBox extends TextFieldWidget {
 	}
 
 	public boolean moreLinesAllowed() {
-		return fontRenderer.listFormattedStringToWidth(getCursoredText(), width).size() * fontRenderer.FONT_HEIGHT < height;
+		return fontRenderer.func_238425_b_(new StringTextComponent(getCursoredText()), width).size() * fontRenderer.FONT_HEIGHT < height;
 	}
 
 	private String getCursoredText() {
@@ -70,14 +75,14 @@ public class GuiTextBox extends TextFieldWidget {
 		return text.substring(0, cursorPos) + "_" + text.substring(cursorPos);
 	}
 
-	private void drawScrolledSplitString(String text, int startX, int startY, int width, int textColour) {
-		List<String> lines = fontRenderer.listFormattedStringToWidth(text, width);
+	private void drawScrolledSplitString(MatrixStack transform, ITextComponent text, int startX, int startY, int width, int textColour) {
+		List<ITextProperties> lines = fontRenderer.func_238425_b_(text, width);
 		maxLines = lines.size();
 
 		int count = 0;
 		int lineY = startY;
 
-		for (String line : lines) {
+		for (ITextProperties line : lines) {
 			if (count < lineScroll) {
 				count++;
 				continue;
@@ -85,7 +90,7 @@ public class GuiTextBox extends TextFieldWidget {
 				break;
 			}
 
-			fontRenderer.drawString(line, startX, lineY, textColour);
+			fontRenderer.drawString(transform, line.getString(), startX, lineY, textColour);
 			lineY += fontRenderer.FONT_HEIGHT;
 
 			count++;

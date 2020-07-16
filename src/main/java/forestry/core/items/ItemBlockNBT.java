@@ -40,7 +40,7 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 		if (getBlock().hasTileEntity(blockState) && stack.hasTag()) {
 			TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 			if (tile != null) {
-				tile.read(stack.getTag());
+				tile.read(blockState, stack.getTag());
 				tile.setPos(pos);
 			}
 		}

@@ -1,9 +1,6 @@
 package forestry.core.gui.elements;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -16,16 +13,15 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.gui.Drawable;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ResourceUtil;
 
 public class TankElement extends GuiElement {
@@ -51,15 +47,27 @@ public class TankElement extends GuiElement {
 		this.contents = contents;
 		this.capacity = capacity;
 		this.overlay = overlay;
+		addTooltip(((tooltip, element, mouseX, mouseY) -> {
+			ToolTip toolTip = new ToolTip();
+			int amount = contents.getAmount();
+			Fluid fluidType = contents.getFluid();
+			FluidAttributes attributes = fluidType.getAttributes();
+			Rarity rarity = attributes.getRarity(contents);
+			if (rarity == null) {
+				rarity = Rarity.COMMON;
+			}
+			toolTip.translated(attributes.getTranslationKey(contents)).style(rarity.color);
+			toolTip.translated("for.gui.tooltip.liquid.amount", amount, capacity);
+		}));
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		RenderSystem.disableBlend();
 		RenderSystem.enableAlphaTest();
 		if (background != null) {
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			background.draw(0, 0);
+			background.draw(transform, 0, 0);
 		}
 		if (contents.isEmpty() || capacity <= 0) {
 			return;
@@ -117,35 +125,12 @@ public class TankElement extends GuiElement {
 
 		if (overlay != null) {
 			RenderSystem.disableDepthTest();
-			overlay.draw(0, 0);
+			overlay.draw(transform, 0, 0);
 			RenderSystem.enableDepthTest();
 		}
 
 		RenderSystem.color4f(1, 1, 1, 1);
 		RenderSystem.disableAlphaTest();
-	}
-
-	@Override
-	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
-		if (contents.isEmpty()) {
-			return Collections.emptyList();
-		}
-		List<ITextComponent> toolTip = new ArrayList<>();
-		int amount = contents.getAmount();
-		Fluid fluidType = contents.getFluid();
-		FluidAttributes attributes = fluidType.getAttributes();
-		Rarity rarity = attributes.getRarity(contents);
-		if (rarity == null) {
-			rarity = Rarity.COMMON;
-		}
-		toolTip.add(new TranslationTextComponent(attributes.getTranslationKey(contents)).setStyle((new Style()).setColor(rarity.color)));
-		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, capacity));
-		return toolTip;
-	}
-
-	@Override
-	public boolean hasTooltip() {
-		return true;
 	}
 
 	private static void setGLColorFromInt(int color) {

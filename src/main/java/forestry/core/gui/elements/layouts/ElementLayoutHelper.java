@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IElementLayout;
-import forestry.api.gui.IElementLayoutHelper;
-import forestry.api.gui.IGuiElement;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IElementLayout;
+import forestry.core.gui.elements.lib.IElementLayoutHelper;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 public class ElementLayoutHelper implements IElementLayoutHelper {
 	private final List<IElementLayout> layouts = new ArrayList<>();

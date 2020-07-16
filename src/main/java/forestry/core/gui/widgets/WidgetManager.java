@@ -16,6 +16,8 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -60,9 +62,9 @@ public class WidgetManager {
 		return null;
 	}
 
-	public void drawWidgets() {
+	public void drawWidgets(MatrixStack transform) {
 		for (Widget slot : widgets) {
-			slot.draw(0, 0);
+			slot.draw(transform, 0, 0);
 		}
 	}
 

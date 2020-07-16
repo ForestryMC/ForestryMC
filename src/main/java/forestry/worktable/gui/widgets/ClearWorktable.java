@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.worktable.gui.widgets;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;
@@ -24,7 +26,7 @@ public class ClearWorktable extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 	}
 
 	@Override

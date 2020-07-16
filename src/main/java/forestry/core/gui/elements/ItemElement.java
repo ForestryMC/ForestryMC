@@ -12,7 +12,7 @@ package forestry.core.gui.elements;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.gui.IItemElement;
+import forestry.core.gui.elements.lib.IItemElement;
 
 public class ItemElement extends AbstractItemElement implements IItemElement {
 	/* Attributes */

@@ -82,7 +82,7 @@ public class ModelCrate implements IModelGeometry<ModelCrate> {
 			if (bakedModel != null) {
 				//Set the crate color index to 100
 				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L))) {
-					bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.func_187508_a(), quad.shouldApplyDiffuseLighting()));
+					bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.func_187508_a(), quad.func_239287_f_()));
 				}
 			}
 		}

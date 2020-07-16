@@ -12,7 +12,8 @@ package forestry.mail;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.server.ServerWorld;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.WorldUtils;
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
@@ -33,7 +35,8 @@ public class EventHandlerMailAlert {
 		if (event.phase == TickEvent.Phase.END &&
 			Minecraft.getInstance().world != null &&
 			GuiMailboxInfo.instance.hasPOBoxInfo()) {
-			GuiMailboxInfo.instance.render();
+			//TODO: Test / Find a valid matrix stack
+			GuiMailboxInfo.instance.render(new MatrixStack());
 		}
 	}
 
@@ -42,8 +45,7 @@ public class EventHandlerMailAlert {
 		PlayerEntity player = event.getPlayer();
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
-		//TODO I have no idea if this cast is safe. I hope that it is.
-		POBox pobox = PostRegistry.getOrCreatePOBox((ServerWorld) player.world, address);
+		POBox pobox = PostRegistry.getOrCreatePOBox(WorldUtils.asServer(player.world), address);
 		PacketPOBoxInfoResponse packet = new PacketPOBoxInfoResponse(pobox.getPOBoxInfo());
 		NetworkUtil.sendToPlayer(packet, player);
 	}

@@ -21,6 +21,7 @@ import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 
 import net.minecraftforge.common.IPlantable;
 
@@ -40,9 +41,10 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 
-		int x = (int) entity.posX;
-		int y = (int) Math.floor(entity.posY);
-		int z = (int) entity.posZ;
+		Vector3d entityPos = entity.getPositionVec();
+		int x = (int) entityPos.x;
+		int y = (int) Math.floor(entityPos.y);
+		int z = (int) entityPos.z;
 		BlockPos pos = new BlockPos(x, y, z);
 
 		if (!canLand(pos)) {
@@ -93,7 +95,7 @@ public class AIButterflyRest extends AIButterflyBase {
 		}
 		BlockState blockState = entity.world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (!block.isAir(blockState)) {    //TODO
+		if (!block.isAir(blockState, entity.world, pos)) {    //TODO
 			//			if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}

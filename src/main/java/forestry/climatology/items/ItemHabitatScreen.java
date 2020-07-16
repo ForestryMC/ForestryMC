@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.ByteNBT;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -85,7 +84,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	public static boolean isValid(ItemStack stack, @Nullable World world) {
 		BlockPos pos = getPosition(stack);
 		int dimension = getDimension(stack);
-		if (pos == null || world == null || dimension == Integer.MAX_VALUE || dimension != world.getDimension().getType().getId() || !world.isBlockLoaded(pos)) {
+		if (pos == null || world == null || dimension == Integer.MAX_VALUE ||/* dimension != world.getDimension().getType().getId() || */!world.isBlockLoaded(pos)) {
 			return false;
 		} else {
 			return TileUtil.getTile(world, pos, IClimateHousing.class) != null;
@@ -119,7 +118,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			if (housing != null) {
 				ItemStack heldItem = player.getHeldItem(context.getHand());
 				heldItem.setTagInfo(POSITION_KEY, NBTUtil.writeBlockPos(pos));
-				heldItem.setTagInfo(DIMENSION_KEY, IntNBT.valueOf(world.getDimension().getType().getId()));
+				//heldItem.setTagInfo(DIMENSION_KEY, IntNBT.valueOf(world.getDimension().getType().getId()));
 			}
 		}
 		if (!world.isRemote) {
@@ -154,7 +153,8 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 		boolean isValid = isValid(stack, world);
 		BlockPos pos = getPosition(stack);
 		if (pos != null) {
-			ITextComponent state = isValid ? new TranslationTextComponent("for.habitat_screen.state.linked", pos.getX(), pos.getY(), pos.getZ(), world.getDimension().getType().getId()) : new TranslationTextComponent("for.habitat_screen.state.fail");
+			int id = 0; //TODO: Fix dimension id
+			ITextComponent state = isValid ? new TranslationTextComponent("for.habitat_screen.state.linked", pos.getX(), pos.getY(), pos.getZ(), id) : new TranslationTextComponent("for.habitat_screen.state.fail");
 			tooltip.add(state);
 		}
 		if (!isValid || pos == null) {
@@ -165,8 +165,8 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			return;
 		}
 		IClimateState climateState = housing.getTransformer().getCurrent();
-		tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).applyTextStyle(TextFormatting.GOLD));
-		tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).applyTextStyle(TextFormatting.BLUE));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).func_240699_a_(TextFormatting.GOLD));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).func_240699_a_(TextFormatting.BLUE));
 	}
 
 	@Override

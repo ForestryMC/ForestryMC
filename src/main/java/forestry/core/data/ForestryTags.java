@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 
 import forestry.core.config.Constants;
 
@@ -24,15 +23,15 @@ public class ForestryTags {
 		public static final ITag<Block> ORES_APATITE = tag("ores/apatite");
 
 		private static ITag<Block> tag(String name) {
-			return new BlockTags.Wrapper(new ResourceLocation(Constants.MOD_ID, name));
+			return BlockTags.makeWrapperTag(Constants.MOD_ID + ":" + name);
 		}
 
 		private static ITag<Block> forgeTag(String name) {
-			return new BlockTags.Wrapper(new ResourceLocation("forge", name));
+			return BlockTags.makeWrapperTag("forge:" + name);
 		}
 
 		private static ITag<Block> vanillaTag(String name) {
-			return new BlockTags.Wrapper(new ResourceLocation(name));
+			return BlockTags.makeWrapperTag(name);
 		}
 
 		private Blocks() {
@@ -77,15 +76,15 @@ public class ForestryTags {
 		public static final ITag<Item> FRUITS = tag("forestry_fruits");
 
 		private static ITag<Item> tag(String name) {
-			return new ItemTags.Wrapper(new ResourceLocation(Constants.MOD_ID, name));
+			return ItemTags.makeWrapperTag(Constants.MOD_ID + ":" + name);
 		}
 
 		private static ITag<Item> forgeTag(String name) {
-			return new ItemTags.Wrapper(new ResourceLocation("forge", name));
+			return ItemTags.makeWrapperTag("forge:" + name);
 		}
 
 		private static ITag<Item> vanillaTag(String name) {
-			return new ItemTags.Wrapper(new ResourceLocation(name));
+			return ItemTags.makeWrapperTag(name);
 		}
 
 		private Items() {

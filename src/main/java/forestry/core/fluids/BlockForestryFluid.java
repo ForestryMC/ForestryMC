@@ -18,8 +18,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
@@ -33,7 +31,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.core.entities.ParticleColoredDripParticle;
 import forestry.modules.features.FeatureFluid;
 import forestry.modules.features.FluidProperties;
 
@@ -97,8 +94,8 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 				double py = d1 - 1.05D;
 				double pz = d2 + rand.nextFloat();
 
-				Particle fx = new ParticleColoredDripParticle(world, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
-				Minecraft.getInstance().particles.addEffect(fx);
+				/*Particle fx = new ParticleColoredDripParticle(world, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
+				Minecraft.getInstance().particles.addEffect(fx);*/
 			}
 		}
 	}

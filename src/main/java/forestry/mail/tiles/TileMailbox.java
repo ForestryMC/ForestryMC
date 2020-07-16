@@ -16,8 +16,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -54,7 +54,7 @@ public class TileMailbox extends TileBase {
 		if (PostManager.postRegistry.isLetter(heldItem)) {
 			IPostalState result = this.tryDispatchLetter(heldItem);
 			if (!result.isOk()) {
-				player.sendMessage(new StringTextComponent(result.getDescription()));
+				player.sendMessage(result.getDescription(), Util.DUMMY_UUID);
 			} else {
 				heldItem.shrink(1);
 			}

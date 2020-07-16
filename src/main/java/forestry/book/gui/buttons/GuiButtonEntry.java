@@ -5,8 +5,11 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -21,28 +24,28 @@ public class GuiButtonEntry extends Button {
 	public final IBookEntry entry;
 
 	public GuiButtonEntry(int x, int y, IBookEntry entry, IPressable action) {
-		super(x, y, Minecraft.getInstance().fontRenderer.getStringWidth(entry.getTitle()) + 9, 11, entry.getTitle(), action);
+		super(x, y, Minecraft.getInstance().fontRenderer.getStringWidth(entry.getTitle().getString()) + 9, 11, entry.getTitle(), action);
 		this.entry = entry;
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {
 			FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
-			String text = getMessage();
+			ITextComponent text = getMessage();
 			if (isHovered) {
-				text = TextFormatting.GOLD + text;
+				((IFormattableTextComponent) text).func_240699_a_(TextFormatting.GOLD);
 			} else {
-				text = TextFormatting.DARK_GRAY + text;
+				((IFormattableTextComponent) text).func_240699_a_(TextFormatting.DARK_GRAY);
 			}
 
 			boolean unicode = fontRenderer.getBidiFlag();
-			fontRenderer.setBidiFlag(true);
-			fontRenderer.drawString(text, this.x + 9, this.y, 0);
-			fontRenderer.setBidiFlag(unicode);
+			//fontRenderer.setBidiFlag(true);
+			fontRenderer.drawString(transform, text.getString(), this.x + 9, this.y, 0);
+			//fontRenderer.setBidiFlag(unicode);
 
 			ItemStack stack = entry.getStack();
 			if (!stack.isEmpty()) {

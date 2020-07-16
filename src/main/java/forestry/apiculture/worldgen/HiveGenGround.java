@@ -48,7 +48,8 @@ public class HiveGenGround extends HiveGen {
 			return null;
 		}
 
-		final BlockPos.Mutable pos = new BlockPos.Mutable(topPos);
+		final BlockPos.Mutable pos = new BlockPos.Mutable();
+		pos.setPos(topPos);
 
 		BlockState blockState = world.getBlockState(pos);
 		while (isTreeBlock(blockState, world, pos) || canReplace(blockState, world, pos)) {

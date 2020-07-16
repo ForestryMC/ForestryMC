@@ -27,7 +27,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 		MANAGED;
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return toString().toLowerCase(Locale.ENGLISH);
 		}
 	}

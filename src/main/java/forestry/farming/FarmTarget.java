@@ -55,7 +55,8 @@ public class FarmTarget {
 			return;
 		}
 
-		BlockPos.Mutable position = new BlockPos.Mutable(platformPosition);
+		BlockPos.Mutable position = new BlockPos.Mutable();
+		position.setPos(platformPosition);
 		for (extent = 0; extent < limit; extent++) {
 			if (!world.isBlockLoaded(position)) {
 				break;

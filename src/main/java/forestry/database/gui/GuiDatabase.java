@@ -268,7 +268,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement IGeneticAnalyzerProvider */
 	@Override
-	protected void drawSelectedSlot(int selectedSlot) {
+	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
 		//Currently not used
 	}
 

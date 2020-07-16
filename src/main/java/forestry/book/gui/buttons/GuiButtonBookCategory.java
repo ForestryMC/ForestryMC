@@ -5,6 +5,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,12 +21,12 @@ public class GuiButtonBookCategory extends Button implements IToolTipProvider {
 	public final IBookCategory category;
 
 	public GuiButtonBookCategory(int x, int y, IBookCategory category, IPressable action) {
-		super(x, y, 32, 32, "", action);
+		super(x, y, 32, 32, null, action);
 		this.category = category;
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (visible) {
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;

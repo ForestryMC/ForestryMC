@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.Style;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,12 +21,11 @@ import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.genetics.gatgets.IDatabaseTab;
-import forestry.api.gui.GuiConstants;
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IDatabaseElement;
-import forestry.api.gui.style.ITextStyle;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.Translator;
 
 @OnlyIn(Dist.CLIENT)
@@ -46,9 +45,9 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 	public void createElements(IDatabaseElement container, ITree tree, ItemStack itemStack) {
 		IAlleleTreeSpecies primarySpecies = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getInactiveAllele(TreeChromosomes.SPECIES);
-		ITextStyle speciesStyle = GuiElementFactory.INSTANCE.getStateStyle(species.isDominant());
+		Style speciesStyle = GuiElementFactory.INSTANCE.getStateStyle(species.isDominant());
 
-		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
+		container.translated("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name").setStyle(GuiElementFactory.INSTANCE.databaseTitle).setAlign(GuiElementAlignment.TOP_CENTER);
 
 		container.addLine(Translator.translateToLocal("for.gui.species"), TreeChromosomes.SPECIES);
 
@@ -73,14 +72,15 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 		}
 
 		IAlleleFruit fruit = mode == DatabaseMode.ACTIVE ? tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS) : tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
-		ITextStyle textStyle = GuiElementFactory.INSTANCE.getStateStyle(tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).isDominant());
+		Style textStyle = GuiElementFactory.INSTANCE.getStateStyle(tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).isDominant());
 
-		container.label(Translator.translateToLocal("for.gui.fruits"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
+		container.translated("for.gui.fruits").setStyle(GuiConstants.UNDERLINED_STYLE).setAlign(GuiElementAlignment.TOP_CENTER);
+		Style fruitStyle = textStyle;
 		String strike = "";
 		if (!species.getSuitableFruit().contains(fruit.getProvider().getFamily()) && fruit != AlleleFruits.fruitNone) {
-			strike = TextFormatting.STRIKETHROUGH.toString();
+			fruitStyle = fruitStyle.setStrikethrough(true);
 		}
-		container.label(strike + fruit.getProvider().getDescription(), GuiElementAlignment.TOP_CENTER, textStyle);
+		container.label(fruit.getProvider().getDescription()).setStyle(fruitStyle).setAlign(GuiElementAlignment.TOP_CENTER);
 
 		IFruitFamily family = fruit.getProvider().getFamily();
 

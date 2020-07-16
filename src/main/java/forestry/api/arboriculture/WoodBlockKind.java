@@ -7,15 +7,17 @@ package forestry.api.arboriculture;
 
 import java.util.Locale;
 
-public enum WoodBlockKind {
+import net.minecraft.util.IStringSerializable;
+
+public enum WoodBlockKind implements IStringSerializable {
 	LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;
 
-	public String getName() {
+	public String getString() {
 		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override
 	public String toString() {
-		return getName();
+		return getString();
 	}
 }

@@ -1,5 +1,7 @@
 package forestry.core.gui.elements;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.gui.Drawable;
 
 public class DrawableElement extends GuiElement {
@@ -21,7 +23,7 @@ public class DrawableElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
-		drawable.draw(0, 0, width, height);
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		drawable.draw(transform, 0, width, height, 0);
 	}
 }

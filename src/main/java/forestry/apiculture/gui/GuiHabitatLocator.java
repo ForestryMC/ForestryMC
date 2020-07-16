@@ -24,6 +24,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.common.BiomeDictionary;
@@ -85,11 +86,11 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		String str = Translator.translateToLocal("item.forestry.habitat_locator").toUpperCase(Locale.ENGLISH);
-		getFontRenderer().drawString(str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(transform, str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.
 		Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<>();
@@ -103,7 +104,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 		}
 
 		for (HabitatSlot slot : habitatSlots) {
-			slot.draw(startX, startY);
+			slot.draw(transform, startY, startX);
 		}
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
 	}

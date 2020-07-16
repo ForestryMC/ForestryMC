@@ -11,6 +11,8 @@
 package forestry.core.genetics.mutations;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import genetics.api.alleles.IAllele;
@@ -18,7 +20,6 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.Translator;
 
 public class MutationConditionDaytime implements IMutationCondition {
 
@@ -37,11 +38,11 @@ public class MutationConditionDaytime implements IMutationCondition {
 	}
 
 	@Override
-	public String getDescription() {
+	public ITextComponent getDescription() {
 		if (daytime) {
-			return Translator.translateToLocal("for.mutation.condition.daytime.day");
+			return new TranslationTextComponent("for.mutation.condition.daytime.day");
 		} else {
-			return Translator.translateToLocal("for.mutation.condition.daytime.night");
+			return new TranslationTextComponent("for.mutation.condition.daytime.night");
 		}
 	}
 }

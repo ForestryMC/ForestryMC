@@ -80,7 +80,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 	}
 
 	@Override
-	public String getName() {
-		return getMachineProperties().getName();
+	public String getString() {
+		return getMachineProperties().getString();
 	}
 }

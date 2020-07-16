@@ -5,7 +5,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public interface IGeneticAnalyzer extends IGuiElement {

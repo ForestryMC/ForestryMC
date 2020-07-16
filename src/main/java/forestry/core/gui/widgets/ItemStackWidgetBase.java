@@ -13,6 +13,8 @@ package forestry.core.gui.widgets;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -28,7 +30,7 @@ public abstract class ItemStackWidgetBase extends Widget {
 	protected abstract ItemStack getItemStack();
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		ItemStack itemStack = getItemStack();
 		if (!itemStack.isEmpty()) {
 			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
@@ -43,7 +45,7 @@ public abstract class ItemStackWidgetBase extends Widget {
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
 		if (!itemStack.isEmpty()) {
-			tip.add(ItemTooltipUtil.getInformation(itemStack));
+			tip.addAll(ItemTooltipUtil.getInformation(itemStack));
 		}
 		return tip;
 	}

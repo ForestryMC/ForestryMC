@@ -18,14 +18,14 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.events.ElementEvent;
 import forestry.climatology.gui.elements.ClimateBarElement;
 import forestry.climatology.gui.elements.HabitatSelectionElement;
 import forestry.climatology.gui.elements.SpeciesSelectionElement;
@@ -38,6 +38,8 @@ import forestry.core.gui.elements.ButtonElement;
 import forestry.core.gui.elements.ScrollBarElement;
 import forestry.core.gui.elements.TextEditElement;
 import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.network.packets.PacketGuiSelectRequest;
@@ -78,20 +80,20 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 			.setParameters(this, 1, 16, 1);
 		rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
 			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range"));
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).applyTextStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).func_240701_a_(TextFormatting.GRAY));
 		});
 		window.add(new CircleButton(30, 37));
 
 		ElementGroup selectionPage = window.pane(8, 86, 164, 56);
 		selectionPage.add(new SpeciesSelectionElement(135, 22, transformer));
-		selectionPage.label(Translator.translateToLocal("for.gui.habitat_former.climate.habitats"), GuiElementAlignment.TOP_CENTER).setLocation(17, 3);
+		selectionPage.translated("for.gui.habitat_former.climate.habitats").setAlign(GuiElementAlignment.TOP_CENTER).setLocation(17, 3);
 		selectionPage.add(new HabitatSelectionElement(67, 12, transformer));
-		selectionPage.label(Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), GuiElementAlignment.TOP_CENTER).setLocation(-49, 5);
+		selectionPage.translated("for.gui.habitat_former.climate.temperature").setAlign(GuiElementAlignment.TOP_CENTER).setLocation(-49, 5);
 		selectionPage.drawable(7, 15, TEMPERATURE_FIELD);
 		temperatureEdit = selectionPage.add(new TextEditElement(9, 17, 50, 10).setMaxLength(3));
 		temperatureEdit.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> setClimate(ClimateType.TEMPERATURE, temperatureEdit.getValue()));
 		selectionPage.drawable(7, 39, HUMIDITY_FIELD);
-		selectionPage.label(Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), GuiElementAlignment.TOP_CENTER).setLocation(-49, 30);
+		selectionPage.translated("for.gui.habitat_former.climate.humidity").setAlign(GuiElementAlignment.TOP_CENTER).setLocation(-49, 30);
 		humidityEdit = selectionPage.add(new TextEditElement(9, 41, 50, 10).setMaxLength(3));
 		humidityEdit.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> setClimate(ClimateType.HUMIDITY, humidityEdit.getValue()));
 	}
@@ -116,14 +118,14 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
-		drawCenteredString(Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), xSize / 2, 23);
-		drawCenteredString(Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), xSize / 2, 47);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
+		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), xSize / 2, 23);
+		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), xSize / 2, 47);
 	}
 
-	private void drawCenteredString(String text, int x, int y) {
-		minecraft.fontRenderer.drawStringWithShadow(text, guiLeft + (float) (x - (double) minecraft.fontRenderer.getStringWidth(text) / 2), (float) guiTop + y, 16777215);
+	private void drawCenteredString(MatrixStack transform, String text, int x, int y) {
+		minecraft.fontRenderer.drawStringWithShadow(transform, text, guiLeft + (float) (x - (double) minecraft.fontRenderer.getStringWidth(text) / 2), (float) guiTop + y, 16777215);
 	}
 
 	public void setClimate(ClimateType type, String text) {

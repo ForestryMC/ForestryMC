@@ -7,15 +7,14 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.Collectors;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,14 +22,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IWindowElement;
-import forestry.api.gui.events.ElementEvent;
-import forestry.api.gui.events.GuiEvent;
-import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.ElementEvent;
+import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.tooltips.ToolTip;
 
 
 /**
@@ -218,13 +218,14 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		if (element instanceof IElementGroup) {
 			IElementGroup group = (IElementGroup) element;
 			boolean addChildren = true;
-			if (element.isCropped()) {
+			if (element instanceof ICroppedGuiElement && ((ICroppedGuiElement) element).isCropped()) {
 				int mouseX = getRelativeMouseX(element);
 				int mouseY = getRelativeMouseY(element);
-				IGuiElement cropRelative = element.getCropElement() != null ? element.getCropElement() : this;
+				ICroppedGuiElement cropped = (ICroppedGuiElement) element;
+				IGuiElement cropRelative = cropped.getCropElement() != null ? cropped.getCropElement() : this;
 				int posX = cropRelative.getAbsoluteX() - element.getAbsoluteX();
 				int posY = cropRelative.getAbsoluteY() - element.getAbsoluteY();
-				addChildren = mouseX >= posX && mouseY >= posY && mouseX <= posX + element.getCropWidth() && mouseY <= posY + element.getCropWidth();
+				addChildren = mouseX >= posX && mouseY >= posY && mouseX <= posX + cropped.getCropWidth() && mouseY <= posY + cropped.getCropHeight();
 			}
 			if (addChildren) {
 				ListIterator<IGuiElement> iterator = group.getElements().listIterator(group.getElements().size());
@@ -238,30 +239,28 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		return widgets;
 	}
 
-	public void drawTooltip(int mouseX, int mouseY) {
-		List<ITextComponent> lines = getTooltip(mouseX, mouseY);
-		//TODO has textComponent gone too far?
-		List<String> strings = lines.stream().map(ITextComponent::getString).collect(Collectors.toList());
+	public void drawTooltip(MatrixStack transform, int mouseY, int mouseX) {
+		ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
 			GlStateManager.pushMatrix();
 			//TODO test
 			MainWindow window = Minecraft.getInstance().getMainWindow();
-			GuiUtils.drawHoveringText(strings, mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
+			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
 			GlStateManager.popMatrix();
 		}
 	}
 
 	@Override
-	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
-		List<ITextComponent> tooltip = new ArrayList<>();
+	public ToolTip getTooltip(int mouseX, int mouseY) {
+		ToolTip toolTip = new ToolTip();
 		Deque<IGuiElement> queue = this.calculateMousedOverElements();
 		while (!queue.isEmpty()) {
 			IGuiElement element = queue.removeFirst();
 			if (element.isEnabled() && element.isVisible() && element.hasTooltip()) {
-				tooltip.addAll(element.getTooltip(getRelativeMouseX(element), getRelativeMouseY(element)));
+				toolTip.addAll(element.getTooltip(getRelativeMouseX(element), getRelativeMouseY(element)));
 			}
 		}
-		return tooltip;
+		return toolTip;
 	}
 
 	/* Mouse */

@@ -12,6 +12,7 @@ package forestry.mail.gui;
 
 import net.minecraft.client.gui.AbstractGui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.mail.IPostalCarrier;
@@ -21,7 +22,6 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
-import forestry.core.utils.Translator;
 
 public class AddresseeSlot extends Widget {
 
@@ -35,20 +35,19 @@ public class AddresseeSlot extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
 		if (carrier != null) {
 			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 32, 32, carrier.getSprite());
+			AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 32, 32, carrier.getSprite());
 		}
 	}
 
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
-		String tooltipString = Translator.translateToLocal("for.gui.addressee." + containerLetter.getCarrierType());
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(tooltipString);
+		tooltip.translated("for.gui.addressee." + containerLetter.getCarrierType());
 		return tooltip;
 	}
 

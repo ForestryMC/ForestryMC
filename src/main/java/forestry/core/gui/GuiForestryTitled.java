@@ -30,9 +30,9 @@ public abstract class GuiForestryTitled<C extends Container> extends GuiForestry
 
 		textLayout.line = 6;
 		if (centeredTitle()) {
-			textLayout.drawCenteredLine(title.getString(), 0, ColourProperties.INSTANCE.get("gui.title"));
+			textLayout.drawCenteredLine(transform, title.getString(), 0, ColourProperties.INSTANCE.get("gui.title"));
 		} else {
-			textLayout.drawLine(title.getString(), 8, ColourProperties.INSTANCE.get("gui.title"));
+			textLayout.drawLine(transform, title.getString(), 8, ColourProperties.INSTANCE.get("gui.title"));
 		}
 		bindTexture(textureFile);
 	}

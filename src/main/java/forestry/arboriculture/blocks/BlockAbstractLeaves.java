@@ -1,5 +1,6 @@
 package forestry.arboriculture.blocks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +20,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -61,8 +61,9 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	//TODO since loot done in loot table I don't know if this works
+	@Nonnull
 	@Override
-	public List<ItemStack> onSheared(ItemStack item, IWorld world, BlockPos pos, int fortune) {
+	public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			tree = TreeDefinition.Oak.createIndividual();

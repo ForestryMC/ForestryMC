@@ -13,6 +13,7 @@ package forestry.core.proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.settings.GraphicsFanciness;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -41,7 +42,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getInstance().gameSettings.fancyGraphics;
+		return Minecraft.getInstance().gameSettings.field_238330_f_ == GraphicsFanciness.FANCY;
 	}
 
 	@Override

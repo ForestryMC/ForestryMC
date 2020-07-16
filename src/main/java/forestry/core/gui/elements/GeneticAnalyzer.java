@@ -8,6 +8,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,17 +24,16 @@ import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
 import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IWindowElement;
-import forestry.api.gui.events.GuiEvent;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -172,8 +173,8 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		//if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
 		//key = "for.gui.database.support";
 		//}
-		List<String> lines = fontRenderer.listFormattedStringToWidth(Translator.translateToLocal(key), scrollable.getWidth());
-		for (String text : lines) {
+		List<ITextProperties> lines = fontRenderer.func_238425_b_(new TranslationTextComponent(key), scrollable.getWidth());
+		for (ITextProperties text : lines) {
 			scrollableContent.label(text);
 		}
 		//Disable the scrollbar

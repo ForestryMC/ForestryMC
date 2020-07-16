@@ -22,11 +22,11 @@ import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -147,9 +147,10 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		}
 
 		public class OverrideList extends ItemOverrideList {
+
 			@Nullable
 			@Override
-			public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+			public IBakedModel func_239290_a_(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 				IOrganism<ITree> organism = GeneticHelper.getOrganism(stack);
 				if (organism.isEmpty()) {
 					return model;

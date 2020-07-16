@@ -159,8 +159,8 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 	}
 
 	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
-		BlockPos.Mutable current = new BlockPos.Mutable(position);
-		BlockState blockState = world.getBlockState(current);
+		BlockPos.Mutable current = new BlockPos.Mutable();
+		BlockState blockState = world.getBlockState(current.setPos(position));
 		while (isJungleTreeTrunk(blockState)) {
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
 				BlockPos candidate = new BlockPos(current.getX() + direction.getXOffset(), current.getY(), current.getZ() + direction.getZOffset());

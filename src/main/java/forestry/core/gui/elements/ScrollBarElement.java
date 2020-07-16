@@ -4,12 +4,13 @@ import javax.annotation.Nullable;
 
 import net.minecraft.util.math.MathHelper;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import forestry.api.gui.IWindowElement;
-import forestry.api.gui.events.GuiEvent;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.widgets.IScrollable;
 
 public class ScrollBarElement extends ElementGroup {
@@ -136,7 +137,7 @@ public class ScrollBarElement extends ElementGroup {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		if (!isVisible()) {
 			return;
 		}
@@ -144,7 +145,7 @@ public class ScrollBarElement extends ElementGroup {
 		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		super.drawElement(mouseX, mouseY);
+		super.drawElement(transform, mouseY, mouseX);
 	}
 
 	private void updateSlider(int mouseX, int mouseY) {

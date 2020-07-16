@@ -43,7 +43,7 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafSpriteProvider leafSpriteProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<>();
-	private PlantType nativeType = PlantType.Plains;
+	private PlantType nativeType = PlantType.PLAINS;
 	private final ILeafProvider leafProvider;
 	private IGrowthProvider growthProvider = new ClimateGrowthProvider();
 	private float rarity = 0.0F;

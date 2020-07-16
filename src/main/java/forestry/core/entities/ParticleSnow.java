@@ -15,14 +15,14 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.World;
+import net.minecraft.client.world.ClientWorld;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 public class ParticleSnow extends Particle {
 	public static final TextureAtlasSprite[] sprites = new TextureAtlasSprite[3];
 
-	public ParticleSnow(World world, double x, double y, double z) {
+	public ParticleSnow(ClientWorld world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
 		//TODO particles

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,12 +21,12 @@ public class GuiButtonPage extends Button implements IToolTipProvider {
 	public boolean left;
 
 	public GuiButtonPage(int x, int y, boolean left, IPressable action) {
-		super(x, y, 18, 10, "", action);
+		super(x, y, 18, 10, null, action);
 		this.left = left;
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (visible) {
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
@@ -34,7 +35,7 @@ public class GuiButtonPage extends Button implements IToolTipProvider {
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableAlphaTest();
 			GlStateManager.disableBlend();
-			blit(x, y, isHovered ? 18 : 0, 181 + (left ? 10 : 0), 18, 10);
+			blit(transform, x, y, isHovered ? 18 : 0, 181 + (left ? 10 : 0), 18, 10);
 			GlStateManager.enableBlend();
 			GlStateManager.disableAlphaTest();
 		}

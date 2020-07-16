@@ -26,17 +26,18 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.events.GuiEvent;
 import forestry.book.data.structure.BlockData;
 import forestry.book.data.structure.StructureBlockAccess;
 import forestry.book.data.structure.StructureInfo;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 
 import org.lwjgl.opengl.GL11;
 
@@ -87,7 +88,7 @@ public class MultiblockElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		if (lastClick != null) {
 			if (Minecraft.getInstance().mouseHelper.isLeftDown() || Minecraft.getInstance().mouseHelper.isRightDown()) {
 				double dx = mouseX - lastClick[0];

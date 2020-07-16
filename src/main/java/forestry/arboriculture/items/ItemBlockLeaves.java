@@ -39,7 +39,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.read(itemstack.getTag());
+		tileLeaves.read(tileLeaves.getBlockState(), itemstack.getTag());
 
 		String unlocalizedName = tileLeaves.getUnlocalizedName();
 		return getDisplayName(unlocalizedName);
@@ -65,7 +65,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.read(itemStack.getTag());
+		tileLeaves.read(tileLeaves.getBlockState(), itemStack.getTag());
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			return tileLeaves.getFruitColour();

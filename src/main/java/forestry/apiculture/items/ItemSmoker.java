@@ -81,7 +81,7 @@ public class ItemSmoker extends ItemForestry {
 
 		Vector3d lookDistance = new Vector3d(look.x * distance, look.y * distance, look.z * distance);
 		Vector3d scaledOffset = handOffset.scale(1.0 / distance);
-		Vector3d smokePos = lookDistance.add(entity.getPositionVector()).add(scaledOffset);
+		Vector3d smokePos = lookDistance.add(entity.getPositionVec()).add(scaledOffset);
 
 		if (world.isRemote) {
 			ParticleRender.addEntitySmokeFX(world, smokePos.x, smokePos.y + 1, smokePos.z);

@@ -18,6 +18,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
 
@@ -37,26 +39,26 @@ public class HintLedger extends Ledger {
 		Minecraft minecraft = Minecraft.getInstance();
 		FontRenderer fontRenderer = minecraft.fontRenderer;
 		//TODO text component
-		int lineCount = fontRenderer.listFormattedStringToWidth(hintString.getString(), maxTextWidth).size();
+		int lineCount = fontRenderer.func_238425_b_(hintString, maxTextWidth).size();
 		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 	}
 
 	@Override
-	public void draw(int x, int y) {
+	public void draw(MatrixStack transform, int y, int x) {
 
 		// Draw background
-		drawBackground(x, y);
+		drawBackground(transform, y, x);
 
 		// Draw icon
-		drawSprite(TextureManagerForestry.getInstance().getDefault("misc/hint"), x + 3, y + 4);
+		drawSprite(transform, TextureManagerForestry.getInstance().getDefault("misc/hint"), x + 3, y + 4);
 
 		if (!isFullyOpened()) {
 			return;
 		}
 
 		//TODO textcomponent
-		drawHeader(Translator.translateToLocal("for.gui.didyouknow") + '?', x + 22, y + 8);
-		drawSplitText(hintString.getString(), x + 12, y + 20, maxTextWidth);
+		drawHeader(transform, Translator.translateToLocal("for.gui.didyouknow") + '?', x + 22, y + 8);
+		drawSplitText(transform, hintString.getString(), x + 12, y + 20, maxTextWidth);
 	}
 
 	@Override

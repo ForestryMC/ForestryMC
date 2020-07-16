@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.io.File;
 import java.util.LinkedHashMap;
 
 import net.minecraft.item.ItemStack;
@@ -78,7 +77,8 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	private void refreshActiveTradeStations(ServerWorld world) {
-		activeTradeStations = new LinkedHashMap<>();
+		//TODO: Find a way to write and read mail data
+		/*activeTradeStations = new LinkedHashMap<>();
 		File worldSave = world.getSaveHandler().getWorldDirectory();    //TODO right file?
 		File file = worldSave.getParentFile();
 		if (!file.exists() || !file.isDirectory()) {
@@ -105,7 +105,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 			}
 
 			registerTradeStation(trade);
-		}
+		}*/
 	}
 
 	@Override

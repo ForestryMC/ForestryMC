@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
@@ -48,16 +50,16 @@ public class SelectionWidget extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		if (logic == null) {
 			return;
 		}
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(TEXTURE);
-		manager.gui.blit(startX + xPos, startY + yPos, 0, 0, width, height);
-		logic.draw();
+		manager.gui.blit(transform, startX + xPos, startY + yPos, 0, 0, width, height);
+		logic.draw(transform);
 
-		manager.minecraft.fontRenderer.drawString(Translator.translateToLocal("for.gui.filter.seletion"), startX + xPos + 12, startY + yPos + 4, manager.gui.getFontColor().get("gui.title"));
+		manager.minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.filter.seletion"), startX + xPos + 12, startY + yPos + 4, manager.gui.getFontColor().get("gui.title"));
 	}
 
 	@Override

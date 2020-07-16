@@ -33,7 +33,7 @@ public abstract class AIButterflyBase extends Goal {
 			return getRandomDestinationUpwards();
 		}
 
-		Vector3d entityPos = new Vector3d(entity.posX, entity.posY, entity.posZ);
+		Vector3d entityPos = entity.getPositionVec();
 		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entityPos);
 
 		if (randomTarget != null && validateDestination(randomTarget, false)) {
@@ -44,7 +44,8 @@ public abstract class AIButterflyBase extends Goal {
 
 	@Nullable
 	protected Vector3d getRandomDestinationUpwards() {
-		Vector3d destination = new Vector3d(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
+		Vector3d entityPos = entity.getPositionVec();
+		Vector3d destination = entityPos.add(0, entity.getRNG().nextInt(10) + 2, 0);
 		if (validateDestination(destination, true)) {
 			return destination;
 		} else {
@@ -66,7 +67,7 @@ public abstract class AIButterflyBase extends Goal {
 			return false;
 		}
 		//		if (!block.isPassable(entity.world, pos)) {
-		if (!block.isAir(blockState)) {    //TODO
+		if (!block.isAir(blockState, entity.world, pos)) {    //TODO
 			return false;
 		}
 		return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.x, dest.y, dest.z);

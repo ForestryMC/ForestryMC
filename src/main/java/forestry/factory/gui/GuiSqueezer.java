@@ -13,6 +13,8 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.SocketWidget;
@@ -30,11 +32,12 @@ public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer> {
 	}
 
 	@Override
-	protected void drawWidgets() {
+	protected void drawWidgets(MatrixStack transform) {
+		//TODO: Make this more consistent
 		int progress = tile.getProgressScaled(43);
-		blit(75, 41, 176, 60, progress, 18);
+		blit(transform, 75, 41, 176, 60, progress, 18);
 
-		super.drawWidgets();
+		super.drawWidgets(transform);
 	}
 
 	@Override

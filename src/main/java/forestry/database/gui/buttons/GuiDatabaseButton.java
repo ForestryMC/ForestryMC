@@ -19,6 +19,7 @@ public class GuiDatabaseButton<V> extends GuiBetterButton {
 	public void setValue(V value) {
 		this.value = value;
 		if (value instanceof String) {
+			//TODO: check
 			setLabel((String) value);
 		}
 		type.onValueChange(this);

@@ -233,7 +233,7 @@ public abstract class ModelProvider implements IDataProvider {
 					continue;
 				}
 				Direction direction = Direction.byIndex(i);
-				facesObj.add(direction.getName(), face.serialize());
+				facesObj.add(direction.getString(), face.serialize());
 			}
 			obj.add("faces", facesObj);
 			return obj;
@@ -272,7 +272,7 @@ public abstract class ModelProvider implements IDataProvider {
 		private JsonElement serialize() {
 			JsonObject obj = new JsonObject();
 			if (axis != null) {
-				obj.addProperty("axis", axis.getName());
+				obj.addProperty("axis", axis.getString());
 			}
 			if (origin == Vector3i.NULL_VECTOR) {
 				obj.add("origin", serializeVex(origin));
@@ -323,7 +323,7 @@ public abstract class ModelProvider implements IDataProvider {
 			}
 			obj.add("uv", uvObject);
 			if (cullFace != null) {
-				obj.addProperty("cullface", cullFace.getName());
+				obj.addProperty("cullface", cullFace.getString());
 			}
 			obj.addProperty("rotation", uv.rotation);
 			if (tintIndex > 0) {

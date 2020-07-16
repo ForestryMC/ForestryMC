@@ -12,16 +12,14 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -53,21 +51,19 @@ public class GuiUtil {
 	}
 
 	//TODO hopefully this is client side...
-	public static void drawToolTips(IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
-		//TODO textcomponent
-		List<String> lines = toolTips.getLines().stream().map(ITextComponent::getString).collect(Collectors.toList());
-		if (!lines.isEmpty()) {
+	public static void drawToolTips(MatrixStack transform, IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
+		if (!toolTips.isEmpty()) {
 			RenderSystem.pushMatrix();
 			if (provider == null || provider.isRelativeToGui()) {
 				RenderSystem.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
 			MainWindow window = Minecraft.getInstance().getMainWindow();    //TODO - more resolution stuff to check
-			GuiUtils.drawHoveringText(lines, mouseX, mouseY, window.getScaledWidth(), window.getScaledHeight(), -1, gui.getMC().fontRenderer);
+			GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getScaledWidth(), window.getScaledHeight(), -1, gui.getMC().fontRenderer);
 			RenderSystem.popMatrix();
 		}
 	}
 
-	public static void drawToolTips(IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
+	public static void drawToolTips(MatrixStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
 		for (Object obj : objects) {
 			if (!(obj instanceof IToolTipProvider)) {
 				continue;
@@ -90,7 +86,7 @@ public class GuiUtil {
 			tips.onTick(mouseOver);
 			if (mouseOver && tips.isReady()) {
 				tips.refresh();
-				drawToolTips(gui, provider, tips, mouseX, mouseY);
+				drawToolTips(transform, gui, provider, tips, mouseX, mouseY);
 			}
 		}
 	}

@@ -73,6 +73,7 @@ import forestry.core.data.WoodBlockStateProvider;
 import forestry.core.data.WoodItemModelProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
@@ -255,6 +256,7 @@ public class Forestry {
 			if (resourceManager instanceof IReloadableResourceManager) {
 				IReloadableResourceManager reloadableManager = (IReloadableResourceManager) resourceManager;
 				reloadableManager.addReloadListener(ColourProperties.INSTANCE);
+				reloadableManager.addReloadListener(GuiElementFactory.INSTANCE);
 				reloadableManager.addReloadListener(spriteUploader);
 			}
 			//EntriesCategory.registerSearchTree();

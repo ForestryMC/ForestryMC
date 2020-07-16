@@ -3,33 +3,23 @@ package forestry.core.data;
 import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.Tags;
-
-import forestry.apiculture.features.ApicultureItems;
-import forestry.arboriculture.features.ArboricultureItems;
-import forestry.core.features.CoreItems;
-import forestry.mail.features.MailItems;
 
 public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	@Nullable
 	private Set<ResourceLocation> filter = null;
 
 	public ForestryItemTagsProvider(DataGenerator generator) {
-		super(generator);
+		super(generator, null);
 	}
 
 	@Override
 	protected void registerTags() {
 		super.registerTags();
-		filter = this.tagToBuilder.keySet().stream().map(ITag::getId).collect(Collectors.toSet());
+		/*filter = this.tagToBuilder.keySet().stream().map(ITag::getId).collect(Collectors.toSet());
 		getBuilder(ForestryTags.Items.GEARS).add(ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
 		getBuilder(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
 		getBuilder(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());
@@ -63,7 +53,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 
 		getBuilder(ForestryTags.Items.STAMPS).add(MailItems.STAMPS.itemArray());
 
-		getBuilder(ForestryTags.Items.FRUITS).add(CoreItems.FRUITS.itemArray());
+		getBuilder(ForestryTags.Items.FRUITS).add(CoreItems.FRUITS.itemArray());*/
 	}
 
 	@Override

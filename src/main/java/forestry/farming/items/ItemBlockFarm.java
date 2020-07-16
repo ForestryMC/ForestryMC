@@ -51,6 +51,6 @@ public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 	@Override
 	public String getTranslationKey() {
 		BlockFarm block = getBlock();
-		return "block.forestry.farm_" + block.getType().getName();
+		return "block.forestry.farm_" + block.getType().getString();
 	}
 }

@@ -13,6 +13,8 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
@@ -29,19 +31,19 @@ public class GuiFermenter extends GuiForestryTitled<ContainerFermenter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining
 		int fuelRemain = tile.getBurnTimeRemainingScaled(16);
 		if (fuelRemain > 0) {
-			blit(guiLeft + 98, guiTop + 46 + 17 - fuelRemain, 176, 78 + 17 - fuelRemain, 4, fuelRemain);
+			blit(transform, guiLeft + 98, guiTop + 46 + 17 - fuelRemain, 176, 78 + 17 - fuelRemain, 4, fuelRemain);
 		}
 
 		// Raw bio mush remaining
 		int bioRemain = tile.getFermentationProgressScaled(16);
 		if (bioRemain > 0) {
-			blit(guiLeft + 74, guiTop + 32 + 17 - bioRemain, 176, 60 + 17 - bioRemain, 4, bioRemain);
+			blit(transform, guiLeft + 74, guiTop + 32 + 17 - bioRemain, 176, 60 + 17 - bioRemain, 4, bioRemain);
 		}
 	}
 

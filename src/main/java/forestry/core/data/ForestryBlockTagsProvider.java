@@ -2,22 +2,10 @@ package forestry.core.data;
 
 import javax.annotation.Nullable;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.Tags;
-
-import forestry.arboriculture.features.ArboricultureBlocks;
-import forestry.arboriculture.features.CharcoalBlocks;
-import forestry.core.blocks.EnumResourceType;
-import forestry.core.features.CoreBlocks;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 //TODO: Split up ?
 public final class ForestryBlockTagsProvider extends BlockTagsProvider {
@@ -31,7 +19,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 	@Override
 	protected void registerTags() {
 		//super.registerTags();
-		filter = this.tagToBuilder.keySet().stream().map(ITag::getId).collect(Collectors.toSet());
+		/*filter = this.tagToBuilder.keySet().stream().map(ITag::getId).collect(Collectors.toSet());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			getBuilder(ForestryTags.Blocks.CHARCOAL).add(CharcoalBlocks.CHARCOAL.block());
 		}
@@ -87,7 +75,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.APATITE).block());
 		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_TIN).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).block());
 		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).block());
-		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).block());
+		getBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).block());*/
 	}
 
 	/*@Override

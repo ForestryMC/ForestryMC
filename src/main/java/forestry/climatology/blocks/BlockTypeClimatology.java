@@ -34,7 +34,7 @@ public enum BlockTypeClimatology implements IBlockTypeCustom {
 	}
 
 	@Override
-	public String getName() {
-		return getMachineProperties().getName();
+	public String getString() {
+		return getMachineProperties().getString();
 	}
 }

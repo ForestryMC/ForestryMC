@@ -38,7 +38,7 @@ public class ItemMinecartBeehousing extends MinecartItem {
 		APIARY;
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return toString().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -92,6 +92,6 @@ public class ItemMinecartBeehousing extends MinecartItem {
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		return "cart." + type.getName();
+		return "cart." + type.getString();
 	}
 }

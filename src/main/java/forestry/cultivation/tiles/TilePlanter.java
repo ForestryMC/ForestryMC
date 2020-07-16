@@ -90,8 +90,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	@Override
 	public ITextComponent getDisplayName() {
-		String name = getBlockType(BlockTypePlanter.ARBORETUM).getName();
-		return new TranslationTextComponent("block.forestry.planter." + (mode.getName()), new TranslationTextComponent("block.forestry." + name));
+		String name = getBlockType(BlockTypePlanter.ARBORETUM).getString();
+		return new TranslationTextComponent("block.forestry.planter." + (mode.getString()), new TranslationTextComponent("block.forestry." + name));
 	}
 
 	@Override

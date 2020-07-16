@@ -19,19 +19,15 @@ import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.genetics.gatgets.IDatabaseTab;
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IDatabaseElement;
-import forestry.api.gui.style.ITextStyle;
-import forestry.api.gui.style.TextStyleBuilder;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.render.ColourProperties;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
 @OnlyIn(Dist.CLIENT)
 public class BeeDatabaseTab implements IDatabaseTab<IBee> {
-	private static final ITextStyle BINOMIAL = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.beealyzer.binomial")).build();
 
 	private final DatabaseMode mode;
 
@@ -54,7 +50,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 		IAlleleBeeSpecies primarySpecies = bee.getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 		IAlleleBeeSpecies secondarySpecies = bee.getGenome().getInactiveAllele(BeeChromosomes.SPECIES);
 
-		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
+		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.databaseTitle);
 
 		container.addLine(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES);
 
@@ -116,7 +112,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 				displayTextKey = "for.bees.stock.ignoble";
 			}
 			displayText = Translator.translateToLocal(displayTextKey);
-			container.label(displayText, GuiElementAlignment.TOP_CENTER, BINOMIAL);
+			container.label(displayText, GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.binomial);
 		}
 	}
 

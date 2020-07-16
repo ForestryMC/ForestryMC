@@ -15,12 +15,10 @@ import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ITextProperties;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.gui.style.ITextStyle;
 
 public class StringUtil {
 
@@ -64,36 +62,15 @@ public class StringUtil {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static int getLineHeight(int maxWidth, String... strings) {
+	public static int getLineHeight(int maxWidth, ITextProperties... strings) {
 		Minecraft minecraft = Minecraft.getInstance();
 		FontRenderer fontRenderer = minecraft.fontRenderer;
 
 		int lineCount = 0;
-		for (String string : strings) {
-			lineCount += fontRenderer.listFormattedStringToWidth(string, maxWidth).size();
+		for (ITextProperties string : strings) {
+			lineCount += fontRenderer.func_238425_b_(string, maxWidth).size();
 		}
 
 		return lineCount * fontRenderer.FONT_HEIGHT;
-	}
-
-	public static String getFormattedString(ITextStyle style, String rawText) {
-		StringBuilder modifiers = new StringBuilder();
-		if (style.isBold()) {
-			modifiers.append(TextFormatting.BOLD);
-		}
-		if (style.isItalic()) {
-			modifiers.append(TextFormatting.ITALIC);
-		}
-		if (style.isUnderlined()) {
-			modifiers.append(TextFormatting.UNDERLINE);
-		}
-		if (style.isStrikethrough()) {
-			modifiers.append(TextFormatting.STRIKETHROUGH);
-		}
-		if (style.isObfuscated()) {
-			modifiers.append(TextFormatting.OBFUSCATED);
-		}
-		modifiers.append(rawText);
-		return modifiers.toString();
 	}
 }

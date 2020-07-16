@@ -23,10 +23,10 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock {
 		//TODO creative tab
 	}
 
-	@Override
+	/*@Override
 	public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_) {
 		return false;
-	}
+	}*/
 
 	@Override
 	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {

@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Direction;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.genetics.filter.IFilterRuleType;
@@ -35,16 +37,16 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		int x = xPos + startX;
 		int y = yPos + startY;
 		IFilterLogic logic = gui.getLogic();
 		IFilterRuleType rule = logic.getRule(facing);
-		draw(manager.gui, rule, x, y);
+		draw(manager.gui, rule, transform, y, x);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		if (this.gui.selection.isSame(this)) {
 			textureManager.bindTexture(SelectionWidget.TEXTURE);
-			gui.blit(x - 1, y - 1, 212, 0, 18, 18);
+			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}
 
@@ -54,12 +56,12 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	}
 
 	@Override
-	public void draw(GuiForestry gui, IFilterRuleType selectable, int x, int y) {
+	public void draw(GuiForestry gui, IFilterRuleType selectable, MatrixStack transform, int y, int x) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(selectable.getTextureMap());
 
 		TextureAtlasSprite sprite = selectable.getSprite();
-		AbstractGui.blit(x, y, gui.getBlitOffset(), 16, 16, sprite);
+		AbstractGui.blit(transform, x, y, gui.getBlitOffset(), 16, 16, sprite);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.config.Constants;
@@ -82,8 +83,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		for (int i = 0; i <= tile.getGame().getBountyLevel() / 4; i++) {
 			GuiUtil.drawItemStack(this, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
@@ -99,7 +100,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 			String format = TextFormatting.UNDERLINE + TextFormatting.ITALIC.toString();
 			int attemptNo = EscritoireGame.BOUNTY_MAX - tile.getGame().getBountyLevel();
 			String attemptNoString = Translator.translateToLocalFormatted("for.gui.escritoire.attempt.number", attemptNo);
-			textLayout.drawLine(format + attemptNoString, 170, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			textLayout.drawLine(transform, format + attemptNoString, 170, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			textLayout.newLine();
 			String escritoireText = textSource.getText(tile.getGame());
 			textLayout.drawSplitLine(escritoireText, 170, 90, ColourProperties.INSTANCE.get("gui.mail.lettertext"));

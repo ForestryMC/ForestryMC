@@ -21,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -56,7 +57,7 @@ public class GuiMailboxInfo extends AbstractGui {
 		fontRenderer = Minecraft.getInstance().fontRenderer;
 	}
 
-	public void render() {
+	public void render(MatrixStack transform) {
 		if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
 			return;
 		}
@@ -78,10 +79,10 @@ public class GuiMailboxInfo extends AbstractGui {
 		TextureManager textureManager = minecraft.getTextureManager();
 		textureManager.bindTexture(textureAlert);
 
-		this.blit(x, y, 0, 0, WIDTH, HEIGHT);
+		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 
-		fontRenderer.drawString(Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
-		fontRenderer.drawString(Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
+		fontRenderer.drawString(transform, Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
+		fontRenderer.drawString(transform, Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
 	}
 
 	protected int getCenteredOffset(String string, int xWidth) {

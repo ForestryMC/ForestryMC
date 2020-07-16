@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
 	@Nullable
@@ -33,8 +34,8 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 		if (entity.getState() != EnumButterflyState.RESTING) {
 			return false;
 		}
-
-		rest = new BlockPos((int) entity.posX, (int) Math.floor(entity.posY) - 1, (int) entity.posZ);
+		Vector3d pos = entity.getPositionVec();
+		rest = new BlockPos((int) pos.x, (int) Math.floor(pos.y) - 1, (int) pos.z);
 		if (entity.world.isAirBlock(rest)) {
 			return false;
 		}

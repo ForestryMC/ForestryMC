@@ -1,6 +1,6 @@
 package forestry.core.gui.elements.layouts;
 
-import forestry.api.gui.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 public class HorizontalLayout extends AbstractElementLayout {
 

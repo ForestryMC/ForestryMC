@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -62,7 +61,7 @@ public class ItemElectronTube extends ItemOverlay {
 			if (Screen.hasShiftDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
-					list.add(new StringTextComponent(circuitLayoutName).setStyle((new Style()).setColor(TextFormatting.WHITE).setUnderlined(true)));
+					list.add(new StringTextComponent(circuitLayoutName).func_240701_a_(TextFormatting.WHITE, TextFormatting.UNDERLINE));
 					for (ICircuit circuit : circuits.get(circuitLayout)) {
 						circuit.addTooltip(list);
 					}
@@ -72,8 +71,8 @@ public class ItemElectronTube extends ItemOverlay {
 			}
 		} else {
 			list.add(new StringTextComponent("<")
-				.appendSibling(new TranslationTextComponent("for.gui.noeffect")
-					.appendText(">")));
+				.func_230529_a_(new TranslationTextComponent("for.gui.noeffect")
+					.func_240702_b_(">")));
 		}
 	}
 

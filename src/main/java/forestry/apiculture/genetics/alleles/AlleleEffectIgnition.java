@@ -12,6 +12,7 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -25,6 +26,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
+import forestry.core.utils.WorldUtils;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	private static final int ignitionChance = 50;
@@ -70,7 +72,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
+		ClientWorld world = WorldUtils.asClient(housing.getWorldObj());
 		if (world.rand.nextInt(2) != 0) {
 			super.doFX(genome, storedData, housing);
 		} else {

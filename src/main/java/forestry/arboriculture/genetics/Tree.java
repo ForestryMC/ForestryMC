@@ -24,9 +24,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -40,7 +37,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 
-import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
@@ -64,7 +60,6 @@ import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
 import forestry.core.genetics.TemplateMatcher;
 
@@ -233,10 +228,11 @@ public class Tree extends Individual implements ITree, IPlantable {
 	public void addTooltip(List<ITextComponent> list) {
 
 		// No info 4 u!
-		if (!isAnalyzed) {
+		/*if (!isAnalyzed) {
 			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.unknown")).appendText(">"));
 			return;
 		}
+		Butterfly
 
 		// You analyzed it? Juicy tooltip coming up!
 		IAlleleTreeSpecies primary = genome.getActiveAllele(TreeChromosomes.SPECIES);
@@ -268,7 +264,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 				strike = TextFormatting.STRIKETHROUGH.toString();
 			}
 			list.add(new StringTextComponent(strike + TextFormatting.GREEN + "F: " + genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDescription()));
-		}
+		}*/
 	}
 
 	/* REPRODUCTION */

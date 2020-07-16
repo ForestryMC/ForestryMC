@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.farming.FarmDirection;
@@ -28,9 +29,9 @@ public class GhostItemStackWidget extends ItemStackWidget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		if (!slot.getHasStack()) {
-			super.draw(startX, startY);
+			super.draw(transform, startY, startX);
 		}
 		RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
@@ -39,14 +40,14 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		String directionString = getDirectionString();
 		if (!directionString.isEmpty()) {
 			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
-			fontRenderer.drawStringWithShadow(getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
+			fontRenderer.drawStringWithShadow(transform, getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
 
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(manager.gui.textureFile);
-		manager.gui.blit(xPos + startX, yPos + startY, 206, 0, 16, 16);
+		manager.gui.blit(transform, xPos + startX, yPos + startY, 206, 0, 16, 16);
 
 		RenderSystem.disableBlend();
 		RenderSystem.enableDepthTest();

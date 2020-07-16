@@ -103,13 +103,13 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
 			if (!fluid.isEmpty()) {
-				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getName() + '.' + fluid.getFluid().getRegistryName();
+				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + '.' + fluid.getFluid().getRegistryName();
 				return ResourceUtil.tryTranslate(exactTranslationKey, () -> {
-					String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getName() + ".grammar";
+					String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + ".grammar";
 					return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
 				});
 			} else {
-				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getName() + ".empty";
+				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getString() + ".empty";
 				return new TranslationTextComponent(unlocalizedname);
 			}
 		}

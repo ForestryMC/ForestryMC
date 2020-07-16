@@ -13,6 +13,8 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.ReservoirWidget;
@@ -30,17 +32,17 @@ public class GuiFabricator extends GuiForestryTitled<ContainerFabricator> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		int heatScaled = tile.getHeatScaled(52);
 		if (heatScaled > 0) {
-			blit(guiLeft + 55, guiTop + 17 + 52 - heatScaled, 192, 52 - heatScaled, 4, heatScaled);
+			blit(transform, guiLeft + 55, guiTop + 17 + 52 - heatScaled, 192, 52 - heatScaled, 4, heatScaled);
 		}
 
 		int meltingPointScaled = tile.getMeltingPointScaled(52);
 		if (meltingPointScaled > 0) {
-			blit(guiLeft + 52, guiTop + 15 + 52 - meltingPointScaled, 196, 0, 10, 5);
+			blit(transform, guiLeft + 52, guiTop + 15 + 52 - meltingPointScaled, 196, 0, 10, 5);
 		}
 	}
 

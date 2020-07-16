@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -34,7 +35,7 @@ public class ColorElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		drawGradientRect(0, 0, width, height, startColor, endColor);
 	}
 

@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,8 +51,8 @@ public class BookEntry implements IBookEntry {
 	}
 
 	@Override
-	public String getTitle() {
-		return title;
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent(title);
 	}
 
 	@Override

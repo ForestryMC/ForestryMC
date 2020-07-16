@@ -20,13 +20,10 @@ import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DimensionType;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 
@@ -34,16 +31,15 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.utils.WorldUtils;
 import forestry.modules.ModuleManager;
 
 public class TickHandlerCoreServer {
 
-	private final LinkedListMultimap<ResourceLocation, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
-	private final Set<ResourceLocation> checkForRetrogen = new HashSet<>();
+	private final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
+	private final Set<RegistryKey<World>> checkForRetrogen = new HashSet<>();
 
 
 	@SubscribeEvent
@@ -62,7 +58,7 @@ public class TickHandlerCoreServer {
 
 		if (Config.doRetrogen && event.world instanceof ServerWorld) {
 			ServerWorld world = (ServerWorld) event.world;
-			ResourceLocation dimId = DimensionType.getKey(world.dimension.getType());
+			RegistryKey<World> dimId = world.func_234923_W_();
 			if (checkForRetrogen.contains(dimId)) {
 				List<ChunkCoords> chunkList = chunkRegenList.get(dimId);
 				Iterator<ChunkCoords> iterator = chunkList.iterator();
@@ -79,11 +75,8 @@ public class TickHandlerCoreServer {
 		}
 	}
 
-	/**
-	 * This is from {@link GameRegistry#generateWorld(int, int, World, ChunkGenerator, AbstractChunkProvider)} where the seed is constructed.
-	 */
 	private static Random getRetrogenRandom(World world, ChunkCoords coords) {
-		long worldSeed = world.getSeed();
+		long worldSeed = WorldUtils.asServer(world).getSeed();
 		Random random = new Random(worldSeed);
 		long xSeed = random.nextLong() >> 2 + 1L;
 		long zSeed = random.nextLong() >> 2 + 1L;
@@ -130,18 +123,18 @@ public class TickHandlerCoreServer {
 	}
 
 	private static class ChunkCoords {
-		public final ResourceLocation dimension;
+		public final RegistryKey<World> dimension;
 		public final int x;
 		public final int z;
 
 		public ChunkCoords(IChunk chunk) {
 			IWorld world = chunk.getWorldForge();
-			if (world == null) { //TODO
-				this.dimension = new ResourceLocation("error", "error");
+			if (world == null) {
+				this.dimension = World.field_234918_g_;
 				this.x = 0;
 				this.z = 0;
 			} else {
-				this.dimension = DimensionType.getKey(world.getDimension().getType());
+				this.dimension = ((World) world).func_234923_W_();
 				this.x = chunk.getPos().x;
 				this.z = chunk.getPos().z;
 			}

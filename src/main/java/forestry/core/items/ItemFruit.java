@@ -40,7 +40,7 @@ public class ItemFruit extends ItemForestryFood {
 		}
 
 		@Override
-		public String getName() {
+		public String getString() {
 			return name;
 		}
 

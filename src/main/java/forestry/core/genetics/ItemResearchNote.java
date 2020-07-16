@@ -23,9 +23,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -130,8 +130,8 @@ public class ItemResearchNote extends ItemForestry {
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.3", speciesResult));
 
 				if (!encoded.getSpecialConditions().isEmpty()) {
-					for (String line : encoded.getSpecialConditions()) {
-						tooltips.add(new StringTextComponent(line).setStyle((new Style()).setColor(TextFormatting.GOLD)));
+					for (ITextComponent line : encoded.getSpecialConditions()) {
+						tooltips.add(((IFormattableTextComponent) line).func_240699_a_(TextFormatting.GOLD));
 					}
 				}
 			} else if (this == SPECIES) {
@@ -168,7 +168,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
-					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"));
+					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"), Util.DUMMY_UUID);
 					return false;
 				}
 
@@ -181,12 +181,12 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.registerSpecies(speciesResult);
 
 				tracker.researchMutation(encoded);
-				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"));
+				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.DUMMY_UUID);
 
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
-					speciesFirst.getDisplayName().applyTextStyle(TextFormatting.GRAY),
-					speciesSecond.getDisplayName().applyTextStyle(TextFormatting.GRAY),
-					speciesResult.getDisplayName().applyTextStyle(TextFormatting.GREEN)));
+					((IFormattableTextComponent) speciesFirst.getDisplayName()).func_240699_a_(TextFormatting.GRAY),
+					((IFormattableTextComponent) speciesSecond.getDisplayName()).func_240699_a_(TextFormatting.GRAY),
+					((IFormattableTextComponent) speciesResult.getDisplayName()).func_240701_a_(TextFormatting.GREEN)), Util.DUMMY_UUID);
 
 				return true;
 			}
@@ -273,7 +273,7 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<ITextComponent> list) {
 			List<ITextComponent> tooltips = type.getTooltip(inner);
 			if (tooltips.isEmpty()) {
-				list.add(new TranslationTextComponent("for.researchNote.error.0").setStyle((new Style()).setColor(TextFormatting.RED).setItalic(true)));
+				list.add(new TranslationTextComponent("for.researchNote.error.0").func_240701_a_(TextFormatting.RED, TextFormatting.ITALIC));
 				list.add(new TranslationTextComponent("for.researchNote.error.1"));
 				return;
 			}

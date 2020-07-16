@@ -18,6 +18,7 @@ import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.BiomeDictionary;
@@ -43,7 +44,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	private final IAllele[] template;
 
 	private final List<IMutationCondition> mutationConditions = new ArrayList<>();
-	private final List<String> specialConditions = new ArrayList<>();
+	private final List<ITextComponent> specialConditions = new ArrayList<>();
 
 	private boolean isSecret = false;
 
@@ -55,7 +56,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public Collection<String> getSpecialConditions() {
+	public Collection<ITextComponent> getSpecialConditions() {
 		return specialConditions;
 	}
 

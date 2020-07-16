@@ -36,7 +36,8 @@ public enum EnumCircuitBoardType implements IItemSubtype {
 		return sockets;
 	}
 
-	public String getName() {
+	@Override
+	public String getString() {
 		return name;
 	}
 

@@ -27,6 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -76,7 +77,7 @@ public class TankWidget extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		RenderSystem.disableBlend();
 		IFluidTank tank = getTank();
 		if (tank == null || tank.getCapacity() <= 0) {
@@ -139,7 +140,7 @@ public class TankWidget extends Widget {
 			RenderSystem.enableAlphaTest();
 			RenderSystem.disableDepthTest();
 			textureManager.bindTexture(manager.gui.textureFile);
-			manager.gui.blit(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
+			manager.gui.blit(transform, startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 			RenderSystem.enableDepthTest();
 			RenderSystem.disableAlphaTest();
 		}

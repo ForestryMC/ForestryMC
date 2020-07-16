@@ -4,7 +4,7 @@ package forestry.core.gui.elements.layouts;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public class VerticalLayout extends AbstractElementLayout {

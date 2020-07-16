@@ -13,6 +13,8 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
@@ -29,14 +31,14 @@ public class GuiStill extends GuiForestryTitled<ContainerStill> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
-		blit(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
+		blit(transform, guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
 
 		if (tile.getWorkCounter() > 0) {
 			int massRemaining = tile.getProgressScaled(16);
-			blit(guiLeft + 84, guiTop + 17 + massRemaining, 176, 74 + massRemaining, 4, 17 - massRemaining);
+			blit(transform, guiLeft + 84, guiTop + 17 + massRemaining, 176, 74 + massRemaining, 4, 17 - massRemaining);
 		}
 	}
 

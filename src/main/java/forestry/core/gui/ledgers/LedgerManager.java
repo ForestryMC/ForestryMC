@@ -16,6 +16,7 @@ import java.util.List;
 
 import net.minecraft.client.renderer.Rectangle2d;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -132,7 +133,7 @@ public class LedgerManager {
 		return areas;
 	}
 
-	public void drawLedgers() {
+	public void drawLedgers(MatrixStack transform) {
 		int yPos = 8;
 		for (Ledger ledger : ledgers) {
 
@@ -143,7 +144,7 @@ public class LedgerManager {
 
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
-			ledger.draw();
+			ledger.draw(transform);
 			yPos += ledger.getHeight();
 		}
 
@@ -165,18 +166,18 @@ public class LedgerManager {
 			}
 
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			errorLedger.draw(-errorLedger.getWidth(), yPos);
+			errorLedger.draw(transform, yPos, -errorLedger.getWidth());
 			yPos += errorLedger.getHeight();
 		}
 		RenderSystem.color4f(1, 1, 1, 1);
 	}
 
-	public void drawTooltips(int mouseX, int mouseY) {
+	public void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
 		Ledger ledger = getAtPosition(mouseX, mouseY);
 		if (ledger != null) {
 			ToolTip toolTip = new ToolTip();
 			toolTip.add(ledger.getTooltip());
-			GuiUtil.drawToolTips(gui, null, toolTip, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, gui, null, toolTip, mouseX, mouseY);
 		}
 	}
 

@@ -21,6 +21,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import genetics.api.alleles.IAllele;
@@ -30,7 +32,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Translator;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
@@ -69,7 +70,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	}
 
 	@Override
-	public String getDescription() {
-		return Translator.translateToLocalFormatted("for.mutation.condition.resource", displayName);
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent("for.mutation.condition.resource", displayName);
 	}
 }

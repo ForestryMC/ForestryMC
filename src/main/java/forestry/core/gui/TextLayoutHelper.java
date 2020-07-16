@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.util.text.StringTextComponent;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -71,42 +74,42 @@ public class TextLayoutHelper {
 		RenderSystem.popMatrix();
 	}
 
-	public void drawRow(String text0, String text1, String text2, int colour0, int colour1, int colour2) {
-		drawLine(text0, column0, colour0);
-		drawLine(text1, column1, colour1);
-		drawLine(text2, column2, colour2);
+	public void drawRow(MatrixStack transform, String text0, String text1, String text2, int colour0, int colour1, int colour2) {
+		drawLine(transform, text0, column0, colour0);
+		drawLine(transform, text1, column1, colour1);
+		drawLine(transform, text2, column2, colour2);
 	}
 
-	public void drawLine(String text, int x) {
-		drawLine(text, x, defaultFontColor);
+	public void drawLine(MatrixStack transform, String text, int x) {
+		drawLine(transform, text, x, defaultFontColor);
 	}
 
 	public void drawSplitLine(String text, int x, int maxWidth) {
 		drawSplitLine(text, x, maxWidth, defaultFontColor);
 	}
 
-	public void drawCenteredLine(String text, int x, int color) {
-		drawCenteredLine(text, x, guiForestry.getSizeX(), color);
+	public void drawCenteredLine(MatrixStack transform, String text, int x, int color) {
+		drawCenteredLine(transform, text, x, guiForestry.getSizeX(), color);
 	}
 
-	public void drawCenteredLine(String text, int x, int width, int color) {
-		drawCenteredLine(text, x, 0, width, color);
+	public void drawCenteredLine(MatrixStack transform, String text, int x, int width, int color) {
+		drawCenteredLine(transform, text, x, 0, width, color);
 	}
 
-	public void drawCenteredLine(String text, int x, int y, int width, int color) {
-		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + y + line, color);
+	public void drawCenteredLine(MatrixStack transform, String text, int x, int y, int width, int color) {
+		guiForestry.getFontRenderer().drawString(transform, text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + y + line, color);
 	}
 
-	public void drawLine(String text, int x, int color) {
-		drawLine(text, x, 0, color);
+	public void drawLine(MatrixStack transform, String text, int x, int color) {
+		drawLine(transform, text, x, 0, color);
 	}
 
-	public void drawLine(String text, int x, int y, int color) {
-		guiForestry.getFontRenderer().drawString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
+	public void drawLine(MatrixStack transform, String text, int x, int y, int color) {
+		guiForestry.getFontRenderer().drawString(transform, text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
 	}
 
 	public void drawSplitLine(String text, int x, int maxWidth, int color) {
-		guiForestry.getFontRenderer().drawSplitString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
+		guiForestry.getFontRenderer().func_238418_a_(new StringTextComponent(text), guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
 	}
 
 	public int getCenteredOffset(String string) {

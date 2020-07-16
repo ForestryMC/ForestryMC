@@ -10,7 +10,7 @@ import java.util.Collection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 /**
  * A factory that creates book pages for a book entry.

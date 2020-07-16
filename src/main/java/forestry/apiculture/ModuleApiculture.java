@@ -36,7 +36,6 @@ import net.minecraft.potion.Potions;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -683,9 +682,10 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
 		boolean hasVillageGenerated) {
-		if (!world.getDimension().getType().equals(DimensionType.OVERWORLD)) {
+		//TODO: Fix if dimensions are more integrated into forge
+		/*if (!world.func_230315_m_() != DimensionType..getType().equals(DimensionType.OVERWORLD)) {
 			return;
-		}
+		}*/
 		if (Config.getBeehivesAmount() > 0.0) {
 			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
 		}

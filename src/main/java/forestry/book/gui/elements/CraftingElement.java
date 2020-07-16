@@ -7,10 +7,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.GuiElementAlignment;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
 
 @OnlyIn(Dist.CLIENT)
 public class CraftingElement extends SelectionElement<IRecipe> {

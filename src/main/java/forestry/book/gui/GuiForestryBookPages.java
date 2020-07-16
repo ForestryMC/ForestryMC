@@ -10,7 +10,6 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,11 +17,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IForesterBook;
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IGuiElement;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.book.gui.buttons.GuiButtonSubEntry;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookPages extends GuiForesterBook {
@@ -100,8 +99,8 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	}
 
 	@Override
-	protected List<String> getTooltip(int mouseX, int mouseY) {
-		List<String> tooltip = new LinkedList<>();
+	protected List<ITextComponent> getTooltip(int mouseX, int mouseY) {
+		List<ITextComponent> tooltip = new LinkedList<>();
 		for (GuiButtonSubEntry subEntry : subButtons) {
 			if (subEntry.isMouseOver(mouseX, mouseY)) {
 				tooltip.addAll(subEntry.getToolTip());
@@ -112,7 +111,7 @@ public class GuiForestryBookPages extends GuiForesterBook {
 
 	@Override
 	public ITextComponent getTitle() {
-		return new StringTextComponent(entry.getTitle());
+		return entry.getTitle();
 	}
 
 	@Override

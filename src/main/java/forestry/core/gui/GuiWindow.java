@@ -5,20 +5,21 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.events.GuiEvent;
-import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.elements.Window;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
 
 import org.lwjgl.glfw.GLFW;
 
 /**
- * GuiScreen implementation of a gui that contains {@link forestry.api.gui.IGuiElement}s.
+ * GuiScreen implementation of a gui that contains {@link IGuiElement}s.
  */
 @OnlyIn(Dist.CLIENT)
 public class GuiWindow extends Screen implements IGuiSizable {
@@ -50,22 +51,21 @@ public class GuiWindow extends Screen implements IGuiSizable {
 		window.updateClient();
 	}
 
-	//TODO - right method?
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
-		super.render(mouseX, mouseY, partialTicks);
-		window.draw(mouseX, mouseY);
+		super.render(transform, mouseX, mouseY, partialTicks);
+		window.draw(transform, mouseY, mouseX);
 	}
 
-	protected void drawTooltips(int mouseX, int mouseY) {
+	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
 		PlayerInventory playerInv = minecraft.player.inventory;
 
 		if (playerInv.getItemStack().isEmpty()) {
-			GuiUtil.drawToolTips(this, buttons, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, buttons, mouseX, mouseY);
 			RenderSystem.pushMatrix();
 			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
-			window.drawTooltip(mouseX, mouseY);
+			window.drawTooltip(transform, mouseY, mouseX);
 			RenderSystem.popMatrix();
 		}
 	}

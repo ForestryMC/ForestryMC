@@ -48,7 +48,7 @@ public class MultiblockEventHandlerClient {
 						String lastValidationError = controller.getLastValidationError();
 						if (lastValidationError != null) {
 							lastValidationError = TextFormatting.DARK_RED.toString() + TextFormatting.ITALIC.toString() + lastValidationError;
-							minecraft.fontRenderer.drawSplitString(lastValidationError, window.getScaledWidth() / 2 + 35, window.getScaledHeight() / 2 - 25, 128, 16777215);
+							//minecraft.fontRenderer.drawSplitString(lastValidationError, window.getScaledWidth() / 2 + 35, window.getScaledHeight() / 2 - 25, 128, 16777215);
 						}
 					});
 				}

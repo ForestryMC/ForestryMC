@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IWindowElement;
-import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.gui.elements.layouts.VerticalLayout;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.event.EventValueChanged;
 
 /**

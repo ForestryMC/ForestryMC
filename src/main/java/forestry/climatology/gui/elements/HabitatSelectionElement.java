@@ -23,6 +23,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,12 +32,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.ForestryAPI;
-import forestry.api.gui.events.GuiEvent;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.StringUtil;
 
@@ -64,8 +65,8 @@ public class HabitatSelectionElement extends ElementGroup {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
-		super.drawElement(mouseX, mouseY);
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		super.drawElement(transform, mouseY, mouseX);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		Optional<ClimateButton> optional = buttons.stream().min(BUTTON_COMPARATOR);
@@ -73,7 +74,7 @@ public class HabitatSelectionElement extends ElementGroup {
 			return;
 		}
 		ClimateButton button = optional.get();
-		blit(button.getX() - 1, button.getY() - 1, 0, 233, 22, 22);
+		blit(transform, button.getX() - 1, button.getY() - 1, 0, 233, 22, 22);
 	}
 
 	private enum EnumClimate {
@@ -116,13 +117,13 @@ public class HabitatSelectionElement extends ElementGroup {
 		}
 
 		@Override
-		public void drawElement(int mouseX, int mouseY) {
+		public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 			textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
-			blit(0, 0, 204, 46, 20, 20);
+			blit(transform, 0, 0, 204, 46, 20, 20);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			blit(2, 2, getBlitOffset(), 16, 16, climate.getSprite());
+			blit(transform, 2, 2, getBlitOffset(), 16, 16, climate.getSprite());
 		}
 
 		private double getComparingCode() {

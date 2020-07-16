@@ -163,7 +163,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(nbt);
+		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	public void onBlockTick() {

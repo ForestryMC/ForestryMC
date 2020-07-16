@@ -1,113 +1,181 @@
 package forestry.core.gui.elements;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Preconditions;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
+import java.util.function.Consumer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.Style;
 
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.ILabelElement;
-import forestry.api.gui.style.ITextStyle;
-import forestry.core.utils.StringUtil;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.ILabelElement;
+import forestry.core.gui.elements.lib.ITextElement;
+import forestry.core.gui.tooltips.ITextInstance;
 
 public class LabelElement extends GuiElement implements ILabelElement {
 	/* Constants */
 	public static final FontRenderer FONT_RENDERER = Minecraft.getInstance().fontRenderer;
+	public static final int DEFAULT_HEIGHT = FONT_RENDERER.FONT_HEIGHT + 3;
 
 	/* Attributes - State */
-	protected ITextStyle style;
-	protected String text;
-	protected String rawText;
-	protected boolean textLength = false;
+	protected ITextProperties component;
+	protected int originalWidth;
+	protected boolean fitText;
+	protected boolean shadow = false;
 
-	public LabelElement(String text, GuiElementAlignment align, ITextStyle style) {
-		this(0, 0, -1, FONT_RENDERER.FONT_HEIGHT, text, align, style);
+	public LabelElement(ITextProperties component) {
+		this(0, 0, -1, DEFAULT_HEIGHT, component, true);
 	}
 
-	//TODO reduce code duplication in this class
-	public LabelElement(int xPos, int yPos, int width, int height, String text, GuiElementAlignment align, ITextStyle style) {
+	public LabelElement(int xPos, int yPos, int width, int height, ITextProperties component, boolean fitText) {
 		super(xPos, yPos, width, height);
-		textLength = width < 0;
-		this.style = style;
-		this.rawText = text;
-		this.text = StringUtil.getFormattedString(style, text);
-		setAlign(align);
-		if (textLength) {
-			//TODO - think this is bidi flag
-			boolean uni = FONT_RENDERER.getBidiFlag();
-			FONT_RENDERER.setBidiFlag(style.isUnicode());
-			setWidth(FONT_RENDERER.getStringWidth(this.text));
-			FONT_RENDERER.setBidiFlag(uni);
-		}
+		this.originalWidth = width;
+		this.component = component;
+		setFitText(fitText);
 	}
 
 	@Override
-	public ILabelElement setStyle(ITextStyle style) {
-		this.style = style;
-		this.text = StringUtil.getFormattedString(style, rawText);
-		if (textLength) {
-			//TODO - think this is bidi now
-			boolean uni = FONT_RENDERER.getBidiFlag();
-			FONT_RENDERER.setBidiFlag(style.isUnicode());
-			setWidth(FONT_RENDERER.getStringWidth(this.text));
-			FONT_RENDERER.setBidiFlag(uni);
+	public LabelElement setFitText(boolean fitText) {
+		this.fitText = fitText;
+		calculateWidth();
+		return this;
+	}
+
+	@Override
+	public boolean isFitText() {
+		return fitText;
+	}
+
+	@Override
+	public LabelElement setShadow(boolean value) {
+		shadow = value;
+		return this;
+	}
+
+	@Override
+	public boolean hasShadow() {
+		return shadow;
+	}
+
+	@Override
+	public Style getStyle() {
+		if (component instanceof IFormattableTextComponent) {
+			return ((IFormattableTextComponent) component).getStyle();
+		}
+		return Style.EMPTY;
+	}
+
+	@Override
+	public ILabelElement setStyle(Style style) {
+		if (component instanceof IFormattableTextComponent) {
+			((IFormattableTextComponent) component).func_240703_c_(style);
 		}
 		return this;
 	}
 
 	@Override
-	public ITextStyle getStyle() {
-		return style;
+	public ITextProperties getValue() {
+		return component;
 	}
 
 	@Override
-	public String getText() {
-		return text;
+	public boolean setValue(ITextProperties value) {
+		this.component = value;
+		calculateWidth();
+		return true;
 	}
 
-	@Override
-	public ILabelElement setText(String text) {
-		this.rawText = text;
-		this.text = StringUtil.getFormattedString(style, text);
-		if (textLength) {
-			//TODO think this is bidi now
-			boolean uni = FONT_RENDERER.getBidiFlag();
-			FONT_RENDERER.setBidiFlag(style.isUnicode());
-			setWidth(FONT_RENDERER.getStringWidth(this.text));
-			FONT_RENDERER.setBidiFlag(uni);
-		}
-		return this;
-	}
-
-	@Override
-	public String getRawText() {
-		return rawText;
-	}
-
-	@Override
-	public Collection<String> getLines() {
-		return Collections.singletonList(text);
-	}
-
-	@Override
-	public Map<ITextStyle, String> getRawLines() {
-		return ImmutableMap.of(style, rawText);
-	}
-
-	@Override
-	public void drawElement(int mouseX, int mouseY) {
-		//TODO think this is bidi now
-		boolean unicode = FONT_RENDERER.getBidiFlag();
-		FONT_RENDERER.setBidiFlag(style.isUnicode());
-		if (style.isShadow()) {
-			FONT_RENDERER.drawStringWithShadow(text, 0, 0, style.getColor());
+	protected void calculateWidth() {
+		if (fitText) {
+			setWidth(FONT_RENDERER.getStringWidth(component.getString()));
 		} else {
-			FONT_RENDERER.drawString(text, 0, 0, style.getColor());
+			setWidth(originalWidth);
 		}
-		FONT_RENDERER.setBidiFlag(unicode);
+	}
+
+	@Override
+	public Collection<ITextProperties> getLines() {
+		return Collections.singletonList(component);
+	}
+
+	@Override
+	public ITextElement setText(ITextComponent text) {
+		setValue((IFormattableTextComponent) text);
+		return this;
+	}
+
+	@Override
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		if (shadow) {
+			FONT_RENDERER.func_238407_a_(transform, component, 0, 0, 0);
+		} else {
+			FONT_RENDERER.func_238422_b_(transform, component, 0, 0, 0);
+		}
+	}
+
+	public static class Builder implements ITextInstance<Builder, Builder, LabelElement> {
+		private final Consumer<IGuiElement> parentAdder;
+		private final IFormattableTextComponent root;
+		private boolean fitText = false;
+		private boolean shadow = false;
+
+		public Builder(Consumer<IGuiElement> parentAdder, IFormattableTextComponent root) {
+			this.parentAdder = parentAdder;
+			this.root = root;
+		}
+
+		@Nullable
+		@Override
+		public ITextComponent lastComponent() {
+			return root;
+		}
+
+		@Override
+		public Builder add(ITextComponent line) {
+			root.func_230529_a_(line);
+			return this;
+		}
+
+		@Override
+		public Builder singleLine() {
+			return this;
+		}
+
+		@Override
+		public Builder cast() {
+			return this;
+		}
+
+		@Override
+		public LabelElement create() {
+			Preconditions.checkNotNull(root);
+			LabelElement element = new LabelElement(root).setFitText(fitText).setShadow(shadow);
+			parentAdder.accept(element);
+			return element;
+		}
+
+		public Builder fitText() {
+			this.fitText = true;
+			return this;
+		}
+
+		public Builder shadow() {
+			shadow = true;
+			return this;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return root == null;
+		}
 	}
 }

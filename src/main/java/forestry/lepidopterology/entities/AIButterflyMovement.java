@@ -39,7 +39,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().squareDistanceTo(entity.getPositionVector()) > 2.0f) {
+		if (entity.getDestination().squareDistanceTo(entity.getPositionVec()) > 2.0f) {
 			return true;
 		}
 
@@ -52,7 +52,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		// Reset destination if we did collide.
 		if (entity.isInWater()) {
 			flightTarget = getRandomDestinationUpwards();
-		} else if (entity.collided) {
+		} else if (false) {//TODO: entity.collided
 			flightTarget = entity.getRNG().nextBoolean() ? getRandomDestination() : null;
 		} else if (entity.world.rand.nextInt(300) == 0) {
 			flightTarget = getRandomDestination();

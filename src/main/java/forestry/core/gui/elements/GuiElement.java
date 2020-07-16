@@ -7,31 +7,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.ITooltipSupplier;
-import forestry.api.gui.IWindowElement;
-import forestry.api.gui.events.ElementEvent;
-import forestry.api.gui.events.GuiElementEvent;
-import forestry.api.gui.events.GuiEventDestination;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.ITooltipSupplier;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.ElementEvent;
+import forestry.core.gui.elements.lib.events.GuiElementEvent;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.tooltips.ToolTip;
 
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiElement extends AbstractGui implements IGuiElement {
+public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiElement {
 	/* Attributes - Final */
 	//Tooltip of the element
 	private final List<ITooltipSupplier> tooltipSuppliers = new ArrayList<>();
@@ -116,7 +116,7 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	@Override
-	public final void draw(int mouseX, int mouseY) {
+	public final void draw(MatrixStack transform, int mouseY, int mouseX) {
 		if (!isVisible()) {
 			return;
 		}
@@ -135,7 +135,7 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
 		}
 
-		drawElement(mouseX, mouseY);
+		drawElement(transform, mouseY, mouseX);
 
 		if (isCropped()) {
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -144,7 +144,7 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 		RenderSystem.popMatrix();
 	}
 
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		//Default-Implementation
 	}
 
@@ -183,13 +183,15 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	@Override
-	public void setXPosition(int xPos) {
+	public IGuiElement setXPosition(int xPos) {
 		setLocation(xPos, yPos);
+		return this;
 	}
 
 	@Override
-	public void setYPosition(int yPos) {
+	public IGuiElement setYPosition(int yPos) {
 		setLocation(xPos, yPos);
+		return this;
 	}
 
 	@Override
@@ -333,23 +335,23 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	@Override
-	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
-		List<ITextComponent> lines = new ArrayList<>();
-		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
-		return lines;
+	public ToolTip getTooltip(int mouseX, int mouseY) {
+		ToolTip toolTip = new ToolTip();
+		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(toolTip, this, mouseX, mouseY));
+		return toolTip;
 	}
 
 	@Override
-	public IGuiElement addTooltip(String line) {
+	public IGuiElement addTooltip(ITextComponent line) {
 		//TODO textcomponent
-		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.add(new StringTextComponent(line)));
+		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line));
 		return this;
 	}
 
 	@Override
-	public IGuiElement addTooltip(Collection<String> lines) {
+	public IGuiElement addTooltip(Collection<ITextComponent> lines) {
 		//TODO textcomponent
-		addTooltip((tooltipLines, element, mouseX, mouseY) -> tooltipLines.addAll(lines.stream().map(StringTextComponent::new).collect(Collectors.toList())));
+		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.addAll(lines));
 		return this;
 	}
 
@@ -370,12 +372,12 @@ public class GuiElement extends AbstractGui implements IGuiElement {
 	}
 
 	@Override
-	public List<ITextComponent> getTooltip() {
+	public ToolTip getTooltip() {
 		int mouseX = getWindow().getRelativeMouseX(this);
 		int mouseY = getWindow().getRelativeMouseY(this);
-		List<ITextComponent> lines = new ArrayList<>();
-		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(lines, this, mouseX, mouseY));
-		return lines;
+		ToolTip toolTip = new ToolTip();
+		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(toolTip, this, mouseX, mouseY));
+		return toolTip;
 	}
 
 	/* Events */

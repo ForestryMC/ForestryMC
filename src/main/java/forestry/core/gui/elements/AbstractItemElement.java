@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.core.gui.elements;
 
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.GuiUtil;
+import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ItemTooltipUtil;
 
 public abstract class AbstractItemElement extends GuiElement {
@@ -36,7 +35,7 @@ public abstract class AbstractItemElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		ItemStack itemStack = getStack();
 		if (!itemStack.isEmpty()) {
 			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
@@ -48,7 +47,7 @@ public abstract class AbstractItemElement extends GuiElement {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public List<ITextComponent> getTooltip(int mouseX, int mouseY) {
+	public ToolTip getTooltip(int mouseX, int mouseY) {
 		ItemStack itemStack = getStack();
 		return ItemTooltipUtil.getInformation(itemStack);
 	}

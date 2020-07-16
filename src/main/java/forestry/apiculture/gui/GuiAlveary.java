@@ -13,6 +13,8 @@ package forestry.apiculture.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.config.Constants;
@@ -29,18 +31,18 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
-		drawHealthMeter(guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
+		drawHealthMeter(transform, guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
 	}
 
-	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {
+	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 
-		this.blit(x, y + 46 - height, i, k + 46 - height, 4, height);
+		this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 	@Override

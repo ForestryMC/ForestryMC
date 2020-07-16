@@ -23,16 +23,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 
 import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IGenome;
 import genetics.api.mutation.IMutationContainer;
@@ -56,7 +52,6 @@ import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.api.lepidopterology.genetics.IButterflyMutation;
 import forestry.core.errors.EnumErrorCode;
-import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.ClimateUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
@@ -84,7 +79,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public void addTooltip(List<ITextComponent> list) {
-		IAlleleButterflySpecies primary = genome.getActiveAllele(ButterflyChromosomes.SPECIES);
+		/*IAlleleButterflySpecies primary = genome.getActiveAllele(ButterflyChromosomes.SPECIES);
 		IAlleleButterflySpecies secondary = genome.getInactiveAllele(ButterflyChromosomes.SPECIES);
 		if (!isPureBred(ButterflyChromosomes.SPECIES)) {
 			list.add(new TranslationTextComponent("for.butterflies.hybrid", primary.getDisplayName(), secondary.getDisplayName()).applyTextStyle(TextFormatting.BLUE));
@@ -107,7 +102,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		if (genome.getActiveValue(ButterflyChromosomes.TOLERANT_FLYER)) {
 			list.add(new TranslationTextComponent("for.gui.flyer.tooltip").applyTextStyle(TextFormatting.WHITE));
-		}
+		}*/
 	}
 
 	@Override

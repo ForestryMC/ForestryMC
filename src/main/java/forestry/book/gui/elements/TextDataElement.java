@@ -5,7 +5,11 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.book.data.TextData;
 import forestry.core.gui.elements.GuiElement;
 
-//TODO ITextComponent?
+//TODO Move to component system
 @OnlyIn(Dist.CLIENT)
 public class TextDataElement extends GuiElement {
 
@@ -30,7 +34,7 @@ public class TextDataElement extends GuiElement {
 		}
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		boolean unicode = fontRenderer.getBidiFlag();
-		fontRenderer.setBidiFlag(true);
+		//fontRenderer.setBidiFlag(true);
 		boolean lastEmpty = false;
 		for (TextData data : textElements) {
 			if (data.text.equals("\n")) {
@@ -67,15 +71,15 @@ public class TextDataElement extends GuiElement {
 			}
 			height += fontRenderer.getWordWrappedHeight(modifiers + data.text, width);
 		}
-		fontRenderer.setBidiFlag(unicode);
+		//fontRenderer.setBidiFlag(unicode);
 		return height;
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		boolean unicode = fontRenderer.getBidiFlag();
-		fontRenderer.setBidiFlag(true);
+		//fontRenderer.setBidiFlag(true);
 		int x = 0;
 		int y = 0;
 		for (TextData data : textElements) {
@@ -91,15 +95,15 @@ public class TextDataElement extends GuiElement {
 			}
 
 			String text = getFormattedString(data);
-			List<String> split = fontRenderer.listFormattedStringToWidth(text, width);
+			List<ITextProperties> split = fontRenderer.func_238425_b_(new StringTextComponent(text), width);
 			for (int i = 0; i < split.size(); i++) {
-				String s = split.get(i);
+				ITextProperties s = split.get(i);
 				int textLength;
 				//TODO correct?
 				if (data.dropshadow) {
-					textLength = fontRenderer.drawString(s, x, y, 0);
+					textLength = fontRenderer.drawString(transform, s.getString(), x, y, 0);
 				} else {
-					textLength = fontRenderer.drawStringWithShadow(s, x, y, 0);
+					textLength = fontRenderer.drawStringWithShadow(transform, s.getString(), x, y, 0);
 				}
 				if (i == split.size() - 1) {
 					x += textLength;
@@ -108,7 +112,7 @@ public class TextDataElement extends GuiElement {
 				}
 			}
 		}
-		fontRenderer.setBidiFlag(unicode);
+		//fontRenderer.setBidiFlag(unicode);
 	}
 
 	private String getFormattedString(TextData data) {

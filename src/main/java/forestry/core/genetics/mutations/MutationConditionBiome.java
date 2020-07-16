@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -25,7 +27,6 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IMutationCondition;
-import forestry.core.utils.Translator;
 
 public class MutationConditionBiome implements IMutationCondition {
 
@@ -48,13 +49,13 @@ public class MutationConditionBiome implements IMutationCondition {
 	}
 
 	@Override
-	public String getDescription() {
+	public ITextComponent getDescription() {
 		if (validBiomeTypes.size() > 1) {
 			String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
-			return Translator.translateToLocalFormatted("for.mutation.condition.biome.multiple", biomeTypes);
+			return new TranslationTextComponent("for.mutation.condition.biome.multiple", biomeTypes);
 		} else {
 			String biomeType = validBiomeTypes.get(0).toString().toLowerCase(Locale.ENGLISH);
-			return Translator.translateToLocalFormatted("for.mutation.condition.biome.single", biomeType);
+			return new TranslationTextComponent("for.mutation.condition.biome.single", biomeType);
 		}
 	}
 }

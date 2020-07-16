@@ -13,6 +13,8 @@ package forestry.energy.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.render.EnumTankLevel;
@@ -26,22 +28,22 @@ public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEn
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		TileEngineElectric engine = tile;
 		int storageHeight = engine.getStorageScaled(46);
 		int storageMaxHeight = engine.getStorageScaled(100);
 		EnumTankLevel rated = EnumTankLevel.rateTankLevel(storageMaxHeight);
 
-		drawHealthMeter(guiLeft + 74, guiTop + 25, storageHeight, rated);
+		drawHealthMeter(transform, guiLeft + 74, guiTop + 25, storageHeight, rated);
 	}
 
-	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {
+	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 
-		this.blit(x, y + 46 - height, i, k + 46 - height, 4, height);
+		this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
 	}
 
 }

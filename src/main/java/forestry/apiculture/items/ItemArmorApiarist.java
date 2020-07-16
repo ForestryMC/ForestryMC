@@ -76,6 +76,12 @@ public class ItemArmorApiarist extends ArmorItem {
 		public float getToughness() {
 			return 0;
 		}
+
+		//Knockback resistance
+		@Override
+		public float func_230304_f_() {
+			return 0;
+		}
 	}
 
 	public ItemArmorApiarist(EquipmentSlotType equipmentSlotIn) {

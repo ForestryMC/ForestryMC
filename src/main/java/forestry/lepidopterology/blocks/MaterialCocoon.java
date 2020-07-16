@@ -12,13 +12,12 @@ package forestry.lepidopterology.blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.material.PushReaction;
 
 public class MaterialCocoon {
 
-	//TODO constructor ugly, AT builder methods?
-	public static final Material INSTANCE = new Material(MaterialColor.WOOL, false, true, true, true, false, true, false, PushReaction.NORMAL);
+	public static final Material INSTANCE = new Material.Builder(MaterialColor.WOOL).flammable().build();
 
-	//new Material.Builder(MaterialColor.WOOL).flammable().requiresTool();
 
+	private MaterialCocoon() {
+	}
 }

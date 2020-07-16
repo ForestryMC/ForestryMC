@@ -6,6 +6,7 @@
 package forestry.api.genetics;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import genetics.api.alleles.IAllele;
@@ -25,5 +26,5 @@ public interface IMutationCondition {
 	/**
 	 * A localized description of the mutation condition. (i.e. "A temperature of HOT is required.")
 	 */
-	String getDescription();
+	ITextComponent getDescription();
 }

@@ -18,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import genetics.api.GeneticHelper;
 import genetics.api.organism.IOrganism;
 
@@ -60,23 +62,23 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter"))) / 2;
-		getFontRenderer().drawString(Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(transform, Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		getFontRenderer().drawString(primary.getDisplayName().getString(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(transform, primary.getDisplayName().getString(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		getFontRenderer().drawString(secondary.getDisplayName().getString(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(transform, secondary.getDisplayName().getString(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
 		offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;
-		getFontRenderer().drawString(youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawString(transform, youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
 
 	}
 

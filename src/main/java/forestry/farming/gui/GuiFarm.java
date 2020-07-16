@@ -13,6 +13,8 @@ package forestry.farming.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -54,13 +56,13 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining
 		int fertilizerRemain = tile.getMultiblockLogic().getController().getStoredFertilizerScaled(16);
 		if (fertilizerRemain > 0) {
-			blit(guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
+			blit(transform, guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
 	}
 }

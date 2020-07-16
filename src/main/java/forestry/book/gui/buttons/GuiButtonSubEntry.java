@@ -7,7 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,13 +25,13 @@ public class GuiButtonSubEntry extends Button {
 	public final IBookEntry subEntry;
 
 	public GuiButtonSubEntry(int x, int y, IBookEntry subEntry, IBookEntry selectedEntry, IPressable action) {
-		super(x, y, 24, 21, "", action);
+		super(x, y, 24, 21, selectedEntry.getTitle(), action);
 		this.subEntry = subEntry;
 		this.selectedEntry = selectedEntry;
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (!visible) {
 			return;
 		}
@@ -39,7 +41,7 @@ public class GuiButtonSubEntry extends Button {
 		GlStateManager.pushMatrix();
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		blit(x, y, 48 + (active ? 24 : 0), 201, 24, 21);
+		blit(transform, x, y, 48 + (active ? 24 : 0), 201, 24, 21);
 
 		GlStateManager.translatef(x + 8.0F, y + 4.0F, getBlitOffset());    //TODO
 		GlStateManager.scalef(0.85F, 0.85F, 0.85F);
@@ -52,7 +54,7 @@ public class GuiButtonSubEntry extends Button {
 		GlStateManager.popMatrix();
 	}
 
-	public List<String> getToolTip() {
+	public List<ITextComponent> getToolTip() {
 		return Collections.singletonList(subEntry.getTitle());
 	}
 

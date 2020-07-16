@@ -21,7 +21,6 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.functions.LootFunctionManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -67,7 +66,6 @@ import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -117,7 +115,7 @@ public class ModuleCore extends BlankForestryModule {
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
 
-		LootFunctionManager.registerFunction(new OrganismFunction.Serializer());
+		//LootFunctionManager.registerFunction(new OrganismFunction.Serializer());
 
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 

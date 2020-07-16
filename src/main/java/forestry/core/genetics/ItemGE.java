@@ -19,7 +19,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -68,7 +68,7 @@ public abstract class ItemGE extends ItemForestry {
 			if (Screen.hasShiftDown()) {
 				individual.addTooltip(list);
 			} else {
-				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle((new Style()).setItalic(true)));
+				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").func_240699_a_(TextFormatting.ITALIC));
 			}
 		} else {
 			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >"));

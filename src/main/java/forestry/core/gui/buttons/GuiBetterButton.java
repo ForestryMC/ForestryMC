@@ -15,7 +15,9 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,7 +43,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	public GuiBetterButton(int x, int y, IButtonTextureSet texture, IPressable handler) {
-		super(x, y, texture.getWidth(), texture.getHeight(), "", handler);
+		super(x, y, texture.getWidth(), texture.getHeight(), null, handler);
 		this.texture = texture;
 		useTexWidth = true;
 	}
@@ -66,7 +68,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	public GuiBetterButton setLabel(String label) {
-		this.setMessage(label);    //TODO check method call
+		this.setMessage(new StringTextComponent(label));    //TODO check method call
 		return this;
 	}
 
@@ -93,7 +95,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (!visible) {
 			return;
 		}
@@ -106,15 +108,15 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		boolean mouseOver = isMouseOverButton(mouseX, mouseY);
 		int hoverState = getYImage(isHovered());    //TODO this is what botania uses for hoverstate
 		if (useTexWidth) {
-			blit(x, y, xOffset, yOffset + hoverState * h, w, h);
+			blit(transform, x, y, xOffset, yOffset + hoverState * h, w, h);
 		} else {
-			blit(x, y, xOffset, yOffset + hoverState * h, width / 2, h);
-			blit(x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
+			blit(transform, x, y, xOffset, yOffset + hoverState * h, width / 2, h);
+			blit(transform, x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
 		}
 
 		//TODO mousedragged
 		//		mouseDragged(minecraft, mouseX, mouseY);
-		drawCenteredString(Minecraft.getInstance().fontRenderer, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(mouseOver));
+		drawCenteredString(transform, Minecraft.getInstance().fontRenderer, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(mouseOver));
 	}
 
 	@Override

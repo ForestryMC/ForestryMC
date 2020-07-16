@@ -109,7 +109,7 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 

@@ -8,6 +8,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,13 +52,13 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	}
 
 	@Override
-	protected void drawText() {
+	protected void drawText(MatrixStack transform) {
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		drawCenteredString(fontRenderer, TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.book.about.title"), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
-		String about = Translator.translateToLocal("for.gui.book.about");
-		fontRenderer.drawSplitString(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
-		fontRenderer.drawString(Translator.translateToLocal("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + fontRenderer.getWordWrappedHeight(about, 108), 0);
-		LOGO.draw(guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + 110, 108, 24);
+		drawCenteredString(transform, fontRenderer, TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.book.about.title"), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
+		ITextComponent about = new TranslationTextComponent("for.gui.book.about");
+		fontRenderer.func_238418_a_(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
+		fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + fontRenderer.getWordWrappedHeight(about.getString(), 108), 0);
+		LOGO.draw(transform, guiTop + LEFT_PAGE_START_Y + 110, 108, 24, guiLeft + RIGHT_PAGE_START_X);
 	}
 
 	@Override

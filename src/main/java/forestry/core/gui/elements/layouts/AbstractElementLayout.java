@@ -4,7 +4,7 @@ package forestry.core.gui.elements.layouts;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.gui.IElementLayout;
+import forestry.core.gui.elements.lib.IElementLayout;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractElementLayout extends ElementGroup implements IElementLayout {

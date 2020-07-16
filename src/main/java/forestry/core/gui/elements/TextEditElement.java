@@ -5,12 +5,14 @@ import java.util.function.Predicate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
-import forestry.api.gui.IValueElement;
-import forestry.api.gui.IWindowElement;
-import forestry.api.gui.events.ElementEvent;
-import forestry.api.gui.events.GuiEvent;
-import forestry.api.gui.events.GuiEventDestination;
-import forestry.api.gui.events.TextEditEvent;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.core.gui.elements.lib.IValueElement;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.ElementEvent;
+import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.elements.lib.events.TextEditEvent;
 
 public class TextEditElement extends GuiElement implements IValueElement<String> {
 
@@ -19,7 +21,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	public TextEditElement(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
 		//TODO - title
-		field = new TextFieldWidget(Minecraft.getInstance().fontRenderer, 0, 0, width, height, "TEST_TITLE");
+		field = new TextFieldWidget(Minecraft.getInstance().fontRenderer, 0, 0, width, height, null);
 		field.setEnableBackgroundDrawing(false);
 		this.addSelfEventHandler(GuiEvent.KeyEvent.class, event -> {
 			String oldText = field.getText();
@@ -42,8 +44,8 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 			this.field.mouseClicked(windowElement.getRelativeMouseX(this), windowElement.getRelativeMouseY(this), event.getButton());
 		});
 		//TODO - method protected so maybe AT the field itself?
-		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.focused = true);
-		this.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> this.field.focused = false);
+		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.setFocused2(true));
+		this.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> this.field.setFocused2(false));
 	}
 
 	public TextEditElement setMaxLength(int maxLength) {
@@ -71,8 +73,8 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	//TODO - maybe need to supply start/end points now?
 	//TODO third param probably partial ticks. Is it being 0 a problem?
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
-		field.render(mouseX, mouseY, 0);
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		field.render(transform, mouseX, mouseY, 0);
 	}
 
 	@Override

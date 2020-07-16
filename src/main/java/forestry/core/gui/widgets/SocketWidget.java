@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,7 +41,7 @@ public class SocketWidget extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (!socketStack.isEmpty()) {
 			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
@@ -59,7 +61,7 @@ public class SocketWidget extends Widget {
 			toolTip.clear();
 			ItemStack stack = tile.getSocket(slot);
 			if (!stack.isEmpty()) {
-				toolTip.add(ItemTooltipUtil.getInformation(stack));
+				toolTip.addAll(ItemTooltipUtil.getInformation(stack));
 				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
 			} else {
 				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));

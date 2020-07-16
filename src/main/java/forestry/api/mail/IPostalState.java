@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.mail;
 
+import net.minecraft.util.text.ITextComponent;
+
 public interface IPostalState {
 	/**
 	 * Normal states are OK, error states are not OK
@@ -14,5 +16,5 @@ public interface IPostalState {
 	/**
 	 * Localized description of the postal state
 	 */
-	String getDescription();
+	ITextComponent getDescription();
 }

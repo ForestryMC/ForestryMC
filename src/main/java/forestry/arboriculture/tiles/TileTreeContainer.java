@@ -140,7 +140,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(nbt);
+		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	@Override

@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import genetics.api.individual.IIndividual;
 
 import forestry.api.genetics.gatgets.IDatabaseTab;
-import forestry.api.gui.IDatabaseElement;
 import forestry.core.features.CoreItems;
+import forestry.core.gui.elements.lib.IDatabaseElement;
 
 public enum AnalyzerTab implements IDatabaseTab {
 	ANALYZE {

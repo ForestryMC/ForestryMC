@@ -9,6 +9,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.genetics.filter.IFilterLogic;
@@ -99,7 +100,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 
 		String oldString = searchField != null ? searchField.getText() : "";
 
-		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + selection.getX() + 89 + 36, selection.getY() + this.guiTop + 4, 80, this.minecraft.fontRenderer.FONT_HEIGHT, "");
+		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + selection.getX() + 89 + 36, selection.getY() + this.guiTop + 4, 80, this.minecraft.fontRenderer.FONT_HEIGHT, null);
 		this.searchField.setMaxStringLength(50);
 		this.searchField.setEnableBackgroundDrawing(false);
 		this.searchField.setTextColor(16777215);
@@ -107,13 +108,13 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableLighting();
 		if (searchField != null) {
-			this.searchField.render(mouseX, mouseY, partialTicks);    //TODO correct?
+			this.searchField.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
 		}
 	}
 

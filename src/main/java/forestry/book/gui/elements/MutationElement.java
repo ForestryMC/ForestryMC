@@ -2,16 +2,18 @@ package forestry.book.gui.elements;
 
 import java.util.Collection;
 
+import net.minecraft.util.text.ITextComponent;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.mutation.IMutation;
 
 import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.gui.GuiConstants;
-import forestry.api.gui.GuiElementAlignment;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
 
 @OnlyIn(Dist.CLIENT)
 public class MutationElement extends SelectionElement<IMutation> {
@@ -36,14 +38,14 @@ public class MutationElement extends SelectionElement<IMutation> {
 	protected void onIndexUpdate(int index, IMutation mutation) {
 		IForestrySpeciesRoot root = (IForestrySpeciesRoot) mutation.getRoot();
 		//
-		Collection<String> conditions = mutation.getSpecialConditions();
+		Collection<ITextComponent> conditions = mutation.getSpecialConditions();
 		String conditionText;
 		if (!conditions.isEmpty()) {
 			conditionText = String.format("[%.0f%%]", mutation.getBaseChance());
 		} else {
 			conditionText = String.format("%.0f%%", mutation.getBaseChance());
 		}
-		selectedElement.label(conditionText, 58, 0, -1, 12, GuiElementAlignment.TOP_LEFT, GuiConstants.BLACK_STYLE).addTooltip(conditions);
+		selectedElement.label(conditionText).setStyle(GuiConstants.BLACK_STYLE).setFitText(true).addTooltip(conditions).setXPosition(58);
 		selectedElement.drawable(62, 6, MUTATION_ARROW).addTooltip(conditions);
 		//
 		selectedElement.item(1, 1, root.createStack(mutation.getFirstParent(), root.getTypeForMutation(0)));

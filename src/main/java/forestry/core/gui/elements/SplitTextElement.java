@@ -1,71 +1,53 @@
 package forestry.core.gui.elements;
 
-import com.google.common.collect.ImmutableMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.ITextElement;
-import forestry.api.gui.style.ITextStyle;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.Style;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import forestry.core.gui.elements.lib.ITextElement;
 
 import static forestry.core.gui.elements.LabelElement.FONT_RENDERER;
 
-//TODO: Fix if mapping are more updated
 public class SplitTextElement extends GuiElement implements ITextElement {
 
-	private List<String> lines = new ArrayList<>();
-	private String rawText;
-	private ITextStyle style;
+	private final List<ITextProperties> lines = new ArrayList<>();
 
-	public SplitTextElement(int xPos, int yPos, int width, String rawText, GuiElementAlignment align, ITextStyle style) {
+	public SplitTextElement(int xPos, int yPos, int width, IFormattableTextComponent component, Style style) {
 		super(xPos, yPos, width, 0);
-		this.rawText = rawText;
-		this.style = style;
-		setAlign(align);
-		/*boolean uni = FONT_RENDERER.getBidiFlag();
-		FONT_RENDERER.setBidiFlag(style.isUnicode());
-		this.lines.addAll(FONT_RENDERER.listFormattedStringToWidth(StringUtil.getFormattedString(style, rawText), width));
-		FONT_RENDERER.setBidiFlag(uni);*/
+		setText(component.func_230530_a_(style));
 		setHeight(lines.size() * FONT_RENDERER.FONT_HEIGHT);
 	}
 
 	@Override
-	public Collection<String> getLines() {
+	public Collection<ITextProperties> getLines() {
 		return lines;
 	}
 
 	@Override
-	public ITextElement setText(String text) {
-		this.rawText = text;
-		boolean uni = FONT_RENDERER.getBidiFlag();
-		/*FONT_RENDERER.setBidiFlag(style.isUnicode());
+	public ITextElement setText(ITextComponent text) {
 		lines.clear();
-		lines.addAll(FONT_RENDERER.listFormattedStringToWidth(StringUtil.getFormattedString(style, rawText), width));
-		FONT_RENDERER.setBidiFlag(uni);*/
+		lines.addAll(FONT_RENDERER.func_238425_b_(text, width));
 		setHeight(lines.size() * FONT_RENDERER.FONT_HEIGHT);
 		return this;
 	}
 
 	@Override
-	public Map<ITextStyle, String> getRawLines() {
-		return ImmutableMap.of(style, rawText);
-	}
-
-	@Override
-	public void drawElement(int mouseX, int mouseY) {
-		boolean unicode = FONT_RENDERER.getBidiFlag();
-		/*FONT_RENDERER.setBidiFlag(style.isUnicode());
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		int posY = 0;
-		for (String text : lines) {
-			int posX = width - FONT_RENDERER.getStringWidth(text);
+		for (ITextProperties text : lines) {
+			int posX = width - FONT_RENDERER.getStringWidth(text.getString());
 			posX *= getAlign().getXOffset();
-			FONT_RENDERER.drawString(text, posX, posY, style.getColor());
+			FONT_RENDERER.func_238422_b_(transform, text, posX, posY, 0);
 			posY += FONT_RENDERER.FONT_HEIGHT;
 		}
-		FONT_RENDERER.setBidiFlag(unicode);
-		RenderSystem.color3f(1.0f, 1.0f, 1.0f);*/
+		RenderSystem.color3f(1.0f, 1.0f, 1.0f);
 	}
 }

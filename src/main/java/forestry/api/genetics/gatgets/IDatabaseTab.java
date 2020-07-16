@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.individual.IIndividual;
 
-import forestry.api.gui.IDatabaseElement;
+import forestry.core.gui.elements.lib.IDatabaseElement;
 
 /**
  * A tab of the database screen that shows some information about a {@link IIndividual}.

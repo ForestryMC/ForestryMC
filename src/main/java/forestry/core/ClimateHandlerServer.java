@@ -32,7 +32,7 @@ public class ClimateHandlerServer {
 		}
 		PlayerEntity player = event.player;
 		World world = player.world;
-		BlockPos pos = player.getPosition();
+		BlockPos pos = player.func_233580_cy_();
 		IWorldClimateHolder worldClimateHolder = ClimateManager.climateRoot.getWorldClimate(world);
 		IClimateState climateState = worldClimateHolder.getState(pos);
 		tickHelper.onTick();

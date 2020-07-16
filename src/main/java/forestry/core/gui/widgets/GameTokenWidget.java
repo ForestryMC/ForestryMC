@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,7 +52,7 @@ public class GameTokenWidget extends Widget {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 
 		EscritoireGameToken token = getToken();
 		if (token == null) {
@@ -70,7 +71,7 @@ public class GameTokenWidget extends Widget {
 		//TODO not sure if this works...
 		RenderSystem.enableDepthTest();
 		RenderSystem.color3f(colorR, colorG, colorB);
-		manager.gui.blit(startX + xPos, startY + yPos, 228, 0, 22, 22);
+		manager.gui.blit(transform, startX + xPos, startY + yPos, 228, 0, 22, 22);
 		RenderSystem.color3f(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
@@ -85,7 +86,7 @@ public class GameTokenWidget extends Widget {
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
 			//TODO no idea if this is right at all
-			manager.gui.blit(startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
+			manager.gui.blit(transform, startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
 		}
 		RenderSystem.enableDepthTest();
 	}

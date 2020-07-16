@@ -1301,7 +1301,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 					.key('E', Items.EGG)
 					.patternLine("AAA").patternLine("BEB").patternLine("CCC")
 					.addCriterion("has_wheat", this.hasItem(Items.WHEAT))::build,
-				new ResourceLocation(Constants.MOD_ID, "cake_" + containerType.getName()),
+				new ResourceLocation(Constants.MOD_ID, "cake_" + containerType.getString()),
 				ForestryModuleUids.FLUIDS);
 		}
 	}

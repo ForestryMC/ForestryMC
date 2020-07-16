@@ -68,7 +68,7 @@ public class HabitatLocatorLogic {
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
-		this.searchCenter = player.getPosition();
+		this.searchCenter = player.func_233580_cy_();
 
 		Biome currentBiome = player.world.getBiome(searchCenter);
 		removeInvalidBiomes(currentBiome, targetBiomes);
@@ -108,7 +108,7 @@ public class HabitatLocatorLogic {
 			return null;
 		}
 
-		BlockPos playerPos = player.getPosition();
+		BlockPos playerPos = player.func_233580_cy_();
 
 		// If we are in a valid spot, we point to ourselves.
 		BlockPos coordinates = getChunkCoordinates(playerPos, player.world, biomesToSearch);

@@ -78,7 +78,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			BlockPos posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 
-			if (posBlock.getY() <= 1 || posBlock.getY() >= world.getActualHeight()) {
+			if (posBlock.getY() <= 1 || posBlock.getY() >= world.func_234938_ad_()) {
 				continue;
 			}
 

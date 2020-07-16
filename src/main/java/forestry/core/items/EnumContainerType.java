@@ -23,7 +23,8 @@ public enum EnumContainerType implements IItemSubtype {
 		this.name = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
 	}
 
-	public String getName() {
+	@Override
+	public String getString() {
 		return name;
 	}
 }

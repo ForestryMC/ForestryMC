@@ -3,7 +3,6 @@ package forestry.apiculture.genetics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
@@ -14,27 +13,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IGenome;
 import genetics.api.organism.IOrganism;
-import genetics.api.organism.IOrganismType;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
-import forestry.api.genetics.alleles.AlleleManager;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.config.Config;
-import forestry.core.gui.GuiAlyzer;
-import forestry.core.gui.TextLayoutHelper;
-import forestry.core.gui.widgets.ItemStackWidget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 
 public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	public static final BeeAlyzerPlugin INSTANCE = new BeeAlyzerPlugin();
@@ -57,7 +42,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage1(Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
+		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
 			if (!optional.isPresent()) {
@@ -74,8 +59,8 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
-			textLayout.drawLine(Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
-			textLayout.drawLine(Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
+			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
+			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
 
 			textLayout.newLine();
 			textLayout.newLine();
@@ -111,13 +96,13 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 
 			textLayout.endPage();
-		}
+		}*/
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage2(Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
+		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
 			if (!optional.isPresent()) {
@@ -230,13 +215,13 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			}
 
 			textLayout.endPage();
-		}
+		}*/
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage3(Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
+		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
 			if (!optional.isPresent()) {
@@ -284,7 +269,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			}
 
 			textLayout.endPage();
-		}
+		}*/
 	}
 
 	@Override

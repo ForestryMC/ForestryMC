@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.settings.ParticleStatus;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.Direction;
@@ -35,6 +36,7 @@ import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
 import forestry.core.entities.ParticleSnow;
 import forestry.core.utils.VectUtil;
+import forestry.core.utils.WorldUtils;
 
 //import forestry.core.entities.ParticleClimate;
 //import forestry.core.entities.ParticleHoneydust;
@@ -59,7 +61,7 @@ public class ParticleRender {
 	}
 
 	public static void addBeeHiveFX(IBeeHousing housing, IGenome genome, List<BlockPos> flowerPositions) {
-		World world = housing.getWorldObj();
+		ClientWorld world = WorldUtils.asClient(housing.getWorldObj());
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
@@ -70,7 +72,7 @@ public class ParticleRender {
 
 		// Avoid rendering bee particles that are too far away, they're very small.
 		// At 32+ distance, have no bee particles. Make more particles up close.
-		BlockPos playerPosition = Minecraft.getInstance().player.getPosition();
+		BlockPos playerPosition = Minecraft.getInstance().player.func_233580_cy_();
 		//TODO - correct?
 		double playerDistanceSq = playerPosition.distanceSq(new Vector3i(particleStart.x, particleStart.y, particleStart.z));
 		if (world.rand.nextInt(1024) < playerDistanceSq) {
@@ -190,10 +192,10 @@ public class ParticleRender {
 		}
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		effectRenderer.addEffect(new ParticleSnow(world, x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
+		effectRenderer.addEffect(new ParticleSnow(WorldUtils.asClient(world), x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
 	}
 
-	public static void addEntityIgnitionFX(World world, double x, double y, double z) {
+	public static void addEntityIgnitionFX(ClientWorld world, double x, double y, double z) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}
@@ -208,7 +210,7 @@ public class ParticleRender {
 		}
 
 		ParticleManager effectRenderer = Minecraft.getInstance().particles;
-		effectRenderer.addEffect(new ParticleSmoke(world, x, y, z));
+		effectRenderer.addEffect(new ParticleSmoke(WorldUtils.asClient(world), x, y, z));
 	}
 
 	public static void addEntityPotionFX(World world, double x, double y, double z, int color) {

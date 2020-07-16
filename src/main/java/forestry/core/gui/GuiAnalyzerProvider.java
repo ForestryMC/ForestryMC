@@ -14,10 +14,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
 import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
-import forestry.api.gui.IGuiElement;
 import forestry.core.gui.buttons.GuiToggleButton;
 import forestry.core.gui.elements.GeneticAnalyzer;
 import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.tiles.ITitled;
@@ -88,7 +88,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		analyzer.setVisible(!deactivated && analyzerVisible);
 	}
 
-	protected abstract void drawSelectedSlot(int selectedSlot);
+	protected abstract void drawSelectedSlot(MatrixStack transform, int selectedSlot);
 
 	/* Methods - Implement GuiScreen */
 	@Override
@@ -148,7 +148,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();
 			if (selectedSlot >= 0) {
-				drawSelectedSlot(selectedSlot);
+				drawSelectedSlot(transform, selectedSlot);
 			}
 		}
 	}

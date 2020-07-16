@@ -12,12 +12,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IGuiElementFactory;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.FabricatorElement;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
 @OnlyIn(Dist.CLIENT)

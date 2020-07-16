@@ -62,9 +62,9 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	}
 
 	@Override
-	protected void drawSelectedSlot(int selectedSlot) {
+	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
 		Slot slot = container.getForestrySlot(1 + selectedSlot);
-		SELECTED_COMB_SLOT.draw(guiLeft + slot.xPos - 3, guiTop + slot.yPos - 3);
+		SELECTED_COMB_SLOT.draw(transform, guiTop + slot.yPos - 3, guiLeft + slot.xPos - 3);
 	}
 
 	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {

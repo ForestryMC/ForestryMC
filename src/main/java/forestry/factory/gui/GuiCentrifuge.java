@@ -13,6 +13,8 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.SocketWidget;
@@ -28,12 +30,12 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		int progress = tile.getProgressScaled(16);
-		blit(guiLeft + 43, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
-		blit(guiLeft + 67, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
+		blit(transform, guiLeft + 43, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
+		blit(transform, guiLeft + 67, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
 	}
 
 	@Override

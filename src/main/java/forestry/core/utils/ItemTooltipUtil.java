@@ -1,16 +1,14 @@
 package forestry.core.utils;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -19,6 +17,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.core.gui.tooltips.ToolTip;
+
 public class ItemTooltipUtil {
 	@OnlyIn(Dist.CLIENT)
 	public static void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
@@ -26,39 +26,50 @@ public class ItemTooltipUtil {
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
 			TranslationTextComponent tooltipInfo = new TranslationTextComponent(tooltipKey);
-			Minecraft minecraft = Minecraft.getInstance();
-			List<String> tooltipInfoWrapped = minecraft.fontRenderer.listFormattedStringToWidth(tooltipInfo.getString(), 150);
-			tooltipInfoWrapped.forEach(s -> tooltip.add(new StringTextComponent(s).applyTextStyle(TextFormatting.GRAY)));
+			tooltip.add(tooltipInfo);
+			/*Minecraft minecraft = Minecraft.getInstance();
+			List<ITextProperties> tooltipInfoWrapped = minecraft.fontRenderer.func_238425_b_(tooltipInfo, 150);
+			tooltipInfoWrapped.forEach(s -> {
+				if(s instanceof IFormattableTextComponent) {
+					s = ((IFormattableTextComponent) s).func_240701_a_(TextFormatting.GRAY);
+				}
+				tooltip.add((ITextComponent) s);
+				CharacterManager
+			});*/
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static void addShiftInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").setStyle(new Style().setItalic(true).setColor(TextFormatting.GRAY)));
+		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").func_240701_a_(TextFormatting.ITALIC, TextFormatting.GRAY));
 	}
 
+	@Nullable
 	@OnlyIn(Dist.CLIENT)
-	public static List<ITextComponent> getInformation(ItemStack stack) {
+	public static ToolTip getInformation(ItemStack stack) {
 		Minecraft minecraft = Minecraft.getInstance();
 		boolean advancedTooltips = minecraft.gameSettings.advancedItemTooltips;
 		return getInformation(stack, minecraft.player, advancedTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
 	}
 
+	@Nullable
 	@OnlyIn(Dist.CLIENT)
-	public static List<ITextComponent> getInformation(ItemStack stack, PlayerEntity player, ITooltipFlag flag) {
+	public static ToolTip getInformation(ItemStack stack, PlayerEntity player, ITooltipFlag flag) {
 		if (stack.isEmpty()) {
-			return Collections.emptyList();
+			return null;
 		}
 		List<ITextComponent> tooltip = stack.getTooltip(player, flag);
 		for (int i = 0; i < tooltip.size(); ++i) {
 			//TODO - can tis be simplified (and is it correct?)
 			ITextComponent component = tooltip.get(i);
 			if (i == 0) {
-				tooltip.set(i, component.applyTextStyle(stack.getRarity().color));
+				tooltip.set(i, ((IFormattableTextComponent) component).func_240699_a_(stack.getRarity().color));
 			} else {
-				tooltip.set(i, component.applyTextStyle(TextFormatting.GRAY));
+				tooltip.set(i, ((IFormattableTextComponent) component).func_240699_a_(TextFormatting.GRAY));
 			}
 		}
-		return tooltip;
+		ToolTip toolTip = new ToolTip();
+		toolTip.addAll(tooltip);
+		return toolTip;
 	}
 }

@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,9 +25,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
-import forestry.api.gui.events.GuiEvent;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.utils.StringUtil;
 
 @OnlyIn(Dist.CLIENT)
@@ -72,7 +73,7 @@ public class ClimateBarElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		handleMouse(mouseX - getX(), mouseY - getY());
 
 		RenderSystem.enableAlphaTest();
@@ -82,12 +83,12 @@ public class ClimateBarElement extends GuiElement {
 
 		setGLColorFromInt(type == ClimateType.TEMPERATURE ? 0xFFD700 : 0x7ff4f4);
 		int progressScaled = getProgressScaled();
-		blit(1, 1, 177, 69, progressScaled, 10);
+		blit(transform, 1, 1, 177, 69, progressScaled, 10);
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		blit(1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
-		blit(1 + getPointerPosition(), 1, 229, 69, 1, 10);
-		blit(1, 1, 177, 80, 50, 10);
+		blit(transform, 1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
+		blit(transform, 1 + getPointerPosition(), 1, 229, 69, 1, 10);
+		blit(transform, 1, 1, 177, 80, 50, 10);
 		RenderSystem.disableAlphaTest();
 	}
 

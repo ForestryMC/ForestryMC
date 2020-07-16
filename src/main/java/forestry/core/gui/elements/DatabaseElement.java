@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
@@ -21,14 +22,13 @@ import genetics.api.mutation.IMutation;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.gatgets.DatabaseMode;
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IDatabaseElement;
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IElementLayout;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.style.ITextStyle;
 import forestry.core.gui.elements.layouts.PaneLayout;
 import forestry.core.gui.elements.layouts.VerticalLayout;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IDatabaseElement;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IElementLayout;
+import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.utils.Translator;
 
 public class DatabaseElement extends VerticalLayout implements IDatabaseElement {
@@ -110,7 +110,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
 	@Override
 	public void addLine(String firstText, String secondText, boolean dominant) {
-		addLine(firstText, secondText, GuiElementFactory.GUI_STYLE, GuiElementFactory.INSTANCE.getStateStyle(dominant));
+		addLine(firstText, secondText, GuiElementFactory.INSTANCE.guiStyle, GuiElementFactory.INSTANCE.getStateStyle(dominant));
 	}
 
 	@Override
@@ -153,30 +153,30 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 	}
 
 	@Override
-	public void addLine(String firstText, String secondText, ITextStyle firstStyle, ITextStyle secondStyle) {
-		IElementLayout first = addSplitText(width, firstText, GuiElementAlignment.TOP_LEFT, firstStyle);
-		IElementLayout second = addSplitText(width, secondText, GuiElementAlignment.TOP_LEFT, secondStyle);
+	public void addLine(String firstText, String secondText, Style firstStyle, Style secondStyle) {
+		IElementLayout first = addSplitText(width, firstText, firstStyle);
+		IElementLayout second = addSplitText(width, secondText, secondStyle);
 		addLine(first, second);
 	}
 
-	private IElementLayout addSplitText(int width, String text, GuiElementAlignment alignment, ITextStyle style) {
+	private IElementLayout addSplitText(int width, String text, Style style) {
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		IElementLayout vertical = new VerticalLayout(width);
 		for (ITextProperties splitText : fontRenderer.func_238425_b_(new StringTextComponent(text), 70)) {
-			vertical.label(splitText.getString(), alignment, style);
+			vertical.label(splitText).setStyle(style);
 		}
 		return vertical;
 	}
 
 	private void addLine(String chromosomeName, IGuiElement right) {
 		int center = width / 2;
-		IGuiElement first = addSplitText(center, chromosomeName, GuiElementAlignment.TOP_LEFT, GuiElementFactory.GUI_STYLE);
+		IGuiElement first = addSplitText(center, chromosomeName, GuiElementFactory.INSTANCE.guiStyle);
 		addLine(first, right);
 	}
 
 	private void addLine(String chromosomeName, IGuiElement second, IGuiElement third) {
 		int center = width / 2;
-		IGuiElement first = addSplitText(center, chromosomeName, GuiElementAlignment.TOP_LEFT, GuiElementFactory.GUI_STYLE);
+		IGuiElement first = addSplitText(center, chromosomeName, GuiElementFactory.INSTANCE.guiStyle);
 		addLine(first, second, third);
 	}
 

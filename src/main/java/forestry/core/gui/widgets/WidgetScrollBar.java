@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
@@ -95,15 +96,15 @@ public class WidgetScrollBar extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		if (!isVisible()) {
 			return;
 		}
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if (background != null) {
-			background.draw(startX + xPos, startY + yPos);
+			background.draw(transform, startY + yPos, startX + xPos);
 		}
-		slider.draw(startX, startY);
+		slider.draw(transform, startY, startX);
 	}
 
 	@Override

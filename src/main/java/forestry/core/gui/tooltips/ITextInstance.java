@@ -1,7 +1,7 @@
 package forestry.core.gui.tooltips;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -11,71 +11,81 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public interface ITextInstance {
-	default ITextInstance text(String text) {
+public interface ITextInstance<I extends ITextInstance<?, ?, ?>, S, R> {
+	default I text(String text) {
 		return add(new StringTextComponent(text));
 	}
 
-	default ITextInstance translated(String text, Object... args) {
+	default I translated(String text, Object... args) {
 		return add(new TranslationTextComponent(text, args));
 	}
 
-	default ITextInstance style(TextFormatting... formatting) {
+	default I style(TextFormatting... formatting) {
 		applyFormatting((component) -> component.func_240701_a_(formatting));
-		return this;
+		return cast();
 	}
 
-	default ITextInstance style(TextFormatting formatting) {
+	default I style(TextFormatting formatting) {
 		applyFormatting((component) -> component.func_240699_a_(formatting));
-		return this;
+		return cast();
 	}
 
-	default ITextInstance style(Style style) {
+	default I style(Style style) {
 		applyFormatting((component) -> component.func_230530_a_(style));
-		return this;
+		return cast();
 	}
 
-	default ITextInstance add(ITextComponent line, TextFormatting format) {
+	default I add(ITextComponent line, TextFormatting format) {
 		return add(line, Style.EMPTY.setFormatting(format));
 	}
 
-	default ITextInstance add(ITextComponent line, Style style) {
+	default I add(ITextComponent line, Style style) {
 		if (line instanceof IFormattableTextComponent) {
 			((IFormattableTextComponent) line).func_230530_a_(style);
 		}
 		return add(line);
 	}
 
-	default ITextInstance add(List<ITextComponent> lines) {
+	default I addAll(ITextComponent... lines) {
 		for (ITextComponent line : lines) {
 			add(line);
 		}
-		return this;
+		return cast();
 	}
 
-	default ITextInstance applyFormatting(Consumer<IFormattableTextComponent> action) {
+	default I addAll(Collection<ITextComponent> lines) {
+		for (ITextComponent line : lines) {
+			add(line);
+		}
+		return cast();
+	}
+
+	default I applyFormatting(Consumer<IFormattableTextComponent> action) {
 		ITextComponent last = lastComponent();
 		if (last instanceof IFormattableTextComponent) {
 			action.accept((IFormattableTextComponent) last);
 		}
-		return this;
+		return cast();
 	}
 
-	default ITextInstance apply(Consumer<ITextComponent> action) {
+	default I apply(Consumer<ITextComponent> action) {
 		ITextComponent last = lastComponent();
 		if (last != null) {
 			action.accept(last);
 		}
-		return this;
+		return cast();
 	}
+
+	I cast();
 
 	@Nullable
 	ITextComponent lastComponent();
 
-	ITextInstance add(ITextComponent line);
+	I add(ITextComponent line);
 
-	TextCompound singleLine();
+	S singleLine();
 
-	TextCollection end();
+	R create();
 
+	boolean isEmpty();
 }

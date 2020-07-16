@@ -13,14 +13,14 @@ import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.genetics.gatgets.IDatabaseTab;
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IDatabaseElement;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
@@ -42,7 +42,7 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 		IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES);
 		IAlleleButterflySpecies secondarySpecies = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.SPECIES);
 
-		database.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.DATABASE_TITLE);
+		database.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.databaseTitle);
 
 		database.addLine(Translator.translateToLocal("for.gui.species"), ButterflyChromosomes.SPECIES);
 

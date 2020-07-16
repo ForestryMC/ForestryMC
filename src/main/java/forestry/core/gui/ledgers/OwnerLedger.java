@@ -17,6 +17,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.TextureManagerForestry;
@@ -43,24 +44,24 @@ public class OwnerLedger extends Ledger {
 	}
 
 	@Override
-	public void draw(int x, int y) {
+	public void draw(MatrixStack transform, int y, int x) {
 		// Draw background
-		drawBackground(x, y);
+		drawBackground(transform, y, x);
 
 		// Draw icon
 		TextureAtlasSprite accessIcon = TextureManagerForestry.getInstance().getDefault("misc/access.shared");
-		drawSprite(accessIcon, x + 3, y + 4);
+		drawSprite(transform, accessIcon, x + 3, y + 4);
 
 		// Draw description
 		if (isFullyOpened()) {
-			drawHeader(Translator.translateToLocal("for.gui.owner"), x + 22, y + 8);
-			drawText(PlayerUtil.getOwnerName(owner), x + 22, y + 20);
+			drawHeader(transform, Translator.translateToLocal("for.gui.owner"), x + 22, y + 8);
+			drawText(transform, PlayerUtil.getOwnerName(owner), x + 22, y + 20);
 		}
 	}
 
 	@Override
 	public ITextComponent getTooltip() {
 		return new TranslationTextComponent("for.gui.owner")
-			.appendText(": " + PlayerUtil.getOwnerName(owner));
+			.func_240702_b_(": " + PlayerUtil.getOwnerName(owner));
 	}
 }

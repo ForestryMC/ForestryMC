@@ -2,9 +2,18 @@ package forestry.core.gui.elements;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
@@ -18,15 +27,6 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
 import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
-import forestry.api.gui.GuiConstants;
-import forestry.api.gui.GuiElementAlignment;
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IElementLayout;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IGuiElementFactory;
-import forestry.api.gui.IWindowElement;
-import forestry.api.gui.style.ITextStyle;
-import forestry.api.gui.style.TextStyleBuilder;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.Drawable;
@@ -35,16 +35,25 @@ import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.layouts.HorizontalLayout;
 import forestry.core.gui.elements.layouts.PaneLayout;
 import forestry.core.gui.elements.layouts.VerticalLayout;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IElementLayout;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
+import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.render.ColourProperties;
 
-public class GuiElementFactory implements IGuiElementFactory {
-	/* Constants */
-	public static final ITextStyle DOMINANT_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.beealyzer.dominant")).build();
-	public static final ITextStyle RECESSIVE_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.beealyzer.recessive")).build();
-	public static final ITextStyle GUI_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.screen")).build();
-	public static final ITextStyle GUI_TITLE_STYLE = new TextStyleBuilder().color(() -> ColourProperties.INSTANCE.get("gui.title")).build();
-	public static final ITextStyle DATABASE_TITLE = new TextStyleBuilder().color(0xcfb53b).underlined(true).build();
+public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
+
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png");
+
+	public Style dominantStyle = Style.EMPTY;
+	public Style recessiveStyle = Style.EMPTY;
+	public Style guiStyle = Style.EMPTY;
+	public Style guiTitleStyle = Style.EMPTY;
+	public Style databaseTitle = Style.EMPTY;
+	public Style binomial = Style.EMPTY;
 
 	/* Drawables */
 	private static final Drawable QUESTION_MARK = new Drawable(TEXTURE, 78, 240, 16, 16);
@@ -57,6 +66,16 @@ public class GuiElementFactory implements IGuiElementFactory {
 	public static final GuiElementFactory INSTANCE = new GuiElementFactory();
 
 	private GuiElementFactory() {
+	}
+
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+		dominantStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
+		recessiveStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
+		guiStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.screen")));
+		guiTitleStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.title")));
+		databaseTitle = Style.EMPTY.setColor(Color.func_240743_a_(0xcfb53b)).setUnderlined(true);
+		binomial = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
 	}
 
 	@Override
@@ -87,19 +106,19 @@ public class GuiElementFactory implements IGuiElementFactory {
 		}
 	}
 
-	public final ITextStyle getStateStyle(boolean dominant) {
-		return dominant ? DOMINANT_STYLE : RECESSIVE_STYLE;
+	public final Style getStateStyle(boolean dominant) {
+		return dominant ? dominantStyle : recessiveStyle;
 	}
 
-	public final ITextStyle getGuiStyle() {
-		return GUI_STYLE;
+	public final Style getGuiStyle() {
+		return guiStyle;
 	}
 
 	public IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset) {
 		String fertilityString = fertilityAllele.getValue() + " x";
 
 		AbstractElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
-		layout.label(fertilityString, getStateStyle(fertilityAllele.isDominant()));
+		layout.label(fertilityString).setStyle(getStateStyle(fertilityAllele.isDominant()));
 		layout.drawable(0, -1, new Drawable(TEXTURE, 60, 240 + texOffset, 12, 8));
 		return layout;
 	}
@@ -112,9 +131,9 @@ public class GuiElementFactory implements IGuiElementFactory {
 	}
 
 	public IElementLayout createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele) {
-		ITextStyle textStyle = getStateStyle(toleranceAllele.isDominant());
+		Style textStyle = getStateStyle(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		String text = "(" + toleranceAllele.getDisplayName().getString() + ")";
+		ITextComponent component = null;
 
 		IElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
 		switch (tolerance) {
@@ -124,7 +143,6 @@ public class GuiElementFactory implements IGuiElementFactory {
 			case BOTH_4:
 			case BOTH_5:
 				layout.add(createBothSymbol(0, -1));
-				layout.label(text, textStyle);
 				break;
 			case DOWN_1:
 			case DOWN_2:
@@ -132,7 +150,6 @@ public class GuiElementFactory implements IGuiElementFactory {
 			case DOWN_4:
 			case DOWN_5:
 				layout.add(createDownSymbol(0, -1));
-				layout.label(text, textStyle);
 				break;
 			case UP_1:
 			case UP_2:
@@ -140,13 +157,18 @@ public class GuiElementFactory implements IGuiElementFactory {
 			case UP_4:
 			case UP_5:
 				layout.add(createUpSymbol(0, -1));
-				layout.label(text, textStyle);
 				break;
 			default:
 				layout.add(createNoneSymbol(0, -1));
-				layout.label("(0)", textStyle);
+				component = new StringTextComponent("(0)");
 				break;
 		}
+		if (component == null) {
+			component = new StringTextComponent("(")
+				.func_230529_a_(toleranceAllele.getDisplayName())
+				.func_240702_b_(")");
+		}
+		layout.label(component).setStyle(textStyle);
 		return layout;
 	}
 
@@ -241,7 +263,11 @@ public class GuiElementFactory implements IGuiElementFactory {
 
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
-			element.label("+", x + 9, y + 1, 10, 10, GuiElementAlignment.TOP_LEFT, GuiConstants.DEFAULT_STYLE);
+			element.label("+")
+				.setStyle(GuiConstants.DEFAULT_STYLE)
+				.setAlign(GuiElementAlignment.TOP_LEFT)
+				.setSize(10, 10)
+				.setLocation(x + 9, y + 1);
 		}
 	}
 

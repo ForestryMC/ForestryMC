@@ -16,6 +16,8 @@ import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
@@ -49,7 +51,7 @@ public class FarmLogicSlot extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		if (!getStackIndex().isEmpty()) {
 			Minecraft minecraft = Minecraft.getInstance();
 			TextureManager textureManager = minecraft.getTextureManager();

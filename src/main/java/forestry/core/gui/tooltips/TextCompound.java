@@ -8,7 +8,7 @@ import net.minecraft.util.text.ITextComponent;
 /**
  * Helper class to allow simple appending of siblings to a text collection.
  */
-public class TextCompound implements ITextInstance {
+public class TextCompound implements ITextInstance<TextCompound, TextCompound, TextCollection> {
 	private final TextCollection parent;
 	@Nullable
 	private IFormattableTextComponent root;
@@ -23,7 +23,8 @@ public class TextCompound implements ITextInstance {
 		return root;
 	}
 
-	public ITextInstance add(ITextComponent line) {
+	@Override
+	public TextCompound add(ITextComponent line) {
 		if (root == null) {
 			if (!(line instanceof IFormattableTextComponent)) {
 				return this;
@@ -40,10 +41,21 @@ public class TextCompound implements ITextInstance {
 		return this;
 	}
 
-	public TextCollection end() {
+	@Override
+	public TextCompound cast() {
+		return this;
+	}
+
+	@Override
+	public TextCollection create() {
 		if (root != null) {
 			parent.add(root);
 		}
 		return parent;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return root == null;
 	}
 }

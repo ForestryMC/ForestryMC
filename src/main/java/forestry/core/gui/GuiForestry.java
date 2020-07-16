@@ -35,11 +35,11 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.events.GuiEvent;
-import forestry.api.gui.events.GuiEventDestination;
 import forestry.core.config.Config;
 import forestry.core.gui.elements.Window;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.HintLedger;
 import forestry.core.gui.ledgers.LedgerManager;
@@ -273,13 +273,13 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	@Override
 	protected void func_230451_b_(MatrixStack transform, int mouseX, int mouseY) {
 		super.func_230451_b_(transform, mouseX, mouseY);
-		ledgerManager.drawTooltips(mouseX, mouseY);
+		ledgerManager.drawTooltips(transform, mouseY, mouseX);
 
 		if (this.playerInventory.getItemStack().isEmpty()) {
-			GuiUtil.drawToolTips(this, widgetManager.getWidgets(), mouseX, mouseY);
-			GuiUtil.drawToolTips(this, this.buttons, mouseX, mouseY);
-			GuiUtil.drawToolTips(this, container.inventorySlots, mouseX, mouseY);
-			window.drawTooltip(mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, container.inventorySlots, mouseX, mouseY);
+			window.drawTooltip(transform, mouseY, mouseX);
 		}
 	}
 
@@ -296,12 +296,12 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		RenderSystem.pushMatrix();
 		{
 			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
-			drawWidgets();
+			drawWidgets(transform);
 		}
 		RenderSystem.popMatrix();
 
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-		window.draw(mouseX, mouseY);
+		window.draw(transform, mouseY, mouseX);
 
 		bindTexture(textureFile);
 	}
@@ -314,9 +314,9 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		blit(transform, guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
-	protected void drawWidgets() {
-		ledgerManager.drawLedgers();
-		widgetManager.drawWidgets();
+	protected void drawWidgets(MatrixStack transform) {
+		ledgerManager.drawLedgers(transform);
+		widgetManager.drawWidgets(transform);
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {

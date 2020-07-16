@@ -7,8 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
@@ -60,7 +60,7 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
 			IBreedingTrackerHandler handler = factories.get(rootUID);
 			String filename = handler.getFileName(player);
-			ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(DimensionType.OVERWORLD);
+			ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(World.field_234918_g_);
 			T tracker = (T) overworld.getSavedData().getOrCreate(() -> (WorldSavedData) handler.createTracker(filename), filename);
 			handler.populateTracker(tracker, overworld, player);
 			return tracker;

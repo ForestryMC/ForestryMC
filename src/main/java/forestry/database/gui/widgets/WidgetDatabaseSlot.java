@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,14 +66,14 @@ public class WidgetDatabaseSlot extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		manager.minecraft.textureManager.bindTexture(TEXTURE_LOCATION);
 		Drawable texture = SLOT;
 		if (isSelected()) {
 			texture = SLOT_SELECTED;
 		}
-		texture.draw(startX + xPos - 3, startY + yPos - 3);
+		texture.draw(transform, startY + yPos - 3, startX + xPos - 3);
 		ItemStack itemStack = getItemStack();
 		if (!itemStack.isEmpty()) {
 			Minecraft minecraft = Minecraft.getInstance();
@@ -154,7 +155,7 @@ public class WidgetDatabaseSlot extends Widget {
 		ItemStack itemStack = getItemStack();
 		ToolTip tip = new ToolTip();
 		if (!itemStack.isEmpty()) {
-			tip.add(ItemTooltipUtil.getInformation(itemStack));
+			tip.addAll(ItemTooltipUtil.getInformation(itemStack));
 		}
 		return tip;
 	}

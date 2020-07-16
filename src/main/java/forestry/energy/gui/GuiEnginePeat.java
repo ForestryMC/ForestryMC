@@ -13,6 +13,8 @@ package forestry.energy.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
 
@@ -23,12 +25,12 @@ public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		if (tile.isBurning()) {
 			int progress = tile.getBurnTimeRemainingScaled(12);
-			blit(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
+			blit(transform, guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
 		}
 	}
 }

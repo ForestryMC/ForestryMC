@@ -14,6 +14,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.widgets.ItemStackWidgetBase;
@@ -40,14 +41,14 @@ public class MemorizedRecipeSlot extends ItemStackWidgetBase {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
-		super.draw(startX, startY);
+	public void draw(MatrixStack transform, int startY, int startX) {
+		super.draw(transform, startY, startX);
 
 		RenderSystem.disableDepthTest();
 
 		if (recipeMemory.isLocked(slotNumber)) {
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, lockIcon);
+			AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, lockIcon);
 		}
 
 		RenderSystem.enableDepthTest();

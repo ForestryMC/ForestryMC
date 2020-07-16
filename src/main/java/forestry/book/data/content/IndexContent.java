@@ -6,11 +6,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookContent;
-import forestry.api.gui.IElementGroup;
-import forestry.api.gui.IGuiElement;
-import forestry.api.gui.IGuiElementFactory;
 import forestry.book.data.IndexData;
 import forestry.book.gui.elements.IndexElement;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
 
 @OnlyIn(Dist.CLIENT)
 public class IndexContent extends BookContent<IndexData> {

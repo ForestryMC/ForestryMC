@@ -13,6 +13,8 @@ package forestry.mail.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
@@ -30,24 +32,24 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+	protected void func_230451_b_(MatrixStack transform, int mouseX, int mouseY) {
 		String name = Translator.translateToLocal(tile.getUnlocalizedTitle());
-		this.minecraft.fontRenderer.drawString(name, textLayout.getCenteredOffset(name), 6, ColourProperties.INSTANCE.get("gui.mail.text"));
+		this.minecraft.fontRenderer.drawString(transform, name, textLayout.getCenteredOffset(name), 6, ColourProperties.INSTANCE.get("gui.mail.text"));
 
 		String receive = Translator.translateToLocal("for.gui.mail.receive");
-		this.minecraft.fontRenderer.drawString(receive, textLayout.getCenteredOffset(receive, 70) + 51, 45, ColourProperties.INSTANCE.get("gui.mail.text"));
+		this.minecraft.fontRenderer.drawString(transform, receive, textLayout.getCenteredOffset(receive, 70) + 51, 45, ColourProperties.INSTANCE.get("gui.mail.text"));
 
 		String send = Translator.translateToLocal("for.gui.mail.send");
-		this.minecraft.fontRenderer.drawString(send, textLayout.getCenteredOffset(send, 70) + 51, 99, ColourProperties.INSTANCE.get("gui.mail.text"));
+		this.minecraft.fontRenderer.drawString(transform, send, textLayout.getCenteredOffset(send, 70) + 51, 99, ColourProperties.INSTANCE.get("gui.mail.text"));
 
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		super.func_230451_b_(transform, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
-		this.minecraft.fontRenderer.drawString(container.getAddress().getName(), guiLeft + 19, guiTop + 22, ColourProperties.INSTANCE.get("gui.mail.text"));
+		this.minecraft.fontRenderer.drawString(transform, container.getAddress().getName(), guiLeft + 19, guiTop + 22, ColourProperties.INSTANCE.get("gui.mail.text"));
 	}
 
 	@Override

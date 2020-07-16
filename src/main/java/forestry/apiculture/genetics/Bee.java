@@ -343,7 +343,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// No info 4 u!
 		if (!isAnalyzed) {
-			toolTip.singleLine().text("<").translated("for.gui.unknown").text(">").end();
+			toolTip.singleLine().text("<").translated("for.gui.unknown").text(">").create();
 			return;
 		}
 
@@ -380,10 +380,10 @@ public class Bee extends IndividualLiving implements IBee {
 			speed = speedAllele.getDisplayName().getString() + ' ' + Translator.translateToLocal("for.gui.worker");
 		}
 
-		toolTip.singleLine().add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName()).text(" ").translated("for.gui.life").end();
+		toolTip.singleLine().add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName()).text(" ").translated("for.gui.life").create();
 		toolTip.text(speed);
-		toolTip.singleLine().text("T: ").add(AlleleManager.climateHelper.toDisplay(primary.getTemperature())).text(" / ").add(tempToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).end();
-		toolTip.singleLine().text("H: ").add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(" / ").add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).end();
+		toolTip.singleLine().text("T: ").add(AlleleManager.climateHelper.toDisplay(primary.getTemperature())).text(" / ").add(tempToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
+		toolTip.singleLine().text("H: ").add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(" / ").add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
 		toolTip.add(genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription());
 
 		if (genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {

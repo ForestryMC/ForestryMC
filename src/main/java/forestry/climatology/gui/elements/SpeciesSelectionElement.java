@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,10 +32,10 @@ import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.api.gui.events.GuiEvent;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
 import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class SpeciesSelectionElement extends GuiElement {
@@ -94,12 +95,12 @@ public class SpeciesSelectionElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(int mouseX, int mouseY) {
-		super.drawElement(mouseX, mouseY);
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		super.drawElement(transform, mouseY, mouseX);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		RenderSystem.enableAlphaTest();
-		blit(0, 0, 224, 46, 22, 22);
+		blit(transform, 0, 0, 224, 46, 22, 22);
 		RenderSystem.disableAlphaTest();
 	}
 

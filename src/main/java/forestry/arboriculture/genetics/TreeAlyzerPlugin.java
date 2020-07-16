@@ -10,46 +10,26 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
 import genetics.api.organism.IOrganism;
-import genetics.api.organism.IOrganismType;
 
-import forestry.api.arboriculture.EnumFruitFamily;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IAlyzerPlugin;
-import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.features.ArboricultureItems;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.config.Config;
-import forestry.core.gui.GuiAlyzer;
-import forestry.core.gui.TextLayoutHelper;
-import forestry.core.gui.widgets.ItemStackWidget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 
 public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	public static final TreeAlyzerPlugin INSTANCE = new TreeAlyzerPlugin();
@@ -72,7 +52,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage1(Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
+		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
@@ -127,13 +107,13 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			guiAlyzer.drawChromosomeRow(Translator.translateToLocal("for.gui.effect"), tree, TreeChromosomes.EFFECT);
 
 			textLayout.endPage();
-		}
+		}*/
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage2(Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
+		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
@@ -229,13 +209,13 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			}
 
 			textLayout.endPage();
-		}
+		}*/
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage3(Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
+		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
@@ -280,7 +260,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			}
 
 			textLayout.endPage();
-		}
+		}*/
 	}
 
 	@Override

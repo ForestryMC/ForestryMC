@@ -18,7 +18,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -87,7 +86,7 @@ public class CircuitBoard implements ICircuitBoard {
 	@OnlyIn(Dist.CLIENT)
 	public void addTooltip(List<ITextComponent> list) {
 		if (layout != null) {
-			list.add(new StringTextComponent(layout.getUsage() + ":").setStyle((new Style()).setColor(TextFormatting.GOLD)));
+			list.add(new StringTextComponent(layout.getUsage() + ":").func_240699_a_(TextFormatting.GOLD));
 			List<ITextComponent> extendedTooltip = new ArrayList<>();
 			for (ICircuit circuit : circuits) {
 				if (circuit != null) {
@@ -98,14 +97,14 @@ public class CircuitBoard implements ICircuitBoard {
 			if (Screen.hasShiftDown() || extendedTooltip.size() <= 4) {
 				list.addAll(extendedTooltip);
 			} else {
-				list.add(new StringTextComponent("<").setStyle((new Style()).setUnderlined(true).setColor(TextFormatting.GRAY))
-					.appendSibling(new TranslationTextComponent("for.gui.tooltip.tmi"))
-					.appendSibling(new StringTextComponent(">")));
+				list.add(new StringTextComponent("<").func_240701_a_(TextFormatting.UNDERLINE, TextFormatting.GRAY)
+					.func_230529_a_(new TranslationTextComponent("for.gui.tooltip.tmi"))
+					.func_230529_a_(new StringTextComponent(">")));
 			}
 		} else {
 			int socketCount = type.getSockets();
 			String localizationKey = "item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
-			list.add(new TranslationTextComponent(localizationKey, type.getSockets()).applyTextStyle(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent(localizationKey, type.getSockets()).func_240699_a_(TextFormatting.GRAY));
 		}
 	}
 

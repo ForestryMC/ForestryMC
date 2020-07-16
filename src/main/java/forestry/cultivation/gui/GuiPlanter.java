@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.core.gui.GuiForestryTitled;
@@ -71,13 +73,13 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining
 		int fertilizerRemain = tile.getStoredFertilizerScaled(16);
 		if (fertilizerRemain > 0) {
-			blit(guiLeft + 101, guiTop + 21 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
+			blit(transform, guiLeft + 101, guiTop + 21 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
 	}
 }

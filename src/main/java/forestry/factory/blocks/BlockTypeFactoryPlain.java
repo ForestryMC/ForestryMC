@@ -37,7 +37,7 @@ public enum BlockTypeFactoryPlain implements IBlockType {
 	}
 
 	@Override
-	public String getName() {
-		return getMachineProperties().getName();
+	public String getString() {
+		return getMachineProperties().getString();
 	}
 }

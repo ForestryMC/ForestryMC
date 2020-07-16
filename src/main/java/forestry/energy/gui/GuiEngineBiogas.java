@@ -13,6 +13,8 @@ package forestry.energy.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEngineBiogas;
@@ -27,15 +29,15 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		int temperature = tile.getOperatingTemperatureScaled(16);
 		if (temperature > 16) {
 			temperature = 16;
 		}
 		if (temperature > 0) {
-			blit(guiLeft + 53, guiTop + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
+			blit(transform, guiLeft + 53, guiTop + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
 		}
 	}
 }

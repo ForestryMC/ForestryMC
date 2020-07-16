@@ -46,7 +46,7 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return uid;
 	}
 

@@ -11,6 +11,9 @@
 package forestry.core.genetics.mutations;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import genetics.api.alleles.IAllele;
@@ -43,14 +46,15 @@ public class MutationConditionHumidity implements IMutationCondition {
 
 	//TODO textcomponent (this will probably crash atm)
 	@Override
-	public String getDescription() {
+	public ITextComponent getDescription() {
 		String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity).getString();
 
 		if (minHumidity != maxHumidity) {
 			String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity).getString();
-			return Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString);
+			//TODO: REPLACE
+			return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString));
 		} else {
-			return Translator.translateToLocalFormatted("for.mutation.condition.humidity.single", minHumidityString);
+			return new TranslationTextComponent("for.mutation.condition.humidity.single", minHumidityString);
 		}
 	}
 }

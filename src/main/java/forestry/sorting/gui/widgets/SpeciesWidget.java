@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
@@ -68,7 +70,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		int x = xPos + startX;
 		int y = yPos + startY;
 		IFilterLogic logic = gui.getLogic();
@@ -79,7 +81,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		if (this.gui.selection.isSame(this)) {
 			textureManager.bindTexture(SelectionWidget.TEXTURE);
-			gui.blit(x - 1, y - 1, 212, 0, 18, 18);
+			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}
 
@@ -101,7 +103,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	}
 
 	@Override
-	public void draw(GuiForestry gui, IAlleleSpecies selectable, int x, int y) {
+	public void draw(GuiForestry gui, IAlleleSpecies selectable, MatrixStack transform, int y, int x) {
 		GuiUtil.drawItemStack(gui, ITEMS.getOrDefault(selectable, ItemStack.EMPTY), x, y);
 	}
 

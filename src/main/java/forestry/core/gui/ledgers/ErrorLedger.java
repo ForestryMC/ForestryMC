@@ -16,6 +16,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.api.core.IErrorState;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
@@ -37,19 +39,19 @@ public class ErrorLedger extends Ledger {
 		this.state = state;
 		if (state != null) {
 			//TODO - textcomponent
-			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip().getString(), Translator.translateToLocal(state.getUnlocalizedHelp()));
+			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), new TranslationTextComponent(state.getUnlocalizedHelp()));
 			maxHeight = lineHeight + 20;
 		}
 	}
 
 	@Override
-	public void draw(int x, int y) {
+	public void draw(MatrixStack transform, int y, int x) {
 		if (state == null) {
 			return;
 		}
 
 		// Draw background
-		drawBackground(x, y);
+		drawBackground(transform, y, x);
 		y += 4;
 
 		int xIcon = x + 5;
@@ -57,17 +59,17 @@ public class ErrorLedger extends Ledger {
 		int xHeader = x + 24;
 
 		// Draw sprite
-		drawSprite(state.getSprite(), xIcon, y);
+		drawSprite(transform, state.getSprite(), xIcon, y);
 		y += 4;
 
 		// Write description if fully opened
 		if (isFullyOpened()) {
 			//TODO textcomponent
-			y += drawHeader(getTooltip().getString(), xHeader, y);
+			y += drawHeader(transform, getTooltip().getString(), xHeader, y);
 			y += 4;
 
 			String helpString = Translator.translateToLocal(state.getUnlocalizedHelp());
-			drawSplitText(helpString, xBody, y, maxTextWidth);
+			drawSplitText(transform, helpString, xBody, y, maxTextWidth);
 		}
 	}
 

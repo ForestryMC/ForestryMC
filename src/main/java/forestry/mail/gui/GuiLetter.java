@@ -18,6 +18,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -62,7 +66,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(widgetManager, 16, 12, container));
 		this.tradeInfoWidgets = new ArrayList<>();
-		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, "");
+		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
 		text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
 	}
 
@@ -72,7 +76,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 
 		minecraft.keyboardListener.enableRepeatEvents(true);
 
-		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, "");
+		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
 		IMailAddress recipient = container.getRecipient();
 		if (recipient != null) {
 			address.setText(recipient.getName());
@@ -91,7 +95,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		// Set focus or enter text into address
 		if (this.address.isFocused()) {
 			if (scanCode == GLFW.GLFW_KEY_ENTER) {
-				this.address.focused = false;
+				this.address.setFocused2(false);
 			} else {
 				this.address.keyPressed(key, scanCode, modifiers);
 			}
@@ -103,7 +107,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 				if (hasShiftDown()) {
 					text.setText(text.getText() + "\n");
 				} else {
-					this.text.focused = false;
+					this.text.setFocused2(false);
 				}
 			} else if (scanCode == GLFW.GLFW_KEY_DOWN) {
 				text.advanceLine();
@@ -129,7 +133,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
 
 		if (!isProcessedLetter && !checkedSessionVars) {
 			checkedSessionVars = true;
@@ -153,43 +157,43 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		}
 		textFocus = text.isFocused();
 
-		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
 
 		if (this.isProcessedLetter) {
-			minecraft.fontRenderer.drawString(address.getText(), guiLeft + 49, guiTop + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
-			minecraft.fontRenderer.drawSplitString(text.getText(), guiLeft + 20, guiTop + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.fontRenderer.drawString(transform, address.getText(), guiLeft + 49, guiTop + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.fontRenderer.func_238418_a_(new StringTextComponent(text.getText()), guiLeft + 20, guiTop + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		} else {
 			clearTradeInfoWidgets();
-			address.render(mouseX, mouseY, partialTicks);    //TODO correct?
+			address.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
 			if (container.getCarrierType() == EnumAddressee.TRADER) {
-				drawTradePreview(18, 32);
+				drawTradePreview(transform, 18, 32);
 			} else {
-				text.render(mouseX, mouseY, partialTicks);
+				text.render(transform, mouseX, mouseY, partialTicks);
 			}
 		}
 	}
 
-	private void drawTradePreview(int x, int y) {
+	private void drawTradePreview(MatrixStack transform, int x, int y) {
 
-		String infoString = null;
+		ITextComponent infoString = null;
 		if (container.getTradeInfo() == null) {
-			infoString = Translator.translateToLocal("for.gui.mail.no.trader");
+			infoString = new TranslationTextComponent("for.gui.mail.no.trader");
 		} else if (container.getTradeInfo().getTradegood().isEmpty()) {
-			infoString = Translator.translateToLocal("for.gui.mail.nothing.to.trade");
+			infoString = new TranslationTextComponent("for.gui.mail.nothing.to.trade");
 		} else if (!container.getTradeInfo().getState().isOk()) {
 			infoString = container.getTradeInfo().getState().getDescription();
 		}
 
 		if (infoString != null) {
-			minecraft.fontRenderer.drawSplitString(infoString, guiLeft + x, guiTop + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.fontRenderer.func_238418_a_(infoString, guiLeft + x, guiTop + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			return;
 		}
 
-		minecraft.fontRenderer.drawString(Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+		minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
 
-		minecraft.fontRenderer.drawString(Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+		minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		for (int i = 0; i < container.getTradeInfo().getRequired().size(); i++) {
 			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().getRequired().get(i)));

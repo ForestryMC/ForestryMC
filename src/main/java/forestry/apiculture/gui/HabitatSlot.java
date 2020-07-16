@@ -18,6 +18,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.StringTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -59,7 +60,7 @@ public class HabitatSlot extends Widget {
 	}
 
 	@Override
-	public void draw(int startX, int startY) {
+	public void draw(MatrixStack transform, int startY, int startX) {
 		if (!isActive) {
 			RenderSystem.color4f(0.2f, 0.2f, 0.2f, 0.2f);
 		} else {
@@ -67,6 +68,6 @@ public class HabitatSlot extends Widget {
 		}
 
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
-		AbstractGui.blit(startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
+		AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
 	}
 }

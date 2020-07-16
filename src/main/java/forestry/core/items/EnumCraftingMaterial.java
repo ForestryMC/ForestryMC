@@ -23,7 +23,7 @@ public enum EnumCraftingMaterial implements IItemSubtype {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return name;
 	}
 }

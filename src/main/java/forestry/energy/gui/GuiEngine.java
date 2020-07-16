@@ -15,6 +15,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Config;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
@@ -38,28 +40,28 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 		}
 
 		@Override
-		public void draw(int x, int y) {
+		public void draw(MatrixStack transform, int y, int x) {
 
 			// Draw background
-			drawBackground(x, y);
+			drawBackground(transform, y, x);
 
 			// Draw icon
-			drawSprite(TextureManagerForestry.getInstance().getDefault("misc/energy"), x + 3, y + 4);
+			drawSprite(transform, TextureManagerForestry.getInstance().getDefault("misc/energy"), x + 3, y + 4);
 
 			if (!isFullyOpened()) {
 				return;
 			}
 
-			drawHeader(Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
+			drawHeader(transform, Translator.translateToLocal("for.gui.energy"), x + 22, y + 8);
 
-			drawSubheader(Translator.translateToLocal("for.gui.currentOutput") + ':', x + 22, y + 20);
-			drawText(Config.energyDisplayMode.formatRate(tile.getCurrentOutput()), x + 22, y + 32);
+			drawSubheader(transform, Translator.translateToLocal("for.gui.currentOutput") + ':', x + 22, y + 20);
+			drawText(transform, Config.energyDisplayMode.formatRate(tile.getCurrentOutput()), x + 22, y + 32);
 
-			drawSubheader(Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 44);
-			drawText(Config.energyDisplayMode.formatEnergyValue(tile.getEnergyManager().getEnergyStored()), x + 22, y + 56);
+			drawSubheader(transform, Translator.translateToLocal("for.gui.stored") + ':', x + 22, y + 44);
+			drawText(transform, Config.energyDisplayMode.formatEnergyValue(tile.getEnergyManager().getEnergyStored()), x + 22, y + 56);
 
-			drawSubheader(Translator.translateToLocal("for.gui.heat") + ':', x + 22, y + 68);
-			drawText((double) tile.getHeat() / (double) 10 + 20.0 + " C", x + 22, y + 80);
+			drawSubheader(transform, Translator.translateToLocal("for.gui.heat") + ':', x + 22, y + 68);
+			drawText(transform, (double) tile.getHeat() / (double) 10 + 20.0 + " C", x + 22, y + 80);
 		}
 
 		@Override

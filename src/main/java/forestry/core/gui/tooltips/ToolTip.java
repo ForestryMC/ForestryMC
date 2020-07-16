@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,8 +20,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 @OnlyIn(Dist.CLIENT)
 public class ToolTip extends TextCollection {
-
-	private final List<ITextComponent> lines = new ArrayList<>();
 	private final long delay;
 	private long mouseOverStart;
 
@@ -39,7 +33,7 @@ public class ToolTip extends TextCollection {
 
 	//TODO - only for porting, remove when cleaning up
 	@Deprecated
-	public boolean add(String s) {
+	public ITextInstance add(String s) {
 		return this.add(new StringTextComponent(s));
 	}
 
