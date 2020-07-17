@@ -228,8 +228,9 @@ public class Forestry {
 		DataGenerator generator = event.getGenerator();
 
 		if (event.includeServer()) {
-			generator.addProvider(new ForestryBlockTagsProvider(generator));
-			generator.addProvider(new ForestryItemTagsProvider(generator));
+			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator);
+			generator.addProvider(blockTagsProvider);
+			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider));
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			generator.addProvider(new WoodBlockStateProvider(generator));
 			generator.addProvider(new WoodBlockModelProvider(generator));

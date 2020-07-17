@@ -11,7 +11,6 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootFunction;
 import net.minecraft.loot.LootFunctionType;
 import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.functions.LootFunctionManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -25,6 +24,8 @@ import genetics.api.root.IRootDefinition;
 import genetics.utils.RootUtils;
 
 public class OrganismFunction extends LootFunction {
+	public static LootFunctionType type;
+
 	private final ResourceLocation speciesUid;
 
 	private OrganismFunction(ILootCondition[] conditions, ResourceLocation speciesUid) {
@@ -58,7 +59,7 @@ public class OrganismFunction extends LootFunction {
 
 	@Override
 	public LootFunctionType func_230425_b_() {
-		return LootFunctionManager.APPLY_BONUS;
+		return type;
 	}
 
 	public static class Serializer extends LootFunction.Serializer<OrganismFunction> {

@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#forestry:ores/copper",
-    "#forestry:ores/tin",
-    "#forestry:ores/apatite"
+    "#forge:ores/copper",
+    "#forge:ores/tin",
+    "#forge:ores/apatite"
   ]
 }

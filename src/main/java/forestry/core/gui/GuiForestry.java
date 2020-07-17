@@ -272,7 +272,6 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 	@Override
 	protected void func_230451_b_(MatrixStack transform, int mouseX, int mouseY) {
-		super.func_230451_b_(transform, mouseX, mouseY);
 		ledgerManager.drawTooltips(transform, mouseY, mouseX);
 
 		if (this.playerInventory.getItemStack().isEmpty()) {

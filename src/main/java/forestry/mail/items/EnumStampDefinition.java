@@ -13,6 +13,7 @@ package forestry.mail.items;
 import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -48,18 +49,18 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	private final String name;
 	private final int primaryColor;
 	private final int secondaryColor;
-	private final Ingredient craftingIngredient;
+	private final Supplier<Ingredient> craftingIngredient;
 	private final EnumPostage postage;
 
 	EnumStampDefinition(String name, EnumPostage postage, ITag<Item> crafting, Color primaryColor, Color secondaryColor) {
-		this(name, postage, Ingredient.fromTag(crafting), primaryColor, secondaryColor);
+		this(name, postage, () -> Ingredient.fromTag(crafting), primaryColor, secondaryColor);
 	}
 
 	EnumStampDefinition(String name, EnumPostage postage, Item crafting, Color primaryColor, Color secondaryColor) {
-		this(name, postage, Ingredient.fromItems(crafting), primaryColor, secondaryColor);
+		this(name, postage, () -> Ingredient.fromItems(crafting), primaryColor, secondaryColor);
 	}
 
-	EnumStampDefinition(String name, EnumPostage postage, Ingredient crafting, Color primaryColor, Color secondaryColor) {
+	EnumStampDefinition(String name, EnumPostage postage, Supplier<Ingredient> crafting, Color primaryColor, Color secondaryColor) {
 		this.name = name;
 		this.primaryColor = primaryColor.getRGB();
 		this.secondaryColor = secondaryColor.getRGB();
@@ -72,7 +73,7 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	}
 
 	public Ingredient getCraftingIngredient() {
-		return this.craftingIngredient;
+		return this.craftingIngredient.get();
 	}
 
 	@Override

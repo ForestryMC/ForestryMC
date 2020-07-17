@@ -34,6 +34,11 @@ targetCompatibility = JavaVersion.VERSION_1_8
 compileJava.sourceCompatibility = JavaVersion.VERSION_1_8
 compileJava.targetCompatibility = JavaVersion.VERSION_1_8
 
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+compileJava {
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 minecraft {
 	mappings channel: 'snapshot', version: mcp_mappings
 
@@ -132,13 +137,16 @@ configurations {
 }
 
 // prevent java 8's strict doclint for javadocs from failing builds
-allprojects {
+if (JavaVersion.current().isJava8Compatible()) {
 	tasks.withType(Javadoc) {
 		options.addStringOption('Xdoclint:none', '-quiet')
 	}
 }
 
 jar {
+	from sourceSets.main.output.classesDirs
+	from sourceSets.main.output.resourcesDir
+
 	manifest {
 		attributes([
             "Specification-Title": "Forestry",
@@ -195,6 +203,15 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
 	toRef = "HEAD"
 	templateContent = file('changelog.mustache').getText('UTF-8')
+}
+
+idea {
+	module {
+		for (String excludeDirName in ["run", "out", "logs", "gradle"]) {
+			File excludeDir = new File(projectDir, excludeDirName)
+			excludeDirs.add(excludeDir)
+		}
+	}
 }
 
 curseforge {
