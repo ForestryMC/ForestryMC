@@ -1336,14 +1336,14 @@ for.multiblock.error.small.x=Мультиблок слишком маленьк�
 for.multiblock.error.small.y=Мультиблок слишком маленький, он должен быть как минимум %d блоков в высоту.
 for.multiblock.error.small.z=Мультиблок слишком маленький, он должен быть как минимум %d блоков в длину.
 
-for.multiblock.alveary.error.needSlabs=Пчелиный улей должны быть покрыт деревянными перекрытиями сверху.
-for.multiblock.alveary.error.needSpace=Пчелиному улью нужно пространство вокруг вершины для пчел, чтобы войти и выйти.
-for.multiblock.alveary.error.needPlainOnTop=В пчелиных ульев должны иметь простой пчелиных ульев блоков на верхнем уровне.
-for.multiblock.alveary.error.needPlainInterior=В пчелиных ульев должны иметь простой пчелиных ульев блоки для интерьера.
+for.multiblock.alveary.error.needSlabs=Пчелиный улей сверху должен быть покрыт деревянными плитами.
+for.multiblock.alveary.error.needSpace=Пчелиному улью необходимо пространство вокруг верхней части, чтобы пчёлы могли влетать и вылетать.
+for.multiblock.alveary.error.needPlainOnTop=Верхняя часть улья должна полностью состоять из простых блоков улья.
+for.multiblock.alveary.error.needPlainInterior=Внутренности улья должны полностью состоять из простых блоков улья.
 
-for.multiblock.farm.error.needPlainBand=Ферма должна иметь простые фермерские блоки для третьего уровня.
-for.multiblock.farm.error.needPlainInterior=Ферма должна иметь простые фермерские блоки для интерьера.
-for.multiblock.farm.error.needGearbox=Ферма должна иметь редуктор, чтобы принимать энергию и работать.
+for.multiblock.farm.error.needPlainBand=Третий слой фермы должен полностью состоять из простых блоков фермы.
+for.multiblock.farm.error.needPlainInterior=Внутренности фермы должены полностью состоять из простых блоков фермы.
+for.multiblock.farm.error.needGearbox=Для приема энергии и работы ферме требуется редуктор.
 
 for.multiblock.alveary.type=Пчелиный улей
 for.multiblock.farm.type=Ферма
@@ -1637,7 +1637,7 @@ tile.for.climatiser.hygro.name=Тепличный терморегулятор
 ####################
 # CLIMATOLAGY
 ####################
-tile.for.habitat_former.name=Формировщик среда обитания
+tile.for.habitat_former.name=Формировщик среды обитания
 
 item.for.habitat_screen.name=Экран среды обитания
 
@@ -1694,10 +1694,10 @@ for.butterflies.hybrid=Гибрид: %PRIMARY-%SECONDARY
 
 for.butterflies.grammar.butterfly.type=Бабочка
 for.butterflies.grammar.butterfly=%SPECIES
-for.butterflies.grammar.serum.type=Сыворотка
-for.butterflies.grammar.serum=%SPECIES %TYPE
+for.butterflies.grammar.serum.type=Сыворотка из
+for.butterflies.grammar.serum=%TYPE %SPECIES
 for.butterflies.grammar.caterpillar.type=Гусеница
-for.butterflies.grammar.caterpillar=%SPECIES %TYPE
+for.butterflies.grammar.caterpillar=%TYPE %SPECIES
 for.butterflies.grammar.cocoon.type=Кокон
 for.butterflies.grammar.cocoon=%TYPE %SPECIES
 
@@ -1829,7 +1829,7 @@ for.gui.filter.forestry.lepidopterology.flutter=Любая бабочка
 for.gui.filter.forestry.lepidopterology.butterfly=Бабочка
 for.gui.filter.forestry.lepidopterology.caterpillar=Гусеница
 for.gui.filter.forestry.lepidopterology.serum=Сыворотка
-for.gui.filter.forestry.lepidopterology.cocoon=Кокон+
+for.gui.filter.forestry.lepidopterology.cocoon=Кокон
 
 ####################
 # MODULES
