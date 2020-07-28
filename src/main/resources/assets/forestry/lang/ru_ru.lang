@@ -74,7 +74,7 @@ for.circuit.layout.machine.upgrade.usage=Сокетные машины
 for.flowers.cacti=Кактусы
 for.flowers.end=Край
 for.flowers.gourd=Бахчевые
-for.flowers.jungle=Лианы и папоротники
+for.flowers.jungle=Тропические
 for.flowers.mushrooms=Грибы
 for.flowers.nether=Нарост из Незера
 for.flowers.vanilla=Цветы
@@ -883,7 +883,7 @@ forestry.allele.effect.aggressive=Агрессия
 forestry.allele.effect.beatific=Блаженность
 forestry.allele.effect.creeper=Крипер
 forestry.allele.effect.drunkard=Пьянение
-forestry.allele.effect.exploration=Исследовательность
+forestry.allele.effect.exploration=Исследование
 forestry.allele.effect.glacial=Замораживание
 forestry.allele.effect.fertile=Удобрение
 forestry.allele.effect.heroic=Геройство
@@ -1637,9 +1637,9 @@ tile.for.climatiser.hygro.name=Тепличный терморегулятор
 ####################
 # CLIMATOLAGY
 ####################
-tile.for.habitat_former.name=Формировщик среды обитания
+tile.for.habitat_former.name=Формировщик среды
 
-item.for.habitat_screen.name=Экран среды обитания
+item.for.habitat_screen.name=Экран среды
 
 for.gui.habitat_former.climate.target=Целевой: %s
 for.gui.habitat_former.climate.value=Значение: %s
@@ -1654,7 +1654,7 @@ for.gui.habitat_former.climate.circle.enabled=Циркулярный режим 
 for.gui.habitat_former.climate.circle.disabled=Циркулярный режим отключен
 for.gui.habitat_former.climate.preview.enabled=Режим прдепросмотра включен
 for.gui.habitat_former.climate.preview.disabled=Режим прдепросмотра отключен
-for.gui.habitat_former=Бывшая среда обитания
+for.gui.habitat_former=Формировщик среды
 for.gui.habitat_former.range=Дальность
 for.gui.habitat_former.resources=Ресурсы
 for.gui.habitat_former.speed=Скорость

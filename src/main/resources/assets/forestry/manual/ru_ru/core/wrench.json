@@ -1,0 +1,19 @@
+{
+	"title": "Гаечный ключ",
+	"icon":{
+		"item": "forestry:wrench"
+	},
+	"content": [
+		[
+			{
+				"text": "Гаечный ключ позваляет игроку вращать все механизмы и двигатели Forestry."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:wrench"
+				]
+			}
+		]
+	]
+}
