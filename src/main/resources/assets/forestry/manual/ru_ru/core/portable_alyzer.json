@@ -12,12 +12,21 @@
 				}
 			},
 			{
-				"text": "All these genetics can get pretty confusing pretty fast. Especially since every offspring will have its own genome built more or less randomly from both parents. So, if you don't keep crossbreeding the same offspring from that same"
+				"text": "Вся это генетика может показаться запутанной. Тем более, что у каждого потомства будет свой собственный геном, созданный более или менее случайным образом из обоих родителей."
 			}
 		],
 		[
 			{
-				"text": "Forest queen you knocked off a tree ages ago, you will have lots of specimens with funny genomes. But where would you get that genome information? Luckily there is the Portable Analyzer to help. It provides a non-invasive way to glean every last bit of information from your specimens, butterflies and trees. Just provide a honey or honeydew drop to pacify the specimen to have everything you ever wanted to know but were afraid to ask at your fingertips."
+				"text": "Так что, если Вы не будете скрещивать одно и то же потомство от одной и той же Лесной королевы, которую вы поймали давным-давно, у Вас будет много экземляров с забавными геномами. Но где бы Вы взяли информацию об этих геномах?"
+			},
+			{
+				"text": "К счастью, есть Портативный Анализатор. Он обеспечивает бесконтактный способ сбора и хранения всей информации о всех Ваших образцах бабочек и пчёл.",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "Просто предоставьте каплю мёда или медовой росы для усыпление изучаемого Вами образца и Вы будете иметь все, что когда-либо хотели знать, но боялись спросить."
 			}
 		]
 	]
