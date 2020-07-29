@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.util.ResourceLocation;
@@ -25,35 +27,38 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 import forestry.core.utils.GeneticsUtil;
 
-public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpeciesBuilder, IAlleleForestrySpecies {
+public abstract class AlleleForestrySpecies extends Allele implements IAlleleForestrySpecies {
 	private final String binomial;
 	private final String authority;
 	private final String description;
+	private final String speciesIdentifier;
 	private final IClassification branch;
 
-	private boolean hasEffect = false;
-	private boolean isSecret = false;
-	private boolean isCounted = true;
-	private EnumTemperature climate = EnumTemperature.NORMAL;
-	private EnumHumidity humidity = EnumHumidity.NORMAL;
+	private final boolean hasEffect;
+	private final boolean isSecret;
+	private final boolean isCounted;
+	private final EnumTemperature climate;
+	private final EnumHumidity humidity;
 	@Nullable
-	private Integer complexityOverride = null;
+	private final Integer complexityOverride;
 
-	protected AlleleForestrySpecies(String modId,
-		String uid,
-		String unlocalizedName,
-		String authority,
-		String unlocalizedDescription,
-		boolean isDominant,
-		IClassification branch,
-		String binomial) {
-		super(unlocalizedName, isDominant);
-		setRegistryName(new ResourceLocation(modId, uid));
+	protected AlleleForestrySpecies(AbstractBuilder<?> builder) {
+		super(builder.translationKey, builder.isDominant);
+		setRegistryName(new ResourceLocation(builder.modId, builder.uid));
 
-		this.branch = branch;
-		this.binomial = binomial;
-		this.description = unlocalizedDescription;
-		this.authority = authority;
+		this.binomial = builder.binomial;
+		this.authority = builder.authority;
+		this.description = builder.description;
+		this.speciesIdentifier = builder.speciesIdentifier;
+		this.branch = builder.branch;
+
+		this.hasEffect = builder.hasEffect;
+		this.isSecret = builder.isSecret;
+		this.isCounted = builder.isCounted;
+		this.climate = builder.climate;
+		this.humidity = builder.humidity;
+
+		this.complexityOverride = builder.complexityOverride;
 	}
 
 	@Override
@@ -67,11 +72,6 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpe
 			return complexityOverride;
 		}
 		return GeneticsUtil.getResearchComplexity(this, getRoot().getKaryotype().getSpeciesType());
-	}
-
-	@Override
-	public void setComplexity(int complexity) {
-		this.complexityOverride = complexity;
 	}
 
 	@Override
@@ -105,6 +105,11 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpe
 	}
 
 	@Override
+	public String getSpeciesIdentifier() {
+		return speciesIdentifier;
+	}
+
+	@Override
 	public String getAuthority() {
 		return authority;
 	}
@@ -114,33 +119,111 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleSpe
 		return this.branch;
 	}
 
-	@Override
-	public IAlleleSpeciesBuilder setTemperature(EnumTemperature temperature) {
-		climate = temperature;
-		return this;
+	protected String getModID() {
+		return getRegistryName().getNamespace();
 	}
 
-	@Override
-	public IAlleleSpeciesBuilder setHumidity(EnumHumidity humidity) {
-		this.humidity = humidity;
-		return this;
-	}
+	public abstract static class AbstractBuilder<B extends IAlleleSpeciesBuilder<?>> implements IAlleleSpeciesBuilder<B> {
+		private final String modId;
+		private final String uid;
+		private final String speciesIdentifier;
+		private String translationKey;
+		private String binomial;
+		private String authority = "Sengir";
+		private String description = "";
+		private IClassification branch;
 
-	@Override
-	public IAlleleSpeciesBuilder setHasEffect() {
-		hasEffect = true;
-		return this;
-	}
+		private boolean hasEffect = false;
+		private boolean isSecret = false;
+		private boolean isCounted = true;
+		private boolean isDominant = false;
+		private EnumTemperature climate = EnumTemperature.NORMAL;
+		private EnumHumidity humidity = EnumHumidity.NORMAL;
+		@Nullable
+		private Integer complexityOverride = null;
 
-	@Override
-	public IAlleleSpeciesBuilder setIsSecret() {
-		isSecret = true;
-		return this;
-	}
+		protected AbstractBuilder(String modId, String uid, String speciesIdentifier) {
+			this.modId = modId;
+			this.uid = uid;
+			this.speciesIdentifier = speciesIdentifier;
+		}
 
-	@Override
-	public IAlleleSpeciesBuilder setIsNotCounted() {
-		isCounted = false;
-		return this;
+		protected static void checkBuilder(AbstractBuilder<?> builder) {
+			Preconditions.checkNotNull(builder.branch, "Every forestry species needs a branch");
+			Preconditions.checkNotNull(builder.translationKey);
+			Preconditions.checkNotNull(builder.binomial);
+		}
+
+		@Override
+		public B setDominant(boolean isDominant) {
+			this.isDominant = isDominant;
+			return cast();
+		}
+
+		@Override
+		public B setAuthority(String authority) {
+			this.authority = authority;
+			return cast();
+		}
+
+		@Override
+		public B setBinomial(String binomial) {
+			this.binomial = binomial;
+			return cast();
+		}
+
+		@Override
+		public B setBranch(IClassification branch) {
+			this.branch = branch;
+			return cast();
+		}
+
+		@Override
+		public B setDescriptionKey(String description) {
+			this.description = description;
+			return cast();
+		}
+
+		@Override
+		public B setTranslationKey(String translationKey) {
+			this.translationKey = translationKey;
+			return cast();
+		}
+
+		@Override
+		public B setComplexity(int complexity) {
+			this.complexityOverride = complexity;
+			return cast();
+		}
+
+		@Override
+		public B setTemperature(EnumTemperature temperature) {
+			climate = temperature;
+			return cast();
+		}
+
+		@Override
+		public B setHumidity(EnumHumidity humidity) {
+			this.humidity = humidity;
+			return cast();
+		}
+
+		@Override
+		public B setHasEffect() {
+			hasEffect = true;
+			return cast();
+		}
+
+		@Override
+		public B setIsSecret() {
+			isSecret = true;
+			return cast();
+		}
+
+		@Override
+		public B setIsNotCounted() {
+			isCounted = false;
+			return cast();
+		}
 	}
 }

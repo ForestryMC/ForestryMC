@@ -24,6 +24,7 @@ import genetics.api.individual.IGenome;
 
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
+import forestry.api.genetics.products.Product;
 import forestry.core.genetics.ProductListWrapper;
 
 public class FruitProviderRipening extends FruitProviderNone {
@@ -71,7 +72,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-		products.addProducts(world, pos, product, (p -> p.chance), world.rand);
+		products.addProducts(world, pos, product, Product::getChance, world.rand);
 
 		return product;
 	}

@@ -33,7 +33,7 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
 		bindTexture(textureFile);
 
 		int x = (width - xSize) / 2;

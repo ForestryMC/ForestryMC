@@ -30,8 +30,8 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge> {
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
 		int progress = tile.getProgressScaled(16);
 		blit(transform, guiLeft + 43, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);

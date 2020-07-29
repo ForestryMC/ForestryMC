@@ -36,9 +36,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IToolPipette;
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.fluids.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ResourceUtil;
 import forestry.farming.gui.ContainerFarm;
 

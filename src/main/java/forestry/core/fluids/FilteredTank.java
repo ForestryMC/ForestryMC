@@ -31,7 +31,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.core.gui.tooltips.ToolTip;
+import forestry.api.core.tooltips.ToolTip;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -89,8 +89,8 @@ public class FilteredTank extends StandardTank {
 		} else {
 			//TODO can this be simplified
 			ITextComponent tmiComponent = new StringTextComponent("<")
-				.func_230529_a_(new TranslationTextComponent("for.gui.tooltip.tmi"))
-				.func_230529_a_(new StringTextComponent(">"));
+				.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
+				.append(new StringTextComponent(">"));
 			toolTip.add(tmiComponent, TextFormatting.ITALIC);
 		}
 		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));

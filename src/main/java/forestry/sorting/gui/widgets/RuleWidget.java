@@ -12,11 +12,11 @@ import net.minecraft.util.Direction;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.gui.GuiForestry;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;

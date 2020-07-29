@@ -8,8 +8,8 @@ import net.minecraft.util.ResourceLocation;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.config.Constants;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.gui.widgets.WidgetScrollBar;

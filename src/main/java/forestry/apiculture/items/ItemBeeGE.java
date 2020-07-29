@@ -99,9 +99,9 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 			IBee individual = optionalIndividual.get();
 			if (individual.isNatural()) {
-				list.add(new TranslationTextComponent("for.bees.stock.pristine").func_240701_a_(TextFormatting.YELLOW, TextFormatting.ITALIC));
+				list.add(new TranslationTextComponent("for.bees.stock.pristine").mergeStyle(TextFormatting.YELLOW, TextFormatting.ITALIC));
 			} else {
-				list.add(new TranslationTextComponent("for.bees.stock.ignoble").func_240699_a_(TextFormatting.YELLOW));
+				list.add(new TranslationTextComponent("for.bees.stock.ignoble").mergeStyle(TextFormatting.YELLOW));
 			}
 		}
 

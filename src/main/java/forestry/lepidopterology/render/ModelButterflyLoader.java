@@ -24,7 +24,7 @@ public class ModelButterflyLoader implements IModelLoader<ModelButterflyItem.Geo
 		ImmutableMap.Builder<String, String> subModels = new ImmutableMap.Builder<>();
 		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (butterfly) -> {
 			ResourceLocation registryName = butterfly.getRegistryName();
-			subModels.put(registryName.getPath(), butterfly.getItemTexture());
+			subModels.put(registryName.getPath(), butterfly.getItemTexture().toString());
 		});
 		return new ModelButterflyItem.Geometry(subModels.build());
 	}

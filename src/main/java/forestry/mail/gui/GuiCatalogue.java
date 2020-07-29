@@ -82,8 +82,8 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
 		Minecraft.getInstance().fontRenderer.drawString(transform, String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, ColourProperties.INSTANCE.get("gui.book"));
 
@@ -124,9 +124,9 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 		//TODO: Fix later
 		if (tradeInfo.getState().isOk()) {
-			fontRenderer.func_238418_a_(((IFormattableTextComponent) tradeInfo.getState().getDescription()).func_240699_a_(TextFormatting.DARK_GREEN), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
+			fontRenderer.func_238418_a_(((IFormattableTextComponent) tradeInfo.getState().getDescription()).mergeStyle(TextFormatting.DARK_GREEN), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		} else {
-			fontRenderer.func_238418_a_(((IFormattableTextComponent) tradeInfo.getState().getDescription()).func_240699_a_(TextFormatting.DARK_RED), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
+			fontRenderer.func_238418_a_(((IFormattableTextComponent) tradeInfo.getState().getDescription()).mergeStyle(TextFormatting.DARK_RED), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		}
 	}
 

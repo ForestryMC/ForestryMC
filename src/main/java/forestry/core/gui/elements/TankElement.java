@@ -20,8 +20,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.Drawable;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ResourceUtil;
 
 public class TankElement extends GuiElement {

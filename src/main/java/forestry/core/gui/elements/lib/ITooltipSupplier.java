@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.core.gui.elements.lib;
 
-import forestry.core.gui.tooltips.ToolTip;
+import forestry.api.core.tooltips.ToolTip;
 
 @FunctionalInterface
 public interface ITooltipSupplier {

@@ -226,10 +226,14 @@ public class Letter implements ILetter {
 	@Override
 	public void addTooltip(List<ITextComponent> list) {
 		if (StringUtils.isNotBlank(this.sender.getName())) {
-			list.add(new TranslationTextComponent("for.gui.mail.from").func_240702_b_(": " + this.sender.getName()).func_240699_a_(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent("for.gui.mail.from")
+				.appendString(": " + this.sender.getName())
+				.mergeStyle(TextFormatting.GRAY));
 		}
 		if (this.recipient != null) {
-			list.add(new TranslationTextComponent("for.gui.mail.to").func_240702_b_(": " + this.getRecipientString()).func_240699_a_(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent("for.gui.mail.to")
+				.appendString(": " + this.getRecipientString())
+				.mergeStyle(TextFormatting.GRAY));
 		}
 	}
 

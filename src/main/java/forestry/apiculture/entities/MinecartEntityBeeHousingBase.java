@@ -99,11 +99,6 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 		return beeLogic;
 	}
 
-	//TODO: Remove if mappings get fixed
-	public BlockPos getPosition() {
-		return func_233580_cy_();
-	}
-
 	@Override
 	public EnumTemperature getTemperature() {
 		return EnumTemperature.getFromBiome(getBiome(), getPosition());

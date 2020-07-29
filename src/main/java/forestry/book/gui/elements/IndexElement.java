@@ -32,7 +32,7 @@ public class IndexElement extends VerticalLayout {
 	private class IndexEntryElement extends LabelElement {
 
 		public IndexEntryElement(IndexEntry data) {
-			super(0, 0, -1, 9, new StringTextComponent(data.title).func_230530_a_(INDEX_STYLE), true);
+			super(0, 0, -1, 9, new StringTextComponent(data.title).mergeStyle(INDEX_STYLE), true);
 			setWidth(width + LabelElement.FONT_RENDERER.getStringWidth(" > "));
 			addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 				GuiForesterBook bookGui = GuiForesterBook.getGuiScreen();

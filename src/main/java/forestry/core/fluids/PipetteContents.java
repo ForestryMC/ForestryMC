@@ -49,7 +49,7 @@ public class PipetteContents {
 
 	public void addTooltip(List<ITextComponent> list) {
 		TextComponent descr = new TranslationTextComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
-		descr.func_240702_b_(" (" + contents.getAmount() + " mb)");
+		descr.appendString(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);
 	}

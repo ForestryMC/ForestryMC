@@ -50,7 +50,7 @@ public abstract class Circuit implements ICircuit {
 			if (!ResourceUtil.canTranslate(component)) {
 				break;
 			}
-			list.add(new StringTextComponent(" - ").func_230529_a_(component));
+			list.add(new StringTextComponent(" - ").append(component));
 			i++;
 		}
 	}

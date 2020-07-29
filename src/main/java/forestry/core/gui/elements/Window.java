@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.lib.IElementGroup;
@@ -30,7 +31,6 @@ import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
-import forestry.core.gui.tooltips.ToolTip;
 
 
 /**

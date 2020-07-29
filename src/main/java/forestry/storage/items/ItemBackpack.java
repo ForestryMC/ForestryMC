@@ -209,9 +209,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		BackpackMode mode = getMode(itemstack);
 		String infoKey = mode.getUnlocalizedInfo();
 		if (infoKey != null) {
-			list.add(new TranslationTextComponent(infoKey).func_240699_a_(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent(infoKey).mergeStyle(TextFormatting.GRAY));
 		}
-		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).func_240699_a_(TextFormatting.GRAY));
+		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).mergeStyle(TextFormatting.GRAY));
 	}
 
 	@Override

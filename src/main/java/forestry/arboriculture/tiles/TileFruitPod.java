@@ -122,7 +122,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		for (Product product : products.getPossibleProducts()) {
 			if (maxChance < product.getChance()) {
 				maxChance = product.getChance();
-				pickBlock = product.getStack().copy();
+				pickBlock = product.copyStack();
 			}
 		}
 

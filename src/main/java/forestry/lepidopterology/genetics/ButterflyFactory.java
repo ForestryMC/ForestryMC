@@ -10,17 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import java.awt.Color;
-
-import genetics.api.classification.IClassification;
-
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.genetics.IButterflyFactory;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflySpecies;
 
 public class ButterflyFactory implements IButterflyFactory {
 	@Override
-	public IAlleleButterflySpeciesBuilder createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, String modID, String texturePath, boolean isDominant, IClassification branch, String binomial, Color serumColour) {
-		return new AlleleButterflySpecies(uid, unlocalizedName, authority, unlocalizedDescription, modID, texturePath, isDominant, branch, binomial, serumColour);
+	public IAlleleButterflySpeciesBuilder createSpecies(String modId, String uid, String speciesIdentifier) {
+		return new AlleleButterflySpecies.Builder(modId, uid, speciesIdentifier);
 	}
 }

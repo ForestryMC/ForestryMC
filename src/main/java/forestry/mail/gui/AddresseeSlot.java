@@ -15,9 +15,9 @@ import net.minecraft.client.gui.AbstractGui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;

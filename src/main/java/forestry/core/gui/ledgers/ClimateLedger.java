@@ -62,9 +62,9 @@ public class ClimateLedger extends Ledger {
 	@Override
 	public ITextComponent getTooltip() {
 		return new StringTextComponent("T: ")
-			.func_230529_a_(AlleleManager.climateHelper.toDisplay(tile.getTemperature()))
-			.func_230529_a_(new StringTextComponent(" / H: "))
-			.func_230529_a_(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
+			.append(AlleleManager.climateHelper.toDisplay(tile.getTemperature()))
+			.append(new StringTextComponent(" / H: "))
+			.append(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
 	}
 
 }

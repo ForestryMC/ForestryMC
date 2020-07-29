@@ -35,47 +35,47 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		tagToBuilder.remove(ItemTags.SAPLINGS.getName());
 		filter = this.tagToBuilder.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet());
 		addToTag(ForestryTags.Items.GEARS, ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
-		func_240522_a_(ForestryTags.Items.GEARS_BRONZE).func_240534_a_(CoreItems.GEAR_BRONZE.item());
-		func_240522_a_(ForestryTags.Items.GEARS_TIN).func_240534_a_(CoreItems.GEAR_TIN.item());
-		func_240522_a_(ForestryTags.Items.GEARS_COPPER).func_240534_a_(CoreItems.GEAR_COPPER.item());
-		func_240522_a_(ForestryTags.Items.GEARS_STONE);
+		getOrCreateBuilder(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
+		getOrCreateBuilder(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());
+		getOrCreateBuilder(ForestryTags.Items.GEARS_COPPER).add(CoreItems.GEAR_COPPER.item());
+		getOrCreateBuilder(ForestryTags.Items.GEARS_STONE);
 
 		addToTag(Tags.Items.INGOTS, ForestryTags.Items.INGOTS_BRONZE, ForestryTags.Items.INGOTS_COPPER, ForestryTags.Items.INGOTS_TIN);
-		func_240522_a_(ForestryTags.Items.INGOTS_BRONZE).func_240534_a_(CoreItems.INGOT_BRONZE.item());
-		func_240522_a_(ForestryTags.Items.INGOTS_TIN).func_240534_a_(CoreItems.INGOT_TIN.item());
-		func_240522_a_(ForestryTags.Items.INGOTS_COPPER).func_240534_a_(CoreItems.INGOT_COPPER.item());
+		getOrCreateBuilder(ForestryTags.Items.INGOTS_BRONZE).add(CoreItems.INGOT_BRONZE.item());
+		getOrCreateBuilder(ForestryTags.Items.INGOTS_TIN).add(CoreItems.INGOT_TIN.item());
+		getOrCreateBuilder(ForestryTags.Items.INGOTS_COPPER).add(CoreItems.INGOT_COPPER.item());
 
-		func_240522_a_(ForestryTags.Items.DUSTS_ASH).func_240534_a_(CoreItems.ASH.item());
-		func_240522_a_(ForestryTags.Items.GEMS_APATITE).func_240534_a_(CoreItems.APATITE.item());
+		getOrCreateBuilder(ForestryTags.Items.DUSTS_ASH).add(CoreItems.ASH.item());
+		getOrCreateBuilder(ForestryTags.Items.GEMS_APATITE).add(CoreItems.APATITE.item());
 
 		addToTag(Tags.Items.STORAGE_BLOCKS, ForestryTags.Items.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_TIN);
-		func_240521_a_(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_APATITE);
-		func_240521_a_(ForestryTags.Blocks.STORAGE_BLOCKS_TIN, ForestryTags.Items.STORAGE_BLOCKS_TIN);
-		func_240521_a_(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_COPPER);
-		func_240521_a_(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_APATITE);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_TIN, ForestryTags.Items.STORAGE_BLOCKS_TIN);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_COPPER);
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE);
 
-		func_240521_a_(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
+		copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
 
-		func_240522_a_(ItemTags.SAPLINGS).func_240534_a_(ArboricultureItems.SAPLING.item());
-		func_240522_a_(ForestryTags.Items.BEE_COMBS).func_240534_a_(ApicultureItems.BEE_COMBS.itemArray());
-		func_240522_a_(ForestryTags.Items.PROPOLIS).func_240534_a_(ApicultureItems.PROPOLIS.itemArray());
-		func_240522_a_(ForestryTags.Items.DROP_HONEY).func_240534_a_(ApicultureItems.HONEY_DROPS.itemArray());
+		getOrCreateBuilder(ItemTags.SAPLINGS).add(ArboricultureItems.SAPLING.item());
+		getOrCreateBuilder(ForestryTags.Items.BEE_COMBS).add(ApicultureItems.BEE_COMBS.itemArray());
+		getOrCreateBuilder(ForestryTags.Items.PROPOLIS).add(ApicultureItems.PROPOLIS.itemArray());
+		getOrCreateBuilder(ForestryTags.Items.DROP_HONEY).add(ApicultureItems.HONEY_DROPS.itemArray());
 
 		addToTag(Tags.Items.ORES, ForestryTags.Items.ORES_COPPER, ForestryTags.Items.ORES_TIN, ForestryTags.Items.ORES_APATITE);
-		func_240521_a_(ForestryTags.Blocks.ORES_COPPER, ForestryTags.Items.ORES_COPPER);
-		func_240521_a_(ForestryTags.Blocks.ORES_TIN, ForestryTags.Items.ORES_TIN);
-		func_240521_a_(ForestryTags.Blocks.ORES_APATITE, ForestryTags.Items.ORES_APATITE);
+		copy(ForestryTags.Blocks.ORES_COPPER, ForestryTags.Items.ORES_COPPER);
+		copy(ForestryTags.Blocks.ORES_TIN, ForestryTags.Items.ORES_TIN);
+		copy(ForestryTags.Blocks.ORES_APATITE, ForestryTags.Items.ORES_APATITE);
 
-		func_240522_a_(ForestryTags.Items.STAMPS).func_240534_a_(MailItems.STAMPS.itemArray());
+		getOrCreateBuilder(ForestryTags.Items.STAMPS).add(MailItems.STAMPS.itemArray());
 
-		func_240522_a_(ForestryTags.Items.FRUITS).func_240534_a_(CoreItems.FRUITS.itemArray());
+		getOrCreateBuilder(ForestryTags.Items.FRUITS).add(CoreItems.FRUITS.itemArray());
 	}
 
 	@SafeVarargs
 	protected final void addToTag(ITag.INamedTag<Item> tag, ITag.INamedTag<Item>... providers) {
-		TagsProvider.Builder<Item> builder = func_240522_a_(tag);
+		TagsProvider.Builder<Item> builder = getOrCreateBuilder(tag);
 		for (ITag.INamedTag<Item> provider : providers) {
-			builder.func_240531_a_(provider);
+			builder.addTag(provider);
 		}
 	}
 

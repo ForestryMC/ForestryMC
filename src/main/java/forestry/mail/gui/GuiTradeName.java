@@ -76,8 +76,8 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int var3, int var2) {
-		super.func_230450_a_(transform, partialTicks, var3, var2);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int var3, int var2) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, var3, var2);
 
 		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
 		textLayout.startPage();

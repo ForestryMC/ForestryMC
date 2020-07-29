@@ -19,6 +19,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.ITooltipSupplier;
@@ -26,7 +27,6 @@ import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
-import forestry.core.gui.tooltips.ToolTip;
 
 import org.lwjgl.opengl.GL11;
 

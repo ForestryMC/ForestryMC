@@ -1,4 +1,4 @@
-package forestry.core.gui.tooltips;
+package forestry.api.core.tooltips;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

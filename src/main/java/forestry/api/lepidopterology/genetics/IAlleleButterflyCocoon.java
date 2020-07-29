@@ -5,12 +5,11 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import java.util.Map;
-
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.alleles.IAlleleProperty;
+import forestry.api.genetics.products.IDynamicProductList;
 
 public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
 
@@ -18,9 +17,11 @@ public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterfly
 
 	String getCocoonName();
 
-	Map<ItemStack, Float> getCocoonLoot();
+	IDynamicProductList getCocoonLoot();
 
 	void clearLoot();
+
+	void bakeLoot();
 
 	void addLoot(ItemStack loot, float chance);
 }

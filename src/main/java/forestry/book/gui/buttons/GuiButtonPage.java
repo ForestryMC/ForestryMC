@@ -12,9 +12,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.tooltips.IToolTipProvider;
+import forestry.api.core.tooltips.ToolTip;
 import forestry.book.gui.GuiForesterBook;
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiButtonPage extends Button implements IToolTipProvider {

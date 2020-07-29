@@ -37,9 +37,9 @@ public class GuiButtonEntry extends Button {
 
 			ITextComponent text = getMessage();
 			if (isHovered) {
-				((IFormattableTextComponent) text).func_240699_a_(TextFormatting.GOLD);
+				((IFormattableTextComponent) text).mergeStyle(TextFormatting.GOLD);
 			} else {
-				((IFormattableTextComponent) text).func_240699_a_(TextFormatting.DARK_GRAY);
+				((IFormattableTextComponent) text).mergeStyle(TextFormatting.DARK_GRAY);
 			}
 
 			boolean unicode = fontRenderer.getBidiFlag();

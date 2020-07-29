@@ -99,7 +99,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		Block block = blockState.getBlock();
 		if (block instanceof MushroomBlock) {
 			MushroomBlock mushroom = (MushroomBlock) block;
-			mushroom.func_226940_a_(world, pos, blockState, world.rand);
+			mushroom.grow(world, pos, blockState, world.rand);
 			return true;
 		}
 		return false;

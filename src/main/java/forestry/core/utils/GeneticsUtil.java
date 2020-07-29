@@ -21,6 +21,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
@@ -30,6 +31,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
@@ -43,19 +45,44 @@ import genetics.api.root.components.ComponentKeys;
 import genetics.utils.AlleleUtils;
 import genetics.utils.RootUtils;
 
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.arboriculture.ArboricultureCapabilities;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.genetics.ISpeciesRootPollinatable;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
 
 public class GeneticsUtil {
+
+	private static String getKeyPrefix(IAllele allele) {
+		if (allele instanceof IAlleleBeeSpecies) {
+			return "for.bees.custom.alyzer";
+		} else if (allele instanceof IAlleleTreeSpecies) {
+			return "for.trees.custom.alyzer";
+		} else if (allele instanceof IAlleleButterflySpecies) {
+			return "for.butterflies.custom.alyzer";
+		}
+		throw new IllegalStateException();
+	}
+
+	public static ITextComponent getSpeciesName(IOrganismType type, IAlleleForestrySpecies allele) {
+		String alleleKey = allele.getLocalisationKey();
+		String customKey = getKeyPrefix(allele) +
+			'.' +
+			type.getName() +
+			'.' +
+			alleleKey.replace("for.bees.species.", "");
+		return ResourceUtil.tryTranslate(customKey, allele::getDisplayName);
+	}
 
 	public static boolean hasNaturalistEye(PlayerEntity player) {
 		ItemStack armorItemStack = player.getItemStackFromSlot(EquipmentSlotType.HEAD);

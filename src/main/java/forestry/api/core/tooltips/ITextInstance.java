@@ -1,4 +1,4 @@
-package forestry.core.gui.tooltips;
+package forestry.api.core.tooltips;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -21,27 +21,37 @@ public interface ITextInstance<I extends ITextInstance<?, ?, ?>, S, R> {
 	}
 
 	default I style(TextFormatting... formatting) {
-		applyFormatting((component) -> component.func_240701_a_(formatting));
+		applyFormatting((component) -> component.mergeStyle(formatting));
 		return cast();
 	}
 
 	default I style(TextFormatting formatting) {
-		applyFormatting((component) -> component.func_240699_a_(formatting));
+		applyFormatting((component) -> component.mergeStyle(formatting));
 		return cast();
 	}
 
 	default I style(Style style) {
-		applyFormatting((component) -> component.func_230530_a_(style));
+		applyFormatting((component) -> component.mergeStyle(style));
 		return cast();
 	}
 
 	default I add(ITextComponent line, TextFormatting format) {
-		return add(line, Style.EMPTY.setFormatting(format));
+		if (line instanceof IFormattableTextComponent) {
+			((IFormattableTextComponent) line).mergeStyle(format);
+		}
+		return add(line);
+	}
+
+	default I add(ITextComponent line, TextFormatting... format) {
+		if (line instanceof IFormattableTextComponent) {
+			((IFormattableTextComponent) line).mergeStyle(format);
+		}
+		return add(line);
 	}
 
 	default I add(ITextComponent line, Style style) {
 		if (line instanceof IFormattableTextComponent) {
-			((IFormattableTextComponent) line).func_230530_a_(style);
+			((IFormattableTextComponent) line).mergeStyle(style);
 		}
 		return add(line);
 	}

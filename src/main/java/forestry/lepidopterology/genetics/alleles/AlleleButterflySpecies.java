@@ -10,54 +10,61 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.Collection;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
 
-import genetics.api.classification.IClassification;
-
+import forestry.api.core.ISetupListener;
 import forestry.api.core.ISpriteRegistry;
+import forestry.api.genetics.products.IDynamicProductList;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpeciesBuilder;
 import forestry.api.lepidopterology.genetics.IButterflyRoot;
 import forestry.core.config.Constants;
+import forestry.core.genetics.ProductListWrapper;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
-public class AlleleButterflySpecies extends AlleleForestrySpecies
-	implements IAlleleButterflySpecies, IAlleleButterflySpeciesBuilder {
+public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAlleleButterflySpecies,
+	ISetupListener {
 	private final String texture;
 	private final Color serumColour;
-	private float rarity = 0.1f;
-	private float flightDistance = 5.0f;
-	private boolean isActualNocturnal = false;
+	private final float rarity;
+	private final float flightDistance;
+	private final boolean nocturnal;
 
-	private final Set<BiomeDictionary.Type> spawnBiomes = new HashSet<>();
+	private final Set<BiomeDictionary.Type> spawnBiomes;
 
-	private final Map<ItemStack, Float> butterflyLoot = new HashMap<>();
-	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<>();
+	private ProductListWrapper butterflyLoot;
+	private ProductListWrapper caterpillarLoot;
 
-	public AlleleButterflySpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
-		String modID, String texturePath, boolean isDominant, IClassification branch, String binomial,
-		Color serumColour) {
-		super(modID, uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
-		this.serumColour = serumColour;
+	public AlleleButterflySpecies(Builder builder) {
+		super(builder);
+		this.texture = builder.texture;
+		this.serumColour = builder.serumColour;
+		this.rarity = builder.rarity;
+		this.flightDistance = builder.flightDistance;
+		this.nocturnal = builder.nocturnal;
 
-		this.texture = texturePath;
+		this.spawnBiomes = builder.spawnBiomes.build();
+
+		this.butterflyLoot = builder.butterflyLoot;
+		this.caterpillarLoot = builder.caterpillarLoot;
 	}
 
 	@Override
-	public IAlleleButterflySpecies build() {
-		return this;
+	public void onFinishSetup() {
+		butterflyLoot = butterflyLoot.bake();
+		caterpillarLoot = caterpillarLoot.bake();
 	}
 
 	@Override
@@ -66,41 +73,13 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies
 	}
 
 	@Override
-	public AlleleButterflySpecies setRarity(float rarity) {
-		this.rarity = rarity;
-		return this;
+	public ResourceLocation getEntityTexture() {
+		return new ResourceLocation(getModID(), Constants.TEXTURE_PATH_ENTITIES + "/" + texture + ".png");
 	}
 
 	@Override
-	public AlleleButterflySpecies setFlightDistance(float flightDistance) {
-		this.flightDistance = flightDistance;
-		return this;
-	}
-
-	@Override
-	public AlleleButterflySpecies setNocturnal() {
-		this.isActualNocturnal = true;
-		return this;
-	}
-
-	public AlleleButterflySpecies addSpawnBiomes(Set<BiomeDictionary.Type> biomeTags) {
-		spawnBiomes.addAll(biomeTags);
-		return this;
-	}
-
-	public AlleleButterflySpecies addSpawnBiome(BiomeDictionary.Type biomeTag) {
-		spawnBiomes.add(biomeTag);
-		return this;
-	}
-
-	@Override
-	public String getEntityTexture() {
-		return getRegistryName().getNamespace() + ":" + Constants.TEXTURE_PATH_ENTITIES + "/" + texture + ".png";
-	}
-
-	@Override
-	public String getItemTexture() {
-		return getRegistryName().getNamespace() + ":item/" + texture;
+	public ResourceLocation getItemTexture() {
+		return new ResourceLocation(getModID(), "item/" + texture);
 	}
 
 	@Override
@@ -137,16 +116,16 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies
 
 	@Override
 	public boolean isNocturnal() {
-		return isActualNocturnal;
+		return nocturnal;
 	}
 
 	@Override
-	public Map<ItemStack, Float> getButterflyLoot() {
+	public IDynamicProductList getButterflyLoot() {
 		return butterflyLoot;
 	}
 
 	@Override
-	public Map<ItemStack, Float> getCaterpillarLoot() {
+	public IDynamicProductList getCaterpillarLoot() {
 		return caterpillarLoot;
 	}
 
@@ -161,6 +140,81 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(ISpriteRegistry registry) {
-		registry.addSprite(new ResourceLocation(getItemTexture()));
+		registry.addSprite(getItemTexture());
+	}
+
+	public static class Builder extends AbstractBuilder<IAlleleButterflySpeciesBuilder>
+		implements IAlleleButterflySpeciesBuilder {
+
+		private final ImmutableSet.Builder<BiomeDictionary.Type> spawnBiomes = new ImmutableSet.Builder<>();
+		private final ProductListWrapper butterflyLoot = ProductListWrapper.create();
+		private final ProductListWrapper caterpillarLoot = ProductListWrapper.create();
+
+		private String texture;
+		private Color serumColour = Color.WHITE;
+		private float rarity = 0.1f;
+		private float flightDistance = 5.0f;
+		private boolean nocturnal = false;
+
+		public Builder(String modId, String uid, String speciesIdentifier) {
+			super(modId, uid, speciesIdentifier);
+		}
+
+		@Override
+		public IAlleleButterflySpeciesBuilder cast() {
+			return this;
+		}
+
+		@Override
+		public IAlleleButterflySpecies build() {
+			checkBuilder(this);
+			Preconditions.checkNotNull(texture);
+			return new AlleleButterflySpecies(this);
+		}
+
+		@Override
+		public IAlleleButterflySpeciesBuilder setRarity(float rarity) {
+			this.rarity = rarity;
+			return this;
+		}
+
+		@Override
+		public IAlleleButterflySpeciesBuilder setTexture(String texture) {
+			this.texture = texture;
+			return this;
+		}
+
+		@Override
+		public IAlleleButterflySpeciesBuilder setSerumColour(int serumColour) {
+			return setSerumColour(new Color(serumColour));
+		}
+
+		@Override
+		public IAlleleButterflySpeciesBuilder setSerumColour(Color serumColour) {
+			this.serumColour = serumColour;
+			return this;
+		}
+
+		@Override
+		public IAlleleButterflySpeciesBuilder setFlightDistance(float flightDistance) {
+			this.flightDistance = flightDistance;
+			return this;
+		}
+
+		@Override
+		public IAlleleButterflySpeciesBuilder setNocturnal() {
+			this.nocturnal = true;
+			return this;
+		}
+
+		public IAlleleButterflySpeciesBuilder addSpawnBiomes(Collection<BiomeDictionary.Type> biomeTags) {
+			spawnBiomes.addAll(biomeTags);
+			return this;
+		}
+
+		public IAlleleButterflySpeciesBuilder addSpawnBiome(BiomeDictionary.Type biomeTag) {
+			spawnBiomes.add(biomeTag);
+			return this;
+		}
 	}
 }

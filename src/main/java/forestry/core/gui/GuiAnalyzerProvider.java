@@ -142,8 +142,8 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.func_230450_a_(transform, partialTicks, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();

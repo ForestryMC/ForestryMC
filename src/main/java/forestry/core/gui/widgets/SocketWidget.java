@@ -21,11 +21,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gui.IContainerSocketed;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.Translator;
 

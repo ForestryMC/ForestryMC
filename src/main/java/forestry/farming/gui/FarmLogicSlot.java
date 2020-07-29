@@ -18,11 +18,11 @@ import net.minecraft.item.ItemStack;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.config.Config;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.farming.multiblock.IFarmControllerInternal;

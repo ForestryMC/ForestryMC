@@ -15,6 +15,8 @@ import forestry.api.core.EnumTemperature;
  */
 public interface IAlleleForestrySpecies extends IAlleleSpecies {
 
+	String getSpeciesIdentifier();
+
 	/* RESEARCH */
 
 	/**

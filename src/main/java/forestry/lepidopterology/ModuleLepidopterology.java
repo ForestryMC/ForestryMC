@@ -41,6 +41,7 @@ import genetics.utils.AlleleUtils;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.products.Product;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
@@ -221,15 +222,10 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	private static void parseCooconLoot(LocalizedConfiguration config, IAlleleButterflyCocoon cocoon) {
 		Map<ItemStack, Float> cooconLoot = new HashMap<>();
 		List<String> lootList = new ArrayList<>();
-		for (Entry<ItemStack, Float> entry : cocoon.getCocoonLoot().entrySet()) {
-			String itemStackString = ItemStackUtil.getItemNameFromRegistryAsString(entry.getKey().getItem());
+		for (Product product : cocoon.getCocoonLoot().getPossibleProducts()) {
+			String itemStackString = ItemStackUtil.getItemNameFromRegistryAsString(product.getItem());
 
-			int meta = entry.getKey().getDamage();
-			//TODO tags
-			//			if (meta != OreDictionary.WILDCARD_VALUE) {
-			//				itemStackString = itemStackString + ':' + meta;
-			//			}
-			lootList.add(itemStackString + ";" + entry.getValue());
+			lootList.add(itemStackString + ";" + product.getChance());
 		}
 		Collections.sort(lootList);
 		String[] defaultLoot = lootList.toArray(new String[0]);
@@ -255,6 +251,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		for (Entry<ItemStack, Float> entry : cooconLoot.entrySet()) {
 			cocoon.addLoot(entry.getKey(), entry.getValue());
 		}
+		cocoon.bakeLoot();
 	}
 
 	@Override

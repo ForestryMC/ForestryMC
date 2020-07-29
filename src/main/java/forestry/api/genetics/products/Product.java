@@ -10,12 +10,16 @@ import net.minecraft.item.ItemStack;
  * This pair is used in the {@link IProductList} to represent a product that can be produced.
  */
 public final class Product {
-	public final ItemStack stack;
-	public final float chance;
+	private final ItemStack stack;
+	private final float chance;
 
 	public Product(ItemStack stack, float chance) {
 		this.stack = stack;
 		this.chance = chance;
+	}
+
+	public ItemStack copyStack() {
+		return stack.copy();
 	}
 
 	public ItemStack getStack() {

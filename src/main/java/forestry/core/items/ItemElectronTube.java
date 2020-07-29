@@ -61,7 +61,7 @@ public class ItemElectronTube extends ItemOverlay {
 			if (Screen.hasShiftDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
-					list.add(new StringTextComponent(circuitLayoutName).func_240701_a_(TextFormatting.WHITE, TextFormatting.UNDERLINE));
+					list.add(new StringTextComponent(circuitLayoutName).mergeStyle(TextFormatting.WHITE, TextFormatting.UNDERLINE));
 					for (ICircuit circuit : circuits.get(circuitLayout)) {
 						circuit.addTooltip(list);
 					}
@@ -71,8 +71,8 @@ public class ItemElectronTube extends ItemOverlay {
 			}
 		} else {
 			list.add(new StringTextComponent("<")
-				.func_230529_a_(new TranslationTextComponent("for.gui.noeffect")
-					.func_240702_b_(">")));
+				.append(new TranslationTextComponent("for.gui.noeffect")
+					.appendString(">")));
 		}
 	}
 

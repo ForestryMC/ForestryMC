@@ -54,7 +54,7 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
-			tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).func_240699_a_(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).mergeStyle(TextFormatting.GRAY));
 		}
 	}
 

@@ -77,7 +77,7 @@ public class ParticleHelper {
 			DiggingParticle fx = new DiggingParticle(WorldUtils.asClient(world), px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
 			effectRenderer.addEffect(fx);
 			callback.addHitEffects(fx, world, pos, blockState);
-			fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F);
+			fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multiplyParticleScaleBy(0.6F);
 		}
 		return true;
 	}

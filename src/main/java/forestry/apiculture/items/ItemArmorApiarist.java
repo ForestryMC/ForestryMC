@@ -74,13 +74,12 @@ public class ItemArmorApiarist extends ArmorItem {
 
 		@Override
 		public float getToughness() {
-			return 0;
+			return 0.0F;
 		}
 
-		//Knockback resistance
 		@Override
-		public float func_230304_f_() {
-			return 0;
+		public float getKnockbackResistance() {
+			return 0.0F;
 		}
 	}
 
@@ -106,10 +105,10 @@ public class ItemArmorApiarist extends ArmorItem {
 			@Override
 			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return LazyOptional.of(() -> capability.getDefaultInstance());
+					return LazyOptional.of(capability::getDefaultInstance);
 				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
 					slot == EquipmentSlotType.HEAD) {
-					return LazyOptional.of(() -> capability.getDefaultInstance());
+					return LazyOptional.of(capability::getDefaultInstance);
 				}
 				return LazyOptional.empty();
 			}

@@ -62,6 +62,6 @@ public class OwnerLedger extends Ledger {
 	@Override
 	public ITextComponent getTooltip() {
 		return new TranslationTextComponent("for.gui.owner")
-			.func_240702_b_(": " + PlayerUtil.getOwnerName(owner));
+			.appendString(": " + PlayerUtil.getOwnerName(owner));
 	}
 }

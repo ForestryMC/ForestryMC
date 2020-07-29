@@ -37,68 +37,68 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 		//super.registerTags();
 		filter = this.tagToBuilder.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
-			func_240522_a_(ForestryTags.Blocks.CHARCOAL).func_240534_a_(CharcoalBlocks.CHARCOAL.block());
+			getOrCreateBuilder(ForestryTags.Blocks.CHARCOAL).add(CharcoalBlocks.CHARCOAL.block());
 		}
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			func_240522_a_(BlockTags.PLANKS).func_240534_a_(ArboricultureBlocks.PLANKS.blockArray());
-			func_240522_a_(BlockTags.LOGS).func_240534_a_(ArboricultureBlocks.LOGS.blockArray());
-			func_240522_a_(BlockTags.STAIRS).func_240534_a_(ArboricultureBlocks.STAIRS.blockArray());
-			func_240522_a_(BlockTags.WOODEN_STAIRS).func_240534_a_(ArboricultureBlocks.STAIRS.blockArray());
-			func_240522_a_(BlockTags.FENCES).func_240534_a_(ArboricultureBlocks.FENCES.blockArray());
-			func_240522_a_(BlockTags.WOODEN_FENCES).func_240534_a_(ArboricultureBlocks.FENCES.blockArray());
-			func_240522_a_(Tags.Blocks.FENCE_GATES).func_240534_a_(ArboricultureBlocks.FENCE_GATES.blockArray());
-			func_240522_a_(Tags.Blocks.FENCE_GATES_WOODEN).func_240534_a_(ArboricultureBlocks.FENCE_GATES.blockArray());
-			func_240522_a_(BlockTags.SLABS).func_240534_a_(ArboricultureBlocks.SLABS.blockArray());
-			func_240522_a_(BlockTags.WOODEN_SLABS).func_240534_a_(ArboricultureBlocks.SLABS.blockArray());
-			func_240522_a_(BlockTags.DOORS).func_240534_a_(ArboricultureBlocks.DOORS.blockArray());
-			func_240522_a_(BlockTags.WOODEN_DOORS).func_240534_a_(ArboricultureBlocks.DOORS.blockArray());
+			getOrCreateBuilder(BlockTags.PLANKS).add(ArboricultureBlocks.PLANKS.blockArray());
+			getOrCreateBuilder(BlockTags.LOGS).add(ArboricultureBlocks.LOGS.blockArray());
+			getOrCreateBuilder(BlockTags.STAIRS).add(ArboricultureBlocks.STAIRS.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_STAIRS).add(ArboricultureBlocks.STAIRS.blockArray());
+			getOrCreateBuilder(BlockTags.FENCES).add(ArboricultureBlocks.FENCES.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_FENCES).add(ArboricultureBlocks.FENCES.blockArray());
+			getOrCreateBuilder(Tags.Blocks.FENCE_GATES).add(ArboricultureBlocks.FENCE_GATES.blockArray());
+			getOrCreateBuilder(Tags.Blocks.FENCE_GATES_WOODEN).add(ArboricultureBlocks.FENCE_GATES.blockArray());
+			getOrCreateBuilder(BlockTags.SLABS).add(ArboricultureBlocks.SLABS.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_SLABS).add(ArboricultureBlocks.SLABS.blockArray());
+			getOrCreateBuilder(BlockTags.DOORS).add(ArboricultureBlocks.DOORS.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_DOORS).add(ArboricultureBlocks.DOORS.blockArray());
 
-			func_240522_a_(BlockTags.PLANKS).func_240534_a_(ArboricultureBlocks.PLANKS_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.LOGS).func_240534_a_(ArboricultureBlocks.LOGS_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.STAIRS).func_240534_a_(ArboricultureBlocks.STAIRS_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.WOODEN_STAIRS).func_240534_a_(ArboricultureBlocks.STAIRS_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.FENCES).func_240534_a_(ArboricultureBlocks.FENCES_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.WOODEN_FENCES).func_240534_a_(ArboricultureBlocks.FENCES_FIREPROOF.blockArray());
-			func_240522_a_(Tags.Blocks.FENCE_GATES).func_240534_a_(ArboricultureBlocks.FENCE_GATES_FIREPROOF.blockArray());
-			func_240522_a_(Tags.Blocks.FENCE_GATES_WOODEN).func_240534_a_(ArboricultureBlocks.FENCE_GATES_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.SLABS).func_240534_a_(ArboricultureBlocks.SLABS_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.WOODEN_SLABS).func_240534_a_(ArboricultureBlocks.SLABS_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.PLANKS).add(ArboricultureBlocks.PLANKS_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.LOGS).add(ArboricultureBlocks.LOGS_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.STAIRS).add(ArboricultureBlocks.STAIRS_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_STAIRS).add(ArboricultureBlocks.STAIRS_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.FENCES).add(ArboricultureBlocks.FENCES_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_FENCES).add(ArboricultureBlocks.FENCES_FIREPROOF.blockArray());
+			getOrCreateBuilder(Tags.Blocks.FENCE_GATES).add(ArboricultureBlocks.FENCE_GATES_FIREPROOF.blockArray());
+			getOrCreateBuilder(Tags.Blocks.FENCE_GATES_WOODEN).add(ArboricultureBlocks.FENCE_GATES_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.SLABS).add(ArboricultureBlocks.SLABS_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_SLABS).add(ArboricultureBlocks.SLABS_FIREPROOF.blockArray());
 
-			func_240522_a_(BlockTags.PLANKS).func_240534_a_(ArboricultureBlocks.PLANKS_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.LOGS).func_240534_a_(ArboricultureBlocks.LOGS_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.STAIRS).func_240534_a_(ArboricultureBlocks.STAIRS_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.WOODEN_STAIRS).func_240534_a_(ArboricultureBlocks.STAIRS_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.FENCES).func_240534_a_(ArboricultureBlocks.FENCES_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.WOODEN_FENCES).func_240534_a_(ArboricultureBlocks.FENCES_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(Tags.Blocks.FENCE_GATES).func_240534_a_(ArboricultureBlocks.FENCE_GATES_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(Tags.Blocks.FENCE_GATES_WOODEN).func_240534_a_(ArboricultureBlocks.FENCE_GATES_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.SLABS).func_240534_a_(ArboricultureBlocks.SLABS_VANILLA_FIREPROOF.blockArray());
-			func_240522_a_(BlockTags.WOODEN_SLABS).func_240534_a_(ArboricultureBlocks.SLABS_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.PLANKS).add(ArboricultureBlocks.PLANKS_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.LOGS).add(ArboricultureBlocks.LOGS_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.STAIRS).add(ArboricultureBlocks.STAIRS_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_STAIRS).add(ArboricultureBlocks.STAIRS_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.FENCES).add(ArboricultureBlocks.FENCES_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_FENCES).add(ArboricultureBlocks.FENCES_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(Tags.Blocks.FENCE_GATES).add(ArboricultureBlocks.FENCE_GATES_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(Tags.Blocks.FENCE_GATES_WOODEN).add(ArboricultureBlocks.FENCE_GATES_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.SLABS).add(ArboricultureBlocks.SLABS_VANILLA_FIREPROOF.blockArray());
+			getOrCreateBuilder(BlockTags.WOODEN_SLABS).add(ArboricultureBlocks.SLABS_VANILLA_FIREPROOF.blockArray());
 
-			func_240522_a_(BlockTags.SAPLINGS).func_240534_a_(ArboricultureBlocks.SAPLING_GE.block());
-			func_240522_a_(BlockTags.LEAVES).func_240534_a_(ArboricultureBlocks.LEAVES.block()).func_240534_a_(ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.blockArray()).func_240534_a_(ArboricultureBlocks.LEAVES_DEFAULT.blockArray()).func_240534_a_(ArboricultureBlocks.LEAVES_DECORATIVE.blockArray());
+			getOrCreateBuilder(BlockTags.SAPLINGS).add(ArboricultureBlocks.SAPLING_GE.block());
+			getOrCreateBuilder(BlockTags.LEAVES).add(ArboricultureBlocks.LEAVES.block()).add(ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.blockArray()).add(ArboricultureBlocks.LEAVES_DEFAULT.blockArray()).add(ArboricultureBlocks.LEAVES_DECORATIVE.blockArray());
 
-			//func_240522_a_(Tags.Blocks.CHESTS).func_240534_a_(registry.treeChest);
-			//func_240522_a_(Tags.Blocks.CHESTS_WOODEN).func_240534_a_(registry.treeChest);
+			//getOrCreateBuilder(Tags.Blocks.CHESTS).add(registry.treeChest);
+			//getOrCreateBuilder(Tags.Blocks.CHESTS_WOODEN).add(registry.treeChest);
 		}
 
 		addToTag(Tags.Blocks.ORES, ForestryTags.Blocks.ORES_COPPER, ForestryTags.Blocks.ORES_TIN, ForestryTags.Blocks.ORES_APATITE);
-		func_240522_a_(ForestryTags.Blocks.ORES_COPPER).func_240534_a_(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
-		func_240522_a_(ForestryTags.Blocks.ORES_TIN).func_240534_a_(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
-		func_240522_a_(ForestryTags.Blocks.ORES_APATITE).func_240534_a_(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).block());
+		getOrCreateBuilder(ForestryTags.Blocks.ORES_COPPER).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
+		getOrCreateBuilder(ForestryTags.Blocks.ORES_TIN).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
+		getOrCreateBuilder(ForestryTags.Blocks.ORES_APATITE).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).block());
 
 		addToTag(Tags.Blocks.STORAGE_BLOCKS, ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Blocks.STORAGE_BLOCKS_TIN);
-		func_240522_a_(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE).func_240534_a_(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.APATITE).block());
-		func_240522_a_(ForestryTags.Blocks.STORAGE_BLOCKS_TIN).func_240534_a_(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).block());
-		func_240522_a_(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER).func_240534_a_(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).block());
-		func_240522_a_(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).func_240534_a_(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).block());
+		getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.APATITE).block());
+		getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_TIN).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).block());
+		getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).block());
+		getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).block());
 	}
 
 	@SafeVarargs
 	protected final void addToTag(ITag.INamedTag<Block> tag, ITag.INamedTag<Block>... providers) {
-		TagsProvider.Builder<Block> builder = func_240522_a_(tag);
+		TagsProvider.Builder<Block> builder = getOrCreateBuilder(tag);
 		for (ITag.INamedTag<Block> provider : providers) {
-			builder.func_240531_a_(provider);
+			builder.addTag(provider);
 		}
 	}
 

@@ -165,8 +165,8 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			return;
 		}
 		IClimateState climateState = housing.getTransformer().getCurrent();
-		tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).func_240699_a_(TextFormatting.GOLD));
-		tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).func_240699_a_(TextFormatting.BLUE));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).mergeStyle(TextFormatting.GOLD));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).mergeStyle(TextFormatting.BLUE));
 	}
 
 	@Override

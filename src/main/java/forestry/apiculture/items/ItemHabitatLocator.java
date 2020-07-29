@@ -78,22 +78,22 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 		Minecraft minecraft = Minecraft.getInstance();
 		if (world != null && minecraft.player != null) {
 			ClientPlayerEntity player = minecraft.player;
-			Biome currentBiome = player.world.getBiome(player.func_233580_cy_());
+			Biome currentBiome = player.world.getBiome(player.getPosition());
 
-			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.func_233580_cy_());
+			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
 			list.add(new TranslationTextComponent("for.gui.currentBiome")
-				.func_230529_a_(new StringTextComponent(": "))
-				.func_230529_a_(new TranslationTextComponent(currentBiome.getTranslationKey())));
+				.append(new StringTextComponent(": "))
+				.append(new TranslationTextComponent(currentBiome.getTranslationKey())));
 
 			list.add(new TranslationTextComponent("for.gui.temperature")
-				.func_230529_a_(new StringTextComponent(": "))
-				.func_230529_a_(AlleleManager.climateHelper.toDisplay(temperature)));
+				.append(new StringTextComponent(": "))
+				.append(AlleleManager.climateHelper.toDisplay(temperature)));
 
 			list.add(new TranslationTextComponent("for.gui.humidity")
-				.func_230529_a_(new StringTextComponent(": "))
-				.func_230529_a_(AlleleManager.climateHelper.toDisplay(humidity)));
+				.append(new StringTextComponent(": "))
+				.append(AlleleManager.climateHelper.toDisplay(humidity)));
 		}
 	}
 

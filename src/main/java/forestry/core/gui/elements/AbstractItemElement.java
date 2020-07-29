@@ -20,8 +20,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiUtil;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.ItemTooltipUtil;
 
 public abstract class AbstractItemElement extends GuiElement {

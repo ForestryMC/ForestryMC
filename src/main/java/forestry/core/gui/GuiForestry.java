@@ -62,7 +62,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	protected final WidgetManager widgetManager;
 	protected final LedgerManager ledgerManager;
 	protected final TextLayoutHelper textLayout;
-	protected final Window window;
+	protected final Window<?> window;
 
 	protected GuiForestry(String texture, C container, PlayerInventory inv, ITextComponent title) {
 		this(new ForestryResource(texture), container, inv, title);
@@ -254,7 +254,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Override
-	public void func_238746_a_(MatrixStack transform, Slot slot) {
+	public void moveItems(MatrixStack transform, Slot slot) {
 		if (slot instanceof ISlotTextured) {
 			ISlotTextured textured = (ISlotTextured) slot;
 			ItemStack stack = slot.getStack();
@@ -267,11 +267,11 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 				}
 			}
 		}
-		super.func_238746_a_(transform, slot);
+		super.moveItems(transform, slot);
 	}
 
 	@Override
-	protected void func_230451_b_(MatrixStack transform, int mouseX, int mouseY) {
+	protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {
 		ledgerManager.drawTooltips(transform, mouseY, mouseX);
 
 		if (this.playerInventory.getItemStack().isEmpty()) {
@@ -283,7 +283,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
 		drawBackground(transform);
 
 		widgetManager.updateWidgets(mouseX - guiLeft, mouseY - guiTop);
@@ -322,15 +322,6 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(texturePath);
-	}
-
-	//TODO - think this is the right field
-	//not renaming method for now so that when other modules are added it's obvious
-	//where the method is
-	//TODO - or it involves the first line, hard to tell which yet
-	public void setZLevel(int level) {
-		this.itemRenderer.zLevel = 9999999999f;    //TODO
-		this.setBlitOffset(level);
 	}
 
 	@Override

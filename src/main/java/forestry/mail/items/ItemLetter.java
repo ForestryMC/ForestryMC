@@ -104,7 +104,9 @@ public class ItemLetter extends ItemWithGui {
 
 		CompoundNBT compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
-			list.add(new StringTextComponent("<").func_230529_a_(new TranslationTextComponent("for.gui.blank").func_240702_b_(">")).func_240699_a_(TextFormatting.GRAY));
+			list.add(new StringTextComponent("<")
+				.append(new TranslationTextComponent("for.gui.blank").appendString(">"))
+				.mergeStyle(TextFormatting.GRAY));
 			return;
 		}
 

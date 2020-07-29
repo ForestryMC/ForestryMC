@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiForestry;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.sorting.gui.ISelectableProvider;
 

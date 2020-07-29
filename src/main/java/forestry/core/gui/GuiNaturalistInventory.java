@@ -71,8 +71,8 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int j, int i) {
-		super.func_230450_a_(transform, partialTicks, j, i);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int j, int i) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, j, i);
 		timer.onDraw();
 		String header = Translator.translateToLocal("for.gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
 		getFontRenderer().drawString(transform, header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, ColourProperties.INSTANCE.get("gui.title"));

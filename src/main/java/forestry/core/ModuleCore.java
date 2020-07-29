@@ -323,7 +323,7 @@ public class ModuleCore extends BlankForestryModule {
 	@SubscribeEvent
 	public void onRegisterLoot(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
 		//TODO: Remove if forge adds missing registry types.
-		OrganismFunction.type = Registry.register(Registry.field_239694_aZ_, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootFunctionType(new OrganismFunction.Serializer()));
+		OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootFunctionType(new OrganismFunction.Serializer()));
 	}
 
 	@Override

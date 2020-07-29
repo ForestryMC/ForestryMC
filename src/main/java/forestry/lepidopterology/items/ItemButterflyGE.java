@@ -150,7 +150,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		}
 
 		EntityUtil.spawnEntity(entityItem.world,
-			EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.world, butterfly, entityItem.func_233580_cy_()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
+			EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
 		if (!entityItem.getItem().isEmpty()) {
 			entityItem.getItem().shrink(1);
 		} else {

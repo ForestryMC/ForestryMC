@@ -5,16 +5,40 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
+import java.awt.Color;
+import java.util.Collection;
+
+import net.minecraftforge.common.BiomeDictionary;
+
 import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 
-public interface IAlleleButterflySpeciesBuilder extends IAlleleSpeciesBuilder {
+public interface IAlleleButterflySpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleButterflySpeciesBuilder> {
 
 	@Override
 	IAlleleButterflySpecies build();
 
 	IAlleleButterflySpeciesBuilder setRarity(float rarity);
 
+	/**
+	 * @param texturePath String texture path for this butterfly e.g. "forestry:butterfly/..."
+	 */
+	IAlleleButterflySpeciesBuilder setTexture(String texturePath);
+
+	/**
+	 * @param serumColour The color of this butterfly's serum.
+	 */
+	IAlleleButterflySpeciesBuilder setSerumColour(int serumColour);
+
+	/**
+	 * @param serumColour The color of this butterfly's serum.
+	 */
+	IAlleleButterflySpeciesBuilder setSerumColour(Color serumColour);
+
 	IAlleleButterflySpeciesBuilder setFlightDistance(float flightDistance);
 
 	IAlleleButterflySpeciesBuilder setNocturnal();
+
+	IAlleleButterflySpeciesBuilder addSpawnBiomes(Collection<BiomeDictionary.Type> biomeTags);
+
+	IAlleleButterflySpeciesBuilder addSpawnBiome(BiomeDictionary.Type biomeTag);
 }

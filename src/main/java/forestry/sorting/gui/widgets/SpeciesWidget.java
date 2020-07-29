@@ -23,13 +23,13 @@ import genetics.api.root.IRootDefinition;
 import genetics.utils.AlleleUtils;
 import genetics.utils.RootUtils;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;

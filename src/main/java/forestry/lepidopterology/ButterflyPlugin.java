@@ -90,12 +90,12 @@ public class ButterflyPlugin implements IGeneticPlugin {
 							return 0.9f;
 						}
 
-						for (ItemStack stack : butterflySpecies.getButterflyLoot().keySet()) {
+						for (ItemStack stack : butterflySpecies.getButterflyLoot().getPossibleStacks()) {
 							if (stack.isItemEqual(itemstack)) {
 								return 1.0f;
 							}
 						}
-						for (ItemStack stack : butterflySpecies.getCaterpillarLoot().keySet()) {
+						for (ItemStack stack : butterflySpecies.getCaterpillarLoot().getPossibleStacks()) {
 							if (stack.isItemEqual(itemstack)) {
 								return 1.0f;
 							}

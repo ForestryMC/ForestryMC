@@ -23,7 +23,7 @@ public interface IProductList {
 
 	default NonNullList<ItemStack> getPossibleStacks() {
 		NonNullList<ItemStack> stacks = NonNullList.create();
-		getPossibleProducts().forEach(product -> stacks.add(product.stack));
+		getPossibleProducts().forEach(product -> stacks.add(product.getStack()));
 		return stacks;
 	}
 

@@ -237,8 +237,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.func_230450_a_(transform, partialTicks, mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
 		if (searchField != null) {
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);

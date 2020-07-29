@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui.tooltips;
+package forestry.api.core.tooltips;
 
 import net.minecraft.util.text.StringTextComponent;
 

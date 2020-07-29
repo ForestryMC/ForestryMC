@@ -32,7 +32,7 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
 	}
 
 	@Override
-	protected void func_230451_b_(MatrixStack transform, int mouseX, int mouseY) {
+	protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {
 		String name = Translator.translateToLocal(tile.getUnlocalizedTitle());
 		this.minecraft.fontRenderer.drawString(transform, name, textLayout.getCenteredOffset(name), 6, ColourProperties.INSTANCE.get("gui.mail.text"));
 
@@ -42,12 +42,12 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
 		String send = Translator.translateToLocal("for.gui.mail.send");
 		this.minecraft.fontRenderer.drawString(transform, send, textLayout.getCenteredOffset(send, 70) + 51, 99, ColourProperties.INSTANCE.get("gui.mail.text"));
 
-		super.func_230451_b_(transform, mouseX, mouseY);
+		super.drawGuiContainerForegroundLayer(transform, mouseX, mouseY);
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
 		this.minecraft.fontRenderer.drawString(transform, container.getAddress().getName(), guiLeft + 19, guiTop + 22, ColourProperties.INSTANCE.get("gui.mail.text"));
 	}

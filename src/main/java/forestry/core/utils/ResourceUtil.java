@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,15 +50,15 @@ public class ResourceUtil {
 	private ResourceUtil() {
 	}
 
-	public static TranslationTextComponent tryTranslate(String optionalKey, String defaultKey) {
+	public static ITextComponent tryTranslate(String optionalKey, String defaultKey) {
 		return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
 	}
 
-	public static TranslationTextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
+	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
 		return tryTranslate(optionalKey, () -> new TranslationTextComponent(defaultKey));
 	}
 
-	public static TranslationTextComponent tryTranslate(String optionalKey, Supplier<TranslationTextComponent> defaultKey) {
+	public static ITextComponent tryTranslate(String optionalKey, Supplier<ITextComponent> defaultKey) {
 		return tryTranslate(() -> new TranslationTextComponent(optionalKey), defaultKey);
 	}
 
@@ -66,7 +67,7 @@ public class ResourceUtil {
 	 *
 	 * @return The optional component if it can be translated the other component otherwise.
 	 */
-	public static TranslationTextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<TranslationTextComponent> defaultKey) {
+	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<ITextComponent> defaultKey) {
 		TranslationTextComponent component = optionalKey.get();
 		if (canTranslate(component)) {
 			return component;
@@ -76,7 +77,7 @@ public class ResourceUtil {
 	}
 
 	public static boolean canTranslate(TranslationTextComponent component) {
-		String translatedText = component.getUnformattedComponentText();
+		String translatedText = component.getString();
 		return !translatedText.startsWith(component.getKey());
 	}
 

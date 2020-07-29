@@ -17,11 +17,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.lib.events.GuiElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.elements.lib.events.GuiEventHandler;
 import forestry.core.gui.elements.lib.events.GuiEventOrigin;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)

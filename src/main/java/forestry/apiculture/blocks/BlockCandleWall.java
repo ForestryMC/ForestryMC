@@ -29,7 +29,7 @@ public class BlockCandleWall extends BlockCandle {
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-		return WallTorchBlock.func_220289_j(state);
+		return WallTorchBlock.getShapeForState(state);
 	}
 
 	@Override

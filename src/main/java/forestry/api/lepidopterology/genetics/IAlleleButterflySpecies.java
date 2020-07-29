@@ -5,15 +5,15 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.BiomeDictionary;
 
 import forestry.api.core.ISpriteRegister;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.products.IDynamicProductList;
 
 public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISpriteRegister {
 
@@ -26,12 +26,12 @@ public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISprite
 	/**
 	 * @return Path of the texture to use for entity rendering.
 	 */
-	String getEntityTexture();
+	ResourceLocation getEntityTexture();
 
 	/**
-	 * @return Path of the texture to use for item model.
+	 * @return Path of the texture to the item model.
 	 */
-	String getItemTexture();
+	ResourceLocation getItemTexture();
 
 	/**
 	 * Allows butterflies to restrict random spawns beyond the restrictions set by getTemperature() and getHumidity().
@@ -63,10 +63,10 @@ public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISprite
 	/**
 	 * @return The loot that drops if you kill a butterfly.
 	 */
-	Map<ItemStack, Float> getButterflyLoot();
+	IDynamicProductList getButterflyLoot();
 
 	/**
 	 * @return The loot that drops if you destroy a leaf that contains a caterpillar.
 	 */
-	Map<ItemStack, Float> getCaterpillarLoot();
+	IDynamicProductList getCaterpillarLoot();
 }

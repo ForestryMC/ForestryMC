@@ -5,28 +5,62 @@
  ******************************************************************************/
 package forestry.api.genetics.alleles;
 
+import genetics.api.classification.IClassification;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
-public interface IAlleleSpeciesBuilder {
+public interface IAlleleSpeciesBuilder<B> {
+
+	B cast();
 
 	IAlleleForestrySpecies build();
 
-	IAlleleSpeciesBuilder setTemperature(EnumTemperature temperature);
+	B setTemperature(EnumTemperature temperature);
 
-	IAlleleSpeciesBuilder setHumidity(EnumHumidity humidity);
+	B setHumidity(EnumHumidity humidity);
 
-	IAlleleSpeciesBuilder setHasEffect();
+	B setHasEffect();
 
 	/**
 	 * Secret species are not shown in creative mode.
 	 */
-	IAlleleSpeciesBuilder setIsSecret();
+	B setIsSecret();
 
 	/**
 	 * Uncounted species do not count toward total species discovered.
 	 */
-	IAlleleSpeciesBuilder setIsNotCounted();
+	B setIsNotCounted();
+
+	/**
+	 * Whether this species is genetically dominant (false means it is recessive)
+	 */
+	B setDominant(boolean isDominant);
+
+	/**
+	 * Binomial name of the species sans genus. "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun names or null.
+	 */
+	B setBinomial(String binomial);
+
+	/**
+	 * Authority for the binomial name, e.g. "Sengir" on species of base Forestry.
+	 */
+	B setAuthority(String authority);
+
+	/**
+	 * Unlocalized description for this species
+	 */
+	B setDescriptionKey(String description);
+
+	/**
+	 * Unlocalized name for this species
+	 */
+	B setTranslationKey(String translationKey);
+
+	/**
+	 * Classification of this species
+	 */
+	B setBranch(IClassification branch);
 
 	/**
 	 * Manually the genetic complexity.
@@ -34,5 +68,5 @@ public interface IAlleleSpeciesBuilder {
 	 *
 	 * @see IAlleleForestrySpecies#getComplexity()
 	 */
-	void setComplexity(int complexity);
+	B setComplexity(int complexity);
 }

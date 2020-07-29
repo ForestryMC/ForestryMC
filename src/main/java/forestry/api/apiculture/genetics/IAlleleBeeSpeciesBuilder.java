@@ -14,10 +14,19 @@ import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 
-public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder {
+public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleBeeSpeciesBuilder> {
 
 	@Override
 	IAlleleBeeSpecies build();
+
+	IAlleleBeeSpeciesBuilder setColour(IBeeSpriteColourProvider colourProvider);
+
+	/**
+	 * @param primaryColor   The outline color of this species
+	 * @param secondaryColor The body color of this species
+	 * @return
+	 */
+	IAlleleBeeSpeciesBuilder setColour(int primaryColor, int secondaryColor);
 
 	/**
 	 * Add a product for this bee species.

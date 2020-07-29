@@ -10,30 +10,34 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 
 import genetics.api.alleles.AlleleCategorized;
 
+import forestry.api.core.ISetupListener;
+import forestry.api.genetics.products.IDynamicProductList;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.core.config.Constants;
+import forestry.core.genetics.ProductListWrapper;
 import forestry.lepidopterology.blocks.PropertyCocoon;
 
-public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon {
+public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon, ISetupListener {
 	public static final PropertyCocoon COCOON = new PropertyCocoon("cocoon");
 	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 2);
 
-	private final Map<ItemStack, Float> loot = new HashMap<>();
+	private ProductListWrapper loot = ProductListWrapper.create();
 	private final String name;
 
 	public AlleleButterflyCocoon(String name, boolean isDominant) {
 		super(Constants.MOD_ID, "cocoon", name, isDominant);
 		this.name = name;
+	}
+
+	@Override
+	public void onFinishSetup() {
+		loot = loot.bake();
 	}
 
 	private static String getAgeKey(int age) {
@@ -59,17 +63,23 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
 
 	@Override
 	public void clearLoot() {
-		this.loot.clear();
+		loot = ProductListWrapper.create();
+	}
+
+	@Override
+	public void bakeLoot() {
+		loot = loot.bake();
 	}
 
 	@Override
 	public void addLoot(ItemStack loot, float chance) {
-		this.loot.put(loot, chance);
+		this.loot.addProduct(loot, chance);
 	}
 
+
 	@Override
-	public Map<ItemStack, Float> getCocoonLoot() {
-		return Collections.unmodifiableMap(loot);
+	public IDynamicProductList getCocoonLoot() {
+		return loot;
 	}
 
 	@Override

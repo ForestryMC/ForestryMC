@@ -35,8 +35,6 @@ import forestry.core.items.ItemForestry;
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(Item.Properties properties) {
 		super(properties.setNoRepair());
-		//TODO - properties
-		//		setHasSubtypes(true);
 	}
 
 	protected abstract IAlleleForestrySpecies getSpecies(ItemStack itemStack);
@@ -68,10 +66,10 @@ public abstract class ItemGE extends ItemForestry {
 			if (Screen.hasShiftDown()) {
 				individual.addTooltip(list);
 			} else {
-				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").func_240699_a_(TextFormatting.ITALIC));
+				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
 			}
 		} else {
-			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >"));
+			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").mergeStyle(TextFormatting.GRAY));
 		}
 	}
 

@@ -22,7 +22,7 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 
 	public SplitTextElement(int xPos, int yPos, int width, IFormattableTextComponent component, Style style) {
 		super(xPos, yPos, width, 0);
-		setText(component.func_230530_a_(style));
+		setText(component.mergeStyle(style));
 		setHeight(lines.size() * FONT_RENDERER.FONT_HEIGHT);
 	}
 

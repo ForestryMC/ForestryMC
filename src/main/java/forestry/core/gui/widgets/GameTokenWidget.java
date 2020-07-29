@@ -24,8 +24,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiUtil;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.EscritoireGame;

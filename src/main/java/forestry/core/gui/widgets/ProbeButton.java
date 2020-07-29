@@ -17,8 +17,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiEscritoire;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;

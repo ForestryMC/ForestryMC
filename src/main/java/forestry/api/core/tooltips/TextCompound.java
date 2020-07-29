@@ -1,4 +1,4 @@
-package forestry.core.gui.tooltips;
+package forestry.api.core.tooltips;
 
 import javax.annotation.Nullable;
 
@@ -32,7 +32,7 @@ public class TextCompound implements ITextInstance<TextCompound, TextCompound, T
 			root = (IFormattableTextComponent) line;
 			return this;
 		}
-		root.func_230529_a_(line);
+		root.append(line);
 		return this;
 	}
 

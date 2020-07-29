@@ -165,8 +165,8 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		}
 		if (component == null) {
 			component = new StringTextComponent("(")
-				.func_230529_a_(toleranceAllele.getDisplayName())
-				.func_240702_b_(")");
+				.append(toleranceAllele.getDisplayName())
+				.appendString(")");
 		}
 		layout.label(component).setStyle(textStyle);
 		return layout;

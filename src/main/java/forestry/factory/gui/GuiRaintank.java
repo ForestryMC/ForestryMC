@@ -31,8 +31,8 @@ public class GuiRaintank extends GuiForestryTitled<ContainerRaintank> {
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
 		if (tile.isFilling()) {
 			int progress = tile.getFillProgressScaled(24);

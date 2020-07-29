@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import forestry.api.core.tooltips.ToolTip;
 import forestry.api.farming.FarmDirection;
-import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;

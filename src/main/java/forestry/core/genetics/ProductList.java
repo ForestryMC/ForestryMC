@@ -46,7 +46,7 @@ public final class ProductList implements IDynamicProductList {
 	public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
 		constantProducts.forEach(product -> {
 			if (rand.nextFloat() < modifier.apply(product)) {
-				stacks.add(product.stack.copy());
+				stacks.add(product.copyStack());
 			}
 		});
 		dynamics.forEach(child -> child.addProducts(stacks, modifier, rand));
@@ -56,7 +56,7 @@ public final class ProductList implements IDynamicProductList {
 	public void addProducts(IBlockReader reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
 		constantProducts.forEach(product -> {
 			if (rand.nextFloat() < modifier.apply(product)) {
-				stacks.add(product.stack.copy());
+				stacks.add(product.copyStack());
 			}
 		});
 		dynamics.forEach(child -> child.addProducts(reader, pos, stacks, modifier, rand));

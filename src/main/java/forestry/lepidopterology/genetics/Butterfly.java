@@ -13,7 +13,6 @@ package forestry.lepidopterology.genetics;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -42,6 +41,8 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.products.IProductList;
+import forestry.api.genetics.products.Product;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.IButterflyNursery;
@@ -308,10 +309,11 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		CreatureEntity creature = entity.getEntity();
 		float metabolism = (float) getGenome().getActiveValue(ButterflyChromosomes.METABOLISM) / 10;
+		IProductList products = getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getButterflyLoot();
 
-		for (Map.Entry<ItemStack, Float> entry : getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getButterflyLoot().entrySet()) {
-			if (creature.world.rand.nextFloat() < entry.getValue() * metabolism) {
-				drop.add(entry.getKey().copy());
+		for (Product product : products.getPossibleProducts()) {
+			if (creature.world.rand.nextFloat() < product.getChance() * metabolism) {
+				drop.add(product.copyStack());
 			}
 		}
 
@@ -322,10 +324,10 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	public NonNullList<ItemStack> getCaterpillarDrop(IButterflyNursery nursery, boolean playerKill, int lootLevel) {
 		NonNullList<ItemStack> drop = NonNullList.create();
 		float metabolism = (float) getGenome().getActiveValue(ButterflyChromosomes.METABOLISM) / 10;
-
-		for (Map.Entry<ItemStack, Float> entry : getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getCaterpillarLoot().entrySet()) {
-			if (rand.nextFloat() < entry.getValue() * metabolism) {
-				drop.add(entry.getKey().copy());
+		IProductList products = getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getCaterpillarLoot();
+		for (Product product : products.getPossibleProducts()) {
+			if (rand.nextFloat() < product.getChance() * metabolism) {
+				drop.add(product.copyStack());
 			}
 		}
 
@@ -336,10 +338,11 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	public NonNullList<ItemStack> getCocoonDrop(IButterflyCocoon cocoon) {
 		NonNullList<ItemStack> drop = NonNullList.create();
 		float metabolism = (float) getGenome().getActiveValue(ButterflyChromosomes.METABOLISM) / 10;
+		IProductList products = getGenome().getActiveAllele(ButterflyChromosomes.COCOON).getCocoonLoot();
 
-		for (Map.Entry<ItemStack, Float> entry : getGenome().getActiveAllele(ButterflyChromosomes.COCOON).getCocoonLoot().entrySet()) {
-			if (rand.nextFloat() < entry.getValue() * metabolism) {
-				drop.add(entry.getKey().copy());
+		for (Product product : products.getPossibleProducts()) {
+			if (rand.nextFloat() < product.getChance() * metabolism) {
+				drop.add(product.copyStack());
 			}
 		}
 

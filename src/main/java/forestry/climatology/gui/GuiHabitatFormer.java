@@ -80,7 +80,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 			.setParameters(this, 1, 16, 1);
 		rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
 			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range"));
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).func_240701_a_(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).mergeStyle(TextFormatting.GRAY));
 		});
 		window.add(new CircleButton(30, 37));
 
@@ -118,8 +118,8 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	protected void func_230450_a_(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.func_230450_a_(transform, partialTicks, mouseY, mouseX);
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), xSize / 2, 23);
 		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), xSize / 2, 47);
 	}

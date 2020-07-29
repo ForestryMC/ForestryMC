@@ -131,7 +131,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				if (!encoded.getSpecialConditions().isEmpty()) {
 					for (ITextComponent line : encoded.getSpecialConditions()) {
-						tooltips.add(((IFormattableTextComponent) line).func_240699_a_(TextFormatting.GOLD));
+						tooltips.add(((IFormattableTextComponent) line).mergeStyle(TextFormatting.GOLD));
 					}
 				}
 			} else if (this == SPECIES) {
@@ -184,9 +184,9 @@ public class ItemResearchNote extends ItemForestry {
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.DUMMY_UUID);
 
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
-					((IFormattableTextComponent) speciesFirst.getDisplayName()).func_240699_a_(TextFormatting.GRAY),
-					((IFormattableTextComponent) speciesSecond.getDisplayName()).func_240699_a_(TextFormatting.GRAY),
-					((IFormattableTextComponent) speciesResult.getDisplayName()).func_240701_a_(TextFormatting.GREEN)), Util.DUMMY_UUID);
+					((IFormattableTextComponent) speciesFirst.getDisplayName()).mergeStyle(TextFormatting.GRAY),
+					((IFormattableTextComponent) speciesSecond.getDisplayName()).mergeStyle(TextFormatting.GRAY),
+					((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)), Util.DUMMY_UUID);
 
 				return true;
 			}
@@ -273,7 +273,7 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<ITextComponent> list) {
 			List<ITextComponent> tooltips = type.getTooltip(inner);
 			if (tooltips.isEmpty()) {
-				list.add(new TranslationTextComponent("for.researchNote.error.0").func_240701_a_(TextFormatting.RED, TextFormatting.ITALIC));
+				list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(TextFormatting.RED, TextFormatting.ITALIC));
 				list.add(new TranslationTextComponent("for.researchNote.error.1"));
 				return;
 			}

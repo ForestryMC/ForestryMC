@@ -43,7 +43,6 @@ import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGermlingModelProvider;
-import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -1013,9 +1012,15 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 		ILeafSpriteProvider leafIconProvider = TreeManager.treeFactory.getLeafIconProvider(leafType, primary, secondary);
 		IGermlingModelProvider germlingIconProvider = ModelProviderFactory.create(woodType, uid, leafIconProvider);
 
-		ILeafProvider leafProvider = new LeafProvider();
-
-		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, Constants.MOD_ID, leafIconProvider, germlingIconProvider, this, leafProvider);
+		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(Constants.MOD_ID, uid, speciesName)
+			.setDescriptionKey(unlocalizedDescription)
+			.setTranslationKey(unlocalizedName)
+			.setDominant(dominant)
+			.setBranch(branch.getBranch())
+			.setBinomial(binomial)
+			.setLeafSprite(leafIconProvider)
+			.setModel(germlingIconProvider)
+			.setGenerator(this);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();
 		this.woodType = woodType;
@@ -1143,16 +1148,5 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	@Override
 	public String getString() {
 		return name().toLowerCase(Locale.ENGLISH);
-	}
-
-	public int getMetadata() {
-		return ordinal();
-	}
-
-	public static TreeDefinition byMetadata(int meta) {
-		if (meta < 0 || meta >= VALUES.length) {
-			meta = 0;
-		}
-		return VALUES[meta];
 	}
 }

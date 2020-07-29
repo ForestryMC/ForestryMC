@@ -16,10 +16,10 @@ import net.minecraft.util.text.Style;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import forestry.api.core.tooltips.ITextInstance;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.ILabelElement;
 import forestry.core.gui.elements.lib.ITextElement;
-import forestry.core.gui.tooltips.ITextInstance;
 
 public class LabelElement extends GuiElement implements ILabelElement {
 	/* Constants */
@@ -77,7 +77,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 	@Override
 	public ILabelElement setStyle(Style style) {
 		if (component instanceof IFormattableTextComponent) {
-			((IFormattableTextComponent) component).func_240703_c_(style);
+			((IFormattableTextComponent) component).setStyle(style);
 		}
 		return this;
 	}
@@ -141,7 +141,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 
 		@Override
 		public Builder add(ITextComponent line) {
-			root.func_230529_a_(line);
+			root.append(line);
 			return this;
 		}
 

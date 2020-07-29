@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.tooltips.ToolTip;
+import forestry.api.core.tooltips.ToolTip;
 
 public class ItemTooltipUtil {
 	@OnlyIn(Dist.CLIENT)
@@ -26,12 +26,12 @@ public class ItemTooltipUtil {
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
 			TranslationTextComponent tooltipInfo = new TranslationTextComponent(tooltipKey);
-			tooltip.add(tooltipInfo);
+			tooltip.add(tooltipInfo.mergeStyle(TextFormatting.GRAY));
 			/*Minecraft minecraft = Minecraft.getInstance();
 			List<ITextProperties> tooltipInfoWrapped = minecraft.fontRenderer.func_238425_b_(tooltipInfo, 150);
 			tooltipInfoWrapped.forEach(s -> {
 				if(s instanceof IFormattableTextComponent) {
-					s = ((IFormattableTextComponent) s).func_240701_a_(TextFormatting.GRAY);
+					s = ((IFormattableTextComponent) s).mergeStyle(TextFormatting.GRAY);
 				}
 				tooltip.add((ITextComponent) s);
 				CharacterManager
@@ -41,7 +41,7 @@ public class ItemTooltipUtil {
 
 	@OnlyIn(Dist.CLIENT)
 	public static void addShiftInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").func_240701_a_(TextFormatting.ITALIC, TextFormatting.GRAY));
+		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY));
 	}
 
 	@Nullable
@@ -63,9 +63,9 @@ public class ItemTooltipUtil {
 			//TODO - can tis be simplified (and is it correct?)
 			ITextComponent component = tooltip.get(i);
 			if (i == 0) {
-				tooltip.set(i, ((IFormattableTextComponent) component).func_240699_a_(stack.getRarity().color));
+				tooltip.set(i, ((IFormattableTextComponent) component).mergeStyle(stack.getRarity().color));
 			} else {
-				tooltip.set(i, ((IFormattableTextComponent) component).func_240699_a_(TextFormatting.GRAY));
+				tooltip.set(i, ((IFormattableTextComponent) component).mergeStyle(TextFormatting.GRAY));
 			}
 		}
 		ToolTip toolTip = new ToolTip();

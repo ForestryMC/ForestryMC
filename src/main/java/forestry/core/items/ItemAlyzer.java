@@ -44,7 +44,7 @@ public class ItemAlyzer extends ItemWithGui {
 		if (compound != null) {
 			charges = compound.getInt("Charges");
 		}
-		tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).func_240699_a_(TextFormatting.GOLD));
+		tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).mergeStyle(TextFormatting.GOLD));
 	}
 
 	@Override

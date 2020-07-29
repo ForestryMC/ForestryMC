@@ -374,7 +374,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			dataManager.set(DATAWATCHER_ID_SIZE, (int) (size * 100));
 			dataManager.set(DATAWATCHER_ID_SPECIES, species.getRegistryName().toString());
 		} else {
-			textureResource = new ResourceLocation(species.getEntityTexture());
+			textureResource = species.getEntityTexture();
 		}
 	}
 
@@ -498,7 +498,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 					IAllele allele = optionalAllele.get();
 					if (allele instanceof IAlleleButterflySpecies) {
 						species = (IAlleleButterflySpecies) allele;
-						textureResource = new ResourceLocation(species.getEntityTexture());
+						textureResource = species.getEntityTexture();
 						size = dataManager.get(DATAWATCHER_ID_SIZE) / 100f;
 					}
 				}
