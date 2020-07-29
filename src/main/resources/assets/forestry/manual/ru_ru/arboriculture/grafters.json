@@ -1,5 +1,5 @@
 {
-	"title": "Grafters",
+	"title": "Садовый нож",
 	"icon": {
 		"item": "forestry:grafter"
 	},
@@ -12,24 +12,25 @@
 				]
 			},
 			{
-				"text": "Are you sick and tired of breaking leaves and ending up with empty hands? Are your treebreeding efforts hampered by a distinct lack of saplings? Don't despair! Forestry Inc. is proud to introduce the GRAFTER!"
+				"text": "Вам надоело ломать листву голыми руками и оставаться с пустыми руками? Не отчаивайтесь! Forestry с гордостью представляет САДОВЫЙ НОЖ!"
 			}
 		],
 		[
 			{
-				"text": "Our patented grafter will significantly increase your chance at a sapling drop when used on leaves! No more frustration when you get that first pollinated leaf after hours of waiting, only to have it drop no saplings at all! Just use the grafter and you are almost guaranteed to be able to extract a sapling from it. This sturdy device will save you hours of work."
+				"text": "Наш запатентованный садовый нож значительно увеличит Ваши шансы на выпадение саженца при использовании его на листьях! Больше не будет разочарований, когда Вы получаете первый опылённый саженец после нескольких часов ожидания, только чтобы не потерять все саженцы! Просто используйте садовый нож и Вы почти гарантированно получите саженец. Это надежное устройство сэкономит вам часы работы."
 			}
 		],
 		[
 			{
-				"text": "Proven Grafter",
+				"text": "Проверенный садовый нож",
 				"underlined": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "The Proven Grafter is significantly stronger than the Bronze Grafter and can only be obtained by trading with villagers."
+				"text": "Проверенный садовый нож значительно прочнее чем бронзовый садовый нож и может быть получен только за счёт торговли с жителями.",
+				"paragraph": true
 			}
 		]
 	]

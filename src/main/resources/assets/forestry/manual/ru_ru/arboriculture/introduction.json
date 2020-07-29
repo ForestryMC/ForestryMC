@@ -1,18 +1,23 @@
 {
-	"title": "Introduction",
+	"title": "Введение",
 	"icon": {
 		"item": "book"
 	},
 	"content": [
 		[
 			{
-				"text": "Generations of foresters have wondered at the noticeable lack of diversity in Minecraftia's tree species. Common theory among scientists seems to be, that a series of parasites wiped out all but the most hardy of trees ages ago. However, due to the demands of builders everywhere, foresters have taken the breeding successes of beekeepers as cause to dabble into treebreeding."
+				"text": "Поколения лесников удивлялись заметному отсутствию разнообразия разновидностей деревьев майнкрафта. Общепринятая теория среди ученых гласит, что серия паразитов уничтожила все деревья, оставив только самые выносливые, много веков назад."
 			}
 		],
 		[
 			{
-				"text": "Early endavours have proven fruitful and this almanac will attempt to lay out the known basics for the beginning forester."
+				"text": "Тем не менее, из-за требований строителей, лесники вдохновились успехом пчеловодов в размножении и начали увлекаться селекцией деревьев."
+			},
+			{
+				"text": "Ранние попыткие оказались плодотворными и этот альманах попытается поведать основы для начищающего лесника.",
+				"paragraph": true
 			}
 		]
+
 	]
 }
