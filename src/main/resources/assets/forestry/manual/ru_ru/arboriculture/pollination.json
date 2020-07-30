@@ -1,5 +1,5 @@
 {
-	"title": "Pollination",
+	"title": "Опыление",
 	"icon":{
 		"item": "forestry:pollen",
 		"nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeEbony\",UID0:\"forestry..treeEbony\",Slot:0b}]}}"
@@ -7,21 +7,25 @@
 	"content": [
 		[
 			{
-				"text": "There are many misconceptions among laymen as to how tree breeding works. The common adage of “the birds and the bees” has many people confused, as it is partly wrong. You can't breed trees with birds! However, you may be happy to hear that almost any bee is able to cross-pollinate trees of different species. Though experienced forester will usually recommend some of the more high-end bee"
+				"text": "Среди мирян много заблуждений относительно того, как работает селекция деревьев. Общая пословица «птицы и пчелы» сбивает с толку многих людей, поскольку это отчасти неправильно. Вы не можете разводить деревья с птицами! Тем не менее, Вы можете быть рады услышать, что почти любая пчела способна прекрасно опылать деревья разных видов. Хотя опытный лесничий, "
 			}
 		],
 		[
 			{
-				"text": "breeds like rural or industrious for dedicated tree breeding - or have bred their own specialised bees for that purpose - the beginner can rest assured that even the most mundane of bees will do an adequate job at pollinating nearby trees."
+				"text": "как правило, порекомендует некоторые из более высококлассных пчел, такие породы, как сельские или трудолюбивые, для селекции деревьев или разведения собственных специализированных пчёл для этой цели - новичок можеть быть уверен, что даже самые простые пчёлы сделаю адекватную работу по опыление близлежащих деревьев."
 			},
 			{
-				"text": "The underlying principle is rather simple: Set down apiaries near trees of different species and keep them stocked with working bee queens.",
+				"text": "Основной принцип довольно прост: установите пасеки",
 				"paragraph": true
 			}
 		],
 		[
 			{
-				"text": "After a while - depending on the quality of the bee and the density of the surrounding forest - you will start to see some leaves change colour. These leaves have been pollinated by another tree with a different genetic makeup. Just break them and hope for a new sapling to drop."
+				"text": "рядом с деревьями разных видов и держите в них рабочих пчел."
+			},
+			{
+				"text": "Через некоторое время - в зависимости от качества пчелы и плотности окружающего леса - вы увидите, как некоторые листья меняют цвет. Эти листья были опылены другим деревом с другим генетическим кодом. Просто сломайте их и верьте в удачу, что Вам достанется новый саженец.",
+				"paragraph": true
 			}
 		]
 	]
