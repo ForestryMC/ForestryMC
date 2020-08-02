@@ -22,29 +22,29 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.arboriculture.ITreeGenData;
 
 public class TreeBlockTypeLeaf implements ITreeBlockType {
-	private final ITreeGenData tree;
-	@Nullable
-	private final GameProfile owner;
-	@Nullable
-	private final Random rand;
+    private final ITreeGenData tree;
+    @Nullable
+    private final GameProfile owner;
+    @Nullable
+    private final Random rand;
 
-	public TreeBlockTypeLeaf(ITreeGenData tree, @Nullable GameProfile owner) {
-		this(tree, owner, null);
-	}
+    public TreeBlockTypeLeaf(ITreeGenData tree, @Nullable GameProfile owner) {
+        this(tree, owner, null);
+    }
 
-	public TreeBlockTypeLeaf(ITreeGenData tree, @Nullable GameProfile owner, @Nullable Random rand) {
-		this.tree = tree;
-		this.owner = owner;
-		this.rand = rand;
-	}
+    public TreeBlockTypeLeaf(ITreeGenData tree, @Nullable GameProfile owner, @Nullable Random rand) {
+        this.tree = tree;
+        this.owner = owner;
+        this.rand = rand;
+    }
 
-	@Override
-	public void setDirection(Direction facing) {
+    @Override
+    public void setDirection(Direction facing) {
 
-	}
+    }
 
-	@Override
-	public boolean setBlock(IWorld world, BlockPos pos) {
-		return tree.setLeaves(world, owner, pos, rand == null ? world.getRandom() : rand);
-	}
+    @Override
+    public boolean setBlock(IWorld world, BlockPos pos) {
+        return tree.setLeaves(world, owner, pos, rand == null ? world.getRandom() : rand);
+    }
 }

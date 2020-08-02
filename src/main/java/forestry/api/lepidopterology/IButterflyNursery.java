@@ -16,16 +16,16 @@ import forestry.api.genetics.IHousing;
 import forestry.api.lepidopterology.genetics.IButterfly;
 
 public interface IButterflyNursery extends IHousing, IClimateProvider {
-	@Nullable
-	IButterfly getCaterpillar();
+    @Nullable
+    IButterfly getCaterpillar();
 
-	@Nullable
-	IIndividual getNanny();
+    @Nullable
+    IIndividual getNanny();
 
-	void setCaterpillar(@Nullable IButterfly caterpillar);
+    void setCaterpillar(@Nullable IButterfly caterpillar);
 
-	boolean canNurse(IButterfly caterpillar);
+    boolean canNurse(IButterfly caterpillar);
 
-	World getWorldObj();
+    World getWorldObj();
 
 }

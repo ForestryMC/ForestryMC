@@ -18,8 +18,8 @@ import forestry.core.render.IForestryRenderer;
 import forestry.core.tiles.TileForestry;
 
 public interface IMachinePropertiesTesr<T extends TileForestry> extends IMachineProperties<T> {
-	ResourceLocation getParticleTexture();
+    ResourceLocation getParticleTexture();
 
-	@Nullable
-	IForestryRenderer<? super T> getRenderer();
+    @Nullable
+    IForestryRenderer<? super T> getRenderer();
 }

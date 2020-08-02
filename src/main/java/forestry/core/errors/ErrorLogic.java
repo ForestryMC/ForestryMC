@@ -22,60 +22,60 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 
 public class ErrorLogic implements IErrorLogic {
-	private final Set<IErrorState> errorStates = new HashSet<>();
+    private final Set<IErrorState> errorStates = new HashSet<>();
 
-	@Override
-	public final boolean setCondition(boolean condition, IErrorState errorState) {
-		if (errorState == null) {
-			return false;
-		}
-		if (condition) {
-			errorStates.add(errorState);
-		} else {
-			errorStates.remove(errorState);
-		}
-		return condition;
-	}
+    @Override
+    public final boolean setCondition(boolean condition, IErrorState errorState) {
+        if (errorState == null) {
+            return false;
+        }
+        if (condition) {
+            errorStates.add(errorState);
+        } else {
+            errorStates.remove(errorState);
+        }
+        return condition;
+    }
 
-	@Override
-	public final boolean contains(IErrorState state) {
-		return errorStates.contains(state);
-	}
+    @Override
+    public final boolean contains(IErrorState state) {
+        return errorStates.contains(state);
+    }
 
-	@Override
-	public final boolean hasErrors() {
-		return !errorStates.isEmpty();
-	}
+    @Override
+    public final boolean hasErrors() {
+        return !errorStates.isEmpty();
+    }
 
-	@Override
-	public final ImmutableSet<IErrorState> getErrorStates() {
-		return ImmutableSet.copyOf(errorStates);
-	}
+    @Override
+    public final ImmutableSet<IErrorState> getErrorStates() {
+        return ImmutableSet.copyOf(errorStates);
+    }
 
-	@Override
-	public void clearErrors() {
-		errorStates.clear();
-	}
+    @Override
+    public void clearErrors() {
+        errorStates.clear();
+    }
 
-	@Override
-	public void writeData(PacketBuffer data) {
-		data.writeShort(errorStates.size());
-		for (IErrorState errorState : errorStates) {
-			data.writeShort(errorState.getID());
-		}
-	}
+    @Override
+    public void writeData(PacketBuffer data) {
+        data.writeShort(errorStates.size());
+        for (IErrorState errorState : errorStates) {
+            data.writeShort(errorState.getID());
+        }
+    }
 
-	@Override
-	public void readData(PacketBuffer data) {
-		clearErrors();
+    @Override
+    public void readData(PacketBuffer data) {
+        clearErrors();
 
-		short errorStateCount = data.readShort();
-		for (int i = 0; i < errorStateCount; i++) {
-			short errorStateId = data.readShort();
-			IErrorState errorState = ForestryAPI.errorStateRegistry.getErrorState(errorStateId);
-			if (errorState != null) {
-				errorStates.add(errorState);
-			}
-		}
-	}
+        short errorStateCount = data.readShort();
+        for (int i = 0; i < errorStateCount; i++) {
+            short errorStateId = data.readShort();
+            IErrorState errorState = ForestryAPI.errorStateRegistry.getErrorState(errorStateId);
+            if (errorState != null) {
+                errorStates.add(errorState);
+            }
+        }
+    }
 }

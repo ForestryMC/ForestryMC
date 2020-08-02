@@ -16,7 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraftforge.common.ToolType;
 
 public class BlockCore extends BlockBase<BlockTypeCoreTesr> {
-	public BlockCore(BlockTypeCoreTesr blockType) {
-		super(blockType, Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0));
-	}
+    public BlockCore(BlockTypeCoreTesr blockType) {
+        super(blockType, Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0));
+    }
 }

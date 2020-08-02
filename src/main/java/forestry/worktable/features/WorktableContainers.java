@@ -9,8 +9,8 @@ import forestry.worktable.gui.ContainerWorktable;
 
 @FeatureProvider
 public class WorktableContainers {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleWorktable.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleWorktable.class);
 
-	public static final FeatureContainerType<ContainerWorktable> WORKTABLE = REGISTRY.container(ContainerWorktable::fromNetwork, "worktable");
+    public static final FeatureContainerType<ContainerWorktable> WORKTABLE = REGISTRY.container(ContainerWorktable::fromNetwork, "worktable");
 
 }

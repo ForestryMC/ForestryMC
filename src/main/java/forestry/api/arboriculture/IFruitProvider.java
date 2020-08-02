@@ -33,127 +33,127 @@ import forestry.api.genetics.products.IProductList;
  * Provides all information that is needed to spawn a fruit leaves / pod block in the world.
  */
 public interface IFruitProvider extends ISetupListener {
-	/**
-	 * @return The fruit family of this fruit.
-	 */
-	IFruitFamily getFamily();
+    /**
+     * @return The fruit family of this fruit.
+     */
+    IFruitFamily getFamily();
 
-	/**
-	 * Returns the color of the fruit spite based on the ripening time of the fruit.
-	 *
-	 * @param genome       The genome of the tree of the pod / leaves block.
-	 * @param ripeningTime The ripening time of the leaves / pod block. From 0 to {@link #getRipeningPeriod()}.
-	 */
-	int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
+    /**
+     * Returns the color of the fruit spite based on the ripening time of the fruit.
+     *
+     * @param genome       The genome of the tree of the pod / leaves block.
+     * @param ripeningTime The ripening time of the leaves / pod block. From 0 to {@link #getRipeningPeriod()}.
+     */
+    int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
 
-	/**
-	 * return the color to use for decorative leaves. Usually the ripe color.
-	 */
-	int getDecorativeColor();
+    /**
+     * return the color to use for decorative leaves. Usually the ripe color.
+     */
+    int getDecorativeColor();
 
-	/**
-	 * Determines if fruit block of this provider is considered a leaf block.
-	 *
-	 * @param genome The genome of the tree of the pod / leaves block.
-	 * @param world  The world in that the pod / leaves block is located.
-	 * @param pos    The position of the pod / leaves block.
-	 * @return True if this provider provides a fruit leaf for the given genome at the given position.
-	 */
-	boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos);
+    /**
+     * Determines if fruit block of this provider is considered a leaf block.
+     *
+     * @param genome The genome of the tree of the pod / leaves block.
+     * @param world  The world in that the pod / leaves block is located.
+     * @param pos    The position of the pod / leaves block.
+     * @return True if this provider provides a fruit leaf for the given genome at the given position.
+     */
+    boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos);
 
-	/**
-	 * The chance that this leaves contains fruits or the chance that a pod block spawns.
-	 *
-	 * @param genome The genome of the tree of the pod / leaves block.
-	 * @param world
-	 * @return The chance that this leaves contains fruits or the chance that a pod block spawns.
-	 */
-	default float getFruitChance(IGenome genome, IWorld world, BlockPos pos) {
-		ITreeRoot treeRoot = TreeManager.treeRoot;
-		if (treeRoot == null) {
-			return 0.0F;
-		}
-		float yieldModifier = treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1.0F);
-		return genome.getActiveValue(TreeChromosomes.YIELD) * yieldModifier * 2.5F;
-	}
+    /**
+     * The chance that this leaves contains fruits or the chance that a pod block spawns.
+     *
+     * @param genome The genome of the tree of the pod / leaves block.
+     * @param world
+     * @return The chance that this leaves contains fruits or the chance that a pod block spawns.
+     */
+    default float getFruitChance(IGenome genome, IWorld world, BlockPos pos) {
+        ITreeRoot treeRoot = TreeManager.treeRoot;
+        if (treeRoot == null) {
+            return 0.0F;
+        }
+        float yieldModifier = treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1.0F);
+        return genome.getActiveValue(TreeChromosomes.YIELD) * yieldModifier * 2.5F;
+    }
 
-	/**
-	 * @return How many successful ripening block ticks a fruit needs to be ripe.
-	 */
-	int getRipeningPeriod();
+    /**
+     * @return How many successful ripening block ticks a fruit needs to be ripe.
+     */
+    int getRipeningPeriod();
 
-	/**
-	 * A unmodifiable list that contains all products and their associated drop chances.
-	 *
-	 * @return A unmodifiable list that contains all products and their associated drop chances.
-	 */
-	IProductList getProducts();
+    /**
+     * A unmodifiable list that contains all products and their associated drop chances.
+     *
+     * @return A unmodifiable list that contains all products and their associated drop chances.
+     */
+    IProductList getProducts();
 
-	/**
-	 * A unmodifiable list that contains all specialties and their associated drop chances.
-	 *
-	 * @return A unmodifiable list that contains all products and their associated drop chances.
-	 */
-	IProductList getSpecialty();
+    /**
+     * A unmodifiable list that contains all specialties and their associated drop chances.
+     *
+     * @return A unmodifiable list that contains all products and their associated drop chances.
+     */
+    IProductList getSpecialty();
 
-	/**
-	 * Returns all drops of this block if you harvest it.
-	 *
-	 * @param genome       The genome of the tree of the leaves / pod.
-	 * @param ripeningTime The repining time of the block. From 0 to {@link #getRipeningPeriod()}.
-	 */
-	NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime);
+    /**
+     * Returns all drops of this block if you harvest it.
+     *
+     * @param genome       The genome of the tree of the leaves / pod.
+     * @param ripeningTime The repining time of the block. From 0 to {@link #getRipeningPeriod()}.
+     */
+    NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime);
 
-	/**
-	 * @return Short, human-readable identifier used in the treealyzer.
-	 */
-	ITextComponent getDescription();
+    /**
+     * @return Short, human-readable identifier used in the treealyzer.
+     */
+    ITextComponent getDescription();
 
-	/**
-	 * @return The location of the pod model in the "modid:pods/" folder.
-	 */
-	@Nullable
-	String getModelName();
+    /**
+     * @return The location of the pod model in the "modid:pods/" folder.
+     */
+    @Nullable
+    String getModelName();
 
-	/**
-	 * @return The mod id of that adds this fruit provider. Needed for the allele of this fruit.
-	 */
-	String getModID();
+    /**
+     * @return The mod id of that adds this fruit provider. Needed for the allele of this fruit.
+     */
+    String getModID();
 
-	/* TEXTURE OVERLAY */
+    /* TEXTURE OVERLAY */
 
-	/**
-	 * @param ripeningTime Elapsed ripening time for the fruit.
-	 * @return ResourceLocation of the texture to overlay on the leaf block.
-	 */
-	@Nullable
-	ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
+    /**
+     * @param ripeningTime Elapsed ripening time for the fruit.
+     * @return ResourceLocation of the texture to overlay on the leaf block.
+     */
+    @Nullable
+    ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
 
-	/**
-	 * return the ResourceLocation to display on decorative leaves
-	 */
-	@Nullable
-	ResourceLocation getDecorativeSprite();
+    /**
+     * return the ResourceLocation to display on decorative leaves
+     */
+    @Nullable
+    ResourceLocation getDecorativeSprite();
 
-	/**
-	 * @return true if this fruit provider requires fruit blocks to spawn, false otherwise.
-	 */
-	boolean requiresFruitBlocks();
+    /**
+     * @return true if this fruit provider requires fruit blocks to spawn, false otherwise.
+     */
+    boolean requiresFruitBlocks();
 
-	/**
-	 * Tries to spawn a fruit block at the potential position when the tree generates.
-	 * Spawning a fruit has a random chance of success based on {@link TreeChromosomes#SAPPINESS}
-	 *
-	 * @return true if a fruit block was spawned, false otherwise.
-	 */
-	boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos);
+    /**
+     * Tries to spawn a fruit block at the potential position when the tree generates.
+     * Spawning a fruit has a random chance of success based on {@link TreeChromosomes#SAPPINESS}
+     *
+     * @return true if a fruit block was spawned, false otherwise.
+     */
+    boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos);
 
-	/**
-	 * Can be used to register the sprite/s that can be returned with
-	 * {@link #getSprite(IGenome, IBlockReader, BlockPos, int)}.
-	 *
-	 * @param event
-	 */
-	@OnlyIn(Dist.CLIENT)
-	void registerSprites(TextureStitchEvent.Pre event);
+    /**
+     * Can be used to register the sprite/s that can be returned with
+     * {@link #getSprite(IGenome, IBlockReader, BlockPos, int)}.
+     *
+     * @param event
+     */
+    @OnlyIn(Dist.CLIENT)
+    void registerSprites(TextureStitchEvent.Pre event);
 }

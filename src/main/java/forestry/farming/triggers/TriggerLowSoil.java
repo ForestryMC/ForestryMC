@@ -17,52 +17,52 @@ import forestry.core.triggers.Trigger;
 
 public class TriggerLowSoil extends Trigger {
 
-	private final int threshold;
+    private final int threshold;
 
-	public TriggerLowSoil(int threshold) {
-		super("lowSoil." + threshold, "lowSoil", "low_soil");
-		this.threshold = threshold;
-	}
+    public TriggerLowSoil(int threshold) {
+        super("lowSoil." + threshold, "lowSoil", "low_soil");
+        this.threshold = threshold;
+    }
 
-	//	@Override
-	//	public String getDescription() {
-	//		return super.getDescription() + " < " + threshold;
-	//	}
-	//
-	//	@Override
-	//	public int maxParameters() {
-	//		return 1;
-	//	}
+    //	@Override
+    //	public String getDescription() {
+    //		return super.getDescription() + " < " + threshold;
+    //	}
+    //
+    //	@Override
+    //	public int maxParameters() {
+    //		return 1;
+    //	}
 
-	/**
-	 * Return true if the tile given in parameter activates the trigger, given
-	 * the parameters.
-	 */
-	//	@Override
-	//	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
-	//		IStatementParameter parameter = null;
-	//		if (parameters.length > 0) {
-	//			parameter = parameters[0];
-	//		}
-	//
-	//		if (!(tile instanceof TileFarmHatch)) {
-	//			return false;
-	//		}
-	//
-	//		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-	//		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
-	//		IFarmInventory farmInventory = farmController.getFarmInventory();
-	//
-	//		IInventory resourcesInventory = farmInventory.getResourcesInventory();
-	//		Stream<ItemStack> stackStream = InventoryUtil.getStacks(resourcesInventory).stream();
-	//
-	//		if (parameter != null && !parameter.getItemStack().isEmpty()) {
-	//			ItemStack filter = parameter.getItemStack();
-	//			stackStream = stackStream.filter(s -> ItemStackUtil.areItemStacksEqualIgnoreCount(filter, s));
-	//		}
-	//
-	//		return stackStream
-	//				.mapToInt(ItemStack::getCount)
-	//				.sum() < threshold;
-	//	}
+    /**
+     * Return true if the tile given in parameter activates the trigger, given
+     * the parameters.
+     */
+    //	@Override
+    //	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+    //		IStatementParameter parameter = null;
+    //		if (parameters.length > 0) {
+    //			parameter = parameters[0];
+    //		}
+    //
+    //		if (!(tile instanceof TileFarmHatch)) {
+    //			return false;
+    //		}
+    //
+    //		TileFarmHatch tileHatch = (TileFarmHatch) tile;
+    //		IFarmController farmController = tileHatch.getMultiblockLogic().getController();
+    //		IFarmInventory farmInventory = farmController.getFarmInventory();
+    //
+    //		IInventory resourcesInventory = farmInventory.getResourcesInventory();
+    //		Stream<ItemStack> stackStream = InventoryUtil.getStacks(resourcesInventory).stream();
+    //
+    //		if (parameter != null && !parameter.getItemStack().isEmpty()) {
+    //			ItemStack filter = parameter.getItemStack();
+    //			stackStream = stackStream.filter(s -> ItemStackUtil.areItemStacksEqualIgnoreCount(filter, s));
+    //		}
+    //
+    //		return stackStream
+    //				.mapToInt(ItemStack::getCount)
+    //				.sum() < threshold;
+    //	}
 }

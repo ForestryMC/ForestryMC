@@ -43,70 +43,70 @@ import io.netty.buffer.Unpooled;
  */
 public abstract class NBTUtilForestry {
 
-	public enum EnumNBTType {
+    public enum EnumNBTType {
 
-		END(EndNBT.class),
-		BYTE(ByteNBT.class),
-		SHORT(ShortNBT.class),
-		INT(IntNBT.class),
-		LONG(LongNBT.class),
-		FLOAT(FloatNBT.class),
-		DOUBLE(DoubleNBT.class),
-		BYTE_ARRAY(ByteArrayNBT.class),
-		STRING(StringNBT.class),
-		LIST(ListNBT.class),
-		COMPOUND(CompoundNBT.class),
-		INT_ARRAY(IntArrayNBT.class);
-		public static final EnumNBTType[] VALUES = values();
-		public final Class<? extends INBT> classObject;
+        END(EndNBT.class),
+        BYTE(ByteNBT.class),
+        SHORT(ShortNBT.class),
+        INT(IntNBT.class),
+        LONG(LongNBT.class),
+        FLOAT(FloatNBT.class),
+        DOUBLE(DoubleNBT.class),
+        BYTE_ARRAY(ByteArrayNBT.class),
+        STRING(StringNBT.class),
+        LIST(ListNBT.class),
+        COMPOUND(CompoundNBT.class),
+        INT_ARRAY(IntArrayNBT.class);
+        public static final EnumNBTType[] VALUES = values();
+        public final Class<? extends INBT> classObject;
 
-		EnumNBTType(Class<? extends INBT> c) {
-			this.classObject = c;
-		}
-	}
+        EnumNBTType(Class<? extends INBT> c) {
+            this.classObject = c;
+        }
+    }
 
-	public static <T extends INBT> NBTList<T> getNBTList(CompoundNBT nbt, String tag, EnumNBTType type) {
-		ListNBT nbtList = nbt.getList(tag, type.ordinal());
-		return new NBTList<>(nbtList);
-	}
+    public static <T extends INBT> NBTList<T> getNBTList(CompoundNBT nbt, String tag, EnumNBTType type) {
+        ListNBT nbtList = nbt.getList(tag, type.ordinal());
+        return new NBTList<>(nbtList);
+    }
 
-	public static class NBTList<T extends INBT> extends ForwardingList<T> {
+    public static class NBTList<T extends INBT> extends ForwardingList<T> {
 
-		private final ArrayList<T> backingList;
+        private final ArrayList<T> backingList;
 
-		public NBTList(ListNBT nbtList) {
-			//noinspection unchecked
-			backingList = new ArrayList<>((List<T>) nbtList.tagList);
-		}
+        public NBTList(ListNBT nbtList) {
+            //noinspection unchecked
+            backingList = new ArrayList<>((List<T>) nbtList.tagList);
+        }
 
-		@Override
-		protected List<T> delegate() {
-			return backingList;
-		}
+        @Override
+        protected List<T> delegate() {
+            return backingList;
+        }
 
-	}
+    }
 
-	public static CompoundNBT writeStreamableToNbt(IStreamable streamable, CompoundNBT nbt) {
-		PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
-		streamable.writeData(data);
+    public static CompoundNBT writeStreamableToNbt(IStreamable streamable, CompoundNBT nbt) {
+        PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
+        streamable.writeData(data);
 
-		byte[] bytes = new byte[data.readableBytes()];
-		data.getBytes(0, bytes);
-		nbt.putByteArray("dataBytes", bytes);
-		return nbt;
-	}
+        byte[] bytes = new byte[data.readableBytes()];
+        data.getBytes(0, bytes);
+        nbt.putByteArray("dataBytes", bytes);
+        return nbt;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static void readStreamableFromNbt(IStreamable streamable, CompoundNBT nbt) {
-		if (nbt.contains("dataBytes")) {
-			byte[] bytes = nbt.getByteArray("dataBytes");
-			PacketBufferForestry data = new PacketBufferForestry(Unpooled.wrappedBuffer(bytes));
-			try {
-				streamable.readData(data);
-			} catch (IOException e) {
-				Log.error("Failed to read streamable data", e);
-			}
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static void readStreamableFromNbt(IStreamable streamable, CompoundNBT nbt) {
+        if (nbt.contains("dataBytes")) {
+            byte[] bytes = nbt.getByteArray("dataBytes");
+            PacketBufferForestry data = new PacketBufferForestry(Unpooled.wrappedBuffer(bytes));
+            try {
+                streamable.readData(data);
+            } catch (IOException e) {
+                Log.error("Failed to read streamable data", e);
+            }
+        }
+    }
 
 }

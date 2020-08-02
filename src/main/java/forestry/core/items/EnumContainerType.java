@@ -15,16 +15,16 @@ import java.util.Locale;
 import forestry.api.core.IItemSubtype;
 
 public enum EnumContainerType implements IItemSubtype {
-	GLASS, JAR, CAN, CAPSULE, REFRACTORY;
+    GLASS, JAR, CAN, CAPSULE, REFRACTORY;
 
-	private final String name;
+    private final String name;
 
-	EnumContainerType() {
-		this.name = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
-	}
+    EnumContainerType() {
+        this.name = name().toLowerCase(Locale.ENGLISH).replace('_', '.');
+    }
 
-	@Override
-	public String getString() {
-		return name;
-	}
+    @Override
+    public String getString() {
+        return name;
+    }
 }

@@ -34,16 +34,16 @@ import forestry.api.genetics.flowers.IFlowerProvider;
  * forestry.allele.height.smallest=????? ??????
  */
 public interface IAlleleFactory {
-	/**
-	 * @param modId      mod prefix for uid (i.e. "forestry")
-	 * @param category   allele category for uid (i.e. "flowers")
-	 * @param valueName  allele value name for uid (i.e. "vanilla")
-	 * @param value      allele IFlowerProvider value
-	 * @param isDominant allele dominance
-	 * @param types      allele chromosome type for registration (i.e. EnumBeeChromosome.FLOWER_PROVIDER)
-	 * @return a new IAlleleFlowers, registered with the allele registry.
-	 * IAlleleFlowers localization is handled by the IFlowerProvider.getDescription(), unlike the other alleles.
-	 * @since Forestry 4.2
-	 */
-	IAlleleFlowers createFlowers(String modId, String category, String valueName, IFlowerProvider value, boolean isDominant, IChromosomeType... types);
+    /**
+     * @param modId      mod prefix for uid (i.e. "forestry")
+     * @param category   allele category for uid (i.e. "flowers")
+     * @param valueName  allele value name for uid (i.e. "vanilla")
+     * @param value      allele IFlowerProvider value
+     * @param isDominant allele dominance
+     * @param types      allele chromosome type for registration (i.e. EnumBeeChromosome.FLOWER_PROVIDER)
+     * @return a new IAlleleFlowers, registered with the allele registry.
+     * IAlleleFlowers localization is handled by the IFlowerProvider.getDescription(), unlike the other alleles.
+     * @since Forestry 4.2
+     */
+    IAlleleFlowers createFlowers(String modId, String category, String valueName, IFlowerProvider value, boolean isDominant, IChromosomeType... types);
 }

@@ -21,23 +21,23 @@ import forestry.api.core.IItemProvider;
  */
 public interface ICrateRegistry {
 
-	void registerCrate(Item item);
+    void registerCrate(Item item);
 
-	void registerCrate(Block block);
+    void registerCrate(Block block);
 
-	void registerCrate(ItemStack stack);
+    void registerCrate(ItemStack stack);
 
-	void registerCrate(String oreDictName);
+    void registerCrate(String oreDictName);
 
-	void registerCrate(IItemProvider provider);
+    void registerCrate(IItemProvider provider);
 
-	/**
-	 * prevent a crate from being registered
-	 *
-	 * @param stack the ItemStack to blacklist
-	 */
-	default void blacklistCrate(ItemStack stack) {
+    /**
+     * prevent a crate from being registered
+     *
+     * @param stack the ItemStack to blacklist
+     */
+    default void blacklistCrate(ItemStack stack) {
 
-	}
+    }
 
 }

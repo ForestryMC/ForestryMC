@@ -24,24 +24,24 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileRaintank;
 
 public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
-	public static final short SLOT_RESOURCE = 0;
-	public static final short SLOT_PRODUCT = 1;
+    public static final short SLOT_RESOURCE = 0;
+    public static final short SLOT_PRODUCT = 1;
 
-	public InventoryRaintank(TileRaintank raintank) {
-		super(raintank, 3, "Items");
-	}
+    public InventoryRaintank(TileRaintank raintank) {
+        super(raintank, 3, "Items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_RESOURCE) {
-			LazyOptional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(itemStack);
-			return fluidHandler.map(handler -> handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE) > 0).orElse(false);
-		}
-		return false;
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_RESOURCE) {
+            LazyOptional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(itemStack);
+            return fluidHandler.map(handler -> handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE) > 0).orElse(false);
+        }
+        return false;
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
-		return slotIndex == SLOT_PRODUCT;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+        return slotIndex == SLOT_PRODUCT;
+    }
 }

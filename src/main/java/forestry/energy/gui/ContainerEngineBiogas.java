@@ -23,22 +23,22 @@ import forestry.energy.tiles.TileEngineBiogas;
 
 public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas> {
 
-	//TODO dedupe
-	public static ContainerEngineBiogas fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEngineBiogas tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineBiogas.class);
-		return new ContainerEngineBiogas(windowId, inv, tile);
-	}
+    //TODO dedupe
+    public static ContainerEngineBiogas fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+        TileEngineBiogas tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineBiogas.class);
+        return new ContainerEngineBiogas(windowId, inv, tile);
+    }
 
-	public ContainerEngineBiogas(int windowId, PlayerInventory player, TileEngineBiogas engine) {
-		super(windowId, EnergyContainers.ENGINE_BIOGAS.containerType(), player, engine, 8, 84);
+    public ContainerEngineBiogas(int windowId, PlayerInventory player, TileEngineBiogas engine) {
+        super(windowId, EnergyContainers.ENGINE_BIOGAS.containerType(), player, engine, 8, 84);
 
-		this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
-	}
+        this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToListeners(packet);
-	}
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+        sendPacketToListeners(packet);
+    }
 }

@@ -26,56 +26,56 @@ import forestry.core.utils.BlockUtil;
 
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
-	public FarmLogicInfernal(IFarmProperties properties, boolean isManual) {
-		super(properties, isManual);
-	}
+    public FarmLogicInfernal(IFarmProperties properties, boolean isManual) {
+        super(properties, isManual);
+    }
 
-	@Override
-	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
-		Stack<ICrop> crops = new Stack<>();
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			if (!world.isBlockLoaded(position)) {
-				break;
-			}
-			if (world.isAirBlock(pos)) {
-				continue;
-			}
-			BlockState blockState = world.getBlockState(position);
-			for (IFarmable farmable : getFarmables()) {
-				ICrop crop = farmable.getCropAt(world, position, blockState);
-				if (crop != null) {
-					crops.push(crop);
-					break;
-				}
-			}
+    @Override
+    public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+        Stack<ICrop> crops = new Stack<>();
+        for (int i = 0; i < extent; i++) {
+            BlockPos position = translateWithOffset(pos.up(), direction, i);
+            if (!world.isBlockLoaded(position)) {
+                break;
+            }
+            if (world.isAirBlock(pos)) {
+                continue;
+            }
+            BlockState blockState = world.getBlockState(position);
+            for (IFarmable farmable : getFarmables()) {
+                ICrop crop = farmable.getCropAt(world, position, blockState);
+                if (crop != null) {
+                    crops.push(crop);
+                    break;
+                }
+            }
 
-		}
-		return crops;
+        }
+        return crops;
 
-	}
+    }
 
-	@Override
-	protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos, direction, i);
-			if (!world.isBlockLoaded(position)) {
-				break;
-			}
+    @Override
+    protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+        for (int i = 0; i < extent; i++) {
+            BlockPos position = translateWithOffset(pos, direction, i);
+            if (!world.isBlockLoaded(position)) {
+                break;
+            }
 
-			BlockState blockState = world.getBlockState(position);
-			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(blockState, world, position)) {
-				continue;
-			}
+            BlockState blockState = world.getBlockState(position);
+            if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(blockState, world, position)) {
+                continue;
+            }
 
-			BlockPos soilPosition = position.down();
-			BlockState soilState = world.getBlockState(soilPosition);
-			if (isAcceptedSoil(soilState)) {
-				return trySetCrop(world, farmHousing, position, direction);
-			}
-		}
+            BlockPos soilPosition = position.down();
+            BlockState soilState = world.getBlockState(soilPosition);
+            if (isAcceptedSoil(soilState)) {
+                return trySetCrop(world, farmHousing, position, direction);
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

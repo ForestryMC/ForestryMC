@@ -9,23 +9,23 @@ import genetics.api.individual.IIndividual;
 
 public interface IBeeListener {
 
-	/**
-	 * Called when the bees wear out the housing's equipment.
-	 *
-	 * @param amount Integer indicating the amount worn out.
-	 */
-	void wearOutEquipment(int amount);
+    /**
+     * Called when the bees wear out the housing's equipment.
+     *
+     * @param amount Integer indicating the amount worn out.
+     */
+    void wearOutEquipment(int amount);
 
-	/**
-	 * Called after the children have been spawned, and before the new princess is spawned.
-	 */
-	void onQueenDeath();
+    /**
+     * Called after the children have been spawned, and before the new princess is spawned.
+     */
+    void onQueenDeath();
 
-	/**
-	 * Called when the bees have retrieved some pollen.
-	 *
-	 * @return true if this bee listener handled the pollen.
-	 */
-	boolean onPollenRetrieved(IIndividual pollen);
+    /**
+     * Called when the bees have retrieved some pollen.
+     *
+     * @return true if this bee listener handled the pollen.
+     */
+    boolean onPollenRetrieved(IIndividual pollen);
 
 }

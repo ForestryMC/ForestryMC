@@ -12,49 +12,49 @@ import net.minecraft.item.ItemStack;
 
 public interface IFarmRegistry {
 
-	/**
-	 * Registers farming logic in registry
-	 *
-	 * @since Forestry 5.8
-	 */
-	IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance);
+    /**
+     * Registers farming logic in registry
+     *
+     * @since Forestry 5.8
+     */
+    IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance);
 
-	/**
-	 * Registers farming logic in registry under given identifier
-	 *
-	 * @param identifier           Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-	 * @param logicFactory         factory that creates the corresponding instance of logic
-	 * @param farmablesIdentifiers Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-	 */
-	IFarmPropertiesBuilder getPropertiesBuilder(String identifier);
+    /**
+     * Registers farming logic in registry under given identifier
+     *
+     * @param identifier           Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
+     * @param logicFactory         factory that creates the corresponding instance of logic
+     * @param farmablesIdentifiers Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
+     */
+    IFarmPropertiesBuilder getPropertiesBuilder(String identifier);
 
-	/**
-	 * Can be used to add IFarmables to some of the vanilla farm logics.
-	 * <p>
-	 * Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-	 */
-	void registerFarmables(String identifier, IFarmable... farmable);
+    /**
+     * Can be used to add IFarmables to some of the vanilla farm logics.
+     * <p>
+     * Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
+     */
+    void registerFarmables(String identifier, IFarmable... farmable);
 
-	Collection<IFarmable> getFarmables(String identifier);
+    Collection<IFarmable> getFarmables(String identifier);
 
-	IFarmableInfo getFarmableInfo(String identifier);
+    IFarmableInfo getFarmableInfo(String identifier);
 
-	/**
-	 * @param itemStack the fertilizer itemstack
-	 * @param value     The value of the fertilizer. The value of the forestry fertilizer is 500.
-	 */
-	void registerFertilizer(ItemStack itemStack, int value);
+    /**
+     * @param itemStack the fertilizer itemstack
+     * @param value     The value of the fertilizer. The value of the forestry fertilizer is 500.
+     */
+    void registerFertilizer(ItemStack itemStack, int value);
 
-	/**
-	 * @return The value of the fertilizer
-	 */
-	int getFertilizeValue(ItemStack itemStack);
+    /**
+     * @return The value of the fertilizer
+     */
+    int getFertilizeValue(ItemStack itemStack);
 
 
-	/**
-	 * @since Forestry 5.8
-	 */
-	@Nullable
-	IFarmProperties getProperties(String identifier);
+    /**
+     * @since Forestry 5.8
+     */
+    @Nullable
+    IFarmProperties getProperties(String identifier);
 
 }

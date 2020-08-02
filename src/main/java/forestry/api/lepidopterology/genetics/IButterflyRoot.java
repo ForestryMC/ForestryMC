@@ -20,22 +20,22 @@ import forestry.api.lepidopterology.ILepidopteristTracker;
 
 public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
 
-	/* BUTTERFLY SPECIFIC */
-	@Override
-	ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
+    /* BUTTERFLY SPECIFIC */
+    @Override
+    ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
 
-	/**
-	 * Spawns the given butterfly in the world.
-	 *
-	 * @return butterfly entity on success, null otherwise.
-	 */
-	MobEntity spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
+    /**
+     * Spawns the given butterfly in the world.
+     *
+     * @return butterfly entity on success, null otherwise.
+     */
+    MobEntity spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
 
-	BlockPos plantCocoon(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
+    BlockPos plantCocoon(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
 
-	/**
-	 * @return true if passed item is mated.
-	 */
-	boolean isMated(ItemStack stack);
+    /**
+     * @return true if passed item is mated.
+     */
+    boolean isMated(ItemStack stack);
 
 }

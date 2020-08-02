@@ -25,50 +25,50 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 
 public class ButterflySpawner implements ILeafTickHandler {
 
-	@Override
-	public boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed) {
+    @Override
+    public boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed) {
 
-		//TODO hopefully this is right
-		if (!world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
-			return false;
-		}
+        //TODO hopefully this is right
+        if (!world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
+            return false;
+        }
 
-		if (rand.nextFloat() >= tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * tree.getGenome().getActiveValue(TreeChromosomes.YIELD)) {
-			return false;
-		}
+        if (rand.nextFloat() >= tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * tree.getGenome().getActiveValue(TreeChromosomes.YIELD)) {
+            return false;
+        }
 
-		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
-		float rarity;
-		if (!ModuleLepidopterology.spawnRaritys.containsKey(spawn.getGenome().getPrimary().getRegistryName().getPath())) {
-			rarity = spawn.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity();
-		} else {
-			rarity = ModuleLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getRegistryName().getPath());
-		}
+        IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
+        float rarity;
+        if (!ModuleLepidopterology.spawnRaritys.containsKey(spawn.getGenome().getPrimary().getRegistryName().getPath())) {
+            rarity = spawn.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity();
+        } else {
+            rarity = ModuleLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getRegistryName().getPath());
+        }
 
-		if (rand.nextFloat() >= rarity * 0.5f) {
-			return false;
-		}
+        if (rand.nextFloat() >= rarity * 0.5f) {
+            return false;
+        }
 
-		//TODO needs server world?
-		if (false) {//world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
-			return false;
-		}
+        //TODO needs server world?
+        if (false) {//world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
+            return false;
+        }
 
-		if (!spawn.canSpawn(world, pos.getX(), pos.getY(), pos.getZ())) {
-			return false;
-		}
+        if (!spawn.canSpawn(world, pos.getX(), pos.getY(), pos.getZ())) {
+            return false;
+        }
 
-		if (world.isAirBlock(pos.north())) {
-			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.north());
-		} else if (world.isAirBlock(pos.south())) {
-			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.south());
-		} else if (world.isAirBlock(pos.west())) {
-			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.west());
-		} else if (world.isAirBlock(pos.east())) {
-			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.east());
-		}
+        if (world.isAirBlock(pos.north())) {
+            ButterflyUtils.attemptButterflySpawn(world, spawn, pos.north());
+        } else if (world.isAirBlock(pos.south())) {
+            ButterflyUtils.attemptButterflySpawn(world, spawn, pos.south());
+        } else if (world.isAirBlock(pos.west())) {
+            ButterflyUtils.attemptButterflySpawn(world, spawn, pos.west());
+        } else if (world.isAirBlock(pos.east())) {
+            ButterflyUtils.attemptButterflySpawn(world, spawn, pos.east());
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

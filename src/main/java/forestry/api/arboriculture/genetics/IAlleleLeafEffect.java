@@ -18,6 +18,6 @@ import forestry.api.genetics.alleles.IAlleleEffect;
  */
 public interface IAlleleLeafEffect extends IAlleleEffect {
 
-	IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos);
+    IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos);
 
 }

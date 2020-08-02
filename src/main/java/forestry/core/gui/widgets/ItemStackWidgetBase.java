@@ -23,30 +23,30 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.utils.ItemTooltipUtil;
 
 public abstract class ItemStackWidgetBase extends Widget {
-	public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {
-		super(widgetManager, xPos, yPos);
-	}
+    public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {
+        super(widgetManager, xPos, yPos);
+    }
 
-	protected abstract ItemStack getItemStack();
+    protected abstract ItemStack getItemStack();
 
-	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
-		ItemStack itemStack = getItemStack();
-		if (!itemStack.isEmpty()) {
-			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
-			GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
-			RenderHelper.disableStandardItemLighting();
-		}
-	}
+    @Override
+    public void draw(MatrixStack transform, int startY, int startX) {
+        ItemStack itemStack = getItemStack();
+        if (!itemStack.isEmpty()) {
+            //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
+            GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
+            RenderHelper.disableStandardItemLighting();
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		ItemStack itemStack = getItemStack();
-		ToolTip tip = new ToolTip();
-		if (!itemStack.isEmpty()) {
-			tip.addAll(ItemTooltipUtil.getInformation(itemStack));
-		}
-		return tip;
-	}
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        ItemStack itemStack = getItemStack();
+        ToolTip tip = new ToolTip();
+        if (!itemStack.isEmpty()) {
+            tip.addAll(ItemTooltipUtil.getInformation(itemStack));
+        }
+        return tip;
+    }
 }

@@ -24,8 +24,8 @@ import forestry.modules.IClientModuleHandler;
 @OnlyIn(Dist.CLIENT)
 public class ProxyCultivationClient extends ProxyCultivation implements IClientModuleHandler {
 
-	@Override
-	public void setupClient(FMLClientSetupEvent event) {
-		CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
-	}
+    @Override
+    public void setupClient(FMLClientSetupEvent event) {
+        CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
+    }
 }

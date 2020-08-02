@@ -11,20 +11,20 @@ import genetics.api.individual.IIndividual;
 import forestry.apiculture.genetics.AlyzerInfo;
 
 public interface IAlyzerDisplayProvider<I extends IIndividual> {
-	default AlyzerInfo getInfo() {
-		return AlyzerInfo.EMPTY;
-	}
+    default AlyzerInfo getInfo() {
+        return AlyzerInfo.EMPTY;
+    }
 
-	/**
-	 * Called at {@link ContainerScreen#init(Minecraft, int, int)} in the alyzer gui. Can be used to add custom widgets
-	 * to the gui.
-	 */
-	default void initAlyzer(IAlyzerHelper helper) {
-	}
+    /**
+     * Called at {@link ContainerScreen#init(Minecraft, int, int)} in the alyzer gui. Can be used to add custom widgets
+     * to the gui.
+     */
+    default void initAlyzer(IAlyzerHelper helper) {
+    }
 
-	/**
-	 * Used to display the handled allele on the alyzer.
-	 */
-	default void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
-	}
+    /**
+     * Used to display the handled allele on the alyzer.
+     */
+    default void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
+    }
 }

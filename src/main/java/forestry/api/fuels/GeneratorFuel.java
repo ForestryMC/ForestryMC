@@ -9,34 +9,34 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GeneratorFuel {
 
-	private final FluidStack fuelConsumed;
-	private final int eu;
-	private final int rate;
+    private final FluidStack fuelConsumed;
+    private final int eu;
+    private final int rate;
 
-	public GeneratorFuel(FluidStack fuelConsumed, int eu, int rate) {
-		this.fuelConsumed = fuelConsumed;
-		this.eu = eu;
-		this.rate = rate;
-	}
+    public GeneratorFuel(FluidStack fuelConsumed, int eu, int rate) {
+        this.fuelConsumed = fuelConsumed;
+        this.eu = eu;
+        this.rate = rate;
+    }
 
-	/**
-	 * LiquidStack representing the fuel type and amount consumed per triggered cycle.
-	 */
-	public FluidStack getFuelConsumed() {
-		return fuelConsumed;
-	}
+    /**
+     * LiquidStack representing the fuel type and amount consumed per triggered cycle.
+     */
+    public FluidStack getFuelConsumed() {
+        return fuelConsumed;
+    }
 
-	/**
-	 * EU emitted per tick while this fuel is being consumed in the generator (i.e. biofuel = 32, biomass = 8).
-	 */
-	public int getEu() {
-		return eu;
-	}
+    /**
+     * EU emitted per tick while this fuel is being consumed in the generator (i.e. biofuel = 32, biomass = 8).
+     */
+    public int getEu() {
+        return eu;
+    }
 
-	/**
-	 * Rate at which the fuel is consumed. 1 - Every tick 2 - Every second tick 3 - Every third tick etc.
-	 */
-	public int getRate() {
-		return rate;
-	}
+    /**
+     * Rate at which the fuel is consumed. 1 - Every tick 2 - Every second tick 3 - Every third tick etc.
+     */
+    public int getRate() {
+        return rate;
+    }
 }

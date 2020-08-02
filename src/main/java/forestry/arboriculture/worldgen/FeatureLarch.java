@@ -21,22 +21,22 @@ import forestry.core.worldgen.FeatureHelper;
 
 public class FeatureLarch extends FeatureTree {
 
-	public FeatureLarch(ITreeGenData tree) {
-		super(tree, 6, 5);
-	}
+    public FeatureLarch(ITreeGenData tree) {
+        super(tree, 6, 5);
+    }
 
-	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		int leafSpawn = height + 1;
+    @Override
+    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+        int leafSpawn = height + 1;
 
-		float sizeMultiplier = Math.max(height / 8, 1.0f);
+        float sizeMultiplier = Math.max(height / 8, 1.0f);
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
-		while (leafSpawn > 2) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2 * sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		}
-	}
+        while (leafSpawn > 2) {
+            FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2 * sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+            FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        }
+    }
 }

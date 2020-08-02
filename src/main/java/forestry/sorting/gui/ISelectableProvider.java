@@ -7,11 +7,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.core.gui.GuiForestry;
 
 public interface ISelectableProvider<S> {
-	Collection<S> getEntries();
+    Collection<S> getEntries();
 
-	void onSelect(S selectable);
+    void onSelect(S selectable);
 
-	void draw(GuiForestry gui, S selectable, MatrixStack transform, int y, int x);
+    void draw(GuiForestry gui, S selectable, MatrixStack transform, int y, int x);
 
-	String getName(S selectable);
+    String getName(S selectable);
 }

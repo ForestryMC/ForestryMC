@@ -12,10 +12,10 @@ import genetics.api.individual.IIndividual;
  * Used by bees and butterflies to convert and pollinate foreign leaf blocks.
  */
 public interface IBlockTranslator<I extends IIndividual> {
-	@Nullable
-	I getIndividualFromObject(BlockState blockState);
+    @Nullable
+    I getIndividualFromObject(BlockState blockState);
 
-	default ItemStack getGeneticEquivalent(BlockState blockState) {
-		return ItemStack.EMPTY;
-	}
+    default ItemStack getGeneticEquivalent(BlockState blockState) {
+        return ItemStack.EMPTY;
+    }
 }

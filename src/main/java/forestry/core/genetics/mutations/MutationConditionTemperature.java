@@ -27,34 +27,34 @@ import forestry.core.utils.Translator;
 
 public class MutationConditionTemperature implements IMutationCondition {
 
-	private final EnumTemperature minTemperature;
-	private final EnumTemperature maxTemperature;
+    private final EnumTemperature minTemperature;
+    private final EnumTemperature maxTemperature;
 
-	public MutationConditionTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature) {
-		this.minTemperature = minTemperature;
-		this.maxTemperature = maxTemperature;
-	}
+    public MutationConditionTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature) {
+        this.minTemperature = minTemperature;
+        this.maxTemperature = maxTemperature;
+    }
 
-	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		EnumTemperature biomeTemperature = climate.getTemperature();
+    @Override
+    public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+        EnumTemperature biomeTemperature = climate.getTemperature();
 
-		if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {
-			return 0;
-		}
-		return 1;
-	}
+        if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {
+            return 0;
+        }
+        return 1;
+    }
 
-	@Override
-	public ITextComponent getDescription() {
-		//TODO textcomponent
-		String minString = AlleleManager.climateHelper.toDisplay(minTemperature).getString();
+    @Override
+    public ITextComponent getDescription() {
+        //TODO textcomponent
+        String minString = AlleleManager.climateHelper.toDisplay(minTemperature).getString();
 
-		if (minTemperature != maxTemperature) {
-			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature).getString();
-			return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString));
-		} else {
-			return new TranslationTextComponent("for.mutation.condition.temperature.single", minString);
-		}
-	}
+        if (minTemperature != maxTemperature) {
+            String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature).getString();
+            return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString));
+        } else {
+            return new TranslationTextComponent("for.mutation.condition.temperature.single", minString);
+        }
+    }
 }

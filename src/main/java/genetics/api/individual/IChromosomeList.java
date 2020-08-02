@@ -6,17 +6,17 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
 public interface IChromosomeList extends Iterable<IChromosomeType> {
-	IChromosomeTypeBuilder builder();
+    IChromosomeTypeBuilder builder();
 
-	Collection<IChromosomeType> types();
+    Collection<IChromosomeType> types();
 
-	int size();
+    int size();
 
-	String getUID();
+    String getUID();
 
-	IIndividualRoot getRoot();
+    IIndividualRoot getRoot();
 
-	IRootDefinition getDefinition();
+    IRootDefinition getDefinition();
 
-	IChromosomeType[] typesArray();
+    IChromosomeType[] typesArray();
 }

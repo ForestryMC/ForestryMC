@@ -23,44 +23,44 @@ import forestry.api.arboriculture.ICharcoalPileWall;
 
 public class CharcoalPileWall implements ICharcoalPileWall {
 
-	@Nullable
-	private final BlockState blockState;
-	@Nullable
-	private final Block block;
-	private final int charcoalAmount;
+    @Nullable
+    private final BlockState blockState;
+    @Nullable
+    private final Block block;
+    private final int charcoalAmount;
 
-	public CharcoalPileWall(BlockState blockState, int charcoalAmount) {
-		this.blockState = blockState;
-		this.block = null;
-		this.charcoalAmount = charcoalAmount;
-	}
+    public CharcoalPileWall(BlockState blockState, int charcoalAmount) {
+        this.blockState = blockState;
+        this.block = null;
+        this.charcoalAmount = charcoalAmount;
+    }
 
-	public CharcoalPileWall(Block block, int charcoalAmount) {
-		this.blockState = null;
-		this.block = block;
-		this.charcoalAmount = charcoalAmount;
-	}
+    public CharcoalPileWall(Block block, int charcoalAmount) {
+        this.blockState = null;
+        this.block = block;
+        this.charcoalAmount = charcoalAmount;
+    }
 
-	@Override
-	public int getCharcoalAmount() {
-		return charcoalAmount;
-	}
+    @Override
+    public int getCharcoalAmount() {
+        return charcoalAmount;
+    }
 
-	@Override
-	public boolean matches(BlockState state) {
-		return block == state.getBlock() || blockState == state;
-	}
+    @Override
+    public boolean matches(BlockState state) {
+        return block == state.getBlock() || blockState == state;
+    }
 
-	@Override
-	public NonNullList<ItemStack> getDisplayItems() {
-		if (block == null) {
-			Preconditions.checkNotNull(blockState);
-			return NonNullList.withSize(1, new ItemStack(blockState.getBlock()));    //TODO loss of properties?
-		} else if (blockState == null) {
-			Preconditions.checkNotNull(block);
-			return NonNullList.withSize(1, new ItemStack(block));
-		}
-		return NonNullList.create();
-	}
+    @Override
+    public NonNullList<ItemStack> getDisplayItems() {
+        if (block == null) {
+            Preconditions.checkNotNull(blockState);
+            return NonNullList.withSize(1, new ItemStack(blockState.getBlock()));    //TODO loss of properties?
+        } else if (blockState == null) {
+            Preconditions.checkNotNull(block);
+            return NonNullList.withSize(1, new ItemStack(block));
+        }
+        return NonNullList.create();
+    }
 
 }

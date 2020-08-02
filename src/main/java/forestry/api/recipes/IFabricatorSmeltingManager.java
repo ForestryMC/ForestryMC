@@ -10,12 +10,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorSmeltingManager extends ICraftingProvider<IFabricatorSmeltingRecipe> {
-	/**
-	 * Add a smelting recipe to the Fabricator
-	 *
-	 * @param resource     item to be melted down
-	 * @param molten       resulting fluid
-	 * @param meltingPoint temperature at which the item melts. Glass is 1000, Sand is 3000.
-	 */
-	void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint);
+    /**
+     * Add a smelting recipe to the Fabricator
+     *
+     * @param resource     item to be melted down
+     * @param molten       resulting fluid
+     * @param meltingPoint temperature at which the item melts. Glass is 1000, Sand is 3000.
+     */
+    void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint);
 }

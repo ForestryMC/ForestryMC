@@ -10,21 +10,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IHiveTile {
-	/**
-	 * Call to calm agitated bees. Used by the smoker to stop wild bees from attacking as much.
-	 * Bees will not stay calm for very long.
-	 */
-	void calmBees();
+    /**
+     * Call to calm agitated bees. Used by the smoker to stop wild bees from attacking as much.
+     * Bees will not stay calm for very long.
+     */
+    void calmBees();
 
-	boolean isAngry();
+    boolean isAngry();
 
-	/**
-	 * Called when the hive is attacked.
-	 */
-	void onAttack(World world, BlockPos pos, PlayerEntity player);
+    /**
+     * Called when the hive is attacked.
+     */
+    void onAttack(World world, BlockPos pos, PlayerEntity player);
 
-	/**
-	 * Called when the hive is broken.
-	 */
-	void onBroken(World world, BlockPos pos, PlayerEntity player, boolean canHarvest);
+    /**
+     * Called when the hive is broken.
+     */
+    void onBroken(World world, BlockPos pos, PlayerEntity player, boolean canHarvest);
 }

@@ -24,29 +24,29 @@ import forestry.arboriculture.IWoodTyped;
 
 public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 
-	private final EnumForestryWoodType woodType;
+    private final EnumForestryWoodType woodType;
 
-	public BlockForestryDoor(EnumForestryWoodType woodType) {
-		super(Block.Properties.create(Material.WOOD)
-			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD)
-			.harvestTool(ToolType.AXE)
-			.harvestLevel(0));
-		this.woodType = woodType;
-	}
+    public BlockForestryDoor(EnumForestryWoodType woodType) {
+        super(Block.Properties.create(Material.WOOD)
+                .hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+                .sound(SoundType.WOOD)
+                .harvestTool(ToolType.AXE)
+                .harvestLevel(0));
+        this.woodType = woodType;
+    }
 
-	@Override
-	public WoodBlockKind getBlockKind() {
-		return WoodBlockKind.DOOR;
-	}
+    @Override
+    public WoodBlockKind getBlockKind() {
+        return WoodBlockKind.DOOR;
+    }
 
-	@Override
-	public boolean isFireproof() {
-		return false;
-	}
+    @Override
+    public boolean isFireproof() {
+        return false;
+    }
 
-	@Override
-	public IWoodType getWoodType() {
-		return woodType;
-	}
+    @Override
+    public IWoodType getWoodType() {
+        return woodType;
+    }
 }

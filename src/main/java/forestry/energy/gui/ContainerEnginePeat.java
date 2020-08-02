@@ -23,27 +23,27 @@ import forestry.energy.tiles.TileEnginePeat;
 
 public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 
-	//TODO dedupe
-	public static ContainerEnginePeat fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEnginePeat tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEnginePeat.class);
-		return new ContainerEnginePeat(windowId, inv, tile);
-	}
+    //TODO dedupe
+    public static ContainerEnginePeat fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+        TileEnginePeat tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEnginePeat.class);
+        return new ContainerEnginePeat(windowId, inv, tile);
+    }
 
-	public ContainerEnginePeat(int id, PlayerInventory player, TileEnginePeat tile) {
-		super(id, EnergyContainers.ENGINE_PEAT.containerType(), player, tile, 8, 84);
+    public ContainerEnginePeat(int id, PlayerInventory player, TileEnginePeat tile) {
+        super(id, EnergyContainers.ENGINE_PEAT.containerType(), player, tile, 8, 84);
 
-		this.addSlot(new SlotFiltered(tile, 0, 44, 46));
+        this.addSlot(new SlotFiltered(tile, 0, 44, 46));
 
-		this.addSlot(new SlotOutput(tile, 1, 98, 35));
-		this.addSlot(new SlotOutput(tile, 2, 98, 53));
-		this.addSlot(new SlotOutput(tile, 3, 116, 35));
-		this.addSlot(new SlotOutput(tile, 4, 116, 53));
-	}
+        this.addSlot(new SlotOutput(tile, 1, 98, 35));
+        this.addSlot(new SlotOutput(tile, 2, 98, 53));
+        this.addSlot(new SlotOutput(tile, 3, 116, 35));
+        this.addSlot(new SlotOutput(tile, 4, 116, 53));
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToListeners(packet);
-	}
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+        sendPacketToListeners(packet);
+    }
 }

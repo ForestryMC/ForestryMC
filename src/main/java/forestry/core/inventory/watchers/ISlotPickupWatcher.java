@@ -13,5 +13,5 @@ package forestry.core.inventory.watchers;
 import net.minecraft.entity.player.PlayerEntity;
 
 public interface ISlotPickupWatcher {
-	void onTake(int slotIndex, PlayerEntity player);
+    void onTake(int slotIndex, PlayerEntity player);
 }

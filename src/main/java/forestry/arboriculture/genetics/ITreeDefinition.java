@@ -20,8 +20,8 @@ import forestry.api.arboriculture.genetics.ITree;
 
 public interface ITreeDefinition extends ISpeciesDefinition<ITree> {
 
-	@Override
-	IAlleleTreeSpecies getSpecies();
+    @Override
+    IAlleleTreeSpecies getSpecies();
 
-	ItemStack getMemberStack(EnumGermlingType treeType);
+    ItemStack getMemberStack(EnumGermlingType treeType);
 }

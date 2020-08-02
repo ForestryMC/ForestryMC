@@ -9,14 +9,14 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 public interface ICrafterWorktable {
-	ItemStack getResult(CraftingInventory CraftingInventory, World world);
+    ItemStack getResult(CraftingInventory CraftingInventory, World world);
 
-	boolean canTakeStack(int slotIndex);
+    boolean canTakeStack(int slotIndex);
 
-	boolean onCraftingStart(PlayerEntity player);
+    boolean onCraftingStart(PlayerEntity player);
 
-	void onCraftingComplete(PlayerEntity player);
+    void onCraftingComplete(PlayerEntity player);
 
-	@Nullable
-	IRecipe getRecipeUsed();
+    @Nullable
+    IRecipe getRecipeUsed();
 }

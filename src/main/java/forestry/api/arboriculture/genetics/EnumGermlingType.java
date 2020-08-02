@@ -8,18 +8,18 @@ package forestry.api.arboriculture.genetics;
 import genetics.api.organism.IOrganismType;
 
 public enum EnumGermlingType implements IOrganismType {
-	SAPLING("sapling"), POLLEN("pollen");
+    SAPLING("sapling"), POLLEN("pollen");
 
-	public static final EnumGermlingType[] VALUES = values();
+    public static final EnumGermlingType[] VALUES = values();
 
-	private final String name;
+    private final String name;
 
-	EnumGermlingType(String name) {
-		this.name = name;
-	}
+    EnumGermlingType(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
 }

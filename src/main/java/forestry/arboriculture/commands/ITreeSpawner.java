@@ -17,6 +17,6 @@ import forestry.core.commands.SpeciesNotFoundException;
 
 public interface ITreeSpawner {
 
-	int spawn(CommandSource source, String treeName, PlayerEntity player) throws SpeciesNotFoundException;
+    int spawn(CommandSource source, String treeName, PlayerEntity player) throws SpeciesNotFoundException;
 
 }

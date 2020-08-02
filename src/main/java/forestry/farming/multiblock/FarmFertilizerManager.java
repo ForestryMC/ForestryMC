@@ -19,73 +19,73 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.cultivation.IFarmHousingInternal;
 
 public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
-	private static final int BUFFER_FERTILIZER = 200;
-	private final IFarmInventoryInternal inventory;
-	private int storedFertilizer;
+    private static final int BUFFER_FERTILIZER = 200;
+    private final IFarmInventoryInternal inventory;
+    private int storedFertilizer;
 
-	public FarmFertilizerManager(IFarmHousingInternal housing) {
-		this.inventory = housing.getFarmInventory();
-		storedFertilizer = 0;
-	}
+    public FarmFertilizerManager(IFarmHousingInternal housing) {
+        this.inventory = housing.getFarmInventory();
+        storedFertilizer = 0;
+    }
 
-	public boolean hasFertilizer(int amount) {
-		if (inventory.getFertilizerValue() < 0) {
-			return true;
-		}
+    public boolean hasFertilizer(int amount) {
+        if (inventory.getFertilizerValue() < 0) {
+            return true;
+        }
 
-		return storedFertilizer >= amount;
-	}
+        return storedFertilizer >= amount;
+    }
 
-	public void removeFertilizer(int amount) {
-		if (inventory.getFertilizerValue() < 0) {
-			return;
-		}
+    public void removeFertilizer(int amount) {
+        if (inventory.getFertilizerValue() < 0) {
+            return;
+        }
 
-		storedFertilizer -= amount;
-		if (storedFertilizer < 0) {
-			storedFertilizer = 0;
-		}
-	}
+        storedFertilizer -= amount;
+        if (storedFertilizer < 0) {
+            storedFertilizer = 0;
+        }
+    }
 
-	public boolean maintainFertilizer() {
-		if (storedFertilizer <= BUFFER_FERTILIZER) {
-			int fertilizerValue = inventory.getFertilizerValue();
-			if (fertilizerValue < 0) {
-				storedFertilizer += 2000;
-			} else if (inventory.useFertilizer()) {
-				storedFertilizer += fertilizerValue;
-			}
-		}
+    public boolean maintainFertilizer() {
+        if (storedFertilizer <= BUFFER_FERTILIZER) {
+            int fertilizerValue = inventory.getFertilizerValue();
+            if (fertilizerValue < 0) {
+                storedFertilizer += 2000;
+            } else if (inventory.useFertilizer()) {
+                storedFertilizer += fertilizerValue;
+            }
+        }
 
-		return storedFertilizer > 0;
-	}
+        return storedFertilizer > 0;
+    }
 
-	@Override
-	public void read(CompoundNBT data) {
-		storedFertilizer = data.getInt("StoredFertilizer");
-	}
+    @Override
+    public void read(CompoundNBT data) {
+        storedFertilizer = data.getInt("StoredFertilizer");
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		data.putInt("StoredFertilizer", storedFertilizer);
-		return data;
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT data) {
+        data.putInt("StoredFertilizer", storedFertilizer);
+        return data;
+    }
 
-	public int getStoredFertilizerScaled(IFarmInventoryInternal inventory, int scale) {
-		if (storedFertilizer == 0) {
-			return 0;
-		}
+    public int getStoredFertilizerScaled(IFarmInventoryInternal inventory, int scale) {
+        if (storedFertilizer == 0) {
+            return 0;
+        }
 
-		return storedFertilizer * scale / (inventory.getFertilizerValue() + BUFFER_FERTILIZER);
-	}
+        return storedFertilizer * scale / (inventory.getFertilizerValue() + BUFFER_FERTILIZER);
+    }
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		data.writeVarInt(storedFertilizer);
-	}
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        data.writeVarInt(storedFertilizer);
+    }
 
-	@Override
-	public void readData(PacketBufferForestry data) {
-		storedFertilizer = data.readVarInt();
-	}
+    @Override
+    public void readData(PacketBufferForestry data) {
+        storedFertilizer = data.readVarInt();
+    }
 }

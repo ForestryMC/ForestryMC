@@ -29,9 +29,9 @@ import forestry.modules.IClientModuleHandler;
 @OnlyIn(Dist.CLIENT)
 public class ProxyLepidopterologyClient extends ProxyLepidopterology implements IClientModuleHandler {
 
-	@Override
-	public void setupClient(FMLClientSetupEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(LepidopterologyEntities.BUTTERFLY.entityType(), RenderButterflyEntity::new);
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_ge"), new ModelButterflyLoader());
-	}
+    @Override
+    public void setupClient(FMLClientSetupEvent event) {
+        RenderingRegistry.registerEntityRenderingHandler(LepidopterologyEntities.BUTTERFLY.entityType(), RenderButterflyEntity::new);
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_ge"), new ModelButterflyLoader());
+    }
 }

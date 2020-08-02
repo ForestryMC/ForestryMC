@@ -10,18 +10,18 @@ import java.util.Locale;
 import genetics.api.organism.IOrganismType;
 
 public enum EnumBeeType implements IOrganismType {
-	DRONE, PRINCESS, QUEEN, LARVAE;
+    DRONE, PRINCESS, QUEEN, LARVAE;
 
-	public static final EnumBeeType[] VALUES = values();
+    public static final EnumBeeType[] VALUES = values();
 
-	private final String name;
+    private final String name;
 
-	EnumBeeType() {
-		this.name = this.toString().toLowerCase(Locale.ENGLISH);
-	}
+    EnumBeeType() {
+        this.name = this.toString().toLowerCase(Locale.ENGLISH);
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 }

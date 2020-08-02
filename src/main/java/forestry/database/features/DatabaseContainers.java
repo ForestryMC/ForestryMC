@@ -9,7 +9,7 @@ import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class DatabaseContainers {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleDatabase.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleDatabase.class);
 
-	public static final FeatureContainerType<ContainerDatabase> DATABASE = REGISTRY.container(ContainerDatabase::fromNetwork, "database");
+    public static final FeatureContainerType<ContainerDatabase> DATABASE = REGISTRY.container(ContainerDatabase::fromNetwork, "database");
 }

@@ -12,26 +12,26 @@ import forestry.core.network.PacketIdClient;
 
 public class PacketClimatePlayer extends ForestryPacket implements IForestryPacketClient {
 
-	private IClimateState climateState;
+    private final IClimateState climateState;
 
-	public PacketClimatePlayer(IClimateState climateState) {
-		this.climateState = climateState;
-	}
+    public PacketClimatePlayer(IClimateState climateState) {
+        this.climateState = climateState;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeClimateState(climateState);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeClimateState(climateState);
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.CLIMATE_PLAYER;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.CLIMATE_PLAYER;
+    }
 
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			ClimateHandlerClient.setCurrentState(data.readClimateState());
-		}
-	}
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            ClimateHandlerClient.setCurrentState(data.readClimateState());
+        }
+    }
 }

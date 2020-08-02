@@ -8,12 +8,12 @@ import genetics.api.alleles.IAlleleTemplateBuilder;
  * about a purebred {@link IIndividual}.
  */
 public interface ITemplateProvider {
-	/**
-	 * @return The active and inactive template of the individual.
-	 */
-	IAlleleTemplate getTemplate();
+    /**
+     * @return The active and inactive template of the individual.
+     */
+    IAlleleTemplate getTemplate();
 
-	default IAlleleTemplateBuilder getTemplateBuilder() {
-		return getTemplate().createBuilder();
-	}
+    default IAlleleTemplateBuilder getTemplateBuilder() {
+        return getTemplate().createBuilder();
+    }
 }

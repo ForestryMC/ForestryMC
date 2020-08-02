@@ -21,88 +21,88 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class StructureInfo {
-	public BlockState[][][] data;
-	public int blockCount = 0;
-	public int[] countPerLevel;
-	public int structureHeight = 0;
-	public int structureLength = 0;
-	public int structureWidth = 0;
-	public int showLayer = -1;
+    public BlockState[][][] data;
+    public int blockCount = 0;
+    public int[] countPerLevel;
+    public int structureHeight = 0;
+    public int structureLength = 0;
+    public int structureWidth = 0;
+    public int showLayer = -1;
 
-	private int blockIndex = 0;
-	private int maxBlockIndex;
+    private int blockIndex = 0;
+    private final int maxBlockIndex;
 
-	public StructureInfo(int length, int height, int width, BlockData[] blockData) {
-		this.structureWidth = width;
-		this.structureHeight = height;
-		this.structureLength = length;
-		BlockState[][][] states = new BlockState[height][length][width];
+    public StructureInfo(int length, int height, int width, BlockData[] blockData) {
+        this.structureWidth = width;
+        this.structureHeight = height;
+        this.structureLength = length;
+        BlockState[][][] states = new BlockState[height][length][width];
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < length; x++) {
-				for (int z = 0; z < width; z++) {
-					for (BlockData data : blockData) {
-						if (inside(x, y, z, data.pos, data.endPos)) {
-							states[y][x][z] = NBTUtil.readBlockState(data.state);
-							break;
-						}
-					}
-				}
-			}
-		}
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < length; x++) {
+                for (int z = 0; z < width; z++) {
+                    for (BlockData data : blockData) {
+                        if (inside(x, y, z, data.pos, data.endPos)) {
+                            states[y][x][z] = NBTUtil.readBlockState(data.state);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
-		data = states;
-		maxBlockIndex = blockIndex = structureHeight * structureLength * structureWidth;
-	}
+        data = states;
+        maxBlockIndex = blockIndex = structureHeight * structureLength * structureWidth;
+    }
 
-	private boolean inside(int x, int y, int z, int[] rangeStart, int[] rangeEnd) {
-		if (x >= rangeStart[0] && x <= rangeEnd[0]) {
-			if (y >= rangeStart[1] && y <= rangeEnd[1]) {
-				return z >= rangeStart[2] && z <= rangeEnd[2];
-			}
-		}
+    private boolean inside(int x, int y, int z, int[] rangeStart, int[] rangeEnd) {
+        if (x >= rangeStart[0] && x <= rangeEnd[0]) {
+            if (y >= rangeStart[1] && y <= rangeEnd[1]) {
+                return z >= rangeStart[2] && z <= rangeEnd[2];
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public void setShowLayer(int layer) {
-		showLayer = layer;
-		blockIndex = (layer + 1) * (structureLength * structureWidth) - 1;
-	}
+    public void setShowLayer(int layer) {
+        showLayer = layer;
+        blockIndex = (layer + 1) * (structureLength * structureWidth) - 1;
+    }
 
-	public void reset() {
-		blockIndex = maxBlockIndex;
-	}
+    public void reset() {
+        blockIndex = maxBlockIndex;
+    }
 
-	public boolean canStep() {
-		int index = blockIndex;
-		do {
-			if (++index >= maxBlockIndex) {
-				return false;
-			}
-		} while (isEmpty(index));
-		return true;
-	}
+    public boolean canStep() {
+        int index = blockIndex;
+        do {
+            if (++index >= maxBlockIndex) {
+                return false;
+            }
+        } while (isEmpty(index));
+        return true;
+    }
 
-	public void step() {
-		int start = blockIndex;
-		do {
-			if (++blockIndex >= maxBlockIndex) {
-				blockIndex = 0;
-			}
-		} while (isEmpty(blockIndex) && blockIndex != start);
-	}
+    public void step() {
+        int start = blockIndex;
+        do {
+            if (++blockIndex >= maxBlockIndex) {
+                blockIndex = 0;
+            }
+        } while (isEmpty(blockIndex) && blockIndex != start);
+    }
 
-	private boolean isEmpty(int index) {
-		int y = index / (structureLength * structureWidth);
-		int r = index % (structureLength * structureWidth);
-		int x = r / structureWidth;
-		int z = r % structureWidth;
+    private boolean isEmpty(int index) {
+        int y = index / (structureLength * structureWidth);
+        int r = index % (structureLength * structureWidth);
+        int x = r / structureWidth;
+        int z = r % structureWidth;
 
-		return data[y][x][z] == null || data[y][x][z].getBlock() == Blocks.AIR;
-	}
+        return data[y][x][z] == null || data[y][x][z].getBlock() == Blocks.AIR;
+    }
 
-	public int getLimiter() {
-		return blockIndex;
-	}
+    public int getLimiter() {
+        return blockIndex;
+    }
 }

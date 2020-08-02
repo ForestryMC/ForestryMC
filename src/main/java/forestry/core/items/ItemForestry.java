@@ -28,41 +28,41 @@ import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemForestry extends Item {
 
-	private final int burnTime;
+    private final int burnTime;
 
-	//TODO may be worth removing this
-	public ItemForestry() {
-		this(ItemGroupForestry.tabForestry);
-	}
+    //TODO may be worth removing this
+    public ItemForestry() {
+        this(ItemGroupForestry.tabForestry);
+    }
 
-	public ItemForestry(ItemGroup group) {
-		this(new Item.Properties(), group);
-	}
+    public ItemForestry(ItemGroup group) {
+        this(new Item.Properties(), group);
+    }
 
-	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
-		this(properties.group(creativeTab));
-	}
+    public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
+        this(properties.group(creativeTab));
+    }
 
-	public ItemForestry(Item.Properties properties) {
-		//TODO - do the below at registration
-		super(properties);
-		if (properties instanceof ItemProperties) {
-			this.burnTime = ((ItemProperties) properties).burnTime;
-		} else {
-			burnTime = 0;
-		}
-	}
+    public ItemForestry(Item.Properties properties) {
+        //TODO - do the below at registration
+        super(properties);
+        if (properties instanceof ItemProperties) {
+            this.burnTime = ((ItemProperties) properties).burnTime;
+        } else {
+            burnTime = 0;
+        }
+    }
 
-	@Override
-	public int getBurnTime(ItemStack itemStack) {
-		return burnTime;
-	}
+    @Override
+    public int getBurnTime(ItemStack itemStack) {
+        return burnTime;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
-		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
+    }
 
 }

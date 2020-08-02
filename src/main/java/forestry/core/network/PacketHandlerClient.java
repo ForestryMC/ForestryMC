@@ -22,40 +22,40 @@ import net.minecraftforge.fml.network.NetworkEvent;
 @OnlyIn(Dist.CLIENT)
 public class PacketHandlerClient {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
-	public void onPacket(NetworkEvent.ServerCustomPayloadEvent event) {
-		PacketBufferForestry data = new PacketBufferForestry(event.getPayload());
-		byte idOrdinal = data.readByte();
-		PacketIdClient id = PacketIdClient.VALUES[idOrdinal];
+    public void onPacket(NetworkEvent.ServerCustomPayloadEvent event) {
+        PacketBufferForestry data = new PacketBufferForestry(event.getPayload());
+        byte idOrdinal = data.readByte();
+        PacketIdClient id = PacketIdClient.VALUES[idOrdinal];
 
-		IForestryPacketHandlerClient packetHandler = id.getPacketHandler();
+        IForestryPacketHandlerClient packetHandler = id.getPacketHandler();
 
-		PlayerEntity player = Minecraft.getInstance().player;
+        PlayerEntity player = Minecraft.getInstance().player;
 
-		if (player == null) {
-			LOGGER.warn("the player was null, event: {}", event);
-			return;
-		}
+        if (player == null) {
+            LOGGER.warn("the player was null, event: {}", event);
+            return;
+        }
 
-		try {
-			packetHandler.onPacketData(data, player);
+        try {
+            packetHandler.onPacketData(data, player);
 
-		} catch (IOException e) {
-			LOGGER.error("exception handling packet", e);
-			return;
-		}
-		event.getSource().get().setPacketHandled(true);
-	}
+        } catch (IOException e) {
+            LOGGER.error("exception handling packet", e);
+            return;
+        }
+        event.getSource().get().setPacketHandled(true);
+    }
 
-	public static void sendPacket(IForestryPacketServer packet) {
-		Minecraft minecraft = Minecraft.getInstance();
-		ClientPlayNetHandler netHandler = minecraft.getConnection();
-		if (netHandler != null) {
-			Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-			ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
-			netHandler.sendPacket(payload.getThis());
-		}
-	}
+    public static void sendPacket(IForestryPacketServer packet) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientPlayNetHandler netHandler = minecraft.getConnection();
+        if (netHandler != null) {
+            Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
+            ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
+            netHandler.sendPacket(payload.getThis());
+        }
+    }
 
 }

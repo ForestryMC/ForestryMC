@@ -41,103 +41,103 @@ import net.minecraftforge.common.model.TransformationHelper;
 @OnlyIn(Dist.CLIENT)
 public class TRSRBakedModel implements IBakedModel {
 
-	protected final ImmutableList<BakedQuad> general;
-	protected final ImmutableMap<Direction, ImmutableList<BakedQuad>> faces;
-	protected final IBakedModel original;
+    protected final ImmutableList<BakedQuad> general;
+    protected final ImmutableMap<Direction, ImmutableList<BakedQuad>> faces;
+    protected final IBakedModel original;
 
-	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float scale) {
-		this(original, x, y, z, 0, 0, 0, scale, scale, scale);
-	}
+    public TRSRBakedModel(IBakedModel original, float x, float y, float z, float scale) {
+        this(original, x, y, z, 0, 0, 0, scale, scale, scale);
+    }
 
-	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
-		this(original, x, y, z, rotX, rotY, rotZ, scale, scale, scale);
-	}
+    public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
+        this(original, x, y, z, rotX, rotY, rotZ, scale, scale, scale);
+    }
 
-	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
-		this(original, new TransformationMatrix(new Vector3f(x, y, z),
-			null,
-			new Vector3f(scaleX, scaleY, scaleZ),
-			TransformationHelper.quatFromXYZ(new Vector3f(rotX, rotY, rotZ), false)));
-	}
+    public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+        this(original, new TransformationMatrix(new Vector3f(x, y, z),
+                null,
+                new Vector3f(scaleX, scaleY, scaleZ),
+                TransformationHelper.quatFromXYZ(new Vector3f(rotX, rotY, rotZ), false)));
+    }
 
-	public TRSRBakedModel(IBakedModel original, TransformationMatrix transform) {
-		this.original = original;
+    public TRSRBakedModel(IBakedModel original, TransformationMatrix transform) {
+        this.original = original;
 
-		ImmutableList.Builder<BakedQuad> builder;
-		builder = ImmutableList.builder();
+        ImmutableList.Builder<BakedQuad> builder;
+        builder = ImmutableList.builder();
 
-		//transform = TransformationHelper.blockCenterToCorner(transform);
+        //transform = TransformationHelper.blockCenterToCorner(transform);
 
-		// face quads
-		EnumMap<Direction, ImmutableList<BakedQuad>> faces = Maps.newEnumMap(Direction.class);
-		for (Direction face : Direction.values()) {
-			if (!original.isBuiltInRenderer()) {
-				for (BakedQuad quad : original.getQuads(null, face, new Random())) {
-					BakedQuadBuilder quadBuilder = new BakedQuadBuilder();
-					TRSRTransformer transformer = new TRSRTransformer(quadBuilder, transform);
-					quad.pipe(transformer);
-					builder.add(quadBuilder.build());
-				}
-			}
-			//faces.put(face, builder.build());
-			faces.put(face, ImmutableList.of());
-		}
+        // face quads
+        EnumMap<Direction, ImmutableList<BakedQuad>> faces = Maps.newEnumMap(Direction.class);
+        for (Direction face : Direction.values()) {
+            if (!original.isBuiltInRenderer()) {
+                for (BakedQuad quad : original.getQuads(null, face, new Random())) {
+                    BakedQuadBuilder quadBuilder = new BakedQuadBuilder();
+                    TRSRTransformer transformer = new TRSRTransformer(quadBuilder, transform);
+                    quad.pipe(transformer);
+                    builder.add(quadBuilder.build());
+                }
+            }
+            //faces.put(face, builder.build());
+            faces.put(face, ImmutableList.of());
+        }
 
-		// general quads
-		//builder = ImmutableList.builder();
-		if (!original.isBuiltInRenderer()) {
-			for (BakedQuad quad : original.getQuads(null, null, new Random())) {
-				BakedQuadBuilder quadBuilder = new BakedQuadBuilder();
-				TRSRTransformer transformer = new TRSRTransformer(quadBuilder, transform);
-				quad.pipe(transformer);
-				builder.add(quadBuilder.build());
-			}
-		}
+        // general quads
+        //builder = ImmutableList.builder();
+        if (!original.isBuiltInRenderer()) {
+            for (BakedQuad quad : original.getQuads(null, null, new Random())) {
+                BakedQuadBuilder quadBuilder = new BakedQuadBuilder();
+                TRSRTransformer transformer = new TRSRTransformer(quadBuilder, transform);
+                quad.pipe(transformer);
+                builder.add(quadBuilder.build());
+            }
+        }
 
-		this.general = builder.build();
-		this.faces = Maps.immutableEnumMap(faces);
-	}
+        this.general = builder.build();
+        this.faces = Maps.immutableEnumMap(faces);
+    }
 
-	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-		if (side != null) {
-			return faces.get(side);
-		}
-		return general;
-	}
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+        if (side != null) {
+            return faces.get(side);
+        }
+        return general;
+    }
 
-	@Override
-	public boolean isAmbientOcclusion() {
-		return false;
-	}
+    @Override
+    public boolean isAmbientOcclusion() {
+        return false;
+    }
 
-	@Override
-	public boolean isGui3d() {
-		return original.isGui3d();
-	}
+    @Override
+    public boolean isGui3d() {
+        return original.isGui3d();
+    }
 
-	@Override
-	public boolean func_230044_c_() {
-		return false;
-	}
+    @Override
+    public boolean func_230044_c_() {
+        return false;
+    }
 
-	@Override
-	public boolean isBuiltInRenderer() {
-		return original.isBuiltInRenderer();
-	}
+    @Override
+    public boolean isBuiltInRenderer() {
+        return original.isBuiltInRenderer();
+    }
 
-	@Override
-	public TextureAtlasSprite getParticleTexture() {
-		return original.getParticleTexture();
-	}
+    @Override
+    public TextureAtlasSprite getParticleTexture() {
+        return original.getParticleTexture();
+    }
 
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
-		return original.getItemCameraTransforms();
-	}
+    @Override
+    public ItemCameraTransforms getItemCameraTransforms() {
+        return original.getItemCameraTransforms();
+    }
 
-	@Override
-	public ItemOverrideList getOverrides() {
-		return original.getOverrides();
-	}
+    @Override
+    public ItemOverrideList getOverrides() {
+        return original.getOverrides();
+    }
 }

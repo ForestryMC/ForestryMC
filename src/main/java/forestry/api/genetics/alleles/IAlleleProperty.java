@@ -11,14 +11,14 @@ import forestry.api.core.IBlockSubtype;
 
 public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, Comparable<A>, IBlockSubtype {
 
-	/**
-	 * To compare the allele for the properties
-	 */
-	@Override
-	int compareTo(A o);
+    /**
+     * To compare the allele for the properties
+     */
+    @Override
+    int compareTo(A o);
 
-	@Override
-	default String getString() {
-		return getRegistryName().toString().replace(":", "_");
-	}
+    @Override
+    default String getString() {
+        return getRegistryName().toString().replace(":", "_");
+    }
 }

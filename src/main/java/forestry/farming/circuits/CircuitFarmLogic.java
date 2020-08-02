@@ -23,77 +23,77 @@ import forestry.core.circuits.Circuit;
 
 public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 
-	private final IFarmProperties properties;
-	private final IFarmLogic logic;
+    private final IFarmProperties properties;
+    private final IFarmLogic logic;
 
-	public CircuitFarmLogic(String uid, IFarmProperties instance, boolean manual) {
-		super(uid);
-		this.logic = instance.getLogic(manual);
-		this.properties = instance;
-	}
+    public CircuitFarmLogic(String uid, IFarmProperties instance, boolean manual) {
+        super(uid);
+        this.logic = instance.getLogic(manual);
+        this.properties = instance;
+    }
 
-	@SuppressWarnings("unused")
-	public CircuitFarmLogic(String uid, IFarmLogic logic) {
-		super(uid);
-		this.logic = logic;
-		this.properties = logic.getProperties();
-	}
+    @SuppressWarnings("unused")
+    public CircuitFarmLogic(String uid, IFarmLogic logic) {
+        super(uid);
+        this.logic = logic;
+        this.properties = logic.getProperties();
+    }
 
-	@Override
-	public String getTranslationKey() {
-		return properties.getTranslationKey();
-	}
+    @Override
+    public String getTranslationKey() {
+        return properties.getTranslationKey();
+    }
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return properties.getDisplayName(logic.isManual());
-	}
+    @Override
+    public ITextComponent getDisplayName() {
+        return properties.getDisplayName(logic.isManual());
+    }
 
-	@Override
-	public IFarmLogic getFarmLogic() {
-		return logic;
-	}
+    @Override
+    public IFarmLogic getFarmLogic() {
+        return logic;
+    }
 
-	@Override
-	public boolean isCircuitable(Object tile) {
-		return tile instanceof IFarmHousing;
-	}
+    @Override
+    public boolean isCircuitable(Object tile) {
+        return tile instanceof IFarmHousing;
+    }
 
-	@Nullable
-	private IFarmHousing getCircuitable(Object tile) {
-		if (!isCircuitable(tile)) {
-			return null;
-		}
-		return (IFarmHousing) tile;
-	}
+    @Nullable
+    private IFarmHousing getCircuitable(Object tile) {
+        if (!isCircuitable(tile)) {
+            return null;
+        }
+        return (IFarmHousing) tile;
+    }
 
-	@Override
-	public void onInsertion(int slot, Object tile) {
-		IFarmHousing housing = getCircuitable(tile);
-		if (housing == null) {
-			return;
-		}
+    @Override
+    public void onInsertion(int slot, Object tile) {
+        IFarmHousing housing = getCircuitable(tile);
+        if (housing == null) {
+            return;
+        }
 
-		housing.setFarmLogic(FarmDirection.values()[slot], logic);
-	}
+        housing.setFarmLogic(FarmDirection.values()[slot], logic);
+    }
 
-	@Override
-	public void onLoad(int slot, Object tile) {
-		onInsertion(slot, tile);
-	}
+    @Override
+    public void onLoad(int slot, Object tile) {
+        onInsertion(slot, tile);
+    }
 
-	@Override
-	public void onRemoval(int slot, Object tile) {
-		IFarmHousing farmHousing = getCircuitable(tile);
-		if (farmHousing == null) {
-			return;
-		}
+    @Override
+    public void onRemoval(int slot, Object tile) {
+        IFarmHousing farmHousing = getCircuitable(tile);
+        if (farmHousing == null) {
+            return;
+        }
 
-		farmHousing.resetFarmLogic(FarmDirection.values()[slot]);
-	}
+        farmHousing.resetFarmLogic(FarmDirection.values()[slot]);
+    }
 
-	@Override
-	public void onTick(int slot, Object tile) {
-	}
+    @Override
+    public void onTick(int slot, Object tile) {
+    }
 
 }

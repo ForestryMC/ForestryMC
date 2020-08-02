@@ -21,29 +21,29 @@ import forestry.lepidopterology.entities.EntityButterfly;
 
 public class RenderButterflyEntity extends MobRenderer<EntityButterfly, ModelButterfly> {
 
-	public RenderButterflyEntity(EntityRendererManager manager) {
-		super(manager, new ModelButterfly(), 0.25f);
-	}
+    public RenderButterflyEntity(EntityRendererManager manager) {
+        super(manager, new ModelButterfly(), 0.25f);
+    }
 
 
-	@Override
-	public void render(EntityButterfly entity, float entityYaw, float partialTickTime, MatrixStack transform, IRenderTypeBuffer buffer, int packedLight) {
-		if (!entity.isRenderable()) {
-			return;
-		}
+    @Override
+    public void render(EntityButterfly entity, float entityYaw, float partialTickTime, MatrixStack transform, IRenderTypeBuffer buffer, int packedLight) {
+        if (!entity.isRenderable()) {
+            return;
+        }
 
-		entityModel.setScale(entity.getSize());
-		super.render(entity, entityYaw, partialTickTime, transform, buffer, packedLight);
-	}
+        entityModel.setScale(entity.getSize());
+        super.render(entity, entityYaw, partialTickTime, transform, buffer, packedLight);
+    }
 
-	@Override
-	public ResourceLocation getEntityTexture(EntityButterfly entity) {
-		return entity.getTexture();
-	}
+    @Override
+    public ResourceLocation getEntityTexture(EntityButterfly entity) {
+        return entity.getTexture();
+    }
 
-	@Override
-	protected float handleRotationFloat(EntityButterfly entity, float partialTickTime) {
-		return entity.getWingFlap(partialTickTime);
-	}
+    @Override
+    protected float handleRotationFloat(EntityButterfly entity, float partialTickTime) {
+        return entity.getWingFlap(partialTickTime);
+    }
 
 }

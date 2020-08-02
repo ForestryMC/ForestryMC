@@ -20,14 +20,14 @@ import forestry.core.network.PacketBufferForestry;
 
 @OnlyIn(Dist.CLIENT)
 public class PacketHandlerDummyClient extends PacketHandlerDummy implements IForestryPacketHandlerClient {
-	public static final PacketHandlerDummyClient INSTANCE = new PacketHandlerDummyClient();
+    public static final PacketHandlerDummyClient INSTANCE = new PacketHandlerDummyClient();
 
-	private PacketHandlerDummyClient() {
+    private PacketHandlerDummyClient() {
 
-	}
+    }
 
-	@Override
-	public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+    @Override
+    public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 
-	}
+    }
 }

@@ -30,32 +30,32 @@ import forestry.api.genetics.IMutationCondition;
 
 public class MutationConditionBiome implements IMutationCondition {
 
-	private final List<BiomeDictionary.Type> validBiomeTypes;
+    private final List<BiomeDictionary.Type> validBiomeTypes;
 
-	public MutationConditionBiome(BiomeDictionary.Type... types) {
-		this.validBiomeTypes = Arrays.asList(types);
-	}
+    public MutationConditionBiome(BiomeDictionary.Type... types) {
+        this.validBiomeTypes = Arrays.asList(types);
+    }
 
-	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		Biome biome = climate.getBiome();
-		for (BiomeDictionary.Type type : validBiomeTypes) {
-			if (BiomeDictionary.hasType(biome, type)) {
-				return 1;
-			}
-		}
+    @Override
+    public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+        Biome biome = climate.getBiome();
+        for (BiomeDictionary.Type type : validBiomeTypes) {
+            if (BiomeDictionary.hasType(biome, type)) {
+                return 1;
+            }
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	@Override
-	public ITextComponent getDescription() {
-		if (validBiomeTypes.size() > 1) {
-			String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
-			return new TranslationTextComponent("for.mutation.condition.biome.multiple", biomeTypes);
-		} else {
-			String biomeType = validBiomeTypes.get(0).toString().toLowerCase(Locale.ENGLISH);
-			return new TranslationTextComponent("for.mutation.condition.biome.single", biomeType);
-		}
-	}
+    @Override
+    public ITextComponent getDescription() {
+        if (validBiomeTypes.size() > 1) {
+            String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
+            return new TranslationTextComponent("for.mutation.condition.biome.multiple", biomeTypes);
+        } else {
+            String biomeType = validBiomeTypes.get(0).toString().toLowerCase(Locale.ENGLISH);
+            return new TranslationTextComponent("for.mutation.condition.biome.single", biomeType);
+        }
+    }
 }

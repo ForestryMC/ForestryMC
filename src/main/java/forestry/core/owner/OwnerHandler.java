@@ -24,57 +24,57 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
 public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, INbtReadable {
-	@Nullable
-	private GameProfile owner = null;
+    @Nullable
+    private GameProfile owner = null;
 
-	@Override
-	@Nullable
-	public GameProfile getOwner() {
-		return owner;
-	}
+    @Override
+    @Nullable
+    public GameProfile getOwner() {
+        return owner;
+    }
 
-	@Override
-	public void setOwner(GameProfile owner) {
-		this.owner = owner;
-	}
+    @Override
+    public void setOwner(GameProfile owner) {
+        this.owner = owner;
+    }
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		if (owner == null) {
-			data.writeBoolean(false);
-		} else {
-			data.writeBoolean(true);
-			data.writeLong(owner.getId().getMostSignificantBits());
-			data.writeLong(owner.getId().getLeastSignificantBits());
-			data.writeString(owner.getName());
-		}
-	}
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        if (owner == null) {
+            data.writeBoolean(false);
+        } else {
+            data.writeBoolean(true);
+            data.writeLong(owner.getId().getMostSignificantBits());
+            data.writeLong(owner.getId().getLeastSignificantBits());
+            data.writeString(owner.getName());
+        }
+    }
 
-	@Override
-	public void readData(PacketBufferForestry data) {
-		if (data.readBoolean()) {
-			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
-			setOwner(owner);
-		}
-	}
+    @Override
+    public void readData(PacketBufferForestry data) {
+        if (data.readBoolean()) {
+            GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+            setOwner(owner);
+        }
+    }
 
-	@Override
-	public void read(CompoundNBT data) {
-		if (data.contains("owner")) {
-			GameProfile owner = NBTUtil.readGameProfile(data.getCompound("owner"));
-			if (owner != null) {
-				setOwner(owner);
-			}
-		}
-	}
+    @Override
+    public void read(CompoundNBT data) {
+        if (data.contains("owner")) {
+            GameProfile owner = NBTUtil.readGameProfile(data.getCompound("owner"));
+            if (owner != null) {
+                setOwner(owner);
+            }
+        }
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		if (this.owner != null) {
-			CompoundNBT nbt = new CompoundNBT();
-			NBTUtil.writeGameProfile(nbt, owner);
-			data.put("owner", nbt);
-		}
-		return data;
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT data) {
+        if (this.owner != null) {
+            CompoundNBT nbt = new CompoundNBT();
+            NBTUtil.writeGameProfile(nbt, owner);
+            data.put("owner", nbt);
+        }
+        return data;
+    }
 }

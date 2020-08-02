@@ -10,14 +10,14 @@ import java.util.Locale;
 import net.minecraft.util.IStringSerializable;
 
 public enum WoodBlockKind implements IStringSerializable {
-	LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;
+    LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;
 
-	public String getString() {
-		return super.toString().toLowerCase(Locale.ENGLISH);
-	}
+    public String getString() {
+        return super.toString().toLowerCase(Locale.ENGLISH);
+    }
 
-	@Override
-	public String toString() {
-		return getString();
-	}
+    @Override
+    public String toString() {
+        return getString();
+    }
 }

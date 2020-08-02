@@ -29,35 +29,35 @@ import forestry.factory.tiles.TileFermenter;
 
 public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
-	public static ContainerFermenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileFermenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFermenter.class);
-		return new ContainerFermenter(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerFermenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileFermenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFermenter.class);
+        return new ContainerFermenter(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerFermenter(int windowId, PlayerInventory player, TileFermenter tile) {
-		super(windowId, FactoryContainers.FERMENTER.containerType(), player, tile, 8, 84);
+    public ContainerFermenter(int windowId, PlayerInventory player, TileFermenter tile) {
+        super(windowId, FactoryContainers.FERMENTER.containerType(), player, tile, 8, 84);
 
-		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_RESOURCE, 85, 23));
-		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_FUEL, 75, 57));
-		this.addSlot(new SlotOutput(tile, InventoryFermenter.SLOT_CAN_OUTPUT, 150, 58));
-		this.addSlot(new SlotEmptyLiquidContainerIn(tile, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
-		this.addSlot(new SlotLiquidIn(tile, InventoryFermenter.SLOT_INPUT, 10, 40));
-	}
+        this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_RESOURCE, 85, 23));
+        this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_FUEL, 75, 57));
+        this.addSlot(new SlotOutput(tile, InventoryFermenter.SLOT_CAN_OUTPUT, 150, 58));
+        this.addSlot(new SlotEmptyLiquidContainerIn(tile, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
+        this.addSlot(new SlotLiquidIn(tile, InventoryFermenter.SLOT_INPUT, 10, 40));
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void updateProgressBar(int messageId, int data) {
-		super.updateProgressBar(messageId, data);
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void updateProgressBar(int messageId, int data) {
+        super.updateProgressBar(messageId, data);
 
-		tile.getGUINetworkData(messageId, data);
-	}
+        tile.getGUINetworkData(messageId, data);
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		for (IContainerListener crafter : listeners) {
-			tile.sendGUINetworkData(this, crafter);
-		}
-	}
+        for (IContainerListener crafter : listeners) {
+            tile.sendGUINetworkData(this, crafter);
+        }
+    }
 }

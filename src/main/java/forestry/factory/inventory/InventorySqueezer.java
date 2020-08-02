@@ -26,60 +26,60 @@ import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.tiles.TileSqueezer;
 
 public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
-	public static final short SLOT_RESOURCE_1 = 0;
-	public static final short SLOTS_RESOURCE_COUNT = 9;
-	public static final short SLOT_REMNANT = 9;
-	public static final short SLOT_REMNANT_COUNT = 1;
-	public static final short SLOT_CAN_INPUT = 10;
-	public static final short SLOT_CAN_OUTPUT = 11;
+    public static final short SLOT_RESOURCE_1 = 0;
+    public static final short SLOTS_RESOURCE_COUNT = 9;
+    public static final short SLOT_REMNANT = 9;
+    public static final short SLOT_REMNANT_COUNT = 1;
+    public static final short SLOT_CAN_INPUT = 10;
+    public static final short SLOT_CAN_OUTPUT = 11;
 
-	public InventorySqueezer(TileSqueezer squeezer) {
-		super(squeezer, 12, "Items");
-	}
+    public InventorySqueezer(TileSqueezer squeezer) {
+        super(squeezer, 12, "Items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_CAN_INPUT) {
-			return FluidHelper.isFillableEmptyContainer(itemStack);
-		}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_CAN_INPUT) {
+            return FluidHelper.isFillableEmptyContainer(itemStack);
+        }
 
-		if (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
-			if (FluidHelper.isFillableEmptyContainer(itemStack)) {
-				return false;
-			}
+        if (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
+            if (FluidHelper.isFillableEmptyContainer(itemStack)) {
+                return false;
+            }
 
-			return SqueezerRecipeManager.canUse(itemStack);
-		}
+            return SqueezerRecipeManager.canUse(itemStack);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
-		return slotIndex == SLOT_REMNANT || slotIndex == SLOT_CAN_OUTPUT;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+        return slotIndex == SLOT_REMNANT || slotIndex == SLOT_CAN_OUTPUT;
+    }
 
-	public boolean hasResources() {
-		return !InventoryUtil.isEmpty(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
-	}
+    public boolean hasResources() {
+        return !InventoryUtil.isEmpty(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
+    }
 
-	public NonNullList<ItemStack> getResources() {
-		return InventoryUtil.getStacks(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
-	}
+    public NonNullList<ItemStack> getResources() {
+        return InventoryUtil.getStacks(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
+    }
 
-	public boolean removeResources(NonNullList<ItemStack> stacks) {
-		IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, stacks, null, false, true, false, true);
-	}
+    public boolean removeResources(NonNullList<ItemStack> stacks) {
+        IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
+        return InventoryUtil.removeSets(inventory, 1, stacks, null, false, true, false, true);
+    }
 
-	public boolean addRemnant(ItemStack remnant, boolean doAdd) {
-		return InventoryUtil.tryAddStack(this, remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true, doAdd);
-	}
+    public boolean addRemnant(ItemStack remnant, boolean doAdd) {
+        return InventoryUtil.tryAddStack(this, remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true, doAdd);
+    }
 
-	public void fillContainers(FluidStack fluidStack, TankManager tankManager) {
-		if (getStackInSlot(SLOT_CAN_INPUT).isEmpty()) {
-			return;
-		}
-		FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
-	}
+    public void fillContainers(FluidStack fluidStack, TankManager tankManager) {
+        if (getStackInSlot(SLOT_CAN_INPUT).isEmpty()) {
+            return;
+        }
+        FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
+    }
 }

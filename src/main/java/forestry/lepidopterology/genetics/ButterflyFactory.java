@@ -15,8 +15,8 @@ import forestry.api.lepidopterology.genetics.IButterflyFactory;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflySpecies;
 
 public class ButterflyFactory implements IButterflyFactory {
-	@Override
-	public IAlleleButterflySpeciesBuilder createSpecies(String modId, String uid, String speciesIdentifier) {
-		return new AlleleButterflySpecies.Builder(modId, uid, speciesIdentifier);
-	}
+    @Override
+    public IAlleleButterflySpeciesBuilder createSpecies(String modId, String uid, String speciesIdentifier) {
+        return new AlleleButterflySpecies.Builder(modId, uid, speciesIdentifier);
+    }
 }

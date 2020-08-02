@@ -28,34 +28,34 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.TileUtil;
 
 public class PacketTileStream extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final IStreamable streamable;
+    private final BlockPos pos;
+    private final IStreamable streamable;
 
-	public <T extends TileEntity & IStreamable> PacketTileStream(T streamable) {
-		this.pos = streamable.getPos();
-		this.streamable = streamable;
-	}
+    public <T extends TileEntity & IStreamable> PacketTileStream(T streamable) {
+        this.pos = streamable.getPos();
+        this.streamable = streamable;
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TILE_FORESTRY_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.TILE_FORESTRY_UPDATE;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		streamable.writeData(data);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        streamable.writeData(data);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			BlockPos pos = data.readBlockPos();
-			IStreamable tile = TileUtil.getTile(player.world, pos, IStreamable.class);
-			if (tile != null) {
-				tile.readData(data);
-			}
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+            BlockPos pos = data.readBlockPos();
+            IStreamable tile = TileUtil.getTile(player.world, pos, IStreamable.class);
+            if (tile != null) {
+                tile.readData(data);
+            }
+        }
+    }
 }

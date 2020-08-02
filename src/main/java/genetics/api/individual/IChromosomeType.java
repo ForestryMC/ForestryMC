@@ -10,32 +10,32 @@ import genetics.api.root.IRootDefinition;
  * Interface to be implemented by the enums representing the various chromosomes.
  */
 public interface IChromosomeType {
-	/**
-	 * @return The position of a chromosome that has this type at a chromosome array.
-	 */
-	int getIndex();
+    /**
+     * @return The position of a chromosome that has this type at a chromosome array.
+     */
+    int getIndex();
 
-	@Deprecated
-	default int ordinal() {
-		return getIndex();
-	}
+    @Deprecated
+    default int ordinal() {
+        return getIndex();
+    }
 
-	/**
-	 * @return Short identifier.
-	 */
-	String getName();
+    /**
+     * @return Short identifier.
+     */
+    String getName();
 
-	ITextComponent getDisplayName();
+    ITextComponent getDisplayName();
 
-	/**
-	 * @return The definition that contains this type in the {@link IKaryotype}.
-	 * @implNote You can use {@link genetics.api.IGeneticApiInstance#getRoot(String)} to get a instance of your definition.
-	 */
-	IIndividualRoot getRoot();
+    /**
+     * @return The definition that contains this type in the {@link IKaryotype}.
+     * @implNote You can use {@link genetics.api.IGeneticApiInstance#getRoot(String)} to get a instance of your definition.
+     */
+    IIndividualRoot getRoot();
 
-	IRootDefinition getDefinition();
+    IRootDefinition getDefinition();
 
-	boolean isEmpty();
+    boolean isEmpty();
 
-	boolean isValid(IAllele allele);
+    boolean isValid(IAllele allele);
 }

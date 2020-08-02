@@ -40,64 +40,64 @@ import forestry.farming.features.FarmingTiles;
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active {//}, ITriggerProvider {
 
-	private static final Direction[] dumpDirections = new Direction[]{Direction.DOWN};
+    private static final Direction[] dumpDirections = new Direction[]{Direction.DOWN};
 
-	private final AdjacentTileCache tileCache;
-	private final AdjacentInventoryCache inventoryCache;
+    private final AdjacentTileCache tileCache;
+    private final AdjacentInventoryCache inventoryCache;
 
-	public TileFarmHatch() {
-		super(FarmingTiles.HATCH.tileType());
-		this.tileCache = new AdjacentTileCache(this);
-		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY());
-	}
+    public TileFarmHatch() {
+        super(FarmingTiles.HATCH.tileType());
+        this.tileCache = new AdjacentTileCache(this);
+        this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY());
+    }
 
-	@Override
-	public boolean allowsAutomation() {
-		return true;
-	}
+    @Override
+    public boolean allowsAutomation() {
+        return true;
+    }
 
-	@Override
-	public void updateServer(int tickCount) {
-		if (tickCount % 40 == 0) {
-			IInventory productInventory = getMultiblockLogic().getController().getFarmInventory().getProductInventory();
-			IItemHandler productItemHandler = new InvWrapper(productInventory);
+    @Override
+    public void updateServer(int tickCount) {
+        if (tickCount % 40 == 0) {
+            IInventory productInventory = getMultiblockLogic().getController().getFarmInventory().getProductInventory();
+            IItemHandler productItemHandler = new InvWrapper(productInventory);
 
-			if (!InventoryUtil.moveOneItemToPipe(productItemHandler, tileCache, dumpDirections)) {
-				InventoryUtil.moveItemStack(productItemHandler, inventoryCache.getAdjacentInventories());
-			}
-		}
-	}
+            if (!InventoryUtil.moveOneItemToPipe(productItemHandler, tileCache, dumpDirections)) {
+                InventoryUtil.moveItemStack(productItemHandler, inventoryCache.getAdjacentInventories());
+            }
+        }
+    }
 
-	@Override
-	public void updateClient(int tickCount) {
+    @Override
+    public void updateClient(int tickCount) {
 
-	}
+    }
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(this, facing);
-			return LazyOptional.of(() -> sidedInvWrapper).cast();
-		}
-		return super.getCapability(capability, facing);
-	}
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(this, facing);
+            return LazyOptional.of(() -> sidedInvWrapper).cast();
+        }
+        return super.getCapability(capability, facing);
+    }
 
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
-	//	}
-	//
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
-	//	}
-	//
-	//	/* ITRIGGERPROVIDER */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		if (getMultiblockLogic().isConnected()) {
-	//			triggers.addAll(FarmingTriggers.allExternalTriggers);
-	//		}
-	//	}
+    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+    //	@Override
+    //	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+    //	}
+    //
+    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+    //	@Override
+    //	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
+    //	}
+    //
+    //	/* ITRIGGERPROVIDER */
+    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+    //	@Override
+    //	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+    //		if (getMultiblockLogic().isConnected()) {
+    //			triggers.addAll(FarmingTriggers.allExternalTriggers);
+    //		}
+    //	}
 }

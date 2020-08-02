@@ -19,50 +19,50 @@ import forestry.core.utils.OreDictUtil;
 
 public class ItemFruit extends ItemForestryFood {
 
-	public enum EnumFruit implements IItemSubtype {
-		CHERRY(OreDictUtil.CROP_CHERRY),
-		WALNUT(OreDictUtil.CROP_WALNUT),
-		CHESTNUT(OreDictUtil.CROP_CHESTNUT),
-		LEMON(OreDictUtil.CROP_LEMON),
-		PLUM(OreDictUtil.CROP_PLUM),
-		DATES(OreDictUtil.CROP_DATE),
-		PAPAYA(OreDictUtil.CROP_PAPAYA);
-		//, COCONUT("cropCoconut");
-		public static final EnumFruit[] VALUES = values();
+    public enum EnumFruit implements IItemSubtype {
+        CHERRY(OreDictUtil.CROP_CHERRY),
+        WALNUT(OreDictUtil.CROP_WALNUT),
+        CHESTNUT(OreDictUtil.CROP_CHESTNUT),
+        LEMON(OreDictUtil.CROP_LEMON),
+        PLUM(OreDictUtil.CROP_PLUM),
+        DATES(OreDictUtil.CROP_DATE),
+        PAPAYA(OreDictUtil.CROP_PAPAYA);
+        //, COCONUT("cropCoconut");
+        public static final EnumFruit[] VALUES = values();
 
-		private final String oreDict;
-		private final String name;
+        private final String oreDict;
+        private final String name;
 
-		//TODO tags
-		EnumFruit(String oreDict) {
-			this.oreDict = oreDict;
-			this.name = this.toString().toLowerCase(Locale.ENGLISH);
-		}
+        //TODO tags
+        EnumFruit(String oreDict) {
+            this.oreDict = oreDict;
+            this.name = this.toString().toLowerCase(Locale.ENGLISH);
+        }
 
-		@Override
-		public String getString() {
-			return name;
-		}
+        @Override
+        public String getString() {
+            return name;
+        }
 
-		//		public String getOreDict() {
-		//			return oreDict;
-		//		}
-	}
+        //		public String getOreDict() {
+        //			return oreDict;
+        //		}
+    }
 
-	private EnumFruit type;
+    private final EnumFruit type;
 
-	public ItemFruit(EnumFruit type) {
-		super(1, 0.2f, (new Item.Properties()));
-		this.type = type;
-	}
+    public ItemFruit(EnumFruit type) {
+        super(1, 0.2f, (new Item.Properties()));
+        this.type = type;
+    }
 
-	public EnumFruit getType() {
-		return type;
-	}
+    public EnumFruit getType() {
+        return type;
+    }
 
-	@Override
-	public boolean isDamageable() {
-		return false;
-	}
+    @Override
+    public boolean isDamageable() {
+        return false;
+    }
 
 }

@@ -19,41 +19,41 @@ import forestry.farming.features.FarmingBlocks;
 @OnlyIn(Dist.CLIENT)
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, BlockFarm> {
 
-	public ModelFarmBlock() {
-		super(BlockFarm.class);
-	}
+    public ModelFarmBlock() {
+        super(BlockFarm.class);
+    }
 
-	@Override
-	protected BlockFarm getInventoryKey(ItemStack stack) {
-		Block block = Block.getBlockFromItem(stack.getItem());
-		if (block instanceof BlockFarm) {
-			return ((BlockFarm) block);
-		}
-		return FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block();
-	}
+    @Override
+    protected BlockFarm getInventoryKey(ItemStack stack) {
+        Block block = Block.getBlockFromItem(stack.getItem());
+        if (block instanceof BlockFarm) {
+            return ((BlockFarm) block);
+        }
+        return FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block();
+    }
 
-	@Override
-	protected BlockFarm getWorldKey(BlockState state, IModelData extraData) {
-		Block block = state.getBlock();
-		if (block instanceof BlockFarm) {
-			return ((BlockFarm) block);
-		}
-		return FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block();
-	}
+    @Override
+    protected BlockFarm getWorldKey(BlockState state, IModelData extraData) {
+        Block block = state.getBlock();
+        if (block instanceof BlockFarm) {
+            return ((BlockFarm) block);
+        }
+        return FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block();
+    }
 
-	@Override
-	protected void bakeBlock(BlockFarm blockFarm, IModelData extraData, BlockFarm key, ModelBaker baker, boolean inventory) {
-		EnumFarmBlockType type = key.getType();
-		EnumFarmMaterial material = key.getFarmMaterial();
-		TextureAtlasSprite[] textures = material.getSprites();
+    @Override
+    protected void bakeBlock(BlockFarm blockFarm, IModelData extraData, BlockFarm key, ModelBaker baker, boolean inventory) {
+        EnumFarmBlockType type = key.getType();
+        EnumFarmMaterial material = key.getFarmMaterial();
+        TextureAtlasSprite[] textures = material.getSprites();
 
-		// Add the plain block.
-		baker.addBlockModel(textures, 0);
-		// Add the overlay block.
-		baker.addBlockModel(type.getSprites(), 0);
+        // Add the plain block.
+        baker.addBlockModel(textures, 0);
+        // Add the overlay block.
+        baker.addBlockModel(type.getSprites(), 0);
 
-		// Set the particle sprite
-		baker.setParticleSprite(textures[0]);
-	}
+        // Set the particle sprite
+        baker.setParticleSprite(textures[0]);
+    }
 
 }

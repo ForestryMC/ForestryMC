@@ -28,53 +28,53 @@ import forestry.core.tiles.TileUtil;
 
 public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousingBase> implements IContainerBeeHousing {
 
-	private final IGuiBeeHousingDelegate delegate;
-	private final GuiBeeHousing.Icon icon;
+    private final IGuiBeeHousingDelegate delegate;
+    private final GuiBeeHousing.Icon icon;
 
-	public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		PacketBufferForestry buf = new PacketBufferForestry(data);
-		TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, buf.readBlockPos(), TileBeeHousingBase.class);
-		boolean hasFrames = buf.readBoolean();
-		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
-		return new ContainerBeeHousing(windowId, inv, tile, hasFrames, icon);    //TODO nullability.
-	}
+    public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        PacketBufferForestry buf = new PacketBufferForestry(data);
+        TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, buf.readBlockPos(), TileBeeHousingBase.class);
+        boolean hasFrames = buf.readBoolean();
+        GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
+        return new ContainerBeeHousing(windowId, inv, tile, hasFrames, icon);    //TODO nullability.
+    }
 
-	//TODO hack icon in GUI by checking title. Then it isn't needed here.
-	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
-		super(windowId, ApicultureContainers.BEE_HOUSING.containerType(), player, tile, 8, 108);
-		ContainerBeeHelper.addSlots(this, tile, hasFrames);
+    //TODO hack icon in GUI by checking title. Then it isn't needed here.
+    public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
+        super(windowId, ApicultureContainers.BEE_HOUSING.containerType(), player, tile, 8, 108);
+        ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
-		tile.getBeekeepingLogic().clearCachedValues();
-		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-		if (player.player instanceof ServerPlayerEntity) {
-			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) player.player));
-		}
+        tile.getBeekeepingLogic().clearCachedValues();
+        LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+        if (player.player instanceof ServerPlayerEntity) {
+            listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) player.player));
+        }
 
-		delegate = tile;
-		this.icon = icon;
-	}
+        delegate = tile;
+        this.icon = icon;
+    }
 
-	private int beeProgress = -1;
+    private int beeProgress = -1;
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
-		if (this.beeProgress != beeProgress) {
-			this.beeProgress = beeProgress;
-			IForestryPacketClient packet = new PacketGuiUpdate(tile);
-			sendPacketToListeners(packet);
-		}
-	}
+        int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
+        if (this.beeProgress != beeProgress) {
+            this.beeProgress = beeProgress;
+            IForestryPacketClient packet = new PacketGuiUpdate(tile);
+            sendPacketToListeners(packet);
+        }
+    }
 
-	@Override
-	public IGuiBeeHousingDelegate getDelegate() {
-		return delegate;
-	}
+    @Override
+    public IGuiBeeHousingDelegate getDelegate() {
+        return delegate;
+    }
 
-	@Override
-	public GuiBeeHousing.Icon getIcon() {
-		return icon;
-	}
+    @Override
+    public GuiBeeHousing.Icon getIcon() {
+        return icon;
+    }
 }

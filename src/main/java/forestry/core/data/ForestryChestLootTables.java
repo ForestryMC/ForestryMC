@@ -8,8 +8,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class ForestryChestLootTables extends ChestLootTables {
 
-	@Override
-	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
+    @Override
+    public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 
-	}
+    }
 }

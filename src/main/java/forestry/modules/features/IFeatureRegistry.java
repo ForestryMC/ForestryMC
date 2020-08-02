@@ -28,47 +28,47 @@ import forestry.api.storage.EnumBackpackType;
 
 public interface IFeatureRegistry {
 
-	<B extends Block, I extends BlockItem> FeatureBlock<B, I> block(Supplier<B> constructor, String identifier);
+    <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(Supplier<B> constructor, String identifier);
 
-	<B extends Block, I extends BlockItem> FeatureBlock<B, I> block(Supplier<B> constructor, @Nullable Function<B, I> itemConstructor, String identifier);
+    <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(Supplier<B> constructor, @Nullable Function<B, I> itemConstructor, String identifier);
 
-	<B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, Class<? extends S> typeClass);
+    <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, Class<? extends S> typeClass);
 
-	<B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, Collection<S> types);
+    <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, Collection<S> types);
 
-	<B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, S[] types);
+    <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, S[] types);
 
-	<I extends Item> FeatureItem<I> item(Supplier<I> constructor, String identifier);
+    <I extends Item> FeatureItem<I> item(Supplier<I> constructor, String identifier);
 
-	FeatureItem<Item> backpack(String backpackUid, EnumBackpackType type, String identifier);
+    FeatureItem<Item> backpack(String backpackUid, EnumBackpackType type, String identifier);
 
-	FeatureItem<Item> naturalistBackpack(String backpackUid, String rootUid, ItemGroup tab, String identifier);
+    FeatureItem<Item> naturalistBackpack(String backpackUid, String rootUid, ItemGroup tab, String identifier);
 
-	<I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(Function<S, I> constructor, String identifier, S[] subTypes);
+    <I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(Function<S, I> constructor, String identifier, S[] subTypes);
 
-	<I extends Item, S extends IItemSubtype> FeatureItemGroup.Builder<I, S> itemGroup(Function<S, I> constructor, S[] subTypes);
+    <I extends Item, S extends IItemSubtype> FeatureItemGroup.Builder<I, S> itemGroup(Function<S, I> constructor, S[] subTypes);
 
-	<I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes, String identifier);
+    <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes, String identifier);
 
-	<I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable.Builder<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes);
+    <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable.Builder<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes);
 
-	<B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(BiFunction<R, C, B> constructor, R[] rowTypes, C[] columnTypes);
+    <B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(BiFunction<R, C, B> constructor, R[] rowTypes, C[] columnTypes);
 
-	<T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks);
+    <T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks);
 
-	<C extends Container> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier);
+    <C extends Container> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier);
 
-	<E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier);
+    <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier);
 
-	<E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer);
+    <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer);
 
-	FeatureFluid.Builder fluid(String identifier);
+    FeatureFluid.Builder fluid(String identifier);
 
-	void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener);
+    void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener);
 
-	<F extends IModFeature> F register(F feature);
+    <F extends IModFeature> F register(F feature);
 
-	Collection<IModFeature> getFeatures();
+    Collection<IModFeature> getFeatures();
 
-	Collection<IModFeature> getFeatures(FeatureType type);
+    Collection<IModFeature> getFeatures(FeatureType type);
 }

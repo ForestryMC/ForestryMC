@@ -15,53 +15,53 @@ import genetics.api.root.IIndividualRootBuilder;
  */
 public class ComponentKey<C extends IRootComponent> {
 
-	public static <C extends IRootComponent> ComponentKey<C> create(String name, Class<C> componentClass) {
-		return create(name, componentClass, DefaultStage.CREATION);
-	}
+    public static <C extends IRootComponent> ComponentKey<C> create(String name, Class<C> componentClass) {
+        return create(name, componentClass, DefaultStage.CREATION);
+    }
 
-	public static <C extends IRootComponent> ComponentKey<C> create(String name, Class<C> componentClass, IStage stage) {
-		return new ComponentKey<>(name, componentClass, stage);
-	}
+    public static <C extends IRootComponent> ComponentKey<C> create(String name, Class<C> componentClass, IStage stage) {
+        return new ComponentKey<>(name, componentClass, stage);
+    }
 
-	private final String name;
-	private final Class<C> componentClass;
-	private final IStage stage;
+    private final String name;
+    private final Class<C> componentClass;
+    private final IStage stage;
 
-	private ComponentKey(String name, Class<C> componentClass, IStage stage) {
-		this.name = name;
-		this.componentClass = componentClass;
-		this.stage = stage;
-	}
+    private ComponentKey(String name, Class<C> componentClass, IStage stage) {
+        this.name = name;
+        this.componentClass = componentClass;
+        this.stage = stage;
+    }
 
-	@SuppressWarnings("unchecked")
-	public <R> R cast(C instance) {
-		return (R) instance;
-	}
+    @SuppressWarnings("unchecked")
+    public <R> R cast(C instance) {
+        return (R) instance;
+    }
 
-	public Class<C> getComponentClass() {
-		return componentClass;
-	}
+    public Class<C> getComponentClass() {
+        return componentClass;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public IStage getStage() {
-		return stage;
-	}
+    public IStage getStage() {
+        return stage;
+    }
 
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
-	@Override
-	public String toString() {
-		return name;
-	}
+    @Override
+    public String toString() {
+        return name;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		return o == this || (o != null && o.toString().equals(name));
-	}
+    @Override
+    public boolean equals(Object o) {
+        return o == this || (o != null && o.toString().equals(name));
+    }
 }

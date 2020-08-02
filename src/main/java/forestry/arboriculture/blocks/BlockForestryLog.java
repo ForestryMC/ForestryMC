@@ -15,50 +15,50 @@ import forestry.arboriculture.IWoodTyped;
 //worst part is probably textures
 public class BlockForestryLog extends RotatedPillarBlock implements IWoodTyped {
 
-	private final boolean fireproof;
-	private final IWoodType woodType;
+    private final boolean fireproof;
+    private final IWoodType woodType;
 
-	public BlockForestryLog(boolean fireproof, IWoodType woodType) {
-		super(BlockForestryPlank.createWoodProperties(woodType));
-		this.fireproof = fireproof;
-		this.woodType = woodType;
-	}
+    public BlockForestryLog(boolean fireproof, IWoodType woodType) {
+        super(BlockForestryPlank.createWoodProperties(woodType));
+        this.fireproof = fireproof;
+        this.woodType = woodType;
+    }
 
 
-	@Override
-	public final WoodBlockKind getBlockKind() {
-		return WoodBlockKind.LOG;
-	}
+    @Override
+    public final WoodBlockKind getBlockKind() {
+        return WoodBlockKind.LOG;
+    }
 
-	@Override
-	public final boolean isFireproof() {
-		return fireproof;
-	}
+    @Override
+    public final boolean isFireproof() {
+        return fireproof;
+    }
 
-	@Override
-	public IWoodType getWoodType() {
-		return woodType;
-	}
+    @Override
+    public IWoodType getWoodType() {
+        return woodType;
+    }
 
-	/* PROPERTIES */
-	@Override
-	public final int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-		if (fireproof) {
-			return 0;
-		} else if (face == Direction.DOWN) {
-			return 20;
-		} else if (face != Direction.UP) {
-			return 10;
-		} else {
-			return 5;
-		}
-	}
+    /* PROPERTIES */
+    @Override
+    public final int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+        if (fireproof) {
+            return 0;
+        } else if (face == Direction.DOWN) {
+            return 20;
+        } else if (face != Direction.UP) {
+            return 10;
+        } else {
+            return 5;
+        }
+    }
 
-	@Override
-	public final int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-		if (fireproof) {
-			return 0;
-		}
-		return 5;
-	}
+    @Override
+    public final int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+        if (fireproof) {
+            return 0;
+        }
+        return 5;
+    }
 }

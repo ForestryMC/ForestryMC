@@ -19,19 +19,19 @@ import net.minecraft.item.ItemStack;
  */
 public interface IInvSlot {
 
-	boolean canPutStackInSlot(ItemStack stack);
+    boolean canPutStackInSlot(ItemStack stack);
 
-	boolean canTakeStackFromSlot(ItemStack stack);
+    boolean canTakeStackFromSlot(ItemStack stack);
 
-	ItemStack decreaseStackInSlot();
+    ItemStack decreaseStackInSlot();
 
-	/**
-	 * It is not legal to edit the stack returned from this function.
-	 */
-	ItemStack getStackInSlot();
+    /**
+     * It is not legal to edit the stack returned from this function.
+     */
+    ItemStack getStackInSlot();
 
-	//    void setStackInSlot(ItemStack stack);
+    //    void setStackInSlot(ItemStack stack);
 
-	int getIndex();
+    int getIndex();
 
 }

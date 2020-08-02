@@ -41,90 +41,90 @@ import forestry.mail.gui.ILetterInfoReceiver;
 
 // TODO: split this into two different packets
 public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
-	public final EnumAddressee type;
-	@Nullable
-	public final ITradeStationInfo tradeInfo;
-	@Nullable
-	public final IMailAddress address;
+    public final EnumAddressee type;
+    @Nullable
+    public final ITradeStationInfo tradeInfo;
+    @Nullable
+    public final IMailAddress address;
 
-	public PacketLetterInfoResponse(EnumAddressee type, @Nullable ITradeStationInfo info, @Nullable IMailAddress address) {
-		this.type = type;
-		if (type == EnumAddressee.TRADER) {
-			this.tradeInfo = info;
-			this.address = null;
-		} else if (type == EnumAddressee.PLAYER) {
-			this.tradeInfo = info;
-			this.address = address;
-		} else {
-			throw new IllegalArgumentException("Unknown addressee type: " + type);
-		}
-	}
+    public PacketLetterInfoResponse(EnumAddressee type, @Nullable ITradeStationInfo info, @Nullable IMailAddress address) {
+        this.type = type;
+        if (type == EnumAddressee.TRADER) {
+            this.tradeInfo = info;
+            this.address = null;
+        } else if (type == EnumAddressee.PLAYER) {
+            this.tradeInfo = info;
+            this.address = address;
+        } else {
+            throw new IllegalArgumentException("Unknown addressee type: " + type);
+        }
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.LETTER_INFO_RESPONSE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.LETTER_INFO_RESPONSE;
+    }
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		data.writeEnum(type, EnumAddressee.values());
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        data.writeEnum(type, EnumAddressee.values());
 
-		if (type == EnumAddressee.PLAYER) {
-			Preconditions.checkNotNull(address);
-			GameProfile profile = address.getPlayerProfile();
+        if (type == EnumAddressee.PLAYER) {
+            Preconditions.checkNotNull(address);
+            GameProfile profile = address.getPlayerProfile();
 
-			data.writeLong(profile.getId().getMostSignificantBits());
-			data.writeLong(profile.getId().getLeastSignificantBits());
-			data.writeString(profile.getName());
+            data.writeLong(profile.getId().getMostSignificantBits());
+            data.writeLong(profile.getId().getLeastSignificantBits());
+            data.writeString(profile.getName());
 
-		} else if (type == EnumAddressee.TRADER) {
-			if (tradeInfo == null) {
-				data.writeBoolean(false);
-			} else {
-				data.writeBoolean(true);
-				data.writeString(tradeInfo.getAddress().getName());
+        } else if (type == EnumAddressee.TRADER) {
+            if (tradeInfo == null) {
+                data.writeBoolean(false);
+            } else {
+                data.writeBoolean(true);
+                data.writeString(tradeInfo.getAddress().getName());
 
-				data.writeLong(tradeInfo.getOwner().getId().getMostSignificantBits());
-				data.writeLong(tradeInfo.getOwner().getId().getLeastSignificantBits());
-				data.writeString(tradeInfo.getOwner().getName());
+                data.writeLong(tradeInfo.getOwner().getId().getMostSignificantBits());
+                data.writeLong(tradeInfo.getOwner().getId().getLeastSignificantBits());
+                data.writeString(tradeInfo.getOwner().getName());
 
-				data.writeItemStack(tradeInfo.getTradegood());
-				data.writeItemStacks(tradeInfo.getRequired());
+                data.writeItemStack(tradeInfo.getTradegood());
+                data.writeItemStacks(tradeInfo.getRequired());
 
-				data.writeEnum(tradeInfo.getState(), EnumTradeStationState.values());
-			}
-		}
-	}
+                data.writeEnum(tradeInfo.getState(), EnumTradeStationState.values());
+            }
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			Container container = player.openContainer;
-			if (container instanceof ILetterInfoReceiver) {
-				EnumAddressee type = data.readEnum(EnumAddressee.values());
-				ITradeStationInfo tradeInfo = null;
-				IMailAddress address = null;
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+            Container container = player.openContainer;
+            if (container instanceof ILetterInfoReceiver) {
+                EnumAddressee type = data.readEnum(EnumAddressee.values());
+                ITradeStationInfo tradeInfo = null;
+                IMailAddress address = null;
 
-				if (type == EnumAddressee.PLAYER) {
-					GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
-					address = PostManager.postRegistry.getMailAddress(profile);
-				} else if (type == EnumAddressee.TRADER) {
-					if (data.readBoolean()) {
-						address = PostManager.postRegistry.getMailAddress(data.readString());
-						GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+                if (type == EnumAddressee.PLAYER) {
+                    GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+                    address = PostManager.postRegistry.getMailAddress(profile);
+                } else if (type == EnumAddressee.TRADER) {
+                    if (data.readBoolean()) {
+                        address = PostManager.postRegistry.getMailAddress(data.readString());
+                        GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 
-						ItemStack tradegood = data.readItemStack();
-						NonNullList<ItemStack> required = data.readItemStacks();
+                        ItemStack tradegood = data.readItemStack();
+                        NonNullList<ItemStack> required = data.readItemStacks();
 
-						EnumTradeStationState state = data.readEnum(EnumTradeStationState.values());
-						tradeInfo = new TradeStationInfo(address, owner, tradegood, required, state);
-					} else {
-						tradeInfo = null;
-					}
-				}
-				((ILetterInfoReceiver) container).handleLetterInfoUpdate(type, address, tradeInfo);
-			}
-		}
-	}
+                        EnumTradeStationState state = data.readEnum(EnumTradeStationState.values());
+                        tradeInfo = new TradeStationInfo(address, owner, tradegood, required, state);
+                    } else {
+                        tradeInfo = null;
+                    }
+                }
+                ((ILetterInfoReceiver) container).handleLetterInfoUpdate(type, address, tradeInfo);
+            }
+        }
+    }
 }

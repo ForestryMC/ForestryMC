@@ -22,49 +22,49 @@ import genetics.utils.AlleleUtils;
  */
 public interface IAlleleData<V> extends IAlleleProvider {
 
-	/**
-	 * @return The value of the allele.
-	 */
-	V getValue();
+    /**
+     * @return The value of the allele.
+     */
+    V getValue();
 
-	/**
-	 * @return The dominance of the allele.
-	 */
-	boolean isDominant();
+    /**
+     * @return The dominance of the allele.
+     */
+    boolean isDominant();
 
-	/**
-	 * @return The category of the allele is used for custom localisation and the registration name of the allele.
-	 */
-	String getCategory();
+    /**
+     * @return The category of the allele is used for custom localisation and the registration name of the allele.
+     */
+    String getCategory();
 
-	/**
-	 * @return The name that is used for the unlocalized name and the registration name of the allele.
-	 */
-	String getName();
+    /**
+     * @return The name that is used for the unlocalized name and the registration name of the allele.
+     */
+    String getName();
 
-	default Optional<IAlleleValue<V>> getAlleleValue() {
-		return GeneticsAPI.apiInstance.getAlleleHelper().getAllele(this);
-	}
+    default Optional<IAlleleValue<V>> getAlleleValue() {
+        return GeneticsAPI.apiInstance.getAlleleHelper().getAllele(this);
+    }
 
-	default IAlleleValue<V> createAllele() {
-		return new AlleleCategorizedValue<>(ModLoadingContext.get().getActiveContainer().getModId(), getCategory(), getName(), getValue(), isDominant());
-	}
+    default IAlleleValue<V> createAllele() {
+        return new AlleleCategorizedValue<>(ModLoadingContext.get().getActiveContainer().getModId(), getCategory(), getName(), getValue(), isDominant());
+    }
 
-	@Override
-	default IAllele getAllele() {
-		Optional<IAlleleValue<V>> optionalAllele = getAlleleValue();
-		if (!optionalAllele.isPresent()) {
-			throw new IllegalStateException("Attempted to get the allele from an allele data that was not registered! Please register the allele data before you use it.");
-		}
-		return optionalAllele.get();
-	}
+    @Override
+    default IAllele getAllele() {
+        Optional<IAlleleValue<V>> optionalAllele = getAlleleValue();
+        if (!optionalAllele.isPresent()) {
+            throw new IllegalStateException("Attempted to get the allele from an allele data that was not registered! Please register the allele data before you use it.");
+        }
+        return optionalAllele.get();
+    }
 
-	default Collection<IChromosomeType> getTypes() {
-		Optional<IAlleleValue<V>> optionalAllele = getAlleleValue();
-		if (!optionalAllele.isPresent()) {
-			return Collections.emptySet();
-		}
-		IAlleleValue<V> alleleValue = optionalAllele.get();
-		return AlleleUtils.getChromosomeTypes(alleleValue);
-	}
+    default Collection<IChromosomeType> getTypes() {
+        Optional<IAlleleValue<V>> optionalAllele = getAlleleValue();
+        if (!optionalAllele.isPresent()) {
+            return Collections.emptySet();
+        }
+        IAlleleValue<V> alleleValue = optionalAllele.get();
+        return AlleleUtils.getChromosomeTypes(alleleValue);
+    }
 }

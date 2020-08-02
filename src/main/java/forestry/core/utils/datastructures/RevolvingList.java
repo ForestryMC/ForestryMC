@@ -22,36 +22,36 @@ import java.util.LinkedList;
  */
 public class RevolvingList<T> {
 
-	private final Deque<T> list = new LinkedList<>();
+    private final Deque<T> list = new LinkedList<>();
 
-	public RevolvingList(Collection<? extends T> collection) {
-		Preconditions.checkArgument(!collection.isEmpty());
-		for (T object : collection) {
-			Preconditions.checkNotNull(object);
-			list.add(object);
-		}
-	}
+    public RevolvingList(Collection<? extends T> collection) {
+        Preconditions.checkArgument(!collection.isEmpty());
+        for (T object : collection) {
+            Preconditions.checkNotNull(object);
+            list.add(object);
+        }
+    }
 
-	public void rotateLeft() {
-		list.addFirst(list.removeLast());
-	}
+    public void rotateLeft() {
+        list.addFirst(list.removeLast());
+    }
 
-	public void rotateRight() {
-		list.addLast(list.removeFirst());
-	}
+    public void rotateRight() {
+        list.addLast(list.removeFirst());
+    }
 
-	public T getCurrent() {
-		return list.getFirst();
-	}
+    public T getCurrent() {
+        return list.getFirst();
+    }
 
-	public void setCurrent(T e) {
-		if (!list.contains(e)) {
-			return;
-		}
+    public void setCurrent(T e) {
+        if (!list.contains(e)) {
+            return;
+        }
 
-		while (!getCurrent().equals(e)) {
-			rotateRight();
-		}
-	}
+        while (!getCurrent().equals(e)) {
+            rotateRight();
+        }
+    }
 
 }

@@ -11,10 +11,10 @@ import forestry.sorting.blocks.BlockGeneticFilter;
 @FeatureProvider
 public class SortingBlocks {
 
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleSorting.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleSorting.class);
 
-	public static final FeatureBlock<BlockGeneticFilter, ItemBlockForestry> FILTER = REGISTRY.block(BlockGeneticFilter::new, ItemBlockForestry::new, "genetic_filter");
+    public static final FeatureBlock<BlockGeneticFilter, ItemBlockForestry> FILTER = REGISTRY.block(BlockGeneticFilter::new, ItemBlockForestry::new, "genetic_filter");
 
-	private SortingBlocks() {
-	}
+    private SortingBlocks() {
+    }
 }

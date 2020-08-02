@@ -13,8 +13,8 @@ import net.minecraft.item.ItemStack;
  */
 public interface IVariableFermentable {
 
-	/**
-	 * @return Float representing the modification to be applied to the matching recipe's biomass output.
-	 */
-	float getFermentationModifier(ItemStack itemstack);
+    /**
+     * @return Float representing the modification to be applied to the matching recipe's biomass output.
+     */
+    float getFermentationModifier(ItemStack itemstack);
 }

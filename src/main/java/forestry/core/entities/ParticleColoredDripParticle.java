@@ -23,84 +23,84 @@ import net.minecraft.util.math.MathHelper;
 //TODO - sort out setParticleTextureIndex
 public class ParticleColoredDripParticle extends SpriteTexturedParticle {
 
-	/**
-	 * The height of the current bob
-	 */
-	private int bobTimer;
+    /**
+     * The height of the current bob
+     */
+    private int bobTimer;
 
-	public ParticleColoredDripParticle(ClientWorld world, double x, double y, double z, float red, float green, float blue) {
-		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-		this.motionX = this.motionY = this.motionZ = 0.0D;
+    public ParticleColoredDripParticle(ClientWorld world, double x, double y, double z, float red, float green, float blue) {
+        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+        this.motionX = this.motionY = this.motionZ = 0.0D;
 
-		this.particleRed = red;
-		this.particleGreen = green;
-		this.particleBlue = blue;
+        this.particleRed = red;
+        this.particleGreen = green;
+        this.particleBlue = blue;
 
-		//		this.setParticleTextureIndex(113);
-		this.setSize(0.01F, 0.01F);
-		this.particleGravity = 0.06F;
-		this.bobTimer = 40;
-		this.maxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
-		this.motionX = this.motionY = this.motionZ = 0.0D;
-	}
+        //		this.setParticleTextureIndex(113);
+        this.setSize(0.01F, 0.01F);
+        this.particleGravity = 0.06F;
+        this.bobTimer = 40;
+        this.maxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
+        this.motionX = this.motionY = this.motionZ = 0.0D;
+    }
 
-	/**
-	 * Called to update the entity's position/logic.
-	 */
-	@Override
-	public void tick() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+    /**
+     * Called to update the entity's position/logic.
+     */
+    @Override
+    public void tick() {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
 
-		this.motionY -= this.particleGravity;
+        this.motionY -= this.particleGravity;
 
-		if (this.bobTimer-- > 0) {
-			this.motionX *= 0.02D;
-			this.motionY *= 0.02D;
-			this.motionZ *= 0.02D;
-			//			this.setParticleTextureIndex(113);
-		} else {
-			//			this.setParticleTextureIndex(112);
-		}
+        if (this.bobTimer-- > 0) {
+            this.motionX *= 0.02D;
+            this.motionY *= 0.02D;
+            this.motionZ *= 0.02D;
+            //			this.setParticleTextureIndex(113);
+        } else {
+            //			this.setParticleTextureIndex(112);
+        }
 
-		this.move(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 0.9800000190734863D;
-		this.motionY *= 0.9800000190734863D;
-		this.motionZ *= 0.9800000190734863D;
+        this.move(this.motionX, this.motionY, this.motionZ);
+        this.motionX *= 0.9800000190734863D;
+        this.motionY *= 0.9800000190734863D;
+        this.motionZ *= 0.9800000190734863D;
 
-		if (this.maxAge-- <= 0) {
-			this.setExpired();
-		}
+        if (this.maxAge-- <= 0) {
+            this.setExpired();
+        }
 
-		if (this.onGround) {
-			//			this.setParticleTextureIndex(114);
+        if (this.onGround) {
+            //			this.setParticleTextureIndex(114);
 
-			this.motionX *= 0.699999988079071D;
-			this.motionZ *= 0.699999988079071D;
-		}
+            this.motionX *= 0.699999988079071D;
+            this.motionZ *= 0.699999988079071D;
+        }
 
-		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-		BlockState BlockState = this.world.getBlockState(blockpos);
-		Material material = BlockState.getMaterial();
+        BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+        BlockState BlockState = this.world.getBlockState(blockpos);
+        Material material = BlockState.getMaterial();
 
-		if (material.isLiquid() || material.isSolid()) {
-			double d0 = 0.0D;
+        if (material.isLiquid() || material.isSolid()) {
+            double d0 = 0.0D;
 
-			//			if (BlockState.getBlock() instanceof BlockLiquid) {
-			//				d0 = BlockLiquid.getLiquidHeightPercent(BlockState.getValue(BlockLiquid.LEVEL));
-			//			}
+            //			if (BlockState.getBlock() instanceof BlockLiquid) {
+            //				d0 = BlockLiquid.getLiquidHeightPercent(BlockState.getValue(BlockLiquid.LEVEL));
+            //			}
 
-			double d1 = MathHelper.floor(this.posY) + 1 - d0;
+            double d1 = MathHelper.floor(this.posY) + 1 - d0;
 
-			if (this.posY < d1) {
-				this.setExpired();
-			}
-		}
-	}
+            if (this.posY < d1) {
+                this.setExpired();
+            }
+        }
+    }
 
-	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_OPAQUE;    //same as DripParticle
-	}
+    @Override
+    public IParticleRenderType getRenderType() {
+        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;    //same as DripParticle
+    }
 }

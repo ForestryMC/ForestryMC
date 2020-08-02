@@ -28,158 +28,158 @@ import forestry.core.utils.InventoryUtil;
  */
 public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
-	private final InventoryPlain inventory;
-	private boolean allowAutomation = true;
-	@Nullable
-	private int[] slotMap;
+    private final InventoryPlain inventory;
+    private boolean allowAutomation = true;
+    @Nullable
+    private int[] slotMap;
 
-	public InventoryAdapter(int size, String name) {
-		this(size, name, 64);
-	}
+    public InventoryAdapter(int size, String name) {
+        this(size, name, 64);
+    }
 
-	public InventoryAdapter(int size, String name, int stackLimit) {
-		this(new InventoryPlain(size, name, stackLimit));
-	}
+    public InventoryAdapter(int size, String name, int stackLimit) {
+        this(new InventoryPlain(size, name, stackLimit));
+    }
 
-	public InventoryAdapter(InventoryPlain inventory) {
-		this.inventory = inventory;
-		configureSided();
-	}
+    public InventoryAdapter(InventoryPlain inventory) {
+        this.inventory = inventory;
+        configureSided();
+    }
 
-	public InventoryAdapter disableAutomation() {
-		this.allowAutomation = false;
-		return this;
-	}
+    public InventoryAdapter disableAutomation() {
+        this.allowAutomation = false;
+        return this;
+    }
 
-	/**
-	 * @return Copy of this inventory. Stacks are copies.
-	 */
-	public InventoryAdapter copy() {
-		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), "TEST_TITLE_PLEASE_IGNORE", inventory.getInventoryStackLimit());
+    /**
+     * @return Copy of this inventory. Stacks are copies.
+     */
+    public InventoryAdapter copy() {
+        InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), "TEST_TITLE_PLEASE_IGNORE", inventory.getInventoryStackLimit());
 
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (!inventory.getStackInSlot(i).isEmpty()) {
-				copy.setInventorySlotContents(i, inventory.getStackInSlot(i).copy());
-			}
-		}
+        for (int i = 0; i < inventory.getSizeInventory(); i++) {
+            if (!inventory.getStackInSlot(i).isEmpty()) {
+                copy.setInventorySlotContents(i, inventory.getStackInSlot(i).copy());
+            }
+        }
 
-		return copy;
-	}
+        return copy;
+    }
 
-	/* IINVENTORY */
-	@Override
-	public boolean isEmpty() {
-		return inventory.isEmpty();
-	}
+    /* IINVENTORY */
+    @Override
+    public boolean isEmpty() {
+        return inventory.isEmpty();
+    }
 
-	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
+    @Override
+    public int getSizeInventory() {
+        return inventory.getSizeInventory();
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int slotId) {
-		return inventory.getStackInSlot(slotId);
-	}
+    @Override
+    public ItemStack getStackInSlot(int slotId) {
+        return inventory.getStackInSlot(slotId);
+    }
 
-	@Override
-	public ItemStack decrStackSize(int slotId, int count) {
-		return inventory.decrStackSize(slotId, count);
-	}
+    @Override
+    public ItemStack decrStackSize(int slotId, int count) {
+        return inventory.decrStackSize(slotId, count);
+    }
 
-	@Override
-	public void setInventorySlotContents(int slotId, ItemStack itemstack) {
-		inventory.setInventorySlotContents(slotId, itemstack);
-	}
+    @Override
+    public void setInventorySlotContents(int slotId, ItemStack itemstack) {
+        inventory.setInventorySlotContents(slotId, itemstack);
+    }
 
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
+    @Override
+    public int getInventoryStackLimit() {
+        return inventory.getInventoryStackLimit();
+    }
 
-	@Override
-	public void markDirty() {
-		inventory.markDirty();
-	}
+    @Override
+    public void markDirty() {
+        inventory.markDirty();
+    }
 
-	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return inventory.removeStackFromSlot(slotIndex);
-	}
+    @Override
+    public ItemStack removeStackFromSlot(int slotIndex) {
+        return inventory.removeStackFromSlot(slotIndex);
+    }
 
-	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		return true;
-	}
+    @Override
+    public boolean isUsableByPlayer(PlayerEntity player) {
+        return true;
+    }
 
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
-	}
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        return true;
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return true;
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return true;
+    }
 
-	@Override
-	public boolean isLocked(int slotIndex) {
-		return false;
-	}
+    @Override
+    public boolean isLocked(int slotIndex) {
+        return false;
+    }
 
-	/* ISIDEDINVENTORY */
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		if (allowAutomation && slotMap != null) {
-			return slotMap;
-		}
-		return Constants.SLOTS_NONE;
-	}
+    /* ISIDEDINVENTORY */
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        if (allowAutomation && slotMap != null) {
+            return slotMap;
+        }
+        return Constants.SLOTS_NONE;
+    }
 
-	private void configureSided() {
-		int count = getSizeInventory();
-		slotMap = new int[count];
-		for (int i = 0; i < count; i++) {
-			slotMap[i] = i;
-		}
-	}
+    private void configureSided() {
+        int count = getSizeInventory();
+        slotMap = new int[count];
+        for (int i = 0; i < count; i++) {
+            slotMap[i] = i;
+        }
+    }
 
-	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, Direction side) {
-		return isItemValidForSlot(slot, stack);
-	}
+    @Override
+    public boolean canInsertItem(int slot, ItemStack stack, Direction side) {
+        return isItemValidForSlot(slot, stack);
+    }
 
-	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
-		return false;
-	}
+    @Override
+    public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
+        return false;
+    }
 
-	/* SAVING & LOADING */
-	@Override
-	public void read(CompoundNBT compoundNBT) {
-		InventoryUtil.readFromNBT(this, inventory.getName(), compoundNBT);
-	}
+    /* SAVING & LOADING */
+    @Override
+    public void read(CompoundNBT compoundNBT) {
+        InventoryUtil.readFromNBT(this, inventory.getName(), compoundNBT);
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		InventoryUtil.writeToNBT(this, inventory.getName(), compoundNBT);
-		return compoundNBT;
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        InventoryUtil.writeToNBT(this, inventory.getName(), compoundNBT);
+        return compoundNBT;
+    }
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		data.writeInventory(inventory);
-	}
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        data.writeInventory(inventory);
+    }
 
-	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
-		data.readInventory(inventory);
-	}
+    @Override
+    public void readData(PacketBufferForestry data) throws IOException {
+        data.readInventory(inventory);
+    }
 
-	/* FIELDS */
+    /* FIELDS */
 
-	@Override
-	public void clear() {
-		inventory.clear();
-	}
+    @Override
+    public void clear() {
+        inventory.clear();
+    }
 }

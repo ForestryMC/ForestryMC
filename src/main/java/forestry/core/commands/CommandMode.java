@@ -12,9 +12,9 @@ package forestry.core.commands;
 
 public class CommandMode {//} extends SubCommand {
 
-	public CommandMode(ICommandModeHelper modeHelper) {
-		//		super("mode");
-		//		addChildCommand(new CommandModeInfo(modeHelper));
-		//		addChildCommand(new CommandModeSet(modeHelper));
-	}
+    public CommandMode(ICommandModeHelper modeHelper) {
+        //		super("mode");
+        //		addChildCommand(new CommandModeInfo(modeHelper));
+        //		addChildCommand(new CommandModeSet(modeHelper));
+    }
 }

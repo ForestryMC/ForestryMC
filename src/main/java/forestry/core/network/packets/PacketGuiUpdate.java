@@ -28,35 +28,35 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.TileUtil;
 
 public class PacketGuiUpdate extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final IStreamableGui guiDataTile;
+    private final BlockPos pos;
+    private final IStreamableGui guiDataTile;
 
-	public <T extends IStreamableGui & ILocatable> PacketGuiUpdate(T guiDataTile) {
-		this.pos = guiDataTile.getCoordinates();
-		this.guiDataTile = guiDataTile;
-	}
+    public <T extends IStreamableGui & ILocatable> PacketGuiUpdate(T guiDataTile) {
+        this.pos = guiDataTile.getCoordinates();
+        this.guiDataTile = guiDataTile;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		guiDataTile.writeGuiData(data);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        guiDataTile.writeGuiData(data);
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.GUI_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.GUI_UPDATE;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			BlockPos pos = data.readBlockPos();
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+            BlockPos pos = data.readBlockPos();
 
-			IStreamableGui tile = TileUtil.getTile(player.world, pos, IStreamableGui.class);
-			if (tile != null) {
-				tile.readGuiData(data);
-			}
-		}
-	}
+            IStreamableGui tile = TileUtil.getTile(player.world, pos, IStreamableGui.class);
+            if (tile != null) {
+                tile.readGuiData(data);
+            }
+        }
+    }
 }

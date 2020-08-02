@@ -21,11 +21,11 @@ import net.minecraft.item.ItemStack;
  */
 public interface IWoodAccess {
 
-	ItemStack getStack(IWoodType woodType, WoodBlockKind kind, boolean fireproof);
+    ItemStack getStack(IWoodType woodType, WoodBlockKind kind, boolean fireproof);
 
-	BlockState getBlock(IWoodType woodType, WoodBlockKind kind, boolean fireproof);
+    BlockState getBlock(IWoodType woodType, WoodBlockKind kind, boolean fireproof);
 
-	List<IWoodType> getRegisteredWoodTypes();
+    List<IWoodType> getRegisteredWoodTypes();
 
-	void register(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof, BlockState blockState, ItemStack itemStack);
+    void register(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof, BlockState blockState, ItemStack itemStack);
 }

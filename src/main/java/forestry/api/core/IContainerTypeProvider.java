@@ -6,10 +6,10 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 
 public interface IContainerTypeProvider<C extends Container> {
-	boolean hasContainerType();
+    boolean hasContainerType();
 
-	@Nullable
-	ContainerType<C> getContainerType();
+    @Nullable
+    ContainerType<C> getContainerType();
 
-	ContainerType<C> containerType();
+    ContainerType<C> containerType();
 }

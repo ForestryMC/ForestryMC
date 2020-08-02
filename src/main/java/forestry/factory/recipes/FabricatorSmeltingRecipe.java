@@ -20,32 +20,32 @@ import forestry.api.recipes.IFabricatorSmeltingRecipe;
 
 public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 
-	private final ItemStack resource;
-	private final FluidStack product;
-	private final int meltingPoint;
+    private final ItemStack resource;
+    private final FluidStack product;
+    private final int meltingPoint;
 
-	public FabricatorSmeltingRecipe(ItemStack resource, FluidStack molten, int meltingPoint) {
-		Preconditions.checkNotNull(resource);
-		Preconditions.checkArgument(!resource.isEmpty());
-		Preconditions.checkNotNull(molten);
+    public FabricatorSmeltingRecipe(ItemStack resource, FluidStack molten, int meltingPoint) {
+        Preconditions.checkNotNull(resource);
+        Preconditions.checkArgument(!resource.isEmpty());
+        Preconditions.checkNotNull(molten);
 
-		this.resource = resource;
-		this.product = molten;
-		this.meltingPoint = meltingPoint;
-	}
+        this.resource = resource;
+        this.product = molten;
+        this.meltingPoint = meltingPoint;
+    }
 
-	@Override
-	public ItemStack getResource() {
-		return resource;
-	}
+    @Override
+    public ItemStack getResource() {
+        return resource;
+    }
 
-	@Override
-	public FluidStack getProduct() {
-		return product;
-	}
+    @Override
+    public FluidStack getProduct() {
+        return product;
+    }
 
-	@Override
-	public int getMeltingPoint() {
-		return meltingPoint;
-	}
+    @Override
+    public int getMeltingPoint() {
+        return meltingPoint;
+    }
 }

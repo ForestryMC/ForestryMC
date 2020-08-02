@@ -14,8 +14,8 @@ import forestry.api.arboriculture.ITreeGenData;
 
 public class FeatureOak extends FeatureTreeVanilla {
 
-	public FeatureOak(ITreeGenData tree) {
-		super(tree);
-	}
+    public FeatureOak(ITreeGenData tree) {
+        super(tree);
+    }
 
 }

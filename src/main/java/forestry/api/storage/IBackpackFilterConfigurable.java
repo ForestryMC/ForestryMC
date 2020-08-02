@@ -14,36 +14,36 @@ import net.minecraft.item.ItemStack;
  * Get a new instance from {@link IBackpackInterface#createBackpackFilter()}.
  */
 public interface IBackpackFilterConfigurable extends Predicate<ItemStack> {
-	/**
-	 * Adds an item as valid for this backpack to pick up.
-	 */
-	void acceptItem(ItemStack validItem);
+    /**
+     * Adds an item as valid for this backpack to pick up.
+     */
+    void acceptItem(ItemStack validItem);
 
-	/**
-	 * Adds an item as invalid for this backpack, used to make exceptions to oreDictionary matches.
-	 *
-	 * @see #acceptTagName(String)
-	 */
-	void rejectItem(ItemStack invalidItem);
+    /**
+     * Adds an item as invalid for this backpack, used to make exceptions to oreDictionary matches.
+     *
+     * @see #acceptTagName(String)
+     */
+    void rejectItem(ItemStack invalidItem);
 
-	/**
-	 * Adds an ore dictionary name as valid for this backpack.
-	 * The backpack will pick up any item that has this oreDictName.
-	 *
-	 * @see OreDictionary
-	 */
-	void acceptTagName(String oreDictName);
+    /**
+     * Adds an ore dictionary name as valid for this backpack.
+     * The backpack will pick up any item that has this oreDictName.
+     *
+     * @see OreDictionary
+     */
+    void acceptTagName(String oreDictName);
 
-	/**
-	 * Removes an ore dictionary name as valid for this backpack.
-	 * The backpack will not pick up any item that has this oreDictName.
-	 *
-	 * @see OreDictionary
-	 */
-	void rejectOreDictName(String oreDictName);
+    /**
+     * Removes an ore dictionary name as valid for this backpack.
+     * The backpack will not pick up any item that has this oreDictName.
+     *
+     * @see OreDictionary
+     */
+    void rejectOreDictName(String oreDictName);
 
-	/**
-	 * Clear all the rules from this filter.
-	 */
-	void clear();
+    /**
+     * Clear all the rules from this filter.
+     */
+    void clear();
 }

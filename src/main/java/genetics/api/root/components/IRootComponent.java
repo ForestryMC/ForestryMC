@@ -26,7 +26,7 @@ import genetics.api.root.IIndividualRootBuilder;
  * @see IIndividualRootBuilder
  */
 public interface IRootComponent<I extends IIndividual> {
-	IIndividualRoot<I> getRoot();
+    IIndividualRoot<I> getRoot();
 
-	ComponentKey getKey();
+    ComponentKey getKey();
 }

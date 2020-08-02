@@ -6,8 +6,8 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 //TODO API
-	//@API(apiVersion = "5.0.0", owner = "ForestryAPI|core", provides = "ForestryAPI|storage")
-	package forestry.api.storage;
+//@API(apiVersion = "5.0.0", owner = "ForestryAPI|core", provides = "ForestryAPI|storage")
+package forestry.api.storage;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

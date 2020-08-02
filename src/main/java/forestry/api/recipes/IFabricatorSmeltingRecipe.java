@@ -10,18 +10,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
-	/**
-	 * @return item to be melted down
-	 */
-	ItemStack getResource();
+    /**
+     * @return item to be melted down
+     */
+    ItemStack getResource();
 
-	/**
-	 * @return temperature at which the item melts. Glass is 1000, Sand is 3000.
-	 */
-	int getMeltingPoint();
+    /**
+     * @return temperature at which the item melts. Glass is 1000, Sand is 3000.
+     */
+    int getMeltingPoint();
 
-	/**
-	 * @return resulting fluid
-	 */
-	FluidStack getProduct();
+    /**
+     * @return resulting fluid
+     */
+    FluidStack getProduct();
 }

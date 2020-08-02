@@ -11,8 +11,8 @@ import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 
 public interface ILeafProvider {
 
-	void init(IAlleleTreeSpecies treeSpecies);
+    void init(IAlleleTreeSpecies treeSpecies);
 
-	ItemStack getDecorativeLeaves();
+    ItemStack getDecorativeLeaves();
 
 }

@@ -20,41 +20,41 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 @OnlyIn(Dist.CLIENT)
 public class ToolTip extends TextCollection {
-	private final long delay;
-	private long mouseOverStart;
+    private final long delay;
+    private long mouseOverStart;
 
-	public ToolTip() {
-		this.delay = 0;
-	}
+    public ToolTip() {
+        this.delay = 0;
+    }
 
-	public ToolTip(int delay) {
-		this.delay = delay;
-	}
+    public ToolTip(int delay) {
+        this.delay = delay;
+    }
 
-	//TODO - only for porting, remove when cleaning up
-	@Deprecated
-	public ITextInstance add(String s) {
-		return this.add(new StringTextComponent(s));
-	}
+    //TODO - only for porting, remove when cleaning up
+    @Deprecated
+    public ITextInstance add(String s) {
+        return this.add(new StringTextComponent(s));
+    }
 
-	public void onTick(boolean mouseOver) {
-		if (delay == 0) {
-			return;
-		}
-		if (mouseOver) {
-			if (mouseOverStart == 0) {
-				mouseOverStart = System.currentTimeMillis();
-			}
-		} else {
-			mouseOverStart = 0;
-		}
-	}
+    public void onTick(boolean mouseOver) {
+        if (delay == 0) {
+            return;
+        }
+        if (mouseOver) {
+            if (mouseOverStart == 0) {
+                mouseOverStart = System.currentTimeMillis();
+            }
+        } else {
+            mouseOverStart = 0;
+        }
+    }
 
-	public boolean isReady() {
-		return delay == 0 || mouseOverStart != 0 && System.currentTimeMillis() - mouseOverStart >= delay;
-	}
+    public boolean isReady() {
+        return delay == 0 || mouseOverStart != 0 && System.currentTimeMillis() - mouseOverStart >= delay;
+    }
 
-	public void refresh() {
-	}
+    public void refresh() {
+    }
 
 }

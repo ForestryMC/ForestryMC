@@ -28,33 +28,33 @@ import forestry.core.items.ItemFruit;
 //TODO: Add support for the alyzer
 @OnlyIn(Dist.CLIENT)
 public class TreePlugin extends DatabasePlugin<ITree> {
-	public static final TreePlugin INSTANCE = new TreePlugin();
-	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
+    public static final TreePlugin INSTANCE = new TreePlugin();
+    protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	private TreePlugin() {
-		super(new TreeDatabaseTab(DatabaseMode.ACTIVE),
-			new TreeDatabaseTab(DatabaseMode.INACTIVE),
-			new ProductsTab(() -> CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY, 1)),
-			new MutationsTab(ArboricultureItems.GRAFTER::stack));
-		NonNullList<ItemStack> treeList = NonNullList.create();
-		ArboricultureItems.SAPLING.item().addCreativeItems(treeList, false);
-		for (ItemStack treeStack : treeList) {
-			IOrganism<?> organism = GeneticHelper.getOrganism(treeStack);
-			if (organism.isEmpty()) {
-				continue;
-			}
-			IAlleleTreeSpecies species = organism.getAllele(TreeChromosomes.SPECIES, true);
-			iconStacks.put(species.getRegistryName().toString(), treeStack);
-		}
-	}
+    private TreePlugin() {
+        super(new TreeDatabaseTab(DatabaseMode.ACTIVE),
+                new TreeDatabaseTab(DatabaseMode.INACTIVE),
+                new ProductsTab(() -> CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY, 1)),
+                new MutationsTab(ArboricultureItems.GRAFTER::stack));
+        NonNullList<ItemStack> treeList = NonNullList.create();
+        ArboricultureItems.SAPLING.item().addCreativeItems(treeList, false);
+        for (ItemStack treeStack : treeList) {
+            IOrganism<?> organism = GeneticHelper.getOrganism(treeStack);
+            if (organism.isEmpty()) {
+                continue;
+            }
+            IAlleleTreeSpecies species = organism.getAllele(TreeChromosomes.SPECIES, true);
+            iconStacks.put(species.getRegistryName().toString(), treeStack);
+        }
+    }
 
-	@Override
-	public Map<String, ItemStack> getIndividualStacks() {
-		return iconStacks;
-	}
+    @Override
+    public Map<String, ItemStack> getIndividualStacks() {
+        return iconStacks;
+    }
 
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("treealyzer");
-	}
+    @Override
+    public List<String> getHints() {
+        return Config.hints.get("treealyzer");
+    }
 }

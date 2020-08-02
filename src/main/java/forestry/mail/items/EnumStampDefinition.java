@@ -27,76 +27,76 @@ import forestry.core.data.ForestryTags;
 import forestry.core.items.ItemOverlay;
 
 public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
-	P_1("1n", EnumPostage.P_1, ForestryTags.Items.GEMS_APATITE, new Color(0x4a8ca7), new Color(0xffffff)),
-	P_2("2n", EnumPostage.P_2, ForestryTags.Items.INGOTS_COPPER, new Color(0xe8c814), new Color(0xffffff)),
-	P_5("5n", EnumPostage.P_5, ForestryTags.Items.INGOTS_TIN, new Color(0x9c0707), new Color(0xffffff)),
-	P_10("10n", EnumPostage.P_10, Tags.Items.INGOTS_GOLD, new Color(0x7bd1b8), new Color(0xffffff)),
-	P_20("20n", EnumPostage.P_20, Tags.Items.GEMS_DIAMOND, new Color(0xff9031), new Color(0xfff7dd)),
-	P_50("50n", EnumPostage.P_50, Tags.Items.GEMS_EMERALD, new Color(0x6431d7), new Color(0xfff7dd)),
-	P_100("100n", EnumPostage.P_100, Items.NETHER_STAR, new Color(0xd731ba), new Color(0xfff7dd)),
-	//	P_200("200n", EnumPostage.P_200, Items.NETHER_STAR, new Color(0xcd9831), new Color(0xfff7dd)),
-	;
+    P_1("1n", EnumPostage.P_1, ForestryTags.Items.GEMS_APATITE, new Color(0x4a8ca7), new Color(0xffffff)),
+    P_2("2n", EnumPostage.P_2, ForestryTags.Items.INGOTS_COPPER, new Color(0xe8c814), new Color(0xffffff)),
+    P_5("5n", EnumPostage.P_5, ForestryTags.Items.INGOTS_TIN, new Color(0x9c0707), new Color(0xffffff)),
+    P_10("10n", EnumPostage.P_10, Tags.Items.INGOTS_GOLD, new Color(0x7bd1b8), new Color(0xffffff)),
+    P_20("20n", EnumPostage.P_20, Tags.Items.GEMS_DIAMOND, new Color(0xff9031), new Color(0xfff7dd)),
+    P_50("50n", EnumPostage.P_50, Tags.Items.GEMS_EMERALD, new Color(0x6431d7), new Color(0xfff7dd)),
+    P_100("100n", EnumPostage.P_100, Items.NETHER_STAR, new Color(0xd731ba), new Color(0xfff7dd)),
+    //	P_200("200n", EnumPostage.P_200, Items.NETHER_STAR, new Color(0xcd9831), new Color(0xfff7dd)),
+    ;
 
-	public static final EnumStampDefinition[] VALUES = values();
-	private static final Map<EnumPostage, EnumStampDefinition> postageMap = new EnumMap<>(EnumPostage.class);
+    public static final EnumStampDefinition[] VALUES = values();
+    private static final Map<EnumPostage, EnumStampDefinition> postageMap = new EnumMap<>(EnumPostage.class);
 
-	static {
-		for (EnumStampDefinition stampDefinition : VALUES) {
-			postageMap.put(stampDefinition.getPostage(), stampDefinition);
-		}
-	}
+    static {
+        for (EnumStampDefinition stampDefinition : VALUES) {
+            postageMap.put(stampDefinition.getPostage(), stampDefinition);
+        }
+    }
 
-	private final String name;
-	private final int primaryColor;
-	private final int secondaryColor;
-	private final Supplier<Ingredient> craftingIngredient;
-	private final EnumPostage postage;
+    private final String name;
+    private final int primaryColor;
+    private final int secondaryColor;
+    private final Supplier<Ingredient> craftingIngredient;
+    private final EnumPostage postage;
 
-	EnumStampDefinition(String name, EnumPostage postage, ITag<Item> crafting, Color primaryColor, Color secondaryColor) {
-		this(name, postage, () -> Ingredient.fromTag(crafting), primaryColor, secondaryColor);
-	}
+    EnumStampDefinition(String name, EnumPostage postage, ITag<Item> crafting, Color primaryColor, Color secondaryColor) {
+        this(name, postage, () -> Ingredient.fromTag(crafting), primaryColor, secondaryColor);
+    }
 
-	EnumStampDefinition(String name, EnumPostage postage, Item crafting, Color primaryColor, Color secondaryColor) {
-		this(name, postage, () -> Ingredient.fromItems(crafting), primaryColor, secondaryColor);
-	}
+    EnumStampDefinition(String name, EnumPostage postage, Item crafting, Color primaryColor, Color secondaryColor) {
+        this(name, postage, () -> Ingredient.fromItems(crafting), primaryColor, secondaryColor);
+    }
 
-	EnumStampDefinition(String name, EnumPostage postage, Supplier<Ingredient> crafting, Color primaryColor, Color secondaryColor) {
-		this.name = name;
-		this.primaryColor = primaryColor.getRGB();
-		this.secondaryColor = secondaryColor.getRGB();
-		this.craftingIngredient = crafting;
-		this.postage = postage;
-	}
+    EnumStampDefinition(String name, EnumPostage postage, Supplier<Ingredient> crafting, Color primaryColor, Color secondaryColor) {
+        this.name = name;
+        this.primaryColor = primaryColor.getRGB();
+        this.secondaryColor = secondaryColor.getRGB();
+        this.craftingIngredient = crafting;
+        this.postage = postage;
+    }
 
-	public EnumPostage getPostage() {
-		return this.postage;
-	}
+    public EnumPostage getPostage() {
+        return this.postage;
+    }
 
-	public Ingredient getCraftingIngredient() {
-		return this.craftingIngredient.get();
-	}
+    public Ingredient getCraftingIngredient() {
+        return this.craftingIngredient.get();
+    }
 
-	@Override
-	public String getString() {
-		return name;
-	}
+    @Override
+    public String getString() {
+        return name;
+    }
 
-	@Override
-	public int getPrimaryColor() {
-		return primaryColor;
-	}
+    @Override
+    public int getPrimaryColor() {
+        return primaryColor;
+    }
 
-	@Override
-	public int getSecondaryColor() {
-		return secondaryColor;
-	}
+    @Override
+    public int getSecondaryColor() {
+        return secondaryColor;
+    }
 
-	@Override
-	public boolean isSecret() {
-		return false;
-	}
+    @Override
+    public boolean isSecret() {
+        return false;
+    }
 
-	public static EnumStampDefinition getFromPostage(EnumPostage postage) {
-		return postageMap.get(postage);
-	}
+    public static EnumStampDefinition getFromPostage(EnumPostage postage) {
+        return postageMap.get(postage);
+    }
 }

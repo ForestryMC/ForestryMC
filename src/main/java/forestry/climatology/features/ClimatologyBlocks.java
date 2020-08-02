@@ -10,11 +10,11 @@ import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class ClimatologyBlocks {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleClimatology.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleClimatology.class);
 
-	public static final FeatureBlock<BlockHabitatFormer, ItemBlockForestry> HABITATFORMER = REGISTRY.block(BlockHabitatFormer::new, ItemBlockForestry::new, "habitat_former");
+    public static final FeatureBlock<BlockHabitatFormer, ItemBlockForestry> HABITATFORMER = REGISTRY.block(BlockHabitatFormer::new, ItemBlockForestry::new, "habitat_former");
 
-	private ClimatologyBlocks() {
+    private ClimatologyBlocks() {
 
-	}
+    }
 }

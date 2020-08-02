@@ -19,15 +19,15 @@ import forestry.core.items.ItemOverlay;
 
 public class ItemStamp extends ItemOverlay implements IStamps {
 
-	private EnumStampDefinition def;
+    private final EnumStampDefinition def;
 
-	public ItemStamp(EnumStampDefinition def) {
-		super(ItemGroupForestry.tabForestry, def);
-		this.def = def;
-	}
+    public ItemStamp(EnumStampDefinition def) {
+        super(ItemGroupForestry.tabForestry, def);
+        this.def = def;
+    }
 
-	@Override
-	public EnumPostage getPostage(ItemStack itemstack) {
-		return def.getPostage();
-	}
+    @Override
+    public EnumPostage getPostage(ItemStack itemstack) {
+        return def.getPostage();
+    }
 }

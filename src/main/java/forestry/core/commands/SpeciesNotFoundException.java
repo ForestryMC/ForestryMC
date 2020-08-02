@@ -16,10 +16,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class SpeciesNotFoundException extends CommandException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public SpeciesNotFoundException(ResourceLocation title) {
-		super(new TranslationTextComponent("Could not find species with Name or UID %s", title));
-	}
+    public SpeciesNotFoundException(ResourceLocation title) {
+        super(new TranslationTextComponent("Could not find species with Name or UID %s", title));
+    }
 
 }

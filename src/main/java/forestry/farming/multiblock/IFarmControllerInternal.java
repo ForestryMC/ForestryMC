@@ -22,9 +22,9 @@ import forestry.cultivation.IFarmHousingInternal;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
 public interface IFarmControllerInternal extends IFarmController, IMultiblockControllerInternal, ISocketable, IClimatised, IOwnedTile, IStreamableGui, IFarmHousingInternal {
-	IFarmLedgerDelegate getFarmLedgerDelegate();
+    IFarmLedgerDelegate getFarmLedgerDelegate();
 
-	IInventoryAdapter getInternalInventory();
+    IInventoryAdapter getInternalInventory();
 
-	ITankManager getTankManager();
+    ITankManager getTankManager();
 }

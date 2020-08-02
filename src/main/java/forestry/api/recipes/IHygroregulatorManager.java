@@ -20,13 +20,13 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public interface IHygroregulatorManager extends ICraftingProvider<IHygroregulatorRecipe> {
 
-	/**
-	 * Add a recipe to the alveary hygroregulator and the habitatformer.
-	 *
-	 * @param resource     FluidStack containing information on fluid and amount.
-	 * @param transferTime The time between the removal of the fluid from the tank and the actual addition to the alveary climate.
-	 * @param tempChange   The temperature change that this recipe causes in one work cycle.
-	 * @param humidChange  The humidity change that this recipe causes in one work cycle.
-	 */
-	void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange);
+    /**
+     * Add a recipe to the alveary hygroregulator and the habitatformer.
+     *
+     * @param resource     FluidStack containing information on fluid and amount.
+     * @param transferTime The time between the removal of the fluid from the tank and the actual addition to the alveary climate.
+     * @param tempChange   The temperature change that this recipe causes in one work cycle.
+     * @param humidChange  The humidity change that this recipe causes in one work cycle.
+     */
+    void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange);
 }

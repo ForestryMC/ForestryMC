@@ -17,33 +17,33 @@ import genetics.api.root.IIndividualRoot;
  * the offspring. This is the case in forestry as well as in as in binnies mods.
  */
 public interface IAlleleSpecies extends IAllele {
-	/**
-	 * @return the {@link IIndividualRoot} associated with this species.
-	 */
-	IIndividualRoot<? extends IIndividual> getRoot();
+    /**
+     * @return the {@link IIndividualRoot} associated with this species.
+     */
+    IIndividualRoot<? extends IIndividual> getRoot();
 
-	/**
-	 * @return Localized short description of this species. (May be null.)
-	 */
-	ITextComponent getDescription();
+    /**
+     * @return Localized short description of this species. (May be null.)
+     */
+    ITextComponent getDescription();
 
-	/**
-	 * Binomial name of the species sans genus ("Apis"). Returning "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun
-	 * names or return null.
-	 *
-	 * @return flavour text (may be null)
-	 */
-	String getBinomial();
+    /**
+     * Binomial name of the species sans genus ("Apis"). Returning "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun
+     * names or return null.
+     *
+     * @return flavour text (may be null)
+     */
+    String getBinomial();
 
-	/**
-	 * Authority for the binomial name, e.g. "Sengir" on species of base Forestry.
-	 *
-	 * @return flavour text (may be null)
-	 */
-	String getAuthority();
+    /**
+     * Authority for the binomial name, e.g. "Sengir" on species of base Forestry.
+     *
+     * @return flavour text (may be null)
+     */
+    String getAuthority();
 
-	/**
-	 * @return Branch this species is associated with.
-	 */
-	IClassification getBranch();
+    /**
+     * @return Branch this species is associated with.
+     */
+    IClassification getBranch();
 }

@@ -9,8 +9,8 @@ import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class ClimatologyTiles {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleClimatology.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleClimatology.class);
 
-	public static final FeatureTileType<TileHabitatFormer> HABITAT_FORMER = REGISTRY.tile(TileHabitatFormer::new, "habitat_former", ClimatologyBlocks.HABITATFORMER::collect);
+    public static final FeatureTileType<TileHabitatFormer> HABITAT_FORMER = REGISTRY.tile(TileHabitatFormer::new, "habitat_former", ClimatologyBlocks.HABITATFORMER::collect);
 
 }

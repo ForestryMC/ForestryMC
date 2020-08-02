@@ -14,63 +14,63 @@ import genetics.api.root.IIndividualRoot;
  */
 public interface IAlleleTemplate {
 
-	/**
-	 * @return The allele at the position of the chromosomeType at the allele array.
-	 */
-	IAllele get(IChromosomeType type);
+    /**
+     * @return The allele at the position of the chromosomeType at the allele array.
+     */
+    IAllele get(IChromosomeType type);
 
-	/**
-	 * @return A copy of the allele array.
-	 */
-	IAllele[] alleles();
+    /**
+     * @return A copy of the allele array.
+     */
+    IAllele[] alleles();
 
-	/**
-	 * @return The size of the allele array.
-	 */
-	int size();
+    /**
+     * @return The size of the allele array.
+     */
+    int size();
 
-	/**
-	 * @return A copy of this template with a copied allele array.
-	 */
-	IAlleleTemplate copy();
+    /**
+     * @return A copy of this template with a copied allele array.
+     */
+    IAlleleTemplate copy();
 
-	/**
-	 * Creates a new builder with the alleles that are contained in this template.
-	 */
-	IAlleleTemplateBuilder createBuilder();
+    /**
+     * Creates a new builder with the alleles that are contained in this template.
+     */
+    IAlleleTemplateBuilder createBuilder();
 
-	/**
-	 * @return The karyotype that defines the {@link #size()} and which alleles this template can contain.
-	 */
-	IKaryotype getKaryotype();
+    /**
+     * @return The karyotype that defines the {@link #size()} and which alleles this template can contain.
+     */
+    IKaryotype getKaryotype();
 
-	default <I extends IIndividual> I toIndividual(IIndividualRoot<I> root) {
-		return toIndividual(root, null);
-	}
+    default <I extends IIndividual> I toIndividual(IIndividualRoot<I> root) {
+        return toIndividual(root, null);
+    }
 
-	/**
-	 * Creates an individual with the help of the genetic root using
-	 * {@link IIndividualRoot#templateAsIndividual(IAllele[], IAllele[])}.
-	 */
-	<I extends IIndividual> I toIndividual(IIndividualRoot<I> root, @Nullable IAlleleTemplate inactiveTemplate);
+    /**
+     * Creates an individual with the help of the genetic root using
+     * {@link IIndividualRoot#templateAsIndividual(IAllele[], IAllele[])}.
+     */
+    <I extends IIndividual> I toIndividual(IIndividualRoot<I> root, @Nullable IAlleleTemplate inactiveTemplate);
 
-	default IGenome toGenome() {
-		return toGenome(null);
-	}
+    default IGenome toGenome() {
+        return toGenome(null);
+    }
 
-	/**
-	 * Creates a genome with the help of the karyotype using
-	 * {@link IKaryotype#templateAsGenome(IAllele[], IAllele[])}.
-	 */
-	IGenome toGenome(@Nullable IAlleleTemplate inactiveTemplate);
+    /**
+     * Creates a genome with the help of the karyotype using
+     * {@link IKaryotype#templateAsGenome(IAllele[], IAllele[])}.
+     */
+    IGenome toGenome(@Nullable IAlleleTemplate inactiveTemplate);
 
-	default IChromosome[] toChromosomes() {
-		return toChromosomes(null);
-	}
+    default IChromosome[] toChromosomes() {
+        return toChromosomes(null);
+    }
 
-	/**
-	 * Creates a chromosome array with the help of the karyotype using
-	 * {@link IKaryotype#templateAsChromosomes(IAllele[], IAllele[])}.
-	 */
-	IChromosome[] toChromosomes(@Nullable IAlleleTemplate inactiveTemplate);
+    /**
+     * Creates a chromosome array with the help of the karyotype using
+     * {@link IKaryotype#templateAsChromosomes(IAllele[], IAllele[])}.
+     */
+    IChromosome[] toChromosomes(@Nullable IAlleleTemplate inactiveTemplate);
 }

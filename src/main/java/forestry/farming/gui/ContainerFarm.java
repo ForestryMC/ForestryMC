@@ -27,57 +27,57 @@ import forestry.farming.tiles.TileFarm;
 
 public class ContainerFarm extends ContainerSocketed<TileFarm> {
 
-	public static ContainerFarm fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileFarm tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFarm.class);
-		return new ContainerFarm(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerFarm fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileFarm tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFarm.class);
+        return new ContainerFarm(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerFarm(int windowId, PlayerInventory playerInventory, TileFarm data) {
-		super(windowId, FarmingContainers.FARM.containerType(), playerInventory, data, 28, 138);
+    public ContainerFarm(int windowId, PlayerInventory playerInventory, TileFarm data) {
+        super(windowId, FarmingContainers.FARM.containerType(), playerInventory, data, 28, 138);
 
-		// Resources
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
-			}
-		}
+        // Resources
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
+            }
+        }
 
-		// Germlings
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
-			}
-		}
+        // Germlings
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
+            }
+        }
 
-		// Production 1
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
-			}
-		}
+        // Production 1
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
+            }
+        }
 
-		// Production 2
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
-			}
-		}
+        // Production 2
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
+            }
+        }
 
-		// Fertilizer
-		this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_FERTILIZER, 63, 95));
-		// Can Slot
-		this.addSlot(new SlotLiquidIn(tile, InventoryFarm.SLOT_CAN, 15, 95));
-	}
+        // Fertilizer
+        this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_FERTILIZER, 63, 95));
+        // Can Slot
+        this.addSlot(new SlotLiquidIn(tile, InventoryFarm.SLOT_CAN, 15, 95));
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToListeners(packet);
-	}
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+        sendPacketToListeners(packet);
+    }
 
-	public IFluidTank getTank(int slot) {
-		return tile.getMultiblockLogic().getController().getTankManager().getTank(slot);
-	}
+    public IFluidTank getTank(int slot) {
+        return tile.getMultiblockLogic().getController().getTankManager().getTank(slot);
+    }
 
 }

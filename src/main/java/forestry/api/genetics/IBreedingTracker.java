@@ -25,87 +25,87 @@ import forestry.api.apiculture.IBeekeepingMode;
  */
 public interface IBreedingTracker {
 
-	/**
-	 * @return Name of the current {@link IBeekeepingMode}.
-	 */
-	String getModeName();
+    /**
+     * @return Name of the current {@link IBeekeepingMode}.
+     */
+    String getModeName();
 
-	/**
-	 * Set the current {@link IBeekeepingMode}.
-	 */
-	void setModeName(String name);
+    /**
+     * Set the current {@link IBeekeepingMode}.
+     */
+    void setModeName(String name);
 
-	/**
-	 * @return Amount of species discovered.
-	 */
-	int getSpeciesBred();
+    /**
+     * @return Amount of species discovered.
+     */
+    int getSpeciesBred();
 
-	/**
-	 * Register the birth of an individual. Will mark it as discovered.
-	 */
-	void registerBirth(IIndividual individual);
+    /**
+     * Register the birth of an individual. Will mark it as discovered.
+     */
+    void registerBirth(IIndividual individual);
 
-	/**
-	 * Register the pickup of an individual.
-	 */
-	void registerPickup(IIndividual individual);
+    /**
+     * Register the pickup of an individual.
+     */
+    void registerPickup(IIndividual individual);
 
-	/**
-	 * Marks a species as discovered. Should only be called from registerIndividual normally.
-	 */
-	void registerSpecies(IAlleleSpecies species);
+    /**
+     * Marks a species as discovered. Should only be called from registerIndividual normally.
+     */
+    void registerSpecies(IAlleleSpecies species);
 
-	/**
-	 * Register a successful mutation. Will mark it as discovered.
-	 */
-	void registerMutation(IMutation mutation);
+    /**
+     * Register a successful mutation. Will mark it as discovered.
+     */
+    void registerMutation(IMutation mutation);
 
-	/**
-	 * Queries the tracker for discovered species.
-	 *
-	 * @param mutation Mutation to query for.
-	 * @return true if the mutation has been discovered.
-	 */
-	boolean isDiscovered(IMutation mutation);
+    /**
+     * Queries the tracker for discovered species.
+     *
+     * @param mutation Mutation to query for.
+     * @return true if the mutation has been discovered.
+     */
+    boolean isDiscovered(IMutation mutation);
 
-	/**
-	 * Queries the tracker for discovered species.
-	 *
-	 * @param species Species to check.
-	 * @return true if the species has been bred.
-	 */
-	boolean isDiscovered(IAlleleSpecies species);
+    /**
+     * Queries the tracker for discovered species.
+     *
+     * @param species Species to check.
+     * @return true if the species has been bred.
+     */
+    boolean isDiscovered(IAlleleSpecies species);
 
-	/**
-	 * @return A collection that contains the {@link IAllele#getRegistryName()}s of all discovered species.
-	 */
-	default Collection<String> getDiscoveredSpecies() {
-		return Collections.emptyList();
-	}
+    /**
+     * @return A collection that contains the {@link IAllele#getRegistryName()}s of all discovered species.
+     */
+    default Collection<String> getDiscoveredSpecies() {
+        return Collections.emptyList();
+    }
 
-	/**
-	 * Register a successfully researched mutation.
-	 * Mutations are normally researched in the Escritoire.
-	 * Researched mutations may have bonuses such as occurring at a higher rate.
-	 * Researched mutations count as discovered.
-	 */
-	void researchMutation(IMutation mutation);
+    /**
+     * Register a successfully researched mutation.
+     * Mutations are normally researched in the Escritoire.
+     * Researched mutations may have bonuses such as occurring at a higher rate.
+     * Researched mutations count as discovered.
+     */
+    void researchMutation(IMutation mutation);
 
-	/**
-	 * @return true if the mutation has been researched.
-	 */
-	boolean isResearched(IMutation mutation);
+    /**
+     * @return true if the mutation has been researched.
+     */
+    boolean isResearched(IMutation mutation);
 
-	/**
-	 * Synchronizes the tracker to the client side.
-	 * Before Forestry 4.2.1: Should be called before opening any gui needing that information.
-	 * Since Forestry 4.2.1: Breeding tracker should be automatically synced, only Forestry should need to call this.
-	 */
-	void synchToPlayer(PlayerEntity player);
+    /**
+     * Synchronizes the tracker to the client side.
+     * Before Forestry 4.2.1: Should be called before opening any gui needing that information.
+     * Since Forestry 4.2.1: Breeding tracker should be automatically synced, only Forestry should need to call this.
+     */
+    void synchToPlayer(PlayerEntity player);
 
-	/* LOADING & SAVING */
-	void decodeFromNBT(CompoundNBT compound);
+    /* LOADING & SAVING */
+    void decodeFromNBT(CompoundNBT compound);
 
-	void encodeToNBT(CompoundNBT compound);
+    void encodeToNBT(CompoundNBT compound);
 
 }

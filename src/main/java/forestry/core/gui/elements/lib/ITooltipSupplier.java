@@ -10,9 +10,9 @@ import forestry.api.core.tooltips.ToolTip;
 @FunctionalInterface
 public interface ITooltipSupplier {
 
-	default boolean hasTooltip() {
-		return true;
-	}
+    default boolean hasTooltip() {
+        return true;
+    }
 
-	void addTooltip(ToolTip tooltip, IGuiElement element, int mouseX, int mouseY);
+    void addTooltip(ToolTip tooltip, IGuiElement element, int mouseX, int mouseY);
 }

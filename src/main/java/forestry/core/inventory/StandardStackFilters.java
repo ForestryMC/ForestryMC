@@ -25,24 +25,24 @@ import net.minecraft.tileentity.FurnaceTileEntity;
  */
 public enum StandardStackFilters implements Predicate<ItemStack> {
 
-	ALL {
-		@Override
-		public boolean test(ItemStack stack) {
-			return true;
-		}
-	},
-	FUEL {
-		@Override
-		public boolean test(ItemStack stack) {
-			return FurnaceTileEntity.getBurnTimes().get(stack.getItem()) > 0;
-		}
-	},
-	//TODO - where is this used?
-	FEED {
-		@Override
-		public boolean test(ItemStack stack) {
-			//TODO - tag on seeds?
-			return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT || stack.getItem() == Items.WHEAT_SEEDS;
-		}
-	}
+    ALL {
+        @Override
+        public boolean test(ItemStack stack) {
+            return true;
+        }
+    },
+    FUEL {
+        @Override
+        public boolean test(ItemStack stack) {
+            return FurnaceTileEntity.getBurnTimes().get(stack.getItem()) > 0;
+        }
+    },
+    //TODO - where is this used?
+    FEED {
+        @Override
+        public boolean test(ItemStack stack) {
+            //TODO - tag on seeds?
+            return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT || stack.getItem() == Items.WHEAT_SEEDS;
+        }
+    }
 }

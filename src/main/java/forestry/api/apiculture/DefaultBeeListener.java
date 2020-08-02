@@ -13,19 +13,19 @@ import genetics.api.individual.IIndividual;
  * BeeListeners should inherit from this class unless they need to listen for everything.
  */
 public class DefaultBeeListener implements IBeeListener {
-	@Override
-	public void wearOutEquipment(int amount) {
+    @Override
+    public void wearOutEquipment(int amount) {
 
-	}
+    }
 
-	@Override
-	public void onQueenDeath() {
+    @Override
+    public void onQueenDeath() {
 
-	}
+    }
 
-	@Override
-	public boolean onPollenRetrieved(IIndividual pollen) {
-		return false;
-	}
+    @Override
+    public boolean onPollenRetrieved(IIndividual pollen) {
+        return false;
+    }
 
 }

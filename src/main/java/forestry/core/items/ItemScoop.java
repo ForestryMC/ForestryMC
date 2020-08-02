@@ -19,13 +19,13 @@ import forestry.api.core.IToolScoop;
 import forestry.api.core.ItemGroups;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
-	public static ToolType SCOOP = ToolType.get("scoop");
+    public static ToolType SCOOP = ToolType.get("scoop");
 
-	public ItemScoop() {
-		super(ItemStack.EMPTY, (new Item.Properties())
-			.maxDamage(10)
-			.group(ItemGroups.tabApiculture)
-			.addToolType(SCOOP, 3));
-		setEfficiencyOnProperMaterial(2.0f);
-	}
+    public ItemScoop() {
+        super(ItemStack.EMPTY, (new Item.Properties())
+                .maxDamage(10)
+                .group(ItemGroups.tabApiculture)
+                .addToolType(SCOOP, 3));
+        setEfficiencyOnProperMaterial(2.0f);
+    }
 }

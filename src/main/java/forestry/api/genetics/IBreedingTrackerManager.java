@@ -8,7 +8,7 @@ import com.mojang.authlib.GameProfile;
 
 public interface IBreedingTrackerManager {
 
-	void registerTracker(String rootUID, IBreedingTrackerHandler handler);
+    void registerTracker(String rootUID, IBreedingTrackerHandler handler);
 
-	<T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile);
+    <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile);
 }

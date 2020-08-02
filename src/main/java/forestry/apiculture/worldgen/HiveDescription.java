@@ -42,145 +42,145 @@ import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
 
 public enum HiveDescription implements IHiveDescription {
-	FOREST(IHiveRegistry.HiveType.FOREST, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
-		@Override
-		public void postGen(World world, Random rand, BlockPos pos) {
-			super.postGen(world, rand, pos);
-			postGenFlowers(world, rand, pos, flowerStates);
-		}
-	},
-	MEADOWS(IHiveRegistry.HiveType.MEADOWS, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
-		@Override
-		public void postGen(World world, Random rand, BlockPos pos) {
-			super.postGen(world, rand, pos);
-			postGenFlowers(world, rand, pos, flowerStates);
-		}
-	},
-	DESERT(IHiveRegistry.HiveType.DESERT, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.SANDSTONE)) {
-		@Override
-		public void postGen(World world, Random rand, BlockPos pos) {
-			super.postGen(world, rand, pos);
-			postGenFlowers(world, rand, pos, cactusStates);
-		}
-	},
-	JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
-		@Override
-		public boolean isGoodBiome(Biome biome) {
-			return BiomeDictionary.hasType(biome, BiomeDictionary.Type.END);
-		}
-	},
-	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
-		@Override
-		public void postGen(World world, Random rand, BlockPos pos) {
-			BlockPos posAbove = pos.up();
-			if (world.isAirBlock(posAbove)) {
-				world.setBlockState(posAbove, Blocks.SNOW.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
-			}
+    FOREST(IHiveRegistry.HiveType.FOREST, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
+        @Override
+        public void postGen(World world, Random rand, BlockPos pos) {
+            super.postGen(world, rand, pos);
+            postGenFlowers(world, rand, pos, flowerStates);
+        }
+    },
+    MEADOWS(IHiveRegistry.HiveType.MEADOWS, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
+        @Override
+        public void postGen(World world, Random rand, BlockPos pos) {
+            super.postGen(world, rand, pos);
+            postGenFlowers(world, rand, pos, flowerStates);
+        }
+    },
+    DESERT(IHiveRegistry.HiveType.DESERT, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.SANDSTONE)) {
+        @Override
+        public void postGen(World world, Random rand, BlockPos pos) {
+            super.postGen(world, rand, pos);
+            postGenFlowers(world, rand, pos, cactusStates);
+        }
+    },
+    JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
+    END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
+        @Override
+        public boolean isGoodBiome(Biome biome) {
+            return BiomeDictionary.hasType(biome, BiomeDictionary.Type.END);
+        }
+    },
+    SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
+        @Override
+        public void postGen(World world, Random rand, BlockPos pos) {
+            BlockPos posAbove = pos.up();
+            if (world.isAirBlock(posAbove)) {
+                world.setBlockState(posAbove, Blocks.SNOW.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+            }
 
-			postGenFlowers(world, rand, pos, flowerStates);
-		}
-	},
-	SWAMP(IHiveRegistry.HiveType.SWAMP, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
-		@Override
-		public void postGen(World world, Random rand, BlockPos pos) {
-			super.postGen(world, rand, pos);
+            postGenFlowers(world, rand, pos, flowerStates);
+        }
+    },
+    SWAMP(IHiveRegistry.HiveType.SWAMP, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
+        @Override
+        public void postGen(World world, Random rand, BlockPos pos) {
+            super.postGen(world, rand, pos);
 
-			postGenFlowers(world, rand, pos, mushroomStates);
-		}
-	};
+            postGenFlowers(world, rand, pos, mushroomStates);
+        }
+    };
 
-	private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW, Blocks.SAND, Blocks.SANDSTONE);
-	private static final List<BlockState> flowerStates = new ArrayList<>();
-	private static final List<BlockState> mushroomStates = new ArrayList<>();
-	private static final List<BlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());
+    private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW, Blocks.SAND, Blocks.SANDSTONE);
+    private static final List<BlockState> flowerStates = new ArrayList<>();
+    private static final List<BlockState> mushroomStates = new ArrayList<>();
+    private static final List<BlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());
 
-	static {
-		flowerStates.addAll(Blocks.POPPY.getStateContainer().getValidStates());
-		flowerStates.addAll(Blocks.DANDELION.getStateContainer().getValidStates());
-		mushroomStates.add(Blocks.RED_MUSHROOM.getDefaultState());
-		mushroomStates.add(Blocks.BROWN_MUSHROOM.getDefaultState());
-	}
+    static {
+        flowerStates.addAll(Blocks.POPPY.getStateContainer().getValidStates());
+        flowerStates.addAll(Blocks.DANDELION.getStateContainer().getValidStates());
+        mushroomStates.add(Blocks.RED_MUSHROOM.getDefaultState());
+        mushroomStates.add(Blocks.BROWN_MUSHROOM.getDefaultState());
+    }
 
-	private final BlockState blockState;
-	private final float genChance;
-	private final IGenome beeGenome;
-	private final IHiveGen hiveGen;
-	private final IHiveRegistry.HiveType hiveType;
+    private final BlockState blockState;
+    private final float genChance;
+    private final IGenome beeGenome;
+    private final IHiveGen hiveGen;
+    private final IHiveRegistry.HiveType hiveType;
 
-	HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
-		this.blockState = ApicultureBlocks.BEEHIVE.get(hiveType).defaultState();
-		this.genChance = genChance;
-		this.beeGenome = beeTemplate.getGenome();
-		this.hiveGen = hiveGen;
-		this.hiveType = hiveType;
-	}
+    HiveDescription(IHiveRegistry.HiveType hiveType, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
+        this.blockState = ApicultureBlocks.BEEHIVE.get(hiveType).defaultState();
+        this.genChance = genChance;
+        this.beeGenome = beeTemplate.getGenome();
+        this.hiveGen = hiveGen;
+        this.hiveType = hiveType;
+    }
 
-	@Override
-	public IHiveGen getHiveGen() {
-		return hiveGen;
-	}
+    @Override
+    public IHiveGen getHiveGen() {
+        return hiveGen;
+    }
 
-	@Override
-	public BlockState getBlockState() {
-		return blockState;
-	}
+    @Override
+    public BlockState getBlockState() {
+        return blockState;
+    }
 
-	@Override
-	public boolean isGoodBiome(Biome biome) {
-		return !BiomeHelper.isBiomeHellish(biome) && !HiveConfig.isBlacklisted(hiveType, biome);
-	}
+    @Override
+    public boolean isGoodBiome(Biome biome) {
+        return !BiomeHelper.isBiomeHellish(biome) && !HiveConfig.isBlacklisted(hiveType, biome);
+    }
 
-	@Override
-	public boolean isGoodHumidity(EnumHumidity humidity) {
-		EnumHumidity idealHumidity = beeGenome.getActiveAllele(BeeChromosomes.SPECIES).getHumidity();
-		EnumTolerance humidityTolerance = beeGenome.getActiveValue(BeeChromosomes.HUMIDITY_TOLERANCE);
-		return AlleleManager.climateHelper.isWithinLimits(humidity, idealHumidity, humidityTolerance);
-	}
+    @Override
+    public boolean isGoodHumidity(EnumHumidity humidity) {
+        EnumHumidity idealHumidity = beeGenome.getActiveAllele(BeeChromosomes.SPECIES).getHumidity();
+        EnumTolerance humidityTolerance = beeGenome.getActiveValue(BeeChromosomes.HUMIDITY_TOLERANCE);
+        return AlleleManager.climateHelper.isWithinLimits(humidity, idealHumidity, humidityTolerance);
+    }
 
-	@Override
-	public boolean isGoodTemperature(EnumTemperature temperature) {
-		EnumTemperature idealTemperature = beeGenome.getActiveAllele(BeeChromosomes.SPECIES).getTemperature();
-		EnumTolerance temperatureTolerance = beeGenome.getActiveValue(BeeChromosomes.TEMPERATURE_TOLERANCE);
-		return AlleleManager.climateHelper.isWithinLimits(temperature, idealTemperature, temperatureTolerance);
-	}
+    @Override
+    public boolean isGoodTemperature(EnumTemperature temperature) {
+        EnumTemperature idealTemperature = beeGenome.getActiveAllele(BeeChromosomes.SPECIES).getTemperature();
+        EnumTolerance temperatureTolerance = beeGenome.getActiveValue(BeeChromosomes.TEMPERATURE_TOLERANCE);
+        return AlleleManager.climateHelper.isWithinLimits(temperature, idealTemperature, temperatureTolerance);
+    }
 
-	@Override
-	public float getGenChance() {
-		return genChance;
-	}
+    @Override
+    public float getGenChance() {
+        return genChance;
+    }
 
-	@Override
-	public void postGen(World world, Random rand, BlockPos pos) {
-	}
+    @Override
+    public void postGen(World world, Random rand, BlockPos pos) {
+    }
 
-	protected static void postGenFlowers(World world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
-		int plantedCount = 0;
-		for (int i = 0; i < 10; i++) {
-			int xOffset = rand.nextInt(8) - 4;
-			int zOffset = rand.nextInt(8) - 4;
-			BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
-			if ((xOffset == 0 && zOffset == 0) || !world.isBlockLoaded(blockPos)) {
-				continue;
-			}
+    protected static void postGenFlowers(World world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
+        int plantedCount = 0;
+        for (int i = 0; i < 10; i++) {
+            int xOffset = rand.nextInt(8) - 4;
+            int zOffset = rand.nextInt(8) - 4;
+            BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
+            if ((xOffset == 0 && zOffset == 0) || !world.isBlockLoaded(blockPos)) {
+                continue;
+            }
 
-			blockPos = groundGen.getPosForHive(world, blockPos.getX(), blockPos.getZ());
-			if (blockPos == null) {
-				continue;
-			}
+            blockPos = groundGen.getPosForHive(world, blockPos.getX(), blockPos.getZ());
+            if (blockPos == null) {
+                continue;
+            }
 
-			BlockState state = flowerStates.get(rand.nextInt(flowerStates.size()));
-			Block block = state.getBlock();
-			if (!block.getDefaultState().isValidPosition(world, blockPos)) {
-				continue;
-			}
+            BlockState state = flowerStates.get(rand.nextInt(flowerStates.size()));
+            Block block = state.getBlock();
+            if (!block.getDefaultState().isValidPosition(world, blockPos)) {
+                continue;
+            }
 
-			world.setBlockState(blockPos, state);
-			plantedCount++;
+            world.setBlockState(blockPos, state);
+            plantedCount++;
 
-			if (plantedCount >= 3) {
-				break;
-			}
-		}
-	}
+            if (plantedCount >= 3) {
+                break;
+            }
+        }
+    }
 }

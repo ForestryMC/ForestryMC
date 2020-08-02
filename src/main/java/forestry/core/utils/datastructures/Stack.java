@@ -26,83 +26,83 @@ import forestry.core.utils.Log;
 
 //TODO - this class relies on meta a lot so probably will have to go.
 public class Stack {
-	private final String name;
-	private final int meta;
+    private final String name;
+    private final int meta;
 
-	public Stack(String name, int meta) {
-		this.name = name;
-		this.meta = meta;
-	}
+    public Stack(String name, int meta) {
+        this.name = name;
+        this.meta = meta;
+    }
 
-	public static List<Stack> parseStackStrings(String itemStackStrings, int missingMetaValue) {
-		String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
-		return parseStackStrings(parts, missingMetaValue);
-	}
+    public static List<Stack> parseStackStrings(String itemStackStrings, int missingMetaValue) {
+        String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
+        return parseStackStrings(parts, missingMetaValue);
+    }
 
-	public static List<Stack> parseStackStrings(String[] parts, int missingMetaValue) {
+    public static List<Stack> parseStackStrings(String[] parts, int missingMetaValue) {
 
-		List<Stack> stacks = new ArrayList<>();
+        List<Stack> stacks = new ArrayList<>();
 
-		for (String itemStackString : parts) {
-			Stack stack = parseStackString(itemStackString, missingMetaValue);
-			if (stack != null) {
-				stacks.add(stack);
-			}
-		}
+        for (String itemStackString : parts) {
+            Stack stack = parseStackString(itemStackString, missingMetaValue);
+            if (stack != null) {
+                stacks.add(stack);
+            }
+        }
 
-		return stacks;
-	}
+        return stacks;
+    }
 
-	@Nullable
-	public static Stack parseStackString(String stackString, int missingMetaValue) {
-		stackString = stackString.trim();
-		if (stackString.isEmpty()) {
-			return null;
-		}
+    @Nullable
+    public static Stack parseStackString(String stackString, int missingMetaValue) {
+        stackString = stackString.trim();
+        if (stackString.isEmpty()) {
+            return null;
+        }
 
-		String[] parts = stackString.split(":+");
+        String[] parts = stackString.split(":+");
 
-		if (parts.length != 2 && parts.length != 3) {
-			Log.warning("Stack string (" + stackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
-			return null;
-		}
+        if (parts.length != 2 && parts.length != 3) {
+            Log.warning("Stack string (" + stackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
+            return null;
+        }
 
-		String name = parts[0] + ':' + parts[1];
-		int meta;
+        String name = parts[0] + ':' + parts[1];
+        int meta;
 
-		if (parts.length == 2) {
-			meta = missingMetaValue;
-		} else {
-			try {
-				meta = parts[2].equals("*") ? 0/*OreDictionary.WILDCARD_VALUE*/ : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
-			} catch (ParseException e) {
-				Log.warning("ItemStack string (" + stackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
-				return null;
-			}
-		}
+        if (parts.length == 2) {
+            meta = missingMetaValue;
+        } else {
+            try {
+                meta = parts[2].equals("*") ? 0/*OreDictionary.WILDCARD_VALUE*/ : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
+            } catch (ParseException e) {
+                Log.warning("ItemStack string (" + stackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
+                return null;
+            }
+        }
 
-		return new Stack(name, meta);
-	}
+        return new Stack(name, meta);
+    }
 
-	@Nullable
-	public Item getItem() {
-		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
-		if (item == null) {
-			Log.warning("Failed to find item for (" + name + ") in the Forge registry.");
-		}
-		return item;
-	}
+    @Nullable
+    public Item getItem() {
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
+        if (item == null) {
+            Log.warning("Failed to find item for (" + name + ") in the Forge registry.");
+        }
+        return item;
+    }
 
-	@Nullable
-	public Block getBlock() {
-		Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(name));
-		if (block == null) {
-			Log.warning("Failed to find block for (" + name + ") in the Forge registry.");
-		}
-		return block;
-	}
+    @Nullable
+    public Block getBlock() {
+        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(name));
+        if (block == null) {
+            Log.warning("Failed to find block for (" + name + ") in the Forge registry.");
+        }
+        return block;
+    }
 
-	public int getMeta() {
-		return meta;
-	}
+    public int getMeta() {
+        return meta;
+    }
 }

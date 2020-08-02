@@ -15,16 +15,16 @@ import net.minecraft.block.material.MaterialColor;
 
 public class MaterialBeehive {
 
-	//TODO - need AT for several material builder methods
-	public static final Material BEEHIVE_WORLD = (new Material.Builder(MaterialColor.STONE)).build();
-	public static final Material BEEHIVE_ALVEARY = (new Material.Builder(MaterialColor.STONE)).build();
+    //TODO - need AT for several material builder methods
+    public static final Material BEEHIVE_WORLD = (new Material.Builder(MaterialColor.STONE)).build();
+    public static final Material BEEHIVE_ALVEARY = (new Material.Builder(MaterialColor.STONE)).build();
 
-	private MaterialBeehive(boolean noHarvest) {
-		//		super(MaterialColor.STONE);
-		//		if (noHarvest) {
-		//			this.setRequiresTool();
-		//		}
-		//		setImmovableMobility();
-	}
+    private MaterialBeehive(boolean noHarvest) {
+        //		super(MaterialColor.STONE);
+        //		if (noHarvest) {
+        //			this.setRequiresTool();
+        //		}
+        //		setImmovableMobility();
+    }
 
 }

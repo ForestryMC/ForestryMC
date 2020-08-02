@@ -16,51 +16,51 @@ import com.mojang.authlib.GameProfile;
 
 public interface IPostRegistry {
 
-	/* POST OFFICE */
-	IPostOffice getPostOffice(ServerWorld world);
+    /* POST OFFICE */
+    IPostOffice getPostOffice(ServerWorld world);
 
-	/* MAIL ADDRESSES */
-	IMailAddress getMailAddress(GameProfile gameProfile);
+    /* MAIL ADDRESSES */
+    IMailAddress getMailAddress(GameProfile gameProfile);
 
-	IMailAddress getMailAddress(String traderName);
+    IMailAddress getMailAddress(String traderName);
 
-	/* LETTERS */
-	boolean isLetter(ItemStack itemstack);
+    /* LETTERS */
+    boolean isLetter(ItemStack itemstack);
 
-	ILetter createLetter(IMailAddress sender, IMailAddress recipient);
+    ILetter createLetter(IMailAddress sender, IMailAddress recipient);
 
-	@Nullable
-	ILetter getLetter(ItemStack itemstack);
+    @Nullable
+    ILetter getLetter(ItemStack itemstack);
 
-	ItemStack createLetterStack(ILetter letter);
+    ItemStack createLetterStack(ILetter letter);
 
-	/* CARRIERS */
+    /* CARRIERS */
 
-	/**
-	 * Registers a new {@link IPostalCarrier}. See {@link IPostalCarrier} for details.
-	 *
-	 * @param carrier {@link IPostalCarrier} to register.
-	 */
-	void registerCarrier(IPostalCarrier carrier);
+    /**
+     * Registers a new {@link IPostalCarrier}. See {@link IPostalCarrier} for details.
+     *
+     * @param carrier {@link IPostalCarrier} to register.
+     */
+    void registerCarrier(IPostalCarrier carrier);
 
-	@Nullable
-	IPostalCarrier getCarrier(EnumAddressee uid);
+    @Nullable
+    IPostalCarrier getCarrier(EnumAddressee uid);
 
-	Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers();
+    Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers();
 
-	/* TRADE STATIONS */
-	void deleteTradeStation(ServerWorld world, IMailAddress address);
+    /* TRADE STATIONS */
+    void deleteTradeStation(ServerWorld world, IMailAddress address);
 
-	ITradeStation getOrCreateTradeStation(ServerWorld world, GameProfile owner, IMailAddress address);
+    ITradeStation getOrCreateTradeStation(ServerWorld world, GameProfile owner, IMailAddress address);
 
-	@Nullable
-	ITradeStation getTradeStation(ServerWorld world, IMailAddress address);
+    @Nullable
+    ITradeStation getTradeStation(ServerWorld world, IMailAddress address);
 
-	boolean isAvailableTradeAddress(ServerWorld world, IMailAddress address);
+    boolean isAvailableTradeAddress(ServerWorld world, IMailAddress address);
 
-	boolean isValidTradeAddress(World world, IMailAddress address);
+    boolean isValidTradeAddress(World world, IMailAddress address);
 
-	/* PO BOXES */
-	boolean isValidPOBox(World world, IMailAddress address);
+    /* PO BOXES */
+    boolean isValidPOBox(World world, IMailAddress address);
 
 }

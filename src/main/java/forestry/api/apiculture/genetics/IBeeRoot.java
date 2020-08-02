@@ -26,67 +26,67 @@ import forestry.api.genetics.IForestrySpeciesRoot;
 
 public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 
-	/* BREEDING TRACKER */
+    /* BREEDING TRACKER */
 
-	/**
-	 * @return {@link IApiaristTracker} associated with the passed world.
-	 */
-	@Override
-	IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
+    /**
+     * @return {@link IApiaristTracker} associated with the passed world.
+     */
+    @Override
+    IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
 
-	/* BEE SPECIFIC */
+    /* BEE SPECIFIC */
 
-	/**
-	 * @return true if passed item is a drone. Equal to getType(ItemStack stack) == EnumBeeType.DRONE
-	 */
-	boolean isDrone(ItemStack stack);
+    /**
+     * @return true if passed item is a drone. Equal to getType(ItemStack stack) == EnumBeeType.DRONE
+     */
+    boolean isDrone(ItemStack stack);
 
-	/**
-	 * @return true if passed item is mated (i.e. a queen)
-	 */
-	boolean isMated(ItemStack stack);
+    /**
+     * @return true if passed item is mated (i.e. a queen)
+     */
+    boolean isMated(ItemStack stack);
 
-	/**
-	 * Creates an IBee suitable for a queen containing the necessary second genome for the mate.
-	 *
-	 * @param genome Valid {@link IGenome}
-	 * @param mate   Valid {@link IBee} representing the mate.
-	 * @return Mated {@link IBee} from the passed genomes.
-	 */
-	IBee getBee(World world, IGenome genome, IBee mate);
+    /**
+     * Creates an IBee suitable for a queen containing the necessary second genome for the mate.
+     *
+     * @param genome Valid {@link IGenome}
+     * @param mate   Valid {@link IBee} representing the mate.
+     * @return Mated {@link IBee} from the passed genomes.
+     */
+    IBee getBee(World world, IGenome genome, IBee mate);
 
-	/* GAME MODE */
-	void resetBeekeepingMode();
+    /* GAME MODE */
+    void resetBeekeepingMode();
 
-	List<IBeekeepingMode> getBeekeepingModes();
+    List<IBeekeepingMode> getBeekeepingModes();
 
-	IBeekeepingMode getBeekeepingMode(World world);
+    IBeekeepingMode getBeekeepingMode(World world);
 
-	@Nullable
-	IBeekeepingMode getBeekeepingMode(String name);
+    @Nullable
+    IBeekeepingMode getBeekeepingMode(String name);
 
-	void registerBeekeepingMode(IBeekeepingMode mode);
+    void registerBeekeepingMode(IBeekeepingMode mode);
 
-	void setBeekeepingMode(World world, IBeekeepingMode mode);
+    void setBeekeepingMode(World world, IBeekeepingMode mode);
 
-	/* MISC */
+    /* MISC */
 
-	/**
-	 * Creates beekeepingLogic for a housing.
-	 * Should be used when the housing is created, see IBeekeepingLogic
-	 */
-	IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing);
+    /**
+     * Creates beekeepingLogic for a housing.
+     * Should be used when the housing is created, see IBeekeepingLogic
+     */
+    IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing);
 
-	/**
-	 * Combines multiple modifiers from an IBeeHousing into one.
-	 * Stays up to date with changes to the housing's modifiers.
-	 */
-	IBeeModifier createBeeHousingModifier(IBeeHousing housing);
+    /**
+     * Combines multiple modifiers from an IBeeHousing into one.
+     * Stays up to date with changes to the housing's modifiers.
+     */
+    IBeeModifier createBeeHousingModifier(IBeeHousing housing);
 
-	/**
-	 * Combines multiple listeners from an IBeeHousing into one.
-	 * Stays up to date with changes to the housing's listeners.
-	 */
-	IBeeListener createBeeHousingListener(IBeeHousing housing);
+    /**
+     * Combines multiple listeners from an IBeeHousing into one.
+     * Stays up to date with changes to the housing's listeners.
+     */
+    IBeeListener createBeeHousingListener(IBeeHousing housing);
 
 }

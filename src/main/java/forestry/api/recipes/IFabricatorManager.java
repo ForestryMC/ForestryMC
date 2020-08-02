@@ -11,6 +11,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe> {
 
-	void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern);
+    void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern);
 
 }

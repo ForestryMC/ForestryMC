@@ -35,80 +35,80 @@ import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends AbstractGui {
 
-	public enum XPosition {
-		LEFT, RIGHT
-	}
+    public enum XPosition {
+        LEFT, RIGHT
+    }
 
-	public enum YPosition {
-		TOP, BOTTOM
-	}
+    public enum YPosition {
+        TOP, BOTTOM
+    }
 
-	public static final GuiMailboxInfo instance = new GuiMailboxInfo();
-	private static final int WIDTH = 98;
-	private static final int HEIGHT = 17;
+    public static final GuiMailboxInfo instance = new GuiMailboxInfo();
+    private static final int WIDTH = 98;
+    private static final int HEIGHT = 17;
 
-	private final FontRenderer fontRenderer;
-	@Nullable
-	private POBoxInfo poInfo;
-	// TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
-	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
+    private final FontRenderer fontRenderer;
+    @Nullable
+    private POBoxInfo poInfo;
+    // TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
+    private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
-	private GuiMailboxInfo() {
-		fontRenderer = Minecraft.getInstance().fontRenderer;
-	}
+    private GuiMailboxInfo() {
+        fontRenderer = Minecraft.getInstance().fontRenderer;
+    }
 
-	public void render(MatrixStack transform) {
-		if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
-			return;
-		}
+    public void render(MatrixStack transform) {
+        if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
+            return;
+        }
 
-		int x = 0;
-		int y = 0;
+        int x = 0;
+        int y = 0;
 
-		Minecraft minecraft = Minecraft.getInstance();
-		MainWindow win = minecraft.getMainWindow();
-		if (Config.mailAlertXPosition == XPosition.RIGHT) {
-			x = win.getScaledWidth() - WIDTH;
-		}
-		if (Config.mailAlertYPosition == YPosition.BOTTOM) {
-			y = win.getScaledHeight() - HEIGHT;
-		}
+        Minecraft minecraft = Minecraft.getInstance();
+        MainWindow win = minecraft.getMainWindow();
+        if (Config.mailAlertXPosition == XPosition.RIGHT) {
+            x = win.getScaledWidth() - WIDTH;
+        }
+        if (Config.mailAlertYPosition == YPosition.BOTTOM) {
+            y = win.getScaledHeight() - HEIGHT;
+        }
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.disableLighting();
-		TextureManager textureManager = minecraft.getTextureManager();
-		textureManager.bindTexture(textureAlert);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableLighting();
+        TextureManager textureManager = minecraft.getTextureManager();
+        textureManager.bindTexture(textureAlert);
 
-		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
+        this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 
-		fontRenderer.drawString(transform, Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
-		fontRenderer.drawString(transform, Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
-	}
+        fontRenderer.drawString(transform, Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
+        fontRenderer.drawString(transform, Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
+    }
 
-	protected int getCenteredOffset(String string, int xWidth) {
-		return (xWidth - fontRenderer.getStringWidth(string)) / 2;
-	}
+    protected int getCenteredOffset(String string, int xWidth) {
+        return (xWidth - fontRenderer.getStringWidth(string)) / 2;
+    }
 
-	public boolean hasPOBoxInfo() {
-		return poInfo != null;
-	}
+    public boolean hasPOBoxInfo() {
+        return poInfo != null;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public void setPOBoxInfo(PlayerEntity player, POBoxInfo info) {
-		boolean playJingle = false;
+    @OnlyIn(Dist.CLIENT)
+    public void setPOBoxInfo(PlayerEntity player, POBoxInfo info) {
+        boolean playJingle = false;
 
-		if (info.hasMail()) {
-			if (this.poInfo == null) {
-				playJingle = true;
-			} else if (this.poInfo.playerLetters != info.playerLetters || this.poInfo.tradeLetters != info.tradeLetters) {
-				playJingle = true;
-			}
-		}
+        if (info.hasMail()) {
+            if (this.poInfo == null) {
+                playJingle = true;
+            } else if (this.poInfo.playerLetters != info.playerLetters || this.poInfo.tradeLetters != info.tradeLetters) {
+                playJingle = true;
+            }
+        }
 
-		if (playJingle) {
-			SoundUtil.playSoundEvent(SoundEvents.ENTITY_PLAYER_LEVELUP);
-		}
+        if (playJingle) {
+            SoundUtil.playSoundEvent(SoundEvents.ENTITY_PLAYER_LEVELUP);
+        }
 
-		this.poInfo = info;
-	}
+        this.poInfo = info;
+    }
 }

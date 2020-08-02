@@ -36,113 +36,113 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
 public class GuiImprinter extends GuiForestry<ContainerImprinter> {
-	private final ItemInventoryImprinter itemInventory;
-	private int startX;
-	private int startY;
+    private final ItemInventoryImprinter itemInventory;
+    private int startX;
+    private int startY;
 
-	private final Map<String, ItemStack> iconStacks = new HashMap<>();
+    private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	public GuiImprinter(ContainerImprinter container, PlayerInventory inventoryplayer, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", container, inventoryplayer, title);
+    public GuiImprinter(ContainerImprinter container, PlayerInventory inventoryplayer, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", container, inventoryplayer, title);
 
-		this.itemInventory = container.getItemInventory();
-		this.xSize = 176;
-		this.ySize = 185;
+        this.itemInventory = container.getItemInventory();
+        this.xSize = 176;
+        this.ySize = 185;
 
-		NonNullList<ItemStack> beeList = NonNullList.create();
-		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
-		for (ItemStack beeStack : beeList) {
-			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
-			if (organism.isEmpty()) {
-				continue;
-			}
-			IAlleleBeeSpecies species = organism.getAllele(BeeChromosomes.SPECIES, true);
-			iconStacks.put(species.getRegistryName().toString(), beeStack);
-		}
-	}
+        NonNullList<ItemStack> beeList = NonNullList.create();
+        ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
+        for (ItemStack beeStack : beeList) {
+            IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
+            if (organism.isEmpty()) {
+                continue;
+            }
+            IAlleleBeeSpecies species = organism.getAllele(BeeChromosomes.SPECIES, true);
+            iconStacks.put(species.getRegistryName().toString(), beeStack);
+        }
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter"))) / 2;
-		getFontRenderer().drawString(transform, Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+        int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter"))) / 2;
+        getFontRenderer().drawString(transform, Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
-		IAlleleBeeSpecies primary = itemInventory.getPrimary();
-		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		getFontRenderer().drawString(transform, primary.getDisplayName().getString(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+        IAlleleBeeSpecies primary = itemInventory.getPrimary();
+        drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
+        getFontRenderer().drawString(transform, primary.getDisplayName().getString(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
-		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
-		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		getFontRenderer().drawString(transform, secondary.getDisplayName().getString(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+        IAlleleBeeSpecies secondary = itemInventory.getSecondary();
+        drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
+        getFontRenderer().drawString(transform, secondary.getDisplayName().getString(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
-		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
-		offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;
-		getFontRenderer().drawString(transform, youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
+        String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
+        offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;
+        getFontRenderer().drawString(transform, youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
 
-	}
+    }
 
-	private void drawBeeSpeciesIcon(IAlleleBeeSpecies bee, int x, int y) {
-		GuiUtil.drawItemStack(this, iconStacks.get(bee.getRegistryName().toString()), x, y);
-	}
+    private void drawBeeSpeciesIcon(IAlleleBeeSpecies bee, int x, int y) {
+        GuiUtil.drawItemStack(this, iconStacks.get(bee.getRegistryName().toString()), x, y);
+    }
 
-	private static int getHabitatSlotAtPosition(double i, double j) {
-		int[] xPos = new int[]{12, 12};
-		int[] yPos = new int[]{32, 52};
+    private static int getHabitatSlotAtPosition(double i, double j) {
+        int[] xPos = new int[]{12, 12};
+        int[] yPos = new int[]{32, 52};
 
-		for (int l = 0; l < xPos.length; l++) {
-			if (i >= xPos[l] && i <= xPos[l] + 16 && j >= yPos[l] && j <= yPos[l] + 16) {
-				return l;
-			}
-		}
+        for (int l = 0; l < xPos.length; l++) {
+            if (i >= xPos[l] && i <= xPos[l] + 16 && j >= yPos[l] && j <= yPos[l] + 16) {
+                return l;
+            }
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	//TODO check return
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int k) {
-		super.mouseClicked(mouseX, mouseY, k);
+    //TODO check return
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int k) {
+        super.mouseClicked(mouseX, mouseY, k);
 
-		int cornerX = (width - xSize) / 2;
-		int cornerY = (height - ySize) / 2;
+        int cornerX = (width - xSize) / 2;
+        int cornerY = (height - ySize) / 2;
 
-		int slot = getHabitatSlotAtPosition(mouseX - cornerX, mouseY - cornerY);
-		if (slot < 0) {
-			return true;
-		}
+        int slot = getHabitatSlotAtPosition(mouseX - cornerX, mouseY - cornerY);
+        if (slot < 0) {
+            return true;
+        }
 
-		if (k == 0) {
-			advanceSelection(slot);
-			return true;
-		} else {
-			regressSelection(slot);
-			return true;
-		}
-	}
+        if (k == 0) {
+            advanceSelection(slot);
+            return true;
+        } else {
+            regressSelection(slot);
+            return true;
+        }
+    }
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		startX = (this.width - this.xSize) / 2;
-		startY = (this.height - this.ySize) / 2;
-	}
+        startX = (this.width - this.xSize) / 2;
+        startY = (this.height - this.ySize) / 2;
+    }
 
-	private static void advanceSelection(int index) {
-		sendSelectionChange(index, 0);
-	}
+    private static void advanceSelection(int index) {
+        sendSelectionChange(index, 0);
+    }
 
-	private static void regressSelection(int index) {
-		sendSelectionChange(index, 1);
-	}
+    private static void regressSelection(int index) {
+        sendSelectionChange(index, 1);
+    }
 
-	private static void sendSelectionChange(int index, int advance) {
-		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, advance));
-	}
+    private static void sendSelectionChange(int index, int advance) {
+        NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, advance));
+    }
 
-	@Override
-	protected void addLedgers() {
+    @Override
+    protected void addLedgers() {
 
-	}
+    }
 }

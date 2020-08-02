@@ -25,64 +25,64 @@ import forestry.api.core.tooltips.ToolTip;
  */
 @OnlyIn(Dist.CLIENT)
 public abstract class Widget implements IToolTipProvider {
-	protected final WidgetManager manager;
-	protected final int xPos;
-	protected final int yPos;
-	protected int width = 16;
-	protected int height = 16;
+    protected final WidgetManager manager;
+    protected final int xPos;
+    protected final int yPos;
+    protected int width = 16;
+    protected int height = 16;
 
-	public Widget(WidgetManager manager, int xPos, int yPos) {
-		this.manager = manager;
-		this.xPos = xPos;
-		this.yPos = yPos;
-	}
+    public Widget(WidgetManager manager, int xPos, int yPos) {
+        this.manager = manager;
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public int getX() {
-		return xPos;
-	}
+    public int getX() {
+        return xPos;
+    }
 
-	public int getY() {
-		return yPos;
-	}
+    public int getY() {
+        return yPos;
+    }
 
-	public abstract void draw(MatrixStack transform, int startY, int startX);
+    public abstract void draw(MatrixStack transform, int startY, int startX);
 
-	public void update(int mouseX, int mouseY) {
+    public void update(int mouseX, int mouseY) {
 
-	}
+    }
 
-	@Nullable
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		return null;
-	}
+    @Nullable
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        return null;
+    }
 
-	// Not fully implemented
-	@Override
-	public boolean isToolTipVisible() {
-		return true;
-	}
+    // Not fully implemented
+    @Override
+    public boolean isToolTipVisible() {
+        return true;
+    }
 
-	@Override
-	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= xPos && mouseX <= xPos + this.width && mouseY >= yPos && mouseY <= yPos + this.height;
-	}
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return mouseX >= xPos && mouseX <= xPos + this.width && mouseY >= yPos && mouseY <= yPos + this.height;
+    }
 
-	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-	}
+    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+    }
 
-	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
-		return false;
-	}
+    public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
+        return false;
+    }
 
-	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
-	}
+    public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
+    }
 }

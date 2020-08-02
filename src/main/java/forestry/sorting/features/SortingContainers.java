@@ -9,8 +9,8 @@ import forestry.sorting.gui.ContainerGeneticFilter;
 
 @FeatureProvider
 public class SortingContainers {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleSorting.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleSorting.class);
 
-	public static final FeatureContainerType<ContainerGeneticFilter> GENETIC_FILTER = REGISTRY.container(ContainerGeneticFilter::fromNetwork, "genetic_filter");
+    public static final FeatureContainerType<ContainerGeneticFilter> GENETIC_FILTER = REGISTRY.container(ContainerGeneticFilter::fromNetwork, "genetic_filter");
 
 }

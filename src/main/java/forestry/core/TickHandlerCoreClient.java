@@ -24,29 +24,29 @@ import forestry.core.utils.GeneticsUtil;
 @OnlyIn(Dist.CLIENT)
 public class TickHandlerCoreClient {
 
-	private boolean hasNaturalistEye;
+    private boolean hasNaturalistEye;
 
-	//TODO - register event handlers
-	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.END) {
-			Minecraft minecraft = Minecraft.getInstance();
-			if (minecraft != null) {
-				PlayerEntity player = minecraft.player;
-				if (player != null) {
-					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
-					if (this.hasNaturalistEye != hasNaturalistEye) {
-						this.hasNaturalistEye = hasNaturalistEye;
-						//TODO - I think this is the correct field
-						WorldRenderer renderGlobal = minecraft.worldRenderer;
-						if (renderGlobal != null) {
-							renderGlobal.markBlockRangeForRenderUpdate(
-								(int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32,
-								(int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
-						}
-					}
-				}
-			}
-		}
-	}
+    //TODO - register event handlers
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft != null) {
+                PlayerEntity player = minecraft.player;
+                if (player != null) {
+                    boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
+                    if (this.hasNaturalistEye != hasNaturalistEye) {
+                        this.hasNaturalistEye = hasNaturalistEye;
+                        //TODO - I think this is the correct field
+                        WorldRenderer renderGlobal = minecraft.worldRenderer;
+                        if (renderGlobal != null) {
+                            renderGlobal.markBlockRangeForRenderUpdate(
+                                    (int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32,
+                                    (int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

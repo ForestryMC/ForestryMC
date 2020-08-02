@@ -36,94 +36,94 @@ import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockSolidCocoon extends Block {
-	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
+    private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
-	public BlockSolidCocoon() {
-		super(Block.Properties.create(MaterialCocoon.INSTANCE)
-			.harvestTool(ItemScoop.SCOOP)
-			.harvestLevel(0)
-			.hardnessAndResistance(0.5F)
-			.tickRandomly()
-			.sound(SoundType.GROUND));
-		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-			.with(AlleleButterflyCocoon.AGE, 0));
-	}
+    public BlockSolidCocoon() {
+        super(Block.Properties.create(MaterialCocoon.INSTANCE)
+                .harvestTool(ItemScoop.SCOOP)
+                .harvestLevel(0)
+                .hardnessAndResistance(0.5F)
+                .tickRandomly()
+                .sound(SoundType.GROUND));
+        setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
+                .with(AlleleButterflyCocoon.AGE, 0));
+    }
 
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(COCOON, AlleleButterflyCocoon.AGE);
-	}
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(COCOON, AlleleButterflyCocoon.AGE);
+    }
 
-	//TODO
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-	//		if (cocoon != null) {
-	//			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-	//				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
-	//		}
-	//		return super.getActualState(state, world, pos);
-	//	}
-	//
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public void registerStateMapper() {
-	//		ModelLoader.setCustomStateMapper(this, new CocoonStateMapper());
-	//	}
-	//
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public void registerModel(Item item, IModelManager manager) {
-	//		// To delete the error message
-	//		manager.registerItemModel(item, 0, "cocoon_late");
-	//	}
+    //TODO
+    //	@OnlyIn(Dist.CLIENT)
+    //	@Override
+    //	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+    //		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+    //		if (cocoon != null) {
+    //			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
+    //				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
+    //		}
+    //		return super.getActualState(state, world, pos);
+    //	}
+    //
+    //	@OnlyIn(Dist.CLIENT)
+    //	@Override
+    //	public void registerStateMapper() {
+    //		ModelLoader.setCustomStateMapper(this, new CocoonStateMapper());
+    //	}
+    //
+    //	@OnlyIn(Dist.CLIENT)
+    //	@Override
+    //	public void registerModel(Item item, IModelManager manager) {
+    //		// To delete the error message
+    //		manager.registerItemModel(item, 0, "cocoon_late");
+    //	}
 
-	//	@Override
-	//	public boolean isFullBlock(BlockState state) {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isOpaqueCube(BlockState state) {
-	//		return false;
-	//	}
+    //	@Override
+    //	public boolean isFullBlock(BlockState state) {
+    //		return false;
+    //	}
+    //
+    //	@Override
+    //	public boolean isOpaqueCube(BlockState state) {
+    //		return false;
+    //	}
 
-	@Override
-	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (canHarvestBlock(state, world, pos, player)) {
-			TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
-				NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
-				for (ItemStack stack : drops) {
-					ItemStackUtil.dropItemStackAsEntity(stack, world, pos);
-				}
-			});
-		}
+    @Override
+    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+        if (canHarvestBlock(state, world, pos, player)) {
+            TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
+                NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
+                for (ItemStack stack : drops) {
+                    ItemStackUtil.dropItemStackAsEntity(stack, world, pos);
+                }
+            });
+        }
 
-		return world.setBlockState(pos, Blocks.AIR.getDefaultState());
-	}
+        return world.setBlockState(pos, Blocks.AIR.getDefaultState());
+    }
 
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
 
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileCocoon(true);
-	}
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new TileCocoon(true);
+    }
 
-	@Override
-	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
-			return state;
-		}
-		return Blocks.AIR.getDefaultState();
-	}
+    @Override
+    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
+            return state;
+        }
+        return Blocks.AIR.getDefaultState();
+    }
 
-	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return BlockCocoon.BOUNDING_BOX;
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return BlockCocoon.BOUNDING_BOX;
+    }
 
 }

@@ -18,66 +18,66 @@ package forestry.core.triggers;
 
 public abstract class Trigger {//implements ITriggerExternal {
 
-	private final String uid;
-	private final String localization;
-	private final String textureName;
+    private final String uid;
+    private final String localization;
+    private final String textureName;
 
-	protected Trigger(String uid, String textureName) {
-		this(uid, uid, textureName);
-	}
+    protected Trigger(String uid, String textureName) {
+        this(uid, uid, textureName);
+    }
 
-	protected Trigger(String uid, String localization, String textureName) {
-		this.uid = "forestry:" + uid;
-		this.localization = localization;
-		this.textureName = textureName;
-		//		StatementManager.registerStatement(this);
-	}
+    protected Trigger(String uid, String localization, String textureName) {
+        this.uid = "forestry:" + uid;
+        this.localization = localization;
+        this.textureName = textureName;
+        //		StatementManager.registerStatement(this);
+    }
 
-	//	@Override
-	//	public String getUniqueTag() {
-	//		return uid;
-	//	}
-	//
-	//	@Override
-	//	public String getDescription() {
-	//		return Translator.translateToLocal("for.trigger." + localization);
-	//	}
-	//
-	//	@Override
-	//	public IStatementParameter createParameter(int index) {
-	//		return null;
-	//	}
-	//
-	//	@Override
-	//	public int maxParameters() {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public int minParameters() {
-	//		return 0;
-	//	}
-	//
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Nullable
-	//	private ISprite icon;
-	//
-	//	@Nullable
-	//	@Override
-	//	public ISprite getSprite() {
-	//		if (icon == null) {
-	//			icon = new Sprite(new ResourceLocation(Constants.MOD_ID, String.format("textures/gui/triggers/%s.png", textureName)));
-	//		}
-	//		return icon;
-	//	}
-	//
-	//	@Override
-	//	public IStatement rotateLeft() {
-	//		return this;
-	//	}
-	//
-	//	@Override
-	//	public IStatement[] getPossible() {
-	//		return new IStatement[0];
-	//	}
+    //	@Override
+    //	public String getUniqueTag() {
+    //		return uid;
+    //	}
+    //
+    //	@Override
+    //	public String getDescription() {
+    //		return Translator.translateToLocal("for.trigger." + localization);
+    //	}
+    //
+    //	@Override
+    //	public IStatementParameter createParameter(int index) {
+    //		return null;
+    //	}
+    //
+    //	@Override
+    //	public int maxParameters() {
+    //		return 0;
+    //	}
+    //
+    //	@Override
+    //	public int minParameters() {
+    //		return 0;
+    //	}
+    //
+    //	@OnlyIn(Dist.CLIENT)
+    //	@Nullable
+    //	private ISprite icon;
+    //
+    //	@Nullable
+    //	@Override
+    //	public ISprite getSprite() {
+    //		if (icon == null) {
+    //			icon = new Sprite(new ResourceLocation(Constants.MOD_ID, String.format("textures/gui/triggers/%s.png", textureName)));
+    //		}
+    //		return icon;
+    //	}
+    //
+    //	@Override
+    //	public IStatement rotateLeft() {
+    //		return this;
+    //	}
+    //
+    //	@Override
+    //	public IStatement[] getPossible() {
+    //		return new IStatement[0];
+    //	}
 }

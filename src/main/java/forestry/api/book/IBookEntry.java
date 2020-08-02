@@ -22,40 +22,40 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IBookEntry {
 
-	/**
-	 * @return The stack that is displayed before the entry name.
-	 */
-	ItemStack getStack();
+    /**
+     * @return The stack that is displayed before the entry name.
+     */
+    ItemStack getStack();
 
-	/**
-	 * @return A unique string identifier for this entry.
-	 */
-	String getName();
+    /**
+     * @return A unique string identifier for this entry.
+     */
+    String getName();
 
-	/**
-	 * @return the object that creates the book pages at the moment the bock opens.
-	 */
-	IBookPageFactory getPageFactory();
+    /**
+     * @return the object that creates the book pages at the moment the bock opens.
+     */
+    IBookPageFactory getPageFactory();
 
-	/**
-	 * All sub entries of this entry are reachable over the buttons on the left side of the book.
-	 */
-	IBookEntry[] getSubEntries();
+    /**
+     * All sub entries of this entry are reachable over the buttons on the left side of the book.
+     */
+    IBookEntry[] getSubEntries();
 
-	/**
-	 * The parent of the entry if this entry is a sub entry. Null if the entry is no sub entry.
-	 */
-	@Nullable
-	IBookEntry getParent();
+    /**
+     * The parent of the entry if this entry is a sub entry. Null if the entry is no sub entry.
+     */
+    @Nullable
+    IBookEntry getParent();
 
-	/**
-	 * @return the localized title of this entry.
-	 */
-	ITextComponent getTitle();
+    /**
+     * @return the localized title of this entry.
+     */
+    ITextComponent getTitle();
 
-	/**
-	 * @return the content that was deserialized from the json file of this entry.
-	 */
-	BookContent[][] getContent();
+    /**
+     * @return the content that was deserialized from the json file of this entry.
+     */
+    BookContent[][] getContent();
 
 }

@@ -16,16 +16,16 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.util.IStringSerializable;
 
 public enum State implements IStringSerializable {
-	ON, OFF;
+    ON, OFF;
 
-	public static final EnumProperty<State> PROPERTY = EnumProperty.create("state", State.class);
+    public static final EnumProperty<State> PROPERTY = EnumProperty.create("state", State.class);
 
-	public static State fromBool(boolean value) {
-		return value ? ON : OFF;
-	}
+    public static State fromBool(boolean value) {
+        return value ? ON : OFF;
+    }
 
-	@Override
-	public String getString() {
-		return name().toLowerCase(Locale.ENGLISH);
-	}
+    @Override
+    public String getString() {
+        return name().toLowerCase(Locale.ENGLISH);
+    }
 }

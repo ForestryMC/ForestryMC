@@ -19,41 +19,41 @@ import forestry.core.ItemGroupForestry;
 
 public class ItemForestryFood extends Item {
 
-	private boolean isDrink = false;
+    private boolean isDrink = false;
 
-	public ItemForestryFood(int heal) {
-		this(heal, 0.6f);
-	}
+    public ItemForestryFood(int heal) {
+        this(heal, 0.6f);
+    }
 
-	public ItemForestryFood(Item.Properties properties) {
-		super(properties);
-	}
+    public ItemForestryFood(Item.Properties properties) {
+        super(properties);
+    }
 
-	public ItemForestryFood(int heal, float saturation) {
-		this(heal, saturation, new Item.Properties());
-	}
+    public ItemForestryFood(int heal, float saturation) {
+        this(heal, saturation, new Item.Properties());
+    }
 
-	public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
-		super(properties
-			.group(ItemGroupForestry.tabForestry)
-			.food((new Food.Builder())
-				.hunger(heal)
-				.saturation(saturation)
-				.build()));
-	}
+    public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
+        super(properties
+                .group(ItemGroupForestry.tabForestry)
+                .food((new Food.Builder())
+                        .hunger(heal)
+                        .saturation(saturation)
+                        .build()));
+    }
 
-	@Override
-	public UseAction getUseAction(ItemStack itemstack) {
-		if (isDrink) {
-			return UseAction.DRINK;
-		} else {
-			return UseAction.EAT;
-		}
-	}
+    @Override
+    public UseAction getUseAction(ItemStack itemstack) {
+        if (isDrink) {
+            return UseAction.DRINK;
+        } else {
+            return UseAction.EAT;
+        }
+    }
 
-	public ItemForestryFood setIsDrink() {
-		isDrink = true;
-		return this;
-	}
+    public ItemForestryFood setIsDrink() {
+        isDrink = true;
+        return this;
+    }
 
 }

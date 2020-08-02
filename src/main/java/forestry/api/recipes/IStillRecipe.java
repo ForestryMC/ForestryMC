@@ -8,18 +8,18 @@ package forestry.api.recipes;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IStillRecipe extends IForestryRecipe {
-	/**
-	 * @return Amount of work cycles required to run through the conversion once.
-	 */
-	int getCyclesPerUnit();
+    /**
+     * @return Amount of work cycles required to run through the conversion once.
+     */
+    int getCyclesPerUnit();
 
-	/**
-	 * @return FluidStack representing the input liquid.
-	 */
-	FluidStack getInput();
+    /**
+     * @return FluidStack representing the input liquid.
+     */
+    FluidStack getInput();
 
-	/**
-	 * @return FluidStack representing the output liquid.
-	 */
-	FluidStack getOutput();
+    /**
+     * @return FluidStack representing the output liquid.
+     */
+    FluidStack getOutput();
 }

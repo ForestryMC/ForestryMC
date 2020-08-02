@@ -7,13 +7,13 @@ import genetics.api.individual.IIndividual;
 
 public interface IRootComponentContainer<I extends IIndividual> {
 
-	void onStage(IStage stage);
+    void onStage(IStage stage);
 
-	boolean has(ComponentKey key);
+    boolean has(ComponentKey key);
 
-	<C extends IRootComponent<I>> C get(ComponentKey key);
+    <C extends IRootComponent<I>> C get(ComponentKey key);
 
-	<C extends IRootComponent<I>> Optional<C> getSafe(ComponentKey key);
+    <C extends IRootComponent<I>> Optional<C> getSafe(ComponentKey key);
 
-	Map<ComponentKey, IRootComponent<I>> getComponents();
+    Map<ComponentKey, IRootComponent<I>> getComponents();
 }

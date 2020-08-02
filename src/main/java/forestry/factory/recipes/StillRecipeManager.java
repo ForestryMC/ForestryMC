@@ -24,60 +24,60 @@ import forestry.api.recipes.IStillRecipe;
 
 public class StillRecipeManager implements IStillManager {
 
-	private static final Set<IStillRecipe> recipes = new HashSet<>();
-	public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
-	public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
+    private static final Set<IStillRecipe> recipes = new HashSet<>();
+    public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
+    public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
 
-	@Override
-	public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
-		IStillRecipe recipe = new StillRecipe(timePerUnit, input, output);
-		addRecipe(recipe);
-	}
+    @Override
+    public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
+        IStillRecipe recipe = new StillRecipe(timePerUnit, input, output);
+        addRecipe(recipe);
+    }
 
-	@Nullable
-	public static IStillRecipe findMatchingRecipe(@Nullable FluidStack item) {
-		if (item == null) {
-			return null;
-		}
-		for (IStillRecipe recipe : recipes) {
-			if (matches(recipe, item)) {
-				return recipe;
-			}
-		}
-		return null;
-	}
+    @Nullable
+    public static IStillRecipe findMatchingRecipe(@Nullable FluidStack item) {
+        if (item == null) {
+            return null;
+        }
+        for (IStillRecipe recipe : recipes) {
+            if (matches(recipe, item)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 
-	public static boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
-		if (recipe == null || item == null) {
-			return false;
-		}
-		return item.containsFluid(recipe.getInput());
-	}
+    public static boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
+        if (recipe == null || item == null) {
+            return false;
+        }
+        return item.containsFluid(recipe.getInput());
+    }
 
-	@Override
-	public boolean addRecipe(IStillRecipe recipe) {
-		FluidStack input = recipe.getInput();
-		recipeFluidInputs.add(input.getFluid());
+    @Override
+    public boolean addRecipe(IStillRecipe recipe) {
+        FluidStack input = recipe.getInput();
+        recipeFluidInputs.add(input.getFluid());
 
-		FluidStack output = recipe.getOutput();
-		recipeFluidOutputs.add(output.getFluid());
+        FluidStack output = recipe.getOutput();
+        recipeFluidOutputs.add(output.getFluid());
 
-		return recipes.add(recipe);
-	}
+        return recipes.add(recipe);
+    }
 
-	@Override
-	public boolean removeRecipe(IStillRecipe recipe) {
-		FluidStack input = recipe.getInput();
-		recipeFluidInputs.remove(input.getFluid());
+    @Override
+    public boolean removeRecipe(IStillRecipe recipe) {
+        FluidStack input = recipe.getInput();
+        recipeFluidInputs.remove(input.getFluid());
 
-		FluidStack output = recipe.getOutput();
-		recipeFluidOutputs.remove(output.getFluid());
+        FluidStack output = recipe.getOutput();
+        recipeFluidOutputs.remove(output.getFluid());
 
-		return recipes.remove(recipe);
-	}
+        return recipes.remove(recipe);
+    }
 
-	@Override
-	public Set<IStillRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
-	}
+    @Override
+    public Set<IStillRecipe> recipes() {
+        return Collections.unmodifiableSet(recipes);
+    }
 }

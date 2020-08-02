@@ -26,14 +26,14 @@ import forestry.modules.IClientModuleHandler;
 @OnlyIn(Dist.CLIENT)
 public class ProxyClimatologyClient extends ProxyClimatology implements IClientModuleHandler {
 
-	@Override
-	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(new PreviewHandlerClient());
-	}
+    @Override
+    public void preInit() {
+        MinecraftForge.EVENT_BUS.register(new PreviewHandlerClient());
+    }
 
-	@Override
-	public void setupClient(FMLClientSetupEvent event) {
-		RenderTypeLookup.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.getCutout());
-	}
+    @Override
+    public void setupClient(FMLClientSetupEvent event) {
+        RenderTypeLookup.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.getCutout());
+    }
 
 }

@@ -13,53 +13,53 @@ import genetics.api.individual.IGenomeMatcher;
 import genetics.api.root.IIndividualRoot;
 
 public class TemplateMatcher implements IGenomeMatcher {
-	private final IGenome genome;
-	@Nullable
-	private Boolean matches = null;
+    private final IGenome genome;
+    @Nullable
+    private Boolean matches = null;
 
-	public TemplateMatcher(IGenome genome) {
-		this.genome = genome;
-	}
+    public TemplateMatcher(IGenome genome) {
+        this.genome = genome;
+    }
 
-	@Override
-	public IGenome getFirst() {
-		return genome;
-	}
+    @Override
+    public IGenome getFirst() {
+        return genome;
+    }
 
-	@Override
-	public IGenome getSecond() {
-		return genome.getKaryotype().getDefaultGenome();
-	}
+    @Override
+    public IGenome getSecond() {
+        return genome.getKaryotype().getDefaultGenome();
+    }
 
-	@Override
-	public IIndividualRoot getRoot() {
-		return GeneticsAPI.apiInstance.getRoot(genome.getKaryotype().getUID()).get();
-	}
+    @Override
+    public IIndividualRoot getRoot() {
+        return GeneticsAPI.apiInstance.getRoot(genome.getKaryotype().getUID()).get();
+    }
 
-	@Override
-	public boolean matches() {
-		if (matches == null) {
-			matches = calculateMatches();
-		}
-		return matches;
-	}
+    @Override
+    public boolean matches() {
+        if (matches == null) {
+            matches = calculateMatches();
+        }
+        return matches;
+    }
 
-	private boolean calculateMatches() {
-		IAlleleSpecies primary = genome.getPrimary();
-		IAllele[] template = getRoot().getTemplates().getTemplate(primary.getRegistryName().toString());
-		IChromosome[] chromosomes = genome.getChromosomes();
-		for (int i = 0; i < chromosomes.length; i++) {
-			IChromosome chromosome = chromosomes[i];
-			ResourceLocation templateUid = template[i].getRegistryName();
-			IAllele activeAllele = chromosome.getActiveAllele();
-			if (!activeAllele.getRegistryName().equals(templateUid)) {
-				return false;
-			}
-			IAllele inactiveAllele = chromosome.getInactiveAllele();
-			if (!inactiveAllele.getRegistryName().equals(templateUid)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private boolean calculateMatches() {
+        IAlleleSpecies primary = genome.getPrimary();
+        IAllele[] template = getRoot().getTemplates().getTemplate(primary.getRegistryName().toString());
+        IChromosome[] chromosomes = genome.getChromosomes();
+        for (int i = 0; i < chromosomes.length; i++) {
+            IChromosome chromosome = chromosomes[i];
+            ResourceLocation templateUid = template[i].getRegistryName();
+            IAllele activeAllele = chromosome.getActiveAllele();
+            if (!activeAllele.getRegistryName().equals(templateUid)) {
+                return false;
+            }
+            IAllele inactiveAllele = chromosome.getInactiveAllele();
+            if (!inactiveAllele.getRegistryName().equals(templateUid)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -15,7 +15,7 @@ import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.features.LepidopterologyTiles;
 
 public class TileLepidopteristChest extends TileNaturalistChest {
-	public TileLepidopteristChest() {
-		super(LepidopterologyTiles.LEPIDOPTERIST_CHEST.tileType(), ButterflyManager.butterflyRoot);
-	}
+    public TileLepidopteristChest() {
+        super(LepidopterologyTiles.LEPIDOPTERIST_CHEST.tileType(), ButterflyManager.butterflyRoot);
+    }
 }

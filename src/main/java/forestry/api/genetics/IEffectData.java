@@ -14,11 +14,11 @@ import forestry.api.core.INbtWritable;
  * @author SirSengir
  */
 public interface IEffectData extends INbtWritable, INbtReadable {
-	void setInteger(int index, int val);
+    void setInteger(int index, int val);
 
-	void setBoolean(int index, boolean val);
+    void setBoolean(int index, boolean val);
 
-	int getInteger(int index);
+    int getInteger(int index);
 
-	boolean getBoolean(int index);
+    boolean getBoolean(int index);
 }

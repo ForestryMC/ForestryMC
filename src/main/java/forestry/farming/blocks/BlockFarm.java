@@ -34,57 +34,57 @@ import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 
-	private final EnumFarmBlockType type;
-	private final EnumFarmMaterial farmMaterial;
+    private final EnumFarmBlockType type;
+    private final EnumFarmMaterial farmMaterial;
 
-	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
-		super(Block.Properties.create(Material.ROCK)
-			.hardnessAndResistance(1.0f)
-			.harvestTool(ToolType.PICKAXE)
-			.harvestLevel(0));
-		this.type = type;
-		this.farmMaterial = farmMaterial;
-	}
+    public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
+        super(Block.Properties.create(Material.ROCK)
+                .hardnessAndResistance(1.0f)
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(0));
+        this.type = type;
+        this.farmMaterial = farmMaterial;
+    }
 
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		if (type == EnumFarmBlockType.BAND) {
-			return;
-		}
-		super.fillItemGroup(tab, list);
-	}
+    @Override
+    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
+        if (type == EnumFarmBlockType.BAND) {
+            return;
+        }
+        super.fillItemGroup(tab, list);
+    }
 
-	public EnumFarmBlockType getType() {
-		return type;
-	}
+    public EnumFarmBlockType getType() {
+        return type;
+    }
 
-	public EnumFarmMaterial getFarmMaterial() {
-		return farmMaterial;
-	}
+    public EnumFarmMaterial getFarmMaterial() {
+        return farmMaterial;
+    }
 
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		switch (type) {
-			case GEARBOX:
-				return new TileFarmGearbox();
-			case HATCH:
-				return new TileFarmHatch();
-			case VALVE:
-				return new TileFarmValve();
-			case CONTROL:
-				return new TileFarmControl();
-			default:
-				return new TileFarmPlain();
-		}
-	}
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        switch (type) {
+            case GEARBOX:
+                return new TileFarmGearbox();
+            case HATCH:
+                return new TileFarmHatch();
+            case VALVE:
+                return new TileFarmValve();
+            case CONTROL:
+                return new TileFarmControl();
+            default:
+                return new TileFarmPlain();
+        }
+    }
 
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
 
-	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
-		return getType() == EnumFarmBlockType.CONTROL;
-	}
+    @Override
+    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+        return getType() == EnumFarmBlockType.CONTROL;
+    }
 }

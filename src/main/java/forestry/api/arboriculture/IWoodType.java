@@ -12,7 +12,7 @@ import forestry.api.core.IBlockSubtype;
  * @see EnumVanillaWoodType
  */
 public interface IWoodType extends IBlockSubtype {
-	float getHardness();
+    float getHardness();
 
-	String toString();
+    String toString();
 }

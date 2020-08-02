@@ -14,14 +14,14 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public class FakeSlotPickupWatcher implements ISlotPickupWatcher {
 
-	public static final FakeSlotPickupWatcher instance = new FakeSlotPickupWatcher();
+    public static final FakeSlotPickupWatcher instance = new FakeSlotPickupWatcher();
 
-	private FakeSlotPickupWatcher() {
+    private FakeSlotPickupWatcher() {
 
-	}
+    }
 
-	@Override
-	public void onTake(int slotIndex, PlayerEntity player) {
+    @Override
+    public void onTake(int slotIndex, PlayerEntity player) {
 
-	}
+    }
 }

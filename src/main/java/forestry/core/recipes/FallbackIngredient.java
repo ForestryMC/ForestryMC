@@ -32,90 +32,90 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 public class FallbackIngredient extends Ingredient {
-	private final Ingredient primary;
-	private final Ingredient fallback;
+    private final Ingredient primary;
+    private final Ingredient fallback;
 
-	public static Ingredient fromItems(IItemProvider primary, IItemProvider fallback) {
-		return fromIngredients(Ingredient.fromItems(primary), Ingredient.fromItems(fallback));
-	}
+    public static Ingredient fromItems(IItemProvider primary, IItemProvider fallback) {
+        return fromIngredients(Ingredient.fromItems(primary), Ingredient.fromItems(fallback));
+    }
 
-	public static Ingredient fromStacks(ItemStack primary, ItemStack fallback) {
-		return fromIngredients(Ingredient.fromStacks(primary), Ingredient.fromStacks(fallback));
-	}
+    public static Ingredient fromStacks(ItemStack primary, ItemStack fallback) {
+        return fromIngredients(Ingredient.fromStacks(primary), Ingredient.fromStacks(fallback));
+    }
 
-	public static Ingredient fromTag(ITag<Item> primary, ItemStack fallback) {
-		return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromStacks(fallback));
-	}
+    public static Ingredient fromTag(ITag<Item> primary, ItemStack fallback) {
+        return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromStacks(fallback));
+    }
 
-	public static Ingredient fromTag(ITag<Item> primary, ITag<Item> fallback) {
-		return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromTag(fallback));
-	}
+    public static Ingredient fromTag(ITag<Item> primary, ITag<Item> fallback) {
+        return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromTag(fallback));
+    }
 
-	public static Ingredient fromIngredients(Ingredient primary, Ingredient fallback) {
-		return new FallbackIngredient(primary, fallback);
-	}
+    public static Ingredient fromIngredients(Ingredient primary, Ingredient fallback) {
+        return new FallbackIngredient(primary, fallback);
+    }
 
-	private FallbackIngredient(Ingredient primary, Ingredient fallback) {
-		super(Stream.of());
-		this.primary = primary;
-		this.fallback = fallback;
-	}
+    private FallbackIngredient(Ingredient primary, Ingredient fallback) {
+        super(Stream.of());
+        this.primary = primary;
+        this.fallback = fallback;
+    }
 
-	@Override
-	public JsonElement serialize() {
-		JsonObject jsonobject = new JsonObject();
-		jsonobject.add("primary", primary.serialize());
-		jsonobject.add("fallback", fallback.serialize());
-		return jsonobject;
-	}
+    @Override
+    public JsonElement serialize() {
+        JsonObject jsonobject = new JsonObject();
+        jsonobject.add("primary", primary.serialize());
+        jsonobject.add("fallback", fallback.serialize());
+        return jsonobject;
+    }
 
-	public static class Serializer implements IIngredientSerializer<Ingredient> {
-		public static final Serializer INSTANCE = new Serializer();
+    public static class Serializer implements IIngredientSerializer<Ingredient> {
+        public static final Serializer INSTANCE = new Serializer();
 
-		private Serializer() {
-		}
+        private Serializer() {
+        }
 
-		@Override
-		public Ingredient parse(PacketBuffer buffer) {
-			return Ingredient.read(buffer);
-		}
+        @Override
+        public Ingredient parse(PacketBuffer buffer) {
+            return Ingredient.read(buffer);
+        }
 
-		@Override
-		public void write(PacketBuffer buffer, Ingredient ingredient) {
-			ingredient.write(buffer);
-		}
+        @Override
+        public void write(PacketBuffer buffer, Ingredient ingredient) {
+            ingredient.write(buffer);
+        }
 
-		@Nonnull
-		@Override
-		public Ingredient parse(JsonObject json) {
-			Ingredient ret;
-			try {
-				JsonArray arr = JSONUtils.getJsonArray(json, "primary");
-				List<Ingredient> ingredientList = new ArrayList<>();
-				for (JsonElement element : arr) {
-					if (!(element instanceof JsonObject)) {
-						throw new JsonSyntaxException("Didn't supply json object for ingredient!");
-					}
-					JsonObject obj = (JsonObject) element;
-					ingredientList.add(CraftingHelper.getIngredient(obj));
-				}
-				ret = Ingredient.merge(ingredientList);
-			} catch (JsonSyntaxException e) {
-				ret = Ingredient.EMPTY;    //throws exception if item doesn't exist
-			}
-			if (ret.getMatchingStacks().length == 0) {
-				JsonArray fallbackArr = JSONUtils.getJsonArray(json, "fallback");
-				List<Ingredient> ingredients = new ArrayList<>();
-				for (JsonElement element : fallbackArr) {
-					if (!(element instanceof JsonObject)) {
-						throw new JsonSyntaxException("Didn't supply json object for ingredient!");
-					}
-					JsonObject obj = (JsonObject) element;
-					ingredients.add(CraftingHelper.getIngredient(obj));
-				}
-				ret = Ingredient.merge(ingredients);
-			}
-			return ret;
-		}
-	}
+        @Nonnull
+        @Override
+        public Ingredient parse(JsonObject json) {
+            Ingredient ret;
+            try {
+                JsonArray arr = JSONUtils.getJsonArray(json, "primary");
+                List<Ingredient> ingredientList = new ArrayList<>();
+                for (JsonElement element : arr) {
+                    if (!(element instanceof JsonObject)) {
+                        throw new JsonSyntaxException("Didn't supply json object for ingredient!");
+                    }
+                    JsonObject obj = (JsonObject) element;
+                    ingredientList.add(CraftingHelper.getIngredient(obj));
+                }
+                ret = Ingredient.merge(ingredientList);
+            } catch (JsonSyntaxException e) {
+                ret = Ingredient.EMPTY;    //throws exception if item doesn't exist
+            }
+            if (ret.getMatchingStacks().length == 0) {
+                JsonArray fallbackArr = JSONUtils.getJsonArray(json, "fallback");
+                List<Ingredient> ingredients = new ArrayList<>();
+                for (JsonElement element : fallbackArr) {
+                    if (!(element instanceof JsonObject)) {
+                        throw new JsonSyntaxException("Didn't supply json object for ingredient!");
+                    }
+                    JsonObject obj = (JsonObject) element;
+                    ingredients.add(CraftingHelper.getIngredient(obj));
+                }
+                ret = Ingredient.merge(ingredients);
+            }
+            return ret;
+        }
+    }
 }

@@ -13,14 +13,14 @@ import forestry.database.inventory.InventoryDatabase;
 
 public class TileDatabase extends TileBase {
 
-	public TileDatabase() {
-		super(DatabaseTiles.DATABASE.tileType());
-		setInternalInventory(new InventoryDatabase(this));
-	}
+    public TileDatabase() {
+        super(DatabaseTiles.DATABASE.tileType());
+        setInternalInventory(new InventoryDatabase(this));
+    }
 
-	@Nullable
-	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new ContainerDatabase(windowId, playerInventory, this);
-	}
+    @Nullable
+    @Override
+    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+        return new ContainerDatabase(windowId, playerInventory, this);
+    }
 }

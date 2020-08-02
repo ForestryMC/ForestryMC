@@ -27,38 +27,38 @@ import forestry.core.genetics.mutations.Mutation;
 
 public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationBuilder {
 
-	public BeeMutation(IAlleleBeeSpecies bee0, IAlleleBeeSpecies bee1, IAllele[] result, int chance) {
-		super(bee0, bee1, result, chance);
-	}
+    public BeeMutation(IAlleleBeeSpecies bee0, IAlleleBeeSpecies bee1, IAllele[] result, int chance) {
+        super(bee0, bee1, result, chance);
+    }
 
-	@Override
-	public IBeeMutation build() {
-		return this;
-	}
+    @Override
+    public IBeeMutation build() {
+        return this;
+    }
 
-	@Override
-	public IBeeRoot getRoot() {
-		return BeeManager.beeRoot;
-	}
+    @Override
+    public IBeeRoot getRoot() {
+        return BeeManager.beeRoot;
+    }
 
-	@Override
-	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IGenome genome0, IGenome genome1) {
-		World world = housing.getWorldObj();
-		BlockPos housingPos = housing.getCoordinates();
+    @Override
+    public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IGenome genome0, IGenome genome1) {
+        World world = housing.getWorldObj();
+        BlockPos housingPos = housing.getCoordinates();
 
-		float processedChance = super.getChance(world, housingPos, allele0, allele1, genome0, genome1, housing);
-		if (processedChance <= 0) {
-			return 0;
-		}
+        float processedChance = super.getChance(world, housingPos, allele0, allele1, genome0, genome1, housing);
+        if (processedChance <= 0) {
+            return 0;
+        }
 
-		//TODO world cast
-		IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-		IBeeModifier beeModeModifier = BeeManager.beeRoot.getBeekeepingMode(world).getBeeModifier();
+        //TODO world cast
+        IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
+        IBeeModifier beeModeModifier = BeeManager.beeRoot.getBeekeepingMode(world).getBeeModifier();
 
-		processedChance *= beeHousingModifier.getMutationModifier(genome0, genome1, processedChance);
-		processedChance *= beeModeModifier.getMutationModifier(genome0, genome1, processedChance);
+        processedChance *= beeHousingModifier.getMutationModifier(genome0, genome1, processedChance);
+        processedChance *= beeModeModifier.getMutationModifier(genome0, genome1, processedChance);
 
-		return processedChance;
-	}
+        return processedChance;
+    }
 
 }

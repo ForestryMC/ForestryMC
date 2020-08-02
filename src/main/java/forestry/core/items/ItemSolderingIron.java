@@ -22,12 +22,12 @@ import forestry.core.inventory.ItemInventorySolderingIron;
 
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 
-	public ItemSolderingIron() {
-		super(new Item.Properties().maxDamage(5).group(ItemGroupForestry.tabForestry));
-	}
+    public ItemSolderingIron() {
+        super(new Item.Properties().maxDamage(5).group(ItemGroupForestry.tabForestry));
+    }
 
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return new ContainerSolderingIron(windowId, player, new ItemInventorySolderingIron(player, heldItem));
-	}
+    @Override
+    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+        return new ContainerSolderingIron(windowId, player, new ItemInventorySolderingIron(player, heldItem));
+    }
 }

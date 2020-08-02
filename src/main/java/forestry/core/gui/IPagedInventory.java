@@ -18,5 +18,5 @@ import net.minecraft.inventory.IInventory;
  */
 public interface IPagedInventory extends IInventory {
 
-	void flipPage(ServerPlayerEntity player, short page);
+    void flipPage(ServerPlayerEntity player, short page);
 }

@@ -25,28 +25,28 @@ import forestry.core.utils.NetworkUtil;
 
 public class CropPeat extends Crop {
 
-	public CropPeat(World world, BlockPos position) {
-		super(world, position);
-	}
+    public CropPeat(World world, BlockPos position) {
+        super(world, position);
+    }
 
-	@Override
-	protected boolean isCrop(World world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		return CoreBlocks.PEAT.blockEqual(blockState);
-	}
+    @Override
+    protected boolean isCrop(World world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        return CoreBlocks.PEAT.blockEqual(blockState);
+    }
 
-	@Override
-	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
-		NonNullList<ItemStack> drops = NonNullList.create();
-		drops.add(CoreItems.PEAT.stack());
+    @Override
+    protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+        NonNullList<ItemStack> drops = NonNullList.create();
+        drops.add(CoreItems.PEAT.stack());
 
-		BlockState blockState = world.getBlockState(pos);
+        BlockState blockState = world.getBlockState(pos);
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		NetworkUtil.sendNetworkPacket(packet, pos, world);
+        PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+        NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		world.setBlockState(pos, Blocks.DIRT.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
-		return drops;
-	}
+        world.setBlockState(pos, Blocks.DIRT.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+        return drops;
+    }
 
 }

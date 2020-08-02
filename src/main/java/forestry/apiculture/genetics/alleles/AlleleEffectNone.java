@@ -11,7 +11,7 @@
 package forestry.apiculture.genetics.alleles;
 
 public class AlleleEffectNone extends AlleleEffect {
-	public AlleleEffectNone(String valueName, boolean isDominant) {
-		super(valueName, isDominant);
-	}
+    public AlleleEffectNone(String valueName, boolean isDominant) {
+        super(valueName, isDominant);
+    }
 }

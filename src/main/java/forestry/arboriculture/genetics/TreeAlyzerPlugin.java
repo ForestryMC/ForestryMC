@@ -32,26 +32,26 @@ import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Config;
 
 public class TreeAlyzerPlugin implements IAlyzerPlugin {
-	public static final TreeAlyzerPlugin INSTANCE = new TreeAlyzerPlugin();
+    public static final TreeAlyzerPlugin INSTANCE = new TreeAlyzerPlugin();
 
-	protected final Map<ResourceLocation, ItemStack> iconStacks = new HashMap<>();
+    protected final Map<ResourceLocation, ItemStack> iconStacks = new HashMap<>();
 
-	private TreeAlyzerPlugin() {
-		NonNullList<ItemStack> treeList = NonNullList.create();
-		ArboricultureItems.SAPLING.item().addCreativeItems(treeList, false);
-		for (ItemStack treeStack : treeList) {
-			IOrganism<?> organism = GeneticHelper.getOrganism(treeStack);
-			if (organism.isEmpty()) {
-				continue;
-			}
-			IAlleleTreeSpecies species = organism.getAllele(TreeChromosomes.SPECIES, true);
-			iconStacks.put(species.getRegistryName(), treeStack);
-		}
-	}
+    private TreeAlyzerPlugin() {
+        NonNullList<ItemStack> treeList = NonNullList.create();
+        ArboricultureItems.SAPLING.item().addCreativeItems(treeList, false);
+        for (ItemStack treeStack : treeList) {
+            IOrganism<?> organism = GeneticHelper.getOrganism(treeStack);
+            if (organism.isEmpty()) {
+                continue;
+            }
+            IAlleleTreeSpecies species = organism.getAllele(TreeChromosomes.SPECIES, true);
+            iconStacks.put(species.getRegistryName(), treeStack);
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawAnalyticsPage1(Screen gui, ItemStack itemStack) {
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawAnalyticsPage1(Screen gui, ItemStack itemStack) {
 		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
@@ -108,11 +108,11 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.endPage();
 		}*/
-	}
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawAnalyticsPage2(Screen gui, ItemStack itemStack) {
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawAnalyticsPage2(Screen gui, ItemStack itemStack) {
 		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
@@ -210,11 +210,11 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.endPage();
 		}*/
-	}
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawAnalyticsPage3(Screen gui, ItemStack itemStack) {
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawAnalyticsPage3(Screen gui, ItemStack itemStack) {
 		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
@@ -261,16 +261,16 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.endPage();
 		}*/
-	}
+    }
 
-	@Override
-	public Map<ResourceLocation, ItemStack> getIconStacks() {
-		return iconStacks;
-	}
+    @Override
+    public Map<ResourceLocation, ItemStack> getIconStacks() {
+        return iconStacks;
+    }
 
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("treealyzer");
-	}
+    @Override
+    public List<String> getHints() {
+        return Config.hints.get("treealyzer");
+    }
 
 }

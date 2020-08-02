@@ -23,19 +23,19 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public interface ITankManager extends IFluidHandler {
-	void containerAdded(Container container, IContainerListener crafter);
+    void containerAdded(Container container, IContainerListener crafter);
 
-	void sendTankUpdate(Container container, List<IContainerListener> crafters);
+    void sendTankUpdate(Container container, List<IContainerListener> crafters);
 
-	void containerRemoved(Container container);
+    void containerRemoved(Container container);
 
-	IFluidTank getTank(int tankIndex);
+    IFluidTank getTank(int tankIndex);
 
-	boolean canFillFluidType(FluidStack fluidStack);
+    boolean canFillFluidType(FluidStack fluidStack);
 
-	/**
-	 * For updating tanks on the client
-	 */
-	@OnlyIn(Dist.CLIENT)
-	void processTankUpdate(int tankIndex, @Nullable FluidStack contents);
+    /**
+     * For updating tanks on the client
+     */
+    @OnlyIn(Dist.CLIENT)
+    void processTankUpdate(int tankIndex, @Nullable FluidStack contents);
 }

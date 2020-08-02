@@ -2,7 +2,7 @@ package forestry.core.gui.elements;
 
 public interface IProviderElement<V> {
 
-	V getValue();
+    V getValue();
 
-	boolean setValue(V value);
+    boolean setValue(V value);
 }

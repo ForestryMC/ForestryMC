@@ -14,6 +14,6 @@ import forestry.modules.ISidedModuleHandler;
 
 public class ProxyLepidopterology implements ISidedModuleHandler {
 
-	public void preInitializeRendering() {
-	}
+    public void preInitializeRendering() {
+    }
 }

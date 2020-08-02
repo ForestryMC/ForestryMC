@@ -19,21 +19,21 @@ import forestry.core.utils.SlotUtil;
 import forestry.energy.tiles.TileEnginePeat;
 
 public class InventoryEnginePeat extends InventoryAdapterTile<TileEnginePeat> {
-	public static final short SLOT_FUEL = 0;
-	public static final short SLOT_WASTE_1 = 1;
-	public static final short SLOT_WASTE_COUNT = 4;
+    public static final short SLOT_FUEL = 0;
+    public static final short SLOT_WASTE_1 = 1;
+    public static final short SLOT_WASTE_COUNT = 4;
 
-	public InventoryEnginePeat(TileEnginePeat engineCopper) {
-		super(engineCopper, 5, "Items");
-	}
+    public InventoryEnginePeat(TileEnginePeat engineCopper) {
+        super(engineCopper, 5, "Items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemStack);
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemStack);
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
-		return SlotUtil.isSlotInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+        return SlotUtil.isSlotInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
+    }
 }

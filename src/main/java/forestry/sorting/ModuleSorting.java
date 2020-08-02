@@ -21,36 +21,36 @@ import forestry.sorting.network.PacketRegistrySorting;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.SORTING, name = "Sorting", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.sorting.description")
 public class ModuleSorting extends BlankForestryModule {
 
-	@Override
-	public IPacketRegistry getPacketRegistry() {
-		return new PacketRegistrySorting();
-	}
+    @Override
+    public IPacketRegistry getPacketRegistry() {
+        return new PacketRegistrySorting();
+    }
 
-	@Override
-	public void setupAPI() {
-		AlleleManager.filterRegistry = new FilterRegistry();
-	}
+    @Override
+    public void setupAPI() {
+        AlleleManager.filterRegistry = new FilterRegistry();
+    }
 
-	@Override
-	public void disabledSetupAPI() {
-		AlleleManager.filterRegistry = new DummyFilterRegistry();
-	}
+    @Override
+    public void disabledSetupAPI() {
+        AlleleManager.filterRegistry = new DummyFilterRegistry();
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerGuiFactories() {
-		ScreenManager.registerFactory(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerGuiFactories() {
+        ScreenManager.registerFactory(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
+    }
 
-	@Override
-	public void preInit() {
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
+    @Override
+    public void preInit() {
+        CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
 
-		DefaultFilterRuleType.init();
-	}
+        DefaultFilterRuleType.init();
+    }
 
-	@Override
-	public void doInit() {
-		((FilterRegistry) AlleleManager.filterRegistry).init();
-	}
+    @Override
+    public void doInit() {
+        ((FilterRegistry) AlleleManager.filterRegistry).init();
+    }
 }

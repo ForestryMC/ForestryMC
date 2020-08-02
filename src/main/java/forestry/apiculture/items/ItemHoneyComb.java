@@ -24,39 +24,39 @@ import forestry.core.items.ItemForestry;
 
 public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 
-	private final EnumHoneyComb type;
+    private final EnumHoneyComb type;
 
-	public ItemHoneyComb(EnumHoneyComb type) {
-		super((new Item.Properties())
-			.group(ItemGroups.tabApiculture));
+    public ItemHoneyComb(EnumHoneyComb type) {
+        super((new Item.Properties())
+                .group(ItemGroups.tabApiculture));
 
-		this.type = type;
-	}
+        this.type = type;
+    }
 
-	@Nullable
-	public static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
-		List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);
-		for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
-			EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
-			if (!honeyComb.isSecret() || includeSecret) {
-				validCombs.add(honeyComb);
-			}
-		}
+    @Nullable
+    public static EnumHoneyComb getRandomCombType(Random random, boolean includeSecret) {
+        List<EnumHoneyComb> validCombs = new ArrayList<>(EnumHoneyComb.VALUES.length);
+        for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {
+            EnumHoneyComb honeyComb = EnumHoneyComb.get(i);
+            if (!honeyComb.isSecret() || includeSecret) {
+                validCombs.add(honeyComb);
+            }
+        }
 
-		if (validCombs.isEmpty()) {
-			return null;
-		} else {
-			return validCombs.get(random.nextInt(validCombs.size()));
-		}
-	}
+        if (validCombs.isEmpty()) {
+            return null;
+        } else {
+            return validCombs.get(random.nextInt(validCombs.size()));
+        }
+    }
 
-	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
-		EnumHoneyComb honeyComb = this.type;
-		if (tintIndex == 1) {
-			return honeyComb.primaryColor;
-		} else {
-			return honeyComb.secondaryColor;
-		}
-	}
+    @Override
+    public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
+        EnumHoneyComb honeyComb = this.type;
+        if (tintIndex == 1) {
+            return honeyComb.primaryColor;
+        } else {
+            return honeyComb.secondaryColor;
+        }
+    }
 }

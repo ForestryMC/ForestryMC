@@ -14,19 +14,19 @@ import net.minecraft.world.server.ServerWorld;
 
 public interface IPostOffice {
 
-	void collectPostage(NonNullList<ItemStack> stamps);
+    void collectPostage(NonNullList<ItemStack> stamps);
 
-	IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge);
+    IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge);
 
-	ItemStack getAnyStamp(int max);
+    ItemStack getAnyStamp(int max);
 
-	ItemStack getAnyStamp(EnumPostage postage, int max);
+    ItemStack getAnyStamp(EnumPostage postage, int max);
 
-	ItemStack getAnyStamp(EnumPostage[] postages, int max);
+    ItemStack getAnyStamp(EnumPostage[] postages, int max);
 
-	void registerTradeStation(ITradeStation trade);
+    void registerTradeStation(ITradeStation trade);
 
-	void deregisterTradeStation(ITradeStation trade);
+    void deregisterTradeStation(ITradeStation trade);
 
-	Map<IMailAddress, ITradeStation> getActiveTradeStations(World world);
+    Map<IMailAddress, ITradeStation> getActiveTradeStations(World world);
 }

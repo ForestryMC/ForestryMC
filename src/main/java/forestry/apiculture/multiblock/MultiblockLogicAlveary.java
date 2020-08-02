@@ -17,35 +17,35 @@ import forestry.api.multiblock.IMultiblockLogicAlveary;
 import forestry.core.multiblock.MultiblockLogic;
 
 public class MultiblockLogicAlveary extends MultiblockLogic<IAlvearyControllerInternal> implements IMultiblockLogicAlveary {
-	public MultiblockLogicAlveary() {
-		super(IAlvearyControllerInternal.class);
-	}
+    public MultiblockLogicAlveary() {
+        super(IAlvearyControllerInternal.class);
+    }
 
-	@Override
-	public IAlvearyControllerInternal getController() {
-		if (super.isConnected()) {
-			return controller;
-		} else {
-			return FakeAlvearyController.instance;
-		}
-	}
+    @Override
+    public IAlvearyControllerInternal getController() {
+        if (super.isConnected()) {
+            return controller;
+        } else {
+            return FakeAlvearyController.instance;
+        }
+    }
 
-	@Override
-	public IAlvearyControllerInternal createNewController(World world) {
-		return new AlvearyController(world);
-	}
+    @Override
+    public IAlvearyControllerInternal createNewController(World world) {
+        return new AlvearyController(world);
+    }
 
-	@Override
-	public void becomeMultiblockSaveDelegate() {
-		super.becomeMultiblockSaveDelegate();
-		IClimateListener listener = getController().getClimateListener();
-		listener.markLocatableDirty();
-	}
+    @Override
+    public void becomeMultiblockSaveDelegate() {
+        super.becomeMultiblockSaveDelegate();
+        IClimateListener listener = getController().getClimateListener();
+        listener.markLocatableDirty();
+    }
 
-	@Override
-	public void forfeitMultiblockSaveDelegate() {
-		super.forfeitMultiblockSaveDelegate();
-		IClimateListener listener = getController().getClimateListener();
-		listener.markLocatableDirty();
-	}
+    @Override
+    public void forfeitMultiblockSaveDelegate() {
+        super.forfeitMultiblockSaveDelegate();
+        IClimateListener listener = getController().getClimateListener();
+        listener.markLocatableDirty();
+    }
 }

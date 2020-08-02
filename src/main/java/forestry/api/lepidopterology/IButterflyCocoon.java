@@ -10,10 +10,10 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 
 public interface IButterflyCocoon extends IHousing {
 
-	IButterfly getCaterpillar();
+    IButterfly getCaterpillar();
 
-	void setCaterpillar(IButterfly butterfly);
+    void setCaterpillar(IButterfly butterfly);
 
-	boolean isSolid();
+    boolean isSolid();
 
 }

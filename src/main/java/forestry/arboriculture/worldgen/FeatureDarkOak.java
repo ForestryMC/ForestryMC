@@ -14,8 +14,8 @@ import forestry.api.arboriculture.ITreeGenData;
 
 public class FeatureDarkOak extends FeatureTreeVanilla {
 
-	public FeatureDarkOak(ITreeGenData tree) {
-		super(tree);
-	}
+    public FeatureDarkOak(ITreeGenData tree) {
+        super(tree);
+    }
 
 }

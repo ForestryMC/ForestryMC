@@ -17,23 +17,23 @@ import net.minecraft.world.IWorld;
 
 public class TreeBlockType implements ITreeBlockType {
 
-	private final BlockState blockState;
+    private final BlockState blockState;
 
-	public TreeBlockType(BlockState blockState) {
-		this.blockState = blockState;
-	}
+    public TreeBlockType(BlockState blockState) {
+        this.blockState = blockState;
+    }
 
-	@Override
-	public void setDirection(Direction facing) {
+    @Override
+    public void setDirection(Direction facing) {
 
-	}
+    }
 
-	@Override
-	public boolean setBlock(IWorld world, BlockPos pos) {
-		return world.setBlockState(pos, blockState, 18);
-	}
+    @Override
+    public boolean setBlock(IWorld world, BlockPos pos) {
+        return world.setBlockState(pos, blockState, 18);
+    }
 
-	public BlockState getBlockState() {
-		return blockState;
-	}
+    public BlockState getBlockState() {
+        return blockState;
+    }
 }

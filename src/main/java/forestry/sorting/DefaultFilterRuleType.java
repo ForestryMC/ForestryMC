@@ -18,92 +18,92 @@ import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.render.TextureManagerForestry;
 
 public enum DefaultFilterRuleType implements IFilterRuleType {
-	CLOSED(false) {
-		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return false;
-		}
-	},
-	ANYTHING(false) {
-		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return true;
-		}
-	},
-	ITEM(false) {
-		@Override
-		public boolean isValid(ItemStack itemStack, IFilterData data) {
-			return !data.isPresent();
-		}
-	},
-	PURE_BREED,
-	NOCTURNAL,
-	PURE_NOCTURNAL,
-	FLYER,
-	PURE_FLYER,
-	CAVE,
-	PURE_CAVE,
+    CLOSED(false) {
+        @Override
+        public boolean isValid(ItemStack itemStack, IFilterData data) {
+            return false;
+        }
+    },
+    ANYTHING(false) {
+        @Override
+        public boolean isValid(ItemStack itemStack, IFilterData data) {
+            return true;
+        }
+    },
+    ITEM(false) {
+        @Override
+        public boolean isValid(ItemStack itemStack, IFilterData data) {
+            return !data.isPresent();
+        }
+    },
+    PURE_BREED,
+    NOCTURNAL,
+    PURE_NOCTURNAL,
+    FLYER,
+    PURE_FLYER,
+    CAVE,
+    PURE_CAVE,
 	/*FIREPROOF,
 	PURE_FIREPROOF*/;
 
-	private final String uid;
-	private final Set<IFilterRule> logic;
-	private final boolean isContainer;
+    private final String uid;
+    private final Set<IFilterRule> logic;
+    private final boolean isContainer;
 
-	DefaultFilterRuleType() {
-		this(true);
-	}
+    DefaultFilterRuleType() {
+        this(true);
+    }
 
-	DefaultFilterRuleType(boolean isContainer) {
-		this.uid = "forestry.default." + name().toLowerCase(Locale.ENGLISH);
-		this.logic = new HashSet<>();
-		this.isContainer = isContainer;
-	}
+    DefaultFilterRuleType(boolean isContainer) {
+        this.uid = "forestry.default." + name().toLowerCase(Locale.ENGLISH);
+        this.logic = new HashSet<>();
+        this.isContainer = isContainer;
+    }
 
-	public static void init() {
-		for (DefaultFilterRuleType rule : values()) {
-			AlleleManager.filterRegistry.registerFilter(rule);
-		}
-	}
+    public static void init() {
+        for (DefaultFilterRuleType rule : values()) {
+            AlleleManager.filterRegistry.registerFilter(rule);
+        }
+    }
 
-	@Override
-	public boolean isValid(ItemStack itemStack, IFilterData data) {
-		for (IFilterRule logic : logic) {
-			if (logic.isValid(itemStack, data)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean isValid(ItemStack itemStack, IFilterData data) {
+        for (IFilterRule logic : logic) {
+            if (logic.isValid(itemStack, data)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public void addLogic(IFilterRule logic) {
-		if (logic == this) {
-			throw new IllegalArgumentException();
-		}
-		this.logic.add(logic);
-	}
+    @Override
+    public void addLogic(IFilterRule logic) {
+        if (logic == this) {
+            throw new IllegalArgumentException();
+        }
+        this.logic.add(logic);
+    }
 
-	@Override
-	public boolean isContainer() {
-		return isContainer;
-	}
+    @Override
+    public boolean isContainer() {
+        return isContainer;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public TextureAtlasSprite getSprite() {
-		return TextureManagerForestry.getInstance().getDefault("analyzer/" + name().toLowerCase(Locale.ENGLISH));
-	}
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public TextureAtlasSprite getSprite() {
+        return TextureManagerForestry.getInstance().getDefault("analyzer/" + name().toLowerCase(Locale.ENGLISH));
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public ResourceLocation getTextureMap() {
-		return TextureManagerForestry.LOCATION_FORESTRY_TEXTURE;
-	}
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public ResourceLocation getTextureMap() {
+        return TextureManagerForestry.LOCATION_FORESTRY_TEXTURE;
+    }
 
-	@Override
-	public String getUID() {
-		return uid;
-	}
+    @Override
+    public String getUID() {
+        return uid;
+    }
 
 }

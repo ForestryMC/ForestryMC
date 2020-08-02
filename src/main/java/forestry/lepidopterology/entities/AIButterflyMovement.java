@@ -18,55 +18,55 @@ import net.minecraft.util.math.vector.Vector3d;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class AIButterflyMovement extends AIButterflyBase {
-	@Nullable
-	protected Vector3d flightTarget;
+    @Nullable
+    protected Vector3d flightTarget;
 
-	protected AIButterflyMovement(EntityButterfly entity) {
-		super(entity);
-	}
+    protected AIButterflyMovement(EntityButterfly entity) {
+        super(entity);
+    }
 
-	@Override
-	public boolean shouldContinueExecuting() {
-		if (entity.getState() != EnumButterflyState.FLYING) {
-			return false;
-		}
-		if (flightTarget == null) {
-			return false;
-		}
-		// Abort if the flight target changed on us.
-		if (entity.getDestination() == null || !entity.getDestination().equals(flightTarget)) {
-			return false;
-		}
+    @Override
+    public boolean shouldContinueExecuting() {
+        if (entity.getState() != EnumButterflyState.FLYING) {
+            return false;
+        }
+        if (flightTarget == null) {
+            return false;
+        }
+        // Abort if the flight target changed on us.
+        if (entity.getDestination() == null || !entity.getDestination().equals(flightTarget)) {
+            return false;
+        }
 
-		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().squareDistanceTo(entity.getPositionVec()) > 2.0f) {
-			return true;
-		}
+        // Continue if we have not yet reached the destination.
+        if (entity.getDestination().squareDistanceTo(entity.getPositionVec()) > 2.0f) {
+            return true;
+        }
 
-		entity.setDestination(null);
-		return false;
-	}
+        entity.setDestination(null);
+        return false;
+    }
 
-	@Override
-	public void tick() {
-		// Reset destination if we did collide.
-		if (entity.isInWater()) {
-			flightTarget = getRandomDestinationUpwards();
-		} else if (false) {//TODO: entity.collided
-			flightTarget = entity.getRNG().nextBoolean() ? getRandomDestination() : null;
-		} else if (entity.world.rand.nextInt(300) == 0) {
-			flightTarget = getRandomDestination();
-		}
-		entity.setDestination(flightTarget);
-		entity.changeExhaustion(1);
-	}
+    @Override
+    public void tick() {
+        // Reset destination if we did collide.
+        if (entity.isInWater()) {
+            flightTarget = getRandomDestinationUpwards();
+        } else if (false) {//TODO: entity.collided
+            flightTarget = entity.getRNG().nextBoolean() ? getRandomDestination() : null;
+        } else if (entity.world.rand.nextInt(300) == 0) {
+            flightTarget = getRandomDestination();
+        }
+        entity.setDestination(flightTarget);
+        entity.changeExhaustion(1);
+    }
 
-	@Override
-	public void startExecuting() {
-	}
+    @Override
+    public void startExecuting() {
+    }
 
-	@Override
-	public void resetTask() {
-		flightTarget = null;
-	}
+    @Override
+    public void resetTask() {
+        flightTarget = null;
+    }
 }

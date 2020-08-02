@@ -19,23 +19,23 @@ import forestry.core.config.Constants;
 
 public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleButterflyEffect {
 
-	protected AlleleButterflyEffect(String valueName, boolean isDominant) {
-		super(Constants.MOD_ID, "bf", valueName, isDominant);
-	}
+    protected AlleleButterflyEffect(String valueName, boolean isDominant) {
+        super(Constants.MOD_ID, "bf", valueName, isDominant);
+    }
 
-	@Override
-	public boolean isCombinable() {
-		return true;
-	}
+    @Override
+    public boolean isCombinable() {
+        return true;
+    }
 
-	@Override
-	public IEffectData validateStorage(IEffectData storedData) {
-		return storedData;
-	}
+    @Override
+    public IEffectData validateStorage(IEffectData storedData) {
+        return storedData;
+    }
 
-	@Override
-	public IEffectData doEffect(IEntityButterfly butterfly, IEffectData storedData) {
-		return storedData;
-	}
+    @Override
+    public IEffectData doEffect(IEntityButterfly butterfly, IEffectData storedData) {
+        return storedData;
+    }
 
 }

@@ -12,8 +12,8 @@ package forestry.energy.circuits;
 
 public class CircuitElectricChoke extends CircuitElectricChange {
 
-	public CircuitElectricChoke(String uid) {
-		super(uid);
-		this.configureChange(-1, -5);
-	}
+    public CircuitElectricChoke(String uid) {
+        super(uid);
+        this.configureChange(-1, -5);
+    }
 }

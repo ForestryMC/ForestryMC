@@ -5,16 +5,16 @@ import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleType;
 
 public class AlleleSpecies extends Allele {
-	protected AlleleSpecies(boolean dominant, String localisationKey) {
-		super(dominant, localisationKey);
-	}
+    protected AlleleSpecies(boolean dominant, String localisationKey) {
+        super(dominant, localisationKey);
+    }
 
-	public static class Type implements IAlleleType {
-		public static final Type INSTANCE = new Type();
+    public static class Type implements IAlleleType {
+        public static final Type INSTANCE = new Type();
 
-		@Override
-		public IAllele deserialize(AlleleInfo info) {
-			return new AlleleSpecies(info.dominant, info.name);
-		}
-	}
+        @Override
+        public IAllele deserialize(AlleleInfo info) {
+            return new AlleleSpecies(info.dominant, info.name);
+        }
+    }
 }

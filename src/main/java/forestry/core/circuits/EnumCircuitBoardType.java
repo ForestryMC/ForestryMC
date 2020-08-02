@@ -19,35 +19,35 @@ import forestry.api.core.IItemSubtype;
 import forestry.core.render.ColourProperties;
 
 public enum EnumCircuitBoardType implements IItemSubtype {
-	BASIC(1),
-	ENHANCED(2),
-	REFINED(3),
-	INTRICATE(4);
+    BASIC(1),
+    ENHANCED(2),
+    REFINED(3),
+    INTRICATE(4);
 
-	private final int sockets;
-	private final String name;
+    private final int sockets;
+    private final String name;
 
-	EnumCircuitBoardType(int sockets) {
-		this.name = toString().toLowerCase(Locale.ENGLISH);
-		this.sockets = sockets;
-	}
+    EnumCircuitBoardType(int sockets) {
+        this.name = toString().toLowerCase(Locale.ENGLISH);
+        this.sockets = sockets;
+    }
 
-	public int getSockets() {
-		return sockets;
-	}
+    public int getSockets() {
+        return sockets;
+    }
 
-	@Override
-	public String getString() {
-		return name;
-	}
+    @Override
+    public String getString() {
+        return name;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public int getPrimaryColor() {
-		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".primary");
-	}
+    @OnlyIn(Dist.CLIENT)
+    public int getPrimaryColor() {
+        return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".primary");
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public int getSecondaryColor() {
-		return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".secondary");
-	}
+    @OnlyIn(Dist.CLIENT)
+    public int getSecondaryColor() {
+        return ColourProperties.INSTANCE.get("item.circuit." + name().toLowerCase(Locale.ENGLISH) + ".secondary");
+    }
 }

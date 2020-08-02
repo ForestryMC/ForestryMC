@@ -20,35 +20,35 @@ import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 import forestry.factory.tiles.TileFabricator;
 
 public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
-	public static final short SLOT_METAL = 0;
-	public static final short SLOT_PLAN = 1;
-	public static final short SLOT_RESULT = 2;
-	public static final short SLOT_INVENTORY_1 = 3;
-	public static final short SLOT_INVENTORY_COUNT = 18;
-	public static final short SLOT_COUNT = 21;
+    public static final short SLOT_METAL = 0;
+    public static final short SLOT_PLAN = 1;
+    public static final short SLOT_RESULT = 2;
+    public static final short SLOT_INVENTORY_1 = 3;
+    public static final short SLOT_INVENTORY_COUNT = 18;
+    public static final short SLOT_COUNT = 21;
 
-	public InventoryFabricator(TileFabricator fabricator) {
-		super(fabricator, SLOT_COUNT, "Items");
-	}
+    public InventoryFabricator(TileFabricator fabricator) {
+        super(fabricator, SLOT_COUNT, "Items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_METAL) {
-			return FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null;
-		} else if (slotIndex == SLOT_PLAN) {
-			return FabricatorRecipeManager.isPlan(itemStack);
-		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-			if (FabricatorRecipeManager.isPlan(itemStack)) {
-				return false;
-			} else if (FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null) {
-				return false;
-			}
-		}
-		return SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_METAL) {
+            return FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null;
+        } else if (slotIndex == SLOT_PLAN) {
+            return FabricatorRecipeManager.isPlan(itemStack);
+        } else if (SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
+            if (FabricatorRecipeManager.isPlan(itemStack)) {
+                return false;
+            } else if (FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null) {
+                return false;
+            }
+        }
+        return SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
-		return slotIndex == SLOT_RESULT;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+        return slotIndex == SLOT_RESULT;
+    }
 }

@@ -43,126 +43,126 @@ import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class MultiblockElement extends GuiElement {
-	private float scale = 50.0F;
-	private float xTranslate = 0F;
-	private float yTranslate = 0F;
-	private int tick = 0;
+    private float scale = 50.0F;
+    private float xTranslate = 0F;
+    private float yTranslate = 0F;
+    private int tick = 0;
 
-	private float rotX;
-	private float rotY;
+    private float rotX;
+    private float rotY;
 
-	private StructureInfo structureData;
-	private StructureBlockAccess blockAccess;
+    private final StructureInfo structureData;
+    private final StructureBlockAccess blockAccess;
 
-	@Nullable
-	private double[] lastClick = null;
-	private int fullStructureSteps = 5;
+    @Nullable
+    private double[] lastClick = null;
+    private int fullStructureSteps = 5;
 
-	public MultiblockElement(int x, int y, int width, int height, int[] size, BlockData[] structure) {
-		super(x, y, width, height);
-		if (size.length == 3) {
-			scale = 100f / (float) IntStream.of(size).max().getAsInt();
+    public MultiblockElement(int x, int y, int width, int height, int[] size, BlockData[] structure) {
+        super(x, y, width, height);
+        if (size.length == 3) {
+            scale = 100f / (float) IntStream.of(size).max().getAsInt();
 
-			float sx = (float) width / (float) GuiForesterBook.PAGE_WIDTH;
-			float sy = (float) height / (float) GuiForesterBook.PAGE_HEIGHT;
+            float sx = (float) width / (float) GuiForesterBook.PAGE_WIDTH;
+            float sy = (float) height / (float) GuiForesterBook.PAGE_HEIGHT;
 
-			scale *= Math.min(sx, sy);
+            scale *= Math.min(sx, sy);
 
-			xTranslate = x + (float) width / 2.0F;
-			yTranslate = y + (float) height / 2.0F;
-		}
-		structureData = new StructureInfo(size[0], size[1], size[2], structure);
-		blockAccess = new StructureBlockAccess(structureData);
+            xTranslate = x + (float) width / 2.0F;
+            yTranslate = y + (float) height / 2.0F;
+        }
+        structureData = new StructureInfo(size[0], size[1], size[2], structure);
+        blockAccess = new StructureBlockAccess(structureData);
 
 
-		rotX = 25;
-		rotY = -45;
+        rotX = 25;
+        rotY = -45;
 
-		addSelfEventHandler(GuiEvent.DownEvent.class, event -> lastClick = new double[]{event.getX(), event.getY()});
-		addSelfEventHandler(GuiEvent.UpEvent.class, event -> lastClick = null);
-	}
+        addSelfEventHandler(GuiEvent.DownEvent.class, event -> lastClick = new double[]{event.getX(), event.getY()});
+        addSelfEventHandler(GuiEvent.UpEvent.class, event -> lastClick = null);
+    }
 
-	@Override
-	public boolean canMouseOver() {
-		return true;
-	}
+    @Override
+    public boolean canMouseOver() {
+        return true;
+    }
 
-	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		if (lastClick != null) {
-			if (Minecraft.getInstance().mouseHelper.isLeftDown() || Minecraft.getInstance().mouseHelper.isRightDown()) {
-				double dx = mouseX - lastClick[0];
-				double dy = mouseY - lastClick[1];
-				float maxSpeed = 10f;
-				double changeY = Math.min(maxSpeed, dx / 10f);
-				double changeX = Math.min(maxSpeed, dy / 10f);
+    @Override
+    public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+        if (lastClick != null) {
+            if (Minecraft.getInstance().mouseHelper.isLeftDown() || Minecraft.getInstance().mouseHelper.isRightDown()) {
+                double dx = mouseX - lastClick[0];
+                double dy = mouseY - lastClick[1];
+                float maxSpeed = 10f;
+                double changeY = Math.min(maxSpeed, dx / 10f);
+                double changeX = Math.min(maxSpeed, dy / 10f);
 
-				rotY += changeY;
-				rotX += changeX;
-			} else {
-				lastClick = null;
-			}
-		}
+                rotY += changeY;
+                rotX += changeX;
+            } else {
+                lastClick = null;
+            }
+        }
 
-		boolean canTick = false;
-		if (canTick) {
-			if (++tick % 20 == 0 && (structureData.canStep() || ++fullStructureSteps >= 5)) {
-				structureData.step();
-				fullStructureSteps = 0;
-			}
-		} else {
-			structureData.reset();
-			structureData.setShowLayer(9);
-		}
+        boolean canTick = false;
+        if (canTick) {
+            if (++tick % 20 == 0 && (structureData.canStep() || ++fullStructureSteps >= 5)) {
+                structureData.step();
+                fullStructureSteps = 0;
+            }
+        } else {
+            structureData.reset();
+            structureData.setShowLayer(9);
+        }
 
-		int structureLength = structureData.structureLength;
-		int structureWidth = structureData.structureWidth;
-		int structureHeight = structureData.structureHeight;
+        int structureLength = structureData.structureLength;
+        int structureWidth = structureData.structureWidth;
+        int structureHeight = structureData.structureHeight;
 
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.pushMatrix();
-		RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.pushMatrix();
+        RenderHelper.disableStandardItemLighting();
 
-		final BlockRendererDispatcher blockRender = Minecraft.getInstance().getBlockRendererDispatcher();
-		final TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+        final BlockRendererDispatcher blockRender = Minecraft.getInstance().getBlockRendererDispatcher();
+        final TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
-		GlStateManager.translatef(xTranslate, yTranslate, Math.max(structureHeight, Math.max(structureWidth, structureLength)));
-		GlStateManager.scalef(scale, -scale, 1);
-		GlStateManager.rotatef(rotX, 1, 0, 0);
-		GlStateManager.rotatef(rotY, 0, 1, 0);
+        GlStateManager.translatef(xTranslate, yTranslate, Math.max(structureHeight, Math.max(structureWidth, structureLength)));
+        GlStateManager.scalef(scale, -scale, 1);
+        GlStateManager.rotatef(rotX, 1, 0, 0);
+        GlStateManager.rotatef(rotY, 0, 1, 0);
 
-		GlStateManager.translatef((float) structureLength / -2f, (float) structureHeight / -2f, (float) structureWidth / -2f);
+        GlStateManager.translatef((float) structureLength / -2f, (float) structureHeight / -2f, (float) structureWidth / -2f);
 
-		GlStateManager.disableLighting();
+        GlStateManager.disableLighting();
 
-		if (Minecraft.isAmbientOcclusionEnabled()) {
-			GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		} else {
-			GlStateManager.shadeModel(GL11.GL_FLAT);
-		}
+        if (Minecraft.isAmbientOcclusionEnabled()) {
+            GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        } else {
+            GlStateManager.shadeModel(GL11.GL_FLAT);
+        }
 
-		textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-		for (int h = 0; h < structureData.structureHeight; h++) {
-			for (int l = 0; l < structureData.structureLength; l++) {
-				for (int w = 0; w < structureData.structureWidth; w++) {
-					BlockPos pos = new BlockPos(l, h, w);
-					if (!blockAccess.isAirBlock(pos)) {
-						BlockState state = blockAccess.getBlockState(pos);
-						Tessellator tessellator = Tessellator.getInstance();
-						BufferBuilder buffer = tessellator.getBuffer();
-						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-						//blockRender.renderBlock(state, pos, blockAccess, buffer, new Random(), EmptyModelData.INSTANCE);//TODO: Guide
-						tessellator.draw();
-					}
-				}
-			}
-		}
-		GlStateManager.popMatrix();
+        textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        for (int h = 0; h < structureData.structureHeight; h++) {
+            for (int l = 0; l < structureData.structureLength; l++) {
+                for (int w = 0; w < structureData.structureWidth; w++) {
+                    BlockPos pos = new BlockPos(l, h, w);
+                    if (!blockAccess.isAirBlock(pos)) {
+                        BlockState state = blockAccess.getBlockState(pos);
+                        Tessellator tessellator = Tessellator.getInstance();
+                        BufferBuilder buffer = tessellator.getBuffer();
+                        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+                        //blockRender.renderBlock(state, pos, blockAccess, buffer, new Random(), EmptyModelData.INSTANCE);//TODO: Guide
+                        tessellator.draw();
+                    }
+                }
+            }
+        }
+        GlStateManager.popMatrix();
 
-		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableRescaleNormal();
-		GlStateManager.shadeModel(GL11.GL_FLAT);
-		GlStateManager.enableBlend();
-		RenderHelper.disableStandardItemLighting();
-	}
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.enableBlend();
+        RenderHelper.disableStandardItemLighting();
+    }
 }

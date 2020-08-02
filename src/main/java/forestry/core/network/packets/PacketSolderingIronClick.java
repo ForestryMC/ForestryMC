@@ -21,33 +21,33 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 
 public class PacketSolderingIronClick extends ForestryPacket implements IForestryPacketServer {
-	private final int slot;
+    private final int slot;
 
-	public PacketSolderingIronClick(int slot) {
-		this.slot = slot;
-	}
+    public PacketSolderingIronClick(int slot) {
+        this.slot = slot;
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.SOLDERING_IRON_CLICK;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.SOLDERING_IRON_CLICK;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeVarInt(slot);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeVarInt(slot);
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			int slot = data.readVarInt();
+    public static class Handler implements IForestryPacketHandlerServer {
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+            int slot = data.readVarInt();
 
-			if (!(player.openContainer instanceof IContainerSocketed)) {
-				return;
-			}
-			ItemStack itemstack = player.inventory.getItemStack();
+            if (!(player.openContainer instanceof IContainerSocketed)) {
+                return;
+            }
+            ItemStack itemstack = player.inventory.getItemStack();
 
-			((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(slot, player, itemstack);
-		}
-	}
+            ((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(slot, player, itemstack);
+        }
+    }
 }

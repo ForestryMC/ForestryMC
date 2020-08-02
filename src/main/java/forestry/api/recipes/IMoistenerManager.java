@@ -19,12 +19,12 @@ import net.minecraft.item.ItemStack;
  */
 public interface IMoistenerManager extends ICraftingProvider<IMoistenerRecipe> {
 
-	/**
-	 * Add a recipe to the moistener
-	 *
-	 * @param resource    Item required in resource stack. Will be reduced by one per produced item.
-	 * @param product     Item to produce per resource processed.
-	 * @param timePerItem Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
-	 */
-	void addRecipe(ItemStack resource, ItemStack product, int timePerItem);
+    /**
+     * Add a recipe to the moistener
+     *
+     * @param resource    Item required in resource stack. Will be reduced by one per produced item.
+     * @param product     Item to produce per resource processed.
+     * @param timePerItem Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
+     */
+    void addRecipe(ItemStack resource, ItemStack product, int timePerItem);
 }

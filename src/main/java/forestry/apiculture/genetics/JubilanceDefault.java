@@ -20,18 +20,18 @@ import forestry.api.core.EnumTemperature;
 
 public class JubilanceDefault implements IJubilanceProvider {
 
-	public static final JubilanceDefault instance = new JubilanceDefault();
+    public static final JubilanceDefault instance = new JubilanceDefault();
 
-	protected JubilanceDefault() {
+    protected JubilanceDefault() {
 
-	}
+    }
 
-	@Override
-	public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
-		EnumTemperature temperature = housing.getTemperature();
-		EnumHumidity humidity = housing.getHumidity();
+    @Override
+    public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
+        EnumTemperature temperature = housing.getTemperature();
+        EnumHumidity humidity = housing.getHumidity();
 
-		return temperature == species.getTemperature() && humidity == species.getHumidity();
-	}
+        return temperature == species.getTemperature() && humidity == species.getHumidity();
+    }
 
 }

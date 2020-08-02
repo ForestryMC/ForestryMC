@@ -18,33 +18,33 @@ import forestry.core.tiles.TileUtil;
 import forestry.sorting.tiles.IFilterContainer;
 
 public class PacketGuiFilterUpdate extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final IFilterLogic logic;
+    private final BlockPos pos;
+    private final IFilterLogic logic;
 
-	public PacketGuiFilterUpdate(IFilterContainer container) {
-		this.pos = container.getCoordinates();
-		this.logic = container.getLogic();
-	}
+    public PacketGuiFilterUpdate(IFilterContainer container) {
+        this.pos = container.getCoordinates();
+        this.logic = container.getLogic();
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		logic.writeGuiData(data);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        logic.writeGuiData(data);
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.GUI_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.GUI_UPDATE;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
 
-			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
-			logic.ifPresent(l -> l.readGuiData(data));
-		}
-	}
+            LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
+            logic.ifPresent(l -> l.readGuiData(data));
+        }
+    }
 }

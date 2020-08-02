@@ -21,18 +21,18 @@ import forestry.core.worldgen.FeatureHelper;
 
 public class FeatureDate extends FeatureTree {
 
-	public FeatureDate(ITreeGenData tree) {
-		super(tree, 6, 2);
-	}
+    public FeatureDate(ITreeGenData tree) {
+        super(tree, 6, 2);
+    }
 
-	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		int leafSpawn = height + 1;
+    @Override
+    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+        int leafSpawn = height + 1;
 
-		float radiusMultiplier = height / 6f;
+        float radiusMultiplier = height / 6f;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, radiusMultiplier * 2f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, radiusMultiplier * 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-	}
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, radiusMultiplier * 2f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, radiusMultiplier * 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+    }
 }

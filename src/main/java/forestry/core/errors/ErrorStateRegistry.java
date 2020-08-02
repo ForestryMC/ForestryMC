@@ -31,65 +31,65 @@ import forestry.api.core.ISpriteRegistry;
  */
 public class ErrorStateRegistry implements IErrorStateRegistry {
 
-	private static final BiMap<Short, IErrorState> states = HashBiMap.create();
-	private static final Map<String, IErrorState> stateNames = new HashMap<>();
-	private static final Set<IErrorState> stateView = Collections.unmodifiableSet(states.inverse().keySet());
+    private static final BiMap<Short, IErrorState> states = HashBiMap.create();
+    private static final Map<String, IErrorState> stateNames = new HashMap<>();
+    private static final Set<IErrorState> stateView = Collections.unmodifiableSet(states.inverse().keySet());
 
-	@Override
-	public void registerErrorState(IErrorState state) {
-		if (states.containsKey(state.getID())) {
-			throw new RuntimeException("Forestry Error State does not possess a unique id.");
-		}
+    @Override
+    public void registerErrorState(IErrorState state) {
+        if (states.containsKey(state.getID())) {
+            throw new RuntimeException("Forestry Error State does not possess a unique id.");
+        }
 
-		states.put(state.getID(), state);
-		addStateName(state, state.getUniqueName());
-	}
+        states.put(state.getID(), state);
+        addStateName(state, state.getUniqueName());
+    }
 
-	@Override
-	public void addAlias(IErrorState state, String name) {
-		if (!states.containsValue(state)) {
-			throw new RuntimeException("Forestry Error State did not exist while trying to register alias.");
-		}
+    @Override
+    public void addAlias(IErrorState state, String name) {
+        if (!states.containsValue(state)) {
+            throw new RuntimeException("Forestry Error State did not exist while trying to register alias.");
+        }
 
-		addStateName(state, name);
-	}
+        addStateName(state, name);
+    }
 
-	private static void addStateName(IErrorState state, String name) {
-		if (!name.contains(":")) {
-			throw new RuntimeException("Forestry Error State name must be in the format <modid>:<name>.");
-		}
+    private static void addStateName(IErrorState state, String name) {
+        if (!name.contains(":")) {
+            throw new RuntimeException("Forestry Error State name must be in the format <modid>:<name>.");
+        }
 
-		if (stateNames.containsKey(name)) {
-			throw new RuntimeException("Forestry Error State does not possess a unique name.");
-		}
+        if (stateNames.containsKey(name)) {
+            throw new RuntimeException("Forestry Error State does not possess a unique name.");
+        }
 
-		stateNames.put(name, state);
-	}
+        stateNames.put(name, state);
+    }
 
-	@Override
-	public IErrorState getErrorState(short id) {
-		return states.get(id);
-	}
+    @Override
+    public IErrorState getErrorState(short id) {
+        return states.get(id);
+    }
 
-	@Override
-	public IErrorState getErrorState(String name) {
-		return stateNames.get(name);
-	}
+    @Override
+    public IErrorState getErrorState(String name) {
+        return stateNames.get(name);
+    }
 
-	@Override
-	public Set<IErrorState> getErrorStates() {
-		return stateView;
-	}
+    @Override
+    public Set<IErrorState> getErrorStates() {
+        return stateView;
+    }
 
-	@Override
-	public IErrorLogic createErrorLogic() {
-		return new ErrorLogic();
-	}
+    @Override
+    public IErrorLogic createErrorLogic() {
+        return new ErrorLogic();
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static void initSprites(ISpriteRegistry event) {
-		for (IErrorState code : states.values()) {
-			code.registerSprites(event);
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static void initSprites(ISpriteRegistry event) {
+        for (IErrorState code : states.values()) {
+            code.registerSprites(event);
+        }
+    }
 }

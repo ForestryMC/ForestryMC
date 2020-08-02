@@ -28,51 +28,51 @@ import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 
-	private static final int MAX_BLOCK_FIND_TRIES = 5;
+    private static final int MAX_BLOCK_FIND_TRIES = 5;
 
-	public AlleleEffectFertile() {
-		super("fertile", false, 6, true, false);
-	}
+    public AlleleEffectFertile() {
+        super("fertile", false, 6, true, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorldObj();
-		BlockPos housingCoordinates = housing.getCoordinates();
-		Vector3i area = getModifiedArea(genome, housing);
+        World world = housing.getWorldObj();
+        BlockPos housingCoordinates = housing.getCoordinates();
+        Vector3i area = getModifiedArea(genome, housing);
 
-		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
-		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
-		int blockMaxY = housingCoordinates.getY() + area.getY() / 2 + 1;
-		int blockMinY = housingCoordinates.getY() - area.getY() / 2 - 1;
+        int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+        int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
+        int blockMaxY = housingCoordinates.getY() + area.getY() / 2 + 1;
+        int blockMinY = housingCoordinates.getY() - area.getY() / 2 - 1;
 
-		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			if (world.getChunkProvider().getChunk(blockX >> 4, blockZ >> 4, false) != null) {
-				if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
-					break;
-				}
-				blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
-				blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
-			}
-		}
+        for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
+            if (world.getChunkProvider().getChunk(blockX >> 4, blockZ >> 4, false) != null) {
+                if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
+                    break;
+                }
+                blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+                blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
+            }
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
-	private static int getRandomOffset(Random random, int centrePos, int offset) {
-		return centrePos + random.nextInt(offset) - offset / 2;
-	}
+    private static int getRandomOffset(Random random, int centrePos, int offset) {
+        return centrePos + random.nextInt(offset) - offset / 2;
+    }
 
-	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
-		for (int y = maxY; y >= minY; --y) {
-			BlockState state = world.getBlockState(new BlockPos(x, y, z));
-			Block block = state.getBlock();
-			if (block.ticksRandomly(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
-				world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
-				return true;
-			}
-		}
-		return false;
-	}
+    private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
+        for (int y = maxY; y >= minY; --y) {
+            BlockState state = world.getBlockState(new BlockPos(x, y, z));
+            Block block = state.getBlock();
+            if (block.ticksRandomly(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
+                world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

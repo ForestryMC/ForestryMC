@@ -28,65 +28,65 @@ import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
 public class FarmLedger extends Ledger {
-	private final IFarmLedgerDelegate delegate;
+    private final IFarmLedgerDelegate delegate;
 
-	public FarmLedger(LedgerManager ledgerManager, IFarmLedgerDelegate delegate) {
-		super(ledgerManager, "farm");
-		this.delegate = delegate;
+    public FarmLedger(LedgerManager ledgerManager, IFarmLedgerDelegate delegate) {
+        super(ledgerManager, "farm");
+        this.delegate = delegate;
 
-		//TODO textcomponent
-		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
-		this.maxHeight = titleHeight + 110;
-	}
+        //TODO textcomponent
+        int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
+        this.maxHeight = titleHeight + 110;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void draw(MatrixStack transform, int y, int x) {
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void draw(MatrixStack transform, int y, int x) {
 
-		// Draw background
-		drawBackground(transform, y, x);
-		y += 4;
+        // Draw background
+        drawBackground(transform, y, x);
+        y += 4;
 
-		int xIcon = x + 3;
-		int xBody = x + 10;
-		int xHeader = x + 22;
+        int xIcon = x + 3;
+        int xBody = x + 10;
+        int xHeader = x + 22;
 
-		// Draw icon
-		TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("item/water_bucket");
-		drawSprite(transform, textureAtlasSprite, xIcon, y, AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-		y += 4;
+        // Draw icon
+        TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("item/water_bucket");
+        drawSprite(transform, textureAtlasSprite, xIcon, y, AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        y += 4;
 
-		if (!isFullyOpened()) {
-			return;
-		}
+        if (!isFullyOpened()) {
+            return;
+        }
 
-		y += drawHeader(transform, Translator.translateToLocal("for.gui.hydration"), xHeader, y);
-		y += 4;
+        y += drawHeader(transform, Translator.translateToLocal("for.gui.hydration"), xHeader, y);
+        y += 4;
 
-		y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.heat") + ':', xBody, y);
-		y += 3;
-		y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), xBody, y);
-		y += 3;
+        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.heat") + ':', xBody, y);
+        y += 3;
+        y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), xBody, y);
+        y += 3;
 
-		y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.humid") + ':', xBody, y);
-		y += 3;
-		y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
-		y += 3;
+        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.humid") + ':', xBody, y);
+        y += 3;
+        y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
+        y += 3;
 
-		y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.rainfall") + ':', xBody, y);
-		y += 3;
-		y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", xBody, y);
-		y += 3;
+        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.rainfall") + ':', xBody, y);
+        y += 3;
+        y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", xBody, y);
+        y += 3;
 
-		y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.overall") + ':', xBody, y);
-		y += 3;
-		drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationModifier()), xBody, y);
-	}
+        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.overall") + ':', xBody, y);
+        y += 3;
+        drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationModifier()), xBody, y);
+    }
 
-	@Override
-	public ITextComponent getTooltip() {
-		float hydrationModifier = delegate.getHydrationModifier();
-		return new StringTextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ')
-			.append(new TranslationTextComponent("for.gui.hydration"));
-	}
+    @Override
+    public ITextComponent getTooltip() {
+        float hydrationModifier = delegate.getHydrationModifier();
+        return new StringTextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ')
+                .append(new TranslationTextComponent("for.gui.hydration"));
+    }
 }

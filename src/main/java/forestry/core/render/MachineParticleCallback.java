@@ -28,22 +28,22 @@ import forestry.core.utils.ResourceUtil;
 
 public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase> {
 
-	private final P blockType;
+    private final P blockType;
 
-	public MachineParticleCallback(BlockBase block, P blockType) {
-		super(block);
-		this.blockType = blockType;
-	}
+    public MachineParticleCallback(BlockBase block, P blockType) {
+        super(block);
+        this.blockType = blockType;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
-		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
-		if (machineProperties instanceof IMachinePropertiesTesr) {
-			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-			TextureAtlasSprite particleTexture = ResourceUtil.getBlockSprite(machinePropertiesTesr.getParticleTexture());
-			fx.sprite = particleTexture;
-		}
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
+        IMachineProperties<?> machineProperties = blockType.getMachineProperties();
+        if (machineProperties instanceof IMachinePropertiesTesr) {
+            IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
+            TextureAtlasSprite particleTexture = ResourceUtil.getBlockSprite(machinePropertiesTesr.getParticleTexture());
+            fx.sprite = particleTexture;
+        }
+    }
 
 }

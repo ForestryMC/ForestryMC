@@ -12,9 +12,9 @@ import forestry.worktable.blocks.BlockWorktable;
 
 @FeatureProvider
 public class WorktableBlocks {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleWorktable.class);
-	public static final FeatureBlock<BlockWorktable, ItemBlockForestry> WORKTABLE = REGISTRY.block(() -> new BlockWorktable(BlockTypeWorktable.WORKTABLE), ItemBlockNBT::new, "worktable");
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleWorktable.class);
+    public static final FeatureBlock<BlockWorktable, ItemBlockForestry> WORKTABLE = REGISTRY.block(() -> new BlockWorktable(BlockTypeWorktable.WORKTABLE), ItemBlockNBT::new, "worktable");
 
-	private WorktableBlocks() {
-	}
+    private WorktableBlocks() {
+    }
 }

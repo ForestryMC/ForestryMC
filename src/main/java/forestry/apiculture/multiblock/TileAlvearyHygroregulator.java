@@ -41,116 +41,116 @@ import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.tiles.ILiquidTankTile;
 
 public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser {
-	private final TankManager tankManager;
-	private final FilteredTank liquidTank;
-	private final IInventoryAdapter inventory;
+    private final TankManager tankManager;
+    private final FilteredTank liquidTank;
+    private final IInventoryAdapter inventory;
 
-	@Nullable
-	private IHygroregulatorRecipe currentRecipe;
-	private int transferTime;
+    @Nullable
+    private IHygroregulatorRecipe currentRecipe;
+    private int transferTime;
 
-	public TileAlvearyHygroregulator() {
-		super(BlockAlvearyType.HYGRO);
+    public TileAlvearyHygroregulator() {
+        super(BlockAlvearyType.HYGRO);
 
-		this.inventory = new InventoryHygroregulator(this);
+        this.inventory = new InventoryHygroregulator(this);
 
-		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
+        this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
 
-		this.tankManager = new TankManager(this, liquidTank);
-	}
+        this.tankManager = new TankManager(this, liquidTank);
+    }
 
-	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return inventory;
-	}
+    @Override
+    public IInventoryAdapter getInternalInventory() {
+        return inventory;
+    }
 
-	@Override
-	public boolean allowsAutomation() {
-		return true;
-	}
+    @Override
+    public boolean allowsAutomation() {
+        return true;
+    }
 
-	/* UPDATING */
-	@Override
-	public void changeClimate(int tickCount, IClimateControlled climateControlled) {
-		if (transferTime <= 0) {
-			FluidStack fluid = liquidTank.getFluid();
-			if (!fluid.isEmpty()) {
-				currentRecipe = HygroregulatorManager.findMatchingRecipe(fluid);
+    /* UPDATING */
+    @Override
+    public void changeClimate(int tickCount, IClimateControlled climateControlled) {
+        if (transferTime <= 0) {
+            FluidStack fluid = liquidTank.getFluid();
+            if (!fluid.isEmpty()) {
+                currentRecipe = HygroregulatorManager.findMatchingRecipe(fluid);
 
-				if (currentRecipe != null) {
-					liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
-					transferTime = currentRecipe.getTransferTime();
-				}
-			}
-		}
+                if (currentRecipe != null) {
+                    liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
+                    transferTime = currentRecipe.getTransferTime();
+                }
+            }
+        }
 
-		if (transferTime > 0) {
+        if (transferTime > 0) {
 
-			transferTime--;
-			if (currentRecipe != null) {
-				climateControlled.addHumidityChange(currentRecipe.getHumidChange(), 0.0f, 1.0f);
-				climateControlled.addTemperatureChange(currentRecipe.getTempChange(), 0.0f, 2.0f);
-			} else {
-				transferTime = 0;
-			}
-		}
+            transferTime--;
+            if (currentRecipe != null) {
+                climateControlled.addHumidityChange(currentRecipe.getHumidChange(), 0.0f, 1.0f);
+                climateControlled.addTemperatureChange(currentRecipe.getTempChange(), 0.0f, 2.0f);
+            } else {
+                transferTime = 0;
+            }
+        }
 
-		if (tickCount % 20 == 0) {
-			// Check if we have suitable items waiting in the item slot
-			FluidHelper.drainContainers(tankManager, this, 0);
-		}
-	}
+        if (tickCount % 20 == 0) {
+            // Check if we have suitable items waiting in the item slot
+            FluidHelper.drainContainers(tankManager, this, 0);
+        }
+    }
 
-	/* SAVING & LOADING */
-	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
-		tankManager.read(compoundNBT);
+    /* SAVING & LOADING */
+    @Override
+    public void read(BlockState state, CompoundNBT compoundNBT) {
+        super.read(state, compoundNBT);
+        tankManager.read(compoundNBT);
 
-		transferTime = compoundNBT.getInt("TransferTime");
+        transferTime = compoundNBT.getInt("TransferTime");
 
-		if (compoundNBT.contains("CurrentLiquid")) {
-			FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
-			currentRecipe = HygroregulatorManager.findMatchingRecipe(liquid);
-		}
-	}
+        if (compoundNBT.contains("CurrentLiquid")) {
+            FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
+            currentRecipe = HygroregulatorManager.findMatchingRecipe(liquid);
+        }
+    }
 
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
-		tankManager.write(compoundNBT);
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        compoundNBT = super.write(compoundNBT);
+        tankManager.write(compoundNBT);
 
-		compoundNBT.putInt("TransferTime", transferTime);
-		if (currentRecipe != null) {
-			CompoundNBT subcompound = new CompoundNBT();
-			currentRecipe.getResource().writeToNBT(subcompound);
-			compoundNBT.put("CurrentLiquid", subcompound);
-		}
-		return compoundNBT;
-	}
+        compoundNBT.putInt("TransferTime", transferTime);
+        if (currentRecipe != null) {
+            CompoundNBT subcompound = new CompoundNBT();
+            currentRecipe.getResource().writeToNBT(subcompound);
+            compoundNBT.put("CurrentLiquid", subcompound);
+        }
+        return compoundNBT;
+    }
 
-	/* ILIQUIDTANKCONTAINER */
+    /* ILIQUIDTANKCONTAINER */
 
-	@Override
-	public TankManager getTankManager() {
-		return tankManager;
-	}
+    @Override
+    public TankManager getTankManager() {
+        return tankManager;
+    }
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		LazyOptional<T> superCap = super.getCapability(capability, facing);
-		if (superCap.isPresent()) {
-			return superCap;
-		}
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return LazyOptional.of(() -> tankManager).cast();
-		}
-		return LazyOptional.empty();
-	}
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        LazyOptional<T> superCap = super.getCapability(capability, facing);
+        if (superCap.isPresent()) {
+            return superCap;
+        }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return LazyOptional.of(() -> tankManager).cast();
+        }
+        return LazyOptional.empty();
+    }
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerAlvearyHygroregulator(windowId, inv, this);
-	}
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerAlvearyHygroregulator(windowId, inv, this);
+    }
 }

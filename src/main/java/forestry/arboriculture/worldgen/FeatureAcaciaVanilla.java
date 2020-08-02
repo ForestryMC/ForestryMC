@@ -14,8 +14,8 @@ import forestry.api.arboriculture.ITreeGenData;
 
 public class FeatureAcaciaVanilla extends FeatureTreeVanilla {
 
-	public FeatureAcaciaVanilla(ITreeGenData tree) {
-		super(tree);
-	}
+    public FeatureAcaciaVanilla(ITreeGenData tree) {
+        super(tree);
+    }
 
 }

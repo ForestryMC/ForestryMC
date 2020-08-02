@@ -18,36 +18,36 @@ import net.minecraft.world.World;
  */
 public interface IFarmable {
 
-	/**
-	 * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature version of the crop.
-	 */
-	boolean isSaplingAt(World world, BlockPos pos, BlockState blockState);
+    /**
+     * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature version of the crop.
+     */
+    boolean isSaplingAt(World world, BlockPos pos, BlockState blockState);
 
-	/**
-	 * @return {@link ICrop} if the block at the given location is a harvestable and mature crop, null otherwise.
-	 */
-	@Nullable
-	ICrop getCropAt(World world, BlockPos pos, BlockState blockState);
+    /**
+     * @return {@link ICrop} if the block at the given location is a harvestable and mature crop, null otherwise.
+     */
+    @Nullable
+    ICrop getCropAt(World world, BlockPos pos, BlockState blockState);
 
-	/**
-	 * @return true if the item is a valid germling (plantable sapling, seed, etc.) for this type.
-	 */
-	boolean isGermling(ItemStack itemstack);
+    /**
+     * @return true if the item is a valid germling (plantable sapling, seed, etc.) for this type.
+     */
+    boolean isGermling(ItemStack itemstack);
 
-	default void addInformation(IFarmableInfo info) {
-	}
+    default void addInformation(IFarmableInfo info) {
+    }
 
-	/**
-	 * @return true if the item is something that can drop from this type without actually being harvested as a crop. (Apples or sapling from decaying leaves.)
-	 */
-	boolean isWindfall(ItemStack itemstack);
+    /**
+     * @return true if the item is something that can drop from this type without actually being harvested as a crop. (Apples or sapling from decaying leaves.)
+     */
+    boolean isWindfall(ItemStack itemstack);
 
-	/**
-	 * Plants a sapling by manipulating the world. The {@link IFarmLogic} should have verified the given location as valid. Called by the {@link IFarmHousing}
-	 * which handles resources.
-	 *
-	 * @return true on success, false otherwise.
-	 */
-	boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos);
+    /**
+     * Plants a sapling by manipulating the world. The {@link IFarmLogic} should have verified the given location as valid. Called by the {@link IFarmHousing}
+     * which handles resources.
+     *
+     * @return true on success, false otherwise.
+     */
+    boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos);
 
 }

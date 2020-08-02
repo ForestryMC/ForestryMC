@@ -21,18 +21,18 @@ import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectExploration extends AlleleEffectThrottled {
 
-	public AlleleEffectExploration() {
-		super("exploration", false, 80, true, false);
-	}
+    public AlleleEffectExploration() {
+        super("exploration", false, 80, true, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
-		for (PlayerEntity player : players) {
-			player.giveExperiencePoints(2);
-		}
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
+        for (PlayerEntity player : players) {
+            player.giveExperiencePoints(2);
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
 }

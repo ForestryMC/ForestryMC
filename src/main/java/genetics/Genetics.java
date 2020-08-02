@@ -34,77 +34,77 @@ import genetics.plugins.PluginManager;
 
 @Mod(Genetics.MOD_ID)
 public class Genetics {
-	public static final String MOD_ID = "geneticsapi";
+    public static final String MOD_ID = "geneticsapi";
 
-	/**
-	 * Capability for {@link IOrganism}.
-	 */
-	@CapabilityInject(IOrganism.class)
-	public static Capability<IOrganism> ORGANISM;
-	@CapabilityInject(IGeneTemplate.class)
-	public static Capability<IGeneTemplate> GENE_TEMPLATE;
+    /**
+     * Capability for {@link IOrganism}.
+     */
+    @CapabilityInject(IOrganism.class)
+    public static Capability<IOrganism> ORGANISM;
+    @CapabilityInject(IGeneTemplate.class)
+    public static Capability<IGeneTemplate> GENE_TEMPLATE;
 
-	public Genetics() {
-		GeneticsAPI.apiInstance = ApiInstance.INSTANCE;
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-		modBus.addListener(this::setupCommon);
-		modBus.addListener(this::loadComplete);
-		modBus.register(this);
-	}
+    public Genetics() {
+        GeneticsAPI.apiInstance = ApiInstance.INSTANCE;
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.addListener(this::setupCommon);
+        modBus.addListener(this::loadComplete);
+        modBus.register(this);
+    }
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	@SuppressWarnings("unused")
-	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		CapabilityManager.INSTANCE.register(IOrganism.class, new NullStorage<>(), () -> GeneticHelper.EMPTY);
-		CapabilityManager.INSTANCE.register(IGeneTemplate.class, new NullStorage<>(), () -> GeneTemplate.EMPTY);
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SuppressWarnings("unused")
+    public void registerBlocks(RegistryEvent.Register<Block> event) {
+        CapabilityManager.INSTANCE.register(IOrganism.class, new NullStorage<>(), () -> GeneticHelper.EMPTY);
+        CapabilityManager.INSTANCE.register(IGeneTemplate.class, new NullStorage<>(), () -> GeneTemplate.EMPTY);
 
-		PluginManager.create();
+        PluginManager.create();
 
-		PluginManager.initPlugins();
-	}
+        PluginManager.initPlugins();
+    }
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	@SuppressWarnings("unused")
-	public void registerFinished(RegistryEvent.Register<Item> event) {
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isPresent()) {
-				continue;
-			}
-			definition.get().getComponentContainer().onStage(DefaultStage.REGISTRATION);
-		}
-	}
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SuppressWarnings("unused")
+    public void registerFinished(RegistryEvent.Register<Item> event) {
+        for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+            if (!definition.isPresent()) {
+                continue;
+            }
+            definition.get().getComponentContainer().onStage(DefaultStage.REGISTRATION);
+        }
+    }
 
-	@SuppressWarnings("unused")
-	private void setupCommon(FMLCommonSetupEvent event) {
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isPresent()) {
-				continue;
-			}
-			definition.get().getComponentContainer().onStage(DefaultStage.SETUP);
-		}
-	}
+    @SuppressWarnings("unused")
+    private void setupCommon(FMLCommonSetupEvent event) {
+        for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+            if (!definition.isPresent()) {
+                continue;
+            }
+            definition.get().getComponentContainer().onStage(DefaultStage.SETUP);
+        }
+    }
 
-	@SuppressWarnings("unused")
-	private void loadComplete(FMLLoadCompleteEvent event) {
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isPresent()) {
-				continue;
-			}
-			definition.get().getComponentContainer().onStage(DefaultStage.COMPLETION);
-		}
-		GeneticSaveHandler.setWriteFormat(SaveFormat.BINARY);
-	}
+    @SuppressWarnings("unused")
+    private void loadComplete(FMLLoadCompleteEvent event) {
+        for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+            if (!definition.isPresent()) {
+                continue;
+            }
+            definition.get().getComponentContainer().onStage(DefaultStage.COMPLETION);
+        }
+        GeneticSaveHandler.setWriteFormat(SaveFormat.BINARY);
+    }
 
-	private static class NullStorage<T> implements Capability.IStorage<T> {
-		@Nullable
-		public INBT writeNBT(Capability<T> capability, T instance, Direction side) {
-			/* compiled code */
-			return null;
-		}
+    private static class NullStorage<T> implements Capability.IStorage<T> {
+        @Nullable
+        public INBT writeNBT(Capability<T> capability, T instance, Direction side) {
+            /* compiled code */
+            return null;
+        }
 
-		@Override
-		public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
-			/* compiled code */
-		}
-	}
+        @Override
+        public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
+            /* compiled code */
+        }
+    }
 }

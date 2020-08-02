@@ -9,12 +9,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 @OnlyIn(Dist.CLIENT)
 public class IndexEntry {
-	/**
-	 * The localized name of the entry.
-	 */
-	public String title;
-	/**
-	 * The page that a mouse click on this entry opens.
-	 */
-	public int page;
+    /**
+     * The localized name of the entry.
+     */
+    public String title;
+    /**
+     * The page that a mouse click on this entry opens.
+     */
+    public int page;
 }

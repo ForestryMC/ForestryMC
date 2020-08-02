@@ -26,33 +26,33 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 
 public class PacketGuiUpdateEntity extends ForestryPacket implements IForestryPacketClient {
-	private final Entity entity;
-	private final IStreamableGui streamableGui;
+    private final Entity entity;
+    private final IStreamableGui streamableGui;
 
-	public PacketGuiUpdateEntity(IStreamableGui streamableGui, Entity entity) {
-		this.entity = entity;
-		this.streamableGui = streamableGui;
-	}
+    public PacketGuiUpdateEntity(IStreamableGui streamableGui, Entity entity) {
+        this.entity = entity;
+        this.streamableGui = streamableGui;
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.GUI_UPDATE_ENTITY;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.GUI_UPDATE_ENTITY;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeEntityById(entity);
-		streamableGui.writeGuiData(data);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeEntityById(entity);
+        streamableGui.writeGuiData(data);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			Entity entity = data.readEntityById(player.world);
-			if (entity instanceof IStreamableGui) {
-				((IStreamableGui) entity).readGuiData(data);
-			}
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+            Entity entity = data.readEntityById(player.world);
+            if (entity instanceof IStreamableGui) {
+                ((IStreamableGui) entity).readGuiData(data);
+            }
+        }
+    }
 }

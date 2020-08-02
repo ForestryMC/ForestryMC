@@ -15,52 +15,52 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IBookEntryBuilder {
 
-	/**
-	 * Sets the content of the entry.
-	 */
-	IBookEntryBuilder setContent(BookContent[][] content);
+    /**
+     * Sets the content of the entry.
+     */
+    IBookEntryBuilder setContent(BookContent[][] content);
 
-	/**
-	 * Sets the localized name of entry.
-	 */
-	IBookEntryBuilder setTitle(String title);
+    /**
+     * Sets the localized name of entry.
+     */
+    IBookEntryBuilder setTitle(String title);
 
-	IBookEntryBuilder setStack(ItemStack stack);
+    IBookEntryBuilder setStack(ItemStack stack);
 
-	IBookEntryBuilder setLoader(IBookPageFactory loader);
+    IBookEntryBuilder setLoader(IBookPageFactory loader);
 
-	/**
-	 * Creates a sub entry.
-	 * <p>
-	 * Important: You not have to call {@link #addToCategory()} at the end of the creation of the sub entry
-	 *
-	 * @param name The unique name of the sub entry.
-	 * @return The entry builder of the sub entry.
-	 */
-	default IBookEntryBuilder createSubEntry(String name) {
-		return createSubEntry(name, ItemStack.EMPTY);
-	}
+    /**
+     * Creates a sub entry.
+     * <p>
+     * Important: You not have to call {@link #addToCategory()} at the end of the creation of the sub entry
+     *
+     * @param name The unique name of the sub entry.
+     * @return The entry builder of the sub entry.
+     */
+    default IBookEntryBuilder createSubEntry(String name) {
+        return createSubEntry(name, ItemStack.EMPTY);
+    }
 
-	/**
-	 * Creates a sub entry.
-	 * <p>
-	 * Important: You not have to call {@link #addToCategory()} at the end of the creation of the sub entry
-	 *
-	 * @param name  The unique name of the sub entry.
-	 * @param stack The stack that represents the sub entry.
-	 * @return The entry builder of the sub entry.
-	 */
-	IBookEntryBuilder createSubEntry(String name, ItemStack stack);
+    /**
+     * Creates a sub entry.
+     * <p>
+     * Important: You not have to call {@link #addToCategory()} at the end of the creation of the sub entry
+     *
+     * @param name  The unique name of the sub entry.
+     * @param stack The stack that represents the sub entry.
+     * @return The entry builder of the sub entry.
+     */
+    IBookEntryBuilder createSubEntry(String name, ItemStack stack);
 
-	IBookEntry build(@Nullable IBookEntry parent);
+    IBookEntry build(@Nullable IBookEntry parent);
 
-	/**
-	 * Builds a entry with the current information.
-	 */
-	IBookEntry build();
+    /**
+     * Builds a entry with the current information.
+     */
+    IBookEntry build();
 
-	/**
-	 * Builds the entry and adds it to the category.
-	 */
-	IBookCategory addToCategory();
+    /**
+     * Builds the entry and adds it to the category.
+     */
+    IBookCategory addToCategory();
 }

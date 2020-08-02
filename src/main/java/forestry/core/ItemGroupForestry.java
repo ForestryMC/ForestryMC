@@ -40,64 +40,64 @@ import forestry.modules.features.FeatureProvider;
 @FeatureProvider
 public class ItemGroupForestry extends ItemGroup {
 
-	static {
-		ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
+    static {
+        ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
-		}
+        if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+            ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
+        }
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			ItemGroups.tabArboriculture = new ItemGroupForestry(3, "arboriculture");
-		}
+        if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+            ItemGroups.tabArboriculture = new ItemGroupForestry(3, "arboriculture");
+        }
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			ItemGroups.tabLepidopterology = new ItemGroupForestry(4, "lepidopterology");
-		}
-	}
+        if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+            ItemGroups.tabLepidopterology = new ItemGroupForestry(4, "lepidopterology");
+        }
+    }
 
-	public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
+    public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
 
-	public static void create() {
-		//Needed to load the groups before the feature creation
-	}
+    public static void create() {
+        //Needed to load the groups before the feature creation
+    }
 
-	private final int icon;
+    private final int icon;
 
-	private ItemGroupForestry(int icon, String label) {
-		super(label);
-		this.icon = icon;
-	}
+    private ItemGroupForestry(int icon, String label) {
+        super(label);
+        this.icon = icon;
+    }
 
-	@Override
-	public ItemStack getIcon() {
-		Item iconItem;
-		switch (icon) {
-			case 1:
-				if (ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
-					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "miner_bag"));
-				} else {
-					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "crate"));
-				}
-				break;
-			case 2:
-				return BeeManager.beeRoot.getTypes().createStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
-			case 3:
-				return TreeManager.treeRoot.getTypes().createStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
-			case 4:
-				return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
-			default:
-				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizer_compound"));
-				break;
-		}
-		if (iconItem == null) {
-			iconItem = CoreItems.WRENCH.item();
-		}
-		return new ItemStack(iconItem);
-	}
+    @Override
+    public ItemStack getIcon() {
+        Item iconItem;
+        switch (icon) {
+            case 1:
+                if (ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
+                    iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "miner_bag"));
+                } else {
+                    iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "crate"));
+                }
+                break;
+            case 2:
+                return BeeManager.beeRoot.getTypes().createStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
+            case 3:
+                return TreeManager.treeRoot.getTypes().createStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
+            case 4:
+                return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
+            default:
+                iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizer_compound"));
+                break;
+        }
+        if (iconItem == null) {
+            iconItem = CoreItems.WRENCH.item();
+        }
+        return new ItemStack(iconItem);
+    }
 
-	@Override
-	public ItemStack createIcon() {
-		return getIcon();
-	}
+    @Override
+    public ItemStack createIcon() {
+        return getIcon();
+    }
 }

@@ -14,8 +14,8 @@ import forestry.api.arboriculture.ITreeGenData;
 
 public class FeatureBirch extends FeatureTreeVanilla {
 
-	public FeatureBirch(ITreeGenData tree) {
-		super(tree);
-	}
+    public FeatureBirch(ITreeGenData tree) {
+        super(tree);
+    }
 
 }

@@ -32,66 +32,66 @@ import forestry.apiculture.entities.MinecartEntityBeehouse;
 
 public class ItemMinecartBeehousing extends MinecartItem {
 
-	//TODO merge with BlockTypeApiculture?
-	public enum Type implements IItemSubtype {
-		BEE_HOUSE,
-		APIARY;
+    //TODO merge with BlockTypeApiculture?
+    public enum Type implements IItemSubtype {
+        BEE_HOUSE,
+        APIARY;
 
-		@Override
-		public String getString() {
-			return toString().toLowerCase(Locale.ENGLISH);
-		}
-	}
+        @Override
+        public String getString() {
+            return toString().toLowerCase(Locale.ENGLISH);
+        }
+    }
 
-	private Type type;
+    private final Type type;
 
-	public ItemMinecartBeehousing(Type type) {
-		super(null, (new Item.Properties()).maxDamage(0).group(ItemGroups.tabApiculture));
-		this.type = type;
+    public ItemMinecartBeehousing(Type type) {
+        super(null, (new Item.Properties()).maxDamage(0).group(ItemGroups.tabApiculture));
+        this.type = type;
 
-		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
-	}
+        DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
+    }
 
-	//TODO world.addEntity returns successfully here but nothing ever appears in the world
-	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
-		PlayerEntity player = context.getPlayer();
+    //TODO world.addEntity returns successfully here but nothing ever appears in the world
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
+        PlayerEntity player = context.getPlayer();
 
 
-		if (!AbstractRailBlock.isRail(world.getBlockState(pos))) {
-			return ActionResultType.PASS;
-		}
+        if (!AbstractRailBlock.isRail(world.getBlockState(pos))) {
+            return ActionResultType.PASS;
+        }
 
-		ItemStack stack = player.getHeldItem(context.getHand());
+        ItemStack stack = player.getHeldItem(context.getHand());
 
-		if (!context.getWorld().isRemote) {
-			MinecartEntityBeeHousingBase minecart;
+        if (!context.getWorld().isRemote) {
+            MinecartEntityBeeHousingBase minecart;
 
-			if (type == Type.BEE_HOUSE) {
-				minecart = new MinecartEntityBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
-			} else {
-				minecart = new MinecartEntityApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
-			}
+            if (type == Type.BEE_HOUSE) {
+                minecart = new MinecartEntityBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+            } else {
+                minecart = new MinecartEntityApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+            }
 
-			minecart.getOwnerHandler().setOwner(player.getGameProfile());
+            minecart.getOwnerHandler().setOwner(player.getGameProfile());
 
-			if (stack.hasDisplayName()) {
-				minecart.setCustomName(stack.getDisplayName());
-			}
+            if (stack.hasDisplayName()) {
+                minecart.setCustomName(stack.getDisplayName());
+            }
 
-			if (!world.addEntity(minecart)) {
-				return ActionResultType.FAIL;
-			}
-		}
+            if (!world.addEntity(minecart)) {
+                return ActionResultType.FAIL;
+            }
+        }
 
-		stack.shrink(1);
-		return ActionResultType.SUCCESS;
-	}
+        stack.shrink(1);
+        return ActionResultType.SUCCESS;
+    }
 
-	@Override
-	public String getTranslationKey(ItemStack stack) {
-		return "cart." + type.getString();
-	}
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        return "cart." + type.getString();
+    }
 }

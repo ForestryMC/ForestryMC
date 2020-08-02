@@ -12,29 +12,29 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IBookLoader {
 
-	/**
-	 * Adds a content type.
-	 *
-	 * @param name         The name of the content type.
-	 * @param contentClass The class for the deserialization of the content.
-	 */
-	void registerContentType(String name, Class<? extends BookContent> contentClass);
+    /**
+     * Adds a content type.
+     *
+     * @param name         The name of the content type.
+     * @param contentClass The class for the deserialization of the content.
+     */
+    void registerContentType(String name, Class<? extends BookContent> contentClass);
 
-	void registerPageFactory(String name, IBookPageFactory factory);
+    void registerPageFactory(String name, IBookPageFactory factory);
 
-	IBookPageFactory getPageFactory(String name);
+    IBookPageFactory getPageFactory(String name);
 
-	/**
-	 * Loads the book if it was not loaded already or if it was invalidated. Otherwise it returns the last loaded
-	 * instance.
-	 *
-	 * @return The current instance of the forestry guide book.
-	 */
-	IForesterBook loadBook();
+    /**
+     * Loads the book if it was not loaded already or if it was invalidated. Otherwise it returns the last loaded
+     * instance.
+     *
+     * @return The current instance of the forestry guide book.
+     */
+    IForesterBook loadBook();
 
-	/**
-	 * Invalidates the current instance of the book.
-	 * The next time {@link #loadBook()} gets called a new instance of the book will be loaded.
-	 */
-	void invalidateBook();
+    /**
+     * Invalidates the current instance of the book.
+     * The next time {@link #loadBook()} gets called a new instance of the book will be loaded.
+     */
+    void invalidateBook();
 }

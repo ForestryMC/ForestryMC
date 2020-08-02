@@ -33,85 +33,85 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
-	public static final FakeAlvearyController instance = new FakeAlvearyController();
+    public static final FakeAlvearyController instance = new FakeAlvearyController();
 
-	private FakeAlvearyController() {
+    private FakeAlvearyController() {
 
-	}
+    }
 
-	@Override
-	public Iterable<IBeeModifier> getBeeModifiers() {
-		return Collections.emptyList();
-	}
+    @Override
+    public Iterable<IBeeModifier> getBeeModifiers() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public Iterable<IBeeListener> getBeeListeners() {
-		return Collections.emptyList();
-	}
+    @Override
+    public Iterable<IBeeListener> getBeeListeners() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public IBeeHousingInventory getBeeInventory() {
-		return FakeBeeHousingInventory.instance;
-	}
+    @Override
+    public IBeeHousingInventory getBeeInventory() {
+        return FakeBeeHousingInventory.instance;
+    }
 
-	@Override
-	public IBeekeepingLogic getBeekeepingLogic() {
-		return FakeBeekeepingLogic.instance;
-	}
+    @Override
+    public IBeekeepingLogic getBeekeepingLogic() {
+        return FakeBeekeepingLogic.instance;
+    }
 
-	@Override
-	public int getBlockLightValue() {
-		return 0;
-	}
+    @Override
+    public int getBlockLightValue() {
+        return 0;
+    }
 
-	@Override
-	public boolean canBlockSeeTheSky() {
-		return false;
-	}
+    @Override
+    public boolean canBlockSeeTheSky() {
+        return false;
+    }
 
-	@Override
-	public boolean isRaining() {
-		return false;
-	}
+    @Override
+    public boolean isRaining() {
+        return false;
+    }
 
-	@Override
-	@Nullable
-	public GameProfile getOwner() {
-		return null;
-	}
+    @Override
+    @Nullable
+    public GameProfile getOwner() {
+        return null;
+    }
 
-	@Override
-	public BlockPos getCoordinates() {
-		return BlockPos.ZERO;
-	}
+    @Override
+    public BlockPos getCoordinates() {
+        return BlockPos.ZERO;
+    }
 
-	@Override
-	public Vector3d getBeeFXCoordinates() {
-		return new Vector3d(0, 0, 0);
-	}
+    @Override
+    public Vector3d getBeeFXCoordinates() {
+        return new Vector3d(0, 0, 0);
+    }
 
-	@Override
-	public Biome getBiome() {
-		return Biomes.PLAINS;
-	}
+    @Override
+    public Biome getBiome() {
+        return Biomes.PLAINS;
+    }
 
-	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return FakeInventoryAdapter.instance();
-	}
+    @Override
+    public IInventoryAdapter getInternalInventory() {
+        return FakeInventoryAdapter.instance();
+    }
 
-	@Override
-	public IClimateListener getClimateListener() {
-		return FakeClimateListener.INSTANCE;
-	}
+    @Override
+    public IClimateListener getClimateListener() {
+        return FakeClimateListener.INSTANCE;
+    }
 
-	@Override
-	public int getHealthScaled(int i) {
-		return 0;
-	}
+    @Override
+    public int getHealthScaled(int i) {
+        return 0;
+    }
 
-	@Override
-	public String getUnlocalizedType() {
-		return "for.multiblock.alveary.type";
-	}
+    @Override
+    public String getUnlocalizedType() {
+        return "for.multiblock.alveary.type";
+    }
 }

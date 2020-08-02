@@ -14,8 +14,8 @@ import genetics.classification.Classification;
 
 public class Branch extends Classification {
 
-	public Branch(String uid, String scientific) {
-		super(EnumClassLevel.GENUS, uid, scientific);
-	}
+    public Branch(String uid, String scientific) {
+        super(EnumClassLevel.GENUS, uid, scientific);
+    }
 
 }

@@ -23,105 +23,105 @@ import genetics.utils.AlleleUtils;
 
 public class MutationContainer<I extends IIndividual, M extends IMutation> implements IMutationContainer<I, M> {
 
-	private final List<M> mutations = new LinkedList<>();
-	private final IIndividualRoot<I> root;
+    private final List<M> mutations = new LinkedList<>();
+    private final IIndividualRoot<I> root;
 
-	public MutationContainer(IIndividualRoot<I> root) {
-		this.root = root;
-	}
+    public MutationContainer(IIndividualRoot<I> root) {
+        this.root = root;
+    }
 
-	@Override
-	public IIndividualRoot<I> getRoot() {
-		return root;
-	}
+    @Override
+    public IIndividualRoot<I> getRoot() {
+        return root;
+    }
 
-	@Override
-	public boolean registerMutation(M mutation) {
-		IChromosomeType speciesType = root.getKaryotype().getSpeciesType();
-		IAllele firstParent = mutation.getFirstParent();
-		IAllele secondParent = mutation.getSecondParent();
-		IAllele resultSpecies = mutation.getTemplate()[speciesType.getIndex()];
-		if (AlleleUtils.isBlacklisted(resultSpecies)
-			|| AlleleUtils.isBlacklisted(firstParent)
-			|| AlleleUtils.isBlacklisted(secondParent)) {
-			return false;
-		}
-		mutations.add(mutation);
-		return true;
-	}
+    @Override
+    public boolean registerMutation(M mutation) {
+        IChromosomeType speciesType = root.getKaryotype().getSpeciesType();
+        IAllele firstParent = mutation.getFirstParent();
+        IAllele secondParent = mutation.getSecondParent();
+        IAllele resultSpecies = mutation.getTemplate()[speciesType.getIndex()];
+        if (AlleleUtils.isBlacklisted(resultSpecies)
+                || AlleleUtils.isBlacklisted(firstParent)
+                || AlleleUtils.isBlacklisted(secondParent)) {
+            return false;
+        }
+        mutations.add(mutation);
+        return true;
+    }
 
-	@Override
-	public List<M> getMutations(boolean shuffle) {
-		if (shuffle) {
-			Collections.shuffle(mutations);
-		}
-		return mutations;
-	}
+    @Override
+    public List<M> getMutations(boolean shuffle) {
+        if (shuffle) {
+            Collections.shuffle(mutations);
+        }
+        return mutations;
+    }
 
-	@Override
-	public List<M> getCombinations(IAllele other) {
-		List<M> combinations = new ArrayList<>();
-		for (M mutation : getMutations(false)) {
-			if (mutation.isPartner(other)) {
-				combinations.add(mutation);
-			}
-		}
+    @Override
+    public List<M> getCombinations(IAllele other) {
+        List<M> combinations = new ArrayList<>();
+        for (M mutation : getMutations(false)) {
+            if (mutation.isPartner(other)) {
+                combinations.add(mutation);
+            }
+        }
 
-		return combinations;
-	}
+        return combinations;
+    }
 
-	@Override
-	public List<M> getResultantMutations(IAllele other) {
-		IKaryotype karyotype = root.getKaryotype();
-		List<M> resultants = new ArrayList<>();
-		int speciesIndex = karyotype.getSpeciesType().getIndex();
-		for (M mutation : getMutations(false)) {
-			IAllele[] template = mutation.getTemplate();
-			if (template.length <= speciesIndex) {
-				continue;
-			}
-			IAllele speciesAllele = template[speciesIndex];
-			if (speciesAllele == other) {
-				resultants.add(mutation);
-			}
-		}
+    @Override
+    public List<M> getResultantMutations(IAllele other) {
+        IKaryotype karyotype = root.getKaryotype();
+        List<M> resultants = new ArrayList<>();
+        int speciesIndex = karyotype.getSpeciesType().getIndex();
+        for (M mutation : getMutations(false)) {
+            IAllele[] template = mutation.getTemplate();
+            if (template.length <= speciesIndex) {
+                continue;
+            }
+            IAllele speciesAllele = template[speciesIndex];
+            if (speciesAllele == other) {
+                resultants.add(mutation);
+            }
+        }
 
-		return resultants;
-	}
+        return resultants;
+    }
 
-	@Override
-	public List<M> getCombinations(IAlleleSpecies parentFirst, IAlleleSpecies parentSecond, boolean shuffle) {
-		List<M> combinations = new ArrayList<>();
+    @Override
+    public List<M> getCombinations(IAlleleSpecies parentFirst, IAlleleSpecies parentSecond, boolean shuffle) {
+        List<M> combinations = new ArrayList<>();
 
-		ResourceLocation parentSpecies = parentSecond.getRegistryName();
-		for (M mutation : getMutations(shuffle)) {
-			if (mutation.isPartner(parentFirst)) {
-				IAllele partner = mutation.getPartner(parentFirst);
-				if (partner.getRegistryName().equals(parentSpecies)) {
-					combinations.add(mutation);
-				}
-			}
-		}
+        ResourceLocation parentSpecies = parentSecond.getRegistryName();
+        for (M mutation : getMutations(shuffle)) {
+            if (mutation.isPartner(parentFirst)) {
+                IAllele partner = mutation.getPartner(parentFirst);
+                if (partner.getRegistryName().equals(parentSpecies)) {
+                    combinations.add(mutation);
+                }
+            }
+        }
 
-		return combinations;
-	}
+        return combinations;
+    }
 
-	@Override
-	public Collection<M> getPaths(IAllele result, IChromosomeType chromosomeType) {
-		ArrayList<M> paths = new ArrayList<>();
-		for (M mutation : getMutations(false)) {
-			IAllele[] template = mutation.getTemplate();
-			IAllele mutationResult = template[chromosomeType.getIndex()];
-			if (mutationResult == result) {
-				paths.add(mutation);
-			}
-		}
+    @Override
+    public Collection<M> getPaths(IAllele result, IChromosomeType chromosomeType) {
+        ArrayList<M> paths = new ArrayList<>();
+        for (M mutation : getMutations(false)) {
+            IAllele[] template = mutation.getTemplate();
+            IAllele mutationResult = template[chromosomeType.getIndex()];
+            if (mutationResult == result) {
+                paths.add(mutation);
+            }
+        }
 
-		return paths;
-	}
+        return paths;
+    }
 
-	@Override
-	public ComponentKey<IMutationContainer> getKey() {
-		return ComponentKeys.MUTATIONS;
-	}
+    @Override
+    public ComponentKey<IMutationContainer> getKey() {
+        return ComponentKeys.MUTATIONS;
+    }
 }

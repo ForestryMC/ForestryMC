@@ -17,54 +17,54 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ForestryModule {
 
-	/**
-	 * @return Unique identifier for the module, no spaces!
-	 */
-	String moduleID();
+    /**
+     * @return Unique identifier for the module, no spaces!
+     */
+    String moduleID();
 
-	/**
-	 * @return The unique identifier of the module container.
-	 */
-	String containerID();
+    /**
+     * @return The unique identifier of the module container.
+     */
+    String containerID();
 
-	/**
-	 * @return Nice and readable module name.
-	 */
-	String name();
+    /**
+     * @return Nice and readable module name.
+     */
+    String name();
 
-	/**
-	 * @return ForestryModule author's name.
-	 */
-	String author() default "";
+    /**
+     * @return ForestryModule author's name.
+     */
+    String author() default "";
 
-	/**
-	 * @return URL of plugin homepage.
-	 */
-	String url() default "";
+    /**
+     * @return URL of plugin homepage.
+     */
+    String url() default "";
 
-	/**
-	 * @return Not used (yet?).
-	 */
-	String help() default "";
+    /**
+     * @return Not used (yet?).
+     */
+    String help() default "";
 
-	/**
-	 * @return The name of the loot table file, if any.
-	 */
-	String lootTable() default "";
+    /**
+     * @return The name of the loot table file, if any.
+     */
+    String lootTable() default "";
 
-	/**
-	 * @return True if this is a core module.
-	 */
-	boolean coreModule() default false;
+    /**
+     * @return True if this is a core module.
+     */
+    boolean coreModule() default false;
 
-	/**
-	 * @return Version of the module, if any.
-	 */
-	String version() default "";
+    /**
+     * @return Version of the module, if any.
+     */
+    String version() default "";
 
-	/**
-	 * @return Localization key for a short description what the module does.
-	 */
-	String unlocalizedDescription() default "";
+    /**
+     * @return Localization key for a short description what the module does.
+     */
+    String unlocalizedDescription() default "";
 
 }

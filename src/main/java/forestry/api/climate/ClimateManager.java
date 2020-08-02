@@ -6,9 +6,9 @@
 package forestry.api.climate;
 
 public class ClimateManager {
-	public static IClimateRoot climateRoot;
+    public static IClimateRoot climateRoot;
 
-	public static IClimateFactory climateFactory;
+    public static IClimateFactory climateFactory;
 
-	public static IClimateStateHelper stateHelper;
+    public static IClimateStateHelper stateHelper;
 }

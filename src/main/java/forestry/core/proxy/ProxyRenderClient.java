@@ -40,52 +40,52 @@ import forestry.modules.IClientModuleHandler;
 @OnlyIn(Dist.CLIENT)
 public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
 
-	@Override
-	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getInstance().gameSettings.field_238330_f_ == GraphicsFanciness.FANCY;
-	}
+    @Override
+    public boolean fancyGraphicsEnabled() {
+        return Minecraft.getInstance().gameSettings.field_238330_f_ == GraphicsFanciness.FANCY;
+    }
 
-	@Override
-	public void initRendering() {
-		TextureManagerForestry textureManagerForestry = TextureManagerForestry.getInstance();
+    @Override
+    public void initRendering() {
+        TextureManagerForestry textureManagerForestry = TextureManagerForestry.getInstance();
 
-		Minecraft minecraft = Minecraft.getInstance();
-		//minecraft.getTextureManager().loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);// TODO: Gui atlas
-	}
+        Minecraft minecraft = Minecraft.getInstance();
+        //minecraft.getTextureManager().loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);// TODO: Gui atlas
+    }
 
-	@Override
-	public void setupClient(FMLClientSetupEvent event) {
-		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-	}
+    @Override
+    public void setupClient(FMLClientSetupEvent event) {
+        CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+    }
 
-	@Override
-	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(new RenderMachine(baseTexture));
-	}
+    @Override
+    public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
+        machineProperties.setRenderer(new RenderMachine(baseTexture));
+    }
 
-	@Override
-	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(new RenderMill(baseTexture));
-	}
+    @Override
+    public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
+        machineProperties.setRenderer(new RenderMill(baseTexture));
+    }
 
-	@Override
-	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
-		machineProperties.setRenderer(new RenderEscritoire());
-	}
+    @Override
+    public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
+        machineProperties.setRenderer(new RenderEscritoire());
+    }
 
-	@Override
-	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
-		RenderAnalyzer renderAnalyzer = new RenderAnalyzer();
-		machineProperties.setRenderer(renderAnalyzer);
-	}
+    @Override
+    public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
+        RenderAnalyzer renderAnalyzer = new RenderAnalyzer();
+        machineProperties.setRenderer(renderAnalyzer);
+    }
 
-	@Override
-	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
-		machineProperties.setRenderer(new RenderNaturalistChest(textureName));
-	}
+    @Override
+    public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
+        machineProperties.setRenderer(new RenderNaturalistChest(textureName));
+    }
 
-	@Override
-	public void registerItemAndBlockColors() {
-		ClientManager.getInstance().registerItemAndBlockColors();
-	}
+    @Override
+    public void registerItemAndBlockColors() {
+        ClientManager.getInstance().registerItemAndBlockColors();
+    }
 }

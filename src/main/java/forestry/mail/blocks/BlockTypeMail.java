@@ -20,25 +20,25 @@ import forestry.mail.features.MailTiles;
 import forestry.modules.features.FeatureTileType;
 
 public enum BlockTypeMail implements IBlockType {
-	MAILBOX(() -> MailTiles.MAILBOX, "mailbox"),
-	TRADE_STATION(() -> MailTiles.TRADER, "trade_station"),
-	PHILATELIST(() -> MailTiles.STAMP_COLLECTOR, "stamp_collector");
+    MAILBOX(() -> MailTiles.MAILBOX, "mailbox"),
+    TRADE_STATION(() -> MailTiles.TRADER, "trade_station"),
+    PHILATELIST(() -> MailTiles.STAMP_COLLECTOR, "stamp_collector");
 
-	public static final BlockTypeMail[] VALUES = values();
+    public static final BlockTypeMail[] VALUES = values();
 
-	private final IMachineProperties machineProperties;
+    private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeMail(Supplier<FeatureTileType<? extends T>> teClass, String name) {
-		this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
-	}
+    <T extends TileForestry> BlockTypeMail(Supplier<FeatureTileType<? extends T>> teClass, String name) {
+        this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
+    }
 
-	@Override
-	public IMachineProperties getMachineProperties() {
-		return machineProperties;
-	}
+    @Override
+    public IMachineProperties getMachineProperties() {
+        return machineProperties;
+    }
 
-	@Override
-	public String getString() {
-		return getMachineProperties().getString();
-	}
+    @Override
+    public String getString() {
+        return getMachineProperties().getString();
+    }
 }

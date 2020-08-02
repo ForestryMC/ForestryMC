@@ -17,10 +17,10 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public class TemplateNotFoundException extends CommandException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public TemplateNotFoundException(IAlleleForestrySpecies species) {
-		super(new TranslationTextComponent("Could not find template for species %s with UID %s", species.getDisplayName().getString(), species.getRegistryName().toString()));
-	}
+    public TemplateNotFoundException(IAlleleForestrySpecies species) {
+        super(new TranslationTextComponent("Could not find template for species %s with UID %s", species.getDisplayName().getString(), species.getRegistryName().toString()));
+    }
 
 }

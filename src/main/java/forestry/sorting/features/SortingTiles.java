@@ -9,7 +9,7 @@ import forestry.sorting.tiles.TileGeneticFilter;
 
 @FeatureProvider
 public class SortingTiles {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleSorting.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleSorting.class);
 
-	public static final FeatureTileType<TileGeneticFilter> GENETIC_FILTER = REGISTRY.tile(TileGeneticFilter::new, "genetic_filter", SortingBlocks.FILTER::collect);
+    public static final FeatureTileType<TileGeneticFilter> GENETIC_FILTER = REGISTRY.tile(TileGeneticFilter::new, "genetic_filter", SortingBlocks.FILTER::collect);
 }

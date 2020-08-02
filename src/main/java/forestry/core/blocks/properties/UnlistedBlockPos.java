@@ -16,9 +16,9 @@ import net.minecraftforge.client.model.data.ModelProperty;
 
 //TODO - I thimmk this is right
 public final class UnlistedBlockPos extends ModelProperty<BlockPos> {
-	public static final UnlistedBlockPos POS = new UnlistedBlockPos();
+    public static final UnlistedBlockPos POS = new UnlistedBlockPos();
 
-	public UnlistedBlockPos() {
-		super();
-	}
+    public UnlistedBlockPos() {
+        super();
+    }
 }

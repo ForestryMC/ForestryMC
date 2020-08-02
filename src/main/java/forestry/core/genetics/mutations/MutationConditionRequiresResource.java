@@ -35,42 +35,42 @@ import forestry.core.tiles.TileUtil;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
-	private final Set<BlockState> acceptedBlockStates = new HashSet<>();
-	private final String displayName;
+    private final Set<BlockState> acceptedBlockStates = new HashSet<>();
+    private final String displayName;
 
-	public MutationConditionRequiresResource(String oreDictName) {
-		this.displayName = oreDictName;
-		for (ItemStack ore : new ItemStack[0]) {//TODO oredictionary OreDictionary.getOres(oreDictName)) {
-			if (!ore.isEmpty()) {
-				Item oreItem = ore.getItem();
-				Block oreBlock = Block.getBlockFromItem(oreItem);
-				//TODO - tag or state, Blocks,AIR doesn't cover everything any more
-				if (oreBlock != Blocks.AIR) {
-					this.acceptedBlockStates.addAll(oreBlock.getStateContainer().getValidStates());
-				}
-			}
-		}
-	}
+    public MutationConditionRequiresResource(String oreDictName) {
+        this.displayName = oreDictName;
+        for (ItemStack ore : new ItemStack[0]) {//TODO oredictionary OreDictionary.getOres(oreDictName)) {
+            if (!ore.isEmpty()) {
+                Item oreItem = ore.getItem();
+                Block oreBlock = Block.getBlockFromItem(oreItem);
+                //TODO - tag or state, Blocks,AIR doesn't cover everything any more
+                if (oreBlock != Blocks.AIR) {
+                    this.acceptedBlockStates.addAll(oreBlock.getStateContainer().getValidStates());
+                }
+            }
+        }
+    }
 
-	public MutationConditionRequiresResource(BlockState... acceptedBlockStates) {
-		Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
-		this.displayName = acceptedBlockStates[0].getBlock().getRegistryName().toString();    //TODO translation
-	}
+    public MutationConditionRequiresResource(BlockState... acceptedBlockStates) {
+        Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
+        this.displayName = acceptedBlockStates[0].getBlock().getRegistryName().toString();    //TODO translation
+    }
 
-	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		TileEntity tile;
-		do {
-			pos = pos.down();
-			tile = TileUtil.getTile(world, pos);
-		} while (tile instanceof IBeeHousing);
+    @Override
+    public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+        TileEntity tile;
+        do {
+            pos = pos.down();
+            tile = TileUtil.getTile(world, pos);
+        } while (tile instanceof IBeeHousing);
 
-		BlockState blockState = world.getBlockState(pos);
-		return this.acceptedBlockStates.contains(blockState) ? 1 : 0;
-	}
+        BlockState blockState = world.getBlockState(pos);
+        return this.acceptedBlockStates.contains(blockState) ? 1 : 0;
+    }
 
-	@Override
-	public ITextComponent getDescription() {
-		return new TranslationTextComponent("for.mutation.condition.resource", displayName);
-	}
+    @Override
+    public ITextComponent getDescription() {
+        return new TranslationTextComponent("for.mutation.condition.resource", displayName);
+    }
 }

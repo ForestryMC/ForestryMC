@@ -8,6 +8,6 @@ package forestry.api.apiculture.genetics;
 import forestry.api.genetics.IMutationBuilder;
 
 public interface IBeeMutationBuilder extends IMutationBuilder {
-	@Override
-	IBeeMutation build();
+    @Override
+    IBeeMutation build();
 }

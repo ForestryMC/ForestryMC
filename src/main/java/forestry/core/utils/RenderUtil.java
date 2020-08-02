@@ -12,10 +12,10 @@ import net.minecraftforge.fml.DistExecutor;
  */
 public class RenderUtil {
 
-	private RenderUtil() {
-	}
+    private RenderUtil() {
+    }
 
-	public static void markForUpdate(BlockPos pos) {
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ()));
-	}
+    public static void markForUpdate(BlockPos pos) {
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ()));
+    }
 }

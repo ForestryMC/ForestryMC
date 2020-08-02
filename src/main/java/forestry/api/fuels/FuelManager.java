@@ -11,29 +11,29 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
 public class FuelManager {
-	/**
-	 * Add new fuels for the fermenter here (i.e. fertilizer).
-	 */
-	public static Map<ItemStack, FermenterFuel> fermenterFuel;
-	/**
-	 * Add new resources for the moistener here (i.e. wheat)
-	 */
-	public static Map<ItemStack, MoistenerFuel> moistenerResource;
-	/**
-	 * Add new substrates for the rainmaker here
-	 */
-	public static Map<ItemStack, RainSubstrate> rainSubstrate;
-	/**
-	 * Add new fuels for EngineBronze (= biogas engine) here
-	 */
-	public static Map<Fluid, EngineBronzeFuel> bronzeEngineFuel;
-	/**
-	 * Add new fuels for EngineCopper (= peat-fired engine) here
-	 */
-	public static Map<ItemStack, EngineCopperFuel> copperEngineFuel;
-	/**
-	 * Add new fuels for Generator here
-	 */
-	public static Map<Fluid, GeneratorFuel> generatorFuel;
+    /**
+     * Add new fuels for the fermenter here (i.e. fertilizer).
+     */
+    public static Map<ItemStack, FermenterFuel> fermenterFuel;
+    /**
+     * Add new resources for the moistener here (i.e. wheat)
+     */
+    public static Map<ItemStack, MoistenerFuel> moistenerResource;
+    /**
+     * Add new substrates for the rainmaker here
+     */
+    public static Map<ItemStack, RainSubstrate> rainSubstrate;
+    /**
+     * Add new fuels for EngineBronze (= biogas engine) here
+     */
+    public static Map<Fluid, EngineBronzeFuel> bronzeEngineFuel;
+    /**
+     * Add new fuels for EngineCopper (= peat-fired engine) here
+     */
+    public static Map<ItemStack, EngineCopperFuel> copperEngineFuel;
+    /**
+     * Add new fuels for Generator here
+     */
+    public static Map<Fluid, GeneratorFuel> generatorFuel;
 
 }

@@ -23,29 +23,29 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
-	private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
+    private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
 
-	public AlleleEffectAggressive() {
-		super("aggressive", true, 40, false, false);
-	}
+    public AlleleEffectAggressive() {
+        super("aggressive", true, 40, false, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
-		for (LivingEntity entity : entities) {
-			int damage = 4;
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
+        for (LivingEntity entity : entities) {
+            int damage = 4;
 
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
-			damage -= count;
-			if (damage <= 0) {
-				continue;
-			}
+            // Entities are not attacked if they wear a full set of apiarist's armor.
+            int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
+            damage -= count;
+            if (damage <= 0) {
+                continue;
+            }
 
-			entity.attackEntityFrom(damageSourceBeeAggressive, damage);
-		}
+            entity.attackEntityFrom(damageSourceBeeAggressive, damage);
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
 }

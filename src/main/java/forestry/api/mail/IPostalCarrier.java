@@ -23,33 +23,33 @@ import forestry.api.core.ITextureManager;
  */
 public interface IPostalCarrier {
 
-	/**
-	 * @return An EnumAddressee identifying the type of carrier
-	 */
-	EnumAddressee getType();
+    /**
+     * @return An EnumAddressee identifying the type of carrier
+     */
+    EnumAddressee getType();
 
-	/**
-	 * @return A human-readable name for this carrier.
-	 */
-	String getName();
+    /**
+     * @return A human-readable name for this carrier.
+     */
+    String getName();
 
-	/**
-	 * Sprite registered to the Gui Texture Map at {@link ITextureManager}.
-	 * Must be 26 pixels wide and 15 pixels tall. The texture itself must be 32x32 square.
-	 */
-	@OnlyIn(Dist.CLIENT)
-	TextureAtlasSprite getSprite();
+    /**
+     * Sprite registered to the Gui Texture Map at {@link ITextureManager}.
+     * Must be 26 pixels wide and 15 pixels tall. The texture itself must be 32x32 square.
+     */
+    @OnlyIn(Dist.CLIENT)
+    TextureAtlasSprite getSprite();
 
-	/**
-	 * Handle delivery of a letter addressed to this carrier.
-	 *
-	 * @param world       The world the {@link IPostOffice} handles.
-	 * @param office      {link @IPostOffice} which received this letter and handed it to the carrier.
-	 * @param recipient   An identifier for the recipient as typed by the player into the address field.
-	 * @param letterstack ItemStack representing the letter. See {@link IPostRegistry} for helper functions to validate and extract it.
-	 * @param doDeliver   Whether or not the letter is supposed to actually be delivered or if delivery is only to be simulated.
-	 * @return {link IPostalState} holding information on success or failure for delivery.
-	 */
-	IPostalState deliverLetter(ServerWorld world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);
+    /**
+     * Handle delivery of a letter addressed to this carrier.
+     *
+     * @param world       The world the {@link IPostOffice} handles.
+     * @param office      {link @IPostOffice} which received this letter and handed it to the carrier.
+     * @param recipient   An identifier for the recipient as typed by the player into the address field.
+     * @param letterstack ItemStack representing the letter. See {@link IPostRegistry} for helper functions to validate and extract it.
+     * @param doDeliver   Whether or not the letter is supposed to actually be delivered or if delivery is only to be simulated.
+     * @return {link IPostalState} holding information on success or failure for delivery.
+     */
+    IPostalState deliverLetter(ServerWorld world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);
 
 }

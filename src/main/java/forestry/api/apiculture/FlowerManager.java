@@ -8,19 +8,19 @@ package forestry.api.apiculture;
 import forestry.api.genetics.flowers.IFlowerRegistry;
 
 public class FlowerManager {
-	/**
-	 * <blockquote><pre>e.g. FlowerManager.flowerRegister.registerPlantableFlower(new ItemStack(Blocks.RED_FLOWER), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);</pre></blockquote>
-	 */
-	public static IFlowerRegistry flowerRegistry;
+    /**
+     * <blockquote><pre>e.g. FlowerManager.flowerRegister.registerPlantableFlower(new ItemStack(Blocks.RED_FLOWER), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);</pre></blockquote>
+     */
+    public static IFlowerRegistry flowerRegistry;
 
-	public static final String FlowerTypeVanilla = "flowersVanilla";
-	public static final String FlowerTypeNether = "flowersNether";
-	public static final String FlowerTypeCacti = "flowersCacti";
-	public static final String FlowerTypeMushrooms = "flowersMushrooms";
-	public static final String FlowerTypeEnd = "flowersEnd";
-	public static final String FlowerTypeJungle = "flowersJungle";
-	public static final String FlowerTypeSnow = "flowersSnow";
-	public static final String FlowerTypeWheat = "flowersWheat";
-	public static final String FlowerTypeGourd = "flowersGourd";
+    public static final String FlowerTypeVanilla = "flowersVanilla";
+    public static final String FlowerTypeNether = "flowersNether";
+    public static final String FlowerTypeCacti = "flowersCacti";
+    public static final String FlowerTypeMushrooms = "flowersMushrooms";
+    public static final String FlowerTypeEnd = "flowersEnd";
+    public static final String FlowerTypeJungle = "flowersJungle";
+    public static final String FlowerTypeSnow = "flowersSnow";
+    public static final String FlowerTypeWheat = "flowersWheat";
+    public static final String FlowerTypeGourd = "flowersGourd";
 
 }

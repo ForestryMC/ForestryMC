@@ -6,24 +6,24 @@
 package forestry.api.circuits;
 
 public enum CircuitSocketType implements ICircuitSocketType {
-	NONE("none"),
-	FARM("forestry.farm"),
-	ELECTRIC_ENGINE("forestry.electric.engine"),
-	MACHINE("forestry.machine");
+    NONE("none"),
+    FARM("forestry.farm"),
+    ELECTRIC_ENGINE("forestry.electric.engine"),
+    MACHINE("forestry.machine");
 
-	private final String uid;
+    private final String uid;
 
-	CircuitSocketType(String uid) {
-		this.uid = uid;
-	}
+    CircuitSocketType(String uid) {
+        this.uid = uid;
+    }
 
-	@Override
-	public String getUid() {
-		return uid;
-	}
+    @Override
+    public String getUid() {
+        return uid;
+    }
 
-	@Override
-	public boolean equals(ICircuitSocketType socketType) {
-		return uid.equals(socketType.getUid());
-	}
+    @Override
+    public boolean equals(ICircuitSocketType socketType) {
+        return uid.equals(socketType.getUid());
+    }
 }

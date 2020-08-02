@@ -19,20 +19,20 @@ import forestry.api.genetics.flowers.IFlowerProvider;
 
 public class AlleleFlowers<P extends IFlowerProvider> extends AlleleCategorizedValue<P> implements IAlleleFlowers {
 
-	private final IFlowerProvider provider;
+    private final IFlowerProvider provider;
 
-	public AlleleFlowers(String modId, String category, String name, P provider, boolean isDominant) {
-		super(modId, category, name, provider, isDominant);
-		this.provider = provider;
-	}
+    public AlleleFlowers(String modId, String category, String name, P provider, boolean isDominant) {
+        super(modId, category, name, provider, isDominant);
+        this.provider = provider;
+    }
 
-	@Override
-	public IFlowerProvider getProvider() {
-		return provider;
-	}
+    @Override
+    public IFlowerProvider getProvider() {
+        return provider;
+    }
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return getProvider().getDescription();
-	}
+    @Override
+    public ITextComponent getDisplayName() {
+        return getProvider().getDescription();
+    }
 }

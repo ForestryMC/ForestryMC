@@ -22,32 +22,32 @@ import forestry.modules.ISidedModuleHandler;
 
 public class ProxyRender implements ISidedModuleHandler {
 
-	public boolean fancyGraphicsEnabled() {
-		return false;
-	}
+    public boolean fancyGraphicsEnabled() {
+        return false;
+    }
 
-	public void initRendering() {
-	}
+    public void initRendering() {
+    }
 
-	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
-	}
+    public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
+    }
 
-	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
-	}
+    public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
+    }
 
-	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
-	}
+    public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
+    }
 
-	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
-	}
+    public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
+    }
 
-	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
-	}
+    public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
+    }
 
-	public void registerModels(ModelBakeEvent event) {
-	}
+    public void registerModels(ModelBakeEvent event) {
+    }
 
-	public void registerItemAndBlockColors() {
-	}
+    public void registerItemAndBlockColors() {
+    }
 
 }

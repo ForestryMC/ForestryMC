@@ -23,11 +23,11 @@ import forestry.api.arboriculture.genetics.ITreeMutationFactory;
 
 public class TreeMutationFactory implements ITreeMutationFactory {
 
-	@Override
-	public ITreeMutationBuilder createMutation(IAlleleTreeSpecies parent0, IAlleleTreeSpecies parent1, IAllele[] result, int chance) {
-		TreeMutation treeMutation = new TreeMutation(parent0, parent1, result, chance);
-		IMutationContainer<IBee, IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
-		container.registerMutation(treeMutation);
-		return treeMutation;
-	}
+    @Override
+    public ITreeMutationBuilder createMutation(IAlleleTreeSpecies parent0, IAlleleTreeSpecies parent1, IAllele[] result, int chance) {
+        TreeMutation treeMutation = new TreeMutation(parent0, parent1, result, chance);
+        IMutationContainer<IBee, IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
+        container.registerMutation(treeMutation);
+        return treeMutation;
+    }
 }

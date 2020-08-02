@@ -24,56 +24,56 @@ import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableStacked implements IFarmable {
-	protected final ItemStack germling;
-	protected final Block cropBlock;
-	protected final int matureHeight;
-	protected final ItemStack fruit;
+    protected final ItemStack germling;
+    protected final Block cropBlock;
+    protected final int matureHeight;
+    protected final ItemStack fruit;
 
-	public FarmableStacked(ItemStack germling, Block cropBlock, int matureHeight) {
-		this(germling, germling, cropBlock, matureHeight);
-	}
+    public FarmableStacked(ItemStack germling, Block cropBlock, int matureHeight) {
+        this(germling, germling, cropBlock, matureHeight);
+    }
 
-	public FarmableStacked(ItemStack germling, ItemStack fruit, Block cropBlock, int matureHeight) {
-		this.germling = germling;
-		this.fruit = fruit;
-		this.cropBlock = cropBlock;
-		this.matureHeight = matureHeight;
-	}
+    public FarmableStacked(ItemStack germling, ItemStack fruit, Block cropBlock, int matureHeight) {
+        this.germling = germling;
+        this.fruit = fruit;
+        this.cropBlock = cropBlock;
+        this.matureHeight = matureHeight;
+    }
 
-	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
-		return blockState.getBlock() == cropBlock;
-	}
+    @Override
+    public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
+        return blockState.getBlock() == cropBlock;
+    }
 
-	@Override
-	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-		BlockPos cropPos = pos.add(0, matureHeight - 1, 0);
-		blockState = world.getBlockState(cropPos);
-		if (blockState.getBlock() != cropBlock) {
-			return null;
-		}
+    @Override
+    public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
+        BlockPos cropPos = pos.add(0, matureHeight - 1, 0);
+        blockState = world.getBlockState(cropPos);
+        if (blockState.getBlock() != cropBlock) {
+            return null;
+        }
 
-		return new CropDestroy(world, blockState, cropPos, null);
-	}
+        return new CropDestroy(world, blockState, cropPos, null);
+    }
 
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
-		return ItemStack.areItemsEqual(germling, itemstack);
-	}
+    @Override
+    public boolean isGermling(ItemStack itemstack) {
+        return ItemStack.areItemsEqual(germling, itemstack);
+    }
 
-	@Override
-	public void addInformation(IFarmableInfo info) {
-		info.addSeedlings(germling);
-		info.addProducts(fruit);
-	}
+    @Override
+    public void addInformation(IFarmableInfo info) {
+        info.addSeedlings(germling);
+        info.addProducts(fruit);
+    }
 
-	@Override
-	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		return BlockUtil.setBlockWithPlaceSound(world, pos, cropBlock.getDefaultState());
-	}
+    @Override
+    public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+        return BlockUtil.setBlockWithPlaceSound(world, pos, cropBlock.getDefaultState());
+    }
 
-	@Override
-	public boolean isWindfall(ItemStack itemstack) {
-		return false;
-	}
+    @Override
+    public boolean isWindfall(ItemStack itemstack) {
+        return false;
+    }
 }

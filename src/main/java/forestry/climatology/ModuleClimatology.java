@@ -39,50 +39,50 @@ import forestry.modules.ModuleHelper;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CLIMATOLOGY, name = "Climatology", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")
 public class ModuleClimatology extends BlankForestryModule {
 
-	@SuppressWarnings("NullableProblems")
-	public static ProxyClimatology proxy;
+    @SuppressWarnings("NullableProblems")
+    public static ProxyClimatology proxy;
 
-	public ModuleClimatology() {
-		proxy = DistExecutor.runForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);
-	}
+    public ModuleClimatology() {
+        proxy = DistExecutor.runForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerGuiFactories() {
-		ScreenManager.registerFactory(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerGuiFactories() {
+        ScreenManager.registerFactory(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
+    }
 
-	@Override
-	public void preInit() {
-		proxy.preInit();
+    @Override
+    public void preInit() {
+        proxy.preInit();
 
-		// Capabilities
-		CapabilityManager.INSTANCE.register(IClimateListener.class, new NullStorage<>(), () -> FakeClimateListener.INSTANCE);
-		CapabilityManager.INSTANCE.register(IClimateTransformer.class, new NullStorage<>(), () -> FakeClimateTransformer.INSTANCE);
-	}
+        // Capabilities
+        CapabilityManager.INSTANCE.register(IClimateListener.class, new NullStorage<>(), () -> FakeClimateListener.INSTANCE);
+        CapabilityManager.INSTANCE.register(IClimateTransformer.class, new NullStorage<>(), () -> FakeClimateTransformer.INSTANCE);
+    }
 
-	@Override
-	public void registerRecipes() {
+    @Override
+    public void registerRecipes() {
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-			//						RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, ClimatologyItems.HABITAT_SCREEN.stack(),
-			//							"IPI",
-			//							"IPI",
-			//							"GDG",
-			//							'G', Tags.Items.GEAR_BRONZE,
-			//							'P', OreDictUtil.PANE_GLASS,
-			//							'I', OreDictUtil.INGOT_BRONZE,
-			//							'D', OreDictUtil.GEM_DIAMOND);	//TODO recipes
-		}
-	}
+        if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
+            //						RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, ClimatologyItems.HABITAT_SCREEN.stack(),
+            //							"IPI",
+            //							"IPI",
+            //							"GDG",
+            //							'G', Tags.Items.GEAR_BRONZE,
+            //							'P', OreDictUtil.PANE_GLASS,
+            //							'I', OreDictUtil.INGOT_BRONZE,
+            //							'D', OreDictUtil.GEM_DIAMOND);	//TODO recipes
+        }
+    }
 
-	@Override
-	public IPacketRegistry getPacketRegistry() {
-		return new PacketRegistryClimatology();
-	}
+    @Override
+    public IPacketRegistry getPacketRegistry() {
+        return new PacketRegistryClimatology();
+    }
 
-	@Override
-	public ISidedModuleHandler getModuleHandler() {
-		return proxy;
-	}
+    @Override
+    public ISidedModuleHandler getModuleHandler() {
+        return proxy;
+    }
 }

@@ -26,290 +26,294 @@ import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
 public interface IGuiElement {
-	/* Position and Size*/
-	/**
-	 * @return the x position of this element relative to the position of its parent.
-	 */
-	int getX();
+    /* Position and Size*/
 
-	/**
-	 * @return the y position of this element relative to the position of its parent.
-	 */
-	int getY();
+    /**
+     * @return the x position of this element relative to the position of its parent.
+     */
+    int getX();
 
-	/**
-	 * @return the x position of this element relative to the gui.
-	 */
-	int getAbsoluteX();
+    /**
+     * @return the y position of this element relative to the position of its parent.
+     */
+    int getY();
 
-	/**
-	 * @return the y position of this element relative to the gui.
-	 */
-	int getAbsoluteY();
+    /**
+     * @return the x position of this element relative to the gui.
+     */
+    int getAbsoluteX();
 
-	/**
-	 * @return the size of the element on the x-axis.
-	 */
-	int getWidth();
+    /**
+     * @return the y position of this element relative to the gui.
+     */
+    int getAbsoluteY();
 
-	void setWidth(int width);
+    /**
+     * @return the size of the element on the x-axis.
+     */
+    int getWidth();
 
-	/**
-	 * @return the size of the element on the y-axis.
-	 */
-	int getHeight();
+    void setWidth(int width);
 
-	void setHeight(int height);
+    /**
+     * @return the size of the element on the y-axis.
+     */
+    int getHeight();
 
-	IGuiElement setOffset(int xOffset, int yOffset);
+    void setHeight(int height);
 
-	/**
-	 * Sets the x position of this element relative to the position of its parent.
-	 */
-	IGuiElement setXPosition(int xPos);
+    IGuiElement setOffset(int xOffset, int yOffset);
 
-	/**
-	 * Sets the y position of this element relative to the position of its parent.
-	 */
-	IGuiElement setYPosition(int yPos);
+    /**
+     * Sets the x position of this element relative to the position of its parent.
+     */
+    IGuiElement setXPosition(int xPos);
 
-	/**
-	 * The alignment of the {@link IGuiElement} defines the position of the element relative to the position of its
-	 * parent.
-	 */
-	GuiElementAlignment getAlign();
+    /**
+     * Sets the y position of this element relative to the position of its parent.
+     */
+    IGuiElement setYPosition(int yPos);
 
-	/**
-	 * Sets the alignment of this element.
-	 */
-	IGuiElement setAlign(GuiElementAlignment align);
+    /**
+     * The alignment of the {@link IGuiElement} defines the position of the element relative to the position of its
+     * parent.
+     */
+    GuiElementAlignment getAlign();
 
-	/**
-	 * The root of the containment hierarchy that this element is part of.
-	 */
-	IWindowElement getWindow();
+    /**
+     * Sets the alignment of this element.
+     */
+    IGuiElement setAlign(GuiElementAlignment align);
 
-	/**
-	 * Sets the dimensions of this element.
-	 *
-	 * @param width  the size of the element on the x-axis.
-	 * @param height the size of the element on the y-axis.
-	 */
-	IGuiElement setSize(int width, int height);
+    /**
+     * The root of the containment hierarchy that this element is part of.
+     */
+    IWindowElement getWindow();
 
-	/**
-	 * Sets the position of this element.
-	 *
-	 * @param xPos the x position of this element relative to the position of its parent.
-	 * @param yPos the y position of this element relative to the position of its parent.
-	 */
-	IGuiElement setLocation(int xPos, int yPos);
+    /**
+     * Sets the dimensions of this element.
+     *
+     * @param width  the size of the element on the x-axis.
+     * @param height the size of the element on the y-axis.
+     */
+    IGuiElement setSize(int width, int height);
 
-	/**
-	 * Sets the dimensions and position of this element.
-	 *
-	 * @param xPos   the x position of this element relative to the position of its parent.
-	 * @param yPos   the y position of this element relative to the position of its parent.
-	 * @param width  the size of the element on the x-axis.
-	 * @param height the size of the element on the y-axis.
-	 */
-	IGuiElement setBounds(int xPos, int yPos, int width, int height);
+    /**
+     * Sets the position of this element.
+     *
+     * @param xPos the x position of this element relative to the position of its parent.
+     * @param yPos the y position of this element relative to the position of its parent.
+     */
+    IGuiElement setLocation(int xPos, int yPos);
 
-	/* Parent */
+    /**
+     * Sets the dimensions and position of this element.
+     *
+     * @param xPos   the x position of this element relative to the position of its parent.
+     * @param yPos   the y position of this element relative to the position of its parent.
+     * @param width  the size of the element on the x-axis.
+     * @param height the size of the element on the y-axis.
+     */
+    IGuiElement setBounds(int xPos, int yPos, int width, int height);
 
-	/**
-	 * The position of this element is relative to the position of its parent.
-	 *
-	 * @return the parent element of this element.
-	 */
-	@Nullable
-	IGuiElement getParent();
+    /* Parent */
 
-	/**
-	 * Sets the parent of this element.
-	 */
-	IGuiElement setParent(@Nullable IGuiElement parent);
+    /**
+     * The position of this element is relative to the position of its parent.
+     *
+     * @return the parent element of this element.
+     */
+    @Nullable
+    IGuiElement getParent();
 
-	/* Creation & Deletion */
+    /**
+     * Sets the parent of this element.
+     */
+    IGuiElement setParent(@Nullable IGuiElement parent);
 
-	/**
-	 * Called at {@link IElementGroup#add(IGuiElement)} after the element was added to the group and
-	 * {@link #setParent(IGuiElement)} was called at the element.
-	 * <p>
-	 * Can be used to add other element to the element if the element is an {@link IElementGroup}.
-	 */
-	void onCreation();
+    /* Creation & Deletion */
 
-	/**
-	 * Called at {@link IElementGroup#remove(IGuiElement...)} after the element was removed from the group.
-	 */
-	void onDeletion();
+    /**
+     * Called at {@link IElementGroup#add(IGuiElement)} after the element was added to the group and
+     * {@link #setParent(IGuiElement)} was called at the element.
+     * <p>
+     * Can be used to add other element to the element if the element is an {@link IElementGroup}.
+     */
+    void onCreation();
 
-	/* Rendering */
+    /**
+     * Called at {@link IElementGroup#remove(IGuiElement...)} after the element was removed from the group.
+     */
+    void onDeletion();
 
-	/**
-	 * Draws the element and his children.
-	 *
-	 * @param transform
-	 * @param mouseY    The y position of the mouse relative to the parent of the element.
-	 * @param mouseX    The x position of the mouse relative to the parent of the element.
-	 */
-	void draw(MatrixStack transform, int mouseY, int mouseX);
+    /* Rendering */
 
-	/**
-	 * Draws the element itself at the current position.
-	 *
-	 * @param transform
-	 * @param mouseY    The y position of the mouse relative to the parent of the element.
-	 * @param mouseX    The x position of the mouse relative to the parent of the element.
-	 */
-	void drawElement(MatrixStack transform, int mouseY, int mouseX);
+    /**
+     * Draws the element and his children.
+     *
+     * @param transform
+     * @param mouseY    The y position of the mouse relative to the parent of the element.
+     * @param mouseX    The x position of the mouse relative to the parent of the element.
+     */
+    void draw(MatrixStack transform, int mouseY, int mouseX);
 
-	/* Mouse Over */
+    /**
+     * Draws the element itself at the current position.
+     *
+     * @param transform
+     * @param mouseY    The y position of the mouse relative to the parent of the element.
+     * @param mouseX    The x position of the mouse relative to the parent of the element.
+     */
+    void drawElement(MatrixStack transform, int mouseY, int mouseX);
 
-	/**
-	 * @param mouseX The x position of the mouse relative to the parent of the element.
-	 * @param mouseY The y position of the mouse relative to the parent of the element.
-	 * @return True if the mouse is currently over the element.
-	 */
-	boolean isMouseOver(double mouseX, double mouseY);
+    /* Mouse Over */
 
-	/**
-	 * @return True if the mouse is currently over the element.
-	 */
-	boolean isMouseOver();
+    /**
+     * @param mouseX The x position of the mouse relative to the parent of the element.
+     * @param mouseY The y position of the mouse relative to the parent of the element.
+     * @return True if the mouse is currently over the element.
+     */
+    boolean isMouseOver(double mouseX, double mouseY);
 
-	default boolean canMouseOver() {
-		return hasTooltip();
-	}
+    /**
+     * @return True if the mouse is currently over the element.
+     */
+    boolean isMouseOver();
 
-	/* Updates */
+    default boolean canMouseOver() {
+        return hasTooltip();
+    }
 
-	/**
-	 * Updates the element. Called at {@link Screen#tick()}.
-	 */
-	@OnlyIn(Dist.CLIENT)
-	void updateClient();
+    /* Updates */
 
-	/* State */
+    /**
+     * Updates the element. Called at {@link Screen#tick()}.
+     */
+    @OnlyIn(Dist.CLIENT)
+    void updateClient();
 
-	/**
-	 * @return True if this element can be focused and processes keys.
-	 */
-	default boolean canFocus() {
-		return false;
-	}
+    /* State */
 
-	/**
-	 * The element can be hided with {@link #hide()} and be made visible again with {@link #show()}.
-	 *
-	 * @return True of this element is currently visible.
-	 */
-	boolean isVisible();
+    /**
+     * @return True if this element can be focused and processes keys.
+     */
+    default boolean canFocus() {
+        return false;
+    }
 
-	/**
-	 * Makes this element visible again.
-	 */
-	void show();
+    /**
+     * The element can be hided with {@link #hide()} and be made visible again with {@link #show()}.
+     *
+     * @return True of this element is currently visible.
+     */
+    boolean isVisible();
 
-	/**
-	 * Hides this element.
-	 */
-	void hide();
+    /**
+     * Makes this element visible again.
+     */
+    void show();
 
-	/**
-	 * The most elements are enabled by default. Only a few elements are disabled at a certain time like buttons.
-	 *
-	 * @return True if this element is enabled.
-	 */
-	boolean isEnabled();
+    /**
+     * Hides this element.
+     */
+    void hide();
 
-	/* Tooltip */
+    /**
+     * The most elements are enabled by default. Only a few elements are disabled at a certain time like buttons.
+     *
+     * @return True if this element is enabled.
+     */
+    boolean isEnabled();
 
-	/**
-	 * Adds an additional tooltip to the current tooltip of the element.
-	 * @param line
-	 */
-	IGuiElement addTooltip(ITextComponent line);
+    /* Tooltip */
 
-	/**
-	 * Adds an additional tooltip to the current tooltip of the element.
-	 * @param lines
-	 */
-	IGuiElement addTooltip(Collection<ITextComponent> lines);
+    /**
+     * Adds an additional tooltip to the current tooltip of the element.
+     *
+     * @param line
+     */
+    IGuiElement addTooltip(ITextComponent line);
 
-	IGuiElement addTooltip(ITooltipSupplier supplier);
+    /**
+     * Adds an additional tooltip to the current tooltip of the element.
+     *
+     * @param lines
+     */
+    IGuiElement addTooltip(Collection<ITextComponent> lines);
 
-	/**
-	 * @return True if this element currently has a tooltip.
-	 */
-	boolean hasTooltip();
+    IGuiElement addTooltip(ITooltipSupplier supplier);
 
-	/**
-	 * Clears the tooltips that were added with {@link #addTooltip(ITextComponent)} and {@link #addTooltip(Collection)}.
-	 * It does not remove default tooltips of an element like the fluid information of a tank or the item information
-	 * of an slot element.
-	 */
-	void clearTooltip();
+    /**
+     * @return True if this element currently has a tooltip.
+     */
+    boolean hasTooltip();
 
-	/**
-	 * Returns the tooltip that this element provides at the given mouse position.
-	 *  @param mouseX The x position of the mouse relative to the parent of the element.
-	 * @param mouseY The y position of the mouse relative to the parent of the element.
-	 * @return
-	 */
-	ToolTip getTooltip(int mouseX, int mouseY);
+    /**
+     * Clears the tooltips that were added with {@link #addTooltip(ITextComponent)} and {@link #addTooltip(Collection)}.
+     * It does not remove default tooltips of an element like the fluid information of a tank or the item information
+     * of an slot element.
+     */
+    void clearTooltip();
 
-	/**
-	 * @return Returns the tooltips that were added with {@link #addTooltip(ITextComponent)} and {@link #addTooltip(Collection)}.
-	 */
-	ToolTip getTooltip();
+    /**
+     * Returns the tooltip that this element provides at the given mouse position.
+     *
+     * @param mouseX The x position of the mouse relative to the parent of the element.
+     * @param mouseY The y position of the mouse relative to the parent of the element.
+     * @return
+     */
+    ToolTip getTooltip(int mouseX, int mouseY);
 
-	/* Events */
+    /**
+     * @return Returns the tooltips that were added with {@link #addTooltip(ITextComponent)} and {@link #addTooltip(Collection)}.
+     */
+    ToolTip getTooltip();
 
-	/**
-	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
-	 */
-	<E extends GuiElementEvent> void addEventHandler(Consumer<E> eventHandler);
+    /* Events */
 
-	/**
-	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
-	 */
-	default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
-		addEventHandler(new GuiEventHandler<>(eventClass, eventHandler));
-	}
+    /**
+     * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
+     */
+    <E extends GuiElementEvent> void addEventHandler(Consumer<E> eventHandler);
 
-	/**
-	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
-	 */
-	default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> eventHandler) {
-		addEventHandler(new GuiEventHandler<>(eventClass, origin, relative, eventHandler));
-	}
+    /**
+     * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
+     */
+    default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
+        addEventHandler(new GuiEventHandler<>(eventClass, eventHandler));
+    }
 
-	/**
-	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
-	 */
-	default <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
-		addEventHandler(new GuiEventHandler<>(eventClass, GuiEventOrigin.SELF, this, eventHandler));
-	}
+    /**
+     * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
+     */
+    default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> eventHandler) {
+        addEventHandler(new GuiEventHandler<>(eventClass, origin, relative, eventHandler));
+    }
 
-	/**
-	 * Distributes the event to the elements that are defined by the {@link GuiEventDestination}.
-	 */
-	default void postEvent(GuiElementEvent event, GuiEventDestination destination) {
-		try {
-			destination.sendEvent(this, event);
-		} catch (Exception e) {
-			Log.error("An error has occurred during the posting of the event.", e);
-		}
-	}
+    /**
+     * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
+     */
+    default <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
+        addEventHandler(new GuiEventHandler<>(eventClass, GuiEventOrigin.SELF, this, eventHandler));
+    }
 
-	default void postEvent(GuiElementEvent event) {
-		postEvent(event, GuiEventDestination.SINGLE);
-	}
+    /**
+     * Distributes the event to the elements that are defined by the {@link GuiEventDestination}.
+     */
+    default void postEvent(GuiElementEvent event, GuiEventDestination destination) {
+        try {
+            destination.sendEvent(this, event);
+        } catch (Exception e) {
+            Log.error("An error has occurred during the posting of the event.", e);
+        }
+    }
 
-	/**
-	 * Receives an event and distributes them to the event handlers of this element.
-	 */
-	void receiveEvent(GuiElementEvent event);
+    default void postEvent(GuiElementEvent event) {
+        postEvent(event, GuiEventDestination.SINGLE);
+    }
+
+    /**
+     * Receives an event and distributes them to the event handlers of this element.
+     */
+    void receiveEvent(GuiElementEvent event);
 }

@@ -13,9 +13,9 @@ import genetics.api.root.IIndividualRoot;
  * {@link IIndividualRoot#createWrapper(IGenome)}.
  */
 public interface IGenomeWrapper {
-	/**
-	 * @return The wrapped genome.
-	 */
-	IGenome getGenome();
+    /**
+     * @return The wrapped genome.
+     */
+    IGenome getGenome();
 
 }

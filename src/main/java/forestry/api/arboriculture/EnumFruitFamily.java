@@ -11,40 +11,40 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.alleles.AlleleManager;
 
 public enum EnumFruitFamily implements IFruitFamily {
-	PRUNES("prunes", "Prunus domestica"),
-	POMES("pomes", "Pomum"),
-	JUNGLE("jungle", "Tropicus"),
-	NUX("nuts", "Nux"),
-	NONE("none", "None");
+    PRUNES("prunes", "Prunus domestica"),
+    POMES("pomes", "Pomum"),
+    JUNGLE("jungle", "Tropicus"),
+    NUX("nuts", "Nux"),
+    NONE("none", "None");
 
-	private final String uid;
-	private final String scientific;
+    private final String uid;
+    private final String scientific;
 
-	EnumFruitFamily(String uid, String scientific) {
-		this.uid = uid;
-		this.scientific = scientific;
-		AlleleManager.geneticRegistry.registerFruitFamily(this);
-	}
+    EnumFruitFamily(String uid, String scientific) {
+        this.uid = uid;
+        this.scientific = scientific;
+        AlleleManager.geneticRegistry.registerFruitFamily(this);
+    }
 
-	@Override
-	public String getUID() {
-		return "forestry." + uid;
-	}
+    @Override
+    public String getUID() {
+        return "forestry." + uid;
+    }
 
-	@Override
-	public String getScientific() {
-		return this.scientific;
-	}
+    @Override
+    public String getScientific() {
+        return this.scientific;
+    }
 
-	//TODO - these must only be called on client. Or Should I return TranslationTextComponent
-	@Override
-	public String getName() {
-		return I18n.format("for.family." + uid);
-	}
+    //TODO - these must only be called on client. Or Should I return TranslationTextComponent
+    @Override
+    public String getName() {
+        return I18n.format("for.family." + uid);
+    }
 
-	@Override
-	public String getDescription() {
-		return I18n.format("for.family." + uid + ".description");
-	}
+    @Override
+    public String getDescription() {
+        return I18n.format("for.family." + uid + ".description");
+    }
 
 }

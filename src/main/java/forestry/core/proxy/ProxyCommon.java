@@ -22,31 +22,31 @@ import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
 
 public class ProxyCommon {
-	public void registerItem(Item item) {
+    public void registerItem(Item item) {
 
-	}
+    }
 
-	public void registerBlock(Block block) {
+    public void registerBlock(Block block) {
 
-	}
+    }
 
-	public void registerTickHandlers() {
-		TickHandlerCoreServer tickHandlerCoreServer = new TickHandlerCoreServer();
-		MinecraftForge.EVENT_BUS.register(tickHandlerCoreServer);
+    public void registerTickHandlers() {
+        TickHandlerCoreServer tickHandlerCoreServer = new TickHandlerCoreServer();
+        MinecraftForge.EVENT_BUS.register(tickHandlerCoreServer);
 
-		MultiblockServerTickHandler multiblockServerTickHandler = new MultiblockServerTickHandler();
-		MinecraftForge.EVENT_BUS.register(multiblockServerTickHandler);
-	}
+        MultiblockServerTickHandler multiblockServerTickHandler = new MultiblockServerTickHandler();
+        MinecraftForge.EVENT_BUS.register(multiblockServerTickHandler);
+    }
 
-	public void registerEventHandlers() {
-	}
+    public void registerEventHandlers() {
+    }
 
-	public File getForestryRoot() {
-		return new File(".");
-	}
+    public File getForestryRoot() {
+        return new File(".");
+    }
 
-	public double getBlockReachDistance(PlayerEntity PlayerEntity) {
-		return 4f;
-	}
+    public double getBlockReachDistance(PlayerEntity PlayerEntity) {
+        return 4f;
+    }
 
 }

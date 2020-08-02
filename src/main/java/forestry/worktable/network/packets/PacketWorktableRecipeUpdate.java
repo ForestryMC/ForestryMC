@@ -32,34 +32,34 @@ import forestry.worktable.tiles.TileWorktable;
  * Used to sync the worktable crafting result from Server to Client.
  */
 public class PacketWorktableRecipeUpdate extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	@Nullable
-	private final MemorizedRecipe recipe;
+    private final BlockPos pos;
+    @Nullable
+    private final MemorizedRecipe recipe;
 
-	public PacketWorktableRecipeUpdate(TileWorktable worktable) {
-		this.pos = worktable.getPos();
-		this.recipe = worktable.getCurrentRecipe();
-	}
+    public PacketWorktableRecipeUpdate(TileWorktable worktable) {
+        this.pos = worktable.getPos();
+        this.recipe = worktable.getCurrentRecipe();
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.WORKTABLE_CRAFTING_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.WORKTABLE_CRAFTING_UPDATE;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeStreamable(recipe);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeStreamable(recipe);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			BlockPos pos = data.readBlockPos();
-			MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+            BlockPos pos = data.readBlockPos();
+            MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
 
-			TileUtil.actOnTile(player.world, pos, TileWorktable.class, tile -> tile.setCurrentRecipe(recipe));
-		}
-	}
+            TileUtil.actOnTile(player.world, pos, TileWorktable.class, tile -> tile.setCurrentRecipe(recipe));
+        }
+    }
 }

@@ -26,25 +26,25 @@ import forestry.api.genetics.IForestrySpeciesRoot;
 
 public class PickupHandlerCore implements IPickupHandler {
 
-	@Override
-	public boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity entityitem) {
-		ItemStack itemstack = entityitem.getItem();
-		if (itemstack.isEmpty()) {
-			return false;
-		}
+    @Override
+    public boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity entityitem) {
+        ItemStack itemstack = entityitem.getItem();
+        if (itemstack.isEmpty()) {
+            return false;
+        }
 
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemstack);
-		if (definition.isPresent()) {
-			IForestrySpeciesRoot<IIndividual> root = definition.get();
-			Optional<IIndividual> optionalIndividual = root.create(itemstack);
-			if (optionalIndividual.isPresent()) {
-				IIndividual individual = optionalIndividual.get();
-				IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, PlayerEntity.getGameProfile());
-				tracker.registerPickup(individual);
-			}
-		}
+        IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemstack);
+        if (definition.isPresent()) {
+            IForestrySpeciesRoot<IIndividual> root = definition.get();
+            Optional<IIndividual> optionalIndividual = root.create(itemstack);
+            if (optionalIndividual.isPresent()) {
+                IIndividual individual = optionalIndividual.get();
+                IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, PlayerEntity.getGameProfile());
+                tracker.registerPickup(individual);
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

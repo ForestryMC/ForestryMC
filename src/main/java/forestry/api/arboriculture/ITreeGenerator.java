@@ -22,9 +22,9 @@ import genetics.api.individual.IGenome;
  * Implements the tree generation for a tree species.
  */
 public interface ITreeGenerator {
-	Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree);
+    Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree);
 
-	boolean setLogBlock(IGenome genome, IWorld world, BlockPos pos, Direction facing);
+    boolean setLogBlock(IGenome genome, IWorld world, BlockPos pos, Direction facing);
 
-	boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand);
+    boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand);
 }

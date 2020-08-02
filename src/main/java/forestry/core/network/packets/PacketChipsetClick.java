@@ -22,33 +22,33 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 
 public class PacketChipsetClick extends ForestryPacket implements IForestryPacketServer {
-	private final int slot;
+    private final int slot;
 
-	public PacketChipsetClick(int slot) {
-		this.slot = slot;
-	}
+    public PacketChipsetClick(int slot) {
+        this.slot = slot;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeVarInt(slot);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeVarInt(slot);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.CHIPSET_CLICK;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.CHIPSET_CLICK;
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			int slot = data.readVarInt();
+    public static class Handler implements IForestryPacketHandlerServer {
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+            int slot = data.readVarInt();
 
-			if (player.openContainer instanceof IContainerSocketed) {
-				ItemStack itemstack = player.inventory.getItemStack();
-				if (itemstack.getItem() instanceof ItemCircuitBoard) {
-					((IContainerSocketed) player.openContainer).handleChipsetClickServer(slot, player, itemstack);
-				}
-			}
-		}
-	}
+            if (player.openContainer instanceof IContainerSocketed) {
+                ItemStack itemstack = player.inventory.getItemStack();
+                if (itemstack.getItem() instanceof ItemCircuitBoard) {
+                    ((IContainerSocketed) player.openContainer).handleChipsetClickServer(slot, player, itemstack);
+                }
+            }
+        }
+    }
 }

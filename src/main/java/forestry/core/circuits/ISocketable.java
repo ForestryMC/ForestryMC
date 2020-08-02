@@ -15,11 +15,11 @@ import net.minecraft.item.ItemStack;
 import forestry.api.circuits.ICircuitSocketType;
 
 public interface ISocketable {
-	int getSocketCount();
+    int getSocketCount();
 
-	ItemStack getSocket(int slot);
+    ItemStack getSocket(int slot);
 
-	void setSocket(int slot, ItemStack stack);
+    void setSocket(int slot, ItemStack stack);
 
-	ICircuitSocketType getSocketType();
+    ICircuitSocketType getSocketType();
 }

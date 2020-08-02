@@ -20,31 +20,31 @@ import forestry.api.genetics.ICheckPollinatable;
 import forestry.apiculture.ModuleApiculture;
 
 public class CheckPollinatableTree implements ICheckPollinatable {
-	private final ITree tree;
+    private final ITree tree;
 
-	public CheckPollinatableTree(ITree tree) {
-		this.tree = tree;
-	}
+    public CheckPollinatableTree(ITree tree) {
+        this.tree = tree;
+    }
 
-	@Override
-	public PlantType getPlantType() {
-		return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
-	}
+    @Override
+    public PlantType getPlantType() {
+        return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
+    }
 
-	@Override
-	public ITree getPollen() {
-		return tree;
-	}
+    @Override
+    public ITree getPollen() {
+        return tree;
+    }
 
-	@Override
-	public boolean canMateWith(IIndividual pollen) {
-		return pollen instanceof ITree &&
-			!isPollinated() &&
-			(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
-	}
+    @Override
+    public boolean canMateWith(IIndividual pollen) {
+        return pollen instanceof ITree &&
+                !isPollinated() &&
+                (ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
+    }
 
-	@Override
-	public boolean isPollinated() {
-		return tree.getMate().isPresent();
-	}
+    @Override
+    public boolean isPollinated() {
+        return tree.getMate().isPresent();
+    }
 }

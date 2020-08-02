@@ -14,5 +14,5 @@ import genetics.api.mutation.IMutation;
 import forestry.api.lepidopterology.IButterflyNursery;
 
 public interface IButterflyMutation extends IMutation {
-	float getChance(World world, IButterflyNursery housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1);
+    float getChance(World world, IButterflyNursery housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1);
 }

@@ -21,14 +21,14 @@ import net.minecraft.item.ItemStack;
  */
 public interface ICentrifugeManager extends ICraftingProvider<ICentrifugeRecipe> {
 
-	/**
-	 * Add a recipe to the centrifuge
-	 *
-	 * @param timePerItem Time to centrifugate one item of the given type. Default is 20.
-	 * @param input       ItemStack containing information on item id and damage. Stack size will be ignored.
-	 * @param products    Specifies the possible products and the chances of them resulting from centrifuging.
-	 *                    Chances are from (0.0 to 1.0]
-	 */
-	void addRecipe(int timePerItem, ItemStack input, Map<ItemStack, Float> products);
+    /**
+     * Add a recipe to the centrifuge
+     *
+     * @param timePerItem Time to centrifugate one item of the given type. Default is 20.
+     * @param input       ItemStack containing information on item id and damage. Stack size will be ignored.
+     * @param products    Specifies the possible products and the chances of them resulting from centrifuging.
+     *                    Chances are from (0.0 to 1.0]
+     */
+    void addRecipe(int timePerItem, ItemStack input, Map<ItemStack, Float> products);
 
 }

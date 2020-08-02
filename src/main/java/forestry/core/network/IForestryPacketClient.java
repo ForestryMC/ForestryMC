@@ -14,6 +14,6 @@ package forestry.core.network;
  * A packet sent from the server to the client
  */
 public interface IForestryPacketClient extends IForestryPacket {
-	@Override
-	PacketIdClient getPacketId();
+    @Override
+    PacketIdClient getPacketId();
 }

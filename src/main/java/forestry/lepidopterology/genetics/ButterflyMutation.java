@@ -24,26 +24,26 @@ import forestry.core.genetics.mutations.Mutation;
 
 public class ButterflyMutation extends Mutation implements IButterflyMutation, IButterflyMutationBuilder {
 
-	protected ButterflyMutation(IAlleleForestrySpecies species0, IAlleleForestrySpecies species1, IAllele[] template, int chance) {
-		super(species0, species1, template, chance);
-	}
+    protected ButterflyMutation(IAlleleForestrySpecies species0, IAlleleForestrySpecies species1, IAllele[] template, int chance) {
+        super(species0, species1, template, chance);
+    }
 
-	@Override
-	public IButterflyMutation build() {
-		return this;
-	}
+    @Override
+    public IButterflyMutation build() {
+        return this;
+    }
 
-	@Override
-	public float getChance(World world, IButterflyNursery housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		float processedChance = super.getChance(world, housing.getCoordinates(), allele0, allele1, genome0, genome1, housing);
-		if (processedChance <= 0) {
-			return 0;
-		}
-		return processedChance;
-	}
+    @Override
+    public float getChance(World world, IButterflyNursery housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+        float processedChance = super.getChance(world, housing.getCoordinates(), allele0, allele1, genome0, genome1, housing);
+        if (processedChance <= 0) {
+            return 0;
+        }
+        return processedChance;
+    }
 
-	@Override
-	public IIndividualRoot getRoot() {
-		return ButterflyHelper.getRoot();
-	}
+    @Override
+    public IIndividualRoot getRoot() {
+        return ButterflyHelper.getRoot();
+    }
 }

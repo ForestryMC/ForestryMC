@@ -15,29 +15,29 @@ import genetics.api.individual.IIndividual;
  */
 public interface ICheckPollinatable {
 
-	/**
-	 * @return plant type this pollinatable is classified as.
-	 * (Can be used by bees to determine whether to interact or not.)
-	 */
-	PlantType getPlantType();
+    /**
+     * @return plant type this pollinatable is classified as.
+     * (Can be used by bees to determine whether to interact or not.)
+     */
+    PlantType getPlantType();
 
-	/**
-	 * @return IIndividual containing the genetic information of this IPollinatable
-	 */
-	IIndividual getPollen();
+    /**
+     * @return IIndividual containing the genetic information of this IPollinatable
+     */
+    IIndividual getPollen();
 
-	/**
-	 * Checks whether this can mate with the given pollen.
-	 * <p>
-	 * Must be the one to check genetic equivalency.
-	 *
-	 * @param pollen IIndividual representing the pollen.
-	 * @return true if mating is possible, false otherwise.
-	 */
-	boolean canMateWith(IIndividual pollen);
+    /**
+     * Checks whether this can mate with the given pollen.
+     * <p>
+     * Must be the one to check genetic equivalency.
+     *
+     * @param pollen IIndividual representing the pollen.
+     * @return true if mating is possible, false otherwise.
+     */
+    boolean canMateWith(IIndividual pollen);
 
-	/**
-	 * @return true if this has already been pollinated.
-	 */
-	boolean isPollinated();
+    /**
+     * @return true if this has already been pollinated.
+     */
+    boolean isPollinated();
 }

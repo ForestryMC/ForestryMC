@@ -17,21 +17,21 @@ import forestry.core.triggers.Trigger;
 
 public class TriggerMissingQueen extends Trigger {
 
-	public TriggerMissingQueen() {
-		super("missingQueen", "missing_queen");
-	}
+    public TriggerMissingQueen() {
+        super("missingQueen", "missing_queen");
+    }
 
-	/**
-	 * Return true if the tile given in parameter activates the trigger, given the parameters.
-	 */
-	//	@Override
-	//	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
-	//
-	//		if (!(tile instanceof IErrorLogicSource)) {
-	//			return false;
-	//		}
-	//
-	//		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-	//		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
-	//	}
+    /**
+     * Return true if the tile given in parameter activates the trigger, given the parameters.
+     */
+    //	@Override
+    //	public boolean isTriggerActive(TileEntity tile, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+    //
+    //		if (!(tile instanceof IErrorLogicSource)) {
+    //			return false;
+    //		}
+    //
+    //		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+    //		return apiary.getErrorLogic().contains(EnumErrorCode.NO_QUEEN);
+    //	}
 }

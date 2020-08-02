@@ -9,15 +9,15 @@ import net.minecraft.block.Block;
 
 public interface IHiveGenHelper {
 
-	/**
-	 * Returns a hiveGen for a hive that spawns on the ground.
-	 * validGroundBlocks specifies which block materials it can spawn on.
-	 */
-	IHiveGen ground(Block... validGroundBlocks);
+    /**
+     * Returns a hiveGen for a hive that spawns on the ground.
+     * validGroundBlocks specifies which block materials it can spawn on.
+     */
+    IHiveGen ground(Block... validGroundBlocks);
 
-	/**
-	 * Returns a hiveGen for a hive that spawns in trees.
-	 */
-	IHiveGen tree();
+    /**
+     * Returns a hiveGen for a hive that spawns in trees.
+     */
+    IHiveGen tree();
 
 }

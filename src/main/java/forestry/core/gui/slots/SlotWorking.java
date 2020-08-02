@@ -16,28 +16,28 @@ import net.minecraft.item.ItemStack;
 
 public class SlotWorking extends SlotForestry {
 
-	public SlotWorking(IInventory iinventory, int i, int j, int k) {
-		super(iinventory, i, j, k);
-		blockShift();
-	}
+    public SlotWorking(IInventory iinventory, int i, int j, int k) {
+        super(iinventory, i, j, k);
+        blockShift();
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		return false;
-	}
+    @Override
+    public boolean isItemValid(ItemStack itemstack) {
+        return false;
+    }
 
-	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+        return ItemStack.EMPTY;
+    }
 
-	@Override
-	public boolean canTakeStack(PlayerEntity stack) {
-		return false;
-	}
+    @Override
+    public boolean canTakeStack(PlayerEntity stack) {
+        return false;
+    }
 
-	@Override
-	public ItemStack decrStackSize(int i) {
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack decrStackSize(int i) {
+        return ItemStack.EMPTY;
+    }
 }

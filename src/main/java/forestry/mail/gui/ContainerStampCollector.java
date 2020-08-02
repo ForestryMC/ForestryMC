@@ -23,22 +23,22 @@ import forestry.mail.tiles.TileStampCollector;
 
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 
-	public static ContainerStampCollector fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileStampCollector tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileStampCollector.class);
-		return new ContainerStampCollector(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerStampCollector fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileStampCollector tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileStampCollector.class);
+        return new ContainerStampCollector(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerStampCollector(int windowId, PlayerInventory inv, TileStampCollector tile) {
-		super(windowId, MailContainers.STAMP_COLLECTOR.containerType(), inv, tile, 8, 111);
+    public ContainerStampCollector(int windowId, PlayerInventory inv, TileStampCollector tile) {
+        super(windowId, MailContainers.STAMP_COLLECTOR.containerType(), inv, tile, 8, 111);
 
-		// Filter
-		addSlot(new SlotFiltered(tile, InventoryStampCollector.SLOT_FILTER, 80, 19));
+        // Filter
+        addSlot(new SlotFiltered(tile, InventoryStampCollector.SLOT_FILTER, 80, 19));
 
-		// Collected Stamps
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSlot(new SlotOutput(tile, j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
-			}
-		}
-	}
+        // Collected Stamps
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                addSlot(new SlotOutput(tile, j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
+            }
+        }
+    }
 }

@@ -17,19 +17,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IAlyzerPlugin {
 
-	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage1(Screen gui, ItemStack itemStack);
+    @OnlyIn(Dist.CLIENT)
+    void drawAnalyticsPage1(Screen gui, ItemStack itemStack);
 
-	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage2(Screen gui, ItemStack itemStack);
+    @OnlyIn(Dist.CLIENT)
+    void drawAnalyticsPage2(Screen gui, ItemStack itemStack);
 
-	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage3(Screen gui, ItemStack itemStack);
+    @OnlyIn(Dist.CLIENT)
+    void drawAnalyticsPage3(Screen gui, ItemStack itemStack);
 
-	/**
-	 * The hints that will be shown in the alyzer gui.
-	 */
-	List<String> getHints();
+    /**
+     * The hints that will be shown in the alyzer gui.
+     */
+    List<String> getHints();
 
-	Map<ResourceLocation, ItemStack> getIconStacks();
+    Map<ResourceLocation, ItemStack> getIconStacks();
 }

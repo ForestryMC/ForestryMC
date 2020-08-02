@@ -23,33 +23,33 @@ import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 @OnlyIn(Dist.CLIENT)
 public class FabricatorContent extends BookContent<CraftingData> {
 
-	@Override
-	public Class<? extends CraftingData> getDataClass() {
-		return CraftingData.class;
-	}
+    @Override
+    public Class<? extends CraftingData> getDataClass() {
+        return CraftingData.class;
+    }
 
-	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
-		if (data == null || (data.stack.isEmpty() && data.stacks.length == 0)) {
-			return false;
-		}
-		if (!data.stack.isEmpty()) {
-			page.add(new FabricatorElement(0, 0, data.stack));
-		} else {
-			page.add(new FabricatorElement(0, 0, data.stacks));
-		}
-		return true;
-	}
+    @Override
+    public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+        if (data == null || (data.stack.isEmpty() && data.stacks.length == 0)) {
+            return false;
+        }
+        if (!data.stack.isEmpty()) {
+            page.add(new FabricatorElement(0, 0, data.stack));
+        } else {
+            page.add(new FabricatorElement(0, 0, data.stacks));
+        }
+        return true;
+    }
 
-	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
-		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-		for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
-			Fluid fluid = smelting.getProduct().getFluid();
-			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<>());
-			}
-			smeltingInputs.get(fluid).add(smelting);
-		}
-		return smeltingInputs;
-	}
+    private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+        Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
+        for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
+            Fluid fluid = smelting.getProduct().getFluid();
+            if (!smeltingInputs.containsKey(fluid)) {
+                smeltingInputs.put(fluid, new ArrayList<>());
+            }
+            smeltingInputs.get(fluid).add(smelting);
+        }
+        return smeltingInputs;
+    }
 }

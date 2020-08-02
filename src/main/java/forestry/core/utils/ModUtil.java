@@ -22,29 +22,29 @@ import net.minecraftforge.fml.ModList;
 
 
 public abstract class ModUtil {
-	public static boolean isModLoaded(String modname) {
-		return ModList.get().isLoaded(modname);
-	}
+    public static boolean isModLoaded(String modname) {
+        return ModList.get().isLoaded(modname);
+    }
 
-	public static boolean isModLoaded(String modname, @Nullable String versionRangeString) {
-		if (!isModLoaded(modname)) {
-			return false;
-		}
+    public static boolean isModLoaded(String modname, @Nullable String versionRangeString) {
+        if (!isModLoaded(modname)) {
+            return false;
+        }
 
-		if (versionRangeString != null) {
-			Optional<? extends ModContainer> cont = ModList.get().getModContainerById(modname);
-			if (cont.isPresent()) {
-				ModContainer modContainer = cont.get();
+        if (versionRangeString != null) {
+            Optional<? extends ModContainer> cont = ModList.get().getModContainerById(modname);
+            if (cont.isPresent()) {
+                ModContainer modContainer = cont.get();
 
-				ArtifactVersion modVersion = modContainer.getModInfo().getVersion();
+                ArtifactVersion modVersion = modContainer.getModInfo().getVersion();
 
-				VersionRange range = VersionRange.createFromVersion(versionRangeString);
-				DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(versionRangeString);    //TODO - check
+                VersionRange range = VersionRange.createFromVersion(versionRangeString);
+                DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(versionRangeString);    //TODO - check
 
-				return requiredVersion.compareTo(modVersion) > 0; //TODO - this comparison is incorrect
-			}
-		}
+                return requiredVersion.compareTo(modVersion) > 0; //TODO - this comparison is incorrect
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

@@ -20,8 +20,8 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 
 public interface IButterflyDefinition extends ISpeciesDefinition<IButterfly> {
 
-	@Override
-	IAlleleButterflySpecies getSpecies();
+    @Override
+    IAlleleButterflySpecies getSpecies();
 
-	ItemStack getMemberStack(EnumFlutterType flutterType);
+    ItemStack getMemberStack(EnumFlutterType flutterType);
 }

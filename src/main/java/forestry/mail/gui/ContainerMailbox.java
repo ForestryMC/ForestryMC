@@ -32,45 +32,45 @@ import forestry.mail.tiles.TileMailbox;
 
 public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
-	public static final short SLOT_LETTERS = 0;
-	public static final short SLOT_LETTERS_COUNT = 7 * 12;
-	@Nullable
-	private final POBox mailInventory;
+    public static final short SLOT_LETTERS = 0;
+    public static final short SLOT_LETTERS_COUNT = 7 * 12;
+    @Nullable
+    private final POBox mailInventory;
 
 
-	public static ContainerMailbox fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileMailbox tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMailbox.class);
-		return new ContainerMailbox(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerMailbox fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileMailbox tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMailbox.class);
+        return new ContainerMailbox(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
-		super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
-		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.world, playerInventory.player.getGameProfile());
+    public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
+        super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
+        IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.world, playerInventory.player.getGameProfile());
 
-		if (inventory instanceof POBox) {
-			this.mailInventory = (POBox) inventory;
-		} else {
-			this.mailInventory = null;
-		}
+        if (inventory instanceof POBox) {
+            this.mailInventory = (POBox) inventory;
+        } else {
+            this.mailInventory = null;
+        }
 
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 12; j++) {
-				addSlot(new SlotOutput(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
-			}
-		}
-	}
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 12; j++) {
+                addSlot(new SlotOutput(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
+            }
+        }
+    }
 
-	@Override
-	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
-		ItemStack stack = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
+    @Override
+    public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
+        ItemStack stack = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
 
-		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
-			if (!player.world.isRemote && mailInventory != null) {
-				POBoxInfo info = mailInventory.getPOBoxInfo();
-				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
-			}
-		}
+        if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
+            if (!player.world.isRemote && mailInventory != null) {
+                POBoxInfo info = mailInventory.getPOBoxInfo();
+                NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
+            }
+        }
 
-		return stack;
-	}
+        return stack;
+    }
 }

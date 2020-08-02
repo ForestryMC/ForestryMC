@@ -14,6 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface IResupplyHandler {
 
-	void resupply(PlayerEntity player);
+    void resupply(PlayerEntity player);
 
 }

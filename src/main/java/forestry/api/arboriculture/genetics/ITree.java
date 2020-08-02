@@ -31,72 +31,72 @@ import forestry.api.genetics.products.IProductList;
 
 public interface ITree extends IIndividual, ITreeGenData {
 
-	@Override
-	ITreeRoot getRoot();
+    @Override
+    ITreeRoot getRoot();
 
-	boolean matchesTemplateGenome();
+    boolean matchesTemplateGenome();
 
-	IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos);
+    IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos);
 
-	@OnlyIn(Dist.CLIENT)
-	IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos);
+    @OnlyIn(Dist.CLIENT)
+    IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos);
 
-	/**
-	 * @since Forestry 4.0
-	 */
-	List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
+    /**
+     * @since Forestry 4.0
+     */
+    List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
 
-	// Products, Chance
-	IProductList getProducts();
+    // Products, Chance
+    IProductList getProducts();
 
-	// Specialties, Chance
-	IProductList getSpecialties();
+    // Specialties, Chance
+    IProductList getSpecialties();
 
-	NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
+    NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
 
-	/**
-	 * @return Boolean indicating whether a sapling can stay planted at the given position.
-	 */
-	boolean canStay(IBlockReader world, BlockPos pos);
+    /**
+     * @return Boolean indicating whether a sapling can stay planted at the given position.
+     */
+    boolean canStay(IBlockReader world, BlockPos pos);
 
-	/**
-	 * @return Position that this tree can grow. May be different from pos if there are multiple saplings.
-	 * Returns null if a sapling at the given position can not grow into a tree.
-	 */
-	@Override
-	@Nullable
-	BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
+    /**
+     * @return Position that this tree can grow. May be different from pos if there are multiple saplings.
+     * Returns null if a sapling at the given position can not grow into a tree.
+     */
+    @Override
+    @Nullable
+    BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
 
-	/**
-	 * @return Integer denoting the maturity (block ticks) required for a sapling to attempt to grow into a tree.
-	 */
-	int getRequiredMaturity();
+    /**
+     * @return Integer denoting the maturity (block ticks) required for a sapling to attempt to grow into a tree.
+     */
+    int getRequiredMaturity();
 
-	/**
-	 * @return Integer denoting how resilient leaf blocks are against adverse influences (i.e. caterpillars).
-	 */
-	int getResilience();
+    /**
+     * @return Integer denoting how resilient leaf blocks are against adverse influences (i.e. caterpillars).
+     */
+    int getResilience();
 
-	/**
-	 * @return Integer denoting the size of the tree trunk.
-	 */
-	@Override
-	int getGirth();
+    /**
+     * @return Integer denoting the size of the tree trunk.
+     */
+    @Override
+    int getGirth();
 
-	Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed);
+    Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed);
 
-	@Override
-	ITree copy();
+    @Override
+    ITree copy();
 
-	boolean isPureBred(IChromosomeType chromosome);
+    boolean isPureBred(IChromosomeType chromosome);
 
-	boolean canBearFruit();
+    boolean canBearFruit();
 
-	default boolean hasEffect() {
-		return getGenome().getActiveAllele(TreeChromosomes.SPECIES).hasEffect();
-	}
+    default boolean hasEffect() {
+        return getGenome().getActiveAllele(TreeChromosomes.SPECIES).hasEffect();
+    }
 
-	default boolean isSecret() {
-		return getGenome().getActiveAllele(TreeChromosomes.SPECIES).isSecret();
-	}
+    default boolean isSecret() {
+        return getGenome().getActiveAllele(TreeChromosomes.SPECIES).isSecret();
+    }
 }

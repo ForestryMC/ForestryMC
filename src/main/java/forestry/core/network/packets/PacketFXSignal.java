@@ -34,72 +34,72 @@ import forestry.core.network.PacketIdClient;
 
 public class PacketFXSignal extends ForestryPacket implements IForestryPacketClient {
 
-	public enum VisualFXType {
-		NONE, BLOCK_BREAK, SAPLING_PLACE
-	}
+    public enum VisualFXType {
+        NONE, BLOCK_BREAK, SAPLING_PLACE
+    }
 
-	public enum SoundFXType {
-		NONE, BLOCK_BREAK, BLOCK_PLACE
-	}
+    public enum SoundFXType {
+        NONE, BLOCK_BREAK, BLOCK_PLACE
+    }
 
-	private final BlockPos pos;
-	private final VisualFXType visualFX;
-	private final SoundFXType soundFX;
-	private final BlockState blockState;
+    private final BlockPos pos;
+    private final VisualFXType visualFX;
+    private final SoundFXType soundFX;
+    private final BlockState blockState;
 
-	public PacketFXSignal(VisualFXType type, BlockPos pos, BlockState blockState) {
-		this(type, SoundFXType.NONE, pos, blockState);
-	}
+    public PacketFXSignal(VisualFXType type, BlockPos pos, BlockState blockState) {
+        this(type, SoundFXType.NONE, pos, blockState);
+    }
 
-	public PacketFXSignal(SoundFXType type, BlockPos pos, BlockState blockState) {
-		this(VisualFXType.NONE, type, pos, blockState);
-	}
+    public PacketFXSignal(SoundFXType type, BlockPos pos, BlockState blockState) {
+        this(VisualFXType.NONE, type, pos, blockState);
+    }
 
-	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, BlockState blockState) {
-		this.pos = pos;
-		this.visualFX = visualFX;
-		this.soundFX = soundFX;
-		this.blockState = blockState;
-	}
+    public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, BlockState blockState) {
+        this.pos = pos;
+        this.visualFX = visualFX;
+        this.soundFX = soundFX;
+        this.blockState = blockState;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeByte(visualFX.ordinal());
-		data.writeByte(soundFX.ordinal());
-		CompoundNBT tag = NBTUtil.writeBlockState(blockState);
-		data.writeCompoundTag(tag);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeByte(visualFX.ordinal());
+        data.writeByte(soundFX.ordinal());
+        CompoundNBT tag = NBTUtil.writeBlockState(blockState);
+        data.writeCompoundTag(tag);
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.FX_SIGNAL;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.FX_SIGNAL;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			BlockPos pos = data.readBlockPos();
-			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
-			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
-			World world = player.world;
-			BlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
-			Block block = blockState.getBlock();
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+            BlockPos pos = data.readBlockPos();
+            VisualFXType visualFX = VisualFXType.values()[data.readByte()];
+            SoundFXType soundFX = SoundFXType.values()[data.readByte()];
+            World world = player.world;
+            BlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
+            Block block = blockState.getBlock();
 
-			if (visualFX == VisualFXType.BLOCK_BREAK) {
-				Minecraft.getInstance().particles.addBlockDestroyEffects(pos, blockState);
-			}
+            if (visualFX == VisualFXType.BLOCK_BREAK) {
+                Minecraft.getInstance().particles.addBlockDestroyEffects(pos, blockState);
+            }
 
-			if (soundFX != SoundFXType.NONE) {
-				SoundType soundType = block.getSoundType(blockState, world, pos, null);
+            if (soundFX != SoundFXType.NONE) {
+                SoundType soundType = block.getSoundType(blockState, world, pos, null);
 
-				if (soundFX == SoundFXType.BLOCK_BREAK) {
-					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
-				} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
-				}
-			}
-		}
-	}
+                if (soundFX == SoundFXType.BLOCK_BREAK) {
+                    world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+                } else if (soundFX == SoundFXType.BLOCK_PLACE) {
+                    world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+                }
+            }
+        }
+    }
 }

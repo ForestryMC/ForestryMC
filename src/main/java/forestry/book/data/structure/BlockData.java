@@ -21,9 +21,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BlockData {
-	public int[] pos;
-	public int[] endPos;
-	public CompoundNBT state;
-	public String block;
-	public JsonObject nbt;
+    public int[] pos;
+    public int[] endPos;
+    public CompoundNBT state;
+    public String block;
+    public JsonObject nbt;
 }

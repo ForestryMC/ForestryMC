@@ -24,36 +24,36 @@ import forestry.core.network.PacketIdServer;
 import forestry.core.tiles.TileUtil;
 
 public class PacketSelectClimateTargeted extends ForestryPacket implements IForestryPacketServer {
-	private final BlockPos pos;
-	private final IClimateState climateState;
+    private final BlockPos pos;
+    private final IClimateState climateState;
 
-	public PacketSelectClimateTargeted(BlockPos pos, IClimateState climateState) {
-		this.pos = pos;
-		this.climateState = climateState;
-	}
+    public PacketSelectClimateTargeted(BlockPos pos, IClimateState climateState) {
+        this.pos = pos;
+        this.climateState = climateState;
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.SELECT_CLIMATE_TARGETED;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.SELECT_CLIMATE_TARGETED;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeClimateState(climateState);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeClimateState(climateState);
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
-			IClimateState climateState = data.readClimateState();
+    public static class Handler implements IForestryPacketHandlerServer {
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
+            IClimateState climateState = data.readClimateState();
 
-			IClimateHousing housing = TileUtil.getTile(player.world, pos, IClimateHousing.class);
-			if (housing != null) {
-				IClimateTransformer transformer = housing.getTransformer();
-				transformer.setTarget(climateState);
-			}
-		}
-	}
+            IClimateHousing housing = TileUtil.getTile(player.world, pos, IClimateHousing.class);
+            if (housing != null) {
+                IClimateTransformer transformer = housing.getTransformer();
+                transformer.setTarget(climateState);
+            }
+        }
+    }
 }

@@ -16,15 +16,15 @@ import forestry.core.ItemGroupForestry;
 
 public class ItemCraftingMaterial extends ItemForestry {
 
-	private EnumCraftingMaterial type;
+    private final EnumCraftingMaterial type;
 
-	public ItemCraftingMaterial(EnumCraftingMaterial type) {
-		super((new Item.Properties())
-			.group(ItemGroupForestry.tabForestry));
-		this.type = type;
-	}
+    public ItemCraftingMaterial(EnumCraftingMaterial type) {
+        super((new Item.Properties())
+                .group(ItemGroupForestry.tabForestry));
+        this.type = type;
+    }
 
-	public EnumCraftingMaterial getType() {
-		return type;
-	}
+    public EnumCraftingMaterial getType() {
+        return type;
+    }
 }

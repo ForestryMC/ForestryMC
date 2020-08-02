@@ -27,68 +27,68 @@ import forestry.api.core.INbtWritable;
  */
 public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 
-	/* SERVER */
+    /* SERVER */
 
-	/**
-	 * Checks that the bees can work, setting error conditions on the housing where needed
-	 *
-	 * @return true if no errors are present and doWork should be called
-	 */
-	boolean canWork();
+    /**
+     * Checks that the bees can work, setting error conditions on the housing where needed
+     *
+     * @return true if no errors are present and doWork should be called
+     */
+    boolean canWork();
 
-	/**
-	 * Performs actual work, breeding, production, etc.
-	 */
-	void doWork();
+    /**
+     * Performs actual work, breeding, production, etc.
+     */
+    void doWork();
 
-	/**
-	 * Force the logic to refresh any cached values and error states.
-	 * Call this when a player opens the gui so that all errors are up to date.
-	 */
-	void clearCachedValues();
+    /**
+     * Force the logic to refresh any cached values and error states.
+     * Call this when a player opens the gui so that all errors are up to date.
+     */
+    void clearCachedValues();
 
 
-	/* CLIENT */
+    /* CLIENT */
 
-	/**
-	 * Sync to client by using {@link #write(CompoundNBT)} in your {@link TileEntity#getUpdateTag()}
-	 */
-	void syncToClient();
+    /**
+     * Sync to client by using {@link #write(CompoundNBT)} in your {@link TileEntity#getUpdateTag()}
+     */
+    void syncToClient();
 
-	void syncToClient(ServerPlayerEntity player);
+    void syncToClient(ServerPlayerEntity player);
 
-	/**
-	 * Get the progress bar for breeding and production.
-	 * To avoid network spam, this is only available server-side,
-	 * and must be synced manually to the client when a GUI is open.
-	 */
-	int getBeeProgressPercent();
+    /**
+     * Get the progress bar for breeding and production.
+     * To avoid network spam, this is only available server-side,
+     * and must be synced manually to the client when a GUI is open.
+     */
+    int getBeeProgressPercent();
 
-	/**
-	 * Whether bee fx should be active.
-	 * Internally, this is automatically synced to the client.
-	 */
-	@OnlyIn(Dist.CLIENT)
-	boolean canDoBeeFX();
+    /**
+     * Whether bee fx should be active.
+     * Internally, this is automatically synced to the client.
+     */
+    @OnlyIn(Dist.CLIENT)
+    boolean canDoBeeFX();
 
-	/**
-	 * Display bee fx. Calls IBee.doFX(IEffectData[] storedData, IBeeHousing housing) on the queen.
-	 * Internally, the queen is automatically synced to the client for the fx.
-	 */
-	@OnlyIn(Dist.CLIENT)
-	void doBeeFX();
+    /**
+     * Display bee fx. Calls IBee.doFX(IEffectData[] storedData, IBeeHousing housing) on the queen.
+     * Internally, the queen is automatically synced to the client for the fx.
+     */
+    @OnlyIn(Dist.CLIENT)
+    void doBeeFX();
 
-	/**
-	 * Used by bee fx to direct bees to nearby flowers.
-	 * These positions are synced to the client from the server.
-	 */
-	List<BlockPos> getFlowerPositions();
+    /**
+     * Used by bee fx to direct bees to nearby flowers.
+     * These positions are synced to the client from the server.
+     */
+    List<BlockPos> getFlowerPositions();
 
-	default void readData(PacketBuffer data) throws IOException {
+    default void readData(PacketBuffer data) throws IOException {
 
-	}
+    }
 
-	default void writeData(PacketBuffer data) {
+    default void writeData(PacketBuffer data) {
 
-	}
+    }
 }

@@ -13,7 +13,7 @@ package forestry.core.network.packets;
 import forestry.core.network.IForestryPacketHandler;
 
 public abstract class PacketHandlerDummy implements IForestryPacketHandler {
-	protected PacketHandlerDummy() {
+    protected PacketHandlerDummy() {
 
-	}
+    }
 }

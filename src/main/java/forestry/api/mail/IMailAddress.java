@@ -11,11 +11,11 @@ import forestry.api.core.INbtWritable;
 
 public interface IMailAddress extends INbtWritable {
 
-	EnumAddressee getType();
+    EnumAddressee getType();
 
-	String getName();
+    String getName();
 
-	boolean isValid();
+    boolean isValid();
 
-	GameProfile getPlayerProfile();
+    GameProfile getPlayerProfile();
 }

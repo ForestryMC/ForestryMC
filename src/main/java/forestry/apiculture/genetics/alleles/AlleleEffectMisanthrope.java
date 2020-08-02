@@ -24,29 +24,29 @@ import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 
-	private static final DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
+    private static final DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
 
-	public AlleleEffectMisanthrope() {
-		super("misanthrope", true, 20, false, false);
-	}
+    public AlleleEffectMisanthrope() {
+        super("misanthrope", true, 20, false, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
-		for (PlayerEntity player : players) {
-			int damage = 4;
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
+        for (PlayerEntity player : players) {
+            int damage = 4;
 
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
-			damage -= count;
-			if (damage <= 0) {
-				continue;
-			}
+            // Entities are not attacked if they wear a full set of apiarist's armor.
+            int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
+            damage -= count;
+            if (damage <= 0) {
+                continue;
+            }
 
-			player.attackEntityFrom(damageSourceBeeEnd, damage);
-		}
+            player.attackEntityFrom(damageSourceBeeEnd, damage);
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
 }

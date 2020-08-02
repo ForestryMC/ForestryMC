@@ -23,29 +23,29 @@ import forestry.core.tiles.TileNaturalistChest;
 import forestry.modules.features.FeatureTileType;
 
 public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
-	ARB_CHEST(() -> ArboricultureTiles.ARBORIST_CHEST, "arb_chest", "arbchest", TileNaturalistChest.CHEST_SHAPE);
+    ARB_CHEST(() -> ArboricultureTiles.ARBORIST_CHEST, "arb_chest", "arbchest", TileNaturalistChest.CHEST_SHAPE);
 
-	public static final BlockTypeArboricultureTesr[] VALUES = values();
+    public static final BlockTypeArboricultureTesr[] VALUES = values();
 
-	private final IMachinePropertiesTesr<?> machineProperties;
+    private final IMachinePropertiesTesr<?> machineProperties;
 
-	<T extends TileNaturalistChest> BlockTypeArboricultureTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String renderName, VoxelShape shape) {
-		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
-			.setParticleTexture(name + ".0")
-			.setNotFullCube()
-			.setShape(shape)
-			.create();
-		Proxies.render.setRenderChest(machineProperties, renderName);
-		this.machineProperties = machineProperties;
-	}
+    <T extends TileNaturalistChest> BlockTypeArboricultureTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String renderName, VoxelShape shape) {
+        MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
+                .setParticleTexture(name + ".0")
+                .setNotFullCube()
+                .setShape(shape)
+                .create();
+        Proxies.render.setRenderChest(machineProperties, renderName);
+        this.machineProperties = machineProperties;
+    }
 
-	@Override
-	public IMachinePropertiesTesr<?> getMachineProperties() {
-		return machineProperties;
-	}
+    @Override
+    public IMachinePropertiesTesr<?> getMachineProperties() {
+        return machineProperties;
+    }
 
-	@Override
-	public String getString() {
-		return getMachineProperties().getString();
-	}
+    @Override
+    public String getString() {
+        return getMachineProperties().getString();
+    }
 }

@@ -13,6 +13,6 @@ package forestry.core.gui;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 public interface IGuiSelectable {
-	// server
-	void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary);
+    // server
+    void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary);
 }

@@ -21,36 +21,36 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 
 public class PacketGuiSelectRequest extends ForestryPacket implements IForestryPacketServer {
-	private final int primaryIndex;
-	private final int secondaryIndex;
+    private final int primaryIndex;
+    private final int secondaryIndex;
 
-	public PacketGuiSelectRequest(int primaryIndex, int secondaryIndex) {
-		this.primaryIndex = primaryIndex;
-		this.secondaryIndex = secondaryIndex;
-	}
+    public PacketGuiSelectRequest(int primaryIndex, int secondaryIndex) {
+        this.primaryIndex = primaryIndex;
+        this.secondaryIndex = secondaryIndex;
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.GUI_SELECTION_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.GUI_SELECTION_REQUEST;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeVarInt(primaryIndex);
-		data.writeVarInt(secondaryIndex);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeVarInt(primaryIndex);
+        data.writeVarInt(secondaryIndex);
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			int primary = data.readVarInt();
-			int secondary = data.readVarInt();
+    public static class Handler implements IForestryPacketHandlerServer {
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+            int primary = data.readVarInt();
+            int secondary = data.readVarInt();
 
-			Container container = player.openContainer;
-			if ((container instanceof IGuiSelectable)) {
-				IGuiSelectable guiSelectable = (IGuiSelectable) container;
-				guiSelectable.handleSelectionRequest(player, primary, secondary);
-			}
-		}
-	}
+            Container container = player.openContainer;
+            if ((container instanceof IGuiSelectable)) {
+                IGuiSelectable guiSelectable = (IGuiSelectable) container;
+                guiSelectable.handleSelectionRequest(player, primary, secondary);
+            }
+        }
+    }
 }

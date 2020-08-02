@@ -55,225 +55,225 @@ import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.recipes.SqueezerRecipeManager;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
-	private static final int TICKS_PER_RECIPE_TIME = 1;
-	private static final int ENERGY_PER_WORK_CYCLE = 2000;
-	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
+    private static final int TICKS_PER_RECIPE_TIME = 1;
+    private static final int ENERGY_PER_WORK_CYCLE = 2000;
+    private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
-	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
+    private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
-	private final TankManager tankManager;
-	private final StandardTank productTank;
-	private final InventorySqueezer inventory;
-	@Nullable
-	private ISqueezerRecipe currentRecipe;
+    private final TankManager tankManager;
+    private final StandardTank productTank;
+    private final InventorySqueezer inventory;
+    @Nullable
+    private ISqueezerRecipe currentRecipe;
 
-	public TileSqueezer() {
-		super(FactoryTiles.SQUEEZER.tileType(), 1100, Constants.MACHINE_MAX_ENERGY);
-		this.inventory = new InventorySqueezer(this);
-		setInternalInventory(this.inventory);
-		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
-		this.tankManager = new TankManager(this, productTank);
-	}
+    public TileSqueezer() {
+        super(FactoryTiles.SQUEEZER.tileType(), 1100, Constants.MACHINE_MAX_ENERGY);
+        this.inventory = new InventorySqueezer(this);
+        setInternalInventory(this.inventory);
+        this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
+        this.tankManager = new TankManager(this, productTank);
+    }
 
-	/* LOADING & SAVING */
+    /* LOADING & SAVING */
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
-		tankManager.write(compoundNBT);
-		sockets.write(compoundNBT);
-		return compoundNBT;
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        compoundNBT = super.write(compoundNBT);
+        tankManager.write(compoundNBT);
+        sockets.write(compoundNBT);
+        return compoundNBT;
+    }
 
-	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
-		tankManager.read(compoundNBT);
-		sockets.read(compoundNBT);
+    @Override
+    public void read(BlockState state, CompoundNBT compoundNBT) {
+        super.read(state, compoundNBT);
+        tankManager.read(compoundNBT);
+        sockets.read(compoundNBT);
 
-		ItemStack chip = sockets.getStackInSlot(0);
-		if (!chip.isEmpty()) {
-			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
-			if (chipset != null) {
-				chipset.onLoad(this);
-			}
-		}
-	}
+        ItemStack chip = sockets.getStackInSlot(0);
+        if (!chip.isEmpty()) {
+            ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
+            if (chipset != null) {
+                chipset.onLoad(this);
+            }
+        }
+    }
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		super.writeData(data);
-		tankManager.writeData(data);
-	}
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        super.writeData(data);
+        tankManager.writeData(data);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void readData(PacketBufferForestry data) throws IOException {
-		super.readData(data);
-		tankManager.readData(data);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readData(PacketBufferForestry data) throws IOException {
+        super.readData(data);
+        tankManager.readData(data);
+    }
 
-	@Override
-	public void writeGuiData(PacketBufferForestry data) {
-		super.writeGuiData(data);
-		sockets.writeData(data);
-	}
+    @Override
+    public void writeGuiData(PacketBufferForestry data) {
+        super.writeGuiData(data);
+        sockets.writeData(data);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void readGuiData(PacketBufferForestry data) throws IOException {
-		super.readGuiData(data);
-		sockets.readData(data);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readGuiData(PacketBufferForestry data) throws IOException {
+        super.readGuiData(data);
+        sockets.readData(data);
+    }
 
-	// / WORKING
-	@Override
-	public void updateServerSide() {
-		super.updateServerSide();
+    // / WORKING
+    @Override
+    public void updateServerSide() {
+        super.updateServerSide();
 
-		if (updateOnInterval(20)) {
-			FluidStack fluid = productTank.getFluid();
-			if (!fluid.isEmpty()) {
-				inventory.fillContainers(fluid, tankManager);
-			}
-		}
-	}
+        if (updateOnInterval(20)) {
+            FluidStack fluid = productTank.getFluid();
+            if (!fluid.isEmpty()) {
+                inventory.fillContainers(fluid, tankManager);
+            }
+        }
+    }
 
-	@Override
-	public boolean workCycle() {
-		if (currentRecipe == null) {
-			return false;
-		}
-		if (!inventory.removeResources(currentRecipe.getResources())) {
-			return false;
-		}
+    @Override
+    public boolean workCycle() {
+        if (currentRecipe == null) {
+            return false;
+        }
+        if (!inventory.removeResources(currentRecipe.getResources())) {
+            return false;
+        }
 
-		FluidStack resultFluid = currentRecipe.getFluidOutput();
-		productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.EXECUTE);
+        FluidStack resultFluid = currentRecipe.getFluidOutput();
+        productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.EXECUTE);
 
-		if (!currentRecipe.getRemnants().isEmpty() && world.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
-			ItemStack remnant = currentRecipe.getRemnants().copy();
-			inventory.addRemnant(remnant, true);
-		}
+        if (!currentRecipe.getRemnants().isEmpty() && world.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
+            ItemStack remnant = currentRecipe.getRemnants().copy();
+            inventory.addRemnant(remnant, true);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private boolean checkRecipe() {
-		ISqueezerRecipe matchingRecipe = null;
-		if (inventory.hasResources()) {
-			NonNullList<ItemStack> resources = inventory.getResources();
+    private boolean checkRecipe() {
+        ISqueezerRecipe matchingRecipe = null;
+        if (inventory.hasResources()) {
+            NonNullList<ItemStack> resources = inventory.getResources();
 
-			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
-				matchingRecipe = currentRecipe;
-			} else {
-				matchingRecipe = SqueezerRecipeManager.findMatchingRecipe(resources);
-			}
-		}
+            if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
+                matchingRecipe = currentRecipe;
+            } else {
+                matchingRecipe = SqueezerRecipeManager.findMatchingRecipe(resources);
+            }
+        }
 
-		if (currentRecipe != matchingRecipe) {
-			currentRecipe = matchingRecipe;
-			if (currentRecipe != null) {
-				int recipeTime = currentRecipe.getProcessingTime();
-				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
-				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
-			}
-		}
+        if (currentRecipe != matchingRecipe) {
+            currentRecipe = matchingRecipe;
+            if (currentRecipe != null) {
+                int recipeTime = currentRecipe.getProcessingTime();
+                setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
+                setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
+            }
+        }
 
-		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NO_RECIPE);
-		return currentRecipe != null;
-	}
+        getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NO_RECIPE);
+        return currentRecipe != null;
+    }
 
-	@Override
-	public boolean hasWork() {
-		checkRecipe();
+    @Override
+    public boolean hasWork() {
+        checkRecipe();
 
-		boolean hasResources = inventory.hasResources();
-		boolean hasRecipe = true;
-		boolean canFill = true;
-		boolean canAdd = true;
+        boolean hasResources = inventory.hasResources();
+        boolean hasRecipe = true;
+        boolean canFill = true;
+        boolean canAdd = true;
 
-		if (hasResources) {
-			hasRecipe = currentRecipe != null;
-			if (hasRecipe) {
-				FluidStack resultFluid = currentRecipe.getFluidOutput();
-				canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) == resultFluid.getAmount();
+        if (hasResources) {
+            hasRecipe = currentRecipe != null;
+            if (hasRecipe) {
+                FluidStack resultFluid = currentRecipe.getFluidOutput();
+                canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) == resultFluid.getAmount();
 
-				if (!currentRecipe.getRemnants().isEmpty()) {
-					canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);
-				}
-			}
-		}
+                if (!currentRecipe.getRemnants().isEmpty()) {
+                    canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);
+                }
+            }
+        }
 
-		IErrorLogic errorLogic = getErrorLogic();
-		errorLogic.setCondition(!hasResources, EnumErrorCode.NO_RESOURCE);
-		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
-		errorLogic.setCondition(!canFill, EnumErrorCode.NO_SPACE_TANK);
-		errorLogic.setCondition(!canAdd, EnumErrorCode.NO_SPACE_INVENTORY);
+        IErrorLogic errorLogic = getErrorLogic();
+        errorLogic.setCondition(!hasResources, EnumErrorCode.NO_RESOURCE);
+        errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
+        errorLogic.setCondition(!canFill, EnumErrorCode.NO_SPACE_TANK);
+        errorLogic.setCondition(!canAdd, EnumErrorCode.NO_SPACE_INVENTORY);
 
-		return hasResources && hasRecipe && canFill && canAdd;
-	}
+        return hasResources && hasRecipe && canFill && canAdd;
+    }
 
-	@Override
-	public TankRenderInfo getProductTankInfo() {
-		return new TankRenderInfo(productTank);
-	}
+    @Override
+    public TankRenderInfo getProductTankInfo() {
+        return new TankRenderInfo(productTank);
+    }
 
 
-	@Override
-	public TankManager getTankManager() {
-		return tankManager;
-	}
+    @Override
+    public TankManager getTankManager() {
+        return tankManager;
+    }
 
-	/* ISocketable */
-	@Override
-	public int getSocketCount() {
-		return sockets.getSizeInventory();
-	}
+    /* ISocketable */
+    @Override
+    public int getSocketCount() {
+        return sockets.getSizeInventory();
+    }
 
-	@Override
-	public ItemStack getSocket(int slot) {
-		return sockets.getStackInSlot(slot);
-	}
+    @Override
+    public ItemStack getSocket(int slot) {
+        return sockets.getStackInSlot(slot);
+    }
 
-	@Override
-	public void setSocket(int slot, ItemStack stack) {
-		if (stack.isEmpty() || ChipsetManager.circuitRegistry.isChipset(stack)) {
-			// Dispose correctly of old chipsets
-			if (!sockets.getStackInSlot(slot).isEmpty()) {
-				if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-					ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
-					if (chipset != null) {
-						chipset.onRemoval(this);
-					}
-				}
-			}
+    @Override
+    public void setSocket(int slot, ItemStack stack) {
+        if (stack.isEmpty() || ChipsetManager.circuitRegistry.isChipset(stack)) {
+            // Dispose correctly of old chipsets
+            if (!sockets.getStackInSlot(slot).isEmpty()) {
+                if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
+                    ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
+                    if (chipset != null) {
+                        chipset.onRemoval(this);
+                    }
+                }
+            }
 
-			sockets.setInventorySlotContents(slot, stack);
-			if (!stack.isEmpty()) {
-				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
-				if (chipset != null) {
-					chipset.onInsertion(this);
-				}
-			}
-		}
-	}
+            sockets.setInventorySlotContents(slot, stack);
+            if (!stack.isEmpty()) {
+                ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
+                if (chipset != null) {
+                    chipset.onInsertion(this);
+                }
+            }
+        }
+    }
 
-	@Override
-	public ICircuitSocketType getSocketType() {
-		return CircuitSocketType.MACHINE;
-	}
+    @Override
+    public ICircuitSocketType getSocketType() {
+        return CircuitSocketType.MACHINE;
+    }
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return LazyOptional.of(() -> tankManager).cast();
-		}
-		return super.getCapability(capability, facing);
-	}
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return LazyOptional.of(() -> tankManager).cast();
+        }
+        return super.getCapability(capability, facing);
+    }
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerSqueezer(windowId, inv, this);
-	}
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerSqueezer(windowId, inv, this);
+    }
 }

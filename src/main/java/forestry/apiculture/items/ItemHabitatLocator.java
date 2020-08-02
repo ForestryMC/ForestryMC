@@ -41,64 +41,64 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.items.ItemWithGui;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
-	private static final String iconName = "forestry:items/biomefinder";
+    private static final String iconName = "forestry:items/biomefinder";
 
-	private final HabitatLocatorLogic locatorLogic;
+    private final HabitatLocatorLogic locatorLogic;
 
-	public ItemHabitatLocator() {
-		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
-		locatorLogic = new HabitatLocatorLogic();
-	}
+    public ItemHabitatLocator() {
+        super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
+        locatorLogic = new HabitatLocatorLogic();
+    }
 
-	public HabitatLocatorLogic getLocatorLogic() {
-		return locatorLogic;
-	}
+    public HabitatLocatorLogic getLocatorLogic() {
+        return locatorLogic;
+    }
 
-	@Override
-	public void inventoryTick(ItemStack stack, World world, Entity player, int slot, boolean selected) {
-		if (!world.isRemote) {
-			locatorLogic.onUpdate(world, player);
-		}
-	}
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity player, int slot, boolean selected) {
+        if (!world.isRemote) {
+            locatorLogic.onUpdate(world, player);
+        }
+    }
 
-	/* SPRITES */
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerSprites(ISpriteRegistry registry) {
-		//TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
-		//		Minecraft.getInstance().getTextureMap().setTextureEntry(texture);
-		//TODO textures
-	}
+    /* SPRITES */
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerSprites(ISpriteRegistry registry) {
+        //TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
+        //		Minecraft.getInstance().getTextureMap().setTextureEntry(texture);
+        //TODO textures
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+        super.addInformation(itemstack, world, list, flag);
 
-		Minecraft minecraft = Minecraft.getInstance();
-		if (world != null && minecraft.player != null) {
-			ClientPlayerEntity player = minecraft.player;
-			Biome currentBiome = player.world.getBiome(player.getPosition());
+        Minecraft minecraft = Minecraft.getInstance();
+        if (world != null && minecraft.player != null) {
+            ClientPlayerEntity player = minecraft.player;
+            Biome currentBiome = player.world.getBiome(player.getPosition());
 
-			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
-			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
+            EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
+            EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
-			list.add(new TranslationTextComponent("for.gui.currentBiome")
-				.append(new StringTextComponent(": "))
-				.append(new TranslationTextComponent(currentBiome.getTranslationKey())));
+            list.add(new TranslationTextComponent("for.gui.currentBiome")
+                    .append(new StringTextComponent(": "))
+                    .append(new TranslationTextComponent(currentBiome.getTranslationKey())));
 
-			list.add(new TranslationTextComponent("for.gui.temperature")
-				.append(new StringTextComponent(": "))
-				.append(AlleleManager.climateHelper.toDisplay(temperature)));
+            list.add(new TranslationTextComponent("for.gui.temperature")
+                    .append(new StringTextComponent(": "))
+                    .append(AlleleManager.climateHelper.toDisplay(temperature)));
 
-			list.add(new TranslationTextComponent("for.gui.humidity")
-				.append(new StringTextComponent(": "))
-				.append(AlleleManager.climateHelper.toDisplay(humidity)));
-		}
-	}
+            list.add(new TranslationTextComponent("for.gui.humidity")
+                    .append(new StringTextComponent(": "))
+                    .append(AlleleManager.climateHelper.toDisplay(humidity)));
+        }
+    }
 
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return new ContainerHabitatLocator(windowId, player, new ItemInventoryHabitatLocator(player, heldItem));
-	}
+    @Override
+    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+        return new ContainerHabitatLocator(windowId, player, new ItemInventoryHabitatLocator(player, heldItem));
+    }
 }

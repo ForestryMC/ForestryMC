@@ -12,19 +12,19 @@ import forestry.storage.items.ItemBackpack;
 
 public class ItemInventoryBackpack extends ItemInventory {
 
-	private final IBackpackDefinition backpackDefinition;
+    private final IBackpackDefinition backpackDefinition;
 
-	public ItemInventoryBackpack(PlayerEntity player, int size, ItemStack parent) {
-		super(player, size, parent);
+    public ItemInventoryBackpack(PlayerEntity player, int size, ItemStack parent) {
+        super(player, size, parent);
 
-		Item item = parent.getItem();
-		Preconditions.checkArgument(item instanceof ItemBackpack, "Parent must be a backpack.");
+        Item item = parent.getItem();
+        Preconditions.checkArgument(item instanceof ItemBackpack, "Parent must be a backpack.");
 
-		this.backpackDefinition = ((ItemBackpack) item).getDefinition();
-	}
+        this.backpackDefinition = ((ItemBackpack) item).getDefinition();
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return backpackDefinition.getFilter().test(itemStack);
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return backpackDefinition.getFilter().test(itemStack);
+    }
 }

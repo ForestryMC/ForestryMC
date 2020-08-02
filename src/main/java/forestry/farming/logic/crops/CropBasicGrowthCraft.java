@@ -28,54 +28,54 @@ import forestry.core.utils.NetworkUtil;
 //TODO follow up in forge on generic crop interface...
 public class CropBasicGrowthCraft extends Crop {
 
-	private final BlockState blockState;
-	private final boolean isRice;
-	private final boolean isGrape;
+    private final BlockState blockState;
+    private final boolean isRice;
+    private final boolean isGrape;
 
-	public CropBasicGrowthCraft(World world, BlockState blockState, BlockPos position, boolean isRice, boolean isGrape) {
-		super(world, position);
-		this.blockState = blockState;
-		this.isRice = isRice;
-		this.isGrape = isGrape;
-	}
+    public CropBasicGrowthCraft(World world, BlockState blockState, BlockPos position, boolean isRice, boolean isGrape) {
+        super(world, position);
+        this.blockState = blockState;
+        this.isRice = isRice;
+        this.isGrape = isGrape;
+    }
 
-	@Override
-	protected boolean isCrop(World world, BlockPos pos) {
-		return world.getBlockState(pos) == blockState;
-	}
+    @Override
+    protected boolean isCrop(World world, BlockPos pos) {
+        return world.getBlockState(pos) == blockState;
+    }
 
-	@Override
-	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
-		Block block = blockState.getBlock();
-		NonNullList<ItemStack> harvest = NonNullList.create();
-		//TODO cast
-		LootContext.Builder ctx = new LootContext.Builder((ServerWorld) world)
-			.withParameter(LootParameters.POSITION, pos);
-		harvest.addAll(block.getDrops(blockState, ctx));
-		if (harvest.size() > 1) {
-			harvest.remove(0); //Hops have rope as first drop.
-		}
+    @Override
+    protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+        Block block = blockState.getBlock();
+        NonNullList<ItemStack> harvest = NonNullList.create();
+        //TODO cast
+        LootContext.Builder ctx = new LootContext.Builder((ServerWorld) world)
+                .withParameter(LootParameters.POSITION, pos);
+        harvest.addAll(block.getDrops(blockState, ctx));
+        if (harvest.size() > 1) {
+            harvest.remove(0); //Hops have rope as first drop.
+        }
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-		NetworkUtil.sendNetworkPacket(packet, pos, world);
+        PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+        NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		if (isGrape) {
-			world.removeBlock(pos, false);
-		} else {
-			world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
-		}
+        if (isGrape) {
+            world.removeBlock(pos, false);
+        } else {
+            world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+        }
 
-		if (isRice) {
-			// TODO: GrowthCraft for MC 1.9. Don't use meta, get the actual block state.
-			world.setBlockState(pos.down(), block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
-			//TODO flatten
-		}
+        if (isRice) {
+            // TODO: GrowthCraft for MC 1.9. Don't use meta, get the actual block state.
+            world.setBlockState(pos.down(), block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+            //TODO flatten
+        }
 
-		return harvest;
-	}
+        return harvest;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("CropBasicGrowthCraft [ position: [ %s ]; block: %s ]", position.toString(), blockState);
-	}
+    @Override
+    public String toString() {
+        return String.format("CropBasicGrowthCraft [ position: [ %s ]; block: %s ]", position.toString(), blockState);
+    }
 }

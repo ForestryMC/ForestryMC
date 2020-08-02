@@ -22,32 +22,32 @@ import forestry.core.genetics.BreedingTracker;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
-	/**
-	 * Required for creation from map storage
-	 */
-	public LepidopteristTracker(String s) {
-		super(s, "NORMAL");
-	}
+    /**
+     * Required for creation from map storage
+     */
+    public LepidopteristTracker(String s) {
+        super(s, "NORMAL");
+    }
 
-	@Override
-	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
-		//TODO world cast
-		return ButterflyManager.butterflyRoot.getBreedingTracker(player.world, player.getGameProfile());
-	}
+    @Override
+    protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
+        //TODO world cast
+        return ButterflyManager.butterflyRoot.getBreedingTracker(player.world, player.getGameProfile());
+    }
 
-	@Override
-	protected String speciesRootUID() {
-		return ButterflyRoot.UID;
-	}
+    @Override
+    protected String speciesRootUID() {
+        return ButterflyRoot.UID;
+    }
 
-	@Override
-	public void registerPickup(IIndividual individual) {
-	}
+    @Override
+    public void registerPickup(IIndividual individual) {
+    }
 
-	@Override
-	public void registerCatch(IButterfly butterfly) {
-		registerSpecies(butterfly.getGenome().getPrimary());
-		registerSpecies(butterfly.getGenome().getSecondary());
-	}
+    @Override
+    public void registerCatch(IButterfly butterfly) {
+        registerSpecies(butterfly.getGenome().getPrimary());
+        registerSpecies(butterfly.getGenome().getSecondary());
+    }
 
 }

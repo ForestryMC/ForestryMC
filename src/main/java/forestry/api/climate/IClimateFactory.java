@@ -11,13 +11,13 @@ import forestry.api.core.ILocatable;
  * @since Forestry 5.8.1
  */
 public interface IClimateFactory {
-	/**
-	 * Creates a {@link IClimateTransformer}.
-	 */
-	IClimateTransformer createTransformer(IClimateHousing housing);
+    /**
+     * Creates a {@link IClimateTransformer}.
+     */
+    IClimateTransformer createTransformer(IClimateHousing housing);
 
-	/**
-	 * Creates a {@link IClimateListener}.
-	 */
-	IClimateListener createListener(ILocatable locatable);
+    /**
+     * Creates a {@link IClimateListener}.
+     */
+    IClimateListener createListener(ILocatable locatable);
 }

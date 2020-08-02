@@ -14,27 +14,27 @@ import forestry.apiculture.blocks.BlockAlvearyType;
 
 public class TileAlvearyFan extends TileAlvearyClimatiser {
 
-	private static final FanDefinition definition = new FanDefinition();
+    private static final FanDefinition definition = new FanDefinition();
 
-	public TileAlvearyFan() {
-		super(BlockAlvearyType.FAN, definition);
-	}
+    public TileAlvearyFan() {
+        super(BlockAlvearyType.FAN, definition);
+    }
 
-	private static class FanDefinition implements IClimitiserDefinition {
+    private static class FanDefinition implements IClimitiserDefinition {
 
-		@Override
-		public float getChangePerTransfer() {
-			return -0.01f;
-		}
+        @Override
+        public float getChangePerTransfer() {
+            return -0.01f;
+        }
 
-		@Override
-		public float getBoundaryUp() {
-			return 2.5f;
-		}
+        @Override
+        public float getBoundaryUp() {
+            return 2.5f;
+        }
 
-		@Override
-		public float getBoundaryDown() {
-			return 0.05f;
-		}
-	}
+        @Override
+        public float getBoundaryDown() {
+            return 0.05f;
+        }
+    }
 }

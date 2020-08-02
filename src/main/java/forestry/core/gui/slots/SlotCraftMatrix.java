@@ -19,21 +19,21 @@ import forestry.core.gui.IContainerCrafting;
  */
 public class SlotCraftMatrix extends SlotForestry {
 
-	private final IContainerCrafting eventHandler;
-	private final int slot;
+    private final IContainerCrafting eventHandler;
+    private final int slot;
 
-	public SlotCraftMatrix(IContainerCrafting container, IInventory iinventory, int i, int j, int k) {
-		super(iinventory, i, j, k);
-		setPhantom();
-		this.eventHandler = container;
-		this.slot = i;
-		setStackLimit(1);
-	}
+    public SlotCraftMatrix(IContainerCrafting container, IInventory iinventory, int i, int j, int k) {
+        super(iinventory, i, j, k);
+        setPhantom();
+        this.eventHandler = container;
+        this.slot = i;
+        setStackLimit(1);
+    }
 
-	@Override
-	public void onSlotChanged() {
-		super.onSlotChanged();
-		eventHandler.onCraftMatrixChanged(inventory, slot);
-	}
+    @Override
+    public void onSlotChanged() {
+        super.onSlotChanged();
+        eventHandler.onCraftMatrixChanged(inventory, slot);
+    }
 
 }

@@ -22,55 +22,55 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class StringUtil {
 
-	private static final Pattern camelCaseToUnderscores = Pattern.compile("(.)([A-Z])");
+    private static final Pattern camelCaseToUnderscores = Pattern.compile("(.)([A-Z])");
 
-	public static String camelCaseToUnderscores(String uid) {
-		return camelCaseToUnderscores.matcher(uid).replaceAll("$1_$2").toLowerCase(Locale.ENGLISH);
-	}
+    public static String camelCaseToUnderscores(String uid) {
+        return camelCaseToUnderscores.matcher(uid).replaceAll("$1_$2").toLowerCase(Locale.ENGLISH);
+    }
 
-	public static String append(String delim, String source, String appendix) {
-		if (source.length() <= 0) {
-			return appendix;
-		}
+    public static String append(String delim, String source, String appendix) {
+        if (source.length() <= 0) {
+            return appendix;
+        }
 
-		if (appendix.length() <= 0) {
-			return source;
-		}
+        if (appendix.length() <= 0) {
+            return source;
+        }
 
-		return source + delim + appendix;
-	}
+        return source + delim + appendix;
+    }
 
-	public static String readableBoolean(boolean flag, String trueStr, String falseStr) {
-		if (flag) {
-			return trueStr;
-		} else {
-			return falseStr;
-		}
-	}
+    public static String readableBoolean(boolean flag, String trueStr, String falseStr) {
+        if (flag) {
+            return trueStr;
+        } else {
+            return falseStr;
+        }
+    }
 
-	public static String floatAsPercent(float val) {
-		return (int) (val * 100) + " %";
-	}
+    public static String floatAsPercent(float val) {
+        return (int) (val * 100) + " %";
+    }
 
-	public static String line(int length) {
-		StringBuilder line = new StringBuilder();
-		for (int i = 0; i < length; i++) {
-			line.append('-');
-		}
+    public static String line(int length) {
+        StringBuilder line = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            line.append('-');
+        }
 
-		return line.toString();
-	}
+        return line.toString();
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static int getLineHeight(int maxWidth, ITextProperties... strings) {
-		Minecraft minecraft = Minecraft.getInstance();
-		FontRenderer fontRenderer = minecraft.fontRenderer;
+    @OnlyIn(Dist.CLIENT)
+    public static int getLineHeight(int maxWidth, ITextProperties... strings) {
+        Minecraft minecraft = Minecraft.getInstance();
+        FontRenderer fontRenderer = minecraft.fontRenderer;
 
-		int lineCount = 0;
-		for (ITextProperties string : strings) {
-			lineCount += fontRenderer.func_238425_b_(string, maxWidth).size();
-		}
+        int lineCount = 0;
+        for (ITextProperties string : strings) {
+            lineCount += fontRenderer.func_238425_b_(string, maxWidth).size();
+        }
 
-		return lineCount * fontRenderer.FONT_HEIGHT;
-	}
+        return lineCount * fontRenderer.FONT_HEIGHT;
+    }
 }

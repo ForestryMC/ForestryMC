@@ -25,34 +25,34 @@ import forestry.core.tiles.TileUtil;
 import forestry.mail.tiles.TileTrader;
 
 public class PacketTraderAddressResponse extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final String addressName;
+    private final BlockPos pos;
+    private final String addressName;
 
-	public PacketTraderAddressResponse(TileTrader tile, String addressName) {
-		this.pos = tile.getPos();
-		this.addressName = addressName;
-	}
+    public PacketTraderAddressResponse(TileTrader tile, String addressName) {
+        this.pos = tile.getPos();
+        this.addressName = addressName;
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TRADING_ADDRESS_RESPONSE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.TRADING_ADDRESS_RESPONSE;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeString(addressName);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeString(addressName);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
 
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
-			String addressName = data.readString();
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
+            String addressName = data.readString();
 
-			TileUtil.actOnTile(player.world, pos, TileTrader.class, tile -> tile.handleSetAddressResponse(addressName));
-		}
-	}
+            TileUtil.actOnTile(player.world, pos, TileTrader.class, tile -> tile.handleSetAddressResponse(addressName));
+        }
+    }
 }

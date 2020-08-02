@@ -26,63 +26,63 @@ import forestry.mail.TradeStation;
 
 public class InventoryTradeStation extends InventoryAdapter {
 
-	public InventoryTradeStation() {
-		super(TradeStation.SLOT_SIZE, "INV");
-	}
+    public InventoryTradeStation() {
+        super(TradeStation.SLOT_SIZE, "INV");
+    }
 
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		List<Integer> slots = new ArrayList<>();
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        List<Integer> slots = new ArrayList<>();
 
-		for (int i = TradeStation.SLOT_LETTERS_1; i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
-			slots.add(i);
-		}
-		for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
-			slots.add(i);
-		}
-		for (int i = TradeStation.SLOT_RECEIVE_BUFFER; i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
-			slots.add(i);
-		}
-		for (int i = TradeStation.SLOT_SEND_BUFFER; i < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT; i++) {
-			slots.add(i);
-		}
+        for (int i = TradeStation.SLOT_LETTERS_1; i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
+            slots.add(i);
+        }
+        for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
+            slots.add(i);
+        }
+        for (int i = TradeStation.SLOT_RECEIVE_BUFFER; i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
+            slots.add(i);
+        }
+        for (int i = TradeStation.SLOT_SEND_BUFFER; i < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT; i++) {
+            slots.add(i);
+        }
 
-		int[] slotsInt = new int[slots.size()];
-		for (int i = 0; i < slots.size(); i++) {
-			slotsInt[i] = slots.get(i);
-		}
+        int[] slotsInt = new int[slots.size()];
+        for (int i = 0; i < slots.size(); i++) {
+            slotsInt[i] = slots.get(i);
+        }
 
-		return slotsInt;
-	}
+        return slotsInt;
+    }
 
-	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, Direction side) {
-		return SlotUtil.isSlotInRange(slot, TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT);
-	}
+    @Override
+    public boolean canExtractItem(int slot, ItemStack itemStack, Direction side) {
+        return SlotUtil.isSlotInRange(slot, TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT);
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT)) {
-			for (int i = 0; i < TradeStation.SLOT_TRADEGOOD_COUNT; i++) {
-				ItemStack tradeGood = getStackInSlot(TradeStation.SLOT_TRADEGOOD + i);
-				if (ItemStackUtil.isIdenticalItem(tradeGood, itemStack)) {
-					return true;
-				}
-			}
-			return false;
-		} else if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT)) {
-			Item item = itemStack.getItem();
-			return item == Items.PAPER;
-		} else if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_STAMPS_1, TradeStation.SLOT_STAMPS_COUNT)) {
-			Item item = itemStack.getItem();
-			return item instanceof IStamps;
-		}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT)) {
+            for (int i = 0; i < TradeStation.SLOT_TRADEGOOD_COUNT; i++) {
+                ItemStack tradeGood = getStackInSlot(TradeStation.SLOT_TRADEGOOD + i);
+                if (ItemStackUtil.isIdenticalItem(tradeGood, itemStack)) {
+                    return true;
+                }
+            }
+            return false;
+        } else if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT)) {
+            Item item = itemStack.getItem();
+            return item == Items.PAPER;
+        } else if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_STAMPS_1, TradeStation.SLOT_STAMPS_COUNT)) {
+            Item item = itemStack.getItem();
+            return item instanceof IStamps;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return canSlotAccept(i, itemstack);
-	}
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        return canSlotAccept(i, itemstack);
+    }
 }

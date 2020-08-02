@@ -14,15 +14,15 @@ import forestry.api.apiculture.DefaultBeeListener;
 import forestry.apiculture.inventory.IApiaryInventory;
 
 public class ApiaryBeeListener extends DefaultBeeListener {
-	private final IApiary apiary;
+    private final IApiary apiary;
 
-	public ApiaryBeeListener(IApiary apiary) {
-		this.apiary = apiary;
-	}
+    public ApiaryBeeListener(IApiary apiary) {
+        this.apiary = apiary;
+    }
 
-	@Override
-	public void wearOutEquipment(int amount) {
-		IApiaryInventory apiaryInventory = apiary.getApiaryInventory();
-		apiaryInventory.wearOutFrames(apiary, amount);
-	}
+    @Override
+    public void wearOutEquipment(int amount) {
+        IApiaryInventory apiaryInventory = apiary.getApiaryInventory();
+        apiaryInventory.wearOutFrames(apiary, amount);
+    }
 }

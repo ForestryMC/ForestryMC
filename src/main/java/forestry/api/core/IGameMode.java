@@ -7,27 +7,27 @@ package forestry.api.core;
 
 public interface IGameMode {
 
-	/**
-	 * @return Human-readable identifier for the game mode. (i.e. 'EASY', 'NORMAL', 'HARD')
-	 */
-	String getIdentifier();
+    /**
+     * @return Human-readable identifier for the game mode. (i.e. 'EASY', 'NORMAL', 'HARD')
+     */
+    String getIdentifier();
 
-	/**
-	 * @param ident Identifier for the setting. (See the gamemode config.)
-	 * @return Value of the requested setting, false if unknown setting.
-	 */
-	boolean getBooleanSetting(String ident);
+    /**
+     * @param ident Identifier for the setting. (See the gamemode config.)
+     * @return Value of the requested setting, false if unknown setting.
+     */
+    boolean getBooleanSetting(String ident);
 
-	/**
-	 * @param ident Identifier for the setting. (See the gamemode config.)
-	 * @return Value of the requested setting, 0 if unknown setting.
-	 */
-	int getIntegerSetting(String ident);
+    /**
+     * @param ident Identifier for the setting. (See the gamemode config.)
+     * @return Value of the requested setting, 0 if unknown setting.
+     */
+    int getIntegerSetting(String ident);
 
-	/**
-	 * @param ident Identifier for the setting. (See the gamemode config.)
-	 * @return Value of the requested setting, 0 if unknown setting.
-	 */
-	float getFloatSetting(String ident);
+    /**
+     * @param ident Identifier for the setting. (See the gamemode config.)
+     * @return Value of the requested setting, 0 if unknown setting.
+     */
+    float getFloatSetting(String ident);
 
 }

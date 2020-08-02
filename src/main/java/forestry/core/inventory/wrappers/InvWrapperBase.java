@@ -19,117 +19,117 @@ import net.minecraft.item.ItemStack;
  */
 public abstract class InvWrapperBase implements IInventory {
 
-	private final IInventory inv;
-	private boolean checkItems = true;
+    private final IInventory inv;
+    private boolean checkItems = true;
 
-	public InvWrapperBase(IInventory inv) {
-		this(inv, true);
-	}
+    public InvWrapperBase(IInventory inv) {
+        this(inv, true);
+    }
 
-	public InvWrapperBase(IInventory inv, boolean checkItems) {
-		this.inv = inv;
-		this.checkItems = checkItems;
-	}
+    public InvWrapperBase(IInventory inv, boolean checkItems) {
+        this.inv = inv;
+        this.checkItems = checkItems;
+    }
 
-	public IInventory getBaseInventory() {
-		return inv;
-	}
+    public IInventory getBaseInventory() {
+        return inv;
+    }
 
-	@Override
-	public int getSizeInventory() {
-		return inv.getSizeInventory();
-	}
+    @Override
+    public int getSizeInventory() {
+        return inv.getSizeInventory();
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inv.getStackInSlot(slot);
-	}
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        return inv.getStackInSlot(slot);
+    }
 
-	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		return inv.decrStackSize(slot, amount);
-	}
+    @Override
+    public ItemStack decrStackSize(int slot, int amount) {
+        return inv.decrStackSize(slot, amount);
+    }
 
-	@Override
-	public ItemStack removeStackFromSlot(int slot) {
-		return inv.removeStackFromSlot(slot);
-	}
+    @Override
+    public ItemStack removeStackFromSlot(int slot) {
+        return inv.removeStackFromSlot(slot);
+    }
 
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		inv.setInventorySlotContents(slot, itemstack);
-	}
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack itemstack) {
+        inv.setInventorySlotContents(slot, itemstack);
+    }
 
-	//TODO inventory name
-	//	@Override
-	//	public String getName() {
-	//		return inv.getName();
-	//	}
-	//
-	//	@Override
-	//	public ITextComponent getDisplayName() {
-	//		return inv.getDisplayName();
-	//	}
+    //TODO inventory name
+    //	@Override
+    //	public String getName() {
+    //		return inv.getName();
+    //	}
+    //
+    //	@Override
+    //	public ITextComponent getDisplayName() {
+    //		return inv.getDisplayName();
+    //	}
 
-	@Override
-	public int getInventoryStackLimit() {
-		return inv.getInventoryStackLimit();
-	}
+    @Override
+    public int getInventoryStackLimit() {
+        return inv.getInventoryStackLimit();
+    }
 
-	@Override
-	public void markDirty() {
-		inv.markDirty();
-	}
+    @Override
+    public void markDirty() {
+        inv.markDirty();
+    }
 
-	@Override
-	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
-		return inv.isUsableByPlayer(PlayerEntity);
-	}
+    @Override
+    public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
+        return inv.isUsableByPlayer(PlayerEntity);
+    }
 
-	@Override
-	public void openInventory(PlayerEntity player) {
-		inv.openInventory(player);
-	}
+    @Override
+    public void openInventory(PlayerEntity player) {
+        inv.openInventory(player);
+    }
 
-	@Override
-	public void closeInventory(PlayerEntity player) {
-		inv.closeInventory(player);
-	}
+    @Override
+    public void closeInventory(PlayerEntity player) {
+        inv.closeInventory(player);
+    }
 
-	//TODO inventory name
-	//	@Override
-	//	public boolean hasCustomName() {
-	//		return inv.hasCustomName();
-	//	}
+    //TODO inventory name
+    //	@Override
+    //	public boolean hasCustomName() {
+    //		return inv.hasCustomName();
+    //	}
 
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return !checkItems || inv.isItemValidForSlot(slot, stack);
-	}
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return !checkItems || inv.isItemValidForSlot(slot, stack);
+    }
 
-	//TODO inventory field
-	//	@Override
-	//	public int getField(int id) {
-	//		return inv.getField(id);
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//		inv.setField(id, value);
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return inv.getFieldCount();
-	//	}
+    //TODO inventory field
+    //	@Override
+    //	public int getField(int id) {
+    //		return inv.getField(id);
+    //	}
+    //
+    //	@Override
+    //	public void setField(int id, int value) {
+    //		inv.setField(id, value);
+    //	}
+    //
+    //	@Override
+    //	public int getFieldCount() {
+    //		return inv.getFieldCount();
+    //	}
 
-	@Override
-	public void clear() {
-		inv.clear();
-	}
+    @Override
+    public void clear() {
+        inv.clear();
+    }
 
-	public boolean checkItems() {
-		return checkItems;
-	}
+    public boolean checkItems() {
+        return checkItems;
+    }
 }
 

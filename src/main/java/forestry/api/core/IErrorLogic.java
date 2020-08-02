@@ -13,32 +13,32 @@ import net.minecraft.network.PacketBuffer;
  */
 public interface IErrorLogic extends IErrorSource {
 
-	/**
-	 * Sets the errorState when condition is true, and unsets it when condition is false.
-	 *
-	 * @return condition
-	 */
-	boolean setCondition(boolean condition, IErrorState errorState);
+    /**
+     * Sets the errorState when condition is true, and unsets it when condition is false.
+     *
+     * @return condition
+     */
+    boolean setCondition(boolean condition, IErrorState errorState);
 
-	/**
-	 * @return true if the error state is active.
-	 */
-	boolean contains(IErrorState state);
+    /**
+     * @return true if the error state is active.
+     */
+    boolean contains(IErrorState state);
 
-	/**
-	 * @return true if there are any active error states.
-	 */
-	boolean hasErrors();
+    /**
+     * @return true if there are any active error states.
+     */
+    boolean hasErrors();
 
-	/**
-	 * Sets all active error states to false
-	 */
-	void clearErrors();
+    /**
+     * Sets all active error states to false
+     */
+    void clearErrors();
 
-	/**
-	 * Network serialization for syncing errors to the client from the server.
-	 */
-	void writeData(PacketBuffer data);
+    /**
+     * Network serialization for syncing errors to the client from the server.
+     */
+    void writeData(PacketBuffer data);
 
-	void readData(PacketBuffer data);
+    void readData(PacketBuffer data);
 }

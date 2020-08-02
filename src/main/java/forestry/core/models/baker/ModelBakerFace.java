@@ -21,16 +21,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 @OnlyIn(Dist.CLIENT)
 public class ModelBakerFace {
-	public final Direction face;
+    public final Direction face;
 
-	public final TextureAtlasSprite spite;
+    public final TextureAtlasSprite spite;
 
-	public final int colorIndex;
+    public final int colorIndex;
 
-	public ModelBakerFace(Direction face, int colorIndex, TextureAtlasSprite sprite) {
-		this.colorIndex = colorIndex;
-		this.face = face;
-		this.spite = sprite;
-	}
+    public ModelBakerFace(Direction face, int colorIndex, TextureAtlasSprite sprite) {
+        this.colorIndex = colorIndex;
+        this.face = face;
+        this.spite = sprite;
+    }
 
 }

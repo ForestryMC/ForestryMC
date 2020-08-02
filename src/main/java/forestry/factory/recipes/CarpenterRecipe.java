@@ -22,37 +22,37 @@ import forestry.core.recipes.ShapedRecipeCustom;
 
 public class CarpenterRecipe implements ICarpenterRecipe {
 
-	private final int packagingTime;
-	private final FluidStack liquid;
-	private final ItemStack box;
-	private final ShapedRecipeCustom internal;
+    private final int packagingTime;
+    private final FluidStack liquid;
+    private final ItemStack box;
+    private final ShapedRecipeCustom internal;
 
-	public CarpenterRecipe(int packagingTime, FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
-		Preconditions.checkNotNull(box);
-		Preconditions.checkNotNull(internal);
-		this.packagingTime = packagingTime;
-		this.liquid = liquid;
-		this.box = box;
-		this.internal = internal;
-	}
+    public CarpenterRecipe(int packagingTime, FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
+        Preconditions.checkNotNull(box);
+        Preconditions.checkNotNull(internal);
+        this.packagingTime = packagingTime;
+        this.liquid = liquid;
+        this.box = box;
+        this.internal = internal;
+    }
 
-	@Override
-	public int getPackagingTime() {
-		return packagingTime;
-	}
+    @Override
+    public int getPackagingTime() {
+        return packagingTime;
+    }
 
-	@Override
-	public ItemStack getBox() {
-		return box;
-	}
+    @Override
+    public ItemStack getBox() {
+        return box;
+    }
 
-	@Override
-	public FluidStack getFluidResource() {
-		return liquid;
-	}
+    @Override
+    public FluidStack getFluidResource() {
+        return liquid;
+    }
 
-	@Override
-	public IDescriptiveRecipe getCraftingGridRecipe() {
-		return internal;
-	}
+    @Override
+    public IDescriptiveRecipe getCraftingGridRecipe() {
+        return internal;
+    }
 }

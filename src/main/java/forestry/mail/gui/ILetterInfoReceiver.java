@@ -17,5 +17,5 @@ import forestry.api.mail.IMailAddress;
 import forestry.api.mail.ITradeStationInfo;
 
 public interface ILetterInfoReceiver {
-	void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo);
+    void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo);
 }

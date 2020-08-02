@@ -24,46 +24,46 @@ import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.tiles.TileMoistener;
 
 public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
-	public static final short SLOT_STASH_1 = 0;
-	public static final short SLOT_STASH_COUNT = 6;
-	public static final short SLOT_RESERVOIR_1 = 6;
-	public static final short SLOT_RESERVOIR_COUNT = 3;
-	public static final short SLOT_WORKING = 9;
-	public static final short SLOT_PRODUCT = 10;
-	public static final short SLOT_RESOURCE = 11;
+    public static final short SLOT_STASH_1 = 0;
+    public static final short SLOT_STASH_COUNT = 6;
+    public static final short SLOT_RESERVOIR_1 = 6;
+    public static final short SLOT_RESERVOIR_COUNT = 3;
+    public static final short SLOT_WORKING = 9;
+    public static final short SLOT_PRODUCT = 10;
+    public static final short SLOT_RESOURCE = 11;
 
-	public InventoryMoistener(TileMoistener moistener) {
-		super(moistener, 12, "Items");
-	}
+    public InventoryMoistener(TileMoistener moistener) {
+        super(moistener, 12, "Items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_RESOURCE) {
-			return MoistenerRecipeManager.isResource(itemStack);
-		}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_RESOURCE) {
+            return MoistenerRecipeManager.isResource(itemStack);
+        }
 
-		if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
-			return FuelManager.moistenerResource.containsKey(itemStack);
-		}
+        if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
+            return FuelManager.moistenerResource.containsKey(itemStack);
+        }
 
-		if (slotIndex == SLOT_PRODUCT) {
-			LazyOptional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
-			return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);    //TODO very common pattern. Create Helper?
-		}
+        if (slotIndex == SLOT_PRODUCT) {
+            LazyOptional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
+            return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);    //TODO very common pattern. Create Helper?
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
-		if (slotIndex == SLOT_PRODUCT) {
-			return true;
-		}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+        if (slotIndex == SLOT_PRODUCT) {
+            return true;
+        }
 
-		if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT)) {
-			return !FuelManager.moistenerResource.containsKey(itemstack);
-		}
+        if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT)) {
+            return !FuelManager.moistenerResource.containsKey(itemstack);
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

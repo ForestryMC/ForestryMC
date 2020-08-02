@@ -33,47 +33,47 @@ import forestry.core.render.TextureManagerForestry;
 @OnlyIn(Dist.CLIENT)
 public class ProxyClient extends ProxyCommon {
 
-	@Override
-	public void registerTickHandlers() {
-		super.registerTickHandlers();
-		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
-		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
-	}
+    @Override
+    public void registerTickHandlers() {
+        super.registerTickHandlers();
+        MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
+        MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
+    }
 
-	@Override
-	public void registerEventHandlers() {
-		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandlerClient());
-		MinecraftForge.EVENT_BUS.register(new ClimateHandlerClient());
-	}
+    @Override
+    public void registerEventHandlers() {
+        MinecraftForge.EVENT_BUS.register(new MultiblockEventHandlerClient());
+        MinecraftForge.EVENT_BUS.register(new ClimateHandlerClient());
+    }
 
-	@Override
-	public void registerBlock(Block block) {
-		ClientManager.getInstance().registerBlockClient(block);
-		if (Minecraft.getInstance() != null) {
-			TextureManagerForestry.getInstance().registerBlock(block);
-		}
-	}
+    @Override
+    public void registerBlock(Block block) {
+        ClientManager.getInstance().registerBlockClient(block);
+        if (Minecraft.getInstance() != null) {
+            TextureManagerForestry.getInstance().registerBlock(block);
+        }
+    }
 
-	@Override
-	public void registerItem(Item item) {
-		ClientManager.getInstance().registerItemClient(item);
-		if (Minecraft.getInstance() != null) {
-			TextureManagerForestry.getInstance().registerItem(item);
-		}
-	}
+    @Override
+    public void registerItem(Item item) {
+        ClientManager.getInstance().registerItemClient(item);
+        if (Minecraft.getInstance() != null) {
+            TextureManagerForestry.getInstance().registerItem(item);
+        }
+    }
 
-	@Override
-	public File getForestryRoot() {
-		return Minecraft.getInstance().gameDir;
-	}
+    @Override
+    public File getForestryRoot() {
+        return Minecraft.getInstance().gameDir;
+    }
 
-	@Override
-	public double getBlockReachDistance(PlayerEntity PlayerEntity) {
-		if (PlayerEntity instanceof ClientPlayerEntity) {
-			return Minecraft.getInstance().playerController.getBlockReachDistance();
-		} else {
-			return 4f;
-		}
-	}
+    @Override
+    public double getBlockReachDistance(PlayerEntity PlayerEntity) {
+        if (PlayerEntity instanceof ClientPlayerEntity) {
+            return Minecraft.getInstance().playerController.getBlockReachDistance();
+        } else {
+            return 4f;
+        }
+    }
 
 }

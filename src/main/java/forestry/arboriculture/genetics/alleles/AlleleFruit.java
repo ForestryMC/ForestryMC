@@ -21,45 +21,45 @@ import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.core.ISetupListener;
 
 public class AlleleFruit extends AlleleCategorized implements IAlleleFruit, ISetupListener {
-	private final IFruitProvider provider;
+    private final IFruitProvider provider;
 
-	public AlleleFruit(String name, IFruitProvider provider) {
-		this(name, provider, false);
-	}
+    public AlleleFruit(String name, IFruitProvider provider) {
+        this(name, provider, false);
+    }
 
-	public AlleleFruit(String name, IFruitProvider provider, boolean isDominant) {
-		super(provider.getModID(), "fruit", name, isDominant);
-		this.provider = provider;
-	}
+    public AlleleFruit(String name, IFruitProvider provider, boolean isDominant) {
+        super(provider.getModID(), "fruit", name, isDominant);
+        this.provider = provider;
+    }
 
-	@Override
-	public IFruitProvider getProvider() {
-		return this.provider;
-	}
+    @Override
+    public IFruitProvider getProvider() {
+        return this.provider;
+    }
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return getProvider().getDescription();
-	}
+    @Override
+    public ITextComponent getDisplayName() {
+        return getProvider().getDescription();
+    }
 
-	@Nullable
-	@Override
-	public String getModelName() {
-		return getProvider().getModelName();
-	}
+    @Nullable
+    @Override
+    public String getModelName() {
+        return getProvider().getModelName();
+    }
 
-	@Override
-	public int compareTo(IAlleleFruit o) {
-		return 0;
-	}
+    @Override
+    public int compareTo(IAlleleFruit o) {
+        return 0;
+    }
 
-	@Override
-	public void onStartSetup() {
-		provider.onStartSetup();
-	}
+    @Override
+    public void onStartSetup() {
+        provider.onStartSetup();
+    }
 
-	@Override
-	public void onFinishSetup() {
-		provider.onFinishSetup();
-	}
+    @Override
+    public void onFinishSetup() {
+        provider.onFinishSetup();
+    }
 }

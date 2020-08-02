@@ -38,62 +38,62 @@ import forestry.api.core.tooltips.ToolTip;
  */
 public class FilteredTank extends StandardTank {
 
-	private final Set<ResourceLocation> filters = new HashSet<>(); // FluidNames
+    private final Set<ResourceLocation> filters = new HashSet<>(); // FluidNames
 
-	public FilteredTank(int capacity) {
-		super(capacity);
-		setValidator(this::fluidMatchesFilter);
-	}
+    public FilteredTank(int capacity) {
+        super(capacity);
+        setValidator(this::fluidMatchesFilter);
+    }
 
-	public FilteredTank(int capacity, boolean canFill, boolean canDrain) {
-		super(capacity, canFill, canDrain);
-	}
+    public FilteredTank(int capacity, boolean canFill, boolean canDrain) {
+        super(capacity, canFill, canDrain);
+    }
 
-	public FilteredTank setFilters(Fluid... filters) {
-		return setFilters(Arrays.asList(filters));
-	}
+    public FilteredTank setFilters(Fluid... filters) {
+        return setFilters(Arrays.asList(filters));
+    }
 
-	public FilteredTank setFilters(Collection<Fluid> filters) {
-		this.filters.clear();
-		for (Fluid fluid : filters) {
-			this.filters.add(fluid.getRegistryName());
-		}
-		return this;
-	}
+    public FilteredTank setFilters(Collection<Fluid> filters) {
+        this.filters.clear();
+        for (Fluid fluid : filters) {
+            this.filters.add(fluid.getRegistryName());
+        }
+        return this;
+    }
 
-	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource.getFluid() != Fluids.EMPTY && filters.contains(resource.getFluid().getRegistryName());
-	}
+    private boolean fluidMatchesFilter(FluidStack resource) {
+        return resource.getFluid() != Fluids.EMPTY && filters.contains(resource.getFluid().getRegistryName());
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	protected void refreshTooltip() {
-		if (hasFluid()) {
-			super.refreshTooltip();
-			return;
-		}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    protected void refreshTooltip() {
+        if (hasFluid()) {
+            super.refreshTooltip();
+            return;
+        }
 
-		ToolTip toolTip = getToolTip();
-		toolTip.clear();
-		if (Screen.hasShiftDown() || filters.size() < 5) {
-			for (ResourceLocation filterName : filters) {
-				Fluid fluidFilter = ForgeRegistries.FLUIDS.getValue(filterName);
-				FluidAttributes attributes = fluidFilter.getAttributes();
-				Rarity rarity = attributes.getRarity();
-				if (rarity == null) {
-					rarity = Rarity.COMMON;
-				}
-				FluidStack filterFluidStack = new FluidStack(fluidFilter, 1);
-				toolTip.add(filterFluidStack.getDisplayName(), rarity.color);
-			}
-		} else {
-			//TODO can this be simplified
-			ITextComponent tmiComponent = new StringTextComponent("<")
-				.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
-				.append(new StringTextComponent(">"));
-			toolTip.add(tmiComponent, TextFormatting.ITALIC);
-		}
-		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));
-	}
+        ToolTip toolTip = getToolTip();
+        toolTip.clear();
+        if (Screen.hasShiftDown() || filters.size() < 5) {
+            for (ResourceLocation filterName : filters) {
+                Fluid fluidFilter = ForgeRegistries.FLUIDS.getValue(filterName);
+                FluidAttributes attributes = fluidFilter.getAttributes();
+                Rarity rarity = attributes.getRarity();
+                if (rarity == null) {
+                    rarity = Rarity.COMMON;
+                }
+                FluidStack filterFluidStack = new FluidStack(fluidFilter, 1);
+                toolTip.add(filterFluidStack.getDisplayName(), rarity.color);
+            }
+        } else {
+            //TODO can this be simplified
+            ITextComponent tmiComponent = new StringTextComponent("<")
+                    .append(new TranslationTextComponent("for.gui.tooltip.tmi"))
+                    .append(new StringTextComponent(">"));
+            toolTip.add(tmiComponent, TextFormatting.ITALIC);
+        }
+        toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));
+    }
 
 }

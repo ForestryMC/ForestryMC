@@ -9,5 +9,5 @@ import net.minecraft.world.IBlockReader;
 @FunctionalInterface
 public interface IShapeProvider {
 
-	VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context);
+    VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context);
 }

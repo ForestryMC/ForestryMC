@@ -38,100 +38,100 @@ import forestry.arboriculture.worldgen.FeatureArboriculture;
 import forestry.core.worldgen.FeatureBase;
 
 public class TileSapling extends TileTreeContainer {
-	public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<>();
+    public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<>();
 
-	private int timesTicked = 0;
+    private int timesTicked = 0;
 
-	public TileSapling() {
-		super(ArboricultureTiles.SAPLING.tileType());
-	}
+    public TileSapling() {
+        super(ArboricultureTiles.SAPLING.tileType());
+    }
 
-	/* SAVING & LOADING */
-	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+    /* SAVING & LOADING */
+    @Override
+    public void read(BlockState state, CompoundNBT compoundNBT) {
+        super.read(state, compoundNBT);
 
-		timesTicked = compoundNBT.getInt("TT");
-	}
+        timesTicked = compoundNBT.getInt("TT");
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        compoundNBT = super.write(compoundNBT);
 
-		compoundNBT.putInt("TT", timesTicked);
-		return compoundNBT;
-	}
+        compoundNBT.putInt("TT", timesTicked);
+        return compoundNBT;
+    }
 
-	@Override
-	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
-		timesTicked++;
-		tryGrow(rand, false);
-	}
+    @Override
+    public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+        timesTicked++;
+        tryGrow(rand, false);
+    }
 
-	private static int getRequiredMaturity(World world, ITree tree) {
-		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
-		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
-		return Math.round(tree.getRequiredMaturity() * maturationModifier);
-	}
+    private static int getRequiredMaturity(World world, ITree tree) {
+        ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
+        float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
+        return Math.round(tree.getRequiredMaturity() * maturationModifier);
+    }
 
-	public boolean canAcceptBoneMeal(Random rand) {
-		ITree tree = getTree();
+    public boolean canAcceptBoneMeal(Random rand) {
+        ITree tree = getTree();
 
-		if (tree == null) {
-			return false;
-		}
+        if (tree == null) {
+            return false;
+        }
 
-		int maturity = getRequiredMaturity(world, tree);
-		if (timesTicked < maturity) {
-			return true;
-		}
+        int maturity = getRequiredMaturity(world, tree);
+        if (timesTicked < maturity) {
+            return true;
+        }
 
-		Feature generator = tree.getTreeGenerator(world, getPos(), true);
-		if (generator instanceof FeatureArboriculture) {
-			FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
-			arboricultureGenerator.preGenerate(world, rand, getPos());
-			return arboricultureGenerator.getValidGrowthPos(world, getPos()) != null;
-		} else {
-			return true;
-		}
-	}
+        Feature generator = tree.getTreeGenerator(world, getPos(), true);
+        if (generator instanceof FeatureArboriculture) {
+            FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
+            arboricultureGenerator.preGenerate(world, rand, getPos());
+            return arboricultureGenerator.getValidGrowthPos(world, getPos()) != null;
+        } else {
+            return true;
+        }
+    }
 
-	public void tryGrow(Random random, boolean bonemealed) {
-		ITree tree = getTree();
+    public void tryGrow(Random random, boolean bonemealed) {
+        ITree tree = getTree();
 
-		if (tree == null) {
-			return;
-		}
+        if (tree == null) {
+            return;
+        }
 
-		int maturity = getRequiredMaturity(world, tree);
-		if (timesTicked < maturity) {
-			if (bonemealed) {
-				timesTicked = maturity;
-			}
-			return;
-		}
+        int maturity = getRequiredMaturity(world, tree);
+        if (timesTicked < maturity) {
+            if (bonemealed) {
+                timesTicked = maturity;
+            }
+            return;
+        }
 
-		Feature generator = tree.getTreeGenerator(world, getPos(), bonemealed);
-		final boolean generated;
-		if (generator instanceof FeatureBase) {
-			generated = ((FeatureBase) generator).place(world, random, getPos(), false);
-		} else {
-			generated = generator.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
-		}
+        Feature generator = tree.getTreeGenerator(world, getPos(), bonemealed);
+        final boolean generated;
+        if (generator instanceof FeatureBase) {
+            generated = ((FeatureBase) generator).place(world, random, getPos(), false);
+        } else {
+            generated = generator.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
+        }
 
-		if (generated) {
-			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, getOwnerHandler().getOwner());
-			breedingTracker.registerBirth(tree);
-		}
-	}
+        if (generated) {
+            IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, getOwnerHandler().getOwner());
+            breedingTracker.registerBirth(tree);
+        }
+    }
 
-	@Nonnull
-	@Override
-	public IModelData getModelData() {
-		ITree tree = getTree();
-		if (tree == null) {
-			return EmptyModelData.INSTANCE;
-		}
-		return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
-	}
+    @Nonnull
+    @Override
+    public IModelData getModelData() {
+        ITree tree = getTree();
+        if (tree == null) {
+            return EmptyModelData.INSTANCE;
+        }
+        return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
+    }
 }

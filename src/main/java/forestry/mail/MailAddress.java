@@ -29,111 +29,111 @@ import forestry.core.utils.PlayerUtil;
 
 public class MailAddress implements INbtWritable, IMailAddress {
 
-	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
+    private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
 
-	private final EnumAddressee type;
-	private final GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
+    private final EnumAddressee type;
+    private final GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
 
-	public MailAddress() {
-		this.type = EnumAddressee.PLAYER;
-		this.gameProfile = invalidGameProfile;
-	}
+    public MailAddress() {
+        this.type = EnumAddressee.PLAYER;
+        this.gameProfile = invalidGameProfile;
+    }
 
-	public MailAddress(GameProfile gameProfile) {
-		Preconditions.checkNotNull(gameProfile, "gameProfile must not be null");
+    public MailAddress(GameProfile gameProfile) {
+        Preconditions.checkNotNull(gameProfile, "gameProfile must not be null");
 
-		this.type = EnumAddressee.PLAYER;
-		this.gameProfile = gameProfile;
-	}
+        this.type = EnumAddressee.PLAYER;
+        this.gameProfile = gameProfile;
+    }
 
-	public MailAddress(String name) {
-		Preconditions.checkNotNull(name, "name must not be null");
-		Preconditions.checkArgument(StringUtils.isNotBlank(name), "name must not be blank");
+    public MailAddress(String name) {
+        Preconditions.checkNotNull(name, "name must not be null");
+        Preconditions.checkArgument(StringUtils.isNotBlank(name), "name must not be blank");
 
-		this.type = EnumAddressee.TRADER;
-		this.gameProfile = new GameProfile(null, name);
-	}
+        this.type = EnumAddressee.TRADER;
+        this.gameProfile = new GameProfile(null, name);
+    }
 
-	public MailAddress(CompoundNBT nbt) {
-		EnumAddressee type = null;
-		GameProfile gameProfile = invalidGameProfile;
-		if (nbt.contains("TP")) {
-			String typeName = nbt.getString("TP");
-			type = EnumAddressee.fromString(typeName);
-		}
+    public MailAddress(CompoundNBT nbt) {
+        EnumAddressee type = null;
+        GameProfile gameProfile = invalidGameProfile;
+        if (nbt.contains("TP")) {
+            String typeName = nbt.getString("TP");
+            type = EnumAddressee.fromString(typeName);
+        }
 
-		if (type == null) {
-			type = EnumAddressee.PLAYER;
-			gameProfile = invalidGameProfile;
-		} else if (nbt.contains("profile")) {
-			CompoundNBT profileTag = nbt.getCompound("profile");
-			gameProfile = NBTUtil.readGameProfile(profileTag);
-			if (gameProfile == null) {
-				gameProfile = invalidGameProfile;
-			}
-		}
+        if (type == null) {
+            type = EnumAddressee.PLAYER;
+            gameProfile = invalidGameProfile;
+        } else if (nbt.contains("profile")) {
+            CompoundNBT profileTag = nbt.getCompound("profile");
+            gameProfile = NBTUtil.readGameProfile(profileTag);
+            if (gameProfile == null) {
+                gameProfile = invalidGameProfile;
+            }
+        }
 
-		this.type = type;
-		this.gameProfile = gameProfile;
-	}
+        this.type = type;
+        this.gameProfile = gameProfile;
+    }
 
-	@Override
-	public EnumAddressee getType() {
-		return type;
-	}
+    @Override
+    public EnumAddressee getType() {
+        return type;
+    }
 
-	@Override
-	public String getName() {
-		return gameProfile.getName();
-	}
+    @Override
+    public String getName() {
+        return gameProfile.getName();
+    }
 
-	@Override
-	public boolean isValid() {
-		return gameProfile.getName() != null && !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
-	}
+    @Override
+    public boolean isValid() {
+        return gameProfile.getName() != null && !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
+    }
 
-	@Override
-	public GameProfile getPlayerProfile() {
-		if (this.type != EnumAddressee.PLAYER) {
-			return invalidGameProfile;
-		}
-		return gameProfile;
-	}
+    @Override
+    public GameProfile getPlayerProfile() {
+        if (this.type != EnumAddressee.PLAYER) {
+            return invalidGameProfile;
+        }
+        return gameProfile;
+    }
 
-	@Override
-	public int hashCode() {
-		return gameProfile.getName().hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return gameProfile.getName().hashCode();
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof MailAddress)) {
-			return false;
-		}
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MailAddress)) {
+            return false;
+        }
 
-		MailAddress address = (MailAddress) o;
-		return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
-	}
+        MailAddress address = (MailAddress) o;
+        return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
+    }
 
-	@Override
-	public String toString() {
-		String name = getName().toLowerCase(Locale.ENGLISH);
-		if (getType() == EnumAddressee.PLAYER) {
-			return type + "-" + name + '-' + gameProfile.getId();
-		} else {
-			return type + "-" + name;
-		}
-	}
+    @Override
+    public String toString() {
+        String name = getName().toLowerCase(Locale.ENGLISH);
+        if (getType() == EnumAddressee.PLAYER) {
+            return type + "-" + name + '-' + gameProfile.getId();
+        } else {
+            return type + "-" + name;
+        }
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT.putString("TP", type.toString());
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        compoundNBT.putString("TP", type.toString());
 
-		if (gameProfile != invalidGameProfile) {
-			CompoundNBT profileNbt = new CompoundNBT();
-			NBTUtil.writeGameProfile(profileNbt, gameProfile);
-			compoundNBT.put("profile", profileNbt);
-		}
-		return compoundNBT;
-	}
+        if (gameProfile != invalidGameProfile) {
+            CompoundNBT profileNbt = new CompoundNBT();
+            NBTUtil.writeGameProfile(profileNbt, gameProfile);
+            compoundNBT.put("profile", profileNbt);
+        }
+        return compoundNBT;
+    }
 }

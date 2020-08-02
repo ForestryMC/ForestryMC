@@ -24,27 +24,27 @@ import forestry.factory.tiles.TileSqueezer;
 
 public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
 
-	public static ContainerSqueezer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileSqueezer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileSqueezer.class);
-		return new ContainerSqueezer(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerSqueezer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileSqueezer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileSqueezer.class);
+        return new ContainerSqueezer(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerSqueezer(int windowId, PlayerInventory player, TileSqueezer tile) {
-		super(windowId, FactoryContainers.SQUEEZER.containerType(), player, tile, 8, 84);
+    public ContainerSqueezer(int windowId, PlayerInventory player, TileSqueezer tile) {
+        super(windowId, FactoryContainers.SQUEEZER.containerType(), player, tile, 8, 84);
 
-		// Resource inventory
-		for (int row = 0; row < 3; row++) {
-			for (int column = 0; column < 3; column++) {
-				this.addSlot(new SlotFiltered(this.tile, column + row * 3, 17 + column * 18, 21 + row * 18));
-			}
-		}
+        // Resource inventory
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                this.addSlot(new SlotFiltered(this.tile, column + row * 3, 17 + column * 18, 21 + row * 18));
+            }
+        }
 
-		// Remnants slot
-		this.addSlot(new SlotOutput(this.tile, InventorySqueezer.SLOT_REMNANT, 97, 60));
+        // Remnants slot
+        this.addSlot(new SlotOutput(this.tile, InventorySqueezer.SLOT_REMNANT, 97, 60));
 
-		// Can slot
-		this.addSlot(new SlotLiquidIn(this.tile, InventorySqueezer.SLOT_CAN_INPUT, 147, 24));
-		// Output slot
-		this.addSlot(new SlotOutput(this.tile, InventorySqueezer.SLOT_CAN_OUTPUT, 147, 60));
-	}
+        // Can slot
+        this.addSlot(new SlotLiquidIn(this.tile, InventorySqueezer.SLOT_CAN_INPUT, 147, 24));
+        // Output slot
+        this.addSlot(new SlotOutput(this.tile, InventorySqueezer.SLOT_CAN_OUTPUT, 147, 60));
+    }
 }

@@ -14,21 +14,21 @@ import forestry.arboriculture.features.ArboricultureBlocks;
 
 public class LeafProvider implements ILeafProvider {
 
-	@Nullable
-	private IAlleleTreeSpecies treeSpecies = null;
+    @Nullable
+    private IAlleleTreeSpecies treeSpecies = null;
 
-	@Override
-	public void init(IAlleleTreeSpecies treeSpecies) {
-		this.treeSpecies = treeSpecies;
-	}
+    @Override
+    public void init(IAlleleTreeSpecies treeSpecies) {
+        this.treeSpecies = treeSpecies;
+    }
 
-	@Override
-	public ItemStack getDecorativeLeaves() {
-		IAllele allele = treeSpecies;
-		if (allele == null) {
-			allele = TreeDefinition.Oak.getTemplate().get(TreeChromosomes.SPECIES);
-		}
-		return ArboricultureBlocks.LEAVES_DECORATIVE.findFeature(allele.getRegistryName().toString()).map(IItemProvider::stack).orElse(ItemStack.EMPTY);
-	}
+    @Override
+    public ItemStack getDecorativeLeaves() {
+        IAllele allele = treeSpecies;
+        if (allele == null) {
+            allele = TreeDefinition.Oak.getTemplate().get(TreeChromosomes.SPECIES);
+        }
+        return ArboricultureBlocks.LEAVES_DECORATIVE.findFeature(allele.getRegistryName().toString()).map(IItemProvider::stack).orElse(ItemStack.EMPTY);
+    }
 
 }

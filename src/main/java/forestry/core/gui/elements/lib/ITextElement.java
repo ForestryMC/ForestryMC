@@ -10,10 +10,10 @@ import net.minecraft.util.text.ITextProperties;
  */
 public interface ITextElement extends IGuiElement {
 
-	/**
-	 * @return The text this element displays.
-	 */
-	Collection<ITextProperties> getLines();
+    /**
+     * @return The text this element displays.
+     */
+    Collection<ITextProperties> getLines();
 
-	ITextElement setText(ITextComponent text);
+    ITextElement setText(ITextComponent text);
 }

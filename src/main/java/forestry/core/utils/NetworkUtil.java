@@ -33,47 +33,47 @@ import forestry.core.network.PacketHandlerServer;
 //import net.minecraft.server.management.PlayerChunkMap;
 
 public class NetworkUtil {
-	public static <P extends IForestryPacketClient> void sendNetworkPacket(P packet, BlockPos pos, World world) {
-		if (!(world instanceof ServerWorld)) {
-			return;
-		}
+    public static <P extends IForestryPacketClient> void sendNetworkPacket(P packet, BlockPos pos, World world) {
+        if (!(world instanceof ServerWorld)) {
+            return;
+        }
 
-		ServerWorld worldServer = (ServerWorld) world;
-		//		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
+        ServerWorld worldServer = (ServerWorld) world;
+        //		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
 
-		//		int chunkX = pos.getX() >> 4;
-		//		int chunkZ = pos.getZ() >> 4;
+        //		int chunkX = pos.getX() >> 4;
+        //		int chunkZ = pos.getZ() >> 4;
 
-		for (PlayerEntity playerObj : world.getPlayers()) {
-			if (playerObj instanceof ServerPlayerEntity) {
-				ServerPlayerEntity player = (ServerPlayerEntity) playerObj;
+        for (PlayerEntity playerObj : world.getPlayers()) {
+            if (playerObj instanceof ServerPlayerEntity) {
+                ServerPlayerEntity player = (ServerPlayerEntity) playerObj;
 
-				if (true) {//TODO packet spam - playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
-					sendToPlayer(packet, player);
-				}
-			}
-		}
-	}
+                if (true) {//TODO packet spam - playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
+                    sendToPlayer(packet, player);
+                }
+            }
+        }
+    }
 
-	public static void sendToPlayer(IForestryPacketClient packet, PlayerEntity PlayerEntity) {
-		if (!(PlayerEntity instanceof ServerPlayerEntity) || PlayerEntity instanceof FakePlayer) {
-			return;
-		}
+    public static void sendToPlayer(IForestryPacketClient packet, PlayerEntity PlayerEntity) {
+        if (!(PlayerEntity instanceof ServerPlayerEntity) || PlayerEntity instanceof FakePlayer) {
+            return;
+        }
 
-		ServerPlayerEntity player = (ServerPlayerEntity) PlayerEntity;
-		PacketHandlerServer.sendPacket(packet, player);
-	}
+        ServerPlayerEntity player = (ServerPlayerEntity) PlayerEntity;
+        PacketHandlerServer.sendPacket(packet, player);
+    }
 
-	public static void inventoryChangeNotify(PlayerEntity player, Container container) {
-		if (player instanceof ServerPlayerEntity) {
-			((ServerPlayerEntity) player).sendContainerToPlayer(container);
-		}
-	}
+    public static void inventoryChangeNotify(PlayerEntity player, Container container) {
+        if (player instanceof ServerPlayerEntity) {
+            ((ServerPlayerEntity) player).sendContainerToPlayer(container);
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static void sendToServer(IForestryPacketServer packet) {
-		ClientPlayNetHandler netHandler = Minecraft.getInstance().getConnection();
-		Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
-		PacketHandlerClient.sendPacket(packet);
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static void sendToServer(IForestryPacketServer packet) {
+        ClientPlayNetHandler netHandler = Minecraft.getInstance().getConnection();
+        Preconditions.checkNotNull(netHandler, "Tried to send packet before netHandler (client world) exists.");
+        PacketHandlerClient.sendPacket(packet);
+    }
 }

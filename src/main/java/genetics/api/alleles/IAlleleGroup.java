@@ -6,11 +6,11 @@ import genetics.api.individual.IChromosomeType;
 
 public interface IAlleleGroup<V> {
 
-	Collection<IAllele> getAlleles();
+    Collection<IAllele> getAlleles();
 
-	Collection<IChromosomeType> getTypes();
+    Collection<IChromosomeType> getTypes();
 
-	String getName();
+    String getName();
 
-	Collection<V> getValues();
+    Collection<V> getValues();
 }

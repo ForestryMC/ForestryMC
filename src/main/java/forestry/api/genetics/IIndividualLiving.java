@@ -13,37 +13,37 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public interface IIndividualLiving extends IIndividual {
 
-	/**
-	 * @return Current health of the individual.
-	 */
-	int getHealth();
+    /**
+     * @return Current health of the individual.
+     */
+    int getHealth();
 
-	/**
-	 * Set the current health of the individual.
-	 */
-	void setHealth(int health);
+    /**
+     * Set the current health of the individual.
+     */
+    void setHealth(int health);
 
-	/**
-	 * @return Maximum health of the individual.
-	 */
-	int getMaxHealth();
+    /**
+     * @return Maximum health of the individual.
+     */
+    int getMaxHealth();
 
-	/**
-	 * Age the individual.
-	 */
-	void age(World world, float ageModifier);
+    /**
+     * Age the individual.
+     */
+    void age(World world, float ageModifier);
 
-	/**
-	 * @return true if the individual is among the living.
-	 */
-	boolean isAlive();
+    /**
+     * @return true if the individual is among the living.
+     */
+    boolean isAlive();
 
-	default boolean hasEffect() {
-		return getGenome().getPrimary(IAlleleForestrySpecies.class).hasEffect();
-	}
+    default boolean hasEffect() {
+        return getGenome().getPrimary(IAlleleForestrySpecies.class).hasEffect();
+    }
 
-	default boolean isSecret() {
-		return getGenome().getPrimary(IAlleleForestrySpecies.class).isSecret();
-	}
+    default boolean isSecret() {
+        return getGenome().getPrimary(IAlleleForestrySpecies.class).isSecret();
+    }
 
 }

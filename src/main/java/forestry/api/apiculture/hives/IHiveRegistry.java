@@ -12,56 +12,56 @@ import forestry.api.core.IBlockSubtype;
 
 public interface IHiveRegistry {
 
-	/* Forestry Hive Names */
-	enum HiveType implements IBlockSubtype {
-		FOREST("forestry:forest", "forestry.speciesForest"),
-		MEADOWS("forestry:meadows", "forestry.speciesMeadows"),
-		DESERT("forestry:desert", "forestry.speciesModest"),
-		JUNGLE("forestry:jungle", "forestry.speciesTropical"),
-		END("forestry:end", "forestry.speciesEnded"),
-		SNOW("forestry:snow", "forestry.speciesWintry"),
-		SWAMP("forestry:swamp", "forestry.speciesMarshy"),
-		SWARM("forestry:swarm", "forestry.speciesForest");
+    /* Forestry Hive Names */
+    enum HiveType implements IBlockSubtype {
+        FOREST("forestry:forest", "forestry.speciesForest"),
+        MEADOWS("forestry:meadows", "forestry.speciesMeadows"),
+        DESERT("forestry:desert", "forestry.speciesModest"),
+        JUNGLE("forestry:jungle", "forestry.speciesTropical"),
+        END("forestry:end", "forestry.speciesEnded"),
+        SNOW("forestry:snow", "forestry.speciesWintry"),
+        SWAMP("forestry:swamp", "forestry.speciesMarshy"),
+        SWARM("forestry:swarm", "forestry.speciesForest");
 
-		public static final HiveType[] VALUES = values();
+        public static final HiveType[] VALUES = values();
 
-		private final String hiveUid;
-		private final String speciesUid;
+        private final String hiveUid;
+        private final String speciesUid;
 
-		HiveType(String hiveUid, String speciesUid) {
-			this.hiveUid = hiveUid;
-			this.speciesUid = speciesUid;
-		}
-
-
-		public String getHiveUid() {
-			return hiveUid;
-		}
+        HiveType(String hiveUid, String speciesUid) {
+            this.hiveUid = hiveUid;
+            this.speciesUid = speciesUid;
+        }
 
 
-		public String getSpeciesUid() {
-			return speciesUid;
-		}
+        public String getHiveUid() {
+            return hiveUid;
+        }
 
-		@Override
-		public String getString() {
-			return name().toLowerCase(Locale.ENGLISH);
-		}
 
-		public int getMeta() {
-			return ordinal();
-		}
-	}
+        public String getSpeciesUid() {
+            return speciesUid;
+        }
 
-	/**
-	 * Adds a new hive to be generated in the world.
-	 */
-	void registerHive(String hiveName, IHiveDescription hiveDescription);
+        @Override
+        public String getString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
 
-	/**
-	 * Add drops to a registered hive.
-	 */
-	void addDrops(String hiveName, IHiveDrop... drops);
+        public int getMeta() {
+            return ordinal();
+        }
+    }
 
-	void addDrops(String hiveName, List<IHiveDrop> drop);
+    /**
+     * Adds a new hive to be generated in the world.
+     */
+    void registerHive(String hiveName, IHiveDescription hiveDescription);
+
+    /**
+     * Add drops to a registered hive.
+     */
+    void addDrops(String hiveName, IHiveDrop... drops);
+
+    void addDrops(String hiveName, List<IHiveDrop> drop);
 }

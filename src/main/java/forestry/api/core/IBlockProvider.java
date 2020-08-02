@@ -8,20 +8,20 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 
 public interface IBlockProvider<B extends Block, I extends Item> extends IItemProvider<I> {
-	boolean hasBlock();
+    boolean hasBlock();
 
-	@Nullable
-	B getBlock();
+    @Nullable
+    B getBlock();
 
-	Block block();
+    Block block();
 
-	Collection<B> collect();
+    Collection<B> collect();
 
-	default boolean blockEqual(BlockState state) {
-		return blockEqual(state.getBlock());
-	}
+    default boolean blockEqual(BlockState state) {
+        return blockEqual(state.getBlock());
+    }
 
-	default boolean blockEqual(Block block) {
-		return hasBlock() && block() == block;
-	}
+    default boolean blockEqual(Block block) {
+        return hasBlock() && block() == block;
+    }
 }

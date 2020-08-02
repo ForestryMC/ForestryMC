@@ -24,85 +24,85 @@ import net.minecraftforge.registries.IForgeRegistry;
  * the model manager of Forestry.
  */
 public interface IForestryModule {
-	default boolean isAvailable() {
-		return true;
-	}
+    default boolean isAvailable() {
+        return true;
+    }
 
-	default boolean canBeDisabled() {
-		return true;
-	}
+    default boolean canBeDisabled() {
+        return true;
+    }
 
-	default String getFailMessage() {
-		return "";
-	}
+    default String getFailMessage() {
+        return "";
+    }
 
-	/**
-	 * The ForestryModule.moduleID()s of any other modules this module depends on.
-	 */
-	default Set<ResourceLocation> getDependencyUids() {
-		return Collections.emptySet();
-	}
+    /**
+     * The ForestryModule.moduleID()s of any other modules this module depends on.
+     */
+    default Set<ResourceLocation> getDependencyUids() {
+        return Collections.emptySet();
+    }
 
-	/**
-	 * Can be used to setup the api.
-	 * Will only be called if the module is active if not {@link #disabledSetupAPI()} will be called.
-	 * <p>
-	 * Must be called by the mod that registers the container.
-	 */
-	default void setupAPI() {
-	}
+    /**
+     * Can be used to setup the api.
+     * Will only be called if the module is active if not {@link #disabledSetupAPI()} will be called.
+     * <p>
+     * Must be called by the mod that registers the container.
+     */
+    default void setupAPI() {
+    }
 
-	/**
-	 * Called to setup the api if this module is disabled in the config or has missing dependencies.
-	 * <p>
-	 * Must be called by the mod that registers the container.
-	 */
-	default void disabledSetupAPI() {
-	}
+    /**
+     * Called to setup the api if this module is disabled in the config or has missing dependencies.
+     * <p>
+     * Must be called by the mod that registers the container.
+     */
+    default void disabledSetupAPI() {
+    }
 
-	default void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
+    default void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
 
-	}
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	default void registerGuiFactories() {
+    @OnlyIn(Dist.CLIENT)
+    default void registerGuiFactories() {
 
-	}
+    }
 
-	/**
-	 * Must be called by the mod that registers the container.
-	 */
-	default void preInit() {
-	}
+    /**
+     * Must be called by the mod that registers the container.
+     */
+    default void preInit() {
+    }
 
-	/**
-	 * Can be used to register Buildcraft triggers.
-	 */
-	default void registerTriggers() {
-	}
+    /**
+     * Can be used to register Buildcraft triggers.
+     */
+    default void registerTriggers() {
+    }
 
-	default void doInit() {
-	}
+    default void doInit() {
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	default void clientSetup() {
+    @OnlyIn(Dist.CLIENT)
+    default void clientSetup() {
 
-	}
+    }
 
-	/**
-	 * Can be used to register recipes. Called after {@link #doInit()}.
-	 */
-	default void registerRecipes() {
-	}
+    /**
+     * Can be used to register recipes. Called after {@link #doInit()}.
+     */
+    default void registerRecipes() {
+    }
 
-	default void addLootPoolNames(Set<String> lootPoolNames) {
-	}
+    default void addLootPoolNames(Set<String> lootPoolNames) {
+    }
 
-	default void postInit() {
-	}
+    default void postInit() {
+    }
 
-	@Nullable
-	default Command[] getConsoleCommands() {
-		return null;
-	}
+    @Nullable
+    default Command[] getConsoleCommands() {
+        return null;
+    }
 }

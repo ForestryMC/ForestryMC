@@ -16,8 +16,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IStreamableGui {
-	void writeGuiData(PacketBufferForestry data);
+    void writeGuiData(PacketBufferForestry data);
 
-	@OnlyIn(Dist.CLIENT)
-	void readGuiData(PacketBufferForestry data) throws IOException;
+    @OnlyIn(Dist.CLIENT)
+    void readGuiData(PacketBufferForestry data) throws IOException;
 }

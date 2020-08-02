@@ -35,65 +35,65 @@ import genetics.organism.OrganismHandler;
 import genetics.root.DisplayHelper;
 
 public enum GeneticFactory implements IGeneticFactory {
-	INSTANCE;
+    INSTANCE;
 
-	@Override
-	public IAlleleTemplateBuilder createTemplateBuilder(IKaryotype karyotype) {
-		return new AlleleTemplateBuilder(karyotype, karyotype.getDefaultTemplate().alleles());
-	}
+    @Override
+    public IAlleleTemplateBuilder createTemplateBuilder(IKaryotype karyotype) {
+        return new AlleleTemplateBuilder(karyotype, karyotype.getDefaultTemplate().alleles());
+    }
 
-	@Override
-	public IAlleleTemplateBuilder createTemplateBuilder(IKaryotype karyotype, IAllele[] alleles) {
-		return new AlleleTemplateBuilder(karyotype, alleles);
-	}
+    @Override
+    public IAlleleTemplateBuilder createTemplateBuilder(IKaryotype karyotype, IAllele[] alleles) {
+        return new AlleleTemplateBuilder(karyotype, alleles);
+    }
 
-	@Override
-	public IAlleleTemplate createTemplate(IKaryotype karyotype, IAllele[] alleles) {
-		return new AlleleTemplate(Arrays.copyOf(alleles, alleles.length), karyotype);
-	}
+    @Override
+    public IAlleleTemplate createTemplate(IKaryotype karyotype, IAllele[] alleles) {
+        return new AlleleTemplate(Arrays.copyOf(alleles, alleles.length), karyotype);
+    }
 
-	@Override
-	public IGenome createGenome(IKaryotype karyotype, CompoundNBT compound) {
-		return new Genome(karyotype, compound);
-	}
+    @Override
+    public IGenome createGenome(IKaryotype karyotype, CompoundNBT compound) {
+        return new Genome(karyotype, compound);
+    }
 
-	@Override
-	public IGenome createGenome(IKaryotype karyotype, IChromosome[] chromosomes) {
-		return new Genome(karyotype, chromosomes);
-	}
+    @Override
+    public IGenome createGenome(IKaryotype karyotype, IChromosome[] chromosomes) {
+        return new Genome(karyotype, chromosomes);
+    }
 
-	@Override
-	public IChromosome createChromosome(IAllele allele, IChromosomeType type) {
-		return Chromosome.create(allele, type);
-	}
+    @Override
+    public IChromosome createChromosome(IAllele allele, IChromosomeType type) {
+        return Chromosome.create(allele, type);
+    }
 
-	@Override
-	public IChromosome createChromosome(IAllele firstAllele, IAllele secondAllele, IChromosomeType type) {
-		return Chromosome.create(firstAllele, secondAllele, type);
-	}
+    @Override
+    public IChromosome createChromosome(IAllele firstAllele, IAllele secondAllele, IChromosomeType type) {
+        return Chromosome.create(firstAllele, secondAllele, type);
+    }
 
-	@Override
-	public <I extends IIndividual> IOrganism<I> createOrganism(ItemStack itemStack, IOrganismType type, IRootDefinition<? extends IIndividualRoot<I>> definition) {
-		return new Organism<>(itemStack, definition, () -> type);
-	}
+    @Override
+    public <I extends IIndividual> IOrganism<I> createOrganism(ItemStack itemStack, IOrganismType type, IRootDefinition<? extends IIndividualRoot<I>> definition) {
+        return new Organism<>(itemStack, definition, () -> type);
+    }
 
-	@Override
-	public <I extends IIndividual> IOrganismHandler<I> createOrganismHandler(IRootDefinition<? extends IIndividualRoot<I>> rootDefinition, Supplier<ItemStack> stack) {
-		return new OrganismHandler<>(rootDefinition, stack);
-	}
+    @Override
+    public <I extends IIndividual> IOrganismHandler<I> createOrganismHandler(IRootDefinition<? extends IIndividualRoot<I>> rootDefinition, Supplier<ItemStack> stack) {
+        return new OrganismHandler<>(rootDefinition, stack);
+    }
 
-	@Override
-	public <I extends IIndividual> IDisplayHelper createDisplayHelper(IIndividualRoot<I> root) {
-		return new DisplayHelper<>(root);
-	}
+    @Override
+    public <I extends IIndividual> IDisplayHelper createDisplayHelper(IIndividualRoot<I> root) {
+        return new DisplayHelper<>(root);
+    }
 
-	@Override
-	public IGeneTemplate createGeneTemplate() {
-		return new GeneTemplate();
-	}
+    @Override
+    public IGeneTemplate createGeneTemplate() {
+        return new GeneTemplate();
+    }
 
-	@Override
-	public <I extends IIndividual> IIndividualBuilder<I> createIndividualBuilder(I individual) {
-		return new IndividualBuilder<>(individual);
-	}
+    @Override
+    public <I extends IIndividual> IIndividualBuilder<I> createIndividualBuilder(I individual) {
+        return new IndividualBuilder<>(individual);
+    }
 }

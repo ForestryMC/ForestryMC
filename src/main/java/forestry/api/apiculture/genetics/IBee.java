@@ -32,63 +32,63 @@ import forestry.api.genetics.IIndividualLiving;
  */
 public interface IBee extends IIndividualLiving {
 
-	/**
-	 * @return true if the individual is originally of natural origin.
-	 */
-	boolean isNatural();
+    /**
+     * @return true if the individual is originally of natural origin.
+     */
+    boolean isNatural();
 
-	/**
-	 * @return generation this individual is removed from the original individual.
-	 */
-	int getGeneration();
+    /**
+     * @return generation this individual is removed from the original individual.
+     */
+    int getGeneration();
 
-	/**
-	 * Set the natural flag on this bee.
-	 */
-	void setIsNatural(boolean flag);
+    /**
+     * Set the natural flag on this bee.
+     */
+    void setIsNatural(boolean flag);
 
-	IEffectData[] doEffect(IEffectData[] storedData, IBeeHousing housing);
+    IEffectData[] doEffect(IEffectData[] storedData, IBeeHousing housing);
 
-	@OnlyIn(Dist.CLIENT)
-	IEffectData[] doFX(IEffectData[] storedData, IBeeHousing housing);
+    @OnlyIn(Dist.CLIENT)
+    IEffectData[] doFX(IEffectData[] storedData, IBeeHousing housing);
 
-	/**
-	 * @return true if the bee may spawn offspring
-	 */
-	boolean canSpawn();
+    /**
+     * @return true if the bee may spawn offspring
+     */
+    boolean canSpawn();
 
-	/**
-	 * Determines whether the queen can work.
-	 *
-	 * @param housing the {@link IBeeHousing} the bee currently resides in.
-	 * @return an empty set if the queen can work, a set of error states if the queen can not work
-	 */
-	Set<IErrorState> getCanWork(IBeeHousing housing);
+    /**
+     * Determines whether the queen can work.
+     *
+     * @param housing the {@link IBeeHousing} the bee currently resides in.
+     * @return an empty set if the queen can work, a set of error states if the queen can not work
+     */
+    Set<IErrorState> getCanWork(IBeeHousing housing);
 
-	List<Biome> getSuitableBiomes();
+    List<Biome> getSuitableBiomes();
 
-	NonNullList<ItemStack> getProduceList();
+    NonNullList<ItemStack> getProduceList();
 
-	NonNullList<ItemStack> getSpecialtyList();
+    NonNullList<ItemStack> getSpecialtyList();
 
-	NonNullList<ItemStack> produceStacks(IBeeHousing housing);
+    NonNullList<ItemStack> produceStacks(IBeeHousing housing);
 
-	Optional<IBee> spawnPrincess(IBeeHousing housing);
+    Optional<IBee> spawnPrincess(IBeeHousing housing);
 
-	List<IBee> spawnDrones(IBeeHousing housing);
+    List<IBee> spawnDrones(IBeeHousing housing);
 
-	/**
-	 * Plants a random flower from the given list near the housing
-	 *
-	 * @param housing          the location the bee is living
-	 * @param potentialFlowers the flowers to choose from
-	 * @return the position of the planted flower, or null of none were planted
-	 * @since Forestry 5.5.4
-	 */
-	Optional<BlockPos> plantFlowerRandom(IBeeHousing housing, List<BlockState> potentialFlowers);
+    /**
+     * Plants a random flower from the given list near the housing
+     *
+     * @param housing          the location the bee is living
+     * @param potentialFlowers the flowers to choose from
+     * @return the position of the planted flower, or null of none were planted
+     * @since Forestry 5.5.4
+     */
+    Optional<BlockPos> plantFlowerRandom(IBeeHousing housing, List<BlockState> potentialFlowers);
 
-	Optional<IIndividual> retrievePollen(IBeeHousing housing);
+    Optional<IIndividual> retrievePollen(IBeeHousing housing);
 
-	boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);
+    boolean pollinateRandom(IBeeHousing housing, IIndividual pollen);
 
 }

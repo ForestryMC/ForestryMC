@@ -11,10 +11,10 @@ import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class CultivationBlocks {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCultivation.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCultivation.class);
 
-	public static final FeatureBlockTable<BlockPlanter, BlockTypePlanter, BlockPlanter.Mode> PLANTER = REGISTRY.blockTable(BlockPlanter::new, BlockTypePlanter.values(), BlockPlanter.Mode.values()).item(ItemBlockPlanter::new).create();
+    public static final FeatureBlockTable<BlockPlanter, BlockTypePlanter, BlockPlanter.Mode> PLANTER = REGISTRY.blockTable(BlockPlanter::new, BlockTypePlanter.values(), BlockPlanter.Mode.values()).item(ItemBlockPlanter::new).create();
 
-	private CultivationBlocks() {
-	}
+    private CultivationBlocks() {
+    }
 }

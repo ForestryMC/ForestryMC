@@ -36,108 +36,108 @@ import forestry.core.inventory.InventoryNaturalistChest;
 import forestry.core.network.PacketBufferForestry;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
-	private static final float lidAngleVariationPerTick = 0.1F;
-	public static final VoxelShape CHEST_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+    private static final float lidAngleVariationPerTick = 0.1F;
+    public static final VoxelShape CHEST_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
-	private final IForestrySpeciesRoot speciesRoot;
-	public float lidAngle;
-	public float prevLidAngle;
-	private int numPlayersUsing;
+    private final IForestrySpeciesRoot speciesRoot;
+    public float lidAngle;
+    public float prevLidAngle;
+    private int numPlayersUsing;
 
-	public TileNaturalistChest(TileEntityType type, IForestrySpeciesRoot speciesRoot) {
-		super(type);
-		this.speciesRoot = speciesRoot;
-		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
-	}
+    public TileNaturalistChest(TileEntityType type, IForestrySpeciesRoot speciesRoot) {
+        super(type);
+        this.speciesRoot = speciesRoot;
+        setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
+    }
 
-	public void increaseNumPlayersUsing() {
-		numPlayersUsing++;
-		setNeedsNetworkUpdate();
-	}
+    public void increaseNumPlayersUsing() {
+        numPlayersUsing++;
+        setNeedsNetworkUpdate();
+    }
 
-	public void decreaseNumPlayersUsing() {
-		numPlayersUsing--;
-		if (numPlayersUsing < 0) {
-			numPlayersUsing = 0;
-		}
-		setNeedsNetworkUpdate();
-	}
+    public void decreaseNumPlayersUsing() {
+        numPlayersUsing--;
+        if (numPlayersUsing < 0) {
+            numPlayersUsing = 0;
+        }
+        setNeedsNetworkUpdate();
+    }
 
-	@Override
-	protected void updateClientSide() {
-		updates();
-	}
+    @Override
+    protected void updateClientSide() {
+        updates();
+    }
 
-	@Override
-	protected void updateServerSide() {
-		updates();
-	}
+    @Override
+    protected void updateServerSide() {
+        updates();
+    }
 
-	private void updates() {
-		prevLidAngle = lidAngle;
+    private void updates() {
+        prevLidAngle = lidAngle;
 
-		if (numPlayersUsing > 0 && lidAngle == 0.0F) {
-			playLidSound(SoundEvents.BLOCK_CHEST_OPEN);
-		}
+        if (numPlayersUsing > 0 && lidAngle == 0.0F) {
+            playLidSound(SoundEvents.BLOCK_CHEST_OPEN);
+        }
 
-		if (numPlayersUsing == 0 && lidAngle > 0.0F || numPlayersUsing > 0 && lidAngle < 1.0F) {
-			float oldAngle = lidAngle;
+        if (numPlayersUsing == 0 && lidAngle > 0.0F || numPlayersUsing > 0 && lidAngle < 1.0F) {
+            float oldAngle = lidAngle;
 
-			if (numPlayersUsing > 0) {
-				lidAngle += lidAngleVariationPerTick;
-			} else {
-				lidAngle -= lidAngleVariationPerTick;
-			}
+            if (numPlayersUsing > 0) {
+                lidAngle += lidAngleVariationPerTick;
+            } else {
+                lidAngle -= lidAngleVariationPerTick;
+            }
 
-			lidAngle = Math.max(Math.min(lidAngle, 1), 0);
+            lidAngle = Math.max(Math.min(lidAngle, 1), 0);
 
-			if (lidAngle < 0.5F && oldAngle >= 0.5F) {
-				playLidSound(SoundEvents.BLOCK_CHEST_CLOSE);
-			}
-		}
-	}
+            if (lidAngle < 0.5F && oldAngle >= 0.5F) {
+                playLidSound(SoundEvents.BLOCK_CHEST_CLOSE);
+            }
+        }
+    }
 
-	private void playLidSound(SoundEvent sound) {
-		this.world.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
-	}
+    private void playLidSound(SoundEvent sound) {
+        this.world.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+    }
 
-	@Override
-	public void flipPage(ServerPlayerEntity player, short page) {
-		NetworkHooks.openGui(player, this, p -> {
-			p.writeBlockPos(this.pos);
-			p.writeVarInt(page);
-		});
-	}
+    @Override
+    public void flipPage(ServerPlayerEntity player, short page) {
+        NetworkHooks.openGui(player, this, p -> {
+            p.writeBlockPos(this.pos);
+            p.writeVarInt(page);
+        });
+    }
 
-	@Override
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
-		NetworkHooks.openGui(player, this, p -> {
-			p.writeBlockPos(this.pos);
-			p.writeVarInt(0);
-		});
-	}
+    @Override
+    public void openGui(ServerPlayerEntity player, BlockPos pos) {
+        NetworkHooks.openGui(player, this, p -> {
+            p.writeBlockPos(this.pos);
+            p.writeVarInt(0);
+        });
+    }
 
-	/* IStreamable */
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		super.writeData(data);
-		data.writeInt(numPlayersUsing);
-	}
+    /* IStreamable */
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        super.writeData(data);
+        data.writeInt(numPlayersUsing);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void readData(PacketBufferForestry data) throws IOException {
-		super.readData(data);
-		numPlayersUsing = data.readInt();
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readData(PacketBufferForestry data) throws IOException {
+        super.readData(data);
+        numPlayersUsing = data.readInt();
+    }
 
-	//TODO page stuff.
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerNaturalistInventory(windowId, inv, this, 5);
-	}
+    //TODO page stuff.
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerNaturalistInventory(windowId, inv, this, 5);
+    }
 
-	public IForestrySpeciesRoot getSpeciesRoot() {
-		return speciesRoot;
-	}
+    public IForestrySpeciesRoot getSpeciesRoot() {
+        return speciesRoot;
+    }
 }

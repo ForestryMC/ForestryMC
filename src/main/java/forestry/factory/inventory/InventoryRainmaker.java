@@ -18,35 +18,35 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileMillRainmaker;
 
 public class InventoryRainmaker extends InventoryAdapterTile<TileMillRainmaker> {
-	private static final int SLOT_SUBSTRATE = 0;
+    private static final int SLOT_SUBSTRATE = 0;
 
-	public InventoryRainmaker(TileMillRainmaker tile) {
-		super(tile, 1, "items");
-	}
+    public InventoryRainmaker(TileMillRainmaker tile) {
+        super(tile, 1, "items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_SUBSTRATE) {
-			if (FuelManager.rainSubstrate.containsKey(itemStack) && tile.charge == 0 && tile.progress == 0) {
-				RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
-				if (tile.getWorld().isRaining() && substrate.isReverse()) {
-					return true;
-				} else {
-					return !tile.getWorld().isRaining() && !substrate.isReverse();
-				}
-			}
-		}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_SUBSTRATE) {
+            if (FuelManager.rainSubstrate.containsKey(itemStack) && tile.charge == 0 && tile.progress == 0) {
+                RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
+                if (tile.getWorld().isRaining() && substrate.isReverse()) {
+                    return true;
+                } else {
+                    return !tile.getWorld().isRaining() && !substrate.isReverse();
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_SUBSTRATE) {
-			RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
-			if (substrate != null && substrate.getItem().isItemEqual(itemStack)) {
-				tile.addCharge(substrate);
-			}
-		}
-	}
+    @Override
+    public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_SUBSTRATE) {
+            RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
+            if (substrate != null && substrate.getItem().isItemEqual(itemStack)) {
+                tile.addCharge(substrate);
+            }
+        }
+    }
 }

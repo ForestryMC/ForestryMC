@@ -26,92 +26,92 @@ import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 
-	private final ModelRenderer pedestal;
-	private final ModelRenderer cover;
-	private final ModelRenderer tower1;
-	private final ModelRenderer tower2;
+    private final ModelRenderer pedestal;
+    private final ModelRenderer cover;
+    private final ModelRenderer tower1;
+    private final ModelRenderer tower2;
 
-	private final ResourceLocation[] textures;
+    private final ResourceLocation[] textures;
 
-	public RenderAnalyzer() {
-		int textureWidth = 64;
-		int textureHeight = 32;
+    public RenderAnalyzer() {
+        int textureWidth = 64;
+        int textureHeight = 32;
 
-		textures = new ResourceLocation[]{
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_pedestal.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower1.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower2.png"),
-		};
+        textures = new ResourceLocation[]{
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_pedestal.png"),
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower1.png"),
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower2.png"),
+        };
 
-		pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);
-		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
-		pedestal.setRotationPoint(8, 8, 8);
+        pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+        pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
+        pedestal.setRotationPoint(8, 8, 8);
 
-		cover = new ModelRenderer(textureWidth, textureHeight, 0, 0);
-		cover.addBox(-8F, -8F, -8F, 16, 1, 16);
-		cover.setRotationPoint(8, 8, 8);
+        cover = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+        cover.addBox(-8F, -8F, -8F, 16, 1, 16);
+        cover.setRotationPoint(8, 8, 8);
 
-		tower1 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
-		tower1.addBox(-8, -7, -7, 2, 14, 14);
-		tower1.setRotationPoint(8, 8, 8);
+        tower1 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+        tower1.addBox(-8, -7, -7, 2, 14, 14);
+        tower1.setRotationPoint(8, 8, 8);
 
-		tower2 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
-		tower2.addBox(6, -7, -7, 2, 14, 14);
-		tower2.setRotationPoint(8, 8, 8);
-	}
+        tower2 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+        tower2.addBox(6, -7, -7, 2, 14, 14);
+        tower2.setRotationPoint(8, 8, 8);
+    }
 
-	@Override
-	public void renderTile(TileAnalyzer tile, RenderHelper helper) {
-		World worldObj = tile.getWorldObj();
-		BlockState blockState = worldObj.getBlockState(tile.getPos());
-		if (blockState.getBlock() instanceof BlockBase) {
-			Direction facing = blockState.get(BlockBase.FACING);
-			render(tile.getIndividualOnDisplay(), worldObj, facing, helper);
-		}
-	}
+    @Override
+    public void renderTile(TileAnalyzer tile, RenderHelper helper) {
+        World worldObj = tile.getWorldObj();
+        BlockState blockState = worldObj.getBlockState(tile.getPos());
+        if (blockState.getBlock() instanceof BlockBase) {
+            Direction facing = blockState.get(BlockBase.FACING);
+            render(tile.getIndividualOnDisplay(), worldObj, facing, helper);
+        }
+    }
 
-	@Override
-	public void renderItem(ItemStack stack, RenderHelper helper) {
-		render(ItemStack.EMPTY, null, Direction.WEST, helper);
-	}
+    @Override
+    public void renderItem(ItemStack stack, RenderHelper helper) {
+        render(ItemStack.EMPTY, null, Direction.WEST, helper);
+    }
 
-	private void render(ItemStack itemstack, @Nullable World world, Direction orientation, RenderHelper helper) {
-		Vector3f rotation = new Vector3f(0, 0, 0);
-		switch (orientation) {
-			case EAST:
-				rotation.setY((float) Math.PI / 2);
-				break;
-			case WEST:
-				rotation.setY((float) -Math.PI / 2);
-				break;
-			case SOUTH:
-				break;
-			case NORTH:
-			default:
-				rotation.setY((float) Math.PI);
-				break;
-		}
-		helper.setRotation(rotation);
-		helper.push();
+    private void render(ItemStack itemstack, @Nullable World world, Direction orientation, RenderHelper helper) {
+        Vector3f rotation = new Vector3f(0, 0, 0);
+        switch (orientation) {
+            case EAST:
+                rotation.setY((float) Math.PI / 2);
+                break;
+            case WEST:
+                rotation.setY((float) -Math.PI / 2);
+                break;
+            case SOUTH:
+                break;
+            case NORTH:
+            default:
+                rotation.setY((float) Math.PI);
+                break;
+        }
+        helper.setRotation(rotation);
+        helper.push();
 
-		helper.renderModel(textures[0], pedestal);
-		helper.renderModel(textures[0], new Vector3f(0, 0, (float) Math.PI), cover);
+        helper.renderModel(textures[0], pedestal);
+        helper.renderModel(textures[0], new Vector3f(0, 0, (float) Math.PI), cover);
 
-		helper.renderModel(textures[1], tower1);
+        helper.renderModel(textures[1], tower1);
 
-		helper.renderModel(textures[2], tower2);
-		helper.pop();
-		if (itemstack.isEmpty() || world == null) {
-			return;
-		}
-		float renderScale = 1.0f;
+        helper.renderModel(textures[2], tower2);
+        helper.pop();
+        if (itemstack.isEmpty() || world == null) {
+            return;
+        }
+        float renderScale = 1.0f;
 
-		helper.push();
-		helper.translate(0.5f, 0.2f, 0.5f);
-		helper.scale(renderScale, renderScale, renderScale);
+        helper.push();
+        helper.translate(0.5f, 0.2f, 0.5f);
+        helper.scale(renderScale, renderScale, renderScale);
 
-		helper.renderItem(itemstack, world);
-		helper.pop();
-	}
+        helper.renderItem(itemstack, world);
+        helper.pop();
+    }
 
 }

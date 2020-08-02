@@ -26,53 +26,53 @@ import forestry.core.blocks.IBlockType;
 
 public abstract class TileBase extends TileForestry {
 
-	public TileBase(TileEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
-	}
+    public TileBase(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
 
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
-		if (!hasGui()) {
-			return;
-		}
-		NetworkHooks.openGui(player, this, pos);
-	}
+    public void openGui(ServerPlayerEntity player, BlockPos pos) {
+        if (!hasGui()) {
+            return;
+        }
+        NetworkHooks.openGui(player, this, pos);
+    }
 
-	protected boolean hasGui() {
-		return true;
-	}
+    protected boolean hasGui() {
+        return true;
+    }
 
-	@Override
-	public String getUnlocalizedTitle() {
-		Block block = getBlockState().getBlock();
-		if (block instanceof BlockBase) {
-			return block.getTranslationKey();
-		}
-		return super.getUnlocalizedTitle();
-	}
+    @Override
+    public String getUnlocalizedTitle() {
+        Block block = getBlockState().getBlock();
+        if (block instanceof BlockBase) {
+            return block.getTranslationKey();
+        }
+        return super.getUnlocalizedTitle();
+    }
 
-	@SuppressWarnings("unchecked")
-	public <T extends IBlockType> T getBlockType(T fallbackType) {
-		BlockState blockState = getBlockState();
-		Block block = blockState.getBlock();
-		if (!(block instanceof BlockBase)) {
-			return fallbackType;
-		}
-		BlockBase blockBase = (BlockBase) block;
-		return (T) blockBase.blockType;
-	}
+    @SuppressWarnings("unchecked")
+    public <T extends IBlockType> T getBlockType(T fallbackType) {
+        BlockState blockState = getBlockState();
+        Block block = blockState.getBlock();
+        if (!(block instanceof BlockBase)) {
+            return fallbackType;
+        }
+        BlockBase blockBase = (BlockBase) block;
+        return (T) blockBase.blockType;
+    }
 
 
-	//TODO
-	//	@Override
-	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-	//		Block oldBlock = oldState.getBlock();
-	//		Block newBlock = newState.getBlock();
-	//		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
-	//	}
+    //TODO
+    //	@Override
+    //	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+    //		Block oldBlock = oldState.getBlock();
+    //		Block newBlock = newState.getBlock();
+    //		return oldBlock != newBlock || !(oldBlock instanceof BlockBase) || !(newBlock instanceof BlockBase);
+    //	}
 
-	@Nonnull
-	public Direction getFacing() {
-		return getWorld().getBlockState(getPos()).get(BlockBase.FACING);
-	}
+    @Nonnull
+    public Direction getFacing() {
+        return getWorld().getBlockState(getPos()).get(BlockBase.FACING);
+    }
 
 }

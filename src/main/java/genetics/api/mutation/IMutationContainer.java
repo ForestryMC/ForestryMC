@@ -19,35 +19,35 @@ import genetics.api.root.components.IRootComponent;
  */
 public interface IMutationContainer<I extends IIndividual, M extends IMutation> extends IRootComponent<I> {
 
-	/**
-	 * Registers the given mutation to the component.
-	 */
-	boolean registerMutation(M mutation);
+    /**
+     * Registers the given mutation to the component.
+     */
+    boolean registerMutation(M mutation);
 
-	/**
-	 * @return All registered mutations.
-	 */
-	List<? extends M> getMutations(boolean shuffle);
+    /**
+     * @return All registered mutations.
+     */
+    List<? extends M> getMutations(boolean shuffle);
 
-	/**
-	 * @param other Allele to match mutations against.
-	 * @return All registered mutations the given allele is part of.
-	 */
-	List<? extends M> getCombinations(IAllele other);
+    /**
+     * @param other Allele to match mutations against.
+     * @return All registered mutations the given allele is part of.
+     */
+    List<? extends M> getCombinations(IAllele other);
 
-	/**
-	 * @param other Allele to match mutations against.
-	 * @return All registered mutations the give allele is resolute of.
-	 */
-	List<? extends M> getResultantMutations(IAllele other);
+    /**
+     * @param other Allele to match mutations against.
+     * @return All registered mutations the give allele is resolute of.
+     */
+    List<? extends M> getResultantMutations(IAllele other);
 
-	/**
-	 * @return all possible mutations that result from breeding two species
-	 */
-	List<? extends M> getCombinations(IAlleleSpecies parentFirst, IAlleleSpecies parentSecond, boolean shuffle);
+    /**
+     * @return all possible mutations that result from breeding two species
+     */
+    List<? extends M> getCombinations(IAlleleSpecies parentFirst, IAlleleSpecies parentSecond, boolean shuffle);
 
-	Collection<? extends M> getPaths(IAllele result, IChromosomeType geneType);
+    Collection<? extends M> getPaths(IAllele result, IChromosomeType geneType);
 
-	@Override
-	ComponentKey<IMutationContainer> getKey();
+    @Override
+    ComponentKey<IMutationContainer> getKey();
 }

@@ -22,89 +22,89 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.apiculture.features.ApicultureTiles;
 
 public class TileCandle extends TileEntity {
-	private int colour;
-	private boolean lit;
+    private int colour;
+    private boolean lit;
 
-	public TileCandle() {
-		super(ApicultureTiles.CANDLE.tileType());
-	}
+    public TileCandle() {
+        super(ApicultureTiles.CANDLE.tileType());
+    }
 
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
-	}
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(getBlockState(), nbt);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        super.onDataPacket(net, pkt);
+        CompoundNBT nbt = pkt.getNbtCompound();
+        handleUpdateTag(getBlockState(), nbt);
+    }
 
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
-		return write(tag);
-	}
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tag = super.getUpdateTag();
+        return write(tag);
+    }
 
-	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		super.handleUpdateTag(state, tag);
-		read(state, tag);
-	}
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+        super.handleUpdateTag(state, tag);
+        read(state, tag);
+    }
 
-	public void onPacketUpdate(int colour, boolean isLit) {
-		this.colour = colour;
-		this.lit = isLit;
-	}
+    public void onPacketUpdate(int colour, boolean isLit) {
+        this.colour = colour;
+        this.lit = isLit;
+    }
 
-	@Override
-	public void read(BlockState state, CompoundNBT tagRoot) {
-		super.read(state, tagRoot);
-		colour = tagRoot.getInt("colour");
-		lit = tagRoot.getBoolean("lit");
-	}
+    @Override
+    public void read(BlockState state, CompoundNBT tagRoot) {
+        super.read(state, tagRoot);
+        colour = tagRoot.getInt("colour");
+        lit = tagRoot.getBoolean("lit");
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT tagRoot) {
-		tagRoot = super.write(tagRoot);
-		tagRoot.putInt("colour", this.colour);
-		tagRoot.putBoolean("lit", this.lit);
-		return tagRoot;
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT tagRoot) {
+        tagRoot = super.write(tagRoot);
+        tagRoot.putInt("colour", this.colour);
+        tagRoot.putBoolean("lit", this.lit);
+        return tagRoot;
+    }
 
-	public boolean isLit() {
-		return lit;
-	}
+    public boolean isLit() {
+        return lit;
+    }
 
-	public void setLit(boolean lit) {
-		this.lit = lit;
-	}
+    public void setLit(boolean lit) {
+        this.lit = lit;
+    }
 
-	public int getColour() {
-		return colour;
-	}
+    public int getColour() {
+        return colour;
+    }
 
-	public void setColour(int value) {
-		this.colour = value;
-	}
+    public void setColour(int value) {
+        this.colour = value;
+    }
 
-	public void addColour(int colour2) {
-		int[] myColour = fromIntColour(this.colour);
-		int[] addColour = fromIntColour(colour2);
-		this.colour = toIntColour((addColour[0] + myColour[0]) / 2, (addColour[0] + myColour[0]) / 2, (addColour[2] + myColour[2]) / 2);
-	}
+    public void addColour(int colour2) {
+        int[] myColour = fromIntColour(this.colour);
+        int[] addColour = fromIntColour(colour2);
+        this.colour = toIntColour((addColour[0] + myColour[0]) / 2, (addColour[0] + myColour[0]) / 2, (addColour[2] + myColour[2]) / 2);
+    }
 
-	private static int[] fromIntColour(int value) {
-		int[] cs = new int[3];
-		cs[0] = (value & 0xff0000) >> 16;
-		cs[1] = (value & 0x00ff00) >> 8;
-		cs[2] = value & 0x0000ff;
-		return cs;
-	}
+    private static int[] fromIntColour(int value) {
+        int[] cs = new int[3];
+        cs[0] = (value & 0xff0000) >> 16;
+        cs[1] = (value & 0x00ff00) >> 8;
+        cs[2] = value & 0x0000ff;
+        return cs;
+    }
 
-	private static int toIntColour(int r, int g, int b) {
-		return r << 16 | g << 8 | b;
-	}
+    private static int toIntColour(int r, int g, int b) {
+        return r << 16 | g << 8 | b;
+    }
 }

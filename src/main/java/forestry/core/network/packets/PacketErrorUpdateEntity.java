@@ -25,35 +25,35 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 
 public class PacketErrorUpdateEntity extends ForestryPacket implements IForestryPacketClient {
-	private final Entity entity;
-	private final IErrorLogic errorLogic;
+    private final Entity entity;
+    private final IErrorLogic errorLogic;
 
-	public PacketErrorUpdateEntity(Entity entity, IErrorLogicSource errorLogicSource) {
-		this.entity = entity;
-		this.errorLogic = errorLogicSource.getErrorLogic();
-	}
+    public PacketErrorUpdateEntity(Entity entity, IErrorLogicSource errorLogicSource) {
+        this.entity = entity;
+        this.errorLogic = errorLogicSource.getErrorLogic();
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.ERROR_UPDATE_ENTITY;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.ERROR_UPDATE_ENTITY;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeEntityById(entity);
-		errorLogic.writeData(data);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeEntityById(entity);
+        errorLogic.writeData(data);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			Entity entity = data.readEntityById(player.world);
-			if (entity instanceof IErrorLogicSource) {
-				IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;
-				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
-				errorLogic.readData(data);
-			}
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            Entity entity = data.readEntityById(player.world);
+            if (entity instanceof IErrorLogicSource) {
+                IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;
+                IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
+                errorLogic.readData(data);
+            }
+        }
+    }
 }

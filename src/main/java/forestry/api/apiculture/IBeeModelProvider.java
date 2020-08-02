@@ -14,6 +14,6 @@ import forestry.api.apiculture.genetics.EnumBeeType;
 
 public interface IBeeModelProvider {
 
-	@OnlyIn(Dist.CLIENT)
-	ModelResourceLocation getModel(EnumBeeType type);
+    @OnlyIn(Dist.CLIENT)
+    ModelResourceLocation getModel(EnumBeeType type);
 }

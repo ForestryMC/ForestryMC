@@ -21,24 +21,24 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.energy.tiles.TileEngineBiogas;
 
 public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas> {
-	public static final short SLOT_CAN = 0;
+    public static final short SLOT_CAN = 0;
 
-	public InventoryEngineBiogas(TileEngineBiogas engineBronze) {
-		super(engineBronze, 1, "Items");
-	}
+    public InventoryEngineBiogas(TileEngineBiogas engineBronze) {
+        super(engineBronze, 1, "Items");
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
-		return true;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+        return true;
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_CAN) {
-			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
-		}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_CAN) {
+            LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+            return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

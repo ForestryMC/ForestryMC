@@ -14,26 +14,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
 public class InventoryAdapterRestricted extends InventoryAdapter {
-	public InventoryAdapterRestricted(int size, String name) {
-		super(size, name);
-	}
+    public InventoryAdapterRestricted(int size, String name) {
+        super(size, name);
+    }
 
-	public InventoryAdapterRestricted(int size, String name, int stackLimit) {
-		super(size, name, stackLimit);
-	}
+    public InventoryAdapterRestricted(int size, String name, int stackLimit) {
+        super(size, name, stackLimit);
+    }
 
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return !itemStack.isEmpty() && canSlotAccept(slotIndex, itemStack);
-	}
+    @Override
+    public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+        return !itemStack.isEmpty() && canSlotAccept(slotIndex, itemStack);
+    }
 
-	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return !itemStack.isEmpty() && isItemValidForSlot(slotIndex, itemStack);
-	}
+    @Override
+    public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
+        return !itemStack.isEmpty() && isItemValidForSlot(slotIndex, itemStack);
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return !itemStack.isEmpty();
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
+        return !itemStack.isEmpty();
+    }
 }

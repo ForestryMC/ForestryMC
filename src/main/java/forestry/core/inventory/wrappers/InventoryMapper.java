@@ -22,75 +22,75 @@ import net.minecraft.item.ItemStack;
  */
 public class InventoryMapper extends InvWrapperBase implements IInventory {
 
-	private final IInventory inv;
-	private final int start;
-	private final int size;
-	private int stackSizeLimit = -1;
+    private final IInventory inv;
+    private final int start;
+    private final int size;
+    private int stackSizeLimit = -1;
 
-	public InventoryMapper(IInventory inv) {
-		this(inv, 0, inv.getSizeInventory(), true);
-	}
+    public InventoryMapper(IInventory inv) {
+        this(inv, 0, inv.getSizeInventory(), true);
+    }
 
-	public InventoryMapper(IInventory inv, boolean checkItems) {
-		this(inv, 0, inv.getSizeInventory(), checkItems);
-	}
+    public InventoryMapper(IInventory inv, boolean checkItems) {
+        this(inv, 0, inv.getSizeInventory(), checkItems);
+    }
 
-	/**
-	 * Creates a new InventoryMapper
-	 *
-	 * @param inv   The backing inventory
-	 * @param start The starting index
-	 * @param size  The size of the new inventory, take care not to exceed the
-	 *              end of the backing inventory
-	 */
-	public InventoryMapper(IInventory inv, int start, int size) {
-		this(inv, start, size, true);
-	}
+    /**
+     * Creates a new InventoryMapper
+     *
+     * @param inv   The backing inventory
+     * @param start The starting index
+     * @param size  The size of the new inventory, take care not to exceed the
+     *              end of the backing inventory
+     */
+    public InventoryMapper(IInventory inv, int start, int size) {
+        this(inv, start, size, true);
+    }
 
-	public InventoryMapper(IInventory inv, int start, int size, boolean checkItems) {
-		super(inv, checkItems);
-		this.inv = inv;
-		this.start = start;
-		this.size = size;
-	}
+    public InventoryMapper(IInventory inv, int start, int size, boolean checkItems) {
+        super(inv, checkItems);
+        this.inv = inv;
+        this.start = start;
+        this.size = size;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return inv.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return inv.isEmpty();
+    }
 
-	@Override
-	public int getSizeInventory() {
-		return size;
-	}
+    @Override
+    public int getSizeInventory() {
+        return size;
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inv.getStackInSlot(start + slot);
-	}
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        return inv.getStackInSlot(start + slot);
+    }
 
-	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		return inv.decrStackSize(start + slot, amount);
-	}
+    @Override
+    public ItemStack decrStackSize(int slot, int amount) {
+        return inv.decrStackSize(start + slot, amount);
+    }
 
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		inv.setInventorySlotContents(start + slot, itemstack);
-	}
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack itemstack) {
+        inv.setInventorySlotContents(start + slot, itemstack);
+    }
 
-	public void setStackSizeLimit(int limit) {
-		stackSizeLimit = limit;
-	}
+    public void setStackSizeLimit(int limit) {
+        stackSizeLimit = limit;
+    }
 
-	@Override
-	public int getInventoryStackLimit() {
-		return stackSizeLimit > 0 ? stackSizeLimit : inv.getInventoryStackLimit();
-	}
+    @Override
+    public int getInventoryStackLimit() {
+        return stackSizeLimit > 0 ? stackSizeLimit : inv.getInventoryStackLimit();
+    }
 
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return !checkItems() || inv.isItemValidForSlot(start + slot, stack);
-	}
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return !checkItems() || inv.isItemValidForSlot(start + slot, stack);
+    }
 
 }

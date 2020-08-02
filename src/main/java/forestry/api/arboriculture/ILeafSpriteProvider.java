@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
  * Icon registration is not done here because these icons are heavily reused.
  */
 public interface ILeafSpriteProvider {
-	ResourceLocation getSprite(boolean pollinated, boolean fancy);
+    ResourceLocation getSprite(boolean pollinated, boolean fancy);
 
-	int getColor(boolean pollinated);
+    int getColor(boolean pollinated);
 }

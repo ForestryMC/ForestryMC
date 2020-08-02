@@ -30,74 +30,74 @@ import genetics.api.root.components.IRootComponentRegistry;
  * @param <I> The type of the individual that the root describes.
  */
 public interface IIndividualRootBuilder<I extends IIndividual> {
-	/**
-	 * Adds a chromosome type to the prototype of this individual.
-	 */
-	IIndividualRootBuilder<I> addChromosome(IChromosomeType type);
+    /**
+     * Adds a chromosome type to the prototype of this individual.
+     */
+    IIndividualRootBuilder<I> addChromosome(IChromosomeType type);
 
-	/**
-	 * Adds the given chromosome types to the prototype of this individual.
-	 */
-	IIndividualRootBuilder<I> addChromosome(IChromosomeType... types);
+    /**
+     * Adds the given chromosome types to the prototype of this individual.
+     */
+    IIndividualRootBuilder<I> addChromosome(IChromosomeType... types);
 
-	/**
-	 * Sets the species type of the prototype of this individual.
-	 */
-	IIndividualRootBuilder<I> setSpeciesType(IChromosomeType speciesType);
+    /**
+     * Sets the species type of the prototype of this individual.
+     */
+    IIndividualRootBuilder<I> setSpeciesType(IChromosomeType speciesType);
 
-	/**
-	 * Sets the function that is used to create a template builder.
-	 */
-	IIndividualRootBuilder<I> setTemplateFactory(BiFunction<IKaryotype, IAllele[], IAlleleTemplateBuilder> templateFactory);
+    /**
+     * Sets the function that is used to create a template builder.
+     */
+    IIndividualRootBuilder<I> setTemplateFactory(BiFunction<IKaryotype, IAllele[], IAlleleTemplateBuilder> templateFactory);
 
-	IIndividualRootBuilder<I> setRootFactory(IIndividualRootFactory<I, IIndividualRoot<I>> rootFactory);
+    IIndividualRootBuilder<I> setRootFactory(IIndividualRootFactory<I, IIndividualRoot<I>> rootFactory);
 
-	IIndividualRootBuilder<I> setRootFactory(Class<? extends I> individualClass);
+    IIndividualRootBuilder<I> setRootFactory(Class<? extends I> individualClass);
 
-	IIndividualRootBuilder<I> setDefaultTemplate(Function<IAlleleTemplateBuilder, IAlleleTemplate> defaultTemplate);
+    IIndividualRootBuilder<I> setDefaultTemplate(Function<IAlleleTemplateBuilder, IAlleleTemplate> defaultTemplate);
 
-	/**
-	 * Returns an optional that contains the created root object.
-	 * <p>
-	 * Returns an empty optional if the root was not built yet.
-	 *
-	 * @return An optional that contains the root object of this builder if it was already built, otherwise an empty
-	 * optional.
-	 */
-	<R extends IIndividualRoot<I>> IRootDefinition<R> getDefinition();
+    /**
+     * Returns an optional that contains the created root object.
+     * <p>
+     * Returns an empty optional if the root was not built yet.
+     *
+     * @return An optional that contains the root object of this builder if it was already built, otherwise an empty
+     * optional.
+     */
+    <R extends IIndividualRoot<I>> IRootDefinition<R> getDefinition();
 
-	/**
-	 * Adds the default component factory that was registered with {@link IRootComponentRegistry#registerFactory(ComponentKey, IRootComponentFactory)}
-	 * to this root.
-	 * <p>
-	 * {@link IRootComponentFactory#create(IIndividualRoot)} gets called later after all components were added and the
-	 * builder starts to build the root.
-	 * root object.
-	 *
-	 * @param key The key associated with the component and the builder of this component.
-	 */
-	IIndividualRootBuilder<I> addComponent(ComponentKey key);
+    /**
+     * Adds the default component factory that was registered with {@link IRootComponentRegistry#registerFactory(ComponentKey, IRootComponentFactory)}
+     * to this root.
+     * <p>
+     * {@link IRootComponentFactory#create(IIndividualRoot)} gets called later after all components were added and the
+     * builder starts to build the root.
+     * root object.
+     *
+     * @param key The key associated with the component and the builder of this component.
+     */
+    IIndividualRootBuilder<I> addComponent(ComponentKey key);
 
 
-	/**
-	 * Adds the given component factory to this root.
-	 * <p>
-	 *
-	 * @param key     The key associated with the component and the builder of this component.
-	 * @param factory The factory that creates the instance of the component builder.
-	 * @param <C>     The type of the component of the key.
-	 * @param <B>     the type of the component builder that the is associated with the key and created by the factory.
-	 */
-	<C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(ComponentKey key, IRootComponentFactory<I, C> factory);
+    /**
+     * Adds the given component factory to this root.
+     * <p>
+     *
+     * @param key     The key associated with the component and the builder of this component.
+     * @param factory The factory that creates the instance of the component builder.
+     * @param <C>     The type of the component of the key.
+     * @param <B>     the type of the component builder that the is associated with the key and created by the factory.
+     */
+    <C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(ComponentKey key, IRootComponentFactory<I, C> factory);
 
-	/**
-	 * Adds a component listener.
-	 * <p>
-	 *
-	 * @param key      The key associated with the component and the builder of this component.
-	 * @param consumer A consumer that receives the instance of the component builder before the component gets created.
-	 * @param <C>      The type of the component of the key.
-	 * @param <B>      the type of the component builder that the is associated with the key and created by the factory.
-	 */
-	<C extends IRootComponent<I>> IIndividualRootBuilder<I> addListener(ComponentKey key, Consumer<C> consumer);
+    /**
+     * Adds a component listener.
+     * <p>
+     *
+     * @param key      The key associated with the component and the builder of this component.
+     * @param consumer A consumer that receives the instance of the component builder before the component gets created.
+     * @param <C>      The type of the component of the key.
+     * @param <B>      the type of the component builder that the is associated with the key and created by the factory.
+     */
+    <C extends IRootComponent<I>> IIndividualRootBuilder<I> addListener(ComponentKey key, Consumer<C> consumer);
 }

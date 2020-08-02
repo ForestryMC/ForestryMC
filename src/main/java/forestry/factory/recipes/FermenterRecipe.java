@@ -23,76 +23,76 @@ import forestry.api.recipes.IFermenterRecipe;
 
 public class FermenterRecipe implements IFermenterRecipe {
 
-	private final ItemStack resource;
-	@Nullable
-	private final String resourceOreName;
-	private final int fermentationValue;
-	private final float modifier;
-	private final Fluid output;
-	private final FluidStack fluidResource;
+    private final ItemStack resource;
+    @Nullable
+    private final String resourceOreName;
+    private final int fermentationValue;
+    private final float modifier;
+    private final Fluid output;
+    private final FluidStack fluidResource;
 
-	public FermenterRecipe(ItemStack resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
-		Preconditions.checkNotNull(resource, "Fermenter Resource cannot be null!");
-		Preconditions.checkArgument(!resource.isEmpty(), "Fermenter Resource item cannot be empty!");
-		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
-		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
+    public FermenterRecipe(ItemStack resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+        Preconditions.checkNotNull(resource, "Fermenter Resource cannot be null!");
+        Preconditions.checkArgument(!resource.isEmpty(), "Fermenter Resource item cannot be empty!");
+        Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
+        Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
-		this.resource = resource;
-		this.resourceOreName = null;
-		this.fermentationValue = fermentationValue;
-		this.modifier = modifier;
-		this.output = output;
-		this.fluidResource = fluidResource;
-	}
+        this.resource = resource;
+        this.resourceOreName = null;
+        this.fermentationValue = fermentationValue;
+        this.modifier = modifier;
+        this.output = output;
+        this.fluidResource = fluidResource;
+    }
 
-	public FermenterRecipe(String resourceOreName, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
-		Preconditions.checkNotNull(resourceOreName, "Fermenter Resource cannot be null!");
-		Preconditions.checkArgument(!resourceOreName.isEmpty(), "Fermenter Resource ore name cannot be empty!");
-		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
-		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
+    public FermenterRecipe(String resourceOreName, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+        Preconditions.checkNotNull(resourceOreName, "Fermenter Resource cannot be null!");
+        Preconditions.checkArgument(!resourceOreName.isEmpty(), "Fermenter Resource ore name cannot be empty!");
+        Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
+        Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
-		this.resource = ItemStack.EMPTY;
-		this.resourceOreName = resourceOreName;
-		this.fermentationValue = fermentationValue;
-		this.modifier = modifier;
-		this.output = output;
-		this.fluidResource = fluidResource;
-	}
+        this.resource = ItemStack.EMPTY;
+        this.resourceOreName = resourceOreName;
+        this.fermentationValue = fermentationValue;
+        this.modifier = modifier;
+        this.output = output;
+        this.fluidResource = fluidResource;
+    }
 
 
-	@Override
-	public ItemStack getResource() {
-		return resource;
-	}
+    @Override
+    public ItemStack getResource() {
+        return resource;
+    }
 
-	@Nullable
-	@Override
-	public String getResourceOreName() {
-		return resourceOreName;
-	}
+    @Nullable
+    @Override
+    public String getResourceOreName() {
+        return resourceOreName;
+    }
 
-	@Override
-	public FluidStack getFluidResource() {
-		return fluidResource;
-	}
+    @Override
+    public FluidStack getFluidResource() {
+        return fluidResource;
+    }
 
-	@Override
-	public int getFermentationValue() {
-		return fermentationValue;
-	}
+    @Override
+    public int getFermentationValue() {
+        return fermentationValue;
+    }
 
-	@Override
-	public float getModifier() {
-		return modifier;
-	}
+    @Override
+    public float getModifier() {
+        return modifier;
+    }
 
-	@Override
-	public Fluid getOutput() {
-		return output;
-	}
+    @Override
+    public Fluid getOutput() {
+        return output;
+    }
 
-	@Override
-	public int compareTo(IFermenterRecipe o) {
-		return !resource.isEmpty() ? -1 : 1;
-	}
+    @Override
+    public int compareTo(IFermenterRecipe o) {
+        return !resource.isEmpty() ? -1 : 1;
+    }
 }

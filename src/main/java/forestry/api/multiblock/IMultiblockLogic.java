@@ -19,55 +19,55 @@ import forestry.api.core.INbtWritable;
  */
 public interface IMultiblockLogic extends INbtWritable {
 
-	/**
-	 * @return True if this block is connected to a multiblock controller. False otherwise.
-	 */
-	boolean isConnected();
+    /**
+     * @return True if this block is connected to a multiblock controller. False otherwise.
+     */
+    boolean isConnected();
 
-	/**
-	 * @return the multiblock controller for this logic
-	 */
-	IMultiblockController getController();
+    /**
+     * @return the multiblock controller for this logic
+     */
+    IMultiblockController getController();
 
-	/* Updating and Synchronization */
+    /* Updating and Synchronization */
 
-	/**
-	 * call on Tile.validate()
-	 **/
-	void validate(World world, IMultiblockComponent part);
+    /**
+     * call on Tile.validate()
+     **/
+    void validate(World world, IMultiblockComponent part);
 
-	/**
-	 * call on Tile.invalidate()
-	 **/
-	void invalidate(World world, IMultiblockComponent part);
+    /**
+     * call on Tile.invalidate()
+     **/
+    void invalidate(World world, IMultiblockComponent part);
 
-	/**
-	 * call on Tile.onChunkUnload()
-	 **/
-	void onChunkUnload(World world, IMultiblockComponent part);
+    /**
+     * call on Tile.onChunkUnload()
+     **/
+    void onChunkUnload(World world, IMultiblockComponent part);
 
-	/**
-	 * Writes data for client synchronization.
-	 * Use this in Tile.getDescriptionPacket()
-	 */
-	void encodeDescriptionPacket(CompoundNBT packetData);
+    /**
+     * Writes data for client synchronization.
+     * Use this in Tile.getDescriptionPacket()
+     */
+    void encodeDescriptionPacket(CompoundNBT packetData);
 
-	/**
-	 * Reads data for client synchronization.
-	 * Use this in Tile.onDataPacket()
-	 */
-	void decodeDescriptionPacket(CompoundNBT packetData);
+    /**
+     * Reads data for client synchronization.
+     * Use this in Tile.onDataPacket()
+     */
+    void decodeDescriptionPacket(CompoundNBT packetData);
 
-	/**
-	 * Read the logic's data from file.
-	 * Use this in Tile.read()
-	 */
-	void readFromNBT(CompoundNBT CompoundNBT);
+    /**
+     * Read the logic's data from file.
+     * Use this in Tile.read()
+     */
+    void readFromNBT(CompoundNBT CompoundNBT);
 
-	/**
-	 * Write the logic's data to file.
-	 * Use this in Tile.write()
-	 */
-	@Override
-	CompoundNBT write(CompoundNBT CompoundNBT);
+    /**
+     * Write the logic's data to file.
+     * Use this in Tile.write()
+     */
+    @Override
+    CompoundNBT write(CompoundNBT CompoundNBT);
 }

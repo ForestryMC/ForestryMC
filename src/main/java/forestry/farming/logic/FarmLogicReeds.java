@@ -13,8 +13,8 @@ package forestry.farming.logic;
 import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicReeds extends FarmLogicSoil {
-	public FarmLogicReeds(IFarmProperties properties, boolean isManual) {
-		super(properties, isManual);
-	}
+    public FarmLogicReeds(IFarmProperties properties, boolean isManual) {
+        super(properties, isManual);
+    }
 
 }

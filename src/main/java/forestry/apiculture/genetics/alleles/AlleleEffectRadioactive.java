@@ -36,81 +36,81 @@ import forestry.core.utils.VectUtil;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
-	private static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
+    private static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
 
-	public AlleleEffectRadioactive() {
-		super("radioactive", true, 40, false, true);
-	}
+    public AlleleEffectRadioactive() {
+        super("radioactive", true, 40, false, true);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		harmEntities(genome, housing);
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        harmEntities(genome, housing);
 
-		return destroyEnvironment(genome, storedData, housing);
-	}
+        return destroyEnvironment(genome, storedData, housing);
+    }
 
-	private void harmEntities(IGenome genome, IBeeHousing housing) {
-		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
-		for (LivingEntity entity : entities) {
-			int damage = 8;
+    private void harmEntities(IGenome genome, IBeeHousing housing) {
+        List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
+        for (LivingEntity entity : entities) {
+            int damage = 8;
 
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
-			damage -= count * 2;
-			if (damage <= 0) {
-				continue;
-			}
+            // Entities are not attacked if they wear a full set of apiarist's armor.
+            int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
+            damage -= count * 2;
+            if (damage <= 0) {
+                continue;
+            }
 
-			entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
-		}
-	}
+            entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
+        }
+    }
 
-	private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
-		Random rand = world.rand;
+    private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        World world = housing.getWorldObj();
+        Random rand = world.rand;
 
-		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
-		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
-		BlockPos posHousing = housing.getCoordinates();
+        Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
+        Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+        BlockPos posHousing = housing.getCoordinates();
 
-		for (int i = 0; i < 20; i++) {
-			BlockPos randomPos = VectUtil.getRandomPositionInArea(rand, area);
-			BlockPos posBlock = randomPos.add(posHousing);
-			posBlock = posBlock.add(offset);
+        for (int i = 0; i < 20; i++) {
+            BlockPos randomPos = VectUtil.getRandomPositionInArea(rand, area);
+            BlockPos posBlock = randomPos.add(posHousing);
+            posBlock = posBlock.add(offset);
 
-			if (posBlock.getY() <= 1 || posBlock.getY() >= world.func_234938_ad_()) {
-				continue;
-			}
+            if (posBlock.getY() <= 1 || posBlock.getY() >= world.func_234938_ad_()) {
+                continue;
+            }
 
-			// Don't destroy ourselves or blocks below us.
-			if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() && posBlock.getY() <= posHousing.getY()) {
-				continue;
-			}
+            // Don't destroy ourselves or blocks below us.
+            if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() && posBlock.getY() <= posHousing.getY()) {
+                continue;
+            }
 
-			if (!world.isBlockLoaded(posBlock) || world.isAirBlock(posBlock)) {
-				continue;
-			}
+            if (!world.isBlockLoaded(posBlock) || world.isAirBlock(posBlock)) {
+                continue;
+            }
 
-			BlockState blockState = world.getBlockState(posBlock);
-			Block block = blockState.getBlock();
+            BlockState blockState = world.getBlockState(posBlock);
+            Block block = blockState.getBlock();
 
-			if (block instanceof BlockAlveary) {
-				continue;
-			}
+            if (block instanceof BlockAlveary) {
+                continue;
+            }
 
-			TileEntity tile = TileUtil.getTile(world, posBlock);
-			if (tile instanceof IBeeHousing) {
-				continue;
-			}
+            TileEntity tile = TileUtil.getTile(world, posBlock);
+            if (tile instanceof IBeeHousing) {
+                continue;
+            }
 
-			if (blockState.getBlockHardness(world, posBlock) < 0) {
-				continue;
-			}
+            if (blockState.getBlockHardness(world, posBlock) < 0) {
+                continue;
+            }
 
-			BlockUtil.setBlockToAirWithSound(world, posBlock, blockState);
-			break;
-		}
+            BlockUtil.setBlockToAirWithSound(world, posBlock, blockState);
+            break;
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 }

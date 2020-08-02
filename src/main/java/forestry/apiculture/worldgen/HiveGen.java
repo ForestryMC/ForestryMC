@@ -20,14 +20,14 @@ import forestry.core.utils.BlockUtil;
 
 public abstract class HiveGen implements IHiveGen {
 
-	public static boolean isTreeBlock(BlockState blockState, World world, BlockPos pos) {
-		Block block = blockState.getBlock();
-		//TODO tag?
-		return false;//block.isLeaves(blockState, world, pos) || block.isWood(world, pos);
-	}
+    public static boolean isTreeBlock(BlockState blockState, World world, BlockPos pos) {
+        Block block = blockState.getBlock();
+        //TODO tag?
+        return false;//block.isLeaves(blockState, world, pos) || block.isWood(world, pos);
+    }
 
-	@Override
-	public boolean canReplace(BlockState blockState, World world, BlockPos pos) {
-		return BlockUtil.canReplace(blockState, world, pos);
-	}
+    @Override
+    public boolean canReplace(BlockState blockState, World world, BlockPos pos) {
+        return BlockUtil.canReplace(blockState, world, pos);
+    }
 }

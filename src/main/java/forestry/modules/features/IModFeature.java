@@ -18,24 +18,24 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
  * @see FeatureType
  */
 public interface IModFeature {
-	String getIdentifier();
+    String getIdentifier();
 
-	FeatureType getType();
+    FeatureType getType();
 
-	String getModId();
+    String getModId();
 
-	String getModuleId();
+    String getModuleId();
 
-	void create();
+    void create();
 
-	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
-	}
+    default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
+    }
 
-	default boolean isEnabled() {
-		return ModFeatureRegistry.get(getModId()).isEnabled(this);
-	}
+    default boolean isEnabled() {
+        return ModFeatureRegistry.get(getModId()).isEnabled(this);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	default void clientSetup() {
-	}
+    @OnlyIn(Dist.CLIENT)
+    default void clientSetup() {
+    }
 }

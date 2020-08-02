@@ -8,13 +8,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IGuiSizable {
 
-	int getGuiLeft();
+    int getGuiLeft();
 
-	int getGuiTop();
+    int getGuiTop();
 
-	int getSizeX();
+    int getSizeX();
 
-	int getSizeY();
+    int getSizeY();
 
-	Minecraft getMC();
+    Minecraft getMC();
 }

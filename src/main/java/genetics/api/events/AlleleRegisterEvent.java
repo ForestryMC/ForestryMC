@@ -10,19 +10,19 @@ import genetics.api.alleles.IAlleleRegistry;
 
 public class AlleleRegisterEvent extends Event /*implements IContextSetter*/ {
 
-	private final IAlleleRegistry alleleRegistry;
-	private final IForgeRegistry<IAllele> registry;
+    private final IAlleleRegistry alleleRegistry;
+    private final IForgeRegistry<IAllele> registry;
 
-	public AlleleRegisterEvent() {
-		this.alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
-		this.registry = RegistryManager.ACTIVE.getRegistry(IAllele.class);
-	}
+    public AlleleRegisterEvent() {
+        this.alleleRegistry = GeneticsAPI.apiInstance.getAlleleRegistry();
+        this.registry = RegistryManager.ACTIVE.getRegistry(IAllele.class);
+    }
 
-	public IAlleleRegistry getAlleleRegistry() {
-		return alleleRegistry;
-	}
+    public IAlleleRegistry getAlleleRegistry() {
+        return alleleRegistry;
+    }
 
-	public IForgeRegistry<IAllele> getRegistry() {
-		return registry;
-	}
+    public IForgeRegistry<IAllele> getRegistry() {
+        return registry;
+    }
 }

@@ -13,5 +13,5 @@ package forestry.core.gui;
 import net.minecraft.inventory.IInventory;
 
 public interface IContainerCrafting {
-	void onCraftMatrixChanged(IInventory iinventory, int slot);
+    void onCraftMatrixChanged(IInventory iinventory, int slot);
 }

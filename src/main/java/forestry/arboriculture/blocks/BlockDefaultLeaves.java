@@ -32,78 +32,78 @@ import forestry.arboriculture.genetics.TreeDefinition;
  * Similar to decorative leaves, but these will drop saplings and can be used for pollination.
  */
 public class BlockDefaultLeaves extends BlockAbstractLeaves {
-	private final TreeDefinition definition;
+    private final TreeDefinition definition;
 
-	public BlockDefaultLeaves(TreeDefinition definition) {
-		super(Block.Properties.create(Material.LEAVES)
-			.hardnessAndResistance(0.2f)
-			.sound(SoundType.PLANT)
-			.tickRandomly()
-			.notSolid());
-		this.definition = definition;
-	}
+    public BlockDefaultLeaves(TreeDefinition definition) {
+        super(Block.Properties.create(Material.LEAVES)
+                .hardnessAndResistance(0.2f)
+                .sound(SoundType.PLANT)
+                .tickRandomly()
+                .notSolid());
+        this.definition = definition;
+    }
 
-	//TODO needed?
-	@Nullable
-	public TreeDefinition getTreeDefinition(BlockState blockState) {
-		if (blockState.getBlock() == this) {
-			return this.definition;
-		} else {
-			return null;
-		}
-	}
+    //TODO needed?
+    @Nullable
+    public TreeDefinition getTreeDefinition(BlockState blockState) {
+        if (blockState.getBlock() == this) {
+            return this.definition;
+        } else {
+            return null;
+        }
+    }
 
-	public TreeDefinition getTreeDefinition() {
-		return definition;
-	}
+    public TreeDefinition getTreeDefinition() {
+        return definition;
+    }
 
-	@Override
-	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
-		ITree tree = getTree(world, pos);
-		if (tree == null) {
-			return;
-		}
+    @Override
+    protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
+        ITree tree = getTree(world, pos);
+        if (tree == null) {
+            return;
+        }
 
-		// Add saplings
-		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
-		for (ITree sapling : saplings) {
-			if (sapling != null) {
-				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
-			}
-		}
-	}
+        // Add saplings
+        List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
+        for (ITree sapling : saplings) {
+            if (sapling != null) {
+                drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
+            }
+        }
+    }
 
-	@Override
-	protected ITree getTree(IBlockReader world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		TreeDefinition treeDefinition = getTreeDefinition(blockState);
-		if (treeDefinition != null) {
-			return treeDefinition.createIndividual();
-		} else {
-			return null;
-		}
-	}
+    @Override
+    protected ITree getTree(IBlockReader world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        TreeDefinition treeDefinition = getTreeDefinition(blockState);
+        if (treeDefinition != null) {
+            return treeDefinition.createIndividual();
+        } else {
+            return null;
+        }
+    }
 
-	/* RENDERING */
-	//TODO hitbox/rendering
-	//	@Override
-	//	public final boolean isOpaqueCube(BlockState state) {
-	//		if (!Proxies.render.fancyGraphicsEnabled()) {
-	//			return !TreeDefinition.Willow.equals(definition);
-	//		}
-	//		return false;
-	//	}
+    /* RENDERING */
+    //TODO hitbox/rendering
+    //	@Override
+    //	public final boolean isOpaqueCube(BlockState state) {
+    //		if (!Proxies.render.fancyGraphicsEnabled()) {
+    //			return !TreeDefinition.Willow.equals(definition);
+    //		}
+    //		return false;
+    //	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
-		TreeDefinition treeDefinition = getTreeDefinition(state);
-		if (treeDefinition == null) {
-			treeDefinition = TreeDefinition.Oak;
-		}
-		IGenome genome = treeDefinition.getGenome();
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+        TreeDefinition treeDefinition = getTreeDefinition(state);
+        if (treeDefinition == null) {
+            treeDefinition = TreeDefinition.Oak;
+        }
+        IGenome genome = treeDefinition.getGenome();
 
-		ILeafSpriteProvider spriteProvider = genome.getActiveAllele(TreeChromosomes.SPECIES).getLeafSpriteProvider();
-		return spriteProvider.getColor(false);
-	}
+        ILeafSpriteProvider spriteProvider = genome.getActiveAllele(TreeChromosomes.SPECIES).getLeafSpriteProvider();
+        return spriteProvider.getColor(false);
+    }
 }

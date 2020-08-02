@@ -14,18 +14,18 @@ import forestry.core.gui.elements.lib.IGuiElementFactory;
 
 @OnlyIn(Dist.CLIENT)
 public class IndexContent extends BookContent<IndexData> {
-	@Nullable
-	@Override
-	public Class<? extends IndexData> getDataClass() {
-		return IndexData.class;
-	}
+    @Nullable
+    @Override
+    public Class<? extends IndexData> getDataClass() {
+        return IndexData.class;
+    }
 
-	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
-		if (data == null || data.entries.length <= 0) {
-			return false;
-		}
-		page.add(new IndexElement(0, 0, data.entries));
-		return true;
-	}
+    @Override
+    public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+        if (data == null || data.entries.length <= 0) {
+            return false;
+        }
+        page.add(new IndexElement(0, 0, data.entries));
+        return true;
+    }
 }

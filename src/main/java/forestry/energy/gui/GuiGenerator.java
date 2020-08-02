@@ -22,27 +22,27 @@ import forestry.energy.tiles.TileEuGenerator;
 
 public class GuiGenerator extends GuiForestryTitled<ContainerGenerator> {
 
-	private final TileEuGenerator tile;
+    private final TileEuGenerator tile;
 
-	public GuiGenerator(ContainerGenerator container, PlayerInventory inventory, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/generator.png", container, inventory, title);
-		widgetManager.add(new TankWidget(this.widgetManager, 49, 17, 0));
-		this.tile = container.getTile();
-	}
+    public GuiGenerator(ContainerGenerator container, PlayerInventory inventory, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/generator.png", container, inventory, title);
+        widgetManager.add(new TankWidget(this.widgetManager, 49, 17, 0));
+        this.tile = container.getTile();
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		int progress = tile.getStoredScaled(49);
-		if (progress > 0) {
-			blit(transform, guiLeft + 108, guiTop + 38, 176, 91, progress, 18);
-		}
-	}
+        int progress = tile.getStoredScaled(49);
+        if (progress > 0) {
+            blit(transform, guiLeft + 108, guiTop + 38, 176, 91, progress, 18);
+        }
+    }
 
-	@Override
-	protected void addLedgers() {
+    @Override
+    protected void addLedgers() {
 
-	}
+    }
 
 }

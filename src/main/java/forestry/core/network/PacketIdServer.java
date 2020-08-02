@@ -17,52 +17,52 @@ import forestry.core.network.packets.PacketHandlerDummyServer;
  * Packets sent to the server from the client
  */
 public enum PacketIdServer implements IPacketId {
-	INVALID,
+    INVALID,
 
-	// Core Gui
-	GUI_SELECTION_REQUEST,
-	PIPETTE_CLICK,
-	CHIPSET_CLICK,
-	SOLDERING_IRON_CLICK,
+    // Core Gui
+    GUI_SELECTION_REQUEST,
+    PIPETTE_CLICK,
+    CHIPSET_CLICK,
+    SOLDERING_IRON_CLICK,
 
-	//Database
-	INSERT_ITEM,
-	EXTRACT_ITEM,
+    //Database
+    INSERT_ITEM,
+    EXTRACT_ITEM,
 
-	// Sorting
-	FILTER_CHANGE_RULE,
-	FILTER_CHANGE_GENOME,
+    // Sorting
+    FILTER_CHANGE_RULE,
+    FILTER_CHANGE_GENOME,
 
-	// Climate
-	SELECT_CLIMATE_TARGETED,
-	CLIMATE_LISTENER_UPDATE_REQUEST,
-	CLIMATE_LISTENER_UPDATE_REQUEST_ENTITY,
+    // Climate
+    SELECT_CLIMATE_TARGETED,
+    CLIMATE_LISTENER_UPDATE_REQUEST,
+    CLIMATE_LISTENER_UPDATE_REQUEST_ENTITY,
 
-	// JEI
-	WORKTABLE_RECIPE_REQUEST,
-	RECIPE_TRANSFER_REQUEST,
+    // JEI
+    WORKTABLE_RECIPE_REQUEST,
+    RECIPE_TRANSFER_REQUEST,
 
-	// Apiculture
-	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
+    // Apiculture
+    BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
 
-	// Mail
-	LETTER_INFO_REQUEST,
-	TRADING_ADDRESS_REQUEST,
-	LETTER_TEXT_SET;
+    // Mail
+    LETTER_INFO_REQUEST,
+    TRADING_ADDRESS_REQUEST,
+    LETTER_TEXT_SET;
 
-	public static final PacketIdServer[] VALUES = values();
+    public static final PacketIdServer[] VALUES = values();
 
-	private IForestryPacketHandlerServer packetHandler;
+    private IForestryPacketHandlerServer packetHandler;
 
-	PacketIdServer() {
-		this.packetHandler = PacketHandlerDummyServer.instance;
-	}
+    PacketIdServer() {
+        this.packetHandler = PacketHandlerDummyServer.instance;
+    }
 
-	public void setPacketHandler(IForestryPacketHandlerServer packetHandler) {
-		this.packetHandler = packetHandler;
-	}
+    public void setPacketHandler(IForestryPacketHandlerServer packetHandler) {
+        this.packetHandler = packetHandler;
+    }
 
-	public IForestryPacketHandlerServer getPacketHandler() {
-		return packetHandler;
-	}
+    public IForestryPacketHandlerServer getPacketHandler() {
+        return packetHandler;
+    }
 }

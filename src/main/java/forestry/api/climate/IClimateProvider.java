@@ -14,9 +14,9 @@ import forestry.api.core.EnumTemperature;
  * Provides information about the climate on a specific position or of a tile entity.
  */
 public interface IClimateProvider {
-	Biome getBiome();
+    Biome getBiome();
 
-	EnumTemperature getTemperature();
+    EnumTemperature getTemperature();
 
-	EnumHumidity getHumidity();
+    EnumHumidity getHumidity();
 }

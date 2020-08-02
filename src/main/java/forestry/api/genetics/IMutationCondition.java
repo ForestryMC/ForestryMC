@@ -16,15 +16,15 @@ import forestry.api.climate.IClimateProvider;
 
 public interface IMutationCondition {
 
-	/**
-	 * Returns a float from 0 to 1 representing the chance for mutation to occur.
-	 * Most will return 1 if the condition is met and 0 otherwise,
-	 * but the float offers flexibility for more advanced conditions.
-	 */
-	float getChance(World world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate);
+    /**
+     * Returns a float from 0 to 1 representing the chance for mutation to occur.
+     * Most will return 1 if the condition is met and 0 otherwise,
+     * but the float offers flexibility for more advanced conditions.
+     */
+    float getChance(World world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate);
 
-	/**
-	 * A localized description of the mutation condition. (i.e. "A temperature of HOT is required.")
-	 */
-	ITextComponent getDescription();
+    /**
+     * A localized description of the mutation condition. (i.e. "A temperature of HOT is required.")
+     */
+    ITextComponent getDescription();
 }

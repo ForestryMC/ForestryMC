@@ -15,28 +15,28 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.INbtWritable;
 
 public interface ICircuitBoard extends INbtWritable {
-	@OnlyIn(Dist.CLIENT)
-	int getPrimaryColor();
+    @OnlyIn(Dist.CLIENT)
+    int getPrimaryColor();
 
-	@OnlyIn(Dist.CLIENT)
-	int getSecondaryColor();
+    @OnlyIn(Dist.CLIENT)
+    int getSecondaryColor();
 
-	@OnlyIn(Dist.CLIENT)
-	void addTooltip(List<ITextComponent> list);
+    @OnlyIn(Dist.CLIENT)
+    void addTooltip(List<ITextComponent> list);
 
-	void onInsertion(Object tile);
+    void onInsertion(Object tile);
 
-	void onLoad(Object tile);
+    void onLoad(Object tile);
 
-	void onRemoval(Object tile);
+    void onRemoval(Object tile);
 
-	void onTick(Object tile);
+    void onTick(Object tile);
 
-	ICircuit[] getCircuits();
+    ICircuit[] getCircuits();
 
-	/**
-	 * Specifies where a circuit can be used.
-	 */
-	ICircuitSocketType getSocketType();
+    /**
+     * Specifies where a circuit can be used.
+     */
+    ICircuitSocketType getSocketType();
 
 }

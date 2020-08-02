@@ -23,45 +23,45 @@ import forestry.core.worldgen.FeatureHelper;
 
 public class FeatureWalnut extends FeatureTree {
 
-	public FeatureWalnut(ITreeGenData tree) {
-		super(tree, 7, 3);
-	}
+    public FeatureWalnut(ITreeGenData tree) {
+        super(tree, 7, 3);
+    }
 
-	@Override
-	public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
-		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
+    @Override
+    public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+        FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
 
-		Set<BlockPos> branchEnds = new HashSet<>();
+        Set<BlockPos> branchEnds = new HashSet<>();
 
-		int branchHeight = height - 3;
-		float branchSize = 2;
-		while (branchHeight >= 3) {
-			branchEnds.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, branchHeight, 0), girth, 0.2f, 0.2f, (int) branchSize, 1, 0.5f));
-			branchHeight--;
-			branchSize += 0.25f;
-		}
+        int branchHeight = height - 3;
+        float branchSize = 2;
+        while (branchHeight >= 3) {
+            branchEnds.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, branchHeight, 0), girth, 0.2f, 0.2f, (int) branchSize, 1, 0.5f));
+            branchHeight--;
+            branchSize += 0.25f;
+        }
 
-		return branchEnds;
-	}
+        return branchEnds;
+    }
 
-	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		int leafSpawn = height + 1;
+    @Override
+    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+        int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
-		float branchSize = 2;
-		while (leafSpawn >= 3) {
-			int leafRadius = Math.min(4, (int) branchSize);
-			for (BlockPos branchEnd : branchEnds) {
-				FeatureHelper.generateCircle(world, rand, branchEnd, leafRadius, 2, 2, leaf, 1.0f, FeatureHelper.EnumReplaceMode.SOFT);
-			}
-			leafSpawn--;
-			branchSize += 0.25f;
-		}
-	}
+        float branchSize = 2;
+        while (leafSpawn >= 3) {
+            int leafRadius = Math.min(4, (int) branchSize);
+            for (BlockPos branchEnd : branchEnds) {
+                FeatureHelper.generateCircle(world, rand, branchEnd, leafRadius, 2, 2, leaf, 1.0f, FeatureHelper.EnumReplaceMode.SOFT);
+            }
+            leafSpawn--;
+            branchSize += 0.25f;
+        }
+    }
 }

@@ -23,48 +23,48 @@ import forestry.storage.inventory.ItemInventoryBackpack;
 //TODO it may be simpler to split this up into two containerTypes. One for normal size and one for t2
 public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
 
-	public enum Size {
-		DEFAULT(3, 5, 44, 19),
-		T2(5, 9, 8, 8);
+    public enum Size {
+        DEFAULT(3, 5, 44, 19),
+        T2(5, 9, 8, 8);
 
-		final int rows;
-		final int columns;
-		final int startX;
-		final int startY;
+        final int rows;
+        final int columns;
+        final int startX;
+        final int startY;
 
-		Size(int rows, int columns, int startX, int startY) {
-			this.rows = rows;
-			this.columns = columns;
-			this.startX = startX;
-			this.startY = startY;
-		}
+        Size(int rows, int columns, int startX, int startY) {
+            this.rows = rows;
+            this.columns = columns;
+            this.startX = startX;
+            this.startY = startY;
+        }
 
-		public int getSize() {
-			return rows * columns;
-		}
-	}
+        public int getSize() {
+            return rows * columns;
+        }
+    }
 
-	private Size size;
+    private final Size size;
 
-	public static ContainerBackpack fromNetwork(int windowID, PlayerInventory inv, PacketBuffer extraData) {
-		Size size = extraData.readEnumValue(Size.class);
-		ItemStack parent = extraData.readItemStack();
-		return new ContainerBackpack(windowID, inv.player, size, parent);
-	}
+    public static ContainerBackpack fromNetwork(int windowID, PlayerInventory inv, PacketBuffer extraData) {
+        Size size = extraData.readEnumValue(Size.class);
+        ItemStack parent = extraData.readItemStack();
+        return new ContainerBackpack(windowID, inv.player, size, parent);
+    }
 
-	public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
-		super(windowID, new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18, BackpackContainers.BACKPACK.containerType());
-		this.size = size;
-		// Inventory
-		for (int j = 0; j < size.rows; j++) {
-			for (int k = 0; k < size.columns; k++) {
-				int slot = k + j * size.columns;
-				addSlot(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
-			}
-		}
-	}
+    public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
+        super(windowID, new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18, BackpackContainers.BACKPACK.containerType());
+        this.size = size;
+        // Inventory
+        for (int j = 0; j < size.rows; j++) {
+            for (int k = 0; k < size.columns; k++) {
+                int slot = k + j * size.columns;
+                addSlot(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
+            }
+        }
+    }
 
-	public Size getSize() {
-		return size;
-	}
+    public Size getSize() {
+        return size;
+    }
 }

@@ -7,7 +7,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IValueElement<V> extends IGuiElement {
 
-	V getValue();
+    V getValue();
 
-	void setValue(V value);
+    void setValue(V value);
 }

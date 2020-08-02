@@ -18,13 +18,13 @@ import forestry.farming.multiblock.MultiblockLogicFarm;
 
 public class MultiblockLogicFactory implements IMultiblockLogicFactory {
 
-	@Override
-	public IMultiblockLogicAlveary createAlvearyLogic() {
-		return new MultiblockLogicAlveary();
-	}
+    @Override
+    public IMultiblockLogicAlveary createAlvearyLogic() {
+        return new MultiblockLogicAlveary();
+    }
 
-	@Override
-	public IMultiblockLogicFarm createFarmLogic() {
-		return new MultiblockLogicFarm();
-	}
+    @Override
+    public IMultiblockLogicFarm createFarmLogic() {
+        return new MultiblockLogicFarm();
+    }
 }

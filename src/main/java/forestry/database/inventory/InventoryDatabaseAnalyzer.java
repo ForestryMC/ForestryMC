@@ -19,26 +19,26 @@ import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
 public class InventoryDatabaseAnalyzer extends InventoryAdapterTile<TileDatabase> {
-	public static final int SLOT_ENERGY = 0;
+    public static final int SLOT_ENERGY = 0;
 
-	public InventoryDatabaseAnalyzer(TileDatabase database) {
-		super(database, 1, "AnalyzerItems");
-	}
+    public InventoryDatabaseAnalyzer(TileDatabase database) {
+        super(database, 1, "AnalyzerItems");
+    }
 
-	public static boolean isAlyzingFuel(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return false;
-		}
+    public static boolean isAlyzingFuel(ItemStack itemstack) {
+        if (itemstack.isEmpty()) {
+            return false;
+        }
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
-		}
+        if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+            return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return isAlyzingFuel(itemStack);
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return isAlyzingFuel(itemStack);
+    }
 }

@@ -8,11 +8,11 @@ import forestry.api.farming.IFarmInventory;
 
 public interface IFarmInventoryInternal extends IFarmInventory {
 
-	int getFertilizerValue();
+    int getFertilizerValue();
 
-	boolean useFertilizer();
+    boolean useFertilizer();
 
-	void stowProducts(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce);
+    void stowProducts(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce);
 
-	boolean tryAddPendingProduce(Stack<ItemStack> pendingProduce);
+    boolean tryAddPendingProduce(Stack<ItemStack> pendingProduce);
 }

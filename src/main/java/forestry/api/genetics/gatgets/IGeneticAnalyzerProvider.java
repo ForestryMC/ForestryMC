@@ -4,19 +4,19 @@ import net.minecraft.item.ItemStack;
 
 public interface IGeneticAnalyzerProvider {
 
-	ItemStack getSpecimen(int index);
+    ItemStack getSpecimen(int index);
 
-	default boolean onUpdateSelected() {
-		return false;
-	}
+    default boolean onUpdateSelected() {
+        return false;
+    }
 
-	default void onSelection(int index, boolean changed) {
+    default void onSelection(int index, boolean changed) {
 
-	}
+    }
 
-	int getSelectedSlot(int index);
+    int getSelectedSlot(int index);
 
-	int getSlotCount();
+    int getSlotCount();
 
-	int getFirstSlot();
+    int getFirstSlot();
 }

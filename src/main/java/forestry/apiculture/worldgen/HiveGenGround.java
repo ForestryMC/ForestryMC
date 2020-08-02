@@ -23,43 +23,43 @@ import net.minecraft.world.gen.Heightmap;
 
 public class HiveGenGround extends HiveGen {
 
-	private final Set<Material> groundMaterials = new HashSet<>();
+    private final Set<Material> groundMaterials = new HashSet<>();
 
-	public HiveGenGround(Block... groundBlocks) {
-		for (Block block : groundBlocks) {
-			BlockState blockState = block.getDefaultState();
-			Material blockMaterial = blockState.getMaterial();
-			groundMaterials.add(blockMaterial);
-		}
-	}
+    public HiveGenGround(Block... groundBlocks) {
+        for (Block block : groundBlocks) {
+            BlockState blockState = block.getDefaultState();
+            Material blockMaterial = blockState.getMaterial();
+            groundMaterials.add(blockMaterial);
+        }
+    }
 
-	@Override
-	public boolean isValidLocation(World world, BlockPos pos) {
-		BlockState groundBlockState = world.getBlockState(pos.down());
-		Material groundBlockMaterial = groundBlockState.getMaterial();
-		return groundMaterials.contains(groundBlockMaterial);
-	}
+    @Override
+    public boolean isValidLocation(World world, BlockPos pos) {
+        BlockState groundBlockState = world.getBlockState(pos.down());
+        Material groundBlockMaterial = groundBlockState.getMaterial();
+        return groundMaterials.contains(groundBlockMaterial);
+    }
 
-	@Override
-	public BlockPos getPosForHive(World world, int x, int z) {
-		// get to the ground
-		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
-		if (topPos.getY() == 0) {
-			return null;
-		}
+    @Override
+    public BlockPos getPosForHive(World world, int x, int z) {
+        // get to the ground
+        final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
+        if (topPos.getY() == 0) {
+            return null;
+        }
 
-		final BlockPos.Mutable pos = new BlockPos.Mutable();
-		pos.setPos(topPos);
+        final BlockPos.Mutable pos = new BlockPos.Mutable();
+        pos.setPos(topPos);
 
-		BlockState blockState = world.getBlockState(pos);
-		while (isTreeBlock(blockState, world, pos) || canReplace(blockState, world, pos)) {
-			pos.move(Direction.DOWN);
-			if (pos.getY() <= 0) {
-				return null;
-			}
-			blockState = world.getBlockState(pos);
-		}
+        BlockState blockState = world.getBlockState(pos);
+        while (isTreeBlock(blockState, world, pos) || canReplace(blockState, world, pos)) {
+            pos.move(Direction.DOWN);
+            if (pos.getY() <= 0) {
+                return null;
+            }
+            blockState = world.getBlockState(pos);
+        }
 
-		return pos.up();
-	}
+        return pos.up();
+    }
 }

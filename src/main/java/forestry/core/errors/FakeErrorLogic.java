@@ -19,44 +19,44 @@ import forestry.api.core.IErrorState;
 
 public class FakeErrorLogic implements IErrorLogic {
 
-	public static final FakeErrorLogic instance = new FakeErrorLogic();
+    public static final FakeErrorLogic instance = new FakeErrorLogic();
 
-	private FakeErrorLogic() {
+    private FakeErrorLogic() {
 
-	}
+    }
 
-	@Override
-	public boolean setCondition(boolean condition, IErrorState errorState) {
-		return false;
-	}
+    @Override
+    public boolean setCondition(boolean condition, IErrorState errorState) {
+        return false;
+    }
 
-	@Override
-	public boolean contains(IErrorState state) {
-		return false;
-	}
+    @Override
+    public boolean contains(IErrorState state) {
+        return false;
+    }
 
-	@Override
-	public boolean hasErrors() {
-		return true;
-	}
+    @Override
+    public boolean hasErrors() {
+        return true;
+    }
 
-	@Override
-	public void clearErrors() {
+    @Override
+    public void clearErrors() {
 
-	}
+    }
 
-	@Override
-	public void writeData(PacketBuffer data) {
+    @Override
+    public void writeData(PacketBuffer data) {
 
-	}
+    }
 
-	@Override
-	public void readData(PacketBuffer data) {
+    @Override
+    public void readData(PacketBuffer data) {
 
-	}
+    }
 
-	@Override
-	public ImmutableSet<IErrorState> getErrorStates() {
-		return ImmutableSet.of();
-	}
+    @Override
+    public ImmutableSet<IErrorState> getErrorStates() {
+        return ImmutableSet.of();
+    }
 }

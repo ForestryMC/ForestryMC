@@ -38,160 +38,160 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, INamedContainerProvider {
-	@Nullable
-	private GameProfile owner;
+    @Nullable
+    private GameProfile owner;
 
-	public MultiblockTileEntityForestry(TileEntityType<?> tileEntityType, T multiblockLogic) {
-		super(tileEntityType, multiblockLogic);
-	}
+    public MultiblockTileEntityForestry(TileEntityType<?> tileEntityType, T multiblockLogic) {
+        super(tileEntityType, multiblockLogic);
+    }
 
-	/**
-	 * Called by a structure block when it is right clicked by a player.
-	 */
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
-		NetworkHooks.openGui(player, this, pos);
-	}
+    /**
+     * Called by a structure block when it is right clicked by a player.
+     */
+    public void openGui(ServerPlayerEntity player, BlockPos pos) {
+        NetworkHooks.openGui(player, this, pos);
+    }
 
-	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
+    @Override
+    public void read(BlockState state, CompoundNBT data) {
+        super.read(state, data);
 
-		if (data.contains("owner")) {
-			CompoundNBT ownerNbt = data.getCompound("owner");
-			this.owner = NBTUtil.readGameProfile(ownerNbt);
-		}
+        if (data.contains("owner")) {
+            CompoundNBT ownerNbt = data.getCompound("owner");
+            this.owner = NBTUtil.readGameProfile(ownerNbt);
+        }
 
-		getInternalInventory().read(data);
-	}
+        getInternalInventory().read(data);
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		data = super.write(data);
+    @Override
+    public CompoundNBT write(CompoundNBT data) {
+        data = super.write(data);
 
-		if (this.owner != null) {
-			CompoundNBT nbt = new CompoundNBT();
-			NBTUtil.writeGameProfile(nbt, owner);
-			data.put("owner", nbt);
-		}
+        if (this.owner != null) {
+            CompoundNBT nbt = new CompoundNBT();
+            NBTUtil.writeGameProfile(nbt, owner);
+            data.put("owner", nbt);
+        }
 
-		getInternalInventory().write(data);
-		return data;
-	}
+        getInternalInventory().write(data);
+        return data;
+    }
 
-	/* INVENTORY */
-	public IInventoryAdapter getInternalInventory() {
-		return FakeInventoryAdapter.instance();
-	}
+    /* INVENTORY */
+    public IInventoryAdapter getInternalInventory() {
+        return FakeInventoryAdapter.instance();
+    }
 
-	public boolean allowsAutomation() {
-		return false;
-	}
+    public boolean allowsAutomation() {
+        return false;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return getInternalInventory().isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return getInternalInventory().isEmpty();
+    }
 
-	@Override
-	public final int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
+    @Override
+    public final int getSizeInventory() {
+        return getInternalInventory().getSizeInventory();
+    }
 
-	@Override
-	public final ItemStack getStackInSlot(int slotIndex) {
-		return getInternalInventory().getStackInSlot(slotIndex);
-	}
+    @Override
+    public final ItemStack getStackInSlot(int slotIndex) {
+        return getInternalInventory().getStackInSlot(slotIndex);
+    }
 
-	@Override
-	public final ItemStack decrStackSize(int slotIndex, int amount) {
-		return getInternalInventory().decrStackSize(slotIndex, amount);
-	}
+    @Override
+    public final ItemStack decrStackSize(int slotIndex, int amount) {
+        return getInternalInventory().decrStackSize(slotIndex, amount);
+    }
 
-	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return getInternalInventory().removeStackFromSlot(slotIndex);
-	}
+    @Override
+    public ItemStack removeStackFromSlot(int slotIndex) {
+        return getInternalInventory().removeStackFromSlot(slotIndex);
+    }
 
-	@Override
-	public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
-	}
+    @Override
+    public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+        getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
+    }
 
-	@Override
-	public final int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
+    @Override
+    public final int getInventoryStackLimit() {
+        return getInternalInventory().getInventoryStackLimit();
+    }
 
-	@Override
-	public final void openInventory(PlayerEntity player) {
-		getInternalInventory().openInventory(player);
-	}
+    @Override
+    public final void openInventory(PlayerEntity player) {
+        getInternalInventory().openInventory(player);
+    }
 
-	@Override
-	public final void closeInventory(PlayerEntity player) {
-		getInternalInventory().closeInventory(player);
-	}
+    @Override
+    public final void closeInventory(PlayerEntity player) {
+        getInternalInventory().closeInventory(player);
+    }
 
-	@Override
-	public final boolean isUsableByPlayer(PlayerEntity player) {
-		return getInternalInventory().isUsableByPlayer(player);
-	}
+    @Override
+    public final boolean isUsableByPlayer(PlayerEntity player) {
+        return getInternalInventory().isUsableByPlayer(player);
+    }
 
-	@Override
-	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
-	}
+    @Override
+    public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+        return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
+    }
 
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		if (allowsAutomation()) {
-			return getInternalInventory().getSlotsForFace(side);
-		} else {
-			return Constants.SLOTS_NONE;
-		}
-	}
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        if (allowsAutomation()) {
+            return getInternalInventory().getSlotsForFace(side);
+        } else {
+            return Constants.SLOTS_NONE;
+        }
+    }
 
-	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return allowsAutomation() && getInternalInventory().canInsertItem(slotIndex, itemStack, side);
-	}
+    @Override
+    public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
+        return allowsAutomation() && getInternalInventory().canInsertItem(slotIndex, itemStack, side);
+    }
 
-	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return allowsAutomation() && getInternalInventory().canExtractItem(slotIndex, itemStack, side);
-	}
+    @Override
+    public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
+        return allowsAutomation() && getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+    }
 
-	@Override
-	public final boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().canSlotAccept(slotIndex, itemStack);
-	}
+    @Override
+    public final boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return getInternalInventory().canSlotAccept(slotIndex, itemStack);
+    }
 
-	@Override
-	public final boolean isLocked(int slotIndex) {
-		return getInternalInventory().isLocked(slotIndex);
-	}
+    @Override
+    public final boolean isLocked(int slotIndex) {
+        return getInternalInventory().isLocked(slotIndex);
+    }
 
-	/* ILocatable */
-	@Override
-	public final World getWorldObj() {
-		return world;
-	}
+    /* ILocatable */
+    @Override
+    public final World getWorldObj() {
+        return world;
+    }
 
-	/* IMultiblockComponent */
+    /* IMultiblockComponent */
 
-	@Override
-	@Nullable
-	public final GameProfile getOwner() {
-		return owner;
-	}
+    @Override
+    @Nullable
+    public final GameProfile getOwner() {
+        return owner;
+    }
 
-	public final void setOwner(GameProfile owner) {
-		this.owner = owner;
-	}
+    public final void setOwner(GameProfile owner) {
+        this.owner = owner;
+    }
 
 
-	@Override
-	public void clear() {
-		getInternalInventory().clear();
-	}
+    @Override
+    public void clear() {
+        getInternalInventory().clear();
+    }
 }

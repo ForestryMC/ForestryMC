@@ -15,32 +15,32 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 
 public class PacketClimateListenerUpdateRequest extends ForestryPacket implements IForestryPacketServer {
-	private final BlockPos pos;
+    private final BlockPos pos;
 
-	public PacketClimateListenerUpdateRequest(BlockPos pos) {
-		this.pos = pos;
-	}
+    public PacketClimateListenerUpdateRequest(BlockPos pos) {
+        this.pos = pos;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.CLIMATE_LISTENER_UPDATE_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.CLIMATE_LISTENER_UPDATE_REQUEST;
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
+    public static class Handler implements IForestryPacketHandlerServer {
 
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
-			TileEntity tileEntity = player.world.getTileEntity(pos);
-			if (tileEntity != null) {
-				LazyOptional<IClimateListener> listener = tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER);
-				listener.ifPresent(l -> l.syncToClient(player));
-			}
-		}
-	}
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
+            TileEntity tileEntity = player.world.getTileEntity(pos);
+            if (tileEntity != null) {
+                LazyOptional<IClimateListener> listener = tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER);
+                listener.ifPresent(l -> l.syncToClient(player));
+            }
+        }
+    }
 }

@@ -19,38 +19,38 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface IForesterBook {
 
-	/**
-	 * Creates a category, add it to this book and returns it.
-	 *
-	 * @param name A unique identifier for the category.
-	 * @return The created category.
-	 */
-	IBookCategory addCategory(String name);
+    /**
+     * Creates a category, add it to this book and returns it.
+     *
+     * @param name A unique identifier for the category.
+     * @return The created category.
+     */
+    IBookCategory addCategory(String name);
 
-	/**
-	 * @return The category with the given unique name.
-	 */
-	@Nullable
-	IBookCategory getCategory(String name);
+    /**
+     * @return The category with the given unique name.
+     */
+    @Nullable
+    IBookCategory getCategory(String name);
 
-	/**
-	 * @return All categories of this book.
-	 */
-	Collection<IBookCategory> getCategories();
+    /**
+     * @return All categories of this book.
+     */
+    Collection<IBookCategory> getCategories();
 
-	/**
-	 * @return A collection that contains all unique names of the categories
-	 */
-	Collection<String> getCategoryNames();
+    /**
+     * @return A collection that contains all unique names of the categories
+     */
+    Collection<String> getCategoryNames();
 
-	/**
-	 * @return A collection that contains all entries of the category with the given name.
-	 */
-	Collection<IBookEntry> getEntries(String category);
+    /**
+     * @return A collection that contains all entries of the category with the given name.
+     */
+    Collection<IBookEntry> getEntries(String category);
 
-	/**
-	 * @return the entry with the given unique name.
-	 */
-	@Nullable
-	IBookEntry getEntry(String name);
+    /**
+     * @return the entry with the given unique name.
+     */
+    @Nullable
+    IBookEntry getEntry(String name);
 }

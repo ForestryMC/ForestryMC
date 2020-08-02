@@ -21,36 +21,36 @@ import forestry.core.utils.BlockUtil;
 
 public class CropBasicAgriCraft extends Crop {
 
-	private final BlockState blockState;
+    private final BlockState blockState;
 
-	public CropBasicAgriCraft(World world, BlockState blockState, BlockPos position) {
-		super(world, position);
-		this.blockState = blockState;
-	}
+    public CropBasicAgriCraft(World world, BlockState blockState, BlockPos position) {
+        super(world, position);
+        this.blockState = blockState;
+    }
 
-	@Override
-	protected boolean isCrop(World world, BlockPos pos) {
-		return world.getBlockState(pos) == blockState;
-	}
+    @Override
+    protected boolean isCrop(World world, BlockPos pos) {
+        return world.getBlockState(pos) == blockState;
+    }
 
-	@Override
-	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
-		Block block = blockState.getBlock();
-		NonNullList<ItemStack> harvest = NonNullList.create();
-		//		block.getDrops(harvest, world, pos, blockState, 0);
-		//TODO getDrops
-		if (harvest.size() > 1) {
-			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
-		}
-		harvest.remove(0);
+    @Override
+    protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+        Block block = blockState.getBlock();
+        NonNullList<ItemStack> harvest = NonNullList.create();
+        //		block.getDrops(harvest, world, pos, blockState, 0);
+        //TODO getDrops
+        if (harvest.size() > 1) {
+            harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
+        }
+        harvest.remove(0);
 
-		BlockState oldState = world.getBlockState(pos);
-		BlockUtil.setBlockWithBreakSound(world, pos, block.getDefaultState(), oldState);
-		return harvest;
-	}
+        BlockState oldState = world.getBlockState(pos);
+        BlockUtil.setBlockWithBreakSound(world, pos, block.getDefaultState(), oldState);
+        return harvest;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("CropBasicAgriCraft [ position: [ %s ]; block: %s ]", position.toString(), blockState);
-	}
+    @Override
+    public String toString() {
+        return String.format("CropBasicAgriCraft [ position: [ %s ]; block: %s ]", position.toString(), blockState);
+    }
 }

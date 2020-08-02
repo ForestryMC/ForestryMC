@@ -17,15 +17,15 @@ import forestry.api.apiculture.hives.IHiveGenHelper;
 
 public class HiveGenHelper implements IHiveGenHelper {
 
-	private static final IHiveGen treeGen = new HiveGenTree();
+    private static final IHiveGen treeGen = new HiveGenTree();
 
-	@Override
-	public IHiveGen ground(Block... validGroundBlocks) {
-		return new HiveGenGround(validGroundBlocks);
-	}
+    @Override
+    public IHiveGen ground(Block... validGroundBlocks) {
+        return new HiveGenGround(validGroundBlocks);
+    }
 
-	@Override
-	public IHiveGen tree() {
-		return treeGen;
-	}
+    @Override
+    public IHiveGen tree() {
+        return treeGen;
+    }
 }

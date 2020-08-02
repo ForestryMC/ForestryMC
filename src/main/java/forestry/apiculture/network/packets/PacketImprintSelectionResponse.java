@@ -24,36 +24,36 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 
 public class PacketImprintSelectionResponse extends ForestryPacket implements IForestryPacketClient {
-	private final int primary;
-	private final int secondary;
+    private final int primary;
+    private final int secondary;
 
-	public PacketImprintSelectionResponse(int primaryIndex, int secondaryIndex) {
-		this.primary = primaryIndex;
-		this.secondary = secondaryIndex;
-	}
+    public PacketImprintSelectionResponse(int primaryIndex, int secondaryIndex) {
+        this.primary = primaryIndex;
+        this.secondary = secondaryIndex;
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.IMPRINT_SELECTION_RESPONSE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.IMPRINT_SELECTION_RESPONSE;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeVarInt(primary);
-		data.writeVarInt(secondary);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeVarInt(primary);
+        data.writeVarInt(secondary);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			Container container = player.openContainer;
-			if (container instanceof ContainerImprinter) {
-				int primaryIndex = data.readVarInt();
-				int secondaryIndex = data.readVarInt();
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            Container container = player.openContainer;
+            if (container instanceof ContainerImprinter) {
+                int primaryIndex = data.readVarInt();
+                int secondaryIndex = data.readVarInt();
 
-				((ContainerImprinter) container).setSelection(primaryIndex, secondaryIndex);
-			}
-		}
-	}
+                ((ContainerImprinter) container).setSelection(primaryIndex, secondaryIndex);
+            }
+        }
+    }
 }

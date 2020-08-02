@@ -40,82 +40,82 @@ import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, ModelDefaultLeaves.Key> {
-	public ModelDefaultLeaves() {
-		super(BlockDefaultLeaves.class);
-	}
+    public ModelDefaultLeaves() {
+        super(BlockDefaultLeaves.class);
+    }
 
-	public static class Key {
-		public final TreeDefinition definition;
-		public final boolean fancy;
-		private final int hashCode;
+    public static class Key {
+        public final TreeDefinition definition;
+        public final boolean fancy;
+        private final int hashCode;
 
-		public Key(TreeDefinition definition, boolean fancy) {
-			this.definition = definition;
-			this.fancy = fancy;
-			this.hashCode = Objects.hash(definition, fancy);
-		}
+        public Key(TreeDefinition definition, boolean fancy) {
+            this.definition = definition;
+            this.fancy = fancy;
+            this.hashCode = Objects.hash(definition, fancy);
+        }
 
-		@Override
-		public boolean equals(Object other) {
-			if (!(other instanceof Key)) {
-				return false;
-			} else {
-				Key otherKey = (Key) other;
-				return otherKey.definition == definition && otherKey.fancy == fancy;
-			}
-		}
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof Key)) {
+                return false;
+            } else {
+                Key otherKey = (Key) other;
+                return otherKey.definition == definition && otherKey.fancy == fancy;
+            }
+        }
 
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-	}
+        @Override
+        public int hashCode() {
+            return hashCode;
+        }
+    }
 
-	@Override
-	protected ModelDefaultLeaves.Key getInventoryKey(ItemStack stack) {
-		Block block = Block.getBlockFromItem(stack.getItem());
-		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
-		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		return new Key(bBlock.getTreeDefinition(), Proxies.render.fancyGraphicsEnabled());
-	}
+    @Override
+    protected ModelDefaultLeaves.Key getInventoryKey(ItemStack stack) {
+        Block block = Block.getBlockFromItem(stack.getItem());
+        Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "ItemStack must be for default leaves.");
+        BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
+        return new Key(bBlock.getTreeDefinition(), Proxies.render.fancyGraphicsEnabled());
+    }
 
-	@Override
-	protected ModelDefaultLeaves.Key getWorldKey(BlockState state, IModelData extraData) {
-		Block block = state.getBlock();
-		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "state must be for default leaves.");
-		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
-		TreeDefinition treeDefinition = bBlock.getTreeDefinition(state);
-		Preconditions.checkNotNull(treeDefinition);
-		return new ModelDefaultLeaves.Key(treeDefinition, Proxies.render.fancyGraphicsEnabled());
-	}
+    @Override
+    protected ModelDefaultLeaves.Key getWorldKey(BlockState state, IModelData extraData) {
+        Block block = state.getBlock();
+        Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "state must be for default leaves.");
+        BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
+        TreeDefinition treeDefinition = bBlock.getTreeDefinition(state);
+        Preconditions.checkNotNull(treeDefinition);
+        return new ModelDefaultLeaves.Key(treeDefinition, Proxies.render.fancyGraphicsEnabled());
+    }
 
-	@Override
-	protected void bakeBlock(BlockDefaultLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
-		TreeDefinition treeDefinition = key.definition;
+    @Override
+    protected void bakeBlock(BlockDefaultLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+        TreeDefinition treeDefinition = key.definition;
 
-		IGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
-		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
+        IGenome genome = treeDefinition.getGenome();
+        IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
+        ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
-		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
-		TextureAtlasSprite leafSprite = ResourceUtil.getBlockSprite(leafSpriteLocation);
+        ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
+        TextureAtlasSprite leafSprite = ResourceUtil.getBlockSprite(leafSpriteLocation);
 
-		// Render the plain leaf block.
-		baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
+        // Render the plain leaf block.
+        baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
-		// Set the particle sprite
-		baker.setParticleSprite(leafSprite);
-	}
+        // Set the particle sprite
+        baker.setParticleSprite(leafSprite);
+    }
 
 
-	@Override
-	protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block, IModelData extraData) {
-		ModelBaker baker = new ModelBaker();
+    @Override
+    protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block, IModelData extraData) {
+        ModelBaker baker = new ModelBaker();
 
-		bakeBlock(block, extraData, key, baker, false);
+        bakeBlock(block, extraData, key, baker, false);
 
-		blockModel = baker.bake(false);
-		onCreateModel(blockModel);
-		return blockModel;
-	}
+        blockModel = baker.bake(false);
+        onCreateModel(blockModel);
+        return blockModel;
+    }
 }

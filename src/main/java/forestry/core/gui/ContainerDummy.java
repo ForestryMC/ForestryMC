@@ -14,15 +14,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 
 public class ContainerDummy extends Container {
-	public static final ContainerDummy instance = new ContainerDummy();
+    public static final ContainerDummy instance = new ContainerDummy();
 
-	private ContainerDummy() {
-		super(null, 0);
-	}
+    private ContainerDummy() {
+        super(null, 0);
+    }
 
-	@Override
-	public boolean canInteractWith(PlayerEntity PlayerEntity) {
-		return true;
-	}
+    @Override
+    public boolean canInteractWith(PlayerEntity PlayerEntity) {
+        return true;
+    }
 
 }

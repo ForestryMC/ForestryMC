@@ -3,11 +3,11 @@ package genetics.api.individual;
 import genetics.api.root.IIndividualRoot;
 
 public interface IGenomeMatcher {
-	IGenome getFirst();
+    IGenome getFirst();
 
-	IGenome getSecond();
+    IGenome getSecond();
 
-	IIndividualRoot getRoot();
+    IIndividualRoot getRoot();
 
-	boolean matches();
+    boolean matches();
 }

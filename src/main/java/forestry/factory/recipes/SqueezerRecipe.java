@@ -21,48 +21,48 @@ import forestry.api.recipes.ISqueezerRecipe;
 
 public class SqueezerRecipe implements ISqueezerRecipe {
 
-	private final int processingTime;
-	private final NonNullList<ItemStack> resources;
-	private final FluidStack fluidOutput;
-	private final ItemStack remnants;
-	private final float remnantsChance;
+    private final int processingTime;
+    private final NonNullList<ItemStack> resources;
+    private final FluidStack fluidOutput;
+    private final ItemStack remnants;
+    private final float remnantsChance;
 
-	public SqueezerRecipe(int processingTime, NonNullList<ItemStack> resources, FluidStack fluidOutput, ItemStack remnants, float remnantsChance) {
-		Preconditions.checkNotNull(resources);
-		Preconditions.checkArgument(!resources.isEmpty());
-		Preconditions.checkNotNull(fluidOutput);
-		Preconditions.checkNotNull(remnants);
+    public SqueezerRecipe(int processingTime, NonNullList<ItemStack> resources, FluidStack fluidOutput, ItemStack remnants, float remnantsChance) {
+        Preconditions.checkNotNull(resources);
+        Preconditions.checkArgument(!resources.isEmpty());
+        Preconditions.checkNotNull(fluidOutput);
+        Preconditions.checkNotNull(remnants);
 
-		this.processingTime = processingTime;
-		this.resources = resources;
-		this.fluidOutput = fluidOutput;
-		this.remnants = remnants;
-		this.remnantsChance = remnantsChance;
-	}
+        this.processingTime = processingTime;
+        this.resources = resources;
+        this.fluidOutput = fluidOutput;
+        this.remnants = remnants;
+        this.remnantsChance = remnantsChance;
+    }
 
-	@Override
-	public NonNullList<ItemStack> getResources() {
-		return resources;
-	}
+    @Override
+    public NonNullList<ItemStack> getResources() {
+        return resources;
+    }
 
-	@Override
-	public ItemStack getRemnants() {
-		return remnants;
-	}
+    @Override
+    public ItemStack getRemnants() {
+        return remnants;
+    }
 
-	@Override
-	public float getRemnantsChance() {
-		return remnantsChance;
-	}
+    @Override
+    public float getRemnantsChance() {
+        return remnantsChance;
+    }
 
-	@Override
-	public FluidStack getFluidOutput() {
-		return fluidOutput;
-	}
+    @Override
+    public FluidStack getFluidOutput() {
+        return fluidOutput;
+    }
 
-	@Override
-	public int getProcessingTime() {
-		return processingTime;
-	}
+    @Override
+    public int getProcessingTime() {
+        return processingTime;
+    }
 
 }

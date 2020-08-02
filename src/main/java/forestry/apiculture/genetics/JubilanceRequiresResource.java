@@ -28,25 +28,25 @@ import forestry.core.tiles.TileUtil;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 
-	private final Set<BlockState> acceptedBlockStates = new HashSet<>();
+    private final Set<BlockState> acceptedBlockStates = new HashSet<>();
 
-	public JubilanceRequiresResource(BlockState... acceptedBlockStates) {
-		Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
-	}
+    public JubilanceRequiresResource(BlockState... acceptedBlockStates) {
+        Collections.addAll(this.acceptedBlockStates, acceptedBlockStates);
+    }
 
-	@Override
-	public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
-		World world = housing.getWorldObj();
-		BlockPos pos = housing.getCoordinates();
+    @Override
+    public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
+        World world = housing.getWorldObj();
+        BlockPos pos = housing.getCoordinates();
 
-		TileEntity tile;
-		do {
-			pos = pos.down();
-			tile = TileUtil.getTile(world, pos);
-		} while (tile instanceof IBeeHousing && pos.getY() > 0);
+        TileEntity tile;
+        do {
+            pos = pos.down();
+            tile = TileUtil.getTile(world, pos);
+        } while (tile instanceof IBeeHousing && pos.getY() > 0);
 
-		BlockState blockState = world.getBlockState(pos);
-		return this.acceptedBlockStates.contains(blockState);
-	}
+        BlockState blockState = world.getBlockState(pos);
+        return this.acceptedBlockStates.contains(blockState);
+    }
 
 }

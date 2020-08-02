@@ -31,43 +31,43 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 
 public class HabitatSlot extends Widget {
-	private final Collection<BiomeDictionary.Type> biomes;
-	private final String name;
-	private final String iconIndex;
-	public boolean isActive = false;
+    private final Collection<BiomeDictionary.Type> biomes;
+    private final String name;
+    private final String iconIndex;
+    public boolean isActive = false;
 
-	public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<BiomeDictionary.Type> biomes) {
-		super(widgetManager, xPos, yPos);
-		this.biomes = biomes;
-		this.name = name;
-		this.iconIndex = "habitats/" + name.toLowerCase(Locale.ENGLISH);
-	}
+    public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<BiomeDictionary.Type> biomes) {
+        super(widgetManager, xPos, yPos);
+        this.biomes = biomes;
+        this.name = name;
+        this.iconIndex = "habitats/" + name.toLowerCase(Locale.ENGLISH);
+    }
 
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		ToolTip tooltip = new ToolTip();
-		tooltip.add(new StringTextComponent(name));
-		return tooltip;
-	}
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        ToolTip tooltip = new ToolTip();
+        tooltip.add(new StringTextComponent(name));
+        return tooltip;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public TextureAtlasSprite getIcon() {
-		return TextureManagerForestry.getInstance().getDefault(iconIndex);
-	}
+    @OnlyIn(Dist.CLIENT)
+    public TextureAtlasSprite getIcon() {
+        return TextureManagerForestry.getInstance().getDefault(iconIndex);
+    }
 
-	public void setActive(Collection<BiomeDictionary.Type> biomes) {
-		isActive = !Collections.disjoint(this.biomes, biomes);
-	}
+    public void setActive(Collection<BiomeDictionary.Type> biomes) {
+        isActive = !Collections.disjoint(this.biomes, biomes);
+    }
 
-	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
-		if (!isActive) {
-			RenderSystem.color4f(0.2f, 0.2f, 0.2f, 0.2f);
-		} else {
-			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-		}
+    @Override
+    public void draw(MatrixStack transform, int startY, int startX) {
+        if (!isActive) {
+            RenderSystem.color4f(0.2f, 0.2f, 0.2f, 0.2f);
+        } else {
+            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        }
 
-		TextureManagerForestry.getInstance().bindGuiTextureMap();
-		AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
-	}
+        TextureManagerForestry.getInstance().bindGuiTextureMap();
+        AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
+    }
 }

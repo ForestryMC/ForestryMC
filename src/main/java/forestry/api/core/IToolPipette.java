@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
  * Taken from BuildCraft 5.0.x
  */
 public interface IToolPipette {
-	/**
-	 * @return true if the pipette can pipette.
-	 */
-	boolean canPipette(ItemStack pipette);
+    /**
+     * @return true if the pipette can pipette.
+     */
+    boolean canPipette(ItemStack pipette);
 }

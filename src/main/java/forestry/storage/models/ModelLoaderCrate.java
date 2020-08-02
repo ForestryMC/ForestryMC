@@ -22,22 +22,22 @@ import forestry.storage.items.ItemCrated;
 
 @OnlyIn(Dist.CLIENT)
 public enum ModelLoaderCrate implements IModelLoader {
-	INSTANCE;
+    INSTANCE;
 
-	public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "crate-filled");
+    public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "crate-filled");
 
-	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
-	}
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+    }
 
-	@Override
-	public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-		ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, JSONUtils.getString(modelContents, "variant"));
-		Item item = ForgeRegistries.ITEMS.getValue(registryName);
-		if (!(item instanceof ItemCrated)) {
-			return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CreateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);
-		}
-		ItemCrated crated = (ItemCrated) item;
-		return new ModelCrate(crated);
-	}
+    @Override
+    public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+        ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, JSONUtils.getString(modelContents, "variant"));
+        Item item = ForgeRegistries.ITEMS.getValue(registryName);
+        if (!(item instanceof ItemCrated)) {
+            return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CreateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);
+        }
+        ItemCrated crated = (ItemCrated) item;
+        return new ModelCrate(crated);
+    }
 }

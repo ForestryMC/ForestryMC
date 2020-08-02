@@ -39,81 +39,81 @@ import forestry.core.utils.BlockUtil;
 
 public class FruitProviderPod extends FruitProviderNone {
 
-	public enum EnumPodType {
-		COCOA, DATES, PAPAYA;
-		//, COCONUT;
+    public enum EnumPodType {
+        COCOA, DATES, PAPAYA;
+        //, COCONUT;
 
-		public String getModelName() {
-			return toString().toLowerCase(Locale.ENGLISH);
-		}
-	}
+        public String getModelName() {
+            return toString().toLowerCase(Locale.ENGLISH);
+        }
+    }
 
-	private final EnumPodType type;
+    private final EnumPodType type;
 
-	private ProductListWrapper products;
+    private ProductListWrapper products;
 
-	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack> dropOnMature) {
-		super(unlocalizedDescription, family);
-		this.type = type;
-		this.products = ProductListWrapper.create();
-		this.products.addProduct(dropOnMature, 1.0F);
-	}
+    public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack> dropOnMature) {
+        super(unlocalizedDescription, family);
+        this.type = type;
+        this.products = ProductListWrapper.create();
+        this.products.addProduct(dropOnMature, 1.0F);
+    }
 
-	@Override
-	public void onStartSetup() {
-		products = products.bake();
-	}
+    @Override
+    public void onStartSetup() {
+        products = products.bake();
+    }
 
-	@Override
-	public boolean requiresFruitBlocks() {
-		return true;
-	}
+    @Override
+    public boolean requiresFruitBlocks() {
+        return true;
+    }
 
-	@Override
-	public NonNullList<ItemStack> getFruits(@Nullable IGenome genome, World world, BlockPos pos, int ripeningTime) {
-		if (ripeningTime >= 2) {
-			return products.getPossibleStacks();
-		}
+    @Override
+    public NonNullList<ItemStack> getFruits(@Nullable IGenome genome, World world, BlockPos pos, int ripeningTime) {
+        if (ripeningTime >= 2) {
+            return products.getPossibleStacks();
+        }
 
-		return NonNullList.create();
-	}
+        return NonNullList.create();
+    }
 
-	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
-		if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
-			return false;
-		}
+    @Override
+    public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
+        if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
+            return false;
+        }
 
-		if (type == EnumPodType.COCOA) {
-			return BlockUtil.tryPlantCocoaPod(world, pos);
-		} else {
-			IAlleleFruit activeAllele = genome.getActiveAllele(TreeChromosomes.FRUITS);
-			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getActiveValue(TreeChromosomes.YIELD), pos);
-		}
-	}
+        if (type == EnumPodType.COCOA) {
+            return BlockUtil.tryPlantCocoaPod(world, pos);
+        } else {
+            IAlleleFruit activeAllele = genome.getActiveAllele(TreeChromosomes.FRUITS);
+            return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getActiveValue(TreeChromosomes.YIELD), pos);
+        }
+    }
 
-	@Override
-	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
-		return null;
-	}
+    @Override
+    public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+        return null;
+    }
 
-	@Override
-	public ResourceLocation getDecorativeSprite() {
-		return null;
-	}
+    @Override
+    public ResourceLocation getDecorativeSprite() {
+        return null;
+    }
 
-	@Override
-	public IProductList getProducts() {
-		return products;
-	}
+    @Override
+    public IProductList getProducts() {
+        return products;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerSprites(TextureStitchEvent.Pre event) {
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerSprites(TextureStitchEvent.Pre event) {
+    }
 
-	@Override
-	public String getModelName() {
-		return type.getModelName();
-	}
+    @Override
+    public String getModelName() {
+        return type.getModelName();
+    }
 }

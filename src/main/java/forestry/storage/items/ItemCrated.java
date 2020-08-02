@@ -31,76 +31,76 @@ import forestry.core.items.ItemForestry;
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
-	private final ItemStack contained;
-	@Nullable
-	private final String oreDictName;
+    private final ItemStack contained;
+    @Nullable
+    private final String oreDictName;
 
-	public ItemCrated(ItemStack contained, @Nullable String oreDictName) {
-		super(ItemGroups.tabStorage);
-		this.contained = contained;
-		this.oreDictName = oreDictName;
-	}
+    public ItemCrated(ItemStack contained, @Nullable String oreDictName) {
+        super(ItemGroups.tabStorage);
+        this.contained = contained;
+        this.oreDictName = oreDictName;
+    }
 
-	public ItemStack getContained() {
-		return contained;
-	}
+    public ItemStack getContained() {
+        return contained;
+    }
 
-	@Nullable
-	public String getOreDictName() {
-		return oreDictName;
-	}
+    @Nullable
+    public String getOreDictName() {
+        return oreDictName;
+    }
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack heldItem = playerIn.getHeldItem(handIn);
-		if (!worldIn.isRemote) {
-			if (contained.isEmpty() || heldItem.isEmpty()) {
-				return ActionResult.resultPass(heldItem);
-			}
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack heldItem = playerIn.getHeldItem(handIn);
+        if (!worldIn.isRemote) {
+            if (contained.isEmpty() || heldItem.isEmpty()) {
+                return ActionResult.resultPass(heldItem);
+            }
 
-			heldItem.shrink(1);
+            heldItem.shrink(1);
 
-			ItemStack dropStack = contained.copy();
-			dropStack.setCount(9);
-			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), 40);
-		}
-		return ActionResult.resultSuccess(heldItem);
-	}
+            ItemStack dropStack = contained.copy();
+            dropStack.setCount(9);
+            ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), 40);
+        }
+        return ActionResult.resultSuccess(heldItem);
+    }
 
-	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
-		if (contained.isEmpty()) {
-			return new TranslationTextComponent("item.forestry.crate");
-		} else {
-			ITextComponent containedName = contained.getDisplayName();
-			return new TranslationTextComponent("for.item.crated.grammar", containedName);
-		}
-	}
+    @Override
+    public ITextComponent getDisplayName(ItemStack itemstack) {
+        if (contained.isEmpty()) {
+            return new TranslationTextComponent("item.forestry.crate");
+        } else {
+            ITextComponent containedName = contained.getDisplayName();
+            return new TranslationTextComponent("for.item.crated.grammar", containedName);
+        }
+    }
 
-	//TODO I think this needs ItemOverrides or something?
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public void registerModel(Item item, IModelManager manager) {
-	//		if (contained.isEmpty()) {
-	//			manager.registerItemModel(item, 0);
-	//			manager.registerItemModel(item, 1, "crate-filled");
-	//		} else {
-	//			ResourceLocation location = Preconditions.checkNotNull(getRegistryName());
-	//			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", location.getPath());
-	//			//			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
-	//			//			ModelBakery.registerItemVariants(item, modelLocation);
-	//		}
-	//	}
+    //TODO I think this needs ItemOverrides or something?
+    //	@OnlyIn(Dist.CLIENT)
+    //	@Override
+    //	public void registerModel(Item item, IModelManager manager) {
+    //		if (contained.isEmpty()) {
+    //			manager.registerItemModel(item, 0);
+    //			manager.registerItemModel(item, 1, "crate-filled");
+    //		} else {
+    //			ResourceLocation location = Preconditions.checkNotNull(getRegistryName());
+    //			ModelResourceLocation modelLocation = new ModelResourceLocation("forestry:crate-filled", location.getPath());
+    //			//			ModelLoader.setCustomModelResourceLocation(item, 0, modelLocation);
+    //			//			ModelBakery.registerItemVariants(item, modelLocation);
+    //		}
+    //	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemStack(ItemStack stack, int renderPass) {
-		ItemColors colors = Minecraft.getInstance().getItemColors();
-		if (contained.isEmpty() || renderPass == 100) {
-			return -1;
-		}
-		int color = colors.getColor(contained, renderPass);
-		return color;
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public int getColorFromItemStack(ItemStack stack, int renderPass) {
+        ItemColors colors = Minecraft.getInstance().getItemColors();
+        if (contained.isEmpty() || renderPass == 100) {
+            return -1;
+        }
+        int color = colors.getColor(contained, renderPass);
+        return color;
+    }
 
 }

@@ -49,229 +49,229 @@ import forestry.worktable.recipes.MemorizedRecipe;
 import forestry.worktable.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
-	private RecipeMemory recipeMemory;
-	private final InventoryAdapterTile craftingDisplay;
-	@Nullable
-	private MemorizedRecipe currentRecipe;
+    private RecipeMemory recipeMemory;
+    private final InventoryAdapterTile craftingDisplay;
+    @Nullable
+    private MemorizedRecipe currentRecipe;
 
-	public TileWorktable() {
-		super(WorktableTiles.WORKTABLE.tileType());
-		setInternalInventory(new InventoryWorktable(this));
+    public TileWorktable() {
+        super(WorktableTiles.WORKTABLE.tileType());
+        setInternalInventory(new InventoryWorktable(this));
 
-		craftingDisplay = new InventoryGhostCrafting<>(this, 10);
-		recipeMemory = new RecipeMemory();
-	}
+        craftingDisplay = new InventoryGhostCrafting<>(this, 10);
+        recipeMemory = new RecipeMemory();
+    }
 
-	/* LOADING & SAVING */
+    /* LOADING & SAVING */
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        compoundNBT = super.write(compoundNBT);
 
-		craftingDisplay.write(compoundNBT);
-		recipeMemory.write(compoundNBT);
-		return compoundNBT;
-	}
+        craftingDisplay.write(compoundNBT);
+        recipeMemory.write(compoundNBT);
+        return compoundNBT;
+    }
 
-	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+    @Override
+    public void read(BlockState state, CompoundNBT compoundNBT) {
+        super.read(state, compoundNBT);
 
-		craftingDisplay.read(compoundNBT);
-		recipeMemory = new RecipeMemory(compoundNBT);
-	}
+        craftingDisplay.read(compoundNBT);
+        recipeMemory = new RecipeMemory(compoundNBT);
+    }
 
-	/* NETWORK */
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		super.writeData(data);
+    /* NETWORK */
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        super.writeData(data);
 
-		craftingDisplay.writeData(data);
-		recipeMemory.writeData(data);
-	}
+        craftingDisplay.writeData(data);
+        recipeMemory.writeData(data);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void readData(PacketBufferForestry data) throws IOException {
-		super.readData(data);
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readData(PacketBufferForestry data) throws IOException {
+        super.readData(data);
 
-		craftingDisplay.readData(data);
-		recipeMemory.readData(data);
-	}
+        craftingDisplay.readData(data);
+        recipeMemory.readData(data);
+    }
 
-	/* Recipe Conflicts */
-	public boolean hasRecipeConflict() {
-		return currentRecipe != null && currentRecipe.hasRecipeConflict();
-	}
+    /* Recipe Conflicts */
+    public boolean hasRecipeConflict() {
+        return currentRecipe != null && currentRecipe.hasRecipeConflict();
+    }
 
-	public void chooseNextConflictRecipe() {
-		if (currentRecipe != null) {
-			currentRecipe.incrementRecipe();
-		}
-	}
+    public void chooseNextConflictRecipe() {
+        if (currentRecipe != null) {
+            currentRecipe.incrementRecipe();
+        }
+    }
 
-	public void choosePreviousConflictRecipe() {
-		if (currentRecipe != null) {
-			currentRecipe.decrementRecipe();
-		}
-	}
+    public void choosePreviousConflictRecipe() {
+        if (currentRecipe != null) {
+            currentRecipe.decrementRecipe();
+        }
+    }
 
-	@Override
-	public ItemStack getResult(CraftingInventory CraftingInventory, World world) {
-		if (currentRecipe != null) {
-			return currentRecipe.getCraftingResult(CraftingInventory, world);
-		}
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack getResult(CraftingInventory CraftingInventory, World world) {
+        if (currentRecipe != null) {
+            return currentRecipe.getCraftingResult(CraftingInventory, world);
+        }
+        return ItemStack.EMPTY;
+    }
 
-	/* ICrafterWorktable */
-	@Override
-	public boolean canTakeStack(int craftingSlotIndex) {
-		return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT ||
-			canCraftCurrentRecipe();
-	}
+    /* ICrafterWorktable */
+    @Override
+    public boolean canTakeStack(int craftingSlotIndex) {
+        return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT ||
+                canCraftCurrentRecipe();
+    }
 
-	private boolean canCraftCurrentRecipe() {
-		return craftRecipe(true);
-	}
+    private boolean canCraftCurrentRecipe() {
+        return craftRecipe(true);
+    }
 
-	@Override
-	public boolean onCraftingStart(PlayerEntity player) {
-		return craftRecipe(false);
-	}
+    @Override
+    public boolean onCraftingStart(PlayerEntity player) {
+        return craftRecipe(false);
+    }
 
-	private boolean craftRecipe(boolean simulate) {
-		if (currentRecipe == null) {
-			return false;
-		}
+    private boolean craftRecipe(boolean simulate) {
+        if (currentRecipe == null) {
+            return false;
+        }
 
-		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
-		if (selectedRecipe == null) {
-			return false;
-		}
+        IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
+        if (selectedRecipe == null) {
+            return false;
+        }
 
-		NonNullList<ItemStack> inventoryStacks = InventoryUtil.getStacks(this);
-		CraftingInventoryForestry crafting = RecipeUtil.getCraftRecipe(currentRecipe.getCraftMatrix(), inventoryStacks, world, selectedRecipe);
-		if (crafting == null) {
-			return false;
-		}
+        NonNullList<ItemStack> inventoryStacks = InventoryUtil.getStacks(this);
+        CraftingInventoryForestry crafting = RecipeUtil.getCraftRecipe(currentRecipe.getCraftMatrix(), inventoryStacks, world, selectedRecipe);
+        if (crafting == null) {
+            return false;
+        }
 
-		NonNullList<ItemStack> recipeItems = InventoryUtil.getStacks(crafting);
+        NonNullList<ItemStack> recipeItems = InventoryUtil.getStacks(crafting);
 
-		IInventory inventory;
-		if (simulate) {
-			inventory = new Inventory(this.getSizeInventory());    //TODO use copy constructor in inventory?
-			InventoryUtil.deepCopyInventoryContents(this, inventory);
-		} else {
-			inventory = this;
-		}
+        IInventory inventory;
+        if (simulate) {
+            inventory = new Inventory(this.getSizeInventory());    //TODO use copy constructor in inventory?
+            InventoryUtil.deepCopyInventoryContents(this, inventory);
+        } else {
+            inventory = this;
+        }
 
-		if (!InventoryUtil.deleteExactSet(inventory, recipeItems)) {
-			return false;
-		}
+        if (!InventoryUtil.deleteExactSet(inventory, recipeItems)) {
+            return false;
+        }
 
-		if (!simulate) {
-			// update crafting display to match the ingredients that were actually used
-			currentRecipe.setCraftMatrix(crafting);
-			setCurrentRecipe(currentRecipe);
-		}
+        if (!simulate) {
+            // update crafting display to match the ingredients that were actually used
+            currentRecipe.setCraftMatrix(crafting);
+            setCurrentRecipe(currentRecipe);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void onCraftingComplete(PlayerEntity player) {
-		Preconditions.checkNotNull(currentRecipe);
-		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
-		Preconditions.checkNotNull(selectedRecipe);
+    @Override
+    public void onCraftingComplete(PlayerEntity player) {
+        Preconditions.checkNotNull(currentRecipe);
+        IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
+        Preconditions.checkNotNull(selectedRecipe);
 
-		ForgeHooks.setCraftingPlayer(player);
-		CraftingInventoryForestry craftMatrix = currentRecipe.getCraftMatrix();
-		NonNullList<ItemStack> remainingItems = selectedRecipe.getRemainingItems(craftMatrix.copy());
-		ForgeHooks.setCraftingPlayer(null);
+        ForgeHooks.setCraftingPlayer(player);
+        CraftingInventoryForestry craftMatrix = currentRecipe.getCraftMatrix();
+        NonNullList<ItemStack> remainingItems = selectedRecipe.getRemainingItems(craftMatrix.copy());
+        ForgeHooks.setCraftingPlayer(null);
 
-		for (ItemStack remainingItem : remainingItems) {
-			if (remainingItem != null && !remainingItem.isEmpty()) {
-				if (!InventoryUtil.tryAddStack(this, remainingItem, true)) {
-					player.dropItem(remainingItem, false);
-				}
-			}
-		}
+        for (ItemStack remainingItem : remainingItems) {
+            if (remainingItem != null && !remainingItem.isEmpty()) {
+                if (!InventoryUtil.tryAddStack(this, remainingItem, true)) {
+                    player.dropItem(remainingItem, false);
+                }
+            }
+        }
 
-		if (!world.isRemote) {
-			recipeMemory.memorizeRecipe(world.getGameTime(), currentRecipe);
-		}
-	}
+        if (!world.isRemote) {
+            recipeMemory.memorizeRecipe(world.getGameTime(), currentRecipe);
+        }
+    }
 
-	@Nullable
-	@Override
-	public IRecipe getRecipeUsed() {
-		if (currentRecipe == null) {
-			return null;
-		}
+    @Nullable
+    @Override
+    public IRecipe getRecipeUsed() {
+        if (currentRecipe == null) {
+            return null;
+        }
 
-		return currentRecipe.getSelectedRecipe();
-	}
+        return currentRecipe.getSelectedRecipe();
+    }
 
-	/* Crafting Container methods */
-	public RecipeMemory getMemory() {
-		return recipeMemory;
-	}
+    /* Crafting Container methods */
+    public RecipeMemory getMemory() {
+        return recipeMemory;
+    }
 
-	public void chooseRecipeMemory(int recipeIndex) {
-		MemorizedRecipe recipe = recipeMemory.getRecipe(recipeIndex);
-		setCurrentRecipe(recipe);
-	}
+    public void chooseRecipeMemory(int recipeIndex) {
+        MemorizedRecipe recipe = recipeMemory.getRecipe(recipeIndex);
+        setCurrentRecipe(recipe);
+    }
 
-	private void setCraftingDisplay(IInventory craftMatrix) {
-		for (int slot = 0; slot < craftMatrix.getSizeInventory(); slot++) {
-			craftingDisplay.setInventorySlotContents(slot, craftMatrix.getStackInSlot(slot));
-		}
-	}
+    private void setCraftingDisplay(IInventory craftMatrix) {
+        for (int slot = 0; slot < craftMatrix.getSizeInventory(); slot++) {
+            craftingDisplay.setInventorySlotContents(slot, craftMatrix.getStackInSlot(slot));
+        }
+    }
 
-	public IInventory getCraftingDisplay() {
-		return new InventoryMapper(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-	}
+    public IInventory getCraftingDisplay() {
+        return new InventoryMapper(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+    }
 
-	public void clearCraftMatrix() {
-		for (int slot = 0; slot < craftingDisplay.getSizeInventory(); slot++) {
-			craftingDisplay.setInventorySlotContents(slot, ItemStack.EMPTY);
-		}
-	}
+    public void clearCraftMatrix() {
+        for (int slot = 0; slot < craftingDisplay.getSizeInventory(); slot++) {
+            craftingDisplay.setInventorySlotContents(slot, ItemStack.EMPTY);
+        }
+    }
 
-	public void setCurrentRecipe(CraftingInventoryForestry crafting) {
-		List<IRecipe> recipes = RecipeUtil.findMatchingRecipes(crafting, world);
-		MemorizedRecipe recipe = recipes.isEmpty() ? null : new MemorizedRecipe(crafting, recipes);
+    public void setCurrentRecipe(CraftingInventoryForestry crafting) {
+        List<IRecipe> recipes = RecipeUtil.findMatchingRecipes(crafting, world);
+        MemorizedRecipe recipe = recipes.isEmpty() ? null : new MemorizedRecipe(crafting, recipes);
 
-		if (currentRecipe != null && recipe != null) {
-			if (recipe.hasRecipe(currentRecipe.getSelectedRecipe())) {
-				NonNullList<ItemStack> stacks = InventoryUtil.getStacks(crafting);
-				NonNullList<ItemStack> currentStacks = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
-				if (ItemStackUtil.equalSets(stacks, currentStacks)) {
-					return;
-				}
-			}
-		}
+        if (currentRecipe != null && recipe != null) {
+            if (recipe.hasRecipe(currentRecipe.getSelectedRecipe())) {
+                NonNullList<ItemStack> stacks = InventoryUtil.getStacks(crafting);
+                NonNullList<ItemStack> currentStacks = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
+                if (ItemStackUtil.equalSets(stacks, currentStacks)) {
+                    return;
+                }
+            }
+        }
 
-		setCurrentRecipe(recipe);
-	}
+        setCurrentRecipe(recipe);
+    }
 
-	/* Network Sync with PacketWorktableRecipeUpdate */
-	@Nullable
-	public MemorizedRecipe getCurrentRecipe() {
-		return currentRecipe;
-	}
+    /* Network Sync with PacketWorktableRecipeUpdate */
+    @Nullable
+    public MemorizedRecipe getCurrentRecipe() {
+        return currentRecipe;
+    }
 
-	public void setCurrentRecipe(@Nullable MemorizedRecipe recipe) {
-		this.currentRecipe = recipe;
-		if (currentRecipe != null) {
-			setCraftingDisplay(currentRecipe.getCraftMatrix());
-		}
-	}
+    public void setCurrentRecipe(@Nullable MemorizedRecipe recipe) {
+        this.currentRecipe = recipe;
+        if (currentRecipe != null) {
+            setCraftingDisplay(currentRecipe.getCraftMatrix());
+        }
+    }
 
-	@Nullable
-	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new ContainerWorktable(windowId, playerInventory, this);
-	}
+    @Nullable
+    @Override
+    public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+        return new ContainerWorktable(windowId, playerInventory, this);
+    }
 }

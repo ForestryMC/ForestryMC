@@ -43,225 +43,225 @@ import forestry.mail.network.packets.PacketLetterInfoRequest;
 import org.lwjgl.glfw.GLFW;
 
 public class GuiLetter extends GuiForestry<ContainerLetter> {
-	private final ItemInventoryLetter itemInventory;
-	private final boolean isProcessedLetter;
-	private boolean checkedSessionVars;
+    private final ItemInventoryLetter itemInventory;
+    private final boolean isProcessedLetter;
+    private boolean checkedSessionVars;
 
-	private TextFieldWidget address;
-	private GuiTextBox text;
+    private TextFieldWidget address;
+    private GuiTextBox text;
 
-	private boolean addressFocus;
-	private boolean textFocus;
+    private boolean addressFocus;
+    private boolean textFocus;
 
-	private final ArrayList<Widget> tradeInfoWidgets;
+    private final ArrayList<Widget> tradeInfoWidgets;
 
-	public GuiLetter(ContainerLetter container, PlayerInventory inv, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/letter.png", container, inv, title);
-		this.minecraft = Minecraft.getInstance(); //not 100% why this is needed, maybe side issues
+    public GuiLetter(ContainerLetter container, PlayerInventory inv, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/letter.png", container, inv, title);
+        this.minecraft = Minecraft.getInstance(); //not 100% why this is needed, maybe side issues
 
-		this.itemInventory = container.getItemInventory();
-		this.xSize = 194;
-		this.ySize = 227;
+        this.itemInventory = container.getItemInventory();
+        this.xSize = 194;
+        this.ySize = 227;
 
-		this.isProcessedLetter = container.getLetter().isProcessed();
-		this.widgetManager.add(new AddresseeSlot(widgetManager, 16, 12, container));
-		this.tradeInfoWidgets = new ArrayList<>();
-		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
-		text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
-	}
+        this.isProcessedLetter = container.getLetter().isProcessed();
+        this.widgetManager.add(new AddresseeSlot(widgetManager, 16, 12, container));
+        this.tradeInfoWidgets = new ArrayList<>();
+        address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
+        text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
+    }
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		minecraft.keyboardListener.enableRepeatEvents(true);
+        minecraft.keyboardListener.enableRepeatEvents(true);
 
-		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
-		IMailAddress recipient = container.getRecipient();
-		if (recipient != null) {
-			address.setText(recipient.getName());
-		}
+        address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
+        IMailAddress recipient = container.getRecipient();
+        if (recipient != null) {
+            address.setText(recipient.getName());
+        }
 
-		text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
-		text.setMaxStringLength(128);
-		if (!container.getText().isEmpty()) {
-			text.setText(container.getText());
-		}
-	}
+        text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
+        text.setMaxStringLength(128);
+        if (!container.getText().isEmpty()) {
+            text.setText(container.getText());
+        }
+    }
 
-	@Override
-	public boolean keyPressed(int key, int scanCode, int modifiers) {
+    @Override
+    public boolean keyPressed(int key, int scanCode, int modifiers) {
 
-		// Set focus or enter text into address
-		if (this.address.isFocused()) {
-			if (scanCode == GLFW.GLFW_KEY_ENTER) {
-				this.address.setFocused2(false);
-			} else {
-				this.address.keyPressed(key, scanCode, modifiers);
-			}
-			return true;
-		}
+        // Set focus or enter text into address
+        if (this.address.isFocused()) {
+            if (scanCode == GLFW.GLFW_KEY_ENTER) {
+                this.address.setFocused2(false);
+            } else {
+                this.address.keyPressed(key, scanCode, modifiers);
+            }
+            return true;
+        }
 
-		if (this.text.isFocused()) {
-			if (scanCode == GLFW.GLFW_KEY_ENTER) {
-				if (hasShiftDown()) {
-					text.setText(text.getText() + "\n");
-				} else {
-					this.text.setFocused2(false);
-				}
-			} else if (scanCode == GLFW.GLFW_KEY_DOWN) {
-				text.advanceLine();
-			} else if (scanCode == GLFW.GLFW_KEY_UP) {
-				text.regressLine();
-			} else if (text.moreLinesAllowed() || scanCode == GLFW.GLFW_KEY_DELETE || scanCode == GLFW.GLFW_KEY_BACKSLASH) {
-				this.text.keyPressed(key, scanCode, modifiers);
-			}
-			return true;
-		}
+        if (this.text.isFocused()) {
+            if (scanCode == GLFW.GLFW_KEY_ENTER) {
+                if (hasShiftDown()) {
+                    text.setText(text.getText() + "\n");
+                } else {
+                    this.text.setFocused2(false);
+                }
+            } else if (scanCode == GLFW.GLFW_KEY_DOWN) {
+                text.advanceLine();
+            } else if (scanCode == GLFW.GLFW_KEY_UP) {
+                text.regressLine();
+            } else if (text.moreLinesAllowed() || scanCode == GLFW.GLFW_KEY_DELETE || scanCode == GLFW.GLFW_KEY_BACKSLASH) {
+                this.text.keyPressed(key, scanCode, modifiers);
+            }
+            return true;
+        }
 
-		return super.keyPressed(key, scanCode, modifiers);
-	}
+        return super.keyPressed(key, scanCode, modifiers);
+    }
 
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
-			return true;
-		}
-		this.address.mouseClicked(mouseX, mouseY, mouseButton);
-		this.text.mouseClicked(mouseX, mouseY, mouseButton);
-		return true;
-	}
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
+            return true;
+        }
+        this.address.mouseClicked(mouseX, mouseY, mouseButton);
+        this.text.mouseClicked(mouseX, mouseY, mouseButton);
+        return true;
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
 
-		if (!isProcessedLetter && !checkedSessionVars) {
-			checkedSessionVars = true;
-			setFromSessionVars();
-			String recipient = this.address.getText();
-			EnumAddressee recipientType = container.getCarrierType();
-			setRecipient(recipient, recipientType);
-		}
+        if (!isProcessedLetter && !checkedSessionVars) {
+            checkedSessionVars = true;
+            setFromSessionVars();
+            String recipient = this.address.getText();
+            EnumAddressee recipientType = container.getCarrierType();
+            setRecipient(recipient, recipientType);
+        }
 
-		// Check for focus changes
-		if (addressFocus != address.isFocused()) {
-			String recipient = this.address.getText();
-			if (StringUtils.isNotBlank(recipient)) {
-				EnumAddressee recipientType = container.getCarrierType();
-				setRecipient(recipient, recipientType);
-			}
-		}
-		addressFocus = address.isFocused();
-		if (textFocus != text.isFocused()) {
-			setText();
-		}
-		textFocus = text.isFocused();
+        // Check for focus changes
+        if (addressFocus != address.isFocused()) {
+            String recipient = this.address.getText();
+            if (StringUtils.isNotBlank(recipient)) {
+                EnumAddressee recipientType = container.getCarrierType();
+                setRecipient(recipient, recipientType);
+            }
+        }
+        addressFocus = address.isFocused();
+        if (textFocus != text.isFocused()) {
+            setText();
+        }
+        textFocus = text.isFocused();
 
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		if (this.isProcessedLetter) {
-			minecraft.fontRenderer.drawString(transform, address.getText(), guiLeft + 49, guiTop + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
-			minecraft.fontRenderer.func_238418_a_(new StringTextComponent(text.getText()), guiLeft + 20, guiTop + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
-		} else {
-			clearTradeInfoWidgets();
-			address.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
-			if (container.getCarrierType() == EnumAddressee.TRADER) {
-				drawTradePreview(transform, 18, 32);
-			} else {
-				text.render(transform, mouseX, mouseY, partialTicks);
-			}
-		}
-	}
+        if (this.isProcessedLetter) {
+            minecraft.fontRenderer.drawString(transform, address.getText(), guiLeft + 49, guiTop + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+            minecraft.fontRenderer.func_238418_a_(new StringTextComponent(text.getText()), guiLeft + 20, guiTop + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+        } else {
+            clearTradeInfoWidgets();
+            address.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
+            if (container.getCarrierType() == EnumAddressee.TRADER) {
+                drawTradePreview(transform, 18, 32);
+            } else {
+                text.render(transform, mouseX, mouseY, partialTicks);
+            }
+        }
+    }
 
-	private void drawTradePreview(MatrixStack transform, int x, int y) {
+    private void drawTradePreview(MatrixStack transform, int x, int y) {
 
-		ITextComponent infoString = null;
-		if (container.getTradeInfo() == null) {
-			infoString = new TranslationTextComponent("for.gui.mail.no.trader");
-		} else if (container.getTradeInfo().getTradegood().isEmpty()) {
-			infoString = new TranslationTextComponent("for.gui.mail.nothing.to.trade");
-		} else if (!container.getTradeInfo().getState().isOk()) {
-			infoString = container.getTradeInfo().getState().getDescription();
-		}
+        ITextComponent infoString = null;
+        if (container.getTradeInfo() == null) {
+            infoString = new TranslationTextComponent("for.gui.mail.no.trader");
+        } else if (container.getTradeInfo().getTradegood().isEmpty()) {
+            infoString = new TranslationTextComponent("for.gui.mail.nothing.to.trade");
+        } else if (!container.getTradeInfo().getState().isOk()) {
+            infoString = container.getTradeInfo().getState().getDescription();
+        }
 
-		if (infoString != null) {
-			minecraft.fontRenderer.func_238418_a_(infoString, guiLeft + x, guiTop + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
-			return;
-		}
+        if (infoString != null) {
+            minecraft.fontRenderer.func_238418_a_(infoString, guiLeft + x, guiTop + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+            return;
+        }
 
-		minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+        minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
-		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
+        addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
 
-		minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+        minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
-		for (int i = 0; i < container.getTradeInfo().getRequired().size(); i++) {
-			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().getRequired().get(i)));
-		}
-	}
+        for (int i = 0; i < container.getTradeInfo().getRequired().size(); i++) {
+            addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().getRequired().get(i)));
+        }
+    }
 
-	private void addTradeInfoWidget(Widget widget) {
-		tradeInfoWidgets.add(widget);
-		widgetManager.add(widget);
-	}
+    private void addTradeInfoWidget(Widget widget) {
+        tradeInfoWidgets.add(widget);
+        widgetManager.add(widget);
+    }
 
-	private void clearTradeInfoWidgets() {
-		for (Widget widget : tradeInfoWidgets) {
-			widgetManager.remove(widget);
-		}
-		tradeInfoWidgets.clear();
-	}
+    private void clearTradeInfoWidgets() {
+        for (Widget widget : tradeInfoWidgets) {
+            widgetManager.remove(widget);
+        }
+        tradeInfoWidgets.clear();
+    }
 
-	@Override
-	public void onClose() {
-		String recipientName = this.address.getText();
-		EnumAddressee recipientType = container.getCarrierType();
-		setRecipient(recipientName, recipientType);
-		setText();
-		minecraft.keyboardListener.enableRepeatEvents(false);
-		super.onClose();
-	}
+    @Override
+    public void onClose() {
+        String recipientName = this.address.getText();
+        EnumAddressee recipientType = container.getCarrierType();
+        setRecipient(recipientName, recipientType);
+        setText();
+        minecraft.keyboardListener.enableRepeatEvents(false);
+        super.onClose();
+    }
 
-	private void setFromSessionVars() {
-		if (SessionVars.getStringVar("mail.letter.recipient") == null) {
-			return;
-		}
+    private void setFromSessionVars() {
+        if (SessionVars.getStringVar("mail.letter.recipient") == null) {
+            return;
+        }
 
-		String recipient = SessionVars.getStringVar("mail.letter.recipient");
-		String typeName = SessionVars.getStringVar("mail.letter.addressee");
+        String recipient = SessionVars.getStringVar("mail.letter.recipient");
+        String typeName = SessionVars.getStringVar("mail.letter.addressee");
 
-		if (StringUtils.isNotBlank(recipient) && StringUtils.isNotBlank(typeName)) {
-			address.setText(recipient);
+        if (StringUtils.isNotBlank(recipient) && StringUtils.isNotBlank(typeName)) {
+            address.setText(recipient);
 
-			EnumAddressee type = EnumAddressee.fromString(typeName);
-			container.setCarrierType(type);
-		}
+            EnumAddressee type = EnumAddressee.fromString(typeName);
+            container.setCarrierType(type);
+        }
 
-		SessionVars.clearStringVar("mail.letter.recipient");
-		SessionVars.clearStringVar("mail.letter.addressee");
-	}
+        SessionVars.clearStringVar("mail.letter.recipient");
+        SessionVars.clearStringVar("mail.letter.addressee");
+    }
 
-	private void setRecipient(String recipientName, EnumAddressee type) {
-		if (this.isProcessedLetter || StringUtils.isBlank(recipientName)) {
-			return;
-		}
+    private void setRecipient(String recipientName, EnumAddressee type) {
+        if (this.isProcessedLetter || StringUtils.isBlank(recipientName)) {
+            return;
+        }
 
-		PacketLetterInfoRequest packet = new PacketLetterInfoRequest(recipientName, type);
-		NetworkUtil.sendToServer(packet);
-	}
+        PacketLetterInfoRequest packet = new PacketLetterInfoRequest(recipientName, type);
+        NetworkUtil.sendToServer(packet);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	private void setText() {
-		if (this.isProcessedLetter) {
-			return;
-		}
+    @OnlyIn(Dist.CLIENT)
+    private void setText() {
+        if (this.isProcessedLetter) {
+            return;
+        }
 
-		container.setText(this.text.getText());
-	}
+        container.setText(this.text.getText());
+    }
 
-	@Override
-	protected void addLedgers() {
-		addErrorLedger(itemInventory);
-		addHintLedger("letter");
-	}
+    @Override
+    protected void addLedgers() {
+        addErrorLedger(itemInventory);
+        addHintLedger("letter");
+    }
 }

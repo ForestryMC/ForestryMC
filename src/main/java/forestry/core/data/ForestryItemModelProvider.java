@@ -22,35 +22,35 @@ import forestry.storage.items.ItemCrated;
 import forestry.storage.models.ModelLoaderCrate;
 
 public class ForestryItemModelProvider extends ModelProvider {
-	public ForestryItemModelProvider(DataGenerator generator) {
-		super(generator, "item");
-	}
+    public ForestryItemModelProvider(DataGenerator generator) {
+        super(generator, "item");
+    }
 
-	@Override
-	protected void registerModels() {
-		for (BlockItem farm : FarmingBlocks.FARM.getItems()) {
-			registerModel(farm, new ModelBuilder().parent(Constants.MOD_ID + ":block/farm"));
-		}
-		registerModel(LepidopterologyItems.CATERPILLAR_GE, new ModelBuilder()
-			.item()
-			.layer(0, new ResourceLocation(Constants.MOD_ID, "item/caterpillar.body2"))
-			.layer(1, new ResourceLocation(Constants.MOD_ID, "item/caterpillar.body")));
-		registerModel(LepidopterologyItems.SERUM_GE, new ModelBuilder()
-			.item()
-			.layer(0, new ResourceLocation(Constants.MOD_ID, "item/liquids/jar.bottle"))
-			.layer(1, new ResourceLocation(Constants.MOD_ID, "item/liquids/jar.contents")));
-		registerModel(ArboricultureItems.SAPLING, new ModelBuilder().parent("forge:item/default").loader(new ResourceLocation(Constants.MOD_ID, "sapling_ge")));
-		for (FeatureItem<ItemCrated> featureCrated : ModuleCrates.crates) {
-			registerModel(featureCrated, new ModelBuilder()
-				.parent(Constants.MOD_ID + ":item/crate-filled")
-				.loader(ModelLoaderCrate.LOCATION)
-				.loaderData("variant", new JsonPrimitive(featureCrated.getIdentifier()))
-			);
-		}
+    @Override
+    protected void registerModels() {
+        for (BlockItem farm : FarmingBlocks.FARM.getItems()) {
+            registerModel(farm, new ModelBuilder().parent(Constants.MOD_ID + ":block/farm"));
+        }
+        registerModel(LepidopterologyItems.CATERPILLAR_GE, new ModelBuilder()
+                .item()
+                .layer(0, new ResourceLocation(Constants.MOD_ID, "item/caterpillar.body2"))
+                .layer(1, new ResourceLocation(Constants.MOD_ID, "item/caterpillar.body")));
+        registerModel(LepidopterologyItems.SERUM_GE, new ModelBuilder()
+                .item()
+                .layer(0, new ResourceLocation(Constants.MOD_ID, "item/liquids/jar.bottle"))
+                .layer(1, new ResourceLocation(Constants.MOD_ID, "item/liquids/jar.contents")));
+        registerModel(ArboricultureItems.SAPLING, new ModelBuilder().parent("forge:item/default").loader(new ResourceLocation(Constants.MOD_ID, "sapling_ge")));
+        for (FeatureItem<ItemCrated> featureCrated : ModuleCrates.crates) {
+            registerModel(featureCrated, new ModelBuilder()
+                    .parent(Constants.MOD_ID + ":item/crate-filled")
+                    .loader(ModelLoaderCrate.LOCATION)
+                    .loaderData("variant", new JsonPrimitive(featureCrated.getIdentifier()))
+            );
+        }
 
-		for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
-			Block block = cell.getValue().block();
-			registerModel(block, new ModelBuilder().parent("forestry:block/" + cell.getRowKey().getString()));
-		}
-	}
+        for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
+            Block block = cell.getValue().block();
+            registerModel(block, new ModelBuilder().parent("forestry:block/" + cell.getRowKey().getString()));
+        }
+    }
 }

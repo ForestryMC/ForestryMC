@@ -18,7 +18,7 @@ import forestry.core.tiles.IFilterSlotDelegate;
  * Useful for InventoryTweaks. Works like SlotFiltered but allows InventoryTweaks to sort it.
  */
 public class SlotFilteredInventory extends SlotFiltered {
-	public <T extends IInventory & IFilterSlotDelegate> SlotFilteredInventory(T inventory, int slotIndex, int xPos, int yPos) {
-		super(inventory, slotIndex, xPos, yPos);
-	}
+    public <T extends IInventory & IFilterSlotDelegate> SlotFilteredInventory(T inventory, int slotIndex, int xPos, int yPos) {
+        super(inventory, slotIndex, xPos, yPos);
+    }
 }

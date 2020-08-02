@@ -31,26 +31,26 @@ import forestry.farming.blocks.BlockFarm;
 
 public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
-	public ItemBlockFarm(BlockFarm block) {
-		super(block, new Item.Properties().group(ItemGroupForestry.tabForestry));
-	}
+    public ItemBlockFarm(BlockFarm block) {
+        super(block, new Item.Properties().group(ItemGroupForestry.tabForestry));
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip"));
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        if (Screen.hasShiftDown()) {
+            tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip"));
 			/*BlockFarm block = getBlock();
 			EnumFarmMaterial material = block.getFarmMaterial();
 			tooltip.add(new TranslationTextComponent("block.forestry.farm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(material.getFormatting())).appendText(" " + WordUtils.capitalize(material.getName().replace("_", ""))));*/
-		} else {
-			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
-		}
-	}
+        } else {
+            ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
+        }
+    }
 
-	@Override
-	public String getTranslationKey() {
-		BlockFarm block = getBlock();
-		return "block.forestry.farm_" + block.getType().getString();
-	}
+    @Override
+    public String getTranslationKey() {
+        BlockFarm block = getBlock();
+        return "block.forestry.farm_" + block.getType().getString();
+    }
 }

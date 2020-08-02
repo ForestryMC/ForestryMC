@@ -19,38 +19,38 @@ import forestry.api.genetics.IHousing;
 
 public interface IBeeHousing extends IHousing, IErrorLogicSource, IClimateProvider, ILocatable {
 
-	/**
-	 * Used by {@link IBeeRoot#createBeeHousingModifier(IBeeHousing)}
-	 * to combine bee modifiers from several sources that can change over time.
-	 *
-	 * @return IBeeModifiers from the housing, frames, etc.
-	 */
-	Iterable<IBeeModifier> getBeeModifiers();
+    /**
+     * Used by {@link IBeeRoot#createBeeHousingModifier(IBeeHousing)}
+     * to combine bee modifiers from several sources that can change over time.
+     *
+     * @return IBeeModifiers from the housing, frames, etc.
+     */
+    Iterable<IBeeModifier> getBeeModifiers();
 
-	/**
-	 * Used by {@link IBeeRoot#createBeeHousingListener(IBeeHousing)}
-	 * to combine bee listeners from several sources that can change over time.
-	 *
-	 * @return IBeeListeners from the housing, multiblock parts, etc.
-	 */
-	Iterable<IBeeListener> getBeeListeners();
+    /**
+     * Used by {@link IBeeRoot#createBeeHousingListener(IBeeHousing)}
+     * to combine bee listeners from several sources that can change over time.
+     *
+     * @return IBeeListeners from the housing, multiblock parts, etc.
+     */
+    Iterable<IBeeListener> getBeeListeners();
 
-	IBeeHousingInventory getBeeInventory();
+    IBeeHousingInventory getBeeInventory();
 
-	IBeekeepingLogic getBeekeepingLogic();
+    IBeekeepingLogic getBeekeepingLogic();
 
-	int getBlockLightValue();
+    int getBlockLightValue();
 
-	boolean canBlockSeeTheSky();
+    boolean canBlockSeeTheSky();
 
-	boolean isRaining();
+    boolean isRaining();
 
-	@Nullable
-	GameProfile getOwner();
+    @Nullable
+    GameProfile getOwner();
 
-	/**
-	 * @return exact coordinates where bee particle FX should spawn from
-	 * @since Forestry 4.2
-	 */
-	Vector3d getBeeFXCoordinates();
+    /**
+     * @return exact coordinates where bee particle FX should spawn from
+     * @since Forestry 4.2
+     */
+    Vector3d getBeeFXCoordinates();
 }

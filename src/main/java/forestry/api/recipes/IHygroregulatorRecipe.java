@@ -9,23 +9,23 @@ import net.minecraftforge.fluids.FluidStack;
 
 public interface IHygroregulatorRecipe extends IForestryRecipe {
 
-	/**
-	 * @return FluidStack containing information on fluid and amount.
-	 */
-	FluidStack getResource();
+    /**
+     * @return FluidStack containing information on fluid and amount.
+     */
+    FluidStack getResource();
 
-	/**
-	 * @return The time between the removal of the fluid from the tank and the actual addition to the alveary climate.
-	 */
-	int getTransferTime();
+    /**
+     * @return The time between the removal of the fluid from the tank and the actual addition to the alveary climate.
+     */
+    int getTransferTime();
 
-	/**
-	 * @return The humidity change that this recipe causes in one work cycle.
-	 */
-	float getHumidChange();
+    /**
+     * @return The humidity change that this recipe causes in one work cycle.
+     */
+    float getHumidChange();
 
-	/**
-	 * @return The temperature change that this recipe causes in one work cycle.
-	 */
-	float getTempChange();
+    /**
+     * @return The temperature change that this recipe causes in one work cycle.
+     */
+    float getTempChange();
 }

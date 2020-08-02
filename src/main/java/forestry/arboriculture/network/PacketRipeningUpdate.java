@@ -25,33 +25,33 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.TileUtil;
 
 public class PacketRipeningUpdate extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final int value;
+    private final BlockPos pos;
+    private final int value;
 
-	public PacketRipeningUpdate(TileLeaves leaves) {
-		this.pos = leaves.getPos();
-		this.value = leaves.getFruitColour();
-	}
+    public PacketRipeningUpdate(TileLeaves leaves) {
+        this.pos = leaves.getPos();
+        this.value = leaves.getFruitColour();
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.RIPENING_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.RIPENING_UPDATE;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeVarInt(value);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeVarInt(value);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
-			int value = data.readVarInt();
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
+            int value = data.readVarInt();
 
-			TileUtil.actOnTile(player.world, pos, IRipeningPacketReceiver.class, tile -> tile.fromRipeningPacket(value));
-		}
-	}
+            TileUtil.actOnTile(player.world, pos, IRipeningPacketReceiver.class, tile -> tile.fromRipeningPacket(value));
+        }
+    }
 }

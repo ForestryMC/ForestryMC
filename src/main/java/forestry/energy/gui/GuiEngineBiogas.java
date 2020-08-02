@@ -20,24 +20,24 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEngineBiogas;
 
 public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {
-	public GuiEngineBiogas(ContainerEngineBiogas container, PlayerInventory inventory, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", container, inventory, container.getTile(), title);
-		widgetManager.add(new TankWidget(widgetManager, 89, 19, 0));
-		widgetManager.add(new TankWidget(widgetManager, 107, 19, 1));
+    public GuiEngineBiogas(ContainerEngineBiogas container, PlayerInventory inventory, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", container, inventory, container.getTile(), title);
+        widgetManager.add(new TankWidget(widgetManager, 89, 19, 0));
+        widgetManager.add(new TankWidget(widgetManager, 107, 19, 1));
 
-		widgetManager.add(new BiogasSlot(widgetManager, 30, 47, 2));
-	}
+        widgetManager.add(new BiogasSlot(widgetManager, 30, 47, 2));
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		int temperature = tile.getOperatingTemperatureScaled(16);
-		if (temperature > 16) {
-			temperature = 16;
-		}
-		if (temperature > 0) {
-			blit(transform, guiLeft + 53, guiTop + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
-		}
-	}
+        int temperature = tile.getOperatingTemperatureScaled(16);
+        if (temperature > 16) {
+            temperature = 16;
+        }
+        if (temperature > 0) {
+            blit(transform, guiLeft + 53, guiTop + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
+        }
+    }
 }

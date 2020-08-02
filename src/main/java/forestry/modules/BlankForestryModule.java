@@ -26,72 +26,72 @@ import forestry.core.network.IPacketRegistry;
 
 public class BlankForestryModule implements IForestryModule {
 
-	/**
-	 * The ForestryModule.moduleID()s of any other modules this module depends on.
-	 */
-	public Set<ResourceLocation> getDependencyUids() {
-		return ImmutableSet.of(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE));
-	}
+    /**
+     * The ForestryModule.moduleID()s of any other modules this module depends on.
+     */
+    public Set<ResourceLocation> getDependencyUids() {
+        return ImmutableSet.of(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE));
+    }
 
-	@Override
-	public String toString() {
-		ForestryModule forestryModule = getClass().getAnnotation(ForestryModule.class);
-		if (forestryModule == null) {
-			return getClass().getSimpleName();
-		}
-		return forestryModule.name() + " Module";
-	}
+    @Override
+    public String toString() {
+        ForestryModule forestryModule = getClass().getAnnotation(ForestryModule.class);
+        if (forestryModule == null) {
+            return getClass().getSimpleName();
+        }
+        return forestryModule.name() + " Module";
+    }
 
-	public boolean processIMCMessage(InterModComms.IMCMessage message) {
-		return false;
-	}
+    public boolean processIMCMessage(InterModComms.IMCMessage message) {
+        return false;
+    }
 
-	public void addBiomeDecorations(Biome biome) {
-	}
+    public void addBiomeDecorations(Biome biome) {
+    }
 
-	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-	}
+    public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+    }
 
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-	}
+    public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+    }
 
-	public void decorateBiome(World world, Random rand, BlockPos pos) {
-	}
+    public void decorateBiome(World world, Random rand, BlockPos pos) {
+    }
 
-	/**
-	 * Can be used to register crates via the {@link forestry.api.storage.ICrateRegistry}.
-	 */
-	public void registerCrates() {
-	}
+    /**
+     * Can be used to register crates via the {@link forestry.api.storage.ICrateRegistry}.
+     */
+    public void registerCrates() {
+    }
 
-	/**
-	 * Can be used to hide items in JEI.
-	 */
-	public void getHiddenItems(List<ItemStack> hiddenItems) {
-	}
+    /**
+     * Can be used to hide items in JEI.
+     */
+    public void getHiddenItems(List<ItemStack> hiddenItems) {
+    }
 
-	@Nullable
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
+    @Nullable
+    public ISaveEventHandler getSaveEventHandler() {
+        return null;
+    }
 
-	@Nullable
-	public IPacketRegistry getPacketRegistry() {
-		return null;
-	}
+    @Nullable
+    public IPacketRegistry getPacketRegistry() {
+        return null;
+    }
 
-	@Nullable
-	public IPickupHandler getPickupHandler() {
-		return null;
-	}
+    @Nullable
+    public IPickupHandler getPickupHandler() {
+        return null;
+    }
 
-	@Nullable
-	public IResupplyHandler getResupplyHandler() {
-		return null;
-	}
+    @Nullable
+    public IResupplyHandler getResupplyHandler() {
+        return null;
+    }
 
-	@Nullable
-	public ISidedModuleHandler getModuleHandler() {
-		return null;
-	}
+    @Nullable
+    public ISidedModuleHandler getModuleHandler() {
+        return null;
+    }
 }

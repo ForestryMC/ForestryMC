@@ -23,30 +23,30 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileBottler;
 
 public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
-	public static final short SLOT_INPUT_FULL_CONTAINER = 0;
-	public static final short SLOT_INPUT_EMPTY_CONTAINER = 1;
-	public static final short SLOT_EMPTYING_PROCESSING = 2;
-	public static final short SLOT_FILLING_PROCESSING = 3;
-	public static final short SLOT_OUTPUT_EMPTY_CONTAINER = 4;
-	public static final short SLOT_OUTPUT_FULL_CONTAINER = 5;
+    public static final short SLOT_INPUT_FULL_CONTAINER = 0;
+    public static final short SLOT_INPUT_EMPTY_CONTAINER = 1;
+    public static final short SLOT_EMPTYING_PROCESSING = 2;
+    public static final short SLOT_FILLING_PROCESSING = 3;
+    public static final short SLOT_OUTPUT_EMPTY_CONTAINER = 4;
+    public static final short SLOT_OUTPUT_FULL_CONTAINER = 5;
 
-	public InventoryBottler(TileBottler tileBottler) {
-		super(tileBottler, 6, "Items");
-	}
+    public InventoryBottler(TileBottler tileBottler) {
+        super(tileBottler, 6, "Items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_INPUT_EMPTY_CONTAINER) {
-			return FluidHelper.isFillableContainerWithRoom(itemStack);
-		} else if (slotIndex == SLOT_INPUT_FULL_CONTAINER) {
-			LazyOptional<FluidStack> fluidStack = FluidUtil.getFluidContained(itemStack);
-			return fluidStack.map(f -> ForgeRegistries.FLUIDS.containsValue(f.getFluid())).orElse(false);
-		}
-		return false;
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_INPUT_EMPTY_CONTAINER) {
+            return FluidHelper.isFillableContainerWithRoom(itemStack);
+        } else if (slotIndex == SLOT_INPUT_FULL_CONTAINER) {
+            LazyOptional<FluidStack> fluidStack = FluidUtil.getFluidContained(itemStack);
+            return fluidStack.map(f -> ForgeRegistries.FLUIDS.containsValue(f.getFluid())).orElse(false);
+        }
+        return false;
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
-		return slotIndex == SLOT_OUTPUT_EMPTY_CONTAINER || slotIndex == SLOT_OUTPUT_FULL_CONTAINER;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+        return slotIndex == SLOT_OUTPUT_EMPTY_CONTAINER || slotIndex == SLOT_OUTPUT_FULL_CONTAINER;
+    }
 }

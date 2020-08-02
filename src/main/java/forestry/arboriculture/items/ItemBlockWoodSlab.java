@@ -12,24 +12,24 @@ import forestry.arboriculture.blocks.BlockForestrySlab;
 
 public class ItemBlockWoodSlab extends BlockItem {
 
-	public ItemBlockWoodSlab(BlockForestrySlab block) {
-		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
-	}
+    public ItemBlockWoodSlab(BlockForestrySlab block) {
+        super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
+    }
 
-	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
-		BlockForestrySlab wood = (BlockForestrySlab) getBlock();
-		IWoodType woodType = wood.getWoodType();
-		return WoodHelper.getDisplayName(wood, woodType);
-	}
+    @Override
+    public ITextComponent getDisplayName(ItemStack itemstack) {
+        BlockForestrySlab wood = (BlockForestrySlab) getBlock();
+        IWoodType woodType = wood.getWoodType();
+        return WoodHelper.getDisplayName(wood, woodType);
+    }
 
-	@Override
-	public int getBurnTime(ItemStack itemStack) {
-		BlockForestrySlab forestrySlab = (BlockForestrySlab) getBlock();
-		if (forestrySlab.isFireproof()) {
-			return 0;
-		} else {
-			return 150;
-		}
-	}
+    @Override
+    public int getBurnTime(ItemStack itemStack) {
+        BlockForestrySlab forestrySlab = (BlockForestrySlab) getBlock();
+        if (forestrySlab.isFireproof()) {
+            return 0;
+        } else {
+            return 150;
+        }
+    }
 }

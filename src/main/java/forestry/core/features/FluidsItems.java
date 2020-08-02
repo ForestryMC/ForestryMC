@@ -20,22 +20,22 @@ import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class FluidsItems {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleFluids.class);
-	public static final FeatureItemGroup<ItemFluidContainerForestry, EnumContainerType> CONTAINERS = REGISTRY.itemGroup(ItemFluidContainerForestry::new, EnumContainerType.values()).create();
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleFluids.class);
+    public static final FeatureItemGroup<ItemFluidContainerForestry, EnumContainerType> CONTAINERS = REGISTRY.itemGroup(ItemFluidContainerForestry::new, EnumContainerType.values()).create();
 
-	public static ItemStack getContainer(EnumContainerType type, ForestryFluids fluid) {
-		return getContainer(type, fluid.getFluid());
-	}
+    public static ItemStack getContainer(EnumContainerType type, ForestryFluids fluid) {
+        return getContainer(type, fluid.getFluid());
+    }
 
-	public static ItemStack getContainer(EnumContainerType type, Fluid fluid) {
-		ItemStack container = CONTAINERS.stack(type);
-		LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
-		return fluidHandlerCap.map(handler -> {
-			handler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
-			return container;
-		}).orElse(ItemStack.EMPTY);
-	}
+    public static ItemStack getContainer(EnumContainerType type, Fluid fluid) {
+        ItemStack container = CONTAINERS.stack(type);
+        LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
+        return fluidHandlerCap.map(handler -> {
+            handler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
+            return container;
+        }).orElse(ItemStack.EMPTY);
+    }
 
-	private FluidsItems() {
-	}
+    private FluidsItems() {
+    }
 }

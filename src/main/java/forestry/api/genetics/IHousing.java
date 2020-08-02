@@ -12,9 +12,9 @@ import net.minecraft.util.math.BlockPos;
  */
 public interface IHousing {
 
-	/**
-	 * The coordinates of the housing.
-	 */
-	BlockPos getCoordinates();
+    /**
+     * The coordinates of the housing.
+     */
+    BlockPos getCoordinates();
 
 }

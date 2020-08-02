@@ -10,23 +10,23 @@ import forestry.modules.features.FeatureTileType;
 import forestry.worktable.features.WorktableTiles;
 
 public enum BlockTypeWorktable implements IBlockType {
-	WORKTABLE(() -> WorktableTiles.WORKTABLE, "worktable");
+    WORKTABLE(() -> WorktableTiles.WORKTABLE, "worktable");
 
-	public static final BlockTypeWorktable[] VALUES = values();
+    public static final BlockTypeWorktable[] VALUES = values();
 
-	private final IMachineProperties machineProperties;
+    private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeWorktable(Supplier<FeatureTileType<? extends T>> teClass, String name) {
-		this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
-	}
+    <T extends TileForestry> BlockTypeWorktable(Supplier<FeatureTileType<? extends T>> teClass, String name) {
+        this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
+    }
 
-	@Override
-	public IMachineProperties getMachineProperties() {
-		return machineProperties;
-	}
+    @Override
+    public IMachineProperties getMachineProperties() {
+        return machineProperties;
+    }
 
-	@Override
-	public String getString() {
-		return getMachineProperties().getString();
-	}
+    @Override
+    public String getString() {
+        return getMachineProperties().getString();
+    }
 }

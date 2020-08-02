@@ -14,26 +14,26 @@ import forestry.modules.ModuleManager;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.BOOK, name = "Book", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.book.description")
 public class ModuleBook extends BlankForestryModule {
-	@SuppressWarnings("NullableProblems")
-	public static ProxyBook proxy;
+    @SuppressWarnings("NullableProblems")
+    public static ProxyBook proxy;
 
-	public ModuleBook() {
-		proxy = DistExecutor.runForDist(() -> ProxyBookClient::new, () -> ProxyBook::new);
-	}
+    public ModuleBook() {
+        proxy = DistExecutor.runForDist(() -> ProxyBookClient::new, () -> ProxyBook::new);
+    }
 
-	@Override
-	public void setupAPI() {
-		proxy.setupAPI();
-	}
+    @Override
+    public void setupAPI() {
+        proxy.setupAPI();
+    }
 
-	@Override
-	public void preInit() {
-		proxy.preInit();
-		MinecraftForge.EVENT_BUS.register(new EventHandlerBook());
-	}
+    @Override
+    public void preInit() {
+        proxy.preInit();
+        MinecraftForge.EVENT_BUS.register(new EventHandlerBook());
+    }
 
-	@Override
-	public void postInit() {
-		ModuleManager.getModuleHandler().runBookInit();
-	}
+    @Override
+    public void postInit() {
+        ModuleManager.getModuleHandler().runBookInit();
+    }
 }

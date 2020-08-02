@@ -31,66 +31,66 @@ import forestry.core.utils.Translator;
 
 public class SocketWidget extends Widget {
 
-	private final ISocketable tile;
-	private final int slot;
+    private final ISocketable tile;
+    private final int slot;
 
-	public SocketWidget(WidgetManager manager, int xPos, int yPos, ISocketable tile, int slot) {
-		super(manager, xPos, yPos);
-		this.tile = tile;
-		this.slot = slot;
-	}
+    public SocketWidget(WidgetManager manager, int xPos, int yPos, ISocketable tile, int slot) {
+        super(manager, xPos, yPos);
+        this.tile = tile;
+        this.slot = slot;
+    }
 
-	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
-		ItemStack socketStack = tile.getSocket(slot);
-		if (!socketStack.isEmpty()) {
-			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
-		}
-	}
+    @Override
+    public void draw(MatrixStack transform, int startY, int startX) {
+        ItemStack socketStack = tile.getSocket(slot);
+        if (!socketStack.isEmpty()) {
+            Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		return toolTip;
-	}
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        return toolTip;
+    }
 
-	private final ToolTip toolTip = new ToolTip(250) {
-		@Override
-		@OnlyIn(Dist.CLIENT)
-		public void refresh() {
-			toolTip.clear();
-			ItemStack stack = tile.getSocket(slot);
-			if (!stack.isEmpty()) {
-				toolTip.addAll(ItemTooltipUtil.getInformation(stack));
-				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
-			} else {
-				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));
-			}
-		}
-	};
+    private final ToolTip toolTip = new ToolTip(250) {
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public void refresh() {
+            toolTip.clear();
+            ItemStack stack = tile.getSocket(slot);
+            if (!stack.isEmpty()) {
+                toolTip.addAll(ItemTooltipUtil.getInformation(stack));
+                toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
+            } else {
+                toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));
+            }
+        }
+    };
 
-	@Override
-	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+    @Override
+    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 
-		ItemStack itemstack = manager.minecraft.player.inventory.getItemStack();
-		if (itemstack.isEmpty()) {
-			return;
-		}
+        ItemStack itemstack = manager.minecraft.player.inventory.getItemStack();
+        if (itemstack.isEmpty()) {
+            return;
+        }
 
-		Item held = itemstack.getItem();
+        Item held = itemstack.getItem();
 
-		Container container = manager.gui.getContainer();
-		if (!(container instanceof IContainerSocketed)) {
-			return;
-		}
+        Container container = manager.gui.getContainer();
+        if (!(container instanceof IContainerSocketed)) {
+            return;
+        }
 
-		IContainerSocketed containerSocketed = (IContainerSocketed) container;
+        IContainerSocketed containerSocketed = (IContainerSocketed) container;
 
-		// Insert chipsets
-		if (held instanceof ItemCircuitBoard) {
-			containerSocketed.handleChipsetClick(slot);
-		} else if (held instanceof ISolderingIron) {
-			containerSocketed.handleSolderingIronClick(slot);
-		}
-	}
+        // Insert chipsets
+        if (held instanceof ItemCircuitBoard) {
+            containerSocketed.handleChipsetClick(slot);
+        } else if (held instanceof ISolderingIron) {
+            containerSocketed.handleSolderingIronClick(slot);
+        }
+    }
 }

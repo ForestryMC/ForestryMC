@@ -21,19 +21,19 @@ import forestry.core.worldgen.FeatureHelper;
 
 public class FeaturePlum extends FeatureTree {
 
-	public FeaturePlum(ITreeGenData tree) {
-		super(tree, 6, 3);
-	}
+    public FeaturePlum(ITreeGenData tree) {
+        super(tree, 6, 3);
+    }
 
-	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		int yCenter = height - girth;
-		yCenter = yCenter > 2 ? yCenter : 3;
+    @Override
+    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+        int yCenter = height - girth;
+        yCenter = yCenter > 2 ? yCenter : 3;
 
-		int radius = Math.round((2 + rand.nextInt(girth)) * (height / 4.0f));
-		if (radius > 4) {
-			radius = 4;
-		}
-		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.add(0, yCenter, 0), girth, radius, leaf, FeatureHelper.EnumReplaceMode.AIR);
-	}
+        int radius = Math.round((2 + rand.nextInt(girth)) * (height / 4.0f));
+        if (radius > 4) {
+            radius = 4;
+        }
+        FeatureHelper.generateSphereFromTreeStartPos(world, startPos.add(0, yCenter, 0), girth, radius, leaf, FeatureHelper.EnumReplaceMode.AIR);
+    }
 }

@@ -8,5 +8,5 @@ package forestry.api.core;
 import net.minecraft.nbt.CompoundNBT;
 
 public interface INbtReadable {
-	void read(CompoundNBT nbt);
+    void read(CompoundNBT nbt);
 }

@@ -69,236 +69,236 @@ import forestry.modules.ModuleHelper;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
 
-	@SuppressWarnings("NullableProblems")
-	public static ProxyLepidopterology proxy;
-	private static final String CONFIG_CATEGORY = "lepidopterology";
-	public static int spawnConstraint = 100;
-	public static int entityConstraint = 1000;
-	public static int maxDistance = 64;
-	private static boolean allowPollination = true;
-	public static final Map<String, Float> spawnRaritys = Maps.newHashMap();
-	private static boolean spawnButterflysFromLeaves = true;
-	private static boolean generateCocoons = false;
-	private static float generateCocoonsAmount = 1.0f;
-	private static float serumChance = 0.55f;
-	private static float secondSerumChance = 0;
+    @SuppressWarnings("NullableProblems")
+    public static ProxyLepidopterology proxy;
+    private static final String CONFIG_CATEGORY = "lepidopterology";
+    public static int spawnConstraint = 100;
+    public static int entityConstraint = 1000;
+    public static int maxDistance = 64;
+    private static boolean allowPollination = true;
+    public static final Map<String, Float> spawnRaritys = Maps.newHashMap();
+    private static boolean spawnButterflysFromLeaves = true;
+    private static boolean generateCocoons = false;
+    private static float generateCocoonsAmount = 1.0f;
+    private static float serumChance = 0.55f;
+    private static float secondSerumChance = 0;
 
-	public ModuleLepidopterology() {
-		proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
-		ForgeUtils.registerSubscriber(this);
-	}
+    public ModuleLepidopterology() {
+        proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
+        ForgeUtils.registerSubscriber(this);
+    }
 
-	@Override
-	public void setupAPI() {
-		ButterflyManager.butterflyFactory = new ButterflyFactory();
-		ButterflyManager.butterflyMutationFactory = new ButterflyMutationFactory();
-	}
+    @Override
+    public void setupAPI() {
+        ButterflyManager.butterflyFactory = new ButterflyFactory();
+        ButterflyManager.butterflyMutationFactory = new ButterflyMutationFactory();
+    }
 
-	@Override
-	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(this);
+    @Override
+    public void preInit() {
+        MinecraftForge.EVENT_BUS.register(this);
 
-		ButterflyDefinition.preInit();
-		MothDefinition.preInit();
+        ButterflyDefinition.preInit();
+        MothDefinition.preInit();
 
-		proxy.preInitializeRendering();
+        proxy.preInitializeRendering();
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-			LepidopterologyFilterRule.init();
-			LepidopterologyFilterRuleType.init();
-		}
-	}
+        if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
+            LepidopterologyFilterRule.init();
+            LepidopterologyFilterRuleType.init();
+        }
+    }
 
-	@Override
-	public Set<ResourceLocation> getDependencyUids() {
-		Set<ResourceLocation> dependencyUids = new HashSet<>();
-		dependencyUids.add(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE));
-		dependencyUids.add(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE));
-		return dependencyUids;
-	}
+    @Override
+    public Set<ResourceLocation> getDependencyUids() {
+        Set<ResourceLocation> dependencyUids = new HashSet<>();
+        dependencyUids.add(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE));
+        dependencyUids.add(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.ARBORICULTURE));
+        return dependencyUids;
+    }
 
-	@Override
-	public void doInit() {
-		//TODO commands
-		//		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
+    @Override
+    public void doInit() {
+        //TODO commands
+        //		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 
-		MothDefinition.initMoths();
-		ButterflyDefinition.initButterflies();
-		ButterflyAlleles.createLoot();
+        MothDefinition.initMoths();
+        ButterflyDefinition.initButterflies();
+        ButterflyAlleles.createLoot();
 
-		if (spawnButterflysFromLeaves) {
-			TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
-		}
+        if (spawnButterflysFromLeaves) {
+            TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
+        }
 
-		//TODO recipes
-		//		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS,
-		//				"before:minecraft:shapeless");
-	}
+        //TODO recipes
+        //		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS,
+        //				"before:minecraft:shapeless");
+    }
 
-	@Override
-	public void postInit() {
-		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
-		loadConfig(configFile);
-	}
+    @Override
+    public void postInit() {
+        File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
+        loadConfig(configFile);
+    }
 
-	@Override
-	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-		boolean hasVillageGenerated) {
-		if (generateCocoons) {
-			if (generateCocoonsAmount > 0.0) {
-				//TODO worldgen
-				//				CocoonDecorator.decorateCocoons(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
-			}
-		}
-	}
+    @Override
+    public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
+                              boolean hasVillageGenerated) {
+        if (generateCocoons) {
+            if (generateCocoonsAmount > 0.0) {
+                //TODO worldgen
+                //				CocoonDecorator.decorateCocoons(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
+            }
+        }
+    }
 
-	@Override
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (generateCocoons) {
-			if (generateCocoonsAmount > 0.0) {
-				//TODO worldgen
-				//				CocoonDecorator.decorateCocoons(world, rand, chunkX, chunkZ);
-			}
-		}
-	}
+    @Override
+    public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+        if (generateCocoons) {
+            if (generateCocoonsAmount > 0.0) {
+                //TODO worldgen
+                //				CocoonDecorator.decorateCocoons(world, rand, chunkX, chunkZ);
+            }
+        }
+    }
 
-	private static void loadConfig(File configFile) {
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.1.0");
+    private static void loadConfig(File configFile) {
+        LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.1.0");
 
-		spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
-		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
-		maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
-		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
-		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
-			spawnButterflysFromLeaves);
+        spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
+        entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
+        maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
+        allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
+        spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
+                spawnButterflysFromLeaves);
 
-		generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
-		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
-			0.0f, 10.0f);
+        generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
+        generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
+                0.0f, 10.0f);
 
-		serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
-		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
-			100.0f);
+        serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
+        secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
+                100.0f);
 
-		parseRarity(config);
-		parseCooconLoots(config);
+        parseRarity(config);
+        parseCooconLoots(config);
 
-		config.save();
-	}
+        config.save();
+    }
 
-	private static void parseRarity(LocalizedConfiguration config) {
-		List<String> butterflyRarity = Lists.newArrayList();
-		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (species) -> {
-			String identifier = species.getRegistryName().toString().replace(':', '_');
-			butterflyRarity.add(identifier + ":" + species.getRarity());
-		});
-		Collections.sort(butterflyRarity);
-		String[] defaultRaritys = butterflyRarity.toArray(new String[0]);
+    private static void parseRarity(LocalizedConfiguration config) {
+        List<String> butterflyRarity = Lists.newArrayList();
+        AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (species) -> {
+            String identifier = species.getRegistryName().toString().replace(':', '_');
+            butterflyRarity.add(identifier + ":" + species.getRarity());
+        });
+        Collections.sort(butterflyRarity);
+        String[] defaultRaritys = butterflyRarity.toArray(new String[0]);
 
-		Property rarityConf = config.get("butterfly.alleles", "rarity", defaultRaritys);
-		rarityConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.rarity"));
+        Property rarityConf = config.get("butterfly.alleles", "rarity", defaultRaritys);
+        rarityConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.rarity"));
 
-		String[] configRaritys = rarityConf.getStringList();
-		for (String rarity : configRaritys) {
-			if (rarity.contains(":") && rarity.length() > 3) {
-				String[] raritys = rarity.split(":");
-				try {
-					spawnRaritys.put(raritys[0], Float.parseFloat(raritys[1]));
-				} catch (Exception e) {
-					Log.error("Failed to parse spawn rarity for butterfly. {}", rarity, e);
-				}
-			}
-		}
-	}
+        String[] configRaritys = rarityConf.getStringList();
+        for (String rarity : configRaritys) {
+            if (rarity.contains(":") && rarity.length() > 3) {
+                String[] raritys = rarity.split(":");
+                try {
+                    spawnRaritys.put(raritys[0], Float.parseFloat(raritys[1]));
+                } catch (Exception e) {
+                    Log.error("Failed to parse spawn rarity for butterfly. {}", rarity, e);
+                }
+            }
+        }
+    }
 
-	private static void parseCooconLoots(LocalizedConfiguration config) {
-		for (IAllele allele : AlleleUtils.filteredAlleles(ButterflyChromosomes.COCOON)) {
-			if (allele instanceof IAlleleButterflyCocoon) {
-				parseCooconLoot(config, (IAlleleButterflyCocoon) allele);
-			}
-		}
-	}
+    private static void parseCooconLoots(LocalizedConfiguration config) {
+        for (IAllele allele : AlleleUtils.filteredAlleles(ButterflyChromosomes.COCOON)) {
+            if (allele instanceof IAlleleButterflyCocoon) {
+                parseCooconLoot(config, (IAlleleButterflyCocoon) allele);
+            }
+        }
+    }
 
-	private static void parseCooconLoot(LocalizedConfiguration config, IAlleleButterflyCocoon cocoon) {
-		Map<ItemStack, Float> cooconLoot = new HashMap<>();
-		List<String> lootList = new ArrayList<>();
-		for (Product product : cocoon.getCocoonLoot().getPossibleProducts()) {
-			String itemStackString = ItemStackUtil.getItemNameFromRegistryAsString(product.getItem());
+    private static void parseCooconLoot(LocalizedConfiguration config, IAlleleButterflyCocoon cocoon) {
+        Map<ItemStack, Float> cooconLoot = new HashMap<>();
+        List<String> lootList = new ArrayList<>();
+        for (Product product : cocoon.getCocoonLoot().getPossibleProducts()) {
+            String itemStackString = ItemStackUtil.getItemNameFromRegistryAsString(product.getItem());
 
-			lootList.add(itemStackString + ";" + product.getChance());
-		}
-		Collections.sort(lootList);
-		String[] defaultLoot = lootList.toArray(new String[0]);
+            lootList.add(itemStackString + ";" + product.getChance());
+        }
+        Collections.sort(lootList);
+        String[] defaultLoot = lootList.toArray(new String[0]);
 
-		Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getRegistryName().toString(), defaultLoot);
-		lootConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.loot"));
+        Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getRegistryName().toString(), defaultLoot);
+        lootConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.loot"));
 
-		String[] configLoot = lootConf.getStringList();
-		for (String loot : configLoot) {
-			if (loot.contains(";") && loot.length() > 3) {
-				String[] loots = loot.split(";");
-				try {
-					ItemStack itemStack = null; //TODO tags, flatten ItemStackUtil.parseItemStackString(loots[0], OreDictionary.WILDCARD_VALUE);
-					if (itemStack != null) {
-						cooconLoot.put(itemStack, Float.parseFloat(loots[1]));
-					}
-				} catch (Exception e) {
-					Log.error("Failed to parse cocoon loot. {}", loot, e);
-				}
-			}
-		}
-		cocoon.clearLoot();
-		for (Entry<ItemStack, Float> entry : cooconLoot.entrySet()) {
-			cocoon.addLoot(entry.getKey(), entry.getValue());
-		}
-		cocoon.bakeLoot();
-	}
+        String[] configLoot = lootConf.getStringList();
+        for (String loot : configLoot) {
+            if (loot.contains(";") && loot.length() > 3) {
+                String[] loots = loot.split(";");
+                try {
+                    ItemStack itemStack = null; //TODO tags, flatten ItemStackUtil.parseItemStackString(loots[0], OreDictionary.WILDCARD_VALUE);
+                    if (itemStack != null) {
+                        cooconLoot.put(itemStack, Float.parseFloat(loots[1]));
+                    }
+                } catch (Exception e) {
+                    Log.error("Failed to parse cocoon loot. {}", loot, e);
+                }
+            }
+        }
+        cocoon.clearLoot();
+        for (Entry<ItemStack, Float> entry : cooconLoot.entrySet()) {
+            cocoon.addLoot(entry.getKey(), entry.getValue());
+        }
+        cocoon.bakeLoot();
+    }
 
-	@Override
-	public void registerRecipes() {
-		//		ForgeRegistries.RECIPES.register(new MatingRecipe());    //TODO - JSON this?
-	}
-	//
-	//	@Override
-	//	public void getHiddenItems(List<ItemStack> hiddenItems) {
-	//		// cocoon itemBlock is different from the normal item
-	//		hiddenItems.add(new ItemStack(blocks.cocoon));
-	//		hiddenItems.add(new ItemStack(blocks.solidCocoon));
-	//	}
+    @Override
+    public void registerRecipes() {
+        //		ForgeRegistries.RECIPES.register(new MatingRecipe());    //TODO - JSON this?
+    }
+    //
+    //	@Override
+    //	public void getHiddenItems(List<ItemStack> hiddenItems) {
+    //		// cocoon itemBlock is different from the normal item
+    //		hiddenItems.add(new ItemStack(blocks.cocoon));
+    //		hiddenItems.add(new ItemStack(blocks.solidCocoon));
+    //	}
 
-	public static boolean isPollinationAllowed() {
-		return allowPollination;
-	}
+    public static boolean isPollinationAllowed() {
+        return allowPollination;
+    }
 
-	public static boolean isSpawnButterflysFromLeaves() {
-		return spawnButterflysFromLeaves;
-	}
+    public static boolean isSpawnButterflysFromLeaves() {
+        return spawnButterflysFromLeaves;
+    }
 
-	public static boolean isGenerateCocoons() {
-		return generateCocoons;
-	}
+    public static boolean isGenerateCocoons() {
+        return generateCocoons;
+    }
 
-	public static float getGenerateCocoonsAmount() {
-		return generateCocoonsAmount;
-	}
+    public static float getGenerateCocoonsAmount() {
+        return generateCocoonsAmount;
+    }
 
-	public static float getSerumChance() {
-		return serumChance;
-	}
+    public static float getSerumChance() {
+        return serumChance;
+    }
 
-	public static float getSecondSerumChance() {
-		return secondSerumChance;
-	}
+    public static float getSecondSerumChance() {
+        return secondSerumChance;
+    }
 
-	@SubscribeEvent
-	public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
-		if (event.getEntity() instanceof EntityButterfly) {
-			event.setCanceled(true);
-		}
-	}
+    @SubscribeEvent
+    public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
+        if (event.getEntity() instanceof EntityButterfly) {
+            event.setCanceled(true);
+        }
+    }
 
-	@Override
-	public ISidedModuleHandler getModuleHandler() {
-		return proxy;
-	}
+    @Override
+    public ISidedModuleHandler getModuleHandler() {
+        return proxy;
+    }
 }

@@ -22,32 +22,32 @@ import forestry.core.utils.BlockUtil;
 
 public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 
-	public FarmLogicRedOrchid(IFarmProperties properties, boolean isManual) {
-		super(properties, isManual);
-	}
+    public FarmLogicRedOrchid(IFarmProperties properties, boolean isManual) {
+        super(properties, isManual);
+    }
 
-	@Override
-	protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos, direction, i);
-			if (!world.isBlockLoaded(position)) {
-				break;
-			}
+    @Override
+    protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+        for (int i = 0; i < extent; i++) {
+            BlockPos position = translateWithOffset(pos, direction, i);
+            if (!world.isBlockLoaded(position)) {
+                break;
+            }
 
-			BlockState state = world.getBlockState(position);
-			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
-				continue;
-			}
+            BlockState state = world.getBlockState(position);
+            if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
+                continue;
+            }
 
-			BlockPos soilPos = position.down();
-			BlockState blockState = world.getBlockState(soilPos);
-			if (!isAcceptedSoil(blockState)) {
-				continue;
-			}
+            BlockPos soilPos = position.down();
+            BlockState blockState = world.getBlockState(soilPos);
+            if (!isAcceptedSoil(blockState)) {
+                continue;
+            }
 
-			return trySetCrop(world, farmHousing, position, direction);
-		}
+            return trySetCrop(world, farmHousing, position, direction);
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

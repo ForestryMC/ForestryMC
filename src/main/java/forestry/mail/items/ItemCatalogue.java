@@ -23,13 +23,13 @@ import forestry.mail.gui.ContainerCatalogue;
 
 public class ItemCatalogue extends ItemWithGui {
 
-	public ItemCatalogue() {
-		super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
-	}
+    public ItemCatalogue() {
+        super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
+    }
 
-	@Nullable
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return new ContainerCatalogue(windowId, player.inventory);
-	}
+    @Nullable
+    @Override
+    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+        return new ContainerCatalogue(windowId, player.inventory);
+    }
 }

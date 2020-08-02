@@ -27,35 +27,35 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.tiles.TileUtil;
 
 public class PacketErrorUpdate extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final IErrorLogic errorLogic;
+    private final BlockPos pos;
+    private final IErrorLogic errorLogic;
 
-	public PacketErrorUpdate(TileEntity tile, IErrorLogicSource errorLogicSource) {
-		this.pos = tile.getPos();
-		this.errorLogic = errorLogicSource.getErrorLogic();
-	}
+    public PacketErrorUpdate(TileEntity tile, IErrorLogicSource errorLogicSource) {
+        this.pos = tile.getPos();
+        this.errorLogic = errorLogicSource.getErrorLogic();
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		errorLogic.writeData(data);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        errorLogic.writeData(data);
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.ERROR_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.ERROR_UPDATE;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
 
-			TileUtil.actOnTile(player.world, pos, IErrorLogicSource.class, errorSourceTile -> {
-				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
-				errorLogic.readData(data);
-			});
-		}
-	}
+            TileUtil.actOnTile(player.world, pos, IErrorLogicSource.class, errorSourceTile -> {
+                IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
+                errorLogic.readData(data);
+            });
+        }
+    }
 }

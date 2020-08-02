@@ -15,65 +15,65 @@ import genetics.api.alleles.IAlleleType;
 
 public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 
-	protected final boolean dominant;
-	private final String localisationKey;
+    protected final boolean dominant;
+    private final String localisationKey;
 
-	public Allele(boolean dominant, String localisationKey) {
-		this.dominant = dominant;
-		this.localisationKey = localisationKey;
-	}
+    public Allele(boolean dominant, String localisationKey) {
+        this.dominant = dominant;
+        this.localisationKey = localisationKey;
+    }
 
-	@Override
-	public boolean isDominant() {
-		return dominant;
-	}
+    @Override
+    public boolean isDominant() {
+        return dominant;
+    }
 
-	@Override
-	public final String getLocalisationKey() {
-		return localisationKey;
-	}
+    @Override
+    public final String getLocalisationKey() {
+        return localisationKey;
+    }
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(getLocalisationKey());
-	}
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent(getLocalisationKey());
+    }
 
-	@Override
-	public IAlleleType getType() {
-		return Type.INSTANCE;
-	}
+    @Override
+    public IAlleleType getType() {
+        return Type.INSTANCE;
+    }
 
-	@Override
-	public int hashCode() {
-		return getRegistryName() != null ? getRegistryName().hashCode() : Objects.hash(dominant);
-	}
+    @Override
+    public int hashCode() {
+        return getRegistryName() != null ? getRegistryName().hashCode() : Objects.hash(dominant);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof IAllele)) {
-			return false;
-		}
-		IAllele otherAllele = (IAllele) obj;
-		return getRegistryName() != null ?
-			getRegistryName().equals(((IAllele) obj).getRegistryName()) :
-			dominant == otherAllele.isDominant();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IAllele)) {
+            return false;
+        }
+        IAllele otherAllele = (IAllele) obj;
+        return getRegistryName() != null ?
+                getRegistryName().equals(((IAllele) obj).getRegistryName()) :
+                dominant == otherAllele.isDominant();
+    }
 
-	@Override
-	public String toString() {
-		return MoreObjects
-			.toStringHelper(this)
-			.add("name", getRegistryName())
-			.add("dominant", dominant)
-			.toString();
-	}
+    @Override
+    public String toString() {
+        return MoreObjects
+                .toStringHelper(this)
+                .add("name", getRegistryName())
+                .add("dominant", dominant)
+                .toString();
+    }
 
-	public static class Type implements IAlleleType {
-		public static final Type INSTANCE = new Type();
+    public static class Type implements IAlleleType {
+        public static final Type INSTANCE = new Type();
 
-		@Override
-		public IAllele deserialize(AlleleInfo info) {
-			return new Allele(info.dominant, info.name);
-		}
-	}
+        @Override
+        public IAllele deserialize(AlleleInfo info) {
+            return new Allele(info.dominant, info.name);
+        }
+    }
 }

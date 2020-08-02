@@ -31,60 +31,60 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
-	private final ItemInventorySolderingIron itemInventory;
+    private final ItemInventorySolderingIron itemInventory;
 
-	public GuiSolderingIron(ContainerSolderingIron container, PlayerInventory inv, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/solder.png", container, inv, title);
+    public GuiSolderingIron(ContainerSolderingIron container, PlayerInventory inv, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/solder.png", container, inv, title);
 
-		this.itemInventory = container.getItemInventory();
-		this.xSize = 176;
-		this.ySize = 205;
-	}
+        this.itemInventory = container.getItemInventory();
+        this.xSize = 176;
+        this.ySize = 205;
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		ICircuitLayout layout = container.getLayout();
-		String title = layout.getName();
-		getFontRenderer().drawString(transform, title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
+        ICircuitLayout layout = container.getLayout();
+        String title = layout.getName();
+        getFontRenderer().drawString(transform, title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
-		for (int i = 0; i < 4; i++) {
-			String description;
-			ItemStack tube = itemInventory.getStackInSlot(i + 2);
-			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
-			if (recipe == null) {
-				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
-			} else {
-				description = recipe.getCircuit().getDisplayName().getString();
-			}
+        for (int i = 0; i < 4; i++) {
+            String description;
+            ItemStack tube = itemInventory.getStackInSlot(i + 2);
+            CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
+            if (recipe == null) {
+                description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
+            } else {
+                description = recipe.getCircuit().getDisplayName().getString();
+            }
 
-			int row = i * 20;
-			getFontRenderer().drawString(transform, description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+            int row = i * 20;
+            getFontRenderer().drawString(transform, description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 
-			if (tube.isEmpty()) {
-				ICircuitSocketType socketType = layout.getSocketType();
-				if (CircuitSocketType.FARM.equals(socketType)) {
-					FarmDirection farmDirection = FarmDirection.values()[i];
-					String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
-					String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
-					getFontRenderer().drawString(transform, localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
-				}
-			}
-		}
-	}
+            if (tube.isEmpty()) {
+                ICircuitSocketType socketType = layout.getSocketType();
+                if (CircuitSocketType.FARM.equals(socketType)) {
+                    FarmDirection farmDirection = FarmDirection.values()[i];
+                    String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
+                    String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
+                    getFontRenderer().drawString(transform, localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+                }
+            }
+        }
+    }
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		buttons.add(new Button(guiLeft + 12, guiTop + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
-		buttons.add(new Button(guiLeft + 130, guiTop + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
-	}
+        buttons.add(new Button(guiLeft + 12, guiTop + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
+        buttons.add(new Button(guiLeft + 130, guiTop + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
+    }
 
-	@Override
-	protected void addLedgers() {
-		addErrorLedger(itemInventory);
-		addHintLedger("soldering.iron");
-	}
+    @Override
+    protected void addLedgers() {
+        addErrorLedger(itemInventory);
+        addHintLedger("soldering.iron");
+    }
 }

@@ -22,15 +22,15 @@ import net.minecraft.world.gen.feature.structure.StructureManager;
 
 public abstract class FeatureBase extends Feature<NoFeatureConfig> {
 
-	protected FeatureBase() {
-		super(NoFeatureConfig.field_236558_a_);
-	}
+    protected FeatureBase() {
+        super(NoFeatureConfig.field_236558_a_);
+    }
 
-	@Override
-	public boolean func_230362_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-		return place(world, rand, pos, false);
-	}
+    @Override
+    public boolean func_230362_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+        return place(world, rand, pos, false);
+    }
 
-	public abstract boolean place(IWorld world, Random rand, BlockPos pos, boolean forced);
+    public abstract boolean place(IWorld world, Random rand, BlockPos pos, boolean forced);
 
 }

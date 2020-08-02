@@ -17,24 +17,24 @@ import forestry.api.genetics.ICheckPollinatable;
 
 public interface IFlowerProvider {
 
-	boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable);
+    boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable);
 
-	/**
-	 * @return The unique type used for the IFlowerRegistry
-	 * @since Forestry 4.0.0
-	 */
-	String getFlowerType();
+    /**
+     * @return The unique type used for the IFlowerRegistry
+     * @since Forestry 4.0.0
+     */
+    String getFlowerType();
 
-	/**
-	 * @return Short, human-readable identifier used in the beealyzer.
-	 */
-	ITextComponent getDescription();
+    /**
+     * @return Short, human-readable identifier used in the beealyzer.
+     */
+    ITextComponent getDescription();
 
-	/**
-	 * Allows the flower provider to affect the produce at the given location.
-	 * If this flowerProvider does not affect the products, it should return the products unchanged.
-	 *
-	 * @return Array of itemstacks being the (modified or unmodified) produce.
-	 */
-	NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products);
+    /**
+     * Allows the flower provider to affect the produce at the given location.
+     * If this flowerProvider does not affect the products, it should return the products unchanged.
+     *
+     * @return Array of itemstacks being the (modified or unmodified) produce.
+     */
+    NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products);
 }

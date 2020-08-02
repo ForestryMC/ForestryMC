@@ -9,16 +9,16 @@ import net.minecraft.inventory.IInventory;
 
 public interface ITradeStation extends ILetterHandler, IInventory {
 
-	IMailAddress getAddress();
+    IMailAddress getAddress();
 
-	boolean isValid();
+    boolean isValid();
 
-	void invalidate();
+    void invalidate();
 
-	void setVirtual(boolean isVirtual);
+    void setVirtual(boolean isVirtual);
 
-	boolean isVirtual();
+    boolean isVirtual();
 
-	ITradeStationInfo getTradeInfo();
+    ITradeStationInfo getTradeInfo();
 
 }

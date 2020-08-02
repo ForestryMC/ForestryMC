@@ -25,30 +25,30 @@ import forestry.core.tiles.TileUtil;
 //TODO inline?
 public abstract class BlockTreeContainer extends ContainerBlock {
 
-	protected BlockTreeContainer(Properties properties) {
-		super(properties
-			.tickRandomly()
-			.sound(SoundType.PLANT)
-			.doesNotBlockMovement());
-	}
+    protected BlockTreeContainer(Properties properties) {
+        super(properties
+                .tickRandomly()
+                .sound(SoundType.PLANT)
+                .doesNotBlockMovement());
+    }
 
-	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+    @Override
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 
-		if (rand.nextFloat() > 0.1) {
-			return;
-		}
+        if (rand.nextFloat() > 0.1) {
+            return;
+        }
 
-		TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
-		if (tile == null) {
-			return;
-		}
+        TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
+        if (tile == null) {
+            return;
+        }
 
-		tile.onBlockTick(world, pos, state, rand);
-	}
+        tile.onBlockTick(world, pos, state, rand);
+    }
 
-	@Override
-	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
-	}
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
 }

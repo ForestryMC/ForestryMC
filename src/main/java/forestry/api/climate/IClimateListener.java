@@ -21,46 +21,46 @@ import forestry.api.core.ILocatable;
  */
 public interface IClimateListener extends ILocatable, IClimateProvider {
 
-	/**
-	 * @return Returns the climate state of this listener.
-	 */
-	IClimateState getClimateState();
+    /**
+     * @return Returns the climate state of this listener.
+     */
+    IClimateState getClimateState();
 
-	/**
-	 * @return Returns the temperature value of this listener.
-	 */
-	float getExactTemperature();
+    /**
+     * @return Returns the temperature value of this listener.
+     */
+    float getExactTemperature();
 
-	/**
-	 * @return Returns the temperature value of this listener.
-	 */
-	float getExactHumidity();
+    /**
+     * @return Returns the temperature value of this listener.
+     */
+    float getExactHumidity();
 
-	/* CLIENT */
+    /* CLIENT */
 
-	/**
-	 * Updates the listener on the client side.
-	 *
-	 * @param spawnParticles If the listener should spawn particles around its location.
-	 */
-	@OnlyIn(Dist.CLIENT)
-	void updateClientSide(boolean spawnParticles);
+    /**
+     * Updates the listener on the client side.
+     *
+     * @param spawnParticles If the listener should spawn particles around its location.
+     */
+    @OnlyIn(Dist.CLIENT)
+    void updateClientSide(boolean spawnParticles);
 
-	/**
-	 * Sets the cached state to the given state.
-	 */
-	@OnlyIn(Dist.CLIENT)
-	void setClimateState(IClimateState climateState);
+    /**
+     * Sets the cached state to the given state.
+     */
+    @OnlyIn(Dist.CLIENT)
+    void setClimateState(IClimateState climateState);
 
-	/**
-	 * Sends a packet if needed to all players that are currently "watching" the chunk that the listener is located in.
-	 */
-	void syncToClient();
+    /**
+     * Sends a packet if needed to all players that are currently "watching" the chunk that the listener is located in.
+     */
+    void syncToClient();
 
-	/**
-	 * Sends a packet to the given players.
-	 */
-	void syncToClient(ServerPlayerEntity player);
+    /**
+     * Sends a packet to the given players.
+     */
+    void syncToClient(ServerPlayerEntity player);
 
-	void markLocatableDirty();
+    void markLocatableDirty();
 }

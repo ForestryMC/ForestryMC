@@ -32,59 +32,59 @@ import forestry.core.inventory.watchers.ISlotPickupWatcher;
 
 public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.BeeListener {
 
-	private final IBeeListener beeListener;
-	private final InventoryAlvearySieve inventory;
+    private final IBeeListener beeListener;
+    private final InventoryAlvearySieve inventory;
 
-	public TileAlvearySieve() {
-		super(BlockAlvearyType.SIEVE);
-		this.inventory = new InventoryAlvearySieve(this);
-		this.beeListener = new AlvearySieveBeeListener(inventory);
-	}
+    public TileAlvearySieve() {
+        super(BlockAlvearyType.SIEVE);
+        this.inventory = new InventoryAlvearySieve(this);
+        this.beeListener = new AlvearySieveBeeListener(inventory);
+    }
 
-	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return inventory;
-	}
+    @Override
+    public IInventoryAdapter getInternalInventory() {
+        return inventory;
+    }
 
-	public ISlotPickupWatcher getCrafter() {
-		return inventory;
-	}
+    public ISlotPickupWatcher getCrafter() {
+        return inventory;
+    }
 
-	@Override
-	public IBeeListener getBeeListener() {
-		return beeListener;
-	}
+    @Override
+    public IBeeListener getBeeListener() {
+        return beeListener;
+    }
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerAlvearySieve(windowId, inv, this);
-	}
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerAlvearySieve(windowId, inv, this);
+    }
 
-	static class AlvearySieveBeeListener extends DefaultBeeListener {
-		private final InventoryAlvearySieve inventory;
+    static class AlvearySieveBeeListener extends DefaultBeeListener {
+        private final InventoryAlvearySieve inventory;
 
-		public AlvearySieveBeeListener(InventoryAlvearySieve inventory) {
-			this.inventory = inventory;
-		}
+        public AlvearySieveBeeListener(InventoryAlvearySieve inventory) {
+            this.inventory = inventory;
+        }
 
-		@Override
-		public boolean onPollenRetrieved(IIndividual pollen) {
-			if (!inventory.canStorePollen()) {
-				return false;
-			}
+        @Override
+        public boolean onPollenRetrieved(IIndividual pollen) {
+            if (!inventory.canStorePollen()) {
+                return false;
+            }
 
-			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
-			if (!definition.isPresent()) {
-				return false;
-			}
-			IForestrySpeciesRoot<IIndividual> root = definition.get();
+            IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
+            if (!definition.isPresent()) {
+                return false;
+            }
+            IForestrySpeciesRoot<IIndividual> root = definition.get();
 
-			ItemStack pollenStack = root.getTypes().createStack(pollen, EnumGermlingType.POLLEN);
-			if (!pollenStack.isEmpty()) {
-				inventory.storePollenStack(pollenStack);
-				return true;
-			}
-			return false;
-		}
-	}
+            ItemStack pollenStack = root.getTypes().createStack(pollen, EnumGermlingType.POLLEN);
+            if (!pollenStack.isEmpty()) {
+                inventory.storePollenStack(pollenStack);
+                return true;
+            }
+            return false;
+        }
+    }
 }

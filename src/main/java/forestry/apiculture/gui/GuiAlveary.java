@@ -22,34 +22,34 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
 
 public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
-	private final TileAlveary tile;
+    private final TileAlveary tile;
 
-	public GuiAlveary(ContainerAlveary container, PlayerInventory inventory, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", container, inventory, title);
-		this.tile = container.getTile();
-		this.ySize = 190;
-	}
+    public GuiAlveary(ContainerAlveary container, PlayerInventory inventory, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/alveary.png", container, inventory, title);
+        this.tile = container.getTile();
+        this.ySize = 190;
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
-		drawHealthMeter(transform, guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
-	}
+        IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
+        drawHealthMeter(transform, guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
+    }
 
-	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
-		int i = 176 + rated.getLevelScaled(16);
-		int k = 0;
+    private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
+        int i = 176 + rated.getLevelScaled(16);
+        int k = 0;
 
-		this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
-	}
+        this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
+    }
 
-	@Override
-	protected void addLedgers() {
-		addErrorLedger(tile);
-		addClimateLedger(tile);
-		addHintLedger("apiary");
-		addOwnerLedger(tile);
-	}
+    @Override
+    protected void addLedgers() {
+        addErrorLedger(tile);
+        addClimateLedger(tile);
+        addHintLedger("apiary");
+        addOwnerLedger(tile);
+    }
 }

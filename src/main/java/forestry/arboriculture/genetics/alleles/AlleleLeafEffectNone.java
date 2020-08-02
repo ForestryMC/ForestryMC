@@ -11,12 +11,12 @@
 package forestry.arboriculture.genetics.alleles;
 
 public class AlleleLeafEffectNone extends AlleleLeafEffect {
-	public AlleleLeafEffectNone() {
-		super("none", true);
-	}
+    public AlleleLeafEffectNone() {
+        super("none", true);
+    }
 
-	@Override
-	public String getLocalisationKey() {
-		return "for.arboriculture.effect.none";
-	}
+    @Override
+    public String getLocalisationKey() {
+        return "for.arboriculture.effect.none";
+    }
 }

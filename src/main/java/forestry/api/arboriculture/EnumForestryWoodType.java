@@ -9,68 +9,68 @@ import java.util.Locale;
 import java.util.Random;
 
 public enum EnumForestryWoodType implements IWoodType {
-	LARCH,
-	TEAK,
-	ACACIA_DESERT,
-	LIME,
-	CHESTNUT,
-	WENGE,
-	BAOBAB,
-	SEQUOIA(4.0f),
+    LARCH,
+    TEAK,
+    ACACIA_DESERT,
+    LIME,
+    CHESTNUT,
+    WENGE,
+    BAOBAB,
+    SEQUOIA(4.0f),
 
-	KAPOK,
-	EBONY,
-	MAHOGANY,
-	BALSA(1.0f),
-	WILLOW,
-	WALNUT,
-	GREENHEART(7.5f),
-	CHERRY,
+    KAPOK,
+    EBONY,
+    MAHOGANY,
+    BALSA(1.0f),
+    WILLOW,
+    WALNUT,
+    GREENHEART(7.5f),
+    CHERRY,
 
-	MAHOE,
-	POPLAR,
-	PALM,
-	PAPAYA,
-	PINE(3.0f),
-	PLUM,
-	MAPLE,
-	CITRUS,
+    MAHOE,
+    POPLAR,
+    PALM,
+    PAPAYA,
+    PINE(3.0f),
+    PLUM,
+    MAPLE,
+    CITRUS,
 
-	GIGANTEUM(4.0f),
-	IPE,
-	PADAUK,
-	COCOBOLO,
-	ZEBRAWOOD;
+    GIGANTEUM(4.0f),
+    IPE,
+    PADAUK,
+    COCOBOLO,
+    ZEBRAWOOD;
 
-	public static final float DEFAULT_HARDNESS = 2.0f;
-	public static final EnumForestryWoodType[] VALUES = values();
+    public static final float DEFAULT_HARDNESS = 2.0f;
+    public static final EnumForestryWoodType[] VALUES = values();
 
-	private final float hardness;
+    private final float hardness;
 
-	EnumForestryWoodType() {
-		this(DEFAULT_HARDNESS);
-	}
+    EnumForestryWoodType() {
+        this(DEFAULT_HARDNESS);
+    }
 
-	EnumForestryWoodType(float hardness) {
-		this.hardness = hardness;
-	}
+    EnumForestryWoodType(float hardness) {
+        this.hardness = hardness;
+    }
 
-	@Override
-	public float getHardness() {
-		return hardness;
-	}
+    @Override
+    public float getHardness() {
+        return hardness;
+    }
 
-	public static EnumForestryWoodType getRandom(Random random) {
-		return VALUES[random.nextInt(VALUES.length)];
-	}
+    public static EnumForestryWoodType getRandom(Random random) {
+        return VALUES[random.nextInt(VALUES.length)];
+    }
 
-	@Override
-	public String toString() {
-		return super.toString().toLowerCase(Locale.ENGLISH);
-	}
+    @Override
+    public String toString() {
+        return super.toString().toLowerCase(Locale.ENGLISH);
+    }
 
-	@Override
-	public String getString() {
-		return toString();
-	}
+    @Override
+    public String getString() {
+        return toString();
+    }
 }

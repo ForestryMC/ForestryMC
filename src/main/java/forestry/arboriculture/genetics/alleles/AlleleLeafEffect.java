@@ -22,22 +22,22 @@ import forestry.core.config.Constants;
 
 public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEffect {
 
-	protected AlleleLeafEffect(String valueName, boolean isDominant) {
-		super(Constants.MOD_ID, "leaves", valueName, isDominant);
-	}
+    protected AlleleLeafEffect(String valueName, boolean isDominant) {
+        super(Constants.MOD_ID, "leaves", valueName, isDominant);
+    }
 
-	@Override
-	public boolean isCombinable() {
-		return true;
-	}
+    @Override
+    public boolean isCombinable() {
+        return true;
+    }
 
-	@Override
-	public IEffectData validateStorage(IEffectData storedData) {
-		return storedData;
-	}
+    @Override
+    public IEffectData validateStorage(IEffectData storedData) {
+        return storedData;
+    }
 
-	@Override
-	public IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos) {
-		return storedData;
-	}
+    @Override
+    public IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos) {
+        return storedData;
+    }
 }

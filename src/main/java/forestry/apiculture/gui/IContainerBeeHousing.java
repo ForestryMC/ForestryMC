@@ -14,7 +14,7 @@ import forestry.core.gui.IContainerAnalyzerProvider;
 
 public interface IContainerBeeHousing extends IContainerAnalyzerProvider {
 
-	IGuiBeeHousingDelegate getDelegate();
+    IGuiBeeHousingDelegate getDelegate();
 
-	GuiBeeHousing.Icon getIcon();
+    GuiBeeHousing.Icon getIcon();
 }

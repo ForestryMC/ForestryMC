@@ -33,85 +33,85 @@ import forestry.core.worldgen.FeatureBase;
 
 public abstract class FeatureArboriculture extends FeatureBase {
 
-	protected static final int minPodHeight = 3;
+    protected static final int minPodHeight = 3;
 
-	protected final ITreeGenData tree;
+    protected final ITreeGenData tree;
 
-	protected FeatureArboriculture(ITreeGenData tree) {
-		this.tree = tree;
-	}
+    protected FeatureArboriculture(ITreeGenData tree) {
+        this.tree = tree;
+    }
 
-	@Override
-	public boolean place(IWorld world, Random rand, BlockPos pos, boolean forced) {
-		if (!ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
-			return false;
-		}
+    @Override
+    public boolean place(IWorld world, Random rand, BlockPos pos, boolean forced) {
+        if (!ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
+            return false;
+        }
 
-		GameProfile owner = getOwner(world, pos);
-		TreeBlockTypeLeaf leaf = new TreeBlockTypeLeaf(tree, owner, rand);
-		TreeBlockTypeLog wood = new TreeBlockTypeLog(tree);
+        GameProfile owner = getOwner(world, pos);
+        TreeBlockTypeLeaf leaf = new TreeBlockTypeLeaf(tree, owner, rand);
+        TreeBlockTypeLog wood = new TreeBlockTypeLog(tree);
 
-		preGenerate(world, rand, pos);
+        preGenerate(world, rand, pos);
 
-		BlockPos genPos;
-		if (forced) {
-			genPos = pos;
-		} else {
-			genPos = getValidGrowthPos(world, pos);
-		}
+        BlockPos genPos;
+        if (forced) {
+            genPos = pos;
+        } else {
+            genPos = getValidGrowthPos(world, pos);
+        }
 
-		if (genPos != null) {
-			clearSaplings(world, genPos);
-			List<BlockPos> branchEnds = new ArrayList<>(generateTrunk(world, rand, wood, genPos));
-			branchEnds.sort(VectUtil.TOP_DOWN_COMPARATOR);
-			generateLeaves(world, rand, leaf, branchEnds, genPos);
-			generateExtras(world, rand, genPos);
-			return true;
-		}
+        if (genPos != null) {
+            clearSaplings(world, genPos);
+            List<BlockPos> branchEnds = new ArrayList<>(generateTrunk(world, rand, wood, genPos));
+            branchEnds.sort(VectUtil.TOP_DOWN_COMPARATOR);
+            generateLeaves(world, rand, leaf, branchEnds, genPos);
+            generateExtras(world, rand, genPos);
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Nullable
-	private static GameProfile getOwner(IWorld world, BlockPos pos) {
-		TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
-		if (tile == null) {
-			return null;
-		}
-		return tile.getOwnerHandler().getOwner();
-	}
+    @Nullable
+    private static GameProfile getOwner(IWorld world, BlockPos pos) {
+        TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
+        if (tile == null) {
+            return null;
+        }
+        return tile.getOwnerHandler().getOwner();
+    }
 
-	public void preGenerate(IWorld world, Random rand, BlockPos startPos) {
+    public void preGenerate(IWorld world, Random rand, BlockPos startPos) {
 
-	}
+    }
 
-	/**
-	 * Generate the tree's trunk. Returns a list of positions of branch ends for leaves to generate at.
-	 */
+    /**
+     * Generate the tree's trunk. Returns a list of positions of branch ends for leaves to generate at.
+     */
 
-	protected abstract Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
+    protected abstract Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
 
-	protected abstract void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos);
+    protected abstract void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos);
 
-	protected abstract void generateExtras(IWorld world, Random rand, BlockPos startPos);
+    protected abstract void generateExtras(IWorld world, Random rand, BlockPos startPos);
 
-	@Nullable
-	public abstract BlockPos getValidGrowthPos(IWorld world, BlockPos pos);
+    @Nullable
+    public abstract BlockPos getValidGrowthPos(IWorld world, BlockPos pos);
 
-	public void clearSaplings(IWorld world, BlockPos genPos) {
-		int treeGirth = tree.getGirth();
-		for (int x = 0; x < treeGirth; x++) {
-			for (int z = 0; z < treeGirth; z++) {
-				BlockPos saplingPos = genPos.add(x, 0, z);
-				if (world.getBlockState(saplingPos).getBlock() instanceof BlockSapling) {
-					world.setBlockState(saplingPos, Blocks.AIR.getDefaultState(), 18);
-				}
-			}
-		}
-	}
+    public void clearSaplings(IWorld world, BlockPos genPos) {
+        int treeGirth = tree.getGirth();
+        for (int x = 0; x < treeGirth; x++) {
+            for (int z = 0; z < treeGirth; z++) {
+                BlockPos saplingPos = genPos.add(x, 0, z);
+                if (world.getBlockState(saplingPos).getBlock() instanceof BlockSapling) {
+                    world.setBlockState(saplingPos, Blocks.AIR.getDefaultState(), 18);
+                }
+            }
+        }
+    }
 
-	public boolean hasPods() {
-		return tree.allowsFruitBlocks();
-	}
+    public boolean hasPods() {
+        return tree.allowsFruitBlocks();
+    }
 
 }

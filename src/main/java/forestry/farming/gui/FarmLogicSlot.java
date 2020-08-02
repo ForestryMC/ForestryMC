@@ -29,54 +29,54 @@ import forestry.farming.multiblock.IFarmControllerInternal;
 
 public class FarmLogicSlot extends Widget {
 
-	private final IFarmControllerInternal farmController;
-	private final FarmDirection farmDirection;
+    private final IFarmControllerInternal farmController;
+    private final FarmDirection farmDirection;
 
-	public FarmLogicSlot(IFarmControllerInternal farmController, WidgetManager manager, int xPos, int yPos, FarmDirection farmDirection) {
-		super(manager, xPos, yPos);
-		this.farmController = farmController;
-		this.farmDirection = farmDirection;
-	}
+    public FarmLogicSlot(IFarmControllerInternal farmController, WidgetManager manager, int xPos, int yPos, FarmDirection farmDirection) {
+        super(manager, xPos, yPos);
+        this.farmController = farmController;
+        this.farmDirection = farmDirection;
+    }
 
-	private IFarmLogic getLogic() {
-		return farmController.getFarmLogic(farmDirection);
-	}
+    private IFarmLogic getLogic() {
+        return farmController.getFarmLogic(farmDirection);
+    }
 
-	private IFarmProperties getProperties() {
-		return getLogic().getProperties();
-	}
+    private IFarmProperties getProperties() {
+        return getLogic().getProperties();
+    }
 
-	private ItemStack getStackIndex() {
-		return getProperties().getIcon();
-	}
+    private ItemStack getStackIndex() {
+        return getProperties().getIcon();
+    }
 
-	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
-		if (!getStackIndex().isEmpty()) {
-			Minecraft minecraft = Minecraft.getInstance();
-			TextureManager textureManager = minecraft.getTextureManager();
-			textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-			ItemRenderer renderItem = minecraft.getItemRenderer();
-			renderItem.renderItemIntoGUI(getStackIndex(), startX + xPos, startY + yPos);
-		}
-	}
+    @Override
+    public void draw(MatrixStack transform, int startY, int startX) {
+        if (!getStackIndex().isEmpty()) {
+            Minecraft minecraft = Minecraft.getInstance();
+            TextureManager textureManager = minecraft.getTextureManager();
+            textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+            ItemRenderer renderItem = minecraft.getItemRenderer();
+            renderItem.renderItemIntoGUI(getStackIndex(), startX + xPos, startY + yPos);
+        }
+    }
 
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		if (isMouseOver(mouseX, mouseY)) {
-			return toolTip;
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        if (isMouseOver(mouseX, mouseY)) {
+            return toolTip;
+        } else {
+            return null;
+        }
+    }
 
-	protected final ToolTip toolTip = new ToolTip(250) {
-		@Override
-		public void refresh() {
-			toolTip.clear();
-			toolTip.add(getProperties().getDisplayName(getLogic().isManual()));
-			toolTip.add("Fertilizer: " + Math.round(getProperties().getFertilizerConsumption(farmController) * Config.fertilizerModifier));
-			toolTip.add("Water: " + getProperties().getWaterConsumption(farmController, farmController.getFarmLedgerDelegate().getHydrationModifier()));
-		}
-	};
+    protected final ToolTip toolTip = new ToolTip(250) {
+        @Override
+        public void refresh() {
+            toolTip.clear();
+            toolTip.add(getProperties().getDisplayName(getLogic().isManual()));
+            toolTip.add("Fertilizer: " + Math.round(getProperties().getFertilizerConsumption(farmController) * Config.fertilizerModifier));
+            toolTip.add("Water: " + getProperties().getWaterConsumption(farmController, farmController.getFarmLedgerDelegate().getHydrationModifier()));
+        }
+    };
 }

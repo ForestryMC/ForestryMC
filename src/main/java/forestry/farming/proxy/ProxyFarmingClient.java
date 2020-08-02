@@ -31,29 +31,29 @@ import forestry.modules.IClientModuleHandler;
 @OnlyIn(Dist.CLIENT)
 public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHandler {
 
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ClientManager.getInstance().registerModel(new ModelFarmBlock(), FarmingBlocks.FARM);
-	}
+    @Override
+    public void registerModels(ModelRegistryEvent event) {
+        ClientManager.getInstance().registerModel(new ModelFarmBlock(), FarmingBlocks.FARM);
+    }
 
-	@Override
-	public void setupClient(FMLClientSetupEvent event) {
-		FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-	}
+    @Override
+    public void setupClient(FMLClientSetupEvent event) {
+        FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+    }
 
-	@Override
-	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
-			return;
-		}
-		EnumFarmBlockType.gatherSprites(event);
-	}
+    @Override
+    public void registerSprites(TextureStitchEvent.Pre event) {
+        if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+            return;
+        }
+        EnumFarmBlockType.gatherSprites(event);
+    }
 
-	@Override
-	public void handleSprites(TextureStitchEvent.Post event) {
-		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
-			return;
-		}
-		EnumFarmBlockType.fillSprites(event);
-	}
+    @Override
+    public void handleSprites(TextureStitchEvent.Post event) {
+        if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+            return;
+        }
+        EnumFarmBlockType.fillSprites(event);
+    }
 }

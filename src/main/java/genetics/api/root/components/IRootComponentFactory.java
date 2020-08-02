@@ -18,5 +18,5 @@ import genetics.api.root.IIndividualRootBuilder;
  */
 public interface IRootComponentFactory<I extends IIndividual, C extends IRootComponent<I>> {
 
-	C create(IIndividualRoot<I> root);
+    C create(IIndividualRoot<I> root);
 }

@@ -13,5 +13,5 @@ package forestry.core.items;
 import net.minecraft.item.ItemStack;
 
 public interface ICraftingPlan {
-	ItemStack planUsed(ItemStack plan, ItemStack result);
+    ItemStack planUsed(ItemStack plan, ItemStack result);
 }

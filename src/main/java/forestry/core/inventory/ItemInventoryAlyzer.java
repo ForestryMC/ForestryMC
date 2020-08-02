@@ -35,152 +35,152 @@ import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
 public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
-	public static final int SLOT_ENERGY = 0;
-	public static final int SLOT_SPECIMEN = 1;
-	public static final int SLOT_ANALYZE_1 = 2;
-	public static final int SLOT_ANALYZE_2 = 3;
-	public static final int SLOT_ANALYZE_3 = 4;
-	public static final int SLOT_ANALYZE_4 = 5;
-	public static final int SLOT_ANALYZE_5 = 6;
+    public static final int SLOT_ENERGY = 0;
+    public static final int SLOT_SPECIMEN = 1;
+    public static final int SLOT_ANALYZE_1 = 2;
+    public static final int SLOT_ANALYZE_2 = 3;
+    public static final int SLOT_ANALYZE_3 = 4;
+    public static final int SLOT_ANALYZE_4 = 5;
+    public static final int SLOT_ANALYZE_5 = 6;
 
-	public ItemInventoryAlyzer(PlayerEntity player, ItemStack itemstack) {
-		super(player, 7, itemstack);
-	}
+    public ItemInventoryAlyzer(PlayerEntity player, ItemStack itemstack) {
+        super(player, 7, itemstack);
+    }
 
-	public static boolean isAlyzingFuel(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return false;
-		}
+    public static boolean isAlyzingFuel(ItemStack itemstack) {
+        if (itemstack.isEmpty()) {
+            return false;
+        }
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
-		}
+        if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+            return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_ENERGY) {
-			return isAlyzingFuel(itemStack);
-		}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_ENERGY) {
+            return isAlyzingFuel(itemStack);
+        }
 
-		// only allow one slot to be used at a time
-		if (hasSpecimen() && getStackInSlot(slotIndex).isEmpty()) {
-			return false;
-		}
+        // only allow one slot to be used at a time
+        if (hasSpecimen() && getStackInSlot(slotIndex).isEmpty()) {
+            return false;
+        }
 
-		itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemStack);
-		if (!definition.isPresent()) {
-			return false;
-		}
-		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
+        itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
+        IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemStack);
+        if (!definition.isPresent()) {
+            return false;
+        }
+        IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
-		if (slotIndex == SLOT_SPECIMEN) {
-			return true;
-		}
+        if (slotIndex == SLOT_SPECIMEN) {
+            return true;
+        }
 
-		Optional<IIndividual> optionalIndividual = speciesRoot.create(itemStack);
-		return optionalIndividual.filter(IIndividual::isAnalyzed).isPresent();
-	}
+        Optional<IIndividual> optionalIndividual = speciesRoot.create(itemStack);
+        return optionalIndividual.filter(IIndividual::isAnalyzed).isPresent();
+    }
 
-	@Override
-	public void setInventorySlotContents(int index, ItemStack itemStack) {
-		super.setInventorySlotContents(index, itemStack);
-		if (index == SLOT_SPECIMEN) {
-			analyzeSpecimen(itemStack);
-		}
-	}
+    @Override
+    public void setInventorySlotContents(int index, ItemStack itemStack) {
+        super.setInventorySlotContents(index, itemStack);
+        if (index == SLOT_SPECIMEN) {
+            analyzeSpecimen(itemStack);
+        }
+    }
 
-	private void analyzeSpecimen(ItemStack specimen) {
-		if (specimen.isEmpty()) {
-			return;
-		}
+    private void analyzeSpecimen(ItemStack specimen) {
+        if (specimen.isEmpty()) {
+            return;
+        }
 
-		ItemStack convertedSpecimen = GeneticsUtil.convertToGeneticEquivalent(specimen);
-		if (!ItemStack.areItemStacksEqual(specimen, convertedSpecimen)) {
-			setInventorySlotContents(SLOT_SPECIMEN, convertedSpecimen);
-			specimen = convertedSpecimen;
-		}
+        ItemStack convertedSpecimen = GeneticsUtil.convertToGeneticEquivalent(specimen);
+        if (!ItemStack.areItemStacksEqual(specimen, convertedSpecimen)) {
+            setInventorySlotContents(SLOT_SPECIMEN, convertedSpecimen);
+            specimen = convertedSpecimen;
+        }
 
-		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(specimen);
-		// No individual, abort
-		if (!definition.isPresent()) {
-			return;
-		}
-		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
+        IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(specimen);
+        // No individual, abort
+        if (!definition.isPresent()) {
+            return;
+        }
+        IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 
-		Optional<IIndividual> optionalIndividual = speciesRoot.create(specimen);
+        Optional<IIndividual> optionalIndividual = speciesRoot.create(specimen);
 
-		// Analyze if necessary
-		if (optionalIndividual.isPresent()) {
-			IIndividual individual = optionalIndividual.get();
-			if (!individual.isAnalyzed()) {
-				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-				if (requiresEnergy) {
-					// Requires energy
-					if (!isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
-						return;
-					}
-				}
+        // Analyze if necessary
+        if (optionalIndividual.isPresent()) {
+            IIndividual individual = optionalIndividual.get();
+            if (!individual.isAnalyzed()) {
+                final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
+                if (requiresEnergy) {
+                    // Requires energy
+                    if (!isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+                        return;
+                    }
+                }
 
-				if (individual.analyze()) {
-					IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
-					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
-					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
+                if (individual.analyze()) {
+                    IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+                    breedingTracker.registerSpecies(individual.getGenome().getPrimary());
+                    breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 
-					GeneticHelper.setIndividual(specimen, individual);
+                    GeneticHelper.setIndividual(specimen, individual);
 
-					if (requiresEnergy) {
-						// Decrease energy
-						decrStackSize(SLOT_ENERGY, 1);
-					}
-				}
-			}
-		}
+                    if (requiresEnergy) {
+                        // Decrease energy
+                        decrStackSize(SLOT_ENERGY, 1);
+                    }
+                }
+            }
+        }
 
-		setInventorySlotContents(SLOT_ANALYZE_1, specimen);
-		setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
-	}
+        setInventorySlotContents(SLOT_ANALYZE_1, specimen);
+        setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
+    }
 
-	@Override
-	public final ImmutableSet<IErrorState> getErrorStates() {
-		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+    @Override
+    public final ImmutableSet<IErrorState> getErrorStates() {
+        ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
-		if (!hasSpecimen()) {
-			errorStates.add(EnumErrorCode.NO_SPECIMEN);
-		} else {
-			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(getSpecimen());
-			if (definition.isPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
-				errorStates.add(EnumErrorCode.NO_HONEY);
-			}
-		}
+        if (!hasSpecimen()) {
+            errorStates.add(EnumErrorCode.NO_SPECIMEN);
+        } else {
+            IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(getSpecimen());
+            if (definition.isPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+                errorStates.add(EnumErrorCode.NO_HONEY);
+            }
+        }
 
-		return errorStates.build();
-	}
+        return errorStates.build();
+    }
 
-	public ItemStack getSpecimen() {
-		for (int i = SLOT_SPECIMEN; i <= SLOT_ANALYZE_5; i++) {
-			ItemStack itemStack = getStackInSlot(i);
-			if (!itemStack.isEmpty()) {
-				return itemStack;
-			}
-		}
-		return ItemStack.EMPTY;
-	}
+    public ItemStack getSpecimen() {
+        for (int i = SLOT_SPECIMEN; i <= SLOT_ANALYZE_5; i++) {
+            ItemStack itemStack = getStackInSlot(i);
+            if (!itemStack.isEmpty()) {
+                return itemStack;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
 
-	public boolean hasSpecimen() {
-		return !getSpecimen().isEmpty();
-	}
+    public boolean hasSpecimen() {
+        return !getSpecimen().isEmpty();
+    }
 
-	@Override
-	protected void onWriteNBT(CompoundNBT nbt) {
-		ItemStack energy = getStackInSlot(ItemInventoryAlyzer.SLOT_ENERGY);
-		int amount = 0;
-		if (!energy.isEmpty()) {
-			amount = energy.getCount();
-		}
-		nbt.putInt("Charges", amount);
-	}
+    @Override
+    protected void onWriteNBT(CompoundNBT nbt) {
+        ItemStack energy = getStackInSlot(ItemInventoryAlyzer.SLOT_ENERGY);
+        int amount = 0;
+        if (!energy.isEmpty()) {
+            amount = energy.getCount();
+        }
+        nbt.putInt("Charges", amount);
+    }
 }

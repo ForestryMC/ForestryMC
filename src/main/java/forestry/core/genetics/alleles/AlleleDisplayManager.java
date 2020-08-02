@@ -9,10 +9,10 @@ import genetics.api.organism.IOrganismType;
 import forestry.api.genetics.alyzer.IAlleleDisplayHandler;
 
 public class AlleleDisplayManager {
-	public <I extends IIndividual> void addHandler(IAlleleDisplayHandler<I> handler, String rootUID, IChromosomeType type, Predicate<IOrganismType> typeFilter) {
-	}
+    public <I extends IIndividual> void addHandler(IAlleleDisplayHandler<I> handler, String rootUID, IChromosomeType type, Predicate<IOrganismType> typeFilter) {
+    }
 
-	public <I extends IIndividual> void addHandler(IAlleleDisplayHandler<I> handler, String rootUID, IChromosomeType type) {
-		addHandler(handler, rootUID, type, (t) -> true);
-	}
+    public <I extends IIndividual> void addHandler(IAlleleDisplayHandler<I> handler, String rootUID, IChromosomeType type) {
+        addHandler(handler, rootUID, type, (t) -> true);
+    }
 }

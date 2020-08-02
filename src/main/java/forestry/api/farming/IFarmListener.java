@@ -13,43 +13,43 @@ import net.minecraft.util.math.BlockPos;
 
 public interface IFarmListener {
 
-	/**
-	 * Called before a crop is harvested.
-	 *
-	 * @param crop ICrop about to be harvested.
-	 * @return true to cancel further processing of this crop.
-	 */
-	boolean beforeCropHarvest(ICrop crop);
+    /**
+     * Called before a crop is harvested.
+     *
+     * @param crop ICrop about to be harvested.
+     * @return true to cancel further processing of this crop.
+     */
+    boolean beforeCropHarvest(ICrop crop);
 
-	/**
-	 * Called after a crop has been harvested, but before harvested items are stowed in the farms inventory.
-	 *
-	 * @param harvested Collection of harvested stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
-	 * @param crop      Harvested {@link ICrop}
-	 */
-	void afterCropHarvest(NonNullList<ItemStack> harvested, ICrop crop);
+    /**
+     * Called after a crop has been harvested, but before harvested items are stowed in the farms inventory.
+     *
+     * @param harvested Collection of harvested stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
+     * @param crop      Harvested {@link ICrop}
+     */
+    void afterCropHarvest(NonNullList<ItemStack> harvested, ICrop crop);
 
-	/**
-	 * Called after the stack of collected items has been returned by the farm logic, but before it is added to the farm's pending queue.
-	 *
-	 * @param collected Collection of collected stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
-	 */
-	void hasCollected(NonNullList<ItemStack> collected, IFarmLogic logic);
+    /**
+     * Called after the stack of collected items has been returned by the farm logic, but before it is added to the farm's pending queue.
+     *
+     * @param collected Collection of collected stacks. May be manipulated. Ensure removal of stacks with 0 or less items!
+     */
+    void hasCollected(NonNullList<ItemStack> collected, IFarmLogic logic);
 
-	/**
-	 * Called after farmland has successfully been cultivated by a farm logic.
-	 */
-	void hasCultivated(IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent);
+    /**
+     * Called after farmland has successfully been cultivated by a farm logic.
+     */
+    void hasCultivated(IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent);
 
-	/**
-	 * Called after the stack of harvested crops has been returned by the farm logic, but before it is added to the farm's pending queue.
-	 */
-	void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent);
+    /**
+     * Called after the stack of harvested crops has been returned by the farm logic, but before it is added to the farm's pending queue.
+     */
+    void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent);
 
-	/**
-	 * Can be used to cancel farm task on a per side/{@link IFarmLogic} basis.
-	 *
-	 * @return true to skip any work action on the given logic and direction for this work cycle.
-	 */
-	boolean cancelTask(IFarmLogic logic, FarmDirection direction);
+    /**
+     * Can be used to cancel farm task on a per side/{@link IFarmLogic} basis.
+     *
+     * @return true to skip any work action on the given logic and direction for this work cycle.
+     */
+    boolean cancelTask(IFarmLogic logic, FarmDirection direction);
 }

@@ -38,58 +38,58 @@ import forestry.core.utils.ResourceUtil;
 @OnlyIn(Dist.CLIENT)
 public final class ModelBaker {
 
-	private static final ResourceLocation FACE_LOCATION = new ResourceLocation(Constants.MOD_ID, "baker_face");
-	private static final float[] UVS = new float[]{0.0F, 0.0F, 16.0F, 16.0F, 0.0F, 0.0F, 16.0F, 16.0F};
-	private static final FaceBakery FACE_BAKERY = new FaceBakery();
-	private static final Vector3f POS_FROM = new Vector3f(0.0F, 0.0F, 0.0F);
-	private static final Vector3f POS_TO = new Vector3f(16.0F, 16.0F, 16.0F);
+    private static final ResourceLocation FACE_LOCATION = new ResourceLocation(Constants.MOD_ID, "baker_face");
+    private static final float[] UVS = new float[]{0.0F, 0.0F, 16.0F, 16.0F, 0.0F, 0.0F, 16.0F, 16.0F};
+    private static final FaceBakery FACE_BAKERY = new FaceBakery();
+    private static final Vector3f POS_FROM = new Vector3f(0.0F, 0.0F, 0.0F);
+    private static final Vector3f POS_TO = new Vector3f(16.0F, 16.0F, 16.0F);
 
-	private final List<ModelBakerFace> faces = new ArrayList<>();
+    private final List<ModelBakerFace> faces = new ArrayList<>();
 
-	private final ModelBakerModel currentModel = new ModelBakerModel(ClientManager.getInstance().getDefaultBlockState());
+    private final ModelBakerModel currentModel = new ModelBakerModel(ClientManager.getInstance().getDefaultBlockState());
 
-	private int colorIndex = -1;
+    private int colorIndex = -1;
 
-	public ModelBaker addBlockModel(TextureAtlasSprite[] textures, int colorIndex) {
-		this.colorIndex = colorIndex;
+    public ModelBaker addBlockModel(TextureAtlasSprite[] textures, int colorIndex) {
+        this.colorIndex = colorIndex;
 
-		for (Direction facing : Direction.VALUES) {
-			addFace(facing, textures[facing.ordinal()]);
-		}
-		return this;
-	}
+        for (Direction facing : Direction.VALUES) {
+            addFace(facing, textures[facing.ordinal()]);
+        }
+        return this;
+    }
 
-	public ModelBaker addBlockModel(TextureAtlasSprite texture, int colorIndex) {
-		return addBlockModel(new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
-	}
+    public ModelBaker addBlockModel(TextureAtlasSprite texture, int colorIndex) {
+        return addBlockModel(new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
+    }
 
-	public ModelBaker addFace(Direction facing, TextureAtlasSprite sprite) {
-		if (sprite != ResourceUtil.getMissingTexture()) {
-			faces.add(new ModelBakerFace(facing, colorIndex, sprite));
-		}
-		return this;
-	}
+    public ModelBaker addFace(Direction facing, TextureAtlasSprite sprite) {
+        if (sprite != ResourceUtil.getMissingTexture()) {
+            faces.add(new ModelBakerFace(facing, colorIndex, sprite));
+        }
+        return this;
+    }
 
-	public ModelBakerModel bake(boolean flip) {
-		ModelRotation modelRotation = ModelRotation.X0_Y0;
+    public ModelBakerModel bake(boolean flip) {
+        ModelRotation modelRotation = ModelRotation.X0_Y0;
 
-		if (flip) {
-			modelRotation = ModelRotation.X0_Y180;
-		}
+        if (flip) {
+            modelRotation = ModelRotation.X0_Y180;
+        }
 
-		for (ModelBakerFace face : faces) {
-			Direction facing = face.face;
-			BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
-			BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
-			BakedQuad quad = FACE_BAKERY.bakeQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
+        for (ModelBakerFace face : faces) {
+            Direction facing = face.face;
+            BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
+            BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
+            BakedQuad quad = FACE_BAKERY.bakeQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
 
-			currentModel.addQuad(facing, quad);
-		}
+            currentModel.addQuad(facing, quad);
+        }
 
-		return currentModel;
-	}
+        return currentModel;
+    }
 
-	public void setParticleSprite(TextureAtlasSprite particleSprite) {
-		currentModel.setParticleSprite(particleSprite);
-	}
+    public void setParticleSprite(TextureAtlasSprite particleSprite) {
+        currentModel.setParticleSprite(particleSprite);
+    }
 }

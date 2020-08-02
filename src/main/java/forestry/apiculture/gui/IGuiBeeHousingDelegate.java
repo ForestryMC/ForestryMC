@@ -16,10 +16,10 @@ import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 
 public interface IGuiBeeHousingDelegate extends ITitled, IErrorLogicSource, IOwnedTile, IClimatised {
-	/**
-	 * Returns scaled queen health or breeding progress
-	 */
-	int getHealthScaled(int i);
+    /**
+     * Returns scaled queen health or breeding progress
+     */
+    int getHealthScaled(int i);
 
-	String getHintKey();
+    String getHintKey();
 }

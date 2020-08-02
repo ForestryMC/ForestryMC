@@ -25,43 +25,43 @@ import forestry.core.network.PacketBufferForestry;
 
 public class ItemForesterBook extends ItemWithGui {
 
-	public ItemForesterBook() {
-		super(new Item.Properties().group(ItemGroupForestry.tabForestry));
+    public ItemForesterBook() {
+        super(new Item.Properties().group(ItemGroupForestry.tabForestry));
 
-	}
+    }
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		bookOpenGui(playerIn, playerIn.getHeldItem(handIn));
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        bookOpenGui(playerIn, playerIn.getHeldItem(handIn));
 
-		ItemStack stack = playerIn.getHeldItem(handIn);
-		return ActionResult.resultSuccess(stack);
-	}
+        ItemStack stack = playerIn.getHeldItem(handIn);
+        return ActionResult.resultSuccess(stack);
+    }
 
-	@Override
-	protected void openGui(ServerPlayerEntity PlayerEntity, ItemStack stack) {
-		return;    //TODO hopefully use vanilla hacky method instead
-	}
+    @Override
+    protected void openGui(ServerPlayerEntity PlayerEntity, ItemStack stack) {
+        return;    //TODO hopefully use vanilla hacky method instead
+    }
 
-	@Override
-	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-	}
+    @Override
+    protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	private void bookOpenGui(PlayerEntity player, ItemStack stack) {
-		IForesterBook book = BookLoader.INSTANCE.loadBook();
-		GuiForesterBook guiScreen = GuiForesterBook.getGuiScreen();
-		if (guiScreen != null && guiScreen.getBook() != book) {
-			GuiForesterBook.setGuiScreen(null);
-			guiScreen = null;
-		}
-		GuiForesterBook bookGui = guiScreen != null ? guiScreen : new GuiForestryBookCategories(book);
-		Minecraft.getInstance().displayGuiScreen(bookGui);    //TODO does this work
-	}
+    @OnlyIn(Dist.CLIENT)
+    private void bookOpenGui(PlayerEntity player, ItemStack stack) {
+        IForesterBook book = BookLoader.INSTANCE.loadBook();
+        GuiForesterBook guiScreen = GuiForesterBook.getGuiScreen();
+        if (guiScreen != null && guiScreen.getBook() != book) {
+            GuiForesterBook.setGuiScreen(null);
+            guiScreen = null;
+        }
+        GuiForesterBook bookGui = guiScreen != null ? guiScreen : new GuiForestryBookCategories(book);
+        Minecraft.getInstance().displayGuiScreen(bookGui);    //TODO does this work
+    }
 
-	@Nullable
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return null;
-	}
+    @Nullable
+    @Override
+    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+        return null;
+    }
 }

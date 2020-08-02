@@ -11,9 +11,9 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import forestry.api.genetics.filter.IFilterLogic;
 
 public class GeneticCapabilities {
-	/**
-	 * Capability for {@link IFilterLogic}.
-	 */
-	@CapabilityInject(IFilterLogic.class)
-	public static Capability<IFilterLogic> FILTER_LOGIC;
+    /**
+     * Capability for {@link IFilterLogic}.
+     */
+    @CapabilityInject(IFilterLogic.class)
+    public static Capability<IFilterLogic> FILTER_LOGIC;
 }

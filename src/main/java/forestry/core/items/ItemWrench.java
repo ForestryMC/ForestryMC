@@ -33,39 +33,39 @@ import forestry.core.ItemGroupForestry;
 //@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = Constants.BCLIB_MOD_ID)
 public class ItemWrench extends ItemForestry {//implements IToolWrench {
 
-	public ItemWrench() {
-		super((new Item.Properties())
-			.addToolType(ToolType.get("wrench"), 0).group(ItemGroupForestry.tabForestry));
-	}
+    public ItemWrench() {
+        super((new Item.Properties())
+                .addToolType(ToolType.get("wrench"), 0).group(ItemGroupForestry.tabForestry));
+    }
 
-	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World worldIn = context.getWorld();
-		BlockPos pos = context.getPos();
-		PlayerEntity player = context.getPlayer();
-		if (player == null) {
-			return ActionResultType.FAIL;
-		}
-		Direction facing = context.getFace();
-		Hand hand = context.getHand();
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        World worldIn = context.getWorld();
+        BlockPos pos = context.getPos();
+        PlayerEntity player = context.getPlayer();
+        if (player == null) {
+            return ActionResultType.FAIL;
+        }
+        Direction facing = context.getFace();
+        Hand hand = context.getHand();
 
-		BlockState state = worldIn.getBlockState(pos);
-		Block block = state.getBlock();
-		BlockState rotatedState = block.rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
-		if (rotatedState != state) {    //TODO - how to rotate based on a direction, might need helper method
-			player.swingArm(hand);
-			worldIn.setBlockState(pos, rotatedState, 2);
-			return ActionResultType.SUCCESS;
-		}
-		return ActionResultType.FAIL;
-	}
+        BlockState state = worldIn.getBlockState(pos);
+        Block block = state.getBlock();
+        BlockState rotatedState = block.rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
+        if (rotatedState != state) {    //TODO - how to rotate based on a direction, might need helper method
+            player.swingArm(hand);
+            worldIn.setBlockState(pos, rotatedState, 2);
+            return ActionResultType.SUCCESS;
+        }
+        return ActionResultType.FAIL;
+    }
 
-	//	@Override
-	//	public boolean canWrench(PlayerEntity player, Hand hand, ItemStack wrench, RayTraceResult rayTrace) {
-	//		return true;
-	//	}
-	//
-	//	@Override
-	//	public void wrenchUsed(PlayerEntity player, Hand hand, ItemStack wrench, RayTraceResult rayTrace) {
-	//	}
+    //	@Override
+    //	public boolean canWrench(PlayerEntity player, Hand hand, ItemStack wrench, RayTraceResult rayTrace) {
+    //		return true;
+    //	}
+    //
+    //	@Override
+    //	public void wrenchUsed(PlayerEntity player, Hand hand, ItemStack wrench, RayTraceResult rayTrace) {
+    //	}
 }

@@ -14,10 +14,10 @@ import genetics.api.individual.IIndividual;
  */
 public interface IPollinatable extends ICheckPollinatable {
 
-	/**
-	 * Pollinates this entity.
-	 *
-	 * @param pollen IIndividual representing the pollen.
-	 */
-	void mateWith(IIndividual pollen);
+    /**
+     * Pollinates this entity.
+     *
+     * @param pollen IIndividual representing the pollen.
+     */
+    void mateWith(IIndividual pollen);
 }

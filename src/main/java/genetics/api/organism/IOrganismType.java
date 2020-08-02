@@ -10,9 +10,9 @@ import genetics.api.root.IIndividualRootBuilder;
  * {@link IIndividualRootBuilder} that handles the {@link IIndividual} to that this type belongs.
  */
 public interface IOrganismType {
-	String getName();
+    String getName();
 
-	default boolean isEmpty() {
-		return false;
-	}
+    default boolean isEmpty() {
+        return false;
+    }
 }

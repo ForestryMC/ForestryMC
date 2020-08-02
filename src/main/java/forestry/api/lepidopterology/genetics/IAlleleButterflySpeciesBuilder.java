@@ -14,31 +14,31 @@ import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 
 public interface IAlleleButterflySpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleButterflySpeciesBuilder> {
 
-	@Override
-	IAlleleButterflySpecies build();
+    @Override
+    IAlleleButterflySpecies build();
 
-	IAlleleButterflySpeciesBuilder setRarity(float rarity);
+    IAlleleButterflySpeciesBuilder setRarity(float rarity);
 
-	/**
-	 * @param texturePath String texture path for this butterfly e.g. "forestry:butterfly/..."
-	 */
-	IAlleleButterflySpeciesBuilder setTexture(String texturePath);
+    /**
+     * @param texturePath String texture path for this butterfly e.g. "forestry:butterfly/..."
+     */
+    IAlleleButterflySpeciesBuilder setTexture(String texturePath);
 
-	/**
-	 * @param serumColour The color of this butterfly's serum.
-	 */
-	IAlleleButterflySpeciesBuilder setSerumColour(int serumColour);
+    /**
+     * @param serumColour The color of this butterfly's serum.
+     */
+    IAlleleButterflySpeciesBuilder setSerumColour(int serumColour);
 
-	/**
-	 * @param serumColour The color of this butterfly's serum.
-	 */
-	IAlleleButterflySpeciesBuilder setSerumColour(Color serumColour);
+    /**
+     * @param serumColour The color of this butterfly's serum.
+     */
+    IAlleleButterflySpeciesBuilder setSerumColour(Color serumColour);
 
-	IAlleleButterflySpeciesBuilder setFlightDistance(float flightDistance);
+    IAlleleButterflySpeciesBuilder setFlightDistance(float flightDistance);
 
-	IAlleleButterflySpeciesBuilder setNocturnal();
+    IAlleleButterflySpeciesBuilder setNocturnal();
 
-	IAlleleButterflySpeciesBuilder addSpawnBiomes(Collection<BiomeDictionary.Type> biomeTags);
+    IAlleleButterflySpeciesBuilder addSpawnBiomes(Collection<BiomeDictionary.Type> biomeTags);
 
-	IAlleleButterflySpeciesBuilder addSpawnBiome(BiomeDictionary.Type biomeTag);
+    IAlleleButterflySpeciesBuilder addSpawnBiome(BiomeDictionary.Type biomeTag);
 }

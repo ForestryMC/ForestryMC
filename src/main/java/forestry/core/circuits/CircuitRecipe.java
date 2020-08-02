@@ -17,29 +17,29 @@ import forestry.api.circuits.ICircuitLayout;
 
 public class CircuitRecipe {
 
-	private final ICircuitLayout layout;
-	private final ItemStack resource;
-	private final ICircuit circuit;
+    private final ICircuitLayout layout;
+    private final ItemStack resource;
+    private final ICircuit circuit;
 
-	public CircuitRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
-		this.resource = resource;
-		this.layout = layout;
-		this.circuit = circuit;
-	}
+    public CircuitRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
+        this.resource = resource;
+        this.layout = layout;
+        this.circuit = circuit;
+    }
 
-	public boolean matches(ICircuitLayout layout, ItemStack itemstack) {
-		if (!this.layout.getUID().equals(layout.getUID())) {
-			return false;
-		}
+    public boolean matches(ICircuitLayout layout, ItemStack itemstack) {
+        if (!this.layout.getUID().equals(layout.getUID())) {
+            return false;
+        }
 
-		return itemstack.isItemEqual(resource);
-	}
+        return itemstack.isItemEqual(resource);
+    }
 
-	public ICircuit getCircuit() {
-		return circuit;
-	}
+    public ICircuit getCircuit() {
+        return circuit;
+    }
 
-	public ItemStack getResource() {
-		return resource;
-	}
+    public ItemStack getResource() {
+        return resource;
+    }
 }

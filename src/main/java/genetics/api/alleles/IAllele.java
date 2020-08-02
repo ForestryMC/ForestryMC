@@ -20,29 +20,29 @@ import genetics.api.individual.IIndividual;
  * if you want to create a {@link IAllele} that only represents a simple value object.
  */
 public interface IAllele extends IForgeRegistryEntry<IAllele> {
-	/**
-	 * @return true if the allele is dominant, false otherwise.
-	 */
-	boolean isDominant();
+    /**
+     * @return true if the allele is dominant, false otherwise.
+     */
+    boolean isDominant();
 
-	/**
-	 * @return Localized short, human-readable identifier used in tooltips and beealyzer.
-	 */
-	ITextComponent getDisplayName();
+    /**
+     * @return Localized short, human-readable identifier used in tooltips and beealyzer.
+     */
+    ITextComponent getDisplayName();
 
-	/**
-	 * @return The localisation identifier for this allele.
-	 */
-	String getLocalisationKey();
+    /**
+     * @return The localisation identifier for this allele.
+     */
+    String getLocalisationKey();
 
-	/**
-	 * @return The registry name
-	 */
-	@Nonnull
-	ResourceLocation getRegistryName();
+    /**
+     * @return The registry name
+     */
+    @Nonnull
+    ResourceLocation getRegistryName();
 
-	/**
-	 * @return The type that was used to deserialize this allele.
-	 */
-	IAlleleType getType();
+    /**
+     * @return The type that was used to deserialize this allele.
+     */
+    IAlleleType getType();
 }

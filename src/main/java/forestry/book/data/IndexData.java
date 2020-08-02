@@ -6,8 +6,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class IndexData {
-	/**
-	 * All entries of this index.
-	 */
-	public IndexEntry[] entries = new IndexEntry[0];
+    /**
+     * All entries of this index.
+     */
+    public IndexEntry[] entries = new IndexEntry[0];
 }

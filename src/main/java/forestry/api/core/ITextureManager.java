@@ -18,14 +18,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public interface ITextureManager {
 
-	/**
-	 * Location of the Forestry Gui Texture Map.
-	 * Used for binding with {@link TextureManager#bindTexture(ResourceLocation)}
-	 */
-	ResourceLocation getGuiTextureMap();
+    /**
+     * Location of the Forestry Gui Texture Map.
+     * Used for binding with {@link TextureManager#bindTexture(ResourceLocation)}
+     */
+    ResourceLocation getGuiTextureMap();
 
-	/**
-	 * Get a texture atlas sprite that has been registered by Forestry, for Forestry's Gui Texture Map.
-	 */
-	TextureAtlasSprite getDefault(String ident);
+    /**
+     * Get a texture atlas sprite that has been registered by Forestry, for Forestry's Gui Texture Map.
+     */
+    TextureAtlasSprite getDefault(String ident);
 }

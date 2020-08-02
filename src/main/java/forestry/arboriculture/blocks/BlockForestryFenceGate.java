@@ -25,47 +25,47 @@ import forestry.arboriculture.IWoodTyped;
 
 public class BlockForestryFenceGate extends FenceGateBlock implements IWoodTyped {
 
-	private final boolean fireproof;
-	private final IWoodType woodType;
+    private final boolean fireproof;
+    private final IWoodType woodType;
 
-	public BlockForestryFenceGate(boolean fireproof, IWoodType woodType) {
-		super(Block.Properties.create(Material.WOOD)
-			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD));
-		this.fireproof = fireproof;
-		this.woodType = woodType;
+    public BlockForestryFenceGate(boolean fireproof, IWoodType woodType) {
+        super(Block.Properties.create(Material.WOOD)
+                .hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+                .sound(SoundType.WOOD));
+        this.fireproof = fireproof;
+        this.woodType = woodType;
 
-		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
-	}
+        //		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
+    }
 
-	@Override
-	public boolean isFireproof() {
-		return fireproof;
-	}
+    @Override
+    public boolean isFireproof() {
+        return fireproof;
+    }
 
-	@Override
-	public IWoodType getWoodType() {
-		return woodType;
-	}
+    @Override
+    public IWoodType getWoodType() {
+        return woodType;
+    }
 
-	@Override
-	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-		if (fireproof) {
-			return 0;
-		}
-		return 20;
-	}
+    @Override
+    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+        if (fireproof) {
+            return 0;
+        }
+        return 20;
+    }
 
-	@Override
-	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-		if (fireproof) {
-			return 0;
-		}
-		return 5;
-	}
+    @Override
+    public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+        if (fireproof) {
+            return 0;
+        }
+        return 5;
+    }
 
-	@Override
-	public WoodBlockKind getBlockKind() {
-		return WoodBlockKind.FENCE_GATE;
-	}
+    @Override
+    public WoodBlockKind getBlockKind() {
+        return WoodBlockKind.FENCE_GATE;
+    }
 }

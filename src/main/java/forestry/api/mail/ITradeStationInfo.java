@@ -11,13 +11,13 @@ import net.minecraft.util.NonNullList;
 import com.mojang.authlib.GameProfile;
 
 public interface ITradeStationInfo {
-	IMailAddress getAddress();
+    IMailAddress getAddress();
 
-	GameProfile getOwner();
+    GameProfile getOwner();
 
-	ItemStack getTradegood();
+    ItemStack getTradegood();
 
-	NonNullList<ItemStack> getRequired();
+    NonNullList<ItemStack> getRequired();
 
-	EnumTradeStationState getState();
+    EnumTradeStationState getState();
 }

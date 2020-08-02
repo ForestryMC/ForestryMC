@@ -27,59 +27,59 @@ import forestry.api.apiculture.genetics.IBeeRoot;
  */
 public class BeeManager {
 
-	/**
-	 * Common Village Bees
-	 */
-	public static List<IGenome> commonVillageBees;
-	/**
-	 * Uncommon Village Bees (20 % of spawns)
-	 */
-	public static List<IGenome> uncommonVillageBees;
+    /**
+     * Common Village Bees
+     */
+    public static List<IGenome> commonVillageBees;
+    /**
+     * Uncommon Village Bees (20 % of spawns)
+     */
+    public static List<IGenome> uncommonVillageBees;
 
-	/**
-	 * List of items that can induce swarming. Integer denotes x in 1000 chance.
-	 */
-	public static final Map<ItemStack, Integer> inducers = new HashMap<>();
+    /**
+     * List of items that can induce swarming. Integer denotes x in 1000 chance.
+     */
+    public static final Map<ItemStack, Integer> inducers = new HashMap<>();
 
-	public static final IRootDefinition<IBeeRoot> beeRootDefinition = GeneticsAPI.apiInstance.getRoot("rootBees");
+    public static final IRootDefinition<IBeeRoot> beeRootDefinition = GeneticsAPI.apiInstance.getRoot("rootBees");
 
-	/**
-	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")
-	 *
-	 * @implNote Only null if the "apiculture" module is not enabled.
-	 */
-	//TODO: Move most calls to definition (more save)
-	public static IBeeRoot beeRoot;
+    /**
+     * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")
+     *
+     * @implNote Only null if the "apiculture" module is not enabled.
+     */
+    //TODO: Move most calls to definition (more save)
+    public static IBeeRoot beeRoot;
 
-	/**
-	 * Used to create new bees.
-	 *
-	 * @implNote Only null if the "apiculture" module is not enabled.
-	 */
-	@Nullable
-	public static IBeeFactory beeFactory;
+    /**
+     * Used to create new bees.
+     *
+     * @implNote Only null if the "apiculture" module is not enabled.
+     */
+    @Nullable
+    public static IBeeFactory beeFactory;
 
-	/**
-	 * Used to create new bee mutations.
-	 *
-	 * @implNote Only null if the "apiculture" module is not enabled.
-	 */
-	@Nullable
-	public static IBeeMutationFactory beeMutationFactory;
+    /**
+     * Used to create new bee mutations.
+     *
+     * @implNote Only null if the "apiculture" module is not enabled.
+     */
+    @Nullable
+    public static IBeeMutationFactory beeMutationFactory;
 
-	/**
-	 * Used to get Forestry's jubilance implementations.
-	 *
-	 * @implNote Only null if the "apiculture" module is not enabled.
-	 */
-	@Nullable
-	public static IJubilanceFactory jubilanceFactory;
+    /**
+     * Used to get Forestry's jubilance implementations.
+     *
+     * @implNote Only null if the "apiculture" module is not enabled.
+     */
+    @Nullable
+    public static IJubilanceFactory jubilanceFactory;
 
-	/**
-	 * Used to check whether a player is wearing Apiarist Armor.
-	 *
-	 * @implNote Only null if the "apiculture" module is not enabled.
-	 */
-	@Nullable
-	public static IArmorApiaristHelper armorApiaristHelper;
+    /**
+     * Used to check whether a player is wearing Apiarist Armor.
+     *
+     * @implNote Only null if the "apiculture" module is not enabled.
+     */
+    @Nullable
+    public static IArmorApiaristHelper armorApiaristHelper;
 }

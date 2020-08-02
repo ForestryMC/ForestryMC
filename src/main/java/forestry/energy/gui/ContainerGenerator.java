@@ -23,22 +23,22 @@ import forestry.energy.tiles.TileEuGenerator;
 
 public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 
-	//TODO dedupe
-	public static ContainerGenerator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEuGenerator tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEuGenerator.class);
-		return new ContainerGenerator(windowId, inv, tile);
-	}
+    //TODO dedupe
+    public static ContainerGenerator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+        TileEuGenerator tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEuGenerator.class);
+        return new ContainerGenerator(windowId, inv, tile);
+    }
 
-	public ContainerGenerator(int windowId, PlayerInventory player, TileEuGenerator tile) {
-		super(windowId, EnergyContainers.GENERATOR.containerType(), player, tile, 8, 84);
+    public ContainerGenerator(int windowId, PlayerInventory player, TileEuGenerator tile) {
+        super(windowId, EnergyContainers.GENERATOR.containerType(), player, tile, 8, 84);
 
-		this.addSlot(new SlotLiquidIn(tile, InventoryGenerator.SLOT_CAN, 22, 38));
-	}
+        this.addSlot(new SlotLiquidIn(tile, InventoryGenerator.SLOT_CAN, 22, 38));
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToListeners(packet);
-	}
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+        sendPacketToListeners(packet);
+    }
 }

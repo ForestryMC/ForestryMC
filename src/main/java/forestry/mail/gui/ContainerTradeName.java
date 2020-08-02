@@ -22,30 +22,30 @@ import forestry.mail.tiles.TileTrader;
 
 public class ContainerTradeName extends ContainerTile<TileTrader> {
 
-	public static ContainerTradeName fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileTrader tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileTrader.class);
-		return new ContainerTradeName(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerTradeName fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileTrader tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileTrader.class);
+        return new ContainerTradeName(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerTradeName(int windowId, PlayerInventory inv, TileTrader tile) {
-		super(windowId, MailContainers.TRADE_NAME.containerType(), tile);
-	}
+    public ContainerTradeName(int windowId, PlayerInventory inv, TileTrader tile) {
+        super(windowId, MailContainers.TRADE_NAME.containerType(), tile);
+    }
 
-	public IMailAddress getAddress() {
-		return tile.getAddress();
-	}
+    public IMailAddress getAddress() {
+        return tile.getAddress();
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		if (tile.isLinked()) {
-			for (Object crafter : listeners) {
-				if (crafter instanceof ServerPlayerEntity) {
-					ServerPlayerEntity player = (ServerPlayerEntity) crafter;
-					tile.openGui(player, tile.getPos());    //TODO correct pos?
-				}
-			}
-		}
-	}
+        if (tile.isLinked()) {
+            for (Object crafter : listeners) {
+                if (crafter instanceof ServerPlayerEntity) {
+                    ServerPlayerEntity player = (ServerPlayerEntity) crafter;
+                    tile.openGui(player, tile.getPos());    //TODO correct pos?
+                }
+            }
+        }
+    }
 }

@@ -9,6 +9,6 @@ import net.minecraft.item.ItemStack;
 
 public interface ISolderManager {
 
-	void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit);
+    void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit);
 
 }

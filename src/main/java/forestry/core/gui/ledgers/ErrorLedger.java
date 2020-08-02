@@ -27,63 +27,63 @@ import forestry.core.utils.Translator;
  */
 public class ErrorLedger extends Ledger {
 
-	@Nullable
-	private IErrorState state;
+    @Nullable
+    private IErrorState state;
 
-	public ErrorLedger(LedgerManager manager) {
-		super(manager, "error", false);
-		maxHeight = 72;
-	}
+    public ErrorLedger(LedgerManager manager) {
+        super(manager, "error", false);
+        maxHeight = 72;
+    }
 
-	public void setState(@Nullable IErrorState state) {
-		this.state = state;
-		if (state != null) {
-			//TODO - textcomponent
-			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), new TranslationTextComponent(state.getUnlocalizedHelp()));
-			maxHeight = lineHeight + 20;
-		}
-	}
+    public void setState(@Nullable IErrorState state) {
+        this.state = state;
+        if (state != null) {
+            //TODO - textcomponent
+            int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), new TranslationTextComponent(state.getUnlocalizedHelp()));
+            maxHeight = lineHeight + 20;
+        }
+    }
 
-	@Override
-	public void draw(MatrixStack transform, int y, int x) {
-		if (state == null) {
-			return;
-		}
+    @Override
+    public void draw(MatrixStack transform, int y, int x) {
+        if (state == null) {
+            return;
+        }
 
-		// Draw background
-		drawBackground(transform, y, x);
-		y += 4;
+        // Draw background
+        drawBackground(transform, y, x);
+        y += 4;
 
-		int xIcon = x + 5;
-		int xBody = x + 14;
-		int xHeader = x + 24;
+        int xIcon = x + 5;
+        int xBody = x + 14;
+        int xHeader = x + 24;
 
-		// Draw sprite
-		drawSprite(transform, state.getSprite(), xIcon, y);
-		y += 4;
+        // Draw sprite
+        drawSprite(transform, state.getSprite(), xIcon, y);
+        y += 4;
 
-		// Write description if fully opened
-		if (isFullyOpened()) {
-			//TODO textcomponent
-			y += drawHeader(transform, getTooltip().getString(), xHeader, y);
-			y += 4;
+        // Write description if fully opened
+        if (isFullyOpened()) {
+            //TODO textcomponent
+            y += drawHeader(transform, getTooltip().getString(), xHeader, y);
+            y += 4;
 
-			String helpString = Translator.translateToLocal(state.getUnlocalizedHelp());
-			drawSplitText(transform, helpString, xBody, y, maxTextWidth);
-		}
-	}
+            String helpString = Translator.translateToLocal(state.getUnlocalizedHelp());
+            drawSplitText(transform, helpString, xBody, y, maxTextWidth);
+        }
+    }
 
-	@Override
-	public boolean isVisible() {
-		return state != null;
-	}
+    @Override
+    public boolean isVisible() {
+        return state != null;
+    }
 
-	@Override
-	public ITextComponent getTooltip() {
-		if (state == null) {
-			return new StringTextComponent("");
-		}
-		return new TranslationTextComponent(state.getUnlocalizedDescription());
-	}
+    @Override
+    public ITextComponent getTooltip() {
+        if (state == null) {
+            return new StringTextComponent("");
+        }
+        return new TranslationTextComponent(state.getUnlocalizedDescription());
+    }
 
 }

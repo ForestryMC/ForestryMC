@@ -11,30 +11,30 @@ import net.minecraft.item.ItemStack;
  */
 public interface IFarmableInfo {
 
-	/***
-	 * @return The identifier of the IFarmable.
-	 */
-	String getIdentifier();
+    /***
+     * @return The identifier of the IFarmable.
+     */
+    String getIdentifier();
 
-	default void addSeedlings(ItemStack... seedlings) {
-		addSeedlings(Arrays.asList(seedlings));
-	}
+    default void addSeedlings(ItemStack... seedlings) {
+        addSeedlings(Arrays.asList(seedlings));
+    }
 
-	void addSeedlings(Collection<ItemStack> seedlings);
+    void addSeedlings(Collection<ItemStack> seedlings);
 
-	/**
-	 * @return a collection that contains all valid seedlings of a farmable.
-	 */
-	Collection<ItemStack> getSeedlings();
+    /**
+     * @return a collection that contains all valid seedlings of a farmable.
+     */
+    Collection<ItemStack> getSeedlings();
 
-	default void addProducts(ItemStack... products) {
-		addProducts(Arrays.asList(products));
-	}
+    default void addProducts(ItemStack... products) {
+        addProducts(Arrays.asList(products));
+    }
 
-	void addProducts(Collection<ItemStack> products);
+    void addProducts(Collection<ItemStack> products);
 
-	/**
-	 * @return a collection that contains all possible products of a farmable.
-	 */
-	Collection<ItemStack> getProducts();
+    /**
+     * @return a collection that contains all possible products of a farmable.
+     */
+    Collection<ItemStack> getProducts();
 }

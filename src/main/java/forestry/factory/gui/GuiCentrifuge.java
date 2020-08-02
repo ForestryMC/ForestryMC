@@ -21,27 +21,27 @@ import forestry.core.gui.widgets.SocketWidget;
 import forestry.factory.tiles.TileCentrifuge;
 
 public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge> {
-	private final TileCentrifuge tile;
+    private final TileCentrifuge tile;
 
-	public GuiCentrifuge(ContainerCentrifuge container, PlayerInventory inventory, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket2.png", container, inventory, title);
-		this.tile = container.getTile();
-		widgetManager.add(new SocketWidget(this.widgetManager, 79, 37, tile, 0));
-	}
+    public GuiCentrifuge(ContainerCentrifuge container, PlayerInventory inventory, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket2.png", container, inventory, title);
+        this.tile = container.getTile();
+        widgetManager.add(new SocketWidget(this.widgetManager, 79, 37, tile, 0));
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		int progress = tile.getProgressScaled(16);
-		blit(transform, guiLeft + 43, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
-		blit(transform, guiLeft + 67, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
-	}
+        int progress = tile.getProgressScaled(16);
+        blit(transform, guiLeft + 43, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
+        blit(transform, guiLeft + 67, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
+    }
 
-	@Override
-	protected void addLedgers() {
-		addErrorLedger(tile);
-		addHintLedger("centrifuge");
-		addPowerLedger(tile.getEnergyManager());
-	}
+    @Override
+    protected void addLedgers() {
+        addErrorLedger(tile);
+        addHintLedger("centrifuge");
+        addPowerLedger(tile.getEnergyManager());
+    }
 }

@@ -37,48 +37,48 @@ import forestry.api.modules.IModuleManager;
  */
 public class ForestryAPI {
 
-	/**
-	 * The main mod instance for Forestry.
-	 */
-	public static Object instance;
+    /**
+     * The main mod instance for Forestry.
+     */
+    public static Object instance;
 
-	/**
-	 * A {@link ITextureManager} needed for some things in the API.
-	 */
-	@OnlyIn(Dist.CLIENT)
-	public static ITextureManager textureManager;
+    /**
+     * A {@link ITextureManager} needed for some things in the API.
+     */
+    @OnlyIn(Dist.CLIENT)
+    public static ITextureManager textureManager;
 
-	/**
-	 * Instance of the module manager of forestry.
-	 * This can be used to register {@link IModuleContainer}s in the constructor of your mod.
-	 */
-	public static IModuleManager moduleManager;
+    /**
+     * Instance of the module manager of forestry.
+     * This can be used to register {@link IModuleContainer}s in the constructor of your mod.
+     */
+    public static IModuleManager moduleManager;
 
-	/**
-	 * A registry for register fertilizers, {@link IFarmable}s.
-	 */
-	public static IFarmRegistry farmRegistry;
+    /**
+     * A registry for register fertilizers, {@link IFarmable}s.
+     */
+    public static IFarmRegistry farmRegistry;
 
-	/**
-	 * The currently active {@link IGameMode}.
-	 */
-	public static IGameMode activeMode;
+    /**
+     * The currently active {@link IGameMode}.
+     */
+    public static IGameMode activeMode;
 
-	/**
-	 * Provides information on certain Forestry constants (Villager IDs, Chest gen keys, etc)
-	 */
-	public static IForestryConstants forestryConstants;
+    /**
+     * Provides information on certain Forestry constants (Villager IDs, Chest gen keys, etc)
+     */
+    public static IForestryConstants forestryConstants;
 
-	/**
-	 * The currently enabled Forestry modules.
-	 * Can be used to check if certain features are available, for example:
-	 * ForestryAPI.enabledModules.contains(new ResourceLocation("forestry", "apiculture"))
-	 */
-	public static Set<ResourceLocation> enabledModules;
+    /**
+     * The currently enabled Forestry modules.
+     * Can be used to check if certain features are available, for example:
+     * ForestryAPI.enabledModules.contains(new ResourceLocation("forestry", "apiculture"))
+     */
+    public static Set<ResourceLocation> enabledModules;
 
-	/**
-	 * Instance of the errorStateRegistry for registering errors.
-	 * Also creates new instances of IErrorLogic.
-	 */
-	public static IErrorStateRegistry errorStateRegistry;
+    /**
+     * Instance of the errorStateRegistry for registering errors.
+     * Also creates new instances of IErrorLogic.
+     */
+    public static IErrorStateRegistry errorStateRegistry;
 }

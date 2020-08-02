@@ -10,22 +10,22 @@ import forestry.database.features.DatabaseTiles;
 import forestry.modules.features.FeatureTileType;
 
 public enum BlockTypeDatabase implements IBlockTypeCustom {
-	DATABASE(() -> DatabaseTiles.DATABASE, "database");
-	public static final BlockTypeDatabase[] VALUES = values();
+    DATABASE(() -> DatabaseTiles.DATABASE, "database");
+    public static final BlockTypeDatabase[] VALUES = values();
 
-	private final IMachineProperties machineProperties;
+    private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeDatabase(Supplier<FeatureTileType<? extends T>> teClass, String name) {
-		this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
-	}
+    <T extends TileForestry> BlockTypeDatabase(Supplier<FeatureTileType<? extends T>> teClass, String name) {
+        this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
+    }
 
-	@Override
-	public IMachineProperties getMachineProperties() {
-		return machineProperties;
-	}
+    @Override
+    public IMachineProperties getMachineProperties() {
+        return machineProperties;
+    }
 
-	@Override
-	public String getString() {
-		return getMachineProperties().getString();
-	}
+    @Override
+    public String getString() {
+        return getMachineProperties().getString();
+    }
 }

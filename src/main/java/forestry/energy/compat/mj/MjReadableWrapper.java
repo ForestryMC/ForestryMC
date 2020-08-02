@@ -9,17 +9,17 @@ import forestry.energy.EnergyManager;
 //@Optional.Interface(iface = "buildcraft.api.mj.IMjReadable", modid = Constants.BCLIB_MOD_ID)
 public class MjReadableWrapper extends MjConnectorWrapper {//implements IMjReadable {
 
-	public MjReadableWrapper(EnergyManager energyManager) {
-		super(energyManager);
-	}
+    public MjReadableWrapper(EnergyManager energyManager) {
+        super(energyManager);
+    }
 
-	//	@Override
-	//	public long getStored() {
-	//		return MjHelper.rfToMicro(energyManager.getEnergyStored());
-	//	}
-	//
-	//	@Override
-	//	public long getCapacity() {
-	//		return MjHelper.rfToMicro(energyManager.getMaxEnergyStored());
-	//	}
+    //	@Override
+    //	public long getStored() {
+    //		return MjHelper.rfToMicro(energyManager.getEnergyStored());
+    //	}
+    //
+    //	@Override
+    //	public long getCapacity() {
+    //		return MjHelper.rfToMicro(energyManager.getMaxEnergyStored());
+    //	}
 }

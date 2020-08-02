@@ -16,27 +16,27 @@ import net.minecraft.util.NonNullList;
  */
 public interface IDescriptiveRecipe {
 
-	/**
-	 * @return width of the crafting ingredients in the crafting table
-	 */
-	int getWidth();
+    /**
+     * @return width of the crafting ingredients in the crafting table
+     */
+    int getWidth();
 
-	/**
-	 * @return height of the crafting ingredients in the crafting table
-	 */
-	int getHeight();
+    /**
+     * @return height of the crafting ingredients in the crafting table
+     */
+    int getHeight();
 
-	/**
-	 * @return array of all the ingredients in the crafting table.
-	 * Each inner list represents one slot's accepted ItemStacks
-	 */
-	NonNullList<NonNullList<ItemStack>> getRawIngredients();
+    /**
+     * @return array of all the ingredients in the crafting table.
+     * Each inner list represents one slot's accepted ItemStacks
+     */
+    NonNullList<NonNullList<ItemStack>> getRawIngredients();
 
-	//TODO replace with tags
-	NonNullList<String> getOreDicts();
+    //TODO replace with tags
+    NonNullList<String> getOreDicts();
 
-	/**
-	 * Must not be named the same as {@link IRecipe#getRecipeOutput()} to avoid obfuscation for recipes that implement both.
-	 */
-	ItemStack getOutput();
+    /**
+     * Must not be named the same as {@link IRecipe#getRecipeOutput()} to avoid obfuscation for recipes that implement both.
+     */
+    ItemStack getOutput();
 }

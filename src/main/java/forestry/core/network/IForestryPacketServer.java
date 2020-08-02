@@ -11,6 +11,6 @@
 package forestry.core.network;
 
 public interface IForestryPacketServer extends IForestryPacket {
-	@Override
-	PacketIdServer getPacketId();
+    @Override
+    PacketIdServer getPacketId();
 }

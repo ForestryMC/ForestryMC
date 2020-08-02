@@ -26,55 +26,55 @@ import genetics.api.root.components.ComponentKey;
  */
 public interface IMutation {
 
-	/**
-	 * @return {@link IIndividualRoot} this mutation is associated with.
-	 */
-	IIndividualRoot getRoot();
+    /**
+     * @return {@link IIndividualRoot} this mutation is associated with.
+     */
+    IIndividualRoot getRoot();
 
-	/**
-	 * @return first of the alleles implementing IAlleleSpecies required for this mutation.
-	 */
-	IAlleleSpecies getFirstParent();
+    /**
+     * @return first of the alleles implementing IAlleleSpecies required for this mutation.
+     */
+    IAlleleSpecies getFirstParent();
 
-	/**
-	 * @return second of the alleles implementing IAlleleSpecies required for this mutation.
-	 */
-	IAlleleSpecies getSecondParent();
+    /**
+     * @return second of the alleles implementing IAlleleSpecies required for this mutation.
+     */
+    IAlleleSpecies getSecondParent();
 
-	/**
-	 * @return the allele implementing IAlleleSpecies the resulted of this mutation.
-	 */
-	IAlleleSpecies getResultingSpecies();
+    /**
+     * @return the allele implementing IAlleleSpecies the resulted of this mutation.
+     */
+    IAlleleSpecies getResultingSpecies();
 
-	/**
-	 * @return Array of {@link IAllele} representing the full default genome of the mutated side.
-	 * <p>
-	 * Make sure to return a proper array for the species class. Returning an allele of the wrong type will cause cast errors on runtime.
-	 */
-	IAllele[] getTemplate();
+    /**
+     * @return Array of {@link IAllele} representing the full default genome of the mutated side.
+     * <p>
+     * Make sure to return a proper array for the species class. Returning an allele of the wrong type will cause cast errors on runtime.
+     */
+    IAllele[] getTemplate();
 
-	/**
-	 * @return Unmodified base chance for mutation to fire.
-	 */
-	float getBaseChance();
+    /**
+     * @return Unmodified base chance for mutation to fire.
+     */
+    float getBaseChance();
 
-	/**
-	 * @return Collection of localized, human-readable strings describing special mutation conditions, if any.
-	 */
-	Collection<ITextComponent> getSpecialConditions();
+    /**
+     * @return Collection of localized, human-readable strings describing special mutation conditions, if any.
+     */
+    Collection<ITextComponent> getSpecialConditions();
 
-	/**
-	 * @return true if the passed allele is one of the alleles participating in this mutation.
-	 */
-	boolean isPartner(IAllele allele);
+    /**
+     * @return true if the passed allele is one of the alleles participating in this mutation.
+     */
+    boolean isPartner(IAllele allele);
 
-	/**
-	 * @return the other allele which was not passed as argument.
-	 */
-	IAllele getPartner(IAllele allele);
+    /**
+     * @return the other allele which was not passed as argument.
+     */
+    IAllele getPartner(IAllele allele);
 
-	/**
-	 * @return true if the mutation should not be displayed in a gui that displays all mutations.
-	 */
-	boolean isSecret();
+    /**
+     * @return true if the mutation should not be displayed in a gui that displays all mutations.
+     */
+    boolean isSecret();
 }

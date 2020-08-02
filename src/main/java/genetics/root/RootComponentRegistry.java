@@ -12,25 +12,25 @@ import genetics.api.root.components.IRootComponentRegistry;
 import genetics.organism.OrganismTypes;
 
 public enum RootComponentRegistry implements IRootComponentRegistry {
-	INSTANCE;
+    INSTANCE;
 
-	private final Map<ComponentKey, IRootComponentFactory> factoryByKey = new HashMap<>();
+    private final Map<ComponentKey, IRootComponentFactory> factoryByKey = new HashMap<>();
 
-	RootComponentRegistry() {
-		registerFactory(ComponentKeys.TEMPLATES, TemplateContainer::new);
-		registerFactory(ComponentKeys.TYPES, OrganismTypes::new);
-		registerFactory(ComponentKeys.TRANSLATORS, IndividualTranslator::new);
-		registerFactory(ComponentKeys.MUTATIONS, MutationContainer::new);
-	}
+    RootComponentRegistry() {
+        registerFactory(ComponentKeys.TEMPLATES, TemplateContainer::new);
+        registerFactory(ComponentKeys.TYPES, OrganismTypes::new);
+        registerFactory(ComponentKeys.TRANSLATORS, IndividualTranslator::new);
+        registerFactory(ComponentKeys.MUTATIONS, MutationContainer::new);
+    }
 
-	@Override
-	public void registerFactory(ComponentKey key, IRootComponentFactory factory) {
-		factoryByKey.put(key, factory);
-	}
+    @Override
+    public void registerFactory(ComponentKey key, IRootComponentFactory factory) {
+        factoryByKey.put(key, factory);
+    }
 
-	@Nullable
-	@Override
-	public IRootComponentFactory getFactory(ComponentKey key) {
-		return factoryByKey.get(key);
-	}
+    @Nullable
+    @Override
+    public IRootComponentFactory getFactory(ComponentKey key) {
+        return factoryByKey.get(key);
+    }
 }

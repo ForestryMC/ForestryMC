@@ -10,51 +10,50 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
+import forestry.api.genetics.flowers.IFlowerGrowthHelper;
+import forestry.api.genetics.flowers.IFlowerGrowthRule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.api.genetics.flowers.IFlowerGrowthHelper;
-import forestry.api.genetics.flowers.IFlowerGrowthRule;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class GrowthRuleFertilize implements IFlowerGrowthRule {
 
-	private final List<Block> allowedItems;
+    private final List<Block> allowedItems;
 
-	public GrowthRuleFertilize(Block... allowedItems) {
-		this.allowedItems = Arrays.asList(allowedItems);
-	}
+    public GrowthRuleFertilize(Block... allowedItems) {
+        this.allowedItems = Arrays.asList(allowedItems);
+    }
 
-	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
-		return growFlower(world, pos);
-	}
+    @Override
+    public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+        return growFlower(world, pos);
+    }
 
-	private boolean growFlower(ServerWorld world, BlockPos pos) {
-		if (!world.isBlockLoaded(pos)) {
-			return false;
-		}
+    private boolean growFlower(ServerWorld world, BlockPos pos) {
+        if (!world.isBlockLoaded(pos)) {
+            return false;
+        }
 
-		BlockState state = world.getBlockState(pos);
-		Block ground = state.getBlock();
-		for (Block b : this.allowedItems) {
-			if (b == ground && b instanceof IGrowable) {
-				IGrowable growable = (IGrowable) b;
-				if (growable.canGrow(world, pos, state, false)) {//TODO what to put for isClient
-					for (int i = 0; i < world.rand.nextInt(2) + 1; i++) {
-						growable.grow(world, world.rand, pos, state);
-					}
-				}
-			}
-		}
+        BlockState state = world.getBlockState(pos);
+        Block ground = state.getBlock();
+        for (Block b : this.allowedItems) {
+            if (b == ground && b instanceof IGrowable) {
+                IGrowable growable = (IGrowable) b;
+                if (growable.canGrow(world, pos, state, false)) {//TODO what to put for isClient
+                    for (int i = 0; i < world.rand.nextInt(2) + 1; i++) {
+                        growable.grow(world, world.rand, pos, state);
+                    }
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

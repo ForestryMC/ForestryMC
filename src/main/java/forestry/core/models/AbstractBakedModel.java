@@ -30,54 +30,54 @@ import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractBakedModel implements IBakedModel {
-	@Nullable
-	protected ItemOverrideList overrideList;
+    @Nullable
+    protected ItemOverrideList overrideList;
 
-	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+        return Collections.emptyList();
+    }
 
-	protected ItemOverrideList createOverrides() {
-		return ItemOverrideList.EMPTY;
-	}
+    protected ItemOverrideList createOverrides() {
+        return ItemOverrideList.EMPTY;
+    }
 
-	@Override
-	public ItemOverrideList getOverrides() {
-		if (overrideList == null) {
-			overrideList = createOverrides();
-		}
-		return overrideList;
-	}
+    @Override
+    public ItemOverrideList getOverrides() {
+        if (overrideList == null) {
+            overrideList = createOverrides();
+        }
+        return overrideList;
+    }
 
-	@Override
-	public boolean isAmbientOcclusion() {
-		return true;
-	}
+    @Override
+    public boolean isAmbientOcclusion() {
+        return true;
+    }
 
-	@Override
-	public boolean isGui3d() {
-		return true;
-	}
+    @Override
+    public boolean isGui3d() {
+        return true;
+    }
 
-	@Override
-	public boolean func_230044_c_() {
-		return false;
-	}
+    @Override
+    public boolean func_230044_c_() {
+        return false;
+    }
 
-	@Override
-	public boolean isBuiltInRenderer() {
-		return false;
-	}
+    @Override
+    public boolean isBuiltInRenderer() {
+        return false;
+    }
 
-	@Override
-	public TextureAtlasSprite getParticleTexture() {
-		return ResourceUtil.getMissingTexture();
-	}
+    @Override
+    public TextureAtlasSprite getParticleTexture() {
+        return ResourceUtil.getMissingTexture();
+    }
 
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
-		return ItemCameraTransforms.DEFAULT;
-	}
+    @Override
+    public ItemCameraTransforms getItemCameraTransforms() {
+        return ItemCameraTransforms.DEFAULT;
+    }
 
 }

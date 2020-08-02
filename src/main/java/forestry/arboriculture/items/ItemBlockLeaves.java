@@ -28,51 +28,51 @@ import forestry.core.utils.Translator;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 
-	public ItemBlockLeaves(BlockAbstractLeaves block) {
-		super(block);
-	}
+    public ItemBlockLeaves(BlockAbstractLeaves block) {
+        super(block);
+    }
 
-	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
-		if (!itemstack.hasTag()) {
-			return new TranslationTextComponent("trees.grammar.leaves.type");
-		}
+    @Override
+    public ITextComponent getDisplayName(ItemStack itemstack) {
+        if (!itemstack.hasTag()) {
+            return new TranslationTextComponent("trees.grammar.leaves.type");
+        }
 
-		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.read(tileLeaves.getBlockState(), itemstack.getTag());
+        TileLeaves tileLeaves = new TileLeaves();
+        tileLeaves.read(tileLeaves.getBlockState(), itemstack.getTag());
 
-		String unlocalizedName = tileLeaves.getUnlocalizedName();
-		return getDisplayName(unlocalizedName);
-	}
+        String unlocalizedName = tileLeaves.getUnlocalizedName();
+        return getDisplayName(unlocalizedName);
+    }
 
-	public static ITextComponent getDisplayName(String unlocalizedSpeciesName) {
-		String customTreeKey = "for.trees.custom.leaves." + unlocalizedSpeciesName.replace("for.trees.species.", "");
-		if (Translator.canTranslateToLocal(customTreeKey)) {
-			return new TranslationTextComponent(customTreeKey);
-		}
+    public static ITextComponent getDisplayName(String unlocalizedSpeciesName) {
+        String customTreeKey = "for.trees.custom.leaves." + unlocalizedSpeciesName.replace("for.trees.species.", "");
+        if (Translator.canTranslateToLocal(customTreeKey)) {
+            return new TranslationTextComponent(customTreeKey);
+        }
 
-		ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
+        ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
 
-		ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
-		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
-	}
+        ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
+        return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
-		if (itemStack.getTag() == null) {
-			return ModuleArboriculture.proxy.getFoliageColorDefault();
-		}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
+        if (itemStack.getTag() == null) {
+            return ModuleArboriculture.proxy.getFoliageColorDefault();
+        }
 
-		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.read(tileLeaves.getBlockState(), itemStack.getTag());
+        TileLeaves tileLeaves = new TileLeaves();
+        tileLeaves.read(tileLeaves.getBlockState(), itemStack.getTag());
 
-		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
-			return tileLeaves.getFruitColour();
-		} else {
-			PlayerEntity player = Minecraft.getInstance().player;
-			return tileLeaves.getFoliageColour(player);
-		}
-	}
+        if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
+            return tileLeaves.getFruitColour();
+        } else {
+            PlayerEntity player = Minecraft.getInstance().player;
+            return tileLeaves.getFoliageColour(player);
+        }
+    }
 
 }

@@ -19,13 +19,13 @@ import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicMushroom extends FarmLogicArboreal {
 
-	public FarmLogicMushroom(IFarmProperties properties, boolean isManual) {
-		super(properties, isManual);
-	}
+    public FarmLogicMushroom(IFarmProperties properties, boolean isManual) {
+        super(properties, isManual);
+    }
 
-	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
-		return NonNullList.create();//Needed to override Arboreal #collect
-	}
+    @Override
+    public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+        return NonNullList.create();//Needed to override Arboreal #collect
+    }
 
 }

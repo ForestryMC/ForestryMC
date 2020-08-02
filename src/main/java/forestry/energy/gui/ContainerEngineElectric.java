@@ -23,23 +23,23 @@ import forestry.energy.tiles.TileEngineElectric;
 
 public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectric> {
 
-	//TODO dedupe
-	public static ContainerEngineElectric fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEngineElectric tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineElectric.class);
-		return new ContainerEngineElectric(windowId, inv, tile);
-	}
+    //TODO dedupe
+    public static ContainerEngineElectric fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+        TileEngineElectric tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineElectric.class);
+        return new ContainerEngineElectric(windowId, inv, tile);
+    }
 
-	public ContainerEngineElectric(int windowId, PlayerInventory player, TileEngineElectric tile) {
-		super(windowId, EnergyContainers.ENGINE_ELECTRIC.containerType(), player, tile, 8, 84);
+    public ContainerEngineElectric(int windowId, PlayerInventory player, TileEngineElectric tile) {
+        super(windowId, EnergyContainers.ENGINE_ELECTRIC.containerType(), player, tile, 8, 84);
 
-		this.addSlot(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
-	}
+        this.addSlot(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToListeners(packet);
-	}
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+        sendPacketToListeners(packet);
+    }
 
 }

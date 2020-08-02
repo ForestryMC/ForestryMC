@@ -22,26 +22,26 @@ import forestry.apiculture.features.ApicultureItems;
 import forestry.core.config.Config;
 
 public class BeeAlyzerPlugin implements IAlyzerPlugin {
-	public static final BeeAlyzerPlugin INSTANCE = new BeeAlyzerPlugin();
+    public static final BeeAlyzerPlugin INSTANCE = new BeeAlyzerPlugin();
 
-	protected final Map<ResourceLocation, ItemStack> iconStacks = new HashMap<>();
+    protected final Map<ResourceLocation, ItemStack> iconStacks = new HashMap<>();
 
-	private BeeAlyzerPlugin() {
-		NonNullList<ItemStack> beeList = NonNullList.create();
-		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
-		for (ItemStack beeStack : beeList) {
-			IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
-			if (organism.isEmpty()) {
-				continue;
-			}
-			IAlleleBeeSpecies species = organism.getAllele(BeeChromosomes.SPECIES, true);
-			iconStacks.put(species.getRegistryName(), beeStack);
-		}
-	}
+    private BeeAlyzerPlugin() {
+        NonNullList<ItemStack> beeList = NonNullList.create();
+        ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
+        for (ItemStack beeStack : beeList) {
+            IOrganism<?> organism = GeneticHelper.getOrganism(beeStack);
+            if (organism.isEmpty()) {
+                continue;
+            }
+            IAlleleBeeSpecies species = organism.getAllele(BeeChromosomes.SPECIES, true);
+            iconStacks.put(species.getRegistryName(), beeStack);
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawAnalyticsPage1(Screen gui, ItemStack itemStack) {
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawAnalyticsPage1(Screen gui, ItemStack itemStack) {
 		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
@@ -97,11 +97,11 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.endPage();
 		}*/
-	}
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawAnalyticsPage2(Screen gui, ItemStack itemStack) {
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawAnalyticsPage2(Screen gui, ItemStack itemStack) {
 		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
@@ -216,11 +216,11 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.endPage();
 		}*/
-	}
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawAnalyticsPage3(Screen gui, ItemStack itemStack) {
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawAnalyticsPage3(Screen gui, ItemStack itemStack) {
 		/*if (gui instanceof GuiAlyzer) {
 			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
@@ -270,16 +270,16 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.endPage();
 		}*/
-	}
+    }
 
-	@Override
-	public Map<ResourceLocation, ItemStack> getIconStacks() {
-		return iconStacks;
-	}
+    @Override
+    public Map<ResourceLocation, ItemStack> getIconStacks() {
+        return iconStacks;
+    }
 
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("beealyzer");
-	}
+    @Override
+    public List<String> getHints() {
+        return Config.hints.get("beealyzer");
+    }
 
 }

@@ -16,25 +16,25 @@ import net.minecraft.util.Direction;
 
 public class InventoryAdapterTile<T extends TileEntity> extends InventoryAdapterRestricted {
 
-	protected final T tile;
+    protected final T tile;
 
-	public InventoryAdapterTile(T tile, int size, String name) {
-		this(tile, size, name, 64);
-	}
+    public InventoryAdapterTile(T tile, int size, String name) {
+        this(tile, size, name, 64);
+    }
 
-	public InventoryAdapterTile(T tile, int size, String name, int stackLimit) {
-		super(size, name, stackLimit);
-		this.tile = tile;
-	}
+    public InventoryAdapterTile(T tile, int size, String name, int stackLimit) {
+        super(size, name, stackLimit);
+        this.tile = tile;
+    }
 
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		tile.markDirty();
-	}
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        tile.markDirty();
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
-		return false;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+        return false;
+    }
 }

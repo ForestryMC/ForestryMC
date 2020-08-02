@@ -15,17 +15,17 @@ import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 
 public class ModelButterflyLoader implements IModelLoader<ModelButterflyItem.Geometry> {
 
-	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
-	}
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+    }
 
-	@Override
-	public ModelButterflyItem.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-		ImmutableMap.Builder<String, String> subModels = new ImmutableMap.Builder<>();
-		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (butterfly) -> {
-			ResourceLocation registryName = butterfly.getRegistryName();
-			subModels.put(registryName.getPath(), butterfly.getItemTexture().toString());
-		});
-		return new ModelButterflyItem.Geometry(subModels.build());
-	}
+    @Override
+    public ModelButterflyItem.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+        ImmutableMap.Builder<String, String> subModels = new ImmutableMap.Builder<>();
+        AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (butterfly) -> {
+            ResourceLocation registryName = butterfly.getRegistryName();
+            subModels.put(registryName.getPath(), butterfly.getItemTexture().toString());
+        });
+        return new ModelButterflyItem.Geometry(subModels.build());
+    }
 }

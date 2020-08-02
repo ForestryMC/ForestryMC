@@ -11,10 +11,10 @@ import java.util.Locale;
  * This enum contains the two climate types that forestry uses.
  */
 public enum ClimateType {
-	TEMPERATURE, HUMIDITY;
+    TEMPERATURE, HUMIDITY;
 
-	public String getName() {
-		return name().toLowerCase(Locale.ENGLISH);
-	}
+    public String getName() {
+        return name().toLowerCase(Locale.ENGLISH);
+    }
 
 }

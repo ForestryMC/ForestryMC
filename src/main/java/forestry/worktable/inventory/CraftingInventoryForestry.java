@@ -17,26 +17,26 @@ import forestry.core.gui.ContainerDummy;
 import forestry.worktable.gui.ContainerWorktable;
 
 public class CraftingInventoryForestry extends CraftingInventory {
-	private final Container eventHandlerIn;
+    private final Container eventHandlerIn;
 
-	public CraftingInventoryForestry(ContainerWorktable containerWorktable) {
-		this(containerWorktable, 3, 3);
-	}
+    public CraftingInventoryForestry(ContainerWorktable containerWorktable) {
+        this(containerWorktable, 3, 3);
+    }
 
-	public CraftingInventoryForestry() {
-		this(ContainerDummy.instance, 3, 3);
-	}
+    public CraftingInventoryForestry() {
+        this(ContainerDummy.instance, 3, 3);
+    }
 
-	private CraftingInventoryForestry(Container eventHandlerIn, int width, int height) {
-		super(eventHandlerIn, width, height);
-		this.eventHandlerIn = eventHandlerIn;
-	}
+    private CraftingInventoryForestry(Container eventHandlerIn, int width, int height) {
+        super(eventHandlerIn, width, height);
+        this.eventHandlerIn = eventHandlerIn;
+    }
 
-	public CraftingInventoryForestry copy() {
-		CraftingInventoryForestry copy = new CraftingInventoryForestry(this.eventHandlerIn, getWidth(), getHeight());
-		for (int slot = 0; slot < getSizeInventory(); slot++) {
-			copy.setInventorySlotContents(slot, getStackInSlot(slot).copy());
-		}
-		return copy;
-	}
+    public CraftingInventoryForestry copy() {
+        CraftingInventoryForestry copy = new CraftingInventoryForestry(this.eventHandlerIn, getWidth(), getHeight());
+        for (int slot = 0; slot < getSizeInventory(); slot++) {
+            copy.setInventorySlotContents(slot, getStackInSlot(slot).copy());
+        }
+        return copy;
+    }
 }

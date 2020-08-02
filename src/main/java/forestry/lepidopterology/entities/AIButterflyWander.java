@@ -14,28 +14,28 @@ import java.util.EnumSet;
 
 public class AIButterflyWander extends AIButterflyMovement {
 
-	public AIButterflyWander(EntityButterfly entity) {
-		super(entity);
-		setMutexFlags(EnumSet.of(Flag.MOVE));
-		//		setMutexBits(1);	TODO mutex
-	}
+    public AIButterflyWander(EntityButterfly entity) {
+        super(entity);
+        setMutexFlags(EnumSet.of(Flag.MOVE));
+        //		setMutexBits(1);	TODO mutex
+    }
 
-	@Override
-	public boolean shouldExecute() {
-		if (entity.getDestination() != null) {
-			return false;
-		}
+    @Override
+    public boolean shouldExecute() {
+        if (entity.getDestination() != null) {
+            return false;
+        }
 
-		flightTarget = getRandomDestination();
-		if (flightTarget == null) {
-			if (entity.getState().doesMovement) {
-				entity.setState(EnumButterflyState.HOVER);
-			}
-			return false;
-		}
+        flightTarget = getRandomDestination();
+        if (flightTarget == null) {
+            if (entity.getState().doesMovement) {
+                entity.setState(EnumButterflyState.HOVER);
+            }
+            return false;
+        }
 
-		entity.setDestination(flightTarget);
-		entity.setState(EnumButterflyState.FLYING);
-		return true;
-	}
+        entity.setDestination(flightTarget);
+        entity.setState(EnumButterflyState.FLYING);
+        return true;
+    }
 }

@@ -57,273 +57,273 @@ import forestry.core.utils.Translator;
 
 public class ItemResearchNote extends ItemForestry {
 
-	private static final String NBT_ALLELE_FIRST = "AL0";
-	private static final String NBT_ALLELE_SECOND = "AL1";
-	private static final String NBT_ALLELE_RESULT = "RST";
-	private static final String NBT_ROOT = "ROT";
+    private static final String NBT_ALLELE_FIRST = "AL0";
+    private static final String NBT_ALLELE_SECOND = "AL1";
+    private static final String NBT_ALLELE_RESULT = "RST";
+    private static final String NBT_ROOT = "ROT";
 
-	private static final String NBT_RESEARCHER = "RES";
-	private static final String NBT_TYPE = "TYP";
-	private static final String NBT_INNER = "INN";
+    private static final String NBT_RESEARCHER = "RES";
+    private static final String NBT_TYPE = "TYP";
+    private static final String NBT_INNER = "INN";
 
-	public enum EnumNoteType {
-		NONE, MUTATION, SPECIES;
+    public enum EnumNoteType {
+        NONE, MUTATION, SPECIES;
 
-		public static final EnumNoteType[] VALUES = values();
+        public static final EnumNoteType[] VALUES = values();
 
-		@Nullable
-		private static IMutation getEncodedMutation(IIndividualRoot<IIndividual> root, CompoundNBT compound) {
-			IAllele allele0 = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_FIRST));
-			IAllele allele1 = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_SECOND));
-			if (allele0 == null || allele1 == null) {
-				return null;
-			}
+        @Nullable
+        private static IMutation getEncodedMutation(IIndividualRoot<IIndividual> root, CompoundNBT compound) {
+            IAllele allele0 = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_FIRST));
+            IAllele allele1 = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_SECOND));
+            if (allele0 == null || allele1 == null) {
+                return null;
+            }
 
-			IAllele result = null;
-			if (compound.contains(NBT_ALLELE_RESULT)) {
-				result = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_RESULT));
-			}
+            IAllele result = null;
+            if (compound.contains(NBT_ALLELE_RESULT)) {
+                result = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_RESULT));
+            }
 
-			IMutation encoded = null;
-			IMutationContainer<IIndividual, IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
-			for (IMutation mutation : container.getCombinations(allele0)) {
-				if (mutation.isPartner(allele1)) {
-					if (result == null
-						|| mutation.getTemplate()[0].getRegistryName().equals(result.getRegistryName())) {
-						encoded = mutation;
-						break;
-					}
-				}
-			}
+            IMutation encoded = null;
+            IMutationContainer<IIndividual, IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
+            for (IMutation mutation : container.getCombinations(allele0)) {
+                if (mutation.isPartner(allele1)) {
+                    if (result == null
+                            || mutation.getTemplate()[0].getRegistryName().equals(result.getRegistryName())) {
+                        encoded = mutation;
+                        break;
+                    }
+                }
+            }
 
-			return encoded;
-		}
+            return encoded;
+        }
 
-		public List<ITextComponent> getTooltip(CompoundNBT compound) {
-			List<ITextComponent> tooltips = new ArrayList<>();
+        public List<ITextComponent> getTooltip(CompoundNBT compound) {
+            List<ITextComponent> tooltips = new ArrayList<>();
 
-			if (this == NONE) {
-				return tooltips;
-			}
+            if (this == NONE) {
+                return tooltips;
+            }
 
-			if (this == MUTATION) {
-				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
-				if (!definition.isPresent()) {
-					return tooltips;
-				}
-				IIndividualRoot<IIndividual> root = definition.get();
+            if (this == MUTATION) {
+                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
+                if (!definition.isPresent()) {
+                    return tooltips;
+                }
+                IIndividualRoot<IIndividual> root = definition.get();
 
-				IMutation encoded = getEncodedMutation(root, compound);
-				if (encoded == null) {
-					return tooltips;
-				}
+                IMutation encoded = getEncodedMutation(root, compound);
+                if (encoded == null) {
+                    return tooltips;
+                }
 
-				ITextComponent species1 = encoded.getFirstParent().getDisplayName();
-				ITextComponent species2 = encoded.getSecondParent().getDisplayName();
-				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
-				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
-				ITextComponent speciesResult = encoded.getResultingSpecies().getDisplayName();
+                ITextComponent species1 = encoded.getFirstParent().getDisplayName();
+                ITextComponent species2 = encoded.getSecondParent().getDisplayName();
+                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
+                String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
+                ITextComponent speciesResult = encoded.getResultingSpecies().getDisplayName();
 
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.2", mutationChance));
-				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.3", speciesResult));
+                tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
+                tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));
+                tooltips.add(new TranslationTextComponent("for.researchNote.discovery.2", mutationChance));
+                tooltips.add(new TranslationTextComponent("for.researchNote.discovery.3", speciesResult));
 
-				if (!encoded.getSpecialConditions().isEmpty()) {
-					for (ITextComponent line : encoded.getSpecialConditions()) {
-						tooltips.add(((IFormattableTextComponent) line).mergeStyle(TextFormatting.GOLD));
-					}
-				}
-			} else if (this == SPECIES) {
-				IAlleleForestrySpecies alleleFirst = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_FIRST));
-				if (alleleFirst == null) {
-					return tooltips;
-				}
-				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(NBT_ROOT));
-				definition.ifPresent(root -> {
-					tooltips.add(new TranslationTextComponent("researchNote.discovered.0"));
-					tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", alleleFirst.getDisplayName(), alleleFirst.getBinomial()));
-				});
-			}
+                if (!encoded.getSpecialConditions().isEmpty()) {
+                    for (ITextComponent line : encoded.getSpecialConditions()) {
+                        tooltips.add(((IFormattableTextComponent) line).mergeStyle(TextFormatting.GOLD));
+                    }
+                }
+            } else if (this == SPECIES) {
+                IAlleleForestrySpecies alleleFirst = AlleleUtils.getAlleleOrNull(compound.getString(NBT_ALLELE_FIRST));
+                if (alleleFirst == null) {
+                    return tooltips;
+                }
+                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(NBT_ROOT));
+                definition.ifPresent(root -> {
+                    tooltips.add(new TranslationTextComponent("researchNote.discovered.0"));
+                    tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", alleleFirst.getDisplayName(), alleleFirst.getBinomial()));
+                });
+            }
 
-			return tooltips;
-		}
+            return tooltips;
+        }
 
-		public boolean registerResults(World world, PlayerEntity player, CompoundNBT compound) {
-			if (this == NONE) {
-				return false;
-			}
+        public boolean registerResults(World world, PlayerEntity player, CompoundNBT compound) {
+            if (this == NONE) {
+                return false;
+            }
 
-			if (this == MUTATION) {
-				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
-				if (!definition.isPresent()) {
-					return false;
-				}
-				IIndividualRoot<IIndividual> root = definition.get();
+            if (this == MUTATION) {
+                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
+                if (!definition.isPresent()) {
+                    return false;
+                }
+                IIndividualRoot<IIndividual> root = definition.get();
 
-				IMutation encoded = getEncodedMutation(root, compound);
-				if (encoded == null) {
-					return false;
-				}
+                IMutation encoded = getEncodedMutation(root, compound);
+                if (encoded == null) {
+                    return false;
+                }
 
-				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
-				if (tracker.isResearched(encoded)) {
-					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"), Util.DUMMY_UUID);
-					return false;
-				}
+                IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
+                if (tracker.isResearched(encoded)) {
+                    player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"), Util.DUMMY_UUID);
+                    return false;
+                }
 
-				IAlleleSpecies speciesFirst = encoded.getFirstParent();
-				IAlleleSpecies speciesSecond = encoded.getSecondParent();
-				IAlleleSpecies speciesResult = encoded.getResultingSpecies();
+                IAlleleSpecies speciesFirst = encoded.getFirstParent();
+                IAlleleSpecies speciesSecond = encoded.getSecondParent();
+                IAlleleSpecies speciesResult = encoded.getResultingSpecies();
 
-				tracker.registerSpecies(speciesFirst);
-				tracker.registerSpecies(speciesSecond);
-				tracker.registerSpecies(speciesResult);
+                tracker.registerSpecies(speciesFirst);
+                tracker.registerSpecies(speciesSecond);
+                tracker.registerSpecies(speciesResult);
 
-				tracker.researchMutation(encoded);
-				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.DUMMY_UUID);
+                tracker.researchMutation(encoded);
+                player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.DUMMY_UUID);
 
-				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
-					((IFormattableTextComponent) speciesFirst.getDisplayName()).mergeStyle(TextFormatting.GRAY),
-					((IFormattableTextComponent) speciesSecond.getDisplayName()).mergeStyle(TextFormatting.GRAY),
-					((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)), Util.DUMMY_UUID);
+                player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
+                        ((IFormattableTextComponent) speciesFirst.getDisplayName()).mergeStyle(TextFormatting.GRAY),
+                        ((IFormattableTextComponent) speciesSecond.getDisplayName()).mergeStyle(TextFormatting.GRAY),
+                        ((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)), Util.DUMMY_UUID);
 
-				return true;
-			}
+                return true;
+            }
 
-			return false;
+            return false;
 
-		}
+        }
 
-		public static ResearchNote createMutationNote(GameProfile researcher, IMutation mutation) {
-			CompoundNBT compound = new CompoundNBT();
-			compound.putString(NBT_ROOT, mutation.getRoot().getUID());
-			compound.putString(NBT_ALLELE_FIRST, mutation.getFirstParent().getRegistryName().toString());
-			compound.putString(NBT_ALLELE_SECOND, mutation.getSecondParent().getRegistryName().toString());
-			compound.putString(NBT_ALLELE_RESULT, mutation.getResultingSpecies().getRegistryName().toString());
-			return new ResearchNote(researcher, MUTATION, compound);
-		}
+        public static ResearchNote createMutationNote(GameProfile researcher, IMutation mutation) {
+            CompoundNBT compound = new CompoundNBT();
+            compound.putString(NBT_ROOT, mutation.getRoot().getUID());
+            compound.putString(NBT_ALLELE_FIRST, mutation.getFirstParent().getRegistryName().toString());
+            compound.putString(NBT_ALLELE_SECOND, mutation.getSecondParent().getRegistryName().toString());
+            compound.putString(NBT_ALLELE_RESULT, mutation.getResultingSpecies().getRegistryName().toString());
+            return new ResearchNote(researcher, MUTATION, compound);
+        }
 
-		public static ItemStack createMutationNoteStack(Item item, GameProfile researcher, IMutation mutation) {
-			ResearchNote note = createMutationNote(researcher, mutation);
-			CompoundNBT compound = new CompoundNBT();
-			note.writeToNBT(compound);
-			ItemStack created = new ItemStack(item);
-			created.setTag(compound);
-			return created;
-		}
+        public static ItemStack createMutationNoteStack(Item item, GameProfile researcher, IMutation mutation) {
+            ResearchNote note = createMutationNote(researcher, mutation);
+            CompoundNBT compound = new CompoundNBT();
+            note.writeToNBT(compound);
+            ItemStack created = new ItemStack(item);
+            created.setTag(compound);
+            return created;
+        }
 
-		public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleForestrySpecies species) {
-			CompoundNBT compound = new CompoundNBT();
-			compound.putString(NBT_ROOT, species.getRoot().getUID());
-			compound.putString(NBT_ALLELE_FIRST, species.getRegistryName().toString());
-			return new ResearchNote(researcher, SPECIES, compound);
-		}
+        public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleForestrySpecies species) {
+            CompoundNBT compound = new CompoundNBT();
+            compound.putString(NBT_ROOT, species.getRoot().getUID());
+            compound.putString(NBT_ALLELE_FIRST, species.getRegistryName().toString());
+            return new ResearchNote(researcher, SPECIES, compound);
+        }
 
-		public static ItemStack createSpeciesNoteStack(Item item, GameProfile researcher, IAlleleForestrySpecies species) {
-			ResearchNote note = createSpeciesNote(researcher, species);
-			CompoundNBT compound = new CompoundNBT();
-			note.writeToNBT(compound);
-			ItemStack created = new ItemStack(item);
-			created.setTag(compound);
-			return created;
-		}
+        public static ItemStack createSpeciesNoteStack(Item item, GameProfile researcher, IAlleleForestrySpecies species) {
+            ResearchNote note = createSpeciesNote(researcher, species);
+            CompoundNBT compound = new CompoundNBT();
+            note.writeToNBT(compound);
+            ItemStack created = new ItemStack(item);
+            created.setTag(compound);
+            return created;
+        }
 
-	}
+    }
 
-	public static class ResearchNote {
-		@Nullable
-		private final GameProfile researcher;
-		private final EnumNoteType type;
-		private final CompoundNBT inner;
+    public static class ResearchNote {
+        @Nullable
+        private final GameProfile researcher;
+        private final EnumNoteType type;
+        private final CompoundNBT inner;
 
-		public ResearchNote(GameProfile researcher, EnumNoteType type, CompoundNBT inner) {
-			this.researcher = researcher;
-			this.type = type;
-			this.inner = inner;
-		}
+        public ResearchNote(GameProfile researcher, EnumNoteType type, CompoundNBT inner) {
+            this.researcher = researcher;
+            this.type = type;
+            this.inner = inner;
+        }
 
-		public ResearchNote(@Nullable CompoundNBT compound) {
-			if (compound != null) {
-				if (compound.contains(NBT_RESEARCHER)) {
-					this.researcher = NBTUtil.readGameProfile(compound.getCompound(NBT_RESEARCHER));
-				} else {
-					this.researcher = null;
-				}
-				this.type = EnumNoteType.VALUES[compound.getByte(NBT_TYPE)];
-				this.inner = compound.getCompound(NBT_INNER);
-			} else {
-				this.type = EnumNoteType.NONE;
-				this.researcher = null;
-				this.inner = new CompoundNBT();
-			}
-		}
+        public ResearchNote(@Nullable CompoundNBT compound) {
+            if (compound != null) {
+                if (compound.contains(NBT_RESEARCHER)) {
+                    this.researcher = NBTUtil.readGameProfile(compound.getCompound(NBT_RESEARCHER));
+                } else {
+                    this.researcher = null;
+                }
+                this.type = EnumNoteType.VALUES[compound.getByte(NBT_TYPE)];
+                this.inner = compound.getCompound(NBT_INNER);
+            } else {
+                this.type = EnumNoteType.NONE;
+                this.researcher = null;
+                this.inner = new CompoundNBT();
+            }
+        }
 
-		public CompoundNBT writeToNBT(CompoundNBT compound) {
-			if (this.researcher != null) {
-				CompoundNBT nbt = new CompoundNBT();
-				NBTUtil.writeGameProfile(nbt, researcher);
-				compound.put(NBT_RESEARCHER, nbt);
-			}
-			compound.putByte(NBT_TYPE, (byte) type.ordinal());
-			compound.put(NBT_INNER, inner);
-			return compound;
-		}
+        public CompoundNBT writeToNBT(CompoundNBT compound) {
+            if (this.researcher != null) {
+                CompoundNBT nbt = new CompoundNBT();
+                NBTUtil.writeGameProfile(nbt, researcher);
+                compound.put(NBT_RESEARCHER, nbt);
+            }
+            compound.putByte(NBT_TYPE, (byte) type.ordinal());
+            compound.put(NBT_INNER, inner);
+            return compound;
+        }
 
-		public void addTooltip(List<ITextComponent> list) {
-			List<ITextComponent> tooltips = type.getTooltip(inner);
-			if (tooltips.isEmpty()) {
-				list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(TextFormatting.RED, TextFormatting.ITALIC));
-				list.add(new TranslationTextComponent("for.researchNote.error.1"));
-				return;
-			}
+        public void addTooltip(List<ITextComponent> list) {
+            List<ITextComponent> tooltips = type.getTooltip(inner);
+            if (tooltips.isEmpty()) {
+                list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(TextFormatting.RED, TextFormatting.ITALIC));
+                list.add(new TranslationTextComponent("for.researchNote.error.1"));
+                return;
+            }
 
-			list.addAll(tooltips);
-		}
+            list.addAll(tooltips);
+        }
 
-		public boolean registerResults(World world, PlayerEntity player) {
-			return type.registerResults(world, player, inner);
-		}
-	}
+        public boolean registerResults(World world, PlayerEntity player) {
+            return type.registerResults(world, player, inner);
+        }
+    }
 
-	public ItemResearchNote() {
-		super((new Item.Properties()).group(null));
-	}
+    public ItemResearchNote() {
+        super((new Item.Properties()).group(null));
+    }
 
-	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
-		ResearchNote note = new ResearchNote(itemstack.getTag());
-		String researcherName;
-		if (note.researcher == null) {
-			researcherName = "Sengir";
-		} else {
-			researcherName = note.researcher.getName();
-		}
-		return new TranslationTextComponent(getTranslationKey(itemstack), researcherName);
-	}
+    @Override
+    public ITextComponent getDisplayName(ItemStack itemstack) {
+        ResearchNote note = new ResearchNote(itemstack.getTag());
+        String researcherName;
+        if (note.researcher == null) {
+            researcherName = "Sengir";
+        } else {
+            researcherName = note.researcher.getName();
+        }
+        return new TranslationTextComponent(getTranslationKey(itemstack), researcherName);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
-		ResearchNote note = new ResearchNote(itemstack.getTag());
-		note.addTooltip(list);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+        super.addInformation(itemstack, world, list, flag);
+        ResearchNote note = new ResearchNote(itemstack.getTag());
+        note.addTooltip(list);
+    }
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack heldItem = playerIn.getHeldItem(handIn);
-		if (worldIn.isRemote) {
-			return ActionResult.resultPass(heldItem);
-		}
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack heldItem = playerIn.getHeldItem(handIn);
+        if (worldIn.isRemote) {
+            return ActionResult.resultPass(heldItem);
+        }
 
-		ResearchNote note = new ResearchNote(heldItem.getTag());
-		if (note.registerResults(worldIn, playerIn)) {
-			playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
-			// Notify player that his inventory has changed.
-			NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);    //TODO not sure this is right
-		}
+        ResearchNote note = new ResearchNote(heldItem.getTag());
+        if (note.registerResults(worldIn, playerIn)) {
+            playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
+            // Notify player that his inventory has changed.
+            NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);    //TODO not sure this is right
+        }
 
-		return ActionResult.resultSuccess(heldItem);
-	}
+        return ActionResult.resultSuccess(heldItem);
+    }
 }

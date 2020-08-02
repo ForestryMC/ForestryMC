@@ -62,44 +62,44 @@ import forestry.modules.ModuleHelper;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
 
-	@SuppressWarnings("NullableProblems")
-	public static ProxyFarming proxy;
+    @SuppressWarnings("NullableProblems")
+    public static ProxyFarming proxy;
 
-	public ModuleFarming() {
-		proxy = DistExecutor.runForDist(() -> ProxyFarmingClient::new, () -> ProxyFarming::new);
-	}
+    public ModuleFarming() {
+        proxy = DistExecutor.runForDist(() -> ProxyFarmingClient::new, () -> ProxyFarming::new);
+    }
 
 
-	@Override
-	public void setupAPI() {
-		ForestryAPI.farmRegistry = FarmRegistry.getInstance();
-	}
+    @Override
+    public void setupAPI() {
+        ForestryAPI.farmRegistry = FarmRegistry.getInstance();
+    }
 
-	@Override
-	public void disabledSetupAPI() {
-		ForestryAPI.farmRegistry = new DummyFarmRegistry();
-	}
+    @Override
+    public void disabledSetupAPI() {
+        ForestryAPI.farmRegistry = new DummyFarmRegistry();
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerGuiFactories() {
-		ScreenManager.registerFactory(FarmingContainers.FARM.containerType(), GuiFarm::new);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerGuiFactories() {
+        ScreenManager.registerFactory(FarmingContainers.FARM.containerType(), GuiFarm::new);
+    }
 
-	@Override
-	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(this);
-		IFarmRegistry registry = ForestryAPI.farmRegistry;
-		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
-		}
+    @Override
+    public void preInit() {
+        MinecraftForge.EVENT_BUS.register(this);
+        IFarmRegistry registry = ForestryAPI.farmRegistry;
+        registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
+        if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+            registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
+        }
 
-		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-			new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
+        registry.registerFarmables(ForestryFarmIdentifier.CROPS,
+                new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
+                new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
+                new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
+                new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
 
 		/*BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
@@ -107,59 +107,59 @@ public class ModuleFarming extends BlankForestryModule {
 		BlockState plantedRedMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));*/
 
-		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
-		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON));
+        registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
+        registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON));
 
-		registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3));
+        registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3));
 
-		registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3));
+        registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3));
 
-		registry.registerFarmables(ForestryFarmIdentifier.SUCCULENTES, new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
+        registry.registerFarmables(ForestryFarmIdentifier.SUCCULENTES, new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
-		registry.registerFarmables(ForestryFarmIdentifier.ENDER, FarmableChorus.INSTANCE);
+        registry.registerFarmables(ForestryFarmIdentifier.ENDER, FarmableChorus.INSTANCE);
 
-		//Forestry fertilizer
-		//TODO - tags
-		registry.registerFertilizer(CoreItems.FERTILIZER_COMPOUND.stack(), 500);
+        //Forestry fertilizer
+        //TODO - tags
+        registry.registerFertilizer(CoreItems.FERTILIZER_COMPOUND.stack(), 500);
 
-		// Layouts
-		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed", CircuitSocketType.FARM);
-		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
-		ICircuitLayout layoutManual = new CircuitLayout("farms.manual", CircuitSocketType.FARM);
-		ChipsetManager.circuitRegistry.registerLayout(layoutManual);
-	}
+        // Layouts
+        ICircuitLayout layoutManaged = new CircuitLayout("farms.managed", CircuitSocketType.FARM);
+        ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
+        ICircuitLayout layoutManual = new CircuitLayout("farms.manual", CircuitSocketType.FARM);
+        ChipsetManager.circuitRegistry.registerLayout(layoutManual);
+    }
 
-	@Override
-	public void registerTriggers() {
-		FarmingTriggers.initialize();
-	}
+    @Override
+    public void registerTriggers() {
+        FarmingTriggers.initialize();
+    }
 
-	@Override
-	public void doInit() {
+    @Override
+    public void doInit() {
 
-		//Load config
-		File configFile = new File(Forestry.instance.getConfigFolder(), Config.CATEGORY_FARM + ".cfg");
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
-		FarmRegistry.getInstance().loadConfig(config);
-		config.save();
+        //Load config
+        File configFile = new File(Forestry.instance.getConfigFolder(), Config.CATEGORY_FARM + ".cfg");
+        LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+        FarmRegistry.getInstance().loadConfig(config);
+        config.save();
 
-		FarmDefinition.init();
-	}
+        FarmDefinition.init();
+    }
 
-	@Override
-	public void registerRecipes() {
-		FarmDefinition.registerCircuits();
-	}
+    @Override
+    public void registerRecipes() {
+        FarmDefinition.registerCircuits();
+    }
 
-	@Override
-	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		// mushrooms are a workaround for the farm and should not be obtainable
-		//		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
-		//TODO - tag
-	}
+    @Override
+    public void getHiddenItems(List<ItemStack> hiddenItems) {
+        // mushrooms are a workaround for the farm and should not be obtainable
+        //		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
+        //TODO - tag
+    }
 
-	@Override
-	public ISidedModuleHandler getModuleHandler() {
-		return proxy;
-	}
+    @Override
+    public ISidedModuleHandler getModuleHandler() {
+        return proxy;
+    }
 }

@@ -22,15 +22,15 @@ import forestry.worktable.network.packets.PacketWorktableRecipeRequest;
 import forestry.worktable.network.packets.PacketWorktableRecipeUpdate;
 
 public class PacketRegistryWorktable implements IPacketRegistry {
-	@Override
-	public void registerPacketsServer() {
-		PacketIdServer.WORKTABLE_RECIPE_REQUEST.setPacketHandler(new PacketWorktableRecipeRequest.Handler());
-	}
+    @Override
+    public void registerPacketsServer() {
+        PacketIdServer.WORKTABLE_RECIPE_REQUEST.setPacketHandler(new PacketWorktableRecipeRequest.Handler());
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerPacketsClient() {
-		PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate.Handler());
-		PacketIdClient.WORKTABLE_CRAFTING_UPDATE.setPacketHandler(new PacketWorktableRecipeUpdate.Handler());
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerPacketsClient() {
+        PacketIdClient.WORKTABLE_MEMORY_UPDATE.setPacketHandler(new PacketWorktableMemoryUpdate.Handler());
+        PacketIdClient.WORKTABLE_CRAFTING_UPDATE.setPacketHandler(new PacketWorktableRecipeUpdate.Handler());
+    }
 }

@@ -13,17 +13,17 @@ import genetics.api.root.IIndividualRootBuilder;
  * @see IIndividualRootBuilder
  */
 public interface IRootComponentRegistry {
-	/**
-	 * Registers a default factory.
-	 *
-	 * @param key     The component key of the component builder that the factory creates.
-	 * @param factory A factory that creates a component builder object.
-	 */
-	<I extends IIndividual, C extends IRootComponent<I>> void registerFactory(ComponentKey<C> key, IRootComponentFactory<I, C> factory);
+    /**
+     * Registers a default factory.
+     *
+     * @param key     The component key of the component builder that the factory creates.
+     * @param factory A factory that creates a component builder object.
+     */
+    <I extends IIndividual, C extends IRootComponent<I>> void registerFactory(ComponentKey<C> key, IRootComponentFactory<I, C> factory);
 
-	/**
-	 * @return A factory if one was registered, false otherwise.
-	 */
-	@Nullable
-	IRootComponentFactory getFactory(ComponentKey key);
+    /**
+     * @return A factory if one was registered, false otherwise.
+     */
+    @Nullable
+    IRootComponentFactory getFactory(ComponentKey key);
 }

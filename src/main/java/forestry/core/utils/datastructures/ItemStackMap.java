@@ -20,47 +20,47 @@ import net.minecraft.util.ResourceLocation;
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
-	private static final long serialVersionUID = -8511966739130702305L;
+    private static final long serialVersionUID = -8511966739130702305L;
 
-	@Override
-	protected boolean areEqual(ItemStack a, Object b) {
-		if (b instanceof ItemStack) {
-			ItemStack b2 = (ItemStack) b;
-			return ItemStackUtil.isCraftingEquivalent(b2, a);
-		}
-		if (b instanceof Item) {
-			return a.getItem() == b;
-		}
-		if (b instanceof String) {
-			return areEqual(a, new ResourceLocation((String) b));
-		}
-		if (b instanceof ResourceLocation) {
-			TagCollection<Item> collection = ItemTags.getCollection();
-			ITag<Item> itemTag = collection.get((ResourceLocation) b);
-			if (itemTag == null) {
-				return false;
-			}
-			for (Item item : itemTag.getAllElements()) {
-				if (areEqual(a, item)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		return false;
-	}
+    @Override
+    protected boolean areEqual(ItemStack a, Object b) {
+        if (b instanceof ItemStack) {
+            ItemStack b2 = (ItemStack) b;
+            return ItemStackUtil.isCraftingEquivalent(b2, a);
+        }
+        if (b instanceof Item) {
+            return a.getItem() == b;
+        }
+        if (b instanceof String) {
+            return areEqual(a, new ResourceLocation((String) b));
+        }
+        if (b instanceof ResourceLocation) {
+            TagCollection<Item> collection = ItemTags.getCollection();
+            ITag<Item> itemTag = collection.get((ResourceLocation) b);
+            if (itemTag == null) {
+                return false;
+            }
+            for (Item item : itemTag.getAllElements()) {
+                if (areEqual(a, item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
 
-	@Override
-	protected boolean isValidKey(Object key) {
-		return key instanceof ItemStack || key instanceof Item || key instanceof String || key instanceof ResourceLocation;
-	}
+    @Override
+    protected boolean isValidKey(Object key) {
+        return key instanceof ItemStack || key instanceof Item || key instanceof String || key instanceof ResourceLocation;
+    }
 
-	@Override
-	protected ItemStack getStack(Object key) {
-		if (key instanceof ItemStack) {
-			return (ItemStack) key;
-		}
-		return ItemStack.EMPTY;
-	}
+    @Override
+    protected ItemStack getStack(Object key) {
+        if (key instanceof ItemStack) {
+            return (ItemStack) key;
+        }
+        return ItemStack.EMPTY;
+    }
 
 }

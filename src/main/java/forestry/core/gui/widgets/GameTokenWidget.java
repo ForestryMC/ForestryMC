@@ -34,79 +34,79 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
 
 public class GameTokenWidget extends Widget {
-	private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.BOOK);
+    private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.BOOK);
 
-	private final EscritoireGame game;
-	private final int index;
+    private final EscritoireGame game;
+    private final int index;
 
-	public GameTokenWidget(EscritoireGame game, WidgetManager manager, int xPos, int yPos, int index) {
-		super(manager, xPos, yPos);
-		this.game = game;
-		this.index = index;
-	}
+    public GameTokenWidget(EscritoireGame game, WidgetManager manager, int xPos, int yPos, int index) {
+        super(manager, xPos, yPos);
+        this.game = game;
+        this.index = index;
+    }
 
-	@Nullable
-	private EscritoireGameToken getToken() {
-		return game.getToken(index);
-	}
+    @Nullable
+    private EscritoireGameToken getToken() {
+        return game.getToken(index);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void draw(MatrixStack transform, int startY, int startX) {
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void draw(MatrixStack transform, int startY, int startX) {
 
-		EscritoireGameToken token = getToken();
-		if (token == null) {
-			return;
-		}
+        EscritoireGameToken token = getToken();
+        if (token == null) {
+            return;
+        }
 
-		int tokenColour = token.getTokenColour();
+        int tokenColour = token.getTokenColour();
 
-		float colorR = (tokenColour >> 16 & 255) / 255.0F;
-		float colorG = (tokenColour >> 8 & 255) / 255.0F;
-		float colorB = (tokenColour & 255) / 255.0F;
+        float colorR = (tokenColour >> 16 & 255) / 255.0F;
+        float colorG = (tokenColour >> 8 & 255) / 255.0F;
+        float colorB = (tokenColour & 255) / 255.0F;
 
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(manager.gui.textureFile);
+        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+        textureManager.bindTexture(manager.gui.textureFile);
 
-		//TODO not sure if this works...
-		RenderSystem.enableDepthTest();
-		RenderSystem.color3f(colorR, colorG, colorB);
-		manager.gui.blit(transform, startX + xPos, startY + yPos, 228, 0, 22, 22);
-		RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+        //TODO not sure if this works...
+        RenderSystem.enableDepthTest();
+        RenderSystem.color3f(colorR, colorG, colorB);
+        manager.gui.blit(transform, startX + xPos, startY + yPos, 228, 0, 22, 22);
+        RenderSystem.color3f(1.0f, 1.0f, 1.0f);
 
-		ItemStack tokenStack = HIDDEN_TOKEN;
-		if (token.isVisible()) {
-			tokenStack = token.getTokenStack();
-		}
+        ItemStack tokenStack = HIDDEN_TOKEN;
+        if (token.isVisible()) {
+            tokenStack = token.getTokenStack();
+        }
 
-		GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
+        GuiUtil.drawItemStack(manager.gui, tokenStack, startX + xPos + 3, startY + yPos + 3);
 
-		RenderSystem.disableDepthTest();
-		TextureManagerForestry.getInstance().bindGuiTextureMap();
-		for (String ident : getToken().getOverlayIcons()) {
-			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-			//TODO no idea if this is right at all
-			manager.gui.blit(transform, startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
-		}
-		RenderSystem.enableDepthTest();
-	}
+        RenderSystem.disableDepthTest();
+        TextureManagerForestry.getInstance().bindGuiTextureMap();
+        for (String ident : getToken().getOverlayIcons()) {
+            TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
+            //TODO no idea if this is right at all
+            manager.gui.blit(transform, startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
+        }
+        RenderSystem.enableDepthTest();
+    }
 
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		EscritoireGameToken token = getToken();
-		if (token == null || !token.isVisible()) {
-			return null;
-		}
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        EscritoireGameToken token = getToken();
+        if (token == null || !token.isVisible()) {
+            return null;
+        }
 
-		ToolTip tooltip = new ToolTip();
-		tooltip.add(token.getTooltip());
-		return tooltip;
-	}
+        ToolTip tooltip = new ToolTip();
+        tooltip.add(token.getTooltip());
+        return tooltip;
+    }
 
-	@Override
-	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		game.choose(index);
-		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, 0));
-		SoundUtil.playButtonClick();
-	}
+    @Override
+    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+        game.choose(index);
+        NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, 0));
+        SoundUtil.playButtonClick();
+    }
 }

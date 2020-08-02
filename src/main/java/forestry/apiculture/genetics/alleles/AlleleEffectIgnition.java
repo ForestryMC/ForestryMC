@@ -29,57 +29,57 @@ import forestry.core.render.ParticleRender;
 import forestry.core.utils.WorldUtils;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
-	private static final int ignitionChance = 50;
-	private static final int fireDuration = 500;
+    private static final int ignitionChance = 50;
+    private static final int fireDuration = 500;
 
-	public AlleleEffectIgnition() {
-		super("ignition", false, 20, false, true);
-	}
+    public AlleleEffectIgnition() {
+        super("ignition", false, 20, false, true);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
-		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
-		for (LivingEntity entity : entities) {
-			int chance = ignitionChance;
-			int duration = fireDuration;
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        World world = housing.getWorldObj();
+        List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
+        for (LivingEntity entity : entities) {
+            int chance = ignitionChance;
+            int duration = fireDuration;
 
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
-			if (count > 3) {
-				continue; // Full set, no damage/effect
-			} else if (count > 2) {
-				chance = 5;
-				duration = 50;
-			} else if (count > 1) {
-				chance = 20;
-				duration = 200;
-			} else if (count > 0) {
-				chance = 35;
-				duration = 350;
-			}
+            // Entities are not attacked if they wear a full set of apiarist's armor.
+            int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
+            if (count > 3) {
+                continue; // Full set, no damage/effect
+            } else if (count > 2) {
+                chance = 5;
+                duration = 50;
+            } else if (count > 1) {
+                chance = 20;
+                duration = 200;
+            } else if (count > 0) {
+                chance = 35;
+                duration = 350;
+            }
 
-			if (world.rand.nextInt(1000) >= chance) {
-				continue;
-			}
+            if (world.rand.nextInt(1000) >= chance) {
+                continue;
+            }
 
-			entity.setFire(duration);
-		}
+            entity.setFire(duration);
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		ClientWorld world = WorldUtils.asClient(housing.getWorldObj());
-		if (world.rand.nextInt(2) != 0) {
-			super.doFX(genome, storedData, housing);
-		} else {
-			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
-			ParticleRender.addEntityIgnitionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z);
-		}
-		return storedData;
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        ClientWorld world = WorldUtils.asClient(housing.getWorldObj());
+        if (world.rand.nextInt(2) != 0) {
+            super.doFX(genome, storedData, housing);
+        } else {
+            Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
+            ParticleRender.addEntityIgnitionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z);
+        }
+        return storedData;
+    }
 
 }

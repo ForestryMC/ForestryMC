@@ -20,24 +20,24 @@ import forestry.factory.features.FactoryTiles;
 import forestry.modules.features.FeatureTileType;
 
 public enum BlockTypeFactoryPlain implements IBlockType {
-	FABRICATOR(() -> FactoryTiles.FABRICATOR, "fabricator"),
-	RAINTANK(() -> FactoryTiles.RAIN_TANK, "raintank");
+    FABRICATOR(() -> FactoryTiles.FABRICATOR, "fabricator"),
+    RAINTANK(() -> FactoryTiles.RAIN_TANK, "raintank");
 
-	public static final BlockTypeFactoryPlain[] VALUES = values();
+    public static final BlockTypeFactoryPlain[] VALUES = values();
 
-	private final IMachineProperties machineProperties;
+    private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeFactoryPlain(Supplier<FeatureTileType<? extends T>> teClass, String name) {
-		this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
-	}
+    <T extends TileForestry> BlockTypeFactoryPlain(Supplier<FeatureTileType<? extends T>> teClass, String name) {
+        this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
+    }
 
-	@Override
-	public IMachineProperties getMachineProperties() {
-		return machineProperties;
-	}
+    @Override
+    public IMachineProperties getMachineProperties() {
+        return machineProperties;
+    }
 
-	@Override
-	public String getString() {
-		return getMachineProperties().getString();
-	}
+    @Override
+    public String getString() {
+        return getMachineProperties().getString();
+    }
 }

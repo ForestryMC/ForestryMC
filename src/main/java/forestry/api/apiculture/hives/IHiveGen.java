@@ -13,22 +13,22 @@ import net.minecraft.world.World;
 
 public interface IHiveGen {
 
-	/**
-	 * return a position that the hive should try to generate at.
-	 * returns null if the hive can't be placed anywhere.
-	 */
-	@Nullable
-	BlockPos getPosForHive(World world, int x, int z);
+    /**
+     * return a position that the hive should try to generate at.
+     * returns null if the hive can't be placed anywhere.
+     */
+    @Nullable
+    BlockPos getPosForHive(World world, int x, int z);
 
-	/**
-	 * returns true if the hive can be generated at this location.
-	 * Used for advanced conditions, like checking that the ground below the hive is a certain type.
-	 */
-	boolean isValidLocation(World world, BlockPos pos);
+    /**
+     * returns true if the hive can be generated at this location.
+     * Used for advanced conditions, like checking that the ground below the hive is a certain type.
+     */
+    boolean isValidLocation(World world, BlockPos pos);
 
-	/**
-	 * returns true if the hive can safely replace the block at this location.
-	 */
-	boolean canReplace(BlockState blockState, World world, BlockPos pos);
+    /**
+     * returns true if the hive can safely replace the block at this location.
+     */
+    boolean canReplace(BlockState blockState, World world, BlockPos pos);
 
 }

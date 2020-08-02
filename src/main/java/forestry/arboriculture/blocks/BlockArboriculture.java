@@ -17,7 +17,7 @@ import net.minecraftforge.common.ToolType;
 import forestry.core.blocks.BlockBase;
 
 public class BlockArboriculture extends BlockBase<BlockTypeArboricultureTesr> {
-	public BlockArboriculture(BlockTypeArboricultureTesr type) {
-		super(type, Properties.create(Material.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
-	}
+    public BlockArboriculture(BlockTypeArboricultureTesr type) {
+        super(type, Properties.create(Material.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
+    }
 }

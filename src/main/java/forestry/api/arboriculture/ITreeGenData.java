@@ -18,24 +18,24 @@ import genetics.api.individual.IGenome;
 
 public interface ITreeGenData {
 
-	int getGirth();
+    int getGirth();
 
-	float getHeightModifier();
+    float getHeightModifier();
 
-	/**
-	 * @return Position that this tree can grow. May be different from pos if there are multiple saplings.
-	 * Returns null if a sapling at the given position can not grow into a tree.
-	 */
-	@Nullable
-	BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
+    /**
+     * @return Position that this tree can grow. May be different from pos if there are multiple saplings.
+     * Returns null if a sapling at the given position can not grow into a tree.
+     */
+    @Nullable
+    BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
 
-	boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random random);
+    boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random random);
 
-	boolean setLogBlock(IWorld world, BlockPos pos, Direction facing);
+    boolean setLogBlock(IWorld world, BlockPos pos, Direction facing);
 
-	boolean allowsFruitBlocks();
+    boolean allowsFruitBlocks();
 
-	boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos);
+    boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos);
 
-	IGenome getGenome();
+    IGenome getGenome();
 }

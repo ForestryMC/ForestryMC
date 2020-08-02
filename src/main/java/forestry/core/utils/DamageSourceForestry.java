@@ -17,22 +17,22 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class DamageSourceForestry extends DamageSource {
 
-	public DamageSourceForestry(String ident) {
-		super(ident);
-		setDamageBypassesArmor();
-	}
+    public DamageSourceForestry(String ident) {
+        super(ident);
+        setDamageBypassesArmor();
+    }
 
-	@Override
-	public ITextComponent getDeathMessage(LivingEntity living) {
-		LivingEntity other = living.getAttackingEntity();
-		String ssp = "death." + this.damageType;
-		String smp = ssp + ".player";
+    @Override
+    public ITextComponent getDeathMessage(LivingEntity living) {
+        LivingEntity other = living.getAttackingEntity();
+        String ssp = "death." + this.damageType;
+        String smp = ssp + ".player";
 
-		if (other != null) {
-			return new TranslationTextComponent(smp, living.getDisplayName(), other.getDisplayName());
-		} else {
-			return new TranslationTextComponent(ssp, living.getDisplayName());
-		}
-	}
+        if (other != null) {
+            return new TranslationTextComponent(smp, living.getDisplayName(), other.getDisplayName());
+        } else {
+            return new TranslationTextComponent(ssp, living.getDisplayName());
+        }
+    }
 
 }

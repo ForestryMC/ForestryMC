@@ -8,7 +8,7 @@ import forestry.core.gui.elements.lib.IGuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public class TextEditEvent extends ValueChangedEvent<String> {
-	public TextEditEvent(IGuiElement origin, String newValue, String oldValue) {
-		super(origin, newValue, oldValue);
-	}
+    public TextEditEvent(IGuiElement origin, String newValue, String oldValue) {
+        super(origin, newValue, oldValue);
+    }
 }

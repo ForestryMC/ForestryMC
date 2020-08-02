@@ -11,23 +11,23 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public interface ICircuit {
-	String getUID();
+    String getUID();
 
-	String getTranslationKey();
+    String getTranslationKey();
 
-	default ITextComponent getDisplayName() {
-		return new TranslationTextComponent(getTranslationKey());
-	}
+    default ITextComponent getDisplayName() {
+        return new TranslationTextComponent(getTranslationKey());
+    }
 
-	boolean isCircuitable(Object tile);
+    boolean isCircuitable(Object tile);
 
-	void onInsertion(int slot, Object tile);
+    void onInsertion(int slot, Object tile);
 
-	void onLoad(int slot, Object tile);
+    void onLoad(int slot, Object tile);
 
-	void onRemoval(int slot, Object tile);
+    void onRemoval(int slot, Object tile);
 
-	void onTick(int slot, Object tile);
+    void onTick(int slot, Object tile);
 
-	void addTooltip(List<ITextComponent> list);
+    void addTooltip(List<ITextComponent> list);
 }

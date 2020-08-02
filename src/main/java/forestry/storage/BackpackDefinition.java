@@ -24,49 +24,49 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 
 public class BackpackDefinition implements IBackpackDefinition {
-	private final int primaryColor;
-	private final int secondaryColor;
-	private final Predicate<ItemStack> filter;
+    private final int primaryColor;
+    private final int secondaryColor;
+    private final Predicate<ItemStack> filter;
 
-	public BackpackDefinition(Color primaryColor, Color secondaryColor) {
-		this(primaryColor, secondaryColor, BackpackManager.backpackInterface.createBackpackFilter());
-	}
+    public BackpackDefinition(Color primaryColor, Color secondaryColor) {
+        this(primaryColor, secondaryColor, BackpackManager.backpackInterface.createBackpackFilter());
+    }
 
-	public BackpackDefinition(Color primaryColor, Color secondaryColor, Predicate<ItemStack> filter) {
-		this.primaryColor = primaryColor.getRGB();
-		this.secondaryColor = secondaryColor.getRGB();
-		this.filter = filter;
-	}
+    public BackpackDefinition(Color primaryColor, Color secondaryColor, Predicate<ItemStack> filter) {
+        this.primaryColor = primaryColor.getRGB();
+        this.secondaryColor = secondaryColor.getRGB();
+        this.filter = filter;
+    }
 
-	@Override
-	public Predicate<ItemStack> getFilter() {
-		return filter;
-	}
+    @Override
+    public Predicate<ItemStack> getFilter() {
+        return filter;
+    }
 
-	@Override
-	public ITextComponent getName(ItemStack backpack) {
-		Item item = backpack.getItem();
-		ITextComponent display = new TranslationTextComponent((item.getTranslationKey(backpack)).trim());
+    @Override
+    public ITextComponent getName(ItemStack backpack) {
+        Item item = backpack.getItem();
+        ITextComponent display = new TranslationTextComponent((item.getTranslationKey(backpack)).trim());
 
-		CompoundNBT tagCompound = backpack.getTag();
-		if (tagCompound != null && tagCompound.contains("display", 10)) {
-			CompoundNBT nbt = tagCompound.getCompound("display");
+        CompoundNBT tagCompound = backpack.getTag();
+        if (tagCompound != null && tagCompound.contains("display", 10)) {
+            CompoundNBT nbt = tagCompound.getCompound("display");
 
-			if (nbt.contains("Name", 8)) {
-				display = new StringTextComponent(nbt.getString("Name"));
-			}
-		}
+            if (nbt.contains("Name", 8)) {
+                display = new StringTextComponent(nbt.getString("Name"));
+            }
+        }
 
-		return display;
-	}
+        return display;
+    }
 
-	@Override
-	public int getPrimaryColour() {
-		return primaryColor;
-	}
+    @Override
+    public int getPrimaryColour() {
+        return primaryColor;
+    }
 
-	@Override
-	public int getSecondaryColour() {
-		return secondaryColor;
-	}
+    @Override
+    public int getSecondaryColour() {
+        return secondaryColor;
+    }
 }

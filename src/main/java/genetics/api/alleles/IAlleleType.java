@@ -1,5 +1,5 @@
 package genetics.api.alleles;
 
 public interface IAlleleType {
-	IAllele deserialize(AlleleInfo info);
+    IAllele deserialize(AlleleInfo info);
 }

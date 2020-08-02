@@ -20,30 +20,30 @@ import forestry.core.network.PacketIdServer;
 import forestry.mail.gui.ContainerLetter;
 
 public class PacketLetterTextSet extends ForestryPacket implements IForestryPacketServer {
-	private final String string;
+    private final String string;
 
-	public PacketLetterTextSet(String string) {
-		this.string = string;
-	}
+    public PacketLetterTextSet(String string) {
+        this.string = string;
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.LETTER_TEXT_SET;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.LETTER_TEXT_SET;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeString(string);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeString(string);
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
+    public static class Handler implements IForestryPacketHandlerServer {
 
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			if (player.openContainer instanceof ContainerLetter) {
-				String string = data.readString();
-				((ContainerLetter) player.openContainer).handleSetText(string);
-			}
-		}
-	}
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+            if (player.openContainer instanceof ContainerLetter) {
+                String string = data.readString();
+                ((ContainerLetter) player.openContainer).handleSetText(string);
+            }
+        }
+    }
 }

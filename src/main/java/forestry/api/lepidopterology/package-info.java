@@ -6,8 +6,8 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 //TODO API
-	//@API(apiVersion = "1.4.0", owner = "ForestryAPI|core", provides = "ForestryAPI|lepidopterology")
-	package forestry.api.lepidopterology;
+//@API(apiVersion = "1.4.0", owner = "ForestryAPI|core", provides = "ForestryAPI|lepidopterology")
+package forestry.api.lepidopterology;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

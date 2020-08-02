@@ -9,59 +9,59 @@ import java.util.function.Predicate;
  * A empty instance of an {@link IRootDefinition}.
  */
 public final class EmptyRootDefinition implements IRootDefinition {
-	private static final EmptyRootDefinition INSTANCE = new EmptyRootDefinition();
+    private static final EmptyRootDefinition INSTANCE = new EmptyRootDefinition();
 
-	public static <R extends IIndividualRoot> IRootDefinition<R> empty() {
-		@SuppressWarnings("unchecked")
-		IRootDefinition<R> t = (IRootDefinition<R>) INSTANCE;
-		return t;
-	}
+    public static <R extends IIndividualRoot> IRootDefinition<R> empty() {
+        @SuppressWarnings("unchecked")
+        IRootDefinition<R> t = (IRootDefinition<R>) INSTANCE;
+        return t;
+    }
 
-	private EmptyRootDefinition() {
-	}
+    private EmptyRootDefinition() {
+    }
 
-	@Override
-	public Optional<IIndividualRoot> maybe() {
-		return Optional.empty();
-	}
+    @Override
+    public Optional<IIndividualRoot> maybe() {
+        return Optional.empty();
+    }
 
-	@Override
-	public IIndividualRoot get() {
-		throw new NullPointerException();
-	}
+    @Override
+    public IIndividualRoot get() {
+        throw new NullPointerException();
+    }
 
-	@Override
-	public IIndividualRoot cast() {
-		return get();
-	}
+    @Override
+    public IIndividualRoot cast() {
+        return get();
+    }
 
-	@Override
-	public boolean isPresent() {
-		return false;
-	}
+    @Override
+    public boolean isPresent() {
+        return false;
+    }
 
-	@Override
-	public IIndividualRoot orElse(IIndividualRoot other) {
-		return other;
-	}
+    @Override
+    public IIndividualRoot orElse(IIndividualRoot other) {
+        return other;
+    }
 
-	@Override
-	public boolean test(Predicate predicate) {
-		return false;
-	}
+    @Override
+    public boolean test(Predicate predicate) {
+        return false;
+    }
 
-	@Override
-	public Optional filter(Predicate predicate) {
-		return Optional.empty();
-	}
+    @Override
+    public Optional filter(Predicate predicate) {
+        return Optional.empty();
+    }
 
-	@Override
-	public void ifPresent(Consumer consumer) {
-		//The optional is empty, so we have nothing to call.
-	}
+    @Override
+    public void ifPresent(Consumer consumer) {
+        //The optional is empty, so we have nothing to call.
+    }
 
-	@Override
-	public Optional map(Function mapper) {
-		return Optional.empty();
-	}
+    @Override
+    public Optional map(Function mapper) {
+        return Optional.empty();
+    }
 }

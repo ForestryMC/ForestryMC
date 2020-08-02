@@ -24,31 +24,31 @@ import forestry.apiculture.entities.AIAvoidPlayers;
 
 public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 
-	public AlleleEffectRepulsion() {
-		super("repulsion", false, 100, true, true);
-	}
+    public AlleleEffectRepulsion() {
+        super("repulsion", false, 100, true, true);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<MonsterEntity> mobs = getEntitiesInRange(genome, housing, MonsterEntity.class);
-		for (MonsterEntity mob : mobs) {
-			if (!isMobAvoidingPlayers(mob)) {
-				mob.goalSelector.addGoal(3, new AIAvoidPlayers(mob, 6.0f, 0.25f, 0.3f));
-				mob.goalSelector.tick();    //TODO - I think
-			}
-		}
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        List<MonsterEntity> mobs = getEntitiesInRange(genome, housing, MonsterEntity.class);
+        for (MonsterEntity mob : mobs) {
+            if (!isMobAvoidingPlayers(mob)) {
+                mob.goalSelector.addGoal(3, new AIAvoidPlayers(mob, 6.0f, 0.25f, 0.3f));
+                mob.goalSelector.tick();    //TODO - I think
+            }
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
-	private boolean isMobAvoidingPlayers(MonsterEntity mob) {
-		mob.goalSelector.getRunningGoals().forEach(g -> {
-			//TODO - hmm
-			//			EntityAITaskEntry task = (EntityAITaskEntry) g;
-			//			if (g instanceof AIAvoidPlayers) {
-			//				return true;
-			//			}
-		});
-		return false;
-	}
+    private boolean isMobAvoidingPlayers(MonsterEntity mob) {
+        mob.goalSelector.getRunningGoals().forEach(g -> {
+            //TODO - hmm
+            //			EntityAITaskEntry task = (EntityAITaskEntry) g;
+            //			if (g instanceof AIAvoidPlayers) {
+            //				return true;
+            //			}
+        });
+        return false;
+    }
 }

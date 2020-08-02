@@ -43,119 +43,119 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable {
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+    protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
-	public BlockSapling() {
-		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
-	}
+    public BlockSapling() {
+        super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
+    }
 
-	@Override
-	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
-		return SHAPE;
-	}
+    @Override
+    public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+        return SHAPE;
+    }
 
-	@Nullable
-	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileSapling();
-	}
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+        return new TileSapling();
+    }
 
-	/* RENDERING */
+    /* RENDERING */
 	/*@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return false;
 	}*/
 
-	/* PLANTING */
-	public static boolean canBlockStay(IBlockReader world, BlockPos pos) {
-		TileSapling tile = TileUtil.getTile(world, pos, TileSapling.class);
-		if (tile == null) {
-			return false;
-		}
+    /* PLANTING */
+    public static boolean canBlockStay(IBlockReader world, BlockPos pos) {
+        TileSapling tile = TileUtil.getTile(world, pos, TileSapling.class);
+        if (tile == null) {
+            return false;
+        }
 
-		ITree tree = tile.getTree();
-		return tree != null && tree.canStay(world, pos);
-	}
+        ITree tree = tile.getTree();
+        return tree != null && tree.canStay(world, pos);
+    }
 
-	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
-		if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
-			dropAsSapling(worldIn, pos);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-		}
-	}
+    @Override
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+        super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
+        if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
+            dropAsSapling(worldIn, pos);
+            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+        }
+    }
 
-	@Override
-	public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
-		ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
-		if (!drop.isEmpty()) {
-			return Collections.singletonList(drop);
-		}
-		return Collections.emptyList();
-	}
+    @Override
+    public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+        ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
+        if (!drop.isEmpty()) {
+            return Collections.singletonList(drop);
+        }
+        return Collections.emptyList();
+    }
 
-	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-		if (sapling == null || sapling.getTree() == null) {
-			return ItemStack.EMPTY;
-		}
-		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
-	}
+    @Override
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+        if (sapling == null || sapling.getTree() == null) {
+            return ItemStack.EMPTY;
+        }
+        return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
+    }
 
-	@Override
-	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (!world.isRemote && canHarvestBlock(state, world, pos, player)) {
-			if (!player.isCreative()) {
-				dropAsSapling(world, pos);
-			}
-		}
+    @Override
+    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+        if (!world.isRemote && canHarvestBlock(state, world, pos, player)) {
+            if (!player.isCreative()) {
+                dropAsSapling(world, pos);
+            }
+        }
 
-		return world.setBlockState(pos, Blocks.AIR.getDefaultState());
-	}
+        return world.setBlockState(pos, Blocks.AIR.getDefaultState());
+    }
 
-	private static void dropAsSapling(World world, BlockPos pos) {
-		if (world.isRemote) {
-			return;
-		}
-		ItemStack drop = getDrop(world, pos);
-		if (!drop.isEmpty()) {
-			ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-		}
-	}
+    private static void dropAsSapling(World world, BlockPos pos) {
+        if (world.isRemote) {
+            return;
+        }
+        ItemStack drop = getDrop(world, pos);
+        if (!drop.isEmpty()) {
+            ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
+        }
+    }
 
-	private static ItemStack getDrop(IBlockReader world, BlockPos pos) {
-		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-		if (sapling != null) {
-			ITree tree = sapling.getTree();
-			if (tree != null) {
-				return TreeManager.treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING);
-			}
-		}
-		return ItemStack.EMPTY;
-	}
+    private static ItemStack getDrop(IBlockReader world, BlockPos pos) {
+        TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+        if (sapling != null) {
+            ITree tree = sapling.getTree();
+            if (tree != null) {
+                return TreeManager.treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING);
+            }
+        }
+        return ItemStack.EMPTY;
+    }
 
-	/* GROWNING */
-	@Override
-	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
-		if (world.rand.nextFloat() >= 0.45F) {
-			return false;
-		}
-		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
-		return saplingTile == null || saplingTile.canAcceptBoneMeal(rand);
-	}
+    /* GROWNING */
+    @Override
+    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
+        if (world.rand.nextFloat() >= 0.45F) {
+            return false;
+        }
+        TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
+        return saplingTile == null || saplingTile.canAcceptBoneMeal(rand);
+    }
 
-	@Override
-	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
-		return true;
-	}
+    @Override
+    public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+        return true;
+    }
 
-	@Override
-	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState blockState) {
-		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
-		if (saplingTile != null) {
-			saplingTile.tryGrow(rand, true);
-		}
-	}
+    @Override
+    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState blockState) {
+        TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
+        if (saplingTile != null) {
+            saplingTile.tryGrow(rand, true);
+        }
+    }
 }

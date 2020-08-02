@@ -10,16 +10,16 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
 public class BackpackFilterNaturalist implements Predicate<ItemStack> {
-	private final String speciesRootUid;
+    private final String speciesRootUid;
 
-	public BackpackFilterNaturalist(String speciesRootUid) {
-		this.speciesRootUid = speciesRootUid;
-	}
+    public BackpackFilterNaturalist(String speciesRootUid) {
+        this.speciesRootUid = speciesRootUid;
+    }
 
-	@Override
-	public boolean test(ItemStack itemStack) {
-		IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(speciesRootUid);
-		return definition.test(root -> root.isMember(itemStack));
-	}
+    @Override
+    public boolean test(ItemStack itemStack) {
+        IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(speciesRootUid);
+        return definition.test(root -> root.isMember(itemStack));
+    }
 
 }

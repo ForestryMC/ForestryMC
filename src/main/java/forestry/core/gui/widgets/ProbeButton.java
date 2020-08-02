@@ -25,50 +25,50 @@ import forestry.core.utils.SoundUtil;
 
 public class ProbeButton extends Widget {
 
-	private final GuiEscritoire guiEscritoire;
-	private boolean pressed;
+    private final GuiEscritoire guiEscritoire;
+    private boolean pressed;
 
-	public ProbeButton(GuiEscritoire guiEscritoire, WidgetManager manager, int xPos, int yPos) {
-		super(manager, xPos, yPos);
-		this.guiEscritoire = guiEscritoire;
-		width = 22;
-		height = 25;
-	}
+    public ProbeButton(GuiEscritoire guiEscritoire, WidgetManager manager, int xPos, int yPos) {
+        super(manager, xPos, yPos);
+        this.guiEscritoire = guiEscritoire;
+        width = 22;
+        height = 25;
+    }
 
-	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(manager.gui.textureFile);
-		manager.gui.blit(transform, startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
-	}
+    @Override
+    public void draw(MatrixStack transform, int startY, int startX) {
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+        textureManager.bindTexture(manager.gui.textureFile);
+        manager.gui.blit(transform, startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
+    }
 
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		ToolTip tooltip = new ToolTip();
-		tooltip.add(new TranslationTextComponent("for.gui.escritoire.probe"));
-		return tooltip;
-	}
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        ToolTip tooltip = new ToolTip();
+        tooltip.add(new TranslationTextComponent("for.gui.escritoire.probe"));
+        return tooltip;
+    }
 
-	@Override
-	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		pressed = true;
-		NetworkUtil.sendToServer(new PacketGuiSelectRequest(-1, 0));
-		SoundUtil.playButtonClick();
-	}
+    @Override
+    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+        pressed = true;
+        NetworkUtil.sendToServer(new PacketGuiSelectRequest(-1, 0));
+        SoundUtil.playButtonClick();
+    }
 
-	@Override
-	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
-		if (pressed) {
-			pressed = false;
-		}
-		return false;
-	}
+    @Override
+    public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
+        if (pressed) {
+            pressed = false;
+        }
+        return false;
+    }
 
-	@Override
-	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
-		if (manager.getAtPosition(mouseX - guiEscritoire.getGuiLeft(), mouseY - guiEscritoire.getGuiTop()) != this) {
-			pressed = false;
-		}
-	}
+    @Override
+    public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
+        if (manager.getAtPosition(mouseX - guiEscritoire.getGuiLeft(), mouseY - guiEscritoire.getGuiTop()) != this) {
+            pressed = false;
+        }
+    }
 }

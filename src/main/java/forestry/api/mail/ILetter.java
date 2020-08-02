@@ -17,47 +17,47 @@ import forestry.api.core.INbtWritable;
 
 public interface ILetter extends IInventory, INbtWritable {
 
-	NonNullList<ItemStack> getPostage();
+    NonNullList<ItemStack> getPostage();
 
-	void setProcessed(boolean flag);
+    void setProcessed(boolean flag);
 
-	boolean isProcessed();
+    boolean isProcessed();
 
-	boolean isMailable();
+    boolean isMailable();
 
-	void setSender(IMailAddress address);
+    void setSender(IMailAddress address);
 
-	IMailAddress getSender();
+    IMailAddress getSender();
 
-	boolean hasRecipient();
+    boolean hasRecipient();
 
-	void setRecipient(@Nullable IMailAddress address);
+    void setRecipient(@Nullable IMailAddress address);
 
-	@Nullable
-	IMailAddress getRecipient();
+    @Nullable
+    IMailAddress getRecipient();
 
-	String getRecipientString();
+    String getRecipientString();
 
-	void setText(String text);
+    void setText(String text);
 
-	String getText();
+    String getText();
 
-	void addTooltip(List<ITextComponent> list);
+    void addTooltip(List<ITextComponent> list);
 
-	boolean isPostPaid();
+    boolean isPostPaid();
 
-	int requiredPostage();
+    int requiredPostage();
 
-	void invalidatePostage();
+    void invalidatePostage();
 
-	NonNullList<ItemStack> getAttachments();
+    NonNullList<ItemStack> getAttachments();
 
-	void addAttachment(ItemStack itemstack);
+    void addAttachment(ItemStack itemstack);
 
-	void addAttachments(NonNullList<ItemStack> itemstacks);
+    void addAttachments(NonNullList<ItemStack> itemstacks);
 
-	int countAttachments();
+    int countAttachments();
 
-	void addStamps(ItemStack stamps);
+    void addStamps(ItemStack stamps);
 
 }

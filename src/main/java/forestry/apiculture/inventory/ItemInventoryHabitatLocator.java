@@ -31,83 +31,83 @@ import forestry.core.inventory.ItemInventory;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 
-	private static final short SLOT_ENERGY = 2;
-	private static final short SLOT_SPECIMEN = 0;
-	private static final short SLOT_ANALYZED = 1;
+    private static final short SLOT_ENERGY = 2;
+    private static final short SLOT_SPECIMEN = 0;
+    private static final short SLOT_ANALYZED = 1;
 
-	private final HabitatLocatorLogic locatorLogic;
+    private final HabitatLocatorLogic locatorLogic;
 
-	public ItemInventoryHabitatLocator(PlayerEntity player, ItemStack itemstack) {
-		super(player, 3, itemstack);
-		ItemHabitatLocator habitatLocator = (ItemHabitatLocator) itemstack.getItem();
-		this.locatorLogic = habitatLocator.getLocatorLogic();
-	}
+    public ItemInventoryHabitatLocator(PlayerEntity player, ItemStack itemstack) {
+        super(player, 3, itemstack);
+        ItemHabitatLocator habitatLocator = (ItemHabitatLocator) itemstack.getItem();
+        this.locatorLogic = habitatLocator.getLocatorLogic();
+    }
 
-	private static boolean isEnergy(ItemStack itemstack) {
-		return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
-	}
+    private static boolean isEnergy(ItemStack itemstack) {
+        return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
+    }
 
-	@Override
-	public void onSlotClick(int slotIndex, PlayerEntity player) {
-		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
-			if (locatorLogic.isBiomeFound()) {
-				return;
-			}
-		} else if (!getStackInSlot(SLOT_SPECIMEN).isEmpty()) {
-			// Requires energy
-			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return;
-			}
+    @Override
+    public void onSlotClick(int slotIndex, PlayerEntity player) {
+        if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
+            if (locatorLogic.isBiomeFound()) {
+                return;
+            }
+        } else if (!getStackInSlot(SLOT_SPECIMEN).isEmpty()) {
+            // Requires energy
+            if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+                return;
+            }
 
-			// Decrease energy
-			decrStackSize(SLOT_ENERGY, 1);
+            // Decrease energy
+            decrStackSize(SLOT_ENERGY, 1);
 
-			setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
-			setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
-		}
+            setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
+            setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
+        }
 
-		ItemStack analyzed = getStackInSlot(SLOT_ANALYZED);
-		Optional<IBee> optionalBee = BeeManager.beeRoot.create(analyzed);
-		if (optionalBee.isPresent()) {
-			IBee bee = optionalBee.get();
-			locatorLogic.startBiomeSearch(bee, player);
-		}
-	}
+        ItemStack analyzed = getStackInSlot(SLOT_ANALYZED);
+        Optional<IBee> optionalBee = BeeManager.beeRoot.create(analyzed);
+        if (optionalBee.isPresent()) {
+            IBee bee = optionalBee.get();
+            locatorLogic.startBiomeSearch(bee, player);
+        }
+    }
 
-	public Set<Biome> getBiomesToSearch() {
-		return locatorLogic.getTargetBiomes();
-	}
+    public Set<Biome> getBiomesToSearch() {
+        return locatorLogic.getTargetBiomes();
+    }
 
-	/* IErrorSource */
-	@Override
-	public ImmutableSet<IErrorState> getErrorStates() {
-		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
-			return ImmutableSet.of();
-		}
+    /* IErrorSource */
+    @Override
+    public ImmutableSet<IErrorState> getErrorStates() {
+        if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
+            return ImmutableSet.of();
+        }
 
-		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+        ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
-		ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
-		if (!BeeManager.beeRoot.isMember(specimen)) {
-			errorStates.add(EnumErrorCode.NO_SPECIMEN);
-		}
+        ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+        if (!BeeManager.beeRoot.isMember(specimen)) {
+            errorStates.add(EnumErrorCode.NO_SPECIMEN);
+        }
 
-		if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-			errorStates.add(EnumErrorCode.NO_HONEY);
-		}
+        if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+            errorStates.add(EnumErrorCode.NO_HONEY);
+        }
 
-		return errorStates.build();
-	}
+        return errorStates.build();
+    }
 
-	/* IFilterSlotDelegate */
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_ENERGY) {
-			return isEnergy(itemStack);
-		} else if (slotIndex == SLOT_SPECIMEN) {
-			return BeeManager.beeRoot.isMember(itemStack);
-		}
-		return false;
-	}
+    /* IFilterSlotDelegate */
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_ENERGY) {
+            return isEnergy(itemStack);
+        } else if (slotIndex == SLOT_SPECIMEN) {
+            return BeeManager.beeRoot.isMember(itemStack);
+        }
+        return false;
+    }
 
 }

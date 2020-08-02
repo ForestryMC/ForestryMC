@@ -13,24 +13,24 @@ import net.minecraft.util.NonNullList;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
 
-	/**
-	 * The item for this recipe to match against.
-	 **/
-	ItemStack getInput();
+    /**
+     * The item for this recipe to match against.
+     **/
+    ItemStack getInput();
 
-	/**
-	 * The time it takes to process one item. Default is 20.
-	 **/
-	int getProcessingTime();
+    /**
+     * The time it takes to process one item. Default is 20.
+     **/
+    int getProcessingTime();
 
-	/**
-	 * Returns the randomized products from processing one input item.
-	 **/
-	NonNullList<ItemStack> getProducts(Random random);
+    /**
+     * Returns the randomized products from processing one input item.
+     **/
+    NonNullList<ItemStack> getProducts(Random random);
 
-	/**
-	 * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0],
-	 * to help mods that display recipes
-	 **/
-	Map<ItemStack, Float> getAllProducts();
+    /**
+     * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0],
+     * to help mods that display recipes
+     **/
+    Map<ItemStack, Float> getAllProducts();
 }

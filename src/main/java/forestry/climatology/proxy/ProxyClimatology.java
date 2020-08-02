@@ -14,6 +14,6 @@ import forestry.modules.ISidedModuleHandler;
 
 public class ProxyClimatology implements ISidedModuleHandler {
 
-	public void preInit() {
-	}
+    public void preInit() {
+    }
 }

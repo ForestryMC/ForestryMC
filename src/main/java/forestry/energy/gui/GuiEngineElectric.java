@@ -22,28 +22,28 @@ import forestry.energy.tiles.TileEngineElectric;
 
 public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEngineElectric> {
 
-	public GuiEngineElectric(ContainerEngineElectric container, PlayerInventory inventory, ITextComponent name) {
-		super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", container, inventory, container.getTile(), name);
-		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
-	}
+    public GuiEngineElectric(ContainerEngineElectric container, PlayerInventory inventory, ITextComponent name) {
+        super(Constants.TEXTURE_PATH_GUI + "/electricalengine.png", container, inventory, container.getTile(), name);
+        widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-		TileEngineElectric engine = tile;
-		int storageHeight = engine.getStorageScaled(46);
-		int storageMaxHeight = engine.getStorageScaled(100);
-		EnumTankLevel rated = EnumTankLevel.rateTankLevel(storageMaxHeight);
+        TileEngineElectric engine = tile;
+        int storageHeight = engine.getStorageScaled(46);
+        int storageMaxHeight = engine.getStorageScaled(100);
+        EnumTankLevel rated = EnumTankLevel.rateTankLevel(storageMaxHeight);
 
-		drawHealthMeter(transform, guiLeft + 74, guiTop + 25, storageHeight, rated);
-	}
+        drawHealthMeter(transform, guiLeft + 74, guiTop + 25, storageHeight, rated);
+    }
 
-	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
-		int i = 176 + rated.getLevelScaled(16);
-		int k = 0;
+    private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
+        int i = 176 + rated.getLevelScaled(16);
+        int k = 0;
 
-		this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
-	}
+        this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
+    }
 
 }

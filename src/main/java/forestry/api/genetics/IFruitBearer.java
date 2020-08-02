@@ -15,33 +15,33 @@ import net.minecraft.util.NonNullList;
  */
 public interface IFruitBearer {
 
-	/**
-	 * @return true if the actual tile can bear fruits.
-	 */
-	boolean hasFruit();
+    /**
+     * @return true if the actual tile can bear fruits.
+     */
+    boolean hasFruit();
 
-	/**
-	 * @return Family of the potential fruits on this tile.
-	 */
-	IFruitFamily getFruitFamily();
+    /**
+     * @return Family of the potential fruits on this tile.
+     */
+    IFruitFamily getFruitFamily();
 
-	/**
-	 * Picks the fruits of this tile, resetting it to unripe fruits.
-	 *
-	 * @param tool Tool used in picking the fruits. May be empty.
-	 * @return Picked fruits.
-	 */
-	NonNullList<ItemStack> pickFruit(ItemStack tool);
+    /**
+     * Picks the fruits of this tile, resetting it to unripe fruits.
+     *
+     * @param tool Tool used in picking the fruits. May be empty.
+     * @return Picked fruits.
+     */
+    NonNullList<ItemStack> pickFruit(ItemStack tool);
 
-	/**
-	 * @return float indicating the ripeness of the fruit with >= 1.0f indicating full ripeness.
-	 */
-	float getRipeness();
+    /**
+     * @return float indicating the ripeness of the fruit with >= 1.0f indicating full ripeness.
+     */
+    float getRipeness();
 
-	/**
-	 * Increases the ripeness of the fruit. Adding 1.0f will fully ripen the fruit.
-	 *
-	 * @param add Float to add to the ripeness. Will truncate to valid values.
-	 */
-	void addRipeness(float add);
+    /**
+     * Increases the ripeness of the fruit. Adding 1.0f will fully ripen the fruit.
+     *
+     * @param add Float to add to the ripeness. Will truncate to valid values.
+     */
+    void addRipeness(float add);
 }

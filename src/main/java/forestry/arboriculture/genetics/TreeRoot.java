@@ -74,261 +74,261 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.RenderUtil;
 
 public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreedingTrackerHandler {
-	public static final String UID = "rootTrees";
-	private int treeSpeciesCount = -1;
-	@Nullable
-	private static ITreekeepingMode activeTreekeepingMode;
+    public static final String UID = "rootTrees";
+    private int treeSpeciesCount = -1;
+    @Nullable
+    private static ITreekeepingMode activeTreekeepingMode;
 
-	private final Map<IFruitFamily, Collection<IFruitProvider>> providersForFamilies = new HashMap<>();
-	private final List<ITreekeepingMode> treekeepingModes = new ArrayList<>();
+    private final Map<IFruitFamily, Collection<IFruitProvider>> providersForFamilies = new HashMap<>();
+    private final List<ITreekeepingMode> treekeepingModes = new ArrayList<>();
 
-	public TreeRoot(IRootContext<ITree> context) {
-		super(context);
-		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
-	}
+    public TreeRoot(IRootContext<ITree> context) {
+        super(context);
+        BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
+    }
 
-	@Override
-	public Class<? extends ITree> getMemberClass() {
-		return ITree.class;
-	}
+    @Override
+    public Class<? extends ITree> getMemberClass() {
+        return ITree.class;
+    }
 
-	@Override
-	public int getSpeciesCount() {
-		if (treeSpeciesCount < 0) {
-			treeSpeciesCount = (int) AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-				.filter(IAlleleTreeSpecies::isCounted).count();
-		}
+    @Override
+    public int getSpeciesCount() {
+        if (treeSpeciesCount < 0) {
+            treeSpeciesCount = (int) AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
+                    .filter(IAlleleTreeSpecies::isCounted).count();
+        }
 
-		return treeSpeciesCount;
-	}
+        return treeSpeciesCount;
+    }
 
-	@Override
-	public ITree create(CompoundNBT compound) {
-		return new Tree(compound);
-	}
+    @Override
+    public ITree create(CompoundNBT compound) {
+        return new Tree(compound);
+    }
 
-	@Override
-	public ITree create(IGenome genome) {
-		return new Tree(genome);
-	}
+    @Override
+    public ITree create(IGenome genome) {
+        return new Tree(genome);
+    }
 
-	@Override
-	public ITree create(IGenome genome, IGenome mate) {
-		return new Tree(genome, mate);
-	}
+    @Override
+    public ITree create(IGenome genome, IGenome mate) {
+        return new Tree(genome, mate);
+    }
 
-	@Override
-	public IGenomeWrapper createWrapper(IGenome genome) {
-		return () -> genome;
-	}
+    @Override
+    public IGenomeWrapper createWrapper(IGenome genome) {
+        return () -> genome;
+    }
 
-	@Override
-	public ITree getTree(World world, IGenome genome) {
-		return create(genome);
-	}
+    @Override
+    public ITree getTree(World world, IGenome genome) {
+        return create(genome);
+    }
 
-	@Override
-	public boolean isMember(IIndividual individual) {
-		return individual instanceof ITree;
-	}
+    @Override
+    public boolean isMember(IIndividual individual) {
+        return individual instanceof ITree;
+    }
 
-	/* TREE SPECIFIC */
-	@Override
-	public EnumGermlingType getIconType() {
-		return EnumGermlingType.SAPLING;
-	}
+    /* TREE SPECIFIC */
+    @Override
+    public EnumGermlingType getIconType() {
+        return EnumGermlingType.SAPLING;
+    }
 
-	@Override
-	public ITree getTree(World world, BlockPos pos) {
-		return TileUtil.getResultFromTile(world, pos, TileSapling.class, TileSapling::getTree);
-	}
+    @Override
+    public ITree getTree(World world, BlockPos pos) {
+        return TileUtil.getResultFromTile(world, pos, TileSapling.class, TileSapling::getTree);
+    }
 
-	@Override
-	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
-		BlockState state = ArboricultureBlocks.SAPLING_GE.defaultState();
-		boolean placed = world.setBlockState(pos, state);
-		if (!placed) {
-			return false;
-		}
+    @Override
+    public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
+        BlockState state = ArboricultureBlocks.SAPLING_GE.defaultState();
+        boolean placed = world.setBlockState(pos, state);
+        if (!placed) {
+            return false;
+        }
 
-		BlockState blockState = world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (!ArboricultureBlocks.SAPLING_GE.blockEqual(block)) {
-			return false;
-		}
+        BlockState blockState = world.getBlockState(pos);
+        Block block = blockState.getBlock();
+        if (!ArboricultureBlocks.SAPLING_GE.blockEqual(block)) {
+            return false;
+        }
 
-		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-		if (sapling == null) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-			return false;
-		}
+        TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+        if (sapling == null) {
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            return false;
+        }
 
-		sapling.setTree(tree.copy());
-		sapling.getOwnerHandler().setOwner(owner);
+        sapling.setTree(tree.copy());
+        sapling.getOwnerHandler().setOwner(owner);
 
-		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
-		NetworkUtil.sendNetworkPacket(packet, pos, world);
+        PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
+        NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
+    @Override
+    public boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
 
-		Direction facing = BlockUtil.getValidPodFacing(world, pos);
-		if (facing != null && ArboricultureBlocks.PODS.has(allele)) {
+        Direction facing = BlockUtil.getValidPodFacing(world, pos);
+        if (facing != null && ArboricultureBlocks.PODS.has(allele)) {
 
-			BlockFruitPod fruitPod = ArboricultureBlocks.PODS.get(allele).getBlock();
-			if (fruitPod != null) {
+            BlockFruitPod fruitPod = ArboricultureBlocks.PODS.get(allele).getBlock();
+            if (fruitPod != null) {
 
-				BlockState state = fruitPod.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
-				boolean placed = world.setBlockState(pos, state, 18);
-				if (placed) {
+                BlockState state = fruitPod.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
+                boolean placed = world.setBlockState(pos, state, 18);
+                if (placed) {
 
-					Block block = world.getBlockState(pos).getBlock();
-					if (fruitPod == block) {
+                    Block block = world.getBlockState(pos).getBlock();
+                    if (fruitPod == block) {
 
-						TileFruitPod pod = TileUtil.getTile(world, pos, TileFruitPod.class);
-						if (pod != null) {
-							pod.setProperties(genome, allele, yield);
-							RenderUtil.markForUpdate(pos);
-							return true;
-						} else {
-							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
-							return false;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
+                        TileFruitPod pod = TileUtil.getTile(world, pos, TileFruitPod.class);
+                        if (pod != null) {
+                            pod.setProperties(genome, allele, yield);
+                            RenderUtil.markForUpdate(pos);
+                            return true;
+                        } else {
+                            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
-	/* BREEDING TRACKER */
-	@Override
-	public IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
-		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
-	}
+    /* BREEDING TRACKER */
+    @Override
+    public IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+        return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
+    }
 
-	@Override
-	public String getFileName(@Nullable GameProfile profile) {
-		return "ArboristTracker." + (profile == null ? "common" : profile.getId());
-	}
+    @Override
+    public String getFileName(@Nullable GameProfile profile) {
+        return "ArboristTracker." + (profile == null ? "common" : profile.getId());
+    }
 
-	@Override
-	public IBreedingTracker createTracker(String fileName) {
-		return new ArboristTracker(fileName);
-	}
+    @Override
+    public IBreedingTracker createTracker(String fileName) {
+        return new ArboristTracker(fileName);
+    }
 
-	@Override
-	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
-		if (!(tracker instanceof ArboristTracker)) {
-			return;
-		}
-		ArboristTracker arboristTracker = (ArboristTracker) tracker;
-		arboristTracker.setWorld(world);
-		arboristTracker.setUsername(profile);
-	}
+    @Override
+    public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+        if (!(tracker instanceof ArboristTracker)) {
+            return;
+        }
+        ArboristTracker arboristTracker = (ArboristTracker) tracker;
+        arboristTracker.setWorld(world);
+        arboristTracker.setUsername(profile);
+    }
 
-	/* BREEDING MODES */
+    /* BREEDING MODES */
 
-	@Override
-	public List<ITreekeepingMode> getTreekeepingModes() {
-		return this.treekeepingModes;
-	}
+    @Override
+    public List<ITreekeepingMode> getTreekeepingModes() {
+        return this.treekeepingModes;
+    }
 
-	@Override
-	public ITreekeepingMode getTreekeepingMode(IWorld world) {
-		if (activeTreekeepingMode != null) {
-			return activeTreekeepingMode;
-		}
+    @Override
+    public ITreekeepingMode getTreekeepingMode(IWorld world) {
+        if (activeTreekeepingMode != null) {
+            return activeTreekeepingMode;
+        }
 
-		// No Treekeeping mode yet, item it.
-		IArboristTracker tracker = getBreedingTracker(world, null);
-		String modeName = tracker.getModeName();
-		ITreekeepingMode mode = getTreekeepingMode(modeName);
-		Preconditions.checkNotNull(mode);
-		setTreekeepingMode(world, mode);
-		Log.debug("Set Treekeeping mode for a world to " + mode);
+        // No Treekeeping mode yet, item it.
+        IArboristTracker tracker = getBreedingTracker(world, null);
+        String modeName = tracker.getModeName();
+        ITreekeepingMode mode = getTreekeepingMode(modeName);
+        Preconditions.checkNotNull(mode);
+        setTreekeepingMode(world, mode);
+        Log.debug("Set Treekeeping mode for a world to " + mode);
 
-		return activeTreekeepingMode;
-	}
+        return activeTreekeepingMode;
+    }
 
-	@Override
-	public void registerTreekeepingMode(ITreekeepingMode mode) {
-		treekeepingModes.add(mode);
-	}
+    @Override
+    public void registerTreekeepingMode(ITreekeepingMode mode) {
+        treekeepingModes.add(mode);
+    }
 
-	@Override
-	public void setTreekeepingMode(IWorld world, ITreekeepingMode mode) {
-		activeTreekeepingMode = mode;
-		getBreedingTracker(world, null).setModeName(mode.getName());
-	}
+    @Override
+    public void setTreekeepingMode(IWorld world, ITreekeepingMode mode) {
+        activeTreekeepingMode = mode;
+        getBreedingTracker(world, null).setModeName(mode.getName());
+    }
 
-	@Override
-	public ITreekeepingMode getTreekeepingMode(String name) {
-		for (ITreekeepingMode mode : treekeepingModes) {
-			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
-				return mode;
-			}
-		}
+    @Override
+    public ITreekeepingMode getTreekeepingMode(String name) {
+        for (ITreekeepingMode mode : treekeepingModes) {
+            if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
+                return mode;
+            }
+        }
 
-		Log.debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
-		return treekeepingModes.get(0);
-	}
+        Log.debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
+        return treekeepingModes.get(0);
+    }
 
-	/* ILEAFTICKHANDLER */
-	private final LinkedList<ILeafTickHandler> leafTickHandlers = new LinkedList<>();
+    /* ILEAFTICKHANDLER */
+    private final LinkedList<ILeafTickHandler> leafTickHandlers = new LinkedList<>();
 
-	@Override
-	public void registerLeafTickHandler(ILeafTickHandler handler) {
-		leafTickHandlers.add(handler);
-	}
+    @Override
+    public void registerLeafTickHandler(ILeafTickHandler handler) {
+        leafTickHandlers.add(handler);
+    }
 
-	@Override
-	public Collection<ILeafTickHandler> getLeafTickHandlers() {
-		return leafTickHandlers;
-	}
+    @Override
+    public Collection<ILeafTickHandler> getLeafTickHandlers() {
+        return leafTickHandlers;
+    }
 
-	@Override
-	public IAlyzerPlugin getAlyzerPlugin() {
-		return TreeAlyzerPlugin.INSTANCE;
-	}
+    @Override
+    public IAlyzerPlugin getAlyzerPlugin() {
+        return TreeAlyzerPlugin.INSTANCE;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public IDatabasePlugin getSpeciesPlugin() {
-		return TreePlugin.INSTANCE;
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public IDatabasePlugin getSpeciesPlugin() {
+        return TreePlugin.INSTANCE;
+    }
 
-	@Override
-	public ICheckPollinatable createPollinatable(IIndividual individual) {
-		Preconditions.checkArgument(individual instanceof ITree, "individual must be a tree");
-		return new CheckPollinatableTree((ITree) individual);
-	}
+    @Override
+    public ICheckPollinatable createPollinatable(IIndividual individual) {
+        Preconditions.checkArgument(individual instanceof ITree, "individual must be a tree");
+        return new CheckPollinatableTree((ITree) individual);
+    }
 
-	@Override
-	@Nullable
-	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual individual) {
-		Preconditions.checkArgument(individual instanceof ITree, "pollen must be an instance of ITree");
-		ITree pollen = (ITree) individual;
-		if (pollen.setLeaves(world, owner, pos, world.rand)) {
-			return TileUtil.getTile(world, pos, IPollinatable.class);
-		} else {
-			return null;
-		}
-	}
+    @Override
+    @Nullable
+    public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual individual) {
+        Preconditions.checkArgument(individual instanceof ITree, "pollen must be an instance of ITree");
+        ITree pollen = (ITree) individual;
+        if (pollen.setLeaves(world, owner, pos, world.rand)) {
+            return TileUtil.getTile(world, pos, IPollinatable.class);
+        } else {
+            return null;
+        }
+    }
 
-	@Override
-	public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
-		if (providersForFamilies.isEmpty()) {
-			AlleleUtils.forEach(TreeChromosomes.FRUITS, (fruit) -> {
-				IFruitProvider fruitProvider = fruit.getProvider();
-				Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());
-				fruitProviders.add(fruitProvider);
-			});
-		}
+    @Override
+    public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
+        if (providersForFamilies.isEmpty()) {
+            AlleleUtils.forEach(TreeChromosomes.FRUITS, (fruit) -> {
+                IFruitProvider fruitProvider = fruit.getProvider();
+                Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());
+                fruitProviders.add(fruitProvider);
+            });
+        }
 
-		return providersForFamilies.computeIfAbsent(fruitFamily, k -> new ArrayList<>());
-	}
+        return providersForFamilies.computeIfAbsent(fruitFamily, k -> new ArrayList<>());
+    }
 }

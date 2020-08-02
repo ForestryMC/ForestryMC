@@ -14,7 +14,7 @@ import net.minecraft.world.World;
  * SpecialSource issue https://github.com/md-5/SpecialSource/issues/12
  */
 public interface ILocatable {
-	BlockPos getCoordinates();
+    BlockPos getCoordinates();
 
-	World getWorldObj();
+    World getWorldObj();
 }

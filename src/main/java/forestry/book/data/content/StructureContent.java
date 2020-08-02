@@ -40,52 +40,52 @@ import forestry.core.utils.Log;
  */
 @OnlyIn(Dist.CLIENT)
 public class StructureContent extends BookContent {
-	@Nullable
-	private String structureFile = null;
-	private transient StructureData structureData;
+    @Nullable
+    private final String structureFile = null;
+    private transient StructureData structureData;
 
-	@Nullable
-	@Override
-	public Class getDataClass() {
-		return null;
-	}
+    @Nullable
+    @Override
+    public Class getDataClass() {
+        return null;
+    }
 
-	@Override
-	public void onDeserialization() {
-		if (structureFile == null || structureFile.isEmpty()) {
-			return;
-		}
+    @Override
+    public void onDeserialization() {
+        if (structureFile == null || structureFile.isEmpty()) {
+            return;
+        }
 
-		IResource resource = BookLoader.getResource(structureFile);
-		if (resource == null) {
-			return;
-		}
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
-			structureData = BookLoader.GSON.fromJson(reader, StructureData.class);
-		} catch (IOException e) {
-			Log.error("Failed to load structure file {}.{}", structureFile, e);
-		} finally {
-			IOUtils.closeQuietly(resource);
-		}
-	}
+        IResource resource = BookLoader.getResource(structureFile);
+        if (resource == null) {
+            return;
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+            structureData = BookLoader.GSON.fromJson(reader, StructureData.class);
+        } catch (IOException e) {
+            Log.error("Failed to load structure file {}.{}", structureFile, e);
+        } finally {
+            IOUtils.closeQuietly(resource);
+        }
+    }
 
-	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
-		if (structureFile == null) {
-			return false;
-		}
+    @Override
+    public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+        if (structureFile == null) {
+            return false;
+        }
 
-		int offset = 0;
-		int structureSizeX = page.getWidth();
-		int structureSizeY = 155 - 10;
+        int offset = 0;
+        int structureSizeX = page.getWidth();
+        int structureSizeY = 155 - 10;
 
-		int[] size = structureData.size;
-		BlockData[] structure = structureData.structure;
+        int[] size = structureData.size;
+        BlockData[] structure = structureData.structure;
 
-		if (size.length == 3 && structure.length > 0) {
-			MultiblockElement elementStructure = new MultiblockElement(offset, 0, structureSizeX, structureSizeY, size, structure);
-			page.add(elementStructure);
-		}
-		return true;
-	}
+        if (size.length == 3 && structure.length > 0) {
+            MultiblockElement elementStructure = new MultiblockElement(offset, 0, structureSizeX, structureSizeY, size, structure);
+            page.add(elementStructure);
+        }
+        return true;
+    }
 }

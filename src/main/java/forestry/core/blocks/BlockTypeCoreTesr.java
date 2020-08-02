@@ -23,49 +23,49 @@ import forestry.core.tiles.TileEscritoire;
 import forestry.modules.features.FeatureTileType;
 
 public enum BlockTypeCoreTesr implements IBlockTypeTesr {
-	ANALYZER(createAnalyzerProperties(() -> CoreTiles.ANALYZER, "analyzer")),
-	ESCRITOIRE(createEscritoireProperties(() -> CoreTiles.ESCRITOIRE, "escritoire"));
+    ANALYZER(createAnalyzerProperties(() -> CoreTiles.ANALYZER, "analyzer")),
+    ESCRITOIRE(createEscritoireProperties(() -> CoreTiles.ESCRITOIRE, "escritoire"));
 
-	public static final BlockTypeCoreTesr[] VALUES = values();
+    public static final BlockTypeCoreTesr[] VALUES = values();
 
-	private final IMachinePropertiesTesr machineProperties;
+    private final IMachinePropertiesTesr machineProperties;
 
-	private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Supplier<FeatureTileType<? extends TileAnalyzer>> teClass, String name) {
-		MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
-			.setParticleTexture(name + ".0")
-			.setShape(VoxelShapes::fullCube)
-			.create();
-		Proxies.render.setRendererAnalyzer(machineProperties);    //TODO distexecutor
-		return machineProperties;
-	}
+    private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Supplier<FeatureTileType<? extends TileAnalyzer>> teClass, String name) {
+        MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
+                .setParticleTexture(name + ".0")
+                .setShape(VoxelShapes::fullCube)
+                .create();
+        Proxies.render.setRendererAnalyzer(machineProperties);    //TODO distexecutor
+        return machineProperties;
+    }
 
-	private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(Supplier<FeatureTileType<? extends TileEscritoire>> teClass, String name) {
-		final VoxelShape desk = Block.makeCuboidShape(0D, 8D, 0D, 16, 16, 16);
-		final VoxelShape standRB = Block.makeCuboidShape(13D, 0D, 13D, 15, 10, 15);
-		final VoxelShape standRF = Block.makeCuboidShape(13D, 0D, 1D, 15, 10, 3);
-		final VoxelShape standLB = Block.makeCuboidShape(1D, 0D, 13D, 3, 10, 15);
-		final VoxelShape standLF = Block.makeCuboidShape(1D, 0D, 1D, 3, 10, 3);
-		//final VoxelShape drawers = Block.makeCuboidShape(-7.5D, -2D, 4.5D, 15, 5, 3);
+    private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(Supplier<FeatureTileType<? extends TileEscritoire>> teClass, String name) {
+        final VoxelShape desk = Block.makeCuboidShape(0D, 8D, 0D, 16, 16, 16);
+        final VoxelShape standRB = Block.makeCuboidShape(13D, 0D, 13D, 15, 10, 15);
+        final VoxelShape standRF = Block.makeCuboidShape(13D, 0D, 1D, 15, 10, 3);
+        final VoxelShape standLB = Block.makeCuboidShape(1D, 0D, 13D, 3, 10, 15);
+        final VoxelShape standLF = Block.makeCuboidShape(1D, 0D, 1D, 3, 10, 3);
+        //final VoxelShape drawers = Block.makeCuboidShape(-7.5D, -2D, 4.5D, 15, 5, 3);
 
-		MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
-			.setParticleTexture(name + ".0")
-			.setShape(() -> VoxelShapes.or(desk, standLB, standLF, standRB, standRF))
-			.create();
-		Proxies.render.setRenderEscritoire(machineProperties); //TODO distexecutor
-		return machineProperties;
-	}
+        MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
+                .setParticleTexture(name + ".0")
+                .setShape(() -> VoxelShapes.or(desk, standLB, standLF, standRB, standRF))
+                .create();
+        Proxies.render.setRenderEscritoire(machineProperties); //TODO distexecutor
+        return machineProperties;
+    }
 
-	BlockTypeCoreTesr(IMachinePropertiesTesr machineProperties) {
-		this.machineProperties = machineProperties;
-	}
+    BlockTypeCoreTesr(IMachinePropertiesTesr machineProperties) {
+        this.machineProperties = machineProperties;
+    }
 
-	@Override
-	public IMachinePropertiesTesr getMachineProperties() {
-		return machineProperties;
-	}
+    @Override
+    public IMachinePropertiesTesr getMachineProperties() {
+        return machineProperties;
+    }
 
-	@Override
-	public String getString() {
-		return getMachineProperties().getString();
-	}
+    @Override
+    public String getString() {
+        return getMachineProperties().getString();
+    }
 }

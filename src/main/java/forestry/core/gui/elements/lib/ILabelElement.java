@@ -12,20 +12,20 @@ import forestry.core.gui.elements.IProviderElement;
  */
 public interface ILabelElement extends ITextElement, IProviderElement<ITextProperties> {
 
-	ILabelElement setFitText(boolean fitText);
+    ILabelElement setFitText(boolean fitText);
 
-	boolean isFitText();
+    boolean isFitText();
 
-	ILabelElement setShadow(boolean value);
+    ILabelElement setShadow(boolean value);
 
-	boolean hasShadow();
+    boolean hasShadow();
 
-	Style getStyle();
+    Style getStyle();
 
-	ILabelElement setStyle(Style style);
+    ILabelElement setStyle(Style style);
 
-	default ILabelElement actStyle(UnaryOperator<Style> action) {
-		return setStyle(action.apply(getStyle()));
-	}
+    default ILabelElement actStyle(UnaryOperator<Style> action) {
+        return setStyle(action.apply(getStyle()));
+    }
 
 }

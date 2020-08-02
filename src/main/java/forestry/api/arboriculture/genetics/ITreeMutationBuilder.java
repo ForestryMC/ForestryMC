@@ -8,6 +8,6 @@ package forestry.api.arboriculture.genetics;
 import forestry.api.genetics.IMutationBuilder;
 
 public interface ITreeMutationBuilder extends IMutationBuilder {
-	@Override
-	ITreeMutation build();
+    @Override
+    ITreeMutation build();
 }

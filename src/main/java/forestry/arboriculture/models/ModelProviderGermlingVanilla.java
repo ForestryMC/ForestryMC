@@ -19,56 +19,56 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 
-	private final EnumVanillaWoodType woodType;
-	private final ILeafSpriteProvider leafSpriteProvider;
+    private final EnumVanillaWoodType woodType;
+    private final ILeafSpriteProvider leafSpriteProvider;
 
-	public ModelProviderGermlingVanilla(EnumVanillaWoodType woodType, ILeafSpriteProvider leafSpriteProvider) {
-		this.woodType = woodType;
-		this.leafSpriteProvider = leafSpriteProvider;
-	}
+    public ModelProviderGermlingVanilla(EnumVanillaWoodType woodType, ILeafSpriteProvider leafSpriteProvider) {
+        this.woodType = woodType;
+        this.leafSpriteProvider = leafSpriteProvider;
+    }
 
-	@Override
-	public int getSpriteColor(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.POLLEN) {
-			return leafSpriteProvider.getColor(false);
-		} else {
-			return 0xFFFFFF;
-		}
-	}
+    @Override
+    public int getSpriteColor(EnumGermlingType type, int renderPass) {
+        if (type == EnumGermlingType.POLLEN) {
+            return leafSpriteProvider.getColor(false);
+        } else {
+            return 0xFFFFFF;
+        }
+    }
 
-	@Override
-	public ResourceLocation getItemModel() {
-		switch (woodType) {
-			case SPRUCE:
-				return new ResourceLocation("minecraft", "spruce_sapling");
-			case BIRCH:
-				return new ResourceLocation("minecraft", "birch_sapling");
-			case JUNGLE:
-				return new ResourceLocation("minecraft", "jungle_sapling");
-			case ACACIA:
-				return new ResourceLocation("minecraft", "acacia_sapling");
-			case DARK_OAK:
-				return new ResourceLocation("minecraft", "dark_oak_sapling");
-			default:
-				return new ResourceLocation("minecraft", "oak_sapling");
-		}
-	}
+    @Override
+    public ResourceLocation getItemModel() {
+        switch (woodType) {
+            case SPRUCE:
+                return new ResourceLocation("minecraft", "spruce_sapling");
+            case BIRCH:
+                return new ResourceLocation("minecraft", "birch_sapling");
+            case JUNGLE:
+                return new ResourceLocation("minecraft", "jungle_sapling");
+            case ACACIA:
+                return new ResourceLocation("minecraft", "acacia_sapling");
+            case DARK_OAK:
+                return new ResourceLocation("minecraft", "dark_oak_sapling");
+            default:
+                return new ResourceLocation("minecraft", "oak_sapling");
+        }
+    }
 
-	@Override
-	public ResourceLocation getBlockModel() {
-		switch (woodType) {
-			case SPRUCE:
-				return new ResourceLocation("minecraft", "block/spruce_sapling");
-			case BIRCH:
-				return new ResourceLocation("minecraft", "block/birch_sapling");
-			case JUNGLE:
-				return new ResourceLocation("minecraft", "block/jungle_sapling");
-			case ACACIA:
-				return new ResourceLocation("minecraft", "block/acacia_sapling");
-			case DARK_OAK:
-				return new ResourceLocation("minecraft", "block/dark_oak_sapling");
-			default:
-				return new ResourceLocation("minecraft", "block/oak_sapling");
-		}
-	}
+    @Override
+    public ResourceLocation getBlockModel() {
+        switch (woodType) {
+            case SPRUCE:
+                return new ResourceLocation("minecraft", "block/spruce_sapling");
+            case BIRCH:
+                return new ResourceLocation("minecraft", "block/birch_sapling");
+            case JUNGLE:
+                return new ResourceLocation("minecraft", "block/jungle_sapling");
+            case ACACIA:
+                return new ResourceLocation("minecraft", "block/acacia_sapling");
+            case DARK_OAK:
+                return new ResourceLocation("minecraft", "block/dark_oak_sapling");
+            default:
+                return new ResourceLocation("minecraft", "block/oak_sapling");
+        }
+    }
 }

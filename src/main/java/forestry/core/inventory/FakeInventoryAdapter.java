@@ -20,148 +20,148 @@ import net.minecraft.util.Direction;
 import forestry.core.config.Constants;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
-	@Nullable
-	private static FakeInventoryAdapter instance;
+    @Nullable
+    private static FakeInventoryAdapter instance;
 
-	public static FakeInventoryAdapter instance() {
-		if (instance == null) {
-			instance = new FakeInventoryAdapter();
-		}
-		return instance;
-	}
+    public static FakeInventoryAdapter instance() {
+        if (instance == null) {
+            instance = new FakeInventoryAdapter();
+        }
+        return instance;
+    }
 
-	private FakeInventoryAdapter() {
+    private FakeInventoryAdapter() {
 
-	}
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return true;
-	}
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return false;
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return false;
+    }
 
-	@Override
-	public boolean isLocked(int slotIndex) {
-		return false;
-	}
+    @Override
+    public boolean isLocked(int slotIndex) {
+        return false;
+    }
 
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		return Constants.SLOTS_NONE;
-	}
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return Constants.SLOTS_NONE;
+    }
 
-	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-		return false;
-	}
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+        return false;
+    }
 
-	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
-		return false;
-	}
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+        return false;
+    }
 
-	@Override
-	public int getSizeInventory() {
-		return 0;
-	}
+    @Override
+    public int getSizeInventory() {
+        return 0;
+    }
 
-	@Override
-	public ItemStack getStackInSlot(int p_70301_1_) {
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack getStackInSlot(int p_70301_1_) {
+        return ItemStack.EMPTY;
+    }
 
-	@Override
-	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+        return ItemStack.EMPTY;
+    }
 
-	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack removeStackFromSlot(int index) {
+        return ItemStack.EMPTY;
+    }
 
-	@Override
-	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+    @Override
+    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
 
-	}
+    }
 
-	//TODO inventory name
-	//	@Override
-	//	public ITextComponent getDisplayName() {
-	//		return new StringTextComponent(getName());
-	//	}
-	//
-	//	@Override
-	//	public String getName() {
-	//		return "";
-	//	}
-	//
-	//	@Override
-	//	public boolean hasCustomName() {
-	//		return false;
-	//	}
+    //TODO inventory name
+    //	@Override
+    //	public ITextComponent getDisplayName() {
+    //		return new StringTextComponent(getName());
+    //	}
+    //
+    //	@Override
+    //	public String getName() {
+    //		return "";
+    //	}
+    //
+    //	@Override
+    //	public boolean hasCustomName() {
+    //		return false;
+    //	}
 
-	@Override
-	public int getInventoryStackLimit() {
-		return 0;
-	}
+    @Override
+    public int getInventoryStackLimit() {
+        return 0;
+    }
 
-	@Override
-	public void markDirty() {
+    @Override
+    public void markDirty() {
 
-	}
+    }
 
-	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		return false;
-	}
+    @Override
+    public boolean isUsableByPlayer(PlayerEntity player) {
+        return false;
+    }
 
-	@Override
-	public void openInventory(PlayerEntity player) {
+    @Override
+    public void openInventory(PlayerEntity player) {
 
-	}
+    }
 
-	@Override
-	public void closeInventory(PlayerEntity player) {
+    @Override
+    public void closeInventory(PlayerEntity player) {
 
-	}
+    }
 
-	@Override
-	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-		return false;
-	}
+    @Override
+    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+        return false;
+    }
 
-	@Override
-	public void read(CompoundNBT CompoundNBT) {
+    @Override
+    public void read(CompoundNBT CompoundNBT) {
 
-	}
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
-		return CompoundNBT;
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT CompoundNBT) {
+        return CompoundNBT;
+    }
 
-	//TODO inventory fields
-	//	@Override
-	//	public int getField(int id) {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return 0;
-	//	}
+    //TODO inventory fields
+    //	@Override
+    //	public int getField(int id) {
+    //		return 0;
+    //	}
+    //
+    //	@Override
+    //	public void setField(int id, int value) {
+    //	}
+    //
+    //	@Override
+    //	public int getFieldCount() {
+    //		return 0;
+    //	}
 
-	@Override
-	public void clear() {
-	}
+    @Override
+    public void clear() {
+    }
 
 }

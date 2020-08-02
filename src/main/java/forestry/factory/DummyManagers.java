@@ -42,130 +42,130 @@ import forestry.api.recipes.IStillRecipe;
 
 public class DummyManagers {
 
-	public static abstract class DummyCraftingProvider<T extends IForestryRecipe> implements ICraftingProvider<T> {
-		@Override
-		public boolean addRecipe(T recipe) {
-			return false;
-		}
+    public static abstract class DummyCraftingProvider<T extends IForestryRecipe> implements ICraftingProvider<T> {
+        @Override
+        public boolean addRecipe(T recipe) {
+            return false;
+        }
 
-		@Override
-		public boolean removeRecipe(T recipe) {
-			return false;
-		}
+        @Override
+        public boolean removeRecipe(T recipe) {
+            return false;
+        }
 
-		@Override
-		public Set<T> recipes() {
-			return ImmutableSet.of();
-		}
-	}
+        @Override
+        public Set<T> recipes() {
+            return ImmutableSet.of();
+        }
+    }
 
-	public static class DummyCarpenterManager extends DummyCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
+    public static class DummyCarpenterManager extends DummyCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
 
-		@Override
-		public void addRecipe(ItemStack box, ItemStack product, Object... materials) {
+        @Override
+        public void addRecipe(ItemStack box, ItemStack product, Object... materials) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials) {
+        @Override
+        public void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
+        @Override
+        public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
 
-		}
-	}
+        }
+    }
 
-	public static class DummyCentrifugeManager extends DummyCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
+    public static class DummyCentrifugeManager extends DummyCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
 
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
+        @Override
+        public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
 
-		}
-	}
+        }
+    }
 
-	public static class DummyFabricatorManager extends DummyCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
+    public static class DummyFabricatorManager extends DummyCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
 
-		@Override
-		public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
+        @Override
+        public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
 
-		}
+        }
 
-	}
+    }
 
-	public static class DummyFabricatorSmeltingManager extends DummyCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
+    public static class DummyFabricatorSmeltingManager extends DummyCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
 
-		@Override
-		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
+        @Override
+        public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
 
-		}
-	}
+        }
+    }
 
-	public static class DummyFermenterManager extends DummyCraftingProvider<IFermenterRecipe> implements IFermenterManager {
+    public static class DummyFermenterManager extends DummyCraftingProvider<IFermenterRecipe> implements IFermenterManager {
 
-		@Override
-		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+        @Override
+        public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
+        @Override
+        public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+        @Override
+        public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output) {
+        @Override
+        public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output) {
 
-		}
-	}
+        }
+    }
 
-	public static class DummyMoistenerManager extends DummyCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
+    public static class DummyMoistenerManager extends DummyCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
 
-		@Override
-		public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
+        @Override
+        public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
 
-		}
-	}
+        }
+    }
 
-	public static class DummySqueezerManager extends DummyCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
+    public static class DummySqueezerManager extends DummyCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
 
-		@Override
-		public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
+        @Override
+        public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
+        @Override
+        public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
+        @Override
+        public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
 
-		}
+        }
 
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
+        @Override
+        public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
 
-		}
+        }
 
-		@Override
-		public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
+        @Override
+        public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
 
-		}
-	}
+        }
+    }
 
-	public static class DummyStillManager extends DummyCraftingProvider<IStillRecipe> implements IStillManager {
+    public static class DummyStillManager extends DummyCraftingProvider<IStillRecipe> implements IStillManager {
 
-		@Override
-		public void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output) {
+        @Override
+        public void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output) {
 
-		}
-	}
+        }
+    }
 }

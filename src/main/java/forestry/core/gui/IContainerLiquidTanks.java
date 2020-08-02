@@ -18,10 +18,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidTank;
 
 public interface IContainerLiquidTanks {
-	@OnlyIn(Dist.CLIENT)
-	void handlePipetteClickClient(int slot, PlayerEntity player);
+    @OnlyIn(Dist.CLIENT)
+    void handlePipetteClickClient(int slot, PlayerEntity player);
 
-	void handlePipetteClick(int slot, ServerPlayerEntity player);
+    void handlePipetteClick(int slot, ServerPlayerEntity player);
 
-	IFluidTank getTank(int slot);
+    IFluidTank getTank(int slot);
 }

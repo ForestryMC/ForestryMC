@@ -40,86 +40,86 @@ import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeaves, ModelDecorativeLeaves.Key> {
-	public ModelDecorativeLeaves() {
-		super(BlockDecorativeLeaves.class);
-	}
+    public ModelDecorativeLeaves() {
+        super(BlockDecorativeLeaves.class);
+    }
 
-	public static class Key {
-		public final TreeDefinition definition;
-		public final boolean fancy;
-		private final int hashCode;
+    public static class Key {
+        public final TreeDefinition definition;
+        public final boolean fancy;
+        private final int hashCode;
 
-		public Key(TreeDefinition definition, boolean fancy) {
-			this.definition = definition;
-			this.fancy = fancy;
-			this.hashCode = Objects.hash(definition, fancy);
-		}
+        public Key(TreeDefinition definition, boolean fancy) {
+            this.definition = definition;
+            this.fancy = fancy;
+            this.hashCode = Objects.hash(definition, fancy);
+        }
 
-		@Override
-		public boolean equals(Object other) {
-			if (other == null || !(other instanceof ModelDecorativeLeaves.Key)) {
-				return false;
-			} else {
-				ModelDecorativeLeaves.Key otherKey = (ModelDecorativeLeaves.Key) other;
-				return otherKey.definition == definition && otherKey.fancy == fancy;
-			}
-		}
+        @Override
+        public boolean equals(Object other) {
+            if (other == null || !(other instanceof ModelDecorativeLeaves.Key)) {
+                return false;
+            } else {
+                ModelDecorativeLeaves.Key otherKey = (ModelDecorativeLeaves.Key) other;
+                return otherKey.definition == definition && otherKey.fancy == fancy;
+            }
+        }
 
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-	}
+        @Override
+        public int hashCode() {
+            return hashCode;
+        }
+    }
 
-	@Override
-	protected Key getInventoryKey(ItemStack stack) {
-		Block block = Block.getBlockFromItem(stack.getItem());
-		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "ItemStack must be for decorative leaves.");
-		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
-		return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
-	}
+    @Override
+    protected Key getInventoryKey(ItemStack stack) {
+        Block block = Block.getBlockFromItem(stack.getItem());
+        Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "ItemStack must be for decorative leaves.");
+        BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
+        return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
+    }
 
-	@Override
-	protected Key getWorldKey(BlockState state, IModelData extraData) {
-		Block block = state.getBlock();
-		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "state must be for decorative leaves.");
-		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
-		return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
-	}
+    @Override
+    protected Key getWorldKey(BlockState state, IModelData extraData) {
+        Block block = state.getBlock();
+        Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "state must be for decorative leaves.");
+        BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
+        return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
+    }
 
-	@Override
-	protected void bakeBlock(BlockDecorativeLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
-		TreeDefinition treeDefinition = key.definition;
+    @Override
+    protected void bakeBlock(BlockDecorativeLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+        TreeDefinition treeDefinition = key.definition;
 
-		IGenome genome = treeDefinition.getGenome();
-		IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
-		ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
+        IGenome genome = treeDefinition.getGenome();
+        IAlleleTreeSpecies species = genome.getActiveAllele(TreeChromosomes.SPECIES);
+        ILeafSpriteProvider leafSpriteProvider = species.getLeafSpriteProvider();
 
-		ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
-		TextureAtlasSprite leafSprite = ResourceUtil.getBlockSprite(leafSpriteLocation);
+        ResourceLocation leafSpriteLocation = leafSpriteProvider.getSprite(false, key.fancy);
+        TextureAtlasSprite leafSprite = ResourceUtil.getBlockSprite(leafSpriteLocation);
 
-		// Render the plain leaf block.
-		baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
+        // Render the plain leaf block.
+        baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
-		// Render overlay for fruit leaves.
-		ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
-		if (fruitSpriteLocation != null) {
-			TextureAtlasSprite fruitSprite = ResourceUtil.getBlockSprite(fruitSpriteLocation);
-			baker.addBlockModel(fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
-		}
+        // Render overlay for fruit leaves.
+        ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
+        if (fruitSpriteLocation != null) {
+            TextureAtlasSprite fruitSprite = ResourceUtil.getBlockSprite(fruitSpriteLocation);
+            baker.addBlockModel(fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);
+        }
 
-		// Set the particle sprite
-		baker.setParticleSprite(leafSprite);
-	}
+        // Set the particle sprite
+        baker.setParticleSprite(leafSprite);
+    }
 
-	@Override
-	protected IBakedModel bakeModel(BlockState state, Key key, BlockDecorativeLeaves block, IModelData extraData) {
-		ModelBaker baker = new ModelBaker();
+    @Override
+    protected IBakedModel bakeModel(BlockState state, Key key, BlockDecorativeLeaves block, IModelData extraData) {
+        ModelBaker baker = new ModelBaker();
 
-		bakeBlock(block, extraData, key, baker, false);
+        bakeBlock(block, extraData, key, baker, false);
 
-		blockModel = baker.bake(false);
-		onCreateModel(blockModel);
-		return blockModel;
-	}
+        blockModel = baker.bake(false);
+        onCreateModel(blockModel);
+        return blockModel;
+    }
 }

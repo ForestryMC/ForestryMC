@@ -15,7 +15,7 @@ import forestry.apiculture.features.ApicultureTiles;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class TileApiaristChest extends TileNaturalistChest {
-	public TileApiaristChest() {
-		super(ApicultureTiles.APIARIST_CHEST.tileType(), BeeManager.beeRoot);
-	}
+    public TileApiaristChest() {
+        super(ApicultureTiles.APIARIST_CHEST.tileType(), BeeManager.beeRoot);
+    }
 }

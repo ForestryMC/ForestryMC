@@ -27,39 +27,39 @@ import forestry.mail.gui.ContainerStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
 
 public class TileStampCollector extends TileBase implements IInventory {
-	public TileStampCollector() {
-		super(MailTiles.STAMP_COLLECTOR.tileType());
-		setInternalInventory(new InventoryStampCollector(this));
-	}
+    public TileStampCollector() {
+        super(MailTiles.STAMP_COLLECTOR.tileType());
+        setInternalInventory(new InventoryStampCollector(this));
+    }
 
-	@Override
-	public void updateServerSide() {
-		if (!updateOnInterval(20)) {
-			return;
-		}
+    @Override
+    public void updateServerSide() {
+        if (!updateOnInterval(20)) {
+            return;
+        }
 
-		ItemStack stamp = null;
+        ItemStack stamp = null;
 
-		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER).isEmpty()) {
-			stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(1);
-		} else {
-			ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
-			if (filter.getItem() instanceof IStamps) {
-				stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
-			}
-		}
+        IInventoryAdapter inventory = getInternalInventory();
+        if (inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER).isEmpty()) {
+            stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(1);
+        } else {
+            ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
+            if (filter.getItem() instanceof IStamps) {
+                stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
+            }
+        }
 
-		if (stamp == null) {
-			return;
-		}
+        if (stamp == null) {
+            return;
+        }
 
-		// Store it.
-		InventoryUtil.stowInInventory(stamp, inventory, true, InventoryStampCollector.SLOT_BUFFER_1, InventoryStampCollector.SLOT_BUFFER_COUNT);
-	}
+        // Store it.
+        InventoryUtil.stowInInventory(stamp, inventory, true, InventoryStampCollector.SLOT_BUFFER_1, InventoryStampCollector.SLOT_BUFFER_COUNT);
+    }
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerStampCollector(windowId, inv, this);
-	}
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerStampCollector(windowId, inv, this);
+    }
 }

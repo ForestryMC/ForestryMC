@@ -15,7 +15,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.network.PacketBuffer;
 
 public interface IForestryPacket {
-	Pair<PacketBuffer, Integer> getPacketData();
+    Pair<PacketBuffer, Integer> getPacketData();
 
-	IPacketId getPacketId();
+    IPacketId getPacketId();
 }

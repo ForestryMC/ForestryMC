@@ -30,25 +30,25 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 
 
 public class ItemAlyzer extends ItemWithGui {
-	public ItemAlyzer() {
-		super((new Item.Properties())
-			.group(ItemGroups.tabApiculture)
-			.maxStackSize(1));
-	}
+    public ItemAlyzer() {
+        super((new Item.Properties())
+                .group(ItemGroups.tabApiculture)
+                .maxStackSize(1));
+    }
 
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
-		int charges = 0;
-		CompoundNBT compound = stack.getTag();
-		if (compound != null) {
-			charges = compound.getInt("Charges");
-		}
-		tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).mergeStyle(TextFormatting.GOLD));
-	}
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+        super.addInformation(stack, world, tooltip, advanced);
+        int charges = 0;
+        CompoundNBT compound = stack.getTag();
+        if (compound != null) {
+            charges = compound.getInt("Charges");
+        }
+        tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).mergeStyle(TextFormatting.GOLD));
+    }
 
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return new ContainerAlyzer(windowId, new ItemInventoryAlyzer(player, heldItem), player);
-	}
+    @Override
+    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+        return new ContainerAlyzer(windowId, new ItemInventoryAlyzer(player, heldItem), player);
+    }
 }

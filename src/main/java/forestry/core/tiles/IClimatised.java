@@ -15,11 +15,11 @@ import forestry.api.core.EnumTemperature;
 
 public interface IClimatised {
 
-	EnumTemperature getTemperature();
+    EnumTemperature getTemperature();
 
-	EnumHumidity getHumidity();
+    EnumHumidity getHumidity();
 
-	float getExactTemperature();
+    float getExactTemperature();
 
-	float getExactHumidity();
+    float getExactHumidity();
 }

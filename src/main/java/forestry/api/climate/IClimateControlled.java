@@ -6,13 +6,13 @@
 package forestry.api.climate;
 
 public interface IClimateControlled {
-	/**
-	 * Change the temperature, but not lower than boundaryDown or higher than boundaryUp.
-	 */
-	void addTemperatureChange(float change, float boundaryDown, float boundaryUp);
+    /**
+     * Change the temperature, but not lower than boundaryDown or higher than boundaryUp.
+     */
+    void addTemperatureChange(float change, float boundaryDown, float boundaryUp);
 
-	/**
-	 * Change the humidity, but not lower than boundaryDown or higher than boundaryUp.
-	 */
-	void addHumidityChange(float change, float boundaryDown, float boundaryUp);
+    /**
+     * Change the humidity, but not lower than boundaryDown or higher than boundaryUp.
+     */
+    void addHumidityChange(float change, float boundaryDown, float boundaryUp);
 }

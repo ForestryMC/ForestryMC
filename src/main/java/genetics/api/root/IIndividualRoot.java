@@ -32,151 +32,151 @@ import genetics.api.root.translator.IIndividualTranslator;
  * @param <I> The type of the individual that this root provides.
  */
 public interface IIndividualRoot<I extends IIndividual> {
-	/* Individual Creation */
+    /* Individual Creation */
 
-	/**
-	 * Uses the information that the NBT-Data contains to create a {@link IIndividual}.
-	 */
-	I create(CompoundNBT compound);
+    /**
+     * Uses the information that the NBT-Data contains to create a {@link IIndividual}.
+     */
+    I create(CompoundNBT compound);
 
-	/**
-	 * Creates a {@link IIndividual} that contains this genome.
-	 */
-	I create(IGenome genome);
+    /**
+     * Creates a {@link IIndividual} that contains this genome.
+     */
+    I create(IGenome genome);
 
-	/**
-	 * Creates a {@link IIndividual} that contains the two genome.
-	 */
-	I create(IGenome genome, IGenome mate);
+    /**
+     * Creates a {@link IIndividual} that contains the two genome.
+     */
+    I create(IGenome genome, IGenome mate);
 
-	default Optional<I> create(ItemStack stack) {
-		return getTypes().createIndividual(stack);
-	}
+    default Optional<I> create(ItemStack stack) {
+        return getTypes().createIndividual(stack);
+    }
 
-	default ItemStack createStack(I individual, IOrganismType type) {
-		return getTypes().createStack(individual, type);
-	}
+    default ItemStack createStack(I individual, IOrganismType type) {
+        return getTypes().createStack(individual, type);
+    }
 
-	default Optional<IOrganismType> getType(ItemStack itemStack) {
-		return getTypes().getType(itemStack);
-	}
+    default Optional<IOrganismType> getType(ItemStack itemStack) {
+        return getTypes().getType(itemStack);
+    }
 
-	default IAllele[] getTemplate(String identifier) {
-		return getTemplates().getTemplate(identifier);
-	}
+    default IAllele[] getTemplate(String identifier) {
+        return getTemplates().getTemplate(identifier);
+    }
 
-	Class<? extends I> getMemberClass();
+    Class<? extends I> getMemberClass();
 
-	/**
-	 * Creates a optional that describes an {@link IIndividual} that contains the {@link IAllele} template that is
-	 * associated with the given identifier.
-	 *
-	 * @param templateIdentifier A identifier that is associate with a {@link IAllele} template at the
-	 *                           {@link ITemplateContainer} of this root.
-	 */
-	Optional<I> create(String templateIdentifier);
+    /**
+     * Creates a optional that describes an {@link IIndividual} that contains the {@link IAllele} template that is
+     * associated with the given identifier.
+     *
+     * @param templateIdentifier A identifier that is associate with a {@link IAllele} template at the
+     *                           {@link ITemplateContainer} of this root.
+     */
+    Optional<I> create(String templateIdentifier);
 
-	/**
-	 * Creates a {@link IIndividual} that contains the alleles of the template in a genome.
-	 *
-	 * @param template The alleles of the genome.
-	 */
-	default I templateAsIndividual(IAllele[] template) {
-		return templateAsIndividual(template, null);
-	}
+    /**
+     * Creates a {@link IIndividual} that contains the alleles of the template in a genome.
+     *
+     * @param template The alleles of the genome.
+     */
+    default I templateAsIndividual(IAllele[] template) {
+        return templateAsIndividual(template, null);
+    }
 
-	/**
-	 * Creates a {@link IIndividual} that contains the alleles of the two templates in a genome.
-	 *
-	 * @param templateActive   The active alleles of the genome.
-	 * @param templateInactive The inactive alleles of the genome.
-	 */
-	I templateAsIndividual(IAllele[] templateActive, @Nullable IAllele[] templateInactive);
+    /**
+     * Creates a {@link IIndividual} that contains the alleles of the two templates in a genome.
+     *
+     * @param templateActive   The active alleles of the genome.
+     * @param templateInactive The inactive alleles of the genome.
+     */
+    I templateAsIndividual(IAllele[] templateActive, @Nullable IAllele[] templateInactive);
 
-	/**
-	 * A instance of an {@link IIndividual} that is used if a item has lost its generic data.
-	 */
-	I getDefaultMember();
+    /**
+     * A instance of an {@link IIndividual} that is used if a item has lost its generic data.
+     */
+    I getDefaultMember();
 
-	/* Item Stacks */
+    /* Item Stacks */
 
-	/**
-	 * Creates an {@link ItemStack} that uses the {@link IAllele} template of the given allele and has the
-	 * given organism type.
-	 *
-	 * @param allele The template identifier
-	 * @param type   The type whose {@link IOrganismHandler} will be used to create the stack with
-	 *               {@link IOrganismHandler#createStack(IIndividual)}.
-	 * @return A stack with the given {@link IOrganismType} and the allele template of the given allele.
-	 */
-	ItemStack createStack(IAllele allele, IOrganismType type);
+    /**
+     * Creates an {@link ItemStack} that uses the {@link IAllele} template of the given allele and has the
+     * given organism type.
+     *
+     * @param allele The template identifier
+     * @param type   The type whose {@link IOrganismHandler} will be used to create the stack with
+     *               {@link IOrganismHandler#createStack(IIndividual)}.
+     * @return A stack with the given {@link IOrganismType} and the allele template of the given allele.
+     */
+    ItemStack createStack(IAllele allele, IOrganismType type);
 
-	boolean isMember(ItemStack stack);
+    boolean isMember(ItemStack stack);
 
-	/* Genome */
+    /* Genome */
 
-	/**
-	 * Creates a wrapper that can be used to give access to the values of the alleles that the genome contains.
-	 */
-	IGenomeWrapper createWrapper(IGenome genome);
+    /**
+     * Creates a wrapper that can be used to give access to the values of the alleles that the genome contains.
+     */
+    IGenomeWrapper createWrapper(IGenome genome);
 
-	/* Individuals */
+    /* Individuals */
 
-	List<I> getIndividualTemplates();
-	/* Components */
+    List<I> getIndividualTemplates();
+    /* Components */
 
-	/**
-	 * Returns the template container that contains all registered templates for the individual of this root.
-	 * Templates have to be registered at the {@link IIndividualRootBuilder} of the root before the root itself was
-	 * built.
-	 *
-	 * @return The template container of this root.
-	 */
-	ITemplateContainer getTemplates();
+    /**
+     * Returns the template container that contains all registered templates for the individual of this root.
+     * Templates have to be registered at the {@link IIndividualRootBuilder} of the root before the root itself was
+     * built.
+     *
+     * @return The template container of this root.
+     */
+    ITemplateContainer getTemplates();
 
-	/**
-	 * The Karyotype defines how many {@link IChromosomeType}s the {@link IGenome} of an
-	 * {@link IIndividual} has.
-	 *
-	 * @return The karyotype of this root.
-	 */
-	IKaryotype getKaryotype();
+    /**
+     * The Karyotype defines how many {@link IChromosomeType}s the {@link IGenome} of an
+     * {@link IIndividual} has.
+     *
+     * @return The karyotype of this root.
+     */
+    IKaryotype getKaryotype();
 
-	/**
-	 * A translator that can be used to translate {@link net.minecraft.block.BlockState} and
-	 * {@link ItemStack} without any genetic information  into {@link IIndividual}s or into a {@link ItemStack} that
-	 * contains a {@link genetics.api.organism.IOrganism}.
-	 *
-	 * @return A translator that can be used to translate {@link net.minecraft.block.BlockState} and
-	 * {@link ItemStack} into {@link IIndividual}s.
-	 */
-	IIndividualTranslator<I> getTranslator();
+    /**
+     * A translator that can be used to translate {@link net.minecraft.block.BlockState} and
+     * {@link ItemStack} without any genetic information  into {@link IIndividual}s or into a {@link ItemStack} that
+     * contains a {@link genetics.api.organism.IOrganism}.
+     *
+     * @return A translator that can be used to translate {@link net.minecraft.block.BlockState} and
+     * {@link ItemStack} into {@link IIndividual}s.
+     */
+    IIndividualTranslator<I> getTranslator();
 
-	/**
-	 * All registered {@link IOrganismType}s with there mapped {@link IOrganismHandler}s.
-	 *
-	 * @return A object that contains all registered types of this root.
-	 */
-	IOrganismTypes<I> getTypes();
+    /**
+     * All registered {@link IOrganismType}s with there mapped {@link IOrganismHandler}s.
+     *
+     * @return A object that contains all registered types of this root.
+     */
+    IOrganismTypes<I> getTypes();
 
-	/* Util */
+    /* Util */
 
-	/**
-	 * @return The string based unique identifier of this definition.
-	 */
-	String getUID();
+    /**
+     * @return The string based unique identifier of this definition.
+     */
+    String getUID();
 
-	boolean hasComponent(ComponentKey key);
+    boolean hasComponent(ComponentKey key);
 
-	<C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey key);
+    <C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey key);
 
-	<C extends IRootComponent<I>> C getComponent(ComponentKey key);
+    <C extends IRootComponent<I>> C getComponent(ComponentKey key);
 
-	IRootComponentContainer<I> getComponentContainer();
+    IRootComponentContainer<I> getComponentContainer();
 
-	IDisplayHelper getDisplayHelper();
+    IDisplayHelper getDisplayHelper();
 
-	IRootDefinition<? extends IIndividualRoot<I>> getDefinition();
+    IRootDefinition<? extends IIndividualRoot<I>> getDefinition();
 
-	<T extends IIndividualRoot> T cast();
+    <T extends IIndividualRoot> T cast();
 }

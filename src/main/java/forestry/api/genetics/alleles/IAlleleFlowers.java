@@ -12,9 +12,9 @@ import forestry.api.genetics.flowers.IFlowerProvider;
 
 public interface IAlleleFlowers extends IAllele {
 
-	/**
-	 * @return FlowerProvider
-	 */
-	IFlowerProvider getProvider();
+    /**
+     * @return FlowerProvider
+     */
+    IFlowerProvider getProvider();
 
 }

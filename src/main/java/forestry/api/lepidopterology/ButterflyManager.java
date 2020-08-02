@@ -16,29 +16,29 @@ import forestry.api.lepidopterology.genetics.IButterflyRoot;
 
 public class ButterflyManager {
 
-	public static final IRootDefinition<IButterflyRoot> butterflyRootDefinition = GeneticsAPI.apiInstance.getRoot("rootButterflies");
+    public static final IRootDefinition<IButterflyRoot> butterflyRootDefinition = GeneticsAPI.apiInstance.getRoot("rootButterflies");
 
-	/**
-	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies")
-	 *
-	 * @implNote Only null if the "lepidopterology" module is not enabled.
-	 */
-	//TODO: Move most calls to definition (more save)
-	public static IButterflyRoot butterflyRoot;
+    /**
+     * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies")
+     *
+     * @implNote Only null if the "lepidopterology" module is not enabled.
+     */
+    //TODO: Move most calls to definition (more save)
+    public static IButterflyRoot butterflyRoot;
 
-	/**
-	 * Used to create new butterflies.
-	 *
-	 * @implNote Only null if the "lepidopterology" module is not enabled.
-	 */
-	@Nullable
-	public static IButterflyFactory butterflyFactory;
+    /**
+     * Used to create new butterflies.
+     *
+     * @implNote Only null if the "lepidopterology" module is not enabled.
+     */
+    @Nullable
+    public static IButterflyFactory butterflyFactory;
 
-	/**
-	 * Used to create new butterfly mutations.
-	 *
-	 * @implNote Only null if the "lepidopterology" module is not enabled.
-	 */
-	@Nullable
-	public static IButterflyMutationFactory butterflyMutationFactory;
+    /**
+     * Used to create new butterfly mutations.
+     *
+     * @implNote Only null if the "lepidopterology" module is not enabled.
+     */
+    @Nullable
+    public static IButterflyMutationFactory butterflyMutationFactory;
 }

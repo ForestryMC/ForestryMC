@@ -26,43 +26,43 @@ import forestry.api.genetics.ISpeciesRootPollinatable;
 
 public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 
-	/**
-	 * @return {@link IArboristTracker} associated with the passed world.
-	 */
-	@Override
-	IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
+    /**
+     * @return {@link IArboristTracker} associated with the passed world.
+     */
+    @Override
+    IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
 
-	/* TREE SPECIFIC */
+    /* TREE SPECIFIC */
 
-	/**
-	 * Register a leaf tick handler.
-	 *
-	 * @param handler the {@link ILeafTickHandler} to register.
-	 */
-	void registerLeafTickHandler(ILeafTickHandler handler);
+    /**
+     * Register a leaf tick handler.
+     *
+     * @param handler the {@link ILeafTickHandler} to register.
+     */
+    void registerLeafTickHandler(ILeafTickHandler handler);
 
-	Collection<ILeafTickHandler> getLeafTickHandlers();
+    Collection<ILeafTickHandler> getLeafTickHandlers();
 
-	@Nullable
-	ITree getTree(World world, BlockPos pos);
+    @Nullable
+    ITree getTree(World world, BlockPos pos);
 
-	ITree getTree(World world, IGenome genome);
+    ITree getTree(World world, IGenome genome);
 
-	boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos);
+    boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos);
 
-	boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos);
+    boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos);
 
-	/* GAME MODE */
-	List<ITreekeepingMode> getTreekeepingModes();
+    /* GAME MODE */
+    List<ITreekeepingMode> getTreekeepingModes();
 
-	ITreekeepingMode getTreekeepingMode(IWorld world);
+    ITreekeepingMode getTreekeepingMode(IWorld world);
 
-	@Nullable
-	ITreekeepingMode getTreekeepingMode(String name);
+    @Nullable
+    ITreekeepingMode getTreekeepingMode(String name);
 
-	void registerTreekeepingMode(ITreekeepingMode mode);
+    void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(IWorld world, ITreekeepingMode mode);
+    void setTreekeepingMode(IWorld world, ITreekeepingMode mode);
 
-	Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily);
+    Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily);
 }

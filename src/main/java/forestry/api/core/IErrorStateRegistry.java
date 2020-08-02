@@ -9,16 +9,16 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 public interface IErrorStateRegistry {
-	void registerErrorState(IErrorState state);
+    void registerErrorState(IErrorState state);
 
-	void addAlias(IErrorState state, String name);
+    void addAlias(IErrorState state, String name);
 
-	@Nullable
-	IErrorState getErrorState(short id);
+    @Nullable
+    IErrorState getErrorState(short id);
 
-	IErrorState getErrorState(String name);
+    IErrorState getErrorState(String name);
 
-	Set<IErrorState> getErrorStates();
+    Set<IErrorState> getErrorStates();
 
-	IErrorLogic createErrorLogic();
+    IErrorLogic createErrorLogic();
 }

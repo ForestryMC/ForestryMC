@@ -33,50 +33,50 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.items.ItemForestry;
 
 public abstract class ItemGE extends ItemForestry {
-	protected ItemGE(Item.Properties properties) {
-		super(properties.setNoRepair());
-	}
+    protected ItemGE(Item.Properties properties) {
+        super(properties.setNoRepair());
+    }
 
-	protected abstract IAlleleForestrySpecies getSpecies(ItemStack itemStack);
+    protected abstract IAlleleForestrySpecies getSpecies(ItemStack itemStack);
 
-	@Override
-	public boolean isDamageable() {
-		return false;
-	}
+    @Override
+    public boolean isDamageable() {
+        return false;
+    }
 
-	@Override
-	public boolean hasEffect(ItemStack stack) {
-		if (!stack.hasTag()) { // villager trade wildcard bees
-			return false;
-		}
-		IAlleleForestrySpecies species = getSpecies(stack);
-		return species.hasEffect();
-	}
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        if (!stack.hasTag()) { // villager trade wildcard bees
+            return false;
+        }
+        IAlleleForestrySpecies species = getSpecies(stack);
+        return species.hasEffect();
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		if (!itemstack.hasTag()) {
-			return;
-		}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+        if (!itemstack.hasTag()) {
+            return;
+        }
 
-		Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack).filter(IIndividual::isAnalyzed);
-		if (optionalIndividual.isPresent()) {
-			IIndividual individual = optionalIndividual.get();
-			if (Screen.hasShiftDown()) {
-				individual.addTooltip(list);
-			} else {
-				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
-			}
-		} else {
-			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").mergeStyle(TextFormatting.GRAY));
-		}
-	}
+        Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack).filter(IIndividual::isAnalyzed);
+        if (optionalIndividual.isPresent()) {
+            IIndividual individual = optionalIndividual.get();
+            if (Screen.hasShiftDown()) {
+                individual.addTooltip(list);
+            } else {
+                list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
+            }
+        } else {
+            list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").mergeStyle(TextFormatting.GRAY));
+        }
+    }
 
-	@Nullable
-	@Override
-	public String getCreatorModId(ItemStack itemStack) {
-		IAlleleForestrySpecies species = getSpecies(itemStack);
-		return species.getRegistryName().getNamespace();
-	}
+    @Nullable
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+        IAlleleForestrySpecies species = getSpecies(itemStack);
+        return species.getRegistryName().getNamespace();
+    }
 }

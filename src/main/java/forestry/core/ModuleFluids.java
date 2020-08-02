@@ -37,47 +37,47 @@ import forestry.modules.ForestryModuleUids;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.fluids.description")
 public class ModuleFluids extends BlankForestryModule {
 
-	@Override
-	public boolean canBeDisabled() {
-		return false;
-	}
+    @Override
+    public boolean canBeDisabled() {
+        return false;
+    }
 
-	@Override
-	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+    @Override
+    public void preInit() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-	@Override
-	public void doInit() {
-		if (RecipeManagers.squeezerManager != null) {
-			RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAN), CoreItems.INGOT_TIN.stack(), 0.05f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE), CoreItems.BEESWAX.stack(), 0.10f);
-			RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY), CoreItems.REFRACTORY_WAX.stack(), 0.10f);
-		}
+    @Override
+    public void doInit() {
+        if (RecipeManagers.squeezerManager != null) {
+            RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAN), CoreItems.INGOT_TIN.stack(), 0.05f);
+            RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE), CoreItems.BEESWAX.stack(), 0.10f);
+            RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY), CoreItems.REFRACTORY_WAX.stack(), 0.10f);
+        }
 
-		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
-		if (!ethanol.isEmpty()) {
-			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
-			FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
-		}
+        FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
+        if (!ethanol.isEmpty()) {
+            GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
+            FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+        }
 
-		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(1);
-		if (!biomass.isEmpty()) {
-			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
-			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
-		}
-	}
+        FluidStack biomass = ForestryFluids.BIOMASS.getFluid(1);
+        if (!biomass.isEmpty()) {
+            GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
+            FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
+        }
+    }
 
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
-			return;
-		}
-		for (ForestryFluids fluid : ForestryFluids.values()) {
-			for (ResourceLocation resource : fluid.getFeature().getProperties().resources) {
-				event.addSprite(resource);
-			}
-		}
-	}
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
+        if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+            return;
+        }
+        for (ForestryFluids fluid : ForestryFluids.values()) {
+            for (ResourceLocation resource : fluid.getFeature().getProperties().resources) {
+                event.addSprite(resource);
+            }
+        }
+    }
 }

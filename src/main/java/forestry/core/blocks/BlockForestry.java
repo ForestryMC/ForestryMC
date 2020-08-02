@@ -31,38 +31,38 @@ import forestry.core.utils.Log;
 
 public abstract class BlockForestry extends Block {
 
-	protected BlockForestry(Block.Properties properties) {
-		super(properties
-			.hardnessAndResistance(1.5f));
-	}
+    protected BlockForestry(Block.Properties properties) {
+        super(properties
+                .hardnessAndResistance(1.5f));
+    }
 
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		if (world.isRemote) {
-			return;
-		}
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        if (world.isRemote) {
+            return;
+        }
 
-		if (placer instanceof PlayerEntity) {
-			TileUtil.actOnTile(world, pos, IOwnedTile.class, tile -> {
-				IOwnerHandler ownerHandler = tile.getOwnerHandler();
-				PlayerEntity player = (PlayerEntity) placer;
-				GameProfile gameProfile = player.getGameProfile();
-				ownerHandler.setOwner(gameProfile);
-			});
-		}
-	}
+        if (placer instanceof PlayerEntity) {
+            TileUtil.actOnTile(world, pos, IOwnedTile.class, tile -> {
+                IOwnerHandler ownerHandler = tile.getOwnerHandler();
+                PlayerEntity player = (PlayerEntity) placer;
+                GameProfile gameProfile = player.getGameProfile();
+                ownerHandler.setOwner(gameProfile);
+            });
+        }
+    }
 
-	@Override
-	public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
-		super.onNeighborChange(state, world, pos, neighbor);
+    @Override
+    public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
+        super.onNeighborChange(state, world, pos, neighbor);
 
-		if (world instanceof World) {
-			try {
-				TileUtil.actOnTile(world, pos, TileForestry.class, tile -> tile.onNeighborTileChange((World) world, pos, neighbor));
-			} catch (StackOverflowError error) {
-				Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
-				throw error;
-			}
-		}
-	}
+        if (world instanceof World) {
+            try {
+                TileUtil.actOnTile(world, pos, TileForestry.class, tile -> tile.onNeighborTileChange((World) world, pos, neighbor));
+            } catch (StackOverflowError error) {
+                Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
+                throw error;
+            }
+        }
+    }
 }

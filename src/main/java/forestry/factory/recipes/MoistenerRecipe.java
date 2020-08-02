@@ -16,28 +16,28 @@ import forestry.api.recipes.IMoistenerRecipe;
 
 public class MoistenerRecipe implements IMoistenerRecipe {
 
-	private final int timePerItem;
-	private final ItemStack resource;
-	private final ItemStack product;
+    private final int timePerItem;
+    private final ItemStack resource;
+    private final ItemStack product;
 
-	public MoistenerRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-		this.timePerItem = timePerItem;
-		this.resource = resource;
-		this.product = product;
-	}
+    public MoistenerRecipe(ItemStack resource, ItemStack product, int timePerItem) {
+        this.timePerItem = timePerItem;
+        this.resource = resource;
+        this.product = product;
+    }
 
-	@Override
-	public int getTimePerItem() {
-		return timePerItem;
-	}
+    @Override
+    public int getTimePerItem() {
+        return timePerItem;
+    }
 
-	@Override
-	public ItemStack getResource() {
-		return resource;
-	}
+    @Override
+    public ItemStack getResource() {
+        return resource;
+    }
 
-	@Override
-	public ItemStack getProduct() {
-		return product;
-	}
+    @Override
+    public ItemStack getProduct() {
+        return product;
+    }
 }

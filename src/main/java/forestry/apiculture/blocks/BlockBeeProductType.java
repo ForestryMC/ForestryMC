@@ -1,22 +1,22 @@
 package forestry.apiculture.blocks;
 
-import java.util.Locale;
-
 import net.minecraft.util.IStringSerializable;
 
+import java.util.Locale;
+
 public enum BlockBeeProductType implements IStringSerializable {
-	BEE_COMBS,
-	BEESWAX;
+    BEE_COMBS,
+    BEESWAX;
 
-	public static final BlockBeeProductType[] VALUES = values();
+    public static final BlockBeeProductType[] VALUES = values();
 
-	@Override
-	public String getString() {
-		return name().toLowerCase(Locale.ENGLISH);
-	}
+    @Override
+    public String getString() {
+        return name().toLowerCase(Locale.ENGLISH);
+    }
 
-	public int getMeta() {
-		return ordinal();
-	}
+    public int getMeta() {
+        return ordinal();
+    }
 
 }

@@ -16,23 +16,23 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 //TODO - figure out how IAnimal works now, might want to make abstract and extend AnimalEntity
 public interface IEntityButterfly {
 
-	void changeExhaustion(int change);
+    void changeExhaustion(int change);
 
-	int getExhaustion();
+    int getExhaustion();
 
-	IButterfly getButterfly();
+    IButterfly getButterfly();
 
-	/**
-	 * @return The entity as an EntityCreature to save casting.
-	 */
-	CreatureEntity getEntity();
+    /**
+     * @return The entity as an EntityCreature to save casting.
+     */
+    CreatureEntity getEntity();
 
-	@Nullable
-	IIndividual getPollen();
+    @Nullable
+    IIndividual getPollen();
 
-	void setPollen(@Nullable IIndividual pollen);
+    void setPollen(@Nullable IIndividual pollen);
 
-	boolean canMateWith(IEntityButterfly butterfly);
+    boolean canMateWith(IEntityButterfly butterfly);
 
-	boolean canMate();
+    boolean canMate();
 }

@@ -13,8 +13,8 @@ import forestry.api.arboriculture.genetics.ITree;
 
 public interface IGrowthProvider {
 
-	boolean canSpawn(ITree tree, World world, BlockPos pos);
+    boolean canSpawn(ITree tree, World world, BlockPos pos);
 
-	boolean isBiomeValid(ITree tree, Biome biome);
+    boolean isBiomeValid(ITree tree, Biome biome);
 
 }

@@ -15,9 +15,9 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface IPickupHandler {
 
-	/**
-	 * Returns true if the item was picked up completely
-	 */
-	boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity item);
+    /**
+     * Returns true if the item was picked up completely
+     */
+    boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity item);
 
 }

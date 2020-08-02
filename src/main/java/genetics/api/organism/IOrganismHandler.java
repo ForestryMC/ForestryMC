@@ -13,25 +13,25 @@ import genetics.api.individual.IIndividual;
  */
 public interface IOrganismHandler<I extends IIndividual> {
 
-	/**
-	 * Creates a stack that contains the genetic information of the given individual in the NBT-Data.
-	 *
-	 * @param individual The individual that contains the genetic information
-	 */
-	ItemStack createStack(I individual);
+    /**
+     * Creates a stack that contains the genetic information of the given individual in the NBT-Data.
+     *
+     * @param individual The individual that contains the genetic information
+     */
+    ItemStack createStack(I individual);
 
-	/**
-	 * Creates a individual with the genetic information that the NBT-Data of the stack contains.
-	 */
-	Optional<I> createIndividual(ItemStack itemStack);
+    /**
+     * Creates a individual with the genetic information that the NBT-Data of the stack contains.
+     */
+    Optional<I> createIndividual(ItemStack itemStack);
 
-	/**
-	 * Writes the genetic information of the given individual to the NBT-Data of the given stack
-	 */
-	boolean setIndividual(ItemStack itemStack, I individual);
+    /**
+     * Writes the genetic information of the given individual to the NBT-Data of the given stack
+     */
+    boolean setIndividual(ItemStack itemStack, I individual);
 
-	@Nullable
-	CompoundNBT getIndividualData(ItemStack itemStack);
+    @Nullable
+    CompoundNBT getIndividualData(ItemStack itemStack);
 
-	void setIndividualData(ItemStack itemStack, CompoundNBT compound);
+    void setIndividualData(ItemStack itemStack, CompoundNBT compound);
 }

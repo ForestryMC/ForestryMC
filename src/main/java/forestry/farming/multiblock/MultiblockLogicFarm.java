@@ -16,21 +16,21 @@ import forestry.api.multiblock.IMultiblockLogicFarm;
 import forestry.core.multiblock.MultiblockLogic;
 
 public class MultiblockLogicFarm extends MultiblockLogic<IFarmControllerInternal> implements IMultiblockLogicFarm {
-	public MultiblockLogicFarm() {
-		super(IFarmControllerInternal.class);
-	}
+    public MultiblockLogicFarm() {
+        super(IFarmControllerInternal.class);
+    }
 
-	@Override
-	public IFarmControllerInternal getController() {
-		if (controller != null) {
-			return controller;
-		} else {
-			return FakeFarmController.instance;
-		}
-	}
+    @Override
+    public IFarmControllerInternal getController() {
+        if (controller != null) {
+            return controller;
+        } else {
+            return FakeFarmController.instance;
+        }
+    }
 
-	@Override
-	public IFarmControllerInternal createNewController(World world) {
-		return new FarmController(world);
-	}
+    @Override
+    public IFarmControllerInternal createNewController(World world) {
+        return new FarmController(world);
+    }
 }

@@ -21,17 +21,17 @@ import forestry.core.tiles.TileUtil;
 
 public class ContainerAlvearySwarmer extends ContainerTile<TileAlvearySwarmer> {
 
-	public static ContainerAlvearySwarmer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileAlvearySwarmer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearySwarmer.class);
-		return new ContainerAlvearySwarmer(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerAlvearySwarmer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileAlvearySwarmer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearySwarmer.class);
+        return new ContainerAlvearySwarmer(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerAlvearySwarmer(int windowId, PlayerInventory player, TileAlvearySwarmer tile) {
-		super(windowId, ApicultureContainers.ALVEARY_SWARMER.containerType(), player, tile, 8, 87);
+    public ContainerAlvearySwarmer(int windowId, PlayerInventory player, TileAlvearySwarmer tile) {
+        super(windowId, ApicultureContainers.ALVEARY_SWARMER.containerType(), player, tile, 8, 87);
 
-		this.addSlot(new SlotFiltered(tile, 0, 79, 52));
-		this.addSlot(new SlotFiltered(tile, 1, 100, 39));
-		this.addSlot(new SlotFiltered(tile, 2, 58, 39));
-		this.addSlot(new SlotFiltered(tile, 3, 79, 26));
-	}
+        this.addSlot(new SlotFiltered(tile, 0, 79, 52));
+        this.addSlot(new SlotFiltered(tile, 1, 100, 39));
+        this.addSlot(new SlotFiltered(tile, 2, 58, 39));
+        this.addSlot(new SlotFiltered(tile, 3, 79, 26));
+    }
 }

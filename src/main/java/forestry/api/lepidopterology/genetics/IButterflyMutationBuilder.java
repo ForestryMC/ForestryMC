@@ -8,6 +8,6 @@ package forestry.api.lepidopterology.genetics;
 import forestry.api.genetics.IMutationBuilder;
 
 public interface IButterflyMutationBuilder extends IMutationBuilder {
-	@Override
-	IButterflyMutation build();
+    @Override
+    IButterflyMutation build();
 }

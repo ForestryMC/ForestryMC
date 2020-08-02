@@ -11,10 +11,10 @@ import net.minecraft.util.NonNullList;
 
 public interface ICharcoalPileWall {
 
-	int getCharcoalAmount();
+    int getCharcoalAmount();
 
-	boolean matches(BlockState state);
+    boolean matches(BlockState state);
 
-	NonNullList<ItemStack> getDisplayItems();
+    NonNullList<ItemStack> getDisplayItems();
 
 }

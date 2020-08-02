@@ -7,6 +7,6 @@ package forestry.api.storage;
 
 public class StorageManager {
 
-	public static ICrateRegistry crateRegistry;
+    public static ICrateRegistry crateRegistry;
 
 }

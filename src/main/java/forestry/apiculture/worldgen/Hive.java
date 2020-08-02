@@ -27,65 +27,65 @@ import forestry.api.core.EnumTemperature;
 
 public final class Hive {
 
-	private final IHiveDescription hiveDescription;
-	private final List<IHiveDrop> drops = new ArrayList<>();
+    private final IHiveDescription hiveDescription;
+    private final List<IHiveDrop> drops = new ArrayList<>();
 
-	public Hive(IHiveDescription hiveDescription) {
-		this.hiveDescription = hiveDescription;
-	}
+    public Hive(IHiveDescription hiveDescription) {
+        this.hiveDescription = hiveDescription;
+    }
 
-	public BlockState getHiveBlockState() {
-		return hiveDescription.getBlockState();
-	}
+    public BlockState getHiveBlockState() {
+        return hiveDescription.getBlockState();
+    }
 
-	public void addDrops(List<IHiveDrop> drops) {
-		this.drops.addAll(drops);
-	}
+    public void addDrops(List<IHiveDrop> drops) {
+        this.drops.addAll(drops);
+    }
 
-	public List<IHiveDrop> getDrops() {
-		return drops;
-	}
+    public List<IHiveDrop> getDrops() {
+        return drops;
+    }
 
-	public float genChance() {
-		return hiveDescription.getGenChance();
-	}
+    public float genChance() {
+        return hiveDescription.getGenChance();
+    }
 
-	public void postGen(World world, Random rand, BlockPos pos) {
-		hiveDescription.postGen(world, rand, pos);
-	}
+    public void postGen(World world, Random rand, BlockPos pos) {
+        hiveDescription.postGen(world, rand, pos);
+    }
 
-	public boolean isGoodBiome(Biome biome) {
-		return hiveDescription.isGoodBiome(biome);
-	}
+    public boolean isGoodBiome(Biome biome) {
+        return hiveDescription.isGoodBiome(biome);
+    }
 
-	public boolean isGoodHumidity(EnumHumidity humidity) {
-		return hiveDescription.isGoodHumidity(humidity);
-	}
+    public boolean isGoodHumidity(EnumHumidity humidity) {
+        return hiveDescription.isGoodHumidity(humidity);
+    }
 
-	public boolean isGoodTemperature(EnumTemperature temperature) {
-		return hiveDescription.isGoodTemperature(temperature);
-	}
+    public boolean isGoodTemperature(EnumTemperature temperature) {
+        return hiveDescription.isGoodTemperature(temperature);
+    }
 
-	public boolean isValidLocation(World world, BlockPos pos) {
-		//TODO: Find a way to get the dimension type name
+    public boolean isValidLocation(World world, BlockPos pos) {
+        //TODO: Find a way to get the dimension type name
 		/*if (!HiveConfig.isDimAllowed(world.func_230315_m_().getRegistryName())) {
 			return false;
 		}*/
-		return hiveDescription.getHiveGen().isValidLocation(world, pos);
-	}
+        return hiveDescription.getHiveGen().isValidLocation(world, pos);
+    }
 
-	public boolean canReplace(World world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		return hiveDescription.getHiveGen().canReplace(blockState, world, pos);
-	}
+    public boolean canReplace(World world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        return hiveDescription.getHiveGen().canReplace(blockState, world, pos);
+    }
 
-	@Nullable
-	public BlockPos getPosForHive(World world, int x, int z) {
-		return hiveDescription.getHiveGen().getPosForHive(world, x, z);
-	}
+    @Nullable
+    public BlockPos getPosForHive(World world, int x, int z) {
+        return hiveDescription.getHiveGen().getPosForHive(world, x, z);
+    }
 
-	@Override
-	public String toString() {
-		return hiveDescription + " hive";
-	}
+    @Override
+    public String toString() {
+        return hiveDescription + " hive";
+    }
 }

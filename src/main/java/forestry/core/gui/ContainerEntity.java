@@ -25,44 +25,44 @@ import forestry.api.core.IErrorState;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
 
 public class ContainerEntity<T extends Entity & IInventory> extends ContainerForestry {
-	protected final T entity;
-	@Nullable
-	private ImmutableSet<IErrorState> previousErrorStates;
+    protected final T entity;
+    @Nullable
+    private ImmutableSet<IErrorState> previousErrorStates;
 
-	protected ContainerEntity(int windowId, ContainerType<?> type, T entity) {
-		super(windowId, type);
-		this.entity = entity;
-	}
+    protected ContainerEntity(int windowId, ContainerType<?> type, T entity) {
+        super(windowId, type);
+        this.entity = entity;
+    }
 
-	protected ContainerEntity(int windowId, ContainerType<?> type, T entity, PlayerInventory playerInventory, int xInv, int yInv) {
-		this(windowId, type, entity);
-		addPlayerInventory(playerInventory, xInv, yInv);
-	}
+    protected ContainerEntity(int windowId, ContainerType<?> type, T entity, PlayerInventory playerInventory, int xInv, int yInv) {
+        this(windowId, type, entity);
+        addPlayerInventory(playerInventory, xInv, yInv);
+    }
 
-	@Override
-	protected final boolean canAccess(PlayerEntity player) {
-		return true;
-	}
+    @Override
+    protected final boolean canAccess(PlayerEntity player) {
+        return true;
+    }
 
-	@Override
-	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
-		return entity.isUsableByPlayer(PlayerEntity);
-	}
+    @Override
+    public final boolean canInteractWith(PlayerEntity PlayerEntity) {
+        return entity.isUsableByPlayer(PlayerEntity);
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		if (entity instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
-			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
+        if (entity instanceof IErrorLogicSource) {
+            IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
+            ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
-				PacketErrorUpdateEntity packet = new PacketErrorUpdateEntity(entity, errorLogicSource);
-				sendPacketToListeners(packet);
-			}
+            if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
+                PacketErrorUpdateEntity packet = new PacketErrorUpdateEntity(entity, errorLogicSource);
+                sendPacketToListeners(packet);
+            }
 
-			previousErrorStates = errorStates;
-		}
-	}
+            previousErrorStates = errorStates;
+        }
+    }
 }

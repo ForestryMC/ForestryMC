@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
 public interface ITreeBlockType {
-	void setDirection(Direction facing);
+    void setDirection(Direction facing);
 
-	boolean setBlock(IWorld world, BlockPos pos);
+    boolean setBlock(IWorld world, BlockPos pos);
 }

@@ -10,10 +10,10 @@ import forestry.core.tiles.ITitled;
 
 public interface IFilterContainer extends ILocatable, ITitled {
 
-	@Nullable
-	IInventory getBuffer();
+    @Nullable
+    IInventory getBuffer();
 
-	TileGeneticFilter getTileEntity();
+    TileGeneticFilter getTileEntity();
 
-	IFilterLogic getLogic();
+    IFilterLogic getLogic();
 }

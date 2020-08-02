@@ -18,37 +18,37 @@ import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 
 public class AIButterflyFlee extends AIButterflyMovement {
 
-	public AIButterflyFlee(EntityButterfly entity) {
-		super(entity);
-		setMutexFlags(EnumSet.of(Flag.MOVE));
-		//		setMutexBits(3);	TODO mutex
-	}
+    public AIButterflyFlee(EntityButterfly entity) {
+        super(entity);
+        setMutexFlags(EnumSet.of(Flag.MOVE));
+        //		setMutexBits(3);	TODO mutex
+    }
 
-	@Override
-	public boolean shouldExecute() {
+    @Override
+    public boolean shouldExecute() {
 
-		PlayerEntity player = entity.world.getClosestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
+        PlayerEntity player = entity.world.getClosestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
 
-		if (player == null || player.isSneaking()) {
-			return false;
-		}
+        if (player == null || player.isSneaking()) {
+            return false;
+        }
 
-		if (!entity.getEntitySenses().canSee(player)) {
-			return false;
-		}
+        if (!entity.getEntitySenses().canSee(player)) {
+            return false;
+        }
 
-		flightTarget = getRandomDestination();
-		if (flightTarget == null) {
-			return false;
-		}
+        flightTarget = getRandomDestination();
+        if (flightTarget == null) {
+            return false;
+        }
 
-		if (player.getDistanceSq(flightTarget.x, flightTarget.y, flightTarget.z) < player.getDistance(entity)) {
-			return false;
-		}
+        if (player.getDistanceSq(flightTarget.x, flightTarget.y, flightTarget.z) < player.getDistance(entity)) {
+            return false;
+        }
 
-		entity.setDestination(flightTarget);
-		entity.setState(EnumButterflyState.FLYING);
-		return true;
-	}
+        entity.setDestination(flightTarget);
+        entity.setState(EnumButterflyState.FLYING);
+        return true;
+    }
 
 }

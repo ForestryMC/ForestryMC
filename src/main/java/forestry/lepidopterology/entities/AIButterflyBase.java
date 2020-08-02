@@ -21,56 +21,56 @@ import net.minecraft.util.math.vector.Vector3d;
 
 public abstract class AIButterflyBase extends Goal {
 
-	protected final EntityButterfly entity;
+    protected final EntityButterfly entity;
 
-	protected AIButterflyBase(EntityButterfly entity) {
-		this.entity = entity;
-	}
+    protected AIButterflyBase(EntityButterfly entity) {
+        this.entity = entity;
+    }
 
-	@Nullable
-	protected Vector3d getRandomDestination() {
-		if (entity.isInWater()) {
-			return getRandomDestinationUpwards();
-		}
+    @Nullable
+    protected Vector3d getRandomDestination() {
+        if (entity.isInWater()) {
+            return getRandomDestinationUpwards();
+        }
 
-		Vector3d entityPos = entity.getPositionVec();
-		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entityPos);
+        Vector3d entityPos = entity.getPositionVec();
+        Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entityPos);
 
-		if (randomTarget != null && validateDestination(randomTarget, false)) {
-			return randomTarget;
-		}
-		return null;
-	}
+        if (randomTarget != null && validateDestination(randomTarget, false)) {
+            return randomTarget;
+        }
+        return null;
+    }
 
-	@Nullable
-	protected Vector3d getRandomDestinationUpwards() {
-		Vector3d entityPos = entity.getPositionVec();
-		Vector3d destination = entityPos.add(0, entity.getRNG().nextInt(10) + 2, 0);
-		if (validateDestination(destination, true)) {
-			return destination;
-		} else {
-			return null;
-		}
-	}
+    @Nullable
+    protected Vector3d getRandomDestinationUpwards() {
+        Vector3d entityPos = entity.getPositionVec();
+        Vector3d destination = entityPos.add(0, entity.getRNG().nextInt(10) + 2, 0);
+        if (validateDestination(destination, true)) {
+            return destination;
+        } else {
+            return null;
+        }
+    }
 
-	private boolean validateDestination(Vector3d dest, boolean allowFluids) {
-		if (dest.y < 1) {
-			return false;
-		}
-		BlockPos pos = new BlockPos(dest);
-		if (!entity.world.isBlockLoaded(pos)) {
-			return false;
-		}
-		BlockState blockState = entity.world.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (!allowFluids && blockState.getMaterial().isLiquid()) {
-			return false;
-		}
-		//		if (!block.isPassable(entity.world, pos)) {
-		if (!block.isAir(blockState, entity.world, pos)) {    //TODO
-			return false;
-		}
-		return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.x, dest.y, dest.z);
-	}
+    private boolean validateDestination(Vector3d dest, boolean allowFluids) {
+        if (dest.y < 1) {
+            return false;
+        }
+        BlockPos pos = new BlockPos(dest);
+        if (!entity.world.isBlockLoaded(pos)) {
+            return false;
+        }
+        BlockState blockState = entity.world.getBlockState(pos);
+        Block block = blockState.getBlock();
+        if (!allowFluids && blockState.getMaterial().isLiquid()) {
+            return false;
+        }
+        //		if (!block.isPassable(entity.world, pos)) {
+        if (!block.isAir(blockState, entity.world, pos)) {    //TODO
+            return false;
+        }
+        return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.x, dest.y, dest.z);
+    }
 
 }

@@ -21,13 +21,13 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public interface IStatsSaveHelper {
 
-	String getUnlocalizedSaveStatsString();
+    String getUnlocalizedSaveStatsString();
 
-	void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
+    void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
 
-	Collection<? extends IAlleleForestrySpecies> getSpecies();
+    Collection<? extends IAlleleForestrySpecies> getSpecies();
 
-	String getFileSuffix();
+    String getFileSuffix();
 
-	IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile);
+    IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile);
 }

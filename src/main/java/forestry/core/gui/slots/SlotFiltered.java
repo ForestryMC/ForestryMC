@@ -23,43 +23,43 @@ import forestry.core.tiles.IFilterSlotDelegate;
  * Slot which only takes specific items, specified by the IFilterSlotDelegate.
  */
 public class SlotFiltered extends SlotWatched implements ISlotTextured {
-	private final IFilterSlotDelegate filterSlotDelegate;
-	@Nullable
-	private ResourceLocation backgroundTexture = null;
-	private ResourceLocation blockedTexture = new ResourceLocation(Constants.MOD_ID, "slots/blocked");
+    private final IFilterSlotDelegate filterSlotDelegate;
+    @Nullable
+    private ResourceLocation backgroundTexture = null;
+    private ResourceLocation blockedTexture = new ResourceLocation(Constants.MOD_ID, "slots/blocked");
 
-	public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
-		super(inventory, slotIndex, xPos, yPos);
-		this.filterSlotDelegate = inventory;
-	}
+    public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
+        super(inventory, slotIndex, xPos, yPos);
+        this.filterSlotDelegate = inventory;
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		int slotIndex = getSlotIndex();
-		return !filterSlotDelegate.isLocked(slotIndex) &&
-			(itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
-	}
+    @Override
+    public boolean isItemValid(ItemStack itemstack) {
+        int slotIndex = getSlotIndex();
+        return !filterSlotDelegate.isLocked(slotIndex) &&
+                (itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
+    }
 
-	public SlotFiltered setBlockedTexture(String ident) {
-		blockedTexture = new ResourceLocation(Constants.MOD_ID, ident);
-		return this;
-	}
+    public SlotFiltered setBlockedTexture(String ident) {
+        blockedTexture = new ResourceLocation(Constants.MOD_ID, ident);
+        return this;
+    }
 
-	public SlotFiltered setBackgroundTexture(String backgroundTexture) {
-		this.backgroundTexture = new ResourceLocation(Constants.MOD_ID, backgroundTexture);
-		return this;
-	}
+    public SlotFiltered setBackgroundTexture(String backgroundTexture) {
+        this.backgroundTexture = new ResourceLocation(Constants.MOD_ID, backgroundTexture);
+        return this;
+    }
 
-	@Nullable
-	@Override
-	public ResourceLocation getBackgroundTexture() {
-		ItemStack stack = getStack();
-		if (!isItemValid(stack)) {
-			return blockedTexture;
-		} else if (backgroundTexture != null) {
-			return backgroundTexture;
-		} else {
-			return null;
-		}
-	}
+    @Nullable
+    @Override
+    public ResourceLocation getBackgroundTexture() {
+        ItemStack stack = getStack();
+        if (!isItemValid(stack)) {
+            return blockedTexture;
+        } else if (backgroundTexture != null) {
+            return backgroundTexture;
+        } else {
+            return null;
+        }
+    }
 }

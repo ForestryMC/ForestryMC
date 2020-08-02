@@ -12,32 +12,32 @@ import forestry.api.core.ILocatable;
 
 public interface IClimateHousing extends IErrorLogicSource, ILocatable, IClimateProvider {
 
-	/**
-	 * @return The current temperature as an enum.
-	 */
-	EnumTemperature getTemperature();
+    /**
+     * @return The current temperature as an enum.
+     */
+    EnumTemperature getTemperature();
 
-	/**
-	 * @return The current humidity as an enum.
-	 */
-	EnumHumidity getHumidity();
+    /**
+     * @return The current humidity as an enum.
+     */
+    EnumHumidity getHumidity();
 
-	/**
-	 * @return The current temperature as an float. Range: 0.0F ~ 2.0F
-	 */
-	float getExactTemperature();
+    /**
+     * @return The current temperature as an float. Range: 0.0F ~ 2.0F
+     */
+    float getExactTemperature();
 
-	/**
-	 * @return The current humidity as an float. Range: 0.0F ~ 2.0F
-	 */
-	float getExactHumidity();
+    /**
+     * @return The current humidity as an float. Range: 0.0F ~ 2.0F
+     */
+    float getExactHumidity();
 
-	/**
-	 * @return the logic that handles the climate change of this housing.
-	 */
-	IClimateTransformer getTransformer();
+    /**
+     * @return the logic that handles the climate change of this housing.
+     */
+    IClimateTransformer getTransformer();
 
-	float getChangeForState(ClimateType type, IClimateManipulator manipulator);
+    float getChangeForState(ClimateType type, IClimateManipulator manipulator);
 
-	void markNetworkUpdate();
+    void markNetworkUpdate();
 }

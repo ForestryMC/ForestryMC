@@ -13,5 +13,5 @@ package forestry.core.tiles;
 import forestry.energy.EnergyManager;
 
 public interface IPowerHandler {
-	EnergyManager getEnergyManager();
+    EnergyManager getEnergyManager();
 }

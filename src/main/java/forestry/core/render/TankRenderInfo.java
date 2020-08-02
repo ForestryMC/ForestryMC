@@ -14,25 +14,25 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 public class TankRenderInfo {
-	public static final TankRenderInfo EMPTY = new TankRenderInfo(FluidStack.EMPTY, EnumTankLevel.EMPTY);
+    public static final TankRenderInfo EMPTY = new TankRenderInfo(FluidStack.EMPTY, EnumTankLevel.EMPTY);
 
-	private final FluidStack fluidStack;
-	private final EnumTankLevel level;
+    private final FluidStack fluidStack;
+    private final EnumTankLevel level;
 
-	public TankRenderInfo(IFluidTank fluidTank) {
-		this(fluidTank.getFluid(), EnumTankLevel.rateTankLevel(fluidTank));
-	}
+    public TankRenderInfo(IFluidTank fluidTank) {
+        this(fluidTank.getFluid(), EnumTankLevel.rateTankLevel(fluidTank));
+    }
 
-	public TankRenderInfo(FluidStack fluidStack, EnumTankLevel level) {
-		this.fluidStack = fluidStack;
-		this.level = level;
-	}
+    public TankRenderInfo(FluidStack fluidStack, EnumTankLevel level) {
+        this.fluidStack = fluidStack;
+        this.level = level;
+    }
 
-	public FluidStack getFluidStack() {
-		return fluidStack;
-	}
+    public FluidStack getFluidStack() {
+        return fluidStack;
+    }
 
-	public EnumTankLevel getLevel() {
-		return level;
-	}
+    public EnumTankLevel getLevel() {
+        return level;
+    }
 }

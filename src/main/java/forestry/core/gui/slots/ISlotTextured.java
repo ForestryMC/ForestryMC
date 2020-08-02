@@ -10,10 +10,10 @@ import forestry.core.render.TextureManagerForestry;
 
 public interface ISlotTextured {
 
-	default Function<ResourceLocation, TextureAtlasSprite> getBackgroundAtlas() {
-		return TextureManagerForestry.getInstance().getSpriteUploader()::getSprite;
-	}
+    default Function<ResourceLocation, TextureAtlasSprite> getBackgroundAtlas() {
+        return TextureManagerForestry.getInstance().getSpriteUploader()::getSprite;
+    }
 
-	@Nullable
-	ResourceLocation getBackgroundTexture();
+    @Nullable
+    ResourceLocation getBackgroundTexture();
 }

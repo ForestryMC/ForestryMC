@@ -11,23 +11,23 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
 public interface IFarmPropertiesBuilder {
-	IFarmPropertiesBuilder setIcon(Supplier<ItemStack> stackSupplier);
+    IFarmPropertiesBuilder setIcon(Supplier<ItemStack> stackSupplier);
 
-	default IFarmPropertiesBuilder setFertilizer(int fertilizer) {
-		return setFertilizer((housing) -> fertilizer);
-	}
+    default IFarmPropertiesBuilder setFertilizer(int fertilizer) {
+        return setFertilizer((housing) -> fertilizer);
+    }
 
-	IFarmPropertiesBuilder setFertilizer(ToIntFunction<IFarmHousing> consumption);
+    IFarmPropertiesBuilder setFertilizer(ToIntFunction<IFarmHousing> consumption);
 
-	default IFarmPropertiesBuilder setWater(int waterConsumption) {
-		return setWater((housing, hydrationModifier) -> waterConsumption);
-	}
+    default IFarmPropertiesBuilder setWater(int waterConsumption) {
+        return setWater((housing, hydrationModifier) -> waterConsumption);
+    }
 
-	default IFarmPropertiesBuilder setWater(ToIntFunction<Float> waterConsumption) {
-		return setWater((housing, hydrationModifier) -> waterConsumption.applyAsInt(hydrationModifier));
-	}
+    default IFarmPropertiesBuilder setWater(ToIntFunction<Float> waterConsumption) {
+        return setWater((housing, hydrationModifier) -> waterConsumption.applyAsInt(hydrationModifier));
+    }
 
-	IFarmPropertiesBuilder setWater(ToIntBiFunction<IFarmHousing, Float> waterConsumption);
+    IFarmPropertiesBuilder setWater(ToIntBiFunction<IFarmHousing, Float> waterConsumption);
 
 	/*IFarmPropertiesBuilder setResourcePredicate(Predicate<ItemStack> isResource);
 
@@ -35,25 +35,25 @@ public interface IFarmPropertiesBuilder {
 
 	IFarmPropertiesBuilder setWindfallPredicate(Predicate<ItemStack> isWindfall);*/
 
-	default IFarmPropertiesBuilder addSoil(Block block) {
-		return addSoil(new ItemStack(block), block.getDefaultState());
-	}
+    default IFarmPropertiesBuilder addSoil(Block block) {
+        return addSoil(new ItemStack(block), block.getDefaultState());
+    }
 
-	IFarmPropertiesBuilder addSoil(ItemStack resource, BlockState soilState);
+    IFarmPropertiesBuilder addSoil(ItemStack resource, BlockState soilState);
 
-	IFarmPropertiesBuilder addSeedlings(ItemStack... seedling);
+    IFarmPropertiesBuilder addSeedlings(ItemStack... seedling);
 
-	IFarmPropertiesBuilder addSeedlings(Collection<ItemStack> seedling);
+    IFarmPropertiesBuilder addSeedlings(Collection<ItemStack> seedling);
 
-	IFarmPropertiesBuilder addProducts(ItemStack... products);
+    IFarmPropertiesBuilder addProducts(ItemStack... products);
 
-	IFarmPropertiesBuilder addProducts(Collection<ItemStack> products);
+    IFarmPropertiesBuilder addProducts(Collection<ItemStack> products);
 
-	IFarmPropertiesBuilder addFarmables(String... identifiers);
+    IFarmPropertiesBuilder addFarmables(String... identifiers);
 
-	IFarmPropertiesBuilder setFactory(BiFunction<IFarmProperties, Boolean, IFarmLogic> factory);
+    IFarmPropertiesBuilder setFactory(BiFunction<IFarmProperties, Boolean, IFarmLogic> factory);
 
-	IFarmPropertiesBuilder setTranslationKey(String translationKey);
+    IFarmPropertiesBuilder setTranslationKey(String translationKey);
 
-	IFarmProperties create();
+    IFarmProperties create();
 }

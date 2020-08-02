@@ -33,51 +33,51 @@ import forestry.mail.items.EnumStampDefinition;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 
-	// / CONSTANTS
-	public static final String SAVE_NAME = "forestry_mail";
-	private final int[] collectedPostage = new int[EnumPostage.values().length];
-	private LinkedHashMap<IMailAddress, ITradeStation> activeTradeStations = new LinkedHashMap<>();
+    // / CONSTANTS
+    public static final String SAVE_NAME = "forestry_mail";
+    private final int[] collectedPostage = new int[EnumPostage.values().length];
+    private final LinkedHashMap<IMailAddress, ITradeStation> activeTradeStations = new LinkedHashMap<>();
 
-	// CONSTRUCTORS
-	public PostOffice() {
-		super(SAVE_NAME);
-	}
+    // CONSTRUCTORS
+    public PostOffice() {
+        super(SAVE_NAME);
+    }
 
-	@SuppressWarnings("unused")
-	public PostOffice(String s) {
-		super(s);
-	}
+    @SuppressWarnings("unused")
+    public PostOffice(String s) {
+        super(s);
+    }
 
-	public void setWorld(ServerWorld world) {
-		refreshActiveTradeStations(world);
-	}
+    public void setWorld(ServerWorld world) {
+        refreshActiveTradeStations(world);
+    }
 
-	@Override
-	public void read(CompoundNBT compoundNBT) {
-		for (int i = 0; i < collectedPostage.length; i++) {
-			if (compoundNBT.contains("CPS" + i)) {
-				collectedPostage[i] = compoundNBT.getInt("CPS" + i);
-			}
-		}
-	}
+    @Override
+    public void read(CompoundNBT compoundNBT) {
+        for (int i = 0; i < collectedPostage.length; i++) {
+            if (compoundNBT.contains("CPS" + i)) {
+                collectedPostage[i] = compoundNBT.getInt("CPS" + i);
+            }
+        }
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		for (int i = 0; i < collectedPostage.length; i++) {
-			compoundNBT.putInt("CPS" + i, collectedPostage[i]);
-		}
-		return compoundNBT;
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        for (int i = 0; i < collectedPostage.length; i++) {
+            compoundNBT.putInt("CPS" + i, collectedPostage[i]);
+        }
+        return compoundNBT;
+    }
 
-	/* TRADE STATION MANAGMENT */
+    /* TRADE STATION MANAGMENT */
 
-	@Override
-	public LinkedHashMap<IMailAddress, ITradeStation> getActiveTradeStations(World world) {
-		return this.activeTradeStations;
-	}
+    @Override
+    public LinkedHashMap<IMailAddress, ITradeStation> getActiveTradeStations(World world) {
+        return this.activeTradeStations;
+    }
 
-	private void refreshActiveTradeStations(ServerWorld world) {
-		//TODO: Find a way to write and read mail data
+    private void refreshActiveTradeStations(ServerWorld world) {
+        //TODO: Find a way to write and read mail data
 		/*activeTradeStations = new LinkedHashMap<>();
 		File worldSave = world.getSaveHandler().getWorldDirectory();    //TODO right file?
 		File file = worldSave.getParentFile();
@@ -106,97 +106,97 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 			registerTradeStation(trade);
 		}*/
-	}
+    }
 
-	@Override
-	public void registerTradeStation(ITradeStation trade) {
-		if (!activeTradeStations.containsKey(trade.getAddress())) {
-			activeTradeStations.put(trade.getAddress(), trade);
-		}
-	}
+    @Override
+    public void registerTradeStation(ITradeStation trade) {
+        if (!activeTradeStations.containsKey(trade.getAddress())) {
+            activeTradeStations.put(trade.getAddress(), trade);
+        }
+    }
 
-	@Override
-	public void deregisterTradeStation(ITradeStation trade) {
-		activeTradeStations.remove(trade.getAddress());
-	}
+    @Override
+    public void deregisterTradeStation(ITradeStation trade) {
+        activeTradeStations.remove(trade.getAddress());
+    }
 
-	// / STAMP MANAGMENT
-	@Override
-	public ItemStack getAnyStamp(int max) {
-		return getAnyStamp(EnumPostage.values(), max);
-	}
+    // / STAMP MANAGMENT
+    @Override
+    public ItemStack getAnyStamp(int max) {
+        return getAnyStamp(EnumPostage.values(), max);
+    }
 
-	@Override
-	public ItemStack getAnyStamp(EnumPostage postage, int max) {
-		return getAnyStamp(new EnumPostage[]{postage}, max);
-	}
+    @Override
+    public ItemStack getAnyStamp(EnumPostage postage, int max) {
+        return getAnyStamp(new EnumPostage[]{postage}, max);
+    }
 
-	@Override
-	public ItemStack getAnyStamp(EnumPostage[] postages, int max) {
-		for (EnumPostage postage : postages) {
-			int collected = Math.min(max, collectedPostage[postage.ordinal()]);
-			collectedPostage[postage.ordinal()] -= collected;
+    @Override
+    public ItemStack getAnyStamp(EnumPostage[] postages, int max) {
+        for (EnumPostage postage : postages) {
+            int collected = Math.min(max, collectedPostage[postage.ordinal()]);
+            collectedPostage[postage.ordinal()] -= collected;
 
-			if (collected > 0) {
-				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				return MailItems.STAMPS.stack(stampDefinition, collected);
-			}
-		}
+            if (collected > 0) {
+                EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
+                return MailItems.STAMPS.stack(stampDefinition, collected);
+            }
+        }
 
-		return ItemStack.EMPTY;
-	}
+        return ItemStack.EMPTY;
+    }
 
-	// / DELIVERY
-	@Override
-	public IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge) {
-		ILetter letter = PostManager.postRegistry.getLetter(itemstack);
-		if (letter == null) {
-			return EnumDeliveryState.NOT_MAILABLE;
-		}
+    // / DELIVERY
+    @Override
+    public IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge) {
+        ILetter letter = PostManager.postRegistry.getLetter(itemstack);
+        if (letter == null) {
+            return EnumDeliveryState.NOT_MAILABLE;
+        }
 
-		if (letter.isProcessed()) {
-			return EnumDeliveryState.ALREADY_MAILED;
-		}
+        if (letter.isProcessed()) {
+            return EnumDeliveryState.ALREADY_MAILED;
+        }
 
-		if (!letter.isPostPaid()) {
-			return EnumDeliveryState.NOT_POSTPAID;
-		}
+        if (!letter.isPostPaid()) {
+            return EnumDeliveryState.NOT_POSTPAID;
+        }
 
-		if (!letter.isMailable()) {
-			return EnumDeliveryState.NOT_MAILABLE;
-		}
+        if (!letter.isMailable()) {
+            return EnumDeliveryState.NOT_MAILABLE;
+        }
 
-		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
-		IMailAddress address = letter.getRecipient();
-		if (address != null) {
-			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
-			if (carrier != null) {
-				state = carrier.deliverLetter(world, this, address, itemstack, doLodge);
-			}
-		}
+        IPostalState state = EnumDeliveryState.NOT_MAILABLE;
+        IMailAddress address = letter.getRecipient();
+        if (address != null) {
+            IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
+            if (carrier != null) {
+                state = carrier.deliverLetter(world, this, address, itemstack, doLodge);
+            }
+        }
 
-		if (!state.isOk()) {
-			return state;
-		}
+        if (!state.isOk()) {
+            return state;
+        }
 
-		collectPostage(letter.getPostage());
+        collectPostage(letter.getPostage());
 
-		markDirty();
-		return EnumDeliveryState.OK;
+        markDirty();
+        return EnumDeliveryState.OK;
 
-	}
+    }
 
-	@Override
-	public void collectPostage(NonNullList<ItemStack> stamps) {
-		for (ItemStack stamp : stamps) {
-			if (stamp == null) {
-				continue;
-			}
+    @Override
+    public void collectPostage(NonNullList<ItemStack> stamps) {
+        for (ItemStack stamp : stamps) {
+            if (stamp == null) {
+                continue;
+            }
 
-			if (stamp.getItem() instanceof IStamps) {
-				EnumPostage postage = ((IStamps) stamp.getItem()).getPostage(stamp);
-				collectedPostage[postage.ordinal()] += stamp.getCount();
-			}
-		}
-	}
+            if (stamp.getItem() instanceof IStamps) {
+                EnumPostage postage = ((IStamps) stamp.getItem()).getPostage(stamp);
+                collectedPostage[postage.ordinal()] += stamp.getCount();
+            }
+        }
+    }
 }

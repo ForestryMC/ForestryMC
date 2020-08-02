@@ -25,33 +25,33 @@ import net.minecraftforge.fluids.FluidStack;
  * @author SirSengir
  */
 public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
-	/**
-	 * Add a shaped recipe to the carpenter.
-	 *
-	 * @param box       ItemStack of one item representing the required box (carton, crate) for this recipe. May be null.
-	 * @param product   Crafting result.
-	 * @param materials Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
-	 */
-	void addRecipe(ItemStack box, ItemStack product, Object... materials);
+    /**
+     * Add a shaped recipe to the carpenter.
+     *
+     * @param box       ItemStack of one item representing the required box (carton, crate) for this recipe. May be null.
+     * @param product   Crafting result.
+     * @param materials Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
+     */
+    void addRecipe(ItemStack box, ItemStack product, Object... materials);
 
-	/**
-	 * Add a shaped recipe to the carpenter.
-	 *
-	 * @param packagingTime Number of work cycles required to craft the recipe once.
-	 * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
-	 * @param product       Crafting result.
-	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
-	 */
-	void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials);
+    /**
+     * Add a shaped recipe to the carpenter.
+     *
+     * @param packagingTime Number of work cycles required to craft the recipe once.
+     * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
+     * @param product       Crafting result.
+     * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
+     */
+    void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials);
 
-	/**
-	 * Add a shaped recipe to the carpenter.
-	 *
-	 * @param packagingTime Number of work cycles required to craft the recipe once.
-	 * @param liquid        Liquid required in carpenter's tank.
-	 * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
-	 * @param product       Crafting result.
-	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
-	 */
-	void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
+    /**
+     * Add a shaped recipe to the carpenter.
+     *
+     * @param packagingTime Number of work cycles required to craft the recipe once.
+     * @param liquid        Liquid required in carpenter's tank.
+     * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
+     * @param product       Crafting result.
+     * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
+     */
+    void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
 }

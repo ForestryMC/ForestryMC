@@ -24,17 +24,17 @@ import forestry.book.BookLoader;
 @OnlyIn(Dist.CLIENT)
 public class ProxyBookClient extends ProxyBook {
 
-	@Override
-	public void setupAPI() {
-		BookManager.loader = BookLoader.INSTANCE;
-	}
+    @Override
+    public void setupAPI() {
+        BookManager.loader = BookLoader.INSTANCE;
+    }
 
-	@Override
-	public void preInit() {
-		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-		if (resourceManager instanceof IReloadableResourceManager) {
-			IReloadableResourceManager manager = (IReloadableResourceManager) resourceManager;
-			manager.addReloadListener(BookLoader.INSTANCE);
-		}
-	}
+    @Override
+    public void preInit() {
+        IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+        if (resourceManager instanceof IReloadableResourceManager) {
+            IReloadableResourceManager manager = (IReloadableResourceManager) resourceManager;
+            manager.addReloadListener(BookLoader.INSTANCE);
+        }
+    }
 }

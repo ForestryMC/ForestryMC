@@ -18,18 +18,18 @@ import forestry.core.gui.GuiForestry;
 import forestry.mail.tiles.TileMailbox;
 
 public class GuiMailbox extends GuiForestry<ContainerMailbox> {
-	private final TileMailbox tile;
+    private final TileMailbox tile;
 
-	public GuiMailbox(ContainerMailbox container, PlayerInventory inv, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/mailbox.png", container, inv, title);
-		this.tile = container.getTile();
-		this.xSize = 230;
-		this.ySize = 227;
-	}
+    public GuiMailbox(ContainerMailbox container, PlayerInventory inv, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/mailbox.png", container, inv, title);
+        this.tile = container.getTile();
+        this.xSize = 230;
+        this.ySize = 227;
+    }
 
-	@Override
-	protected void addLedgers() {
-		addErrorLedger(tile);
-		addHintLedger("mailbox");
-	}
+    @Override
+    protected void addLedgers() {
+        addErrorLedger(tile);
+        addHintLedger("mailbox");
+    }
 }

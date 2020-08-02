@@ -13,47 +13,47 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.world.IWorldReader;
 
 public class ItemBlockWallForestry<B extends Block, W extends Block> extends ItemBlockForestry<B> {
-	private final W wallBlock;
+    private final W wallBlock;
 
-	public ItemBlockWallForestry(B block, W wallBlock, Properties builder) {
-		super(block, builder);
-		this.wallBlock = wallBlock;
-	}
+    public ItemBlockWallForestry(B block, W wallBlock, Properties builder) {
+        super(block, builder);
+        this.wallBlock = wallBlock;
+    }
 
-	public ItemBlockWallForestry(B block, W wallBlock) {
-		super(block);
-		this.wallBlock = wallBlock;
-	}
+    public ItemBlockWallForestry(B block, W wallBlock) {
+        super(block);
+        this.wallBlock = wallBlock;
+    }
 
-	@Nullable
-	protected BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState blockstate = this.wallBlock.getStateForPlacement(context);
-		BlockState blockstate1 = null;
-		IWorldReader iworldreader = context.getWorld();
-		BlockPos blockpos = context.getPos();
+    @Nullable
+    protected BlockState getStateForPlacement(BlockItemUseContext context) {
+        BlockState blockstate = this.wallBlock.getStateForPlacement(context);
+        BlockState blockstate1 = null;
+        IWorldReader iworldreader = context.getWorld();
+        BlockPos blockpos = context.getPos();
 
-		for (Direction direction : context.getNearestLookingDirections()) {
-			if (direction != Direction.UP) {
-				BlockState blockstate2 = direction == Direction.DOWN ? this.getBlock().getStateForPlacement(context) : blockstate;
-				if (blockstate2 != null && blockstate2.isValidPosition(iworldreader, blockpos)) {
-					blockstate1 = blockstate2;
-					break;
-				}
-			}
-		}
+        for (Direction direction : context.getNearestLookingDirections()) {
+            if (direction != Direction.UP) {
+                BlockState blockstate2 = direction == Direction.DOWN ? this.getBlock().getStateForPlacement(context) : blockstate;
+                if (blockstate2 != null && blockstate2.isValidPosition(iworldreader, blockpos)) {
+                    blockstate1 = blockstate2;
+                    break;
+                }
+            }
+        }
 
-		return blockstate1 != null && iworldreader.func_226663_a_(blockstate1, blockpos, ISelectionContext.dummy()) ? blockstate1 : null;
-	}
+        return blockstate1 != null && iworldreader.func_226663_a_(blockstate1, blockpos, ISelectionContext.dummy()) ? blockstate1 : null;
+    }
 
-	@Override
-	public void addToBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn) {
-		super.addToBlockToItemMap(blockToItemMap, itemIn);
-		blockToItemMap.put(this.wallBlock, itemIn);
-	}
+    @Override
+    public void addToBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn) {
+        super.addToBlockToItemMap(blockToItemMap, itemIn);
+        blockToItemMap.put(this.wallBlock, itemIn);
+    }
 
-	@Override
-	public void removeFromBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn) {
-		super.removeFromBlockToItemMap(blockToItemMap, itemIn);
-		blockToItemMap.remove(this.wallBlock);
-	}
+    @Override
+    public void removeFromBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn) {
+        super.removeFromBlockToItemMap(blockToItemMap, itemIn);
+        blockToItemMap.remove(this.wallBlock);
+    }
 }

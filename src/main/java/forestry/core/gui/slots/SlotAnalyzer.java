@@ -9,25 +9,25 @@ import forestry.core.gui.GuiAnalyzerProvider;
 import forestry.core.inventory.ItemInventoryAlyzer;
 
 public class SlotAnalyzer extends SlotFiltered {
-	@Nullable
-	@OnlyIn(Dist.CLIENT)
-	private GuiAnalyzerProvider gui;
+    @Nullable
+    @OnlyIn(Dist.CLIENT)
+    private GuiAnalyzerProvider gui;
 
-	public SlotAnalyzer(ItemInventoryAlyzer inventory, int slotIndex, int xPos, int yPos) {
-		super(inventory, slotIndex, xPos, yPos);
-	}
+    public SlotAnalyzer(ItemInventoryAlyzer inventory, int slotIndex, int xPos, int yPos) {
+        super(inventory, slotIndex, xPos, yPos);
+    }
 
-	public void setPosition(int xPos, int yPos) {
-		//this.xPos = xPos;
-		//this.yPos = yPos;//TODO: Fix analyzer slots
-	}
+    public void setPosition(int xPos, int yPos) {
+        //this.xPos = xPos;
+        //this.yPos = yPos;//TODO: Fix analyzer slots
+    }
 
-	public void setGui(@Nullable GuiAnalyzerProvider gui) {
-		this.gui = gui;
-	}
+    public void setGui(@Nullable GuiAnalyzerProvider gui) {
+        this.gui = gui;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return gui != null && gui.analyzer.isVisible();
-	}
+    @Override
+    public boolean isEnabled() {
+        return gui != null && gui.analyzer.isVisible();
+    }
 }

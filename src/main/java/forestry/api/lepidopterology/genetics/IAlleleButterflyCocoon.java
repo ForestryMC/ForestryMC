@@ -13,15 +13,15 @@ import forestry.api.genetics.products.IDynamicProductList;
 
 public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
 
-	ModelResourceLocation getCocoonItemModel(int age);
+    ModelResourceLocation getCocoonItemModel(int age);
 
-	String getCocoonName();
+    String getCocoonName();
 
-	IDynamicProductList getCocoonLoot();
+    IDynamicProductList getCocoonLoot();
 
-	void clearLoot();
+    void clearLoot();
 
-	void bakeLoot();
+    void bakeLoot();
 
-	void addLoot(ItemStack loot, float chance);
+    void addLoot(ItemStack loot, float chance);
 }

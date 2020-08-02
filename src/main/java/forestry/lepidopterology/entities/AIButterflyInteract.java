@@ -17,54 +17,54 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
-	@Nullable
-	protected BlockPos rest;
+    @Nullable
+    protected BlockPos rest;
 
-	private boolean canInteract = false;
-	private boolean hasInteracted = false;
+    private boolean canInteract = false;
+    private boolean hasInteracted = false;
 
-	protected AIButterflyInteract(EntityButterfly entity) {
-		super(entity);
-		setMutexFlags(EnumSet.of(Flag.MOVE));
-		//		setMutexBits(3);	TODO mutex
-	}
+    protected AIButterflyInteract(EntityButterfly entity) {
+        super(entity);
+        setMutexFlags(EnumSet.of(Flag.MOVE));
+        //		setMutexBits(3);	TODO mutex
+    }
 
-	@Override
-	public boolean shouldExecute() {
-		if (entity.getState() != EnumButterflyState.RESTING) {
-			return false;
-		}
-		Vector3d pos = entity.getPositionVec();
-		rest = new BlockPos((int) pos.x, (int) Math.floor(pos.y) - 1, (int) pos.z);
-		if (entity.world.isAirBlock(rest)) {
-			return false;
-		}
+    @Override
+    public boolean shouldExecute() {
+        if (entity.getState() != EnumButterflyState.RESTING) {
+            return false;
+        }
+        Vector3d pos = entity.getPositionVec();
+        rest = new BlockPos((int) pos.x, (int) Math.floor(pos.y) - 1, (int) pos.z);
+        if (entity.world.isAirBlock(rest)) {
+            return false;
+        }
 
-		canInteract = canInteract();
+        canInteract = canInteract();
 
-		return canInteract;
-	}
+        return canInteract;
+    }
 
-	protected abstract boolean canInteract();
+    protected abstract boolean canInteract();
 
-	@Override
-	public boolean shouldContinueExecuting() {
-		return canInteract && !hasInteracted;
-	}
+    @Override
+    public boolean shouldContinueExecuting() {
+        return canInteract && !hasInteracted;
+    }
 
-	@Override
-	public void startExecuting() {
-	}
+    @Override
+    public void startExecuting() {
+    }
 
-	@Override
-	public void resetTask() {
-		canInteract = false;
-		hasInteracted = false;
-		rest = null;
-	}
+    @Override
+    public void resetTask() {
+        canInteract = false;
+        hasInteracted = false;
+        rest = null;
+    }
 
-	protected void setHasInteracted() {
-		hasInteracted = true;
-	}
+    protected void setHasInteracted() {
+        hasInteracted = true;
+    }
 
 }

@@ -29,80 +29,80 @@ import forestry.mail.tiles.TileTrader;
 import org.lwjgl.glfw.GLFW;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
-	private final TileTrader tile;
-	private TextFieldWidget addressNameField;
+    private final TileTrader tile;
+    private TextFieldWidget addressNameField;
 
-	public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", container, inv, title);
-		this.tile = container.getTile();
-		this.xSize = 176;
-		this.ySize = 90;
+    public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {
+        super(Constants.TEXTURE_PATH_GUI + "/tradername.png", container, inv, title);
+        this.tile = container.getTile();
+        this.xSize = 176;
+        this.ySize = 90;
 
-		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
-	}
+        addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
+    }
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
-		addressNameField.setText(container.getAddress().getName());
-		addressNameField.setFocused2(true);
-	}
+        addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
+        addressNameField.setText(container.getAddress().getName());
+        addressNameField.setFocused2(true);
+    }
 
-	@Override
-	public boolean keyPressed(int key, int scanCode, int modifiers) {
+    @Override
+    public boolean keyPressed(int key, int scanCode, int modifiers) {
 
-		// Set focus or enter text into address
-		if (addressNameField.isFocused()) {
-			if (scanCode == GLFW.GLFW_KEY_ENTER) {
-				setAddress();
-			} else {
-				addressNameField.keyPressed(key, scanCode, modifiers);
-			}
-			return true;
-		}
+        // Set focus or enter text into address
+        if (addressNameField.isFocused()) {
+            if (scanCode == GLFW.GLFW_KEY_ENTER) {
+                setAddress();
+            } else {
+                addressNameField.keyPressed(key, scanCode, modifiers);
+            }
+            return true;
+        }
 
-		return super.keyPressed(key, scanCode, modifiers);
-	}
+        return super.keyPressed(key, scanCode, modifiers);
+    }
 
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
-			return false;    //TODO this return value
-		}
-		addressNameField.mouseClicked(mouseX, mouseY, mouseButton);
-		return true;
-	}
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
+            return false;    //TODO this return value
+        }
+        addressNameField.mouseClicked(mouseX, mouseY, mouseButton);
+        return true;
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int var3, int var2) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, var3, var2);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int var3, int var2) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, var3, var2);
 
-		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
-		textLayout.startPage();
-		textLayout.newLine();
-		textLayout.drawCenteredLine(transform, prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
-		textLayout.endPage();
-		addressNameField.render(transform, var2, var3, partialTicks);    //TODO correct?
-	}
+        String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
+        textLayout.startPage();
+        textLayout.newLine();
+        textLayout.drawCenteredLine(transform, prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
+        textLayout.endPage();
+        addressNameField.render(transform, var2, var3, partialTicks);    //TODO correct?
+    }
 
-	@Override
-	public void onClose() {
-		super.onClose();
-		setAddress();
-	}
+    @Override
+    public void onClose() {
+        super.onClose();
+        setAddress();
+    }
 
-	private void setAddress() {
-		String address = addressNameField.getText();
-		if (StringUtils.isNotBlank(address)) {
-			PacketTraderAddressRequest packet = new PacketTraderAddressRequest(tile, address);
-			NetworkUtil.sendToServer(packet);
-		}
-	}
+    private void setAddress() {
+        String address = addressNameField.getText();
+        if (StringUtils.isNotBlank(address)) {
+            PacketTraderAddressRequest packet = new PacketTraderAddressRequest(tile, address);
+            NetworkUtil.sendToServer(packet);
+        }
+    }
 
-	@Override
-	protected void addLedgers() {
-		addErrorLedger(tile);
-	}
+    @Override
+    protected void addLedgers() {
+        addErrorLedger(tile);
+    }
 }

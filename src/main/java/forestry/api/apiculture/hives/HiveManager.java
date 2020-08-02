@@ -7,7 +7,7 @@ package forestry.api.apiculture.hives;
 
 public class HiveManager {
 
-	public static IHiveRegistry hiveRegistry;
-	public static IHiveGenHelper genHelper;
+    public static IHiveRegistry hiveRegistry;
+    public static IHiveGenHelper genHelper;
 
 }

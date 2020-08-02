@@ -13,44 +13,44 @@ package forestry.farming.multiblock;
 import forestry.core.multiblock.IMultiblockSizeLimits;
 
 class FarmMultiblockSizeLimits implements IMultiblockSizeLimits {
-	public static final FarmMultiblockSizeLimits instance = new FarmMultiblockSizeLimits();
+    public static final FarmMultiblockSizeLimits instance = new FarmMultiblockSizeLimits();
 
-	private FarmMultiblockSizeLimits() {
+    private FarmMultiblockSizeLimits() {
 
-	}
+    }
 
-	@Override
-	public int getMinimumNumberOfBlocksForAssembledMachine() {
-		return 3 * 3 * 4;
-	}
+    @Override
+    public int getMinimumNumberOfBlocksForAssembledMachine() {
+        return 3 * 3 * 4;
+    }
 
-	@Override
-	public int getMaximumXSize() {
-		return 5;
-	}
+    @Override
+    public int getMaximumXSize() {
+        return 5;
+    }
 
-	@Override
-	public int getMaximumZSize() {
-		return 5;
-	}
+    @Override
+    public int getMaximumZSize() {
+        return 5;
+    }
 
-	@Override
-	public int getMaximumYSize() {
-		return 4;
-	}
+    @Override
+    public int getMaximumYSize() {
+        return 4;
+    }
 
-	@Override
-	public int getMinimumXSize() {
-		return 3;
-	}
+    @Override
+    public int getMinimumXSize() {
+        return 3;
+    }
 
-	@Override
-	public int getMinimumZSize() {
-		return 3;
-	}
+    @Override
+    public int getMinimumZSize() {
+        return 3;
+    }
 
-	@Override
-	public int getMinimumYSize() {
-		return 4;
-	}
+    @Override
+    public int getMinimumYSize() {
+        return 4;
+    }
 }

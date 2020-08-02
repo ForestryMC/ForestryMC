@@ -19,43 +19,43 @@ import forestry.api.genetics.IBreedingTracker;
 
 public abstract class ForestryEvent extends Event {
 
-	private static abstract class BreedingEvent extends ForestryEvent {
-		public final IRootDefinition root;
-		public final IBreedingTracker tracker;
-		public final GameProfile username;
+    private static abstract class BreedingEvent extends ForestryEvent {
+        public final IRootDefinition root;
+        public final IBreedingTracker tracker;
+        public final GameProfile username;
 
-		private BreedingEvent(IRootDefinition root, GameProfile username, IBreedingTracker tracker) {
-			this.root = root;
-			this.username = username;
-			this.tracker = tracker;
-		}
-	}
+        private BreedingEvent(IRootDefinition root, GameProfile username, IBreedingTracker tracker) {
+            this.root = root;
+            this.username = username;
+            this.tracker = tracker;
+        }
+    }
 
-	public static class SpeciesDiscovered extends BreedingEvent {
-		public final IAlleleSpecies species;
+    public static class SpeciesDiscovered extends BreedingEvent {
+        public final IAlleleSpecies species;
 
-		public SpeciesDiscovered(IRootDefinition root, GameProfile username, IAlleleSpecies species, IBreedingTracker tracker) {
-			super(root, username, tracker);
-			this.species = species;
-		}
-	}
+        public SpeciesDiscovered(IRootDefinition root, GameProfile username, IAlleleSpecies species, IBreedingTracker tracker) {
+            super(root, username, tracker);
+            this.species = species;
+        }
+    }
 
-	public static class MutationDiscovered extends BreedingEvent {
-		public final IMutation allele;
+    public static class MutationDiscovered extends BreedingEvent {
+        public final IMutation allele;
 
-		public MutationDiscovered(IRootDefinition root, GameProfile username, IMutation allele, IBreedingTracker tracker) {
-			super(root, username, tracker);
-			this.allele = allele;
-		}
-	}
+        public MutationDiscovered(IRootDefinition root, GameProfile username, IMutation allele, IBreedingTracker tracker) {
+            super(root, username, tracker);
+            this.allele = allele;
+        }
+    }
 
-	public static class SyncedBreedingTracker extends ForestryEvent {
-		public final IBreedingTracker tracker;
-		public final PlayerEntity player;
+    public static class SyncedBreedingTracker extends ForestryEvent {
+        public final IBreedingTracker tracker;
+        public final PlayerEntity player;
 
-		public SyncedBreedingTracker(IBreedingTracker tracker, PlayerEntity player) {
-			this.tracker = tracker;
-			this.player = player;
-		}
-	}
+        public SyncedBreedingTracker(IBreedingTracker tracker, PlayerEntity player) {
+            this.tracker = tracker;
+            this.player = player;
+        }
+    }
 }

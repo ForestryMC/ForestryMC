@@ -14,18 +14,18 @@ import forestry.modules.ISidedModuleHandler;
 
 public class ProxyArboriculture implements ISidedModuleHandler {
 
-	public void initializeModels() {
-	}
+    public void initializeModels() {
+    }
 
-	public int getFoliageColorDefault() {
-		return 4764952;
-	}
+    public int getFoliageColorDefault() {
+        return 4764952;
+    }
 
-	public int getFoliageColorBirch() {
-		return 8431445;
-	}
+    public int getFoliageColorBirch() {
+        return 8431445;
+    }
 
-	public int getFoliageColorSpruce() {
-		return 6396257;
-	}
+    public int getFoliageColorSpruce() {
+        return 6396257;
+    }
 }

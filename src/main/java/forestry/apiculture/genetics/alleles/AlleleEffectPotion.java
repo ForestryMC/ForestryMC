@@ -35,70 +35,70 @@ import forestry.core.render.ParticleRender;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
-	private final Effect potion;
-	private final int potionFXColor;
-	private final int duration;
-	private final float chance;
+    private final Effect potion;
+    private final int potionFXColor;
+    private final int duration;
+    private final float chance;
 
-	public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration, int throttle, float chance) {
-		super(name, isDominant, throttle, true, false);
-		this.potion = potion;
-		this.duration = duration;
-		this.chance = chance;
+    public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration, int throttle, float chance) {
+        super(name, isDominant, throttle, true, false);
+        this.potion = potion;
+        this.duration = duration;
+        this.chance = chance;
 
-		Collection<EffectInstance> potionEffects = Collections.singleton(new EffectInstance(potion, 1, 0));
-		this.potionFXColor = PotionUtils.getPotionColorFromEffectList(potionEffects);
-	}
+        Collection<EffectInstance> potionEffects = Collections.singleton(new EffectInstance(potion, 1, 0));
+        this.potionFXColor = PotionUtils.getPotionColorFromEffectList(potionEffects);
+    }
 
-	public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration) {
-		this(name, isDominant, potion, duration, 200, 1.0f);
-	}
+    public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration) {
+        this(name, isDominant, potion, duration, 200, 1.0f);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
-		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
-		for (LivingEntity entity : entities) {
-			if (world.rand.nextFloat() >= chance) {
-				continue;
-			}
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        World world = housing.getWorldObj();
+        List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
+        for (LivingEntity entity : entities) {
+            if (world.rand.nextFloat() >= chance) {
+                continue;
+            }
 
-			int dur = this.duration;
-			if (potion.getEffectType() == EffectType.HARMFUL) {
-				// Entities are not attacked if they wear a full set of apiarist's armor.
-				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
-				if (count >= 4) {
-					continue; // Full set, no damage/effect
-				} else if (count == 3) {
-					dur = this.duration / 4;
-				} else if (count == 2) {
-					dur = this.duration / 2;
-				} else if (count == 1) {
-					dur = this.duration * 3 / 4;
-				}
-			} else {
-				// don't apply positive effects to mobs
-				if (entity instanceof IMob) {
-					continue;
-				}
-			}
+            int dur = this.duration;
+            if (potion.getEffectType() == EffectType.HARMFUL) {
+                // Entities are not attacked if they wear a full set of apiarist's armor.
+                int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
+                if (count >= 4) {
+                    continue; // Full set, no damage/effect
+                } else if (count == 3) {
+                    dur = this.duration / 4;
+                } else if (count == 2) {
+                    dur = this.duration / 2;
+                } else if (count == 1) {
+                    dur = this.duration * 3 / 4;
+                }
+            } else {
+                // don't apply positive effects to mobs
+                if (entity instanceof IMob) {
+                    continue;
+                }
+            }
 
-			entity.addPotionEffect(new EffectInstance(potion, dur, 0));
-		}
+            entity.addPotionEffect(new EffectInstance(potion, dur, 0));
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
-		if (world.rand.nextBoolean()) {
-			super.doFX(genome, storedData, housing);
-		} else {
-			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
-			ParticleRender.addEntityPotionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z, potionFXColor);
-		}
-		return storedData;
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+        World world = housing.getWorldObj();
+        if (world.rand.nextBoolean()) {
+            super.doFX(genome, storedData, housing);
+        } else {
+            Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
+            ParticleRender.addEntityPotionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z, potionFXColor);
+        }
+        return storedData;
+    }
 }

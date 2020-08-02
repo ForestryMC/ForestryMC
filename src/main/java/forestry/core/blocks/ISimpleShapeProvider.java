@@ -9,10 +9,10 @@ import net.minecraft.world.IBlockReader;
 @FunctionalInterface
 public interface ISimpleShapeProvider extends IShapeProvider {
 
-	VoxelShape getShape();
+    VoxelShape getShape();
 
-	@Override
-	default VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-		return getShape();
-	}
+    @Override
+    default VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+        return getShape();
+    }
 }

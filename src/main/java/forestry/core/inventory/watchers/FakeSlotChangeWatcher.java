@@ -13,14 +13,14 @@ package forestry.core.inventory.watchers;
 import net.minecraft.inventory.IInventory;
 
 public class FakeSlotChangeWatcher implements ISlotChangeWatcher {
-	public static final FakeSlotChangeWatcher instance = new FakeSlotChangeWatcher();
+    public static final FakeSlotChangeWatcher instance = new FakeSlotChangeWatcher();
 
-	private FakeSlotChangeWatcher() {
+    private FakeSlotChangeWatcher() {
 
-	}
+    }
 
-	@Override
-	public void onSlotChanged(IInventory inventory, int slot) {
+    @Override
+    public void onSlotChanged(IInventory inventory, int slot) {
 
-	}
+    }
 }

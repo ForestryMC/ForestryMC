@@ -24,41 +24,41 @@ import forestry.core.utils.ItemStackUtil;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
 
-	private static final Set<ICentrifugeRecipe> recipes = new HashSet<>();
+    private static final Set<ICentrifugeRecipe> recipes = new HashSet<>();
 
-	@Override
-	public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
-		ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, resource, products);
-		addRecipe(recipe);
-	}
+    @Override
+    public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
+        ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, resource, products);
+        addRecipe(recipe);
+    }
 
-	@Nullable
-	public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
-		if (itemStack.isEmpty()) {
-			return null;
-		}
+    @Nullable
+    public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
+        if (itemStack.isEmpty()) {
+            return null;
+        }
 
-		for (ICentrifugeRecipe recipe : recipes) {
-			ItemStack recipeInput = recipe.getInput();
-			if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack)) {
-				return recipe;
-			}
-		}
-		return null;
-	}
+        for (ICentrifugeRecipe recipe : recipes) {
+            ItemStack recipeInput = recipe.getInput();
+            if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 
-	@Override
-	public boolean addRecipe(ICentrifugeRecipe recipe) {
-		return recipes.add(recipe);
-	}
+    @Override
+    public boolean addRecipe(ICentrifugeRecipe recipe) {
+        return recipes.add(recipe);
+    }
 
-	@Override
-	public boolean removeRecipe(ICentrifugeRecipe recipe) {
-		return recipes.remove(recipe);
-	}
+    @Override
+    public boolean removeRecipe(ICentrifugeRecipe recipe) {
+        return recipes.remove(recipe);
+    }
 
-	@Override
-	public Set<ICentrifugeRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
-	}
+    @Override
+    public Set<ICentrifugeRecipe> recipes() {
+        return Collections.unmodifiableSet(recipes);
+    }
 }

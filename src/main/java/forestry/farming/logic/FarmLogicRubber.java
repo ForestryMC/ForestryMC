@@ -29,54 +29,54 @@ import forestry.farming.logic.crops.CropRubber;
 
 public class FarmLogicRubber extends FarmLogic {
 
-	private boolean active = true;
+    private final boolean active = true;
 
-	public FarmLogicRubber(IFarmProperties properties, boolean isManual) {
-		super(properties, isManual);
-		//		if ((PluginIC2.rubberWood == null || PluginIC2.resin == null) &&
-		//			PluginTechReborn.rubberItemsSuccess()) {
-		//			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
-		//			active = false;
-		//		}
-	}
+    public FarmLogicRubber(IFarmProperties properties, boolean isManual) {
+        super(properties, isManual);
+        //		if ((PluginIC2.rubberWood == null || PluginIC2.resin == null) &&
+        //			PluginTechReborn.rubberItemsSuccess()) {
+        //			Log.warning("Failed to init a farm logic {} since IC2 rubber wood or resin were not found", getClass().getName());
+        //			active = false;
+        //		}
+    }
 
-	@Override
-	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
-		if (!active) {
-			return Collections.emptyList();
-		}
+    @Override
+    public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
+        if (!active) {
+            return Collections.emptyList();
+        }
 
-		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
-		Collection<ICrop> crops = getHarvestBlocks(world, position);
-		farmHousing.increaseExtent(direction, pos, extent);
+        BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
+        Collection<ICrop> crops = getHarvestBlocks(world, position);
+        farmHousing.increaseExtent(direction, pos, extent);
 
-		return crops;
-	}
+        return crops;
+    }
 
-	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
-		Stack<ICrop> crops = new Stack<>();
+    private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
+        Stack<ICrop> crops = new Stack<>();
 
-		for (int j = 0; j < 10; j++) {
-			BlockPos candidate = position.add(0, j, 0);
+        for (int j = 0; j < 10; j++) {
+            BlockPos candidate = position.add(0, j, 0);
 
-			if (!world.isBlockLoaded(candidate)) {
-				return crops;
-			}
+            if (!world.isBlockLoaded(candidate)) {
+                return crops;
+            }
 
-			BlockState blockState = world.getBlockState(candidate);
-			Block block = blockState.getBlock();
-			//			if ((PluginIC2.rubberWood != null && !ItemStackUtil.equals(block, PluginIC2.rubberWood)) &&
-			//				(PluginTechReborn.RUBBER_WOOD != null && !ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD))) {
-			//				break;
-			//			}
+            BlockState blockState = world.getBlockState(candidate);
+            Block block = blockState.getBlock();
+            //			if ((PluginIC2.rubberWood != null && !ItemStackUtil.equals(block, PluginIC2.rubberWood)) &&
+            //				(PluginTechReborn.RUBBER_WOOD != null && !ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD))) {
+            //				break;
+            //			}
 
-			if (CropRubber.hasRubberToHarvest(blockState)) {
-				crops.push(new CropRubber(world, blockState, candidate));
-				break;
-			}
-		}
+            if (CropRubber.hasRubberToHarvest(blockState)) {
+                crops.push(new CropRubber(world, blockState, candidate));
+                break;
+            }
+        }
 
-		return crops;
-	}
+        return crops;
+    }
 
 }

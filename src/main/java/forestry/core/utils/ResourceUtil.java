@@ -47,123 +47,123 @@ import net.minecraftforge.client.model.SimpleModelTransform;
 @OnlyIn(Dist.CLIENT)
 public class ResourceUtil {
 
-	private ResourceUtil() {
-	}
+    private ResourceUtil() {
+    }
 
-	public static ITextComponent tryTranslate(String optionalKey, String defaultKey) {
-		return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
-	}
+    public static ITextComponent tryTranslate(String optionalKey, String defaultKey) {
+        return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
+    }
 
-	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
-		return tryTranslate(optionalKey, () -> new TranslationTextComponent(defaultKey));
-	}
+    public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
+        return tryTranslate(optionalKey, () -> new TranslationTextComponent(defaultKey));
+    }
 
-	public static ITextComponent tryTranslate(String optionalKey, Supplier<ITextComponent> defaultKey) {
-		return tryTranslate(() -> new TranslationTextComponent(optionalKey), defaultKey);
-	}
+    public static ITextComponent tryTranslate(String optionalKey, Supplier<ITextComponent> defaultKey) {
+        return tryTranslate(() -> new TranslationTextComponent(optionalKey), defaultKey);
+    }
 
-	/**
-	 * Tries to translate the optional key component. Returns the default key component if the first can't be translated.
-	 *
-	 * @return The optional component if it can be translated the other component otherwise.
-	 */
-	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<ITextComponent> defaultKey) {
-		TranslationTextComponent component = optionalKey.get();
-		if (canTranslate(component)) {
-			return component;
-		} else {
-			return defaultKey.get();
-		}
-	}
+    /**
+     * Tries to translate the optional key component. Returns the default key component if the first can't be translated.
+     *
+     * @return The optional component if it can be translated the other component otherwise.
+     */
+    public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<ITextComponent> defaultKey) {
+        TranslationTextComponent component = optionalKey.get();
+        if (canTranslate(component)) {
+            return component;
+        } else {
+            return defaultKey.get();
+        }
+    }
 
-	public static boolean canTranslate(TranslationTextComponent component) {
-		String translatedText = component.getString();
-		return !translatedText.startsWith(component.getKey());
-	}
+    public static boolean canTranslate(TranslationTextComponent component) {
+        String translatedText = component.getString();
+        return !translatedText.startsWith(component.getKey());
+    }
 
-	public static Minecraft client() {
-		return Minecraft.getInstance();
-	}
+    public static Minecraft client() {
+        return Minecraft.getInstance();
+    }
 
-	public static IResourceManager resourceManager() {
-		return client().getResourceManager();
-	}
+    public static IResourceManager resourceManager() {
+        return client().getResourceManager();
+    }
 
-	public static TextureAtlasSprite getMissingTexture() {
-		return getSprite(PlayerContainer.LOCATION_BLOCKS_TEXTURE, MissingTextureSprite.getLocation());
-	}
+    public static TextureAtlasSprite getMissingTexture() {
+        return getSprite(PlayerContainer.LOCATION_BLOCKS_TEXTURE, MissingTextureSprite.getLocation());
+    }
 
-	public static TextureAtlasSprite getSprite(ResourceLocation atlas, ResourceLocation sprite) {
-		return client().getAtlasSpriteGetter(atlas).apply(sprite);
-	}
+    public static TextureAtlasSprite getSprite(ResourceLocation atlas, ResourceLocation sprite) {
+        return client().getAtlasSpriteGetter(atlas).apply(sprite);
+    }
 
-	public static TextureAtlasSprite getBlockSprite(ResourceLocation location) {
-		return getSprite(PlayerContainer.LOCATION_BLOCKS_TEXTURE, location);
-	}
+    public static TextureAtlasSprite getBlockSprite(ResourceLocation location) {
+        return getSprite(PlayerContainer.LOCATION_BLOCKS_TEXTURE, location);
+    }
 
-	public static TextureAtlasSprite getBlockSprite(String location) {
-		return getBlockSprite(new ResourceLocation(location));
-	}
+    public static TextureAtlasSprite getBlockSprite(String location) {
+        return getBlockSprite(new ResourceLocation(location));
+    }
 
-	public static boolean resourceExists(ResourceLocation location) {
-		try {
-			resourceManager().getResource(location);
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
+    public static boolean resourceExists(ResourceLocation location) {
+        try {
+            resourceManager().getResource(location);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
 
-	public static BufferedReader createReader(IResource resource) {
-		return new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-	}
+    public static BufferedReader createReader(IResource resource) {
+        return new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+    }
 
-	@Nullable
-	public static IResource getResource(ResourceLocation location) {
-		try {
-			return resourceManager().getResource(location);
-		} catch (IOException e) {
-			return null;
-		}
-	}
+    @Nullable
+    public static IResource getResource(ResourceLocation location) {
+        try {
+            return resourceManager().getResource(location);
+        } catch (IOException e) {
+            return null;
+        }
+    }
 
-	public static List<IResource> getResources(ResourceLocation location) {
-		try {
-			return resourceManager().getAllResources(location);
-		} catch (IOException e) {
-			return Collections.emptyList();
-		}
-	}
+    public static List<IResource> getResources(ResourceLocation location) {
+        try {
+            return resourceManager().getAllResources(location);
+        } catch (IOException e) {
+            return Collections.emptyList();
+        }
+    }
 
-	/**
-	 * @return The model from the item of the stack.
-	 */
-	@Nullable
-	public static IBakedModel getModel(ItemStack stack) {
-		ItemRenderer renderItem = client().getItemRenderer();
-		if (renderItem == null || renderItem.getItemModelMesher() == null) {
-			return null;
-		}
-		return renderItem.getItemModelMesher().getItemModel(stack);
-	}
+    /**
+     * @return The model from the item of the stack.
+     */
+    @Nullable
+    public static IBakedModel getModel(ItemStack stack) {
+        ItemRenderer renderItem = client().getItemRenderer();
+        if (renderItem == null || renderItem.getItemModelMesher() == null) {
+            return null;
+        }
+        return renderItem.getItemModelMesher().getItemModel(stack);
+    }
 
-	public static SimpleModelTransform loadTransform(ResourceLocation location) {
-		return new SimpleModelTransform(PerspectiveMapWrapper.getTransforms(loadTransformFromJson(location)));
-	}
+    public static SimpleModelTransform loadTransform(ResourceLocation location) {
+        return new SimpleModelTransform(PerspectiveMapWrapper.getTransforms(loadTransformFromJson(location)));
+    }
 
-	private static ItemCameraTransforms loadTransformFromJson(ResourceLocation location) {
-		try (Reader reader = getReaderForResource(location)) {
-			return BlockModel.deserialize(reader).getAllTransforms();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ItemCameraTransforms.DEFAULT;
-	}
+    private static ItemCameraTransforms loadTransformFromJson(ResourceLocation location) {
+        try (Reader reader = getReaderForResource(location)) {
+            return BlockModel.deserialize(reader).getAllTransforms();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ItemCameraTransforms.DEFAULT;
+    }
 
-	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
-		ResourceLocation file = new ResourceLocation(location.getNamespace(),
-			"models/" + location.getPath() + ".json");
-		IResource iresource = resourceManager().getResource(file);
-		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));
-	}
+    private static Reader getReaderForResource(ResourceLocation location) throws IOException {
+        ResourceLocation file = new ResourceLocation(location.getNamespace(),
+                "models/" + location.getPath() + ".json");
+        IResource iresource = resourceManager().getResource(file);
+        return new BufferedReader(new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));
+    }
 }

@@ -15,30 +15,30 @@ import forestry.core.utils.Translator;
 
 public class GenericRatings {
 
-	public static String rateMetabolism(int metabolism) {
-		if (metabolism >= 19) {
-			return Translator.translateToLocal("forestry.allele.highest");
-		} else if (metabolism >= 16) {
-			return Translator.translateToLocal("forestry.allele.higher");
-		} else if (metabolism >= 13) {
-			return Translator.translateToLocal("forestry.allele.high");
-		} else if (metabolism >= 10) {
-			return Translator.translateToLocal("forestry.allele.average");
-		} else if (metabolism >= 7) {
-			return Translator.translateToLocal("forestry.allele.slow");
-		} else if (metabolism >= 4) {
-			return Translator.translateToLocal("forestry.allele.slower");
-		} else {
-			return Translator.translateToLocal("forestry.allele.slowest");
-		}
-	}
+    public static String rateMetabolism(int metabolism) {
+        if (metabolism >= 19) {
+            return Translator.translateToLocal("forestry.allele.highest");
+        } else if (metabolism >= 16) {
+            return Translator.translateToLocal("forestry.allele.higher");
+        } else if (metabolism >= 13) {
+            return Translator.translateToLocal("forestry.allele.high");
+        } else if (metabolism >= 10) {
+            return Translator.translateToLocal("forestry.allele.average");
+        } else if (metabolism >= 7) {
+            return Translator.translateToLocal("forestry.allele.slow");
+        } else if (metabolism >= 4) {
+            return Translator.translateToLocal("forestry.allele.slower");
+        } else {
+            return Translator.translateToLocal("forestry.allele.slowest");
+        }
+    }
 
-	public static String rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
-		String active = naturalNocturnal ? Translator.translateToLocal("for.gui.nocturnal") : Translator.translateToLocal("for.gui.diurnal");
-		if (neverSleeps) {
-			active = StringUtil.append(", ", active, naturalNocturnal ? Translator.translateToLocal("for.gui.diurnal") : Translator.translateToLocal("for.gui.nocturnal"));
-		}
+    public static String rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
+        String active = naturalNocturnal ? Translator.translateToLocal("for.gui.nocturnal") : Translator.translateToLocal("for.gui.diurnal");
+        if (neverSleeps) {
+            active = StringUtil.append(", ", active, naturalNocturnal ? Translator.translateToLocal("for.gui.diurnal") : Translator.translateToLocal("for.gui.nocturnal"));
+        }
 
-		return active;
-	}
+        return active;
+    }
 }

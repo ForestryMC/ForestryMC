@@ -35,65 +35,65 @@ import forestry.core.utils.NetworkUtil;
 
 public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
-	private final T tile;
+    private final T tile;
 
-	public ContainerLiquidTanksHelper(T tile) {
-		this.tile = tile;
-	}
+    public ContainerLiquidTanksHelper(T tile) {
+        this.tile = tile;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void handlePipetteClickClient(int slot, PlayerEntity player) {
-		ItemStack itemstack = player.inventory.getItemStack();
-		if (itemstack.getItem() instanceof IToolPipette) {
-			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
-		}
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void handlePipetteClickClient(int slot, PlayerEntity player) {
+        ItemStack itemstack = player.inventory.getItemStack();
+        if (itemstack.getItem() instanceof IToolPipette) {
+            NetworkUtil.sendToServer(new PacketPipetteClick(slot));
+        }
+    }
 
-	@Override
-	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
-		ItemStack itemstack = player.inventory.getItemStack();
-		Item held = itemstack.getItem();
-		if (!(held instanceof IToolPipette)) {
-			return;
-		}
+    @Override
+    public void handlePipetteClick(int slot, ServerPlayerEntity player) {
+        ItemStack itemstack = player.inventory.getItemStack();
+        Item held = itemstack.getItem();
+        if (!(held instanceof IToolPipette)) {
+            return;
+        }
 
-		IToolPipette pipette = (IToolPipette) held;
-		IFluidTank tank = tile.getTankManager().getTank(slot);
-		int liquidAmount = tank.getFluidAmount();
+        IToolPipette pipette = (IToolPipette) held;
+        IFluidTank tank = tile.getTankManager().getTank(slot);
+        int liquidAmount = tank.getFluidAmount();
 
-		LazyOptional<IFluidHandlerItem> fluidCap = FluidUtil.getFluidHandler(itemstack);
-		fluidCap.ifPresent(fluidHandlerItem -> {
-			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
-				if (tank instanceof StandardTank) {
-					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
-					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
-					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setItemStack(fluidHandlerItem.getContainer());
-					player.updateHeldItem();
-				} else {//TODO: Test if this works
-					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
-					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
-					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setItemStack(fluidHandlerItem.getContainer());
-					player.updateHeldItem();
-				}
-			} else {
-				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-				if (!potential.isEmpty()) {
-					if (tank instanceof FluidTank) {
-						int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
-						fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
-						player.inventory.setItemStack(fluidHandlerItem.getContainer());
-						player.updateHeldItem();
-					}
-				}
-			}
-		});
-	}
+        LazyOptional<IFluidHandlerItem> fluidCap = FluidUtil.getFluidHandler(itemstack);
+        fluidCap.ifPresent(fluidHandlerItem -> {
+            if (pipette.canPipette(itemstack) && liquidAmount > 0) {
+                if (tank instanceof StandardTank) {
+                    FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+                    int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+                    tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+                    player.inventory.setItemStack(fluidHandlerItem.getContainer());
+                    player.updateHeldItem();
+                } else {//TODO: Test if this works
+                    FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+                    int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+                    tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+                    player.inventory.setItemStack(fluidHandlerItem.getContainer());
+                    player.updateHeldItem();
+                }
+            } else {
+                FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+                if (!potential.isEmpty()) {
+                    if (tank instanceof FluidTank) {
+                        int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
+                        fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
+                        player.inventory.setItemStack(fluidHandlerItem.getContainer());
+                        player.updateHeldItem();
+                    }
+                }
+            }
+        });
+    }
 
-	@Override
-	public IFluidTank getTank(int slot) {
-		return tile.getTankManager().getTank(slot);
-	}
+    @Override
+    public IFluidTank getTank(int slot) {
+        return tile.getTankManager().getTank(slot);
+    }
 }

@@ -28,84 +28,84 @@ import forestry.core.genetics.EffectData;
 
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
-	private static final int explosionChance = 50;
-	private static final byte defaultForce = 12;
-	private static final byte indexExplosionTimer = 1;
-	private static final byte indexExplosionForce = 2;
+    private static final int explosionChance = 50;
+    private static final byte defaultForce = 12;
+    private static final byte indexExplosionTimer = 1;
+    private static final byte indexExplosionForce = 2;
 
-	public AlleleEffectCreeper() {
-		super("creeper", true, 20, false, true);
-	}
+    public AlleleEffectCreeper() {
+        super("creeper", true, 20, false, true);
+    }
 
-	@Override
-	public IEffectData validateStorage(IEffectData storedData) {
-		if (!(storedData instanceof EffectData)) {
-			return new EffectData(3, 0);
-		}
+    @Override
+    public IEffectData validateStorage(IEffectData storedData) {
+        if (!(storedData instanceof EffectData)) {
+            return new EffectData(3, 0);
+        }
 
-		if (((EffectData) storedData).getIntSize() < 3) {
-			return new EffectData(3, 0);
-		}
+        if (((EffectData) storedData).getIntSize() < 3) {
+            return new EffectData(3, 0);
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorldObj();
-		BlockPos housingCoords = housing.getCoordinates();
+        World world = housing.getWorldObj();
+        BlockPos housingCoords = housing.getCoordinates();
 
-		// If we are already triggered, we continue the explosion sequence.
-		if (storedData.getInteger(indexExplosionTimer) > 0) {
-			progressExplosion(storedData, world, housingCoords);
-			return storedData;
-		}
+        // If we are already triggered, we continue the explosion sequence.
+        if (storedData.getInteger(indexExplosionTimer) > 0) {
+            progressExplosion(storedData, world, housingCoords);
+            return storedData;
+        }
 
-		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
-		for (PlayerEntity player : players) {
-			int chance = explosionChance;
-			storedData.setInteger(indexExplosionForce, defaultForce);
+        List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
+        for (PlayerEntity player : players) {
+            int chance = explosionChance;
+            storedData.setInteger(indexExplosionForce, defaultForce);
 
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
-			if (count > 3) {
-				continue; // Full set, no damage/effect
-			} else if (count > 2) {
-				chance = 5;
-				storedData.setInteger(indexExplosionForce, 6);
-			} else if (count > 1) {
-				chance = 20;
-				storedData.setInteger(indexExplosionForce, 8);
-			} else if (count > 0) {
-				chance = 35;
-				storedData.setInteger(indexExplosionForce, 10);
-			}
+            // Entities are not attacked if they wear a full set of apiarist's armor.
+            int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
+            if (count > 3) {
+                continue; // Full set, no damage/effect
+            } else if (count > 2) {
+                chance = 5;
+                storedData.setInteger(indexExplosionForce, 6);
+            } else if (count > 1) {
+                chance = 20;
+                storedData.setInteger(indexExplosionForce, 8);
+            } else if (count > 0) {
+                chance = 35;
+                storedData.setInteger(indexExplosionForce, 10);
+            }
 
-			if (world.rand.nextInt(1000) >= chance) {
-				continue;
-			}
+            if (world.rand.nextInt(1000) >= chance) {
+                continue;
+            }
 
-			float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
-			world.playSound(null, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, pitch);
-			storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
-		}
+            float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
+            world.playSound(null, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, pitch);
+            storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 
-	private static void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
+    private static void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
 
-		int explosionTimer = storedData.getInteger(indexExplosionTimer);
-		explosionTimer--;
-		storedData.setInteger(indexExplosionTimer, explosionTimer);
+        int explosionTimer = storedData.getInteger(indexExplosionTimer);
+        explosionTimer--;
+        storedData.setInteger(indexExplosionTimer, explosionTimer);
 
-		if (explosionTimer > 0) {
-			return;
-		}
+        if (explosionTimer > 0) {
+            return;
+        }
 
-		//TODO - check explosion mode right
-		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
-	}
+        //TODO - check explosion mode right
+        world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
+    }
 
 }

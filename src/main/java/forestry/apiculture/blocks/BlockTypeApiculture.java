@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import java.util.function.Supplier;
-
 import forestry.apiculture.features.ApicultureTiles;
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
@@ -19,25 +17,27 @@ import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
 
+import java.util.function.Supplier;
+
 public enum BlockTypeApiculture implements IBlockType {
-	APIARY(() -> ApicultureTiles.APIARY, "apiary"),
-	BEE_HOUSE(() -> ApicultureTiles.BEE_HOUSE, "bee_house");
+    APIARY(() -> ApicultureTiles.APIARY, "apiary"),
+    BEE_HOUSE(() -> ApicultureTiles.BEE_HOUSE, "bee_house");
 
-	public static final BlockTypeApiculture[] VALUES = values();
+    public static final BlockTypeApiculture[] VALUES = values();
 
-	private final IMachineProperties machineProperties;
+    private final IMachineProperties machineProperties;
 
-	<T extends TileForestry> BlockTypeApiculture(Supplier<FeatureTileType<? extends T>> teClass, String name) {
-		this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
-	}
+    <T extends TileForestry> BlockTypeApiculture(Supplier<FeatureTileType<? extends T>> teClass, String name) {
+        this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
+    }
 
-	@Override
-	public IMachineProperties<?> getMachineProperties() {
-		return machineProperties;
-	}
+    @Override
+    public IMachineProperties<?> getMachineProperties() {
+        return machineProperties;
+    }
 
-	@Override
-	public String getString() {
-		return getMachineProperties().getString();
-	}
+    @Override
+    public String getString() {
+        return getMachineProperties().getString();
+    }
 }

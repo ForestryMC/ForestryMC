@@ -11,10 +11,10 @@
 package forestry.book.proxy;
 
 public class ProxyBook {
-	public void preInit() {
+    public void preInit() {
 
-	}
+    }
 
-	public void setupAPI() {
-	}
+    public void setupAPI() {
+    }
 }

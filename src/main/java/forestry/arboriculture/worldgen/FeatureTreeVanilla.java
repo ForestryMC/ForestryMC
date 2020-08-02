@@ -13,7 +13,7 @@ package forestry.arboriculture.worldgen;
 import forestry.api.arboriculture.ITreeGenData;
 
 public abstract class FeatureTreeVanilla extends FeatureTree {
-	protected FeatureTreeVanilla(ITreeGenData tree) {
-		super(tree, 5, 2);
-	}
+    protected FeatureTreeVanilla(ITreeGenData tree) {
+        super(tree, 5, 2);
+    }
 }

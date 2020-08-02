@@ -23,11 +23,11 @@ import forestry.api.apiculture.genetics.IBeeMutationFactory;
 
 public class BeeMutationFactory implements IBeeMutationFactory {
 
-	@Override
-	public IBeeMutationBuilder createMutation(IAlleleBeeSpecies parentBee0, IAlleleBeeSpecies parentBee1, IAllele[] result, int chance) {
-		BeeMutation beeMutation = new BeeMutation(parentBee0, parentBee1, result, chance);
-		IMutationContainer<IBee, IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
-		container.registerMutation(beeMutation);
-		return beeMutation;
-	}
+    @Override
+    public IBeeMutationBuilder createMutation(IAlleleBeeSpecies parentBee0, IAlleleBeeSpecies parentBee1, IAllele[] result, int chance) {
+        BeeMutation beeMutation = new BeeMutation(parentBee0, parentBee1, result, chance);
+        IMutationContainer<IBee, IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
+        container.registerMutation(beeMutation);
+        return beeMutation;
+    }
 }

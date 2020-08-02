@@ -23,33 +23,33 @@ import forestry.core.inventory.watchers.ISlotPickupWatcher;
  * Slot with a watcher callbacks.
  */
 public class SlotWatched extends SlotForestry {
-	private ISlotPickupWatcher pickupWatcher = FakeSlotPickupWatcher.instance;
-	private ISlotChangeWatcher changeWatcher = FakeSlotChangeWatcher.instance;
+    private ISlotPickupWatcher pickupWatcher = FakeSlotPickupWatcher.instance;
+    private ISlotChangeWatcher changeWatcher = FakeSlotChangeWatcher.instance;
 
-	public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
-		super(inventory, slotIndex, xPos, yPos);
-	}
+    public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
+        super(inventory, slotIndex, xPos, yPos);
+    }
 
-	public SlotWatched setPickupWatcher(ISlotPickupWatcher pickupWatcher) {
-		this.pickupWatcher = pickupWatcher;
-		return this;
-	}
+    public SlotWatched setPickupWatcher(ISlotPickupWatcher pickupWatcher) {
+        this.pickupWatcher = pickupWatcher;
+        return this;
+    }
 
-	public SlotWatched setChangeWatcher(ISlotChangeWatcher changeWatcher) {
-		this.changeWatcher = changeWatcher;
-		return this;
-	}
+    public SlotWatched setChangeWatcher(ISlotChangeWatcher changeWatcher) {
+        this.changeWatcher = changeWatcher;
+        return this;
+    }
 
-	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
-		itemStack = super.onTake(player, itemStack);
-		pickupWatcher.onTake(getSlotIndex(), player);
-		return itemStack;
-	}
+    @Override
+    public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+        itemStack = super.onTake(player, itemStack);
+        pickupWatcher.onTake(getSlotIndex(), player);
+        return itemStack;
+    }
 
-	@Override
-	public void onSlotChanged() {
-		super.onSlotChanged();
-		changeWatcher.onSlotChanged(inventory, getSlotIndex());
-	}
+    @Override
+    public void onSlotChanged() {
+        super.onSlotChanged();
+        changeWatcher.onSlotChanged(inventory, getSlotIndex());
+    }
 }

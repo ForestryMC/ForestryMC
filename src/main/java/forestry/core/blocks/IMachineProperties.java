@@ -21,18 +21,18 @@ import net.minecraft.util.IStringSerializable;
 import forestry.core.tiles.TileForestry;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable, IShapeProvider {
-	TileEntityType<? extends T> getTeType();
+    TileEntityType<? extends T> getTeType();
 
-	default void clientSetup() {
-	}
+    default void clientSetup() {
+    }
 
-	@Nullable
-	TileEntity createTileEntity();
+    @Nullable
+    TileEntity createTileEntity();
 
-	void setBlock(Block block);
+    void setBlock(Block block);
 
-	@Nullable
-	Block getBlock();
+    @Nullable
+    Block getBlock();
 
-	boolean isFullCube(BlockState state);
+    boolean isFullCube(BlockState state);
 }

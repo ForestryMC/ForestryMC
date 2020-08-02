@@ -21,36 +21,36 @@ import forestry.core.network.PacketIdServer;
 import forestry.mail.gui.ContainerLetter;
 
 public class PacketLetterInfoRequest extends ForestryPacket implements IForestryPacketServer {
-	private final String recipientName;
-	private final EnumAddressee addressType;
+    private final String recipientName;
+    private final EnumAddressee addressType;
 
-	public PacketLetterInfoRequest(String recipientName, EnumAddressee addressType) {
-		this.recipientName = recipientName;
-		this.addressType = addressType;
-	}
+    public PacketLetterInfoRequest(String recipientName, EnumAddressee addressType) {
+        this.recipientName = recipientName;
+        this.addressType = addressType;
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.LETTER_INFO_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.LETTER_INFO_REQUEST;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeString(recipientName);
-		data.writeEnum(addressType, EnumAddressee.values());
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeString(recipientName);
+        data.writeEnum(addressType, EnumAddressee.values());
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
+    public static class Handler implements IForestryPacketHandlerServer {
 
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			String recipientName = data.readString();
-			EnumAddressee addressType = data.readEnum(EnumAddressee.values());
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+            String recipientName = data.readString();
+            EnumAddressee addressType = data.readEnum(EnumAddressee.values());
 
-			if (player.openContainer instanceof ContainerLetter) {
-				ContainerLetter containerLetter = (ContainerLetter) player.openContainer;
-				containerLetter.handleRequestLetterInfo(player, recipientName, addressType);
-			}
-		}
-	}
+            if (player.openContainer instanceof ContainerLetter) {
+                ContainerLetter containerLetter = (ContainerLetter) player.openContainer;
+                containerLetter.handleRequestLetterInfo(player, recipientName, addressType);
+            }
+        }
+    }
 }

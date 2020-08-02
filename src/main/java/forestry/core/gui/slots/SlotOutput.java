@@ -18,12 +18,12 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotOutput extends SlotWatched {
 
-	public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
-		super(iinventory, slotIndex, posX, posY);
-	}
+    public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
+        super(iinventory, slotIndex, posX, posY);
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		return false;
-	}
+    @Override
+    public boolean isItemValid(ItemStack itemstack) {
+        return false;
+    }
 }

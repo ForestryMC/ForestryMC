@@ -9,6 +9,6 @@ import net.minecraft.item.ItemStack;
 
 public interface IStamps {
 
-	EnumPostage getPostage(ItemStack itemstack);
+    EnumPostage getPostage(ItemStack itemstack);
 
 }

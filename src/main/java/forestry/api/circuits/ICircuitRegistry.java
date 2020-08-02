@@ -13,31 +13,31 @@ import net.minecraft.world.server.ServerWorld;
 
 public interface ICircuitRegistry {
 
-	/* CIRCUITS */
-	Map<String, ICircuit> getRegisteredCircuits();
+    /* CIRCUITS */
+    Map<String, ICircuit> getRegisteredCircuits();
 
-	void registerCircuit(ICircuit circuit);
+    void registerCircuit(ICircuit circuit);
 
-	void registerDeprecatedCircuitReplacement(String deprecatedCircuit, ICircuit replacement);
+    void registerDeprecatedCircuitReplacement(String deprecatedCircuit, ICircuit replacement);
 
-	@Nullable
-	ICircuit getCircuit(String uid);
+    @Nullable
+    ICircuit getCircuit(String uid);
 
-	ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName);
+    ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName);
 
-	/* LAYOUTS */
-	Map<String, ICircuitLayout> getRegisteredLayouts();
+    /* LAYOUTS */
+    Map<String, ICircuitLayout> getRegisteredLayouts();
 
-	void registerLayout(ICircuitLayout layout);
+    void registerLayout(ICircuitLayout layout);
 
-	@Nullable
-	ICircuitLayout getLayout(String uid);
+    @Nullable
+    ICircuitLayout getLayout(String uid);
 
-	ICircuitLayout getDefaultLayout();
+    ICircuitLayout getDefaultLayout();
 
-	@Nullable
-	ICircuitBoard getCircuitBoard(ItemStack itemstack);
+    @Nullable
+    ICircuitBoard getCircuitBoard(ItemStack itemstack);
 
-	boolean isChipset(ItemStack itemstack);
+    boolean isChipset(ItemStack itemstack);
 
 }

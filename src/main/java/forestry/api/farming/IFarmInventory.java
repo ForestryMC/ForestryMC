@@ -10,21 +10,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 public interface IFarmInventory {
-	boolean hasResources(NonNullList<ItemStack> resources);
+    boolean hasResources(NonNullList<ItemStack> resources);
 
-	void removeResources(NonNullList<ItemStack> resources);
+    void removeResources(NonNullList<ItemStack> resources);
 
-	boolean acceptsAsSeedling(ItemStack itemstack);
+    boolean acceptsAsSeedling(ItemStack itemstack);
 
-	boolean acceptsAsResource(ItemStack itemstack);
+    boolean acceptsAsResource(ItemStack itemstack);
 
-	boolean acceptsAsFertilizer(ItemStack itemstack);
+    boolean acceptsAsFertilizer(ItemStack itemstack);
 
-	IInventory getProductInventory();
+    IInventory getProductInventory();
 
-	IInventory getGermlingsInventory();
+    IInventory getGermlingsInventory();
 
-	IInventory getResourcesInventory();
+    IInventory getResourcesInventory();
 
-	IInventory getFertilizerInventory();
+    IInventory getFertilizerInventory();
 }

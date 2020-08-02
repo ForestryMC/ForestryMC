@@ -19,18 +19,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IToolTipProvider {
-	@Nullable
-	@OnlyIn(Dist.CLIENT)
-	ToolTip getToolTip(int mouseX, int mouseY);
+    @Nullable
+    @OnlyIn(Dist.CLIENT)
+    ToolTip getToolTip(int mouseX, int mouseY);
 
-	@OnlyIn(Dist.CLIENT)
-	boolean isToolTipVisible();
+    @OnlyIn(Dist.CLIENT)
+    boolean isToolTipVisible();
 
-	@OnlyIn(Dist.CLIENT)
-	boolean isMouseOver(double mouseX, double mouseY);
+    @OnlyIn(Dist.CLIENT)
+    boolean isMouseOver(double mouseX, double mouseY);
 
-	@OnlyIn(Dist.CLIENT)
-	default boolean isRelativeToGui() {
-		return true;
-	}
+    @OnlyIn(Dist.CLIENT)
+    default boolean isRelativeToGui() {
+        return true;
+    }
 }

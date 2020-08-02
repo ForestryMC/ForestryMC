@@ -22,18 +22,18 @@ import forestry.api.genetics.alleles.IAlleleProperty;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> extends Property<A> {
 
-	public PropertyAllele(String name, Class<A> valueClass) {
-		super(name, valueClass);
-	}
+    public PropertyAllele(String name, Class<A> valueClass) {
+        super(name, valueClass);
+    }
 
-	@Override
-	public Optional<A> parseValue(String value) {
-		IAllele allele = AlleleUtils.getAlleleOrNull(value);
-		Class<A> valueClass = getValueClass();
-		if (valueClass.isInstance(allele)) {
-			return Optional.of(valueClass.cast(allele));
-		}
-		return Optional.empty();
-	}
+    @Override
+    public Optional<A> parseValue(String value) {
+        IAllele allele = AlleleUtils.getAlleleOrNull(value);
+        Class<A> valueClass = getValueClass();
+        if (valueClass.isInstance(allele)) {
+            return Optional.of(valueClass.cast(allele));
+        }
+        return Optional.empty();
+    }
 
 }

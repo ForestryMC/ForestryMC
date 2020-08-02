@@ -20,24 +20,24 @@ import forestry.core.render.ColourProperties;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
 
-	protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITextComponent title) {
-		super(texture, container, inv, title);
-	}
+    protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITextComponent title) {
+        super(texture, container, inv, title);
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
-		textLayout.line = 6;
-		if (centeredTitle()) {
-			textLayout.drawCenteredLine(transform, title.getString(), 0, ColourProperties.INSTANCE.get("gui.title"));
-		} else {
-			textLayout.drawLine(transform, title.getString(), 8, ColourProperties.INSTANCE.get("gui.title"));
-		}
-		bindTexture(textureFile);
-	}
+        textLayout.line = 6;
+        if (centeredTitle()) {
+            textLayout.drawCenteredLine(transform, title.getString(), 0, ColourProperties.INSTANCE.get("gui.title"));
+        } else {
+            textLayout.drawLine(transform, title.getString(), 8, ColourProperties.INSTANCE.get("gui.title"));
+        }
+        bindTexture(textureFile);
+    }
 
-	protected boolean centeredTitle() {
-		return true;
-	}
+    protected boolean centeredTitle() {
+        return true;
+    }
 }

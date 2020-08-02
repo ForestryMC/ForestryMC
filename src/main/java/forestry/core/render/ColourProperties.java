@@ -27,33 +27,33 @@ import forestry.core.utils.Log;
 @OnlyIn(Dist.CLIENT)
 public class ColourProperties implements ISelectiveResourceReloadListener {
 
-	public static final ColourProperties INSTANCE;
+    public static final ColourProperties INSTANCE;
 
-	static {
-		INSTANCE = new ColourProperties();
-	}
+    static {
+        INSTANCE = new ColourProperties();
+    }
 
-	private final Properties defaultMappings = new Properties();
-	private final Properties mappings = new Properties();
+    private final Properties defaultMappings = new Properties();
+    private final Properties mappings = new Properties();
 
-	private ColourProperties() {
-	}
+    private ColourProperties() {
+    }
 
-	public synchronized int get(String key) {
-		return Integer.parseInt(mappings.getProperty(key, defaultMappings.getProperty(key, "d67fff")), 16);
-	}
+    public synchronized int get(String key) {
+        return Integer.parseInt(mappings.getProperty(key, defaultMappings.getProperty(key, "d67fff")), 16);
+    }
 
-	@Override    //TODO - actually be selective
-	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> pred) {
-		try {
-			InputStream defaultFontStream = ColourProperties.class.getResourceAsStream("/config/forestry/colour.properties");
-			mappings.load(defaultFontStream);
-			defaultMappings.load(defaultFontStream);
+    @Override    //TODO - actually be selective
+    public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> pred) {
+        try {
+            InputStream defaultFontStream = ColourProperties.class.getResourceAsStream("/config/forestry/colour.properties");
+            mappings.load(defaultFontStream);
+            defaultMappings.load(defaultFontStream);
 
-			defaultFontStream.close();
-		} catch (IOException e) {
-			Log.error("Failed to load colors.properties.", e);
-		}
-	}
+            defaultFontStream.close();
+        } catch (IOException e) {
+            Log.error("Failed to load colors.properties.", e);
+        }
+    }
 
 }

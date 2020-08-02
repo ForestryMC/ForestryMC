@@ -34,52 +34,52 @@ import forestry.core.items.ItemForestry;
 
 public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
-	private final EnumCircuitBoardType type;
+    private final EnumCircuitBoardType type;
 
-	public ItemCircuitBoard(EnumCircuitBoardType type) {
-		this.type = type;
-	}
+    public ItemCircuitBoard(EnumCircuitBoardType type) {
+        this.type = type;
+    }
 
-	public EnumCircuitBoardType getType() {
-		return type;
-	}
+    public EnumCircuitBoardType getType() {
+        return type;
+    }
 
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
-			subItems.add(createCircuitboard(type, null, new ICircuit[]{}));
-		}
-	}
+    @Override
+    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+        if (this.isInGroup(tab)) {
+            subItems.add(createCircuitboard(type, null, new ICircuit[]{}));
+        }
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
-		if (tintIndex == 0) {
-			return type.getPrimaryColor();
-		} else {
-			return type.getSecondaryColor();
-		}
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public int getColorFromItemStack(ItemStack itemstack, int tintIndex) {
+        if (tintIndex == 0) {
+            return type.getPrimaryColor();
+        } else {
+            return type.getSecondaryColor();
+        }
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
-		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
-		if (circuitboard != null) {
-			circuitboard.addTooltip(list);
-		}
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+        super.addInformation(itemstack, world, list, flag);
+        ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
+        if (circuitboard != null) {
+            circuitboard.addTooltip(list);
+        }
+    }
 
-	public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
-		CompoundNBT compoundNBT = new CompoundNBT();
-		new CircuitBoard(type, layout, circuits).write(compoundNBT);
-		ItemStack stack = CoreItems.CIRCUITBOARDS.stack(type, 1);
-		stack.setTag(compoundNBT);
-		return stack;
-	}
+    public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
+        CompoundNBT compoundNBT = new CompoundNBT();
+        new CircuitBoard(type, layout, circuits).write(compoundNBT);
+        ItemStack stack = CoreItems.CIRCUITBOARDS.stack(type, 1);
+        stack.setTag(compoundNBT);
+        return stack;
+    }
 
-	public ItemStack get(EnumCircuitBoardType type) {
-		return CoreItems.CIRCUITBOARDS.stack(type, 1);
-	}
+    public ItemStack get(EnumCircuitBoardType type) {
+        return CoreItems.CIRCUITBOARDS.stack(type, 1);
+    }
 }

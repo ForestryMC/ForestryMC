@@ -30,51 +30,51 @@ import forestry.factory.tiles.TileCarpenter;
 import forestry.factory.tiles.TileFabricator;
 
 public class PacketRecipeTransferRequest extends ForestryPacket implements IForestryPacketServer {
-	private final BlockPos pos;
-	private final NonNullList<ItemStack> craftingInventory;
+    private final BlockPos pos;
+    private final NonNullList<ItemStack> craftingInventory;
 
-	public PacketRecipeTransferRequest(TileBase base, NonNullList<ItemStack> craftingInventory) {
-		this.pos = base.getPos();
-		this.craftingInventory = craftingInventory;
-	}
+    public PacketRecipeTransferRequest(TileBase base, NonNullList<ItemStack> craftingInventory) {
+        this.pos = base.getPos();
+        this.craftingInventory = craftingInventory;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeItemStacks(craftingInventory);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeItemStacks(craftingInventory);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.RECIPE_TRANSFER_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.RECIPE_TRANSFER_REQUEST;
+    }
 
-	public static class Handler implements IForestryPacketHandlerServer {
-		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) throws IOException {
-			BlockPos pos = data.readBlockPos();
-			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
+    public static class Handler implements IForestryPacketHandlerServer {
+        @Override
+        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) throws IOException {
+            BlockPos pos = data.readBlockPos();
+            NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 
-			TileEntity tile = TileUtil.getTile(player.world, pos);
-			if (tile instanceof TileCarpenter) {
-				TileCarpenter carpenter = (TileCarpenter) tile;
-				int index = 0;
-				for (ItemStack stack : craftingInventory) {
-					carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
-					index++;
-				}
+            TileEntity tile = TileUtil.getTile(player.world, pos);
+            if (tile instanceof TileCarpenter) {
+                TileCarpenter carpenter = (TileCarpenter) tile;
+                int index = 0;
+                for (ItemStack stack : craftingInventory) {
+                    carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
+                    index++;
+                }
 
-				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
-			} else if (tile instanceof TileFabricator) {
-				TileFabricator fabricator = (TileFabricator) tile;
-				int index = 0;
-				for (ItemStack stack : craftingInventory) {
-					fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
-					index++;
-				}
+                NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
+            } else if (tile instanceof TileFabricator) {
+                TileFabricator fabricator = (TileFabricator) tile;
+                int index = 0;
+                for (ItemStack stack : craftingInventory) {
+                    fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
+                    index++;
+                }
 
-				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
-			}
-		}
-	}
+                NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
+            }
+        }
+    }
 }

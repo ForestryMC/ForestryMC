@@ -23,32 +23,32 @@ import forestry.core.circuits.ISocketable;
 
 public abstract class ContainerSocketed<T extends TileEntity & ISocketable> extends ContainerTile<T> implements IContainerSocketed {
 
-	private final ContainerSocketedHelper<T> helper;
+    private final ContainerSocketedHelper<T> helper;
 
-	protected ContainerSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
-		super(windowId, type, playerInventory, tile, xInv, yInv);
-		this.helper = new ContainerSocketedHelper<>(this.tile);
-	}
+    protected ContainerSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+        super(windowId, type, playerInventory, tile, xInv, yInv);
+        this.helper = new ContainerSocketedHelper<>(this.tile);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void handleChipsetClick(int slot) {
-		helper.handleChipsetClick(slot);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void handleChipsetClick(int slot) {
+        helper.handleChipsetClick(slot);
+    }
 
-	@Override
-	public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
-		helper.handleChipsetClickServer(slot, player, itemstack);
-	}
+    @Override
+    public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
+        helper.handleChipsetClickServer(slot, player, itemstack);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void handleSolderingIronClick(int slot) {
-		helper.handleSolderingIronClick(slot);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void handleSolderingIronClick(int slot) {
+        helper.handleSolderingIronClick(slot);
+    }
 
-	@Override
-	public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
-		helper.handleSolderingIronClickServer(slot, player, itemstack);
-	}
+    @Override
+    public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
+        helper.handleSolderingIronClickServer(slot, player, itemstack);
+    }
 }

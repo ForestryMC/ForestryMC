@@ -37,66 +37,66 @@ import forestry.mail.gui.ContainerMailbox;
 
 public class TileMailbox extends TileBase {
 
-	public TileMailbox() {
-		super(MailTiles.MAILBOX.tileType());
-		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
-	}
+    public TileMailbox() {
+        super(MailTiles.MAILBOX.tileType());
+        setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
+    }
 
-	/* GUI */
-	@Override
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
-		if (world.isRemote) {
-			return;
-		}
+    /* GUI */
+    @Override
+    public void openGui(ServerPlayerEntity player, BlockPos pos) {
+        if (world.isRemote) {
+            return;
+        }
 
-		ItemStack heldItem = player.getHeldItem(player.getActiveHand());
-		// Handle letter sending
-		if (PostManager.postRegistry.isLetter(heldItem)) {
-			IPostalState result = this.tryDispatchLetter(heldItem);
-			if (!result.isOk()) {
-				player.sendMessage(result.getDescription(), Util.DUMMY_UUID);
-			} else {
-				heldItem.shrink(1);
-			}
-		} else {
-			super.openGui(player, pos);
-		}
-	}
+        ItemStack heldItem = player.getHeldItem(player.getActiveHand());
+        // Handle letter sending
+        if (PostManager.postRegistry.isLetter(heldItem)) {
+            IPostalState result = this.tryDispatchLetter(heldItem);
+            if (!result.isOk()) {
+                player.sendMessage(result.getDescription(), Util.DUMMY_UUID);
+            } else {
+                heldItem.shrink(1);
+            }
+        } else {
+            super.openGui(player, pos);
+        }
+    }
 
-	/* MAIL HANDLING */
-	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
-		if (world.isRemote) {
-			return getInternalInventory();
-		}
+    /* MAIL HANDLING */
+    public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
+        if (world.isRemote) {
+            return getInternalInventory();
+        }
 
-		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
-		return PostRegistry.getOrCreatePOBox((ServerWorld) world, address);
-	}
+        IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
+        return PostRegistry.getOrCreatePOBox((ServerWorld) world, address);
+    }
 
-	private IPostalState tryDispatchLetter(ItemStack letterStack) {
-		ILetter letter = PostManager.postRegistry.getLetter(letterStack);
-		IPostalState result;
+    private IPostalState tryDispatchLetter(ItemStack letterStack) {
+        ILetter letter = PostManager.postRegistry.getLetter(letterStack);
+        IPostalState result;
 
-		if (letter != null) {
-			//this is only called after !world.isRemote has been checked, so I believe the cast is OK
-			ServerWorld world = (ServerWorld) this.world;
-			result = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, letterStack, true);
-		} else {
-			result = EnumDeliveryState.NOT_MAILABLE;
-		}
+        if (letter != null) {
+            //this is only called after !world.isRemote has been checked, so I believe the cast is OK
+            ServerWorld world = (ServerWorld) this.world;
+            result = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, letterStack, true);
+        } else {
+            result = EnumDeliveryState.NOT_MAILABLE;
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		// triggers.add(MailTriggers.triggerHasMail);
-	//	}
+    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+    //	@Override
+    //	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+    //		super.addExternalTriggers(triggers, side, tile);
+    //		// triggers.add(MailTriggers.triggerHasMail);
+    //	}
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerMailbox(windowId, inv, this);
-	}
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerMailbox(windowId, inv, this);
+    }
 }

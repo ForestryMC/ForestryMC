@@ -22,13 +22,13 @@ import forestry.arboriculture.models.SpriteProviderLeaves;
 public class TreeFactory implements ITreeFactory {
 
 
-	@Override
-	public IAlleleTreeSpeciesBuilder createSpecies(String modID, String uid, String speciesIdentifier) {
-		return new AlleleTreeSpecies.Builder(modID, uid, speciesIdentifier);
-	}
+    @Override
+    public IAlleleTreeSpeciesBuilder createSpecies(String modID, String uid, String speciesIdentifier) {
+        return new AlleleTreeSpecies.Builder(modID, uid, speciesIdentifier);
+    }
 
-	@Override
-	public ILeafSpriteProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {
-		return new SpriteProviderLeaves(enumLeafType, color, colorPollinated);
-	}
+    @Override
+    public ILeafSpriteProvider getLeafIconProvider(EnumLeafType enumLeafType, Color color, Color colorPollinated) {
+        return new SpriteProviderLeaves(enumLeafType, color, colorPollinated);
+    }
 }

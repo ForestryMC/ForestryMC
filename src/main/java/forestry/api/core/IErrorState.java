@@ -15,18 +15,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public interface IErrorState extends ISpriteRegister {
 
-	short getID();
+    short getID();
 
-	String getUniqueName();
+    String getUniqueName();
 
-	String getUnlocalizedDescription();
+    String getUnlocalizedDescription();
 
-	String getUnlocalizedHelp();
+    String getUnlocalizedHelp();
 
-	/**
-	 * Sprite registered to the Gui Texture Map at {@link ITextureManager}
-	 */
-	@OnlyIn(Dist.CLIENT)
-	TextureAtlasSprite getSprite();
+    /**
+     * Sprite registered to the Gui Texture Map at {@link ITextureManager}
+     */
+    @OnlyIn(Dist.CLIENT)
+    TextureAtlasSprite getSprite();
 
 }

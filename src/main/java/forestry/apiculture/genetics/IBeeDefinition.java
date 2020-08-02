@@ -20,8 +20,8 @@ import forestry.api.apiculture.genetics.IBee;
 
 public interface IBeeDefinition extends ISpeciesDefinition<IBee> {
 
-	@Override
-	IAlleleBeeSpecies getSpecies();
+    @Override
+    IAlleleBeeSpecies getSpecies();
 
-	ItemStack getMemberStack(EnumBeeType beeType);
+    ItemStack getMemberStack(EnumBeeType beeType);
 }

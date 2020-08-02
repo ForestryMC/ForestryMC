@@ -34,94 +34,94 @@ import forestry.energy.EnergyManager;
 
 //TODO: Add needsGuiUpdate() method, so we only send one gui update packet.
 public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
-	protected final T tile;
-	@Nullable
-	private ImmutableSet<IErrorState> previousErrorStates;
-	private int previousEnergyManagerData = 0;
-	private int previousWorkCounter = 0;
-	private int previousTicksPerWorkCycle = 0;
+    protected final T tile;
+    @Nullable
+    private ImmutableSet<IErrorState> previousErrorStates;
+    private int previousEnergyManagerData = 0;
+    private int previousWorkCounter = 0;
+    private int previousTicksPerWorkCycle = 0;
 
-	protected ContainerTile(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
-		super(windowId, type);
-		addPlayerInventory(playerInventory, xInv, yInv);
-		this.tile = tile;
-	}
+    protected ContainerTile(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+        super(windowId, type);
+        addPlayerInventory(playerInventory, xInv, yInv);
+        this.tile = tile;
+    }
 
-	protected ContainerTile(int windowId, ContainerType<?> type, T tile) {
-		super(windowId, type);
-		this.tile = tile;
-	}
+    protected ContainerTile(int windowId, ContainerType<?> type, T tile) {
+        super(windowId, type);
+        this.tile = tile;
+    }
 
-	@Override
-	protected final boolean canAccess(PlayerEntity player) {
-		return true;
-	}
+    @Override
+    protected final boolean canAccess(PlayerEntity player) {
+        return true;
+    }
 
-	@Override
-	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
-		return TileUtil.isUsableByPlayer(PlayerEntity, tile);
-	}
+    @Override
+    public final boolean canInteractWith(PlayerEntity PlayerEntity) {
+        return TileUtil.isUsableByPlayer(PlayerEntity, tile);
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		if (tile instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
-			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
+        if (tile instanceof IErrorLogicSource) {
+            IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
+            ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-			if (!errorStates.equals(previousErrorStates)) {
-				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
-				sendPacketToListeners(packet);
-			}
+            if (!errorStates.equals(previousErrorStates)) {
+                PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
+                sendPacketToListeners(packet);
+            }
 
-			previousErrorStates = errorStates;
-		}
+            previousErrorStates = errorStates;
+        }
 
-		if (tile instanceof IPowerHandler) {
-			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
-			int energyManagerData = energyManager.getEnergyStored();
-			if (energyManagerData != previousEnergyManagerData) {
-				PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
-				sendPacketToListeners(packet);
+        if (tile instanceof IPowerHandler) {
+            EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
+            int energyManagerData = energyManager.getEnergyStored();
+            if (energyManagerData != previousEnergyManagerData) {
+                PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
+                sendPacketToListeners(packet);
 
-				previousEnergyManagerData = energyManagerData;
-			}
-		}
+                previousEnergyManagerData = energyManagerData;
+            }
+        }
 
-		if (tile instanceof TilePowered) {
-			boolean guiNeedsUpdate = false;
+        if (tile instanceof TilePowered) {
+            boolean guiNeedsUpdate = false;
 
-			TilePowered tilePowered = (TilePowered) tile;
+            TilePowered tilePowered = (TilePowered) tile;
 
-			int workCounter = tilePowered.getWorkCounter();
-			if (workCounter != previousWorkCounter) {
-				guiNeedsUpdate = true;
-				previousWorkCounter = workCounter;
-			}
+            int workCounter = tilePowered.getWorkCounter();
+            if (workCounter != previousWorkCounter) {
+                guiNeedsUpdate = true;
+                previousWorkCounter = workCounter;
+            }
 
-			int ticksPerWorkCycle = tilePowered.getTicksPerWorkCycle();
-			if (ticksPerWorkCycle != previousTicksPerWorkCycle) {
-				guiNeedsUpdate = true;
-				previousTicksPerWorkCycle = ticksPerWorkCycle;
-			}
+            int ticksPerWorkCycle = tilePowered.getTicksPerWorkCycle();
+            if (ticksPerWorkCycle != previousTicksPerWorkCycle) {
+                guiNeedsUpdate = true;
+                previousTicksPerWorkCycle = ticksPerWorkCycle;
+            }
 
-			if (guiNeedsUpdate) {
-				PacketGuiUpdate packet = new PacketGuiUpdate(tilePowered);
-				sendPacketToListeners(packet);
-			}
-		}
-	}
+            if (guiNeedsUpdate) {
+                PacketGuiUpdate packet = new PacketGuiUpdate(tilePowered);
+                sendPacketToListeners(packet);
+            }
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public void onGuiEnergy(int energyStored) {
-		if (tile instanceof IPowerHandler) {
-			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
-			energyManager.setEnergyStored(energyStored);
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    public void onGuiEnergy(int energyStored) {
+        if (tile instanceof IPowerHandler) {
+            EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
+            energyManager.setEnergyStored(energyStored);
+        }
+    }
 
-	public T getTile() {
-		return tile;
-	}
+    public T getTile() {
+        return tile;
+    }
 }

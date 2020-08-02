@@ -26,26 +26,26 @@ import forestry.core.gui.elements.lib.IGuiElementFactory;
  */
 @OnlyIn(Dist.CLIENT)
 public class CraftingContent extends BookContent<CraftingData> {
-	@Override
-	public Class<CraftingData> getDataClass() {
-		return CraftingData.class;
-	}
+    @Override
+    public Class<CraftingData> getDataClass() {
+        return CraftingData.class;
+    }
 
-	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
-		if (data == null || data.locations.length == 0) {
-			return false;
-		}
-		List<IRecipe> recipes = new LinkedList<>();
-		for (ResourceLocation location : data.locations) {
-			//TODO sides
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
-			IRecipe recipe = recipeMap.get(location);
-			if (recipe != null) {
-				recipes.add(recipe);
-			}
-		}
-		page.add(new CraftingElement(0, 0, recipes.toArray(new IRecipe[0])));
-		return true;
-	}
+    @Override
+    public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+        if (data == null || data.locations.length == 0) {
+            return false;
+        }
+        List<IRecipe> recipes = new LinkedList<>();
+        for (ResourceLocation location : data.locations) {
+            //TODO sides
+            Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
+            IRecipe recipe = recipeMap.get(location);
+            if (recipe != null) {
+                recipes.add(recipe);
+            }
+        }
+        page.add(new CraftingElement(0, 0, recipes.toArray(new IRecipe[0])));
+        return true;
+    }
 }

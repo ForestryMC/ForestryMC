@@ -14,12 +14,12 @@ import forestry.farming.multiblock.IFarmInventoryInternal;
 
 public interface IFarmHousingInternal extends IFarmHousing, ILiquidTankTile {
 
-	ITankManager getTankManager();
+    ITankManager getTankManager();
 
-	@Override
-	IFarmInventoryInternal getFarmInventory();
+    @Override
+    IFarmInventoryInternal getFarmInventory();
 
-	void setUpFarmlandTargets(Map<FarmDirection, List<FarmTarget>> targets);
+    void setUpFarmlandTargets(Map<FarmDirection, List<FarmTarget>> targets);
 
-	BlockPos getTopCoord();
+    BlockPos getTopCoord();
 }

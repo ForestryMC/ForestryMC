@@ -19,21 +19,21 @@ import forestry.apiculture.blocks.BlockAlvearyType;
 
 public class TileAlvearyStabiliser extends TileAlveary implements IAlvearyComponent.BeeModifier {
 
-	private static final IBeeModifier beeModifier = new AlvearyStabiliserBeeModifier();
+    private static final IBeeModifier beeModifier = new AlvearyStabiliserBeeModifier();
 
-	public TileAlvearyStabiliser() {
-		super(BlockAlvearyType.STABILISER);
-	}
+    public TileAlvearyStabiliser() {
+        super(BlockAlvearyType.STABILISER);
+    }
 
-	@Override
-	public IBeeModifier getBeeModifier() {
-		return beeModifier;
-	}
+    @Override
+    public IBeeModifier getBeeModifier() {
+        return beeModifier;
+    }
 
-	private static class AlvearyStabiliserBeeModifier extends DefaultBeeModifier {
-		@Override
-		public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
-			return 0.0f;
-		}
-	}
+    private static class AlvearyStabiliserBeeModifier extends DefaultBeeModifier {
+        @Override
+        public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
+            return 0.0f;
+        }
+    }
 }

@@ -19,19 +19,19 @@ import forestry.worktable.gui.ContainerWorktable;
 
 public class ClearWorktable extends Widget {
 
-	public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
-		super(manager, xPos, yPos);
-		width = 7;
-		height = 7;
-	}
+    public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
+        super(manager, xPos, yPos);
+        width = 7;
+        height = 7;
+    }
 
-	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
-	}
+    @Override
+    public void draw(MatrixStack transform, int startY, int startX) {
+    }
 
-	@Override
-	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		ContainerWorktable.clearRecipe();
-		SoundUtil.playButtonClick();
-	}
+    @Override
+    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+        ContainerWorktable.clearRecipe();
+        SoundUtil.playButtonClick();
+    }
 }

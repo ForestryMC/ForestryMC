@@ -18,14 +18,14 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
 
 public class PacketRegistryArboriculture implements IPacketRegistry {
-	@Override
-	public void registerPacketsServer() {
+    @Override
+    public void registerPacketsServer() {
 
-	}
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerPacketsClient() {
-		PacketIdClient.RIPENING_UPDATE.setPacketHandler(new PacketRipeningUpdate.Handler());
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerPacketsClient() {
+        PacketIdClient.RIPENING_UPDATE.setPacketHandler(new PacketRipeningUpdate.Handler());
+    }
 }

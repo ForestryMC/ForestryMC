@@ -26,35 +26,35 @@ import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.utils.Translator;
 
 public class MutationConditionHumidity implements IMutationCondition {
-	private final EnumHumidity minHumidity;
-	private final EnumHumidity maxHumidity;
+    private final EnumHumidity minHumidity;
+    private final EnumHumidity maxHumidity;
 
-	public MutationConditionHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity) {
-		this.minHumidity = minHumidity;
-		this.maxHumidity = maxHumidity;
-	}
+    public MutationConditionHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity) {
+        this.minHumidity = minHumidity;
+        this.maxHumidity = maxHumidity;
+    }
 
-	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		EnumHumidity biomeHumidity = climate.getHumidity();
+    @Override
+    public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+        EnumHumidity biomeHumidity = climate.getHumidity();
 
-		if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {
-			return 0;
-		}
-		return 1;
-	}
+        if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {
+            return 0;
+        }
+        return 1;
+    }
 
-	//TODO textcomponent (this will probably crash atm)
-	@Override
-	public ITextComponent getDescription() {
-		String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity).getString();
+    //TODO textcomponent (this will probably crash atm)
+    @Override
+    public ITextComponent getDescription() {
+        String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity).getString();
 
-		if (minHumidity != maxHumidity) {
-			String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity).getString();
-			//TODO: REPLACE
-			return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString));
-		} else {
-			return new TranslationTextComponent("for.mutation.condition.humidity.single", minHumidityString);
-		}
-	}
+        if (minHumidity != maxHumidity) {
+            String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity).getString();
+            //TODO: REPLACE
+            return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString));
+        } else {
+            return new TranslationTextComponent("for.mutation.condition.humidity.single", minHumidityString);
+        }
+    }
 }

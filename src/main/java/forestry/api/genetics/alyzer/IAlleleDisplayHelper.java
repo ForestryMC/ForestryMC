@@ -7,9 +7,9 @@ import genetics.api.organism.IOrganismType;
 import forestry.apiculture.genetics.IOrganismTooltipProvider;
 
 public interface IAlleleDisplayHelper {
-	default void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int info) {
-		addTooltip(provider, rootUID, info, (organismType) -> true);
-	}
+    default void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int info) {
+        addTooltip(provider, rootUID, info, (organismType) -> true);
+    }
 
-	void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
+    void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
 }

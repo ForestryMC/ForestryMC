@@ -15,12 +15,12 @@ import net.minecraft.world.server.ServerWorld;
  * Basic condition for flower growing, such as checking that the soil is the correct type.
  */
 public interface IFlowerGrowthRule {
-	/**
-	 * Checks a position for suitability, and then plants a flower there.
-	 * Returns true on success.
-	 * For implementers, you can plant a random flower using IFlowerGrowthHelper.plantRandomFlower
-	 *
-	 * @since Forestry 5.5.4
-	 */
-	boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers);
+    /**
+     * Checks a position for suitability, and then plants a flower there.
+     * Returns true on success.
+     * For implementers, you can plant a random flower using IFlowerGrowthHelper.plantRandomFlower
+     *
+     * @since Forestry 5.5.4
+     */
+    boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers);
 }

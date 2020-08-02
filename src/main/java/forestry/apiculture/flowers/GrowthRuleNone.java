@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import java.util.Collection;
-
+import forestry.api.genetics.flowers.IFlowerGrowthHelper;
+import forestry.api.genetics.flowers.IFlowerGrowthRule;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.api.genetics.flowers.IFlowerGrowthHelper;
-import forestry.api.genetics.flowers.IFlowerGrowthRule;
+import java.util.Collection;
 
 public class GrowthRuleNone implements IFlowerGrowthRule {
 
-	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
-		return true;
-	}
+    @Override
+    public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+        return true;
+    }
 }

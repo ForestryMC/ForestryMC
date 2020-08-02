@@ -57,171 +57,171 @@ import forestry.core.tiles.ITitled;
 import forestry.core.utils.RenderUtil;
 
 public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
-	private final String unlocalizedTitle;
+    private final String unlocalizedTitle;
 
-	public TileAlveary(BlockAlvearyType type) {
-		super(type.getTileType().tileType(), new MultiblockLogicAlveary());
-		this.unlocalizedTitle = ApicultureBlocks.ALVEARY.get(type).getTranslationKey();
-	}
+    public TileAlveary(BlockAlvearyType type) {
+        super(type.getTileType().tileType(), new MultiblockLogicAlveary());
+        this.unlocalizedTitle = ApicultureBlocks.ALVEARY.get(type).getTranslationKey();
+    }
 
-	@Override
-	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
-		// Re-render this block on the client
-		if (world.isRemote) {
-			RenderUtil.markForUpdate(getPos());
-		}
-	}
+    @Override
+    public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
+        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
+        // Re-render this block on the client
+        if (world.isRemote) {
+            RenderUtil.markForUpdate(getPos());
+        }
+    }
 
-	//TODO refreshing
-	//	@Override
-	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-	//		return oldState.getBlock() != newState.getBlock();
-	//	}
+    //TODO refreshing
+    //	@Override
+    //	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
+    //		return oldState.getBlock() != newState.getBlock();
+    //	}
 
-	@Override
-	public void onMachineBroken() {
-		// Re-render this block on the client
-		if (world.isRemote) {
-			//TODO
-			BlockPos pos = getPos();
-			RenderUtil.markForUpdate(pos);
-		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
-		markDirty();
-	}
+    @Override
+    public void onMachineBroken() {
+        // Re-render this block on the client
+        if (world.isRemote) {
+            //TODO
+            BlockPos pos = getPos();
+            RenderUtil.markForUpdate(pos);
+        }
+        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
+        markDirty();
+    }
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		LazyOptional<T> superCap = super.getCapability(capability, facing);
-		if (superCap.isPresent()) {
-			return superCap;
-		}
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        LazyOptional<T> superCap = super.getCapability(capability, facing);
+        if (superCap.isPresent()) {
+            return superCap;
+        }
 
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			if (facing != null) {
-				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
-				return LazyOptional.of(() -> sidedInvWrapper).cast();    //TODO - still not sure if I am doing this right
-			} else {
-				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
-				return LazyOptional.of(() -> invWrapper).cast();
-			}
-		}
-		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
-			IClimateListener listener = getMultiblockLogic().getController().getClimateListener();
-			return LazyOptional.of(() -> listener).cast();
-		}
-		return LazyOptional.empty();
-	}
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (facing != null) {
+                SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
+                return LazyOptional.of(() -> sidedInvWrapper).cast();    //TODO - still not sure if I am doing this right
+            } else {
+                InvWrapper invWrapper = new InvWrapper(getInternalInventory());
+                return LazyOptional.of(() -> invWrapper).cast();
+            }
+        }
+        if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
+            IClimateListener listener = getMultiblockLogic().getController().getClimateListener();
+            return LazyOptional.of(() -> listener).cast();
+        }
+        return LazyOptional.empty();
+    }
 
-	/* IHousing */
-	@Override
-	public Biome getBiome() {
-		return getMultiblockLogic().getController().getBiome();
-	}
+    /* IHousing */
+    @Override
+    public Biome getBiome() {
+        return getMultiblockLogic().getController().getBiome();
+    }
 
-	/* IBeeHousing */
-	@Override
-	public Iterable<IBeeModifier> getBeeModifiers() {
-		return getMultiblockLogic().getController().getBeeModifiers();
-	}
+    /* IBeeHousing */
+    @Override
+    public Iterable<IBeeModifier> getBeeModifiers() {
+        return getMultiblockLogic().getController().getBeeModifiers();
+    }
 
-	@Override
-	public Iterable<IBeeListener> getBeeListeners() {
-		return getMultiblockLogic().getController().getBeeListeners();
-	}
+    @Override
+    public Iterable<IBeeListener> getBeeListeners() {
+        return getMultiblockLogic().getController().getBeeListeners();
+    }
 
-	@Override
-	public IBeeHousingInventory getBeeInventory() {
-		return getMultiblockLogic().getController().getBeeInventory();
-	}
+    @Override
+    public IBeeHousingInventory getBeeInventory() {
+        return getMultiblockLogic().getController().getBeeInventory();
+    }
 
-	@Override
-	public IBeekeepingLogic getBeekeepingLogic() {
-		return getMultiblockLogic().getController().getBeekeepingLogic();
-	}
+    @Override
+    public IBeekeepingLogic getBeekeepingLogic() {
+        return getMultiblockLogic().getController().getBeekeepingLogic();
+    }
 
-	@Override
-	public Vector3d getBeeFXCoordinates() {
-		return getMultiblockLogic().getController().getBeeFXCoordinates();
-	}
+    @Override
+    public Vector3d getBeeFXCoordinates() {
+        return getMultiblockLogic().getController().getBeeFXCoordinates();
+    }
 
-	/* IClimatised */
-	@Override
-	public EnumTemperature getTemperature() {
-		return getMultiblockLogic().getController().getTemperature();
-	}
+    /* IClimatised */
+    @Override
+    public EnumTemperature getTemperature() {
+        return getMultiblockLogic().getController().getTemperature();
+    }
 
-	@Override
-	public EnumHumidity getHumidity() {
-		return getMultiblockLogic().getController().getHumidity();
-	}
+    @Override
+    public EnumHumidity getHumidity() {
+        return getMultiblockLogic().getController().getHumidity();
+    }
 
-	@Override
-	public int getBlockLightValue() {
-		return getMultiblockLogic().getController().getBlockLightValue();
-	}
+    @Override
+    public int getBlockLightValue() {
+        return getMultiblockLogic().getController().getBlockLightValue();
+    }
 
-	@Override
-	public boolean canBlockSeeTheSky() {
-		return getMultiblockLogic().getController().canBlockSeeTheSky();
-	}
+    @Override
+    public boolean canBlockSeeTheSky() {
+        return getMultiblockLogic().getController().canBlockSeeTheSky();
+    }
 
-	@Override
-	public boolean isRaining() {
-		return getMultiblockLogic().getController().isRaining();
-	}
+    @Override
+    public boolean isRaining() {
+        return getMultiblockLogic().getController().isRaining();
+    }
 
-	@Override
-	public IErrorLogic getErrorLogic() {
-		return getMultiblockLogic().getController().getErrorLogic();
-	}
+    @Override
+    public IErrorLogic getErrorLogic() {
+        return getMultiblockLogic().getController().getErrorLogic();
+    }
 
-	@Override
-	public IOwnerHandler getOwnerHandler() {
-		return getMultiblockLogic().getController().getOwnerHandler();
-	}
+    @Override
+    public IOwnerHandler getOwnerHandler() {
+        return getMultiblockLogic().getController().getOwnerHandler();
+    }
 
-	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return getMultiblockLogic().getController().getInternalInventory();
-	}
+    @Override
+    public IInventoryAdapter getInternalInventory() {
+        return getMultiblockLogic().getController().getInternalInventory();
+    }
 
-	@Override
-	public String getUnlocalizedTitle() {
-		return unlocalizedTitle;
-	}
+    @Override
+    public String getUnlocalizedTitle() {
+        return unlocalizedTitle;
+    }
 
-	/* IClimatised */
-	@Override
-	public float getExactTemperature() {
-		return getMultiblockLogic().getController().getExactTemperature();
-	}
+    /* IClimatised */
+    @Override
+    public float getExactTemperature() {
+        return getMultiblockLogic().getController().getExactTemperature();
+    }
 
-	@Override
-	public float getExactHumidity() {
-		return getMultiblockLogic().getController().getExactHumidity();
-	}
+    @Override
+    public float getExactHumidity() {
+        return getMultiblockLogic().getController().getExactHumidity();
+    }
 
-	/* IStreamableGui */
-	@Override
-	public void writeGuiData(PacketBufferForestry data) {
-		getMultiblockLogic().getController().writeGuiData(data);
-	}
+    /* IStreamableGui */
+    @Override
+    public void writeGuiData(PacketBufferForestry data) {
+        getMultiblockLogic().getController().writeGuiData(data);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void readGuiData(PacketBufferForestry data) throws IOException {
-		getMultiblockLogic().getController().readGuiData(data);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readGuiData(PacketBufferForestry data) throws IOException {
+        getMultiblockLogic().getController().readGuiData(data);
+    }
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerAlveary(windowId, player.inventory, this);
-	}
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new ContainerAlveary(windowId, player.inventory, this);
+    }
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(this.getUnlocalizedTitle());
-	}
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent(this.getUnlocalizedTitle());
+    }
 }

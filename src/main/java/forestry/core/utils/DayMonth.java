@@ -18,82 +18,82 @@ import java.util.Calendar;
  */
 public class DayMonth {
 
-	public final int day;
-	public final int month;
+    public final int day;
+    public final int month;
 
-	public DayMonth() {
-		this.day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		this.month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-	}
+    public DayMonth() {
+        this.day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        this.month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+    }
 
-	public DayMonth(int day, int month) {
-		this.day = day;
-		this.month = month;
-	}
+    public DayMonth(int day, int month) {
+        this.day = day;
+        this.month = month;
+    }
 
-	public boolean between(DayMonth start, DayMonth end) {
-		if (equals(start) || equals(end)) {
-			return true;
-		}
-		if (start.month > end.month) {
-			return after(start) || before(end);
-		}
-		return after(start) && before(end);
-	}
+    public boolean between(DayMonth start, DayMonth end) {
+        if (equals(start) || equals(end)) {
+            return true;
+        }
+        if (start.month > end.month) {
+            return after(start) || before(end);
+        }
+        return after(start) && before(end);
+    }
 
-	public boolean before(DayMonth other) {
+    public boolean before(DayMonth other) {
 
-		if (other.month > this.month) {
-			return true;
-		}
+        if (other.month > this.month) {
+            return true;
+        }
 
-		if (other.month < this.month) {
-			return false;
-		}
+        if (other.month < this.month) {
+            return false;
+        }
 
-		return this.day < other.day;
-	}
+        return this.day < other.day;
+    }
 
-	public boolean after(DayMonth other) {
+    public boolean after(DayMonth other) {
 
-		if (other.month < this.month) {
-			return true;
-		}
+        if (other.month < this.month) {
+            return true;
+        }
 
-		if (other.month > this.month) {
-			return false;
-		}
+        if (other.month > this.month) {
+            return false;
+        }
 
-		return this.day > other.day;
-	}
+        return this.day > other.day;
+    }
 
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 89 * hash + this.day;
-		hash = 89 * hash + this.month;
-		return hash;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.day;
+        hash = 89 * hash + this.month;
+        return hash;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final DayMonth other = (DayMonth) obj;
-		if (this.day != other.day) {
-			return false;
-		}
-		return this.month == other.month;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DayMonth other = (DayMonth) obj;
+        if (this.day != other.day) {
+            return false;
+        }
+        return this.month == other.month;
+    }
 
-	@Override
-	public String toString() {
-		String monthName = new DateFormatSymbols().getMonths()[month - 1];
-		return monthName + ' ' + day;
-	}
+    @Override
+    public String toString() {
+        String monthName = new DateFormatSymbols().getMonths()[month - 1];
+        return monthName + ' ' + day;
+    }
 
 }

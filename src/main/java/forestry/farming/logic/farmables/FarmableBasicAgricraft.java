@@ -19,15 +19,15 @@ import forestry.api.farming.ICrop;
 import forestry.farming.logic.crops.CropBasicAgriCraft;
 
 public class FarmableBasicAgricraft extends FarmableBase {
-	public FarmableBasicAgricraft(ItemStack germling, BlockState plantedState, BlockState matureState, boolean replant) {
-		super(germling, plantedState, matureState, replant);
-	}
+    public FarmableBasicAgricraft(ItemStack germling, BlockState plantedState, BlockState matureState, boolean replant) {
+        super(germling, plantedState, matureState, replant);
+    }
 
-	@Override
-	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-		if (blockState != matureState) {
-			return null;
-		}
-		return new CropBasicAgriCraft(world, blockState, pos);
-	}
+    @Override
+    public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
+        if (blockState != matureState) {
+            return null;
+        }
+        return new CropBasicAgriCraft(world, blockState, pos);
+    }
 }

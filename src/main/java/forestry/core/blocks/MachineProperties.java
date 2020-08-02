@@ -19,104 +19,104 @@ import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
-	private static final ISimpleShapeProvider FULL_CUBE = VoxelShapes::fullCube;
+    private static final ISimpleShapeProvider FULL_CUBE = VoxelShapes::fullCube;
 
-	private final String name;
-	private final Supplier<FeatureTileType<? extends T>> teType;
-	private final IShapeProvider shape;
-	@Nullable
-	private Block block;
+    private final String name;
+    private final Supplier<FeatureTileType<? extends T>> teType;
+    private final IShapeProvider shape;
+    @Nullable
+    private Block block;
 
-	public MachineProperties(Supplier<FeatureTileType<? extends T>> teType, String name, IShapeProvider shape) {
-		this.teType = teType;
-		this.name = name;
-		this.shape = shape;
-	}
+    public MachineProperties(Supplier<FeatureTileType<? extends T>> teType, String name, IShapeProvider shape) {
+        this.teType = teType;
+        this.name = name;
+        this.shape = shape;
+    }
 
-	@Override
-	public void setBlock(Block block) {
-		this.block = block;
-	}
+    @Override
+    public void setBlock(Block block) {
+        this.block = block;
+    }
 
-	@Nullable
-	@Override
-	public Block getBlock() {
-		return block;
-	}
+    @Nullable
+    @Override
+    public Block getBlock() {
+        return block;
+    }
 
-	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-		return shape.getShape(state, reader, pos, context);
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+        return shape.getShape(state, reader, pos, context);
+    }
 
-	@Override
-	public TileEntity createTileEntity() {
-		return teType.get().getTileType().create();
-	}
+    @Override
+    public TileEntity createTileEntity() {
+        return teType.get().getTileType().create();
+    }
 
-	@Override
-	public TileEntityType<? extends T> getTeType() {
-		return teType.get().getTileType();
-	}
+    @Override
+    public TileEntityType<? extends T> getTeType() {
+        return teType.get().getTileType();
+    }
 
-	@Override
-	public String getString() {
-		return name;
-	}
+    @Override
+    public String getString() {
+        return name;
+    }
 
-	@Override
-	public boolean isFullCube(BlockState state) {
-		return true;
-	}
+    @Override
+    public boolean isFullCube(BlockState state) {
+        return true;
+    }
 
-	public static class Builder<T extends TileForestry, B extends Builder<T, ?>> {
-		@Nullable
-		protected Supplier<FeatureTileType<? extends T>> type;
-		@Nullable
-		protected String name;
-		protected IShapeProvider shape = FULL_CUBE;
+    public static class Builder<T extends TileForestry, B extends Builder<T, ?>> {
+        @Nullable
+        protected Supplier<FeatureTileType<? extends T>> type;
+        @Nullable
+        protected String name;
+        protected IShapeProvider shape = FULL_CUBE;
 
-		public Builder(Supplier<FeatureTileType<? extends T>> type, String name) {
-			this.type = type;
-			this.name = name;
-		}
+        public Builder(Supplier<FeatureTileType<? extends T>> type, String name) {
+            this.type = type;
+            this.name = name;
+        }
 
-		public Builder() {
-		}
+        public Builder() {
+        }
 
-		public B setName(String name) {
-			this.name = name;
-			//noinspection unchecked
-			return (B) this;
-		}
+        public B setName(String name) {
+            this.name = name;
+            //noinspection unchecked
+            return (B) this;
+        }
 
-		public B setType(Supplier<FeatureTileType<? extends T>> teType) {
-			this.type = teType;
-			//noinspection unchecked
-			return (B) this;
-		}
+        public B setType(Supplier<FeatureTileType<? extends T>> teType) {
+            this.type = teType;
+            //noinspection unchecked
+            return (B) this;
+        }
 
-		public B setShape(VoxelShape shape) {
-			return setShape(() -> shape);
-		}
+        public B setShape(VoxelShape shape) {
+            return setShape(() -> shape);
+        }
 
-		public B setShape(ISimpleShapeProvider shape) {
-			this.shape = shape;
-			//noinspection unchecked
-			return (B) this;
-		}
+        public B setShape(ISimpleShapeProvider shape) {
+            this.shape = shape;
+            //noinspection unchecked
+            return (B) this;
+        }
 
-		public B setShape(IShapeProvider shape) {
-			this.shape = shape;
-			//noinspection unchecked
-			return (B) this;
-		}
+        public B setShape(IShapeProvider shape) {
+            this.shape = shape;
+            //noinspection unchecked
+            return (B) this;
+        }
 
-		public MachineProperties<T> create() {
-			Preconditions.checkNotNull(type);
-			Preconditions.checkNotNull(name);
-			Preconditions.checkNotNull(shape);
-			return new MachineProperties<>(type, name, shape);
-		}
-	}
+        public MachineProperties<T> create() {
+            Preconditions.checkNotNull(type);
+            Preconditions.checkNotNull(name);
+            Preconditions.checkNotNull(shape);
+            return new MachineProperties<>(type, name, shape);
+        }
+    }
 }

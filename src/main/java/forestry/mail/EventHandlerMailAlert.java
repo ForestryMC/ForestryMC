@@ -29,24 +29,24 @@ import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
 public class EventHandlerMailAlert {
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onRenderTick(TickEvent.RenderTickEvent event) {
-		if (event.phase == TickEvent.Phase.END &&
-			Minecraft.getInstance().world != null &&
-			GuiMailboxInfo.instance.hasPOBoxInfo()) {
-			//TODO: Test / Find a valid matrix stack
-			GuiMailboxInfo.instance.render(new MatrixStack());
-		}
-	}
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public void onRenderTick(TickEvent.RenderTickEvent event) {
+        if (event.phase == TickEvent.Phase.END &&
+                Minecraft.getInstance().world != null &&
+                GuiMailboxInfo.instance.hasPOBoxInfo()) {
+            //TODO: Test / Find a valid matrix stack
+            GuiMailboxInfo.instance.render(new MatrixStack());
+        }
+    }
 
-	@SubscribeEvent
-	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		PlayerEntity player = event.getPlayer();
+    @SubscribeEvent
+    public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        PlayerEntity player = event.getPlayer();
 
-		IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
-		POBox pobox = PostRegistry.getOrCreatePOBox(WorldUtils.asServer(player.world), address);
-		PacketPOBoxInfoResponse packet = new PacketPOBoxInfoResponse(pobox.getPOBoxInfo());
-		NetworkUtil.sendToPlayer(packet, player);
-	}
+        IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
+        POBox pobox = PostRegistry.getOrCreatePOBox(WorldUtils.asServer(player.world), address);
+        PacketPOBoxInfoResponse packet = new PacketPOBoxInfoResponse(pobox.getPOBoxInfo());
+        NetworkUtil.sendToPlayer(packet, player);
+    }
 }

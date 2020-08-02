@@ -32,29 +32,29 @@ import forestry.core.render.ParticleRender;
 import forestry.core.tiles.TileUtil;
 
 public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
-	public BlockHabitatFormer() {
-		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
-	}
+    public BlockHabitatFormer() {
+        super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		TileHabitatFormer former = TileUtil.getTile(worldIn, pos, TileHabitatFormer.class);
-		if (former != null) {
-			ParticleRender.addClimateParticles(worldIn, pos, rand, former.getTemperature(), former.getHumidity());
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        TileHabitatFormer former = TileUtil.getTile(worldIn, pos, TileHabitatFormer.class);
+        if (former != null) {
+            ParticleRender.addClimateParticles(worldIn, pos, rand, former.getTemperature(), former.getHumidity());
+        }
+    }
 
-	@Override
-	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
-		if (worldIn == null || pos == null) {
-			return 0x912237;
-		}
-		TileHabitatFormer former = TileUtil.getTile(worldIn, pos, TileHabitatFormer.class);
-		if (former != null) {
-			EnumTemperature temperature = former.getTemperature();
-			return temperature.color;
-		}
-		return 0x912237;
-	}
+    @Override
+    public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+        if (worldIn == null || pos == null) {
+            return 0x912237;
+        }
+        TileHabitatFormer former = TileUtil.getTile(worldIn, pos, TileHabitatFormer.class);
+        if (former != null) {
+            EnumTemperature temperature = former.getTemperature();
+            return temperature.color;
+        }
+        return 0x912237;
+    }
 }

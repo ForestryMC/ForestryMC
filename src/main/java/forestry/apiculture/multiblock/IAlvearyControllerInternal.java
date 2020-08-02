@@ -19,9 +19,9 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.tiles.IClimatised;
 
 public interface IAlvearyControllerInternal extends IAlvearyController, IMultiblockControllerInternal, IClimatised, IOwnedTile, IStreamableGui {
-	IInventoryAdapter getInternalInventory();
+    IInventoryAdapter getInternalInventory();
 
-	IClimateListener getClimateListener();
+    IClimateListener getClimateListener();
 
-	int getHealthScaled(int i);
+    int getHealthScaled(int i);
 }

@@ -26,44 +26,44 @@ import forestry.core.utils.VectUtil;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 
-	public AlleleEffectGlacial() {
-		super("glacial", false, 200, true, false);
-	}
+    public AlleleEffectGlacial() {
+        super("glacial", false, 200, true, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+    @Override
+    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorldObj();
-		EnumTemperature temp = housing.getTemperature();
+        World world = housing.getWorldObj();
+        EnumTemperature temp = housing.getTemperature();
 
-		switch (temp) {
-			case HELLISH:
-			case HOT:
-			case WARM:
-				return storedData;
-			default:
-		}
+        switch (temp) {
+            case HELLISH:
+            case HOT:
+            case WARM:
+                return storedData;
+            default:
+        }
 
-		Vector3i area = genome.getActiveValue(BeeChromosomes.TERRITORY);
-		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
-		BlockPos housingCoords = housing.getCoordinates();
+        Vector3i area = genome.getActiveValue(BeeChromosomes.TERRITORY);
+        Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+        BlockPos housingCoords = housing.getCoordinates();
 
-		for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
 
-			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
-			BlockPos posBlock = VectUtil.add(randomPos, housingCoords, offset);
+            BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
+            BlockPos posBlock = VectUtil.add(randomPos, housingCoords, offset);
 
-			// Freeze water
-			if (world.isBlockLoaded(posBlock)) {
-				Block block = world.getBlockState(posBlock).getBlock();
-				if (block == Blocks.WATER) {
-					if (world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
-						world.setBlockState(posBlock, Blocks.ICE.getDefaultState());
-					}
-				}
-			}
-		}
+            // Freeze water
+            if (world.isBlockLoaded(posBlock)) {
+                Block block = world.getBlockState(posBlock).getBlock();
+                if (block == Blocks.WATER) {
+                    if (world.isAirBlock(new BlockPos(posBlock.getX(), posBlock.getY() + 1, posBlock.getZ()))) {
+                        world.setBlockState(posBlock, Blocks.ICE.getDefaultState());
+                    }
+                }
+            }
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 }

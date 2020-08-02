@@ -22,84 +22,84 @@ import forestry.core.network.PacketBufferForestry;
 //TODO - move to factory?
 public abstract class TileMill extends TileBase {
 
-	protected float speed;
-	protected int stage = 0;
-	public int charge = 0;
-	public float progress;
+    protected float speed;
+    protected int stage = 0;
+    public int charge = 0;
+    public float progress;
 
-	protected TileMill(TileEntityType<?> type) {
-		super(type);
-		speed = 0.01F;
-	}
+    protected TileMill(TileEntityType<?> type) {
+        super(type);
+        speed = 0.01F;
+    }
 
-	@Override
-	public void updateClientSide() {
-		update(false);
-	}
+    @Override
+    public void updateClientSide() {
+        update(false);
+    }
 
-	@Override
-	public void updateServerSide() {
-		update(true);
-	}
+    @Override
+    public void updateServerSide() {
+        update(true);
+    }
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		super.writeData(data);
-		data.writeInt(charge);
-		data.writeFloat(speed);
-		data.writeInt(stage);
-	}
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        super.writeData(data);
+        data.writeInt(charge);
+        data.writeFloat(speed);
+        data.writeInt(stage);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void readData(PacketBufferForestry data) throws IOException {
-		super.readData(data);
-		charge = data.readInt();
-		speed = data.readFloat();
-		stage = data.readInt();
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readData(PacketBufferForestry data) throws IOException {
+        super.readData(data);
+        charge = data.readInt();
+        speed = data.readFloat();
+        stage = data.readInt();
+    }
 
-	private void update(boolean isSimulating) {
+    private void update(boolean isSimulating) {
 
-		// Stop gracefully if discharged.
-		if (charge <= 0) {
-			if (stage > 0) {
-				progress += speed;
-			}
-			if (progress > 0.5) {
-				stage = 2;
-			}
-			if (progress > 1) {
-				progress = 0;
-				stage = 0;
-			}
-			return;
-		}
+        // Stop gracefully if discharged.
+        if (charge <= 0) {
+            if (stage > 0) {
+                progress += speed;
+            }
+            if (progress > 0.5) {
+                stage = 2;
+            }
+            if (progress > 1) {
+                progress = 0;
+                stage = 0;
+            }
+            return;
+        }
 
-		// Update blades
-		progress += speed;
-		if (stage <= 0) {
-			stage = 1;
-		}
+        // Update blades
+        progress += speed;
+        if (stage <= 0) {
+            stage = 1;
+        }
 
-		if (progress > 0.5 && stage == 1) {
-			stage = 2;
-			if (charge < 7 && isSimulating) {
-				charge++;
-				setNeedsNetworkUpdate();
-			}
-		}
-		if (progress > 1) {
-			progress = 0;
-			stage = 0;
+        if (progress > 0.5 && stage == 1) {
+            stage = 2;
+            if (charge < 7 && isSimulating) {
+                charge++;
+                setNeedsNetworkUpdate();
+            }
+        }
+        if (progress > 1) {
+            progress = 0;
+            stage = 0;
 
-			// Fully charged! Do something!
-			if (charge >= 7) {
-				activate();
-			}
-		}
+            // Fully charged! Do something!
+            if (charge >= 7) {
+                activate();
+            }
+        }
 
-	}
+    }
 
-	protected abstract void activate();
+    protected abstract void activate();
 }

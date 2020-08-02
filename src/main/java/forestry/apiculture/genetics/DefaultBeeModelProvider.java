@@ -22,19 +22,19 @@ import forestry.api.apiculture.genetics.EnumBeeType;
 
 public class DefaultBeeModelProvider implements IBeeModelProvider {
 
-	@OnlyIn(Dist.CLIENT)
-	private static final EnumMap<EnumBeeType, ModelResourceLocation> models = new EnumMap<>(EnumBeeType.class);
-	public static final String MODEL_DIR = "bees/default/";
+    @OnlyIn(Dist.CLIENT)
+    private static final EnumMap<EnumBeeType, ModelResourceLocation> models = new EnumMap<>(EnumBeeType.class);
+    public static final String MODEL_DIR = "bees/default/";
 
-	public static final DefaultBeeModelProvider instance = new DefaultBeeModelProvider();
+    public static final DefaultBeeModelProvider instance = new DefaultBeeModelProvider();
 
-	private DefaultBeeModelProvider() {
+    private DefaultBeeModelProvider() {
 
-	}
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ModelResourceLocation getModel(EnumBeeType type) {
-		return models.get(type);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ModelResourceLocation getModel(EnumBeeType type) {
+        return models.get(type);
+    }
 }

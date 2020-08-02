@@ -19,58 +19,58 @@ import genetics.api.root.components.IRootComponent;
  * {@link IIndividualRootBuilder}.
  */
 public interface IIndividualTranslator<I extends IIndividual> extends IRootComponent<I> {
-	/**
-	 * Registers a translator that translates a {@link BlockState} into a  {@link IIndividual} or an {@link ItemStack}
-	 * that contains an {@link IOrganism}.
-	 *
-	 * @param translatorKeys The key of the translator the block of {@link BlockState} that you want to translate
-	 *                       with the translator.
-	 * @param translator     A translator that should be used to translate the data.
-	 */
-	IIndividualTranslator<I> registerTranslator(IBlockTranslator<I> translator, Block... translatorKeys);
+    /**
+     * Registers a translator that translates a {@link BlockState} into a  {@link IIndividual} or an {@link ItemStack}
+     * that contains an {@link IOrganism}.
+     *
+     * @param translatorKeys The key of the translator the block of {@link BlockState} that you want to translate
+     *                       with the translator.
+     * @param translator     A translator that should be used to translate the data.
+     */
+    IIndividualTranslator<I> registerTranslator(IBlockTranslator<I> translator, Block... translatorKeys);
 
-	/**
-	 * Registers a translator that translates an {@link ItemStack} that does not contain an {@link IOrganism} into a
-	 * {@link IIndividual} or another {@link ItemStack} that contains an {@link IOrganism}.
-	 *
-	 * @param translatorKeys The key of the translator it is the item of the {@link ItemStack} that you want to translate
-	 *                       with the translator.
-	 * @param translator     A translator that should be used to translate the data.
-	 */
-	IIndividualTranslator<I> registerTranslator(IItemTranslator<I> translator, Item... translatorKeys);
+    /**
+     * Registers a translator that translates an {@link ItemStack} that does not contain an {@link IOrganism} into a
+     * {@link IIndividual} or another {@link ItemStack} that contains an {@link IOrganism}.
+     *
+     * @param translatorKeys The key of the translator it is the item of the {@link ItemStack} that you want to translate
+     *                       with the translator.
+     * @param translator     A translator that should be used to translate the data.
+     */
+    IIndividualTranslator<I> registerTranslator(IItemTranslator<I> translator, Item... translatorKeys);
 
-	/**
-	 * @param translatorKey The key of the translator, by default it is the item of the {@link ItemStack} that you want
-	 *                      to translate with the translator.
-	 */
-	Optional<IItemTranslator<I>> getTranslator(Item translatorKey);
+    /**
+     * @param translatorKey The key of the translator, by default it is the item of the {@link ItemStack} that you want
+     *                      to translate with the translator.
+     */
+    Optional<IItemTranslator<I>> getTranslator(Item translatorKey);
 
-	/**
-	 * @param translatorKey The key of the translator the block of the{@link BlockState} that you want to translate
-	 *                      with the translator.
-	 */
-	Optional<IBlockTranslator<I>> getTranslator(Block translatorKey);
+    /**
+     * @param translatorKey The key of the translator the block of the{@link BlockState} that you want to translate
+     *                      with the translator.
+     */
+    Optional<IBlockTranslator<I>> getTranslator(Block translatorKey);
 
-	/**
-	 * Translates {@link BlockState}s into genetic data.
-	 */
-	Optional<I> translateMember(BlockState objectToTranslate);
+    /**
+     * Translates {@link BlockState}s into genetic data.
+     */
+    Optional<I> translateMember(BlockState objectToTranslate);
 
-	/**
-	 * Translates {@link ItemStack}s into genetic data.
-	 */
-	Optional<I> translateMember(ItemStack objectToTranslate);
+    /**
+     * Translates {@link ItemStack}s into genetic data.
+     */
+    Optional<I> translateMember(ItemStack objectToTranslate);
 
-	/**
-	 * Translates a {@link BlockState}s into genetic data and returns a {@link ItemStack} that contains this data.
-	 */
-	ItemStack getGeneticEquivalent(BlockState objectToTranslate);
+    /**
+     * Translates a {@link BlockState}s into genetic data and returns a {@link ItemStack} that contains this data.
+     */
+    ItemStack getGeneticEquivalent(BlockState objectToTranslate);
 
-	/**
-	 * Translates {@link ItemStack}s into genetic data and returns a other {@link ItemStack} that contains this data.
-	 */
-	ItemStack getGeneticEquivalent(ItemStack objectToTranslate);
+    /**
+     * Translates {@link ItemStack}s into genetic data and returns a other {@link ItemStack} that contains this data.
+     */
+    ItemStack getGeneticEquivalent(ItemStack objectToTranslate);
 
-	@Override
-	ComponentKey<IIndividualTranslator> getKey();
+    @Override
+    ComponentKey<IIndividualTranslator> getKey();
 }

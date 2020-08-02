@@ -29,42 +29,42 @@ import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TileUtil;
 
 public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final int tankIndex;
-	@Nullable
-	private final FluidStack contents;
+    private final BlockPos pos;
+    private final int tankIndex;
+    @Nullable
+    private final FluidStack contents;
 
-	public PacketTankLevelUpdate(ILiquidTankTile tileEntity, int tankIndex, @Nullable FluidStack contents) {
-		this.pos = tileEntity.getCoordinates();
-		this.tankIndex = tankIndex;
-		this.contents = contents;
-	}
+    public PacketTankLevelUpdate(ILiquidTankTile tileEntity, int tankIndex, @Nullable FluidStack contents) {
+        this.pos = tileEntity.getCoordinates();
+        this.tankIndex = tankIndex;
+        this.contents = contents;
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TANK_LEVEL_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.TANK_LEVEL_UPDATE;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeVarInt(tankIndex);
-		data.writeFluidStack(contents);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeVarInt(tankIndex);
+        data.writeFluidStack(contents);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
 
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
-			int tankIndex = data.readVarInt();
-			FluidStack contents = data.readFluidStack();
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
+            int tankIndex = data.readVarInt();
+            FluidStack contents = data.readFluidStack();
 
-			TileUtil.actOnTile(player.world, pos, ILiquidTankTile.class, tile -> {
-				ITankManager tankManager = tile.getTankManager();
-				tankManager.processTankUpdate(tankIndex, contents);
-			});
-		}
-	}
+            TileUtil.actOnTile(player.world, pos, ILiquidTankTile.class, tile -> {
+                ITankManager tankManager = tile.getTankManager();
+                tankManager.processTankUpdate(tankIndex, contents);
+            });
+        }
+    }
 }

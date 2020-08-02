@@ -10,9 +10,9 @@ import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 
 public interface IResearchPlugin {
-	float getResearchSuitability(IAlleleSpecies species, ItemStack itemstack);
+    float getResearchSuitability(IAlleleSpecies species, ItemStack itemstack);
 
-	default NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		return NonNullList.create();
-	}
+    default NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+        return NonNullList.create();
+    }
 }

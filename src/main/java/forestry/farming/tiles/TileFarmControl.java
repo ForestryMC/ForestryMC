@@ -25,37 +25,37 @@ import forestry.farming.features.FarmingTiles;
 
 public class TileFarmControl extends TileFarm implements IFarmComponent.Listener {
 
-	private final IFarmListener farmListener;
+    private final IFarmListener farmListener;
 
-	public TileFarmControl() {
-		super(FarmingTiles.CONTROL.tileType());
-		this.farmListener = new ControlFarmListener(this);
-	}
+    public TileFarmControl() {
+        super(FarmingTiles.CONTROL.tileType());
+        this.farmListener = new ControlFarmListener(this);
+    }
 
-	@Override
-	public IFarmListener getFarmListener() {
-		return farmListener;
-	}
+    @Override
+    public IFarmListener getFarmListener() {
+        return farmListener;
+    }
 
-	private static class ControlFarmListener extends DefaultFarmListener {
-		private final TileFarmControl tile;
+    private static class ControlFarmListener extends DefaultFarmListener {
+        private final TileFarmControl tile;
 
-		public ControlFarmListener(TileFarmControl tile) {
-			this.tile = tile;
-		}
+        public ControlFarmListener(TileFarmControl tile) {
+            this.tile = tile;
+        }
 
-		@Override
-		public boolean cancelTask(IFarmLogic logic, FarmDirection direction) {
-			for (Direction facing : new Direction[]{Direction.UP, Direction.DOWN, direction.getFacing()}) {
-				BlockPos pos = tile.getPos();
-				World world = tile.getWorldObj();
-				BlockState blockState = world.getBlockState(pos.offset(facing));
-				if (!(blockState.getBlock() instanceof BlockFarm) && world.getRedstonePower(pos, facing) > 0) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
+        @Override
+        public boolean cancelTask(IFarmLogic logic, FarmDirection direction) {
+            for (Direction facing : new Direction[]{Direction.UP, Direction.DOWN, direction.getFacing()}) {
+                BlockPos pos = tile.getPos();
+                World world = tile.getWorldObj();
+                BlockState blockState = world.getBlockState(pos.offset(facing));
+                if (!(blockState.getBlock() instanceof BlockFarm) && world.getRedstonePower(pos, facing) > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
 }

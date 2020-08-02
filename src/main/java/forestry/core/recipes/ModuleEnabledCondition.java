@@ -25,50 +25,50 @@ import forestry.core.config.Constants;
 
 public class ModuleEnabledCondition implements ICondition {
 
-	private final String container;
-	private final String module;
+    private final String container;
+    private final String module;
 
-	public ModuleEnabledCondition(String container, String module) {
-		this.container = container;
-		this.module = module;
-	}
+    public ModuleEnabledCondition(String container, String module) {
+        this.container = container;
+        this.module = module;
+    }
 
-	@Override
-	public ResourceLocation getID() {
-		return new ResourceLocation(Constants.MOD_ID, "module");
-	}
+    @Override
+    public ResourceLocation getID() {
+        return new ResourceLocation(Constants.MOD_ID, "module");
+    }
 
-	@Override
-	public boolean test() {
-		return ForestryAPI.enabledModules.contains(new ResourceLocation(container, module));
-	}
+    @Override
+    public boolean test() {
+        return ForestryAPI.enabledModules.contains(new ResourceLocation(container, module));
+    }
 
-	@Override
-	public String toString() {
-		return "module_enabled(container=\"" + container + "\",module=\"" + module + "\")";
-	}
+    @Override
+    public String toString() {
+        return "module_enabled(container=\"" + container + "\",module=\"" + module + "\")";
+    }
 
-	public static class Serializer implements IConditionSerializer<ModuleEnabledCondition> {
-		public static final Serializer INSTANCE = new Serializer();
+    public static class Serializer implements IConditionSerializer<ModuleEnabledCondition> {
+        public static final Serializer INSTANCE = new Serializer();
 
-		@Override
-		public void write(JsonObject json, ModuleEnabledCondition value) {
-			json.addProperty("module", value.module);
-			json.addProperty("container", value.container);
-		}
+        @Override
+        public void write(JsonObject json, ModuleEnabledCondition value) {
+            json.addProperty("module", value.module);
+            json.addProperty("container", value.container);
+        }
 
-		@Override
-		public ModuleEnabledCondition read(JsonObject json) {
-			String module = json.get("module").getAsString();
-			JsonElement conElement = json.get("container");
-			String container = conElement == null ? "forestry" : conElement.getAsString();
+        @Override
+        public ModuleEnabledCondition read(JsonObject json) {
+            String module = json.get("module").getAsString();
+            JsonElement conElement = json.get("container");
+            String container = conElement == null ? "forestry" : conElement.getAsString();
 
-			return new ModuleEnabledCondition(container, module);
-		}
+            return new ModuleEnabledCondition(container, module);
+        }
 
-		@Override
-		public ResourceLocation getID() {
-			return new ResourceLocation(Constants.MOD_ID, "module");
-		}
-	}
+        @Override
+        public ResourceLocation getID() {
+            return new ResourceLocation(Constants.MOD_ID, "module");
+        }
+    }
 }

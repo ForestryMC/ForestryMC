@@ -22,87 +22,87 @@ import forestry.api.core.tooltips.ToolTip;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 
-	private boolean isPhantom;
-	private boolean canAdjustPhantom = true;
-	private boolean canShift = true;
-	private int stackLimit;
-	@Nullable
-	private ToolTip toolTips;
+    private boolean isPhantom;
+    private boolean canAdjustPhantom = true;
+    private boolean canShift = true;
+    private int stackLimit;
+    @Nullable
+    private ToolTip toolTips;
 
-	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
-		super(inventory, slotIndex, xPos, yPos);
-		this.stackLimit = -1;
-	}
+    public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
+        super(inventory, slotIndex, xPos, yPos);
+        this.stackLimit = -1;
+    }
 
-	public SlotForestry setPhantom() {
-		isPhantom = true;
-		return this;
-	}
+    public SlotForestry setPhantom() {
+        isPhantom = true;
+        return this;
+    }
 
-	public SlotForestry blockShift() {
-		canShift = false;
-		return this;
-	}
+    public SlotForestry blockShift() {
+        canShift = false;
+        return this;
+    }
 
-	@Override
-	public void putStack(ItemStack itemStack) {
-		if (!isPhantom() || canAdjustPhantom()) {
-			super.putStack(itemStack);
-		}
-	}
+    @Override
+    public void putStack(ItemStack itemStack) {
+        if (!isPhantom() || canAdjustPhantom()) {
+            super.putStack(itemStack);
+        }
+    }
 
-	public SlotForestry setCanAdjustPhantom(boolean canAdjust) {
-		this.canAdjustPhantom = canAdjust;
-		return this;
-	}
+    public SlotForestry setCanAdjustPhantom(boolean canAdjust) {
+        this.canAdjustPhantom = canAdjust;
+        return this;
+    }
 
-	public SlotForestry setStackLimit(int limit) {
-		this.stackLimit = limit;
-		return this;
-	}
+    public SlotForestry setStackLimit(int limit) {
+        this.stackLimit = limit;
+        return this;
+    }
 
-	public boolean isPhantom() {
-		return this.isPhantom;
-	}
+    public boolean isPhantom() {
+        return this.isPhantom;
+    }
 
-	public boolean canAdjustPhantom() {
-		return canAdjustPhantom;
-	}
+    public boolean canAdjustPhantom() {
+        return canAdjustPhantom;
+    }
 
-	@Override
-	public boolean canTakeStack(PlayerEntity stack) {
-		return !isPhantom();
-	}
+    @Override
+    public boolean canTakeStack(PlayerEntity stack) {
+        return !isPhantom();
+    }
 
-	public boolean canShift() {
-		return canShift;
-	}
+    public boolean canShift() {
+        return canShift;
+    }
 
-	@Override
-	public int getSlotStackLimit() {
-		if (stackLimit < 0) {
-			return super.getSlotStackLimit();
-		} else {
-			return stackLimit;
-		}
-	}
+    @Override
+    public int getSlotStackLimit() {
+        if (stackLimit < 0) {
+            return super.getSlotStackLimit();
+        } else {
+            return stackLimit;
+        }
+    }
 
-	public void setToolTips(ToolTip toolTips) {
-		this.toolTips = toolTips;
-	}
+    public void setToolTips(ToolTip toolTips) {
+        this.toolTips = toolTips;
+    }
 
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		return toolTips;
-	}
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        return toolTips;
+    }
 
-	@Override
-	public boolean isToolTipVisible() {
-		return getStack().isEmpty();
-	}
+    @Override
+    public boolean isToolTipVisible() {
+        return getStack().isEmpty();
+    }
 
-	@Override
-	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
-	}
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
+    }
 }

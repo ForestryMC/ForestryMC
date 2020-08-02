@@ -33,65 +33,65 @@ import forestry.core.utils.NetworkUtil;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
-	public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-		PlayerEntity player = playerInv.player;
-		ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(hand));
-		return new ContainerSolderingIron(windowId, player, inv);
-	}
+    public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+        Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+        PlayerEntity player = playerInv.player;
+        ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(hand));
+        return new ContainerSolderingIron(windowId, player, inv);
+    }
 
-	public ContainerSolderingIron(int windowId, PlayerEntity player, ItemInventorySolderingIron inventory) {
-		super(windowId, inventory, player.inventory, 8, 123, null);
+    public ContainerSolderingIron(int windowId, PlayerEntity player, ItemInventorySolderingIron inventory) {
+        super(windowId, inventory, player.inventory, 8, 123, null);
 
-		// Input
-		this.addSlot(new SlotFiltered(inventory, 0, 152, 12));
+        // Input
+        this.addSlot(new SlotFiltered(inventory, 0, 152, 12));
 
-		// Output
-		this.addSlot(new SlotOutput(inventory, 1, 152, 92));
+        // Output
+        this.addSlot(new SlotOutput(inventory, 1, 152, 92));
 
-		// Ingredients
-		this.addSlot(new SlotFiltered(inventory, 2, 12, 32));
-		this.addSlot(new SlotFiltered(inventory, 3, 12, 52));
-		this.addSlot(new SlotFiltered(inventory, 4, 12, 72));
-		this.addSlot(new SlotFiltered(inventory, 5, 12, 92));
-	}
+        // Ingredients
+        this.addSlot(new SlotFiltered(inventory, 2, 12, 32));
+        this.addSlot(new SlotFiltered(inventory, 3, 12, 52));
+        this.addSlot(new SlotFiltered(inventory, 4, 12, 72));
+        this.addSlot(new SlotFiltered(inventory, 5, 12, 92));
+    }
 
-	public ICircuitLayout getLayout() {
-		return inventory.getLayout();
-	}
+    public ICircuitLayout getLayout() {
+        return inventory.getLayout();
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static void advanceSelection(int index) {
-		sendSelectionChange(index, 0);
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static void advanceSelection(int index) {
+        sendSelectionChange(index, 0);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static void regressSelection(int index) {
-		sendSelectionChange(index, 1);
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static void regressSelection(int index) {
+        sendSelectionChange(index, 1);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	private static void sendSelectionChange(int index, int advance) {
-		IForestryPacketServer packet = new PacketGuiSelectRequest(index, advance);
-		NetworkUtil.sendToServer(packet);
-	}
+    @OnlyIn(Dist.CLIENT)
+    private static void sendSelectionChange(int index, int advance) {
+        IForestryPacketServer packet = new PacketGuiSelectRequest(index, advance);
+        NetworkUtil.sendToServer(packet);
+    }
 
-	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+    @Override
+    public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 
-		if (secondary == 0) {
-			if (primary == 0) {
-				inventory.advanceLayout();
-			}
-		} else if (primary == 0) {
-			inventory.regressLayout();
-		}
+        if (secondary == 0) {
+            if (primary == 0) {
+                inventory.advanceLayout();
+            }
+        } else if (primary == 0) {
+            inventory.regressLayout();
+        }
 
-		IForestryPacketClient packetResponse = new PacketGuiLayoutSelect(inventory.getLayout().getUID());
-		NetworkUtil.sendToPlayer(packetResponse, player);
-	}
+        IForestryPacketClient packetResponse = new PacketGuiLayoutSelect(inventory.getLayout().getUID());
+        NetworkUtil.sendToPlayer(packetResponse, player);
+    }
 
-	public void setLayout(ICircuitLayout layout) {
-		inventory.setLayout(layout);
-	}
+    public void setLayout(ICircuitLayout layout) {
+        inventory.setLayout(layout);
+    }
 }

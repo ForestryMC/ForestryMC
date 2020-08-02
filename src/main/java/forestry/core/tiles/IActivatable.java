@@ -15,9 +15,9 @@ import net.minecraft.util.math.BlockPos;
 /* Networked tile entities that have a client side "active" flag */
 public interface IActivatable {
 
-	BlockPos getCoordinates();
+    BlockPos getCoordinates();
 
-	boolean isActive();
+    boolean isActive();
 
-	void setActive(boolean active);
+    void setActive(boolean active);
 }

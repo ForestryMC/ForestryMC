@@ -11,5 +11,5 @@
 package forestry.core.network;
 
 public interface IPacketId {
-	int ordinal();
+    int ordinal();
 }

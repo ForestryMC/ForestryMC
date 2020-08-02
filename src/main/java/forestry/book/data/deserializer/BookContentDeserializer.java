@@ -18,17 +18,17 @@ import forestry.book.data.content.TextContent;
 
 @OnlyIn(Dist.CLIENT)
 public class BookContentDeserializer implements JsonDeserializer<BookContent> {
-	@Override
-	public BookContent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-		JsonObject object = json.getAsJsonObject();
-		String type = JSONUtils.getString(object, "type", "text");
-		Class<? extends BookContent> typeClass = BookLoader.INSTANCE.getContentType(type);
-		BookContent content = context.deserialize(object, typeClass == null ? TextContent.class : typeClass);
-		content.type = type;
-		if (content.getDataClass() != null) {
-			content.data = context.deserialize(object, content.getDataClass());
-		}
-		content.onDeserialization();
-		return content;
-	}
+    @Override
+    public BookContent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        JsonObject object = json.getAsJsonObject();
+        String type = JSONUtils.getString(object, "type", "text");
+        Class<? extends BookContent> typeClass = BookLoader.INSTANCE.getContentType(type);
+        BookContent content = context.deserialize(object, typeClass == null ? TextContent.class : typeClass);
+        content.type = type;
+        if (content.getDataClass() != null) {
+            content.data = context.deserialize(object, content.getDataClass());
+        }
+        content.onDeserialization();
+        return content;
+    }
 }

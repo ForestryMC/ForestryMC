@@ -24,39 +24,39 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
 
 public class SolderManager implements ISolderManager {
-	private static final List<CircuitRecipe> recipes = new ArrayList<>();
+    private static final List<CircuitRecipe> recipes = new ArrayList<>();
 
-	@Override
-	public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
-		Preconditions.checkNotNull(layout, "layout may not be null");
-		Preconditions.checkNotNull(resource, "resource may not be null");
-		Preconditions.checkNotNull(circuit, "circuit may not be null");
+    @Override
+    public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
+        Preconditions.checkNotNull(layout, "layout may not be null");
+        Preconditions.checkNotNull(resource, "resource may not be null");
+        Preconditions.checkNotNull(circuit, "circuit may not be null");
 
-		recipes.add(new CircuitRecipe(layout, resource, circuit));
-	}
+        recipes.add(new CircuitRecipe(layout, resource, circuit));
+    }
 
-	public static Collection<CircuitRecipe> getRecipes() {
-		return recipes;
-	}
+    public static Collection<CircuitRecipe> getRecipes() {
+        return recipes;
+    }
 
-	@Nullable
-	public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
-		CircuitRecipe circuitRecipe = getMatchingRecipe(layout, resource);
-		if (circuitRecipe == null) {
-			return null;
-		}
-		return circuitRecipe.getCircuit();
-	}
+    @Nullable
+    public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
+        CircuitRecipe circuitRecipe = getMatchingRecipe(layout, resource);
+        if (circuitRecipe == null) {
+            return null;
+        }
+        return circuitRecipe.getCircuit();
+    }
 
-	@Nullable
-	public static CircuitRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
-		if (layout != null) {
-			for (CircuitRecipe recipe : recipes) {
-				if (recipe.matches(layout, resource)) {
-					return recipe;
-				}
-			}
-		}
-		return null;
-	}
+    @Nullable
+    public static CircuitRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
+        if (layout != null) {
+            for (CircuitRecipe recipe : recipes) {
+                if (recipe.matches(layout, resource)) {
+                    return recipe;
+                }
+            }
+        }
+        return null;
+    }
 }

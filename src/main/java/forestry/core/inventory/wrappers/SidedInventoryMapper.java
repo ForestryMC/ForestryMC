@@ -22,43 +22,43 @@ import net.minecraft.util.Direction;
  */
 public class SidedInventoryMapper extends InvWrapperBase implements ISidedInventory {
 
-	private final ISidedInventory inv;
-	private final Direction side;
+    private final ISidedInventory inv;
+    private final Direction side;
 
-	public SidedInventoryMapper(ISidedInventory inv, Direction side) {
-		this(inv, side, true);
-	}
+    public SidedInventoryMapper(ISidedInventory inv, Direction side) {
+        this(inv, side, true);
+    }
 
-	public SidedInventoryMapper(ISidedInventory inv, Direction side, boolean checkItems) {
-		super(inv, checkItems);
-		this.inv = inv;
-		this.side = side;
-	}
+    public SidedInventoryMapper(ISidedInventory inv, Direction side, boolean checkItems) {
+        super(inv, checkItems);
+        this.inv = inv;
+        this.side = side;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		int[] slotsForFace = inv.getSlotsForFace(side);
-		for (int slot : slotsForFace) {
-			if (!inv.getStackInSlot(slot).isEmpty()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    @Override
+    public boolean isEmpty() {
+        int[] slotsForFace = inv.getSlotsForFace(side);
+        for (int slot : slotsForFace) {
+            if (!inv.getStackInSlot(slot).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		return inv.getSlotsForFace(side);
-	}
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return inv.getSlotsForFace(side);
+    }
 
-	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, Direction s) {
-		return !checkItems() || inv.canInsertItem(slot, stack, side);
-	}
+    @Override
+    public boolean canInsertItem(int slot, ItemStack stack, Direction s) {
+        return !checkItems() || inv.canInsertItem(slot, stack, side);
+    }
 
-	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, Direction s) {
-		return !checkItems() || inv.canExtractItem(slot, stack, side);
-	}
+    @Override
+    public boolean canExtractItem(int slot, ItemStack stack, Direction s) {
+        return !checkItems() || inv.canExtractItem(slot, stack, side);
+    }
 
 }

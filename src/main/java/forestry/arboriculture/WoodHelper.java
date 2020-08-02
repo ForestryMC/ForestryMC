@@ -12,28 +12,28 @@ import forestry.core.utils.Translator;
 
 public class WoodHelper {
 
-	public static ITextComponent getDisplayName(IWoodTyped wood, IWoodType woodType) {
-		WoodBlockKind blockKind = wood.getBlockKind();
+    public static ITextComponent getDisplayName(IWoodTyped wood, IWoodType woodType) {
+        WoodBlockKind blockKind = wood.getBlockKind();
 
-		ITextComponent displayName;
+        ITextComponent displayName;
 
-		if (woodType instanceof EnumForestryWoodType) {
-			String customUnlocalizedName = "block.forestry." + blockKind + "." + woodType;
-			if (Translator.canTranslateToLocal(customUnlocalizedName)) {
-				displayName = new TranslationTextComponent(customUnlocalizedName);
-			} else {
-				displayName = new TranslationTextComponent("for." + blockKind + ".grammar", new TranslationTextComponent("for.trees.woodType." + woodType));
-			}
-		} else if (woodType instanceof EnumVanillaWoodType) {
-			displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getDisplayName();
-		} else {
-			throw new IllegalArgumentException("Unknown wood type: " + woodType);
-		}
+        if (woodType instanceof EnumForestryWoodType) {
+            String customUnlocalizedName = "block.forestry." + blockKind + "." + woodType;
+            if (Translator.canTranslateToLocal(customUnlocalizedName)) {
+                displayName = new TranslationTextComponent(customUnlocalizedName);
+            } else {
+                displayName = new TranslationTextComponent("for." + blockKind + ".grammar", new TranslationTextComponent("for.trees.woodType." + woodType));
+            }
+        } else if (woodType instanceof EnumVanillaWoodType) {
+            displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getDisplayName();
+        } else {
+            throw new IllegalArgumentException("Unknown wood type: " + woodType);
+        }
 
-		if (wood.isFireproof()) {
-			displayName = new TranslationTextComponent("block.forestry.fireproof", displayName);
-		}
+        if (wood.isFireproof()) {
+            displayName = new TranslationTextComponent("block.forestry.fireproof", displayName);
+        }
 
-		return displayName;
-	}
+        return displayName;
+    }
 }

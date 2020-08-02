@@ -20,14 +20,14 @@ import forestry.database.network.packets.PacketExtractItem;
 import forestry.database.network.packets.PacketInsertItem;
 
 public class PacketRegistryDatabase implements IPacketRegistry {
-	@Override
-	public void registerPacketsServer() {
-		PacketIdServer.INSERT_ITEM.setPacketHandler(new PacketInsertItem.Handler());
-		PacketIdServer.EXTRACT_ITEM.setPacketHandler(new PacketExtractItem.Handler());
-	}
+    @Override
+    public void registerPacketsServer() {
+        PacketIdServer.INSERT_ITEM.setPacketHandler(new PacketInsertItem.Handler());
+        PacketIdServer.EXTRACT_ITEM.setPacketHandler(new PacketExtractItem.Handler());
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerPacketsClient() {
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerPacketsClient() {
+    }
 }

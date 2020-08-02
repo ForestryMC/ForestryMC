@@ -21,12 +21,12 @@ import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.items.ItemWithGui;
 
 public class ItemImprinter extends ItemWithGui {
-	public ItemImprinter() {
-		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
-	}
+    public ItemImprinter() {
+        super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
+    }
 
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return new ContainerImprinter(windowId, player.inventory, new ItemInventoryImprinter(player, heldItem));
-	}
+    @Override
+    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+        return new ContainerImprinter(windowId, player.inventory, new ItemInventoryImprinter(player, heldItem));
+    }
 }

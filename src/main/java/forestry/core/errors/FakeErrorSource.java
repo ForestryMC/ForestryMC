@@ -16,14 +16,14 @@ import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 
 public class FakeErrorSource implements IErrorSource {
-	public static final FakeErrorSource instance = new FakeErrorSource();
+    public static final FakeErrorSource instance = new FakeErrorSource();
 
-	private FakeErrorSource() {
+    private FakeErrorSource() {
 
-	}
+    }
 
-	@Override
-	public ImmutableSet<IErrorState> getErrorStates() {
-		return ImmutableSet.of();
-	}
+    @Override
+    public ImmutableSet<IErrorState> getErrorStates() {
+        return ImmutableSet.of();
+    }
 }

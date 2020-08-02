@@ -15,7 +15,7 @@ import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class TileArboristChest extends TileNaturalistChest {
-	public TileArboristChest() {
-		super(ArboricultureTiles.ARBORIST_CHEST.tileType(), TreeManager.treeRoot);
-	}
+    public TileArboristChest() {
+        super(ArboricultureTiles.ARBORIST_CHEST.tileType(), TreeManager.treeRoot);
+    }
 }

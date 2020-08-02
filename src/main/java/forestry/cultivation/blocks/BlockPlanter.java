@@ -19,45 +19,45 @@ import forestry.core.render.ParticleRender;
 import forestry.cultivation.tiles.TilePlanter;
 
 public class BlockPlanter extends BlockBase<BlockTypePlanter> {
-	private Mode mode;
+    private final Mode mode;
 
-	//TODO can probably propagate mode further through the code
-	public enum Mode implements IBlockSubtype {
-		MANUAL,
-		MANAGED;
+    //TODO can probably propagate mode further through the code
+    public enum Mode implements IBlockSubtype {
+        MANUAL,
+        MANAGED;
 
-		@Override
-		public String getString() {
-			return toString().toLowerCase(Locale.ENGLISH);
-		}
-	}
+        @Override
+        public String getString() {
+            return toString().toLowerCase(Locale.ENGLISH);
+        }
+    }
 
-	public BlockPlanter(BlockTypePlanter blockType, Mode mode) {
-		super(blockType, Material.WOOD);
-		this.mode = mode;
-	}
+    public BlockPlanter(BlockTypePlanter blockType, Mode mode) {
+        super(blockType, Material.WOOD);
+        this.mode = mode;
+    }
 
-	public Mode getMode() {
-		return mode;
-	}
+    public Mode getMode() {
+        return mode;
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		if (blockType == BlockTypePlanter.FARM_ENDER) {
-			for (int i = 0; i < 3; ++i) {
-				ParticleRender.addPortalFx(worldIn, pos, rand);
-			}
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (blockType == BlockTypePlanter.FARM_ENDER) {
+            for (int i = 0; i < 3; ++i) {
+                ParticleRender.addPortalFx(worldIn, pos, rand);
+            }
+        }
+    }
 
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		TileEntity tile = super.createTileEntity(state, world);
-		if (tile instanceof TilePlanter) {
-			TilePlanter planter = (TilePlanter) tile;
-			planter.setManual(getMode());
-		}
-		return tile;
-	}
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        TileEntity tile = super.createTileEntity(state, world);
+        if (tile instanceof TilePlanter) {
+            TilePlanter planter = (TilePlanter) tile;
+            planter.setManual(getMode());
+        }
+        return tile;
+    }
 }

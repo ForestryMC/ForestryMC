@@ -38,51 +38,51 @@ import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableGE implements IFarmable {
 
-	private final Set<Item> windfall = new HashSet<>();
+    private final Set<Item> windfall = new HashSet<>();
 
-	//TODO would be nice to make this class more granular so windfall and germling checks could be more specific
-	public FarmableGE() {
-		windfall.addAll(AlleleManager.geneticRegistry.getRegisteredFruitFamilies().values().stream()
-			.map(TreeManager.treeRoot::getFruitProvidersForFruitFamily)
-			.flatMap(Collection::stream)
-			.flatMap(p -> Stream.concat(p.getProducts().getPossibleProducts().stream(), p.getSpecialty().getPossibleProducts().stream()))
-			.map(Product::getItem)
-			.collect(Collectors.toSet()));
-	}
+    //TODO would be nice to make this class more granular so windfall and germling checks could be more specific
+    public FarmableGE() {
+        windfall.addAll(AlleleManager.geneticRegistry.getRegisteredFruitFamilies().values().stream()
+                .map(TreeManager.treeRoot::getFruitProvidersForFruitFamily)
+                .flatMap(Collection::stream)
+                .flatMap(p -> Stream.concat(p.getProducts().getPossibleProducts().stream(), p.getSpecialty().getPossibleProducts().stream()))
+                .map(Product::getItem)
+                .collect(Collectors.toSet()));
+    }
 
-	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
-		return ArboricultureBlocks.SAPLING_GE.blockEqual(blockState);
-	}
+    @Override
+    public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
+        return ArboricultureBlocks.SAPLING_GE.blockEqual(blockState);
+    }
 
-	@Override
-	@Nullable
-	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-		Block block = blockState.getBlock();
+    @Override
+    @Nullable
+    public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
+        Block block = blockState.getBlock();
 
-		if (!block.isIn(BlockTags.LOGS)) {
-			return null;
-		}
+        if (!block.isIn(BlockTags.LOGS)) {
+            return null;
+        }
 
-		return new CropDestroy(world, blockState, pos, null);
-	}
+        return new CropDestroy(world, blockState, pos, null);
+    }
 
-	@Override
-	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		ITreeRoot treeRoot = TreeManager.treeRoot;
+    @Override
+    public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+        ITreeRoot treeRoot = TreeManager.treeRoot;
 
-		ITree tree = treeRoot.create(germling).orElse(null);
-		return tree != null && treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
-	}
+        ITree tree = treeRoot.create(germling).orElse(null);
+        return tree != null && treeRoot.plantSapling(world, tree, player.getGameProfile(), pos);
+    }
 
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
-		return TreeManager.treeRoot.isMember(itemstack);
-	}
+    @Override
+    public boolean isGermling(ItemStack itemstack) {
+        return TreeManager.treeRoot.isMember(itemstack);
+    }
 
-	@Override
-	public boolean isWindfall(ItemStack itemstack) {
-		return windfall.contains(itemstack.getItem());
-	}
+    @Override
+    public boolean isWindfall(ItemStack itemstack) {
+        return windfall.contains(itemstack.getItem());
+    }
 
 }

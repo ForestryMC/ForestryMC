@@ -17,10 +17,10 @@ import forestry.core.items.ItemOverlay;
 //Will help with automatic creation of stuff too.
 public class ItemPropolis extends ItemOverlay {
 
-	private final EnumPropolis type;
+    private final EnumPropolis type;
 
-	public ItemPropolis(EnumPropolis type) {
-		super(ItemGroups.tabApiculture, type);
-		this.type = type;
-	}
+    public ItemPropolis(EnumPropolis type) {
+        super(ItemGroups.tabApiculture, type);
+        this.type = type;
+    }
 }

@@ -21,24 +21,24 @@ import forestry.core.utils.TickHelper;
 
 public class ClimateHandlerServer {
 
-	private static final TickHelper tickHelper = new TickHelper();
-	private static IClimateState previousState = ClimateStateHelper.INSTANCE.absent();
+    private static final TickHelper tickHelper = new TickHelper();
+    private static IClimateState previousState = ClimateStateHelper.INSTANCE.absent();
 
-	//TODO - register event handler
-	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.SERVER) {
-			return;
-		}
-		PlayerEntity player = event.player;
-		World world = player.world;
-		BlockPos pos = player.getPosition();
-		IWorldClimateHolder worldClimateHolder = ClimateManager.climateRoot.getWorldClimate(world);
-		IClimateState climateState = worldClimateHolder.getState(pos);
-		tickHelper.onTick();
-		if (tickHelper.updateOnInterval(100) && !climateState.equals(previousState)) {
-			ClimateHandlerServer.previousState = climateState;
-			NetworkUtil.sendToPlayer(new PacketClimatePlayer(climateState), player);
-		}
-	}
+    //TODO - register event handler
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.SERVER) {
+            return;
+        }
+        PlayerEntity player = event.player;
+        World world = player.world;
+        BlockPos pos = player.getPosition();
+        IWorldClimateHolder worldClimateHolder = ClimateManager.climateRoot.getWorldClimate(world);
+        IClimateState climateState = worldClimateHolder.getState(pos);
+        tickHelper.onTick();
+        if (tickHelper.updateOnInterval(100) && !climateState.equals(previousState)) {
+            ClimateHandlerServer.previousState = climateState;
+            NetworkUtil.sendToPlayer(new PacketClimatePlayer(climateState), player);
+        }
+    }
 }

@@ -17,16 +17,16 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.mail.tiles.TileStampCollector;
 
 public class InventoryStampCollector extends InventoryAdapterTile<TileStampCollector> {
-	public static final short SLOT_FILTER = 0;
-	public static final short SLOT_BUFFER_1 = 1;
-	public static final short SLOT_BUFFER_COUNT = 27;
+    public static final short SLOT_FILTER = 0;
+    public static final short SLOT_BUFFER_1 = 1;
+    public static final short SLOT_BUFFER_COUNT = 27;
 
-	public InventoryStampCollector(TileStampCollector tile) {
-		super(tile, 28, "INV");
-	}
+    public InventoryStampCollector(TileStampCollector tile) {
+        super(tile, 28, "INV");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return itemStack.getItem() instanceof IStamps;
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return itemStack.getItem() instanceof IStamps;
+    }
 }

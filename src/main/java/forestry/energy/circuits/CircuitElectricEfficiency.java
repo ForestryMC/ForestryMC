@@ -12,9 +12,9 @@ package forestry.energy.circuits;
 
 public class CircuitElectricEfficiency extends CircuitElectricChange {
 
-	public CircuitElectricEfficiency(String uid) {
-		super(uid);
-		this.configureChange(-1, 0);
-	}
+    public CircuitElectricEfficiency(String uid) {
+        super(uid);
+        this.configureChange(-1, 0);
+    }
 
 }

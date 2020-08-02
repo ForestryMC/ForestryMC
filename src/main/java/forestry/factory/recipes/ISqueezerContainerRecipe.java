@@ -17,14 +17,14 @@ import net.minecraft.item.ItemStack;
 import forestry.api.recipes.ISqueezerRecipe;
 
 public interface ISqueezerContainerRecipe {
-	ItemStack getEmptyContainer();
+    ItemStack getEmptyContainer();
 
-	int getProcessingTime();
+    int getProcessingTime();
 
-	ItemStack getRemnants();
+    ItemStack getRemnants();
 
-	float getRemnantsChance();
+    float getRemnantsChance();
 
-	@Nullable
-	ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer);
+    @Nullable
+    ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer);
 }

@@ -12,20 +12,20 @@ import forestry.core.features.CoreItems;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 
 public enum AnalyzerTab implements IDatabaseTab {
-	ANALYZE {
-		@Override
-		public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
+    ANALYZE {
+        @Override
+        public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
 
-		}
+        }
 
-		@Override
-		public ItemStack getIconStack() {
-			return CoreItems.PORTABLE_ALYZER.stack();
-		}
-	};
+        @Override
+        public ItemStack getIconStack() {
+            return CoreItems.PORTABLE_ALYZER.stack();
+        }
+    };
 
-	//TODO - side issues
-	public String getTooltip(IIndividual individual) {
-		return I18n.format("for.gui.database.tab." + name().toLowerCase(Locale.ENGLISH) + ".name");
-	}
+    //TODO - side issues
+    public String getTooltip(IIndividual individual) {
+        return I18n.format("for.gui.database.tab." + name().toLowerCase(Locale.ENGLISH) + ".name");
+    }
 }

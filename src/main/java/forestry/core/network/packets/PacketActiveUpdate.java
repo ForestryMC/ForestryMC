@@ -29,42 +29,42 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 
 public class PacketActiveUpdate extends ForestryPacket implements IForestryPacketClient {
-	private final BlockPos pos;
-	private final boolean active;
+    private final BlockPos pos;
+    private final boolean active;
 
-	public PacketActiveUpdate(IActivatable tile) {
-		this.pos = tile.getCoordinates();
-		this.active = tile.isActive();
-	}
+    public PacketActiveUpdate(IActivatable tile) {
+        this.pos = tile.getCoordinates();
+        this.active = tile.isActive();
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TILE_FORESTRY_ACTIVE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.TILE_FORESTRY_ACTIVE;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeBlockPos(pos);
-		data.writeBoolean(active);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeBlockPos(pos);
+        data.writeBoolean(active);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			BlockPos pos = data.readBlockPos();
-			boolean active = data.readBoolean();
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+            BlockPos pos = data.readBlockPos();
+            boolean active = data.readBoolean();
 
-			ClientWorld world = Minecraft.getInstance().world;
-			TileEntity tile = TileUtil.getTile(world, pos);
-			if (tile instanceof IActivatable) {
-				((IActivatable) tile).setActive(active);
-			} else if (tile instanceof IMultiblockComponent) {
-				IMultiblockComponent component = (IMultiblockComponent) tile;
-				if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
-					((IActivatable) component.getMultiblockLogic().getController()).setActive(active);
-				}
-			}
-		}
-	}
+            ClientWorld world = Minecraft.getInstance().world;
+            TileEntity tile = TileUtil.getTile(world, pos);
+            if (tile instanceof IActivatable) {
+                ((IActivatable) tile).setActive(active);
+            } else if (tile instanceof IMultiblockComponent) {
+                IMultiblockComponent component = (IMultiblockComponent) tile;
+                if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
+                    ((IActivatable) component.getMultiblockLogic().getController()).setActive(active);
+                }
+            }
+        }
+    }
 }

@@ -9,14 +9,14 @@ import java.util.List;
 
 public interface ITreekeepingMode extends ITreeModifier {
 
-	/**
-	 * @return Localized name of this treekeeping mode.
-	 */
-	String getName();
+    /**
+     * @return Localized name of this treekeeping mode.
+     */
+    String getName();
 
-	/**
-	 * @return Localized list of strings outlining the behaviour of this treekeeping mode.
-	 */
-	List<String> getDescription();
+    /**
+     * @return Localized list of strings outlining the behaviour of this treekeeping mode.
+     */
+    List<String> getDescription();
 
 }

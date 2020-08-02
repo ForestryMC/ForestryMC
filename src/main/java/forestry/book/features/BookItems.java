@@ -9,10 +9,10 @@ import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class BookItems {
-	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleBook.class);
+    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleBook.class);
 
-	public static final FeatureItem<ItemForesterBook> BOOK = REGISTRY.item(ItemForesterBook::new, "book_forester");
+    public static final FeatureItem<ItemForesterBook> BOOK = REGISTRY.item(ItemForesterBook::new, "book_forester");
 
-	private BookItems() {
-	}
+    private BookItems() {
+    }
 }

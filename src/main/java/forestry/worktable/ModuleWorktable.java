@@ -17,14 +17,14 @@ import forestry.worktable.network.PacketRegistryWorktable;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.WORKTABLE, name = "Worktable", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.worktable.description")
 public class ModuleWorktable extends BlankForestryModule {
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void registerGuiFactories() {
-		ScreenManager.registerFactory(WorktableContainers.WORKTABLE.containerType(), GuiWorktable::new);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerGuiFactories() {
+        ScreenManager.registerFactory(WorktableContainers.WORKTABLE.containerType(), GuiWorktable::new);
+    }
 
-	@Override
-	public IPacketRegistry getPacketRegistry() {
-		return new PacketRegistryWorktable();
-	}
+    @Override
+    public IPacketRegistry getPacketRegistry() {
+        return new PacketRegistryWorktable();
+    }
 }

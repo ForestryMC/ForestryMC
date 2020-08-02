@@ -8,5 +8,5 @@ import genetics.api.individual.ITemplateProvider;
  * This interface has no use in the genetics mod.
  */
 public interface IBranchDefinition extends ITemplateProvider {
-	IClassification getBranch();
+    IClassification getBranch();
 }

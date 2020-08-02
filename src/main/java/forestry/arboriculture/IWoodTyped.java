@@ -14,9 +14,9 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 
 public interface IWoodTyped {
-	WoodBlockKind getBlockKind();
+    WoodBlockKind getBlockKind();
 
-	boolean isFireproof();
+    boolean isFireproof();
 
-	IWoodType getWoodType();
+    IWoodType getWoodType();
 }

@@ -14,11 +14,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public class MultiblockServerTickHandler {
 
-	//TODO - register event handler
-	@SubscribeEvent
-	public void onWorldTick(TickEvent.WorldTickEvent event) {
-		if (event.phase == TickEvent.Phase.START) {
-			MultiblockRegistry.tickStart(event.world);
-		}
-	}
+    //TODO - register event handler
+    @SubscribeEvent
+    public void onWorldTick(TickEvent.WorldTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            MultiblockRegistry.tickStart(event.world);
+        }
+    }
 }

@@ -8,14 +8,14 @@ import forestry.energy.EnergyManager;
 
 //@Optional.Interface(iface = "buildcraft.api.mj.IMjConnector", modid = Constants.BCLIB_MOD_ID)
 public class MjConnectorWrapper {//implements IMjConnector {
-	protected final EnergyManager energyManager;
+    protected final EnergyManager energyManager;
 
-	public MjConnectorWrapper(EnergyManager energyManager) {
-		this.energyManager = energyManager;
-	}
+    public MjConnectorWrapper(EnergyManager energyManager) {
+        this.energyManager = energyManager;
+    }
 
-	//	@Override
-	//	public boolean canConnect(@Nonnull IMjConnector other) {
-	//		return true;
-	//	}
+    //	@Override
+    //	public boolean canConnect(@Nonnull IMjConnector other) {
+    //		return true;
+    //	}
 }

@@ -22,40 +22,40 @@ import forestry.core.commands.ICommandModeHelper;
 
 public class TreeModeHelper implements ICommandModeHelper {
 
-	@Override
-	public String[] getModeNames() {
-		List<ITreekeepingMode> treekeepingModes = TreeManager.treeRoot.getTreekeepingModes();
-		int modeStringCount = treekeepingModes.size();
-		List<String> modeStrings = new ArrayList<>(modeStringCount);
-		for (ITreekeepingMode mode : treekeepingModes) {
-			modeStrings.add(mode.getName());
-		}
+    @Override
+    public String[] getModeNames() {
+        List<ITreekeepingMode> treekeepingModes = TreeManager.treeRoot.getTreekeepingModes();
+        int modeStringCount = treekeepingModes.size();
+        List<String> modeStrings = new ArrayList<>(modeStringCount);
+        for (ITreekeepingMode mode : treekeepingModes) {
+            modeStrings.add(mode.getName());
+        }
 
-		return modeStrings.toArray(new String[modeStringCount]);
-	}
+        return modeStrings.toArray(new String[modeStringCount]);
+    }
 
-	@Override
-	public String getModeName(World world) {
-		return TreeManager.treeRoot.getTreekeepingMode(world).getName();
-	}
+    @Override
+    public String getModeName(World world) {
+        return TreeManager.treeRoot.getTreekeepingMode(world).getName();
+    }
 
-	@Override
-	public boolean setMode(World world, String modeName) {
-		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
-		if (mode != null) {
-			TreeManager.treeRoot.setTreekeepingMode(world, mode);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean setMode(World world, String modeName) {
+        ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
+        if (mode != null) {
+            TreeManager.treeRoot.setTreekeepingMode(world, mode);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public Iterable<String> getDescription(String modeName) {
-		ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
-		if (mode == null) {
-			return Collections.emptyList();
-		}
-		return mode.getDescription();
-	}
+    @Override
+    public Iterable<String> getDescription(String modeName) {
+        ITreekeepingMode mode = TreeManager.treeRoot.getTreekeepingMode(modeName);
+        if (mode == null) {
+            return Collections.emptyList();
+        }
+        return mode.getDescription();
+    }
 
 }

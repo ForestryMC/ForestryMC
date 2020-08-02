@@ -28,37 +28,37 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdClient;
 
 public class PacketBeeLogicActiveEntity extends ForestryPacket implements IForestryPacketClient {
-	private final Entity entity;
-	private final BeekeepingLogic beekeepingLogic;
+    private final Entity entity;
+    private final BeekeepingLogic beekeepingLogic;
 
-	public PacketBeeLogicActiveEntity(IBeeHousing housing, Entity entity) {
-		this.entity = entity;
-		this.beekeepingLogic = (BeekeepingLogic) housing.getBeekeepingLogic();
-	}
+    public PacketBeeLogicActiveEntity(IBeeHousing housing, Entity entity) {
+        this.entity = entity;
+        this.beekeepingLogic = (BeekeepingLogic) housing.getBeekeepingLogic();
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY;
+    }
 
-	@Override
-	protected void writeData(PacketBufferForestry data) {
-		data.writeEntityById(entity);
-		beekeepingLogic.writeData(data);
-	}
+    @Override
+    protected void writeData(PacketBufferForestry data) {
+        data.writeEntityById(entity);
+        beekeepingLogic.writeData(data);
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Handler implements IForestryPacketHandlerClient {
-		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			Entity entity = data.readEntityById(player.world);
-			if (entity instanceof IBeeHousing) {
-				IBeeHousing beeHousing = (IBeeHousing) entity;
-				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
-				if (beekeepingLogic instanceof BeekeepingLogic) {
-					beekeepingLogic.readData(data);
-				}
-			}
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    public static class Handler implements IForestryPacketHandlerClient {
+        @Override
+        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+            Entity entity = data.readEntityById(player.world);
+            if (entity instanceof IBeeHousing) {
+                IBeeHousing beeHousing = (IBeeHousing) entity;
+                IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
+                if (beekeepingLogic instanceof BeekeepingLogic) {
+                    beekeepingLogic.readData(data);
+                }
+            }
+        }
+    }
 }

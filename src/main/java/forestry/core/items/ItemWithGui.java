@@ -31,67 +31,67 @@ import forestry.core.network.PacketBufferForestry;
 
 public abstract class ItemWithGui extends ItemForestry {
 
-	public ItemWithGui(Item.Properties properties) {
-		super(properties);
-	}
+    public ItemWithGui(Item.Properties properties) {
+        super(properties);
+    }
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack stack = playerIn.getHeldItem(handIn);
 
-		if (!worldIn.isRemote) {
-			ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO safe?
-			openGui(sPlayer, stack);
-		}
+        if (!worldIn.isRemote) {
+            ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO safe?
+            openGui(sPlayer, stack);
+        }
 
-		return ActionResult.resultSuccess(stack);
-	}
+        return ActionResult.resultSuccess(stack);
+    }
 
-	protected void openGui(ServerPlayerEntity player, ItemStack stack) {
-		NetworkHooks.openGui(player, new ContainerProvider(stack), buffer -> writeContainerData(player, stack, new PacketBufferForestry(buffer)));
-	}
+    protected void openGui(ServerPlayerEntity player, ItemStack stack) {
+        NetworkHooks.openGui(player, new ContainerProvider(stack), buffer -> writeContainerData(player, stack, new PacketBufferForestry(buffer)));
+    }
 
-	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-		buffer.writeBoolean(player.getActiveHand() == Hand.MAIN_HAND);
-	}
+    protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
+        buffer.writeBoolean(player.getActiveHand() == Hand.MAIN_HAND);
+    }
 
-	@Override
-	public boolean onDroppedByPlayer(ItemStack itemstack, PlayerEntity player) {
-		if (!itemstack.isEmpty() &&
-			player instanceof ServerPlayerEntity &&
-			player.openContainer instanceof ContainerItemInventory) {
-			player.closeScreen();
-		}
+    @Override
+    public boolean onDroppedByPlayer(ItemStack itemstack, PlayerEntity player) {
+        if (!itemstack.isEmpty() &&
+                player instanceof ServerPlayerEntity &&
+                player.openContainer instanceof ContainerItemInventory) {
+            player.closeScreen();
+        }
 
-		return super.onDroppedByPlayer(itemstack, player);
-	}
+        return super.onDroppedByPlayer(itemstack, player);
+    }
 
-	@Nullable
-	public abstract Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem);
+    @Nullable
+    public abstract Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem);
 
-	public static class ContainerProvider implements INamedContainerProvider {
+    public static class ContainerProvider implements INamedContainerProvider {
 
-		private final ItemStack heldItem;
+        private final ItemStack heldItem;
 
-		public ContainerProvider(ItemStack heldItem) {
-			this.heldItem = heldItem;
-		}
+        public ContainerProvider(ItemStack heldItem) {
+            this.heldItem = heldItem;
+        }
 
-		@Override
-		public ITextComponent getDisplayName() {
-			return heldItem.getDisplayName();
-		}
+        @Override
+        public ITextComponent getDisplayName() {
+            return heldItem.getDisplayName();
+        }
 
-		@Nullable
-		@Override
-		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-			Item item = heldItem.getItem();
-			if (!(item instanceof ItemWithGui)) {
-				return null;
-			}
-			ItemWithGui itemWithGui = (ItemWithGui) item;
-			return itemWithGui.getContainer(windowId, playerEntity, heldItem);
-		}
-	}
+        @Nullable
+        @Override
+        public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+            Item item = heldItem.getItem();
+            if (!(item instanceof ItemWithGui)) {
+                return null;
+            }
+            ItemWithGui itemWithGui = (ItemWithGui) item;
+            return itemWithGui.getContainer(windowId, playerEntity, heldItem);
+        }
+    }
 
 }

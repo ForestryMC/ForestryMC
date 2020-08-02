@@ -12,19 +12,19 @@ import forestry.core.config.Config;
 
 public class EventHandlerBook {
 
-	private static final String HAS_BOOK = "forestry.spawned_book";
+    private static final String HAS_BOOK = "forestry.spawned_book";
 
-	@SubscribeEvent
-	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		if (Config.spawnWithBook) {
-			CompoundNBT playerData = event.getPlayer().getPersistentData();    //TODO think this is the right method
-			CompoundNBT data = playerData.contains(PlayerEntity.PERSISTED_NBT_TAG) ? playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG) : new CompoundNBT();
+    @SubscribeEvent
+    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (Config.spawnWithBook) {
+            CompoundNBT playerData = event.getPlayer().getPersistentData();    //TODO think this is the right method
+            CompoundNBT data = playerData.contains(PlayerEntity.PERSISTED_NBT_TAG) ? playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG) : new CompoundNBT();
 
-			if (!data.getBoolean(HAS_BOOK)) {
-				ItemHandlerHelper.giveItemToPlayer(event.getPlayer(), BookItems.BOOK.stack());
-				data.putBoolean(HAS_BOOK, true);
-				playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
-			}
-		}
-	}
+            if (!data.getBoolean(HAS_BOOK)) {
+                ItemHandlerHelper.giveItemToPlayer(event.getPlayer(), BookItems.BOOK.stack());
+                data.putBoolean(HAS_BOOK, true);
+                playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+            }
+        }
+    }
 }

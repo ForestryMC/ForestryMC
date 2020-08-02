@@ -62,312 +62,312 @@ import forestry.core.utils.TickHelper;
 //
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, ITickableTileEntity, INamedContainerProvider {//, ITriggerProvider {
-	private final ErrorLogic errorHandler = new ErrorLogic();
-	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
+    private final ErrorLogic errorHandler = new ErrorLogic();
+    private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
-	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
+    private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
 
-	private final TickHelper tickHelper = new TickHelper();
-	private boolean needsNetworkUpdate = false;
+    private final TickHelper tickHelper = new TickHelper();
+    private boolean needsNetworkUpdate = false;
 
-	public TileForestry(TileEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
-	}
+    public TileForestry(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
 
-	protected AdjacentTileCache getTileCache() {
-		return tileCache;
-	}
+    protected AdjacentTileCache getTileCache() {
+        return tileCache;
+    }
 
-	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
-		tileCache.onNeighborChange();
-	}
+    public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
+        tileCache.onNeighborChange();
+    }
 
-	@Override
-	public void remove() {
-		tileCache.purge();
-		super.remove();
-	}
+    @Override
+    public void remove() {
+        tileCache.purge();
+        super.remove();
+    }
 
-	@Override
-	public void validate() {
-		tileCache.purge();
-		super.validate();
-	}
+    @Override
+    public void validate() {
+        tileCache.purge();
+        super.validate();
+    }
 
-	// / UPDATING
-	@Override
-	public final void tick() {
-		tickHelper.onTick();
+    // / UPDATING
+    @Override
+    public final void tick() {
+        tickHelper.onTick();
 
-		if (!world.isRemote) {
-			updateServerSide();
-		} else {
-			updateClientSide();
-		}
+        if (!world.isRemote) {
+            updateServerSide();
+        } else {
+            updateClientSide();
+        }
 
-		if (needsNetworkUpdate) {
-			needsNetworkUpdate = false;
-			sendNetworkUpdate();
-		}
-	}
+        if (needsNetworkUpdate) {
+            needsNetworkUpdate = false;
+            sendNetworkUpdate();
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	protected void updateClientSide() {
-	}
+    @OnlyIn(Dist.CLIENT)
+    protected void updateClientSide() {
+    }
 
-	protected void updateServerSide() {
-	}
+    protected void updateServerSide() {
+    }
 
-	protected final boolean updateOnInterval(int tickInterval) {
-		return tickHelper.updateOnInterval(tickInterval);
-	}
+    protected final boolean updateOnInterval(int tickInterval) {
+        return tickHelper.updateOnInterval(tickInterval);
+    }
 
-	// / SAVING & LOADING
-	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
-		inventory.read(data);
-	}
-
-
-	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		data = super.write(data);
-		inventory.write(data);
-		return data;
-	}
-
-	@Nullable
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
-	}
+    // / SAVING & LOADING
+    @Override
+    public void read(BlockState state, CompoundNBT data) {
+        super.read(state, data);
+        inventory.read(data);
+    }
 
 
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
-		return NBTUtilForestry.writeStreamableToNbt(this, tag);
-	}
+    @Override
+    public CompoundNBT write(CompoundNBT data) {
+        data = super.write(data);
+        inventory.write(data);
+        return data;
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		super.handleUpdateTag(state, tag);
-		NBTUtilForestry.readStreamableFromNbt(this, tag);
-	}
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
+    }
 
-	/* INetworkedEntity */
-	protected final void sendNetworkUpdate() {
-		PacketTileStream packet = new PacketTileStream(this);
-		NetworkUtil.sendNetworkPacket(packet, pos, world);
-	}
 
-	/* IStreamable */
-	@Override
-	public void writeData(PacketBufferForestry data) {
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tag = super.getUpdateTag();
+        return NBTUtilForestry.writeStreamableToNbt(this, tag);
+    }
 
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+        super.handleUpdateTag(state, tag);
+        NBTUtilForestry.readStreamableFromNbt(this, tag);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void readData(PacketBufferForestry data) throws IOException {
+    /* INetworkedEntity */
+    protected final void sendNetworkUpdate() {
+        PacketTileStream packet = new PacketTileStream(this);
+        NetworkUtil.sendNetworkPacket(packet, pos, world);
+    }
 
-	}
+    /* IStreamable */
+    @Override
+    public void writeData(PacketBufferForestry data) {
 
-	public void onRemoval() {
-	}
+    }
 
-	@Override
-	public World getWorldObj() {
-		return world;
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readData(PacketBufferForestry data) throws IOException {
 
-	/* ITriggerProvider */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
-	//	}
-	//
-	//	@Override
-	//	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
-	//	}
-	//
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//	}
+    }
 
-	// / REDSTONE INFO
-	protected boolean isRedstoneActivated() {
-		return world.getRedstonePowerFromNeighbors(getPos()) > 0;
-	}
+    public void onRemoval() {
+    }
 
-	protected final void setNeedsNetworkUpdate() {
-		needsNetworkUpdate = true;
-	}
+    @Override
+    public World getWorldObj() {
+        return world;
+    }
 
-	@Override
-	public final IErrorLogic getErrorLogic() {
-		return errorHandler;
-	}
+    /* ITriggerProvider */
+    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+    //	@Override
+    //	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+    //	}
+    //
+    //	@Override
+    //	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
+    //	}
+    //
+    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+    //	@Override
+    //	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+    //	}
 
-	/* NAME */
+    // / REDSTONE INFO
+    protected boolean isRedstoneActivated() {
+        return world.getRedstonePowerFromNeighbors(getPos()) > 0;
+    }
 
-	/**
-	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
-	 */
-	@Override
-	public String getUnlocalizedTitle() {
-		return getBlockState().getBlock().getTranslationKey();
-	}
+    protected final void setNeedsNetworkUpdate() {
+        needsNetworkUpdate = true;
+    }
 
-	/* INVENTORY BASICS */
-	public IInventoryAdapter getInternalInventory() {
-		return inventory;
-	}
+    @Override
+    public final IErrorLogic getErrorLogic() {
+        return errorHandler;
+    }
 
-	protected final void setInternalInventory(IInventoryAdapter inv) {
-		Preconditions.checkNotNull(inv);
-		this.inventory = inv;
-	}
+    /* NAME */
 
-	/* ISidedInventory */
+    /**
+     * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
+     */
+    @Override
+    public String getUnlocalizedTitle() {
+        return getBlockState().getBlock().getTranslationKey();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return getInternalInventory().isEmpty();
-	}
+    /* INVENTORY BASICS */
+    public IInventoryAdapter getInternalInventory() {
+        return inventory;
+    }
 
-	@Override
-	public final int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
+    protected final void setInternalInventory(IInventoryAdapter inv) {
+        Preconditions.checkNotNull(inv);
+        this.inventory = inv;
+    }
 
-	@Override
-	public final ItemStack getStackInSlot(int slotIndex) {
-		return getInternalInventory().getStackInSlot(slotIndex);
-	}
+    /* ISidedInventory */
 
-	@Override
-	public ItemStack decrStackSize(int slotIndex, int amount) {
-		return getInternalInventory().decrStackSize(slotIndex, amount);
-	}
+    @Override
+    public boolean isEmpty() {
+        return getInternalInventory().isEmpty();
+    }
 
-	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return getInternalInventory().removeStackFromSlot(slotIndex);
-	}
+    @Override
+    public final int getSizeInventory() {
+        return getInternalInventory().getSizeInventory();
+    }
 
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
-	}
+    @Override
+    public final ItemStack getStackInSlot(int slotIndex) {
+        return getInternalInventory().getStackInSlot(slotIndex);
+    }
 
-	@Override
-	public final int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
+    @Override
+    public ItemStack decrStackSize(int slotIndex, int amount) {
+        return getInternalInventory().decrStackSize(slotIndex, amount);
+    }
 
-	@Override
-	public final void openInventory(PlayerEntity player) {
-		getInternalInventory().openInventory(player);
-	}
+    @Override
+    public ItemStack removeStackFromSlot(int slotIndex) {
+        return getInternalInventory().removeStackFromSlot(slotIndex);
+    }
 
-	@Override
-	public final void closeInventory(PlayerEntity player) {
-		getInternalInventory().closeInventory(player);
-	}
+    @Override
+    public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+        getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
+    }
 
-	//	@Override
-	//	public String getName() {
-	//		return getUnlocalizedTitle();
-	//	}
-	//
-	//	@Override
-	//	public ITextComponent getDisplayName() {
-	//		return new TranslationTextComponent(getUnlocalizedTitle());
-	//	}
+    @Override
+    public final int getInventoryStackLimit() {
+        return getInternalInventory().getInventoryStackLimit();
+    }
 
-	@Override
-	public final boolean isUsableByPlayer(PlayerEntity player) {
-		return getInternalInventory().isUsableByPlayer(player);
-	}
+    @Override
+    public final void openInventory(PlayerEntity player) {
+        getInternalInventory().openInventory(player);
+    }
 
-	//	@Override
-	//	public boolean hasCustomName() {
-	//		return getInternalInventory().hasCustomName();
-	//	}
+    @Override
+    public final void closeInventory(PlayerEntity player) {
+        getInternalInventory().closeInventory(player);
+    }
 
-	@Override
-	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
-	}
+    //	@Override
+    //	public String getName() {
+    //		return getUnlocalizedTitle();
+    //	}
+    //
+    //	@Override
+    //	public ITextComponent getDisplayName() {
+    //		return new TranslationTextComponent(getUnlocalizedTitle());
+    //	}
 
-	@Override
-	public final boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().canSlotAccept(slotIndex, itemStack);
-	}
+    @Override
+    public final boolean isUsableByPlayer(PlayerEntity player) {
+        return getInternalInventory().isUsableByPlayer(player);
+    }
 
-	@Override
-	public boolean isLocked(int slotIndex) {
-		return getInternalInventory().isLocked(slotIndex);
-	}
+    //	@Override
+    //	public boolean hasCustomName() {
+    //		return getInternalInventory().hasCustomName();
+    //	}
 
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		return getInternalInventory().getSlotsForFace(side);
-	}
+    @Override
+    public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+        return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
+    }
 
-	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
-	}
+    @Override
+    public final boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return getInternalInventory().canSlotAccept(slotIndex, itemStack);
+    }
 
-	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
-	}
+    @Override
+    public boolean isLocked(int slotIndex) {
+        return getInternalInventory().isLocked(slotIndex);
+    }
 
-	@Override
-	public final BlockPos getCoordinates() {
-		return getPos();
-	}
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return getInternalInventory().getSlotsForFace(side);
+    }
 
-	//TODO - inv
-	//	@Override
-	//	public int getField(int id) {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return 0;
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//	}
+    @Override
+    public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
+        return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
+    }
 
-	@Override
-	public void clear() {
-	}
+    @Override
+    public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
+        return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+    }
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			if (facing != null) {
-				return LazyOptional.of(() -> new SidedInvWrapper(getInternalInventory(), facing)).cast();
-			} else {
-				return LazyOptional.of(() -> new InvWrapper(getInternalInventory())).cast();
-			}
+    @Override
+    public final BlockPos getCoordinates() {
+        return getPos();
+    }
 
-		}
-		return super.getCapability(capability, facing);
-	}
+    //TODO - inv
+    //	@Override
+    //	public int getField(int id) {
+    //		return 0;
+    //	}
+    //
+    //	@Override
+    //	public int getFieldCount() {
+    //		return 0;
+    //	}
+    //
+    //	@Override
+    //	public void setField(int id, int value) {
+    //	}
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(this.getUnlocalizedTitle());
-	}
+    @Override
+    public void clear() {
+    }
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (facing != null) {
+                return LazyOptional.of(() -> new SidedInvWrapper(getInternalInventory(), facing)).cast();
+            } else {
+                return LazyOptional.of(() -> new InvWrapper(getInternalInventory())).cast();
+            }
+
+        }
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent(this.getUnlocalizedTitle());
+    }
 }

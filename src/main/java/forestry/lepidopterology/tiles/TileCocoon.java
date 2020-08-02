@@ -52,198 +52,198 @@ import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 
 public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, IButterflyCocoon {
-	private final OwnerHandler ownerHandler = new OwnerHandler();
-	private int age;
-	private int maturationTime;
-	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.createIndividual();
-	private boolean isSolid;
+    private final OwnerHandler ownerHandler = new OwnerHandler();
+    private int age;
+    private int maturationTime;
+    private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.createIndividual();
+    private boolean isSolid;
 
-	public TileCocoon() {
-		super(LepidopterologyTiles.COCOON.tileType());
-	}
+    public TileCocoon() {
+        super(LepidopterologyTiles.COCOON.tileType());
+    }
 
-	public TileCocoon(boolean isSolid) {
-		super(isSolid ? LepidopterologyTiles.SOLID_COCOON.tileType() : LepidopterologyTiles.COCOON.tileType());
-		this.isSolid = isSolid;
-		if (isSolid) {
-			this.age = 2;
-		}
-	}
+    public TileCocoon(boolean isSolid) {
+        super(isSolid ? LepidopterologyTiles.SOLID_COCOON.tileType() : LepidopterologyTiles.COCOON.tileType());
+        this.isSolid = isSolid;
+        if (isSolid) {
+            this.age = 2;
+        }
+    }
 
-	/* SAVING & LOADING */
-	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+    /* SAVING & LOADING */
+    @Override
+    public void read(BlockState state, CompoundNBT compoundNBT) {
+        super.read(state, compoundNBT);
 
-		if (compoundNBT.contains("Caterpillar")) {
-			caterpillar = new Butterfly(compoundNBT.getCompound("Caterpillar"));
-		}
-		ownerHandler.read(compoundNBT);
-		age = compoundNBT.getInt("Age");
-		maturationTime = compoundNBT.getInt("CATMAT");
-		isSolid = compoundNBT.getBoolean("isSolid");
-	}
+        if (compoundNBT.contains("Caterpillar")) {
+            caterpillar = new Butterfly(compoundNBT.getCompound("Caterpillar"));
+        }
+        ownerHandler.read(compoundNBT);
+        age = compoundNBT.getInt("Age");
+        maturationTime = compoundNBT.getInt("CATMAT");
+        isSolid = compoundNBT.getBoolean("isSolid");
+    }
 
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+    @Override
+    public CompoundNBT write(CompoundNBT compoundNBT) {
+        compoundNBT = super.write(compoundNBT);
 
-		CompoundNBT subcompound = new CompoundNBT();
-		caterpillar.write(subcompound);
-		compoundNBT.put("Caterpillar", subcompound);
+        CompoundNBT subcompound = new CompoundNBT();
+        caterpillar.write(subcompound);
+        compoundNBT.put("Caterpillar", subcompound);
 
-		ownerHandler.write(compoundNBT);
+        ownerHandler.write(compoundNBT);
 
-		compoundNBT.putInt("Age", age);
-		compoundNBT.putInt("CATMAT", maturationTime);
-		compoundNBT.putBoolean("isSolid", isSolid);
-		return compoundNBT;
-	}
+        compoundNBT.putInt("Age", age);
+        compoundNBT.putInt("CATMAT", maturationTime);
+        compoundNBT.putBoolean("isSolid", isSolid);
+        return compoundNBT;
+    }
 
-	@Override
-	public void writeData(PacketBufferForestry data) {
-		IButterfly caterpillar = getCaterpillar();
-		String speciesUID = caterpillar.getIdentifier();
-		data.writeString(speciesUID);
-		data.writeInt(age);
-	}
+    @Override
+    public void writeData(PacketBufferForestry data) {
+        IButterfly caterpillar = getCaterpillar();
+        String speciesUID = caterpillar.getIdentifier();
+        data.writeString(speciesUID);
+        data.writeInt(age);
+    }
 
-	@Override
-	public void readData(PacketBufferForestry data) {
-		String speciesUID = data.readString();
-		IButterfly caterpillar = getButterfly(speciesUID);
-		setCaterpillar(caterpillar);
-		age = data.readInt();
-	}
+    @Override
+    public void readData(PacketBufferForestry data) {
+        String speciesUID = data.readString();
+        IButterfly caterpillar = getButterfly(speciesUID);
+        setCaterpillar(caterpillar);
+        age = data.readInt();
+    }
 
-	private static IButterfly getButterfly(String speciesUID) {
-		IAllele[] butterflyTemplate = ButterflyManager.butterflyRoot.getTemplates().getTemplate(speciesUID);
-		Preconditions.checkNotNull(butterflyTemplate, "Could not find butterfly template for species: %s", speciesUID);
-		return ButterflyManager.butterflyRoot.templateAsIndividual(butterflyTemplate);
-	}
+    private static IButterfly getButterfly(String speciesUID) {
+        IAllele[] butterflyTemplate = ButterflyManager.butterflyRoot.getTemplates().getTemplate(speciesUID);
+        Preconditions.checkNotNull(butterflyTemplate, "Could not find butterfly template for species: %s", speciesUID);
+        return ButterflyManager.butterflyRoot.templateAsIndividual(butterflyTemplate);
+    }
 
-	@Override
-	public IOwnerHandler getOwnerHandler() {
-		return ownerHandler;
-	}
+    @Override
+    public IOwnerHandler getOwnerHandler() {
+        return ownerHandler;
+    }
 
-	//TODO moved to block.onReplaced
-	//	@Override
-	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
-	//		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
-	//	}
+    //TODO moved to block.onReplaced
+    //	@Override
+    //	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
+    //		return !Block.isEqualTo(oldState.getBlock(), newSate.getBlock());
+    //	}
 
-	/* INETWORKEDENTITY */
-	@Nullable
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
-	}
+    /* INETWORKEDENTITY */
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
+    }
 
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
-		return NBTUtilForestry.writeStreamableToNbt(this, tag);
-	}
+    @Override
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT tag = super.getUpdateTag();
+        return NBTUtilForestry.writeStreamableToNbt(this, tag);
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		int oldAge = age;
-		super.handleUpdateTag(state, tag);
-		NBTUtilForestry.readStreamableFromNbt(this, tag);
-		if (oldAge != age) {
-			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-			//			world.markBlockRangeForRenderUpdate(pos, pos);
-		}
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+        int oldAge = age;
+        super.handleUpdateTag(state, tag);
+        NBTUtilForestry.readStreamableFromNbt(this, tag);
+        if (oldAge != age) {
+            Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+            //			world.markBlockRangeForRenderUpdate(pos, pos);
+        }
+    }
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(getBlockState(), nbt);
-	}
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        super.onDataPacket(net, pkt);
+        CompoundNBT nbt = pkt.getNbtCompound();
+        handleUpdateTag(getBlockState(), nbt);
+    }
 
-	public void onBlockTick() {
-		maturationTime++;
+    public void onBlockTick() {
+        maturationTime++;
 
-		IGenome caterpillarGenome = caterpillar.getGenome();
-		int caterpillarMatureTime = Math
-			.round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
+        IGenome caterpillarGenome = caterpillar.getGenome();
+        int caterpillarMatureTime = Math
+                .round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
 
-		if (maturationTime >= caterpillarMatureTime) {
-			if (age < 2) {
-				age++;
-				maturationTime = 0;
-				BlockState blockState = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, blockState, blockState, 0);
-			} else if (caterpillar.canTakeFlight(world, getPos().getX(), getPos().getY(), getPos().getZ())) {
-				NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this);
-				for (ItemStack drop : cocoonDrops) {
-					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-				}
-				world.setBlockState(getPos(), Blocks.AIR.getDefaultState());
-				attemptButterflySpawn(world, caterpillar, getPos());
-			}
-		}
-	}
+        if (maturationTime >= caterpillarMatureTime) {
+            if (age < 2) {
+                age++;
+                maturationTime = 0;
+                BlockState blockState = world.getBlockState(pos);
+                world.notifyBlockUpdate(pos, blockState, blockState, 0);
+            } else if (caterpillar.canTakeFlight(world, getPos().getX(), getPos().getY(), getPos().getZ())) {
+                NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this);
+                for (ItemStack drop : cocoonDrops) {
+                    ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
+                }
+                world.setBlockState(getPos(), Blocks.AIR.getDefaultState());
+                attemptButterflySpawn(world, caterpillar, getPos());
+            }
+        }
+    }
 
-	private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops) {
-		if (cocoonDrops.isEmpty()) {
-			return true;
-		}
-		for (ItemStack stack : cocoonDrops) {
-			if (!stack.isEmpty()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    private boolean isListEmpty(NonNullList<ItemStack> cocoonDrops) {
+        if (cocoonDrops.isEmpty()) {
+            return true;
+        }
+        for (ItemStack stack : cocoonDrops) {
+            if (!stack.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-		MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(),
-			pos.getX(), pos.getY() + 0.1f, pos.getZ());
-		Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(),
-			pos.getZ());
-	}
+    private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
+        MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(),
+                pos.getX(), pos.getY() + 0.1f, pos.getZ());
+        Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(),
+                pos.getZ());
+    }
 
-	@Override
-	public BlockPos getCoordinates() {
-		return getPos();
-	}
+    @Override
+    public BlockPos getCoordinates() {
+        return getPos();
+    }
 
-	@Override
-	public IButterfly getCaterpillar() {
-		return caterpillar;
-	}
+    @Override
+    public IButterfly getCaterpillar() {
+        return caterpillar;
+    }
 
-	@Override
-	public void setCaterpillar(IButterfly butterfly) {
-		this.caterpillar = butterfly;
-		sendNetworkUpdate();
-	}
+    @Override
+    public void setCaterpillar(IButterfly butterfly) {
+        this.caterpillar = butterfly;
+        sendNetworkUpdate();
+    }
 
-	private void sendNetworkUpdate() {
-		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
-	}
+    private void sendNetworkUpdate() {
+        NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	public NonNullList<ItemStack> getCocoonDrops() {
-		return caterpillar.getCocoonDrop(this);
-	}
+    public NonNullList<ItemStack> getCocoonDrops() {
+        return caterpillar.getCocoonDrop(this);
+    }
 
-	@Override
-	public boolean isSolid() {
-		return isSolid;
-	}
+    @Override
+    public boolean isSolid() {
+        return isSolid;
+    }
 
 }

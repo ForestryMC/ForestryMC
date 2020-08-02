@@ -27,33 +27,33 @@ import forestry.core.tiles.TileUtil;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
-	public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileAlveary tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlveary.class);
-		return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
-	}
+    public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileAlveary tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlveary.class);
+        return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
+    }
 
-	public ContainerAlveary(int windowid, PlayerInventory playerInv, TileAlveary tile) {
-		super(windowid, ApicultureContainers.ALVEARY.containerType(), playerInv, tile, 8, 108);
-		ContainerBeeHelper.addSlots(this, tile, false);
+    public ContainerAlveary(int windowid, PlayerInventory playerInv, TileAlveary tile) {
+        super(windowid, ApicultureContainers.ALVEARY.containerType(), playerInv, tile, 8, 108);
+        ContainerBeeHelper.addSlots(this, tile, false);
 
-		tile.getBeekeepingLogic().clearCachedValues();
-		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-		if (playerInv.player instanceof ServerPlayerEntity) {
-			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) playerInv.player));
-		}
-	}
+        tile.getBeekeepingLogic().clearCachedValues();
+        LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+        if (playerInv.player instanceof ServerPlayerEntity) {
+            listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) playerInv.player));
+        }
+    }
 
-	private int beeProgress = -1;
+    private int beeProgress = -1;
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
-		if (this.beeProgress != beeProgress) {
-			this.beeProgress = beeProgress;
-			IForestryPacketClient packet = new PacketGuiUpdate(tile);
-			sendPacketToListeners(packet);
-		}
-	}
+        int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
+        if (this.beeProgress != beeProgress) {
+            this.beeProgress = beeProgress;
+            IForestryPacketClient packet = new PacketGuiUpdate(tile);
+            sendPacketToListeners(packet);
+        }
+    }
 }

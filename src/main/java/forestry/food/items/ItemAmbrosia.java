@@ -22,20 +22,20 @@ import forestry.core.items.ItemForestryFood;
 
 public class ItemAmbrosia extends ItemForestryFood {
 
-	public ItemAmbrosia() {
-		super((new Item.Properties())
-			.group(ItemGroupForestry.tabForestry)
-			.food(new Food.Builder()
-				.setAlwaysEdible()
-				.hunger(Constants.FOOD_AMBROSIA_HEAL)
-				.saturation(0.6f)
-				.effect(new EffectInstance(Effects.REGENERATION, 40, 0), 1.0F)
-				.build()));
-	}
+    public ItemAmbrosia() {
+        super((new Item.Properties())
+                .group(ItemGroupForestry.tabForestry)
+                .food(new Food.Builder()
+                        .setAlwaysEdible()
+                        .hunger(Constants.FOOD_AMBROSIA_HEAL)
+                        .saturation(0.6f)
+                        .effect(new EffectInstance(Effects.REGENERATION, 40, 0), 1.0F)
+                        .build()));
+    }
 
-	@Override
-	public boolean hasEffect(ItemStack itemstack) {
-		return true;
-	}
+    @Override
+    public boolean hasEffect(ItemStack itemstack) {
+        return true;
+    }
 
 }

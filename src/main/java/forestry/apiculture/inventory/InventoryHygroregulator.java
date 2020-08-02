@@ -20,18 +20,18 @@ import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.inventory.InventoryAdapterTile;
 
 public class InventoryHygroregulator extends InventoryAdapterTile<TileAlvearyHygroregulator> {
-	public static final short SLOT_INPUT = 0;
+    public static final short SLOT_INPUT = 0;
 
-	public InventoryHygroregulator(TileAlvearyHygroregulator alvearyHygroregulator) {
-		super(alvearyHygroregulator, 1, "CanInv");
-	}
+    public InventoryHygroregulator(TileAlvearyHygroregulator alvearyHygroregulator) {
+        super(alvearyHygroregulator, 1, "CanInv");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_INPUT) {
-			LazyOptional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
-			return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
-		}
-		return false;
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_INPUT) {
+            LazyOptional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
+            return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
+        }
+        return false;
+    }
 }
