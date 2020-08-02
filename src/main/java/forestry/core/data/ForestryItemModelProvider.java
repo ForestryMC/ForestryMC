@@ -19,7 +19,7 @@ import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureItem;
 import forestry.storage.ModuleCrates;
 import forestry.storage.items.ItemCrated;
-import forestry.storage.models.CrateModel;
+import forestry.storage.models.ModelLoaderCrate;
 
 public class ForestryItemModelProvider extends ModelProvider {
 	public ForestryItemModelProvider(DataGenerator generator) {
@@ -43,7 +43,7 @@ public class ForestryItemModelProvider extends ModelProvider {
 		for (FeatureItem<ItemCrated> featureCrated : ModuleCrates.crates) {
 			registerModel(featureCrated, new ModelBuilder()
 				.parent(Constants.MOD_ID + ":item/crate-filled")
-				.loader(CrateModel.Loader.LOCATION)
+				.loader(ModelLoaderCrate.LOCATION)
 				.loaderData("variant", new JsonPrimitive(featureCrated.getIdentifier()))
 			);
 		}

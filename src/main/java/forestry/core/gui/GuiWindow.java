@@ -62,7 +62,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 		PlayerInventory playerInv = minecraft.player.inventory;
 
 		if (playerInv.getItemStack().isEmpty()) {
-			GuiUtil.drawToolTips(transform, this, children, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, buttons, mouseX, mouseY);
 			RenderSystem.pushMatrix();
 			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
 			window.drawTooltip(transform, mouseY, mouseX);

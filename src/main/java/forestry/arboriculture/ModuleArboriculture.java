@@ -36,7 +36,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
-import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
@@ -44,7 +43,6 @@ import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
-import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -104,8 +102,9 @@ public class ModuleArboriculture extends BlankForestryModule {
 		// Init rendering
 		proxy.initializeModels();
 
+		//TODO: Commands
 		// Commands
-		ModuleCore.rootCommand.then(CommandTree.register());
+		//ModuleCore.rootCommand.addChildCommand(new CommandTree());
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ArboricultureFilterRuleType.init();

@@ -37,7 +37,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 			if (category.getEntries().isEmpty()) {
 				continue;
 			}
-			addButton(new GuiButtonBookCategory(guiLeft + LEFT_PAGE_START_X + x * 36, guiTop + 25 + y * 36, category, this::actionPerformed));
+			buttons.add(new GuiButtonBookCategory(guiLeft + LEFT_PAGE_START_X + x * 36, guiTop + 25 + y * 36, category, this::actionPerformed));
 			x++;
 			if (x == 3) {
 				y++;

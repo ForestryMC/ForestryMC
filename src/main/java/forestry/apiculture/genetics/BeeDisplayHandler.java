@@ -27,7 +27,7 @@ import forestry.api.genetics.alyzer.IAlleleDisplayHandler;
 import forestry.api.genetics.alyzer.IAlleleDisplayHelper;
 import forestry.api.genetics.alyzer.IAlyzerHelper;
 import forestry.core.genetics.GenericRatings;
-import forestry.core.utils.GeneticsUtil;
+import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.ResourceUtil;
 import forestry.core.utils.Translator;
 
@@ -36,10 +36,15 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		@Override
 		public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
 			IOrganismType organismType = helper.getOrganismType();
-			ITextComponent primaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
-			ITextComponent secondaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
+			String customPrimaryBeeKey = "for.bees.custom.beealyzer."
+				+ organismType.getName() + "." + genome.getPrimary().getLocalisationKey().replace("for.bees.species.", "");
+			String customSecondaryBeeKey = "for.bees.custom.beealyzer."
+				+ organismType.getName() + "." + genome.getSecondary().getLocalisationKey().replace("for.bees.species.", "");
 
-			helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES, primaryName, secondaryName);
+			helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"),
+				BeeChromosomes.SPECIES,
+				GuiAlyzer.checkCustomName(customPrimaryBeeKey),
+				GuiAlyzer.checkCustomName(customSecondaryBeeKey));
 		}
 	},
 	SPEED(BeeChromosomes.SPEED, -1, 1) {
@@ -47,6 +52,7 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 			IAllele speedAllele = getActiveAllele(genome);
 			TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." +
+
 				speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
 			if (ResourceUtil.canTranslate(customSpeed)) {
 				toolTip.singleLine()

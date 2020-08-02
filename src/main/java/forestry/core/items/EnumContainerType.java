@@ -15,7 +15,7 @@ import java.util.Locale;
 import forestry.api.core.IItemSubtype;
 
 public enum EnumContainerType implements IItemSubtype {
-	/*GLASS, JAR, */CAN, CAPSULE, REFRACTORY;
+	GLASS, JAR, CAN, CAPSULE, REFRACTORY;
 
 	private final String name;
 

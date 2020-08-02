@@ -10,41 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import java.util.Optional;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
-
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import genetics.commands.SpeciesNotFoundException;
-import forestry.core.utils.BlockUtil;
-import forestry.core.worldgen.FeatureBase;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.utils.AlleleUtils;
-
 public final class TreeGenHelper {
 
-	public static Feature<NoFeatureConfig> getWorldGen(ResourceLocation treeName, PlayerEntity player, BlockPos pos) throws SpeciesNotFoundException {
+	/*public static Feature getWorldGen(ResourceLocation treeName, PlayerEntity player, BlockPos pos) throws SpeciesNotFoundException {
 		IGenome treeGenome = getTreeGenome(treeName);
 		ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
 		return tree.getTreeGenerator(player.world, pos, true);
 	}
 
-	public static <FC extends IFeatureConfig> boolean generateTree(Feature<FC> feature, ChunkGenerator generator, World world, BlockPos pos, FC config) {
+	public static <FC extends IFeatureConfig> boolean generateTree(Feature<FC> feature, ChunkGenerator<? extends GenerationSettings> generator, World world, BlockPos pos, FC config) {
 		if (pos.getY() > 0 && world.isAirBlock(pos.down())) {
 			pos = BlockUtil.getNextSolidDownPos(world, pos);
 		} else {
@@ -59,7 +33,7 @@ public final class TreeGenHelper {
 			if (feature instanceof FeatureBase) {
 				return ((FeatureBase) feature).place(world, world.rand, pos, true);
 			} else {
-				return feature.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), generator, world.rand, pos, config);
+				return feature.place(world, generator, world.rand, pos, config);
 			}
 		}
 		return false;
@@ -67,14 +41,14 @@ public final class TreeGenHelper {
 
 	public static boolean generateTree(ITree tree, World world, BlockPos pos) {
 		Feature<NoFeatureConfig> gen = tree.getTreeGenerator(world, pos, true);
-		ChunkGenerator generator = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator();
+		ChunkGenerator<? extends GenerationSettings> generator = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator();
 
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
 			if (gen instanceof FeatureBase) {
 				return ((FeatureBase) gen).place(world, world.rand, pos, true);
 			} else {
-                return gen.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), world.rand, pos, IFeatureConfig.NO_FEATURE_CONFIG);
+				return gen.place(world, generator, world.rand, pos, IFeatureConfig.NO_FEATURE_CONFIG);
 			}
 		}
 		return false;
@@ -116,5 +90,5 @@ public final class TreeGenHelper {
 		IAllele[] template = TreeManager.treeRoot.getTemplates().getTemplate(species.getRegistryName().toString());
 
 		return TreeManager.treeRoot.getKaryotype().templateAsGenome(template);
-	}
+	}*/
 }

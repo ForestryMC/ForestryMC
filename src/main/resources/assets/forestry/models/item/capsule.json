@@ -1,7 +1,6 @@
 {
-  "loader": "forestry:fluid_container",
-  "gui_light": "front",
-  "empty": "forestry:item/capsule_empty",
-  "filled": "forestry:item/capsule_filled",
-  "type": "capsule"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/liquids/capsule.bottle"
+  }
 }

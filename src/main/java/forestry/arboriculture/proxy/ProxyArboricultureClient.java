@@ -19,6 +19,7 @@ import net.minecraft.world.FoliageColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -90,6 +91,15 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 	}
 
 	@Override
+	public void registerModels(ModelRegistryEvent event) {
+		AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
+			ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
+			ModelLoader.addSpecialModel(treeSpecies.getItemModel());
+		});
+		//ModelLoader.addSpecialModel();
+	}
+
+	@Override
 	public void setupClient(FMLClientSetupEvent event) {
 		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "sapling_ge"), SaplingModelLoader.INSTANCE);
 		ArboricultureBlocks.TREE_CHEST.block().clientSetup();
@@ -101,10 +111,5 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 		ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
 		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.getCutout());
 		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent()));
-
-		AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
-			ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
-			ModelLoader.addSpecialModel(treeSpecies.getItemModel());
-		});
 	}
 }

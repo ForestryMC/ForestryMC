@@ -11,12 +11,9 @@
 package forestry.storage;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
 
-import net.minecraft.util.IStringSerializable;
-
-public enum BackpackMode implements IStringSerializable {
-	NEUTRAL(null),
+public enum BackpackMode {
+	NORMAL(null),
 	LOCKED("for.storage.backpack.mode.locked"),
 	RECEIVE("for.storage.backpack.mode.receiving"),
 	RESUPPLY("for.storage.backpack.mode.resupply");
@@ -26,11 +23,6 @@ public enum BackpackMode implements IStringSerializable {
 
 	BackpackMode(@Nullable String unlocalizedInfo) {
 		this.unlocalizedInfo = unlocalizedInfo;
-	}
-
-	@Override
-	public String getString() {
-		return name().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Nullable

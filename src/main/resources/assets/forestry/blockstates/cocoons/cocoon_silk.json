@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "age=0": { "model": "forestry:cocoon_early" },
+        "age=1": { "model": "forestry:cocoon_middle" },
+        "age=2": { "model": "forestry:cocoon_silk_late" }
+    }
+}

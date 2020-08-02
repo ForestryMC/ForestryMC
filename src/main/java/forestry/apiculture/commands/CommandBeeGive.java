@@ -1,105 +1,175 @@
-/*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
-package forestry.apiculture.commands;
-
-import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-
-import net.minecraftforge.server.command.EnumArgument;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.apiculture.genetics.BeeDefinition;
-import genetics.commands.PermLevel;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IIndividual;
-import genetics.commands.CommandHelpers;
-
-public class CommandBeeGive {
-	public static LiteralArgumentBuilder<CommandSource> register() {
-		return Commands.literal("give").requires(PermLevel.ADMIN)
-				.then(Commands.argument("bee", BeeArgument.beeArgument())
-						.then(Commands.argument("type", EnumArgument.enumArgument(EnumBeeType.class))
-								.then(Commands.argument("player", EntityArgument.player())
-										.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), EntityArgument.getPlayer(a, "player"))))
-								.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), a.getSource().asPlayer())))
-						.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), EnumBeeType.QUEEN, a.getSource().asPlayer())))
-				.executes(a -> execute(a.getSource(), BeeDefinition.FOREST.createIndividual(), EnumBeeType.QUEEN, a.getSource().asPlayer()));
-	}
-
-	public static int execute(CommandSource source, IBee bee, EnumBeeType type, PlayerEntity player) {
-		IBee beeCopy = (IBee) bee.copy();
-		if (type == EnumBeeType.QUEEN) {
-			beeCopy.mate(beeCopy.getGenome());
-		}
-
-		ItemStack beeStack = BeeManager.beeRoot.createStack(beeCopy, type);
-		player.dropItem(beeStack, false, true);
-
-		CommandHelpers.sendLocalizedChatMessage(source, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getDisplayName().getString(), type.getName());
-		return 1;
-	}
-
-	public static class BeeArgument implements ArgumentType<IBee> {
-
-		public static BeeArgument beeArgument() {
-			return new BeeArgument();
-		}
-
-		@Override
-		public IBee parse(final StringReader reader) throws CommandSyntaxException {
-			ResourceLocation location = ResourceLocation.read(reader);
-
-			return BeeManager.beeRoot.getIndividualTemplates().stream().filter(a -> a.getGenome().getActiveAllele(BeeChromosomes.SPECIES).getRegistryName().equals(location)).findFirst().orElseThrow(() -> new SimpleCommandExceptionType(new LiteralMessage("Invalid Bee Type: " + location)).create());
-		}
-
-		@Override
-		public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
-			return ISuggestionProvider.suggest(BeeManager.beeRoot.getIndividualTemplates().stream()
-					.map(IIndividual::getGenome)
-					.map(a -> a.getActiveAllele(BeeChromosomes.SPECIES))
-					.map(IAllele::getRegistryName)
-					.map(ResourceLocation::toString), builder);
-		}
-
-		@Override
-		public Collection<String> getExamples() {
-			return BeeManager.beeRoot.getIndividualTemplates().stream()
-					.map(IIndividual::getGenome)
-					.map(a -> a.getActiveAllele(BeeChromosomes.SPECIES))
-					.map(IAllele::getRegistryName)
-					.map(ResourceLocation::toString)
-					.collect(Collectors.toList());
-		}
-	}
-}
+///*******************************************************************************
+// * Copyright (c) 2011-2014 SirSengir.
+// * All rights reserved. This program and the accompanying materials
+// * are made available under the terms of the GNU Lesser Public License v3
+// * which accompanies this distribution, and is available at
+// * http://www.gnu.org/licenses/lgpl-3.0.txt
+// *
+// * Various Contributors including, but not limited to:
+// * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+// ******************************************************************************/
+//package forestry.apiculture.commands;
+//
+//import javax.annotation.Nullable;
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.Iterator;
+//import java.util.List;
+//
+//import net.minecraft.command.CommandBase;
+//import net.minecraft.command.CommandException;
+//import net.minecraft.command.ICommandSender;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.server.MinecraftServer;
+//import net.minecraft.util.math.BlockPos;
+//
+//import forestry.api.apiculture.BeeManager;
+//import forestry.api.apiculture.genetics.EnumBeeType;
+//import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+//import forestry.api.apiculture.genetics.IBee;
+//import forestry.api.apiculture.genetics.IBeeGenome;
+//import forestry.api.genetics.alleles.AlleleManager;
+//import forestry.api.genetics.IAllele;
+//import forestry.core.commands.CommandHelpers;
+//import forestry.core.commands.SpeciesNotFoundException;
+//import forestry.core.commands.SubCommand;
+//
+//public class CommandBeeGive extends SubCommand {
+//
+//	private final String beeTypeHelpString;
+//	private final String[] beeTypeArr;
+//
+//	public CommandBeeGive() {
+//		super("give");
+//		setPermLevel(PermLevel.ADMIN);
+//
+//		List<String> beeTypeStrings = new ArrayList<>();
+//		for (EnumBeeType type : EnumBeeType.values()) {
+//			beeTypeStrings.add(type.getName());
+//		}
+//
+//		beeTypeArr = beeTypeStrings.toArray(new String[0]);
+//
+//		StringBuilder beeTypeHelp = new StringBuilder();
+//		String separator = ", ";
+//
+//		Iterator<String> iter = beeTypeStrings.iterator();
+//		while (iter.hasNext()) {
+//			beeTypeHelp.append(iter.next());
+//			if (iter.hasNext()) {
+//				beeTypeHelp.append(separator);
+//			}
+//		}
+//		beeTypeHelpString = beeTypeHelp.toString();
+//	}
+//
+//	@Override
+//	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+//		if (args.length < 2) {
+//			printHelp(sender);
+//			return;
+//		}
+//
+//		IBeeGenome beeGenome = getBeeGenome(args[0]);
+//		EnumBeeType beeType = getBeeType(args[1]);
+//		if (beeType == null) {
+//			printHelp(sender);
+//			return;
+//		}
+//
+//		PlayerEntity player;
+//		if (args.length == 3) {
+//			player = CommandBase.getPlayer(server, sender, args[2]);
+//		} else {
+//			player = CommandBase.getPlayer(server, sender, sender.getName());
+//		}
+//
+//		IBee bee = BeeManager.beeRoot.getBee(beeGenome);
+//
+//		if (beeType == EnumBeeType.QUEEN) {
+//			bee.mate(bee);
+//		}
+//
+//		ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, beeType);
+//		player.dropItem(beeStack, false, true);
+//
+//		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getAlleleName(), beeType.getName());
+//	}
+//
+//	private static IBeeGenome getBeeGenome(String speciesName) throws SpeciesNotFoundException {
+//		IAlleleBeeSpecies species = null;
+//
+//		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {
+//
+//			if (!uid.equals(speciesName)) {
+//				continue;
+//			}
+//
+//			IAllele allele = AlleleManager.alleleRegistry.getAllele(uid);
+//			if (allele instanceof IAlleleBeeSpecies) {
+//				species = (IAlleleBeeSpecies) allele;
+//				break;
+//			}
+//		}
+//
+//		if (species == null) {
+//			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+//				if (allele instanceof IAlleleBeeSpecies && allele.getAlleleName().equals(speciesName)) {
+//					species = (IAlleleBeeSpecies) allele;
+//					break;
+//				}
+//			}
+//		}
+//
+//		if (species == null) {
+//			throw new SpeciesNotFoundException(speciesName);
+//		}
+//
+//		IAllele[] template = BeeManager.beeRoot.getTemplate(species);
+//
+//		return BeeManager.beeRoot.templateAsGenome(template);
+//	}
+//
+//	@Override
+//	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+//		if (args.length == 1) {
+//			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(args, getSpecies());
+//			tabCompletion.add("help");
+//			return tabCompletion;
+//		} else if (args.length == 2) {
+//			return CommandHelpers.getListOfStringsMatchingLastWord(args, beeTypeArr);
+//		} else if (args.length == 3) {
+//			return CommandHelpers.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
+//		}
+//		return Collections.emptyList();
+//	}
+//
+//	private static String[] getSpecies() {
+//		List<String> species = new ArrayList<>();
+//
+//		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+//			if (allele instanceof IAlleleBeeSpecies) {
+//				species.add(allele.getAlleleName());
+//			}
+//		}
+//
+//		return species.toArray(new String[0]);
+//	}
+//
+//	@Nullable
+//	private static EnumBeeType getBeeType(String beeTypeName) {
+//		for (EnumBeeType beeType : EnumBeeType.values()) {
+//			if (beeType.getName().equalsIgnoreCase(beeTypeName)) {
+//				return beeType;
+//			}
+//		}
+//		return null;
+//	}
+//
+//	@Override
+//	public void printHelp(ICommandSender sender) {
+//		super.printHelp(sender);
+//		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.beekeeping.give.available", beeTypeHelpString);
+//	}
+//}

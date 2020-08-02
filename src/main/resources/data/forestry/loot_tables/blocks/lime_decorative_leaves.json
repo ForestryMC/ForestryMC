@@ -56,7 +56,7 @@
               ],
               "functions": [
                 {
-                  "function": "forestry:set_species_nbt",
+                  "function": "minecraft:set_species_nbt",
                   "speciesUid": "forestry:tree_lime"
                 }
               ],

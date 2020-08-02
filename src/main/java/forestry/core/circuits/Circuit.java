@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.circuits.ChipsetManager;
@@ -42,7 +41,7 @@ public abstract class Circuit implements ICircuit {
 
 	@Override
 	public void addTooltip(List<ITextComponent> list) {
-		list.add(new TranslationTextComponent(getTranslationKey()).mergeStyle(TextFormatting.GRAY));
+		list.add(new TranslationTextComponent(getTranslationKey()));
 
 		int i = 1;
 		while (true) {
@@ -51,7 +50,7 @@ public abstract class Circuit implements ICircuit {
 			if (!ResourceUtil.canTranslate(component)) {
 				break;
 			}
-			list.add(new StringTextComponent(" - ").append(component).mergeStyle(TextFormatting.GRAY));
+			list.add(new StringTextComponent(" - ").append(component));
 			i++;
 		}
 	}

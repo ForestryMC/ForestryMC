@@ -78,8 +78,8 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	public void init() {
 		super.init();
 
-		addButton(new Button(guiLeft + 12, guiTop + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
-		addButton(new Button(guiLeft + 130, guiTop + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
+		buttons.add(new Button(guiLeft + 12, guiTop + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
+		buttons.add(new Button(guiLeft + 130, guiTop + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
 	}
 
 	@Override

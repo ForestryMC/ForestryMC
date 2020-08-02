@@ -62,17 +62,16 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 				addButtons();
 			} else {
 				buttons.clear();
-				children.clear();
 			}
 		}
 	}
 
 	private void addButtons() {
-		addButton(new GuiBetterButton(guiLeft + 76, guiTop + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
+		buttons.add(new GuiBetterButton(guiLeft + 76, guiTop + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(100, 0));
 			SoundUtil.playButtonClick();
 		}));
-		addButton(new GuiBetterButton(guiLeft + 85, guiTop + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
+		buttons.add(new GuiBetterButton(guiLeft + 85, guiTop + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(101, 0));
 			SoundUtil.playButtonClick();
 		}));

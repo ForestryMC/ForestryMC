@@ -68,12 +68,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	public GuiBetterButton setLabel(String label) {
-		this.setMessage(new StringTextComponent(label));
-		return this;
-	}
-
-	public GuiBetterButton clearLabel() {
-		this.setMessage(null);
+		this.setMessage(new StringTextComponent(label));    //TODO check method call
 		return this;
 	}
 
@@ -86,7 +81,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	public int getTextColor(boolean mouseOver) {
-		if (!active) {
+		if (!visible) {    //TODO right bool?
 			return 0xffa0a0a0;
 		} else if (mouseOver) {
 			return 0xffffa0;
@@ -110,8 +105,8 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		int yOffset = texture.getY();
 		int h = texture.getHeight();
 		int w = texture.getWidth();
-		isHovered = isMouseOverButton(mouseX, mouseY);
-		int hoverState = getYImage(isHovered());
+		boolean mouseOver = isMouseOverButton(mouseX, mouseY);
+		int hoverState = getYImage(isHovered());    //TODO this is what botania uses for hoverstate
 		if (useTexWidth) {
 			blit(transform, x, y, xOffset, yOffset + hoverState * h, w, h);
 		} else {
@@ -121,9 +116,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 
 		//TODO mousedragged
 		//		mouseDragged(minecraft, mouseX, mouseY);
-		if (getMessage() != null) {
-			drawCenteredString(transform, Minecraft.getInstance().fontRenderer, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(isHovered));
-		}
+		drawCenteredString(transform, Minecraft.getInstance().fontRenderer, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(mouseOver));
 	}
 
 	@Override

@@ -75,11 +75,12 @@ public class GeneticsUtil {
 	}
 
 	public static ITextComponent getSpeciesName(IOrganismType type, IAlleleForestrySpecies allele) {
+		String alleleKey = allele.getLocalisationKey();
 		String customKey = getKeyPrefix(allele) +
 			'.' +
 			type.getName() +
 			'.' +
-			allele.getSpeciesIdentifier();
+			alleleKey.replace("for.bees.species.", "");
 		return ResourceUtil.tryTranslate(customKey, allele::getDisplayName);
 	}
 

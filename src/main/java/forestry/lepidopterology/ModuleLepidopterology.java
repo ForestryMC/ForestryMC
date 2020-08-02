@@ -35,6 +35,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
 
+import genetics.api.alleles.IAllele;
+
+import genetics.utils.AlleleUtils;
+
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.products.Product;
@@ -42,7 +46,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.api.modules.ForestryModule;
-import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
@@ -50,7 +53,6 @@ import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
-import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
@@ -63,9 +65,6 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
-
-import genetics.api.alleles.IAllele;
-import genetics.utils.AlleleUtils;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
@@ -120,7 +119,8 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		ModuleCore.rootCommand.then(CommandButterfly.register());
+		//TODO commands
+		//		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
 
 		MothDefinition.initMoths();
 		ButterflyDefinition.initButterflies();

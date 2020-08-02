@@ -25,15 +25,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
-
-import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -239,12 +235,18 @@ public class ModuleManager implements IModuleManager {
 	}
 
 	public static void serverStarting(MinecraftServer server) {
-		CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
-
-		loadedModules.stream()
-				.map(IForestryModule::register)
-				.filter(Objects::nonNull)
-				.forEach(dispatcher::register);
+		//TODO - commands
+		//		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
+		//
+		//		for (IForestryModule module : loadedModules) {
+		//			ICommand[] commands = module.getConsoleCommands();
+		//			if (commands == null) {
+		//				continue;
+		//			}
+		//			for (ICommand command : commands) {
+		//				commandManager.registerCommand(command);
+		//			}
+		//		}
 	}
 
 

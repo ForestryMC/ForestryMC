@@ -18,7 +18,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -40,7 +39,7 @@ public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip").mergeStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip"));
 			/*BlockFarm block = getBlock();
 			EnumFarmMaterial material = block.getFarmMaterial();
 			tooltip.add(new TranslationTextComponent("block.forestry.farm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(material.getFormatting())).appendText(" " + WordUtils.capitalize(material.getName().replace("_", ""))));*/

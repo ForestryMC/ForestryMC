@@ -31,6 +31,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+
+import genetics.utils.AlleleUtils;
+
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ISpriteRegistry;
 import forestry.api.core.ItemGroups;
@@ -52,16 +58,10 @@ import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.genetics.ButterflyHelper;
 
-import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
-import genetics.utils.AlleleUtils;
-
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 
 	private static final Random rand = new Random();
 	public static final String NBT_AGE = "Age";
-	public static final int MAX_AGE = 3;
 	//private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
 	private final EnumFlutterType type;
@@ -98,7 +98,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
 		if (type == EnumFlutterType.COCOON) {
-			for (int age = 0; age < MAX_AGE; age++) {
+			for (int age = 0; age < 3; age++) {
 				for (IButterfly individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
 					// Don't show secret butterflies unless ordered to.
 					if (hideSecrets && individual.isSecret() && !Config.isDebug) {

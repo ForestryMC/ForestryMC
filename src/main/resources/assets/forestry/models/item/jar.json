@@ -1,7 +1,7 @@
 {
-  "loader": "forestry:fluid_container",
-  "gui_light": "front",
-  "empty": "forestry:item/jar_empty",
-  "filled": "forestry:item/jar_filled",
-  "type": "jar"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/liquids/jar.bottle",
+    "layer1": "forestry:item/liquids/jar.contents"
+  }
 }

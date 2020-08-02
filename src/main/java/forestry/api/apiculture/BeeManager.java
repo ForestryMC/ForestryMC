@@ -12,13 +12,13 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.genetics.IBeeFactory;
-import forestry.api.apiculture.genetics.IBeeMutationFactory;
-import forestry.api.apiculture.genetics.IBeeRoot;
-
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IGenome;
 import genetics.api.root.IRootDefinition;
+
+import forestry.api.apiculture.genetics.IBeeFactory;
+import forestry.api.apiculture.genetics.IBeeMutationFactory;
+import forestry.api.apiculture.genetics.IBeeRoot;
 
 /**
  * Some miscellaneous lists and settings for bees.

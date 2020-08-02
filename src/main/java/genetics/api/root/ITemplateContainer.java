@@ -25,7 +25,7 @@ public interface ITemplateContainer<I extends IIndividual> extends IRootComponen
 	/**
 	 * Registers a allele template using the UID of the first allele as identifier.
 	 */
-	ITemplateContainer<I> registerTemplate(IAlleleTemplate template);
+	ITemplateContainer registerTemplate(IAlleleTemplate template);
 
 	/**
 	 * Retrieves a registered template using the passed species unique identifier.

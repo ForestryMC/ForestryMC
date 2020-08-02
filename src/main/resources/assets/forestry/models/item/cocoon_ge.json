@@ -1,3 +1,23 @@
 {
-  "loader": "forestry:butterfly_cocoon"
+  "parent": "forestry:item/cocoon_early",
+  "overrides": [
+    {
+      "predicate": {
+        "age": 0
+      },
+      "model": "forestry:item/cocoon_early"
+    },
+    {
+      "predicate": {
+        "age": 1
+      },
+      "model": "forestry:item/cocoon_middle"
+    },
+    {
+      "predicate": {
+        "age": 2
+      },
+      "model": "forestry:item/cocoon_late"
+    }
+  ]
 }

@@ -72,7 +72,7 @@ public class ItemElectronTube extends ItemOverlay {
 		} else {
 			list.add(new StringTextComponent("<")
 				.append(new TranslationTextComponent("for.gui.noeffect")
-					.appendString(">").mergeStyle(TextFormatting.GRAY)));
+					.appendString(">")));
 		}
 	}
 

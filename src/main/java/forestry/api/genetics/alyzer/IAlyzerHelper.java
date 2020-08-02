@@ -1,8 +1,9 @@
 package forestry.api.genetics.alyzer;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
@@ -72,7 +73,7 @@ public interface IAlyzerHelper {
 
 	ItemStack getDisplayStack(IAlleleSpecies species);
 
-	void drawSpeciesRow(String caption, IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType, ITextComponent primaryName, ITextComponent secondaryName);
+	void drawSpeciesRow(String caption, IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType, @Nullable String primaryName, @Nullable String secondaryName);
 
 	class Column {
 		public static final int FIRST = 12;

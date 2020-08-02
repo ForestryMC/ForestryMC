@@ -13,28 +13,22 @@ package forestry.core.proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.settings.GraphicsFanciness;
-import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
-import forestry.core.items.EnumContainerType;
 import forestry.core.models.ClientManager;
-import forestry.core.models.FluidContainerModel;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
@@ -51,15 +45,17 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 		return Minecraft.getInstance().gameSettings.field_238330_f_ == GraphicsFanciness.FANCY;
 	}
 
+	@Override
+	public void initRendering() {
+		TextureManagerForestry textureManagerForestry = TextureManagerForestry.getInstance();
+
+		Minecraft minecraft = Minecraft.getInstance();
+		//minecraft.getTextureManager().loadTickableTexture(TextureManagerForestry.getInstance().getGuiTextureMap(), textureMap);// TODO: Gui atlas
+	}
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		for (EnumContainerType type : EnumContainerType.values()) {
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_empty", "inventory"));
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_filled", "inventory"));
-		}
 		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
 	}
 
 	@Override

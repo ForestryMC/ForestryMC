@@ -2,7 +2,6 @@
   "textures": {
     "butterfly": "forestry:item/butterflies/lepi_brimstone"
   },
-  "gui_light": "front",
   "elements": [
     {
       "from": [

@@ -1288,9 +1288,9 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	private void registerFluidsRecipes(RecipeDataHelper helper) {
 		ForestryFluids milk = ForestryFluids.MILK;
 		for (EnumContainerType containerType : EnumContainerType.values()) {
-			/*if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
+			if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
 				continue;
-			}*/
+			}
 			ItemStack filled = FluidsItems.getContainer(containerType, milk);
 			Ingredient ingredientNBT = createNbtIngredient(filled);
 			helper.moduleConditionRecipe(
