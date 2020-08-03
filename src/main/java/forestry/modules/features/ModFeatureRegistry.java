@@ -21,6 +21,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -230,7 +232,12 @@ public class ModFeatureRegistry {
 
 		@Override
 		public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer) {
-			return register(new FeatureEntityType<>(moduleID, identifier, consumer, factory, classification));
+			return entity(factory, classification, identifier, consumer, () -> LivingEntity.registerAttributes());
+		}
+
+		@Override
+		public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer, Supplier<AttributeModifierMap.MutableAttribute> attributes) {
+			return register(new FeatureEntityType<>(moduleID, identifier, consumer, factory, classification, attributes));
 		}
 
 		public IModFeature getFeature(String identifier) {

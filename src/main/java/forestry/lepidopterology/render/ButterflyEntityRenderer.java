@@ -19,10 +19,10 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.lepidopterology.entities.EntityButterfly;
 
-public class RenderButterflyEntity extends MobRenderer<EntityButterfly, ModelButterfly> {
+public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, ButterflyModel> {
 
-	public RenderButterflyEntity(EntityRendererManager manager) {
-		super(manager, new ModelButterfly(), 0.25f);
+	public ButterflyEntityRenderer(EntityRendererManager manager) {
+		super(manager, new ButterflyModel(), 0.25f);
 	}
 
 

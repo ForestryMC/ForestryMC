@@ -50,7 +50,6 @@ public class ModuleCrates extends BlankForestryModule {
 	@Override
 	public void setupAPI() {
 		StorageManager.crateRegistry = new CrateRegistry();
-		proxy.registerCrateModel();
 	}
 
 	@Override

@@ -10,7 +10,7 @@
           "name": "forestry:bee_drone_ge",
           "functions": [
             {
-              "function": "set_species_nbt",
+              "function": "forestry:set_species_nbt",
               "speciesUid": "forestry.speciesSteadfast"
             }
           ],
@@ -22,7 +22,7 @@
           "name": "forestry:bee_drone_ge",
           "functions": [
             {
-              "function": "set_species_nbt",
+              "function": "forestry:set_species_nbt",
               "speciesUid": "forestry.speciesTropical"
             },
             {

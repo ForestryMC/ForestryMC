@@ -1,6 +1,7 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "forestry:item/liquids/can.bottle"
-  }
+  "loader": "forestry:fluid_container",
+  "gui_light": "front",
+  "empty": "forestry:item/can_empty",
+  "filled": "forestry:item/can_filled",
+  "type": "can"
 }

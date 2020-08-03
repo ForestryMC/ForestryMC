@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -61,6 +62,8 @@ public interface IFeatureRegistry {
 	<E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier);
 
 	<E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer);
+
+	<E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer, Supplier<AttributeModifierMap.MutableAttribute> attributes);
 
 	FeatureFluid.Builder fluid(String identifier);
 

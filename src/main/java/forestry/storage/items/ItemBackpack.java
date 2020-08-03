@@ -71,9 +71,6 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 		this.definition = definition;
 		this.type = type;
-		/*addPropertyOverride(new ResourceLocation("mode"), (itemStack, world, livingEntity) -> {
-			return getMode(itemStack).ordinal();
-		});*/
 	}
 
 	public IBackpackDefinition getDefinition() {
@@ -255,8 +252,13 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		} else if (meta >= 1) {
 			return BackpackMode.LOCKED;
 		} else {
-			return BackpackMode.NORMAL;
+			return BackpackMode.NEUTRAL;
 		}
+	}
+
+	public static EnumBackpackType getType(ItemStack backpack) {
+		Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
+		return ((ItemBackpack) backpack.getItem()).type;
 	}
 
 	@Override

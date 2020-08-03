@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "inventory": {
+      "model": "forge:bucket",
+      "textures": {
+        "base": "forestry:item/liquids/refractory.bottle",
+        "fluid": "forestry:item/liquids/refractory.contents"
+      },
+      "transform": "forge:default-item"
+    }
+  }
+}

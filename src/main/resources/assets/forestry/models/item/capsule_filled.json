@@ -1,0 +1,9 @@
+{
+  "loader": "forge:bucket",
+  "gui_light": "front",
+  "fluid": "water",
+  "textures": {
+    "base": "forestry:item/liquids/capsule.bottle",
+    "fluid": "forestry:item/liquids/capsule.contents"
+  }
+}

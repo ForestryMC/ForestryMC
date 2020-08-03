@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.lepidopterology.entities.EntityButterfly;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelButterfly extends SegmentedModel<EntityButterfly> {
+public class ButterflyModel extends SegmentedModel<EntityButterfly> {
 
 	private final ModelRenderer wingRight;
 	private final ModelRenderer eyeRight;
@@ -36,7 +36,7 @@ public class ModelButterfly extends SegmentedModel<EntityButterfly> {
 
 	private float scale;
 
-	public ModelButterfly() {
+	public ButterflyModel() {
 		textureWidth = 64;
 		textureHeight = 32;
 
@@ -86,7 +86,7 @@ public class ModelButterfly extends SegmentedModel<EntityButterfly> {
 	@Override
 	public void render(MatrixStack transformation, IVertexBuilder builder, int packedLight, int packetLight2, float ageInTicks, float netHeadYaw, float headPitch, float alpha) {
 		transformation.scale(this.scale, this.scale, this.scale);
-		transformation.translate(0.0F, 20.0f / this.scale * scale, 0.0F);
+		transformation.translate(0.0F, 1.45f / scale, 0.0F);
 
 		super.render(transformation, builder, packedLight, packetLight2, ageInTicks, netHeadYaw, headPitch, alpha);
 	}

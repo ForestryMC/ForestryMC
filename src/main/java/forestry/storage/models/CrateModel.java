@@ -1,5 +1,8 @@
 package forestry.storage.models;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,7 +21,10 @@ import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.datafixers.util.Pair;
@@ -26,18 +32,22 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
+import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.core.config.Constants;
 import forestry.core.models.ClientManager;
 import forestry.core.utils.ResourceUtil;
+import forestry.storage.features.CreateItems;
 import forestry.storage.items.ItemCrated;
 
-//TODO this is pretty broken probably
 @OnlyIn(Dist.CLIENT)
-public class ModelCrate implements IModelGeometry<ModelCrate> {
+public class CrateModel implements IModelGeometry<CrateModel> {
 
 	private static final String CUSTOM_CRATES = "forestry:item/crates/";
 
@@ -50,7 +60,7 @@ public class ModelCrate implements IModelGeometry<ModelCrate> {
 	private final ItemCrated crated;
 	private final ItemStack contained;
 
-	public ModelCrate(ItemCrated crated) {
+	public CrateModel(ItemCrated crated) {
 		this.crated = crated;
 		this.contained = crated.getContained();
 	}
@@ -81,7 +91,7 @@ public class ModelCrate implements IModelGeometry<ModelCrate> {
 			IBakedModel bakedModel = bakery.getBakedModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), transform, spriteGetter);
 			if (bakedModel != null) {
 				//Set the crate color index to 100
-				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L))) {
+				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L), EmptyModelData.INSTANCE)) {
 					bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.func_187508_a(), quad.func_239287_f_()));
 				}
 			}
@@ -90,10 +100,10 @@ public class ModelCrate implements IModelGeometry<ModelCrate> {
 		List<BakedQuad> quads = new LinkedList<>(bakedQuads);
 		IBakedModel contentModel = getCustomContentModel(bakery, spriteGetter, transform);
 		if (contentModel == null) {
-			model = new ModelCrateBaked(quads, contained);
+			model = new CrateBakedModel(quads, contained);
 		} else {
-			quads.addAll(contentModel.getQuads(null, null, new Random(0)));
-			model = new ModelCrateBaked(quads);
+			quads.addAll(contentModel.getQuads(null, null, new Random(0), EmptyModelData.INSTANCE));
+			model = new CrateBakedModel(quads);
 		}
 		return new PerspectiveMapWrapper(model, ClientManager.getInstance().getDefaultItemState());
 	}
@@ -101,5 +111,26 @@ public class ModelCrate implements IModelGeometry<ModelCrate> {
 	@Override
 	public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 		return Collections.emptyList();
+	}
+
+	public static class Loader implements IModelLoader {
+
+		public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "crate-filled");
+
+		@Override
+		public void onResourceManagerReload(IResourceManager resourceManager) {
+			clearCachedQuads();
+		}
+
+		@Override
+		public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, JSONUtils.getString(modelContents, "variant"));
+			Item item = ForgeRegistries.ITEMS.getValue(registryName);
+			if (!(item instanceof ItemCrated)) {
+				return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CreateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);
+			}
+			ItemCrated crated = (ItemCrated) item;
+			return new CrateModel(crated);
+		}
 	}
 }

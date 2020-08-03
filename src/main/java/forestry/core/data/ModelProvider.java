@@ -33,6 +33,7 @@ import net.minecraft.util.math.vector.Vector3i;
 
 import forestry.modules.features.FeatureItem;
 
+//TODO: Migrate to forge system
 public abstract class ModelProvider implements IDataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();

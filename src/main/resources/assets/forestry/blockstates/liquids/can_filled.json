@@ -2,10 +2,10 @@
     "forge_marker": 1,
     "variants": {
         "inventory": {
-            "model": "forge:forgebucket",
+            "model": "forge:bucket",
             "textures": {
-              "base": "forestry:item/liquids/capsule.bottle",
-              "fluid": "forestry:item/liquids/capsule.contents"
+                "base": "forestry:item/liquids/can.bottle",
+                "fluid": "forestry:item/liquids/can.contents"
             },
             "transform": "forge:default-item"
         }
