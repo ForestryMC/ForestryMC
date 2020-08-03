@@ -51,8 +51,8 @@ public class BackpackItemModel extends AbstractItemModel {
                         );
                     }
                     modelBuilder.put(backpackType, modeModels.build());
-                    cachedBakedModels = modelBuilder.build();
                 }
+                cachedBakedModels = modelBuilder.build();
             }
             return new BackpackItemModel();
         }
@@ -68,7 +68,8 @@ public class BackpackItemModel extends AbstractItemModel {
 
         @Override
         public void onResourceManagerReload(IResourceManager resourceManager) {
-            cachedBakedModels = ImmutableMap.of();
+            // TODO: Find a way to clear the cache before the models get reloaded an not after
+            //cachedBakedModels = ImmutableMap.of();
         }
 
         @Override

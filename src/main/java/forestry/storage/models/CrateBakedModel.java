@@ -21,8 +21,8 @@ import java.util.Random;
 
 public class CrateBakedModel extends AbstractBakedModel {
     private static final float CONTENT_RENDER_OFFSET_X = 1f / 16f; // how far to offset content model from the left edge of the crate model
-    private static final float CONTENT_RENDER_OFFSET_Z = 1f / 128f; // how far to render the content model away from the crate model
-    private static final float CONTENT_RENDER_BLOCK_Z_SCALE = 1f / 16f + (2f * CONTENT_RENDER_OFFSET_Z); // how much to scale down blocks so they look flat on the crate model
+    private static final float CONTENT_RENDER_OFFSET_Z = 1f / 512f; // how far to render the content model away from the crate model
+    private static final float CONTENT_RENDER_BLOCK_Z_SCALE = 1f / 16f + CONTENT_RENDER_OFFSET_Z; // how much to scale down blocks so they look flat on the crate model
 
     private ContentModel contentModel;
 

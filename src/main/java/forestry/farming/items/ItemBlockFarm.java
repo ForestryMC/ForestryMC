@@ -26,6 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import net.minecraft.util.text.TextFormatting;
 
 public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
@@ -37,7 +38,7 @@ public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         if (Screen.hasShiftDown()) {
-            tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip"));
+            tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip").mergeStyle(TextFormatting.GRAY));
 			/*BlockFarm block = getBlock();
 			EnumFarmMaterial material = block.getFarmMaterial();
 			tooltip.add(new TranslationTextComponent("block.forestry.farm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(material.getFormatting())).appendText(" " + WordUtils.capitalize(material.getName().replace("_", ""))));*/

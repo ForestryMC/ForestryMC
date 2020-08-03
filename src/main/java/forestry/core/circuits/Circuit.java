@@ -18,6 +18,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
+import net.minecraft.util.text.TextFormatting;
 
 public abstract class Circuit implements ICircuit {
     private final String uid;
@@ -40,7 +41,7 @@ public abstract class Circuit implements ICircuit {
 
     @Override
     public void addTooltip(List<ITextComponent> list) {
-        list.add(new TranslationTextComponent(getTranslationKey()));
+        list.add(new TranslationTextComponent(getTranslationKey()).mergeStyle(TextFormatting.GRAY));
 
         int i = 1;
         while (true) {
@@ -49,7 +50,7 @@ public abstract class Circuit implements ICircuit {
             if (!ResourceUtil.canTranslate(component)) {
                 break;
             }
-            list.add(new StringTextComponent(" - ").append(component));
+            list.add(new StringTextComponent(" - ").append(component).mergeStyle(TextFormatting.GRAY));
             i++;
         }
     }
