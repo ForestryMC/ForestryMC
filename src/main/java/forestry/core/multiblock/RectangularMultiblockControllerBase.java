@@ -1,12 +1,11 @@
 package forestry.core.multiblock;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class RectangularMultiblockControllerBase extends MultiblockControllerForestry {
 

@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import javax.annotation.Nullable;
-
+import forestry.api.core.tooltips.IToolTipProvider;
+import forestry.api.core.tooltips.ToolTip;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.tooltips.IToolTipProvider;
-import forestry.api.core.tooltips.ToolTip;
+import javax.annotation.Nullable;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 

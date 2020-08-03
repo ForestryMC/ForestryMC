@@ -1,14 +1,5 @@
 package forestry.lepidopterology.genetics;
 
-import java.util.function.Function;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.alleles.IAlleleValue;
-
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.gatgets.DatabaseMode;
@@ -23,6 +14,12 @@ import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
+import genetics.api.alleles.IAlleleValue;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {

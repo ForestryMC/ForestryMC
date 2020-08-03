@@ -1,16 +1,5 @@
 package forestry.book.data.content;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.fluid.Fluid;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.book.BookContent;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.book.data.CraftingData;
@@ -19,6 +8,15 @@ import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
+import net.minecraft.fluid.Fluid;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorContent extends BookContent<CraftingData> {

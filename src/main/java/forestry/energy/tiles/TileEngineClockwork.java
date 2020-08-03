@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import javax.annotation.Nullable;
-
+import forestry.core.config.Constants;
+import forestry.core.tiles.TemperatureState;
+import forestry.core.utils.DamageSourceForestry;
+import forestry.energy.features.EnergyTiles;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,13 +21,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-
 import net.minecraftforge.common.util.FakePlayer;
 
-import forestry.core.config.Constants;
-import forestry.core.tiles.TemperatureState;
-import forestry.core.utils.DamageSourceForestry;
-import forestry.energy.features.EnergyTiles;
+import javax.annotation.Nullable;
 
 public class TileEngineClockwork extends TileEngine {
 

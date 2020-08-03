@@ -8,7 +8,6 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-
 import net.minecraftforge.common.ToolType;
 
 public class BlockAsh extends Block {

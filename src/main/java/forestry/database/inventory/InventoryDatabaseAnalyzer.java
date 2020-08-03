@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.database.inventory;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.database.tiles.TileDatabase;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import net.minecraft.item.ItemStack;
 
 public class InventoryDatabaseAnalyzer extends InventoryAdapterTile<TileDatabase> {
     public static final int SLOT_ENERGY = 0;

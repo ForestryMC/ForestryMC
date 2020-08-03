@@ -1,11 +1,10 @@
 package forestry.modules.features;
 
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
-
+import forestry.core.config.Constants;
 import net.minecraft.item.Item;
 
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class FeatureItem<I extends Item> implements IItemFeature<I>, Supplier<I> {
     private final String moduleID;

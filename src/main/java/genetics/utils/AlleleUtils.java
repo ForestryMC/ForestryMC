@@ -1,5 +1,12 @@
 package genetics.utils;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosomeAllele;
+import genetics.api.individual.IChromosomeType;
+import net.minecraft.util.ResourceLocation;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Optional;
@@ -7,14 +14,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import net.minecraft.util.ResourceLocation;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosomeAllele;
-import genetics.api.individual.IChromosomeType;
 
 public class AlleleUtils {
 

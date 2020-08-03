@@ -1,12 +1,11 @@
 package forestry.modules.features;
 
+import forestry.api.core.IItemSubtype;
+import net.minecraft.item.Item;
+
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import net.minecraft.item.Item;
-
-import forestry.api.core.IItemSubtype;
 
 public class FeatureItemGroup<I extends Item, S extends IItemSubtype> extends FeatureGroup<FeatureItemGroup.Builder<I, S>, FeatureItem<I>, S> {
 

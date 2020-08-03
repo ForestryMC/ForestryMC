@@ -1,12 +1,11 @@
 package genetics.api.individual;
 
-import java.util.Random;
-
-import net.minecraft.nbt.CompoundNBT;
-
 import genetics.api.IGeneticFactory;
 import genetics.api.IGeneticSaveHandler;
 import genetics.api.alleles.IAllele;
+import net.minecraft.nbt.CompoundNBT;
+
+import java.util.Random;
 
 
 /**

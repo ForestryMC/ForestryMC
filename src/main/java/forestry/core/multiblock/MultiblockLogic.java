@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import javax.annotation.Nullable;
-
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.utils.Log;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.utils.Log;
+import javax.annotation.Nullable;
 
 public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> implements IMultiblockLogic {
     private final Class<T> controllerClass;

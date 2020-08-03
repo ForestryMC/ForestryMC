@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.ItemGroupForestry;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -17,8 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-
-import forestry.core.ItemGroupForestry;
 
 public class ItemAssemblyKit extends ItemForestry {
     private final ItemStack assembled;

@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import net.minecraft.world.World;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.api.root.IIndividualRoot;
-
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.IButterflyMutation;
 import forestry.api.lepidopterology.genetics.IButterflyMutationBuilder;
 import forestry.core.genetics.mutations.Mutation;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.root.IIndividualRoot;
+import net.minecraft.world.World;
 
 public class ButterflyMutation extends Mutation implements IButterflyMutation, IButterflyMutationBuilder {
 

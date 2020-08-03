@@ -10,28 +10,6 @@
  ******************************************************************************/
 package forestry.storage;
 
-import java.awt.Color;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.fml.InterModComms;
-
 import forestry.Forestry;
 import forestry.api.modules.ForestryModule;
 import forestry.api.storage.BackpackManager;
@@ -46,11 +24,7 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.features.CoreItems;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.utils.IMCUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.OreDictUtil;
-import forestry.core.utils.Translator;
+import forestry.core.utils.*;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -58,6 +32,20 @@ import forestry.modules.features.FeatureItem;
 import forestry.storage.features.BackpackContainers;
 import forestry.storage.features.BackpackItems;
 import forestry.storage.gui.GuiBackpack;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.InterModComms;
+
+import java.awt.*;
+import java.io.File;
+import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
 
 @ForestryModule(moduleID = ForestryModuleUids.BACKPACKS, containerID = Constants.MOD_ID, name = "Backpack", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.backpacks.description", lootTable = "storage")
 public class ModuleBackpacks extends BlankForestryModule {

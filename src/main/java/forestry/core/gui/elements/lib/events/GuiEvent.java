@@ -1,11 +1,10 @@
 package forestry.core.gui.elements.lib.events;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IWindowElement;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiEvent extends GuiElementEvent {

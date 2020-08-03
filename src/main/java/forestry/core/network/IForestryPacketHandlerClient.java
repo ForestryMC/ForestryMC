@@ -1,11 +1,10 @@
 package forestry.core.network;
 
-import java.io.IOException;
-
 import net.minecraft.entity.player.PlayerEntity;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public interface IForestryPacketHandlerClient extends IForestryPacketHandler {

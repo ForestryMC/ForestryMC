@@ -1,11 +1,11 @@
 package forestry.api.core.tooltips;
 
+import net.minecraft.util.text.ITextComponent;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.util.text.ITextComponent;
 
 public class TextCollection implements ITextInstance<TextCollection, TextCompound, TextCollection> {
     private final List<ITextComponent> lines = new ArrayList<>();

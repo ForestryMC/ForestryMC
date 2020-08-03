@@ -5,18 +5,16 @@
  ******************************************************************************/
 package forestry.api.modules;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Set;
-
+import com.mojang.brigadier.Command;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
-
-import com.mojang.brigadier.Command;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Defines a Forestry module.

@@ -1,11 +1,10 @@
 package forestry.arboriculture.items;
 
+import forestry.arboriculture.blocks.BlockForestryDoor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-
-import forestry.arboriculture.blocks.BlockForestryDoor;
 
 //TODO eg    public static final Item OAK_DOOR = register(new TallBlockItem(Blocks.OAK_DOOR, (new Item.Properties()).group(ItemGroup.REDSTONE)));
 public class ItemBlockWoodDoor extends ItemBlockWood<BlockForestryDoor> {

@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-import java.util.function.Predicate;
-
+import forestry.core.utils.Log;
 import net.minecraft.resources.IResourceManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
-import forestry.core.utils.Log;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.function.Predicate;
 
 @OnlyIn(Dist.CLIENT)
 public class ColourProperties implements ISelectiveResourceReloadListener {

@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.core.IToolPipette;
+import forestry.core.ItemGroupForestry;
+import forestry.core.fluids.PipetteContents;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -28,9 +27,8 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
-import forestry.api.core.IToolPipette;
-import forestry.core.ItemGroupForestry;
-import forestry.core.fluids.PipetteContents;
+import javax.annotation.Nullable;
+import java.util.List;
 
 //import net.minecraft.client.renderer.ItemMeshDefinition;
 

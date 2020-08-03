@@ -1,12 +1,9 @@
 package forestry.core.worldgen;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.arboriculture.worldgen.ITreeBlockType;
+import forestry.arboriculture.worldgen.TreeBlockType;
+import forestry.core.utils.VectUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
@@ -19,10 +16,8 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.arboriculture.worldgen.ITreeBlockType;
-import forestry.arboriculture.worldgen.TreeBlockType;
-import forestry.core.utils.VectUtil;
+import javax.annotation.Nullable;
+import java.util.*;
 //import forestry.arboriculture.worldgen.ITreeBlockType;
 //import forestry.arboriculture.worldgen.TreeBlockType;
 

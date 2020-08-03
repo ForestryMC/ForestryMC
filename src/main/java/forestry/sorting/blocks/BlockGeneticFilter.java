@@ -1,7 +1,8 @@
 package forestry.sorting.blocks;
 
-import javax.annotation.Nullable;
-
+import forestry.core.blocks.BlockForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.sorting.tiles.TileGeneticFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -17,12 +18,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.core.blocks.BlockForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.sorting.tiles.TileGeneticFilter;
+import javax.annotation.Nullable;
 
 public class BlockGeneticFilter extends BlockForestry {
     public static final BooleanProperty NORTH = BooleanProperty.create("north");

@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.mail.inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.TradeStation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Direction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryTradeStation extends InventoryAdapter {
 

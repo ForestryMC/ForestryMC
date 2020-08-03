@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
@@ -24,6 +18,10 @@ import forestry.api.apiculture.genetics.IBeeMutation;
 import forestry.api.apiculture.genetics.IBeeMutationBuilder;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.core.genetics.mutations.Mutation;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationBuilder {
 

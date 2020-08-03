@@ -1,28 +1,19 @@
 package genetics.individual;
 
 import com.google.common.base.MoreObjects;
-
-import java.util.Arrays;
-
-import net.minecraft.nbt.CompoundNBT;
-
+import genetics.ApiInstance;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeAllele;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IChromosomeValue;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeWrapper;
-import genetics.api.individual.IKaryotype;
+import genetics.api.individual.*;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
-
-import genetics.ApiInstance;
 import genetics.utils.AlleleUtils;
+import net.minecraft.nbt.CompoundNBT;
+
+import java.util.Arrays;
 
 public final class Genome implements IGenome {
     private final IChromosome[] chromosomes;

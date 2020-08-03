@@ -1,23 +1,20 @@
 package forestry.book.gui.buttons;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import forestry.api.book.IBookEntry;
+import forestry.book.gui.GuiForesterBook;
+import forestry.core.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.text.ITextComponent;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.book.IBookEntry;
-import forestry.book.gui.GuiForesterBook;
-import forestry.core.gui.GuiUtil;
+import java.util.Collections;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiButtonSubEntry extends Button {

@@ -1,9 +1,9 @@
 package forestry.core.config;
 
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import java.text.NumberFormat;
 import java.util.Locale;
-
-import net.minecraftforge.client.MinecraftForgeClient;
 
 public enum EnergyDisplayMode {
     RF("RF", 1),

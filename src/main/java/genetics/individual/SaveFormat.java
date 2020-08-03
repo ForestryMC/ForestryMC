@@ -1,19 +1,16 @@
 package genetics.individual;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.Constants;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
-
 import genetics.utils.SimpleByteBuf;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
 
 public enum SaveFormat {
     //Used before forge fires the FMLLoadCompleteEvent.

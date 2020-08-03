@@ -1,21 +1,18 @@
 package forestry.farming.blocks;
 
 import com.google.common.collect.ImmutableList;
-
-import javax.annotation.Nullable;
-import java.util.Locale;
-
+import forestry.api.core.IBlockSubtype;
+import forestry.core.config.Constants;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.core.config.Constants;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
+import java.util.Locale;
 
 public enum EnumFarmBlockType implements IBlockSubtype {
     PLAIN,

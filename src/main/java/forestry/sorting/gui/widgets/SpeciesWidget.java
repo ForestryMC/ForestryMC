@@ -2,27 +2,7 @@ package forestry.sorting.gui.widgets;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.AlleleUtils;
-import genetics.utils.RootUtils;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -35,6 +15,21 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class SpeciesWidget extends Widget implements ISelectableProvider<IAlleleSpecies> {
     private final static ImmutableMap<IAlleleSpecies, ItemStack> ITEMS = createEntries();

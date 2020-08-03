@@ -1,14 +1,9 @@
 package forestry.core.utils.datastructures;
 
-import java.util.AbstractSet;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+
+import java.util.*;
 
 /**
  * A set with fast {@link #contains(Object)} for BlockState

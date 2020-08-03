@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import java.awt.Color;
-import java.util.EnumMap;
-import java.util.Locale;
-
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.tiles.IRenderableTile;
+import forestry.core.tiles.TileBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
@@ -22,13 +24,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.tiles.IRenderableTile;
-import forestry.core.tiles.TileBase;
+import java.awt.*;
+import java.util.EnumMap;
+import java.util.Locale;
 
 public class RenderMachine implements IForestryRenderer<TileBase> {
 

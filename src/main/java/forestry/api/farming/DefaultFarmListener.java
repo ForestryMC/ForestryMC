@@ -5,11 +5,11 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import java.util.Collection;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Collection;
 
 /**
  * Easily extendable default farmListener.

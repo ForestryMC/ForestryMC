@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import java.io.IOException;
-
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.core.gui.ContainerNaturalistInventory;
+import forestry.core.gui.IPagedInventory;
+import forestry.core.inventory.InventoryNaturalistChest;
+import forestry.core.network.PacketBufferForestry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,17 +26,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.core.gui.ContainerNaturalistInventory;
-import forestry.core.gui.IPagedInventory;
-import forestry.core.inventory.InventoryNaturalistChest;
-import forestry.core.network.PacketBufferForestry;
+import java.io.IOException;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
     private static final float lidAngleVariationPerTick = 0.1F;

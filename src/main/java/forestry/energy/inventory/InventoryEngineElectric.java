@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.energy.inventory;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.energy.tiles.TileEngineElectric;
+import net.minecraft.item.ItemStack;
 
 //import ic2.api.item.ElectricItem;
 

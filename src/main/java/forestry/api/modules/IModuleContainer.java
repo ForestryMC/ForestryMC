@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.modules;
 
-import java.util.Collection;
-
 import forestry.core.config.forge_old.Configuration;
+
+import java.util.Collection;
 
 public interface IModuleContainer {
     /**

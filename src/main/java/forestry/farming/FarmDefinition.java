@@ -1,14 +1,5 @@
 package forestry.farming;
 
-import java.util.function.BiFunction;
-
-import org.apache.commons.lang3.text.WordUtils;
-
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.IStringSerializable;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
@@ -30,19 +21,16 @@ import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemFruit;
 import forestry.core.utils.ForgeUtils;
 import forestry.farming.circuits.CircuitFarmLogic;
-import forestry.farming.logic.FarmLogicArboreal;
-import forestry.farming.logic.FarmLogicCocoa;
-import forestry.farming.logic.FarmLogicCrops;
-import forestry.farming.logic.FarmLogicEnder;
-import forestry.farming.logic.FarmLogicGourd;
-import forestry.farming.logic.FarmLogicInfernal;
-import forestry.farming.logic.FarmLogicMushroom;
-import forestry.farming.logic.FarmLogicOrchard;
-import forestry.farming.logic.FarmLogicPeat;
-import forestry.farming.logic.FarmLogicReeds;
-import forestry.farming.logic.FarmLogicSucculent;
+import forestry.farming.logic.*;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.IStringSerializable;
+import org.apache.commons.lang3.text.WordUtils;
+
+import java.util.function.BiFunction;
 
 public enum FarmDefinition implements IStringSerializable {
     CROPS("crops", EnumElectronTube.BRONZE, FarmLogicCrops::new) {

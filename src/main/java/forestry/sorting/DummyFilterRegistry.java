@@ -1,13 +1,13 @@
 package forestry.sorting;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-
 import forestry.api.core.ILocatable;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.genetics.filter.IFilterRegistry;
 import forestry.api.genetics.filter.IFilterRuleType;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 
 public class DummyFilterRegistry implements IFilterRegistry {
     @Override

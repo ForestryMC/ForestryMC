@@ -1,16 +1,16 @@
 package genetics.individual;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeList;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IChromosomeTypeBuilder;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ChromosomeList implements IChromosomeList {
     private final String rootUID;

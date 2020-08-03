@@ -10,15 +10,6 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.TileUtil;
@@ -29,6 +20,14 @@ import forestry.mail.POBoxInfo;
 import forestry.mail.features.MailContainers;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import forestry.mail.tiles.TileMailbox;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+
+import javax.annotation.Nullable;
 
 public class ContainerMailbox extends ContainerTile<TileMailbox> {
 

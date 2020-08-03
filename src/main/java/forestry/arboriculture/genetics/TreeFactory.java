@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.awt.Color;
-
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.genetics.ITreeFactory;
 import forestry.arboriculture.genetics.alleles.AlleleTreeSpecies;
 import forestry.arboriculture.models.SpriteProviderLeaves;
+
+import java.awt.*;
 
 public class TreeFactory implements ITreeFactory {
 

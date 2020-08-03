@@ -1,13 +1,6 @@
 package forestry.sorting.gui.widgets;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.Widget;
@@ -16,6 +9,11 @@ import forestry.core.gui.widgets.WidgetScrollBar;
 import forestry.core.utils.Translator;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
 
 public class SelectionWidget extends Widget {
     public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/filter_selection.png");

@@ -11,13 +11,10 @@
 package forestry.core;
 
 import com.google.common.collect.LinkedListMultimap;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.utils.WorldUtils;
+import forestry.modules.ModuleManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.RegistryKey;
@@ -26,15 +23,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
-
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.utils.WorldUtils;
-import forestry.modules.ModuleManager;
+import java.util.*;
 
 public class TickHandlerCoreServer {
 

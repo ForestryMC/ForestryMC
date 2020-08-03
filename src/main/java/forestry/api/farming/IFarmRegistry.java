@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import net.minecraft.item.ItemStack;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
-
-import net.minecraft.item.ItemStack;
 
 public interface IFarmRegistry {
 

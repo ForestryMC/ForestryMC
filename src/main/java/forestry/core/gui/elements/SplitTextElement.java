@@ -1,18 +1,16 @@
 package forestry.core.gui.elements;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.gui.elements.lib.ITextElement;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.gui.elements.lib.ITextElement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static forestry.core.gui.elements.LabelElement.FONT_RENDERER;
 

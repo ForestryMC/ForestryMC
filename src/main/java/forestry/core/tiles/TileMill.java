@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import java.io.IOException;
-
+import forestry.core.network.PacketBufferForestry;
 import net.minecraft.tileentity.TileEntityType;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.network.PacketBufferForestry;
+import java.io.IOException;
 
 //TODO - move to factory?
 public abstract class TileMill extends TileBase {

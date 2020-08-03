@@ -10,15 +10,10 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
+import forestry.core.gui.IGuiSelectable;
+import forestry.core.network.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-
-import forestry.core.gui.IGuiSelectable;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketHandlerServer;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdServer;
 
 public class PacketGuiSelectRequest extends ForestryPacket implements IForestryPacketServer {
     private final int primaryIndex;

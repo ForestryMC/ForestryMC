@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import java.awt.Color;
-import java.util.Random;
-
+import forestry.modules.features.FeatureFluid;
+import forestry.modules.features.FluidProperties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -31,8 +30,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.modules.features.FeatureFluid;
-import forestry.modules.features.FluidProperties;
+import java.awt.*;
+import java.util.Random;
 
 public class BlockForestryFluid extends FlowingFluidBlock {
 

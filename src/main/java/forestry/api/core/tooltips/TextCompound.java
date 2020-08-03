@@ -1,9 +1,9 @@
 package forestry.api.core.tooltips;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+
+import javax.annotation.Nullable;
 
 /**
  * Helper class to allow simple appending of siblings to a text collection.

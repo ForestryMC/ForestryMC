@@ -9,6 +9,6 @@
 //@API(apiVersion = "4.1.0", owner = "ForestryAPI|apiculture", provides = "ForestryAPI|hives")
 package forestry.api.apiculture.hives;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

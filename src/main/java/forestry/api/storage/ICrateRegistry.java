@@ -5,11 +5,10 @@
  ******************************************************************************/
 package forestry.api.storage;
 
+import forestry.api.core.IItemProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import forestry.api.core.IItemProvider;
 
 /**
  * Makes a new crate, registers it with the game registry,

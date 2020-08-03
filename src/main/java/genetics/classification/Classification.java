@@ -1,15 +1,13 @@
 package genetics.classification;
 
+import genetics.ApiInstance;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.classification.IClassification;
+import net.minecraft.client.resources.I18n;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import net.minecraft.client.resources.I18n;
-
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.classification.IClassification;
-
-import genetics.ApiInstance;
 
 public class Classification implements IClassification {
 

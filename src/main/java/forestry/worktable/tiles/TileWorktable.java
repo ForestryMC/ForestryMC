@@ -11,28 +11,6 @@
 package forestry.worktable.tiles;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.List;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
-
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.inventory.wrappers.InventoryMapper;
@@ -47,6 +25,25 @@ import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.inventory.InventoryWorktable;
 import forestry.worktable.recipes.MemorizedRecipe;
 import forestry.worktable.recipes.RecipeMemory;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.List;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
     private RecipeMemory recipeMemory;

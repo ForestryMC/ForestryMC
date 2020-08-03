@@ -8,9 +8,9 @@
 //@API(apiVersion = "5.8.1", owner = "ForestryAPI|core", provides = "ForestryAPI|book")
 package forestry.api.book;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //import net.minecraftforge.fml.common.API;
 //TODO API

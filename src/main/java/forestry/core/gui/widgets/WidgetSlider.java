@@ -2,7 +2,6 @@ package forestry.core.gui.widgets;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import forestry.core.gui.Drawable;
 
 public class WidgetSlider extends Widget {

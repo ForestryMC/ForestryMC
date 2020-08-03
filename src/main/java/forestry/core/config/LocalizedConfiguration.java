@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import java.io.File;
-import java.util.Arrays;
-
-import org.apache.commons.lang3.text.WordUtils;
-
 import forestry.core.config.forge_old.Configuration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.utils.Translator;
+import org.apache.commons.lang3.text.WordUtils;
+
+import java.io.File;
+import java.util.Arrays;
 
 public class LocalizedConfiguration extends Configuration {
 

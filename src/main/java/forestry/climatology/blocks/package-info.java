@@ -13,8 +13,7 @@
 @MethodsReturnNonnullByDefault
 package forestry.climatology.blocks;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
+import forestry.core.utils.FieldsAreNonnullByDefault;
 import mcp.MethodsReturnNonnullByDefault;
 
-import forestry.core.utils.FieldsAreNonnullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

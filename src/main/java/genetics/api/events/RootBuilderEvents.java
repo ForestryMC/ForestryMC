@@ -1,15 +1,5 @@
 package genetics.api.events;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.IGenericEvent;
-
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.ISpeciesDefinition;
 import genetics.api.root.IGeneticListener;
@@ -17,6 +7,11 @@ import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.IGenericEvent;
+
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * A collection of events that are fired by the {@link IIndividualRootBuilder}.

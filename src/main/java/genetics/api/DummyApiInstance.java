@@ -1,11 +1,5 @@
 package genetics.api;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-
-import net.minecraftforge.fml.ModLoadingContext;
-
 import genetics.api.alleles.IAlleleHelper;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.classification.IClassificationRegistry;
@@ -16,6 +10,11 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IIndividualRootHelper;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.IRootComponentRegistry;
+import net.minecraftforge.fml.ModLoadingContext;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 public class DummyApiInstance implements IGeneticApiInstance {
     private static final String ERROR_MESSAGE = "The mod %s tried to access the genetics api without checking if the mod is present. Please report this to the mod author.";

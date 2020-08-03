@@ -10,9 +10,14 @@
  ******************************************************************************/
 package forestry.climatology.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.climate.IClimateHousing;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
+import forestry.core.climate.ClimateRoot;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,18 +34,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTransformer;
-import forestry.core.climate.ClimateRoot;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.StringUtil;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 

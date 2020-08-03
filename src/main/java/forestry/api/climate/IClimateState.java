@@ -5,13 +5,12 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-
-import net.minecraft.world.biome.Biome;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import net.minecraft.world.biome.Biome;
+
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * A {@link IClimateState} is used to store and handle temperature and humidity.

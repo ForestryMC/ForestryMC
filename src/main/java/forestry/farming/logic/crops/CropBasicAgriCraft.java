@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.farming.logic.crops;
 
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.core.utils.BlockUtil;
 
 public class CropBasicAgriCraft extends Crop {
 

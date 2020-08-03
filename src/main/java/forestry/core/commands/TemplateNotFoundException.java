@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import net.minecraft.command.CommandException;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public class TemplateNotFoundException extends CommandException {
 

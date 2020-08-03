@@ -1,12 +1,11 @@
 package forestry.core.gui.slots;
 
-import javax.annotation.Nullable;
-import java.util.function.Function;
-
+import forestry.core.render.TextureManagerForestry;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.core.render.TextureManagerForestry;
+import javax.annotation.Nullable;
+import java.util.function.Function;
 
 public interface ISlotTextured {
 

@@ -1,7 +1,10 @@
 package forestry.core.gui.elements;
 
-import javax.annotation.Nullable;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.gui.Drawable;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -13,16 +16,10 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.Drawable;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
 
 public class TankElement extends GuiElement {
     /* Attributes - Final */

@@ -5,15 +5,13 @@
  ******************************************************************************/
 package forestry.api.genetics.gatgets;
 
-import java.util.List;
-import java.util.Map;
-
+import genetics.api.individual.IIndividual;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IIndividual;
+import java.util.List;
+import java.util.Map;
 
 /**
  * An ISpeciesPlugin provides methods that are used in the alyzer and database to display information about an

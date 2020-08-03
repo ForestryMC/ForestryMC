@@ -1,14 +1,5 @@
 package forestry.lepidopterology;
 
-import java.util.Locale;
-
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterData;
 import forestry.api.genetics.filter.IFilterRule;
@@ -16,6 +7,13 @@ import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.core.render.TextureManagerForestry;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Locale;
 
 public enum LepidopterologyFilterRuleType implements IFilterRuleType {
     FLUTTER {

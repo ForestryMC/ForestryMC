@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 

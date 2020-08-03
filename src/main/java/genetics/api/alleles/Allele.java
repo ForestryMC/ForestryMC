@@ -1,14 +1,12 @@
 package genetics.api.alleles;
 
 import com.google.common.base.MoreObjects;
-
-import java.util.Objects;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-
 import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import java.util.Objects;
 
 /**
  * A default implementation of a simple allele.

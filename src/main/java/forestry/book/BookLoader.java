@@ -1,24 +1,16 @@
 package forestry.book;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import javax.annotation.Nullable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-
+import com.google.gson.*;
+import forestry.api.book.*;
+import forestry.book.data.EntryData;
+import forestry.book.data.content.*;
+import forestry.book.data.deserializer.BookCategoryDeserializer;
+import forestry.book.data.deserializer.BookContentDeserializer;
+import forestry.book.pages.JsonPageFactory;
+import forestry.core.utils.JsonUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.ResourceUtil;
+import forestry.modules.ModuleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
 import net.minecraft.item.ItemStack;
@@ -27,31 +19,15 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.commons.io.IOUtils;
 
-import forestry.api.book.BookContent;
-import forestry.api.book.IBookEntryBuilder;
-import forestry.api.book.IBookLoader;
-import forestry.api.book.IBookPageFactory;
-import forestry.api.book.IForesterBook;
-import forestry.book.data.EntryData;
-import forestry.book.data.content.CarpenterContent;
-import forestry.book.data.content.CraftingContent;
-import forestry.book.data.content.FabricatorContent;
-import forestry.book.data.content.ImageContent;
-import forestry.book.data.content.IndexContent;
-import forestry.book.data.content.MutationContent;
-import forestry.book.data.content.StructureContent;
-import forestry.book.data.content.TextContent;
-import forestry.book.data.deserializer.BookCategoryDeserializer;
-import forestry.book.data.deserializer.BookContentDeserializer;
-import forestry.book.pages.JsonPageFactory;
-import forestry.core.utils.JsonUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.ResourceUtil;
-import forestry.modules.ModuleHelper;
+import javax.annotation.Nullable;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.*;
 
 //TODO use selective resource reloader
 @OnlyIn(Dist.CLIENT)

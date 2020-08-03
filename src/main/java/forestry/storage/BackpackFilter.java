@@ -1,13 +1,12 @@
 package forestry.storage;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import forestry.api.storage.IBackpackFilterConfigurable;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.storage.IBackpackFilterConfigurable;
-import forestry.core.utils.ItemStackUtil;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BackpackFilter implements IBackpackFilterConfigurable {
     private final Set<String> acceptedItemStacks = new HashSet<>();

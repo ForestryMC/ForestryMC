@@ -5,13 +5,12 @@
  ******************************************************************************/
 package forestry.api.book;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 @OnlyIn(Dist.CLIENT)
 public interface IBookCategory {

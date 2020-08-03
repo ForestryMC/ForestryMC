@@ -1,23 +1,20 @@
 package forestry.factory.recipes.jei;
 
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.modules.ForestryModuleUids;
-
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
+import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.List;
 //import forestry.core.utils.JeiUtil;
 //import forestry.factory.recipes.jei.bottler.BottlerRecipeCategory;
 //import forestry.factory.recipes.jei.bottler.BottlerRecipeMaker;

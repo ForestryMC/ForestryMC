@@ -11,12 +11,11 @@
 package forestry.core.network;
 
 
-import javax.annotation.Nullable;
-
+import forestry.core.network.packets.PacketHandlerDummyClient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.network.packets.PacketHandlerDummyClient;
+import javax.annotation.Nullable;
 
 /**
  * Packets sent to the client from the server

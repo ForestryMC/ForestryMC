@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.List;
-
+import forestry.core.gui.slots.SlotForestry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
@@ -19,7 +18,7 @@ import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.slots.SlotForestry;
+import java.util.List;
 
 public abstract class SlotUtil {
 

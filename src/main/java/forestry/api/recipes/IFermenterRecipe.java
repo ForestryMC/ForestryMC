@@ -5,12 +5,11 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
 
 public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenterRecipe> {
 

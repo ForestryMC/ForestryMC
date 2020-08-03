@@ -1,19 +1,17 @@
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.tiles.TileUtil;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TreeGrowthHelper {
     @Nullable

@@ -10,18 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
+import forestry.core.gui.GuiForestry;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.GuiForestry;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class WidgetManager {

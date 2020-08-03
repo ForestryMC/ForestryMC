@@ -1,14 +1,13 @@
 package forestry.arboriculture.items;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.BlockForestrySlab;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 public class ItemBlockWoodSlab extends BlockItem {
 

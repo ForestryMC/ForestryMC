@@ -1,8 +1,8 @@
 package forestry.sorting;
 
-import javax.annotation.Nullable;
-
 import genetics.api.alleles.IAllele;
+
+import javax.annotation.Nullable;
 
 
 public class AlleleFilter {

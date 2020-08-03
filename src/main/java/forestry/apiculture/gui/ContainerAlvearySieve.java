@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.apiculture.multiblock.TileAlvearySieve;
@@ -21,6 +18,8 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 

@@ -1,34 +1,18 @@
 package genetics.alleles;
 
 import com.google.common.collect.HashMultimap;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
+import genetics.Genetics;
+import genetics.api.alleles.Allele;
+import genetics.api.alleles.*;
+import genetics.api.classification.IClassification;
+import genetics.api.individual.IChromosomeType;
 import net.minecraft.util.ResourceLocation;
-
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
-import net.minecraftforge.fml.ModLoadingContext;
-
-import genetics.api.alleles.Allele;
-import genetics.api.alleles.AlleleCategorizedValue;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleData;
-import genetics.api.alleles.IAlleleHandler;
-import genetics.api.alleles.IAlleleRegistry;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.classification.IClassification;
-import genetics.api.individual.IChromosomeType;
-
-import genetics.Genetics;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class AlleleRegistry implements IAlleleRegistry {
 

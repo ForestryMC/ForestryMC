@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IMutationCondition;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.utils.Translator;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 public class MutationConditionTemperature implements IMutationCondition {
 

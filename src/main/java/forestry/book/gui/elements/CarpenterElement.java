@@ -1,16 +1,5 @@
 package forestry.book.gui.elements;
 
-import java.util.Collection;
-import java.util.stream.Stream;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.config.Constants;
@@ -18,6 +7,15 @@ import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
 import forestry.factory.recipes.CarpenterRecipeManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Collection;
+import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {

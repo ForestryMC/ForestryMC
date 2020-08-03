@@ -7,7 +7,6 @@ package forestry.api.storage;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
-
 import net.minecraftforge.eventbus.api.Cancelable;
 
 /**

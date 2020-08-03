@@ -3,8 +3,7 @@
 @MethodsReturnNonnullByDefault
 package forestry.core.gui.buttons;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
+import forestry.core.utils.FieldsAreNonnullByDefault;
 import mcp.MethodsReturnNonnullByDefault;
 
-import forestry.core.utils.FieldsAreNonnullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;

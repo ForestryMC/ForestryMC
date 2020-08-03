@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.util.NonNullList;
-
 import forestry.api.recipes.IForestryRecipe;
 import forestry.core.utils.InventoryUtil;
+import net.minecraft.util.NonNullList;
+
+import javax.annotation.Nullable;
 
 public class RecipePair<R extends IForestryRecipe> {
 

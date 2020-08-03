@@ -5,12 +5,11 @@
  ******************************************************************************/
 package forestry.api.book;
 
-import java.util.Collection;
-
+import forestry.core.gui.elements.lib.IGuiElement;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import java.util.Collection;
 
 /**
  * A factory that creates book pages for a book entry.

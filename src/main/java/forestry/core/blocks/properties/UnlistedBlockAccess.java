@@ -11,7 +11,6 @@
 package forestry.core.blocks.properties;
 
 import net.minecraft.world.IBlockReader;
-
 import net.minecraftforge.client.model.data.ModelProperty;
 
 public final class UnlistedBlockAccess extends ModelProperty<IBlockReader> {

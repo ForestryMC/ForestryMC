@@ -1,21 +1,18 @@
 package forestry.book.gui.elements;
 
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.book.data.IndexEntry;
 import forestry.book.gui.GuiForesterBook;
 import forestry.book.gui.GuiForestryBookPages;
 import forestry.core.gui.elements.LabelElement;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 import forestry.core.gui.elements.lib.events.GuiEvent;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class IndexElement extends VerticalLayout {

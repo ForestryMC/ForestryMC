@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import java.util.function.Predicate;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+
+import java.util.function.Predicate;
 
 /**
  * To make your own backpack, create a backpack definition and register it with

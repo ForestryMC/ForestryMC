@@ -1,7 +1,10 @@
 package forestry.apiculture.genetics.alleles;
 
-import java.util.List;
-
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.genetics.EffectData;
+import forestry.core.utils.VectUtil;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,12 +18,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.EffectData;
-import forestry.core.utils.VectUtil;
+import java.util.List;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 

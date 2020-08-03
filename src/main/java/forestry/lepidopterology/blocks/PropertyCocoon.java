@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
+import forestry.core.blocks.properties.PropertyAllele;
+import genetics.utils.AlleleUtils;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import genetics.utils.AlleleUtils;
-
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
-import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
-import forestry.core.blocks.properties.PropertyAllele;
 
 public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
     private static final Map<String, IAlleleButterflyCocoon> namesMap = new HashMap<>();

@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITreeMutation;
@@ -23,6 +17,10 @@ import forestry.api.arboriculture.genetics.ITreeMutationBuilder;
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.climate.ClimateManager;
 import forestry.core.genetics.mutations.Mutation;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TreeMutation extends Mutation implements ITreeMutation, ITreeMutationBuilder {
 

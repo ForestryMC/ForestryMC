@@ -10,15 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
@@ -29,6 +20,13 @@ import forestry.apiculture.gui.ContainerAlvearySieve;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 
 public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.BeeListener {
 

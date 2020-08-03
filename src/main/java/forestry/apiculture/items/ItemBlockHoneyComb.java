@@ -1,15 +1,13 @@
 package forestry.apiculture.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.blocks.BlockHoneyComb;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemBlockHoneyComb extends ItemBlockForestry<BlockHoneyComb> implements IColoredItem {
 

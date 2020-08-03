@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.mail.blocks;
 
-import java.util.function.Supplier;
-
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.mail.features.MailTiles;
 import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeMail implements IBlockType {
     MAILBOX(() -> MailTiles.MAILBOX, "mailbox"),

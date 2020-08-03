@@ -1,9 +1,9 @@
 package forestry.api.farming;
 
+import net.minecraft.item.ItemStack;
+
 import java.util.Arrays;
 import java.util.Collection;
-
-import net.minecraft.item.ItemStack;
 
 /**
  * IFarmableInfo describes the valid seedlings and possible products of an IFarmable. This is mainly used by the jei farming

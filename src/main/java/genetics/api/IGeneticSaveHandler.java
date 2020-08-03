@@ -1,18 +1,13 @@
 package genetics.api;
 
-import javax.annotation.Nullable;
-
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.*;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.individual.IKaryotype;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
+import javax.annotation.Nullable;
 
 /**
  * This handler provides some functions to save and load {@link IAllele}s, {@link IChromosome}s and {@link IGenome}s.

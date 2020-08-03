@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import javax.annotation.Nullable;
 
 /**
  * Ledger displaying ownership information

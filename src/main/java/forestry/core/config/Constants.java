@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.FluidAttributes;
-
 import forestry.api.core.IForestryConstants;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidAttributes;
 
 public class Constants implements IForestryConstants {
     // System

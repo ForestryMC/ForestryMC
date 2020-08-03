@@ -1,13 +1,6 @@
 package genetics.api.root;
 
 import com.google.common.collect.ImmutableList;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-
-import net.minecraft.item.ItemStack;
-
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneticFactory;
 import genetics.api.alleles.IAllele;
@@ -21,9 +14,13 @@ import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponent;
 import genetics.api.root.components.IRootComponentContainer;
 import genetics.api.root.translator.IIndividualTranslator;
-
 import genetics.individual.RootDefinition;
 import genetics.root.RootComponentContainer;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Abstract implementation of the {@link IIndividualRoot} interface.

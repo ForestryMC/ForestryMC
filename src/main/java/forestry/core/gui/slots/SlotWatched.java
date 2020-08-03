@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.inventory.watchers.FakeSlotChangeWatcher;
 import forestry.core.inventory.watchers.FakeSlotPickupWatcher;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 /**
  * Slot with a watcher callbacks.

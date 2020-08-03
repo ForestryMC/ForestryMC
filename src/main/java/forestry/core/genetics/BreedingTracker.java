@@ -10,34 +10,26 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.WorldSavedData;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-
+import forestry.api.core.ForestryEvent;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.core.network.packets.PacketGenomeTrackerSync;
+import forestry.core.utils.NetworkUtil;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import genetics.api.root.IRootDefinition;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
 
-import forestry.api.core.ForestryEvent;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.core.network.packets.PacketGenomeTrackerSync;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 

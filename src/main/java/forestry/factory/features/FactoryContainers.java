@@ -1,15 +1,7 @@
 package forestry.factory.features;
 
 import forestry.factory.ModuleFactory;
-import forestry.factory.gui.ContainerBottler;
-import forestry.factory.gui.ContainerCarpenter;
-import forestry.factory.gui.ContainerCentrifuge;
-import forestry.factory.gui.ContainerFabricator;
-import forestry.factory.gui.ContainerFermenter;
-import forestry.factory.gui.ContainerMoistener;
-import forestry.factory.gui.ContainerRaintank;
-import forestry.factory.gui.ContainerSqueezer;
-import forestry.factory.gui.ContainerStill;
+import forestry.factory.gui.*;
 import forestry.modules.features.FeatureContainerType;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;

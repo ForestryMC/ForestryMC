@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IStillManager;
+import forestry.api.recipes.IStillRecipe;
+import net.minecraft.fluid.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.minecraft.fluid.Fluid;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.recipes.IStillManager;
-import forestry.api.recipes.IStillRecipe;
 
 public class StillRecipeManager implements IStillManager {
 

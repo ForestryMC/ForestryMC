@@ -1,7 +1,6 @@
 package forestry.core.utils;
 
 import net.minecraft.client.resources.I18n;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

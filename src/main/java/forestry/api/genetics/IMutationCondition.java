@@ -5,14 +5,12 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import forestry.api.climate.IClimateProvider;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
-import forestry.api.climate.IClimateProvider;
 
 public interface IMutationCondition {
 

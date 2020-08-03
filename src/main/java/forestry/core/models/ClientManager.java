@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.models;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.items.IColoredItem;
+import forestry.core.utils.ResourceUtil;
+import forestry.modules.features.FeatureBlock;
+import forestry.modules.features.FeatureGroup;
+import forestry.modules.features.FeatureItem;
+import forestry.modules.features.FeatureTable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -35,18 +34,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockDisplayReader;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.items.IColoredItem;
-import forestry.core.utils.ResourceUtil;
-import forestry.modules.features.FeatureBlock;
-import forestry.modules.features.FeatureGroup;
-import forestry.modules.features.FeatureItem;
-import forestry.modules.features.FeatureTable;
+import javax.annotation.Nullable;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientManager {

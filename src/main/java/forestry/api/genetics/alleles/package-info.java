@@ -7,6 +7,6 @@
 @MethodsReturnNonnullByDefault
 package forestry.api.genetics.alleles;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

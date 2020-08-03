@@ -11,12 +11,28 @@
 package forestry.apiculture.tiles;
 
 import com.google.common.base.Predicate;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.apiculture.*;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.api.apiculture.hives.IHiveTile;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
+import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.WorldgenBeekeepingLogic;
+import forestry.apiculture.blocks.BlockBeeHive;
+import forestry.apiculture.features.ApicultureTiles;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.apiculture.genetics.alleles.AlleleEffect;
+import forestry.core.config.Config;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.network.packets.PacketActiveUpdate;
+import forestry.core.tiles.IActivatable;
+import forestry.core.utils.*;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -39,43 +55,13 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeHousingInventory;
-import forestry.api.apiculture.IBeeListener;
-import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.hives.IHiveRegistry;
-import forestry.api.apiculture.hives.IHiveTile;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorLogic;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.WorldgenBeekeepingLogic;
-import forestry.apiculture.blocks.BlockBeeHive;
-import forestry.apiculture.features.ApicultureTiles;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.genetics.alleles.AlleleEffect;
-import forestry.core.config.Config;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.network.packets.PacketActiveUpdate;
-import forestry.core.tiles.IActivatable;
-import forestry.core.utils.DamageSourceForestry;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.TickHelper;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTile, IActivatable, IBeeHousing {
     private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");

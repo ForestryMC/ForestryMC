@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.IOException;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.io.IOException;
 
 public interface IStreamable {
     void writeData(PacketBufferForestry data);

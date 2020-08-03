@@ -1,12 +1,11 @@
 package forestry.farming.logic.farmables;
 
+import forestry.api.farming.ICrop;
+import forestry.farming.logic.crops.CropDestroyDouble;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.farming.logic.crops.CropDestroyDouble;
 
 public class FarmableDoubleCrop extends FarmableBase {
     private final BlockState topMatureState;

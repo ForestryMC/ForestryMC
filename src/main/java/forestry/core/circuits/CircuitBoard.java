@@ -10,26 +10,19 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-
+import forestry.api.circuits.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.CircuitSocketType;
-import forestry.api.circuits.ICircuit;
-import forestry.api.circuits.ICircuitBoard;
-import forestry.api.circuits.ICircuitLayout;
-import forestry.api.circuits.ICircuitSocketType;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CircuitBoard implements ICircuitBoard {
 

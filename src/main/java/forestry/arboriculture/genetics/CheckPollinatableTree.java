@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraftforge.common.PlantType;
-
-import genetics.api.individual.IIndividual;
-
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.apiculture.ModuleApiculture;
+import genetics.api.individual.IIndividual;
+import net.minecraftforge.common.PlantType;
 
 public class CheckPollinatableTree implements ICheckPollinatable {
     private final ITree tree;

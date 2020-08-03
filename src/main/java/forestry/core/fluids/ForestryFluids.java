@@ -10,28 +10,23 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import javax.annotation.Nullable;
-import java.awt.Color;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.core.ModuleFluids;
 import forestry.core.config.Constants;
 import forestry.core.items.DrinkProperties;
 import forestry.modules.features.FeatureFluid;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.ModFeatureRegistry;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 @FeatureProvider
 public enum ForestryFluids {

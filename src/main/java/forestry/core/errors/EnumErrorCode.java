@@ -5,17 +5,15 @@
  ******************************************************************************/
 package forestry.core.errors;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.api.core.ISpriteRegistry;
 import forestry.core.config.Constants;
 import forestry.core.render.TextureManagerForestry;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum EnumErrorCode implements IErrorState {
 

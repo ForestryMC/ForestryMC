@@ -1,7 +1,5 @@
 package forestry.arboriculture.features;
 
-import net.minecraft.item.BlockItem;
-
 import forestry.arboriculture.ModuleCharcoal;
 import forestry.arboriculture.blocks.BlockAsh;
 import forestry.arboriculture.blocks.BlockCharcoal;
@@ -13,6 +11,7 @@ import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
+import net.minecraft.item.BlockItem;
 
 @FeatureProvider
 public class CharcoalBlocks {

@@ -1,11 +1,11 @@
 package forestry.core.data;
 
-import javax.annotation.Nullable;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.core.blocks.EnumResourceType;
+import forestry.core.features.CoreBlocks;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -13,15 +13,13 @@ import net.minecraft.data.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.common.Tags;
 
-import forestry.arboriculture.features.ArboricultureBlocks;
-import forestry.arboriculture.features.CharcoalBlocks;
-import forestry.core.blocks.EnumResourceType;
-import forestry.core.features.CoreBlocks;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
+import javax.annotation.Nullable;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 //TODO: Split up ?
 public final class ForestryBlockTagsProvider extends BlockTagsProvider {

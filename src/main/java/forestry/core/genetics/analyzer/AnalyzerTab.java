@@ -1,15 +1,13 @@
 package forestry.core.genetics.analyzer;
 
-import java.util.Locale;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-
-import genetics.api.individual.IIndividual;
-
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.core.features.CoreItems;
 import forestry.core.gui.elements.lib.IDatabaseElement;
+import genetics.api.individual.IIndividual;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+
+import java.util.Locale;
 
 public enum AnalyzerTab implements IDatabaseTab {
     ANALYZE {

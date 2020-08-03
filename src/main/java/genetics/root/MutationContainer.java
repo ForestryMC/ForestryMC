@@ -1,13 +1,5 @@
 package genetics.root;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.util.ResourceLocation;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
@@ -18,8 +10,10 @@ import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
-
 import genetics.utils.AlleleUtils;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.*;
 
 public class MutationContainer<I extends IIndividual, M extends IMutation> implements IMutationContainer<I, M> {
 

@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.network.PacketBuffer;
+import org.apache.commons.lang3.tuple.Pair;
 
 public interface IForestryPacket {
     Pair<PacketBuffer, Integer> getPacketData();

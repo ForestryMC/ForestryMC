@@ -5,11 +5,11 @@
  ******************************************************************************/
 package forestry.api.book;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * IForesterBook is the interface that the forestry guide book class implements.

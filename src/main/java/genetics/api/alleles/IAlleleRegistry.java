@@ -1,13 +1,12 @@
 package genetics.api.alleles;
 
-import java.util.Collection;
-import java.util.Optional;
-
-import net.minecraft.util.ResourceLocation;
-
 import genetics.api.IGeneticApiInstance;
 import genetics.api.IGeneticPlugin;
 import genetics.api.individual.IChromosomeType;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * The {@link IAlleleRegistry} offers several functions for registering and retrieving alleles.

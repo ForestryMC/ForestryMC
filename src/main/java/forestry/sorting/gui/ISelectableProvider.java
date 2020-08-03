@@ -1,10 +1,9 @@
 package forestry.sorting.gui;
 
-import java.util.Collection;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.gui.GuiForestry;
+
+import java.util.Collection;
 
 public interface ISelectableProvider<S> {
     Collection<S> getEntries();

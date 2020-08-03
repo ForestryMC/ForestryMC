@@ -1,13 +1,13 @@
 package forestry.api.genetics.products;
 
-import java.util.Collection;
-import java.util.Random;
-import java.util.function.Function;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+
+import java.util.Collection;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * A dynamic extension of the {@link IProductList}. With this it is possible to create products dynamically based on the

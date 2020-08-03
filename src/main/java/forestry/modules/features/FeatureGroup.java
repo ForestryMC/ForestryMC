@@ -1,21 +1,14 @@
 package forestry.modules.features;
 
 import com.google.common.collect.ImmutableMap;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiFunction;
-
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.IFeatureSubtype;
 import forestry.api.core.IItemProvider;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
+import java.util.function.BiFunction;
 
 public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends FeatureGroup<B, F, S>>, F extends IModFeature, S extends IFeatureSubtype> {
 

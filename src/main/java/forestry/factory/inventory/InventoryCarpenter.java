@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.tiles.TileCarpenter;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
     public final static int SLOT_BOX = 9;

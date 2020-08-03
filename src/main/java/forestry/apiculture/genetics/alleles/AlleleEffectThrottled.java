@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
+import genetics.api.individual.IGenome;
 
 public abstract class AlleleEffectThrottled extends AlleleEffect {
 

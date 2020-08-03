@@ -1,20 +1,15 @@
 package genetics.root;
 
 import com.google.common.collect.Multimap;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IGeneticListener;
+import genetics.api.root.components.*;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IGeneticListener;
-import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.DefaultStage;
-import genetics.api.root.components.IRootComponent;
-import genetics.api.root.components.IRootComponentContainer;
-import genetics.api.root.components.IStage;
 
 public class RootComponentContainer<I extends IIndividual> implements IRootComponentContainer<I> {
     private final Map<ComponentKey, IRootComponent<I>> components;

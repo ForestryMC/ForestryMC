@@ -10,21 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IJubilanceProvider;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.core.tiles.TileUtil;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IJubilanceProvider;
-import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
-import forestry.core.tiles.TileUtil;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 

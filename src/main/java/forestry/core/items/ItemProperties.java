@@ -1,9 +1,8 @@
 package forestry.core.items;
 
+import forestry.core.ItemGroupForestry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-
-import forestry.core.ItemGroupForestry;
 
 public class ItemProperties extends Item.Properties {
     public int burnTime = -1;

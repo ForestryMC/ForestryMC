@@ -1,12 +1,10 @@
 package forestry.farming.logic;
 
 import com.google.common.collect.ImmutableSet;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Stack;
-
+import forestry.api.farming.*;
+import forestry.core.utils.BlockUtil;
+import forestry.farming.logic.crops.CropDestroy;
+import forestry.farming.logic.farmables.FarmableChorus;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -15,14 +13,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
-import forestry.farming.logic.crops.CropDestroy;
-import forestry.farming.logic.farmables.FarmableChorus;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.Stack;
 
 public class FarmLogicEnder extends FarmLogicHomogeneous {
     private static final Set<Direction> VALID_DIRECTIONS = ImmutableSet.of(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST);

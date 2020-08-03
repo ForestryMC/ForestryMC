@@ -1,13 +1,12 @@
 package forestry.core.gui;
 
+import forestry.core.features.CoreContainers;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.inventory.ItemInventoryAlyzer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-
-import forestry.core.features.CoreContainers;
-import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.inventory.ItemInventoryAlyzer;
 
 public class ContainerAlyzer extends ContainerItemInventory<ItemInventoryAlyzer> {
 

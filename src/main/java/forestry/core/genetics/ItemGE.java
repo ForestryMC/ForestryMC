@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.core.items.ItemForestry;
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -22,15 +22,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
-
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.items.ItemForestry;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 public abstract class ItemGE extends ItemForestry {
     protected ItemGE(Item.Properties properties) {

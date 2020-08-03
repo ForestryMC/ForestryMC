@@ -1,11 +1,10 @@
 package forestry.core.gui.elements.lib;
 
-import java.util.function.UnaryOperator;
-
+import forestry.core.gui.elements.IProviderElement;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
 
-import forestry.core.gui.elements.IProviderElement;
+import java.util.function.UnaryOperator;
 
 /**
  * A label element that displays and contains one single line of text

@@ -1,8 +1,8 @@
 package genetics.api.alleles;
 
-import java.util.Collection;
-
 import genetics.api.individual.IChromosomeType;
+
+import java.util.Collection;
 
 public interface IAlleleGroup<V> {
 

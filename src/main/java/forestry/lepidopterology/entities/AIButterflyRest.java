@@ -10,20 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import java.util.EnumSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.FlowerBlock;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.WallBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-
 import net.minecraftforge.common.IPlantable;
+
+import java.util.EnumSet;
 
 public class AIButterflyRest extends AIButterflyBase {
 

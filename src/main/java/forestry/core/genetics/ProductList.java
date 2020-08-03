@@ -1,24 +1,18 @@
 package forestry.core.genetics;
 
 import com.google.common.collect.ImmutableList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
+import forestry.api.genetics.products.IDynamicProductList;
+import forestry.api.genetics.products.IMutableProductList;
+import forestry.api.genetics.products.IProductList;
+import forestry.api.genetics.products.Product;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-import forestry.api.genetics.products.IDynamicProductList;
-import forestry.api.genetics.products.IMutableProductList;
-import forestry.api.genetics.products.IProductList;
-import forestry.api.genetics.products.Product;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class ProductList implements IDynamicProductList {
 

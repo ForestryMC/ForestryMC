@@ -1,16 +1,6 @@
 package genetics.organism;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-
+import genetics.Genetics;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeAllele;
@@ -21,9 +11,16 @@ import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
-
-import genetics.Genetics;
 import genetics.individual.GeneticSaveHandler;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public class Organism<I extends IIndividual> implements IOrganism<I> {
     private final LazyOptional<IOrganism> holder = LazyOptional.of(() -> this);

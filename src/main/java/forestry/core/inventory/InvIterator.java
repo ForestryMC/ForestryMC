@@ -1,9 +1,9 @@
 package forestry.core.inventory;
 
+import net.minecraftforge.items.IItemHandler;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import net.minecraftforge.items.IItemHandler;
 
 public class InvIterator implements Iterator<IInvSlot> {
     private final IItemHandler inv;

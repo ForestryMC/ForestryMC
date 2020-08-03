@@ -1,14 +1,12 @@
 package forestry.book;
 
+import forestry.book.features.BookItems;
+import forestry.core.config.Config;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
-
-import forestry.book.features.BookItems;
-import forestry.core.config.Config;
 
 public class EventHandlerBook {
 

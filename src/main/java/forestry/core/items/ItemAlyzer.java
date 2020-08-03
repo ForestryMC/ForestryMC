@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.core.ItemGroups;
+import forestry.core.gui.ContainerAlyzer;
+import forestry.core.inventory.ItemInventoryAlyzer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -24,9 +24,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import forestry.api.core.ItemGroups;
-import forestry.core.gui.ContainerAlyzer;
-import forestry.core.inventory.ItemInventoryAlyzer;
+import javax.annotation.Nullable;
+import java.util.List;
 
 
 public class ItemAlyzer extends ItemWithGui {

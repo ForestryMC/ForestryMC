@@ -1,12 +1,12 @@
 package forestry.api.genetics.products;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 import java.util.function.Function;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 /**
  * Empty implementation of the product list

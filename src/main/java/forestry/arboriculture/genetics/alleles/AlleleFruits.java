@@ -1,18 +1,5 @@
 package forestry.arboriculture.genetics.alleles;
 
-import javax.annotation.Nullable;
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import genetics.api.alleles.IAlleleRegistry;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.FruitProviderNone;
@@ -21,12 +8,18 @@ import forestry.arboriculture.FruitProviderPod.EnumPodType;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.core.features.CoreItems;
 import forestry.core.items.ItemFruit.EnumFruit;
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.utils.AlleleUtils;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
-import static forestry.api.arboriculture.EnumFruitFamily.JUNGLE;
-import static forestry.api.arboriculture.EnumFruitFamily.NONE;
-import static forestry.api.arboriculture.EnumFruitFamily.NUX;
-import static forestry.api.arboriculture.EnumFruitFamily.POMES;
-import static forestry.api.arboriculture.EnumFruitFamily.PRUNES;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static forestry.api.arboriculture.EnumFruitFamily.*;
 
 public class AlleleFruits {
     public static final IAlleleFruit fruitNone;

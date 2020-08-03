@@ -1,9 +1,5 @@
 package genetics.api.root;
 
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 import genetics.api.IGeneticApiInstance;
 import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.IAllele;
@@ -16,6 +12,10 @@ import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
 import genetics.api.root.components.IRootComponentFactory;
 import genetics.api.root.components.IRootComponentRegistry;
+
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * The IIndividualRootBuilder offers several functions to register templates, types or something similar that can be

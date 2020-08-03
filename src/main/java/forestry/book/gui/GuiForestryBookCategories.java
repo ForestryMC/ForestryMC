@@ -1,5 +1,12 @@
 package forestry.book.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.api.book.IBookCategory;
+import forestry.api.book.IForesterBook;
+import forestry.book.gui.buttons.GuiButtonBookCategory;
+import forestry.core.config.Constants;
+import forestry.core.gui.Drawable;
+import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
@@ -7,18 +14,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
-import forestry.book.gui.buttons.GuiButtonBookCategory;
-import forestry.core.config.Constants;
-import forestry.core.gui.Drawable;
-import forestry.core.utils.Translator;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookCategories extends GuiForesterBook {

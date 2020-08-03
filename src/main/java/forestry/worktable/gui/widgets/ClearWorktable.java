@@ -11,7 +11,6 @@
 package forestry.worktable.gui.widgets;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;

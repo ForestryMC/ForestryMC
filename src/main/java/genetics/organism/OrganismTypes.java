@@ -1,15 +1,8 @@
 package genetics.organism;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import net.minecraft.item.ItemStack;
-
+import genetics.GeneticFactory;
+import genetics.Genetics;
+import genetics.Log;
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;
@@ -19,10 +12,11 @@ import genetics.api.organism.IOrganismTypes;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
+import net.minecraft.item.ItemStack;
 
-import genetics.GeneticFactory;
-import genetics.Genetics;
-import genetics.Log;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
     private final Map<IOrganismType, IOrganismHandler<I>> types = new LinkedHashMap<>();

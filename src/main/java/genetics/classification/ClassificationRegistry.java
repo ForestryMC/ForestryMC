@@ -1,16 +1,11 @@
 package genetics.classification;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
 import genetics.api.classification.IClassification;
 import genetics.api.classification.IClassification.EnumClassLevel;
 import genetics.api.classification.IClassificationHandler;
 import genetics.api.classification.IClassificationRegistry;
+
+import java.util.*;
 
 public class ClassificationRegistry implements IClassificationRegistry {
     private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);

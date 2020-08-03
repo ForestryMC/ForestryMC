@@ -7,6 +7,6 @@
 @MethodsReturnNonnullByDefault
 package forestry.api.genetics.filter;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

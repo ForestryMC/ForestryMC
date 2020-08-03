@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-
 import forestry.api.multiblock.IMultiblockController;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmMaterial;
 import forestry.farming.features.FarmingTiles;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
 
 //TODO: Fix band: currently breaks multiblocks because removes the old tile and adds a new tile, this causes a ConcurrentModificationException (attachBlock, detachBlock)
 public class TileFarmPlain extends TileFarm {

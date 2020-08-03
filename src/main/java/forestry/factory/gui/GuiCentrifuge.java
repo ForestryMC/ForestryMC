@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.factory.tiles.TileCentrifuge;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge> {
     private final TileCentrifuge tile;

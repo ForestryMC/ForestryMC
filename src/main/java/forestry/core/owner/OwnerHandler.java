@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.core.owner;
 
-import javax.annotation.Nullable;
-import java.util.UUID;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, INbtReadable {
     @Nullable

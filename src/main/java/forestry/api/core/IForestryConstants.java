@@ -6,7 +6,6 @@
 package forestry.api.core;
 
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.event.LootTableLoadEvent;
 
 public interface IForestryConstants {

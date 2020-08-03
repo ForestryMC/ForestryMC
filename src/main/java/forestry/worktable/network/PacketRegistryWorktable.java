@@ -11,15 +11,14 @@
 package forestry.worktable.network;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
 import forestry.worktable.network.packets.PacketWorktableMemoryUpdate;
 import forestry.worktable.network.packets.PacketWorktableRecipeRequest;
 import forestry.worktable.network.packets.PacketWorktableRecipeUpdate;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryWorktable implements IPacketRegistry {
     @Override

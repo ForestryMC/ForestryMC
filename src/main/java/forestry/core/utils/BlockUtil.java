@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -32,8 +31,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
+import java.util.List;
 
 
 public abstract class BlockUtil {

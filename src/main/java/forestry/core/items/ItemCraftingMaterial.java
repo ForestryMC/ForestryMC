@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.Item;
-
 import forestry.core.ItemGroupForestry;
+import net.minecraft.item.Item;
 
 public class ItemCraftingMaterial extends ItemForestry {
 

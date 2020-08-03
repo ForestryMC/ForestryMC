@@ -1,14 +1,9 @@
 package forestry.core.network.packets;
 
+import forestry.api.climate.ClimateCapabilities;
+import forestry.core.network.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-
-import forestry.api.climate.ClimateCapabilities;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketHandlerServer;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdServer;
 
 public class PacketClimateListenerUpdateEntityRequest extends ForestryPacket implements IForestryPacketServer {
     private final Entity entity;

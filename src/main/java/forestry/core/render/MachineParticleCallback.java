@@ -10,21 +10,19 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IBlockType;
+import forestry.core.blocks.IMachineProperties;
+import forestry.core.blocks.IMachinePropertiesTesr;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.particle.DiggingParticle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.IBlockType;
-import forestry.core.blocks.IMachineProperties;
-import forestry.core.blocks.IMachinePropertiesTesr;
-import forestry.core.utils.ResourceUtil;
 
 public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase> {
 

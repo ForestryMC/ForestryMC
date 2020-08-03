@@ -9,8 +9,8 @@
 //@API(apiVersion = "1.4.0", owner = "ForestryAPI|core", provides = "ForestryAPI|lepidopterology")
 package forestry.api.lepidopterology;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //import net.minecraftforge.fml.common.API;

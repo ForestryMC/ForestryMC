@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockCandleWall;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockWallForestry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemBlockCandle extends ItemBlockWallForestry<BlockCandle, BlockCandleWall> implements IColoredItem {
 

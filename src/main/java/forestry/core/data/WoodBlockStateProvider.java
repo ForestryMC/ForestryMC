@@ -1,42 +1,19 @@
 package forestry.core.data;
 
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.FourWayBlock;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.item.BlockItem;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.DoorHingeSide;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.state.properties.Half;
-import net.minecraft.state.properties.SlabType;
-import net.minecraft.state.properties.StairsShape;
-import net.minecraft.util.Direction;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.blocks.BlockDecorativeLeaves;
-import forestry.arboriculture.blocks.BlockDefaultLeaves;
-import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
-import forestry.arboriculture.blocks.BlockForestryDoor;
-import forestry.arboriculture.blocks.BlockForestryFence;
-import forestry.arboriculture.blocks.BlockForestryFenceGate;
-import forestry.arboriculture.blocks.BlockForestryLog;
-import forestry.arboriculture.blocks.BlockForestryPlank;
-import forestry.arboriculture.blocks.BlockForestrySlab;
-import forestry.arboriculture.blocks.BlockForestryStairs;
+import forestry.arboriculture.blocks.*;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.modules.features.FeatureBlock;
+import net.minecraft.block.*;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.item.BlockItem;
+import net.minecraft.state.properties.*;
+import net.minecraft.util.Direction;
+
+import java.util.Map;
 
 public class WoodBlockStateProvider extends BlockStateProvider {
 

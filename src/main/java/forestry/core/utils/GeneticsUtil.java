@@ -10,41 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.util.LazyOptional;
-
-import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.components.ComponentKeys;
-
-import genetics.utils.AlleleUtils;
-import genetics.utils.RootUtils;
-
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -60,6 +26,35 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class GeneticsUtil {
 
@@ -75,12 +70,11 @@ public class GeneticsUtil {
     }
 
     public static ITextComponent getSpeciesName(IOrganismType type, IAlleleForestrySpecies allele) {
-        String alleleKey = allele.getLocalisationKey();
         String customKey = getKeyPrefix(allele) +
                 '.' +
                 type.getName() +
                 '.' +
-                alleleKey.replace("for.bees.species.", "");
+                allele.getSpeciesIdentifier();
         return ResourceUtil.tryTranslate(customKey, allele::getDisplayName);
     }
 

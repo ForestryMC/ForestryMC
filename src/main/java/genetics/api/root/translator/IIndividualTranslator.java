@@ -1,17 +1,16 @@
 package genetics.api.root.translator;
 
-import java.util.Optional;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;
 import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import java.util.Optional;
 
 /**
  * Translates a item or a block that does not contain any genetic information into a {@link ItemStack} or a

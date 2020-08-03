@@ -5,14 +5,12 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
-import java.util.List;
-
+import forestry.api.core.INbtWritable;
 import net.minecraft.util.text.ITextComponent;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.INbtWritable;
+import java.util.List;
 
 public interface ICircuitBoard extends INbtWritable {
     @OnlyIn(Dist.CLIENT)

@@ -1,8 +1,7 @@
 package forestry.farming.logic;
 
-import net.minecraft.block.BlockState;
-
 import forestry.api.farming.IFarmProperties;
+import net.minecraft.block.BlockState;
 
 public abstract class FarmLogicSoil extends FarmLogic {
 

@@ -1,14 +1,13 @@
 package forestry.lepidopterology.genetics;
 
-import genetics.api.alleles.IAlleleTemplate;
-import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IKaryotype;
-
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IButterflyRoot;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.lepidopterology.ButterflyPlugin;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.alleles.IAlleleTemplateBuilder;
+import genetics.api.individual.IKaryotype;
 
 public class ButterflyHelper {
     private ButterflyHelper() {

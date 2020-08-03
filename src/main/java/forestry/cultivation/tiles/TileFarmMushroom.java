@@ -1,11 +1,10 @@
 package forestry.cultivation.tiles;
 
+import forestry.cultivation.features.CultivationTiles;
+import forestry.farming.logic.ForestryFarmIdentifier;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-
-import forestry.cultivation.features.CultivationTiles;
-import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmMushroom extends TilePlanter {
     public TileFarmMushroom() {

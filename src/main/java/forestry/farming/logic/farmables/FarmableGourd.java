@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
+import forestry.core.utils.BlockUtil;
+import forestry.farming.logic.crops.CropDestroy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.api.farming.IFarmableInfo;
-import forestry.core.utils.BlockUtil;
-import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableGourd implements IFarmable {
 

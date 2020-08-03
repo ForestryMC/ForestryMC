@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
     public static final FakeTankManager instance = new FakeTankManager();

@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import forestry.api.apiculture.hives.IHiveDescription;
+import forestry.api.apiculture.hives.IHiveDrop;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import forestry.api.apiculture.hives.IHiveDescription;
-import forestry.api.apiculture.hives.IHiveDrop;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public final class Hive {
 

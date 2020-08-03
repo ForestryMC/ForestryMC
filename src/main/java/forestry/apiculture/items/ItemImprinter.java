@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.items.ItemWithGui;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemImprinter extends ItemWithGui {
     public ItemImprinter() {

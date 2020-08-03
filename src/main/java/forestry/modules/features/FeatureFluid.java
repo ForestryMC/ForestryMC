@@ -1,16 +1,15 @@
 package forestry.modules.features;
 
-import javax.annotation.Nullable;
-import java.awt.Color;
-import java.util.function.Supplier;
-
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.BlockItem;
-
 import forestry.core.config.Constants;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.ForestryFluid;
 import forestry.core.items.DrinkProperties;
+import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.item.BlockItem;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.function.Supplier;
 
 public class FeatureFluid implements IFluidFeature {
     private final FeatureBlock<BlockForestryFluid, BlockItem> block;

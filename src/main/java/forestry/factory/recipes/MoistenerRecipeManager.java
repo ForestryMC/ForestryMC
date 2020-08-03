@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IMoistenerManager;
+import forestry.api.recipes.IMoistenerRecipe;
+import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
+
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.minecraft.item.ItemStack;
-
-import forestry.api.recipes.IMoistenerManager;
-import forestry.api.recipes.IMoistenerRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class MoistenerRecipeManager implements IMoistenerManager {
 

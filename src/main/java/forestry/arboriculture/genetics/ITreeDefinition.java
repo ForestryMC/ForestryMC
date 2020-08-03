@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.item.ItemStack;
-
-import genetics.api.individual.ISpeciesDefinition;
-
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
+import genetics.api.individual.ISpeciesDefinition;
+import net.minecraft.item.ItemStack;
 
 public interface ITreeDefinition extends ISpeciesDefinition<ITree> {
 

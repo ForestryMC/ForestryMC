@@ -1,13 +1,13 @@
 package genetics.api.individual;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Iterator;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
 import genetics.api.root.ITemplateContainer;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * The IKaryotype defines how many chromosomes a {@link IGenome} contains and which type the {@link IChromosome}s have.

@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import java.util.Locale;
-import java.util.function.Function;
-
+import forestry.api.core.IBlockSubtype;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -21,8 +20,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.core.utils.ResourceUtil;
+import java.util.Locale;
+import java.util.function.Function;
 
 public enum EnumFarmMaterial implements IBlockSubtype {
     BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY, "stone_bricks"),

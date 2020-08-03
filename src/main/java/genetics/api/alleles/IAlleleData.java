@@ -1,15 +1,13 @@
 package genetics.api.alleles;
 
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IChromosomeType;
+import genetics.utils.AlleleUtils;
+import net.minecraftforge.fml.ModLoadingContext;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
-
-import net.minecraftforge.fml.ModLoadingContext;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IChromosomeType;
-
-import genetics.utils.AlleleUtils;
 
 /**
  * The IAlleleData is a help interface that provides all information that is required to register a allele at the

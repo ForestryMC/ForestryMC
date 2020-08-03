@@ -1,11 +1,11 @@
 package forestry.database.gui.buttons;
 
-import java.util.Collections;
-import java.util.List;
-
 import forestry.core.gui.buttons.IButtonTextureSet;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.database.DatabaseHelper;
+
+import java.util.Collections;
+import java.util.List;
 
 public enum DatabaseButton {
     SORT_DIRECTION_BUTTON {

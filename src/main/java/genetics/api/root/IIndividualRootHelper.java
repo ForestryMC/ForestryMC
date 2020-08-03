@@ -1,11 +1,10 @@
 package genetics.api.root;
 
-import java.util.Optional;
-
-import net.minecraft.item.ItemStack;
-
 import genetics.api.alleles.IAlleleTemplateBuilder;
 import genetics.api.individual.IIndividual;
+import net.minecraft.item.ItemStack;
+
+import java.util.Optional;
 
 public interface IIndividualRootHelper {
     /**

@@ -12,19 +12,17 @@ package forestry.core.errors;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorState;
+import forestry.api.core.IErrorStateRegistry;
+import forestry.api.core.ISpriteRegistry;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorState;
-import forestry.api.core.IErrorStateRegistry;
-import forestry.api.core.ISpriteRegistry;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.ItemGroupForestry;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
-
-import forestry.core.ItemGroupForestry;
 
 public class ItemForestryFood extends Item {
 

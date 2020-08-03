@@ -1,19 +1,16 @@
 package forestry.book.gui.elements;
 
-import java.util.Collection;
-
-import net.minecraft.util.text.ITextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.mutation.IMutation;
-
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
+import genetics.api.mutation.IMutation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Collection;
 
 @OnlyIn(Dist.CLIENT)
 public class MutationElement extends SelectionElement<IMutation> {

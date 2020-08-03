@@ -1,10 +1,9 @@
 package forestry.api.genetics.alyzer;
 
-import java.util.function.Predicate;
-
+import forestry.apiculture.genetics.IOrganismTooltipProvider;
 import genetics.api.organism.IOrganismType;
 
-import forestry.apiculture.genetics.IOrganismTooltipProvider;
+import java.util.function.Predicate;
 
 public interface IAlleleDisplayHelper {
     default void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int info) {

@@ -22,38 +22,18 @@ package forestry.core.config.forge_old;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Floats;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PushbackInputStream;
-import java.io.Reader;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import forestry.Forestry;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 
-import forestry.Forestry;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static forestry.core.config.forge_old.Property.Type.BOOLEAN;
-import static forestry.core.config.forge_old.Property.Type.DOUBLE;
-import static forestry.core.config.forge_old.Property.Type.INTEGER;
-import static forestry.core.config.forge_old.Property.Type.STRING;
+import static forestry.core.config.forge_old.Property.Type.*;
 
 /**
  * This class offers advanced configurations capabilities, allowing to provide

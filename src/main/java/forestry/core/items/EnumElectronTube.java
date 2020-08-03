@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Locale;
 
 public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {

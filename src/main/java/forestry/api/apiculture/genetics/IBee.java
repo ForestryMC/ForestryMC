@@ -5,25 +5,22 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.IErrorState;
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividualLiving;
+import genetics.api.individual.IIndividual;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IIndividual;
-
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.IErrorState;
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividualLiving;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Other implementations than Forestry's default one are not supported.

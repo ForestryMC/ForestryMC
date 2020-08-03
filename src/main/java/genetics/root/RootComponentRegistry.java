@@ -1,15 +1,14 @@
 package genetics.root;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponentFactory;
 import genetics.api.root.components.IRootComponentRegistry;
-
 import genetics.organism.OrganismTypes;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum RootComponentRegistry implements IRootComponentRegistry {
     INSTANCE;

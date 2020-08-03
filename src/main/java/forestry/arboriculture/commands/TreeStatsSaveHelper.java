@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import java.util.Collection;
-
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
+import genetics.utils.AlleleUtils;
+import net.minecraft.world.World;
+
+import java.util.Collection;
 
 public class TreeStatsSaveHelper implements IStatsSaveHelper {
 

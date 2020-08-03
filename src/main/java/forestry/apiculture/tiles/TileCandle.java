@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
+import forestry.apiculture.features.ApicultureTiles;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.apiculture.features.ApicultureTiles;
 
 public class TileCandle extends TileEntity {
     private int colour;

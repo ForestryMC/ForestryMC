@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.Locale;
-
 import forestry.api.core.IBlockSubtype;
+
+import java.util.Locale;
 
 public enum EnumResourceType implements IBlockSubtype {
     APATITE(0),

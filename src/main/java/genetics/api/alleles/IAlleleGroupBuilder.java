@@ -1,10 +1,10 @@
 package genetics.api.alleles;
 
+import genetics.api.individual.IChromosomeType;
+
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import genetics.api.individual.IChromosomeType;
 
 public interface IAlleleGroupBuilder<V> {
 

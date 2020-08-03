@@ -1,13 +1,8 @@
 package genetics;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
+import genetics.alleles.AlleleHelper;
+import genetics.alleles.AlleleRegistry;
 import genetics.api.IGeneticApiInstance;
 import genetics.api.IGeneticFactory;
 import genetics.api.IGeneticSaveHandler;
@@ -19,15 +14,18 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IIndividualRootHelper;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.IRootComponentRegistry;
-
-import genetics.alleles.AlleleHelper;
-import genetics.alleles.AlleleRegistry;
 import genetics.classification.ClassificationRegistry;
 import genetics.individual.ChromosomeList;
 import genetics.individual.GeneticSaveHandler;
 import genetics.individual.RootDefinition;
 import genetics.root.IndividualRootHelper;
 import genetics.root.RootComponentRegistry;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public enum ApiInstance implements IGeneticApiInstance {
     INSTANCE;

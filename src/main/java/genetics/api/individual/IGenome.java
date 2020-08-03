@@ -1,12 +1,11 @@
 package genetics.api.individual;
 
-import net.minecraft.nbt.CompoundNBT;
-
 import genetics.api.IGeneticFactory;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleValue;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * Holds the {@link IChromosome}s which comprise the traits of a given individual.

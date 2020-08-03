@@ -12,11 +12,13 @@ package forestry.core.items;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuit;
+import forestry.api.circuits.ICircuitLayout;
+import forestry.core.ItemGroupForestry;
+import forestry.core.circuits.SolderManager;
+import forestry.core.config.Config;
+import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemGroup;
@@ -27,17 +29,12 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.ICircuit;
-import forestry.api.circuits.ICircuitLayout;
-import forestry.core.ItemGroupForestry;
-import forestry.core.circuits.SolderManager;
-import forestry.core.config.Config;
-import forestry.core.utils.ItemTooltipUtil;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 public class ItemElectronTube extends ItemOverlay {
 

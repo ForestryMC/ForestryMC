@@ -1,13 +1,12 @@
 package genetics.api.individual;
 
-import java.util.List;
-import java.util.Optional;
-
+import genetics.api.alleles.IAllele;
+import genetics.api.root.IIndividualRoot;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.root.IIndividualRoot;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * An actual individual organism with genetic information.

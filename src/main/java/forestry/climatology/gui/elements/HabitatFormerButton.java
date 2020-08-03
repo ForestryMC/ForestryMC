@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
-import java.util.function.Consumer;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.features.CoreItems;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.elements.ButtonElement;
 import forestry.core.items.EnumElectronTube;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.item.ItemStack;
+
+import java.util.function.Consumer;
 
 public class HabitatFormerButton extends ButtonElement {
     private static final Drawable ENABLED_BUTTON = new Drawable(GuiHabitatFormer.TEXTURE, 234, 0, 22, 22);

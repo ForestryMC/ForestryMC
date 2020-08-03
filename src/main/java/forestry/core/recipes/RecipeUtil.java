@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.utils.ItemStackUtil;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
@@ -23,15 +24,12 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.utils.ItemStackUtil;
-import forestry.worktable.inventory.CraftingInventoryForestry;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class RecipeUtil {
 

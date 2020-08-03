@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import javax.annotation.Nullable;
-
+import forestry.core.config.Constants;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
     @Nullable

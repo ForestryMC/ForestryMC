@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic.crops;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
-
+import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -21,13 +21,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
 import net.minecraftforge.event.ForgeEventFactory;
 
-import forestry.core.config.Constants;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
 
 public class CropDestroy extends Crop {
 

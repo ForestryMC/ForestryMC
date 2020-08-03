@@ -10,23 +10,21 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.text.TranslationTextComponent;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

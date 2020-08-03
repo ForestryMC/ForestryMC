@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-
+import forestry.api.apiculture.genetics.*;
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.genetics.BeeHelper;
+import forestry.core.config.Config;
+import forestry.core.genetics.ItemGE;
+import forestry.core.items.IColoredItem;
+import forestry.core.utils.ResourceUtil;
+import genetics.api.GeneticHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -24,24 +28,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import genetics.api.GeneticHelper;
-
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.genetics.IBeeRoot;
-import forestry.api.core.ItemGroups;
-import forestry.apiculture.genetics.BeeHelper;
-import forestry.core.config.Config;
-import forestry.core.genetics.ItemGE;
-import forestry.core.items.IColoredItem;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 public class ItemBeeGE extends ItemGE implements IColoredItem {
 

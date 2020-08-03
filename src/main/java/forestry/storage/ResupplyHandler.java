@@ -10,23 +10,21 @@
  ******************************************************************************/
 package forestry.storage;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
-
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.core.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.storage.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.Event;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ResupplyHandler implements IResupplyHandler {
 

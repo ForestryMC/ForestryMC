@@ -1,14 +1,14 @@
 package forestry.api.farming;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
+
 import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
 
 public interface IFarmPropertiesBuilder {
     IFarmPropertiesBuilder setIcon(Supplier<ItemStack> stackSupplier);

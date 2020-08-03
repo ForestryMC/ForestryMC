@@ -10,21 +10,19 @@
  ******************************************************************************/
 package forestry.mail.items;
 
-import java.awt.Color;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.function.Supplier;
-
+import forestry.api.mail.EnumPostage;
+import forestry.core.data.ForestryTags;
+import forestry.core.items.ItemOverlay;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
-
 import net.minecraftforge.common.Tags;
 
-import forestry.api.mail.EnumPostage;
-import forestry.core.data.ForestryTags;
-import forestry.core.items.ItemOverlay;
+import java.awt.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
     P_1("1n", EnumPostage.P_1, ForestryTags.Items.GEMS_APATITE, new Color(0x4a8ca7), new Color(0xffffff)),

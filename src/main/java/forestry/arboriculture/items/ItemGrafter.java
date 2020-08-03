@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.core.ItemGroups;
+import forestry.core.items.ItemForestryTool;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -28,14 +28,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.core.ItemGroups;
-import forestry.core.items.ItemForestryTool;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 

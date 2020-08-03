@@ -1,15 +1,13 @@
 package forestry.core;
 
-import net.minecraftforge.eventbus.api.EventPriority;
-
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.core.config.Constants;
+import forestry.core.genetics.alleles.GeneticRegistry;
 import genetics.api.GeneticPlugin;
 import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.classification.IClassificationRegistry;
-
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.GeneticRegistry;
+import net.minecraftforge.eventbus.api.EventPriority;
 
 @GeneticPlugin(modId = Constants.MOD_ID, priority = EventPriority.HIGH)
 public class CorePlugin implements IGeneticPlugin {

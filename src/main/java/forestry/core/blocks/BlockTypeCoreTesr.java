@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.function.Supplier;
-
-import net.minecraft.block.Block;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-
 import forestry.core.features.CoreTiles;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.modules.features.FeatureTileType;
+import net.minecraft.block.Block;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeCoreTesr implements IBlockTypeTesr {
     ANALYZER(createAnalyzerProperties(() -> CoreTiles.ANALYZER, "analyzer")),

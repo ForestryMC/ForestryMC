@@ -5,13 +5,11 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import javax.annotation.Nullable;
-
+import forestry.api.lepidopterology.genetics.IButterfly;
+import genetics.api.individual.IIndividual;
 import net.minecraft.entity.CreatureEntity;
 
-import genetics.api.individual.IIndividual;
-
-import forestry.api.lepidopterology.genetics.IButterfly;
+import javax.annotation.Nullable;
 
 //TODO - figure out how IAnimal works now, might want to make abstract and extend AnimalEntity
 public interface IEntityButterfly {

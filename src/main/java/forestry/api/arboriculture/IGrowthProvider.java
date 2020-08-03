@@ -5,11 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import forestry.api.arboriculture.genetics.ITree;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
-import forestry.api.arboriculture.genetics.ITree;
 
 public interface IGrowthProvider {
 

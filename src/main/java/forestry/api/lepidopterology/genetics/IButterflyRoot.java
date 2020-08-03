@@ -5,18 +5,16 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import javax.annotation.Nullable;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.lepidopterology.ILepidopteristTracker;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.lepidopterology.ILepidopteristTracker;
+import javax.annotation.Nullable;
 
 public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
 

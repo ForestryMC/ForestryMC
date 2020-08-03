@@ -1,16 +1,15 @@
 package forestry.apiculture.genetics;
 
-import java.util.Locale;
-
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.apiculture.genetics.alleles.AlleleEffects;
+import forestry.core.genetics.alleles.EnumAllele;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
 import genetics.api.classification.IBranchDefinition;
 import genetics.api.classification.IClassification;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.apiculture.genetics.alleles.AlleleEffects;
-import forestry.core.genetics.alleles.EnumAllele;
+import java.util.Locale;
 
 public enum BeeBranchDefinition implements IBranchDefinition {
     HONEY("Apis"),

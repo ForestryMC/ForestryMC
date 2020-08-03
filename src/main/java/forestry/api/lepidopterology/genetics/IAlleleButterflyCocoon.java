@@ -5,11 +5,10 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.alleles.IAlleleProperty;
 import forestry.api.genetics.products.IDynamicProductList;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 
 public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
 

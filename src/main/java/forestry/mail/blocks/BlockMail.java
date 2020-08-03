@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.mail.blocks;
 
+import forestry.core.blocks.BlockBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-
 import net.minecraftforge.common.ToolType;
-
-import forestry.core.blocks.BlockBase;
 
 public class BlockMail extends BlockBase<BlockTypeMail> {
     public BlockMail(BlockTypeMail blockType) {

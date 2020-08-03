@@ -1,17 +1,15 @@
 package forestry.core.gui.elements;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.util.math.MathHelper;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.widgets.IScrollable;
+import net.minecraft.util.math.MathHelper;
+
+import javax.annotation.Nullable;
 
 public class ScrollBarElement extends ElementGroup {
     /* Attributes - Final */

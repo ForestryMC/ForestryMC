@@ -1,18 +1,16 @@
 package forestry.core.climate;
 
+import forestry.api.climate.IClimateListener;
+import forestry.api.climate.IClimateState;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.climate.IClimateListener;
-import forestry.api.climate.IClimateState;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 
 public class FakeClimateListener implements IClimateListener {
 

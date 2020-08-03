@@ -2,7 +2,6 @@ package forestry.energy.compat.tesla;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.common.capabilities.Capability;
 
 //import net.minecraftforge.fml.common.Optional;

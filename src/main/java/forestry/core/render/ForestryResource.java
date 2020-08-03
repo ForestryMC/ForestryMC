@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.util.ResourceLocation;
-
 import forestry.core.config.Constants;
+import net.minecraft.util.ResourceLocation;
 
 public class ForestryResource extends ResourceLocation {
 

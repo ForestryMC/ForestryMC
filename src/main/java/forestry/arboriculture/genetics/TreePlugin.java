@@ -1,18 +1,5 @@
 package forestry.arboriculture.genetics;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -24,6 +11,16 @@ import forestry.core.genetics.analyzer.DatabasePlugin;
 import forestry.core.genetics.analyzer.MutationsTab;
 import forestry.core.genetics.analyzer.ProductsTab;
 import forestry.core.items.ItemFruit;
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //TODO: Add support for the alyzer
 @OnlyIn(Dist.CLIENT)

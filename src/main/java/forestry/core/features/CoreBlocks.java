@@ -1,26 +1,14 @@
 package forestry.core.features;
 
+import forestry.core.ModuleCore;
+import forestry.core.blocks.*;
+import forestry.core.items.ItemBlockBase;
+import forestry.core.items.ItemBlockForestry;
+import forestry.modules.features.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-
 import net.minecraftforge.common.ToolType;
-
-import forestry.core.ModuleCore;
-import forestry.core.blocks.BlockBogEarth;
-import forestry.core.blocks.BlockCore;
-import forestry.core.blocks.BlockHumus;
-import forestry.core.blocks.BlockResourceOre;
-import forestry.core.blocks.BlockResourceStorage;
-import forestry.core.blocks.BlockTypeCoreTesr;
-import forestry.core.blocks.EnumResourceType;
-import forestry.core.items.ItemBlockBase;
-import forestry.core.items.ItemBlockForestry;
-import forestry.modules.features.FeatureBlock;
-import forestry.modules.features.FeatureBlockGroup;
-import forestry.modules.features.FeatureProvider;
-import forestry.modules.features.IFeatureRegistry;
-import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class CoreBlocks {

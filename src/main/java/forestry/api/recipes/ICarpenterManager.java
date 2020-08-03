@@ -5,12 +5,11 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipe;
-
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
 
 /**
  * Provides an interface to the recipe manager of the carpenter.

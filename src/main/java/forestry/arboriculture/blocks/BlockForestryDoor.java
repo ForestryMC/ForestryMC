@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-
-import net.minecraftforge.common.ToolType;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
+import net.minecraft.block.Block;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraftforge.common.ToolType;
 
 public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 

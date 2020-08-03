@@ -1,28 +1,24 @@
 package genetics.plugins;
 
 import com.google.common.collect.ImmutableSortedMap;
-
-import java.util.Comparator;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import net.minecraftforge.eventbus.api.EventPriority;
-
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
+import genetics.ApiInstance;
+import genetics.GeneticFactory;
+import genetics.alleles.AlleleRegistry;
 import genetics.api.GeneticPlugin;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.Allele;
-
-import genetics.ApiInstance;
-import genetics.GeneticFactory;
-import genetics.alleles.AlleleRegistry;
 import genetics.classification.ClassificationRegistry;
 import genetics.root.IndividualRootBuilder;
 import genetics.root.RootManager;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.Comparator;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class PluginManager {
     private static final Comparator<IGeneticPlugin> PLUGIN_COMPARATOR = (firstPlugin, secondPlugin) -> {

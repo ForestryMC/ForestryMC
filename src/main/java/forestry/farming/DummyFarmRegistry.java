@@ -1,17 +1,12 @@
 package forestry.farming;
 
+import forestry.api.farming.*;
+import forestry.farming.logic.farmables.FarmableInfo;
+import net.minecraft.item.ItemStack;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-
-import net.minecraft.item.ItemStack;
-
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.IFarmPropertiesBuilder;
-import forestry.api.farming.IFarmRegistry;
-import forestry.api.farming.IFarmable;
-import forestry.api.farming.IFarmableInfo;
-import forestry.farming.logic.farmables.FarmableInfo;
 
 public class DummyFarmRegistry implements IFarmRegistry {
 

@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.storage;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.IItemProvider;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.utils.ItemStackUtil;
@@ -24,6 +17,12 @@ import forestry.core.utils.Log;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 import forestry.storage.items.ItemCrated;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 public class CrateRegistry implements ICrateRegistry {
 

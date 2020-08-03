@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.IntegerProperty;
-
-import genetics.api.alleles.AlleleCategorized;
-
 import forestry.api.core.ISetupListener;
 import forestry.api.genetics.products.IDynamicProductList;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.core.config.Constants;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.lepidopterology.blocks.PropertyCocoon;
+import genetics.api.alleles.AlleleCategorized;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
+import net.minecraft.state.IntegerProperty;
 
 public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleButterflyCocoon, ISetupListener {
     public static final PropertyCocoon COCOON = new PropertyCocoon("cocoon");

@@ -11,10 +11,8 @@
 package forestry.core.recipes;
 
 import com.google.common.base.Preconditions;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IHygroregulatorRecipe;
+import net.minecraftforge.fluids.FluidStack;
 
 public class HygroregulatorRecipe implements IHygroregulatorRecipe {
     private final FluidStack liquid;

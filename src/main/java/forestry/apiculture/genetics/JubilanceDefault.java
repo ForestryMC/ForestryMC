@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import genetics.api.individual.IGenome;
 
 public class JubilanceDefault implements IJubilanceProvider {
 

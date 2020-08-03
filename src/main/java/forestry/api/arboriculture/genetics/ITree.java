@@ -5,9 +5,12 @@
  ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.products.IProductList;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IIndividual;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -16,18 +19,11 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IIndividual;
-
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.products.IProductList;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public interface ITree extends IIndividual, ITreeGenData {
 

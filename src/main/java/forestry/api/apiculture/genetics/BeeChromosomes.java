@@ -5,15 +5,13 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import net.minecraft.util.math.vector.Vector3i;
-
+import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.alleles.IAlleleFlowers;
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeList;
 import genetics.api.individual.IChromosomeValue;
-
-import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.alleles.IAlleleFlowers;
+import net.minecraft.util.math.vector.Vector3i;
 
 /**
  * Enum representing the order of chromosomes in a bee's genome and what they control.

@@ -11,13 +11,11 @@
 package forestry.lepidopterology.genetics;
 
 import com.google.common.base.CaseFormat;
-
-import javax.annotation.Nullable;
-import java.awt.Color;
-import java.util.Locale;
-
-import net.minecraft.item.ItemStack;
-
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.*;
+import forestry.core.config.Constants;
+import forestry.core.genetics.alleles.EnumAllele;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
@@ -27,17 +25,11 @@ import genetics.api.root.ITemplateContainer;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponent;
+import net.minecraft.item.ItemStack;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
-import forestry.api.lepidopterology.genetics.EnumFlutterType;
-import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.genetics.IAlleleButterflySpeciesBuilder;
-import forestry.api.lepidopterology.genetics.IButterfly;
-import forestry.api.lepidopterology.genetics.IButterflyMutationBuilder;
-import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.EnumAllele;
-import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Locale;
 
 public enum MothDefinition implements IButterflyDefinition {
     Brimstone(ButterflyBranchDefinition.OPISTHOGRAPTIS, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f),

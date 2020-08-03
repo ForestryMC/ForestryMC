@@ -1,11 +1,5 @@
 package genetics.api.organism;
 
-import java.util.Optional;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
 import genetics.api.IGeneticFactory;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
@@ -15,6 +9,10 @@ import genetics.api.individual.IChromosomeValue;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import java.util.Optional;
 
 /**
  * Implement this interface as a capability which should provide the genetic information of an item.

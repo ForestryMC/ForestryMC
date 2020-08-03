@@ -1,12 +1,11 @@
 package forestry.cultivation.tiles;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
 import forestry.cultivation.features.CultivationTiles;
 import forestry.farming.logic.ForestryFarmIdentifier;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class TileBog extends TilePlanter {
     public TileBog() {

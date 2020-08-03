@@ -1,13 +1,12 @@
 package forestry.storage.features;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.modules.features.FeatureItem;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 import forestry.storage.ModuleCrates;
 import forestry.storage.items.ItemCrated;
+import net.minecraft.item.ItemStack;
 
 @FeatureProvider
 public class CreateItems {

@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.components.ComponentKeys;
-
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.api.lepidopterology.genetics.IButterflyMutationBuilder;
 import forestry.api.lepidopterology.genetics.IButterflyMutationFactory;
+import genetics.api.alleles.IAllele;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
 
 public class ButterflyMutationFactory implements IButterflyMutationFactory {
 

@@ -1,10 +1,9 @@
 package forestry.core.climate;
 
 import com.google.common.base.MoreObjects;
+import forestry.api.climate.IClimateState;
 
 import java.util.function.UnaryOperator;
-
-import forestry.api.climate.IClimateState;
 
 class MutableClimateState implements IClimateState {
     protected float temperature;

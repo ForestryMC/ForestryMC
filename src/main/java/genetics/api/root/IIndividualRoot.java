@@ -1,18 +1,7 @@
 package genetics.api.root;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
 import genetics.api.alleles.IAllele;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeWrapper;
-import genetics.api.individual.IIndividual;
-import genetics.api.individual.IKaryotype;
+import genetics.api.individual.*;
 import genetics.api.organism.IOrganismHandler;
 import genetics.api.organism.IOrganismType;
 import genetics.api.organism.IOrganismTypes;
@@ -20,6 +9,12 @@ import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
 import genetics.api.root.components.IRootComponentContainer;
 import genetics.api.root.translator.IIndividualTranslator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * The IGeneticRoot offers several functions to create {@link IIndividual}s and to wrap the genome of a

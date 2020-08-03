@@ -1,23 +1,16 @@
 package forestry.core.multiblock;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Log;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Log;
+import java.util.*;
 
 /**
  * This class manages all the multiblock controllers that exist in a given world,

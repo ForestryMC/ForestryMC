@@ -10,9 +10,25 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.IErrorSource;
+import forestry.core.config.Config;
+import forestry.core.gui.elements.Window;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.ledgers.*;
+import forestry.core.gui.slots.ISlotTextured;
+import forestry.core.gui.widgets.TankWidget;
+import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.render.ColourProperties;
+import forestry.core.render.ForestryResource;
+import forestry.core.tiles.IClimatised;
+import forestry.energy.EnergyManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -26,34 +42,11 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.core.IErrorSource;
-import forestry.core.config.Config;
-import forestry.core.gui.elements.Window;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.events.GuiEvent;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
-import forestry.core.gui.ledgers.ClimateLedger;
-import forestry.core.gui.ledgers.HintLedger;
-import forestry.core.gui.ledgers.LedgerManager;
-import forestry.core.gui.ledgers.OwnerLedger;
-import forestry.core.gui.ledgers.PowerLedger;
-import forestry.core.gui.slots.ISlotTextured;
-import forestry.core.gui.widgets.TankWidget;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.render.ColourProperties;
-import forestry.core.render.ForestryResource;
-import forestry.core.tiles.IClimatised;
-import forestry.energy.EnergyManager;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class GuiForestry<C extends Container> extends ContainerScreen<C> implements IGuiSizable {
     protected final C container;

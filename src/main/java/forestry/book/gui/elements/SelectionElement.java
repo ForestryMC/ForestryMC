@@ -1,10 +1,5 @@
 package forestry.book.gui.elements;
 
-import javax.annotation.Nullable;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.ButtonElement;
@@ -13,6 +8,10 @@ import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.layouts.PaneLayout;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class SelectionElement<R> extends PaneLayout {

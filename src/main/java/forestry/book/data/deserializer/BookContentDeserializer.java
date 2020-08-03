@@ -4,17 +4,14 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import java.lang.reflect.Type;
-
-import net.minecraft.util.JSONUtils;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.book.BookContent;
 import forestry.book.BookLoader;
 import forestry.book.data.content.TextContent;
+import net.minecraft.util.JSONUtils;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.lang.reflect.Type;
 
 @OnlyIn(Dist.CLIENT)
 public class BookContentDeserializer implements JsonDeserializer<BookContent> {

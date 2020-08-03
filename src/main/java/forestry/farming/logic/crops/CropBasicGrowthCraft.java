@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic.crops;
 
+import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -19,10 +22,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
-import forestry.core.config.Constants;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.NetworkUtil;
 
 //TODO consider movnig compat specific crops to compat
 //TODO follow up in forge on generic crop interface...

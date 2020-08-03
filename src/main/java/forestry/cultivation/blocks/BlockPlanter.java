@@ -1,22 +1,20 @@
 package forestry.cultivation.blocks;
 
-import java.util.Locale;
-import java.util.Random;
-
+import forestry.api.core.IBlockSubtype;
+import forestry.core.blocks.BlockBase;
+import forestry.core.render.ParticleRender;
+import forestry.cultivation.tiles.TilePlanter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.core.blocks.BlockBase;
-import forestry.core.render.ParticleRender;
-import forestry.cultivation.tiles.TilePlanter;
+import java.util.Locale;
+import java.util.Random;
 
 public class BlockPlanter extends BlockBase<BlockTypePlanter> {
     private final Mode mode;

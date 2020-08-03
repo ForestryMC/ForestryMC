@@ -11,15 +11,12 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-
+import forestry.api.recipes.IFermenterRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.IFermenterRecipe;
+import javax.annotation.Nullable;
 
 public class FermenterRecipe implements IFermenterRecipe {
 

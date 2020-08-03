@@ -1,8 +1,8 @@
 package forestry.modules.features;
 
-import java.util.function.Consumer;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.function.Consumer;
 
 public enum StackOption implements Consumer<ItemStack> {
     MAX_COUNT {

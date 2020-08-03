@@ -1,17 +1,6 @@
 package forestry.cultivation;
 
 import com.google.common.collect.ImmutableSet;
-
-import java.util.Set;
-
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraftforge.fml.DistExecutor;
-
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.cultivation.features.CultivationContainers;
@@ -21,6 +10,13 @@ import forestry.cultivation.proxy.ProxyCultivationClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
+
+import java.util.Set;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CULTIVATION, name = "Cultivation", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.cultivation.description")
 public class ModuleCultivation extends BlankForestryModule {

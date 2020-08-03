@@ -1,10 +1,9 @@
 package forestry.core.items;
 
-import net.minecraft.block.Block;
-
 import forestry.core.ItemGroupForestry;
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
+import net.minecraft.block.Block;
 
 public class ItemBlockBase<B extends Block> extends ItemBlockForestry<B> {
 

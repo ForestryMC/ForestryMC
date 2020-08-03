@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.entities;
 
+import forestry.core.tiles.ITitled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -19,8 +20,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
-import forestry.core.tiles.ITitled;
 
 //TODO - check nothing missing from MinecartEntity now that this extends AbstractMinecartEntity
 public abstract class MinecartEntityForestry extends AbstractMinecartEntity implements ITitled {

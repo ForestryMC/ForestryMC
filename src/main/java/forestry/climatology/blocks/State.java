@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.climatology.blocks;
 
-import java.util.Locale;
-
 import net.minecraft.state.EnumProperty;
 import net.minecraft.util.IStringSerializable;
+
+import java.util.Locale;
 
 public enum State implements IStringSerializable {
     ON, OFF;

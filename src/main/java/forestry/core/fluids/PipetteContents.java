@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class PipetteContents {
 

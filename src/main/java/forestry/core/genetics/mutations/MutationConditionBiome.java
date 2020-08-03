@@ -10,23 +10,20 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
+import forestry.api.climate.IClimateProvider;
+import forestry.api.genetics.IMutationCondition;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.common.BiomeDictionary;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
-import forestry.api.climate.IClimateProvider;
-import forestry.api.genetics.IMutationCondition;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 public class MutationConditionBiome implements IMutationCondition {
 

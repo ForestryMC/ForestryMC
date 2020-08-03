@@ -2,15 +2,12 @@ package forestry.core.genetics;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-
-import net.minecraft.item.ItemStack;
-
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.ISpeciesDisplayHelper;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
-
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.ISpeciesDisplayHelper;
+import net.minecraft.item.ItemStack;
 
 
 public class SpeciesDisplayHelper implements ISpeciesDisplayHelper {

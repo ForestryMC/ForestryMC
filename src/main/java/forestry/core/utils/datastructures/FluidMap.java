@@ -13,7 +13,6 @@ package forestry.core.utils.datastructures;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 

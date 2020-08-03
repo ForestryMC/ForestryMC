@@ -1,9 +1,9 @@
 package genetics.api.root.components;
 
-import javax.annotation.Nullable;
-
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRootBuilder;
+
+import javax.annotation.Nullable;
 
 /**
  * A registry that can be used to register default factories for {@link IRootComponent}s and get these.

@@ -1,12 +1,11 @@
 package forestry.core.render;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
 
 public class RenderForestryTile<T extends TileEntity> extends TileEntityRenderer<T> {
 

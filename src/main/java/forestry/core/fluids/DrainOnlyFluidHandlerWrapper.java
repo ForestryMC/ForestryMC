@@ -1,9 +1,9 @@
 package forestry.core.fluids;
 
-import javax.annotation.Nonnull;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import javax.annotation.Nonnull;
 
 public class DrainOnlyFluidHandlerWrapper implements IFluidHandler {
     private final IFluidHandler internalFluidHandler;

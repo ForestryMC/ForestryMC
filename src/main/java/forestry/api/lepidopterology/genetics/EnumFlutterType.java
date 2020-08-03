@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import java.util.Locale;
-
 import genetics.api.organism.IOrganismType;
+
+import java.util.Locale;
 
 public enum EnumFlutterType implements IOrganismType {
     BUTTERFLY, SERUM, CATERPILLAR, COCOON;

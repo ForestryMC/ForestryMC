@@ -10,27 +10,19 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.IPostOffice;
-import forestry.api.mail.IPostalCarrier;
-import forestry.api.mail.IPostalState;
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.PostManager;
+import forestry.api.mail.*;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PostalCarrier implements IPostalCarrier {
 

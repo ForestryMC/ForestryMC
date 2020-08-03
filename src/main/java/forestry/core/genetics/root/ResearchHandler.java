@@ -1,17 +1,12 @@
 package forestry.core.genetics.root;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
+import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.core.utils.ItemStackUtil;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
@@ -19,13 +14,11 @@ import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 
-import forestry.api.genetics.ForestryComponentKeys;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IResearchHandler;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.core.utils.ItemStackUtil;
+import java.util.*;
 
 public class ResearchHandler<I extends IIndividual> implements IResearchHandler<I> {
     private final Map<ItemStack, Float> catalysts = new LinkedHashMap<>();

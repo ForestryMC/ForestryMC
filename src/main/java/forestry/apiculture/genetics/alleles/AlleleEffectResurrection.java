@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
-
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.utils.EntityUtil;
+import forestry.core.utils.ItemStackUtil;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -23,12 +23,10 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.utils.EntityUtil;
-import forestry.core.utils.ItemStackUtil;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 

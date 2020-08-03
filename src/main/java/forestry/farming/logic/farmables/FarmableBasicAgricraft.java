@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
+import forestry.api.farming.ICrop;
+import forestry.farming.logic.crops.CropBasicAgriCraft;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.farming.logic.crops.CropBasicAgriCraft;
 
 public class FarmableBasicAgricraft extends FarmableBase {
     public FarmableBasicAgricraft(ItemStack germling, BlockState plantedState, BlockState matureState, boolean replant) {

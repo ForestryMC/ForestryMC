@@ -1,19 +1,17 @@
 package forestry.core.gui.elements.lib;
 
-import javax.annotation.Nullable;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import net.minecraft.util.text.Style;
-
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.gatgets.DatabaseMode;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
+import net.minecraft.util.text.Style;
 
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.gatgets.DatabaseMode;
+import javax.annotation.Nullable;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 //TODO textcomponents?
 public interface IDatabaseElement extends IElementLayout {

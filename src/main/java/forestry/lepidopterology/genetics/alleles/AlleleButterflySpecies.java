@@ -12,17 +12,6 @@ package forestry.lepidopterology.genetics.alleles;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-
-import java.awt.Color;
-import java.util.Collection;
-import java.util.Set;
-
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.core.ISetupListener;
 import forestry.api.core.ISpriteRegistry;
 import forestry.api.genetics.products.IDynamicProductList;
@@ -33,6 +22,14 @@ import forestry.api.lepidopterology.genetics.IButterflyRoot;
 import forestry.core.config.Constants;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.BiomeDictionary;
+
+import java.awt.*;
+import java.util.Collection;
+import java.util.Set;
 
 public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAlleleButterflySpecies,
         ISetupListener {

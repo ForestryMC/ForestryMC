@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+
+import java.util.Collection;
 
 /**
  * Provides functions that are related to the forestry charcoal pile.

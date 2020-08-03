@@ -1,12 +1,5 @@
 package forestry.database.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-
 import forestry.core.gui.ContainerAnalyzerProvider;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotFilteredInventory;
@@ -14,6 +7,11 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.database.features.DatabaseContainers;
 import forestry.database.tiles.TileDatabase;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 

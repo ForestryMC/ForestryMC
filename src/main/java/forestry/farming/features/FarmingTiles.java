@@ -2,11 +2,7 @@ package forestry.farming.features;
 
 import forestry.farming.ModuleFarming;
 import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
+import forestry.farming.tiles.*;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.FeatureTileType;
 import forestry.modules.features.IFeatureRegistry;

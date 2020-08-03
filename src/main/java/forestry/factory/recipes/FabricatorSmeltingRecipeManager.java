@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IFabricatorSmeltingManager;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.core.utils.ItemStackUtil;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.recipes.IFabricatorSmeltingManager;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
     public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();

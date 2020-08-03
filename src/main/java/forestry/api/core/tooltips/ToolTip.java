@@ -11,7 +11,6 @@
 package forestry.api.core.tooltips;
 
 import net.minecraft.util.text.StringTextComponent;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

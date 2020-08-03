@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.tiles.TileMill;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
-
-import forestry.core.tiles.TileMill;
 
 public class RenderMill implements IForestryRenderer<TileMill> {
     private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}

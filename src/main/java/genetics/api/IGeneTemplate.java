@@ -1,12 +1,12 @@
 package genetics.api;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
 import genetics.api.root.IIndividualRoot;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * The IGeneTemplate is a interface that can be implemented as a capability if a item should represent a allele at a

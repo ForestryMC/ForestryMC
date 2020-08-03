@@ -1,10 +1,9 @@
 package genetics.plugins.vanilla;
 
+import genetics.Genetics;
 import genetics.api.GeneticPlugin;
 import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.IAlleleRegistry;
-
-import genetics.Genetics;
 
 @GeneticPlugin(modId = Genetics.MOD_ID)
 public class VanillaPlugin implements IGeneticPlugin {

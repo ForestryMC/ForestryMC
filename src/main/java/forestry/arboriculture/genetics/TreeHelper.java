@@ -1,15 +1,14 @@
 package forestry.arboriculture.genetics;
 
-import genetics.api.alleles.IAlleleTemplate;
-import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IKaryotype;
-
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.TreePlugin;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
 import forestry.core.genetics.alleles.EnumAllele;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.alleles.IAlleleTemplateBuilder;
+import genetics.api.individual.IKaryotype;
 
 public class TreeHelper {
     private TreeHelper() {

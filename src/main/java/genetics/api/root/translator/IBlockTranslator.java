@@ -1,11 +1,10 @@
 package genetics.api.root.translator;
 
-import javax.annotation.Nullable;
-
+import genetics.api.individual.IIndividual;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 
-import genetics.api.individual.IIndividual;
+import javax.annotation.Nullable;
 
 /**
  * Translates blockStates into genetic data.

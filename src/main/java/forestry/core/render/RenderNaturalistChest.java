@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
@@ -17,12 +21,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
 

@@ -5,10 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics.alleles;
 
-import genetics.api.classification.IClassification;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import genetics.api.classification.IClassification;
 
 public interface IAlleleSpeciesBuilder<B> {
 

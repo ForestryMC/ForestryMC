@@ -7,7 +7,6 @@ package forestry.api.climate;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.LazyOptional;
 
 public interface IClimateRoot {

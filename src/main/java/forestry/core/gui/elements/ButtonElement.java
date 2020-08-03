@@ -1,14 +1,13 @@
 package forestry.core.gui.elements;
 
-import java.util.function.Consumer;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.utils.SoundUtil;
+
+import java.util.function.Consumer;
 
 public class ButtonElement extends GuiElement {
     /* Attributes - Final */

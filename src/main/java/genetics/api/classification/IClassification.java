@@ -1,8 +1,8 @@
 package genetics.api.classification;
 
-import javax.annotation.Nullable;
-
 import genetics.api.alleles.IAlleleSpecies;
+
+import javax.annotation.Nullable;
 
 /**
  * Biological classifications from domain down to genus.

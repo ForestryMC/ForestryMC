@@ -5,9 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics.alleles;
 
-import genetics.api.individual.IChromosomeType;
-
 import forestry.api.genetics.flowers.IFlowerProvider;
+import genetics.api.individual.IChromosomeType;
 
 /**
  * Creates new alleles with smart localization.

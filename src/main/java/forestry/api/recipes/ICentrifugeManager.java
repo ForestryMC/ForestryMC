@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import java.util.Map;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.Map;
 
 /**
  * Provides an interface to the recipe manager of the centrifuge.

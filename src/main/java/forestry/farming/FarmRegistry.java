@@ -3,25 +3,7 @@ package forestry.farming;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import net.minecraft.item.ItemStack;
-
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.IFarmPropertiesBuilder;
-import forestry.api.farming.IFarmRegistry;
-import forestry.api.farming.IFarmable;
-import forestry.api.farming.IFarmableInfo;
+import forestry.api.farming.*;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ItemStackUtil;
@@ -29,6 +11,11 @@ import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.Map.Entry;
 
 public final class FarmRegistry implements IFarmRegistry {
 

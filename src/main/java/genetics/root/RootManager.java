@@ -3,12 +3,6 @@ package genetics.root;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
@@ -16,6 +10,11 @@ import genetics.api.root.IGeneticListener;
 import genetics.api.root.IGeneticListenerRegistry;
 import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootManager;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class RootManager implements IRootManager, IGeneticListenerRegistry {
     private final HashMap<String, IndividualRootBuilder> rootBuilders = new HashMap<>();

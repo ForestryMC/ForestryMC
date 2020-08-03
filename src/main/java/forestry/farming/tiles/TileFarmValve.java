@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import javax.annotation.Nullable;
-
+import forestry.core.fluids.ITankManager;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.farming.features.FarmingTiles;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import forestry.core.fluids.ITankManager;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.farming.features.FarmingTiles;
+import javax.annotation.Nullable;
 
 public class TileFarmValve extends TileFarm implements ILiquidTankTile {
     public TileFarmValve() {

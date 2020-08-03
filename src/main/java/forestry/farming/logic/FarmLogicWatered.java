@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import org.apache.commons.lang3.tuple.Pair;
-
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.Soil;
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
@@ -19,15 +22,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.Soil;
-import forestry.core.utils.BlockUtil;
+import org.apache.commons.lang3.tuple.Pair;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
     private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.ItemGroupForestry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,10 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.ToolType;
-
-import forestry.core.ItemGroupForestry;
 
 //import net.minecraftforge.fml.common.Optional;
 

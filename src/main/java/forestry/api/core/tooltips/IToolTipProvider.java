@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.api.core.tooltips;
 
-import javax.annotation.Nullable;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

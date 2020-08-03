@@ -11,14 +11,13 @@
 package forestry.factory.network;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
 import forestry.factory.network.packets.PacketRecipeTransferRequest;
 import forestry.factory.network.packets.PacketRecipeTransferUpdate;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryFactory implements IPacketRegistry {
     @Override

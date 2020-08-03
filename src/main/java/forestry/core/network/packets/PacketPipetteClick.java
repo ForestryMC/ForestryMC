@@ -10,14 +10,9 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-
 import forestry.core.gui.IContainerLiquidTanks;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketHandlerServer;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdServer;
+import forestry.core.network.*;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class PacketPipetteClick extends ForestryPacket implements IForestryPacketServer {
     private final int slot;

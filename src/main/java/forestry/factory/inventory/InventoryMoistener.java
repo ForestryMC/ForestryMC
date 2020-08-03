@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-
 import forestry.api.fuels.FuelManager;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.tiles.TileMoistener;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
     public static final short SLOT_STASH_1 = 0;

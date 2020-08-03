@@ -1,8 +1,8 @@
 package forestry.core.gui.elements;
 
-import javax.annotation.Nullable;
-
 import forestry.core.gui.elements.lib.IGuiElement;
+
+import javax.annotation.Nullable;
 
 public interface ICroppedGuiElement extends IGuiElement {
 

@@ -2,13 +2,7 @@ package forestry.cultivation.features;
 
 import forestry.cultivation.ModuleCultivation;
 import forestry.cultivation.blocks.BlockTypePlanter;
-import forestry.cultivation.tiles.TileArboretum;
-import forestry.cultivation.tiles.TileBog;
-import forestry.cultivation.tiles.TileFarmCrops;
-import forestry.cultivation.tiles.TileFarmEnder;
-import forestry.cultivation.tiles.TileFarmGourd;
-import forestry.cultivation.tiles.TileFarmMushroom;
-import forestry.cultivation.tiles.TileFarmNether;
+import forestry.cultivation.tiles.*;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.FeatureTileType;
 import forestry.modules.features.IFeatureRegistry;

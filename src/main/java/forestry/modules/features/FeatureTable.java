@@ -1,20 +1,17 @@
 package forestry.modules.features;
 
 import com.google.common.collect.ImmutableTable;
+import forestry.api.core.IFeatureSubtype;
+import forestry.api.core.IItemProvider;
+import forestry.modules.features.FeatureGroup.IdentifierType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.IFeatureSubtype;
-import forestry.api.core.IItemProvider;
-import forestry.modules.features.FeatureGroup.IdentifierType;
 
 public abstract class FeatureTable<B extends FeatureTable.Builder<R, C, ? extends FeatureTable<B, F, R, C>>, F extends IModFeature, R extends IFeatureSubtype, C extends IFeatureSubtype> {
 

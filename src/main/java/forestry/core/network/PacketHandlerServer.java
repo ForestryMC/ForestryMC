@@ -10,22 +10,19 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.IOException;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import forestry.core.config.Constants;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.network.ICustomPacket;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import forestry.core.config.Constants;
+import java.io.IOException;
 
 //import net.minecraft.util.IThreadListener;
 //import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

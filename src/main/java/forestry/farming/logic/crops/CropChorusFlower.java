@@ -1,16 +1,14 @@
 package forestry.farming.logic.crops;
 
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.event.ForgeEventFactory;
-
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.NetworkUtil;
 
 public class CropChorusFlower extends Crop {
     private static final BlockState BLOCK_STATE = Blocks.CHORUS_FLOWER.getDefaultState();

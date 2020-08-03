@@ -10,20 +10,13 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
+import forestry.core.network.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.IForestryPacketHandlerClient;
-import forestry.core.network.IStreamableGui;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdClient;
+import java.io.IOException;
 
 public class PacketGuiUpdateEntity extends ForestryPacket implements IForestryPacketClient {
     private final Entity entity;

@@ -13,9 +13,7 @@
 package forestry.book.data.structure;
 
 import com.google.gson.JsonObject;
-
 import net.minecraft.nbt.CompoundNBT;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

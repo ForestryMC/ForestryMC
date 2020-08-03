@@ -11,11 +11,10 @@
 package forestry.core.climate;
 
 import com.google.common.base.MoreObjects;
+import forestry.api.climate.IClimateState;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.function.UnaryOperator;
-
-import forestry.api.climate.IClimateState;
 
 @Immutable
 public final class AbsentClimateState implements IClimateState {

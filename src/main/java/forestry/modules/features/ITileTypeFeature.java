@@ -1,13 +1,11 @@
 package forestry.modules.features;
 
+import forestry.api.core.ITileTypeProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import forestry.api.core.ITileTypeProvider;
 
 public interface ITileTypeFeature<T extends TileEntity> extends IModFeature, ITileTypeProvider<T> {
 

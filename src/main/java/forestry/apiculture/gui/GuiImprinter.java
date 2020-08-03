@@ -10,19 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.features.ApicultureItems;
@@ -34,6 +22,15 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GuiImprinter extends GuiForestry<ContainerImprinter> {
     private final ItemInventoryImprinter itemInventory;

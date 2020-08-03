@@ -2,6 +2,6 @@
 @MethodsReturnNonnullByDefault
 package genetics.api.root.translator;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

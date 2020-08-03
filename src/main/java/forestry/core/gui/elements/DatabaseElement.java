@@ -1,35 +1,28 @@
 package forestry.core.gui.elements;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-
+import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.gatgets.DatabaseMode;
+import forestry.core.gui.elements.layouts.PaneLayout;
+import forestry.core.gui.elements.layouts.VerticalLayout;
+import forestry.core.gui.elements.lib.*;
+import forestry.core.utils.Translator;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 
-import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.gatgets.DatabaseMode;
-import forestry.core.gui.elements.layouts.PaneLayout;
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IDatabaseElement;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IElementLayout;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.utils.Translator;
+import javax.annotation.Nullable;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class DatabaseElement extends VerticalLayout implements IDatabaseElement {
     private DatabaseMode mode = DatabaseMode.ACTIVE;

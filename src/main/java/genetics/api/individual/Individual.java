@@ -1,11 +1,10 @@
 package genetics.api.individual;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
+import genetics.api.GeneticsAPI;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.GeneticsAPI;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * A simple abstract default implementation of {@link IIndividual}.

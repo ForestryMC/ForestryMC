@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-
+import forestry.api.apiculture.ApicultureCapabilities;
+import forestry.api.arboriculture.ArboricultureCapabilities;
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.features.ApicultureItems;
+import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
+import forestry.core.items.EnumCraftingMaterial;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -23,18 +28,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.core.ItemGroups;
-import forestry.apiculture.features.ApicultureItems;
-import forestry.core.config.Constants;
-import forestry.core.features.CoreItems;
-import forestry.core.items.EnumCraftingMaterial;
+import javax.annotation.Nullable;
 
 public class ItemArmorApiarist extends ArmorItem {
 

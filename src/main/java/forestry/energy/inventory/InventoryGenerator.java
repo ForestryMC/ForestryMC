@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.energy.inventory;
 
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.energy.tiles.TileEuGenerator;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.energy.tiles.TileEuGenerator;
 
 public class InventoryGenerator extends InventoryAdapterTile<TileEuGenerator> {
     public static final short SLOT_CAN = 0;

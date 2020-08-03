@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.network.packets.PacketGuiUpdate;
@@ -20,6 +17,8 @@ import forestry.core.tiles.TileUtil;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.energy.tiles.TileEuGenerator;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 

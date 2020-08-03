@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Random;
-
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.EmptyProductList;
+import forestry.api.genetics.products.IProductList;
+import forestry.core.config.Constants;
+import genetics.api.individual.IGenome;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -23,18 +25,13 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.products.EmptyProductList;
-import forestry.api.genetics.products.IProductList;
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Random;
 
 public class FruitProviderNone implements IFruitProvider {
 

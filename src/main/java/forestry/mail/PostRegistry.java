@@ -10,32 +10,23 @@
  ******************************************************************************/
 package forestry.mail;
 
-import javax.annotation.Nullable;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.mail.*;
+import forestry.core.utils.Log;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.PlayerUtil;
+import forestry.mail.features.MailItems;
+import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.IPostOffice;
-import forestry.api.mail.IPostRegistry;
-import forestry.api.mail.IPostalCarrier;
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.PostManager;
-import forestry.core.utils.Log;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.PlayerUtil;
-import forestry.mail.features.MailItems;
-import forestry.mail.network.packets.PacketPOBoxInfoResponse;
+import javax.annotation.Nullable;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PostRegistry implements IPostRegistry {
     @Nullable

@@ -10,8 +10,14 @@
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import javax.annotation.Nullable;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.core.ILocatable;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.api.multiblock.MultiblockTileEntityBase;
+import forestry.core.config.Constants;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -24,18 +30,9 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.api.core.ILocatable;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.api.multiblock.MultiblockTileEntityBase;
-import forestry.core.config.Constants;
-import forestry.core.inventory.FakeInventoryAdapter;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.tiles.IFilterSlotDelegate;
+import javax.annotation.Nullable;
 
 public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, INamedContainerProvider {
     @Nullable

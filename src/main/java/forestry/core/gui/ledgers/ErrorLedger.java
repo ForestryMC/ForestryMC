@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import javax.annotation.Nullable;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.api.core.IErrorState;
+import forestry.core.utils.StringUtil;
+import forestry.core.utils.Translator;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.api.core.IErrorState;
-import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import javax.annotation.Nullable;
 
 /**
  * A ledger displaying error messages and help text.

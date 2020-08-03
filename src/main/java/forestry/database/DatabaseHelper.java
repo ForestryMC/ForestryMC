@@ -1,17 +1,13 @@
 package forestry.database;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class DatabaseHelper {
     public static boolean ascending;

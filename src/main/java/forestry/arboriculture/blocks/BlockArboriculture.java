@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import net.minecraft.block.material.Material;
-
-import net.minecraftforge.common.ToolType;
-
 import forestry.core.blocks.BlockBase;
+import net.minecraft.block.material.Material;
+import net.minecraftforge.common.ToolType;
 
 public class BlockArboriculture extends BlockBase<BlockTypeArboricultureTesr> {
     public BlockArboriculture(BlockTypeArboricultureTesr type) {

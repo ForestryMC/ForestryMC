@@ -1,20 +1,14 @@
 package forestry.sorting.gui.widgets;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.sorting.gui.ISelectableProvider;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class SelectionLogic<S> implements IScrollable {
     private static final int SELECTABLE_PER_ROW = 11;

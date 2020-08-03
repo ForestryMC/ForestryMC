@@ -10,19 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import java.util.Optional;
-
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -44,6 +32,16 @@ import forestry.core.owner.OwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
+import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import java.util.Optional;
 
 public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
     private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(MinecartEntityBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);

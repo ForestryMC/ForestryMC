@@ -1,18 +1,5 @@
 package forestry.cultivation.inventory;
 
-import java.util.Stack;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
@@ -26,6 +13,17 @@ import forestry.core.utils.SlotUtil;
 import forestry.cultivation.tiles.TilePlanter;
 import forestry.farming.FarmHelper;
 import forestry.farming.multiblock.IFarmInventoryInternal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+
+import java.util.Stack;
 
 public class InventoryPlanter extends InventoryAdapterRestricted implements IFarmInventoryInternal {
     public static final int SLOT_RESOURCES_1 = 0;

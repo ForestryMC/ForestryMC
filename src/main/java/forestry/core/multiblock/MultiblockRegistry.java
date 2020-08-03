@@ -1,16 +1,14 @@
 package forestry.core.multiblock;
 
 import com.google.common.collect.ImmutableSet;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.utils.Log;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.utils.Log;
 
 /**
  * This is a very static singleton registry class which directs incoming events to sub-objects, which

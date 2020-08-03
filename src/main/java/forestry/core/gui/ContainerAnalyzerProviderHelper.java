@@ -1,19 +1,5 @@
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.features.CoreItems;
@@ -23,6 +9,17 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 //import forestry.database.inventory.InventoryDatabaseAnalyzer;
 

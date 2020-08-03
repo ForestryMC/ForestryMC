@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.VersionRange;
 
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 
 public abstract class ModUtil {

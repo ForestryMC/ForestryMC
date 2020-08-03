@@ -5,9 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import net.minecraft.item.ItemStack;
 
 public interface ILeafProvider {
 

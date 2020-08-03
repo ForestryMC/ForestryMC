@@ -7,9 +7,9 @@
 @MethodsReturnNonnullByDefault
 package forestry.api.core.tooltips;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //import net.minecraftforge.fml.common.API;
 //TODO API

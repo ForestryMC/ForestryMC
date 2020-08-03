@@ -1,27 +1,16 @@
 package genetics.plugins;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import net.minecraftforge.forgespi.language.ModFileScanData;
-
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-
 import genetics.api.GeneticPlugin;
 import genetics.api.IGeneticPlugin;
-
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.forgespi.language.ModFileScanData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.Type;
+
+import java.util.*;
+import java.util.function.Function;
 
 public class PluginUtil {
     private static final Logger LOGGER = LogManager.getLogger();

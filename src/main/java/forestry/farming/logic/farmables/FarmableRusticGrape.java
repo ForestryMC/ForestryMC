@@ -1,9 +1,9 @@
 package forestry.farming.logic.farmables;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.farming.logic.crops.CropDestroy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,9 +12,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.farming.logic.crops.CropDestroy;
+import javax.annotation.Nullable;
 
 public class FarmableRusticGrape implements IFarmable {
     public static final BooleanProperty GRAPES = BooleanProperty.create("grapes");

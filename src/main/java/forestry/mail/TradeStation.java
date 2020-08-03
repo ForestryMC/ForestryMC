@@ -10,6 +10,16 @@
  ******************************************************************************/
 package forestry.mail;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.mail.*;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Translator;
+import forestry.mail.features.MailItems;
+import forestry.mail.inventory.InventoryTradeStation;
+import forestry.mail.items.EnumStampDefinition;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -19,26 +29,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.EnumPostage;
-import forestry.api.mail.EnumTradeStationState;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.IPostalState;
-import forestry.api.mail.IStamps;
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.PostManager;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Translator;
-import forestry.mail.features.MailItems;
-import forestry.mail.inventory.InventoryTradeStation;
-import forestry.mail.items.EnumStampDefinition;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
     public static final String SAVE_NAME = "trade_po_";

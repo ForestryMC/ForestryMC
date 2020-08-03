@@ -1,7 +1,7 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "forestry:item/liquids/glass.bottle",
-    "layer1": "forestry:item/liquids/glass.contents"
-  }
+  "loader": "forestry:fluid_container",
+  "gui_light": "front",
+  "empty": "item/glass_bottle",
+  "filled": "forestry:item/glass_filled",
+  "type": "glass"
 }

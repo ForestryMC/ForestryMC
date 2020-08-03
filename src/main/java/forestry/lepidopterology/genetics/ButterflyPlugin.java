@@ -1,18 +1,5 @@
 package forestry.lepidopterology.genetics;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
 import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
@@ -22,6 +9,16 @@ import forestry.core.config.Config;
 import forestry.core.genetics.analyzer.DatabasePlugin;
 import forestry.core.genetics.analyzer.MutationsTab;
 import forestry.lepidopterology.features.LepidopterologyItems;
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyPlugin extends DatabasePlugin<IButterfly> {

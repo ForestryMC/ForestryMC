@@ -2,7 +2,6 @@ package forestry.core.utils;
 
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
-
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ForgeUtils {

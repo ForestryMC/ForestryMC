@@ -11,33 +11,10 @@
 package forestry.core.network;
 
 
+import forestry.climatology.network.packets.PacketSelectClimateTargeted;
+import forestry.core.network.packets.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.climatology.network.packets.PacketSelectClimateTargeted;
-import forestry.core.network.packets.PacketActiveUpdate;
-import forestry.core.network.packets.PacketChipsetClick;
-import forestry.core.network.packets.PacketClimateListenerUpdate;
-import forestry.core.network.packets.PacketClimateListenerUpdateEntity;
-import forestry.core.network.packets.PacketClimateListenerUpdateEntityRequest;
-import forestry.core.network.packets.PacketClimateListenerUpdateRequest;
-import forestry.core.network.packets.PacketClimatePlayer;
-import forestry.core.network.packets.PacketClimateUpdate;
-import forestry.core.network.packets.PacketErrorUpdate;
-import forestry.core.network.packets.PacketErrorUpdateEntity;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.network.packets.PacketGenomeTrackerSync;
-import forestry.core.network.packets.PacketGuiEnergy;
-import forestry.core.network.packets.PacketGuiLayoutSelect;
-import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.network.packets.PacketGuiUpdate;
-import forestry.core.network.packets.PacketGuiUpdateEntity;
-import forestry.core.network.packets.PacketItemStackDisplay;
-import forestry.core.network.packets.PacketPipetteClick;
-import forestry.core.network.packets.PacketSocketUpdate;
-import forestry.core.network.packets.PacketSolderingIronClick;
-import forestry.core.network.packets.PacketTankLevelUpdate;
-import forestry.core.network.packets.PacketTileStream;
 
 public class PacketRegistryCore implements IPacketRegistry {
     @Override

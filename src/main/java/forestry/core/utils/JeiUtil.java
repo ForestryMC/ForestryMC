@@ -1,17 +1,15 @@
 package forestry.core.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import forestry.modules.features.FeatureItem;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import forestry.modules.features.FeatureItem;
-
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.registration.IRecipeRegistration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JeiUtil {
     public static final String DESCRIPTION_KEY = "for.jei.description.";

@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.farming.logic.crops;
 
+import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
+import forestry.core.features.CoreItems;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.core.config.Constants;
-import forestry.core.features.CoreBlocks;
-import forestry.core.features.CoreItems;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.NetworkUtil;
 
 public class CropPeat extends Crop {
 

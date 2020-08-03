@@ -5,20 +5,18 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import forestry.api.apiculture.genetics.IBeeFactory;
+import forestry.api.apiculture.genetics.IBeeMutationFactory;
+import forestry.api.apiculture.genetics.IBeeRoot;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IGenome;
+import genetics.api.root.IRootDefinition;
+import net.minecraft.item.ItemStack;
+
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IGenome;
-import genetics.api.root.IRootDefinition;
-
-import forestry.api.apiculture.genetics.IBeeFactory;
-import forestry.api.apiculture.genetics.IBeeMutationFactory;
-import forestry.api.apiculture.genetics.IBeeRoot;
 
 /**
  * Some miscellaneous lists and settings for bees.

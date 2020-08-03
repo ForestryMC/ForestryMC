@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.ItemGroupForestry;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.inventory.ItemInventorySolderingIron;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 

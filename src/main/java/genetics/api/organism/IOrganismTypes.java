@@ -1,20 +1,18 @@
 package genetics.api.organism;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.common.capabilities.Capability;
-
 import genetics.api.IGeneticFactory;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * The IGeneticTypes offers several functions to retrieving genetic information from an {@link ItemStack}.

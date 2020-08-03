@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.TileAnalyzer;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
     private final TileAnalyzer tile;

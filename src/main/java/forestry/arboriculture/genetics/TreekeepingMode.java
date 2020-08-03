@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import forestry.api.arboriculture.ITreekeepingMode;
+import genetics.api.individual.IGenome;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import genetics.api.individual.IGenome;
-
-import forestry.api.arboriculture.ITreekeepingMode;
 
 public class TreekeepingMode implements ITreekeepingMode {
 

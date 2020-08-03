@@ -1,13 +1,5 @@
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -15,6 +7,12 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.alleles.AlleleManager;
+import genetics.api.individual.IGenome;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import javax.annotation.Nullable;
 
 public class ClimateGrowthProvider implements IGrowthProvider {
 

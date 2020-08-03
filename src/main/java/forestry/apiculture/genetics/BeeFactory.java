@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import genetics.api.classification.IClassification;
-
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.genetics.IBeeFactory;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
+import genetics.api.classification.IClassification;
 
 public class BeeFactory implements IBeeFactory {
     @Override

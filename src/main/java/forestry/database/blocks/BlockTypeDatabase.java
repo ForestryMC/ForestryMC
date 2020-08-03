@@ -1,13 +1,13 @@
 package forestry.database.blocks;
 
-import java.util.function.Supplier;
-
 import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.database.features.DatabaseTiles;
 import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeDatabase implements IBlockTypeCustom {
     DATABASE(() -> DatabaseTiles.DATABASE, "database");

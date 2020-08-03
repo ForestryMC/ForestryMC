@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import java.util.Locale;
-
 import net.minecraft.util.IStringSerializable;
+
+import java.util.Locale;
 
 public enum WoodBlockKind implements IStringSerializable {
     LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;

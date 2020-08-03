@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiUtil;
 import forestry.core.utils.ItemTooltipUtil;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class ItemStackWidgetBase extends Widget {
     public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {

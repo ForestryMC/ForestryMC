@@ -10,18 +10,15 @@
  ******************************************************************************/
 package forestry.climatology.proxy;
 
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-
 import forestry.climatology.PreviewHandlerClient;
 import forestry.climatology.features.ClimatologyBlocks;
 import forestry.modules.IClientModuleHandler;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class ProxyClimatologyClient extends ProxyClimatology implements IClientModuleHandler {

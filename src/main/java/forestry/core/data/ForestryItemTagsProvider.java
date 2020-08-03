@@ -1,11 +1,9 @@
 package forestry.core.data;
 
-import javax.annotation.Nullable;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import forestry.apiculture.features.ApicultureItems;
+import forestry.arboriculture.features.ArboricultureItems;
+import forestry.core.features.CoreItems;
+import forestry.mail.features.MailItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.data.TagsProvider;
@@ -13,13 +11,13 @@ import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.common.Tags;
 
-import forestry.apiculture.features.ApicultureItems;
-import forestry.arboriculture.features.ArboricultureItems;
-import forestry.core.features.CoreItems;
-import forestry.mail.features.MailItems;
+import javax.annotation.Nullable;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class ForestryItemTagsProvider extends ItemTagsProvider {
     @Nullable

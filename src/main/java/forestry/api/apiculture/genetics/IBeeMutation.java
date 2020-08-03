@@ -5,10 +5,9 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
+import forestry.api.apiculture.IBeeHousing;
 import genetics.api.individual.IGenome;
 import genetics.api.mutation.IMutation;
-
-import forestry.api.apiculture.IBeeHousing;
 
 public interface IBeeMutation extends IMutation {
 

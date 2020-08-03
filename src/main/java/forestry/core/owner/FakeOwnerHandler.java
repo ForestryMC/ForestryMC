@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.owner;
 
-import javax.annotation.Nullable;
-
 import com.mojang.authlib.GameProfile;
+
+import javax.annotation.Nullable;
 
 public class FakeOwnerHandler implements IOwnerHandler {
     @Nullable

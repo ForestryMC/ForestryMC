@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 public class GuiAlvearySwarmer extends GuiForestryTitled<ContainerAlvearySwarmer> {
     private final TileAlvearySwarmer tile;

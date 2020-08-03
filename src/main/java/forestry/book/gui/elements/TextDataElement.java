@@ -1,21 +1,18 @@
 package forestry.book.gui.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.book.data.TextData;
+import forestry.core.gui.elements.GuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.book.data.TextData;
-import forestry.core.gui.elements.GuiElement;
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO Move to component system
 @OnlyIn(Dist.CLIENT)

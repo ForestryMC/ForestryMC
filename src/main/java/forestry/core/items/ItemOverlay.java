@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.api.core.IItemSubtype;
+import forestry.core.ItemGroupForestry;
+import forestry.core.config.Config;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-
-import forestry.api.core.IItemSubtype;
-import forestry.core.ItemGroupForestry;
-import forestry.core.config.Config;
 
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 

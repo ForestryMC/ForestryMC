@@ -10,16 +10,7 @@
  ******************************************************************************/
 package forestry.energy.render;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
-
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryResource;
@@ -27,6 +18,13 @@ import forestry.core.render.IForestryRenderer;
 import forestry.core.render.RenderHelper;
 import forestry.core.tiles.TemperatureState;
 import forestry.energy.tiles.TileEngine;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.World;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
     private final ModelRenderer boiler;

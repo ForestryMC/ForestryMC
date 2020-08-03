@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.arboriculture.ArboricultureCapabilities;
+import forestry.core.ItemGroupForestry;
+import forestry.core.config.Constants;
+import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -24,17 +25,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
-import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.core.ItemGroupForestry;
-import forestry.core.config.Constants;
-import forestry.core.utils.ItemTooltipUtil;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemArmorNaturalist extends ArmorItem {
 

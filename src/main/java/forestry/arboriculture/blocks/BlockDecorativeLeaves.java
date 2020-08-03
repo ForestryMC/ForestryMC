@@ -1,7 +1,13 @@
 package forestry.arboriculture.blocks;
 
-import javax.annotation.Nullable;
-
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.BlockUtil;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -15,20 +21,11 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
+import javax.annotation.Nullable;
 
 //TODO shearing
 public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForgeShearable {

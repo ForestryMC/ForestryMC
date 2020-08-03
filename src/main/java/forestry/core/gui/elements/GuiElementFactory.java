@@ -1,24 +1,5 @@
 package forestry.core.gui.elements;
 
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.function.Predicate;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.mutation.IMutation;
-
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
@@ -30,19 +11,25 @@ import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.layouts.AbstractElementLayout;
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.layouts.HorizontalLayout;
-import forestry.core.gui.elements.layouts.PaneLayout;
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.GuiConstants;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IElementLayout;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
-import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.layouts.*;
+import forestry.core.gui.elements.lib.*;
 import forestry.core.render.ColourProperties;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.mutation.IMutation;
+import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
+
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
 

@@ -1,14 +1,13 @@
 package forestry.apiculture.genetics;
 
-import genetics.api.alleles.IAlleleTemplate;
-import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IKaryotype;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.apiculture.BeePlugin;
 import forestry.apiculture.genetics.alleles.AlleleEffects;
 import forestry.core.genetics.alleles.EnumAllele;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.alleles.IAlleleTemplateBuilder;
+import genetics.api.individual.IKaryotype;
 
 public class BeeHelper {
 

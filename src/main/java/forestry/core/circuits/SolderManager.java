@@ -11,17 +11,15 @@
 package forestry.core.circuits;
 
 import com.google.common.base.Preconditions;
+import forestry.api.circuits.ICircuit;
+import forestry.api.circuits.ICircuitLayout;
+import forestry.api.circuits.ISolderManager;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
-import forestry.api.circuits.ICircuit;
-import forestry.api.circuits.ICircuitLayout;
-import forestry.api.circuits.ISolderManager;
 
 public class SolderManager implements ISolderManager {
     private static final List<CircuitRecipe> recipes = new ArrayList<>();

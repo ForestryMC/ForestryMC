@@ -5,20 +5,18 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import java.io.IOException;
-import java.util.List;
-
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Stores beekeeping logic for bee housings.

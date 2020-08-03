@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.climatology.blocks;
 
-import java.util.function.Supplier;
-
 import forestry.climatology.features.ClimatologyTiles;
 import forestry.core.blocks.IBlockTypeCustom;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeClimatology implements IBlockTypeCustom {
     HABITAT_FORMER(() -> ClimatologyTiles.HABITAT_FORMER, "habitat_former");

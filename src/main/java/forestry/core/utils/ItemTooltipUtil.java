@@ -1,8 +1,6 @@
 package forestry.core.utils;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.core.tooltips.ToolTip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,11 +11,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.tooltips.ToolTip;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemTooltipUtil {
     @OnlyIn(Dist.CLIENT)

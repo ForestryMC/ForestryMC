@@ -1,10 +1,9 @@
 package forestry.farming.multiblock;
 
-import java.util.Stack;
-
+import forestry.api.farming.IFarmInventory;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.farming.IFarmInventory;
+import java.util.Stack;
 
 public interface IFarmInventoryInternal extends IFarmInventory {
 

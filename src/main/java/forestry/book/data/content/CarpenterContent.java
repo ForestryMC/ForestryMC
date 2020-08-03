@@ -1,16 +1,15 @@
 package forestry.book.data.content;
 
-import javax.annotation.Nullable;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.book.BookContent;
 import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.CarpenterElement;
 import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 /**
  * A book content that displays a carpenter recipe.

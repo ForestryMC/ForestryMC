@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import javax.annotation.Nullable;
-
+import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.ItemGroupForestry;
+import forestry.core.config.Constants;
+import forestry.storage.gui.ContainerNaturalistBackpack;
+import forestry.storage.inventory.ItemInventoryBackpackPaged;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -22,12 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import forestry.api.storage.EnumBackpackType;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.ItemGroupForestry;
-import forestry.core.config.Constants;
-import forestry.storage.gui.ContainerNaturalistBackpack;
-import forestry.storage.inventory.ItemInventoryBackpackPaged;
+import javax.annotation.Nullable;
 
 public class ItemBackpackNaturalist extends ItemBackpack {
     private final String rootUid;

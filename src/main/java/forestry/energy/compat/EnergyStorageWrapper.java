@@ -1,9 +1,8 @@
 package forestry.energy.compat;
 
-import net.minecraftforge.energy.IEnergyStorage;
-
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
+import net.minecraftforge.energy.IEnergyStorage;
 
 /**
  * Wraps an {@link EnergyManager} to provide restrictions on extraction of receiving of energy.

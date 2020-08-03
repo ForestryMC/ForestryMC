@@ -1,16 +1,15 @@
 package forestry.core.render;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
-
+import forestry.api.core.ISpriteRegistry;
 import net.minecraft.client.renderer.texture.SpriteUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.api.core.ISpriteRegistry;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class ForestrySpriteUploader extends SpriteUploader implements ISpriteRegistry {
     private final Set<ResourceLocation> registeredSprites = new HashSet<>();

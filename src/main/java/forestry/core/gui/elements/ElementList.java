@@ -1,17 +1,17 @@
 package forestry.core.gui.elements;
 
+import forestry.core.gui.elements.layouts.VerticalLayout;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.event.EventValueChanged;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IWindowElement;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
-import forestry.core.gui.event.EventValueChanged;
 
 /**
  * A element list with selectable elements.

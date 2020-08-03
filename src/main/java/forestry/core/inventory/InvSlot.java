@@ -1,7 +1,6 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.items.IItemHandler;
 
 public class InvSlot implements IInvSlot {

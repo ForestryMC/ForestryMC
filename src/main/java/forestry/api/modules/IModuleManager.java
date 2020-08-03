@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.modules;
 
-import java.util.Collection;
-
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Collection;
 
 /**
  * The module manager of Forestry.

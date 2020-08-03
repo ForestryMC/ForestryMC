@@ -5,12 +5,11 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.Collection;
-
-import net.minecraft.util.text.ITextComponent;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import net.minecraft.util.text.ITextComponent;
+
+import java.util.Collection;
 
 public interface IClimateHelper {
     /**

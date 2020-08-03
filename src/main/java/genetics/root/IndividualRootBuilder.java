@@ -3,22 +3,8 @@ package genetics.root;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
-import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
+import genetics.ApiInstance;
+import genetics.alleles.AlleleTemplateBuilder;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
@@ -27,21 +13,21 @@ import genetics.api.events.RootEvent;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
-import genetics.api.root.IGeneticListener;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IIndividualRootBuilder;
-import genetics.api.root.IIndividualRootFactory;
-import genetics.api.root.IRootContext;
-import genetics.api.root.SimpleIndividualRoot;
+import genetics.api.root.*;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponent;
 import genetics.api.root.components.IRootComponentFactory;
-
-import genetics.ApiInstance;
-import genetics.alleles.AlleleTemplateBuilder;
 import genetics.individual.Karyotype;
 import genetics.individual.RootDefinition;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class IndividualRootBuilder<I extends IIndividual> implements IIndividualRootBuilder<I> {
     public final String uid;

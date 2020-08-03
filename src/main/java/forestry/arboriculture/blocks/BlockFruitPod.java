@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CocoaBlock;
@@ -31,12 +33,9 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 //eg    public static final Block COCOA = register("cocoa", new CocoaBlock(Block.Properties.create(Material.PLANTS).tickRandomly().hardnessAndResistance(0.2F, 3.0F).sound(SoundType.WOOD)));
 public class BlockFruitPod extends CocoaBlock {

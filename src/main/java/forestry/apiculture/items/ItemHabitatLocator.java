@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.api.core.*;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.apiculture.gui.ContainerHabitatLocator;
+import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
+import forestry.core.items.ItemWithGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,19 +28,11 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ISpriteRegistry;
-import forestry.api.core.ItemGroups;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.apiculture.gui.ContainerHabitatLocator;
-import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
-import forestry.core.items.ItemWithGui;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
     private static final String iconName = "forestry:items/biomefinder";

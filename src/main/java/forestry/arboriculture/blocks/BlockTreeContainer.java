@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import java.util.Random;
-
+import forestry.arboriculture.tiles.TileTreeContainer;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -19,8 +19,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.arboriculture.tiles.TileTreeContainer;
-import forestry.core.tiles.TileUtil;
+import java.util.Random;
 
 //TODO inline?
 public abstract class BlockTreeContainer extends ContainerBlock {

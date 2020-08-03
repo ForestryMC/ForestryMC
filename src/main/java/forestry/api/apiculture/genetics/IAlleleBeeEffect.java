@@ -6,14 +6,12 @@
 package forestry.api.apiculture.genetics;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.alleles.IAlleleEffect;
+import genetics.api.individual.IGenome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IAlleleBeeEffect extends IAlleleEffect {
 

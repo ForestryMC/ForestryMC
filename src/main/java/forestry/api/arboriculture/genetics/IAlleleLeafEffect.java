@@ -5,13 +5,11 @@
  ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.alleles.IAlleleEffect;
+import genetics.api.individual.IGenome;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * Simple allele encapsulating a leaf effect. (Not implemented)

@@ -1,12 +1,19 @@
 package genetics;
 
-import javax.annotation.Nullable;
-
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.IGeneTemplate;
+import genetics.api.organism.IOrganism;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.DefaultStage;
+import genetics.individual.GeneticSaveHandler;
+import genetics.individual.SaveFormat;
+import genetics.items.GeneTemplate;
+import genetics.plugins.PluginManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -14,23 +21,12 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.IGeneTemplate;
-import genetics.api.organism.IOrganism;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.components.DefaultStage;
-
-import genetics.individual.GeneticSaveHandler;
-import genetics.individual.SaveFormat;
-import genetics.items.GeneTemplate;
-import genetics.plugins.PluginManager;
+import javax.annotation.Nullable;
 
 @Mod(Genetics.MOD_ID)
 public class Genetics {

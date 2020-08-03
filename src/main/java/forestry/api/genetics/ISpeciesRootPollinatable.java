@@ -5,14 +5,12 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import javax.annotation.Nullable;
-
+import com.mojang.authlib.GameProfile;
+import genetics.api.individual.IIndividual;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
-import genetics.api.individual.IIndividual;
+import javax.annotation.Nullable;
 
 /**
  * @author Nedelosk

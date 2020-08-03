@@ -1,12 +1,12 @@
 package forestry.database;
 
-import java.util.List;
-import java.util.regex.Pattern;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class DatabaseFilterToolTip extends DatabaseFilter {
     public DatabaseFilterToolTip(Pattern pattern) {

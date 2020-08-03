@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.fluids.IFluidTank;
-
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;
@@ -24,6 +19,9 @@ import forestry.core.tiles.TileUtil;
 import forestry.farming.features.FarmingContainers;
 import forestry.farming.multiblock.InventoryFarm;
 import forestry.farming.tiles.TileFarm;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class ContainerFarm extends ContainerSocketed<TileFarm> {
 

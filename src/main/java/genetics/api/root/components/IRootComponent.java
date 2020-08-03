@@ -1,10 +1,10 @@
 package genetics.api.root.components;
 
-import java.util.function.Consumer;
-
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IIndividualRootBuilder;
+
+import java.util.function.Consumer;
 
 /**
  * Every {@link IIndividualRoot} contains {@link IRootComponent}s. They provide expand the function of the root without

@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.render.ParticleRender;
+import genetics.api.individual.IGenome;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.potion.Effect;
@@ -22,16 +23,12 @@ import net.minecraft.potion.EffectType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.render.ParticleRender;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 

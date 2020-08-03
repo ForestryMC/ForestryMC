@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import javax.annotation.Nullable;
-
+import forestry.core.config.Constants;
+import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.core.config.Constants;
-import forestry.core.tiles.IFilterSlotDelegate;
+import javax.annotation.Nullable;
 
 /**
  * Slot which only takes specific items, specified by the IFilterSlotDelegate.

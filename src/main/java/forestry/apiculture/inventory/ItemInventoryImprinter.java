@@ -10,16 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-
-import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -27,6 +17,14 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+
+import java.util.List;
+import java.util.Map;
 
 public class ItemInventoryImprinter extends ItemInventory {
     private static final short specimenSlot = 0;

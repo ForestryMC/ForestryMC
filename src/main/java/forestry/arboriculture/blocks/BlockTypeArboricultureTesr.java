@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import java.util.function.Supplier;
-
-import net.minecraft.util.math.shapes.VoxelShape;
-
 import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
@@ -21,6 +17,9 @@ import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.modules.features.FeatureTileType;
+import net.minecraft.util.math.shapes.VoxelShape;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
     ARB_CHEST(() -> ArboricultureTiles.ARBORIST_CHEST, "arb_chest", "arbchest", TileNaturalistChest.CHEST_SHAPE);

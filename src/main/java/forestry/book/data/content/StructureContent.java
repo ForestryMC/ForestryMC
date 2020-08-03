@@ -12,19 +12,6 @@
  ******************************************************************************/
 package forestry.book.data.content;
 
-import javax.annotation.Nullable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.io.IOUtils;
-
-import net.minecraft.resources.IResource;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.book.BookContent;
 import forestry.book.BookLoader;
 import forestry.book.data.structure.BlockData;
@@ -34,6 +21,16 @@ import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
 import forestry.core.utils.Log;
+import net.minecraft.resources.IResource;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.commons.io.IOUtils;
+
+import javax.annotation.Nullable;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A book content that displays a multiblock structure.

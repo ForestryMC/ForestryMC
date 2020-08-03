@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
-import javax.annotation.Nullable;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.genetics.alleles.IAlleleProperty;
+
+import javax.annotation.Nullable;
 
 /**
  * Simple allele encapsulating an {@link IFruitProvider}.

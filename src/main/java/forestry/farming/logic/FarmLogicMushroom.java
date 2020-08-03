@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicMushroom extends FarmLogicArboreal {
 

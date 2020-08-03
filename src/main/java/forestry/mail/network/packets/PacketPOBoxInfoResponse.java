@@ -10,18 +10,12 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.IForestryPacketHandlerClient;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdClient;
+import forestry.core.network.*;
 import forestry.mail.POBoxInfo;
 import forestry.mail.gui.GuiMailboxInfo;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestryPacketClient {
     public final POBoxInfo poboxInfo;

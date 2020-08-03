@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import javax.annotation.Nullable;
-
+import forestry.core.tiles.TileForestry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 
-import forestry.core.tiles.TileForestry;
+import javax.annotation.Nullable;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable, IShapeProvider {
     TileEntityType<? extends T> getTeType();

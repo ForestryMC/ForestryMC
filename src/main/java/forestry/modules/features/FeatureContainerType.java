@@ -1,13 +1,11 @@
 package forestry.modules.features;
 
-import javax.annotation.Nullable;
-
+import forestry.core.config.Constants;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-
 import net.minecraftforge.fml.network.IContainerFactory;
 
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
 
 public class FeatureContainerType<C extends Container> implements IContainerTypeFeature<C> {
     protected final String moduleID;

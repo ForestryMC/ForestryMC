@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
+import forestry.api.core.IBlockSubtype;
+
 import java.util.List;
 import java.util.Locale;
-
-import forestry.api.core.IBlockSubtype;
 
 public interface IHiveRegistry {
 

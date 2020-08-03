@@ -1,12 +1,5 @@
 package forestry.book.pages;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookPageFactory;
@@ -14,6 +7,12 @@ import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 import forestry.core.gui.elements.lib.IGuiElement;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class JsonPageFactory implements IBookPageFactory {

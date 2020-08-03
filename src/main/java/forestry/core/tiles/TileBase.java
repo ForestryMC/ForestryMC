@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import javax.annotation.Nonnull;
-
+import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IBlockType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.IBlockType;
+import javax.annotation.Nonnull;
 
 public abstract class TileBase extends TileForestry {
 

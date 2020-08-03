@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public interface ITankManager extends IFluidHandler {
     void containerAdded(Container container, IContainerListener crafter);

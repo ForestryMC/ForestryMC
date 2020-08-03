@@ -10,14 +10,11 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import forestry.api.mail.*;
+import forestry.core.gui.IGuiSelectable;
+import forestry.core.utils.NetworkUtil;
+import forestry.mail.features.MailContainers;
+import forestry.mail.network.packets.PacketLetterInfoResponse;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,18 +23,8 @@ import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.server.ServerWorld;
 
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.EnumTradeStationState;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.IPostOffice;
-import forestry.api.mail.IPostalState;
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.ITradeStationInfo;
-import forestry.api.mail.PostManager;
-import forestry.core.gui.IGuiSelectable;
-import forestry.core.utils.NetworkUtil;
-import forestry.mail.features.MailContainers;
-import forestry.mail.network.packets.PacketLetterInfoResponse;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 

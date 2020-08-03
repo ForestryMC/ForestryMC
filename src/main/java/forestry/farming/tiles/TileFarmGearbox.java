@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-
 import forestry.api.multiblock.IFarmComponent;
 import forestry.api.multiblock.IFarmController;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.farming.features.FarmingTiles;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+
+import javax.annotation.Nullable;
 
 public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 

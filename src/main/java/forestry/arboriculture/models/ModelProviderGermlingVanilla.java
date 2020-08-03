@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import net.minecraft.util.ResourceLocation;
-
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
+import net.minecraft.util.ResourceLocation;
 
 public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 

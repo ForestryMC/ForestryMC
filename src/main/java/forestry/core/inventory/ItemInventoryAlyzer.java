@@ -11,19 +11,6 @@
 package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
-
-import java.util.Optional;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IBreedingTracker;
@@ -33,6 +20,15 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.GeneticsUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+
+import java.util.Optional;
 
 public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
     public static final int SLOT_ENERGY = 0;

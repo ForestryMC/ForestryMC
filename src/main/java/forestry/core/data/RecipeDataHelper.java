@@ -1,17 +1,15 @@
 package forestry.core.data;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.function.Consumer;
-
+import forestry.core.config.Constants;
+import forestry.core.recipes.ModuleEnabledCondition;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 
-import forestry.core.config.Constants;
-import forestry.core.recipes.ModuleEnabledCondition;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 //Useful when there is either a recipe, or it is disabled. Convenience from not having to provide an
 //ID when building

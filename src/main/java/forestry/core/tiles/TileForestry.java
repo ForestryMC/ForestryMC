@@ -11,10 +11,18 @@
 package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.ILocatable;
+import forestry.core.errors.ErrorLogic;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.packets.PacketTileStream;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
@@ -30,7 +38,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -39,18 +46,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.core.ILocatable;
-import forestry.core.errors.ErrorLogic;
-import forestry.core.inventory.FakeInventoryAdapter;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.packets.PacketTileStream;
-import forestry.core.utils.NBTUtilForestry;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.TickHelper;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 //import net.minecraftforge.fml.common.Optional;
 

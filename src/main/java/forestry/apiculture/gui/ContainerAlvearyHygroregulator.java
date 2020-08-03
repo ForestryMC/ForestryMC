@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.InventoryHygroregulator;
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks<TileAlvearyHygroregulator> {
 

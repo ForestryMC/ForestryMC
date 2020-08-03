@@ -11,7 +11,10 @@
 package forestry.core.utils;
 
 import com.google.common.base.Preconditions;
-
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketHandlerClient;
+import forestry.core.network.PacketHandlerServer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,15 +23,9 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
-
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketHandlerClient;
-import forestry.core.network.PacketHandlerServer;
 
 //import net.minecraft.server.management.PlayerChunkMap;
 

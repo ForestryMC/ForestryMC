@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.common.util.LazyOptional;
-
 import forestry.api.climate.IClimateListener;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.multiblock.TileAlveary;
@@ -24,6 +18,10 @@ import forestry.core.gui.ContainerTile;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 

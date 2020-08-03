@@ -5,11 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.world.World;
-
-import genetics.api.individual.IIndividual;
-
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import genetics.api.individual.IIndividual;
+import net.minecraft.world.World;
 
 public interface IIndividualLiving extends IIndividual {
 

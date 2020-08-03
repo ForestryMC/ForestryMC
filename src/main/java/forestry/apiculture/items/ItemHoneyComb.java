@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import forestry.api.core.ItemGroups;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemForestry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.ItemGroups;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemForestry;
 
 public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 

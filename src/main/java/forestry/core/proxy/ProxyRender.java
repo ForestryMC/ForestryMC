@@ -10,15 +10,10 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraftforge.client.event.ModelBakeEvent;
-
 import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.tiles.TileAnalyzer;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileEscritoire;
-import forestry.core.tiles.TileMill;
-import forestry.core.tiles.TileNaturalistChest;
+import forestry.core.tiles.*;
 import forestry.modules.ISidedModuleHandler;
+import net.minecraftforge.client.event.ModelBakeEvent;
 
 public class ProxyRender implements ISidedModuleHandler {
 

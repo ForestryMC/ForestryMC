@@ -2,6 +2,6 @@
 @MethodsReturnNonnullByDefault
 package genetics.api.organism;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,25 +1,19 @@
 package genetics.api;
 
-import java.util.function.Supplier;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.individual.IIndividualBuilder;
-import genetics.api.individual.IKaryotype;
+import genetics.api.individual.*;
 import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismHandler;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IDisplayHelper;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+
+import java.util.function.Supplier;
 
 /**
  * A factory that can be used to create some default implementations.

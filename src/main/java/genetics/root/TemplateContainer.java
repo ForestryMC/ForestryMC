@@ -1,14 +1,6 @@
 package genetics.root;
 
 import com.google.common.base.Preconditions;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.individual.IChromosomeType;
@@ -17,6 +9,8 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.ITemplateContainer;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
+
+import java.util.*;
 
 public class TemplateContainer<I extends IIndividual> implements ITemplateContainer<I> {
     private final IIndividualRoot<I> root;

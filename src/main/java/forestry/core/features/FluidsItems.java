@@ -1,14 +1,5 @@
 package forestry.core.features;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-
 import forestry.core.ModuleFluids;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumContainerType;
@@ -17,6 +8,13 @@ import forestry.modules.features.FeatureItemGroup;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 @FeatureProvider
 public class FluidsItems {

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.blocks;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -19,8 +17,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.ToolType;
+
+import java.util.Random;
 
 public class BlockResourceOre extends Block {
     private final EnumResourceType type;

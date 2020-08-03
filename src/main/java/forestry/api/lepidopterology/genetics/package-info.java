@@ -7,6 +7,6 @@
 @MethodsReturnNonnullByDefault
 package forestry.api.lepidopterology.genetics;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

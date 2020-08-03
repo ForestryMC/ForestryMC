@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.List;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import java.util.List;
 
 public class GuiTextBox extends TextFieldWidget {
     private static final int enabledColor = 14737632;

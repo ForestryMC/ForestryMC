@@ -10,25 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nullable;
-import java.util.Locale;
-import java.util.Random;
-import java.util.function.Supplier;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -36,6 +17,22 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.core.utils.BlockUtil;
+import genetics.api.individual.IGenome;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
+
+import javax.annotation.Nullable;
+import java.util.Locale;
+import java.util.Random;
+import java.util.function.Supplier;
 
 public class FruitProviderPod extends FruitProviderNone {
 

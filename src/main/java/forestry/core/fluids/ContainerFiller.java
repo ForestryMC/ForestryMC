@@ -1,15 +1,13 @@
 package forestry.core.fluids;
 
-import javax.annotation.Nullable;
-
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import forestry.core.utils.ItemStackUtil;
+import javax.annotation.Nullable;
 
 /**
  * Helper to slowly fill containers from a machine's internal tank.

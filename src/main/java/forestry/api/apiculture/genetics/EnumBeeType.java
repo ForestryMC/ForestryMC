@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import java.util.Locale;
-
 import genetics.api.organism.IOrganismType;
+
+import java.util.Locale;
 
 public enum EnumBeeType implements IOrganismType {
     DRONE, PRINCESS, QUEEN, LARVAE;

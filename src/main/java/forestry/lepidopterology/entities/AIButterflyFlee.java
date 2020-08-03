@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import java.util.EnumSet;
-
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import net.minecraft.entity.player.PlayerEntity;
 
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import java.util.EnumSet;
 
 public class AIButterflyFlee extends AIButterflyMovement {
 

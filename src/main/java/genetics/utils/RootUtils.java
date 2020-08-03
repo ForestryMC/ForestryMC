@@ -1,16 +1,15 @@
 package genetics.utils;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
-import net.minecraft.item.ItemStack;
-
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class RootUtils {
 

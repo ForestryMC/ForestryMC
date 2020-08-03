@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.EnumMap;
-
+import forestry.api.apiculture.IBeeModelProvider;
+import forestry.api.apiculture.genetics.EnumBeeType;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.apiculture.IBeeModelProvider;
-import forestry.api.apiculture.genetics.EnumBeeType;
+import java.util.EnumMap;
 
 public class DefaultBeeModelProvider implements IBeeModelProvider {
 

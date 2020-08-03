@@ -1,18 +1,16 @@
 package forestry.core.gui.elements.lib;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-
+import forestry.core.gui.elements.LabelElement;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.LabelElement;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public interface IElementGroup extends IGuiElement {

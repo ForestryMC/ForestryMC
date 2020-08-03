@@ -1,7 +1,11 @@
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-
+import forestry.api.apiculture.ApicultureCapabilities;
+import forestry.api.apiculture.hives.IHiveTile;
+import forestry.api.core.ItemGroups;
+import forestry.core.items.ItemForestry;
+import forestry.core.render.ParticleRender;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,25 +13,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.apiculture.hives.IHiveTile;
-import forestry.api.core.ItemGroups;
-import forestry.core.items.ItemForestry;
-import forestry.core.render.ParticleRender;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
 
 public class ItemSmoker extends ItemForestry {
     public ItemSmoker() {

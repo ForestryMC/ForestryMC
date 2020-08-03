@@ -1,10 +1,9 @@
 package genetics.api.root.translator;
 
-import javax.annotation.Nullable;
-
+import genetics.api.individual.IIndividual;
 import net.minecraft.item.ItemStack;
 
-import genetics.api.individual.IIndividual;
+import javax.annotation.Nullable;
 
 /**
  * Translates items into genetic data. Used by the treealyzer and the farm to convert foreign saplings.

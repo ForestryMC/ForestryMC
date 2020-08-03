@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import java.awt.Color;
-import java.util.Locale;
-
 import forestry.core.items.ItemOverlay;
+
+import java.awt.*;
+import java.util.Locale;
 
 public enum EnumPropolis implements ItemOverlay.IOverlayInfo {
     NORMAL(new Color(0xc5b24e)),

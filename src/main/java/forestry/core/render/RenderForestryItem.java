@@ -1,11 +1,10 @@
 package forestry.core.render;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
 
 public class RenderForestryItem extends ItemStackTileEntityRenderer {
 

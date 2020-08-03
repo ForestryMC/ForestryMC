@@ -1,12 +1,11 @@
 package forestry.modules.features;
 
+import forestry.api.core.IItemSubtype;
+import net.minecraft.item.Item;
+
 import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-
-import net.minecraft.item.Item;
-
-import forestry.api.core.IItemSubtype;
 
 public class FeatureItemTable<I extends Item, R extends IItemSubtype, C extends IItemSubtype> extends FeatureTable<FeatureItemTable.Builder<I, R, C>, FeatureItem<I>, R, C> {
 

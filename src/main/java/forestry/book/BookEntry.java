@@ -1,18 +1,16 @@
 package forestry.book;
 
-import javax.annotation.Nullable;
-import java.util.function.Function;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.book.BookContent;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookPageFactory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 public class BookEntry implements IBookEntry {

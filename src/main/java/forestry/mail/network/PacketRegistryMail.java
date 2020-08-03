@@ -11,18 +11,12 @@
 package forestry.mail.network;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
-import forestry.mail.network.packets.PacketLetterInfoRequest;
-import forestry.mail.network.packets.PacketLetterInfoResponse;
-import forestry.mail.network.packets.PacketLetterTextSet;
-import forestry.mail.network.packets.PacketPOBoxInfoResponse;
-import forestry.mail.network.packets.PacketTraderAddressRequest;
-import forestry.mail.network.packets.PacketTraderAddressResponse;
+import forestry.mail.network.packets.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryMail implements IPacketRegistry {
     @Override

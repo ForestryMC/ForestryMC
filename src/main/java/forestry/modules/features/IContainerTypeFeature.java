@@ -1,16 +1,13 @@
 package forestry.modules.features;
 
+import forestry.api.core.IContainerTypeProvider;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import net.minecraftforge.fml.network.IContainerFactory;
-
-import forestry.api.core.IContainerTypeProvider;
 
 public interface IContainerTypeFeature<C extends Container> extends IContainerTypeProvider<C>, IModFeature {
 

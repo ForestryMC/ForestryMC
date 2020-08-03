@@ -10,23 +10,17 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import javax.annotation.Nullable;
-
+import forestry.core.fluids.ITankManager;
+import forestry.core.network.*;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.core.fluids.ITankManager;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketClient;
-import forestry.core.network.IForestryPacketHandlerClient;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdClient;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
 
 public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPacketClient {
     private final BlockPos pos;

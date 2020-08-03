@@ -6,7 +6,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
-
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public enum FeatureType {

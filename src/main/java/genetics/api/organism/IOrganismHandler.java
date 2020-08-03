@@ -1,12 +1,11 @@
 package genetics.api.organism;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-
+import genetics.api.individual.IIndividual;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.individual.IIndividual;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * The IGeneticHandler handles the genetic information of an stack whose item represents a specific {@link IOrganismType}.

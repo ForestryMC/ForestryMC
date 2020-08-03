@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import java.awt.Color;
-import java.util.Locale;
-
 import forestry.core.items.ItemOverlay;
+
+import java.awt.*;
+import java.util.Locale;
 
 public enum EnumHoneyDrop implements ItemOverlay.IOverlayInfo {
     HONEY(new Color(0xecb42d), new Color(0xe8c814)),

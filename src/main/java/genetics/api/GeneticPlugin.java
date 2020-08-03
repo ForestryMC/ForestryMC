@@ -1,11 +1,11 @@
 package genetics.api;
 
+import net.minecraftforge.eventbus.api.EventPriority;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import net.minecraftforge.eventbus.api.EventPriority;
 
 /**
  * This annotation lets Genetics detect mod plugins.

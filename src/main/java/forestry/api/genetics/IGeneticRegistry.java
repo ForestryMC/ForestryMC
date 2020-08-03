@@ -5,18 +5,15 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-
 import com.mojang.authlib.GameProfile;
-
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleHandler;
 import genetics.api.alleles.IAllele;
 import genetics.api.classification.IClassification;
 import genetics.api.mutation.IMutation;
+import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.api.genetics.alleles.IAlleleHandler;
+import java.util.Map;
 
 /**
  * Manages {@link IForestrySpeciesRoot}, {@link IAllele}s, {@link IFruitFamily}s, {@link IClassification}, the blacklist and allows creation of research notes.

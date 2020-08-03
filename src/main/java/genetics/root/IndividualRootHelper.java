@@ -1,10 +1,5 @@
 package genetics.root;
 
-import java.util.Map;
-import java.util.Optional;
-
-import net.minecraft.item.ItemStack;
-
 import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAlleleTemplateBuilder;
@@ -14,6 +9,10 @@ import genetics.api.root.EmptyRootDefinition;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IIndividualRootHelper;
 import genetics.api.root.IRootDefinition;
+import net.minecraft.item.ItemStack;
+
+import java.util.Map;
+import java.util.Optional;
 
 public enum IndividualRootHelper implements IIndividualRootHelper {
     INSTANCE;

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.utils.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -22,11 +23,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.core.utils.WorldUtils;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

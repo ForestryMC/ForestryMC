@@ -1,18 +1,16 @@
 package forestry.core.gui.elements;
 
-import java.util.function.Predicate;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.gui.elements.lib.IValueElement;
 import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.elements.lib.events.TextEditEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+
+import java.util.function.Predicate;
 
 public class TextEditElement extends GuiElement implements IValueElement<String> {
 

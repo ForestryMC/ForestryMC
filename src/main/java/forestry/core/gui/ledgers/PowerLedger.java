@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.config.Config;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 public class PowerLedger extends Ledger {
     private final EnergyManager energyManager;

@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.core.utils.InventoryUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-import forestry.core.utils.InventoryUtil;
 
 public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 

@@ -1,10 +1,10 @@
 package forestry.api.farming;
 
-import java.util.Collection;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+
+import java.util.Collection;
 
 public interface IFarmProperties {
 

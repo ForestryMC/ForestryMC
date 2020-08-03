@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import java.util.function.Supplier;
-
-import net.minecraft.util.math.shapes.VoxelShape;
-
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
@@ -21,6 +17,9 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.features.LepidopterologyTiles;
 import forestry.modules.features.FeatureTileType;
+import net.minecraft.util.math.shapes.VoxelShape;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
     LEPICHEST(() -> LepidopterologyTiles.LEPIDOPTERIST_CHEST, "lepi_chest", "lepichest", TileNaturalistChest.CHEST_SHAPE);

@@ -1,15 +1,13 @@
 package genetics.api.alleles;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import javax.annotation.Nonnull;
 
 /**
  * An {@link IIndividual}'s {@link IGenome} is composed of {@link IChromosome}s consisting each of a active and inactive {@link IAllele}.

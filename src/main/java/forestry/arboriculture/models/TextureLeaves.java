@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import java.util.EnumMap;
-import java.util.Locale;
-import java.util.Map;
-
+import forestry.api.arboriculture.EnumLeafType;
+import forestry.core.config.Constants;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import forestry.api.arboriculture.EnumLeafType;
-import forestry.core.config.Constants;
+import java.util.EnumMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class TextureLeaves {
     private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<>(EnumLeafType.class);

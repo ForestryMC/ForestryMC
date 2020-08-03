@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import forestry.api.arboriculture.ITreeGenData;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
-
-import forestry.api.arboriculture.ITreeGenData;
 
 public class TreeBlockTypeLog implements ITreeBlockType {
     private final ITreeGenData tree;

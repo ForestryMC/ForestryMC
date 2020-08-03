@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
-import java.awt.Color;
-
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafSpriteProvider;
+
+import java.awt.*;
 
 public interface ITreeFactory {
     /**

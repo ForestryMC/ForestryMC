@@ -10,15 +10,10 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-
 import forestry.api.mail.EnumAddressee;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketHandlerServer;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdServer;
+import forestry.core.network.*;
 import forestry.mail.gui.ContainerLetter;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class PacketLetterInfoRequest extends ForestryPacket implements IForestryPacketServer {
     private final String recipientName;

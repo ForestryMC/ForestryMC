@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
-import java.util.function.Supplier;
-
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.factory.features.FactoryTiles;
 import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeFactoryPlain implements IBlockType {
     FABRICATOR(() -> FactoryTiles.FABRICATOR, "fabricator"),

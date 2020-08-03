@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.blocks.properties;
 
-import java.util.Optional;
-
+import forestry.api.genetics.alleles.IAlleleProperty;
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 import net.minecraft.state.Property;
 
-import genetics.api.alleles.IAllele;
-
-import genetics.utils.AlleleUtils;
-
-import forestry.api.genetics.alleles.IAlleleProperty;
+import java.util.Optional;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> extends Property<A> {
 

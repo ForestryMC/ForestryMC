@@ -1,9 +1,8 @@
 package genetics.api.individual;
 
-import net.minecraft.util.ResourceLocation;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.root.IIndividualRoot;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Can be used to create a modified version of an {@link IIndividual}. At the crate of this builder all genetic

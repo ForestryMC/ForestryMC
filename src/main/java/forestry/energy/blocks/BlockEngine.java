@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
-import javax.annotation.Nullable;
-import java.util.EnumMap;
-
+import forestry.api.core.ForestryAPI;
+import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileUtil;
+import forestry.energy.EnergyHelper;
+import forestry.energy.EnergyManager;
+import forestry.energy.tiles.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -30,15 +33,10 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.blocks.BlockBase;
-import forestry.core.tiles.TileUtil;
-import forestry.energy.EnergyHelper;
-import forestry.energy.EnergyManager;
-import forestry.energy.tiles.TileEngine;
+import javax.annotation.Nullable;
+import java.util.EnumMap;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
     private static final EnumMap<Direction, VoxelShape> SHAPE_FOR_DIRECTIONS = new EnumMap<>(Direction.class);

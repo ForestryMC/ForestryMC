@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import javax.annotation.Nullable;
-
+import forestry.api.core.ItemGroups;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemForestry;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,14 +23,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.ItemGroups;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemForestry;
-import forestry.core.utils.ItemStackUtil;
+import javax.annotation.Nullable;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
     private final ItemStack contained;

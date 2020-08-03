@@ -1,15 +1,11 @@
 package genetics.alleles;
 
+import genetics.api.alleles.*;
+import genetics.api.individual.IChromosomeType;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleData;
-import genetics.api.alleles.IAlleleHandler;
-import genetics.api.alleles.IAlleleHelper;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosomeType;
 
 public enum AlleleHelper implements IAlleleHelper, IAlleleHandler {
     INSTANCE;

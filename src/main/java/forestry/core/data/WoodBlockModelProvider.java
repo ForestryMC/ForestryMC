@@ -1,11 +1,10 @@
 package forestry.core.data;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.core.config.Constants;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.util.ResourceLocation;
 
 public class WoodBlockModelProvider extends ModelProvider {
 

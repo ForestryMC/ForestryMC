@@ -2,6 +2,13 @@ package forestry.farming.logic;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+import forestry.api.farming.*;
+import forestry.farming.FarmRegistry;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -12,22 +19,6 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
-
-import org.apache.commons.lang3.text.WordUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmLogic;
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.IFarmPropertiesBuilder;
-import forestry.api.farming.IFarmable;
-import forestry.api.farming.IFarmableInfo;
-import forestry.api.farming.Soil;
-import forestry.farming.FarmRegistry;
 
 public final class FarmProperties implements IFarmProperties {
     private final Set<Soil> soils;

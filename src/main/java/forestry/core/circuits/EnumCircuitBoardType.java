@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.Locale;
-
+import forestry.api.core.IItemSubtype;
+import forestry.core.render.ColourProperties;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.IItemSubtype;
-import forestry.core.render.ColourProperties;
+import java.util.Locale;
 
 public enum EnumCircuitBoardType implements IItemSubtype {
     BASIC(1),

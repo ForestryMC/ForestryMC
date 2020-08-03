@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.recipes.IMoistenerRecipe;
+import net.minecraft.item.ItemStack;
 
 public class MoistenerRecipe implements IMoistenerRecipe {
 

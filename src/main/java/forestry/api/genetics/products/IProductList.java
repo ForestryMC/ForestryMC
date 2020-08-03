@@ -1,11 +1,11 @@
 package forestry.api.genetics.products;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
 import java.util.Collection;
 import java.util.Random;
 import java.util.function.Function;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 /**
  * A list of products that a bee or tree produces.

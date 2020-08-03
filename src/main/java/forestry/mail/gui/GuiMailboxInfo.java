@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import javax.annotation.Nullable;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.render.ForestryResource;
+import forestry.core.utils.SoundUtil;
+import forestry.mail.POBoxInfo;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -20,18 +25,10 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.render.ForestryResource;
-import forestry.core.utils.SoundUtil;
-import forestry.mail.POBoxInfo;
+import javax.annotation.Nullable;
 
 public class GuiMailboxInfo extends AbstractGui {
 

@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
+import forestry.api.core.tooltips.ToolTip;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -24,14 +20,16 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.api.core.tooltips.ToolTip;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

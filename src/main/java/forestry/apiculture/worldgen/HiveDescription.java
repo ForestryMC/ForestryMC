@@ -10,22 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
@@ -40,6 +24,19 @@ import forestry.apiculture.HiveConfig;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
+import genetics.api.individual.IGenome;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public enum HiveDescription implements IHiveDescription {
     FOREST(IHiveRegistry.HiveType.FOREST, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {

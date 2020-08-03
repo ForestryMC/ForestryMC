@@ -5,11 +5,11 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import java.util.Map;
-import java.util.Random;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
+import java.util.Map;
+import java.util.Random;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
 

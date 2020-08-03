@@ -1,10 +1,8 @@
 package forestry.core.gui.buttons;
 
-import net.minecraft.client.gui.widget.button.Button;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.gui.Drawable;
+import net.minecraft.client.gui.widget.button.Button;
 
 public class GuiToggleButton extends Button {
     /* attributes - Final */

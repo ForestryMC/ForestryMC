@@ -11,11 +11,10 @@
 package forestry.arboriculture.network;
 
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryArboriculture implements IPacketRegistry {
     @Override

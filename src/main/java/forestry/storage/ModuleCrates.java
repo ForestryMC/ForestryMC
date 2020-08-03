@@ -2,19 +2,6 @@ package forestry.storage;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-
 import forestry.Forestry;
 import forestry.api.modules.ForestryModule;
 import forestry.api.storage.StorageManager;
@@ -29,6 +16,15 @@ import forestry.modules.features.FeatureItem;
 import forestry.storage.items.ItemCrated;
 import forestry.storage.proxy.ProxyCrates;
 import forestry.storage.proxy.ProxyCratesClient;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @ForestryModule(moduleID = ForestryModuleUids.CRATE, containerID = Constants.MOD_ID, name = "Crate", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.crates.description")
 public class ModuleCrates extends BlankForestryModule {
@@ -50,7 +46,6 @@ public class ModuleCrates extends BlankForestryModule {
     @Override
     public void setupAPI() {
         StorageManager.crateRegistry = new CrateRegistry();
-        proxy.registerCrateModel();
     }
 
     @Override

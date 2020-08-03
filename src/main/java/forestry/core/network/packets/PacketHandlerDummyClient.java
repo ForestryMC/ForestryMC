@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PacketHandlerDummyClient extends PacketHandlerDummy implements IForestryPacketHandlerClient {

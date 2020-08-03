@@ -11,11 +11,9 @@
 package forestry.farming.logic.crops;
 
 import com.google.common.collect.ImmutableCollection;
-
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Optional;
-
+import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -25,9 +23,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.core.config.Constants;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Optional;
 //import forestry.plugins.PluginIC2;
 //import forestry.plugins.PluginTechReborn;
 

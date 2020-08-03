@@ -5,15 +5,13 @@
  ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
-import net.minecraftforge.common.PlantType;
-
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.genetics.IFruitFamily;
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeList;
 import genetics.api.individual.IChromosomeValue;
-
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.genetics.IFruitFamily;
+import net.minecraftforge.common.PlantType;
 
 public class TreeChromosomes {
     public static final IChromosomeList TYPES = GeneticsAPI.apiInstance.getChromosomeList("rootTrees");

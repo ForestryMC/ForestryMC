@@ -1,8 +1,5 @@
 package forestry.lepidopterology.features;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemBlockBase;
 import forestry.lepidopterology.ModuleLepidopterology;
@@ -14,6 +11,8 @@ import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 
 @FeatureProvider
 public class LepidopterologyBlocks {

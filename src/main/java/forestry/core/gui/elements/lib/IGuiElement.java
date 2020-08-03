@@ -5,24 +5,21 @@
  ******************************************************************************/
 package forestry.core.gui.elements.lib;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.function.Consumer;
-
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.lib.events.GuiElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.elements.lib.events.GuiEventHandler;
 import forestry.core.gui.elements.lib.events.GuiEventOrigin;
 import forestry.core.utils.Log;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Consumer;
 
 @OnlyIn(Dist.CLIENT)
 public interface IGuiElement {

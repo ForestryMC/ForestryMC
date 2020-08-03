@@ -11,34 +11,14 @@
 package forestry.factory;
 
 import com.google.common.collect.ImmutableSet;
+import forestry.api.recipes.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import forestry.api.recipes.ICarpenterManager;
-import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.ICentrifugeManager;
-import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.api.recipes.ICraftingProvider;
-import forestry.api.recipes.IFabricatorManager;
-import forestry.api.recipes.IFabricatorRecipe;
-import forestry.api.recipes.IFabricatorSmeltingManager;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.api.recipes.IFermenterManager;
-import forestry.api.recipes.IFermenterRecipe;
-import forestry.api.recipes.IForestryRecipe;
-import forestry.api.recipes.IMoistenerManager;
-import forestry.api.recipes.IMoistenerRecipe;
-import forestry.api.recipes.ISqueezerManager;
-import forestry.api.recipes.ISqueezerRecipe;
-import forestry.api.recipes.IStillManager;
-import forestry.api.recipes.IStillRecipe;
 
 public class DummyManagers {
 

@@ -1,9 +1,9 @@
 {
-	"loader": "forge:bucket",
-	"gui_light": "front",
-	"fluid": "water",
-	"textures": {
-		"base": "forestry:item/liquids/refractory.bottle",
-		"fluid": "forestry:item/liquids/refractory.contents"
-	}
+  "loader": "forge:bucket",
+  "gui_light": "front",
+  "fluid": "water",
+  "textures": {
+    "base": "forestry:item/liquids/refractory.bottle",
+    "fluid": "forestry:item/liquids/refractory.contents"
+  }
 }

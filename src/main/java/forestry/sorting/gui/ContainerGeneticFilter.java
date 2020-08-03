@@ -1,15 +1,14 @@
 package forestry.sorting.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.network.PacketBuffer;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.tiles.TileUtil;
 import forestry.sorting.features.SortingContainers;
 import forestry.sorting.network.packets.PacketGuiFilterUpdate;
 import forestry.sorting.tiles.IFilterContainer;
 import forestry.sorting.tiles.TileGeneticFilter;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.network.PacketBuffer;
 
 public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
     private final IFilterContainer container;

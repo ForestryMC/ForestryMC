@@ -2,38 +2,7 @@ package forestry.core.data;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
-
-import java.lang.reflect.Constructor;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.function.Consumer;
-
-import net.minecraft.block.Block;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.NBTIngredient;
-import net.minecraftforge.common.crafting.conditions.AndCondition;
-import net.minecraftforge.common.crafting.conditions.NotCondition;
-import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
-
-import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.IWoodAccess;
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.WoodBlockKind;
+import forestry.api.arboriculture.*;
 import forestry.api.circuits.ICircuit;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.blocks.BlockAlvearyType;
@@ -90,6 +59,25 @@ import forestry.modules.features.FeatureItem;
 import forestry.sorting.features.SortingBlocks;
 import forestry.storage.features.BackpackItems;
 import forestry.worktable.features.WorktableBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.data.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.crafting.ConditionalRecipe;
+import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.common.crafting.conditions.AndCondition;
+import net.minecraftforge.common.crafting.conditions.NotCondition;
+import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
+
+import java.lang.reflect.Constructor;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ForestryRecipeProvider extends RecipeProvider {
     public ForestryRecipeProvider(DataGenerator generator) {
@@ -1288,9 +1276,9 @@ public class ForestryRecipeProvider extends RecipeProvider {
     private void registerFluidsRecipes(RecipeDataHelper helper) {
         ForestryFluids milk = ForestryFluids.MILK;
         for (EnumContainerType containerType : EnumContainerType.values()) {
-            if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
-                continue;
-            }
+//            if (containerType == EnumContainerType.JAR || containerType == EnumContainerType.GLASS) {
+//                continue;
+//            }
             ItemStack filled = FluidsItems.getContainer(containerType, milk);
             Ingredient ingredientNBT = createNbtIngredient(filled);
             helper.moduleConditionRecipe(

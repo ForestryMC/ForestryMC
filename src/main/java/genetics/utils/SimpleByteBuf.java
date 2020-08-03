@@ -1,19 +1,17 @@
 package genetics.utils;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-
-import net.minecraft.util.ResourceLocation;
-
+import genetics.ApiInstance;
+import genetics.alleles.AlleleRegistry;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
-
-import genetics.ApiInstance;
-import genetics.alleles.AlleleRegistry;
 import genetics.individual.Chromosome;
 import genetics.individual.ChromosomeInfo;
+import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
 
 /**
  * A byte buffer that can be used to encode and decode chromosomes and alleles into a byte array.

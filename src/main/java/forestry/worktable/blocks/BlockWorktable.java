@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.worktable.blocks;
 
+import forestry.core.blocks.BlockBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-
 import net.minecraftforge.common.ToolType;
-
-import forestry.core.blocks.BlockBase;
 
 public class BlockWorktable extends BlockBase<BlockTypeWorktable> {
     public BlockWorktable(BlockTypeWorktable worktable) {

@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+import forestry.core.utils.Log;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.registries.ForgeRegistries;
-
-import forestry.core.utils.Log;
 
 //TODO - this class relies on meta a lot so probably will have to go.
 public class Stack {

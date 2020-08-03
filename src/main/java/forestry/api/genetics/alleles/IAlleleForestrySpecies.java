@@ -5,10 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics.alleles;
 
-import genetics.api.alleles.IAlleleSpecies;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import genetics.api.alleles.IAlleleSpecies;
 
 /**
  * Basic species allele.

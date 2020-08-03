@@ -12,9 +12,14 @@
  ******************************************************************************/
 package forestry.book.gui.elements;
 
-import javax.annotation.Nullable;
-import java.util.stream.IntStream;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import forestry.book.data.structure.BlockData;
+import forestry.book.data.structure.StructureBlockAccess;
+import forestry.book.data.structure.StructureInfo;
+import forestry.book.gui.GuiForesterBook;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -25,21 +30,12 @@ import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.book.data.structure.BlockData;
-import forestry.book.data.structure.StructureBlockAccess;
-import forestry.book.data.structure.StructureInfo;
-import forestry.book.gui.GuiForesterBook;
-import forestry.core.gui.elements.GuiElement;
-import forestry.core.gui.elements.lib.events.GuiEvent;
-
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.util.stream.IntStream;
 
 @OnlyIn(Dist.CLIENT)
 public class MultiblockElement extends GuiElement {

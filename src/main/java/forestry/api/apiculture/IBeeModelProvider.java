@@ -5,12 +5,10 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import forestry.api.apiculture.genetics.EnumBeeType;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.apiculture.genetics.EnumBeeType;
 
 public interface IBeeModelProvider {
 

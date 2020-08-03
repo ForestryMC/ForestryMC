@@ -1,18 +1,16 @@
 package genetics.alleles;
 
-import java.util.Arrays;
-import java.util.Optional;
-
-import net.minecraft.util.ResourceLocation;
-
+import genetics.ApiInstance;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
+import net.minecraft.util.ResourceLocation;
 
-import genetics.ApiInstance;
+import java.util.Arrays;
+import java.util.Optional;
 
 public final class AlleleTemplateBuilder implements IAlleleTemplateBuilder {
     private final IAllele[] alleles;

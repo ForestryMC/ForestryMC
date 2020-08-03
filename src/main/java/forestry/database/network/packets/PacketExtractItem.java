@@ -1,19 +1,13 @@
 package forestry.database.network.packets;
 
+import forestry.core.network.*;
+import forestry.database.gui.ContainerDatabase;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketHandlerServer;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdServer;
-import forestry.database.gui.ContainerDatabase;
 
 public class PacketExtractItem extends ForestryPacket implements IForestryPacketServer {
     public static final int HALF = 1;

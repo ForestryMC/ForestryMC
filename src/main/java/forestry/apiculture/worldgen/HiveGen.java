@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import forestry.api.apiculture.hives.IHiveGen;
+import forestry.core.utils.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.apiculture.hives.IHiveGen;
-import forestry.core.utils.BlockUtil;
 
 public abstract class HiveGen implements IHiveGen {
 

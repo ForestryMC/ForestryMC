@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nullable;
-
+import forestry.api.genetics.IIndividualLiving;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.Individual;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-import genetics.api.individual.Individual;
-
-import forestry.api.genetics.IIndividualLiving;
+import javax.annotation.Nullable;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
     private static final String NBT_HEALTH = "Health";

@@ -11,15 +11,13 @@
 package forestry.arboriculture.charcoal;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-
+import forestry.api.arboriculture.ICharcoalPileWall;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import forestry.api.arboriculture.ICharcoalPileWall;
+import javax.annotation.Nullable;
 
 public class CharcoalPileWall implements ICharcoalPileWall {
 

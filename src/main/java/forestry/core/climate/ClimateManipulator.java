@@ -1,18 +1,16 @@
 package forestry.core.climate;
 
 import com.google.common.base.Preconditions;
+import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateManipulator;
+import forestry.api.climate.IClimateManipulatorBuilder;
+import forestry.api.climate.IClimateState;
+import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-
-import net.minecraft.util.math.MathHelper;
-
-import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateManipulator;
-import forestry.api.climate.IClimateManipulatorBuilder;
-import forestry.api.climate.IClimateState;
 
 public class ClimateManipulator implements IClimateManipulator {
     private final IClimateState targetedState;

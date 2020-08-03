@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.Locale;
-
-import org.apache.commons.lang3.text.WordUtils;
-
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.classification.IBranchDefinition;
 import genetics.api.classification.IClassification;
 import genetics.api.classification.IClassification.EnumClassLevel;
 import genetics.api.classification.IClassificationRegistry;
+import org.apache.commons.lang3.text.WordUtils;
+
+import java.util.Locale;
 
 public enum TreeBranchDefinition implements IBranchDefinition {
     ACACIA,

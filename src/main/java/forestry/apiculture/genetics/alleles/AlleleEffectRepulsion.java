@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.List;
-
-import net.minecraft.entity.monster.MonsterEntity;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.entities.AIAvoidPlayers;
+import genetics.api.individual.IGenome;
+import net.minecraft.entity.monster.MonsterEntity;
+
+import java.util.List;
 
 //import net.minecraft.entity.ai.goal.GoalSelector.EntityAITaskEntry;
 

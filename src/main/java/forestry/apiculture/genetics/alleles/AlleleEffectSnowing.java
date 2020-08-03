@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.IEffectData;
+import forestry.core.render.ParticleRender;
+import forestry.core.utils.VectUtil;
+import genetics.api.individual.IGenome;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,17 +23,8 @@ import net.minecraft.block.SnowBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.individual.IGenome;
-
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IEffectData;
-import forestry.core.render.ParticleRender;
-import forestry.core.utils.VectUtil;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 

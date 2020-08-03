@@ -1,15 +1,10 @@
 package forestry.api.core.tooltips;
 
+import net.minecraft.util.text.*;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.Consumer;
-
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 
 public interface ITextInstance<I extends ITextInstance<?, ?, ?>, S, R> {
     default I text(String text) {

@@ -10,25 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale;
-
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.StringTextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.BiomeDictionary;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
 
 public class HabitatSlot extends Widget {
     private final Collection<BiomeDictionary.Type> biomes;

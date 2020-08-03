@@ -5,12 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import forestry.api.arboriculture.genetics.EnumGermlingType;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.arboriculture.genetics.EnumGermlingType;
 
 /**
  * Provides icons for saplings, pollen, etc.

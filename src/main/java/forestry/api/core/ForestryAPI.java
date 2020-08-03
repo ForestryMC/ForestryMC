@@ -5,17 +5,15 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import java.util.Set;
-
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.modules.IModuleContainer;
 import forestry.api.modules.IModuleManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Set;
 
 /**
  * Forestry's API is divided into several subcategories to make it easier to understand.

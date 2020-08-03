@@ -11,10 +11,8 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.IStillRecipe;
+import net.minecraftforge.fluids.FluidStack;
 
 public class StillRecipe implements IStillRecipe {
     private final int timePerUnit;

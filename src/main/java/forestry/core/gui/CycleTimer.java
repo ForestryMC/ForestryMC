@@ -1,9 +1,9 @@
 package forestry.core.gui;
 
+import net.minecraft.client.gui.screen.Screen;
+
 import java.util.List;
 import java.util.function.Supplier;
-
-import net.minecraft.client.gui.screen.Screen;
 
 public class CycleTimer {
     private long startTime;

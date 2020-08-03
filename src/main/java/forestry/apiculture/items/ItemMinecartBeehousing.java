@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import java.util.Locale;
-
+import forestry.api.core.IItemSubtype;
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.entities.MinecartEntityApiary;
+import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
+import forestry.apiculture.entities.MinecartEntityBeehouse;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IDispenseItemBehavior;
@@ -24,11 +27,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.core.IItemSubtype;
-import forestry.api.core.ItemGroups;
-import forestry.apiculture.entities.MinecartEntityApiary;
-import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
-import forestry.apiculture.entities.MinecartEntityBeehouse;
+import java.util.Locale;
 
 public class ItemMinecartBeehousing extends MinecartItem {
 

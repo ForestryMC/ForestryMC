@@ -1,12 +1,11 @@
 package forestry.core.gui.elements.lib.events;
 
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
-
+import forestry.core.gui.elements.lib.IGuiElement;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 @OnlyIn(Dist.CLIENT)
 public final class GuiEventHandler<E extends GuiElementEvent> implements Consumer<E> {

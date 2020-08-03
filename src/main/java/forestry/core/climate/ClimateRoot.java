@@ -10,22 +10,15 @@
  ******************************************************************************/
 package forestry.core.climate;
 
+import forestry.api.climate.*;
+import forestry.core.DefaultClimateProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
-
 import net.minecraftforge.common.util.LazyOptional;
-
-import forestry.api.climate.ClimateCapabilities;
-import forestry.api.climate.IClimateListener;
-import forestry.api.climate.IClimateProvider;
-import forestry.api.climate.IClimateRoot;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.IWorldClimateHolder;
-import forestry.core.DefaultClimateProvider;
 
 public class ClimateRoot implements IClimateRoot {
 

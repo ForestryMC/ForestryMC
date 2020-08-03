@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileMillRainmaker;
+import net.minecraft.item.ItemStack;
 
 public class InventoryRainmaker extends InventoryAdapterTile<TileMillRainmaker> {
     private static final int SLOT_SUBSTRATE = 0;

@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import javax.annotation.Nullable;
-
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileEscritoire;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
@@ -20,9 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileEscritoire;
+import javax.annotation.Nullable;
 
 public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 

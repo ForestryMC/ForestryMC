@@ -1,16 +1,14 @@
 package forestry.book.gui.elements;
 
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class CraftingElement extends SelectionElement<IRecipe> {

@@ -1,13 +1,11 @@
 package forestry.core.items;
 
+import forestry.core.config.Config;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
-
-import forestry.core.config.Config;
 
 public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consumable {
     private final EnumContainerType containerType;

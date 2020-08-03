@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -22,12 +21,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemBlockNBT extends ItemBlockForestry<Block> {
 

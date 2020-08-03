@@ -26,16 +26,9 @@ import com.google.common.collect.ImmutableSet;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
-import static forestry.core.config.forge_old.Configuration.COMMENT_SEPARATOR;
-import static forestry.core.config.forge_old.Configuration.NEW_LINE;
-import static forestry.core.config.forge_old.Configuration.allowedProperties;
+import static forestry.core.config.forge_old.Configuration.*;
 
 public class ConfigCategory implements Map<String, Property> {
     private final String name;

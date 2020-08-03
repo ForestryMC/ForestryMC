@@ -1,10 +1,11 @@
 package forestry.arboriculture.blocks;
 
 import com.google.common.base.Preconditions;
-
-import java.util.Collection;
-import java.util.Random;
-
+import forestry.api.arboriculture.ICharcoalManager;
+import forestry.api.arboriculture.ICharcoalPileWall;
+import forestry.api.arboriculture.TreeManager;
+import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.core.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,16 +24,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import forestry.api.arboriculture.ICharcoalManager;
-import forestry.api.arboriculture.ICharcoalPileWall;
-import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.features.CharcoalBlocks;
-import forestry.core.config.Config;
+import java.util.Collection;
+import java.util.Random;
 
 public class BlockWoodPile extends Block {
 

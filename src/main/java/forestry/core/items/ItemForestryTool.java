@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.features.CoreItems;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -19,19 +21,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
-
-import forestry.core.features.CoreItems;
-import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
     private final ItemStack remnants;

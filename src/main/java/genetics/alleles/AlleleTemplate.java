@@ -1,17 +1,13 @@
 package genetics.alleles;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.individual.IKaryotype;
+import genetics.api.individual.*;
 import genetics.api.root.IIndividualRoot;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
 
 public final class AlleleTemplate implements IAlleleTemplate {
     private final IAllele[] alleles;

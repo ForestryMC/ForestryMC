@@ -1,14 +1,12 @@
 package forestry.core.gui.widgets;
 
-import javax.annotation.Nullable;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.gui.Drawable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.gui.Drawable;
+import javax.annotation.Nullable;
 
 public class WidgetScrollBar extends Widget {
     @Nullable

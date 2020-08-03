@@ -1,12 +1,5 @@
 package forestry.lepidopterology.genetics;
 
-import java.util.Collection;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
@@ -16,6 +9,11 @@ import forestry.core.gui.elements.ItemElement;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.gui.elements.lib.IElementLayoutHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Collection;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyProductsTab implements IDatabaseTab<IButterfly> {

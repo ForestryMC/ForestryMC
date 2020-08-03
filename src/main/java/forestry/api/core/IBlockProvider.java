@@ -1,11 +1,11 @@
 package forestry.api.core;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 public interface IBlockProvider<B extends Block, I extends Item> extends IItemProvider<I> {
     boolean hasBlock();

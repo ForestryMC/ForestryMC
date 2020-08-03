@@ -1,8 +1,5 @@
 package forestry.core.items;
 
-import javax.annotation.Nullable;
-import java.util.Map;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
@@ -11,6 +8,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.world.IWorldReader;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 public class ItemBlockWallForestry<B extends Block, W extends Block> extends ItemBlockForestry<B> {
     private final W wallBlock;

@@ -5,18 +5,16 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-
+import forestry.api.apiculture.IBeekeepingMode;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 
-import forestry.api.apiculture.IBeekeepingMode;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Keeps track of who bred, discovered, and researched which species in a world.

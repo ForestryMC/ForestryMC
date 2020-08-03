@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
 import forestry.Forestry;
 import forestry.api.core.IGameMode;
 import forestry.core.utils.Log;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameMode implements IGameMode {
     private static final String GAMEMODE_KEY = "gamemode";

@@ -5,12 +5,11 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import java.awt.Color;
-import java.util.Collection;
-
+import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 import net.minecraftforge.common.BiomeDictionary;
 
-import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
+import java.awt.*;
+import java.util.Collection;
 
 public interface IAlleleButterflySpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleButterflySpeciesBuilder> {
 

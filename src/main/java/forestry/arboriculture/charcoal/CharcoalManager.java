@@ -1,17 +1,15 @@
 package forestry.arboriculture.charcoal;
 
 import com.google.common.base.Preconditions;
+import forestry.api.arboriculture.ICharcoalManager;
+import forestry.api.arboriculture.ICharcoalPileWall;
+import forestry.core.config.Config;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-
-import forestry.api.arboriculture.ICharcoalManager;
-import forestry.api.arboriculture.ICharcoalPileWall;
-import forestry.core.config.Config;
 
 public class CharcoalManager implements ICharcoalManager {
     private final List<ICharcoalPileWall> walls = new ArrayList<>();

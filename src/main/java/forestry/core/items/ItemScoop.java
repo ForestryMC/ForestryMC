@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.ToolType;
-
 import forestry.api.core.IToolScoop;
 import forestry.api.core.ItemGroups;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ToolType;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
     public static ToolType SCOOP = ToolType.get("scoop");

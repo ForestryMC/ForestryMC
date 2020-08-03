@@ -1,22 +1,20 @@
 package genetics.individual;
 
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
-import java.util.Optional;
-import java.util.Random;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-
+import genetics.ApiInstance;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
 import genetics.api.root.ITemplateContainer;
-
-import genetics.ApiInstance;
 import genetics.utils.AlleleUtils;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import java.util.Optional;
+import java.util.Random;
 
 @Immutable
 public class Chromosome implements IChromosome {

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.energy.blocks;
 
-import java.util.function.Supplier;
-
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
@@ -22,6 +20,8 @@ import forestry.energy.ModuleEnergy;
 import forestry.energy.features.EnergyTiles;
 import forestry.energy.tiles.TileEngine;
 import forestry.modules.features.FeatureTileType;
+
+import java.util.function.Supplier;
 
 public enum BlockTypeEngine implements IBlockTypeTesr {
     PEAT(createEngineProperties(() -> EnergyTiles.PEAT_ENGINE, "peat", "/engine_copper")),

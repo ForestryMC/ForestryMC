@@ -5,14 +5,13 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import javax.annotation.Nullable;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.root.IRootDefinition;
-
 import forestry.api.lepidopterology.genetics.IButterflyFactory;
 import forestry.api.lepidopterology.genetics.IButterflyMutationFactory;
 import forestry.api.lepidopterology.genetics.IButterflyRoot;
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IRootDefinition;
+
+import javax.annotation.Nullable;
 
 public class ButterflyManager {
 

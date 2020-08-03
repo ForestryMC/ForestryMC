@@ -1,27 +1,22 @@
 package forestry.core.genetics.root;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IBreedingTrackerHandler;
+import forestry.api.genetics.IBreedingTrackerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 import net.minecraftforge.fml.DistExecutor;
 
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IBreedingTrackerHandler;
-import forestry.api.genetics.IBreedingTrackerManager;
+import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public enum BreedingTrackerManager implements IBreedingTrackerManager {
     INSTANCE;

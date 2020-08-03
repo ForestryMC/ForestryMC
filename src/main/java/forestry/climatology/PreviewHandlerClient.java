@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.climatology;
 
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.api.climate.ClimateCapabilities;
+import forestry.api.climate.IClimateTransformer;
+import forestry.climatology.features.ClimatologyItems;
+import forestry.climatology.items.ItemHabitatScreen;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.TickHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -22,10 +26,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -35,12 +35,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import forestry.api.climate.ClimateCapabilities;
-import forestry.api.climate.IClimateTransformer;
-import forestry.climatology.features.ClimatologyItems;
-import forestry.climatology.items.ItemHabitatScreen;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.TickHelper;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
 public class PreviewHandlerClient {

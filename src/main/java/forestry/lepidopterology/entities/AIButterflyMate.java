@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.utils.GeneticsUtil;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class AIButterflyMate extends AIButterflyInteract {
     @Nullable

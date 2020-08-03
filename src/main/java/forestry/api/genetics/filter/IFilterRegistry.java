@@ -1,9 +1,9 @@
 package forestry.api.genetics.filter;
 
+import forestry.api.core.ILocatable;
+
 import javax.annotation.Nullable;
 import java.util.Collection;
-
-import forestry.api.core.ILocatable;
 
 /**
  * @since 5.8

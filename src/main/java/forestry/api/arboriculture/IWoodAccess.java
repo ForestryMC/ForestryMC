@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import java.util.List;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 /**
  * Provides easy access to Forestry and Vanilla wood items.

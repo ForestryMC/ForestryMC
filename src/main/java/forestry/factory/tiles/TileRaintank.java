@@ -10,9 +10,16 @@
  ******************************************************************************/
 package forestry.factory.tiles;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-
+import forestry.api.core.IErrorLogic;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.*;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TileBase;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.gui.ContainerRaintank;
+import forestry.factory.inventory.InventoryRaintank;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -25,7 +32,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -36,20 +42,8 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import forestry.api.core.IErrorLogic;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.ContainerFiller;
-import forestry.core.fluids.DrainOnlyFluidHandlerWrapper;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TileBase;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.gui.ContainerRaintank;
-import forestry.factory.inventory.InventoryRaintank;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
     private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);

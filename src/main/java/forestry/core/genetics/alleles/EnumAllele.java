@@ -1,17 +1,15 @@
 package forestry.core.genetics.alleles;
 
-import java.util.Locale;
-
-import net.minecraft.util.math.vector.Vector3i;
-
-import genetics.api.alleles.IAlleleData;
-import genetics.api.alleles.IAlleleValue;
-
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.flowers.FlowerProvider;
 import forestry.apiculture.genetics.alleles.AlleleFlowers;
 import forestry.core.config.Constants;
+import genetics.api.alleles.IAlleleData;
+import genetics.api.alleles.IAlleleValue;
+import net.minecraft.util.math.vector.Vector3i;
+
+import java.util.Locale;
 
 public class EnumAllele {
     public enum Fertility implements IAlleleData<Integer> {

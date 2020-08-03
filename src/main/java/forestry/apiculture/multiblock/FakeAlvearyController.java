@@ -10,16 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -31,6 +22,13 @@ import forestry.core.climate.FakeClimateListener;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
     public static final FakeAlvearyController instance = new FakeAlvearyController();

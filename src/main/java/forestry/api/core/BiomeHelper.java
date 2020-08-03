@@ -5,12 +5,11 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.common.BiomeDictionary;
 
 public class BiomeHelper {
 

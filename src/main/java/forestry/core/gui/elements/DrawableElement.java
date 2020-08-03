@@ -1,7 +1,6 @@
 package forestry.core.gui.elements;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import forestry.core.gui.Drawable;
 
 public class DrawableElement extends GuiElement {

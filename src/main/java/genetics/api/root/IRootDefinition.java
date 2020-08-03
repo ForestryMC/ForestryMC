@@ -1,12 +1,12 @@
 package genetics.api.root;
 
+import genetics.api.IGeneticApiInstance;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import genetics.api.IGeneticApiInstance;
 
 /**
  * A optional that describes a {@link IIndividualRoot}.

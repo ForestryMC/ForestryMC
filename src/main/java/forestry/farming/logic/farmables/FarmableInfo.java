@@ -1,12 +1,11 @@
 package forestry.farming.logic.farmables;
 
+import forestry.api.farming.IFarmableInfo;
+import net.minecraft.item.ItemStack;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
-import forestry.api.farming.IFarmableInfo;
 
 public class FarmableInfo implements IFarmableInfo {
     private final List<ItemStack> germlings = new ArrayList<>();

@@ -7,6 +7,6 @@
 @MethodsReturnNonnullByDefault
 package forestry.api.arboriculture.genetics;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

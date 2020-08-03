@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
@@ -20,6 +17,8 @@ import forestry.core.tiles.TileUtil;
 import forestry.mail.features.MailContainers;
 import forestry.mail.inventory.InventoryStampCollector;
 import forestry.mail.tiles.TileStampCollector;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 

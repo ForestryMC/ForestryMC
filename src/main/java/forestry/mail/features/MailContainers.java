@@ -1,12 +1,7 @@
 package forestry.mail.features;
 
 import forestry.mail.ModuleMail;
-import forestry.mail.gui.ContainerCatalogue;
-import forestry.mail.gui.ContainerLetter;
-import forestry.mail.gui.ContainerMailbox;
-import forestry.mail.gui.ContainerStampCollector;
-import forestry.mail.gui.ContainerTradeName;
-import forestry.mail.gui.ContainerTrader;
+import forestry.mail.gui.*;
 import forestry.modules.features.FeatureContainerType;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;

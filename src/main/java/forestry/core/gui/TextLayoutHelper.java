@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.util.text.StringTextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import forestry.core.render.ColourProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.core.render.ColourProperties;
 
 @OnlyIn(Dist.CLIENT)
 public class TextLayoutHelper {

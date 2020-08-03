@@ -1,8 +1,5 @@
 package forestry.cultivation.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLiquidIn;
@@ -12,6 +9,8 @@ import forestry.core.tiles.TileUtil;
 import forestry.cultivation.features.CultivationContainers;
 import forestry.cultivation.inventory.InventoryPlanter;
 import forestry.cultivation.tiles.TilePlanter;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 public class ContainerPlanter extends ContainerLiquidTanks<TilePlanter> {
 

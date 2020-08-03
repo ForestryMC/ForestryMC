@@ -1,17 +1,14 @@
 package genetics.alleles;
 
 import com.google.common.base.MoreObjects;
-
-import java.util.Objects;
-
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.registries.ForgeRegistryEntry;
-
 import genetics.api.alleles.AlleleInfo;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleType;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import java.util.Objects;
 
 public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 

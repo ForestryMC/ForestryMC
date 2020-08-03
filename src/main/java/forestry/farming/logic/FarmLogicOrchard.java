@@ -11,29 +11,17 @@
 package forestry.farming.logic;
 
 import com.google.common.collect.ImmutableList;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-
+import forestry.api.farming.*;
+import forestry.api.genetics.IFruitBearer;
+import forestry.core.tiles.TileUtil;
+import forestry.farming.logic.crops.CropFruit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.IFarmable;
-import forestry.api.genetics.IFruitBearer;
-import forestry.core.tiles.TileUtil;
-import forestry.farming.logic.crops.CropFruit;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class FarmLogicOrchard extends FarmLogic {
 

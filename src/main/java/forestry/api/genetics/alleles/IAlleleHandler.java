@@ -5,11 +5,10 @@
  ******************************************************************************/
 package forestry.api.genetics.alleles;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.classification.IClassification;
-
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IGeneticRegistry;
+import genetics.api.alleles.IAllele;
+import genetics.api.classification.IClassification;
 
 /**
  * @author Alex Binnie

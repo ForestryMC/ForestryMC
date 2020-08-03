@@ -1,14 +1,12 @@
 package forestry.apiculture.genetics;
 
-import net.minecraft.item.ItemStack;
-
-import genetics.api.alleles.IAlleleTemplate;
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.individual.IGenome;
+import net.minecraft.item.ItemStack;
 
 public abstract class BeeVariation implements IBeeDefinition {
 

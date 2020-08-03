@@ -10,20 +10,14 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.items.IItemHandler;
-
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraftforge.items.IItemHandler;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

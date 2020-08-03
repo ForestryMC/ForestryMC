@@ -1,14 +1,11 @@
 package forestry.api.genetics.alyzer;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
+import forestry.apiculture.genetics.AlyzerInfo;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
-
-import forestry.apiculture.genetics.AlyzerInfo;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 
 public interface IAlyzerDisplayProvider<I extends IIndividual> {
     default AlyzerInfo getInfo() {

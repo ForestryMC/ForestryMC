@@ -1,10 +1,9 @@
 package genetics.api.alleles;
 
-import net.minecraft.util.text.ITextComponent;
-
 import genetics.api.classification.IClassification;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * The species of an {@link genetics.api.individual.IIndividual} is one of the most important {@link IAllele} of the

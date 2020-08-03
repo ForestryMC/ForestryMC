@@ -11,23 +11,17 @@
 package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
-import forestry.core.circuits.CircuitRecipe;
-import forestry.core.circuits.CircuitRegistry;
-import forestry.core.circuits.EnumCircuitBoardType;
-import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.circuits.SolderManager;
+import forestry.core.circuits.*;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.datastructures.RevolvingList;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 

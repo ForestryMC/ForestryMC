@@ -10,8 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import java.util.List;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.config.SessionVars;
+import forestry.core.gui.GuiForestry;
+import forestry.core.render.ForestryResource;
+import forestry.core.render.TextureManagerForestry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.Rectangle2d;
@@ -20,19 +26,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.config.SessionVars;
-import forestry.core.gui.GuiForestry;
-import forestry.core.render.ForestryResource;
-import forestry.core.render.TextureManagerForestry;
+import java.util.List;
 
 /**
  * Side ledger for guis

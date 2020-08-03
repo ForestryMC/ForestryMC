@@ -1,27 +1,16 @@
 package forestry.modules;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.forgespi.language.ModFileScanData;
-
-import net.minecraftforge.fml.ModList;
-
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Log;
 import forestry.modules.features.FeatureProvider;
-
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
+
+import java.util.*;
 
 public class ForestryPluginUtil {
     private ForestryPluginUtil() {

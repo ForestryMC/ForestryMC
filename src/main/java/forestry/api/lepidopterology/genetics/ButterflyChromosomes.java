@@ -5,13 +5,12 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
+import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.alleles.IAlleleFlowers;
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeList;
 import genetics.api.individual.IChromosomeValue;
-
-import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.alleles.IAlleleFlowers;
 
 public class ButterflyChromosomes {
     public static final IChromosomeList TYPES = GeneticsAPI.apiInstance.getChromosomeList("rootButterflies");

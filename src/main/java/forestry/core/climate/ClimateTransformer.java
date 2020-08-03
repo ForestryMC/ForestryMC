@@ -10,23 +10,16 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-
-import forestry.api.climate.ClimateManager;
-import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateManipulatorBuilder;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTransformer;
-import forestry.api.climate.IWorldClimateHolder;
+import forestry.api.climate.*;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.config.Config;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class ClimateTransformer implements IClimateTransformer, IStreamable, INbtReadable, INbtWritable {
 

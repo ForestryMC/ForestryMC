@@ -5,10 +5,9 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import forestry.api.core.IArmorNaturalist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-
-import forestry.api.core.IArmorNaturalist;
 
 public class ArboricultureCapabilities {
     /**

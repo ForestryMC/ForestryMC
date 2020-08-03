@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.List;
-
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuit;
+import forestry.core.utils.ResourceUtil;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.ICircuit;
-import forestry.core.utils.ResourceUtil;
+import java.util.List;
 
 public abstract class Circuit implements ICircuit {
     private final String uid;

@@ -1,13 +1,12 @@
 package forestry.core.gui.elements.lib;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
 
 /**
  * The window element is the root element of the containment hierarchy. Its the only element the gui interacts with

@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingMode;
@@ -25,6 +17,13 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.utils.SlotUtil;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
 
 public class InventoryApiary extends InventoryBeeHousing implements IApiaryInventory {
     public static final int SLOT_FRAMES_1 = 9;

@@ -10,24 +10,19 @@
  ******************************************************************************/
 package forestry.factory.network.packets;
 
-import java.io.IOException;
-
+import forestry.core.network.*;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.factory.tiles.TileCarpenter;
+import forestry.factory.tiles.TileFabricator;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.IForestryPacketHandlerServer;
-import forestry.core.network.IForestryPacketServer;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.PacketIdServer;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.factory.tiles.TileCarpenter;
-import forestry.factory.tiles.TileFabricator;
+import java.io.IOException;
 
 public class PacketRecipeTransferRequest extends ForestryPacket implements IForestryPacketServer {
     private final BlockPos pos;

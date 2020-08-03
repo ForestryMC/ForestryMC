@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.List;
-
-import net.minecraft.entity.MobEntity;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
+import genetics.api.individual.IGenome;
+import net.minecraft.entity.MobEntity;
+
+import java.util.List;
 
 /**
  * Hermits will not produce if there are any other living creatures nearby.

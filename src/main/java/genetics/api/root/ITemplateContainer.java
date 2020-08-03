@@ -1,15 +1,15 @@
 package genetics.api.root;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Random;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * The ITemplateContainer contains all templates of the {@link IIndividualRoot} that were added with the

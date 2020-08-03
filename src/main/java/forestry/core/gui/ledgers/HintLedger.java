@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import java.util.List;
-import java.util.Random;
-
+import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.core.render.TextureManagerForestry;
-import forestry.core.utils.Translator;
+import java.util.List;
+import java.util.Random;
 
 public class HintLedger extends Ledger {
 

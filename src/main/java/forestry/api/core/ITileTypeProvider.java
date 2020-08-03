@@ -1,9 +1,9 @@
 package forestry.api.core;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+
+import javax.annotation.Nullable;
 
 public interface ITileTypeProvider<T extends TileEntity> {
     boolean hasTileType();

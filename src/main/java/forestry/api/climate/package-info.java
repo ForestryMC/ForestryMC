@@ -8,9 +8,9 @@
 //@API(apiVersion = "5.0.0", owner = "Forestry", provides = "ForestryAPI|climate")
 package forestry.api.climate;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //import net.minecraftforge.fml.common.API;
 //TODO API

@@ -11,18 +11,15 @@
 package forestry.core.gui.slots;
 
 import com.google.common.collect.Lists;
-
+import forestry.worktable.inventory.CraftingInventoryForestry;
+import forestry.worktable.tiles.ICrafterWorktable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-
 import net.minecraftforge.fml.hooks.BasicEventHooks;
-
-import forestry.worktable.inventory.CraftingInventoryForestry;
-import forestry.worktable.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends Slot {
 

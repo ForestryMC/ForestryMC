@@ -1,13 +1,8 @@
 package forestry.core.climate;
 
+import forestry.api.climate.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import forestry.api.climate.ClimateType;
-import forestry.api.climate.IClimateHousing;
-import forestry.api.climate.IClimateManipulatorBuilder;
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTransformer;
 
 public class FakeClimateTransformer implements IClimateTransformer {
     public static final FakeClimateTransformer INSTANCE = new FakeClimateTransformer();

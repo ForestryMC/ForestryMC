@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.tiles.TileCentrifuge;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 
 public class InventoryCentrifuge extends InventoryAdapterTile<TileCentrifuge> {
     public static final int SLOT_RESOURCE = 0;

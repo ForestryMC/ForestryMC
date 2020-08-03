@@ -1,14 +1,14 @@
 package genetics.api.mutation;
 
-import java.util.Collection;
-import java.util.List;
-
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * This component contains all mutations of the {@link genetics.api.root.IIndividualRootBuilder}.

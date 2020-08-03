@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.core.worldgen.FeatureHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.core.worldgen.FeatureHelper;
 
 public class FeatureMahoe extends FeatureTree {
 

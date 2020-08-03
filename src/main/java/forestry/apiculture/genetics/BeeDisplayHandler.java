@@ -1,21 +1,6 @@
 package forestry.apiculture.genetics;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosomeAllele;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IChromosomeValue;
-import genetics.api.individual.IGenome;
-import genetics.api.organism.IOrganismType;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
@@ -27,24 +12,31 @@ import forestry.api.genetics.alyzer.IAlleleDisplayHandler;
 import forestry.api.genetics.alyzer.IAlleleDisplayHelper;
 import forestry.api.genetics.alyzer.IAlyzerHelper;
 import forestry.core.genetics.GenericRatings;
-import forestry.core.gui.GuiAlyzer;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ResourceUtil;
 import forestry.core.utils.Translator;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosomeAllele;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IChromosomeValue;
+import genetics.api.individual.IGenome;
+import genetics.api.organism.IOrganismType;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import javax.annotation.Nullable;
 
 public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
     SPECIES(BeeChromosomes.SPECIES, 0) {
         @Override
         public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
             IOrganismType organismType = helper.getOrganismType();
-            String customPrimaryBeeKey = "for.bees.custom.beealyzer."
-                    + organismType.getName() + "." + genome.getPrimary().getLocalisationKey().replace("for.bees.species.", "");
-            String customSecondaryBeeKey = "for.bees.custom.beealyzer."
-                    + organismType.getName() + "." + genome.getSecondary().getLocalisationKey().replace("for.bees.species.", "");
+            ITextComponent primaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
+            ITextComponent secondaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
 
-            helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"),
-                    BeeChromosomes.SPECIES,
-                    GuiAlyzer.checkCustomName(customPrimaryBeeKey),
-                    GuiAlyzer.checkCustomName(customSecondaryBeeKey));
+            helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES, primaryName, secondaryName);
         }
     },
     SPEED(BeeChromosomes.SPEED, -1, 1) {
@@ -52,7 +44,6 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
         public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
             IAllele speedAllele = getActiveAllele(genome);
             TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." +
-
                     speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
             if (ResourceUtil.canTranslate(customSpeed)) {
                 toolTip.singleLine()

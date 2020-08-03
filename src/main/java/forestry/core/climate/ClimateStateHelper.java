@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateStateHelper;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.MathHelper;
 
 public final class ClimateStateHelper implements IClimateStateHelper {
 

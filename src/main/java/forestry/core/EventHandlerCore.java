@@ -10,10 +10,18 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.net.URL;
-import java.util.Collection;
-import java.util.Set;
-
+import forestry.api.core.ISpriteRegistry;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.apiculture.ApiaristAI;
+import forestry.apiculture.ModuleApiculture;
+import forestry.core.config.Constants;
+import forestry.core.models.ModelBlockCached;
+import forestry.core.render.TextureManagerForestry;
+import forestry.modules.ModuleManager;
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -24,7 +32,6 @@ import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -37,19 +44,9 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-
-import forestry.api.core.ISpriteRegistry;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.apiculture.ApiaristAI;
-import forestry.apiculture.ModuleApiculture;
-import forestry.core.config.Constants;
-import forestry.core.models.ModelBlockCached;
-import forestry.core.render.TextureManagerForestry;
-import forestry.modules.ModuleManager;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Set;
 
 public class EventHandlerCore {
 

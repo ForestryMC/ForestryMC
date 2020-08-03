@@ -1,8 +1,5 @@
 package forestry.modules;
 
-import java.io.File;
-import java.util.Collection;
-
 import forestry.Forestry;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
@@ -10,6 +7,9 @@ import forestry.api.modules.IModuleContainer;
 import forestry.core.config.Constants;
 import forestry.core.config.forge_old.Configuration;
 import forestry.core.config.forge_old.Property;
+
+import java.io.File;
+import java.util.Collection;
 
 public class ForestryModules implements IModuleContainer {
     private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";

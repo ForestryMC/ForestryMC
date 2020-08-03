@@ -6,15 +6,13 @@
 package forestry.api.climate;
 
 import com.google.common.base.MoreObjects;
-
-import javax.annotation.concurrent.Immutable;
-
+import forestry.api.core.INbtWritable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3i;
 
-import forestry.api.core.INbtWritable;
+import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public class Position2D implements Comparable<Position2D>, INbtWritable {

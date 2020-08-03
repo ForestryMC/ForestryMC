@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.book.proxy;
 
+import forestry.api.book.BookManager;
+import forestry.book.BookLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.book.BookManager;
-import forestry.book.BookLoader;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)

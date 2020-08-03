@@ -1,14 +1,13 @@
 package forestry.sorting;
 
-import javax.annotation.Nullable;
-import java.util.NoSuchElementException;
-
+import forestry.api.genetics.filter.IFilterData;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
-import forestry.api.genetics.filter.IFilterData;
+import javax.annotation.Nullable;
+import java.util.NoSuchElementException;
 
 public class FilterData implements IFilterData {
     private final IRootDefinition definition;

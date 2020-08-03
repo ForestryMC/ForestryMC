@@ -5,16 +5,13 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.products.IDynamicProductList;
+import genetics.api.individual.IGenome;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 

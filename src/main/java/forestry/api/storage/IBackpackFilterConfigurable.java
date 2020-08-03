@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import java.util.function.Predicate;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.function.Predicate;
 
 /**
  * A configurable backpack filter. Useful for implementers of {@link IBackpackDefinition}.

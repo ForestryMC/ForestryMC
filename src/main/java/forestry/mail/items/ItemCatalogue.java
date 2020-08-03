@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.mail.items;
 
-import javax.annotation.Nullable;
-
+import forestry.core.ItemGroupForestry;
+import forestry.core.items.ItemWithGui;
+import forestry.mail.gui.ContainerCatalogue;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.ItemGroupForestry;
-import forestry.core.items.ItemWithGui;
-import forestry.mail.gui.ContainerCatalogue;
+import javax.annotation.Nullable;
 
 public class ItemCatalogue extends ItemWithGui {
 

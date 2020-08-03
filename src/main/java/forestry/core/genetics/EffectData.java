@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import net.minecraft.nbt.CompoundNBT;
-
 import forestry.api.genetics.IEffectData;
+import net.minecraft.nbt.CompoundNBT;
 
 public class EffectData implements IEffectData {
 

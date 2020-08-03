@@ -5,12 +5,12 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import java.util.Collection;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Collection;
 
 /**
  * The IFarmLogic is used by farm blocks and multi-blocks to cultivate and harvest crops and plants.

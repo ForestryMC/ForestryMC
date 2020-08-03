@@ -1,30 +1,24 @@
 package forestry.modules.features;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
+import forestry.api.core.IBlockSubtype;
+import forestry.api.core.IItemSubtype;
+import forestry.api.storage.EnumBackpackType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.event.RegistryEvent;
-
 import net.minecraftforge.fml.network.IContainerFactory;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.api.core.IItemSubtype;
-import forestry.api.storage.EnumBackpackType;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.*;
 
 public interface IFeatureRegistry {
 
@@ -61,6 +55,8 @@ public interface IFeatureRegistry {
     <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier);
 
     <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer);
+
+    <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer, Supplier<AttributeModifierMap.MutableAttribute> attributes);
 
     FeatureFluid.Builder fluid(String identifier);
 

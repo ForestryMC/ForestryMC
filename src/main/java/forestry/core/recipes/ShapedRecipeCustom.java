@@ -10,11 +10,8 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -23,8 +20,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.core.utils.ItemStackUtil;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //import net.minecraftforge.oredict.OreDictionary;
 //import net.minecraftforge.oredict.ShapedOreRecipe;
