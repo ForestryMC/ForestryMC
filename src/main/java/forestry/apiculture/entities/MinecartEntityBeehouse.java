@@ -104,12 +104,14 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 		if (ret.isSuccessOrConsume()) {
 			return ret;
 		}
-		NetworkHooks.openGui((ServerPlayerEntity) player, this, p -> {
-			PacketBufferForestry fP = new PacketBufferForestry(p);
-			fP.writeEntityById(getEntity());
-			fP.writeBoolean(false);
-			fP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
-		});
+		if (!this.world.isRemote) {
+			NetworkHooks.openGui((ServerPlayerEntity) player, this, p -> {
+				PacketBufferForestry fP = new PacketBufferForestry(p);
+				fP.writeEntityById(getEntity());
+				fP.writeBoolean(false);
+				fP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
+			});
+		}
 		return ActionResultType.func_233537_a_(this.world.isRemote);
 	}
 }

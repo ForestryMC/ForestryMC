@@ -15,10 +15,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.core.tiles.ITitled;
 
@@ -33,6 +37,12 @@ public abstract class MinecartEntityForestry extends AbstractMinecartEntity impl
 	public MinecartEntityForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
 		super(type, world, posX, posY, posZ);
 		setHasDisplayTile(true);
+	}
+
+	// Needed to spawn the entity on the client
+	@Override
+	public IPacket<?> createSpawnPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	//	//TODO - check
@@ -68,7 +78,7 @@ public abstract class MinecartEntityForestry extends AbstractMinecartEntity impl
 	@Override
 	public void killMinecart(DamageSource damageSource) {
 		super.killMinecart(damageSource);
-		if (/*this.world.getGameRules().getBoolean("doEntityDrops")*/ true) {    //TODO - revisit when class is deobsfucated
+		if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
 			Block block = getDisplayTile().getBlock();
 			entityDropItem(new ItemStack(block), 0.0F);
 		}

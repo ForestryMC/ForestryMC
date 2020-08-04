@@ -124,12 +124,14 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 		if (ret.isSuccessOrConsume()) {
 			return ret;
 		}
-		NetworkHooks.openGui((ServerPlayerEntity) player, this, p -> {
-			PacketBufferForestry fP = new PacketBufferForestry(p);
-			fP.writeEntityById(getEntity());
-			fP.writeBoolean(true);
-			fP.writeEnum(GuiBeeHousing.Icon.APIARY, GuiBeeHousing.Icon.values());
-		});
+		if (!this.world.isRemote) {
+			NetworkHooks.openGui((ServerPlayerEntity) player, this, p -> {
+				PacketBufferForestry fP = new PacketBufferForestry(p);
+				fP.writeEntityById(getEntity());
+				fP.writeBoolean(true);
+				fP.writeEnum(GuiBeeHousing.Icon.APIARY, GuiBeeHousing.Icon.values());
+			});
+		}
 		return ActionResultType.func_233537_a_(this.world.isRemote);
 	}
 }

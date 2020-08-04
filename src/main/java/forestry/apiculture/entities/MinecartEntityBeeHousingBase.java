@@ -119,7 +119,6 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 		return getBiome().getDownfall();
 	}
 
-	//TODO getLight
 	@Override
 	public int getBlockLightValue() {
 		return world.getLight(getPosition().up());

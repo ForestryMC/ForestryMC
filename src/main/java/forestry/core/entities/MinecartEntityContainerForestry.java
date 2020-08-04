@@ -50,7 +50,7 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 
 	@Override
 	protected void readAdditional(CompoundNBT compoundNBT) {
-		super.read(compoundNBT);
+		super.readAdditional(compoundNBT);
 		getInternalInventory().read(compoundNBT);
 	}
 
@@ -182,22 +182,6 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	protected abstract IInventoryAdapter getInternalInventory();
-
-	//TODO inventory field things
-	//	@Override
-	//	public int getField(int id) {
-	//		return getInternalInventory().getField(id);
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//		getInternalInventory().setField(id, value);
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return getInternalInventory().getFieldCount();
-	//	}
 
 	@Override
 	public void clear() {
