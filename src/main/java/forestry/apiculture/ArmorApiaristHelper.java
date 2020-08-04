@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.apiculture.IArmorApiaristHelper;
+import forestry.apiculture.capabilities.ArmorApiarist;
 
 public class ArmorApiaristHelper implements IArmorApiaristHelper {
 
@@ -31,7 +32,7 @@ public class ArmorApiaristHelper implements IArmorApiaristHelper {
 		final IArmorApiarist armorApiarist;
 		LazyOptional<IArmorApiarist> armorCap = stack.getCapability(ApicultureCapabilities.ARMOR_APIARIST);
 		if (armorCap.isPresent()) {
-			armorApiarist = armorCap.orElse(null);
+			armorApiarist = armorCap.orElse(ArmorApiarist.INSTANCE);
 		} else {
 			return false;
 		}

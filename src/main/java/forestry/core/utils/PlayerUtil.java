@@ -12,8 +12,11 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.function.Consumer;
 
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -42,6 +45,28 @@ public abstract class PlayerUtil {
 		} else {
 			return profile.getName();
 		}
+	}
+
+	public static boolean actOnServer(PlayerEntity player, Consumer<ServerPlayerEntity> action) {
+		if (player.world.isRemote || !(player instanceof ServerPlayerEntity)) {
+			return false;
+		}
+		action.accept(asServer(player));
+		return true;
+	}
+
+	public static ClientPlayerEntity asClient(PlayerEntity player) {
+		if (!(player instanceof ClientPlayerEntity)) {
+			throw new IllegalStateException("Failed to cast player to its client version.");
+		}
+		return (ClientPlayerEntity) player;
+	}
+
+	public static ServerPlayerEntity asServer(PlayerEntity player) {
+		if (!(player instanceof ServerPlayerEntity)) {
+			throw new IllegalStateException("Failed to cast player to its server version.");
+		}
+		return (ServerPlayerEntity) player;
 	}
 
 	/**

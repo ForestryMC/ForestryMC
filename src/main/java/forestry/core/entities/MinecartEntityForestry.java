@@ -14,9 +14,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
@@ -25,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.core.tiles.ITitled;
+import forestry.core.utils.PlayerUtil;
 
 //TODO - check nothing missing from MinecartEntity now that this extends AbstractMinecartEntity
 public abstract class MinecartEntityForestry extends AbstractMinecartEntity implements ITitled {
@@ -45,16 +50,17 @@ public abstract class MinecartEntityForestry extends AbstractMinecartEntity impl
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
-	//	//TODO - check
-	//	@Override
-	//	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-	//		if(super.processInitialInteract(player, hand)) {
-	//			return true;
-	//		}
-	//		//TODO sides
-	//		NetworkHooks.openGui((ServerPlayerEntity) player, );
-	//		return true;
-	//	}
+	@Override
+	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
+		ActionResultType ret = super.processInitialInteract(player, hand);
+		if (ret.isSuccessOrConsume()) {
+			return ret;
+		}
+		PlayerUtil.actOnServer(player, this::openGui);
+		return ActionResultType.func_233537_a_(this.world.isRemote);
+	}
+
+	protected abstract void openGui(ServerPlayerEntity player);
 
 	/* MinecartEntity */
 	@Override

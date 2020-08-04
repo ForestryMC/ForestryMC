@@ -85,6 +85,8 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 
 	/* IInventory */
 
+	protected abstract IInventoryAdapter getInternalInventory();
+
 	@Override
 	public boolean isEmpty() {
 		return getInternalInventory().isEmpty();
@@ -180,8 +182,6 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	public void markDirty() {
 
 	}
-
-	protected abstract IInventoryAdapter getInternalInventory();
 
 	@Override
 	public void clear() {

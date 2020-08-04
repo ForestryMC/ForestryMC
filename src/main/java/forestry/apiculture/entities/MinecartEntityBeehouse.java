@@ -19,8 +19,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -97,21 +95,13 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 		return new ContainerMinecartBeehouse(windowId, player.inventory, this, false, GuiBeeHousing.Icon.BEE_HOUSE);
 	}
 
-	//TODO - check
 	@Override
-	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-		ActionResultType ret = super.processInitialInteract(player, hand);
-		if (ret.isSuccessOrConsume()) {
-			return ret;
-		}
-		if (!this.world.isRemote) {
-			NetworkHooks.openGui((ServerPlayerEntity) player, this, p -> {
-				PacketBufferForestry fP = new PacketBufferForestry(p);
-				fP.writeEntityById(getEntity());
-				fP.writeBoolean(false);
-				fP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
-			});
-		}
-		return ActionResultType.func_233537_a_(this.world.isRemote);
+	protected void openGui(ServerPlayerEntity player) {
+		NetworkHooks.openGui(player, this, p -> {
+			PacketBufferForestry fP = new PacketBufferForestry(p);
+			fP.writeEntityById(getEntity());
+			fP.writeBoolean(false);
+			fP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
+		});
 	}
 }

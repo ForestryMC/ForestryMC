@@ -37,7 +37,6 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 		}
 	}
 
-	//TODO be hacky and use title to get the icon?
 	public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + container.getIcon().path, container, inv, container.getDelegate(), 25, 7, 2, 0);
 		this.delegate = container.getDelegate();

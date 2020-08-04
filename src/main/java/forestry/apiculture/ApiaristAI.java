@@ -58,8 +58,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 	public void tick() {
 		super.tick();
 		BlockPos housePos = this.destinationBlock.north().up();
-		//		this.villager.getLookHelper().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
-		//TODO lookHelper
+		this.villager.getLookController().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
 		if (this.getIsAboveDestination()) {
 			World world = this.villager.world;
 

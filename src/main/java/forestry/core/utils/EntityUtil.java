@@ -46,12 +46,6 @@ public abstract class EntityUtil {
 		return living;
 	}
 
-	public static void registerEntity(ResourceLocation registryName, EntityType type, String ident, int id, int eggForeground, int eggBackground, int trackingRange, int updateFrequency, boolean sendVelocity) {
-		ForgeRegistries.ENTITIES.register(type);    //TODO
-		//		EntityRegistry.registerModEntity(registryName, entityClass, ident, id, ForestryAPI.instance, trackingRange, updateFrequency, sendVelocity);
-		Log.debug("Registered entity {} ({}) with id {}.", ident, type.toString(), id);
-	}
-
 	@Nullable
 	private static <T extends MobEntity> T createEntity(World world, EntityType<T> type) {
 		ResourceLocation name = ForgeRegistries.ENTITIES.getKey(type);
