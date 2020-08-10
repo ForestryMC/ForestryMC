@@ -1,16 +1,16 @@
 {
-    "variants": {
-      "mature=true,mushroom=brown": {
-        "model": "block/brown_mushroom"
-      },
-      "mature=false,mushroom=brown": {
-        "model": "block/brown_mushroom"
-      },
-      "mature=true,mushroom=red": {
-        "model": "block/red_mushroom"
-      },
-      "mature=false,mushroom=red": {
-        "model": "block/red_mushroom"
-      }
+  "variants": {
+    "mature=true,mushroom=brown": {
+      "model": "block/brown_mushroom"
+    },
+    "mature=false,mushroom=brown": {
+      "model": "block/brown_mushroom"
+    },
+    "mature=true,mushroom=red": {
+      "model": "block/red_mushroom"
+    },
+    "mature=false,mushroom=red": {
+      "model": "block/red_mushroom"
     }
+  }
 }

@@ -1,18 +1,42 @@
 {
-    "parent": "item/generated",
-    "textures": {
-      "layer0": "forestry:item/apiarist_boots"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/apiarist_boots"
+  },
+  "display": {
+    "thirdperson": {
+      "rotation": [
+        -90,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        1,
+        -2.5
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
     },
-    "display": {
-        "thirdperson": {
-            "rotation": [ -90, 0, 0 ],
-            "translation": [ 0, 1, -2.5 ],
-            "scale": [ 0.55, 0.55, 0.55 ]
-        },
-        "firstperson": {
-            "rotation": [ 0, -135, 25 ],
-            "translation": [ 0, 4, 2 ],
-            "scale": [ 1.7, 1.7, 1.7 ]
-        }
+    "firstperson": {
+      "rotation": [
+        0,
+        -135,
+        25
+      ],
+      "translation": [
+        0,
+        4,
+        2
+      ],
+      "scale": [
+        1.7,
+        1.7,
+        1.7
+      ]
     }
+  }
 }

@@ -1,7 +1,7 @@
 {
-	"variants": {
-      "": {
-        "model": "forestry:block/loam"
-      }
-	}
+  "variants": {
+    "": {
+      "model": "forestry:block/loam"
+    }
+  }
 }

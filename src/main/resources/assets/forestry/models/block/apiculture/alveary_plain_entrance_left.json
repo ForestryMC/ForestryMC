@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube",
-    "textures": {
-      "particle": "forestry:block/apiculture/alveary.right",
-      "down": "forestry:block/apiculture/alveary.bottom",
-      "up": "forestry:block/apiculture/alveary.bottom",
-      "north": "forestry:block/apiculture/alveary.right",
-      "east": "forestry:block/apiculture/alveary.left",
-      "south": "forestry:block/apiculture/alveary.right",
-      "west": "forestry:block/apiculture/alveary.left"
-    }
+  "parent": "block/cube",
+  "textures": {
+    "particle": "forestry:block/apiculture/alveary.right",
+    "down": "forestry:block/apiculture/alveary.bottom",
+    "up": "forestry:block/apiculture/alveary.bottom",
+    "north": "forestry:block/apiculture/alveary.right",
+    "east": "forestry:block/apiculture/alveary.left",
+    "south": "forestry:block/apiculture/alveary.right",
+    "west": "forestry:block/apiculture/alveary.left"
+  }
 }

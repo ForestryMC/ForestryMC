@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-      "layer0": "forestry:item/ice_shard"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/ice_shard"
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-      "all": "forestry:block/ores/copper"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "forestry:block/ores/copper"
+  }
 }

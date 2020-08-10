@@ -1,19 +1,19 @@
 {
-	"title": "Bottler",
-	"icon": {
-		"item": "forestry:bottler"
-	},
-	"content": [
-		[
-			{
-              "text": "The Bottler is a machine that can be used to fill or drain fluid containers like capsules, tin cans or buckets. The machine needs energy in order to work, but it automatically dumps fluids to neighbor block without any need of energy."
-			},
-			{
-				"type": "crafting",
-				"locations": [
-					"forestry:bottler"
-				]
-			}
-		]
-	]
+  "title": "Bottler",
+  "icon": {
+    "item": "forestry:bottler"
+  },
+  "content": [
+    [
+      {
+        "text": "The Bottler is a machine that can be used to fill or drain fluid containers like capsules, tin cans or buckets. The machine needs energy in order to work, but it automatically dumps fluids to neighbor block without any need of energy."
+      },
+      {
+        "type": "crafting",
+        "locations": [
+          "forestry:bottler"
+        ]
+      }
+    ]
+  ]
 }

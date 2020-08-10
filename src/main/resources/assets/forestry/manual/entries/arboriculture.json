@@ -1,8 +1,8 @@
 {
-	"arboriculture":[
-		"arboriculture/introduction",
-		"arboriculture/grafters",
-		"arboriculture/pollination",
-		"arboriculture/tree_mutations"
-	]
+  "arboriculture": [
+    "arboriculture/introduction",
+    "arboriculture/grafters",
+    "arboriculture/pollination",
+    "arboriculture/tree_mutations"
+  ]
 }

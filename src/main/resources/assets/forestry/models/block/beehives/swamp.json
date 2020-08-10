@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube",
-    "textures": {
-      "particle": "forestry:block/beehives/swamp.side",
-      "down": "forestry:block/beehives/swamp.top",
-      "up": "forestry:block/beehives/swamp.top",
-      "north": "forestry:block/beehives/swamp.side",
-      "east": "forestry:block/beehives/swamp.side",
-      "south": "forestry:block/beehives/swamp.side",
-      "west": "forestry:block/beehives/swamp.side"
-    }
+  "parent": "block/cube",
+  "textures": {
+    "particle": "forestry:block/beehives/swamp.side",
+    "down": "forestry:block/beehives/swamp.top",
+    "up": "forestry:block/beehives/swamp.top",
+    "north": "forestry:block/beehives/swamp.side",
+    "east": "forestry:block/beehives/swamp.side",
+    "south": "forestry:block/beehives/swamp.side",
+    "west": "forestry:block/beehives/swamp.side"
+  }
 }

@@ -1,7 +1,7 @@
 {
-	"variants": {
-      "": {
-        "model": "forestry:block/soil/bog"
-      }
-	}
+  "variants": {
+    "": {
+      "model": "forestry:block/soil/bog"
+    }
+  }
 }

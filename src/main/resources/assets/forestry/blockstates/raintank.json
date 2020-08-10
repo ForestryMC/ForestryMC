@@ -1,25 +1,25 @@
 {
-    "variants": {
-      "facing=up": {
-        "model": "forestry:block/raintank"
-      },
-      "facing=down": {
-        "model": "forestry:block/raintank"
-      },
-      "facing=north": {
-        "model": "forestry:block/raintank"
-      },
-      "facing=east": {
-        "model": "forestry:block/raintank",
-        "y": 90
-      },
-      "facing=south": {
-        "model": "forestry:block/raintank",
-        "y": 180
-      },
-      "facing=west": {
-        "model": "forestry:block/raintank",
-        "y": -90
-      }
-	}
+  "variants": {
+    "facing=up": {
+      "model": "forestry:block/raintank"
+    },
+    "facing=down": {
+      "model": "forestry:block/raintank"
+    },
+    "facing=north": {
+      "model": "forestry:block/raintank"
+    },
+    "facing=east": {
+      "model": "forestry:block/raintank",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "forestry:block/raintank",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "forestry:block/raintank",
+      "y": -90
+    }
+  }
 }

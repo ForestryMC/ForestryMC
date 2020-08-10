@@ -1,22 +1,28 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "forge:multi-layer",
-        "custom": {
-            "base": "forestry:crates/cratedStone#contained",
-            "Solid": "forestry:crate#crate",
-            "Cutout": "forestry:crates/cratedStone#contained"
-        },
-        "transform": "forge:default-block"
-     },
-    "variants": {
-      "": [
-        {}
-      ],
-      "inventory": [{ }],
-      "contained": [{
-          "model": "stone",
-          "transform": { "scale": 0.5 }
-        }]
-    }
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forge:multi-layer",
+    "custom": {
+      "base": "forestry:crates/cratedStone#contained",
+      "Solid": "forestry:crate#crate",
+      "Cutout": "forestry:crates/cratedStone#contained"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "": [
+      {}
+    ],
+    "inventory": [
+      {}
+    ],
+    "contained": [
+      {
+        "model": "stone",
+        "transform": {
+          "scale": 0.5
+        }
+      }
+    ]
+  }
 }

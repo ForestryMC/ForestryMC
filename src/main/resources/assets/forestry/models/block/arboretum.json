@@ -1,7 +1,7 @@
 {
-	"parent": "forestry:block/farm_parent",
-	"textures": {
-      "particle": "forestry:block/arboretum_particle",
-      "farm": "forestry:block/arboretum"
-	}
+  "parent": "forestry:block/farm_parent",
+  "textures": {
+    "particle": "forestry:block/arboretum_particle",
+    "farm": "forestry:block/arboretum"
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-      "layer0": "forestry:block/stump"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:block/stump"
+  }
 }

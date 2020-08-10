@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-      "all": "forestry:block/soil/peat"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "forestry:block/soil/peat"
+  }
 }

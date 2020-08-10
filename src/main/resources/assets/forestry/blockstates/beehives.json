@@ -1,28 +1,28 @@
 {
-    "variants": {
-      "hive=forest": {
-        "model": "forestry:block/beehives/forest"
-      },
-      "hive=meadows": {
-        "model": "forestry:block/beehives/meadows"
-      },
-      "hive=desert": {
-        "model": "forestry:block/beehives/desert"
-      },
-      "hive=jungle": {
-        "model": "forestry:block/beehives/jungle"
-      },
-      "hive=end": {
-        "model": "forestry:block/beehives/end"
-      },
-      "hive=snow": {
-        "model": "forestry:block/beehives/snow"
-      },
-      "hive=swamp": {
-        "model": "forestry:block/beehives/swamp"
-      },
-      "hive=swarm": {
-        "model": "forestry:block/beehives/swarm"
-      }
-	}
+  "variants": {
+    "hive=forest": {
+      "model": "forestry:block/beehives/forest"
+    },
+    "hive=meadows": {
+      "model": "forestry:block/beehives/meadows"
+    },
+    "hive=desert": {
+      "model": "forestry:block/beehives/desert"
+    },
+    "hive=jungle": {
+      "model": "forestry:block/beehives/jungle"
+    },
+    "hive=end": {
+      "model": "forestry:block/beehives/end"
+    },
+    "hive=snow": {
+      "model": "forestry:block/beehives/snow"
+    },
+    "hive=swamp": {
+      "model": "forestry:block/beehives/swamp"
+    },
+    "hive=swarm": {
+      "model": "forestry:block/beehives/swarm"
+    }
+  }
 }

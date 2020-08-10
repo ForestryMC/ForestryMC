@@ -1,25 +1,25 @@
 {
-    "variants": {
-      "facing=up": {
-        "model": "forestry:block/trade_station"
-      },
-      "facing=down": {
-        "model": "forestry:block/trade_station"
-      },
-      "facing=north": {
-        "model": "forestry:block/trade_station"
-      },
-      "facing=east": {
-        "model": "forestry:block/trade_station",
-        "y": 90
-      },
-      "facing=south": {
-        "model": "forestry:block/trade_station",
-        "y": 180
-      },
-      "facing=west": {
-        "model": "forestry:block/trade_station",
-        "y": -90
-      }
-	}
+  "variants": {
+    "facing=up": {
+      "model": "forestry:block/trade_station"
+    },
+    "facing=down": {
+      "model": "forestry:block/trade_station"
+    },
+    "facing=north": {
+      "model": "forestry:block/trade_station"
+    },
+    "facing=east": {
+      "model": "forestry:block/trade_station",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "forestry:block/trade_station",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "forestry:block/trade_station",
+      "y": -90
+    }
+  }
 }

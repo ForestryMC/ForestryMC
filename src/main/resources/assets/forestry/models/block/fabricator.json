@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube",
-    "textures": {
-      "particle": "forestry:block/fabricator.4",
-      "down": "forestry:block/fabricator.0",
-      "up": "forestry:block/fabricator.1",
-      "north": "forestry:block/fabricator.3",
-      "east": "forestry:block/fabricator.4",
-      "south": "forestry:block/fabricator.2",
-      "west": "forestry:block/fabricator.4"
-    }
+  "parent": "block/cube",
+  "textures": {
+    "particle": "forestry:block/fabricator.4",
+    "down": "forestry:block/fabricator.0",
+    "up": "forestry:block/fabricator.1",
+    "north": "forestry:block/fabricator.3",
+    "east": "forestry:block/fabricator.4",
+    "south": "forestry:block/fabricator.2",
+    "west": "forestry:block/fabricator.4"
+  }
 }

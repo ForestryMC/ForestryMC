@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube",
-    "textures": {
-      "particle": "forestry:block/mailbox.2",
-      "down": "forestry:block/mailbox.0",
-      "up": "forestry:block/mailbox.1",
-      "north": "forestry:block/mailbox.2",
-      "east": "forestry:block/mailbox.2",
-      "south": "forestry:block/mailbox.2",
-      "west": "forestry:block/mailbox.2"
-    }
+  "parent": "block/cube",
+  "textures": {
+    "particle": "forestry:block/mailbox.2",
+    "down": "forestry:block/mailbox.0",
+    "up": "forestry:block/mailbox.1",
+    "north": "forestry:block/mailbox.2",
+    "east": "forestry:block/mailbox.2",
+    "south": "forestry:block/mailbox.2",
+    "west": "forestry:block/mailbox.2"
+  }
 }

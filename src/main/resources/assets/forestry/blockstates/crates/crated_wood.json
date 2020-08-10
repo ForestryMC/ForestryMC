@@ -1,22 +1,33 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "forge:multi-layer",
-        "custom": {
-            "base": "forestry:crates/cratedWood#contained",
-            "Solid": "forestry:crate#crate",
-            "TRANSLUCENT": "forestry:crates/cratedWood#contained"
-        },
-        "transform": "forge:default-item"
-     },
-    "variants": {
-      "": [
-        {}
-      ],
-      "inventory": [{ }],
-      "contained": [{
-          "model": "oak_log",
-          "transform": { "scale": 0.5, "translation":[ -0.0625, 0, 0 ] }
-        }]
-    }
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forge:multi-layer",
+    "custom": {
+      "base": "forestry:crates/cratedWood#contained",
+      "Solid": "forestry:crate#crate",
+      "TRANSLUCENT": "forestry:crates/cratedWood#contained"
+    },
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "": [
+      {}
+    ],
+    "inventory": [
+      {}
+    ],
+    "contained": [
+      {
+        "model": "oak_log",
+        "transform": {
+          "scale": 0.5,
+          "translation": [
+            -0.0625,
+            0,
+            0
+          ]
+        }
+      }
+    ]
+  }
 }

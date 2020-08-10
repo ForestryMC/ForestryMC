@@ -1,44 +1,62 @@
 {
-    "multipart": [
-      {
-        "apply": {
-          "model": "forestry:block/filter/filter_center"
-        }
+  "multipart": [
+    {
+      "apply": {
+        "model": "forestry:block/filter/filter_center"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
       },
-        {   "when": { "north": "true" },
-          "apply": {
-            "model": "forestry:block/filter/filter_north"
-          }
-        },
-        {   "when": { "east": "true" },
-          "apply": {
-            "model": "forestry:block/filter/filter_east",
-            "y": 90
-          }
-        },
-        {   "when": { "south": "true" },
-          "apply": {
-            "model": "forestry:block/filter/filter_south",
-            "y": 180
-          }
-        },
-        {   "when": { "west": "true" },
-          "apply": {
-            "model": "forestry:block/filter/filter_west",
-            "y": 270
-          }
-        },
-        {   "when": { "up": "true" },
-          "apply": {
-            "model": "forestry:block/filter/filter_up",
-            "x": -90
-          }
-        },
-        {   "when": { "down": "true" },
-          "apply": {
-            "model": "forestry:block/filter/filter_down",
-            "x": 90
-          }
-        }
-    ]
+      "apply": {
+        "model": "forestry:block/filter/filter_north"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "forestry:block/filter/filter_east",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "forestry:block/filter/filter_south",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "forestry:block/filter/filter_west",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "forestry:block/filter/filter_up",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "forestry:block/filter/filter_down",
+        "x": 90
+      }
+    }
+  ]
 }

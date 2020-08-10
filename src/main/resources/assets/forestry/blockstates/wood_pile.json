@@ -1,7 +1,7 @@
 {
-    "variants": {
-      "": {
-        "model": "forestry:block/wood_pile"
-      }
-	}
+  "variants": {
+    "": {
+      "model": "forestry:block/wood_pile"
+    }
+  }
 }

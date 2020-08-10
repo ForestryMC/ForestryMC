@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-      "layer0": "forestry:item/honey_pot"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/honey_pot"
+  }
 }

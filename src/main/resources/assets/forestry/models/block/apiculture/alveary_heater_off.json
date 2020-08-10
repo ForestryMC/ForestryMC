@@ -1,12 +1,12 @@
 {
-    "parent": "forestry:block/apiculture/alveary_plain_normal",
-    "textures": {
-      "particle": "forestry:block/apiculture/alveary.heater.off",
-      "down": "forestry:block/apiculture/alveary.heater.off",
-      "up": "forestry:block/apiculture/alveary.heater.off",
-      "north": "forestry:block/apiculture/alveary.heater.off",
-      "east": "forestry:block/apiculture/alveary.heater.off",
-      "south": "forestry:block/apiculture/alveary.heater.off",
-      "west": "forestry:block/apiculture/alveary.heater.off"
-    }
+  "parent": "forestry:block/apiculture/alveary_plain_normal",
+  "textures": {
+    "particle": "forestry:block/apiculture/alveary.heater.off",
+    "down": "forestry:block/apiculture/alveary.heater.off",
+    "up": "forestry:block/apiculture/alveary.heater.off",
+    "north": "forestry:block/apiculture/alveary.heater.off",
+    "east": "forestry:block/apiculture/alveary.heater.off",
+    "south": "forestry:block/apiculture/alveary.heater.off",
+    "west": "forestry:block/apiculture/alveary.heater.off"
+  }
 }

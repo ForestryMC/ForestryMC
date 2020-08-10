@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-      "layer0": "forestry:item/decaying_wheat"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/decaying_wheat"
+  }
 }

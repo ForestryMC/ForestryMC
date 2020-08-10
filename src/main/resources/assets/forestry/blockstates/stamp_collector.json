@@ -1,25 +1,25 @@
 {
-    "variants": {
-      "facing=up": {
-        "model": "forestry:block/stamp_collector"
-      },
-      "facing=down": {
-        "model": "forestry:block/stamp_collector"
-      },
-      "facing=north": {
-        "model": "forestry:block/stamp_collector"
-      },
-      "facing=east": {
-        "model": "forestry:block/stamp_collector",
-        "y": 90
-      },
-      "facing=south": {
-        "model": "forestry:block/stamp_collector",
-        "y": 180
-      },
-      "facing=west": {
-        "model": "forestry:block/stamp_collector",
-        "y": -90
-      }
-	}
+  "variants": {
+    "facing=up": {
+      "model": "forestry:block/stamp_collector"
+    },
+    "facing=down": {
+      "model": "forestry:block/stamp_collector"
+    },
+    "facing=north": {
+      "model": "forestry:block/stamp_collector"
+    },
+    "facing=east": {
+      "model": "forestry:block/stamp_collector",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "forestry:block/stamp_collector",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "forestry:block/stamp_collector",
+      "y": -90
+    }
+  }
 }

@@ -1,7 +1,7 @@
 {
-    "variants": {
-      "": {
-        "model": "glass_green"
-      }
+  "variants": {
+    "": {
+      "model": "glass_green"
     }
+  }
 }

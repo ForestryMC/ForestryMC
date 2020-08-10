@@ -1,32 +1,32 @@
 {
-	"title": "Still",
-	"icon": {
-		"item": "forestry:still"
-	},
-	"content": [
-		[
-			{
-				"type": "crafting",
-				"locations": [
-					"forestry:still"
-				]
-			},
-			{
-				"text": "The Still is a machine capable of refining Biomass into Ethanol, at a 10:3 ratio (for every 10 Biomass buckets processed you get 3 Ethanol buckets)."
-			}
-		], 
-		[
-			{
-				"text": "If you have Buildcraft installed, you can do the same process in a Refinery, for a 4:1 ratio."
-			},
-			{
-				"text": "Ethanol can then be used in the Bio Generator for generating EU for IndustrialCraft² machines, or as fuel for Buildcraft's Combustion Engine. It cannot be used as a fuel for the Biogas Engine!",
-				"paragraph": true
-			},
-			{
-				"text": "This means that this machine probably won't be very useful to you if you don't have Buildcraft or IndustrialCraft² installed.",
-				"paragraph": true
-			}
-		]
-	]
+  "title": "Still",
+  "icon": {
+    "item": "forestry:still"
+  },
+  "content": [
+    [
+      {
+        "type": "crafting",
+        "locations": [
+          "forestry:still"
+        ]
+      },
+      {
+        "text": "The Still is a machine capable of refining Biomass into Ethanol, at a 10:3 ratio (for every 10 Biomass buckets processed you get 3 Ethanol buckets)."
+      }
+    ],
+    [
+      {
+        "text": "If you have Buildcraft installed, you can do the same process in a Refinery, for a 4:1 ratio."
+      },
+      {
+        "text": "Ethanol can then be used in the Bio Generator for generating EU for IndustrialCraft² machines, or as fuel for Buildcraft's Combustion Engine. It cannot be used as a fuel for the Biogas Engine!",
+        "paragraph": true
+      },
+      {
+        "text": "This means that this machine probably won't be very useful to you if you don't have Buildcraft or IndustrialCraft² installed.",
+        "paragraph": true
+      }
+    ]
+  ]
 }

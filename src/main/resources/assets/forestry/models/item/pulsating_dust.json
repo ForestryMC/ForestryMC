@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-      "layer0": "forestry:item/pulsating_dust"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "forestry:item/pulsating_dust"
+  }
 }

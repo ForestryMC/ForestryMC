@@ -1,39 +1,109 @@
 {
-    "variants": {
-		"tree=oak": { "model": "forestry:germlings/sapling.tree_oak" },
-		"tree=darkoak": { "model": "forestry:germlings/sapling.tree_dark_oak" },
-		"tree=birch": { "model": "forestry:germlings/sapling.tree_birch" },
-		"tree=lime": { "model": "forestry:germlings/sapling.tree_lime" },
-		"tree=walnut": { "model": "forestry:germlings/sapling.tree_walnut" },
-		"tree=chestnut": { "model": "forestry:germlings/sapling.tree_chestnut" },
-		"tree=cherry": { "model": "forestry:germlings/sapling.tree_cherry" },
-		"tree=lemon": { "model": "forestry:germlings/sapling.tree_lemon" },
-		"tree=plum": { "model": "forestry:germlings/sapling.tree_plum" },
-		"tree=maple": { "model": "forestry:germlings/sapling.tree_maple" },
-		"tree=spruce": { "model": "forestry:germlings/sapling.tree_spruce" },
-		"tree=larch": { "model": "forestry:germlings/sapling.tree_larch" },
-		"tree=pine": { "model": "forestry:germlings/sapling.tree_pine" },
-		"tree=sequoia": { "model": "forestry:germlings/sapling.tree_sequoia" },
-		"tree=gigant": { "model": "forestry:germlings/sapling.tree_gigant" },
-		"tree=jungle": { "model": "forestry:germlings/sapling.tree_jungle" },
-		"tree=teak": { "model": "forestry:germlings/sapling.tree_teak" },
-		"tree=ipe": { "model": "forestry:germlings/sapling.tree_ipe" },
-		"tree=kapok": { "model": "forestry:germlings/sapling.tree_kapok" },
-		"tree=ebony": { "model": "forestry:germlings/sapling.tree_ebony" },
-		"tree=zebrawood": { "model": "forestry:germlings/sapling.tree_zebrawood" },
-		"tree=mahogony": { "model": "forestry:germlings/sapling.tree_mahogony" },
-		"tree=acaciavanilla": { "model": "forestry:germlings/sapling.tree_acacia_vanilla" },
-		"tree=acacia": { "model": "forestry:germlings/sapling.tree_acacia" },
-		"tree=padauk": { "model": "forestry:germlings/sapling.tree_padauk" },
-		"tree=balsa": { "model": "forestry:germlings/sapling.tree_balsa" },
-		"tree=cocobolo": { "model": "forestry:germlings/sapling.tree_cocobolo" },
-		"tree=wenge": { "model": "forestry:germlings/sapling.tree_wenge" },
-		"tree=baobab": { "model": "forestry:germlings/sapling.tree_baobab" },
-		"tree=mahoe": { "model": "forestry:germlings/sapling.tree_mahoe" },
-		"tree=willow": { "model": "forestry:germlings/sapling.tree_willow" },
-		"tree=sipiri": { "model": "forestry:germlings/sapling.tree_sipiri" },
-		"tree=papaya": { "model": "forestry:germlings/sapling.tree_papaya" },
-		"tree=date": { "model": "forestry:germlings/sapling.tree_date" },
-		"tree=poplar": { "model": "forestry:germlings/sapling.tree_poplar" }
-	}
+  "variants": {
+    "tree=oak": {
+      "model": "forestry:germlings/sapling.tree_oak"
+    },
+    "tree=darkoak": {
+      "model": "forestry:germlings/sapling.tree_dark_oak"
+    },
+    "tree=birch": {
+      "model": "forestry:germlings/sapling.tree_birch"
+    },
+    "tree=lime": {
+      "model": "forestry:germlings/sapling.tree_lime"
+    },
+    "tree=walnut": {
+      "model": "forestry:germlings/sapling.tree_walnut"
+    },
+    "tree=chestnut": {
+      "model": "forestry:germlings/sapling.tree_chestnut"
+    },
+    "tree=cherry": {
+      "model": "forestry:germlings/sapling.tree_cherry"
+    },
+    "tree=lemon": {
+      "model": "forestry:germlings/sapling.tree_lemon"
+    },
+    "tree=plum": {
+      "model": "forestry:germlings/sapling.tree_plum"
+    },
+    "tree=maple": {
+      "model": "forestry:germlings/sapling.tree_maple"
+    },
+    "tree=spruce": {
+      "model": "forestry:germlings/sapling.tree_spruce"
+    },
+    "tree=larch": {
+      "model": "forestry:germlings/sapling.tree_larch"
+    },
+    "tree=pine": {
+      "model": "forestry:germlings/sapling.tree_pine"
+    },
+    "tree=sequoia": {
+      "model": "forestry:germlings/sapling.tree_sequoia"
+    },
+    "tree=gigant": {
+      "model": "forestry:germlings/sapling.tree_gigant"
+    },
+    "tree=jungle": {
+      "model": "forestry:germlings/sapling.tree_jungle"
+    },
+    "tree=teak": {
+      "model": "forestry:germlings/sapling.tree_teak"
+    },
+    "tree=ipe": {
+      "model": "forestry:germlings/sapling.tree_ipe"
+    },
+    "tree=kapok": {
+      "model": "forestry:germlings/sapling.tree_kapok"
+    },
+    "tree=ebony": {
+      "model": "forestry:germlings/sapling.tree_ebony"
+    },
+    "tree=zebrawood": {
+      "model": "forestry:germlings/sapling.tree_zebrawood"
+    },
+    "tree=mahogony": {
+      "model": "forestry:germlings/sapling.tree_mahogony"
+    },
+    "tree=acaciavanilla": {
+      "model": "forestry:germlings/sapling.tree_acacia_vanilla"
+    },
+    "tree=acacia": {
+      "model": "forestry:germlings/sapling.tree_acacia"
+    },
+    "tree=padauk": {
+      "model": "forestry:germlings/sapling.tree_padauk"
+    },
+    "tree=balsa": {
+      "model": "forestry:germlings/sapling.tree_balsa"
+    },
+    "tree=cocobolo": {
+      "model": "forestry:germlings/sapling.tree_cocobolo"
+    },
+    "tree=wenge": {
+      "model": "forestry:germlings/sapling.tree_wenge"
+    },
+    "tree=baobab": {
+      "model": "forestry:germlings/sapling.tree_baobab"
+    },
+    "tree=mahoe": {
+      "model": "forestry:germlings/sapling.tree_mahoe"
+    },
+    "tree=willow": {
+      "model": "forestry:germlings/sapling.tree_willow"
+    },
+    "tree=sipiri": {
+      "model": "forestry:germlings/sapling.tree_sipiri"
+    },
+    "tree=papaya": {
+      "model": "forestry:germlings/sapling.tree_papaya"
+    },
+    "tree=date": {
+      "model": "forestry:germlings/sapling.tree_date"
+    },
+    "tree=poplar": {
+      "model": "forestry:germlings/sapling.tree_poplar"
+    }
+  }
 }

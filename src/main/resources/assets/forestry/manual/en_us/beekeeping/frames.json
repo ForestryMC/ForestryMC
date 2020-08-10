@@ -1,25 +1,25 @@
 {
-	"title": "Frames",
-	"icon":{
-		"item": "forestry:frame_untreated"
-	},
-	"content": [
-		[
-			{
-				"type": "crafting",
-				"locations": [
-					"forestry:frame_untreated", 
-					"forestry:frame_impregnated"
-				]
-			},
-			{
-				"text": "Wooden frames increase the production speed of the queen in an apiary. Better quality frames increase the production speed of the queen more than lower quality frames."
-			}
-		],
-		[
-			{
-				"text": "By myself, I currently had no success with inserting wooden frames into an alveary or a bee house. At the moment I only discovered 3 frames: the Untreated Frame, the Impregnated Frame and the Proven Frame."
-			}
-		]
-	]
+  "title": "Frames",
+  "icon": {
+    "item": "forestry:frame_untreated"
+  },
+  "content": [
+    [
+      {
+        "type": "crafting",
+        "locations": [
+          "forestry:frame_untreated",
+          "forestry:frame_impregnated"
+        ]
+      },
+      {
+        "text": "Wooden frames increase the production speed of the queen in an apiary. Better quality frames increase the production speed of the queen more than lower quality frames."
+      }
+    ],
+    [
+      {
+        "text": "By myself, I currently had no success with inserting wooden frames into an alveary or a bee house. At the moment I only discovered 3 frames: the Untreated Frame, the Impregnated Frame and the Proven Frame."
+      }
+    ]
+  ]
 }

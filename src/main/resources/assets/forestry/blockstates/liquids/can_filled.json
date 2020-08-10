@@ -1,13 +1,13 @@
 {
-    "forge_marker": 1,
-    "variants": {
-        "inventory": {
-            "model": "forge:bucket",
-            "textures": {
-                "base": "forestry:item/liquids/can.bottle",
-                "fluid": "forestry:item/liquids/can.contents"
-            },
-            "transform": "forge:default-item"
-        }
+  "forge_marker": 1,
+  "variants": {
+    "inventory": {
+      "model": "forge:bucket",
+      "textures": {
+        "base": "forestry:item/liquids/can.bottle",
+        "fluid": "forestry:item/liquids/can.contents"
+      },
+      "transform": "forge:default-item"
     }
+  }
 }

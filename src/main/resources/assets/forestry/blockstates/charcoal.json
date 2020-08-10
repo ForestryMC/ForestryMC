@@ -1,7 +1,7 @@
 {
-    "variants": {
-      "": {
-        "model": "forestry:block/charcoal"
-      }
-	}
+  "variants": {
+    "": {
+      "model": "forestry:block/charcoal"
+    }
+  }
 }

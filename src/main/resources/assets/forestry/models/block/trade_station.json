@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube",
-    "textures": {
-      "particle": "forestry:block/tradestation.4",
-      "down": "forestry:block/tradestation.0",
-      "up": "forestry:block/tradestation.1",
-      "north": "forestry:block/tradestation.3",
-      "east": "forestry:block/tradestation.4",
-      "south": "forestry:block/tradestation.2",
-      "west": "forestry:block/tradestation.4"
-    }
+  "parent": "block/cube",
+  "textures": {
+    "particle": "forestry:block/tradestation.4",
+    "down": "forestry:block/tradestation.0",
+    "up": "forestry:block/tradestation.1",
+    "north": "forestry:block/tradestation.3",
+    "east": "forestry:block/tradestation.4",
+    "south": "forestry:block/tradestation.2",
+    "west": "forestry:block/tradestation.4"
+  }
 }

@@ -1,10 +1,10 @@
 {
-    "variants": {
-      "state=off": {
-        "model": "forestry:block/candle_up_off"
-      },
-      "state=on": {
-        "model": "forestry:block/candle_up_on"
-      }
+  "variants": {
+    "state=off": {
+      "model": "forestry:block/candle_up_off"
+    },
+    "state=on": {
+      "model": "forestry:block/candle_up_on"
     }
+  }
 }

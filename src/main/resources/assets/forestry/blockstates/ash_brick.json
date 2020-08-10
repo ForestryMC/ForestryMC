@@ -1,7 +1,7 @@
 {
-    "variants": {
-      "": {
-        "model": "forestry:block/ash_brick"
-      }
-	}
+  "variants": {
+    "": {
+      "model": "forestry:block/ash_brick"
+    }
+  }
 }

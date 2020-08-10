@@ -1,6 +1,6 @@
 {
-	"parent": "forestry:block/filter/filter_side",
-	"textures": {
-      "wool": "block/green_wool"
-	}
+  "parent": "forestry:block/filter/filter_side",
+  "textures": {
+    "wool": "block/green_wool"
+  }
 }

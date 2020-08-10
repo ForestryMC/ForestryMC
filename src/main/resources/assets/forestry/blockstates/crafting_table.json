@@ -1,7 +1,7 @@
 {
-    "variants": {
-      "": {
-        "model": "crafting_table"
-      }
+  "variants": {
+    "": {
+      "model": "crafting_table"
     }
+  }
 }

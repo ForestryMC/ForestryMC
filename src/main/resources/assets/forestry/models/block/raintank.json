@@ -1,12 +1,12 @@
 {
-    "parent": "block/cube",
-    "textures": {
-      "particle": "forestry:block/raintank.0",
-      "down": "forestry:block/raintank.0",
-      "up": "forestry:block/raintank.1",
-      "north": "forestry:block/raintank.0",
-      "east": "forestry:block/raintank.0",
-      "south": "forestry:block/raintank.0",
-      "west": "forestry:block/raintank.0"
-    }
+  "parent": "block/cube",
+  "textures": {
+    "particle": "forestry:block/raintank.0",
+    "down": "forestry:block/raintank.0",
+    "up": "forestry:block/raintank.1",
+    "north": "forestry:block/raintank.0",
+    "east": "forestry:block/raintank.0",
+    "south": "forestry:block/raintank.0",
+    "west": "forestry:block/raintank.0"
+  }
 }

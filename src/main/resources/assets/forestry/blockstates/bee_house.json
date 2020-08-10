@@ -1,25 +1,25 @@
 {
-    "variants": {
-      "facing=up": {
-        "model": "forestry:block/bee_house"
-      },
-      "facing=down": {
-        "model": "forestry:block/bee_house"
-      },
-      "facing=north": {
-        "model": "forestry:block/bee_house"
-      },
-      "facing=east": {
-        "model": "forestry:block/bee_house",
-        "y": 90
-      },
-      "facing=south": {
-        "model": "forestry:block/bee_house",
-        "y": 180
-      },
-      "facing=west": {
-        "model": "forestry:block/bee_house",
-        "y": -90
-      }
-	}
+  "variants": {
+    "facing=up": {
+      "model": "forestry:block/bee_house"
+    },
+    "facing=down": {
+      "model": "forestry:block/bee_house"
+    },
+    "facing=north": {
+      "model": "forestry:block/bee_house"
+    },
+    "facing=east": {
+      "model": "forestry:block/bee_house",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "forestry:block/bee_house",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "forestry:block/bee_house",
+      "y": -90
+    }
+  }
 }

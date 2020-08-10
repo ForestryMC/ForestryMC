@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-      "all": "forestry:block/greenhouse_deprecated/hygroregulator"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "forestry:block/greenhouse_deprecated/hygroregulator"
+  }
 }
