@@ -1,5 +1,5 @@
 {
-	"title": "Farm GUI",
+	"title": "Интерфейс фермы",
 	"icon":{
 		"item": "glass"
 	},
@@ -21,31 +21,31 @@
 				"type": "index",
 				"entries": [
 					{
-						"title": "I - Water Input Slot",
+						"title": "I - Слот для входа воды",
 						"page": 1
 					},
 					{
-						"title": "II - Water Tank",
+						"title": "II - Резервуар с водой",
 						"page": 1
 					},
 					{
-						"title": "III - Circuit Board Socket",
+						"title": "III - Гнездо для печатной платы",
 						"page": 2
 					},
 					{
-						"title": "IV - Fertilizer Slot",
+						"title": "IV - Слот для удобрения",
 						"page": 3
 					},
 					{
-						"title": "V - Soil Inventory",
+						"title": "V - Место для подачи почвы",
 						"page": 3
 					},
 					{
-						"title": "VI - Germlings Inventory",
+						"title": "VI - Место для саженцев/семян",
 						"page": 4
 					},
 					{
-						"title": "VII - Output Inventory",
+						"title": "VII - Место для выходной продукции",
 						"page": 4
 					}
 				]
@@ -53,10 +53,10 @@
 		],
 		[
 			{
-				"text": "The GUI is divided into seven areas:"
+				"text": "Интерфейс разделён на 7 частей:"
 			},
 			{
-				"text": "I - Water Input Slot",
+				"text": "I - Слот для входа воды",
 				"paragraph": true,
 				"bold": true
 			},
@@ -64,10 +64,10 @@
 				"text": "\n"
 			},
 			{
-				"text": "Place Water Buckets/Cans/Capsules in here in order to fill the Water Tank (II)."
+				"text": "Поместите сюда ведра/банки/капсулы с водой, чтобы наполнить резервуар для воды"
 			},
 			{
-				"text": "II - Water Tank",
+				"text": "II - Резервуар с водой",
 				"paragraph": true,
 				"bold": true
 			},
@@ -75,34 +75,34 @@
 				"text": "\n"
 			},
 			{
-				"text": "This shows how much water the Multi-Farm currently has. It can be filled through (I) or through Farm Valve blocks."
+				"text": "Это показывает, сколько воды сейчас имеется в мультиферме. Его можно заполнить через (I) или через Люк Фермы"
 			}
 		],
 		[
 			{
-				"text": "III - Circuit Board Socket",
+				"text": "III - Гнездо для печатной платы",
 				"bold": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "This area shows the current configuration of the MultiFarm. It has a socket in the center for you to place (or remove, using a Soldering Iron) Circuit Boards in order to place Electron Tubes that will alter the Multi-Farm's behaviour. See Configuring the Farm for more information."
+				"text": "В этой области отображается текущая конфигурация мультифермы. В центре есть разъём, в котором вы можете разместить (или удалить с помощью паяльника) печатные платы, чтобы разместить электронные лампы, которые настроят поведение мультифермы. См. Раздел« Настройка » ферма для получения дополнительной информации"
 			}
 		],
 		[
 			{
-				"text": "IV - Fertilizer Slot",
+				"text": "IV - Слот для удобрений",
 				"bold": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Most farm configurations will need Fertilizer for operation. Place Fertilizer in here or pipe it into the Multi-Farm."
+				"text": "Для работы большинства видов ферм потребуется удобрение. Поместите сюда удобрения или закачивайте их в мультиферму."
 			},
 			{
-				"text": "V - Soil Inventory",
+				"text": "V - Место для почвы",
 				"paragraph": true,
 				"bold": true
 			},
@@ -110,22 +110,22 @@
 				"text": "\n"
 			},
 			{
-				"text": "This is where you will place the necessary soil for the farm to either lay down the farmland (if it's a Managed Farm) or to replace decayed soil blocks."
+				"text": "Сюда вы помещаете необходимую почву для фермы, чтобы либо заложить сельхозугодья (если это управляемая ферма), либо заменить гниющие блоки почвы."
 			}
 		],
 		[
 			{
-				"text": "VI - Germlings Inventory",
+				"text": "VI - Место для саженцев/семян",
 				"bold": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "This is where you will place the germlings (Saplings, Seeds, Cactus, etc.) for use in the farm."
+				"text": "Сюда вы поместите саженцы, семена, кактусы и т.д. Для использования на ферме."
 			},
 			{
-				"text": "VII - Output Inventory",
+				"text": "VII - Место для выходной продукции",
 				"paragraph": true,
 				"bold": true
 			},
@@ -133,7 +133,7 @@
 				"text": "\n"
 			},
 			{
-				"text": "Any waste or harvested resources end here."
+				"text": "Сюда приходят все отходы и собранные ресурсы."
 			}
 		]
 	]

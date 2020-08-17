@@ -1,5 +1,5 @@
 {
-	"title": "Farm Layouts",
+	"title": "Макеты фермы",
 	"icon": {
 		"item": "forestry:wrench"
 	},
@@ -9,23 +9,23 @@
 				"type": "index",
 				"entries": [
 					{
-						"title": "Small",
+						"title": "Маленькая",
 						"page": 1
 					},
 					{
-						"title": "Medium",
+						"title": "Средняя",
 						"page": 2
 					},
 					{
-						"title": "Medium Large",
+						"title": "Средне-большая",
 						"page": 3
 					},
 					{
-						"title": "Large",
+						"title": "Большая",
 						"page": 4
 					},
 					{
-						"title": "Very Large",
+						"title": "Очень большая",
 						"page": 5
 					}
 				]
@@ -33,38 +33,38 @@
 		],
 		[
 			{
-				"text": "Small",
+				"text": "Маленькая",
 				"underlined": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "W×L×H: 3×3×4"
+				"text": "Ш×Д×В: 3×3×4"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Radius: 7 Blocks"
+				"text": "Радиус: 7 Блоков"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Space (W×L): 17×17"
+				"text": "Пространство (Ш*Д): 17×17"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Blocks: 36"
+				"text": "Блоков фермы: 36"
 			},
 					{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Land: 126"
+				"text": "Поле фермы: 126"
 			},
 			{
 					"type": "image",
@@ -82,38 +82,38 @@
 		],
 		[
 			{
-				"text": "Medium",
+				"text": "Средняя",
 				"underlined": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "W×L×H: 3×4×4"
+				"text": "Ш×Д×В: 3×4×4"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Radius: 9 Blocks"
+				"text": "Радиус: 9 Блоков"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Space (W×L): 21×22"
+				"text": "Пространство (Ш*Д): 21×22"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Blocks: 48"
+				"text": "Блоков фермы: 48"
 			},
 					{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Land: 270"
+				"text": "Поле фермы: 270"
 			},
 			{
 					"type": "image",
@@ -131,38 +131,38 @@
 		],
 		[
 			{
-				"text": "Medium Large",
+				"text": "Средне-большая",
 				"underlined": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "W×L×H: 4×4×4"
+				"text": "Ш×Д×В: 4×4×4"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Radius: 9 Blocks"
+				"text": "Радиус: 9 Блоков"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Space (W×L): 22×22"
+				"text": "Пространство (Ш*Д): 22×22"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Blocks: 64"
+				"text": "Блоков фермы: 64"
 			},
 					{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Land: 288"
+				"text": "Поле фермы: 288"
 			},
 			{
 					"type": "image",
@@ -180,38 +180,38 @@
 		],
 		[
 			{
-				"text": "Large",
+				"text": "Большая",
 				"underlined": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "W×L×H: 3×5×4"
+				"text": "Ш×Д×В: 3×5×4"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Radius: 11 Blocks"
+				"text": "Радиус: 11 Блоков"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Space (W×L): 25×27"
+				"text": "Пространство (Ш*Д): 25×27"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Blocks: 60"
+				"text": "Блоков фермы: 60"
 			},
 					{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Land: 396"
+				"text": "Поле фермы: 396"
 			},
 			{
 					"type": "image",
@@ -229,38 +229,38 @@
 		],
 		[
 			{
-				"text": "Very Large",
+				"text": "Очень большая",
 				"underlined": true
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "W×L×H: 5×5×4"
+				"text": "Ш×Д×В: 5×5×4"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Radius: 11 Blocks"
+				"text": "Радиус: 11 Блоков"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Space (W×L): 27×27"
+				"text": "Пространство (Ш*Д): 27×27"
 			},
 			{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Blocks: 100"
+				"text": "Блоков фермы: 100"
 			},
 					{
 				"text": "\n"
 			},
 			{
-				"text": "Farm Land: 440"
+				"text": "Поле фермы: 440"
 			},
 			{
 					"type": "image",

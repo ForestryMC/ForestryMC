@@ -1,5 +1,5 @@
 {
-	"title": "Farm Configuration",
+	"title": "Настройка фермы",
 	"icon": {
 		"item": "forestry:thermionic_tubes",
 		"data": 4
@@ -10,55 +10,55 @@
 				"type": "index",
 				"entries": [
 					{
-						"title": "Arboretum",
+						"title": "Дендрарий",
 						"page": 1
 					},
 					{
-						"title": "Peat Bog",
+						"title": "Торфяное болото",
 						"page": 1
 					},
 					{
-						"title": "Crop Farm",
+						"title": "Ферма растений",
 						"page": 2
 					},
 					{
-						"title": "Infernal Farm",
+						"title": "Адская Ферма",
 						"page": 2
 					},
 					{
-						"title": "Shroom Farm",
+						"title": "Грибная ферма",
 						"page": 3
 					},
 					{
-						"title": "Orchard",
+						"title": "Фруктовый сад",
 						"page": 3
 					},
 					{
-						"title": "Succulent Farm",
+						"title": "Ферма кактусов",
 						"page": 4
 					},
 					{
-						"title": "Reed Farm",
+						"title": "Тростниковая ферма",
 						"page": 4
 					},
 					{
-						"title": "Gourd Farm",
+						"title": "Тыквенная ферма",
 						"page": 5
 					},
 					{
-						"title": "Cocoa Plantation",
+						"title": "Какао-плантация",
 						"page": 5
 					},
 					{
-						"title": "Rubber Plantation",
+						"title": "Каучуковая плантация",
 						"page": 6
 					},
 					{
-						"title": "Red Orchid Farm",
+						"title": "Ферма красных орхидей",
 						"page": 6
 					},
 					{
-						"title": "Ender Farm",
+						"title": "Эндер ферма",
 						"page": 7
 					}
 				]
@@ -66,48 +66,48 @@
 		],
 		[
 			{
-				"text": "Arboretum",
+				"text": "Дендрарий",
 				"underlined": true
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Golden Electron Tube"
+				"text": "Лампа: Золотая электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Dirt, Humus"
+				"text": "Почва: земля, гумус"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 10 mB"
+				"text": "Воды: 10 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 30 mU"
+				"text": "Удобрения: 30 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Saplings"
+				"text": "Семена: Саженцы"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Wood, Saplings, Apples"
+				"text": "Урожай: Дерево, Саженцы, Яблоки"
 			},
 			
 			{
-				"text": "Peat Bog",
+				"text": "Торфяное болото",
 				"underlined": true,
 				"paragraph": true
 			},
@@ -115,82 +115,82 @@
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Obsidian Electron Tube"
+				"text": "Лампа: Обсидиановая электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Bog Earth"
+				"text": "Почва: Болотная Земля"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 20 mB"
+				"text": "Воды: 20 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 10 mU"
+				"text": "Удобрения: 10 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: None"
+				"text": "Семена: Нет"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Peat, Dirt"
+				"text": "Урожай: Торф, Земля"
 			}
 		],
 		[
 			{
-				"text": "Crop Farm",
+				"text": "Ферма растений",
 				"underlined": true
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Bronze Electron Tube"
+				"text": "Лампа: Бронзовая электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Dirt"
+				"text": "Почва: Грязь"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 20 mB"
+				"text": "Воды: 20 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 10 mU"
+				"text": "Удобрения: 10 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Crop Seeds"
+				"text": "Семена: Семена Растений"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Crops"
+				"text": "Урожай: Растения"
 			},
 			{
-				"text": "Infernal Farm",
+				"text": "Адская ферма",
 				"underlined": true,
 				"paragraph": true
 			},
@@ -198,82 +198,82 @@
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Blazing Electron Tube"
+				"text": "Лампа: Пылающая электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Soul Sand"
+				"text": "Почва: Песок душ"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: None"
+				"text": "Воды: Нет"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 20 mU"
+				"text": "Удобрения: 20 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Nether Wart"
+				"text": "Семена: Адский Нарост"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Nether Wart (Grown)"
+				"text": "Урожай: Адский Нарост (Выросший)"
 			}
 		],
 		[
 			{
-				"text": "Shroom Farm",
+				"text": "Грибная Ферма",
 				"underlined": true
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Apatine Electron Tube"
+				"text": "Лампа: Апатитовая электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Mycelium"
+				"text": "Почва: Мицелий"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 80 mB"
+				"text": "Воды: 80 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 20 mU"
+				"text": "Удобрения: 20 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Mushrooms"
+				"text": "Семена: Грибы"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Large mushrooms"
+				"text": "Урожай: Большие грибы"
 			},
 			{
-				"text": "Orchard",
+				"text": "Фруктовый сад",
 				"underlined": true,
 				"paragraph": true
 			},
@@ -281,82 +281,82 @@
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Emerald Electron Tube"
+				"text": "Лампа: Изумрудная электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Dirt"
+				"text": "Почва: Грязь"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 40"
+				"text": "Воды: 40 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 10 mU"
+				"text": "Удобрения: 10 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Trees (grown)"
+				"text": "Семена: Деревья (Выросшие)"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Any fruits"
+				"text": "Урожай: Фрукты"
 			}
 		],
 		[
 			{
-				"text": "Succulent Farm",
+				"text": "Ферма кактусов",
 				"underlined": true
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Copper Electron Tube"
+				"text": "Лампа: Медная электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Sand"
+				"text": "Почва: Песок"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 1 mB"
+				"text": "Воды: 1 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 10 mU"
+				"text": "Удобрения: 10 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Cactus"
+				"text": "Семена: Кактус"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Cactus (3-tall)"
+				"text": "Урожай: Кактус (3й высоты)"
 			},
 			{
-				"text": "Reed Farm",
+				"text": "Тростниковая ферма",
 				"underlined": true,
 				"paragraph": true
 			},
@@ -364,82 +364,82 @@
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Tin Electron Tube"
+				"text": "Лампа: Оловянная электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Sand/Dirt"
+				"text": "Почва: Песок/Земля"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 20"
+				"text": "Воды: 20 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 10 mU"
+				"text": "Удобрения: 10 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Sugar Canes"
+				"text": "Семена: Сахарный тростник"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Sugar Canes (3-tall)"
+				"text": "Урожай: Сахарный тростник (3й высоты)"
 			}
 		],
 		[
 			{
-				"text": "Gourd Farm",
+				"text": "Тыквенная ферма",
 				"underlined": true
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Lapis Electron Tube"
+				"text": "Лампа: Лазуритовая электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Dirt"
+				"text": "Почва: Земля"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 40 mB"
+				"text": "Воды: 40 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 10 mU"
+				"text": "Удобрения: 10 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Pumpkin/Melon Seeds"
+				"text": "Семена: Семена Тыкв/Арбузов"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Pumpkins, Melons"
+				"text": "Урожай: Тыквы, Арбузы"
 			},
 			{
-				"text": "Cocoa Plantation",
+				"text": "Какао-плантация",
 				"underlined": true,
 				"paragraph": true
 			},
@@ -447,82 +447,82 @@
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Diamantine Electron Tube"
+				"text": "Лампа: Алмазная электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Jungle Wood"
+				"text": "Почва: Тропическое дерево"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 20 mB"
+				"text": "Воды: 20 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 120 mU"
+				"text": "Удобрения: 120 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Cocoa Beans"
+				"text": "Семена: Какао-бобы"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Cocoa Plants"
+				"text": "Урожай: Какао-растения"
 			}
 		],
 		[
 			{
-				"text": "Rubber Plantation",
+				"text": "Каучуковая плантация",
 				"underlined": true
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Rubberised  Electron Tube"
+				"text": "Лампа: Прорезиненная электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Dirt"
+				"text": "Почва: Земля"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: 5 mB"
+				"text": "Воды: 5 mB"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 10 mU"
+				"text": "Удобрения: 10 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Rubber Saplings"
+				"text": "Семена: Саженцы гевеи"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Sticky Resin"
+				"text": "Урожай: Латекс"
 			},
 			{
-				"text": "Red Orchid Farm",
+				"text": "Ферма красных орхидей",
 				"underlined": true,
 				"paragraph": true
 			},
@@ -530,79 +530,79 @@
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Orchid Electron Tube"
+				"text": "Лампа: Ордихейная электронная лампа"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: Redstone Ore"
+				"text": "Почва: Редстоунавая руда"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: None"
+				"text": "Воды: Нет"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 20 mU"
+				"text": "Удобрения: 20 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Red Orchid"
+				"text": "Семена: Красные орхидеи"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Redstone"
+				"text": "Урожай: Редстоун"
 			}
 		],
 		[
 			{
-				"text": "Ender Farm",
+				"text": "Эндер ферма",
 				"underlined": true
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Tube: Ender Electron Tube"
+				"text": "Лампа: Электронная лампа края"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Soil: End Stone"
+				"text": "Почва: Эндерняк"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Water: None"
+				"text": "Воды: Нет"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Fertilizer: 20 mU"
+				"text": "Удобрения: 20 mU"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Germlings: Chorus Flower or Ender Lilly Seeds"
+				"text": "Семена: Цветок хоруса или семена эндер лилим"
 			},
 			{	
 				"text": "\n"
 			},
 			{
-				"text": "Harvest: Chorus Fruit & Chorus Flower or  Ender Pearls"
+				"text": "Урожай: Хорус Фрукты & Хорус цветки или Эндер пёрлы"
 			}
 		]
 	]
