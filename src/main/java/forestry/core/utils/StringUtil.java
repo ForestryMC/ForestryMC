@@ -39,7 +39,7 @@ public class StringUtil {
         return source + delim + appendix;
     }
 
-    public static String readableBoolean(boolean flag, String trueStr, String falseStr) {
+    public static ITextProperties readableBoolean(boolean flag, ITextProperties trueStr, ITextProperties falseStr) {
         if (flag) {
             return trueStr;
         } else {

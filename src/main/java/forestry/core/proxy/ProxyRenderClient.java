@@ -27,6 +27,7 @@ import net.minecraft.client.settings.GraphicsFanciness;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -41,7 +42,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
     }
 
     @Override
-    public void setupClient(FMLClientSetupEvent event) {
+    public void registerModels(ModelRegistryEvent event) {
         for (EnumContainerType type : EnumContainerType.values()) {
             ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_empty", "inventory"));
             ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_filled", "inventory"));

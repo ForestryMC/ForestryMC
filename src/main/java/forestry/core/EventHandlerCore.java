@@ -24,6 +24,7 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
@@ -55,7 +56,7 @@ public class EventHandlerCore {
 
     //TODO - register event handler
     @SubscribeEvent
-    public void handleItemPickup(EntityItemPickupEvent event) {
+    public void pickupItem(EntityItemPickupEvent event) {
         if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
             return;
         }
@@ -69,13 +70,13 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+    public void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerEntity player = event.getPlayer();
         syncBreedingTrackers(player);
     }
 
     @SubscribeEvent
-    public void handlePlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+    public void playerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         PlayerEntity player = event.getPlayer();
         syncBreedingTrackers(player);
     }
@@ -97,7 +98,7 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void handleWorldLoad(WorldEvent.Load event) {
+    public void onDimensionLoad(WorldEvent.Load event) {
         IWorld world = event.getWorld();
 
         for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
@@ -106,14 +107,14 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void handleWorldSave(WorldEvent.Save event) {
+    public void onDimensionSave(WorldEvent.Save event) {
         for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
             handler.onWorldSave(event.getWorld());
         }
     }
 
     @SubscribeEvent
-    public void handleWorldUnload(WorldEvent.Unload event) {
+    public void onDimensionUnload(WorldEvent.Unload event) {
         for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
             handler.onWorldUnload(event.getWorld());
         }
@@ -121,7 +122,7 @@ public class EventHandlerCore {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public void handleTextureRemap(TextureStitchEvent.Pre event) {
+    public void onTextureStitchedPre(TextureStitchEvent.Pre event) {
         if (event.getMap().getTextureLocation() == PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
             TextureManagerForestry.getInstance().registerSprites(ISpriteRegistry.fromEvent(event));
             ModelBlockCached.clear();
@@ -129,7 +130,7 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void lootLoad(LootTableLoadEvent event) {
+    public void loadLootTable(LootTableLoadEvent event) {
         if (!event.getName().getNamespace().equals("minecraft")
                 && !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
             return;
@@ -155,7 +156,7 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void handleVillagerAI(EntityJoinWorldEvent event) {
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
         if ((entity instanceof VillagerEntity)) {
             VillagerEntity villager = (VillagerEntity) entity;

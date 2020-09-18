@@ -22,7 +22,10 @@ public class GuiButtonBack extends Button implements IToolTipProvider {
     @Override
     public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
         if (visible) {
-            this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+            this.isHovered = mouseX >= this.x
+                    && mouseY >= this.y
+                    && mouseX < this.x + this.width
+                    && mouseY < this.y + this.height;
 
             TextureManager manager = Minecraft.getInstance().getTextureManager();
             manager.bindTexture(GuiForesterBook.TEXTURE);

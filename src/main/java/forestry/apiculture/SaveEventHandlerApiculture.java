@@ -20,5 +20,4 @@ public class SaveEventHandlerApiculture implements ISaveEventHandler {
     public void onWorldLoad(IWorld world) {
         BeeManager.beeRoot.resetBeekeepingMode();
     }
-
 }

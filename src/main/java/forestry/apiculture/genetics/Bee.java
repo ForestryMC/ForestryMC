@@ -324,7 +324,11 @@ public class Bee extends IndividualLiving implements IBee {
 
         // No info 4 u!
         if (!isAnalyzed) {
-            toolTip.singleLine().text("<").translated("for.gui.unknown").text(">").style(TextFormatting.GRAY).create();
+            toolTip.singleLine()
+                    .text(ITextComponent.func_241827_a_("<"))
+                    .translated("for.gui.unknown")
+                    .text(ITextComponent.func_241827_a_(">"))
+                    .style(TextFormatting.GRAY).create();
             return;
         }
 
@@ -351,7 +355,7 @@ public class Bee extends IndividualLiving implements IBee {
 
         toolTip.singleLine()
                 .add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
-                .text(" ")
+                .text(ITextComponent.func_241827_a_(" "))
                 .translated("for.gui.life")
                 .style(TextFormatting.GRAY)
                 .create();
@@ -367,7 +371,7 @@ public class Bee extends IndividualLiving implements IBee {
         } else {
             toolTip.singleLine()
                     .add(speedAllele.getDisplayName())
-                    .text(" ")
+                    .text(ITextComponent.func_241827_a_(" "))
                     .translated("for.gui.worker")
                     .style(TextFormatting.GRAY)
                     .create();
@@ -376,8 +380,12 @@ public class Bee extends IndividualLiving implements IBee {
         IAlleleValue<EnumTolerance> tempToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
         IAlleleValue<EnumTolerance> humidToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
 
-        toolTip.singleLine().text("T: ").add(AlleleManager.climateHelper.toDisplay(primary.getTemperature())).text(" / ").add(tempToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
-        toolTip.singleLine().text("H: ").add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(" / ").add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
+        toolTip.singleLine().text(ITextComponent.func_241827_a_("T: "))
+                .add(AlleleManager.climateHelper.toDisplay(primary.getTemperature())).text(ITextComponent.func_241827_a_(" / "))
+                .add(tempToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
+        toolTip.singleLine().text(ITextComponent.func_241827_a_("H: "))
+                .add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(ITextComponent.func_241827_a_(" / "))
+                .add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
 
 
         toolTip.add(genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription(), TextFormatting.GRAY);
@@ -487,7 +495,6 @@ public class Bee extends IndividualLiving implements IBee {
 
     @Override
     public List<IBee> spawnDrones(IBeeHousing housing) {
-
         World world = housing.getWorldObj();
 
         // We need a mated queen to produce offspring.

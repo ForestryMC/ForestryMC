@@ -75,6 +75,7 @@ public class AlleleUtils {
         if (!alleleClass.isInstance(allele)) {
             return;
         }
+
         A castedAllele = alleleClass.cast(allele);
         alleleAction.accept(castedAllele);
     }
@@ -84,6 +85,7 @@ public class AlleleUtils {
         if (!alleleClass.isInstance(allele)) {
             return fallback;
         }
+
         A castedAllele = alleleClass.cast(allele);
         return alleleAction.apply(castedAllele);
     }
@@ -126,11 +128,13 @@ public class AlleleUtils {
         if (!(allele instanceof IAlleleValue)) {
             return fallback;
         }
+
         IAlleleValue alleleValue = (IAlleleValue) allele;
         Object value = alleleValue.getValue();
         if (valueClass.isInstance(value)) {
             return valueClass.cast(value);
         }
+
         return fallback;
     }
 
@@ -143,11 +147,13 @@ public class AlleleUtils {
         if (!(allele instanceof IAlleleValue)) {
             return null;
         }
+
         IAlleleValue alleleValue = (IAlleleValue) allele;
         Object value = alleleValue.getValue();
         if (valueClass.isInstance(value)) {
             return valueClass.cast(value);
         }
+
         return null;
     }
 }

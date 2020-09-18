@@ -40,7 +40,9 @@ import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -129,8 +131,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
     }
 
     @Override
-    public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-                              boolean hasVillageGenerated) {
+    public void populateChunk(
+            ChunkGenerator chunkGenerator,
+            World world,
+            Random rand,
+            int chunkX,
+            int chunkZ,
+            boolean hasVillageGenerated
+    ) {
         if (generateCocoons) {
             if (generateCocoonsAmount > 0.0) {
                 //TODO worldgen
@@ -278,10 +286,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
     }
 
     @SubscribeEvent
-    public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
-        if (event.getEntity() instanceof EntityButterfly) {
+    public static boolean onTravelToDimension(Entity entity, RegistryKey<World> dimension) {
+        if (entity instanceof EntityButterfly) {
+            EntityTravelToDimensionEvent event = new EntityTravelToDimensionEvent(entity, dimension);
             event.setCanceled(true);
+            return false;
         }
+
+        return true;
     }
 
     @Override

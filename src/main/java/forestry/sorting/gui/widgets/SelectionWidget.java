@@ -54,10 +54,24 @@ public class SelectionWidget extends Widget {
         }
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindTexture(TEXTURE);
-        manager.gui.blit(transform, startX + xPos, startY + yPos, 0, 0, width, height);
+        manager.gui.blit(
+                transform,
+                startX + xPos,
+                startY + yPos,
+                0,
+                0,
+                width,
+                height
+        );
         logic.draw(transform);
 
-        manager.minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.filter.seletion"), startX + xPos + 12, startY + yPos + 4, manager.gui.getFontColor().get("gui.title"));
+        manager.minecraft.fontRenderer.drawString(
+                transform,
+                Translator.translateToLocal("for.gui.filter.seletion"),
+                startX + xPos + 12,
+                startY + yPos + 4,
+                manager.gui.getFontColor().get("gui.title")
+        );
     }
 
     @Override

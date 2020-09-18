@@ -41,7 +41,9 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
     private final EnumBeeType type;
 
     public ItemBeeGE(EnumBeeType type) {
-        super(type != EnumBeeType.DRONE ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1) : new Item.Properties().group(ItemGroups.tabApiculture));
+        super(type != EnumBeeType.DRONE
+                ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1)
+                : new Item.Properties().group(ItemGroups.tabApiculture));
         this.type = type;
     }
 

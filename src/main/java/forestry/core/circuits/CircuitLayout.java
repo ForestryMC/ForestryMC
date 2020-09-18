@@ -14,6 +14,9 @@ package forestry.core.circuits;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.core.utils.Translator;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class CircuitLayout implements ICircuitLayout {
     private final String uid;
@@ -30,13 +33,13 @@ public class CircuitLayout implements ICircuitLayout {
     }
 
     @Override
-    public String getName() {
-        return Translator.translateToLocal("for.circuit.layout." + this.uid);
+    public TranslationTextComponent getName() {
+        return new TranslationTextComponent("for.circuit.layout." + this.uid);
     }
 
     @Override
-    public String getUsage() {
-        return Translator.translateToLocal("for.circuit.layout." + this.uid + ".usage");
+    public TranslationTextComponent getUsage() {
+        return new TranslationTextComponent("for.circuit.layout." + this.uid + ".usage");
     }
 
     @Override

@@ -16,7 +16,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
 import forestry.factory.tiles.TileBottler;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
@@ -49,9 +48,8 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
         }
         RenderSystem.popMatrix();
 
-        String name = Translator.translateToLocal(tile.getUnlocalizedTitle());
         textLayout.line = 5;
-        textLayout.drawCenteredLine(transform, name, 0, ColourProperties.INSTANCE.get("gui.title"));
+        textLayout.drawCenteredLine(transform, tile.getDisplayName(), 0, ColourProperties.INSTANCE.get("gui.title"));
         bindTexture(textureFile);
 
         bindTexture(textureFile);

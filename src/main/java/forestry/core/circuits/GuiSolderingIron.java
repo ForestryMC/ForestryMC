@@ -25,6 +25,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Locale;
 
@@ -44,15 +45,20 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
         ICircuitLayout layout = container.getLayout();
-        String title = layout.getName();
-        getFontRenderer().drawString(transform, title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
+        getFontRenderer().func_238422_b_(
+                transform,
+                layout.getName(),
+                guiLeft + 8 + textLayout.getCenteredOffset(layout.getName(), 138),
+                guiTop + 16,
+                ColourProperties.INSTANCE.get("gui.screen")
+        );
 
         for (int i = 0; i < 4; i++) {
             String description;
             ItemStack tube = itemInventory.getStackInSlot(i + 2);
             CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
             if (recipe == null) {
-                description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
+                description = "(" + new TranslationTextComponent("for.gui.noeffect").toString() + ")";
             } else {
                 description = recipe.getCircuit().getDisplayName().getString();
             }

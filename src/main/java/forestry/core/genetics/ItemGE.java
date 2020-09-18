@@ -63,7 +63,9 @@ public abstract class ItemGE extends ItemForestry {
             if (Screen.hasShiftDown()) {
                 individual.addTooltip(list);
             } else {
-                list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
+                list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >")
+                        .mergeStyle(TextFormatting.GRAY)
+                        .mergeStyle(TextFormatting.ITALIC));
             }
         } else {
             list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").mergeStyle(TextFormatting.GRAY));

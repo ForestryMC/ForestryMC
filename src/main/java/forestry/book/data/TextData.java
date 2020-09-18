@@ -15,7 +15,7 @@ public class TextData {
     public boolean strikethrough = false;
     public boolean obfuscated = false;
     public boolean paragraph = false;
-    public boolean dropshadow = false;
+    public boolean shadow = false;
 
     public TextData() {
     }

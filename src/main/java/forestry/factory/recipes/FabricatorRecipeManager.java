@@ -32,11 +32,19 @@ public class FabricatorRecipeManager implements IFabricatorManager {
     @Override
     public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
         //TODO json
-        //		ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
-        //		NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getRawIngredients();
-        //
-        //		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients, patternRecipe.getOreDicts(), patternRecipe.getWidth(), patternRecipe.getHeight());
-        //		addRecipe(recipe);
+//        ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
+//        NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getRawIngredients();
+//
+//        IFabricatorRecipe recipe = new FabricatorRecipe(
+//                plan,
+//                molten,
+//                result,
+//                ingredients,
+//                patternRecipe.getOreDicts(),
+//                patternRecipe.getWidth(),
+//                patternRecipe.getHeight()
+//        );
+//        addRecipe(recipe);
     }
 
     public static RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
@@ -46,7 +54,13 @@ public class FabricatorRecipeManager implements IFabricatorManager {
             if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
                 continue;
             }
-            String[][] oreDicts = RecipeUtil.matches(recipe.getIngredients(), recipe.getOreDicts(), recipe.getWidth(), recipe.getHeight(), gridResources);
+            String[][] oreDicts = RecipeUtil.matches(
+                    recipe.getIngredients(),
+                    recipe.getOreDicts(),
+                    recipe.getWidth(),
+                    recipe.getHeight(),
+                    gridResources
+            );
             if (oreDicts != null) {
                 return new RecipePair<>(recipe, oreDicts);
             }

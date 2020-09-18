@@ -98,7 +98,14 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
         }
         window.init(guiLeft, guiTop + (ySize - 166) / 2);
 
-        addButton(new GuiToggleButton(guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
+        addButton(new GuiToggleButton(
+                guiLeft + buttonX,
+                guiTop + buttonY,
+                18,
+                20,
+                TOGGLE_BUTTON,
+                new Handler()
+        )).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
         dirty = true;
 
         if (slotAnalyzer != null) {

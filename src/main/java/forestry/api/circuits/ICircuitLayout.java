@@ -5,6 +5,9 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.TranslationTextComponent;
+
 public interface ICircuitLayout {
 
     /**
@@ -15,12 +18,12 @@ public interface ICircuitLayout {
     /**
      * localized name for this circuit layout
      */
-    String getName();
+    TranslationTextComponent getName();
 
     /**
      * localized string for how this circuit layout is used
      */
-    String getUsage();
+    TranslationTextComponent getUsage();
 
     /**
      * Specifies where a circuit layout is used.

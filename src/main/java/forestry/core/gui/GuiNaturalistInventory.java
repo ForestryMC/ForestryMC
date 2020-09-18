@@ -22,7 +22,6 @@ import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
@@ -34,6 +33,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -70,8 +70,14 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
     protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int j, int i) {
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, j, i);
         timer.onDraw();
-        String header = Translator.translateToLocal("for.gui.page") + " " + (pageCurrent + 1) + "/" + pageMax;
-        getFontRenderer().drawString(transform, header, guiLeft + 95 + textLayout.getCenteredOffset(header, 98), guiTop + 10, ColourProperties.INSTANCE.get("gui.title"));
+        ITextComponent header = new TranslationTextComponent("for.gui.page").appendString(" " + (pageCurrent + 1) + "/" + pageMax);
+        getFontRenderer().func_238422_b_(
+                transform,
+                header,
+                guiLeft + 95 + textLayout.getCenteredOffset(header, 98),
+                guiTop + 10,
+                ColourProperties.INSTANCE.get("gui.title")
+        );
 
         IIndividual individual = getIndividualAtPosition(i, j);
         if (individual == null) {
@@ -141,19 +147,23 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 
         textLayout.startPage();
 
-        textLayout.drawLine(transform, Translator.translateToLocal("for.gui.speciescount") + ": " + breedingTracker.getSpeciesBred() + "/" + speciesRoot.getSpeciesCount(), x);
+        textLayout.drawLine(
+                transform,
+                new TranslationTextComponent("for.gui.speciescount").appendString(": " + breedingTracker.getSpeciesBred() + "/" + speciesRoot.getSpeciesCount()),
+                x
+        );
         textLayout.newLine();
         textLayout.newLine();
 
         if (breedingTracker instanceof IApiaristTracker) {
             IApiaristTracker tracker = (IApiaristTracker) breedingTracker;
-            textLayout.drawLine(transform, Translator.translateToLocal("for.gui.queens") + ": " + tracker.getQueenCount(), x);
+            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.queens").appendString(": " + tracker.getQueenCount()), x);
             textLayout.newLine();
 
-            textLayout.drawLine(transform, Translator.translateToLocal("for.gui.princesses") + ": " + tracker.getPrincessCount(), x);
+            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.princesses").appendString(": " + tracker.getPrincessCount()), x);
             textLayout.newLine();
 
-            textLayout.drawLine(transform, Translator.translateToLocal("for.gui.drones") + ": " + tracker.getDroneCount(), x);
+            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.drones").appendString(": " + tracker.getDroneCount()), x);
             textLayout.newLine();
         }
 
@@ -163,11 +173,11 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
     private void displaySpeciesInformation(MatrixStack transform, boolean analyzed, IAlleleSpecies species, ItemStack iconStack, int x, int maxMutationCount) {
 
         if (!analyzed) {
-            textLayout.drawLine(transform, Translator.translateToLocal("for.gui.unknown"), x);
+            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.unknown"), x);
             return;
         }
 
-        textLayout.drawLine(transform, species.getDisplayName().getString(), x);
+        textLayout.drawLine(transform, species.getDisplayName(), x);
         GuiUtil.drawItemStack(this, iconStack, guiLeft + x + 69, guiTop + textLayout.getLineY() - 2);
 
         textLayout.newLine();

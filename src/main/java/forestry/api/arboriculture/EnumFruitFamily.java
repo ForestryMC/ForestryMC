@@ -8,6 +8,8 @@ package forestry.api.arboriculture;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.alleles.AlleleManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public enum EnumFruitFamily implements IFruitFamily {
     PRUNES("prunes", "Prunus domestica"),
@@ -35,15 +37,14 @@ public enum EnumFruitFamily implements IFruitFamily {
         return this.scientific;
     }
 
-    //TODO - these must only be called on client. Or Should I return TranslationTextComponent
     @Override
-    public String getName() {
-        return I18n.format("for.family." + uid);
+    public TranslationTextComponent getName() {
+        return new TranslationTextComponent("for.family." + uid);
     }
 
     @Override
-    public String getDescription() {
-        return I18n.format("for.family." + uid + ".description");
+    public TranslationTextComponent getDescription() {
+        return new TranslationTextComponent("for.family." + uid + ".description");
     }
 
 }

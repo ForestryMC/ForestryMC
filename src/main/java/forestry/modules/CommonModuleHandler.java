@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -217,12 +218,11 @@ public class CommonModuleHandler {
         });
     }
 
-    //TODO - worldgen
-    //	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-    //		for (BlankForestryModule module : modules) {
-    //			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
-    //		}
-    //	}
+    public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+        for (BlankForestryModule module : modules) {
+            module.populateChunk(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
+        }
+    }
 
     public void addBiomeDecorations(Biome biome) {
         for (BlankForestryModule module : modules) {

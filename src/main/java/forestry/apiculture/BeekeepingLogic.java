@@ -162,7 +162,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
     @Override
     public boolean canWork() {
-
         IErrorLogic errorLogic = housing.getErrorLogic();
         errorLogic.clearErrors();
 
@@ -176,6 +175,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         if (!optionalType.isPresent()) {
             return false;
         }
+
         IOrganismType beeType = optionalType.get();
         // check if we're breeding
         if (beeType == EnumBeeType.PRINCESS) {
@@ -185,6 +185,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
             setActive(false); // not active (no bee FX) when we are breeding
             return !errorLogic.hasErrors();
         }
+
         if (beeType == EnumBeeType.QUEEN) {
             if (!isQueenAlive(queenStack)) {
                 IBee dyingQueen = BeeManager.beeRoot.create(queenStack).orElse(null);
@@ -207,6 +208,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
             } else {
                 this.queen = null;
             }
+
             this.queenStack = queenStack;
             queenCanWorkCache.clear();
         }
@@ -234,6 +236,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         } else if (flowerCacheNeedsSync) {
             syncToClient();
         }
+
         return canWork;
     }
 
@@ -376,6 +379,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         if (!optionalPrincess.isPresent() || !optionalDrone.isPresent()) {
             return;
         }
+
         IBee princess = optionalPrincess.get();
         IBee drone = optionalDrone.get();
         princess.mate(drone.getGenome());
@@ -424,7 +428,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
      * Creates the succeeding princess and between one and three drones.
      */
     private static Collection<ItemStack> spawnOffspring(IBee queen, IBeeHousing beeHousing) {
-
         World world = beeHousing.getWorldObj();
 
         Stack<ItemStack> offspring = new Stack<>();
@@ -571,5 +574,4 @@ public class BeekeepingLogic implements IBeekeepingLogic {
             }
         }
     }
-
 }

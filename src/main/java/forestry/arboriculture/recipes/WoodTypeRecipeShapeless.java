@@ -10,68 +10,68 @@
 // ******************************************************************************/
 //package forestry.arboriculture.recipes;
 //
-//import net.minecraft.block.Block;
-//import net.minecraft.inventory.CraftingInventory;
-//import net.minecraft.item.ItemStack;
-//import net.minecraft.item.crafting.IRecipe;
-//import net.minecraft.util.NonNullList;
-//import net.minecraft.world.World;
-//
 //import forestry.api.arboriculture.EnumForestryWoodType;
 //import forestry.api.arboriculture.IWoodType;
 //import forestry.api.arboriculture.WoodBlockKind;
 //import forestry.arboriculture.IWoodTyped;
 //import forestry.core.utils.InventoryUtil;
 //import forestry.core.utils.ItemStackUtil;
+//import net.minecraft.block.Block;
+//import net.minecraft.inventory.CraftingInventory;
+//import net.minecraft.inventory.IInventory;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.item.crafting.IRecipe;
+//import net.minecraft.util.NonNullList;
+//import net.minecraft.world.World;
 //
 ///**
 // * used for logs -> planks (fireproof and not)
 // */
 //public class WoodTypeRecipeShapeless extends WoodTypeRecipeBase implements IRecipe {
+//    public WoodTypeRecipeShapeless(WoodBlockKind inputKind, WoodBlockKind outputKind, boolean inputFireproof, boolean outputFireproof, int outputCount) {
+//        super(outputCount, inputKind, outputKind, inputFireproof, outputFireproof);
+//    }
+//
+//    @Override
+//    public boolean matches(IInventory inv, World worldIn) {
+//        result = ItemStack.EMPTY;
+//        IWoodType type = null;
+//        int logCount = 0;
+//        for (ItemStack stack : InventoryUtil.getStacks(inv)) {
+//            if (stack.isEmpty()) {
+//                continue;
+//            }
+//            Block block = ItemStackUtil.getBlock(stack);
+//            if (!(block instanceof IWoodTyped)) {
+//                return false;
+//            }
+//            IWoodTyped typed = (IWoodTyped) block;
+//            if (typed.getBlockKind() != inputKind || typed.isFireproof() != inputFireproof) {
+//                return false;
+//            }
+//            if (type == null) {
+//                type = typed.getWoodType(stack.getMetadata()); //TODO - don't use metadata here
+//            }
+//            logCount++;
+//        }
+//
+//        if (type != null) {
+//            result = access.getStack(type, outputKind, outputFireproof);
+//        }
+//
+//        return logCount == 1;
+//    }
 //
 //
-//	public WoodTypeRecipeShapeless(WoodBlockKind inputKind, WoodBlockKind outputKind, boolean inputFireproof, boolean outputFireproof, int outputCount) {
-//		super(outputCount, inputKind, outputKind, inputFireproof, outputFireproof);
-//	}
+//    @Override
+//    public boolean canFit(int width, int height) {
+//        return width >= 1 && height >= 1;
+//    }
 //
-//	@Override
-//	public boolean matches(CraftingInventory inv, World worldIn) {
-//		result = ItemStack.EMPTY;
-//		IWoodType type = null;
-//		int logCount = 0;
-//		for (ItemStack stack : InventoryUtil.getStacks(inv)) {
-//			if (stack.isEmpty()) {
-//				continue;
-//			}
-//			Block block = ItemStackUtil.getBlock(stack);
-//			if (!(block instanceof IWoodTyped)) {
-//				return false;
-//			}
-//			IWoodTyped typed = (IWoodTyped) block;
-//			if (typed.getBlockKind() != inputKind || typed.isFireproof() != inputFireproof) {
-//				return false;
-//			}
-//			if (type == null) {
-//				type = typed.getWoodType(stack.getMetadata()); //TODO - don't use metadata here
-//			}
-//			logCount++;
-//		}
-//		if (type != null) {
-//			result = access.getStack(type, outputKind, outputFireproof);
-//		}
-//		return logCount == 1;
-//	}
-//
-//
-//	@Override
-//	public boolean canFit(int width, int height) {
-//		return width >= 1 && height >= 1;
-//	}
-//
-//	@Override
-//	public NonNullList<ItemStack> getStacks() {
-//		NonNullList<ItemStack> ret = NonNullList.create();
-//		ret.add(access.getStack(EnumForestryWoodType.values()[0], inputKind, inputFireproof));
-//		return ret;
-//	}
+//    @Override
+//    public NonNullList<ItemStack> getStacks() {
+//        NonNullList<ItemStack> ret = NonNullList.create();
+//        ret.add(access.getStack(EnumForestryWoodType.values()[0], inputKind, inputFireproof));
+//        return ret;
+//    }
 //}

@@ -11,32 +11,41 @@
 package forestry.core.genetics;
 
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GenericRatings {
 
-    public static String rateMetabolism(int metabolism) {
+    public static ITextComponent rateMetabolism(int metabolism) {
         if (metabolism >= 19) {
-            return Translator.translateToLocal("forestry.allele.highest");
+            return new TranslationTextComponent("forestry.allele.highest");
         } else if (metabolism >= 16) {
-            return Translator.translateToLocal("forestry.allele.higher");
+            return new TranslationTextComponent("forestry.allele.higher");
         } else if (metabolism >= 13) {
-            return Translator.translateToLocal("forestry.allele.high");
+            return new TranslationTextComponent("forestry.allele.high");
         } else if (metabolism >= 10) {
-            return Translator.translateToLocal("forestry.allele.average");
+            return new TranslationTextComponent("forestry.allele.average");
         } else if (metabolism >= 7) {
-            return Translator.translateToLocal("forestry.allele.slow");
+            return new TranslationTextComponent("forestry.allele.slow");
         } else if (metabolism >= 4) {
-            return Translator.translateToLocal("forestry.allele.slower");
+            return new TranslationTextComponent("forestry.allele.slower");
         } else {
-            return Translator.translateToLocal("forestry.allele.slowest");
+            return new TranslationTextComponent("forestry.allele.slowest");
         }
     }
 
-    public static String rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
-        String active = naturalNocturnal ? Translator.translateToLocal("for.gui.nocturnal") : Translator.translateToLocal("for.gui.diurnal");
+    public static ITextComponent rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
+        ITextComponent active = naturalNocturnal
+                ? new TranslationTextComponent("for.gui.nocturnal")
+                : new TranslationTextComponent("for.gui.diurnal");
         if (neverSleeps) {
-            active = StringUtil.append(", ", active, naturalNocturnal ? Translator.translateToLocal("for.gui.diurnal") : Translator.translateToLocal("for.gui.nocturnal"));
+            active = ITextComponent.func_241827_a_(StringUtil.append(
+                    ", ",
+                    active.getString(),
+                    naturalNocturnal
+                            ? new TranslationTextComponent("for.gui.diurnal").getString()
+                            : new TranslationTextComponent("for.gui.nocturnal").getString()
+            ));
         }
 
         return active;

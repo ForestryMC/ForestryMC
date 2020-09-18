@@ -79,17 +79,15 @@ public interface IElementGroup extends IGuiElement {
     /**
      * Adds a single line of text.
      */
-    ILabelElement label(String text);
+    ILabelElement label(ITextProperties text, Style style);
 
-    ILabelElement label(String text, Style style);
+    ILabelElement label(ITextProperties text, GuiElementAlignment align);
 
-    ILabelElement label(String text, GuiElementAlignment align);
+    ILabelElement label(ITextProperties text, GuiElementAlignment align, Style textStyle);
 
-    ILabelElement label(String text, GuiElementAlignment align, Style textStyle);
+    ILabelElement label(ITextProperties text, int width, int height, GuiElementAlignment align, Style textStyle);
 
-    ILabelElement label(String text, int width, int height, GuiElementAlignment align, Style textStyle);
-
-    ILabelElement label(String text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle);
+    ILabelElement label(ITextProperties text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle);
 
     /**
      * Adds a text element that splits the text with wordwrap.

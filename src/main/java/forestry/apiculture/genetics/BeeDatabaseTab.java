@@ -14,9 +14,10 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 import genetics.api.organism.IOrganismType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -47,35 +48,40 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
         IAlleleBeeSpecies primarySpecies = bee.getGenome().getActiveAllele(BeeChromosomes.SPECIES);
         IAlleleBeeSpecies secondarySpecies = bee.getGenome().getInactiveAllele(BeeChromosomes.SPECIES);
 
-        container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.databaseTitle);
+        container.label(
+                new TranslationTextComponent("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"),
+                GuiElementAlignment.TOP_CENTER,
+                GuiElementFactory.INSTANCE.databaseTitle
+        );
 
-        container.addLine(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES);
+        container.addLine(
+                new TranslationTextComponent("for.gui.species"), BeeChromosomes.SPECIES);
 
-        Function<Boolean, String> toleranceText = a -> {
+        Function<Boolean, ITextProperties> toleranceText = a -> {
             IAlleleForestrySpecies species = a ? primarySpecies : secondarySpecies;
-            return AlleleManager.climateHelper.toDisplay(species.getTemperature()).getString();    //TODO textcomponents
+            return AlleleManager.climateHelper.toDisplay(species.getTemperature());
         };
-        container.addLine(Translator.translateToLocal("for.gui.climate"), toleranceText, BeeChromosomes.TEMPERATURE_TOLERANCE);
+        container.addLine(new TranslationTextComponent("for.gui.climate"), toleranceText, BeeChromosomes.TEMPERATURE_TOLERANCE);
         container.addToleranceLine(BeeChromosomes.TEMPERATURE_TOLERANCE);
 
-        container.addLine(Translator.translateToLocal("for.gui.humidity"), toleranceText, BeeChromosomes.HUMIDITY_TOLERANCE);
+        container.addLine(new TranslationTextComponent("for.gui.humidity"), toleranceText, BeeChromosomes.HUMIDITY_TOLERANCE);
         container.addToleranceLine(BeeChromosomes.HUMIDITY_TOLERANCE);
 
-        container.addLine(Translator.translateToLocal("for.gui.lifespan"), BeeChromosomes.LIFESPAN);
+        container.addLine(new TranslationTextComponent("for.gui.lifespan"), BeeChromosomes.LIFESPAN);
 
-        container.addLine(Translator.translateToLocal("for.gui.speed"), BeeChromosomes.SPEED);
-        container.addLine(Translator.translateToLocal("for.gui.pollination"), BeeChromosomes.FLOWERING);
-        container.addLine(Translator.translateToLocal("for.gui.flowers"), BeeChromosomes.FLOWER_PROVIDER);
+        container.addLine(new TranslationTextComponent("for.gui.speed"), BeeChromosomes.SPEED);
+        container.addLine(new TranslationTextComponent("for.gui.pollination"), BeeChromosomes.FLOWERING);
+        container.addLine(new TranslationTextComponent("for.gui.flowers"), BeeChromosomes.FLOWER_PROVIDER);
 
-        container.addFertilityLine(Translator.translateToLocal("for.gui.fertility"), BeeChromosomes.FERTILITY, 0);
+        container.addFertilityLine(new TranslationTextComponent("for.gui.fertility"), BeeChromosomes.FERTILITY, 0);
 
-        container.addLine(Translator.translateToLocal("for.gui.area"), BeeChromosomes.TERRITORY);
-        container.addLine(Translator.translateToLocal("for.gui.effect"), BeeChromosomes.EFFECT);
+        container.addLine(new TranslationTextComponent("for.gui.area"), BeeChromosomes.TERRITORY);
+        container.addLine(new TranslationTextComponent("for.gui.effect"), BeeChromosomes.EFFECT);
 
-        String yes = Translator.translateToLocal("for.yes");
-        String no = Translator.translateToLocal("for.no");
+        ITextProperties yes = new TranslationTextComponent("for.yes");
+        ITextProperties no = new TranslationTextComponent("for.no");
 
-        String diurnal, nocturnal;
+        ITextProperties diurnal, nocturnal;
         if (mode == DatabaseMode.ACTIVE) {
             if (bee.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
                 nocturnal = diurnal = yes;
@@ -92,24 +98,37 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
             }
         }
 
-        container.addLine(Translator.translateToLocal("for.gui.diurnal"), diurnal, false);
+        container.addLine(new TranslationTextComponent("for.gui.diurnal"), diurnal, false);
 
-        container.addLine(Translator.translateToLocal("for.gui.nocturnal"), nocturnal, false);
+        container.addLine(new TranslationTextComponent("for.gui.nocturnal"), nocturnal, false);
 
-        Function<Boolean, String> flyer = active -> StringUtil.readableBoolean(active ? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN) : bee.getGenome().getInactiveValue(BeeChromosomes.TOLERATES_RAIN), yes, no);
-        container.addLine(Translator.translateToLocal("for.gui.flyer"), flyer, BeeChromosomes.TOLERATES_RAIN);
+        Function<Boolean, ITextProperties> flyer = active ->
+                StringUtil.readableBoolean(
+                        active
+                                ? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN)
+                                : bee.getGenome().getInactiveValue(BeeChromosomes.TOLERATES_RAIN),
+                        yes,
+                        no
+                );
+        container.addLine(new TranslationTextComponent("for.gui.flyer"), flyer, BeeChromosomes.TOLERATES_RAIN);
 
-        Function<Boolean, String> cave = active -> StringUtil.readableBoolean(active ? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING) : bee.getGenome().getInactiveValue(BeeChromosomes.CAVE_DWELLING), yes, no);
-        container.addLine(Translator.translateToLocal("for.gui.cave"), cave, BeeChromosomes.CAVE_DWELLING);
+        Function<Boolean, ITextProperties> cave = active ->
+                StringUtil.readableBoolean(
+                        active
+                                ? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING)
+                                : bee.getGenome().getInactiveValue(BeeChromosomes.CAVE_DWELLING),
+                        yes,
+                        no
+                );
+        container.addLine(new TranslationTextComponent("for.gui.cave"), cave, BeeChromosomes.CAVE_DWELLING);
 
-        String displayText;
         if (type == EnumBeeType.PRINCESS || type == EnumBeeType.QUEEN) {
             String displayTextKey = "for.bees.stock.pristine";
             if (!bee.isNatural()) {
                 displayTextKey = "for.bees.stock.ignoble";
             }
-            displayText = Translator.translateToLocal(displayTextKey);
-            container.label(displayText, GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.binomial);
+
+            container.label(new TranslationTextComponent(displayTextKey), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.binomial);
         }
     }
 

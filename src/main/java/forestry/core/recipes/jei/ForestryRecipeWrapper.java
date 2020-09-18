@@ -1,8 +1,8 @@
 package forestry.core.recipes.jei;
 
-//import mezz.jei.api.recipe.IRecipeWrapper;
-//TODO - jei
-public abstract class ForestryRecipeWrapper<R> {//implements IRecipeWrapper {
+import mezz.jei.api.recipe.category.extensions.IRecipeCategoryExtension;
+
+public abstract class ForestryRecipeWrapper<R> implements IRecipeCategoryExtension {
     private final R recipe;
 
     public ForestryRecipeWrapper(R recipe) {

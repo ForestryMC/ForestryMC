@@ -17,7 +17,6 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.items.ItemForestry;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
@@ -102,7 +101,8 @@ public class ItemResearchNote extends ItemForestry {
             }
 
             if (this == MUTATION) {
-                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
+                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(
+                        "ROT"));
                 if (!definition.isPresent()) {
                     return tooltips;
                 }
@@ -113,10 +113,11 @@ public class ItemResearchNote extends ItemForestry {
                     return tooltips;
                 }
 
-                ITextComponent species1 = encoded.getFirstParent().getDisplayName();
-                ITextComponent species2 = encoded.getSecondParent().getDisplayName();
-                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH);
-                String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
+                String species1 = encoded.getFirstParent().getDisplayName().toString();
+                String species2 = encoded.getSecondParent().getDisplayName().toString();
+                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(
+                        Locale.ENGLISH);
+                String mutationChance = new TranslationTextComponent("for.researchNote.chance." + mutationChanceKey).toString();
                 ITextComponent speciesResult = encoded.getResultingSpecies().getDisplayName();
 
                 tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
@@ -134,10 +135,15 @@ public class ItemResearchNote extends ItemForestry {
                 if (alleleFirst == null) {
                     return tooltips;
                 }
-                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(NBT_ROOT));
+                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(
+                        NBT_ROOT));
                 definition.ifPresent(root -> {
                     tooltips.add(new TranslationTextComponent("researchNote.discovered.0"));
-                    tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", alleleFirst.getDisplayName(), alleleFirst.getBinomial()));
+                    tooltips.add(new TranslationTextComponent(
+                            "for.researchNote.discovered.1",
+                            alleleFirst.getDisplayName(),
+                            alleleFirst.getBinomial()
+                    ));
                 });
             }
 
@@ -150,7 +156,8 @@ public class ItemResearchNote extends ItemForestry {
             }
 
             if (this == MUTATION) {
-                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
+                IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(
+                        "ROT"));
                 if (!definition.isPresent()) {
                     return false;
                 }
@@ -161,7 +168,10 @@ public class ItemResearchNote extends ItemForestry {
                     return false;
                 }
 
-                IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
+                IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(
+                        world,
+                        player.getGameProfile()
+                );
                 if (tracker.isResearched(encoded)) {
                     player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"), Util.DUMMY_UUID);
                     return false;
@@ -178,10 +188,12 @@ public class ItemResearchNote extends ItemForestry {
                 tracker.researchMutation(encoded);
                 player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.DUMMY_UUID);
 
-                player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
+                player.sendMessage(new TranslationTextComponent(
+                        "for.chat.memorizednote2",
                         ((IFormattableTextComponent) speciesFirst.getDisplayName()).mergeStyle(TextFormatting.GRAY),
                         ((IFormattableTextComponent) speciesSecond.getDisplayName()).mergeStyle(TextFormatting.GRAY),
-                        ((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)), Util.DUMMY_UUID);
+                        ((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)
+                ), Util.DUMMY_UUID);
 
                 return true;
             }
@@ -215,7 +227,11 @@ public class ItemResearchNote extends ItemForestry {
             return new ResearchNote(researcher, SPECIES, compound);
         }
 
-        public static ItemStack createSpeciesNoteStack(Item item, GameProfile researcher, IAlleleForestrySpecies species) {
+        public static ItemStack createSpeciesNoteStack(
+                Item item,
+                GameProfile researcher,
+                IAlleleForestrySpecies species
+        ) {
             ResearchNote note = createSpeciesNote(researcher, species);
             CompoundNBT compound = new CompoundNBT();
             note.writeToNBT(compound);
@@ -268,7 +284,10 @@ public class ItemResearchNote extends ItemForestry {
         public void addTooltip(List<ITextComponent> list) {
             List<ITextComponent> tooltips = type.getTooltip(inner);
             if (tooltips.isEmpty()) {
-                list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(TextFormatting.RED, TextFormatting.ITALIC));
+                list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(
+                        TextFormatting.RED,
+                        TextFormatting.ITALIC
+                ));
                 list.add(new TranslationTextComponent("for.researchNote.error.1"));
                 return;
             }
@@ -299,7 +318,12 @@ public class ItemResearchNote extends ItemForestry {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         super.addInformation(itemstack, world, list, flag);
         ResearchNote note = new ResearchNote(itemstack.getTag());
         note.addTooltip(list);

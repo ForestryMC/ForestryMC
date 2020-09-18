@@ -10,10 +10,11 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
-import forestry.core.utils.Translator;
 import genetics.api.alleles.IAlleleValue;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,22 +43,26 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
         container.translated("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name").setStyle(GuiElementFactory.INSTANCE.databaseTitle).setAlign(GuiElementAlignment.TOP_CENTER);
 
-        container.addLine(Translator.translateToLocal("for.gui.species"), TreeChromosomes.SPECIES);
+        container.addLine(new TranslationTextComponent("for.gui.species"), TreeChromosomes.SPECIES);
 
-        container.addLine(Translator.translateToLocal("for.gui.saplings"), TreeChromosomes.FERTILITY);
-        container.addLine(Translator.translateToLocal("for.gui.maturity"), TreeChromosomes.MATURATION);
-        container.addLine(Translator.translateToLocal("for.gui.height"), TreeChromosomes.HEIGHT);
+        container.addLine(new TranslationTextComponent("for.gui.saplings"), TreeChromosomes.FERTILITY);
+        container.addLine(new TranslationTextComponent("for.gui.maturity"), TreeChromosomes.MATURATION);
+        container.addLine(new TranslationTextComponent("for.gui.height"), TreeChromosomes.HEIGHT);
 
-        container.addLine(Translator.translateToLocal("for.gui.girth"), (IAlleleValue<Integer> girth, Boolean active) -> String.format("%sx%s", girth.getValue(), girth.getValue()), TreeChromosomes.GIRTH);
+        container.addLine(
+                new TranslationTextComponent("for.gui.girth"),
+                (IAlleleValue<Integer> girth, Boolean active) -> ITextProperties.func_240652_a_(String.format("%sx%s", girth.getValue(), girth.getValue())),
+                TreeChromosomes.GIRTH
+        );
 
-        container.addLine(Translator.translateToLocal("for.gui.yield"), TreeChromosomes.YIELD);
-        container.addLine(Translator.translateToLocal("for.gui.sappiness"), TreeChromosomes.SAPPINESS);
+        container.addLine(new TranslationTextComponent("for.gui.yield"), TreeChromosomes.YIELD);
+        container.addLine(new TranslationTextComponent("for.gui.sappiness"), TreeChromosomes.SAPPINESS);
 
-        container.addLine(Translator.translateToLocal("for.gui.effect"), TreeChromosomes.EFFECT);
+        container.addLine(new TranslationTextComponent("for.gui.effect"), TreeChromosomes.EFFECT);
 
-        container.addLine(Translator.translateToLocal("for.gui.native"), Translator.translateToLocal("for.gui." + primarySpecies.getPlantType().toString().toLowerCase(Locale.ENGLISH)), species.isDominant());
+        container.addLine(new TranslationTextComponent("for.gui.native"), new TranslationTextComponent("for.gui." + primarySpecies.getPlantType().toString().toLowerCase(Locale.ENGLISH)), species.isDominant());
 
-        container.label(Translator.translateToLocal("for.gui.supports"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
+        container.label(new TranslationTextComponent("for.gui.supports"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
         List<IFruitFamily> families = new ArrayList<>(primarySpecies.getSuitableFruit());
 
         for (IFruitFamily fruitFamily : families) {
@@ -78,7 +83,7 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
         IFruitFamily family = fruit.getProvider().getFamily();
 
         if (family != null && !family.getUID().equals(EnumFruitFamily.NONE.getUID())) {
-            container.label(Translator.translateToLocal("for.gui.family"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
+            container.label(new TranslationTextComponent("for.gui.family"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
             container.label(family.getName(), GuiElementAlignment.TOP_CENTER, textStyle);
         }
 

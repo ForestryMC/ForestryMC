@@ -91,11 +91,6 @@ public class ElementGroup extends GuiElement implements IElementGroup {
     }
 
     @Override
-    public ILabelElement label(ITextProperties component) {
-        return add(new LabelElement(component));
-    }
-
-    @Override
     public ILabelElement translated(String key, Object... args) {
         return label(new TranslationTextComponent(key, args));
     }
@@ -114,33 +109,33 @@ public class ElementGroup extends GuiElement implements IElementGroup {
     }
 
     @Override
-    public ILabelElement label(String text) {
+    public ILabelElement label(ITextProperties text) {
         return label(text, defaultStyle());
     }
 
     @Override
-    public ILabelElement label(String text, Style style) {
+    public ILabelElement label(ITextProperties text, Style style) {
         return label(text, GuiElementAlignment.TOP_LEFT, style);
     }
 
     @Override
-    public ILabelElement label(String text, GuiElementAlignment align) {
+    public ILabelElement label(ITextProperties text, GuiElementAlignment align) {
         return label(text, align, defaultStyle());
     }
 
     @Override
-    public ILabelElement label(String text, GuiElementAlignment align, Style textStyle) {
+    public ILabelElement label(ITextProperties text, GuiElementAlignment align, Style textStyle) {
         return label(text, -1, 12, align, textStyle);
     }
 
     @Override
-    public ILabelElement label(String text, int width, int height, GuiElementAlignment align, Style textStyle) {
+    public ILabelElement label(ITextProperties text, int width, int height, GuiElementAlignment align, Style textStyle) {
         return label(text, 0, 0, width, height < 0 ? 12 : height, align, textStyle);
     }
 
     @Override
-    public ILabelElement label(String text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
-        return add(new LabelElement(x, y, width, height, new StringTextComponent(text), true).setStyle(textStyle));
+    public ILabelElement label(ITextProperties text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
+        return add(new LabelElement(x, y, width, height, text, true).setStyle(textStyle));
     }
 
     @Override

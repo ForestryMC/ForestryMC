@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
-
     private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png");
 
     public Style dominantStyle = Style.EMPTY;
@@ -105,12 +104,12 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
         String fertilityString = fertilityAllele.getValue() + " x";
 
         AbstractElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
-        layout.label(fertilityString).setStyle(getStateStyle(fertilityAllele.isDominant()));
+        layout.label(new StringTextComponent(fertilityString)).setStyle(getStateStyle(fertilityAllele.isDominant()));
         layout.drawable(0, -1, new Drawable(TEXTURE, 60, 240 + texOffset, 12, 8));
         return layout;
     }
 
-    public IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, String text) {
+    public IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, ITextComponent text) {
         IElementLayout layout = createHorizontal(0, 0, 0).setDistance(0);
         layout.label(text, getStateStyle(species.isDominant()));
         layout.add(createToleranceInfo(toleranceAllele));
@@ -250,7 +249,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 
         boolean researched = breedingTracker.isResearched(combination);
         if (researched) {
-            element.label("+")
+            element.label(new StringTextComponent("+"))
                     .setStyle(GuiConstants.DEFAULT_STYLE)
                     .setAlign(GuiElementAlignment.TOP_LEFT)
                     .setSize(10, 10)

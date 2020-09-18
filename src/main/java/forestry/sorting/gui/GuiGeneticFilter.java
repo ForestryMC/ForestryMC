@@ -98,7 +98,14 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 
         String oldString = searchField != null ? searchField.getText() : "";
 
-        this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + selection.getX() + 89 + 36, selection.getY() + this.guiTop + 4, 80, this.minecraft.fontRenderer.FONT_HEIGHT, null);
+        this.searchField = new TextFieldWidget(
+                this.minecraft.fontRenderer,
+                this.guiLeft + selection.getX() + 89 + 36,
+                selection.getY() + this.guiTop + 4,
+                80,
+                minecraft.fontRenderer.FONT_HEIGHT,
+                null
+        );
         this.searchField.setMaxStringLength(50);
         this.searchField.setEnableBackgroundDrawing(false);
         this.searchField.setTextColor(16777215);

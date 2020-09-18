@@ -20,7 +20,6 @@ import net.minecraft.util.NonNullList;
 import javax.annotation.Nullable;
 
 public class CharcoalPileWall implements ICharcoalPileWall {
-
     @Nullable
     private final BlockState blockState;
     @Nullable

@@ -28,23 +28,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-//import net.minecraftforge.common.util.EnumHelper;
-//import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-//import net.minecraftforge.event.terraingen.TerrainGen;
-
 public abstract class HiveDecorator {
 
     @Nullable
     //	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0]);
 
     public static void decorateHives(ChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-        //		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
-        //			return;
-        //		}
-        return; //TODO - worldgen
+//        		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
+//        			return;
+//        		}
+//        return; //TODO - worldgen
 
-
-        //		decorateHives(world, rand, chunkX, chunkZ);
+        decorateHives(world, rand, chunkX, chunkZ);
     }
 
     public static void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
@@ -105,7 +100,6 @@ public abstract class HiveDecorator {
     }
 
     public static boolean tryGenHive(World world, Random rand, int x, int z, Hive hive) {
-
         final BlockPos hivePos = hive.getPosForHive(world, x, z);
 
         if (hivePos == null) {

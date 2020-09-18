@@ -17,7 +17,9 @@ public class GuiToggleButton extends Button {
 
     @Override
     public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
-        this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+        this.isHovered = mouseX >= this.x && mouseY >= this.y
+                && mouseX < this.x + this.width
+                && mouseY < this.y + this.height;
         int hoverState = this.getYImage(this.isHovered());
         Drawable drawable = textures[hoverState];
         drawable.draw(transform, y, x);

@@ -83,10 +83,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-//import forestry.core.commands.CommandListAlleles;
-//import forestry.core.commands.CommandModules;
-//import forestry.core.commands.RootCommand;
-
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
     //	public static final RootCommand rootCommand = new RootCommand();
@@ -318,7 +314,11 @@ public class ModuleCore extends BlankForestryModule {
     @SubscribeEvent
     public void onRegisterLoot(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
         //TODO: Remove if forge adds missing registry types.
-        OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootFunctionType(new OrganismFunction.Serializer()));
+        OrganismFunction.type = Registry.register(
+                Registry.LOOT_FUNCTION_TYPE,
+                new ResourceLocation(Constants.MOD_ID, "set_species_nbt"),
+                new LootFunctionType(new OrganismFunction.Serializer())
+        );
     }
 
     @Override

@@ -8,6 +8,7 @@ import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.layouts.PaneLayout;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,6 +51,7 @@ public abstract class SelectionElement<R> extends PaneLayout {
             leftButton = null;
             rightButton = null;
         }
+
         selectedElement = GuiElementFactory.INSTANCE.createPane(0, 2, width, this.height);
     }
 
@@ -57,16 +59,23 @@ public abstract class SelectionElement<R> extends PaneLayout {
         if (index == this.index || index >= recipes.length || index < 0) {
             return;
         }
+
         this.index = index;
         selectedElement.clear();
         onIndexUpdate(index, recipes[index]);
         if (text != null) {
             text.clear();
-            text.label((index + 1) + "/" + recipes.length, GuiElementAlignment.BOTTOM_CENTER, GuiConstants.BLACK_STYLE).setYPosition(2);
+            text.label(
+                    new StringTextComponent((index + 1) + "/" + recipes.length),
+                    GuiElementAlignment.BOTTOM_CENTER,
+                    GuiConstants.BLACK_STYLE
+            ).setYPosition(2);
         }
+
         if (leftButton != null) {
             leftButton.setEnabled(index > 0);
         }
+
         if (rightButton != null) {
             rightButton.setEnabled(index < recipes.length - 1);
         }

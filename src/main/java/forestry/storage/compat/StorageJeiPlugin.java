@@ -10,7 +10,6 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.util.ResourceLocation;
 
-
 @JeiPlugin
 public class StorageJeiPlugin implements IModPlugin {
 
@@ -52,6 +51,7 @@ public class StorageJeiPlugin implements IModPlugin {
         if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
             JeiUtil.addDescription(registration, BackpackItems.APIARIST_BACKPACK);
         }
+
         if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
             JeiUtil.addDescription(registration, BackpackItems.LEPIDOPTERIST_BACKPACK);
         }

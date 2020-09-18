@@ -14,10 +14,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
 import forestry.mail.tiles.TileTrader;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiTrader extends GuiForestry<ContainerTrader> {
     private final TileTrader tile;
@@ -31,14 +32,31 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {
-        String name = Translator.translateToLocal(tile.getUnlocalizedTitle());
-        this.minecraft.fontRenderer.drawString(transform, name, textLayout.getCenteredOffset(name), 6, ColourProperties.INSTANCE.get("gui.mail.text"));
+        this.minecraft.fontRenderer.func_238422_b_(
+                transform,
+                tile.getDisplayName(),
+                textLayout.getCenteredOffset(tile.getDisplayName()),
+                6,
+                ColourProperties.INSTANCE.get("gui.mail.text")
+        );
 
-        String receive = Translator.translateToLocal("for.gui.mail.receive");
-        this.minecraft.fontRenderer.drawString(transform, receive, textLayout.getCenteredOffset(receive, 70) + 51, 45, ColourProperties.INSTANCE.get("gui.mail.text"));
+        ITextProperties receive = new TranslationTextComponent("for.gui.mail.receive");
+        this.minecraft.fontRenderer.func_238422_b_(
+                transform,
+                receive,
+                textLayout.getCenteredOffset(receive, 70) + 51,
+                45,
+                ColourProperties.INSTANCE.get("gui.mail.text")
+        );
 
-        String send = Translator.translateToLocal("for.gui.mail.send");
-        this.minecraft.fontRenderer.drawString(transform, send, textLayout.getCenteredOffset(send, 70) + 51, 99, ColourProperties.INSTANCE.get("gui.mail.text"));
+        ITextProperties send = new TranslationTextComponent("for.gui.mail.send");
+        this.minecraft.fontRenderer.func_238422_b_(
+                transform,
+                send,
+                textLayout.getCenteredOffset(send, 70) + 51,
+                99,
+                ColourProperties.INSTANCE.get("gui.mail.text")
+        );
 
         super.drawGuiContainerForegroundLayer(transform, mouseX, mouseY);
     }
@@ -47,7 +65,13 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
     protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-        this.minecraft.fontRenderer.drawString(transform, container.getAddress().getName(), guiLeft + 19, guiTop + 22, ColourProperties.INSTANCE.get("gui.mail.text"));
+        this.minecraft.fontRenderer.drawString(
+                transform,
+                container.getAddress().getName(),
+                guiLeft + 19,
+                guiTop + 22,
+                ColourProperties.INSTANCE.get("gui.mail.text")
+        );
     }
 
     @Override

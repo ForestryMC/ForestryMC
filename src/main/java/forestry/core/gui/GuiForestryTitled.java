@@ -17,7 +17,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.text.ITextComponent;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
-
     protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITextComponent title) {
         super(texture, container, inv, title);
     }
@@ -28,9 +27,9 @@ public abstract class GuiForestryTitled<C extends Container> extends GuiForestry
 
         textLayout.line = 6;
         if (centeredTitle()) {
-            textLayout.drawCenteredLine(transform, title.getString(), 0, ColourProperties.INSTANCE.get("gui.title"));
+            textLayout.drawCenteredLine(transform, title, 0, ColourProperties.INSTANCE.get("gui.title"));
         } else {
-            textLayout.drawLine(transform, title.getString(), 8, ColourProperties.INSTANCE.get("gui.title"));
+            textLayout.drawLine(transform, title, 8, ColourProperties.INSTANCE.get("gui.title"));
         }
         bindTexture(textureFile);
     }

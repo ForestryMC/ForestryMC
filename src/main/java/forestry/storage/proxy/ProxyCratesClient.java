@@ -10,6 +10,7 @@ import forestry.storage.models.CrateModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -23,7 +24,7 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
     }
 
     @Override
-    public void setupClient(FMLClientSetupEvent event) {
+    public void registerModels(ModelRegistryEvent event) {
         ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
         ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
 

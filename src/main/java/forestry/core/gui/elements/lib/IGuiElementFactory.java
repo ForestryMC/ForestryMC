@@ -13,6 +13,7 @@ import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.mutation.IMutation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,7 +54,7 @@ public interface IGuiElementFactory {
 
     IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset);
 
-    IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, String text);
+    IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, ITextComponent text);
 
     IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele);
 

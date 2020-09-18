@@ -7,6 +7,7 @@ import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import genetics.api.mutation.IMutation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,7 +35,6 @@ public class MutationElement extends SelectionElement<IMutation> {
     @Override
     protected void onIndexUpdate(int index, IMutation mutation) {
         IForestrySpeciesRoot root = (IForestrySpeciesRoot) mutation.getRoot();
-        //
         Collection<ITextComponent> conditions = mutation.getSpecialConditions();
         String conditionText;
         if (!conditions.isEmpty()) {
@@ -42,7 +42,8 @@ public class MutationElement extends SelectionElement<IMutation> {
         } else {
             conditionText = String.format("%.0f%%", mutation.getBaseChance());
         }
-        selectedElement.label(conditionText).setStyle(GuiConstants.BLACK_STYLE).setFitText(true).addTooltip(conditions).setXPosition(58);
+
+        selectedElement.label(new StringTextComponent(conditionText)).setStyle(GuiConstants.BLACK_STYLE).setFitText(true).addTooltip(conditions).setXPosition(58);
         selectedElement.drawable(62, 6, MUTATION_ARROW).addTooltip(conditions);
         //
         selectedElement.item(1, 1, root.createStack(mutation.getFirstParent(), root.getTypeForMutation(0)));

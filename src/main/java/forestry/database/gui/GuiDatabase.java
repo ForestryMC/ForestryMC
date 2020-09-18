@@ -190,12 +190,26 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
     public void init() {
         super.init();
 
-        this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + 101, this.guiTop + 6, 80, this.minecraft.fontRenderer.FONT_HEIGHT, null);
+        this.searchField = new TextFieldWidget(
+                this.minecraft.fontRenderer,
+                this.guiLeft + 101,
+                this.guiTop + 6,
+                80,
+                this.minecraft.fontRenderer.FONT_HEIGHT,
+                null
+        );
         this.searchField.setMaxStringLength(50);
         this.searchField.setEnableBackgroundDrawing(false);
         this.searchField.setTextColor(16777215);
 
-        addButton(new GuiDatabaseButton<>(guiLeft - 18, guiTop, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
+        addButton(new GuiDatabaseButton<>(
+                guiLeft - 18,
+                guiTop,
+                DatabaseHelper.ascending,
+                this,
+                DatabaseButton.SORT_DIRECTION_BUTTON,
+                b -> ((GuiDatabaseButton) b).onPressed()
+        ));    //TODO cast should be safe?
 
         updateViewedItems();
     }

@@ -17,9 +17,9 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -79,8 +79,14 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
     protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
-        String str = Translator.translateToLocal("item.forestry.habitat_locator").toUpperCase(Locale.ENGLISH);
-        getFontRenderer().drawString(transform, str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+        ITextComponent str = new TranslationTextComponent("item.forestry.habitat_locator");
+        getFontRenderer().func_238422_b_(
+                transform,
+                str,
+                startX + 8 + textLayout.getCenteredOffset(str, 138),
+                startY + 16,
+                ColourProperties.INSTANCE.get("gui.screen")
+        );
 
         // Set active according to valid biomes.
         Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<>();

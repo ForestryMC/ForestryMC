@@ -96,12 +96,12 @@ public class TextDataElement extends GuiElement {
             for (int i = 0; i < split.size(); i++) {
                 ITextProperties s = split.get(i);
                 int textLength;
-                //TODO correct?
-                if (data.dropshadow) {
-                    textLength = fontRenderer.drawString(transform, s.getString(), x, y, 0);
-                } else {
+                if (data.shadow) {
                     textLength = fontRenderer.drawStringWithShadow(transform, s.getString(), x, y, 0);
+                } else {
+                    textLength = fontRenderer.drawString(transform, s.getString(), x, y, 0);
                 }
+
                 if (i == split.size() - 1) {
                     x += textLength;
                 } else {

@@ -159,7 +159,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
                 IHiveRegistry.HiveType hiveType = ((BlockBeeHive) block).getType();
                 String speciesUid = hiveType.getSpeciesUid();
                 IAllele[] template = BeeManager.beeRoot.getTemplates().getTemplate(speciesUid);
-                if (template != null) {
+                if (template.length > 0) {
                     return BeeManager.beeRoot.getKaryotype().templateAsGenome(template);
                 }
             }

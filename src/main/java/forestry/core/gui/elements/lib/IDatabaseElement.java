@@ -7,36 +7,36 @@ import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
+import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-//TODO textcomponents?
 public interface IDatabaseElement extends IElementLayout {
 
     /**
      * Adds the chromosomeName and the name of the active/not active allele, of the chromosome, with {@link #label}.
      */
-    void addLine(String chromosomeName, IChromosomeType chromosome);
+    void addLine(ITextProperties chromosomeName, IChromosomeType chromosome);
 
     /**
      * Adds the chromosomeName and the result of toString with {@link #label}.
      */
-    <A extends IAllele> void addLine(String chromosomeName, BiFunction<A, Boolean, String> toText, IChromosomeType chromosome);
+    <A extends IAllele> void addLine(ITextProperties chromosomeName, BiFunction<A, Boolean, ITextProperties> toText, IChromosomeType chromosome);
 
-    <A extends IAllele> void addLine(String chromosomeName, BiFunction<A, Boolean, String> toText, IChromosomeType chromosome, boolean dominant);
+    <A extends IAllele> void addLine(ITextProperties chromosomeName, BiFunction<A, Boolean, ITextProperties> toText, IChromosomeType chromosome, boolean dominant);
 
-    void addLine(String leftText, Function<Boolean, String> toText, IChromosomeType chromosome);
+    void addLine(ITextProperties leftText, Function<Boolean, ITextProperties> toText, IChromosomeType chromosome);
 
-    void addLine(String firstText, String secondText, Style firstStyle, Style secondStyle);
+    void addLine(ITextProperties firstText, ITextProperties secondText, Style firstStyle, Style secondStyle);
 
-    void addLine(String leftText, String rightText, boolean dominant);
+    void addLine(ITextProperties leftText, ITextProperties rightText, boolean dominant);
 
-    void addLine(String leftText, Function<Boolean, String> toText, boolean dominant);
+    void addLine(ITextProperties leftText, Function<Boolean, ITextProperties> toText, boolean dominant);
 
-    void addFertilityLine(String chromosomeName, IChromosomeType chromosome, int texOffset);
+    void addFertilityLine(ITextProperties chromosomeName, IChromosomeType chromosome, int texOffset);
 
     void addToleranceLine(IChromosomeType chromosome);
 
@@ -51,7 +51,7 @@ public interface IDatabaseElement extends IElementLayout {
 
     //void addRow(String firstText, String secondText, String thirdText, IIndividual individual, IChromosomeType chromosome);
 
-    void addSpeciesLine(String firstText, @Nullable String secondText, IChromosomeType chromosome);
+    void addSpeciesLine(ITextProperties firstText, @Nullable ITextProperties secondText, IChromosomeType chromosome);
 
     void init(DatabaseMode mode, IIndividual individual, int secondColumn, int thirdColumn);
 

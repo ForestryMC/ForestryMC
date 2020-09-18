@@ -130,8 +130,8 @@ public class Forestry {
         modEventBus.addListener(this::processIMCMessages);
         modEventBus.addListener(this::clientStuff);
         modEventBus.addListener(this::gatherData);
-        EventHandlerCore eventHandlerCore = new EventHandlerCore();
-        modEventBus.register(eventHandlerCore);
+//        modEventBus.register(new EventHandlerCore());
+
         MinecraftForge.EVENT_BUS.register(this);
         Proxies.render = DistExecutor.runForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
         Proxies.common = DistExecutor.runForDist(() -> ProxyClient::new, () -> ProxyCommon::new);

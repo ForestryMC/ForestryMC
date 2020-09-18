@@ -7,8 +7,8 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public interface ITextInstance<I extends ITextInstance<?, ?, ?>, S, R> {
-    default I text(String text) {
-        return add(new StringTextComponent(text));
+    default I text(ITextComponent text) {
+        return add(text);
     }
 
     default I translated(String text, Object... args) {

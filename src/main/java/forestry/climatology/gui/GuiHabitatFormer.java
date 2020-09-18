@@ -122,7 +122,12 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
     }
 
     private void drawCenteredString(MatrixStack transform, String text, int x, int y) {
-        minecraft.fontRenderer.drawStringWithShadow(transform, text, guiLeft + (float) (x - (double) minecraft.fontRenderer.getStringWidth(text) / 2), (float) guiTop + y, 16777215);
+        minecraft.fontRenderer.drawStringWithShadow(
+                transform,
+                text,
+                guiLeft + (float) (x - (double) minecraft.fontRenderer.getStringWidth(text) / 2),
+                (float) guiTop + y, 16777215
+        );
     }
 
     public void setClimate(ClimateType type, String text) {

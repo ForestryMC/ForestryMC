@@ -246,22 +246,22 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
         return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, 0);    //TODO - I have no idea what the last param actually does
     }
 
-    @Override
-    public void moveItems(MatrixStack transform, Slot slot) {
-        if (slot instanceof ISlotTextured) {
-            ISlotTextured textured = (ISlotTextured) slot;
-            ItemStack stack = slot.getStack();
-            if (stack.isEmpty() && slot.isEnabled()) {
-                ResourceLocation location = textured.getBackgroundTexture();
-                if (location != null) {
-                    TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
-                    this.minecraft.getTextureManager().bindTexture(sprite.getAtlasTexture().getTextureLocation());
-                    blit(transform, slot.xPos, slot.yPos, this.getBlitOffset(), 16, 16, sprite);
-                }
-            }
-        }
-        super.moveItems(transform, slot);
-    }
+//    @Override
+//    private void moveItems(MatrixStack transform, Slot slot) {
+//        if (slot instanceof ISlotTextured) {
+//            ISlotTextured textured = (ISlotTextured) slot;
+//            ItemStack stack = slot.getStack();
+//            if (stack.isEmpty() && slot.isEnabled()) {
+//                ResourceLocation location = textured.getBackgroundTexture();
+//                if (location != null) {
+//                    TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
+//                    this.minecraft.getTextureManager().bindTexture(sprite.getAtlasTexture().getTextureLocation());
+//                    blit(transform, slot.xPos, slot.yPos, this.getBlitOffset(), 16, 16, sprite);
+//                }
+//            }
+//        }
+//        super.moveItems(transform, slot);
+//    }
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {

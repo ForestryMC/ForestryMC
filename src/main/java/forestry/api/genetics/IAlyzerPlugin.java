@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -17,13 +18,13 @@ import java.util.Map;
 public interface IAlyzerPlugin {
 
     @OnlyIn(Dist.CLIENT)
-    void drawAnalyticsPage1(Screen gui, ItemStack itemStack);
+    void drawAnalyticsPage1(Screen gui, ItemStack itemStack, MatrixStack transform);
 
     @OnlyIn(Dist.CLIENT)
-    void drawAnalyticsPage2(Screen gui, ItemStack itemStack);
+    void drawAnalyticsPage2(Screen gui, ItemStack itemStack, MatrixStack transform);
 
     @OnlyIn(Dist.CLIENT)
-    void drawAnalyticsPage3(Screen gui, ItemStack itemStack);
+    void drawAnalyticsPage3(Screen gui, ItemStack itemStack, MatrixStack transform);
 
     /**
      * The hints that will be shown in the alyzer gui.
