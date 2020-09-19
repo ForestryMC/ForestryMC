@@ -12,6 +12,7 @@ package forestry.core.utils;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -36,7 +37,7 @@ public abstract class PlayerUtil {
 
     public static String getOwnerName(@Nullable GameProfile profile) {
         if (profile == null) {
-            return Translator.translateToLocal("for.gui.derelict");
+            return new TranslationTextComponent("for.gui.derelict").getString();
         } else {
             return profile.getName();
         }

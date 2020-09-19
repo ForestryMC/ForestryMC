@@ -338,14 +338,12 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 
     @Override
     public IGuiElement addTooltip(ITextComponent line) {
-        //TODO textcomponent
         addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line));
         return this;
     }
 
     @Override
     public IGuiElement addTooltip(Collection<ITextComponent> lines) {
-        //TODO textcomponent
         addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.addAll(lines));
         return this;
     }

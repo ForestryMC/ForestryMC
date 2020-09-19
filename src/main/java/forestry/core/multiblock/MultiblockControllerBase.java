@@ -3,11 +3,11 @@ package forestry.core.multiblock;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.Chunk;
@@ -111,7 +111,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         if (!connectedParts.add(part)) {
             Log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. " +
                             "If you encounter odd behavior, please tear down the machine and rebuild it.",
-                    world.isRemote() ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord);
+                    world.isRemote() ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord
+            );
         }
 
         MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
@@ -244,9 +245,15 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         onDetachBlock(part);
         if (!connectedParts.remove(part)) {
             BlockPos partCoords = part.getCoordinates();
-            Log.warning("[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. " +
+            Log.warning(
+                    "[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. " +
                             "If you encounter anomalies, please tear down the reactor and rebuild it.",
-                    world.isRemote() ? "CLIENT" : "SERVER", part.hashCode(), partCoords.getX(), partCoords.getY(), partCoords.getZ());
+                    world.isRemote() ? "CLIENT" : "SERVER",
+                    part.hashCode(),
+                    partCoords.getX(),
+                    partCoords.getY(),
+                    partCoords.getZ()
+            );
         }
 
         if (connectedParts.isEmpty()) {
@@ -352,7 +359,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         BlockPos otherReferenceCoord = other.getReferenceCoord();
         BlockPos referenceCoord = getReferenceCoord();
         if (otherReferenceCoord != null && referenceCoord != null && referenceCoord.compareTo(otherReferenceCoord) >= 0) {
-            throw new IllegalArgumentException("The controller with the lowest minimum-coord value must consume the one with the higher coords");
+            throw new IllegalArgumentException(
+                    "The controller with the lowest minimum-coord value must consume the one with the higher coords");
         }
 
         Set<IMultiblockComponent> partsToAcquire = new HashSet<>(other.getComponents());
@@ -480,9 +488,19 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
      * @param pos   coordinate of the block being tested
      * @throws MultiblockValidationException if the tested block is not allowed on the machine's side faces
      */
-    protected void isBlockGoodForExteriorLevel(int level, World world, BlockPos pos) throws MultiblockValidationException {
+    protected void isBlockGoodForExteriorLevel(
+            int level,
+            World world,
+            BlockPos pos
+    ) throws MultiblockValidationException {
         Block block = world.getBlockState(pos).getBlock();
-        throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
+        throw new MultiblockValidationException(
+                new TranslationTextComponent(
+                        "for.multiblock.error.invalid.interior",
+                        block.getRegistryName()
+                ).getString(),
+                pos
+        );
     }
 
     /**
@@ -494,7 +512,13 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
      */
     protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
         Block block = world.getBlockState(pos).getBlock();
-        throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
+        throw new MultiblockValidationException(
+                new TranslationTextComponent(
+                        "for.multiblock.error.invalid.interior",
+                        block.getRegistryName()
+                ).getString(),
+                pos
+        );
     }
 
     @Override
@@ -606,7 +630,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     @Override
     public boolean shouldConsume(IMultiblockControllerInternal otherController) {
         if (!otherController.getClass().equals(getClass())) {
-            throw new IllegalArgumentException("Attempting to merge two multiblocks with different master classes - this should never happen!");
+            throw new IllegalArgumentException(
+                    "Attempting to merge two multiblocks with different master classes - this should never happen!");
         }
 
         if (otherController == this) {
@@ -620,7 +645,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             return false;
         } else {
             // Strip dead parts from both and retry
-            Log.warning("[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.", world.isRemote ? "CLIENT" : "SERVER");
+            Log.warning(
+                    "[%s] Encountered two controllers with the same reference coordinate. Auditing connected parts and retrying.",
+                    world.isRemote ? "CLIENT" : "SERVER"
+            );
             auditParts();
             otherController.auditParts();
 
@@ -630,8 +658,18 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             } else if (res > 0) {
                 return false;
             } else {
-                Log.error("My Controller (%d): size (%d), parts: %s", hashCode(), connectedParts.size(), getPartsListString());
-                Log.error("Other Controller (%d): size (%d), coords: %s", otherController.hashCode(), otherController.getComponents().size(), otherController.getPartsListString());
+                Log.error(
+                        "My Controller (%d): size (%d), parts: %s",
+                        hashCode(),
+                        connectedParts.size(),
+                        getPartsListString()
+                );
+                Log.error(
+                        "Other Controller (%d): size (%d), coords: %s",
+                        otherController.hashCode(),
+                        otherController.getComponents().size(),
+                        otherController.getPartsListString()
+                );
                 throw new IllegalArgumentException("[" + (world.isRemote ? "CLIENT" : "SERVER") + "] " +
                         "Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
             }
@@ -660,7 +698,13 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
                 sb.append(", ");
             }
             BlockPos partCoord = part.getCoordinates();
-            sb.append(String.format("(%d: %d, %d, %d)", part.hashCode(), partCoord.getX(), partCoord.getY(), partCoord.getZ()));
+            sb.append(String.format(
+                    "(%d: %d, %d, %d)",
+                    part.hashCode(),
+                    partCoord.getX(),
+                    partCoord.getY(),
+                    partCoord.getZ()
+            ));
             first = false;
         }
 
@@ -679,7 +723,12 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         }
 
         connectedParts.removeAll(deadParts);
-        Log.warning("[%s] Controller found %d dead parts during an audit, %d parts remain attached", world.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size());
+        Log.warning(
+                "[%s] Controller found %d dead parts during an audit, %d parts remain attached",
+                world.isRemote ? "CLIENT" : "SERVER",
+                deadParts.size(),
+                connectedParts.size()
+        );
     }
 
     @Override
@@ -760,7 +809,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             MultiblockLogic partLogic = (MultiblockLogic) part.getMultiblockLogic();
             partLogic.setVisited();
 
-            List<IMultiblockComponent> nearbyParts = MultiblockUtil.getNeighboringParts(world, part); // Chunk-safe on server, but not on client
+            List<IMultiblockComponent> nearbyParts = MultiblockUtil.getNeighboringParts(
+                    world,
+                    part
+            ); // Chunk-safe on server, but not on client
             for (IMultiblockComponent nearbyPart : nearbyParts) {
                 // Ignore different machines
                 MultiblockLogic nearbyPartLogic = (MultiblockLogic) nearbyPart.getMultiblockLogic();

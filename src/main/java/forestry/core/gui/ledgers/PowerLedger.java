@@ -13,10 +13,10 @@ package forestry.core.gui.ledgers;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.core.config.Config;
 import forestry.core.render.TextureManagerForestry;
-import forestry.core.utils.Translator;
 import forestry.energy.EnergyManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class PowerLedger extends Ledger {
     private final EnergyManager energyManager;
@@ -42,16 +42,31 @@ public class PowerLedger extends Ledger {
         int xHeader = x + 22;
         int xBody = x + 12;
 
-        drawHeader(transform, Translator.translateToLocal("for.gui.energy"), xHeader, y + 8);
+        drawHeader(transform, new TranslationTextComponent("for.gui.energy"), xHeader, y + 8);
 
-        drawSubheader(transform, Translator.translateToLocal("for.gui.stored") + ':', xBody, y + 20);
+        drawSubheader(transform, new TranslationTextComponent("for.gui.stored").appendString(":"), xBody, y + 20);
         drawText(transform, Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored()), xBody, y + 32);
 
-        drawSubheader(transform, Translator.translateToLocal("for.gui.maxenergy") + ':', xBody, y + 44);
-        drawText(transform, Config.energyDisplayMode.formatEnergyValue(energyManager.getMaxEnergyStored()), xBody, y + 56);
+        drawSubheader(transform, new TranslationTextComponent("for.gui.maxenergy").appendString(":"), xBody, y + 44);
+        drawText(
+                transform,
+                Config.energyDisplayMode.formatEnergyValue(energyManager.getMaxEnergyStored()),
+                xBody,
+                y + 56
+        );
 
-        drawSubheader(transform, Translator.translateToLocal("for.gui.maxenergyreceive") + ':', xBody, y + 68);
-        drawText(transform, Config.energyDisplayMode.formatEnergyValue(energyManager.getMaxEnergyReceived()), xBody, y + 80);
+        drawSubheader(
+                transform,
+                new TranslationTextComponent("for.gui.maxenergyreceive").appendString(":"),
+                xBody,
+                y + 68
+        );
+        drawText(
+                transform,
+                Config.energyDisplayMode.formatEnergyValue(energyManager.getMaxEnergyReceived()),
+                xBody,
+                y + 80
+        );
     }
 
     @Override

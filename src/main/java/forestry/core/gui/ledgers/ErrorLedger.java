@@ -13,7 +13,6 @@ package forestry.core.gui.ledgers;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.api.core.IErrorState;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -37,7 +36,11 @@ public class ErrorLedger extends Ledger {
         this.state = state;
         if (state != null) {
             //TODO - textcomponent
-            int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), new TranslationTextComponent(state.getUnlocalizedHelp()));
+            int lineHeight = StringUtil.getLineHeight(
+                    maxTextWidth,
+                    getTooltip(),
+                    new TranslationTextComponent(state.getUnlocalizedHelp())
+            );
             maxHeight = lineHeight + 20;
         }
     }
@@ -62,12 +65,10 @@ public class ErrorLedger extends Ledger {
 
         // Write description if fully opened
         if (isFullyOpened()) {
-            //TODO textcomponent
-            y += drawHeader(transform, getTooltip().getString(), xHeader, y);
+            y += drawHeader(transform, getTooltip(), xHeader, y);
             y += 4;
 
-            String helpString = Translator.translateToLocal(state.getUnlocalizedHelp());
-            drawSplitText(transform, helpString, xBody, y, maxTextWidth);
+            drawSplitText(transform, new TranslationTextComponent(state.getUnlocalizedHelp()), xBody, y, maxTextWidth);
         }
     }
 

@@ -14,12 +14,12 @@ import forestry.api.mail.*;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -41,7 +41,7 @@ public class PostalCarrier implements IPostalCarrier {
 
     @Override
     public String getName() {
-        return Translator.translateToLocal("for.gui.addressee." + type);
+        return new TranslationTextComponent("for.gui.addressee." + type).getString();
     }
 
     @Override

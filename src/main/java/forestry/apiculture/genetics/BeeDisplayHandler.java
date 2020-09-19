@@ -14,7 +14,6 @@ import forestry.api.genetics.alyzer.IAlyzerHelper;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ResourceUtil;
-import forestry.core.utils.Translator;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeAllele;
@@ -31,12 +30,29 @@ import javax.annotation.Nullable;
 public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
     SPECIES(BeeChromosomes.SPECIES, 0) {
         @Override
-        public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
+        public void drawAlyzer(
+                IAlyzerHelper helper,
+                IGenome genome,
+                double mouseX,
+                double mouseY,
+                MatrixStack transform
+        ) {
             IOrganismType organismType = helper.getOrganismType();
-            ITextComponent primaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
-            ITextComponent secondaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
+            ITextComponent primaryName = GeneticsUtil.getSpeciesName(
+                    organismType,
+                    genome.getActiveAllele(BeeChromosomes.SPECIES)
+            );
+            ITextComponent secondaryName = GeneticsUtil.getSpeciesName(
+                    organismType,
+                    genome.getActiveAllele(BeeChromosomes.SPECIES)
+            );
 
-            helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES, primaryName, secondaryName);
+            helper.drawSpeciesRow(
+                    new TranslationTextComponent("for.gui.species").getString(),
+                    BeeChromosomes.SPECIES,
+                    primaryName,
+                    secondaryName
+            );
         }
     },
     SPEED(BeeChromosomes.SPEED, -1, 1) {
@@ -45,7 +61,7 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
             IAllele speedAllele = getActiveAllele(genome);
             TranslationTextComponent customSpeed = new TranslationTextComponent(
                     "for.tooltip.worker." +
-                    speedAllele.getLocalisationKey().replaceAll("(.*)\\.", "")
+                            speedAllele.getLocalisationKey().replaceAll("(.*)\\.", "")
             );
             if (ResourceUtil.canTranslate(customSpeed)) {
                 toolTip.singleLine()
@@ -75,7 +91,13 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
     },
     FERTILITY(BeeChromosomes.FERTILITY, -1, "fertility") {
         @Override
-        public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
+        public void drawAlyzer(
+                IAlyzerHelper helper,
+                IGenome genome,
+                double mouseX,
+                double mouseY,
+                MatrixStack transform
+        ) {
             super.drawAlyzer(helper, genome, mouseX, mouseY, transform);
             IAlleleValue<Integer> primaryFertility = getActiveValue(genome);
             IAlleleValue<Integer> secondaryFertility = getInactiveValue(genome);

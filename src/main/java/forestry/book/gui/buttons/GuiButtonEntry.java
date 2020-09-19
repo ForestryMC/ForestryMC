@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,7 +21,14 @@ public class GuiButtonEntry extends Button {
     public final IBookEntry entry;
 
     public GuiButtonEntry(int x, int y, IBookEntry entry, IPressable action) {
-        super(x, y, Minecraft.getInstance().fontRenderer.getStringWidth(entry.getTitle().getString()) + 9, 11, entry.getTitle(), action);
+        super(
+                x,
+                y,
+                Minecraft.getInstance().fontRenderer.getStringWidth(entry.getTitle().getString()) + 9,
+                11,
+                entry.getTitle(),
+                action
+        );
         this.entry = entry;
     }
 

@@ -10,7 +10,6 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;
-import forestry.core.utils.Translator;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
 import net.minecraft.client.Minecraft;
@@ -18,6 +17,8 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Collection;
 
@@ -62,8 +63,8 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
     }
 
     @Override
-    public String getName(IFilterRuleType selectable) {
-        return Translator.translateToLocal("for.gui.filter." + selectable.getUID());
+    public ITextComponent getName(IFilterRuleType selectable) {
+        return new TranslationTextComponent("for.gui.filter." + selectable.getUID());
     }
 
     @Override

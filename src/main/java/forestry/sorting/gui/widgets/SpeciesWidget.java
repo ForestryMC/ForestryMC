@@ -27,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -40,7 +41,15 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
     private final boolean active;
     private final GuiGeneticFilter gui;
 
-    public SpeciesWidget(WidgetManager manager, int xPos, int yPos, Direction facing, int index, boolean active, GuiGeneticFilter gui) {
+    public SpeciesWidget(
+            WidgetManager manager,
+            int xPos,
+            int yPos,
+            Direction facing,
+            int index,
+            boolean active,
+            GuiGeneticFilter gui
+    ) {
         super(manager, xPos, yPos);
         this.facing = facing;
         this.index = index;
@@ -52,7 +61,10 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
                 continue;
             }
             IForestrySpeciesRoot root = (IForestrySpeciesRoot) definition.get();
-            IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.world, manager.minecraft.player.getGameProfile());
+            IBreedingTracker tracker = root.getBreedingTracker(
+                    manager.minecraft.world,
+                    manager.minecraft.player.getGameProfile()
+            );
             for (String uid : tracker.getDiscoveredSpecies()) {
                 IAllele allele = AlleleUtils.getAllele(uid).orElse(null);
                 if (allele instanceof IAlleleSpecies) {
@@ -103,8 +115,8 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
     }
 
     @Override
-    public String getName(IAlleleSpecies selectable) {
-        return selectable.getDisplayName().getString();
+    public ITextComponent getName(IAlleleSpecies selectable) {
+        return selectable.getDisplayName();
     }
 
     @Nullable
@@ -149,7 +161,8 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
             IForestrySpeciesRoot<IIndividual> root = (IForestrySpeciesRoot<IIndividual>) definition.get();
             for (IIndividual individual : root.getIndividualTemplates()) {
                 IAlleleSpecies species = individual.getGenome().getPrimary();
-                ItemStack itemStack = root.getTypes().createStack(root.templateAsIndividual(root.getTemplates().getTemplate(species.getRegistryName().toString())), root.getIconType());
+                ItemStack itemStack = root.getTypes().createStack(root.templateAsIndividual(root.getTemplates().getTemplate(
+                        species.getRegistryName().toString())), root.getIconType());
                 entries.put(species, itemStack);
             }
         }

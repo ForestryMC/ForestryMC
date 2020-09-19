@@ -25,7 +25,6 @@ import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
@@ -44,6 +43,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.MinecraftForge;
@@ -165,15 +165,18 @@ public class ModuleLepidopterology extends BlankForestryModule {
         maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
         allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
         spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
-                spawnButterflysFromLeaves);
+                spawnButterflysFromLeaves
+        );
 
         generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
         generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
-                0.0f, 10.0f);
+                0.0f, 10.0f
+        );
 
         serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
         secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
-                100.0f);
+                100.0f
+        );
 
         parseRarity(config);
         parseCooconLoots(config);
@@ -191,7 +194,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
         String[] defaultRaritys = butterflyRarity.toArray(new String[0]);
 
         Property rarityConf = config.get("butterfly.alleles", "rarity", defaultRaritys);
-        rarityConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.rarity"));
+        rarityConf.setComment(new TranslationTextComponent("for.config.butterfly.alleles.rarity").getString());
 
         String[] configRaritys = rarityConf.getStringList();
         for (String rarity : configRaritys) {
@@ -225,8 +228,12 @@ public class ModuleLepidopterology extends BlankForestryModule {
         Collections.sort(lootList);
         String[] defaultLoot = lootList.toArray(new String[0]);
 
-        Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getRegistryName().toString(), defaultLoot);
-        lootConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.loot"));
+        Property lootConf = config.get(
+                "butterfly.cocoons.alleles.loot",
+                cocoon.getRegistryName().toString(),
+                defaultLoot
+        );
+        lootConf.setComment(new TranslationTextComponent("for.config.butterfly.alleles.loot").getString());
 
         String[] configLoot = lootConf.getStringList();
         for (String loot : configLoot) {

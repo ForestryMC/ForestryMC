@@ -25,8 +25,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -217,7 +215,15 @@ public abstract class Ledger {
         manager.gui.blit(transform, x + 4, y, 256 - width + 4, 0, width - 4, 4); // top edge
         manager.gui.blit(transform, x, y, 0, 0, 4, 4); // top left corner
 
-        manager.gui.blit(transform, x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
+        manager.gui.blit(
+                transform,
+                x + 4,
+                y + 4,
+                256 - width + 4,
+                256 - height + 4,
+                width - 4,
+                height - 4
+        ); // body + bottom + right
 
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
     }
@@ -226,32 +232,46 @@ public abstract class Ledger {
         drawSprite(transform, sprite, x, y, TextureManagerForestry.getInstance().getGuiTextureMap());
     }
 
-    protected void drawSprite(MatrixStack transform, TextureAtlasSprite sprite, int x, int y, ResourceLocation textureMap) {
+    protected void drawSprite(
+            MatrixStack transform,
+            TextureAtlasSprite sprite,
+            int x,
+            int y,
+            ResourceLocation textureMap
+    ) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
         Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
         AbstractGui.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
     }
 
-    protected int drawHeader(MatrixStack transform, String string, int x, int y) {
+    protected int drawHeader(MatrixStack transform, ITextComponent string, int x, int y) {
         return drawShadowText(transform, string, x, y, fontColorHeader);
     }
 
-    protected int drawSubheader(MatrixStack transform, String string, int x, int y) {
+    protected int drawSubheader(MatrixStack transform, ITextComponent string, int x, int y) {
         return drawShadowText(transform, string, x, y, fontColorSubheader);
     }
 
-    protected int drawShadowText(MatrixStack transform, String string, int x, int y, int color) {
+    protected int drawShadowText(MatrixStack transform, ITextComponent string, int x, int y, int color) {
         return drawSplitText(transform, string, x, y, maxTextWidth, color, true);
     }
 
-    protected int drawSplitText(MatrixStack transform, String string, int x, int y, int width) {
+    protected int drawSplitText(MatrixStack transform, ITextComponent string, int x, int y, int width) {
         return drawSplitText(transform, string, x, y, width, fontColorText, false);
     }
 
-    protected int drawSplitText(MatrixStack transform, String string, int x, int y, int width, int color, boolean shadow) {
+    protected int drawSplitText(
+            MatrixStack transform,
+            ITextComponent string,
+            int x,
+            int y,
+            int width,
+            int color,
+            boolean shadow
+    ) {
         int originalY = y;
         Minecraft minecraft = Minecraft.getInstance();
-        List<ITextProperties> strings = minecraft.fontRenderer.func_238425_b_(new StringTextComponent(string), width);
+        List<ITextProperties> strings = minecraft.fontRenderer.func_238425_b_(string, width);
         for (ITextProperties obj : strings) {
             String s = obj.getString();
             if (shadow) {

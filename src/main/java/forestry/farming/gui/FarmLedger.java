@@ -15,7 +15,6 @@ import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.utils.ResourceUtil;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.ITextComponent;
@@ -31,7 +30,6 @@ public class FarmLedger extends Ledger {
         super(ledgerManager, "farm");
         this.delegate = delegate;
 
-        //TODO textcomponent
         int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
         this.maxHeight = titleHeight + 110;
     }
@@ -57,25 +55,35 @@ public class FarmLedger extends Ledger {
             return;
         }
 
-        y += drawHeader(transform, Translator.translateToLocal("for.gui.hydration"), xHeader, y);
+        y += drawHeader(transform, new TranslationTextComponent("for.gui.hydration"), xHeader, y);
         y += 4;
 
-        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.heat") + ':', xBody, y);
+        y += drawSubheader(transform, new TranslationTextComponent("for.gui.hydr.heat").appendString(":"), xBody, y);
         y += 3;
         y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), xBody, y);
         y += 3;
 
-        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.humid") + ':', xBody, y);
+        y += drawSubheader(transform, new TranslationTextComponent("for.gui.hydr.humid").appendString(":"), xBody, y);
         y += 3;
         y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
         y += 3;
 
-        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.rainfall") + ':', xBody, y);
+        y += drawSubheader(
+                transform,
+                new TranslationTextComponent("for.gui.hydr.rainfall").appendString(":"),
+                xBody,
+                y
+        );
         y += 3;
-        y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", xBody, y);
+        y += drawText(
+                transform,
+                StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)",
+                xBody,
+                y
+        );
         y += 3;
 
-        y += drawSubheader(transform, Translator.translateToLocal("for.gui.hydr.overall") + ':', xBody, y);
+        y += drawSubheader(transform, new TranslationTextComponent("for.gui.hydr.overall").appendString(":"), xBody, y);
         y += 3;
         drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationModifier()), xBody, y);
     }

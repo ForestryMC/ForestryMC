@@ -14,12 +14,10 @@ import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.genetics.IMutationCondition;
 import forestry.api.genetics.alleles.AlleleManager;
-import forestry.core.utils.Translator;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -33,7 +31,15 @@ public class MutationConditionHumidity implements IMutationCondition {
     }
 
     @Override
-    public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+    public float getChance(
+            World world,
+            BlockPos pos,
+            IAllele allele0,
+            IAllele allele1,
+            IGenome genome0,
+            IGenome genome1,
+            IClimateProvider climate
+    ) {
         EnumHumidity biomeHumidity = climate.getHumidity();
 
         if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {
@@ -42,15 +48,17 @@ public class MutationConditionHumidity implements IMutationCondition {
         return 1;
     }
 
-    //TODO textcomponent (this will probably crash atm)
     @Override
     public ITextComponent getDescription() {
-        String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity).getString();
+        ITextComponent minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity);
 
         if (minHumidity != maxHumidity) {
-            String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity).getString();
-            //TODO: REPLACE
-            return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString));
+            ITextComponent maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity);
+            return new TranslationTextComponent(
+                    "for.mutation.condition.humidity.range",
+                    minHumidityString,
+                    maxHumidityString
+            );
         } else {
             return new TranslationTextComponent("for.mutation.condition.humidity.single", minHumidityString);
         }

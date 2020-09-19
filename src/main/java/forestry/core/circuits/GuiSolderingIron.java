@@ -19,7 +19,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -54,25 +53,38 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
         );
 
         for (int i = 0; i < 4; i++) {
-            String description;
+            ITextComponent description;
             ItemStack tube = itemInventory.getStackInSlot(i + 2);
             CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
             if (recipe == null) {
-                description = "(" + new TranslationTextComponent("for.gui.noeffect").toString() + ")";
+                description = new StringTextComponent(">")
+                        .append(new TranslationTextComponent("for.gui.noeffect"))
+                        .appendString(")");
             } else {
-                description = recipe.getCircuit().getDisplayName().getString();
+                description = recipe.getCircuit().getDisplayName();
             }
 
             int row = i * 20;
-            getFontRenderer().drawString(transform, description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+            getFontRenderer().func_238422_b_(
+                    transform,
+                    description,
+                    guiLeft + 32,
+                    guiTop + 36 + row,
+                    ColourProperties.INSTANCE.get("gui.screen")
+            );
 
             if (tube.isEmpty()) {
                 ICircuitSocketType socketType = layout.getSocketType();
                 if (CircuitSocketType.FARM.equals(socketType)) {
                     FarmDirection farmDirection = FarmDirection.values()[i];
                     String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
-                    String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
-                    getFontRenderer().drawString(transform, localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+                    getFontRenderer().func_238422_b_(
+                            transform,
+                            new TranslationTextComponent("for.gui.solder." + farmDirectionString),
+                            guiLeft + 17,
+                            guiTop + 36 + row,
+                            ColourProperties.INSTANCE.get("gui.screen")
+                    );
                 }
             }
         }
@@ -82,8 +94,22 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
     public void init() {
         super.init();
 
-        addButton(new Button(guiLeft + 12, guiTop + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
-        addButton(new Button(guiLeft + 130, guiTop + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
+        addButton(new Button(
+                guiLeft + 12,
+                guiTop + 10,
+                12,
+                18,
+                new StringTextComponent("<"),
+                b -> ContainerSolderingIron.regressSelection(0)
+        ));
+        addButton(new Button(
+                guiLeft + 130,
+                guiTop + 10,
+                12,
+                18,
+                new StringTextComponent(">"),
+                b -> ContainerSolderingIron.advanceSelection(0)
+        ));
     }
 
     @Override

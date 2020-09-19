@@ -6,17 +6,20 @@ import forestry.core.config.Constants;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.gui.widgets.WidgetScrollBar;
-import forestry.core.utils.Translator;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
 public class SelectionWidget extends Widget {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/filter_selection.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "/filter_selection.png"
+    );
     final WidgetScrollBar scrollBar;
     @Nullable
     private SelectionLogic logic;
@@ -65,9 +68,9 @@ public class SelectionWidget extends Widget {
         );
         logic.draw(transform);
 
-        manager.minecraft.fontRenderer.drawString(
+        manager.minecraft.fontRenderer.func_238422_b_(
                 transform,
-                Translator.translateToLocal("for.gui.filter.seletion"),
+                new TranslationTextComponent("for.gui.filter.seletion"),
                 startX + xPos + 12,
                 startY + yPos + 4,
                 manager.gui.getFontColor().get("gui.title")

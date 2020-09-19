@@ -1,7 +1,7 @@
 package forestry.arboriculture;
 
 import forestry.api.arboriculture.*;
-import forestry.core.utils.Translator;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -14,10 +14,13 @@ public class WoodHelper {
 
         if (woodType instanceof EnumForestryWoodType) {
             String customUnlocalizedName = "block.forestry." + blockKind + "." + woodType;
-            if (Translator.canTranslateToLocal(customUnlocalizedName)) {
+            if (I18n.hasKey(customUnlocalizedName)) {
                 displayName = new TranslationTextComponent(customUnlocalizedName);
             } else {
-                displayName = new TranslationTextComponent("for." + blockKind + ".grammar", new TranslationTextComponent("for.trees.woodType." + woodType));
+                displayName = new TranslationTextComponent(
+                        "for." + blockKind + ".grammar",
+                        new TranslationTextComponent("for.trees.woodType." + woodType)
+                );
             }
         } else if (woodType instanceof EnumVanillaWoodType) {
             displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getDisplayName();

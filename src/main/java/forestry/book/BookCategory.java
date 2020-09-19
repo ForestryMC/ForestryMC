@@ -3,8 +3,8 @@ package forestry.book;
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookEntryBuilder;
-import forestry.core.utils.Translator;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -70,8 +70,8 @@ public class BookCategory implements IBookCategory {
     }
 
     @Override
-    public String getLocalizedName() {
-        return Translator.translateToLocal("for.gui.book.category." + name + ".title");
+    public TranslationTextComponent getLocalizedName() {
+        return new TranslationTextComponent("for.gui.book.category." + name + ".title");
     }
 
     @Override

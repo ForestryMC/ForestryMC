@@ -24,13 +24,20 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class FarmLogicSlot extends Widget {
 
     private final IFarmControllerInternal farmController;
     private final FarmDirection farmDirection;
 
-    public FarmLogicSlot(IFarmControllerInternal farmController, WidgetManager manager, int xPos, int yPos, FarmDirection farmDirection) {
+    public FarmLogicSlot(
+            IFarmControllerInternal farmController,
+            WidgetManager manager,
+            int xPos,
+            int yPos,
+            FarmDirection farmDirection
+    ) {
         super(manager, xPos, yPos);
         this.farmController = farmController;
         this.farmDirection = farmDirection;
@@ -73,8 +80,21 @@ public class FarmLogicSlot extends Widget {
         public void refresh() {
             toolTip.clear();
             toolTip.add(getProperties().getDisplayName(getLogic().isManual()));
-            toolTip.add("Fertilizer: " + Math.round(getProperties().getFertilizerConsumption(farmController) * Config.fertilizerModifier));
-            toolTip.add("Water: " + getProperties().getWaterConsumption(farmController, farmController.getFarmLedgerDelegate().getHydrationModifier()));
+            toolTip.add(
+                    new TranslationTextComponent("for.gui.fertilizer")
+                            .appendString(": ")
+                            .appendString(String.valueOf(Math.round(getProperties().getFertilizerConsumption(
+                                    farmController) * Config.fertilizerModifier
+                            )))
+            );
+            toolTip.add(
+                    new TranslationTextComponent("for.gui.water")
+                            .appendString(": ")
+                            .appendString(String.valueOf(getProperties().getWaterConsumption(
+                                    farmController,
+                                    farmController.getFarmLedgerDelegate().getHydrationModifier()
+                            )))
+            );
         }
     };
 }

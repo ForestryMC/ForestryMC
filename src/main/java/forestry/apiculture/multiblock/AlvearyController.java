@@ -29,13 +29,13 @@ import forestry.core.multiblock.MultiblockValidationException;
 import forestry.core.multiblock.RectangularMultiblockControllerBase;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.ParticleRender;
-import forestry.core.utils.Translator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
@@ -175,7 +175,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
                 BlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
                 if (!block.isIn(BlockTags.WOODEN_SLABS)) {
-                    throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
+                    throw new MultiblockValidationException(
+                            new TranslationTextComponent("for.multiblock.alveary.error.needSlabs").getString()
+                    );
                 }
             }
         }
@@ -191,7 +193,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
                 BlockPos pos = new BlockPos(airX, airY, airZ);
                 BlockState blockState = world.getBlockState(pos);
                 if (blockState.isOpaqueCube(world, pos)) {
-                    throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSpace"));
+                    throw new MultiblockValidationException(
+                            new TranslationTextComponent("for.multiblock.alveary.error.needSpace").getString()
+                    );
                 }
             }
         }
@@ -200,14 +204,18 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
     @Override
     protected void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
         if (level == 2 && !(part instanceof TileAlvearyPlain)) {
-            throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needPlainOnTop"));
+            throw new MultiblockValidationException(
+                    new TranslationTextComponent("for.multiblock.alveary.error.needPlainOnTop").getString()
+            );
         }
     }
 
     @Override
     protected void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
         if (!(part instanceof TileAlvearyPlain)) {
-            throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needPlainInterior"));
+            throw new MultiblockValidationException(
+                    new TranslationTextComponent("for.multiblock.alveary.error.needPlainInterior").getString()
+            );
         }
     }
 
@@ -276,10 +284,30 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
                 fxY += upSpread;
 
                 // display fx on all 4 sides
-                ParticleRender.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-                ParticleRender.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-                ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
-                ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
+                ParticleRender.addEntityHoneyDustFX(
+                        world,
+                        fxX - distanceFromCenter,
+                        fxY,
+                        fxZ + leftRightSpreadFromCenter
+                );
+                ParticleRender.addEntityHoneyDustFX(
+                        world,
+                        fxX + distanceFromCenter,
+                        fxY,
+                        fxZ + leftRightSpreadFromCenter
+                );
+                ParticleRender.addEntityHoneyDustFX(
+                        world,
+                        fxX + leftRightSpreadFromCenter,
+                        fxY,
+                        fxZ - distanceFromCenter
+                );
+                ParticleRender.addEntityHoneyDustFX(
+                        world,
+                        fxX + leftRightSpreadFromCenter,
+                        fxY,
+                        fxZ + distanceFromCenter
+                );
             }
         }
         listener.updateClientSide(false);

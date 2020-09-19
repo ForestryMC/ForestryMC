@@ -13,12 +13,11 @@ package forestry.core.genetics.mutations;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.DayMonth;
-import forestry.core.utils.Translator;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.Calendar;
@@ -34,7 +33,15 @@ public class MutationConditionTimeLimited implements IMutationCondition {
     }
 
     @Override
-    public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+    public float getChance(
+            World world,
+            BlockPos pos,
+            IAllele allele0,
+            IAllele allele1,
+            IGenome genome0,
+            IGenome genome1,
+            IClimateProvider climate
+    ) {
         DayMonth now = new DayMonth();
 
         // If we are equal to start day, return 1.
@@ -58,6 +65,6 @@ public class MutationConditionTimeLimited implements IMutationCondition {
 
     @Override
     public ITextComponent getDescription() {
-        return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.date").replace("%START", start.toString()).replace("%END", end.toString()));
+        return new TranslationTextComponent("for.mutation.condition.date", start.toString(), end.toString());
     }
 }

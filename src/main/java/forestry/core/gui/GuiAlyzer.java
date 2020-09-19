@@ -23,7 +23,6 @@ import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
@@ -164,7 +163,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
                 inactive.getDisplayName(),
                 ColourProperties.INSTANCE.get("gui.screen"),
                 getColorCoding(active.isDominant()),
-                getColorCoding(inactive.isDominant()));
+                getColorCoding(inactive.isDominant())
+        );
     }
 
     public final void drawSpeciesRow(
@@ -298,7 +298,11 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
         textLayout.newLine();
         textLayout.newLine();
 
-        textLayout.drawLine(transform, new TranslationTextComponent("for.gui.alyzer.overview").appendString(":"), COLUMN_0 + 4);
+        textLayout.drawLine(
+                transform,
+                new TranslationTextComponent("for.gui.alyzer.overview").appendString(":"),
+                COLUMN_0 + 4
+        );
         textLayout.newLine();
         textLayout.drawLine(transform, new TranslationTextComponent("for.gui.general"), COLUMN_0 + 4);
         textLayout.newLine();
@@ -314,7 +318,11 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
     public final void drawAnalyticsPageClassification(MatrixStack transform, IIndividual individual) {
         textLayout.startPage();
 
-        textLayout.drawLine(transform, new TranslationTextComponent("for.gui.alyzer.classification").appendString(":"), 12);
+        textLayout.drawLine(
+                transform,
+                new TranslationTextComponent("for.gui.alyzer.classification").appendString(":"),
+                12
+        );
         textLayout.newLine();
 
         Stack<IClassification> hierarchy = new Stack<>();
@@ -338,8 +346,18 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
                 continue;
             }
 
-            textLayout.drawLine(transform, ITextComponent.func_241827_a_(group.getScientific()), x, group.getLevel().getColour());
-            textLayout.drawLine(transform, ITextComponent.func_241827_a_(group.getLevel().name()), 170, group.getLevel().getColour());
+            textLayout.drawLine(
+                    transform,
+                    ITextComponent.func_241827_a_(group.getScientific()),
+                    x,
+                    group.getLevel().getColour()
+            );
+            textLayout.drawLine(
+                    transform,
+                    ITextComponent.func_241827_a_(group.getLevel().name()),
+                    170,
+                    group.getLevel().getColour()
+            );
             textLayout.newLineCompressed();
             x += 12;
         }
@@ -397,7 +415,11 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
     @SuppressWarnings("unchecked")
     public void drawAnalyticsPageMutations(MatrixStack transform, IIndividual individual) {
         textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
-        textLayout.drawLine(transform, new TranslationTextComponent("for.gui.beealyzer.mutations").appendString(":"), COLUMN_0);
+        textLayout.drawLine(
+                transform,
+                new TranslationTextComponent("for.gui.beealyzer.mutations").appendString(":"),
+                COLUMN_0
+        );
         textLayout.newLine();
 
         //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
@@ -436,24 +458,47 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
         textLayout.endPage();
     }
 
-    public void drawMutationInfo(MatrixStack transform, IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
+    public void drawMutationInfo(
+            MatrixStack transform,
+            IMutation combination,
+            IAllele species,
+            int x,
+            IBreedingTracker breedingTracker
+    ) {
         Map<ResourceLocation, ItemStack> iconStacks = ((IForestrySpeciesRoot) combination.getRoot()).getAlyzerPlugin().getIconStacks();
 
         ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getRegistryName());
         widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));
 
-        drawProbabilityArrow(transform, combination, guiLeft + x + 18, guiTop + textLayout.getLineY() + 4, breedingTracker);
+        drawProbabilityArrow(
+                transform,
+                combination,
+                guiLeft + x + 18,
+                guiTop + textLayout.getLineY() + 4,
+                breedingTracker
+        );
 
         IAllele result = combination.getTemplate()[BeeChromosomes.SPECIES.ordinal()];
         ItemStack resultBee = iconStacks.get(result.getRegistryName());
         widgetManager.add(new ItemStackWidget(widgetManager, x + 33, textLayout.getLineY(), resultBee));
     }
 
-    private void drawUnknownMutation(MatrixStack transform, IMutation combination, int x, IBreedingTracker breedingTracker) {
+    private void drawUnknownMutation(
+            MatrixStack transform,
+            IMutation combination,
+            int x,
+            IBreedingTracker breedingTracker
+    ) {
 
         drawQuestionMark(transform, guiLeft + x, guiTop + textLayout.getLineY());
 
-        drawProbabilityArrow(transform, combination, guiLeft + x + 18, guiTop + textLayout.getLineY() + 4, breedingTracker);
+        drawProbabilityArrow(
+                transform,
+                combination,
+                guiLeft + x + 18,
+                guiTop + textLayout.getLineY() + 4,
+                breedingTracker
+        );
 
         drawQuestionMark(transform, guiLeft + x + 32, guiTop + textLayout.getLineY());
     }
@@ -463,7 +508,13 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
         blit(transform, x, y, 78, 240, 16, 16);
     }
 
-    private void drawProbabilityArrow(MatrixStack transform, IMutation combination, int x, int y, IBreedingTracker breedingTracker) {
+    private void drawProbabilityArrow(
+            MatrixStack transform,
+            IMutation combination,
+            int x,
+            int y,
+            IBreedingTracker breedingTracker
+    ) {
         float chance = combination.getBaseChance();
         int line = 247;
         int column = 100;
@@ -503,7 +554,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
     public void drawToleranceInfo(MatrixStack transform, IAlleleValue<EnumTolerance> toleranceAllele, int x) {
         int textColor = getColorCoding(toleranceAllele.isDominant());
         EnumTolerance tolerance = toleranceAllele.getValue();
-        ITextProperties text = ITextComponent.func_241827_a_("(" + toleranceAllele.getDisplayName().getString() + ")");
+        ITextProperties text = new StringTextComponent("(")
+                .append(toleranceAllele.getDisplayName()).appendString(")");
 
         // Enable correct lighting.
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);

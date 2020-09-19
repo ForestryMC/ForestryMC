@@ -24,8 +24,7 @@ public class SelectionLogic<S> implements IScrollable {
         this.widget = widget;
         this.provider = provider;
         this.entries = provider.getEntries();
-        this.comparator = (S f, S s) -> provider.getName(f).compareToIgnoreCase(provider.getName(s));
-
+        this.comparator = (S f, S s) -> provider.getName(f).getString().compareToIgnoreCase(provider.getName(s).getString());
     }
 
     public boolean isSame(ISelectableProvider provider) {
@@ -43,7 +42,11 @@ public class SelectionLogic<S> implements IScrollable {
                 if (index >= sorted.size()) {
                     break Y;
                 }
-                visible.add(new SelectableWidget(sorted.get(index), widget.getX() + 12 + x * 16, widget.getY() + 16 + y * 16));
+                visible.add(new SelectableWidget(
+                        sorted.get(index),
+                        widget.getX() + 12 + x * 16,
+                        widget.getY() + 16 + y * 16
+                ));
             }
         }
     }
@@ -61,14 +64,17 @@ public class SelectionLogic<S> implements IScrollable {
             pattern = Pattern.compile(searchText.toLowerCase(Locale.ENGLISH), Pattern.CASE_INSENSITIVE);
         } catch (Throwable ignore) {
             try {
-                pattern = Pattern.compile(Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)), Pattern.CASE_INSENSITIVE);
+                pattern = Pattern.compile(
+                        Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)),
+                        Pattern.CASE_INSENSITIVE
+                );
             } catch (Throwable e) {
                 return;
             }
         }
 
         for (S entry : entries) {
-            String name = provider.getName(entry);
+            String name = provider.getName(entry).getString();
             if (pattern.matcher(name.toLowerCase(Locale.ENGLISH)).find()) {
                 sorted.add(entry);
             }

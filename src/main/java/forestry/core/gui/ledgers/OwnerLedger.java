@@ -15,7 +15,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Translator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -52,7 +51,7 @@ public class OwnerLedger extends Ledger {
 
         // Draw description
         if (isFullyOpened()) {
-            drawHeader(transform, Translator.translateToLocal("for.gui.owner"), x + 22, y + 8);
+            drawHeader(transform, new TranslationTextComponent("for.gui.owner"), x + 22, y + 8);
             drawText(transform, PlayerUtil.getOwnerName(owner), x + 22, y + 20);
         }
     }

@@ -13,9 +13,6 @@ package forestry.core.circuits;
 
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
-import forestry.core.utils.Translator;
-import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class CircuitLayout implements ICircuitLayout {

@@ -14,12 +14,10 @@ import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IMutationCondition;
 import forestry.api.genetics.alleles.AlleleManager;
-import forestry.core.utils.Translator;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -34,7 +32,15 @@ public class MutationConditionTemperature implements IMutationCondition {
     }
 
     @Override
-    public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+    public float getChance(
+            World world,
+            BlockPos pos,
+            IAllele allele0,
+            IAllele allele1,
+            IGenome genome0,
+            IGenome genome1,
+            IClimateProvider climate
+    ) {
         EnumTemperature biomeTemperature = climate.getTemperature();
 
         if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {
@@ -45,12 +51,11 @@ public class MutationConditionTemperature implements IMutationCondition {
 
     @Override
     public ITextComponent getDescription() {
-        //TODO textcomponent
-        String minString = AlleleManager.climateHelper.toDisplay(minTemperature).getString();
+        ITextComponent minString = AlleleManager.climateHelper.toDisplay(minTemperature);
 
         if (minTemperature != maxTemperature) {
-            String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature).getString();
-            return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString));
+            ITextComponent maxString = AlleleManager.climateHelper.toDisplay(maxTemperature);
+            return new TranslationTextComponent("for.mutation.condition.temperature.range", minString, maxString);
         } else {
             return new TranslationTextComponent("for.mutation.condition.temperature.single", minString);
         }

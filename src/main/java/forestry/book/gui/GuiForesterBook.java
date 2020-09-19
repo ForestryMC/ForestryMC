@@ -24,7 +24,10 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/almanac.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "/almanac/almanac.png"
+    );
     static final int LEFT_PAGE_START_X = 16;
     static final int RIGHT_PAGE_START_X = 132;
     static final int PAGE_START_Y = 12;
@@ -54,9 +57,23 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
         super.init();
         this.buttons.clear();
         if (hasButtons()) {
-            GuiButtonPage leftButton = addButton(new GuiButtonPage(guiLeft + 24, guiTop + Y_SIZE - 20, true, this::actionPerformed));
-            GuiButtonPage rightButton = addButton(new GuiButtonPage(guiLeft + X_SIZE - 44, guiTop + Y_SIZE - 20, false, this::actionPerformed));
-            GuiButtonBack backButton = addButton(new GuiButtonBack(guiLeft + X_SIZE / 2 - 12, guiTop + Y_SIZE - 20, this::actionPerformed));
+            GuiButtonPage leftButton = addButton(new GuiButtonPage(
+                    guiLeft + 24,
+                    guiTop + Y_SIZE - 20,
+                    true,
+                    this::actionPerformed
+            ));
+            GuiButtonPage rightButton = addButton(new GuiButtonPage(
+                    guiLeft + X_SIZE - 44,
+                    guiTop + Y_SIZE - 20,
+                    false,
+                    this::actionPerformed
+            ));
+            GuiButtonBack backButton = addButton(new GuiButtonBack(
+                    guiLeft + X_SIZE / 2 - 12,
+                    guiTop + Y_SIZE - 20,
+                    this::actionPerformed
+            ));
             initButtons(leftButton, rightButton, backButton);
         }
     }
@@ -84,8 +101,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 
         boolean unicode = minecraft.fontRenderer.getBidiFlag();
         //minecraft.fontRenderer.setBidiFlag(true);
-        //TODO textcomponent
-        //drawCenteredString(minecraft.fontRenderer, title.applyTextStyle(TextFormatting.UNDERLINE).getString(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
+        //drawCenteredString(minecraft.fontRenderer, title.applyTextStyle(TextFormatting.UNDERLINE), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 
         drawText(transform);
 
@@ -103,7 +119,16 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
             List<ITextComponent> tooltip = getTooltip(mouseX, mouseY);
             if (!tooltip.isEmpty()) {
                 MainWindow mainWindow = getMC().getMainWindow();
-                GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getScaledWidth(), mainWindow.getScaledHeight(), -1, getMC().fontRenderer);
+                GuiUtils.drawHoveringText(
+                        transform,
+                        tooltip,
+                        mouseX,
+                        mouseY,
+                        mainWindow.getScaledWidth(),
+                        mainWindow.getScaledHeight(),
+                        -1,
+                        getMC().fontRenderer
+                );
             }
         }
     }

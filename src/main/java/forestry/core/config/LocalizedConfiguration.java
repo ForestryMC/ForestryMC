@@ -12,7 +12,8 @@ package forestry.core.config;
 
 import forestry.core.config.forge_old.Configuration;
 import forestry.core.config.forge_old.Property;
-import forestry.core.utils.Translator;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class LocalizedConfiguration extends Configuration {
     public boolean getBooleanLocalizedFormatted(String category, String name, boolean defaultValue, Object... args) {
         String langKey = "for.config." + category + '.' + name;
         String commentKey = langKey + '.' + "comment";
-        String comment = Translator.translateToLocalFormatted(commentKey, args);
+        String comment = new TranslationTextComponent(commentKey, args).getString();
         return getBoolean(name, category, defaultValue, comment, langKey);
     }
 
@@ -56,10 +57,16 @@ public class LocalizedConfiguration extends Configuration {
         return getStringLocalizedFormatted(category, name, defaultValue, validValues, "");
     }
 
-    public String getStringLocalizedFormatted(String category, String name, String defaultValue, String[] validValues, Object... args) {
+    public String getStringLocalizedFormatted(
+            String category,
+            String name,
+            String defaultValue,
+            String[] validValues,
+            Object... args
+    ) {
         String langKey = "for.config." + category + '.' + name;
         String commentKey = langKey + '.' + "comment";
-        String comment = Translator.translateToLocalFormatted(commentKey, args);
+        String comment = new TranslationTextComponent(commentKey, args).getString();
 
         Property prop = this.get(category, name, defaultValue);
         prop.setValidValues(validValues);
@@ -72,8 +79,8 @@ public class LocalizedConfiguration extends Configuration {
         String langKey = "for.config." + category + '.' + name;
         String commentKey = langKey + '.' + "comment";
         String comment = "";
-        if (Translator.canTranslateToLocal(commentKey)) {
-            comment = Translator.translateToLocal(commentKey);
+        if (I18n.hasKey(commentKey)) {
+            comment = new TranslationTextComponent(commentKey).getString();
         }
 
         Property prop = this.get(category, name, defaultValue.name());
@@ -103,9 +110,10 @@ public class LocalizedConfiguration extends Configuration {
         String langKey = "for.config." + category + '.' + name;
         String commentKey = langKey + '.' + "comment";
         String comment = "";
-        if (Translator.canTranslateToLocal(commentKey)) {
-            comment = Translator.translateToLocal(commentKey);
+        if (I18n.hasKey(commentKey)) {
+            comment = new TranslationTextComponent(commentKey).getString();
         }
+
         return super.getStringList(name, category, defaultValue, comment);
     }
 
@@ -113,10 +121,16 @@ public class LocalizedConfiguration extends Configuration {
         return getStringListLocalizedFormatted(category, name, defaultValue, validValues, "");
     }
 
-    public String[] getStringListLocalizedFormatted(String category, String name, String[] defaultValue, String[] validValues, Object... args) {
+    public String[] getStringListLocalizedFormatted(
+            String category,
+            String name,
+            String[] defaultValue,
+            String[] validValues,
+            Object... args
+    ) {
         String langKey = "for.config." + category + '.' + name;
         String commentKey = langKey + '.' + "comment";
-        String comment = Translator.translateToLocalFormatted(commentKey, args);
+        String comment = new TranslationTextComponent(commentKey, args).getString();
 
         Property prop = this.get(category, name, defaultValue);
         prop.setLanguageKey(langKey);
@@ -138,10 +152,17 @@ public class LocalizedConfiguration extends Configuration {
         return getFloatLocalizedFormatted(category, name, defaultValue, minValue, maxValue, "");
     }
 
-    public float getFloatLocalizedFormatted(String category, String name, float defaultValue, float minValue, float maxValue, Object... args) {
+    public float getFloatLocalizedFormatted(
+            String category,
+            String name,
+            float defaultValue,
+            float minValue,
+            float maxValue,
+            Object... args
+    ) {
         String langKey = "for.config." + category + '.' + name;
         String commentKey = langKey + '.' + "comment";
-        String comment = Translator.translateToLocalFormatted(commentKey, args);
+        String comment = new TranslationTextComponent(commentKey, args).getString();
         return getFloat(name, category, defaultValue, minValue, maxValue, comment, langKey);
     }
 
@@ -149,16 +170,23 @@ public class LocalizedConfiguration extends Configuration {
         return getIntLocalizedFormatted(category, name, defaultValue, minValue, maxValue, "");
     }
 
-    public int getIntLocalizedFormatted(String category, String name, int defaultValue, int minValue, int maxValue, Object... args) {
+    public int getIntLocalizedFormatted(
+            String category,
+            String name,
+            int defaultValue,
+            int minValue,
+            int maxValue,
+            Object... args
+    ) {
         String langKey = "for.config." + category + '.' + name;
         String commentKey = langKey + '.' + "comment";
-        String comment = Translator.translateToLocalFormatted(commentKey, args);
+        String comment = new TranslationTextComponent(commentKey, args).getString();
         return getInt(name, category, defaultValue, minValue, maxValue, comment, langKey);
     }
 
     public void addCategoryCommentLocalized(String category) {
         String langKey = "for.config." + category + '.' + "category_comment";
-        setCategoryComment(category, WordUtils.wrap(Translator.translateToLocal(langKey), 100));
+        setCategoryComment(category, WordUtils.wrap(new TranslationTextComponent(langKey).getString(), 100));
     }
 
 }

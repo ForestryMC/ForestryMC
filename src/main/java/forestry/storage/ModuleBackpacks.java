@@ -24,7 +24,10 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.features.CoreItems;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.utils.*;
+import forestry.core.utils.IMCUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -36,6 +39,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -78,7 +82,8 @@ public class ModuleBackpacks extends BlankForestryModule {
         }
 
         if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-            Predicate<ItemStack> filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter("rootButterflies");
+            Predicate<ItemStack> filter = BackpackManager.backpackInterface.createNaturalistBackpackFilter(
+                    "rootButterflies");
             definition = new BackpackDefinition(new Color(0x995b31), Color.WHITE, filter);
             BackpackManager.backpackInterface.registerBackpackDefinition("lepidopterist", definition);
         }
@@ -370,7 +375,8 @@ public class ModuleBackpacks extends BlankForestryModule {
     }
 
     private void handleBackpackConfig(LocalizedConfiguration config, String backpackUid) {
-        BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.backpackInterface.getBackpackDefinition(backpackUid);
+        BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.backpackInterface.getBackpackDefinition(
+                backpackUid);
         if (backpackDefinition == null) {
             return;
         }
@@ -389,8 +395,15 @@ public class ModuleBackpacks extends BlankForestryModule {
                     defaultValidItems = defaultAcceptedItemNames.toArray(new String[0]);
                 }
 
-                Property backpackConf = config.get("backpacks." + backpackUid, "item.stacks.accepted", defaultValidItems);
-                backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.item.stacks.format", backpackUid));
+                Property backpackConf = config.get(
+                        "backpacks." + backpackUid,
+                        "item.stacks.accepted",
+                        defaultValidItems
+                );
+                backpackConf.setComment(new TranslationTextComponent(
+                        "for.config.backpacks.item.stacks.format",
+                        backpackUid
+                ).getString());
 
                 String[] backpackItemList = backpackConf.getStringList();
                 //				List<ItemStack> backpackItems = ItemStackUtil.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);	//TODO tags, new config
@@ -408,8 +421,15 @@ public class ModuleBackpacks extends BlankForestryModule {
                     defaultOreRegexpNames = defaultOreRegexpList.toArray(new String[0]);
                 }
 
-                Property backpackConf = config.get("backpacks." + backpackUid, "ore.dict.accepted", defaultOreRegexpNames);
-                backpackConf.setComment(Translator.translateToLocalFormatted("for.config.backpacks.ore.dict.format", backpackUid));
+                Property backpackConf = config.get(
+                        "backpacks." + backpackUid,
+                        "ore.dict.accepted",
+                        defaultOreRegexpNames
+                );
+                backpackConf.setComment(new TranslationTextComponent(
+                        "for.config.backpacks.ore.dict.format",
+                        backpackUid
+                ).getString());
 
                 //				for (String name : OreDictionary.getOreNames()) {
                 //					if (name == null) {

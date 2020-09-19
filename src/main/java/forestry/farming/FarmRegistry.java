@@ -8,10 +8,10 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -91,7 +91,12 @@ public final class FarmRegistry implements IFarmRegistry {
         List<String> defaultFertilizers = new ArrayList<>(defaultEntries.values());
         Collections.sort(defaultFertilizers);
         String[] defaultSortedFertilizers = defaultFertilizers.toArray(new String[0]);
-        Property property = config.get("fertilizers", "items", defaultSortedFertilizers, Translator.translateToLocal("for.config.farm.fertilizers.items"));
+        Property property = config.get(
+                "fertilizers",
+                "items",
+                defaultSortedFertilizers,
+                new TranslationTextComponent("for.config.farm.fertilizers.items").getString()
+        );
 
         ImmutableMap<ItemStack, Integer> fertilizerMap = checkConfig(property, defaultEntries);
         fertilizer = new FertilizerConfig(fertilizerMap);
@@ -118,7 +123,10 @@ public final class FarmRegistry implements IFarmRegistry {
         return fertilizerMap.build();
     }
 
-    private Map<String, String> parseConfig(String[] fertilizerList, ImmutableMap.Builder<ItemStack, Integer> fertilizerMap) {
+    private Map<String, String> parseConfig(
+            String[] fertilizerList,
+            ImmutableMap.Builder<ItemStack, Integer> fertilizerMap
+    ) {
         Map<String, String> configEntries = new HashMap<>();
         for (String entry : fertilizerList) {
             String[] spited = entry.split(";");
@@ -127,7 +135,10 @@ public final class FarmRegistry implements IFarmRegistry {
                 continue;
             }
             String itemName = spited[0];
-            ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, 0);//TODO oredict OreDictionary.WILDCARD_VALUE);
+            ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(
+                    itemName,
+                    0
+            );//TODO oredict OreDictionary.WILDCARD_VALUE);
             if (fertilizerItem == null || fertilizerItem.isEmpty()) {
                 Log.error("Forestry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
                 continue;

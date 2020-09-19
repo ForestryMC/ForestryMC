@@ -6,6 +6,7 @@
 package forestry.api.book;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -69,7 +70,7 @@ public interface IBookCategory {
     /**
      * @return the localized name of this category.
      */
-    String getLocalizedName();
+    TranslationTextComponent getLocalizedName();
 
     /**
      * Currently unused

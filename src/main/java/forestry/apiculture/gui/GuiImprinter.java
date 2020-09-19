@@ -21,13 +21,13 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 import genetics.api.GeneticHelper;
 import genetics.api.organism.IOrganism;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,21 +61,46 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+        ITextComponent title = new TranslationTextComponent("for.gui.imprinter");
 
-        int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter"))) / 2;
-        getFontRenderer().drawString(transform, Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+        int offset = (138 - getFontRenderer().getStringWidth(title.getString())) / 2;
+        getFontRenderer().func_238422_b_(
+                transform,
+                title,
+                startX + 8 + offset,
+                startY + 16,
+                ColourProperties.INSTANCE.get("gui.screen")
+        );
 
         IAlleleBeeSpecies primary = itemInventory.getPrimary();
         drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-        getFontRenderer().drawString(transform, primary.getDisplayName().getString(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+        getFontRenderer().func_238422_b_(
+                transform,
+                primary.getDisplayName(),
+                startX + 32,
+                startY + 36,
+                ColourProperties.INSTANCE.get("gui.screen")
+        );
 
         IAlleleBeeSpecies secondary = itemInventory.getSecondary();
         drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-        getFontRenderer().drawString(transform, secondary.getDisplayName().getString(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+        getFontRenderer().func_238422_b_(
+                transform,
+                secondary.getDisplayName(),
+                startX + 32,
+                startY + 56,
+                ColourProperties.INSTANCE.get("gui.screen")
+        );
 
-        String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
-        offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;
-        getFontRenderer().drawString(transform, youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
+        ITextComponent youCheater = new TranslationTextComponent("for.gui.imprinter.cheater");
+        offset = (138 - getFontRenderer().getStringWidth(youCheater.getString())) / 2;
+        getFontRenderer().func_238422_b_(
+                transform,
+                youCheater,
+                startX + 8 + offset,
+                startY + 76,
+                ColourProperties.INSTANCE.get("gui.screen")
+        );
 
     }
 

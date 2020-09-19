@@ -17,10 +17,10 @@ import forestry.apiculture.HiveConfig;
 import forestry.core.config.forge_old.Property;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import forestry.factory.ModuleFactory;
 import forestry.mail.gui.GuiMailboxInfo;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 
 import javax.annotation.Nullable;
@@ -28,7 +28,6 @@ import java.io.*;
 import java.util.*;
 
 public class Config {
-
     public static final String CATEGORY_COMMON = "common";
     public static final String CATEGORY_FLUIDS = "fluids";
     public static final String CATEGORY_FARM = "farm";
@@ -208,8 +207,15 @@ public class Config {
         boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", false);
         if (recreate) {
             Log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
-            String recreateDefinitionsComment = Translator.translateToLocal("for.config.difficulty.recreate.definitions.comment");
-            Property property = configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
+            String recreateDefinitionsComment = new TranslationTextComponent(
+                    "for.config.difficulty.recreate.definitions.comment"
+            ).getString();
+            Property property = configCommon.get(
+                    "difficulty",
+                    "recreate.definitions",
+                    true,
+                    recreateDefinitionsComment
+            );
             property.set(false);
         }
 
@@ -235,8 +241,18 @@ public class Config {
             Log.info("Enabled retrogen.");
         }
 
-        generateBeehivesAmount = configCommon.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
-        generateBeehivesDebug = configCommon.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
+        generateBeehivesAmount = configCommon.getFloatLocalized(
+                "world.generate.beehives",
+                "amount",
+                generateBeehivesAmount,
+                0.0f,
+                10.0f
+        );
+        generateBeehivesDebug = configCommon.getBooleanLocalized(
+                "world.generate.beehives",
+                "debug",
+                generateBeehivesDebug
+        );
 
         HiveConfig.parse(configCommon);
 
@@ -257,7 +273,12 @@ public class Config {
 
         String[] allStamps = new String[]{"1n", "2n", "5n", "10n", "20n", "50n", "100n"};
         String[] defaultCollectors = new String[]{"20n", "50n", "100n"};
-        String[] stamps = configCommon.getStringListLocalized("crafting.stamps", "disabled", defaultCollectors, allStamps);
+        String[] stamps = configCommon.getStringListLocalized(
+                "crafting.stamps",
+                "disabled",
+                defaultCollectors,
+                allStamps
+        );
         try {
             collectorStamps.addAll(Arrays.asList(stamps));
         } catch (RuntimeException ex) {
@@ -267,19 +288,55 @@ public class Config {
             collectorStamps.addAll(Arrays.asList(defaultCollectors));
         }
 
-        pollinateVanillaTrees = configCommon.getBooleanLocalized("genetics", "pollinate.vanilla.trees", pollinateVanillaTrees);
+        pollinateVanillaTrees = configCommon.getBooleanLocalized(
+                "genetics",
+                "pollinate.vanilla.trees",
+                pollinateVanillaTrees
+        );
         analyzerEnergyPerWork = configCommon.getIntLocalized("genetics", "analyzerblock.energy.use", 20320, 0, 100000);
-        researchMutationBoostMultiplier = configCommon.getFloatLocalized("genetics.research.boost", "multiplier", researchMutationBoostMultiplier, 1.0f, 1000.f);
-        maxResearchMutationBoostPercent = configCommon.getFloatLocalized("genetics.research.boost", "max.percent", maxResearchMutationBoostPercent, 0.0f, 100.0f);
+        researchMutationBoostMultiplier = configCommon.getFloatLocalized(
+                "genetics.research.boost",
+                "multiplier",
+                researchMutationBoostMultiplier,
+                1.0f,
+                1000.f
+        );
+        maxResearchMutationBoostPercent = configCommon.getFloatLocalized(
+                "genetics.research.boost",
+                "max.percent",
+                maxResearchMutationBoostPercent,
+                0.0f,
+                100.0f
+        );
 
-        enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
+        enableBackpackResupply = configCommon.getBooleanLocalized(
+                "performance",
+                "backpacks.resupply",
+                enableBackpackResupply
+        );
 
-        humusDegradeDelimiter = configCommon.getIntLocalized("tweaks.humus", "degradeDelimiter", humusDegradeDelimiter, 1, 10);
+        humusDegradeDelimiter = configCommon.getIntLocalized(
+                "tweaks.humus",
+                "degradeDelimiter",
+                humusDegradeDelimiter,
+                1,
+                10
+        );
 
         if (side == Dist.CLIENT) {
             mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
-            mailAlertXPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
-            mailAlertYPosition = configCommon.getEnumLocalized("tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
+            mailAlertXPosition = configCommon.getEnumLocalized(
+                    "tweaks.gui.mail.alert",
+                    "xPosition",
+                    mailAlertXPosition,
+                    GuiMailboxInfo.XPosition.values()
+            );
+            mailAlertYPosition = configCommon.getEnumLocalized(
+                    "tweaks.gui.mail.alert",
+                    "yPosition",
+                    mailAlertYPosition,
+                    GuiMailboxInfo.YPosition.values()
+            );
 
             guiTabSpeed = configCommon.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
             enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
@@ -289,29 +346,66 @@ public class Config {
         }
 
         farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
-        fertilizerModifier = configCommon.getFloatLocalized("tweaks.farms", "fertilizer", fertilizerModifier, 0.1F, 5.0F);
+        fertilizerModifier = configCommon.getFloatLocalized(
+                "tweaks.farms",
+                "fertilizer",
+                fertilizerModifier,
+                0.1F,
+                5.0F
+        );
         squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
         enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
         enableExUtilRedOrchid = configCommon.getBooleanLocalized("tweaks.farms", "redorchid", enableExUtilRedOrchid);
-        enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
+        enableMagicalCropsSupport = configCommon.getBooleanLocalized(
+                "tweaks.farms",
+                "magicalcrops",
+                enableMagicalCropsSupport
+        );
 
         planterExtend = configCommon.getIntLocalized("tweaks.cultivation", "extend", planterExtend, 1, 15);
         ringFarms = configCommon.getBooleanLocalized("tweaks.cultivation", "ring", ringFarms);
         ringSize = configCommon.getIntLocalized("tweaks.cultivation", "ring_size", ringSize, 1, 8);
 
         CapsuleFluidPickup = configCommon.getBooleanLocalized("tweaks.capsule", "capsulePickup", CapsuleFluidPickup);
-        nonConsumableCapsules = configCommon.getBooleanLocalized("tweaks.capsule", "capsuleReuseable", nonConsumableCapsules);
+        nonConsumableCapsules = configCommon.getBooleanLocalized(
+                "tweaks.capsule",
+                "capsuleReuseable",
+                nonConsumableCapsules
+        );
 
         habitatformerRange = configCommon.getIntLocalized("tweaks.habitatformer", "range", habitatformerRange, 1, 100);
-        habitatformerAreaCostModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "resources", habitatformerAreaCostModifier, 0F, 5.0F);
-        habitatformerAreaSpeedModifier = configCommon.getFloatLocalized("tweaks.habitatformer.area", "speed", habitatformerAreaSpeedModifier, 0F, 5.0F);
+        habitatformerAreaCostModifier = configCommon.getFloatLocalized(
+                "tweaks.habitatformer.area",
+                "resources",
+                habitatformerAreaCostModifier,
+                0F,
+                5.0F
+        );
+        habitatformerAreaSpeedModifier = configCommon.getFloatLocalized(
+                "tweaks.habitatformer.area",
+                "speed",
+                habitatformerAreaSpeedModifier,
+                0F,
+                5.0F
+        );
 
         charcoalAmountBase = configCommon.getIntLocalized("tweaks.charcoal", "amount.base", charcoalAmountBase, 0, 63);
-        charcoalWallCheckRange = configCommon.getIntLocalized("tweaks.charcoal", "check.range", charcoalWallCheckRange, 1, 32);
+        charcoalWallCheckRange = configCommon.getIntLocalized(
+                "tweaks.charcoal",
+                "check.range",
+                charcoalWallCheckRange,
+                1,
+                32
+        );
 
         String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
         String[] disabledStructureArray = disabledStructures.toArray(new String[0]);
-        disabledStructureArray = configCommon.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
+        disabledStructureArray = configCommon.getStringListLocalized(
+                "structures",
+                "disabled",
+                disabledStructureArray,
+                availableStructures
+        );
 
         disabledStructures.addAll(Arrays.asList(disabledStructureArray));
         for (String s : disabledStructures) {
@@ -326,7 +420,12 @@ public class Config {
         enableMJ = configCommon.getBooleanLocalized("power.types", "mj", true);
         enableTesla = configCommon.getBooleanLocalized("power.types", "tesla", true);
 
-        energyDisplayMode = configCommon.getEnumLocalized("power.display", "mode", EnergyDisplayMode.RF, EnergyDisplayMode.values());
+        energyDisplayMode = configCommon.getEnumLocalized(
+                "power.display",
+                "mode",
+                EnergyDisplayMode.RF,
+                EnergyDisplayMode.values()
+        );
 
         ModuleFactory.loadMachineConfig(configCommon);
 
@@ -336,18 +435,34 @@ public class Config {
     private static void loadConfigFluids() {
         Preconditions.checkNotNull(configFluid);
         for (ForestryFluids fluid : ForestryFluids.values()) {
-            String fluidName = Translator.translateToLocal("fluid." + fluid.getTag().getPath());
+            String fluidName = new TranslationTextComponent("fluid." + fluid.getTag().getPath()).getString();
 
             boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());
-            String enableFluidComment = Translator.translateToLocalFormatted("for.config.fluids.enable.format", fluidName);
-            enabledFluid = configFluid.getBoolean("enableFluid", fluid.getTag().toString(), enabledFluid, enableFluidComment);
+            String enableFluidComment = new TranslationTextComponent(
+                    "for.config.fluids.enable.format",
+                    fluidName
+            ).getString();
+            enabledFluid = configFluid.getBoolean(
+                    "enableFluid",
+                    fluid.getTag().toString(),
+                    enabledFluid,
+                    enableFluidComment
+            );
             if (!enabledFluid) {
                 Config.disabledFluids.add(fluid.getTag());
             }
 
             boolean enabledFluidBlock = !Config.disabledBlocks.contains(fluid.getTag());
-            String enableFluidBlockComment = Translator.translateToLocalFormatted("for.config.fluid.blocks.enable.format", fluidName);
-            enabledFluidBlock = configFluid.getBoolean("enableFluidBlock", fluid.getTag().toString(), enabledFluidBlock, enableFluidBlockComment);
+            String enableFluidBlockComment = new TranslationTextComponent(
+                    "for.config.fluid.blocks.enable.format",
+                    fluidName
+            ).getString();
+            enabledFluidBlock = configFluid.getBoolean(
+                    "enableFluidBlock",
+                    fluid.getTag().toString(),
+                    enabledFluidBlock,
+                    enableFluidBlockComment
+            );
             if (!enabledFluidBlock) {
                 Config.disabledBlocks.add(fluid.getTag());
             }

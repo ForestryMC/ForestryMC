@@ -16,7 +16,6 @@ import forestry.core.gui.TextLayoutHelper;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 import genetics.api.GeneticHelper;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IGenome;
@@ -99,13 +98,33 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
                 textLayout.newLine();
             }
 
-            guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.lifespan"), bee, BeeChromosomes.LIFESPAN);
+            guiAlyzer.drawChromosomeRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.lifespan"),
+                    bee,
+                    BeeChromosomes.LIFESPAN
+            );
             textLayout.newLine();
-            guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.speed"), bee, BeeChromosomes.SPEED);
+            guiAlyzer.drawChromosomeRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.speed"),
+                    bee,
+                    BeeChromosomes.SPEED
+            );
             textLayout.newLine();
-            guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.pollination"), bee, BeeChromosomes.FLOWERING);
+            guiAlyzer.drawChromosomeRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.pollination"),
+                    bee,
+                    BeeChromosomes.FLOWERING
+            );
             textLayout.newLine();
-            guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.flowers"), bee, BeeChromosomes.FLOWER_PROVIDER);
+            guiAlyzer.drawChromosomeRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.flowers"),
+                    bee,
+                    BeeChromosomes.FLOWER_PROVIDER
+            );
             textLayout.newLine();
 
             textLayout.drawLine(transform, new TranslationTextComponent("for.gui.fertility"), GuiAlyzer.COLUMN_0);
@@ -127,10 +146,20 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
             );
             textLayout.newLine();
 
-            guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.area"), bee, BeeChromosomes.TERRITORY);
+            guiAlyzer.drawChromosomeRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.area"),
+                    bee,
+                    BeeChromosomes.TERRITORY
+            );
             textLayout.newLine();
 
-            guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.effect"), bee, BeeChromosomes.EFFECT);
+            guiAlyzer.drawChromosomeRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.effect"),
+                    bee,
+                    BeeChromosomes.EFFECT
+            );
             textLayout.newLine();
 
             textLayout.endPage();
@@ -167,7 +196,8 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
             textLayout.newLine();
 
-            guiAlyzer.drawRow(transform,
+            guiAlyzer.drawRow(
+                    transform,
                     new TranslationTextComponent("for.gui.climate"),
                     AlleleManager.climateHelper.toDisplay(primaryAllele.getTemperature()),
                     AlleleManager.climateHelper.toDisplay(secondaryAllele.getTemperature()),
@@ -189,7 +219,8 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
             textLayout.newLine(16);
 
-            guiAlyzer.drawRow(transform,
+            guiAlyzer.drawRow(
+                    transform,
                     new TranslationTextComponent("for.gui.humidity"),
                     AlleleManager.climateHelper.toDisplay(primaryAllele.getHumidity()),
                     AlleleManager.climateHelper.toDisplay(secondaryAllele.getHumidity()),
@@ -238,17 +269,39 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
             textLayout.drawLine(transform, nocturnal1, GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(false));
             textLayout.newLineCompressed();
 
-            ITextProperties primary = StringUtil.readableBoolean(genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN), yes, no);
-            ITextProperties secondary = StringUtil.readableBoolean(genome.getInactiveValue(BeeChromosomes.TOLERATES_RAIN), yes, no);
+            ITextProperties primary = StringUtil.readableBoolean(
+                    genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN),
+                    yes,
+                    no
+            );
+            ITextProperties secondary = StringUtil.readableBoolean(
+                    genome.getInactiveValue(BeeChromosomes.TOLERATES_RAIN),
+                    yes,
+                    no
+            );
 
-            guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.flyer"), primary, secondary, bee, BeeChromosomes.TOLERATES_RAIN);
+            guiAlyzer.drawRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.flyer"),
+                    primary,
+                    secondary,
+                    bee,
+                    BeeChromosomes.TOLERATES_RAIN
+            );
 
             textLayout.newLineCompressed();
 
             primary = StringUtil.readableBoolean(genome.getActiveValue(BeeChromosomes.CAVE_DWELLING), yes, no);
             secondary = StringUtil.readableBoolean(genome.getInactiveValue(BeeChromosomes.CAVE_DWELLING), yes, no);
 
-            guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.cave"), primary, secondary, bee, BeeChromosomes.CAVE_DWELLING);
+            guiAlyzer.drawRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.cave"),
+                    primary,
+                    secondary,
+                    bee,
+                    BeeChromosomes.CAVE_DWELLING
+            );
 
             textLayout.newLine();
 
@@ -298,7 +351,11 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
             textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
-            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.beealyzer.produce").appendString(":"), GuiAlyzer.COLUMN_0);
+            textLayout.drawLine(
+                    transform,
+                    new TranslationTextComponent("for.gui.beealyzer.produce").appendString(":"),
+                    GuiAlyzer.COLUMN_0
+            );
 
             textLayout.newLine();
 
@@ -318,7 +375,11 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
             textLayout.newLine();
             textLayout.newLine();
 
-            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.beealyzer.specialty").appendString(":"), GuiAlyzer.COLUMN_0);
+            textLayout.drawLine(
+                    transform,
+                    new TranslationTextComponent("for.gui.beealyzer.specialty").appendString(":"),
+                    GuiAlyzer.COLUMN_0
+            );
             textLayout.newLine();
 
             x = GuiAlyzer.COLUMN_0;

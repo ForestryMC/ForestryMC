@@ -12,7 +12,7 @@ package forestry.core.tiles;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import forestry.core.utils.Translator;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -30,11 +30,18 @@ public class EscritoireTextSource {
 
     static {
         researchNotes = ArrayListMultimap.create();
-        EnumSet<Notes> multipleTranslationNoteLevels = EnumSet.of(Notes.level1, Notes.level2, Notes.level3, Notes.level4, Notes.success, Notes.failure);
+        EnumSet<Notes> multipleTranslationNoteLevels = EnumSet.of(
+                Notes.level1,
+                Notes.level2,
+                Notes.level3,
+                Notes.level4,
+                Notes.success,
+                Notes.failure
+        );
         for (Notes notesLevel : multipleTranslationNoteLevels) {
             for (int i = 1; i <= 10; i++) {
                 String key = "for.gui.escritoire.notes." + notesLevel + '.' + i;
-                String note = Translator.translateToLocal(key);
+                String note = new TranslationTextComponent(key).getString();
                 if (key.equals(note)) {
                     break;
                 } else {
@@ -42,7 +49,8 @@ public class EscritoireTextSource {
                 }
             }
         }
-        researchNotes.put(Notes.empty, Translator.translateToLocal("for.gui.escritoire.instructions"));
+
+        researchNotes.put(Notes.empty, new TranslationTextComponent("for.gui.escritoire.instructions").getString());
     }
 
     @Nullable

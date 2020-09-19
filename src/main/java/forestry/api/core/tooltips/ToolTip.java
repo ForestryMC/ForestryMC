@@ -30,12 +30,6 @@ public class ToolTip extends TextCollection {
         this.delay = delay;
     }
 
-    //TODO - only for porting, remove when cleaning up
-    @Deprecated
-    public ITextInstance add(String s) {
-        return this.add(new StringTextComponent(s));
-    }
-
     public void onTick(boolean mouseOver) {
         if (delay == 0) {
             return;

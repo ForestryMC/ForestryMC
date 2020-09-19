@@ -16,7 +16,6 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Translator;
 import forestry.mail.features.MailItems;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
@@ -27,6 +26,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
@@ -132,7 +132,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
     @Override
     public TradeStationInfo getTradeInfo() {
-        NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
+        NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(InventoryUtil.getStacks(
+                inventory,
+                SLOT_EXCHANGE_1,
+                SLOT_EXCHANGE_COUNT
+        ));
 
         // Set current state
         EnumTradeStationState state = EnumTradeStationState.OK;
@@ -159,7 +163,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
     /* ILETTERHANDLER */
     //TODO this method is long. Shorten it.
     @Override
-    public IPostalState handleLetter(ServerWorld world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+    public IPostalState handleLetter(
+            ServerWorld world,
+            IMailAddress recipient,
+            ItemStack letterstack,
+            boolean doLodge
+    ) {
 
         boolean sendOwnerNotice = doLodge && owner != null;
 
@@ -169,7 +178,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
             return EnumTradeStationState.INSUFFICIENT_PAPER;
         }
 
-        int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT), letter.getAttachments());
+        int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(
+                inventory,
+                SLOT_EXCHANGE_1,
+                SLOT_EXCHANGE_COUNT
+        ), letter.getAttachments());
 
         // Not a single match.
         if (ordersToFillCount <= 0) {
@@ -189,7 +202,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
             }
 
             // Check for sufficient output buffer
-            int storable = countStorablePayment(ordersToFillCount, InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
+            int storable = countStorablePayment(
+                    ordersToFillCount,
+                    InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT)
+            );
 
             if (storable <= 0) {
                 return EnumTradeStationState.INSUFFICIENT_BUFFER;
@@ -202,7 +218,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
         // Prepare the letter
         ILetter mail = new Letter(this.address, letter.getSender());
-        mail.setText(Translator.translateToLocal("for.gui.mail.order.attached"));
+        mail.setText(new TranslationTextComponent("for.gui.mail.order.attached").getString());
         for (int i = 0; i < ordersToFillCount; i++) {
             mail.addAttachment(inventory.getStackInSlot(SLOT_TRADEGOOD).copy());
         }
@@ -234,7 +250,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
         ItemStack mailstack = LetterProperties.createStampedLetterStack(mail);
         mailstack.setTag(compoundNBT);
 
-        IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
+        IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(
+                world,
+                mailstack,
+                doLodge
+        );
 
         if (!responseState.isOk()) {
             return new ResponseNotMailable(responseState);
@@ -247,7 +267,13 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
                     continue;
                 }
 
-                InventoryUtil.tryAddStack(inventory, stack.copy(), SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, false);
+                InventoryUtil.tryAddStack(
+                        inventory,
+                        stack.copy(),
+                        SLOT_RECEIVE_BUFFER,
+                        SLOT_RECEIVE_BUFFER_COUNT,
+                        false
+                );
             }
         }
 
@@ -264,9 +290,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
             String orderFilledMessage;
             if (ordersToFillCount == 1) {
-                orderFilledMessage = Translator.translateToLocal("for.gui.mail.order.filled.one");
+                orderFilledMessage = new TranslationTextComponent("for.gui.mail.order.filled.one").getString();
             } else {
-                orderFilledMessage = Translator.translateToLocal("for.gui.mail.order.filled.multiple");
+                orderFilledMessage = new TranslationTextComponent("for.gui.mail.order.filled.multiple").getString();
                 orderFilledMessage = orderFilledMessage.replace("%COUNT", Integer.toString(ordersToFillCount));
             }
 

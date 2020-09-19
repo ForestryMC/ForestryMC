@@ -15,9 +15,9 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.tiles.IClimatised;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Translator;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * A ledger containing climate information.
@@ -47,14 +47,24 @@ public class ClimateLedger extends Ledger {
             return;
         }
 
-        drawHeader(transform, Translator.translateToLocal("for.gui.climate"), x + 22, y + 8);
+        drawHeader(transform, new TranslationTextComponent("for.gui.climate"), x + 22, y + 8);
 
-        //TODO textcomponent
-        drawSubheader(transform, Translator.translateToLocal("for.gui.temperature") + ':', x + 22, y + 20);
-        drawText(transform, AlleleManager.climateHelper.toDisplay(temperature).getString() + ' ' + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22, y + 32);
+        drawSubheader(transform, new TranslationTextComponent("for.gui.temperature").appendString(":"), x + 22, y + 20);
+        drawText(
+                transform,
+                AlleleManager.climateHelper.toDisplay(temperature).getString() + ' ' + StringUtil.floatAsPercent(tile.getExactTemperature()),
+                x + 22,
+                y + 32
+        );
 
-        drawSubheader(transform, Translator.translateToLocal("for.gui.humidity") + ':', x + 22, y + 44);
-        drawText(transform, AlleleManager.climateHelper.toDisplay(tile.getHumidity()).getString() + ' ' + StringUtil.floatAsPercent(tile.getExactHumidity()), x + 22, y + 56);
+        drawSubheader(transform, new TranslationTextComponent("for.gui.humidity").appendString(":"), x + 22, y + 44);
+        drawText(
+                transform,
+                AlleleManager.climateHelper.toDisplay(tile.getHumidity()).getString() + ' ' + StringUtil.floatAsPercent(
+                        tile.getExactHumidity()),
+                x + 22,
+                y + 56
+        );
     }
 
     @Override
@@ -64,5 +74,4 @@ public class ClimateLedger extends Ledger {
                 .append(new StringTextComponent(" / H: "))
                 .append(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
     }
-
 }

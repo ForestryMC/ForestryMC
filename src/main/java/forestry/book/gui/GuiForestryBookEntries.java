@@ -85,6 +85,6 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 
     @Override
     public ITextComponent getTitle() {
-        return new StringTextComponent(category.getLocalizedName());
+        return category.getLocalizedName();
     }
 }

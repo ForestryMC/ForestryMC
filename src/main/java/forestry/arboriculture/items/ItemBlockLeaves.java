@@ -15,8 +15,8 @@ import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.Translator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
@@ -45,7 +45,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 
     public static ITextComponent getDisplayName(String unlocalizedSpeciesName) {
         String customTreeKey = "for.trees.custom.leaves." + unlocalizedSpeciesName.replace("for.trees.species.", "");
-        if (Translator.canTranslateToLocal(customTreeKey)) {
+        if (I18n.hasKey(customTreeKey)) {
             return new TranslationTextComponent(customTreeKey);
         }
 

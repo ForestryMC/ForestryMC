@@ -7,13 +7,15 @@ import forestry.api.farming.FarmDirection;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
 import forestry.cultivation.inventory.InventoryPlanter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
@@ -35,10 +37,16 @@ public class GhostItemStackWidget extends ItemStackWidget {
         RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
 
-        String directionString = getDirectionString();
-        if (!directionString.isEmpty()) {
+        ITextComponent directionString = getDirectionString();
+        if (!directionString.getString().isEmpty()) {
             FontRenderer fontRenderer = manager.minecraft.fontRenderer;
-            fontRenderer.drawStringWithShadow(transform, getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
+            fontRenderer.func_238407_a_(
+                    transform,
+                    getDirectionString(),
+                    xPos + startX + 5,
+                    yPos + startY + 4,
+                    ColourProperties.INSTANCE.get("gui.screen")
+            );
         }
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
@@ -52,14 +60,15 @@ public class GhostItemStackWidget extends ItemStackWidget {
         RenderSystem.enableLighting();
     }
 
-    private String getDirectionString() {
+    private ITextComponent getDirectionString() {
         if (slot.getSlotIndex() >= InventoryPlanter.SLOT_PRODUCTION_1 || slot.getSlotIndex() < InventoryPlanter.SLOT_RESOURCES_1 + InventoryPlanter.SLOT_RESOURCES_COUNT) {
-            return "";
+            return new StringTextComponent("");
         }
+
         int index = slot.getSlotIndex() % 4;
         FarmDirection direction = FarmDirection.values()[index];
         String directionString = direction.toString().toLowerCase(Locale.ENGLISH);
-        return Translator.translateToLocal("for.gui.planter." + directionString);
+        return new TranslationTextComponent("for.gui.planter." + directionString);
     }
 
     @Nullable
