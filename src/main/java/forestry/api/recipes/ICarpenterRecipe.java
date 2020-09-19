@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -25,7 +26,7 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	 * @return the box required for this recipe. return empty stack if there is no required box.
 	 * Examples of boxes are the Forestry cartons and crates.
 	 */
-	ItemStack getBox();
+	Ingredient getBox();
 
 	/**
 	 * @return the fluid required for this recipe. return null if there is no required fluid.

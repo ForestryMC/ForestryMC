@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -75,8 +76,8 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 			}
 		}
 
-		ItemStack box = recipe.getBox();
-		if (!box.isEmpty() && !ItemStackUtil.isCraftingEquivalent(box, item)) {
+		Ingredient box = recipe.getBox();
+		if (!box.hasNoMatchingItems() && !box.test(item)) {
 			return null;
 		}
 
@@ -90,8 +91,8 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		}
 
 		for (ICarpenterRecipe recipe : recipes) {
-			ItemStack box = recipe.getBox();
-			if (ItemStackUtil.isIdenticalItem(box, resource)) {
+			Ingredient box = recipe.getBox();
+			if (box.test(resource)) {
 				return true;
 			}
 		}

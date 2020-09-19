@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
@@ -16,7 +17,7 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	/**
 	 * The item for this recipe to match against.
 	 **/
-	ItemStack getInput();
+	Ingredient getInput();
 
 	/**
 	 * The time it takes to process one item. Default is 20.

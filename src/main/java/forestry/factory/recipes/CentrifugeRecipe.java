@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import forestry.api.recipes.ICentrifugeRecipe;
@@ -23,10 +24,10 @@ import forestry.api.recipes.ICentrifugeRecipe;
 public class CentrifugeRecipe implements ICentrifugeRecipe {
 
 	private final int processingTime;
-	private final ItemStack input;
+	private final Ingredient input;
 	private final Map<ItemStack, Float> outputs;
 
-	public CentrifugeRecipe(int processingTime, ItemStack input, Map<ItemStack, Float> outputs) {
+	public CentrifugeRecipe(int processingTime, Ingredient input, Map<ItemStack, Float> outputs) {
 		this.processingTime = processingTime;
 		this.input = input;
 		this.outputs = outputs;
@@ -39,7 +40,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 	}
 
 	@Override
-	public ItemStack getInput() {
+	public Ingredient getInput() {
 		return input;
 	}
 

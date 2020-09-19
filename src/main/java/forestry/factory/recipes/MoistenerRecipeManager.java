@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
@@ -27,7 +28,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 
 	@Override
 	public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-		IMoistenerRecipe recipe = new MoistenerRecipe(resource, product, timePerItem);
+		IMoistenerRecipe recipe = new MoistenerRecipe(Ingredient.fromStacks(resource), product, timePerItem);
 		addRecipe(recipe);
 	}
 
@@ -37,7 +38,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 		}
 
 		for (IMoistenerRecipe rec : recipes) {
-			if (ItemStackUtil.isIdenticalItem(resource, rec.getResource())) {
+			if (rec.getResource().test(resource)) {
 				return true;
 			}
 		}
@@ -48,7 +49,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 	@Nullable
 	public static IMoistenerRecipe findMatchingRecipe(ItemStack item) {
 		for (IMoistenerRecipe recipe : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), item)) {
+			if (recipe.getResource().test(item)) {
 				return recipe;
 			}
 		}

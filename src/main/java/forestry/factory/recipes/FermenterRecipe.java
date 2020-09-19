@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -23,7 +24,7 @@ import forestry.api.recipes.IFermenterRecipe;
 
 public class FermenterRecipe implements IFermenterRecipe {
 
-	private final ItemStack resource;
+	private final Ingredient resource;
 	@Nullable
 	private final String resourceOreName;
 	private final int fermentationValue;
@@ -31,9 +32,9 @@ public class FermenterRecipe implements IFermenterRecipe {
 	private final Fluid output;
 	private final FluidStack fluidResource;
 
-	public FermenterRecipe(ItemStack resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+	public FermenterRecipe(Ingredient resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
 		Preconditions.checkNotNull(resource, "Fermenter Resource cannot be null!");
-		Preconditions.checkArgument(!resource.isEmpty(), "Fermenter Resource item cannot be empty!");
+		Preconditions.checkArgument(!resource.hasNoMatchingItems(), "Fermenter Resource item cannot be empty!");
 		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
 		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
@@ -51,7 +52,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
 		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
-		this.resource = ItemStack.EMPTY;
+		this.resource = Ingredient.EMPTY;
 		this.resourceOreName = resourceOreName;
 		this.fermentationValue = fermentationValue;
 		this.modifier = modifier;
@@ -61,7 +62,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 
 
 	@Override
-	public ItemStack getResource() {
+	public Ingredient getResource() {
 		return resource;
 	}
 
@@ -93,6 +94,6 @@ public class FermenterRecipe implements IFermenterRecipe {
 
 	@Override
 	public int compareTo(IFermenterRecipe o) {
-		return !resource.isEmpty() ? -1 : 1;
+		return !resource.hasNoMatchingItems() ? -1 : 1;
 	}
 }

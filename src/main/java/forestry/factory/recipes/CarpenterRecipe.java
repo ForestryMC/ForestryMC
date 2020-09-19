@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -24,10 +25,10 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 
 	private final int packagingTime;
 	private final FluidStack liquid;
-	private final ItemStack box;
+	private final Ingredient box;
 	private final ShapedRecipeCustom internal;
 
-	public CarpenterRecipe(int packagingTime, FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
+	public CarpenterRecipe(int packagingTime, FluidStack liquid, Ingredient box, ShapedRecipeCustom internal) {
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(internal);
 		this.packagingTime = packagingTime;
@@ -42,7 +43,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	public ItemStack getBox() {
+	public Ingredient getBox() {
 		return box;
 	}
 

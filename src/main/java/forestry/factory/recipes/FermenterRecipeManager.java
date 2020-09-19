@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -35,7 +36,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(resource, fermentationValue, modifier, output.getFluid(), liquid);
+		IFermenterRecipe recipe = new FermenterRecipe(Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid);
 		addRecipe(recipe);
 	}
 
@@ -69,8 +70,8 @@ public class FermenterRecipeManager implements IFermenterManager {
 	}
 
 	public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
-		ItemStack resource = recipe.getResource();
-		if (!ItemStackUtil.isCraftingEquivalent(resource, res, recipe.getResourceOreName(), false)) {
+		Ingredient resource = recipe.getResource();
+		if (!resource.test(res)) {
 			return false;
 		}
 
@@ -84,7 +85,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		}
 
 		for (IFermenterRecipe recipe : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), resource, recipe.getResourceOreName(), false)) {
+			if (recipe.getResource().test(resource)) {
 				return true;
 			}
 		}

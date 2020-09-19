@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
@@ -28,7 +29,7 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 
 	@Override
 	public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
-		ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, resource, products);
+		ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, Ingredient.fromStacks(resource), products);
 		addRecipe(recipe);
 	}
 
@@ -39,8 +40,8 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 		}
 
 		for (ICentrifugeRecipe recipe : recipes) {
-			ItemStack recipeInput = recipe.getInput();
-			if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack)) {
+			Ingredient recipeInput = recipe.getInput();
+			if (recipeInput.test(itemStack)) {
 				return recipe;
 			}
 		}

@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -20,13 +21,13 @@ import forestry.api.recipes.IFabricatorSmeltingRecipe;
 
 public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 
-	private final ItemStack resource;
+	private final Ingredient resource;
 	private final FluidStack product;
 	private final int meltingPoint;
 
-	public FabricatorSmeltingRecipe(ItemStack resource, FluidStack molten, int meltingPoint) {
+	public FabricatorSmeltingRecipe(Ingredient resource, FluidStack molten, int meltingPoint) {
 		Preconditions.checkNotNull(resource);
-		Preconditions.checkArgument(!resource.isEmpty());
+		Preconditions.checkArgument(!resource.hasNoMatchingItems());
 		Preconditions.checkNotNull(molten);
 
 		this.resource = resource;
@@ -35,7 +36,7 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 	}
 
 	@Override
-	public ItemStack getResource() {
+	public Ingredient getResource() {
 		return resource;
 	}
 

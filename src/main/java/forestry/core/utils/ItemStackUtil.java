@@ -309,54 +309,14 @@ public abstract class ItemStackUtil {
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (isCraftingEquivalent(base, comparison, craftingTools)) {
-			return true;
-		}
-
-		if (oreDictionary) {
-			int[] idsBase = new int[0];//OreDictionary.getOreIDs(base);
-			Arrays.sort(idsBase);
-			int[] idsComp = new int[0];//OreDictionary.getOreIDs(comparison);
-			Arrays.sort(idsComp);
-
-			// check if the sorted arrays "idsBase" and "idsComp" have any ID in common.
-			int iBase = 0;
-			int iComp = 0;
-			while (iBase < idsBase.length && iComp < idsComp.length) {
-				if (idsBase[iBase] < idsComp[iComp]) {
-					iBase++;
-				} else if (idsBase[iBase] > idsComp[iComp]) {
-					iComp++;
-				} else {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		return false;
+		return isCraftingEquivalent(base, comparison, craftingTools);
 	}
 
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, @Nullable String oreDict, boolean craftingTools) {
-		if (isCraftingEquivalent(base, comparison, craftingTools)) {
-			return true;
-		}
-
-		if (oreDict != null && !oreDict.isEmpty()) {
-			int[] validIds = new int[0];//OreDictionary.getOreIDs(comparison);
-			int validID = 0;//OreDictionary.getOreID(oreDict);
-
-			for (int id : validIds) {
-				if (id == validID) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return isCraftingEquivalent(base, comparison, craftingTools);
 	}
 
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean craftingTools) {

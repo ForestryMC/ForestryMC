@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.crafting.CompoundIngredient;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
@@ -66,13 +67,13 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 			selectedElement.item(91, 1, plan);
 		}
 		selectedElement.item(91, 39, recipe.getRecipeOutput());
-		NonNullList<ItemStack> smeltingInput = NonNullList.create();
+		NonNullList<Ingredient> smeltingInput = NonNullList.create();
 		Fluid recipeFluid = recipe.getLiquid().getFluid();
 		for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipeFluid)) {
 			smeltingInput.add(s.getResource());
 		}
 		if (!smeltingInput.isEmpty()) {
-			selectedElement.add(new IngredientElement(1, 6, smeltingInput));
+			selectedElement.add(new IngredientElement(1, 6, new CompoundIngredient(smeltingInput) {}));
 		}
 	}
 

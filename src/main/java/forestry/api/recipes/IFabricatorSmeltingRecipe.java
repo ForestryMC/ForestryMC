@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -13,7 +14,7 @@ public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
 	/**
 	 * @return item to be melted down
 	 */
-	ItemStack getResource();
+	Ingredient getResource();
 
 	/**
 	 * @return temperature at which the item melts. Glass is 1000, Sand is 3000.

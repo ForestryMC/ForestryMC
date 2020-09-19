@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 public interface IMoistenerRecipe extends IForestryRecipe {
 	/**
@@ -18,7 +19,7 @@ public interface IMoistenerRecipe extends IForestryRecipe {
 	/**
 	 * @return Item required in resource stack. Will be reduced by one per produced item.
 	 */
-	ItemStack getResource();
+	Ingredient getResource();
 
 	/**
 	 * @return Item to produce per resource processed.

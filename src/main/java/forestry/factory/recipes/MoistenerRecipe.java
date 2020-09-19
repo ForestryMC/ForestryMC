@@ -11,16 +11,17 @@
 package forestry.factory.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import forestry.api.recipes.IMoistenerRecipe;
 
 public class MoistenerRecipe implements IMoistenerRecipe {
 
 	private final int timePerItem;
-	private final ItemStack resource;
+	private final Ingredient resource;
 	private final ItemStack product;
 
-	public MoistenerRecipe(ItemStack resource, ItemStack product, int timePerItem) {
+	public MoistenerRecipe(Ingredient resource, ItemStack product, int timePerItem) {
 		this.timePerItem = timePerItem;
 		this.resource = resource;
 		this.product = product;
@@ -32,7 +33,7 @@ public class MoistenerRecipe implements IMoistenerRecipe {
 	}
 
 	@Override
-	public ItemStack getResource() {
+	public Ingredient getResource() {
 		return resource;
 	}
 

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -17,7 +18,7 @@ public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenter
 	/**
 	 * @return ItemStack representing the input resource.
 	 */
-	ItemStack getResource();
+	Ingredient getResource();
 
 	/**
 	 * @return String representing the input resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
