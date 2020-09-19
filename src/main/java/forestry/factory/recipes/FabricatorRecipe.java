@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -22,13 +23,13 @@ import forestry.api.recipes.IFabricatorRecipe;
 public class FabricatorRecipe implements IFabricatorRecipe {
 	private final ItemStack plan;
 	private final FluidStack molten;
-	private final NonNullList<NonNullList<ItemStack>> ingredients;
+	private final NonNullList<Ingredient> ingredients;
 	private final NonNullList<String> oreDicts;
 	private final ItemStack result;
 	private final int width;
 	private final int height;
 
-	public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, NonNullList<NonNullList<ItemStack>> ingredients, NonNullList<String> oreDicts, int width, int height) {
+	public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, NonNullList<Ingredient> ingredients, NonNullList<String> oreDicts, int width, int height) {
 		Preconditions.checkNotNull(plan);
 		Preconditions.checkNotNull(molten);
 		Preconditions.checkNotNull(result);
@@ -47,7 +48,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	}
 
 	@Override
-	public NonNullList<NonNullList<ItemStack>> getIngredients() {
+	public NonNullList<Ingredient> getIngredients() {
 		return ingredients;
 	}
 

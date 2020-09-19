@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -19,9 +20,8 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 
 	/**
 	 * @return the list of ingredients in the crafting grid to create this recipe.
-	 * Each inner list represents one slot's accepted ItemStacks
 	 */
-	NonNullList<NonNullList<ItemStack>> getIngredients();
+	NonNullList<Ingredient> getIngredients();
 
 	NonNullList<String> getOreDicts();
 

@@ -45,15 +45,15 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	protected void onIndexUpdate(int index, ICarpenterRecipe recipe) {
 		selectedElement.add(new TankElement(91, 1, null, recipe.getFluidResource(), Constants.PROCESSOR_TANK_CAPACITY, CARPENTER_TANK_OVERLAY));
 		IDescriptiveRecipe gridRecipe = recipe.getCraftingGridRecipe();
-		NonNullList<NonNullList<ItemStack>> ingredients = gridRecipe.getRawIngredients();
+		NonNullList<Ingredient> ingredients = gridRecipe.getRawIngredients();
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
 				int ingredientIndex = y * 3 + x;
 				if (ingredientIndex >= ingredients.size()) {
 					continue;
 				}
-				NonNullList<ItemStack> items = ingredients.get(ingredientIndex);
-				selectedElement.add(new IngredientElement(1 + x * 19, 3 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[0]))));
+				Ingredient ingredient = ingredients.get(ingredientIndex);
+				selectedElement.add(new IngredientElement(1 + x * 19, 3 + y * 19, ingredient));
 			}
 		}
 		selectedElement.item(71, 41, gridRecipe.getOutput());

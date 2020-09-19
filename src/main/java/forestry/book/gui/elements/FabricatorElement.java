@@ -50,15 +50,15 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 	@Override
 	protected void onIndexUpdate(int index, IFabricatorRecipe recipe) {
 		selectedElement.add(new TankElement(1, 33, null, recipe.getLiquid(), 2000, FABRICATOR_TANK_OVERLAY, 16, 16));
-		NonNullList<NonNullList<ItemStack>> ingredients = recipe.getIngredients();
+		NonNullList<Ingredient> ingredients = recipe.getIngredients();
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
 				int ingredientIndex = y * 3 + x;
 				if (ingredientIndex >= ingredients.size()) {
 					continue;
 				}
-				NonNullList<ItemStack> items = ingredients.get(ingredientIndex);
-				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19, Ingredient.fromStacks(items.toArray(new ItemStack[0]))));
+				Ingredient ingredient = ingredients.get(ingredientIndex);
+				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19,ingredient));
 			}
 		}
 		ItemStack plan = recipe.getPlan();

@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
@@ -147,7 +148,7 @@ public abstract class RecipeUtil {
 
 	@Nullable
 	public static String[][] matches(IDescriptiveRecipe recipe, IInventory CraftingInventory) {
-		NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getRawIngredients();
+		NonNullList<Ingredient> recipeIngredients = recipe.getRawIngredients();
 		NonNullList<String> oreDicts = recipe.getOreDicts();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
@@ -155,7 +156,7 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory CraftingInventory) {
+	public static String[][] matches(NonNullList<Ingredient> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory CraftingInventory) {
 		ItemStack[][] resources = getResources(CraftingInventory);
 		return matches(recipeIngredients, oreDicts, width, height, resources);
 	}
@@ -172,7 +173,7 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources) {
+	public static String[][] matches(NonNullList<Ingredient> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources) {
 		for (int i = 0; i <= 3 - width; i++) {
 			for (int j = 0; j <= 3 - height; j++) {
 				String[][] resourceDicts = checkMatch(recipeIngredients, oreDicts, width, height, resources, i, j, true);
@@ -191,7 +192,7 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	private static String[][] checkMatch(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
+	private static String[][] checkMatch(NonNullList<Ingredient> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
 		String[][] resourceDicts = new String[3][3];
 		for (int k = 0; k < 3; k++) {
 			for (int l = 0; l < 3; l++) {
@@ -199,7 +200,7 @@ public abstract class RecipeUtil {
 
 				int widthIt = k - xInGrid;
 				int heightIt = l - yInGrid;
-				NonNullList<ItemStack> recipeIngredient = null;
+				Ingredient recipeIngredient = null;
 				String oreDict = "";
 
 				if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
@@ -223,15 +224,11 @@ public abstract class RecipeUtil {
 		return resourceDicts;
 	}
 
-	private static boolean checkIngredientMatch(@Nullable NonNullList<ItemStack> recipeIngredient, ItemStack resource) {
-		if (recipeIngredient == null || recipeIngredient.isEmpty()) {
+	private static boolean checkIngredientMatch(@Nullable Ingredient recipeIngredient, ItemStack resource) {
+		if (recipeIngredient == null || recipeIngredient.hasNoMatchingItems()) {
 			return resource.isEmpty();
 		}
-		for (ItemStack item : recipeIngredient) {
-			if (ItemStackUtil.isCraftingEquivalent(item, resource)) {
-				return true;
-			}
-		}
-		return false;
+
+		return recipeIngredient.test(resource);
 	}
 }
