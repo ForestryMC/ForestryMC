@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
@@ -33,5 +32,23 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	 * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0],
 	 * to help mods that display recipes
 	 **/
-	Map<ItemStack, Float> getAllProducts();
+	NonNullList<Product> getAllProducts();
+
+	class Product {
+		private final float probability;
+		private final ItemStack stack;
+
+		public Product(float probability, ItemStack stack) {
+			this.probability = probability;
+			this.stack = stack;
+		}
+
+		public float getProbability() {
+			return probability;
+		}
+
+		public ItemStack getStack() {
+			return stack;
+		}
+	}
 }

@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import com.google.common.collect.ImmutableMap;
-
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
@@ -25,18 +22,12 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 
 	private final int processingTime;
 	private final Ingredient input;
-	private final Map<ItemStack, Float> outputs;
+	private final NonNullList<Product> outputs;
 
-	public CentrifugeRecipe(int processingTime, Ingredient input, Map<ItemStack, Float> outputs) {
+	public CentrifugeRecipe(int processingTime, Ingredient input, NonNullList<Product> outputs) {
 		this.processingTime = processingTime;
 		this.input = input;
 		this.outputs = outputs;
-
-		for (ItemStack item : outputs.keySet()) {
-			if (item == null) {
-				throw new IllegalArgumentException("Tried to register a null product of " + input);
-			}
-		}
 	}
 
 	@Override
@@ -53,13 +44,13 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 	public NonNullList<ItemStack> getProducts(Random random) {
 		NonNullList<ItemStack> products = NonNullList.create();
 
-		for (Map.Entry<ItemStack, Float> entry : this.outputs.entrySet()) {
-			float probability = entry.getValue();
+		for (Product entry : this.outputs) {
+			float probability = entry.getProbability();
 
 			if (probability >= 1.0) {
-				products.add(entry.getKey().copy());
+				products.add(entry.getStack().copy());
 			} else if (random.nextFloat() < probability) {
-				products.add(entry.getKey().copy());
+				products.add(entry.getStack().copy());
 			}
 		}
 
@@ -67,7 +58,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 	}
 
 	@Override
-	public Map<ItemStack, Float> getAllProducts() {
-		return ImmutableMap.copyOf(outputs);
+	public NonNullList<Product> getAllProducts() {
+		return outputs;
 	}
 }

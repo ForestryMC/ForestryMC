@@ -18,10 +18,10 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
 
@@ -29,7 +29,13 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 
 	@Override
 	public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
-		ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, Ingredient.fromStacks(resource), products);
+		NonNullList<ICentrifugeRecipe.Product> list = NonNullList.create();
+
+		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+			list.add(new ICentrifugeRecipe.Product(entry.getValue(), entry.getKey()));
+		}
+
+		ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, Ingredient.fromStacks(resource), list);
 		addRecipe(recipe);
 	}
 
