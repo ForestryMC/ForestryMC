@@ -98,11 +98,20 @@ minecraft {
 }
 
 repositories {
+    maven {
+		//remove if mappings are moved to forge maven
+        url 'https://www.dogforce-games.com/maven/'
+    }
 	/*maven {
 		url = 'http://maven.mcmoddev.com'
 	}*/
 	maven {
+		name = "jei"
 		url "http://dvs1.progwml6.com/files/maven"
+	}
+	maven {
+		name = "patchouli"
+		url 'https://maven.blamejared.com'
 	}
 	/*maven {
 		name = "ic2"
@@ -124,6 +133,8 @@ dependencies {
 	compileOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}:api")
 
 	runtimeOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}")
+	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
+	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 	/*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"*/

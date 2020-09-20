@@ -30,11 +30,11 @@ import forestry.api.core.EnumTemperature;
 import forestry.apiculture.entities.ParticleBeeExplore;
 import forestry.apiculture.entities.ParticleBeeRoundTrip;
 import forestry.apiculture.entities.ParticleBeeTargetEntity;
+import forestry.apiculture.entities.ParticleSnow;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.config.Config;
 import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
-import forestry.core.entities.ParticleSnow;
 import forestry.core.utils.VectUtil;
 import forestry.core.utils.WorldUtils;
 

@@ -25,7 +25,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -120,9 +119,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static final String CONFIG_CATEGORY = "apiculture";
 	private static float secondPrincessChance = 0;
 
-	@OnlyIn(Dist.CLIENT)
-	@Nullable
-	private static TextureAtlasSprite beeSprite;
 	@Nullable
 	private static HiveRegistry hiveRegistry;
 
@@ -149,12 +145,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static HiveRegistry getHiveRegistry() {
 		Preconditions.checkNotNull(hiveRegistry);
 		return hiveRegistry;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public static TextureAtlasSprite getBeeSprite() {
-		Preconditions.checkNotNull(beeSprite, "Bee sprite has not been registered");
-		return beeSprite;
 	}
 
 	public ModuleApiculture() {
@@ -284,45 +274,52 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.uncommonVillageBees.add(BeeDefinition.COMMON.getGenome());
 		BeeManager.uncommonVillageBees.add(BeeDefinition.VALIANT.getGenome());
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			// Register villager stuff
-			//TODO - villagers
-			//			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
-			//			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-			//			villagerRegistry.registerVillageCreationHandler(villageHandler);
-			//
-			//			villagerApiarist = new VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
-			//			IForgeRegistry<VillagerProfession> villagerProfessions = ForgeRegistries.PROFESSIONS;
-			//			villagerProfessions.register(villagerApiarist);
-			//
-			//			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
-			//			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
-			//			ItemStack apiary = new ItemStack(blocks.apiary);
-			//			ItemStack provenFrames = items.frameProven.getItemStack();
-			//			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
-			//			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
-			//			ItemStack propolis = new ItemStack(items.propolis, 1);
-			//
-			//			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
-			//			apiaristCareer.addTrade(1,
-			//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.WHEAT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-			//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.CARROT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-			//				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.POTATO), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4))
-			//			);
-			//			apiaristCareer.addTrade(2,
-			//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
-			//				new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
-			//				new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
-			//			);
-			//			apiaristCareer.addTrade(3,
-			//				new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
-			//				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
-			//			);
-			//			apiaristCareer.addTrade(4,
-			//				new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
-			//				new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
-			//			);
-		}
+			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
+			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
+			villagerRegistry.registerVillageCreationHandler(villageHandler);
+
+			villagerApiarist = new VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
+			IForgeRegistry<VillagerProfession> villagerProfessions = ForgeRegistries.PROFESSIONS;
+			villagerProfessions.register(villagerApiarist);
+
+			ItemStack wildcardPrincess = ApicultureItems.BEE_PRINCESS.stack();
+			ItemStack wildcardDrone = ApicultureItems.BEE_DRONE.stack();
+			ItemStack apiary = ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY);
+			ItemStack provenFrames = ApicultureItems.FRAME_PROVEN.stack();
+			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
+			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
+			ItemStack propolis = ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL);
+
+			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
+			VillagerTrades.VILLAGER_DEFAULT_TRADES.put(villagerApiarist, new Int2ObjectOpenHashMap<>(
+				ImmutableMap.of(
+					1,
+					new VillagerTrades.ITrade[]{
+						new VillagerApiaristTrades.GiveRandomCombsForItems(3, new ItemStack(Items.WHEAT, 10), 16, 2),
+						new VillagerApiaristTrades.GiveRandomCombsForItems(3, new ItemStack(Items.CARROT, 10), 16, 2),
+						new VillagerApiaristTrades.GiveRandomCombsForItems(3, new ItemStack(Items.POTATO, 10), 16, 2)
+					},
+					2,
+					new VillagerTrades.ITrade[]{
+						new VillagerTrades.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
+						new VillagerTrades.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
+						new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
+					},
+					3,
+					new VillagerTrades.ITrade[]{
+						new VillagerTrades.GiveEmeraldForItems(wildcardPrincess, null),
+						new VillagerTrades.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
+					},
+					4,
+					new VillagerTrades.ITrade[]{
+						new VillagerTrades.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
+						new VillagerTrades.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
+					}
+				)
+			));
+		}*/
 	}
 
 	@Override
@@ -450,8 +447,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			lavaIngredients = NonNullList.create();
 			lavaIngredients.add(phosphor);
-			//TODO - sand or red sand?
-			lavaIngredients.add(new ItemStack(Blocks.SAND, 1));
+			lavaIngredients.add(new ItemStack(Blocks.RED_SAND));
 			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();

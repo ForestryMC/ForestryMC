@@ -8,36 +8,26 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.entities;
+package forestry.apiculture.entities;
 
 import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.world.ClientWorld;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-public class ParticleSnow extends Particle {
+public class ParticleSnow extends SpriteTexturedParticle {
 	public static final TextureAtlasSprite[] sprites = new TextureAtlasSprite[3];
 
 	public ParticleSnow(ClientWorld world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
-		//TODO particles
-		//		this.setParticleTexture(sprites[rand.nextInt(sprites.length)]);
-		//		this.particleScale *= 0.5F;
+		this.setSprite(sprites[rand.nextInt(sprites.length)]);
+		this.particleScale *= 0.5F;
 		this.maxAge = (int) (40.0D / (Math.random() * 0.8D + 0.2D));
 
 		this.motionX *= 0.01D;
 		this.motionY *= -0.4D;
 		this.motionZ *= 0.01D;
-	}
-
-	@Override
-	public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
-
 	}
 
 	/*@Override
@@ -68,15 +58,5 @@ public class ParticleSnow extends Particle {
 	@Override
 	public IParticleRenderType getRenderType() {
 		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
-	}
-
-	private void renderParticle(BufferBuilder buffer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV, float maxV, float scale, float timeStep) {
-		int i = this.getBrightnessForRender(timeStep);
-		int j = i >> 16 & 65535;
-		int k = i & 65535;
-		buffer.pos(x - rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z - rotationZ * scale - rotationXY * scale).tex(maxU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		buffer.pos(x - rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z - rotationZ * scale + rotationXY * scale).tex(maxU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		buffer.pos(x + rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z + rotationZ * scale + rotationXY * scale).tex(minU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		buffer.pos(x + rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z + rotationZ * scale - rotationXY * scale).tex(minU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
 	}
 }

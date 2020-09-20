@@ -16,7 +16,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.vector.Vector3d;
 
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.proxy.ProxyApicultureClient;
 
 public class ParticleBeeTargetEntity extends SpriteTexturedParticle {
 	private final Vector3d origin;
@@ -24,7 +24,7 @@ public class ParticleBeeTargetEntity extends SpriteTexturedParticle {
 
 	public ParticleBeeTargetEntity(ClientWorld world, Vector3d origin, Entity entity, int color) {
 		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-		setSprite(ModuleApiculture.getBeeSprite());
+		setSprite(ProxyApicultureClient.getBeeSprite());
 		this.origin = origin;
 		this.entity = entity;
 

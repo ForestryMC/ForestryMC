@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.core.ItemGroups;
+import forestry.apiculture.features.ApicultureItems;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
 
@@ -48,6 +49,11 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 		} else {
 			return validCombs.get(random.nextInt(validCombs.size()));
 		}
+	}
+
+	public static ItemStack getRandomComb(int amount, Random random, boolean includeSecret) {
+		EnumHoneyComb comb = getRandomCombType(random, includeSecret);
+		return comb != null ? ApicultureItems.BEE_COMBS.stack(comb, amount) : ItemStack.EMPTY;
 	}
 
 	@Override

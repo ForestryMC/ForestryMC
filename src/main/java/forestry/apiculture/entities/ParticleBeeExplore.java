@@ -16,14 +16,14 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.proxy.ProxyApicultureClient;
 
 public class ParticleBeeExplore extends SpriteTexturedParticle {
 	private final Vector3d origin;
 
 	public ParticleBeeExplore(ClientWorld world, Vector3d origin, BlockPos destination, int color) {
 		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-		setSprite(ModuleApiculture.getBeeSprite());
+		setSprite(ProxyApicultureClient.getBeeSprite());
 		this.origin = origin;
 
 		this.motionX = (destination.getX() + 0.5 - this.posX) * 0.015;

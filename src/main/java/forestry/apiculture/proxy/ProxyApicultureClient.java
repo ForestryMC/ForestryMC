@@ -10,9 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
+import com.google.common.base.Preconditions;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,13 +28,23 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import forestry.apiculture.entities.ParticleSnow;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureEntities;
-import forestry.core.entities.ParticleSnow;
 import forestry.modules.IClientModuleHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class ProxyApicultureClient extends ProxyApiculture implements IClientModuleHandler {
+
+	@OnlyIn(Dist.CLIENT)
+	@Nullable
+	private static TextureAtlasSprite beeSprite;
+
+	@OnlyIn(Dist.CLIENT)
+	public static TextureAtlasSprite getBeeSprite() {
+		Preconditions.checkNotNull(beeSprite, "Bee sprite has not been registered");
+		return beeSprite;
+	}
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
@@ -38,10 +55,24 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		//TODO textures
-		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
-			//			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+		if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_PARTICLES_TEXTURE)) {
+			return;
 		}
-		//		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
+			event.addSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+		}
+		event.addSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
+	}
+
+	@Override
+	public void handleSprites(TextureStitchEvent.Post event) {
+		AtlasTexture map = event.getMap();
+		if (!map.getTextureLocation().equals(AtlasTexture.LOCATION_PARTICLES_TEXTURE)) {
+			return;
+		}
+		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
+			ParticleSnow.sprites[i] = map.getSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+		}
+		beeSprite = map.getSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 }

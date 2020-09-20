@@ -14,17 +14,20 @@
 //import java.util.List;
 //import java.util.Random;
 //
+//import net.minecraft.entity.merchant.villager.VillagerTrades;
 //import net.minecraft.util.Direction;
 //import net.minecraft.util.math.MathHelper;
 //import net.minecraft.world.gen.feature.StructureIO;
 //import net.minecraft.world.gen.feature.StructurePiece;
 //import net.minecraft.world.gen.feature.VillagePieces;
+//import net.minecraft.world.gen.feature.structure.VillagePieces;
 //
 //import net.minecraftforge.fml.common.registry.VillagerRegistry;
 //
 //import forestry.apiculture.worldgen.VillageApiaristHouse;
 //
-//public class VillageCreationApiculture implements VillagerRegistry.IVillageCreationHandler {
+//public class VillageCreationApiculture implements IVillageCreationHandler {
+//
 //
 //	public static void registerVillageComponents() {
 //		StructureIO.registerStructureComponent(VillageApiaristHouse.class, "Forestry:BeeHouse");
