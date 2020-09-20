@@ -11,21 +11,23 @@
 package forestry.lepidopterology.commands;
 
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import forestry.core.commands.PermLevel;
-import forestry.lepidopterology.features.LepidopterologyEntities;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import forestry.core.commands.PermLevel;
+import forestry.lepidopterology.features.LepidopterologyEntities;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class CommandButterfly {
+public class  CommandButterfly {
 //TODO commands
 	public static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("butterfly")
@@ -43,12 +45,6 @@ public class CommandButterfly {
             return Commands.literal("kill").requires(PermLevel.ADMIN).executes(CommandButterflyKill::execute);
 
         }
-
-		/*public CommandButterflyKill() {
-			super("kill");
-			addAlias("killall");
-			setPermLevel(PermLevel.ADMIN);
-		}*/
 
 		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
 			int killCount = 0;

@@ -1,8 +1,8 @@
 package forestry.core.commands;
 
-import net.minecraft.command.CommandSource;
-
 import java.util.function.Predicate;
+
+import net.minecraft.command.CommandSource;
 
 public enum PermLevel implements Predicate<CommandSource> {
 

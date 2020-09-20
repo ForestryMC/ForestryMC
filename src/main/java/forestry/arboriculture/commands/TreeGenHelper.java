@@ -10,16 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.core.commands.SpeciesNotFoundException;
-import forestry.core.utils.BlockUtil;
-import forestry.core.worldgen.FeatureBase;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.utils.AlleleUtils;
+import java.util.Optional;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +24,17 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Optional;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.utils.BlockUtil;
+import forestry.core.worldgen.FeatureBase;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.utils.AlleleUtils;
 
 public final class TreeGenHelper {
 

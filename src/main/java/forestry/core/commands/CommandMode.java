@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+
+import com.mojang.brigadier.builder.ArgumentBuilder;
 
 public class CommandMode {
 	public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {

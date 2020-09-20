@@ -10,15 +10,16 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
+import java.util.stream.Stream;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.world.World;
 
-import java.util.stream.Stream;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 
 public final class CommandModeSet implements Command<CommandSource> {
 	private final ICommandModeHelper modeSetter;

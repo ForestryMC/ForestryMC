@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.core.commands.SpeciesNotFoundException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
+
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.core.commands.SpeciesNotFoundException;
 
 @FunctionalInterface
 public interface ITreeSpawner {

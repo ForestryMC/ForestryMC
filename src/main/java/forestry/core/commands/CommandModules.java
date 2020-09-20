@@ -10,6 +10,15 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -19,20 +28,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Translator;
 import forestry.modules.ModuleManager;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
-//import net.minecraft.command.ICommandSender;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -43,12 +43,6 @@ public class CommandModules {
 				.then(CommandPluginsInfo.register())
 				.executes(CommandModules::listModulesForSender);
 	}
-
-	/*public CommandModules() {
-		super("module");
-		addAlias("mod");
-		addChildCommand(new CommandPluginsInfo());
-	}*/
 
 	private static int listModulesForSender(CommandContext<CommandSource> context) {
 		StringBuilder pluginList = new StringBuilder();

@@ -10,26 +10,23 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
+import java.util.stream.Stream;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.stream.Stream;
-
-//import net.minecraft.command.ICommandSender;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 
 public class CommandModeInfo implements Command<CommandSource> {
-	private final String[] modeStringArr;
 	private final ICommandModeHelper modeHelper;
 
 	public CommandModeInfo(ICommandModeHelper modeHelper) {
 		this.modeHelper = modeHelper;
-		modeStringArr = modeHelper.getModeNames();
 	}
 
 	public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {

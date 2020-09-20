@@ -10,32 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.commands;
 
-import com.mojang.brigadier.Message;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.arboriculture.commands.CommandTreeSpawn;
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.PermLevel;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import net.minecraftforge.server.command.EnumArgument;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.PermLevel;
 
 public class CommandBeeGive {
 	public static LiteralArgumentBuilder<CommandSource> register() {
