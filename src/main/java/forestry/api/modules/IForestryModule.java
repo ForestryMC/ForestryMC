@@ -5,18 +5,17 @@
  ******************************************************************************/
 package forestry.api.modules;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Set;
-
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
-
-import com.mojang.brigadier.Command;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Defines a Forestry module.
@@ -102,7 +101,8 @@ public interface IForestryModule {
 	}
 
 	@Nullable
-	default Command[] getConsoleCommands() {
+	default LiteralArgumentBuilder<CommandSource> register() {
 		return null;
 	}
+
 }

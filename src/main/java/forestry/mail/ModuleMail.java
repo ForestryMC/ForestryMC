@@ -10,30 +10,25 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.client.gui.ScreenManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ISaveEventHandler;
+import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
+import forestry.mail.commands.CommandMail;
 import forestry.mail.features.MailContainers;
-import forestry.mail.gui.GuiCatalogue;
-import forestry.mail.gui.GuiLetter;
-import forestry.mail.gui.GuiMailbox;
-import forestry.mail.gui.GuiStampCollector;
-import forestry.mail.gui.GuiTradeName;
-import forestry.mail.gui.GuiTrader;
+import forestry.mail.gui.*;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.mail.description")
 public class ModuleMail extends BlankForestryModule {
@@ -59,7 +54,7 @@ public class ModuleMail extends BlankForestryModule {
 	@Override
 	public void preInit() {
 		//TODO commands
-		//		ModuleCore.rootCommand.addChildCommand(new CommandMail());
+		ModuleCore.rootCommand.then(CommandMail.register());
 
 		if (Config.mailAlertEnabled) {
 			MinecraftForge.EVENT_BUS.register(new EventHandlerMailAlert());

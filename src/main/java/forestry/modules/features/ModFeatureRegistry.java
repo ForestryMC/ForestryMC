@@ -2,21 +2,14 @@ package forestry.modules.features;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IBlockSubtype;
+import forestry.api.core.IItemSubtype;
+import forestry.api.modules.ForestryModule;
+import forestry.api.storage.BackpackManager;
+import forestry.api.storage.EnumBackpackType;
+import forestry.core.config.Constants;
+import forestry.modules.ForestryModuleUids;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -28,23 +21,20 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import net.minecraftforge.fml.network.IContainerFactory;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IBlockSubtype;
-import forestry.api.core.IItemSubtype;
-import forestry.api.modules.ForestryModule;
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.EnumBackpackType;
-import forestry.core.config.Constants;
-import forestry.modules.ForestryModuleUids;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.function.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //TODO: Sort Registries and Features
 public class ModFeatureRegistry {
@@ -232,7 +222,7 @@ public class ModFeatureRegistry {
 
 		@Override
 		public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer) {
-			return entity(factory, classification, identifier, consumer, () -> LivingEntity.registerAttributes());
+			return entity(factory, classification, identifier, consumer, LivingEntity::registerAttributes);
 		}
 
 		@Override

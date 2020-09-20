@@ -11,41 +11,7 @@
 package forestry.core;
 
 import com.google.common.collect.ImmutableMap;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.Placement;
-
-import com.mojang.brigadier.Command;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import net.minecraftforge.fml.InterModComms;
-
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.modules.ForestryModule;
@@ -58,6 +24,8 @@ import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
+import forestry.core.commands.CommandListAlleles;
+import forestry.core.commands.CommandModules;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
@@ -87,14 +55,44 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.command.CommandSource;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 //import forestry.core.commands.CommandListAlleles;
 //import forestry.core.commands.CommandModules;
-//import forestry.core.commands.RootCommand;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
-	//	public static final RootCommand rootCommand = new RootCommand();
+	public static final LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
 	public ModuleCore() {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -145,8 +143,14 @@ public class ModuleCore extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
-		//		rootCommand.addChildCommand(new CommandModules());
-		//		rootCommand.addChildCommand(new CommandListAlleles());
+		rootCommand.then(CommandModules.register());
+		rootCommand.then(CommandListAlleles.register());
+	}
+
+	@Nullable
+	@Override
+	public LiteralArgumentBuilder<CommandSource> register() {
+		return rootCommand;
 	}
 
 	@Override
@@ -301,11 +305,6 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();
-	}
-
-	@Override
-	public Command[] getConsoleCommands() {
-		return new Command[0];//{rootCommand};
 	}
 
 	@Override
