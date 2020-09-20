@@ -14,6 +14,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.CommandDispatcher;
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
@@ -24,6 +25,7 @@ import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.config.forge_old.Configuration;
 import forestry.core.utils.Log;
+import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
@@ -33,7 +35,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ModuleManager implements IModuleManager {
-
     private static final String CONFIG_CATEGORY = "modules";
     private static final ModuleManager ourInstance = new ModuleManager();
 
@@ -85,6 +86,7 @@ public class ModuleManager implements IModuleManager {
                 return module;
             }
         }
+
         return null;
     }
 
@@ -95,7 +97,10 @@ public class ModuleManager implements IModuleManager {
         Set<ResourceLocation> toLoad = new HashSet<>();
         Set<IForestryModule> modulesToLoad = new HashSet<>();
 
-        ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
+        ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()));
 
         for (IModuleContainer container : moduleContainers.values()) {
             String containerID = container.getID();
@@ -103,8 +108,11 @@ public class ModuleManager implements IModuleManager {
             Configuration config = container.getModulesConfig();
 
             config.load();
-            config.addCustomCategoryComment(CONFIG_CATEGORY, "Disabling these modules can greatly change how the mod functions.\n"
-                    + "Your mileage may vary, please report any issues.");
+            config.addCustomCategoryComment(
+                    CONFIG_CATEGORY,
+                    "Disabling these modules can greatly change how the mod functions.\n"
+                            + "Your mileage may vary, please report any issues."
+            );
             IForestryModule coreModule = getModuleCore(containerModules);
             if (coreModule != null) {
                 containerModules.remove(coreModule);
@@ -121,6 +129,7 @@ public class ModuleManager implements IModuleManager {
                     Log.info("Module disabled: {}", module);
                     continue;
                 }
+
                 if (module.canBeDisabled()) {
                     if (!container.isModuleEnabled(module)) {
                         configDisabledModules.add(module);
@@ -134,6 +143,7 @@ public class ModuleManager implements IModuleManager {
                         continue;
                     }
                 }
+
                 ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
                 toLoad.add(new ResourceLocation(containerID, info.moduleID()));
                 modulesToLoad.add(module);
@@ -223,18 +233,12 @@ public class ModuleManager implements IModuleManager {
     }
 
     public static void serverStarting(MinecraftServer server) {
-        //TODO - commands
-        //		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
-        //
-        //		for (IForestryModule module : loadedModules) {
-        //			ICommand[] commands = module.getConsoleCommands();
-        //			if (commands == null) {
-        //				continue;
-        //			}
-        //			for (ICommand command : commands) {
-        //				commandManager.registerCommand(command);
-        //			}
-        //		}
+        CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
+
+        loadedModules.stream()
+                .map(IForestryModule::register)
+                .filter(Objects::nonNull)
+                .forEach(dispatcher::register);
     }
 
 
@@ -243,6 +247,7 @@ public class ModuleManager implements IModuleManager {
         for (IForestryModule module : loadedModules) {
             module.addLootPoolNames(lootPoolNames);
         }
+
         return lootPoolNames;
     }
 
@@ -255,6 +260,7 @@ public class ModuleManager implements IModuleManager {
                 lootTableNames.add(lootTableFolder);
             }
         }
+
         return lootTableNames;
     }
 }

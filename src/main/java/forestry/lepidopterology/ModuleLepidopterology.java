@@ -19,12 +19,14 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.api.modules.ForestryModule;
+import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
+import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
@@ -108,8 +110,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
     @Override
     public void doInit() {
-        //TODO commands
-        //		ModuleCore.rootCommand.addChildCommand(new CommandButterfly());
+        ModuleCore.rootCommand.then(CommandButterfly.register());
 
         MothDefinition.initMoths();
         ButterflyDefinition.initButterflies();

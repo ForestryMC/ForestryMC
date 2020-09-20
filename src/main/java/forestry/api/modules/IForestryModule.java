@@ -5,7 +5,8 @@
  ******************************************************************************/
 package forestry.api.modules;
 
-import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -100,7 +101,7 @@ public interface IForestryModule {
     }
 
     @Nullable
-    default Command[] getConsoleCommands() {
+    default LiteralArgumentBuilder<CommandSource> register() {
         return null;
     }
 }

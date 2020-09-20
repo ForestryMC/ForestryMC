@@ -26,6 +26,7 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
+import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureItems;
@@ -45,6 +46,7 @@ import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
+import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -194,8 +196,7 @@ public class ModuleApiculture extends BlankForestryModule {
         }
 
         // Commands
-        //TODO - commands
-        //		ModuleCore.rootCommand.addChildCommand(new CommandBee());
+        ModuleCore.rootCommand.then(CommandBee.register());
 
         if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
             ApicultureFilterRuleType.init();

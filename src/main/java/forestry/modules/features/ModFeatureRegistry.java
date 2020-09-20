@@ -125,27 +125,43 @@ public class ModFeatureRegistry {
         }
 
         @Override
-        public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(Supplier<B> constructor, String identifier) {
+        public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(
+                Supplier<B> constructor,
+                String identifier
+        ) {
             return block(constructor, null, identifier);
         }
 
         @Override
-        public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(Supplier<B> constructor, @Nullable Function<B, I> itemConstructor, String identifier) {
+        public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(
+                Supplier<B> constructor,
+                @Nullable Function<B, I> itemConstructor,
+                String identifier
+        ) {
             return register(new FeatureBlock<>(moduleID, identifier, constructor, itemConstructor));
         }
 
         @Override
-        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, Class<? extends S> typeClass) {
+        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
+                Function<S, B> constructor,
+                Class<? extends S> typeClass
+        ) {
             return new FeatureBlockGroup.Builder<>(this, constructor);
         }
 
         @Override
-        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, Collection<S> types) {
+        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
+                Function<S, B> constructor,
+                Collection<S> types
+        ) {
             return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
         }
 
         @Override
-        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(Function<S, B> constructor, S[] types) {
+        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
+                Function<S, B> constructor,
+                S[] types
+        ) {
             return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
         }
 
@@ -160,33 +176,63 @@ public class ModFeatureRegistry {
         }
 
         @Override
-        public FeatureItem<Item> naturalistBackpack(String backpackUid, String rootUid, ItemGroup tab, String identifier) {
-            return item(() -> BackpackManager.backpackInterface.createNaturalistBackpack(backpackUid, rootUid, tab), identifier);
+        public FeatureItem<Item> naturalistBackpack(
+                String backpackUid,
+                String rootUid,
+                ItemGroup tab,
+                String identifier
+        ) {
+            return item(
+                    () -> BackpackManager.backpackInterface.createNaturalistBackpack(backpackUid, rootUid, tab),
+                    identifier
+            );
         }
 
         @Override
-        public <I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(Function<S, I> constructor, String identifier, S[] subTypes) {
+        public <I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(
+                Function<S, I> constructor,
+                String identifier,
+                S[] subTypes
+        ) {
             return itemGroup(constructor, subTypes).identifier(identifier).create();
         }
 
         @Override
-        public <I extends Item, S extends IItemSubtype> FeatureItemGroup.Builder<I, S> itemGroup(Function<S, I> constructor, S[] subTypes) {
+        public <I extends Item, S extends IItemSubtype> FeatureItemGroup.Builder<I, S> itemGroup(
+                Function<S, I> constructor,
+                S[] subTypes
+        ) {
             return (FeatureItemGroup.Builder<I, S>) new FeatureItemGroup.Builder<>(this, constructor).types(subTypes);
         }
 
         @Override
-        public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes, String identifier) {
+        public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable<I, R, C> itemTable(
+                BiFunction<R, C, I> constructor,
+                R[] rowTypes,
+                C[] columnTypes,
+                String identifier
+        ) {
             return itemTable(constructor, rowTypes, columnTypes).identifier(identifier).create();
         }
 
         @Override
-        public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable.Builder<I, R, C> itemTable(BiFunction<R, C, I> constructor, R[] rowTypes, C[] columnTypes) {
-            return (FeatureItemTable.Builder<I, R, C>) new FeatureItemTable.Builder<>(this, constructor).rowTypes(rowTypes).columnTypes(columnTypes);
+        public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable.Builder<I, R, C> itemTable(
+                BiFunction<R, C, I> constructor,
+                R[] rowTypes,
+                C[] columnTypes
+        ) {
+            return (FeatureItemTable.Builder<I, R, C>) new FeatureItemTable.Builder<>(this, constructor).rowTypes(
+                    rowTypes).columnTypes(columnTypes);
         }
 
         @Override
-        public <B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(BiFunction<R, C, B> constructor, R[] rowTypes, C[] columnTypes) {
-            return (FeatureBlockTable.Builder<B, R, C>) new FeatureBlockTable.Builder<>(this, constructor).rowTypes(rowTypes).columnTypes(columnTypes);
+        public <B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(
+                BiFunction<R, C, B> constructor,
+                R[] rowTypes,
+                C[] columnTypes
+        ) {
+            return (FeatureBlockTable.Builder<B, R, C>) new FeatureBlockTable.Builder<>(this, constructor).rowTypes(
+                    rowTypes).columnTypes(columnTypes);
         }
 
         @Override
@@ -206,28 +252,57 @@ public class ModFeatureRegistry {
         }
 
         @Override
-        public <T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constructor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
+        public <T extends TileEntity> FeatureTileType<T> tile(
+                Supplier<T> constructor,
+                String identifier,
+                Supplier<Collection<? extends Block>> validBlocks
+        ) {
             return register(new FeatureTileType<>(moduleID, identifier, constructor, validBlocks));
         }
 
         @Override
-        public <C extends Container> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier) {
+        public <C extends Container> FeatureContainerType<C> container(
+                IContainerFactory<C> factory,
+                String identifier
+        ) {
             return register(new FeatureContainerType<>(moduleID, identifier, factory));
         }
 
         @Override
-        public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier) {
+        public <E extends Entity> FeatureEntityType<E> entity(
+                EntityType.IFactory<E> factory,
+                EntityClassification classification,
+                String identifier
+        ) {
             return entity(factory, classification, identifier, (builder) -> builder);
         }
 
         @Override
-        public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer) {
-            return entity(factory, classification, identifier, consumer, () -> LivingEntity.registerAttributes());
+        public <E extends Entity> FeatureEntityType<E> entity(
+                EntityType.IFactory<E> factory,
+                EntityClassification classification,
+                String identifier,
+                UnaryOperator<EntityType.Builder<E>> consumer
+        ) {
+            return entity(factory, classification, identifier, consumer, LivingEntity::registerAttributes);
         }
 
         @Override
-        public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer, Supplier<AttributeModifierMap.MutableAttribute> attributes) {
-            return register(new FeatureEntityType<>(moduleID, identifier, consumer, factory, classification, attributes));
+        public <E extends Entity> FeatureEntityType<E> entity(
+                EntityType.IFactory<E> factory,
+                EntityClassification classification,
+                String identifier,
+                UnaryOperator<EntityType.Builder<E>> consumer,
+                Supplier<AttributeModifierMap.MutableAttribute> attributes
+        ) {
+            return register(new FeatureEntityType<>(
+                    moduleID,
+                    identifier,
+                    consumer,
+                    factory,
+                    classification,
+                    attributes
+            ));
         }
 
         public IModFeature getFeature(String identifier) {

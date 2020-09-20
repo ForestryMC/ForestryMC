@@ -12,6 +12,7 @@ package forestry.core;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.modules.ForestryModule;
@@ -24,6 +25,8 @@ import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
+import forestry.core.commands.CommandListAlleles;
+import forestry.core.commands.CommandModules;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
@@ -55,6 +58,7 @@ import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.command.CommandSource;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -79,13 +83,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
-    //	public static final RootCommand rootCommand = new RootCommand();
+    public static final LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
     public ModuleCore() {
         MinecraftForge.EVENT_BUS.register(this);
@@ -136,8 +141,14 @@ public class ModuleCore extends BlankForestryModule {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
-        //		rootCommand.addChildCommand(new CommandModules());
-        //		rootCommand.addChildCommand(new CommandListAlleles());
+        rootCommand.then(CommandModules.register());
+        rootCommand.then(CommandListAlleles.register());
+    }
+
+    @Nullable
+    @Override
+    public LiteralArgumentBuilder<CommandSource> register() {
+        return rootCommand;
     }
 
     @Override
@@ -147,12 +158,36 @@ public class ModuleCore extends BlankForestryModule {
         Proxies.render.initRendering();
 
         for (Biome biome : ForgeRegistries.BIOMES) {
-            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.END)) {
+            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(
+                    biome,
+                    BiomeDictionary.Type.END
+            )) {
                 continue;
             }
-            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 56, 0, 184))));
-            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 32, 0, 76))));
-            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 16, 0, 76))));
+            biome.addFeature(
+                    GenerationStage.Decoration.UNDERGROUND_ORES,
+                    Feature.ORE.withConfiguration(new OreFeatureConfig(
+                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(),
+                            36
+                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 56, 0, 184)))
+            );
+            biome.addFeature(
+                    GenerationStage.Decoration.UNDERGROUND_ORES,
+                    Feature.ORE.withConfiguration(new OreFeatureConfig(
+                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(),
+                            6
+                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 32, 0, 76)))
+            );
+            biome.addFeature(
+                    GenerationStage.Decoration.UNDERGROUND_ORES,
+                    Feature.ORE.withConfiguration(new OreFeatureConfig(
+                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(),
+                            6
+                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 16, 0, 76)))
+            );
         }
     }
 
@@ -235,23 +270,50 @@ public class ModuleCore extends BlankForestryModule {
     @Override
     public void registerRecipes() {
         /* SMELTING RECIPES */
-        RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.APATITE, 1), CoreItems.APATITE.stack(), 0.5f);
-        RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.COPPER, 1), CoreItems.INGOT_COPPER.stack(), 0.5f);
-        RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.TIN, 1), CoreItems.INGOT_TIN.stack(), 0.5f);
+        RecipeUtil.addSmelting(
+                CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.APATITE, 1),
+                CoreItems.APATITE.stack(),
+                0.5f
+        );
+        RecipeUtil.addSmelting(
+                CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.COPPER, 1),
+                CoreItems.INGOT_COPPER.stack(),
+                0.5f
+        );
+        RecipeUtil.addSmelting(
+                CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.TIN, 1),
+                CoreItems.INGOT_TIN.stack(),
+                0.5f
+        );
         RecipeUtil.addSmelting(CoreItems.PEAT.stack(), CoreItems.ASH.stack(), 0.0f);
         if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
             // / CARPENTER
             // Portable ANALYZER
-            RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, CoreItems.PORTABLE_ALYZER.stack(),
-                    "X#X", "X#X", "RDR",
-                    '#', OreDictUtil.PANE_GLASS,
-                    'X', OreDictUtil.INGOT_TIN,
-                    'R', OreDictUtil.DUST_REDSTONE,
-                    'D', OreDictUtil.GEM_DIAMOND);
+            RecipeManagers.carpenterManager.addRecipe(
+                    100,
+                    new FluidStack(Fluids.WATER, 2000),
+                    ItemStack.EMPTY,
+                    CoreItems.PORTABLE_ALYZER.stack(),
+                    "X#X",
+                    "X#X",
+                    "RDR",
+                    '#',
+                    OreDictUtil.PANE_GLASS,
+                    'X',
+                    OreDictUtil.INGOT_TIN,
+                    'R',
+                    OreDictUtil.DUST_REDSTONE,
+                    'D',
+                    OreDictUtil.GEM_DIAMOND
+            );
             // Camouflaged Paneling
             FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
             if (!biomass.isEmpty()) {
-                RecipeManagers.squeezerManager.addRecipe(8, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1), biomass);
+                RecipeManagers.squeezerManager.addRecipe(
+                        8,
+                        CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1),
+                        biomass
+                );
             }
         }
         // alternate recipes
@@ -280,7 +342,8 @@ public class ModuleCore extends BlankForestryModule {
     @Override
     public boolean processIMCMessage(InterModComms.IMCMessage message) {
         if (message.getMethod().equals("blacklist-ores-dimension")) {
-            ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier().get();    //TODO - how does IMC work
+            ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier()
+                    .get();    //TODO - how does IMC work
             for (ResourceLocation dim : dims) {
                 Config.blacklistOreDim(dim);
             }
@@ -292,11 +355,6 @@ public class ModuleCore extends BlankForestryModule {
     @Override
     public IPickupHandler getPickupHandler() {
         return new PickupHandlerCore();
-    }
-
-    @Override
-    public Command[] getConsoleCommands() {
-        return new Command[0];//{rootCommand};
     }
 
     @Override
