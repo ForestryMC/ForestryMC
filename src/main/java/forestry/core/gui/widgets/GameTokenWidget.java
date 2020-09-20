@@ -50,7 +50,6 @@ public class GameTokenWidget extends Widget {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void draw(MatrixStack transform, int startY, int startX) {
-
         EscritoireGameToken token = getToken();
         if (token == null) {
             return;
@@ -65,7 +64,6 @@ public class GameTokenWidget extends Widget {
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
         textureManager.bindTexture(manager.gui.textureFile);
 
-        //TODO not sure if this works...
         RenderSystem.enableDepthTest();
         RenderSystem.color3f(colorR, colorG, colorB);
         manager.gui.blit(transform, startX + xPos, startY + yPos, 228, 0, 22, 22);
@@ -82,9 +80,17 @@ public class GameTokenWidget extends Widget {
         TextureManagerForestry.getInstance().bindGuiTextureMap();
         for (String ident : getToken().getOverlayIcons()) {
             TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-            //TODO no idea if this is right at all
-            manager.gui.blit(transform, startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
+            manager.gui.blit(
+                    transform,
+                    startX + xPos + 3,
+                    startY + yPos + 3,
+                    manager.gui.getBlitOffset(),
+                    16,
+                    16,
+                    icon
+            );
         }
+
         RenderSystem.enableDepthTest();
     }
 

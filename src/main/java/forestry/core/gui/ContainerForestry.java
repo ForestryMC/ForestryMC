@@ -58,11 +58,6 @@ public abstract class ContainerForestry extends Container {
     public Slot addSlot(Slot slot) {
         return super.addSlot(slot);
     }
-    //
-    //	@Override
-    //	public Slot addSlotToContainer(Slot p_75146_1_) {
-    //		return super.addSlotToContainer(p_75146_1_);
-    //	}
 
     @Override
     public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {

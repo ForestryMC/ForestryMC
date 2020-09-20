@@ -1,14 +1,17 @@
 package forestry.sorting.gui;
 
+import com.mojang.datafixers.util.Pair;
 import forestry.core.config.Constants;
 import forestry.core.gui.slots.ISlotTextured;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class SlotFilterFacing extends Slot implements ISlotTextured {
+import javax.annotation.Nullable;
 
+public class SlotFilterFacing extends Slot implements ISlotTextured {
     public SlotFilterFacing(IInventory inventoryIn, int index, int xPosition, int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
     }
@@ -18,8 +21,12 @@ public class SlotFilterFacing extends Slot implements ISlotTextured {
         return false;
     }
 
+    @Nullable
     @Override
-    public ResourceLocation getBackgroundTexture() {
-        return new ResourceLocation(Constants.MOD_ID, "slots/bee");
+    public Pair<ResourceLocation, ResourceLocation> getBackground() {
+        return Pair.of(
+                PlayerContainer.LOCATION_BLOCKS_TEXTURE,
+                new ResourceLocation(Constants.MOD_ID, "slots/bee")
+        );
     }
 }

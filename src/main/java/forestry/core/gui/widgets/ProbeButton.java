@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class ProbeButton extends Widget {
-
     private final GuiEscritoire guiEscritoire;
     private boolean pressed;
 

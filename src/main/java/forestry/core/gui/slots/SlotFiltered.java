@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import com.mojang.datafixers.util.Pair;
 import forestry.core.config.Constants;
 import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -51,12 +53,18 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
 
     @Nullable
     @Override
-    public ResourceLocation getBackgroundTexture() {
+    public Pair<ResourceLocation, ResourceLocation> getBackground() {
         ItemStack stack = getStack();
         if (!isItemValid(stack)) {
-            return blockedTexture;
+            return Pair.of(
+                    PlayerContainer.LOCATION_BLOCKS_TEXTURE,
+                    blockedTexture
+            );
         } else if (backgroundTexture != null) {
-            return backgroundTexture;
+            return Pair.of(
+                    PlayerContainer.LOCATION_BLOCKS_TEXTURE,
+                    backgroundTexture
+            );
         } else {
             return null;
         }

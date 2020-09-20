@@ -74,13 +74,15 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
         if (!optionalAllele.isPresent()) {
             return;
         }
+
         IAllele allele = optionalAllele.get();
         if (allele instanceof IAlleleForestrySpecies) {
             IAlleleForestrySpecies species = (IAlleleForestrySpecies) allele;
             IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
             IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
             this.tokenIndividual = root.templateAsIndividual(template);
-            this.tokenStack = root.getTypes().createStack(this.tokenIndividual, ((IForestrySpeciesRoot<IIndividual>) root).getIconType());
+            this.tokenStack = root.getTypes()
+                    .createStack(this.tokenIndividual, ((IForestrySpeciesRoot<IIndividual>) root).getIconType());
         }
     }
 
@@ -163,7 +165,10 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
         CompoundNBT.putInt("state", state.ordinal());
 
         if (tokenIndividual != null) {
-            CompoundNBT.putString("tokenSpecies", tokenIndividual.getGenome().getPrimary().getRegistryName().toString());
+            CompoundNBT.putString(
+                    "tokenSpecies",
+                    tokenIndividual.getGenome().getPrimary().getRegistryName().toString()
+            );
         }
         return CompoundNBT;
     }

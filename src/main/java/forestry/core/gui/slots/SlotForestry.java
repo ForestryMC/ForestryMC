@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nullable;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
-
     private boolean isPhantom;
     private boolean canAdjustPhantom = true;
     private boolean canShift = true;

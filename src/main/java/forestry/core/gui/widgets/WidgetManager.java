@@ -22,7 +22,6 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class WidgetManager {
-
     public final GuiForestry gui;
     public final Minecraft minecraft;
     protected final List<Widget> widgets = new ArrayList<>();

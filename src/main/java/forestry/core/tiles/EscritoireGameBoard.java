@@ -62,6 +62,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
         if (!optional.isPresent()) {
             return false;
         }
+
         IIndividual individual = optional.get();
 
         IGenome genome = individual.getGenome();
@@ -76,6 +77,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
             gameTokens.add(new EscritoireGameToken(speciesUid));
             gameTokens.add(new EscritoireGameToken(speciesUid));
         }
+
         Collections.shuffle(gameTokens);
         return true;
     }
@@ -85,6 +87,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
         if (index >= tokenCount) {
             return null;
         }
+
         return gameTokens.get(index);
     }
 
@@ -156,6 +159,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
             if (isBoardCleared()) {
                 status = EscritoireGame.Status.SUCCESS;
             }
+
             hideProbedTokens();
         } else {
             token.setFailed();
@@ -176,7 +180,6 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
         IAlleleForestrySpecies species2 = genome.getSecondary(IAlleleForestrySpecies.class);
 
         int tokenCount = species1.getComplexity() + species2.getComplexity();
-
         if (tokenCount % 2 != 0) {
             tokenCount = Math.round((float) tokenCount / 2) * 2;
         }
@@ -212,6 +215,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
         } else {
             compoundNBT.putInt("TokenCount", 0);
         }
+
         return compoundNBT;
     }
 
