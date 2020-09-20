@@ -18,10 +18,6 @@
 //import java.util.List;
 //
 //public class BottlerRecipeMaker {
-//
-//    private BottlerRecipeMaker() {
-//    }
-//
 //    public static List<BottlerRecipeWrapper> getBottlerRecipes(IIngredientManager ingredientRegistry) {
 //        List<BottlerRecipeWrapper> recipes = new ArrayList<>();
 //        for (ItemStack stack : ingredientRegistry.getAllIngredients(VanillaTypes.ITEM)) {

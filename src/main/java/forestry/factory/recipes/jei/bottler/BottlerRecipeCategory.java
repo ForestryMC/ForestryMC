@@ -31,7 +31,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
     private final IDrawable tankOverlay;
 
     public BottlerRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createBlankDrawable(62, 60), "block.forestry.bottler.name");
+        super(guiHelper.createBlankDrawable(62, 60), "block.forestry.bottler");
 
         this.slot = guiHelper.getSlotDrawable();
         this.tank = guiHelper.createDrawable(guiTexture, 79, 13, 18, 60);
@@ -42,7 +42,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.BOTTLER);
+        return ForestryRecipeCategoryUid.BOTTLER;
     }
 
     @Override
@@ -53,11 +53,6 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(BottlerRecipeWrapper bottlerRecipeWrapper, IIngredients iIngredients) {
-        // Nothing ?
     }
 
     @Override

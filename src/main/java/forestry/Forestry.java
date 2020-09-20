@@ -14,7 +14,6 @@ import com.google.common.base.Preconditions;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
-import forestry.core.EventHandlerCore;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
@@ -116,6 +115,9 @@ public class Forestry {
         ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
         EnumErrorCode.init();
 
+        configFolder = new File("./config/forestry");
+        Config.load(Dist.DEDICATED_SERVER);
+
         //TODO not sure where this is enabled any more
         //		FluidRegistry.enableUniversalBucket();
         ModuleManager moduleManager = ModuleManager.getInstance();
@@ -139,7 +141,12 @@ public class Forestry {
         ModuleManager.getModuleHandler().runSetup();
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
-        modEventBus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, evt -> networkHandler.serverPacketHandler());
+        modEventBus.addListener(
+                EventPriority.NORMAL,
+                false,
+                FMLCommonSetupEvent.class,
+                evt -> networkHandler.serverPacketHandler()
+        );
     }
 
     public void clientStuff(FMLClientSetupEvent e) {
@@ -162,9 +169,6 @@ public class Forestry {
         MinecraftForge.EVENT_BUS.register(Config.class);
         Proxies.common.registerEventHandlers();
         Proxies.common.registerTickHandlers();
-        configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
-        //TODO - config
-        Config.load(Dist.DEDICATED_SERVER);
 
         String gameMode = Config.gameMode;
         Preconditions.checkNotNull(gameMode);
@@ -227,7 +231,11 @@ public class Forestry {
     private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
         modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
             Minecraft minecraft = Minecraft.getInstance();
-            ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
+            ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(
+                    minecraft.textureManager,
+                    TextureManagerForestry.LOCATION_FORESTRY_TEXTURE,
+                    "gui"
+            );
             TextureManagerForestry.getInstance().init(spriteUploader);
             IResourceManager resourceManager = minecraft.getResourceManager();
             if (resourceManager instanceof IReloadableResourceManager) {
@@ -240,7 +248,12 @@ public class Forestry {
             ModuleManager.getModuleHandler().runClientInit();
 
         });
-        modEventBus.addListener(EventPriority.NORMAL, false, FMLLoadCompleteEvent.class, fmlLoadCompleteEvent -> networkHandler.clientPacketHandler());
+        modEventBus.addListener(
+                EventPriority.NORMAL,
+                false,
+                FMLLoadCompleteEvent.class,
+                fmlLoadCompleteEvent -> networkHandler.clientPacketHandler()
+        );
     }
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
@@ -256,9 +269,11 @@ public class Forestry {
 
         @SubscribeEvent(priority = EventPriority.LOW)
         public static void createObjects(RegistryEvent.Register<Block> event) {
-            ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
+            ModuleManager.getModuleHandler()
+                    .createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
             ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
-            ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+            ModuleManager.getModuleHandler()
+                    .createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
         }
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -275,7 +290,10 @@ public class Forestry {
         @SubscribeEvent
         public static void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
             CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
-            CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "fallback"), FallbackIngredient.Serializer.INSTANCE);
+            CraftingHelper.register(
+                    new ResourceLocation(Constants.MOD_ID, "fallback"),
+                    FallbackIngredient.Serializer.INSTANCE
+            );
         }
 
     }

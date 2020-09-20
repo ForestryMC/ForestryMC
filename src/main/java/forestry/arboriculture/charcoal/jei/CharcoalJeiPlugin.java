@@ -3,9 +3,6 @@ package forestry.arboriculture.charcoal.jei;
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
-import forestry.arboriculture.ModuleCharcoal;
-import forestry.arboriculture.charcoal.CharcoalManager;
-import forestry.arboriculture.charcoal.CharcoalPileWall;
 import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
@@ -18,10 +15,13 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class CharcoalJeiPlugin implements IModPlugin {
-    public static final ResourceLocation RECIPE_UID = new ResourceLocation("forestry.charcoal.pile");
+    public static final ResourceLocation RECIPE_UID = new ResourceLocation(Constants.MOD_ID, "forestry.charcoal.pile");
     @Override
     public ResourceLocation getPluginUid() {
         return RECIPE_UID;

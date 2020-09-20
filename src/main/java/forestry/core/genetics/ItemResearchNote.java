@@ -47,7 +47,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -113,11 +112,20 @@ public class ItemResearchNote extends ItemForestry {
                     return tooltips;
                 }
 
-                ITextComponent species1 = encoded.getFirstParent().getDisplayName();
-                ITextComponent species2 = encoded.getSecondParent().getDisplayName();
-                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString();
+                ITextComponent species1 = encoded.getFirstParent()
+                        .getDisplayName()
+                        .deepCopy()
+                        .mergeStyle(TextFormatting.YELLOW);
+                ITextComponent species2 = encoded.getSecondParent()
+                        .getDisplayName()
+                        .deepCopy()
+                        .mergeStyle(TextFormatting.YELLOW);
+                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase();
                 String mutationChance = new TranslationTextComponent("for.researchNote.chance." + mutationChanceKey).getString();
-                ITextComponent speciesResult = encoded.getResultingSpecies().getDisplayName();
+                ITextComponent speciesResult = encoded.getResultingSpecies()
+                        .getDisplayName()
+                        .deepCopy()
+                        .mergeStyle(TextFormatting.LIGHT_PURPLE);
 
                 tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
                 tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));

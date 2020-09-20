@@ -1,16 +1,17 @@
 package forestry.core.recipes.jei;
 
+import forestry.core.config.Constants;
 import forestry.factory.MachineUIDs;
+import net.minecraft.util.ResourceLocation;
 
 public class ForestryRecipeCategoryUid {
-
-    public static final String BOTTLER = "forestry." + MachineUIDs.BOTTLER;
-    public static final String CARPENTER = "forestry." + MachineUIDs.CARPENTER;
-    public static final String CENTRIFUGE = "forestry." + MachineUIDs.CENTRIFUGE;
-    public static final String FABRICATOR = "forestry." + MachineUIDs.FABRICATOR;
-    public static final String FERMENTER = "forestry." + MachineUIDs.FERMENTER;
-    public static final String MOISTENER = "forestry." + MachineUIDs.MOISTENER;
-    public static final String RAINMAKER = "forestry." + MachineUIDs.RAINMAKER;
-    public static final String SQUEEZER = "forestry." + MachineUIDs.SQUEEZER;
-    public static final String STILL = "forestry." + MachineUIDs.STILL;
+    public static final ResourceLocation BOTTLER = new ResourceLocation(Constants.MOD_ID, MachineUIDs.BOTTLER);
+    public static final ResourceLocation CARPENTER = new ResourceLocation(Constants.MOD_ID, MachineUIDs.CARPENTER);
+    public static final ResourceLocation CENTRIFUGE = new ResourceLocation(Constants.MOD_ID, MachineUIDs.CENTRIFUGE);
+    public static final ResourceLocation FABRICATOR = new ResourceLocation(Constants.MOD_ID, MachineUIDs.FABRICATOR);
+    public static final ResourceLocation FERMENTER = new ResourceLocation(Constants.MOD_ID, MachineUIDs.FERMENTER);
+    public static final ResourceLocation MOISTENER = new ResourceLocation(Constants.MOD_ID, MachineUIDs.MOISTENER);
+    public static final ResourceLocation RAINMAKER = new ResourceLocation(Constants.MOD_ID, MachineUIDs.RAINMAKER);
+    public static final ResourceLocation SQUEEZER = new ResourceLocation(Constants.MOD_ID, MachineUIDs.SQUEEZER);
+    public static final ResourceLocation STILL = new ResourceLocation(Constants.MOD_ID, MachineUIDs.STILL);
 }

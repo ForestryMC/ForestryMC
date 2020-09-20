@@ -1,5 +1,6 @@
 package forestry.farming.compat;
 
+import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.modules.ForestryModuleUids;
@@ -7,16 +8,20 @@ import forestry.modules.ModuleHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class FarmingJeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(Constants.MOD_ID);
+        return new ResourceLocation(Constants.MOD_ID, "farming");
     }
 
     @Override
@@ -29,11 +34,14 @@ public class FarmingJeiPlugin implements IModPlugin {
                 FarmingInfoRecipeMaker.getRecipes(),
                 FarmingInfoRecipeCategory.UID
         );
+    }
 
-//        registration.addRecipes(
-//                CoreItems.CIRCUITBOARDS.getItems(),
-//                FarmingInfoRecipeCategory.UID
-//        );
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(
+                CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE),
+                FarmingInfoRecipeCategory.UID
+        );
     }
 
     @Override

@@ -23,17 +23,23 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public abstract class HiveDecorator {
 
-    @Nullable
+//    @Nullable
     //	private static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0]);
 
-    public static void decorateHives(ChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+    public static void decorateHives(
+            ChunkGenerator chunkProvider,
+            World world,
+            Random rand,
+            int chunkX,
+            int chunkZ,
+            boolean hasVillageGenerated
+    ) {
 //        		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
 //        			return;
 //        		}
@@ -64,6 +70,7 @@ public abstract class HiveDecorator {
                 Log.error("tried to generate a hive in an unloaded area.");
                 return;
             }
+
             Biome biome = world.getBiome(pos);
             EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
@@ -138,7 +145,13 @@ public abstract class HiveDecorator {
             return false;
         }
 
-        hiveBlock.onBlockAdded(state, world, pos, hiveState, false);    //TODO - work out what correct parameters are here
+        hiveBlock.onBlockAdded(
+                state,
+                world,
+                pos,
+                hiveState,
+                false
+        );    //TODO - work out what correct parameters are here
 
         if (!Config.generateBeehivesDebug) {
             hive.postGen(world, rand, pos);

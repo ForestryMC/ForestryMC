@@ -138,7 +138,8 @@ public class ModuleFactory extends BlankForestryModule {
     public void preInit() {
         // Set fuels and resources for the fermenter
         ItemStack fertilizerCompound = CoreItems.FERTILIZER_COMPOUND.stack();
-        FuelManager.fermenterFuel.put(fertilizerCompound, new FermenterFuel(fertilizerCompound,
+        FuelManager.fermenterFuel.put(fertilizerCompound, new FermenterFuel(
+                fertilizerCompound,
                 ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"),
                 ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")
         ));
@@ -162,7 +163,8 @@ public class ModuleFactory extends BlankForestryModule {
         ItemStack peat = CoreItems.PEAT.stack();
         FuelManager.copperEngineFuel.put(
                 peat,
-                new EngineCopperFuel(peat,
+                new EngineCopperFuel(
+                        peat,
                         Constants.ENGINE_COPPER_FUEL_VALUE_PEAT,
                         Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT
                 )
@@ -171,14 +173,16 @@ public class ModuleFactory extends BlankForestryModule {
         ItemStack bituminousPeat = CoreItems.BITUMINOUS_PEAT.stack();
         FuelManager.copperEngineFuel.put(
                 bituminousPeat,
-                new EngineCopperFuel(bituminousPeat,
+                new EngineCopperFuel(
+                        bituminousPeat,
                         Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT,
                         Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT
                 )
         );
 
         Fluid biomass = ForestryFluids.BIOMASS.getFluid();
-        FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(biomass,
+        FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(
+                biomass,
                 Constants.ENGINE_FUEL_VALUE_BIOMASS,
                 (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting(
                         "fuel.biomass.biogas")),
@@ -435,6 +439,7 @@ public class ModuleFactory extends BlankForestryModule {
                     CoreItems.MULCH.stack(), appleMulchAmount
             );
         }
+
         int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
         FluidStack seedOil = ForestryFluids.SEED_OIL.getFluid(seedOilAmount);
         if (!seedOil.isEmpty()) {
@@ -458,12 +463,14 @@ public class ModuleFactory extends BlankForestryModule {
         if (!liquidIce.isEmpty()) {
             RecipeManagers.squeezerManager.addRecipe(10, iceRecipeResources, liquidIce);
         }
+
         // STILL
         FluidStack biomass = ForestryFluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT);
         FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT);
         if (!biomass.isEmpty() && !ethanol.isEmpty()) {
             RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, biomass, ethanol);
         }
+
         // MOISTENER
         RecipeManagers.moistenerManager.addRecipe(
                 new ItemStack(Items.WHEAT_SEEDS),
@@ -552,8 +559,10 @@ public class ModuleFactory extends BlankForestryModule {
             );
             //TODO red sandstone
         }
+
         // / CARPENTER
-        RecipeManagers.carpenterManager.addRecipe(50,
+        RecipeManagers.carpenterManager.addRecipe(
+                50,
                 ForestryFluids.SEED_OIL.getFluid(250),
                 ItemStack.EMPTY,
                 CoreItems.IMPREGNATED_CASING.stack(),
@@ -605,7 +614,8 @@ public class ModuleFactory extends BlankForestryModule {
                 'X', "sand",
                 'Y', CoreItems.MULCH
         );
-        RecipeManagers.carpenterManager.addRecipe(75,
+        RecipeManagers.carpenterManager.addRecipe(
+                75,
                 new FluidStack(Fluids.WATER, 5000),
                 ItemStack.EMPTY,
                 CoreItems.HARDENED_CASING.stack(),
@@ -640,7 +650,8 @@ public class ModuleFactory extends BlankForestryModule {
                 new ICircuit[]{}
         );
 
-        RecipeManagers.carpenterManager.addRecipe(20,
+        RecipeManagers.carpenterManager.addRecipe(
+                20,
                 new FluidStack(Fluids.WATER, 1000),
                 ItemStack.EMPTY,
                 basicCircuitboard,
@@ -653,7 +664,8 @@ public class ModuleFactory extends BlankForestryModule {
                 "dustRedstone"
         );
 
-        RecipeManagers.carpenterManager.addRecipe(40,
+        RecipeManagers.carpenterManager.addRecipe(
+                40,
                 new FluidStack(Fluids.WATER, 1000),
                 ItemStack.EMPTY,
                 enhancedCircuitboard,
@@ -666,7 +678,8 @@ public class ModuleFactory extends BlankForestryModule {
                 "dustRedstone"
         );
 
-        RecipeManagers.carpenterManager.addRecipe(80,
+        RecipeManagers.carpenterManager.addRecipe(
+                80,
                 new FluidStack(Fluids.WATER, 1000),
                 ItemStack.EMPTY,
                 refinedCircuitboard,
@@ -679,7 +692,8 @@ public class ModuleFactory extends BlankForestryModule {
                 "dustRedstone"
         );
 
-        RecipeManagers.carpenterManager.addRecipe(80,
+        RecipeManagers.carpenterManager.addRecipe(
+                80,
                 new FluidStack(Fluids.WATER, 1000),
                 ItemStack.EMPTY,
                 intricateCircuitboard,
@@ -691,7 +705,8 @@ public class ModuleFactory extends BlankForestryModule {
                 'R',
                 "dustRedstone"
         );
-        RecipeManagers.carpenterManager.addRecipe(40,
+        RecipeManagers.carpenterManager.addRecipe(
+                40,
                 new FluidStack(Fluids.WATER, 1000),
                 ItemStack.EMPTY,
                 CoreItems.SOLDERING_IRON.stack(),
@@ -705,10 +720,9 @@ public class ModuleFactory extends BlankForestryModule {
         );
 
         // RAIN SUBSTRATES
-
-
         if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-            RecipeManagers.carpenterManager.addRecipe(5,
+            RecipeManagers.carpenterManager.addRecipe(
+                    5,
                     new FluidStack(Fluids.WATER, 1000),
                     ItemStack.EMPTY,
                     CoreItems.IODINE_CHARGE.stack(),
@@ -725,7 +739,8 @@ public class ModuleFactory extends BlankForestryModule {
                     'Z',
                     ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1)
             );
-            RecipeManagers.carpenterManager.addRecipe(5,
+            RecipeManagers.carpenterManager.addRecipe(
+                    5,
                     new FluidStack(Fluids.WATER, 1000),
                     ItemStack.EMPTY,
                     CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.DISSIPATION_CHARGE, 1),
@@ -744,7 +759,8 @@ public class ModuleFactory extends BlankForestryModule {
         }
 
         // Ender pearl
-        RecipeManagers.carpenterManager.addRecipe(100,
+        RecipeManagers.carpenterManager.addRecipe(
+                100,
                 ItemStack.EMPTY,
                 new ItemStack(Items.ENDER_PEARL, 1),
                 " # ",
@@ -755,7 +771,8 @@ public class ModuleFactory extends BlankForestryModule {
         );
 
         // Woven Silk
-        RecipeManagers.carpenterManager.addRecipe(10,
+        RecipeManagers.carpenterManager.addRecipe(
+                10,
                 new FluidStack(Fluids.WATER, 500),
                 ItemStack.EMPTY,
                 CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1),
@@ -767,7 +784,8 @@ public class ModuleFactory extends BlankForestryModule {
         );
 
         // Boxes
-        RecipeManagers.carpenterManager.addRecipe(5,
+        RecipeManagers.carpenterManager.addRecipe(
+                5,
                 new FluidStack(Fluids.WATER, 1000),
                 ItemStack.EMPTY,
                 CoreItems.CARTON.stack(2),

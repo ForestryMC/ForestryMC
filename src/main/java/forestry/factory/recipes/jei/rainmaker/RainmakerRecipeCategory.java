@@ -19,14 +19,14 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRec
     private final IDrawable icon;
 
     public RainmakerRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createBlankDrawable(150, 30), "block.forestry.rainmaker.name");
+        super(guiHelper.createBlankDrawable(150, 30), "block.forestry.rainmaker");
         this.slot = guiHelper.getSlotDrawable();
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block()));
     }
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.RAINMAKER);
+        return ForestryRecipeCategoryUid.RAINMAKER;
     }
 
     @Override
@@ -37,11 +37,6 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRec
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(RainmakerRecipeWrapper rainmakerRecipeWrapper, IIngredients iIngredients) {
-
     }
 
     @Override

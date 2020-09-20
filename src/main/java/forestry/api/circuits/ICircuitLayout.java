@@ -5,7 +5,6 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public interface ICircuitLayout {

@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei;
 
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
@@ -67,55 +66,54 @@ public class FactoryJeiPlugin implements IModPlugin {
         }
     }
 
-    @Nullable
-    public static IJeiHelpers jeiHelpers;
-
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
             return;
         }
 
-        jeiHelpers = registry.getJeiHelpers();
+        IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
         List<IRecipeCategory> categories = new ArrayList<>();
 
         if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
-            registry.addRecipeCategories(new BottlerRecipeCategory(guiHelper));
+            categories.add(new BottlerRecipeCategory(guiHelper));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
-            registry.addRecipeCategories(new CarpenterRecipeCategory(guiHelper));
+            categories.add(new CarpenterRecipeCategory(guiHelper));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CENTRIFUGE)) {
-            registry.addRecipeCategories(new CentrifugeRecipeCategory(guiHelper));
+            categories.add(new CentrifugeRecipeCategory(guiHelper));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
-            registry.addRecipeCategories(new FabricatorRecipeCategory(guiHelper));
+            categories.add(new FabricatorRecipeCategory(guiHelper));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
-            registry.addRecipeCategories(new FermenterRecipeCategory(guiHelper));
+            categories.add(new FermenterRecipeCategory(guiHelper));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.MOISTENER)) {
-            registry.addRecipeCategories(new MoistenerRecipeCategory(guiHelper));
+            categories.add(new MoistenerRecipeCategory(guiHelper));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.RAINMAKER)) {
-            registry.addRecipeCategories(new RainmakerRecipeCategory(guiHelper));
+            categories.add(new RainmakerRecipeCategory(guiHelper));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.SQUEEZER)) {
-            registry.addRecipeCategories(new SqueezerRecipeCategory(guiHelper));
+            categories.add(new SqueezerRecipeCategory(guiHelper));
         }
 
 //        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
-//            registry.addRecipeCategories(new StillRecipeCategory(guiHelper));
+//            categories.add(new StillRecipeCategory(guiHelper));
 //        }
+
+        registry.addRecipeCategories(categories.toArray(new IRecipeCategory[categories.size()]));
     }
 
     @Override
@@ -123,14 +121,14 @@ public class FactoryJeiPlugin implements IModPlugin {
         if (ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
             registry.addRecipeTransferHandler(
                     new CarpenterRecipeTransferHandler(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.CARPENTER)
+                    ForestryRecipeCategoryUid.CARPENTER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
             registry.addRecipeTransferHandler(
                     new FabricatorRecipeTransferHandler(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.FABRICATOR)
+                    ForestryRecipeCategoryUid.FABRICATOR
             );
         }
     }
@@ -141,63 +139,63 @@ public class FactoryJeiPlugin implements IModPlugin {
         if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.BOTTLER)
+                    ForestryRecipeCategoryUid.BOTTLER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.CARPENTER)
+                    ForestryRecipeCategoryUid.CARPENTER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CENTRIFUGE)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CENTRIFUGE).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.CENTRIFUGE)
+                    ForestryRecipeCategoryUid.CENTRIFUGE
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.FABRICATOR)
+                    ForestryRecipeCategoryUid.FABRICATOR
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.FERMENTER)
+                    ForestryRecipeCategoryUid.FERMENTER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.MOISTENER)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.MOISTENER).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.MOISTENER)
+                    ForestryRecipeCategoryUid.MOISTENER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.RAINMAKER)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.RAINTANK).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.RAINMAKER)
+                    ForestryRecipeCategoryUid.RAINMAKER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.SQUEEZER)) {
             registry.addRecipeCatalyst(
                     new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.SQUEEZER)
+                    ForestryRecipeCategoryUid.SQUEEZER
             );
         }
 
 //        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
 //            registry.addRecipeCatalyst(
 //                    new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block()),
-//                    new ResourceLocation(ForestryRecipeCategoryUid.STILL)
+//                    ForestryRecipeCategoryUid.STILL
 //            );
 //        }
     }
@@ -213,7 +211,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     33,
                     26,
                     22,
-                    new ResourceLocation(ForestryRecipeCategoryUid.BOTTLER)
+                    ForestryRecipeCategoryUid.BOTTLER
             );
             registry.addRecipeClickArea(
                     GuiBottler.class,
@@ -221,7 +219,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     33,
                     26,
                     22,
-                    new ResourceLocation(ForestryRecipeCategoryUid.BOTTLER)
+                    ForestryRecipeCategoryUid.BOTTLER
             );
         }
 
@@ -232,7 +230,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     48,
                     21,
                     26,
-                    new ResourceLocation(ForestryRecipeCategoryUid.CARPENTER)
+                    ForestryRecipeCategoryUid.CARPENTER
             );
         }
 
@@ -243,7 +241,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     22,
                     38,
                     14,
-                    new ResourceLocation(ForestryRecipeCategoryUid.CENTRIFUGE)
+                    ForestryRecipeCategoryUid.CENTRIFUGE
             );
             registry.addRecipeClickArea(
                     GuiCentrifuge.class,
@@ -251,7 +249,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     54,
                     38,
                     14,
-                    new ResourceLocation(ForestryRecipeCategoryUid.CENTRIFUGE)
+                    ForestryRecipeCategoryUid.CENTRIFUGE
             );
         }
 
@@ -262,7 +260,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     53,
                     18,
                     18,
-                    new ResourceLocation(ForestryRecipeCategoryUid.FABRICATOR)
+                    ForestryRecipeCategoryUid.FABRICATOR
             );
         }
 
@@ -273,7 +271,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     40,
                     32,
                     18,
-                    new ResourceLocation(ForestryRecipeCategoryUid.FERMENTER)
+                    ForestryRecipeCategoryUid.FERMENTER
             );
         }
 
@@ -284,7 +282,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     35,
                     19,
                     21,
-                    new ResourceLocation(ForestryRecipeCategoryUid.MOISTENER)
+                    ForestryRecipeCategoryUid.MOISTENER
             );
         }
 
@@ -295,7 +293,7 @@ public class FactoryJeiPlugin implements IModPlugin {
                     41,
                     43,
                     16,
-                    new ResourceLocation(ForestryRecipeCategoryUid.SQUEEZER)
+                    ForestryRecipeCategoryUid.SQUEEZER
             );
         }
 
@@ -305,7 +303,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 //                    17,
 //                    33,
 //                    57,
-//                    new ResourceLocation(ForestryRecipeCategoryUid.STILL));
+//                    ForestryRecipeCategoryUid.STILL);
 //        }
     }
 
@@ -318,67 +316,67 @@ public class FactoryJeiPlugin implements IModPlugin {
 //        if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
 //            registry.addRecipes(
 //                    BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientManager()),
-//                    new ResourceLocation(ForestryRecipeCategoryUid.BOTTLER)
+//                    ForestryRecipeCategoryUid.BOTTLER
 //            );
 //        }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
             registry.addRecipes(
                     CarpenterRecipeMaker.getCarpenterRecipes(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.CARPENTER)
+                    ForestryRecipeCategoryUid.CARPENTER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CENTRIFUGE)) {
             registry.addRecipes(
                     CentrifugeRecipeMaker.getCentrifugeRecipe(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.CENTRIFUGE)
+                    ForestryRecipeCategoryUid.CENTRIFUGE
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
             registry.addRecipes(
                     FabricatorRecipeMaker.getFabricatorRecipes(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.FABRICATOR)
+                    ForestryRecipeCategoryUid.FABRICATOR
             );
         }
 
 //        if (ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
 //            registry.addRecipes(
 //                    FermenterRecipeMaker.getFermenterRecipes(jeiHelpers.getStackHelper()),
-//                    new ResourceLocation(ForestryRecipeCategoryUid.FERMENTER)
+//                    ForestryRecipeCategoryUid.FERMENTER
 //            );
 //        }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.MOISTENER)) {
             registry.addRecipes(
                     MoistenerRecipeMaker.getMoistenerRecipes(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.MOISTENER)
+                    ForestryRecipeCategoryUid.MOISTENER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.RAINMAKER)) {
             registry.addRecipes(
                     RainmakerRecipeMaker.getRecipes(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.RAINMAKER)
+                    ForestryRecipeCategoryUid.RAINMAKER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.SQUEEZER)) {
             registry.addRecipes(
                     SqueezerRecipeMaker.getSqueezerRecipes(),
-                    new ResourceLocation(ForestryRecipeCategoryUid.SQUEEZER)
+                    ForestryRecipeCategoryUid.SQUEEZER
             );
             registry.addRecipes(
                     SqueezerRecipeMaker.getSqueezerContainerRecipes(registry.getIngredientManager()),
-                    new ResourceLocation(ForestryRecipeCategoryUid.SQUEEZER)
+                    ForestryRecipeCategoryUid.SQUEEZER
             );
         }
 
 //        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
 //            registry.addRecipes(
 //                    StillRecipeMaker.getStillRecipes(),
-//                    new ResourceLocation(ForestryRecipeCategoryUid.STILL)
+//                    ForestryRecipeCategoryUid.STILL
 //            );
 //        }
 

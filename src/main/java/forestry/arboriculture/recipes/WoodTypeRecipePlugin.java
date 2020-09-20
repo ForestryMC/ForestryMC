@@ -10,22 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.recipes;
 
-import forestry.api.arboriculture.EnumForestryWoodType;
-import forestry.api.arboriculture.EnumVanillaWoodType;
-import forestry.api.arboriculture.IWoodType;
 import forestry.core.config.Constants;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
-import mezz.jei.api.helpers.IStackHelper;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class WoodTypeRecipePlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {

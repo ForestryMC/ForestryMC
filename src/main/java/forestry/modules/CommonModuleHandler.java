@@ -57,12 +57,15 @@ public class CommonModuleHandler {
         if (stage != Stage.SETUP) {
             throw new RuntimeException("Tried to register Modules outside of SETUP");
         }
+
         for (IForestryModule module : modules) {
             if (!(module instanceof BlankForestryModule)) {
                 continue;
             }
+
             this.modules.add((BlankForestryModule) module);
         }
+
         this.disabledModules.addAll(disabledModules);
     }
 
@@ -77,6 +80,7 @@ public class CommonModuleHandler {
             module.setupAPI();
             Log.debug("Setup API Complete: {}", module);
         }
+
         stage = Stage.SETUP_DISABLED;
         for (IForestryModule module : disabledModules) {
             Log.debug("Disabled-Setup Start: {}", module);
@@ -130,6 +134,7 @@ public class CommonModuleHandler {
             if (false) {//moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
                 module.registerTriggers();
             }
+
             Log.debug("Pre-Init Complete: {}", module);
         }
     }
@@ -186,6 +191,7 @@ public class CommonModuleHandler {
             module.postInit();
             Log.debug("Post-Init Complete: {}", module);
         }
+
         stage = Stage.FINISHED;
     }
 
@@ -218,7 +224,14 @@ public class CommonModuleHandler {
         });
     }
 
-    public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+    public void populateChunk(
+            ChunkGenerator chunkGenerator,
+            World world,
+            Random rand,
+            int chunkX,
+            int chunkZ,
+            boolean hasVillageGenerated
+    ) {
         for (BlankForestryModule module : modules) {
             module.populateChunk(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
         }

@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FarmingInfoRecipeMaker {
-
-    private FarmingInfoRecipeMaker() {
-    }
-
     public static List<FarmingInfoRecipeWrapper> getRecipes() {
         List<FarmingInfoRecipeWrapper> recipes = new ArrayList<>();
         for (CircuitRecipe circuitRecipe : SolderManager.getRecipes()) {
@@ -28,6 +24,7 @@ public class FarmingInfoRecipeMaker {
                 }
             }
         }
+
         return recipes;
     }
 }

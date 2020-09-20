@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.recipes;
 
-import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.config.Constants;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.HashSet;
-import java.util.Set;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class CombBlockRecipePlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {

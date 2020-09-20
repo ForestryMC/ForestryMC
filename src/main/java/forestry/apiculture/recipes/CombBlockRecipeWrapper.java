@@ -10,13 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.recipes;
 
-import forestry.apiculture.blocks.BlockHoneyComb;
-import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.items.ItemHoneyComb;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.extensions.IRecipeCategoryExtension;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
 import java.util.List;

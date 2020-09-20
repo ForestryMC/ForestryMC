@@ -63,5 +63,4 @@ public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
             sendPacketToListeners(packet);
         }
     }
-
 }

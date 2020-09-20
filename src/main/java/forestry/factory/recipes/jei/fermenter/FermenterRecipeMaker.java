@@ -12,10 +12,6 @@
 //import java.util.List;
 //
 //public class FermenterRecipeMaker {
-//
-//    private FermenterRecipeMaker() {
-//    }
-//
 //    public static List<FermenterRecipeWrapper> getFermenterRecipes(IStackHelper stackHelper) {
 //        List<FermenterRecipeWrapper> recipes = new ArrayList<>();
 //        for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {

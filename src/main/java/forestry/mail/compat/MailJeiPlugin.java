@@ -10,8 +10,11 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class MailJeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {

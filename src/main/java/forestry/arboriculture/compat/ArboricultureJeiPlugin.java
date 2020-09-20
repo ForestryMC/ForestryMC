@@ -13,10 +13,13 @@ import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class ArboricultureJeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {

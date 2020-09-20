@@ -12,10 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqueezerRecipeMaker {
-
-    private SqueezerRecipeMaker() {
-    }
-
     public static List<SqueezerRecipeWrapper> getSqueezerRecipes() {
         List<SqueezerRecipeWrapper> recipes = new ArrayList<>();
         for (ISqueezerRecipe recipe : RecipeManagers.squeezerManager.recipes()) {

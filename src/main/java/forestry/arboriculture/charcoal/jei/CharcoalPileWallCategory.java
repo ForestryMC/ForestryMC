@@ -25,7 +25,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
     private final IDrawable icon;
 
     public CharcoalPileWallCategory(IGuiHelper helper) {
-        super(helper.createBlankDrawable(120, 38), "for.jei.charcoal.pile.name");
+        super(helper.createBlankDrawable(120, 38), "for.jei.charcoal.pile");
         ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "textures/gui/jei/recipes.png");
         arrow = helper.createDrawable(resourceLocation, 0, 14, 22, 16);
         IDrawableStatic arrowAnimated = helper.createDrawable(resourceLocation, 22, 14, 22, 16);
@@ -50,11 +50,6 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
     @Override
     public IDrawable getIcon() {
         return icon;
-    }
-
-    @Override
-    public void setIngredients(CharcoalPileWallWrapper charcoalPileWallWrapper, IIngredients iIngredients) {
-
     }
 
     @Override

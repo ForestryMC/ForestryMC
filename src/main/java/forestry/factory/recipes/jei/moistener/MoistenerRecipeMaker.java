@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MoistenerRecipeMaker {
-
-    private MoistenerRecipeMaker() {
-    }
-
     public static List<MoistenerRecipeWrapper> getMoistenerRecipes() {
         List<MoistenerRecipeWrapper> recipes = new ArrayList<>();
         for (IMoistenerRecipe recipe : RecipeManagers.moistenerManager.recipes()) {

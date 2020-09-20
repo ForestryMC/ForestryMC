@@ -7,8 +7,6 @@ package forestry.api.arboriculture;
 
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.alleles.AlleleManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public enum EnumFruitFamily implements IFruitFamily {

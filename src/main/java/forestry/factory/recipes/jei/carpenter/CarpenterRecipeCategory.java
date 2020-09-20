@@ -18,7 +18,6 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -38,7 +37,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
     private final IDrawable icon;
 
     public CarpenterRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "block.forestry.carpenter.name");
+        super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "block.forestry.carpenter");
 
         craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot);
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 59, 4, 17);
@@ -50,7 +49,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.CARPENTER);
+        return ForestryRecipeCategoryUid.CARPENTER;
     }
 
     @Override
@@ -61,11 +60,6 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(CarpenterRecipeWrapper carpenterRecipeWrapper, IIngredients iIngredients) {
-
     }
 
     @Override

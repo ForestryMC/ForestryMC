@@ -33,7 +33,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
     private final IDrawable icon;
 
     public MoistenerRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "block.forestry.moistener.name");
+        super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "block.forestry.moistener");
 
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 91, 29, 55);
         this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
@@ -45,7 +45,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.MOISTENER);
+        return ForestryRecipeCategoryUid.MOISTENER;
     }
 
     @Override
@@ -56,11 +56,6 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(MoistenerRecipeWrapper moistenerRecipeWrapper, IIngredients iIngredients) {
-
     }
 
     @Override

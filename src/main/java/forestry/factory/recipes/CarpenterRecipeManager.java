@@ -29,7 +29,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CarpenterRecipeManager implements ICarpenterManager {
-
     private static final Set<ICarpenterRecipe> recipes = new HashSet<>();
     private static final Set<Fluid> recipeFluids = new HashSet<>();
 
@@ -44,24 +43,45 @@ public class CarpenterRecipeManager implements ICarpenterManager {
     }
 
     @Override
-    public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object[] materials) {
-        //		ICarpenterRecipe recipe = new CarpenterRecipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials));
-        //		addRecipe(recipe);
+    public void addRecipe(
+            int packagingTime,
+            @Nullable FluidStack liquid,
+            ItemStack box,
+            ItemStack product,
+            Object[] materials
+    ) {
+//        ICarpenterRecipe recipe = new CarpenterRecipe(
+//                packagingTime,
+//                liquid,
+//                box,
+//                ShapedRecipeCustom.createShapedRecipe(product, materials)
+//        );
+//        addRecipe(recipe);
         //TODO json
     }
 
-    public static RecipePair<ICarpenterRecipe> findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
+    public static RecipePair<ICarpenterRecipe> findMatchingRecipe(
+            FluidStack liquid,
+            ItemStack item,
+            IInventory CraftingInventory
+    ) {
         for (ICarpenterRecipe recipe : recipes) {
             String[][] resourceDicts = matches(recipe, liquid, item, CraftingInventory);
             if (resourceDicts != null) {
                 return new RecipePair<>(recipe, resourceDicts);
             }
         }
+
         return RecipePair.EMPTY;
     }
 
     @Nullable
-    public static String[][] matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory CraftingInventory) {
+    public static String[][] matches(
+            @Nullable ICarpenterRecipe recipe,
+            FluidStack resource,
+            ItemStack item,
+            IInventory CraftingInventory
+    ) {
         if (recipe == null) {
             return null;
         }
@@ -108,6 +128,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
         if (removed) {
             recipeFluids.clear();
         }
+
         return removed;
     }
 
@@ -131,6 +152,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
                 }
             }
         }
+
         return Collections.unmodifiableSet(recipeFluids);
     }
 

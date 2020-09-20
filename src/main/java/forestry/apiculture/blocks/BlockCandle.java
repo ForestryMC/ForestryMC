@@ -17,14 +17,11 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.RenderUtil;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.EnumProperty;
@@ -43,11 +40,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.List;
 import java.util.*;
 
 public class BlockCandle extends TorchBlock implements IColoredBlock {
-
     private static final ImmutableMap<String, Integer> colours;
     public static final Set<Item> lightingItems;
     public static final String COLOUR_TAG_NAME = "colour";
@@ -97,7 +92,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     }
 
     public BlockCandle() {
-        super(Block.Properties.create(Material.MISCELLANEOUS)
+        super(Block.Properties.from(Blocks.TORCH)
                 .hardnessAndResistance(0.0f)
                 .sound(SoundType.WOOD), ParticleTypes.FLAME);
         setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.OFF));
@@ -128,11 +123,19 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType onBlockActivated(
+            BlockState state,
+            World worldIn,
+            BlockPos pos,
+            PlayerEntity playerIn,
+            Hand hand,
+            BlockRayTraceResult rayTraceResult
+    ) {
         TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
         if (tileCandle == null) {
             return ActionResultType.FAIL;
         }
+
         final boolean isLit = tileCandle.isLit();
 
         ActionResultType flag = ActionResultType.PASS;
@@ -161,6 +164,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
                 } else {
                     toggleLitState = true;
                 }
+
                 flag = ActionResultType.SUCCESS;
             } else {
                 boolean dyed = tryDye(heldItem, isLit, tileCandle);
@@ -180,6 +184,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
             worldIn.getProfiler().endSection();
             flag = ActionResultType.SUCCESS;
         }
+
         return flag;
     }
 
@@ -216,23 +221,29 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
         }
     }
 
+//    @Override
+//    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+//        ItemStack dropStack = drop.get();
+//        drop.remove();
+//        List<ItemStack> drops = new ArrayList<>();
+//
+//        // not harvested, get drops normally
+//        if (dropStack == null) {
+//            dropStack = getCandleDrop(builder.assertPresent(LootParameters.BLOCK_ENTITY));
+//        }
+//
+//        drops.add(dropStack);
+//        return drops;
+//    }
+
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        ItemStack dropStack = drop.get();
-        drop.remove();
-        List<ItemStack> drops = new ArrayList<>();
-
-        // not harvested, get drops normally
-        if (dropStack == null) {
-            dropStack = getCandleDrop(builder.assertPresent(LootParameters.BLOCK_ENTITY));
-        }
-
-        drops.add(dropStack);
-        return drops;
-    }
-
-    @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+    public ItemStack getPickBlock(
+            BlockState state,
+            RayTraceResult target,
+            IBlockReader world,
+            BlockPos pos,
+            PlayerEntity player
+    ) {
         return getCandleDrop(world, pos);
     }
 
@@ -291,6 +302,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
                 value = tag.getInt(COLOUR_TAG_NAME);
             }
         }
+
         return value;
     }
 
@@ -312,13 +324,19 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+    public int colorMultiplier(
+            BlockState state,
+            @Nullable IBlockReader worldIn,
+            @Nullable BlockPos pos,
+            int tintIndex
+    ) {
         if (worldIn != null && pos != null) {
             TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
             if (tileCandle != null) {
                 return tileCandle.getColour();
             }
         }
+
         return 0xffffff;
     }
 }

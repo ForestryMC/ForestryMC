@@ -1,9 +1,6 @@
 package forestry.apiculture.compat;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.apiculture.features.ApicultureItems;
-import forestry.apiculture.items.ItemBeeGE;
 import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import forestry.modules.ForestryModuleUids;
@@ -16,10 +13,13 @@ import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class ApicultureJeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {

@@ -6,7 +6,6 @@ import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryPlain;
-import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 import mezz.jei.api.constants.VanillaTypes;
@@ -40,7 +39,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
     private final IDrawable icon;
 
     public FabricatorRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "block.forestry.fabricator.name");
+        super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "block.forestry.fabricator");
 
         craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR).block()));
@@ -48,7 +47,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.FABRICATOR);
+        return ForestryRecipeCategoryUid.FABRICATOR;
     }
 
     @Override
@@ -59,11 +58,6 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(FabricatorRecipeWrapper fabricatorRecipeWrapper, IIngredients iIngredients) {
-        // Noting
     }
 
     @Override

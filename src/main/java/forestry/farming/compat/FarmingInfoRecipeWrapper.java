@@ -95,11 +95,17 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
         ingredients.setOutputLists(VanillaTypes.ITEM, outputStacks);
     }
 
-    private static <T> void splitItems(List<List<ItemStack>> items, int startIndex, List<T> values, Function<T, ItemStack> itemFunction) {
+    private static <T> void splitItems(
+            List<List<ItemStack>> items,
+            int startIndex,
+            List<T> values,
+            Function<T, ItemStack> itemFunction
+    ) {
         int count = values.size();
         if (count == 0 || count % 4 != 0) {
             count += (4 - count % 4);
         }
+
         for (int i = 0; i < count; i++) {
             int index = startIndex + i % 4;
             ItemStack stack;
@@ -108,6 +114,7 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
             } else {
                 stack = null;
             }
+
             addItemToList(items, index, stack);
         }
     }
@@ -124,6 +131,7 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
             itemList = new ArrayList<>();
             items.add(itemList);
         }
+
         itemList.add(stack);
     }
 }

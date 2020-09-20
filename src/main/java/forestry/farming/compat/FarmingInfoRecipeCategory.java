@@ -25,12 +25,15 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
     private final IDrawable icon;
 
     public FarmingInfoRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createBlankDrawable(144, 90), "for.jei.farming.name");
+        super(guiHelper.createBlankDrawable(144, 90), "for.jei.farming");
         this.slotDrawable = guiHelper.getSlotDrawable();
         ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "textures/gui/jei/recipes.png");
         addition = guiHelper.createDrawable(resourceLocation, 44, 0, 15, 15);
         arrow = guiHelper.createDrawable(resourceLocation, 59, 0, 15, 15);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FarmingBlocks.FARM.get(
+                EnumFarmBlockType.PLAIN,
+                EnumFarmMaterial.BRICK
+        ).block()));
     }
 
     @Override
@@ -46,11 +49,6 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(FarmingInfoRecipeWrapper farmingInfoRecipeWrapper, IIngredients iIngredients) {
-
     }
 
     @Override
@@ -80,12 +78,19 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, FarmingInfoRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(
+            IRecipeLayout recipeLayout,
+            FarmingInfoRecipeWrapper recipeWrapper,
+            IIngredients ingredients
+    ) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
         guiItemStacks.init(0, true, 63, 18);
-        guiItemStacks.set(0, inputs.get(0));
+        if (inputs.size() > 0) {
+            guiItemStacks.set(0, inputs.get(0));
+        }
+
         for (int x = 0; x < 2; x++) {
             for (int y = 0; y < 2; y++) {
                 int index = 1 + x + y * 2;

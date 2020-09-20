@@ -15,10 +15,10 @@ import forestry.api.circuits.ICircuit;
 import forestry.core.utils.ResourceUtil;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
-import net.minecraft.util.text.TextFormatting;
 
 public abstract class Circuit implements ICircuit {
     private final String uid;

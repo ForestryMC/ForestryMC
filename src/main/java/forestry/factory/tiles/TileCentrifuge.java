@@ -87,6 +87,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
                 nbttaglist.add(products);
             }
         }
+
         compound.put("PendingProducts", nbttaglist);
         return compound;
     }
@@ -100,6 +101,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
             CompoundNBT CompoundNBT1 = nbttaglist.getCompound(i);
             pendingProducts.add(ItemStack.read(CompoundNBT1));
         }
+
         sockets.read(compound);
 
         ItemStack chip = sockets.getStackInSlot(0);
@@ -173,7 +175,13 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
         ItemStack next = pendingProducts.peek();
 
-        boolean added = InventoryUtil.tryAddStack(this, next, InventoryCentrifuge.SLOT_PRODUCT_1, InventoryCentrifuge.SLOT_PRODUCT_COUNT, true);
+        boolean added = InventoryUtil.tryAddStack(
+                this,
+                next,
+                InventoryCentrifuge.SLOT_PRODUCT_1,
+                InventoryCentrifuge.SLOT_PRODUCT_COUNT,
+                true
+        );
 
         if (added) {
             pendingProducts.pop();
@@ -193,7 +201,9 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
             return false;
         }
 
-        return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize() > percentage;
+        return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
+                .getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
+                .getMaxStackSize() > percentage;
     }
 
     @Override
@@ -201,6 +211,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
         if (!pendingProducts.isEmpty()) {
             return true;
         }
+
         checkRecipe();
 
         boolean hasResource = !getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).isEmpty();
@@ -234,7 +245,6 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
     @Override
     public void setSocket(int slot, ItemStack stack) {
-
         if (!stack.isEmpty() && !ChipsetManager.circuitRegistry.isChipset(stack)) {
             return;
         }

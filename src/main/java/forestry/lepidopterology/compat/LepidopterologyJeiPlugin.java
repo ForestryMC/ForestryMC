@@ -1,8 +1,6 @@
 package forestry.lepidopterology.compat;
 
-import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;
-import forestry.core.utils.JeiUtil;
 import forestry.lepidopterology.features.LepidopterologyItems;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -11,13 +9,15 @@ import genetics.api.individual.IIndividual;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
-import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 
 @JeiPlugin
+@OnlyIn(Dist.CLIENT)
 public class LepidopterologyJeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {

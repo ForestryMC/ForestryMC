@@ -200,7 +200,6 @@ public class Config {
 	}*/
 
     private static void loadConfigCommon(Dist side) {
-
         String[] gameModes = new String[]{"EASY", "NORMAL", "HARD", "OP"};
         gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", gameModes);
 

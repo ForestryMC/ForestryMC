@@ -1,16 +1,11 @@
 package forestry.factory.recipes.jei.fermenter;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import forestry.api.fuels.FermenterFuel;
-import forestry.api.fuels.FuelManager;
-import forestry.api.recipes.IFermenterRecipe;
-import forestry.api.recipes.IVariableFermentable;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
@@ -19,16 +14,8 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.extensions.IRecipeCategoryExtension;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRecipeWrapper> {
     private static final int resourceSlot = 0;
@@ -45,7 +32,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
     private final IDrawable icon;
 
     public FermenterRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createDrawable(guiTexture, 34, 18, 108, 60), "block.forestry.fermenter.name");
+        super(guiHelper.createDrawable(guiTexture, 34, 18, 108, 60), "block.forestry.fermenter");
 
         IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 60, 4, 18);
         this.progressBar0 = guiHelper.createAnimatedDrawable(progressBarDrawable0, 40, IDrawableAnimated.StartDirection.BOTTOM, false);
@@ -57,7 +44,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.FERMENTER);
+        return ForestryRecipeCategoryUid.FERMENTER;
     }
 
     @Override
@@ -68,11 +55,6 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
     @Override
     public IDrawable getIcon() {
         return icon;
-    }
-
-    @Override
-    public void setIngredients(FermenterRecipeWrapper fermenterRecipeWrapper, IIngredients iIngredients) {
-
     }
 
     @Override

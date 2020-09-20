@@ -44,12 +44,13 @@ import java.util.List;
 import java.util.Random;
 
 public class BlockBeeHive extends ContainerBlock {
-
     private final HiveType type;
 
     public BlockBeeHive(HiveType type) {
         super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
-                .setLightLevel((state) -> (int) (0.4f * 15)) //TODO - correct?
+                .setLightLevel((state) -> {
+                    return (int) (0.4f * 15);
+                })
                 .hardnessAndResistance(2.5f)
                 .harvestLevel(0)
                 .harvestTool(ItemScoop.SCOOP));
@@ -63,7 +64,6 @@ public class BlockBeeHive extends ContainerBlock {
 
     @Override
     public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        super.onBlockClicked(state, world, pos, player);
         TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
     }
 
@@ -79,6 +79,7 @@ public class BlockBeeHive extends ContainerBlock {
         if (hiveName.equals(IHiveRegistry.HiveType.SWARM.getHiveUid())) {
             return Collections.emptyList();
         }
+
         return ModuleApiculture.getHiveRegistry().getDrops(hiveName);
     }
 
@@ -136,6 +137,7 @@ public class BlockBeeHive extends ContainerBlock {
                 break;
             }
         }
+
         return drops;
     }
 

@@ -24,7 +24,8 @@ import java.util.Map.Entry;
 public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeRecipeWrapper> {
     private static final int[][] OUTPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
 
-    private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = (o1, o2) -> o2.getValue().compareTo(o1.getValue());
+    private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = (o1, o2) -> o2.getValue()
+            .compareTo(o1.getValue());
 
     private static final int inputSlot = 0;
     private static final int outputSlot = 1;
@@ -34,17 +35,23 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
     private final IDrawable icon;
 
     public CentrifugeRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createDrawable(guiTexture, 11, 18, 154, 54), "block.forestry.centrifuge.name");
+        super(guiHelper.createDrawable(guiTexture, 11, 18, 154, 54), "block.forestry.centrifuge");
 
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 0, 4, 17);
-        this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CENTRIFUGE).block()));
+        this.arrow = guiHelper.createAnimatedDrawable(
+                arrowDrawable,
+                80,
+                IDrawableAnimated.StartDirection.BOTTOM,
+                false
+        );
+        this.icon = guiHelper.createDrawableIngredient(
+                new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CENTRIFUGE).block())
+        );
     }
-
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.CENTRIFUGE);
+        return ForestryRecipeCategoryUid.CENTRIFUGE;
     }
 
     @Override
@@ -55,11 +62,6 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(CentrifugeRecipeWrapper centrifugeRecipeWrapper, IIngredients iIngredients) {
-
     }
 
     @Override
@@ -82,7 +84,11 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
         guiItemStacks.addTooltipCallback(tooltip);
     }
 
-    private static void setResults(ForestryTooltipCallback tooltip, Map<ItemStack, Float> outputs, IGuiItemStackGroup guiItemStacks) {
+    private static void setResults(
+            ForestryTooltipCallback tooltip,
+            Map<ItemStack, Float> outputs,
+            IGuiItemStackGroup guiItemStacks
+    ) {
         Set<Entry<ItemStack, Float>> entrySet = outputs.entrySet();
         if (entrySet.isEmpty()) {
             return;

@@ -34,7 +34,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
     private final IDrawable icon;
 
     public SqueezerRecipeCategory(IGuiHelper guiHelper) {
-        super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 62), "block.forestry.squeezer.name");
+        super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 62), "block.forestry.squeezer");
 
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
         this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
@@ -44,7 +44,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(ForestryRecipeCategoryUid.SQUEEZER);
+        return ForestryRecipeCategoryUid.SQUEEZER;
     }
 
     @Override
@@ -55,11 +55,6 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
     @Override
     public IDrawable getIcon() {
         return this.icon;
-    }
-
-    @Override
-    public void setIngredients(AbstractSqueezerRecipeWrapper abstractSqueezerRecipeWrapper, IIngredients iIngredients) {
-
     }
 
     @Override

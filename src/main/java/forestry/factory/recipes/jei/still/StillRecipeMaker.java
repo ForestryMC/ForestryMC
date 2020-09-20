@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StillRecipeMaker {
-
-    private StillRecipeMaker() {
-    }
-
     public static List<StillRecipeWrapper> getStillRecipes() {
         List<StillRecipeWrapper> recipes = new ArrayList<>();
         for (IStillRecipe recipe : RecipeManagers.stillManager.recipes()) {
