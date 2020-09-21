@@ -5,12 +5,21 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ObjectHolder;
 
 public interface ICarpenterRecipe extends IForestryRecipe {
+
+	IRecipeType<ICarpenterRecipe> TYPE = RecipeManagers.create("forestry:carpenter");
+
+	class Companion {
+		@ObjectHolder("forestry:carpenter")
+		public static final IRecipeSerializer<ICarpenterRecipe> SERIALIZER = null;
+	}
 
 	/**
 	 * @return Number of work cycles required to craft the recipe once.
@@ -33,4 +42,13 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	 */
 	FluidStack getFluidResource();
 
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
+
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 }

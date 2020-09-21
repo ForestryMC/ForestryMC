@@ -26,7 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
-import forestry.core.utils.ItemStackUtil;
+import forestry.api.recipes.IForestryRecipe;
 
 public class FermenterRecipeManager implements IFermenterManager {
 
@@ -36,7 +36,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid);
+		IFermenterRecipe recipe = new FermenterRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid);
 		addRecipe(recipe);
 	}
 
@@ -47,7 +47,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 
 	@Override
 	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(resourceOreName, fermentationValue, modifier, output.getFluid(), liquid);
+		IFermenterRecipe recipe = new FermenterRecipe(IForestryRecipe.anonymous(), resourceOreName, fermentationValue, modifier, output.getFluid(), liquid);
 		addRecipe(recipe);
 	}
 

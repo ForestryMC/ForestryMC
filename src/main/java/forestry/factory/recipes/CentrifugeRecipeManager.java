@@ -22,6 +22,7 @@ import net.minecraft.util.NonNullList;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.IForestryRecipe;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
 
@@ -35,7 +36,7 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 			list.add(new ICentrifugeRecipe.Product(entry.getValue(), entry.getKey()));
 		}
 
-		ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, Ingredient.fromStacks(resource), list);
+		ICentrifugeRecipe recipe = new CentrifugeRecipe(IForestryRecipe.anonymous(), timePerItem, Ingredient.fromStacks(resource), list);
 		addRecipe(recipe);
 	}
 

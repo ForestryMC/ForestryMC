@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.utils.ItemStackUtil;
 
@@ -75,7 +76,7 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 			ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
 			NonNullList<ItemStack> input = NonNullList.create();
 			input.add(filledContainerCopy);
-			return new SqueezerRecipe(processingTime, input, f, remnants, remnantsChance);
+			return new SqueezerRecipe(IForestryRecipe.anonymous(), processingTime, input, f, remnants, remnantsChance);
 		}).orElse(null);
 	}
 

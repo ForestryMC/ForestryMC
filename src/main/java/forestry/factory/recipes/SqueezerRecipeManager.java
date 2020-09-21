@@ -20,6 +20,7 @@ import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
@@ -33,7 +34,7 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 
 	@Override
 	public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
-		ISqueezerRecipe recipe = new SqueezerRecipe(timePerItem, resources, liquid, remnants, chance / 100.0f);
+		ISqueezerRecipe recipe = new SqueezerRecipe(IForestryRecipe.anonymous(), timePerItem, resources, liquid, remnants, chance / 100.0f);
 		addRecipe(recipe);
 	}
 

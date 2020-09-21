@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.core.utils.ItemStackUtil;
+import forestry.api.recipes.IForestryRecipe;
 
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
 	public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
@@ -47,7 +47,7 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 
 	@Override
 	public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-		addRecipe(new FabricatorSmeltingRecipe(Ingredient.fromStacks(resource), molten, meltingPoint));
+		addRecipe(new FabricatorSmeltingRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), molten, meltingPoint));
 	}
 
 	@Override

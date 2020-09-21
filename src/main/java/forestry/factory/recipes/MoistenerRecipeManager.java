@@ -18,9 +18,9 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class MoistenerRecipeManager implements IMoistenerManager {
 
@@ -28,7 +28,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 
 	@Override
 	public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-		IMoistenerRecipe recipe = new MoistenerRecipe(Ingredient.fromStacks(resource), product, timePerItem);
+		IMoistenerRecipe recipe = new MoistenerRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), product, timePerItem);
 		addRecipe(recipe);
 	}
 

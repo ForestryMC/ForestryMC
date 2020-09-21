@@ -9,6 +9,7 @@ import net.minecraft.fluid.Fluid;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.IHygroregulatorRecipe;
 
@@ -18,7 +19,7 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 
 	@Override
 	public void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange) {
-		addRecipe(new HygroregulatorRecipe(resource, transferTime, humidChange, tempChange));
+		addRecipe(new HygroregulatorRecipe(IForestryRecipe.anonymous(), resource, transferTime, humidChange, tempChange));
 	}
 
 	@Nullable
