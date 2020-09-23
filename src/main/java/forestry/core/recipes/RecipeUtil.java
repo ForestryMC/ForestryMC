@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -32,26 +33,43 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class RecipeUtil {
-
     // TODO use json recipes
-
     public static void addFermenterRecipes(ItemStack resource, int fermentationValue, ForestryFluids output) {
         if (RecipeManagers.fermenterManager == null) {
             return;
         }
+
         FluidStack outputStack = output.getFluid(1);
         if (outputStack.isEmpty()) {
             return;
         }
 
-        RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
+        RecipeManagers.fermenterManager.addRecipe(
+                resource,
+                fermentationValue,
+                1.0f,
+                outputStack,
+                new FluidStack(Fluids.WATER, 1)
+        );
 
         if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
+            RecipeManagers.fermenterManager.addRecipe(
+                    resource,
+                    fermentationValue,
+                    1.5f,
+                    outputStack,
+                    ForestryFluids.JUICE.getFluid(1)
+            );
         }
 
         if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
+            RecipeManagers.fermenterManager.addRecipe(
+                    resource,
+                    fermentationValue,
+                    1.5f,
+                    outputStack,
+                    ForestryFluids.HONEY.getFluid(1)
+            );
         }
     }
 
@@ -59,24 +77,48 @@ public abstract class RecipeUtil {
         if (RecipeManagers.fermenterManager == null) {
             return;
         }
+
         FluidStack outputStack = output.getFluid(1);
         if (outputStack.isEmpty()) {
             return;
         }
 
-        RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
+        RecipeManagers.fermenterManager.addRecipe(
+                resource,
+                fermentationValue,
+                1.0f,
+                outputStack,
+                new FluidStack(Fluids.WATER, 1)
+        );
 
         if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
+            RecipeManagers.fermenterManager.addRecipe(
+                    resource,
+                    fermentationValue,
+                    1.5f,
+                    outputStack,
+                    ForestryFluids.JUICE.getFluid(1)
+            );
         }
 
         if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
+            RecipeManagers.fermenterManager.addRecipe(
+                    resource,
+                    fermentationValue,
+                    1.5f,
+                    outputStack,
+                    ForestryFluids.HONEY.getFluid(1)
+            );
         }
     }
 
     @Nullable
-    public static CraftingInventoryForestry getCraftRecipe(CraftingInventory originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
+    public static CraftingInventoryForestry getCraftRecipe(
+            CraftingInventory originalCrafting,
+            NonNullList<ItemStack> availableItems,
+            World world,
+            IRecipe recipe
+    ) {
         if (!recipe.matches(originalCrafting, world)) {
             return null;
         }
@@ -92,7 +134,14 @@ public abstract class RecipeUtil {
         for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
             ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
             if (!stackInSlot.isEmpty()) {
-                ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
+                ItemStack equivalent = getCraftingEquivalent(
+                        stockCopy,
+                        originalCrafting,
+                        slot,
+                        world,
+                        recipe,
+                        expectedOutput
+                );
                 if (equivalent.isEmpty()) {
                     return null;
                 } else {
@@ -111,7 +160,14 @@ public abstract class RecipeUtil {
         return null;
     }
 
-    private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, CraftingInventory crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
+    private static ItemStack getCraftingEquivalent(
+            NonNullList<ItemStack> stockCopy,
+            CraftingInventory crafting,
+            int slot,
+            World world,
+            IRecipe recipe,
+            ItemStack expectedOutput
+    ) {
         ItemStack originalStack = crafting.getStackInSlot(slot);
         for (ItemStack stockStack : stockCopy) {
             if (!stockStack.isEmpty()) {
@@ -126,12 +182,20 @@ public abstract class RecipeUtil {
                 }
             }
         }
+
         crafting.setInventorySlotContents(slot, originalStack);
         return ItemStack.EMPTY;
     }
 
-    public static List<IRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {    //TODO - is the stream() needed anymore?
-        return world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+    public static List<IRecipe> findMatchingRecipes(
+            CraftingInventory inventory,
+            World world
+    ) {    //TODO - is the stream() needed anymore?
+        return world.getRecipeManager()
+                .getRecipes(IRecipeType.CRAFTING, inventory, world)
+                .stream()
+                .filter(recipe -> recipe.matches(inventory, world))
+                .collect(Collectors.toList());
     }
 
     //TODO - smelting needs to be json now?
@@ -145,7 +209,7 @@ public abstract class RecipeUtil {
 
     @Nullable
     public static String[][] matches(IDescriptiveRecipe recipe, IInventory CraftingInventory) {
-        NonNullList<NonNullList<ItemStack>> recipeIngredients = recipe.getRawIngredients();
+        NonNullList<Ingredient> recipeIngredients = recipe.getRawIngredients();
         NonNullList<String> oreDicts = recipe.getOreDicts();
         int width = recipe.getWidth();
         int height = recipe.getHeight();
@@ -153,7 +217,13 @@ public abstract class RecipeUtil {
     }
 
     @Nullable
-    public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory CraftingInventory) {
+    public static String[][] matches(
+            NonNullList<Ingredient> recipeIngredients,
+            NonNullList<String> oreDicts,
+            int width,
+            int height,
+            IInventory CraftingInventory
+    ) {
         ItemStack[][] resources = getResources(CraftingInventory);
         return matches(recipeIngredients, oreDicts, width, height, resources);
     }
@@ -166,14 +236,30 @@ public abstract class RecipeUtil {
                 resources[i][j] = CraftingInventory.getStackInSlot(k);
             }
         }
+
         return resources;
     }
 
     @Nullable
-    public static String[][] matches(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources) {
+    public static String[][] matches(
+            NonNullList<Ingredient> recipeIngredients,
+            NonNullList<String> oreDicts,
+            int width,
+            int height,
+            ItemStack[][] resources
+    ) {
         for (int i = 0; i <= 3 - width; i++) {
             for (int j = 0; j <= 3 - height; j++) {
-                String[][] resourceDicts = checkMatch(recipeIngredients, oreDicts, width, height, resources, i, j, true);
+                String[][] resourceDicts = checkMatch(
+                        recipeIngredients,
+                        oreDicts,
+                        width,
+                        height,
+                        resources,
+                        i,
+                        j,
+                        true
+                );
                 if (resourceDicts != null) {
                     return resourceDicts;
                 }
@@ -189,7 +275,16 @@ public abstract class RecipeUtil {
     }
 
     @Nullable
-    private static String[][] checkMatch(NonNullList<NonNullList<ItemStack>> recipeIngredients, NonNullList<String> oreDicts, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
+    private static String[][] checkMatch(
+            NonNullList<Ingredient> recipeIngredients,
+            NonNullList<String> oreDicts,
+            int width,
+            int height,
+            ItemStack[][] resources,
+            int xInGrid,
+            int yInGrid,
+            boolean mirror
+    ) {
         String[][] resourceDicts = new String[3][3];
         for (int k = 0; k < 3; k++) {
             for (int l = 0; l < 3; l++) {
@@ -197,7 +292,7 @@ public abstract class RecipeUtil {
 
                 int widthIt = k - xInGrid;
                 int heightIt = l - yInGrid;
-                NonNullList<ItemStack> recipeIngredient = null;
+                Ingredient recipeIngredient = null;
                 String oreDict = "";
 
                 if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
@@ -207,6 +302,7 @@ public abstract class RecipeUtil {
                     } else {
                         position = widthIt + heightIt * width;
                     }
+
                     recipeIngredient = recipeIngredients.get(position);
                     oreDict = oreDicts.get(position);
                 }
@@ -214,6 +310,7 @@ public abstract class RecipeUtil {
                 if (!checkIngredientMatch(recipeIngredient, resource)) {
                     return null;
                 }
+
                 resourceDicts[k][l] = oreDict;
             }
         }
@@ -221,15 +318,11 @@ public abstract class RecipeUtil {
         return resourceDicts;
     }
 
-    private static boolean checkIngredientMatch(@Nullable NonNullList<ItemStack> recipeIngredient, ItemStack resource) {
-        if (recipeIngredient == null || recipeIngredient.isEmpty()) {
+    private static boolean checkIngredientMatch(@Nullable Ingredient recipeIngredient, ItemStack resource) {
+        if (recipeIngredient == null || recipeIngredient.hasNoMatchingItems()) {
             return resource.isEmpty();
         }
-        for (ItemStack item : recipeIngredient) {
-            if (ItemStackUtil.isCraftingEquivalent(item, resource)) {
-                return true;
-            }
-        }
-        return false;
+
+        return recipeIngredient.test(resource);
     }
 }

@@ -58,6 +58,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -155,9 +156,15 @@ public class ModuleFactory extends BlankForestryModule {
         ItemStack wheat = new ItemStack(Items.WHEAT);
         ItemStack mouldyWheat = CoreItems.MOULDY_WHEAT.stack();
         ItemStack decayingWheat = CoreItems.DECAYING_WHEAT.stack();
-        FuelManager.moistenerResource.put(wheat, new MoistenerFuel(wheat, mouldyWheat, 0, 300));
-        FuelManager.moistenerResource.put(mouldyWheat, new MoistenerFuel(mouldyWheat, decayingWheat, 1, 600));
-        FuelManager.moistenerResource.put(decayingWheat, new MoistenerFuel(decayingWheat, mulch, 2, 900));
+        FuelManager.moistenerResource.put(wheat, new MoistenerFuel(Ingredient.fromStacks(wheat), mouldyWheat, 0, 300));
+        FuelManager.moistenerResource.put(
+                mouldyWheat,
+                new MoistenerFuel(Ingredient.fromStacks(mouldyWheat), decayingWheat, 1, 600)
+        );
+        FuelManager.moistenerResource.put(
+                decayingWheat,
+                new MoistenerFuel(Ingredient.fromStacks(decayingWheat), mulch, 2, 900)
+        );
 
         // Set fuels for our own engines
         ItemStack peat = CoreItems.PEAT.stack();

@@ -6,17 +6,26 @@
 package forestry.api.recipes;
 
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nullable;
 
 public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenterRecipe> {
+    IRecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
+
+    class Companion {
+        @ObjectHolder("forestry:fermenter")
+        public static final IRecipeSerializer<IFermenterRecipe> SERIALIZER = null;
+    }
 
     /**
-     * @return ItemStack representing the input resource.
+     * @return Ingredient representing the input resource.
      */
-    ItemStack getResource();
+    Ingredient getResource();
 
     /**
      * @return String representing the input resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
@@ -44,4 +53,14 @@ public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenter
      * @return Fluid representing output. Amount is determined by fermentationValue * modifier.
      */
     Fluid getOutput();
+
+    @Override
+    default IRecipeType<?> getType() {
+        return TYPE;
+    }
+
+    @Override
+    default IRecipeSerializer<?> getSerializer() {
+        return Companion.SERIALIZER;
+    }
 }

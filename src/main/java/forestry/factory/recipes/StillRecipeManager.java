@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
 import net.minecraft.fluid.Fluid;
@@ -28,7 +29,7 @@ public class StillRecipeManager implements IStillManager {
 
     @Override
     public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
-        IStillRecipe recipe = new StillRecipe(timePerUnit, input, output);
+        IStillRecipe recipe = new StillRecipe(IForestryRecipe.anonymous(), timePerUnit, input, output);
         addRecipe(recipe);
     }
 

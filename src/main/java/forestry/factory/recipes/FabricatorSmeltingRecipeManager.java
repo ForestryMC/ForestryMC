@@ -12,9 +12,10 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.core.utils.ItemStackUtil;
+import forestry.api.recipes.IForestryRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -34,7 +35,7 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
         }
 
         for (IFabricatorSmeltingRecipe smelting : recipes) {
-            if (ItemStackUtil.isCraftingEquivalent(smelting.getResource(), resource)) {
+            if (smelting.getResource().test(resource)) {
                 return smelting;
             }
         }
@@ -44,7 +45,12 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 
     @Override
     public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-        addRecipe(new FabricatorSmeltingRecipe(resource, molten, meltingPoint));
+        addRecipe(new FabricatorSmeltingRecipe(
+                IForestryRecipe.anonymous(),
+                Ingredient.fromStacks(resource),
+                molten,
+                meltingPoint
+        ));
     }
 
     @Override

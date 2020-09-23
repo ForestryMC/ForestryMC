@@ -6,8 +6,19 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.registries.ObjectHolder;
 
 public interface IMoistenerRecipe extends IForestryRecipe {
+    IRecipeType<IMoistenerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
+
+    class Companion {
+        @ObjectHolder("forestry:moistener")
+        public static final IRecipeSerializer<IMoistenerRecipe> SERIALIZER = null;
+    }
+
     /**
      * Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
      *
@@ -18,10 +29,20 @@ public interface IMoistenerRecipe extends IForestryRecipe {
     /**
      * @return Item required in resource stack. Will be reduced by one per produced item.
      */
-    ItemStack getResource();
+    Ingredient getResource();
 
     /**
      * @return Item to produce per resource processed.
      */
     ItemStack getProduct();
+
+    @Override
+    default IRecipeType<?> getType() {
+        return TYPE;
+    }
+
+    @Override
+    default IRecipeSerializer<?> getSerializer() {
+        return Companion.SERIALIZER;
+    }
 }

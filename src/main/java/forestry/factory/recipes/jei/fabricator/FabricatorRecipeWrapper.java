@@ -4,7 +4,7 @@ import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import java.util.ArrayList;
@@ -20,14 +20,13 @@ public class FabricatorRecipeWrapper extends ForestryRecipeWrapper<IFabricatorRe
     public void setIngredients(IIngredients ingredients) {
         IFabricatorRecipe recipe = getRecipe();
 
-        NonNullList<NonNullList<ItemStack>> itemInputs = recipe.getIngredients();
-        List<List<ItemStack>> inputStacks = new ArrayList<>();
-        for (List<ItemStack> stacks : itemInputs) {
-            List<ItemStack> copy = new ArrayList<>(stacks);
-            inputStacks.add(copy);
+        NonNullList<Ingredient> itemIngredients = recipe.getIngredients();
+        List<Ingredient> inputStacks = new ArrayList<>();
+        for (Ingredient ingredient : itemIngredients) {
+            inputStacks.add(ingredient);
         }
 
-        ingredients.setInputLists(VanillaTypes.ITEM, inputStacks);
+        ingredients.setInputIngredients(inputStacks);
 
         ingredients.setInputs(VanillaTypes.FLUID, Collections.singletonList(getRecipe().getLiquid()));
 

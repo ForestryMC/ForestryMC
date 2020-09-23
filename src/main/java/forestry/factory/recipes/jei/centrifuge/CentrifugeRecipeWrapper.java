@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class CentrifugeRecipeWrapper extends ForestryRecipeWrapper<ICentrifugeRecipe> {
@@ -19,9 +20,13 @@ public class CentrifugeRecipeWrapper extends ForestryRecipeWrapper<ICentrifugeRe
     public void setIngredients(IIngredients ingredients) {
         ICentrifugeRecipe recipe = getRecipe();
 
-        ingredients.setInputs(VanillaTypes.ITEM, Collections.singletonList(recipe.getInput()));
+        ingredients.setInputIngredients(Collections.singletonList(recipe.getInput()));
 
-        Set<ItemStack> outputs = recipe.getAllProducts().keySet();
+        Set<ItemStack> outputs = new HashSet<>();
+        for (ICentrifugeRecipe.Product product : recipe.getAllProducts()) {
+            outputs.add(product.getStack());
+        }
+
         ingredients.setOutputs(VanillaTypes.ITEM, new ArrayList<>(outputs));
     }
 }

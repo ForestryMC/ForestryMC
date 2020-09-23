@@ -5,14 +5,24 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
+    IRecipeType<IFabricatorSmeltingRecipe> TYPE = RecipeManagers.create("forestry:fabricator_smelting");
+
+    class Companion {
+        @ObjectHolder("forestry:fabricator_smelting")
+        public static final IRecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
+    }
+
     /**
      * @return item to be melted down
      */
-    ItemStack getResource();
+    Ingredient getResource();
 
     /**
      * @return temperature at which the item melts. Glass is 1000, Sand is 3000.
@@ -23,4 +33,14 @@ public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
      * @return resulting fluid
      */
     FluidStack getProduct();
+
+    @Override
+    default IRecipeType<?> getType() {
+        return TYPE;
+    }
+
+    @Override
+    default IRecipeSerializer<?> getSerializer() {
+        return IFabricatorRecipe.Companion.SERIALIZER;
+    }
 }

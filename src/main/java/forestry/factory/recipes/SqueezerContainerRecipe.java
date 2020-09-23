@@ -11,6 +11,7 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,12 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
     private final ItemStack remnants;
     private final float remnantsChance;
 
-    public SqueezerContainerRecipe(ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance) {
+    public SqueezerContainerRecipe(
+            ItemStack emptyContainer,
+            int processingTime,
+            ItemStack remnants,
+            float remnantsChance
+    ) {
         Preconditions.checkNotNull(emptyContainer);
         Preconditions.checkArgument(!emptyContainer.isEmpty());
         Preconditions.checkNotNull(remnants);
@@ -72,8 +78,7 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
             ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
             NonNullList<ItemStack> input = NonNullList.create();
             input.add(filledContainerCopy);
-            return new SqueezerRecipe(processingTime, input, f, remnants, remnantsChance);
+            return new SqueezerRecipe(IForestryRecipe.anonymous(), processingTime, input, f, remnants, remnantsChance);
         }).orElse(null);
     }
-
 }

@@ -233,7 +233,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
     }
 
     public void checkRecipe() {
-        IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE));
+        IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(
+                InventoryMoistener.SLOT_RESOURCE));
         if (currentRecipe != sameRec) {
             currentRecipe = sameRec;
             resetRecipe();
@@ -287,7 +288,12 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
     }
 
     private int getFreeReservoirSlot(ItemStack deposit) {
-        return getFreeSlot(deposit, InventoryMoistener.SLOT_RESERVOIR_1, InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT, false);
+        return getFreeSlot(
+                deposit,
+                InventoryMoistener.SLOT_RESERVOIR_1,
+                InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT,
+                false
+        );
 
     }
 
@@ -351,7 +357,10 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
         }
 
         // Let's look for a new resource to put into the working slot.
-        int resourceSlot = getNextResourceSlot(InventoryMoistener.SLOT_RESERVOIR_1, InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT);
+        int resourceSlot = getNextResourceSlot(
+                InventoryMoistener.SLOT_RESERVOIR_1,
+                InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT
+        );
         // Nothing found, stop.
         if (errorLogic.setCondition(resourceSlot < 0, EnumErrorCode.NO_RESOURCE)) {
             return false;
@@ -363,7 +372,6 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
     private void rotateReservoir() {
         ArrayList<Integer> slotsToShift = new ArrayList<>();
-
         for (int i = InventoryMoistener.SLOT_RESERVOIR_1; i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
             if (getStackInSlot(i).isEmpty()) {
                 continue;
@@ -395,11 +403,13 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
             if (resourceSlot < 0) {
                 break;
             }
+
             int targetSlot = getFreeReservoirSlot(getStackInSlot(resourceSlot));
             // No free target slot, stop
             if (targetSlot < 0) {
                 break;
             }
+
             // Else shift
             if (getStackInSlot(targetSlot).isEmpty()) {
                 setInventorySlotContents(targetSlot, getStackInSlot(resourceSlot));
@@ -424,9 +434,10 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
                 max += 64;
                 continue;
             }
+
             if (FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(i))) {
                 MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(i));
-                if (res.getItem().isItemEqual(inventory.getStackInSlot(i))) {
+                if (res.getResource().test(inventory.getStackInSlot(i))) {
                     max += 64;
                     avail += inventory.getStackInSlot(i).getCount();
                 }
@@ -442,7 +453,9 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
             return false;
         }
 
-        return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getCount() / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize() > percentage;
+        return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
+                .getCount() / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
+                .getMaxStackSize() > percentage;
     }
 
     public boolean isProducing() {
@@ -521,7 +534,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> tankManager).cast();    //TODO this shouldn't be created every time this method is called...
+            return LazyOptional.of(() -> tankManager)
+                    .cast();    //TODO this shouldn't be created every time this method is called...
         }
         return super.getCapability(capability, facing);
     }

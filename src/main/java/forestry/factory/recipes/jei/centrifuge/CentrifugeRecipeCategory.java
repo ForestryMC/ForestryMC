@@ -1,6 +1,7 @@
 package forestry.factory.recipes.jei.centrifuge;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
@@ -79,7 +80,12 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
         guiItemStacks.set(inputSlot, inputs.get(0));
 
         ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
-        Map<ItemStack, Float> products = recipeWrapper.getRecipe().getAllProducts();
+
+        Map<ItemStack, Float> products = new LinkedHashMap<>();
+        for (ICentrifugeRecipe.Product product : recipeWrapper.getRecipe().getAllProducts()) {
+            products.put(product.getStack(), product.getProbability());
+        }
+
         setResults(tooltip, products, guiItemStacks);
         guiItemStacks.addTooltipCallback(tooltip);
     }

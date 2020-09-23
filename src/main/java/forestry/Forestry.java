@@ -14,6 +14,7 @@ import com.google.common.base.Preconditions;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
+import forestry.api.recipes.*;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
@@ -29,11 +30,13 @@ import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
 import forestry.core.proxy.*;
 import forestry.core.recipes.FallbackIngredient;
+import forestry.core.recipes.HygroregulatorRecipe;
 import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestrySpriteUploader;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ForgeUtils;
+import forestry.factory.recipes.*;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
@@ -44,9 +47,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -61,6 +66,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -218,7 +224,6 @@ public class Forestry {
             generator.addProvider(new ForestryBlockStateProvider(generator));
             generator.addProvider(new ForestryBlockModelProvider(generator));
             generator.addProvider(new ForestryItemModelProvider(generator));
-            generator.addProvider(new ForestryRecipeProvider(generator));
             try {
                 generator.run();
             } catch (Exception e) {
@@ -289,13 +294,32 @@ public class Forestry {
 
         @SubscribeEvent
         public static void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+            IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
             CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
             CraftingHelper.register(
                     new ResourceLocation(Constants.MOD_ID, "fallback"),
                     FallbackIngredient.Serializer.INSTANCE
             );
+
+            register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
+            register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
+            register(registry, IFabricatorRecipe.TYPE, new FabricatorRecipe.Serializer());
+            register(registry, IFabricatorSmeltingRecipe.TYPE, new FabricatorSmeltingRecipe.Serializer());
+            register(registry, IFermenterRecipe.TYPE, new FermenterRecipe.Serializer());
+            register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
+            register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
+            register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
+            register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
         }
 
+        private static void register(
+                IForgeRegistry<IRecipeSerializer<?>> registry,
+                IRecipeType<?> type,
+                IRecipeSerializer<?> serializer
+        ) {
+            Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
+            registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+        }
     }
 
     //split

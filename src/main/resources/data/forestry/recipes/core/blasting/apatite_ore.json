@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "forestry:resource_ore_apatite"
+  },
+  "result": "forestry:apatite",
+  "experience": 0.5,
+  "cookingtime": 200
+}

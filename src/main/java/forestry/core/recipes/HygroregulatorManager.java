@@ -1,5 +1,6 @@
 package forestry.core.recipes;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.IHygroregulatorRecipe;
 import net.minecraft.fluid.Fluid;
@@ -16,7 +17,13 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 
     @Override
     public void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange) {
-        addRecipe(new HygroregulatorRecipe(resource, transferTime, humidChange, tempChange));
+        addRecipe(new HygroregulatorRecipe(
+                IForestryRecipe.anonymous(),
+                resource,
+                transferTime,
+                humidChange,
+                tempChange
+        ));
     }
 
     @Nullable
@@ -24,12 +31,14 @@ public class HygroregulatorManager implements IHygroregulatorManager {
         if (liquid.getAmount() <= 0) {
             return null;
         }
+
         for (IHygroregulatorRecipe recipe : recipes) {
             FluidStack resource = recipe.getResource();
             if (resource.isFluidEqual(liquid)) {
                 return recipe;
             }
         }
+
         return null;
     }
 
@@ -50,6 +59,7 @@ public class HygroregulatorManager implements IHygroregulatorManager {
                 recipeFluids.add(fluidStack.getFluid());
             }
         }
+
         return Collections.unmodifiableSet(recipeFluids);
     }
 

@@ -11,21 +11,38 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonObject;
 import forestry.api.recipes.IFabricatorRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class FabricatorRecipe implements IFabricatorRecipe {
+    private final ResourceLocation id;
     private final ItemStack plan;
     private final FluidStack molten;
-    private final NonNullList<NonNullList<ItemStack>> ingredients;
+    private final NonNullList<Ingredient> ingredients;
     private final NonNullList<String> oreDicts;
     private final ItemStack result;
     private final int width;
     private final int height;
 
-    public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, NonNullList<NonNullList<ItemStack>> ingredients, NonNullList<String> oreDicts, int width, int height) {
+    public FabricatorRecipe(
+            ResourceLocation id,
+            ItemStack plan,
+            FluidStack molten,
+            ItemStack result,
+            NonNullList<Ingredient> ingredients,
+            NonNullList<String> oreDicts,
+            int width,
+            int height
+    ) {
+        Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
         Preconditions.checkNotNull(plan);
         Preconditions.checkNotNull(molten);
         Preconditions.checkNotNull(result);
@@ -34,6 +51,8 @@ public class FabricatorRecipe implements IFabricatorRecipe {
         Preconditions.checkNotNull(oreDicts);
         Preconditions.checkArgument(width > 0);
         Preconditions.checkArgument(height > 0);
+
+        this.id = id;
         this.plan = plan;
         this.molten = molten;
         this.result = result;
@@ -44,7 +63,12 @@ public class FabricatorRecipe implements IFabricatorRecipe {
     }
 
     @Override
-    public NonNullList<NonNullList<ItemStack>> getIngredients() {
+    public ResourceLocation getId() {
+        return id;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
         return ingredients;
     }
 
@@ -76,5 +100,23 @@ public class FabricatorRecipe implements IFabricatorRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         return result;
+    }
+
+    // TODO: Remove references of OreDict
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FabricatorRecipe> {
+        @Override
+        public FabricatorRecipe read(ResourceLocation recipeId, JsonObject json) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public FabricatorRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, FabricatorRecipe recipe) {
+            throw new UnsupportedOperationException();
+        }
     }
 }

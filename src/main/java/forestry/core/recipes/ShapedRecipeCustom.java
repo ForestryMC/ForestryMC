@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 //TODO - with recipes now matching on tags is this class really needed any more?
 public class ShapedRecipeCustom extends ShapedRecipe implements IDescriptiveRecipe {
-    private final NonNullList<NonNullList<ItemStack>> input;
+    private final NonNullList<Ingredient> input;
     private final int width;
     private final int height;
     private boolean mirrored = true;
@@ -46,10 +46,7 @@ public class ShapedRecipeCustom extends ShapedRecipe implements IDescriptiveReci
         Collections.reverse(input2);
         this.mirrored = input2 == input;    //TODO - more awful code
 
-        //Dodgy hacks for compiling here:
-        List<NonNullList<ItemStack>> tempList = input.stream().map(i -> NonNullList.from(ItemStack.EMPTY, i.getMatchingStacks())).collect(Collectors.toList());
-        NonNullList<ItemStack> empty = NonNullList.from(ItemStack.EMPTY);
-        this.input = NonNullList.from(empty, tempList.toArray(new NonNullList[0]));
+        this.input = input;
         //		StringBuilder shape = new StringBuilder();
         //		int idx = 0;
         //
@@ -149,7 +146,7 @@ public class ShapedRecipeCustom extends ShapedRecipe implements IDescriptiveReci
         return height;
     }
 
-    public NonNullList<NonNullList<ItemStack>> getRawIngredients() {
+    public NonNullList<Ingredient> getRawIngredients() {
         return input;
     }
 
@@ -192,7 +189,7 @@ public class ShapedRecipeCustom extends ShapedRecipe implements IDescriptiveReci
             for (int y = 0; y < inv.getHeight(); y++) {
                 int subX = x - startX;
                 int subY = y - startY;
-                NonNullList<ItemStack> target = null;
+                Ingredient target = null;
 
                 if (subX >= 0 && subY >= 0 && subX < width && subY < height) {
                     if (mirror) {
@@ -205,15 +202,8 @@ public class ShapedRecipeCustom extends ShapedRecipe implements IDescriptiveReci
                 //TODO
                 ItemStack stackInSlot = ItemStack.EMPTY;//inv.getStackInRowAndColumn(x, y);
 
-                if (target != null && !target.isEmpty()) {
-                    boolean matched = false;
-
-                    Iterator<ItemStack> itr = target.iterator();
-                    while (itr.hasNext() && !matched) {
-                        matched = ItemStackUtil.isCraftingEquivalent(itr.next(), stackInSlot);
-                    }
-
-                    if (!matched) {
+                if (target != null && !target.hasNoMatchingItems()) {
+                    if (!target.test(stackInSlot)) {
                         return false;
                     }
                 } else if (!stackInSlot.isEmpty()) {

@@ -188,7 +188,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
             return true;
         }
 
-        if (!currentRecipe.getBox().isEmpty()) {
+        if (!currentRecipe.getBox().hasNoMatchingItems()) {
             ItemStack box = getStackInSlot(InventoryCarpenter.SLOT_BOX);
             if (box.isEmpty()) {
                 return false;

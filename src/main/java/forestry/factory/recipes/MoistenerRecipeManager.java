@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -21,12 +22,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MoistenerRecipeManager implements IMoistenerManager {
-
     private static final Set<IMoistenerRecipe> recipes = new HashSet<>();
 
     @Override
     public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-        IMoistenerRecipe recipe = new MoistenerRecipe(resource, product, timePerItem);
+        IMoistenerRecipe recipe = new MoistenerRecipe(
+                IForestryRecipe.anonymous(),
+                Ingredient.fromStacks(resource),
+                product,
+                timePerItem
+        );
         addRecipe(recipe);
     }
 
@@ -36,7 +41,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
         }
 
         for (IMoistenerRecipe rec : recipes) {
-            if (ItemStackUtil.isIdenticalItem(resource, rec.getResource())) {
+            if (rec.getResource().test(resource)) {
                 return true;
             }
         }
@@ -47,10 +52,11 @@ public class MoistenerRecipeManager implements IMoistenerManager {
     @Nullable
     public static IMoistenerRecipe findMatchingRecipe(ItemStack item) {
         for (IMoistenerRecipe recipe : recipes) {
-            if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), item)) {
+            if (recipe.getResource().test(item)) {
                 return recipe;
             }
         }
+
         return null;
     }
 

@@ -10,34 +10,39 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Preconditions;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import forestry.api.recipes.ICentrifugeRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import java.util.Map;
 import java.util.Random;
 
 public class CentrifugeRecipe implements ICentrifugeRecipe {
-
+    private final ResourceLocation id;
     private final int processingTime;
-    private final ItemStack input;
-    private final Map<ItemStack, Float> outputs;
+    private final Ingredient input;
+    private final NonNullList<Product> outputs;
 
-    public CentrifugeRecipe(int processingTime, ItemStack input, Map<ItemStack, Float> outputs) {
+    public CentrifugeRecipe(ResourceLocation id, int processingTime, Ingredient input, NonNullList<Product> outputs) {
+        Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
+
+        this.id = id;
         this.processingTime = processingTime;
         this.input = input;
         this.outputs = outputs;
-
-        for (ItemStack item : outputs.keySet()) {
-            if (item == null) {
-                throw new IllegalArgumentException("Tried to register a null product of " + input);
-            }
-        }
     }
 
     @Override
-    public ItemStack getInput() {
+    public Ingredient getInput() {
         return input;
     }
 
@@ -50,13 +55,13 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
     public NonNullList<ItemStack> getProducts(Random random) {
         NonNullList<ItemStack> products = NonNullList.create();
 
-        for (Map.Entry<ItemStack, Float> entry : this.outputs.entrySet()) {
-            float probability = entry.getValue();
+        for (Product entry : this.outputs) {
+            float probability = entry.getProbability();
 
             if (probability >= 1.0) {
-                products.add(entry.getKey().copy());
+                products.add(entry.getStack().copy());
             } else if (random.nextFloat() < probability) {
-                products.add(entry.getKey().copy());
+                products.add(entry.getStack().copy());
             }
         }
 
@@ -64,7 +69,56 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
     }
 
     @Override
-    public Map<ItemStack, Float> getAllProducts() {
-        return ImmutableMap.copyOf(outputs);
+    public NonNullList<Product> getAllProducts() {
+        return outputs;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return id;
+    }
+
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
+        @Override
+        public CentrifugeRecipe read(ResourceLocation recipeId, JsonObject json) {
+            int processingTime = JSONUtils.getInt(json, "time");
+            Ingredient input = Ingredient.deserialize(json.get("input"));
+            NonNullList<Product> outputs = NonNullList.create();
+
+            for (JsonElement element : JSONUtils.getJsonArray(json, "products")) {
+                float chance = JSONUtils.getInt(element.getAsJsonObject(), "chance");
+                ItemStack stack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(
+                        element.getAsJsonObject(),
+                        "item"
+                ), true);
+                outputs.add(new Product(chance, stack));
+            }
+
+            return new CentrifugeRecipe(recipeId, processingTime, input, outputs);
+        }
+
+        @Override
+        public CentrifugeRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+            int processingTime = buffer.readVarInt();
+            Ingredient input = Ingredient.read(buffer);
+            NonNullList<Product> outputs = RecipeSerializers.read(buffer, b -> {
+                float chance = b.readFloat();
+                ItemStack stack = b.readItemStack();
+                return new Product(chance, stack);
+            });
+
+            return new CentrifugeRecipe(recipeId, processingTime, input, outputs);
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, CentrifugeRecipe recipe) {
+            buffer.writeVarInt(recipe.processingTime);
+            recipe.input.write(buffer);
+
+            RecipeSerializers.write(buffer, recipe.outputs, (b, product) -> {
+                b.writeFloat(product.getProbability());
+                b.writeItemStack(product.getStack());
+            });
+        }
     }
 }

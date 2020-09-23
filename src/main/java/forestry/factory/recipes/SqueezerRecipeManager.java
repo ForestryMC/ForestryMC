@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
@@ -30,8 +31,21 @@ public class SqueezerRecipeManager implements ISqueezerManager {
     public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<>();
 
     @Override
-    public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
-        ISqueezerRecipe recipe = new SqueezerRecipe(timePerItem, resources, liquid, remnants, chance / 100.0f);
+    public void addRecipe(
+            int timePerItem,
+            NonNullList<ItemStack> resources,
+            FluidStack liquid,
+            ItemStack remnants,
+            int chance
+    ) {
+        ISqueezerRecipe recipe = new SqueezerRecipe(
+                IForestryRecipe.anonymous(),
+                timePerItem,
+                resources,
+                liquid,
+                remnants,
+                chance / 100.0f
+        );
         addRecipe(recipe);
     }
 
@@ -56,7 +70,10 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 
     @Override
     public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance) {
-        containerRecipes.put(emptyContainer, new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance));
+        containerRecipes.put(
+                emptyContainer,
+                new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance)
+        );
     }
 
     @Nullable

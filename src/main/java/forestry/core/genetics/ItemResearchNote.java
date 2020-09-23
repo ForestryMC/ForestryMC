@@ -120,8 +120,11 @@ public class ItemResearchNote extends ItemForestry {
                         .getDisplayName()
                         .deepCopy()
                         .mergeStyle(TextFormatting.YELLOW);
-                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase();
-                String mutationChance = new TranslationTextComponent("for.researchNote.chance." + mutationChanceKey).getString();
+                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance())
+                        .toString()
+                        .toLowerCase();
+                ITextComponent mutationChance = new TranslationTextComponent("for.researchNote.chance." + mutationChanceKey)
+                        .mergeStyle(TextFormatting.DARK_BLUE);
                 ITextComponent speciesResult = encoded.getResultingSpecies()
                         .getDisplayName()
                         .deepCopy()

@@ -7,6 +7,7 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -24,11 +25,10 @@ public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerReci
     public void setIngredients(IIngredients ingredients) {
         IMoistenerRecipe recipe = getRecipe();
 
-        List<ItemStack> itemStackInputs = new ArrayList<>();
-        itemStackInputs.add(recipe.getResource());
-        ItemStack fuelItem = fuel.getItem();
-        itemStackInputs.add(fuelItem);
-        ingredients.setInputs(VanillaTypes.ITEM, itemStackInputs);
+        List<Ingredient> itemIngredients = new ArrayList<>();
+        itemIngredients.add(recipe.getResource());
+        itemIngredients.add(fuel.getResource());
+        ingredients.setInputIngredients(itemIngredients);
 
         List<ItemStack> itemStackOutputs = new ArrayList<>();
         itemStackOutputs.add(recipe.getProduct());

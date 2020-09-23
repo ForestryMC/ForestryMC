@@ -7,6 +7,7 @@ package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 /**
@@ -30,7 +31,7 @@ public interface IDescriptiveRecipe {
      * @return array of all the ingredients in the crafting table.
      * Each inner list represents one slot's accepted ItemStacks
      */
-    NonNullList<NonNullList<ItemStack>> getRawIngredients();
+    NonNullList<Ingredient> getRawIngredients();
 
     //TODO replace with tags
     NonNullList<String> getOreDicts();

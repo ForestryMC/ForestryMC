@@ -15,13 +15,15 @@ import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRecipeWrapper> {
@@ -41,9 +43,15 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
         craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot);
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 59, 4, 17);
-        this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.BOTTOM, false);
+        this.arrow = guiHelper.createAnimatedDrawable(
+                arrowDrawable,
+                200,
+                IDrawableAnimated.StartDirection.BOTTOM,
+                false
+        );
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER)
+                .block()));
     }
 
 
@@ -69,35 +77,42 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, CarpenterRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+        IGuiIngredientGroup guiIngredients = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
-        guiItemStacks.init(boxSlot, true, 73, 3);
+        guiIngredients.init(boxSlot, true, 73, 3);
 
-        guiItemStacks.init(craftOutputSlot, false, 70, 34);
+        guiIngredients.init(craftOutputSlot, false, 70, 34);
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 int index = craftInputSlot + x + y * 3;
-                guiItemStacks.init(index, true, x * 18, 3 + y * 18);
+                guiIngredients.init(index, true, x * 18, 3 + y * 18);
             }
         }
 
         guiFluidStacks.init(inputTank, true, 141, 1, 16, 58, 10000, false, tankOverlay);
 
         ICarpenterRecipe recipe = recipeWrapper.getRecipe();
-        ItemStack box = recipe.getBox();
-        if (!box.isEmpty()) {
-            guiItemStacks.set(boxSlot, box);
+        Ingredient box = recipe.getBox();
+        if (!box.hasNoMatchingItems()) {
+            guiIngredients.set(boxSlot, box);
         }
 
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
-        guiItemStacks.set(craftOutputSlot, outputs.get(0));
+        guiIngredients.set(craftOutputSlot, outputs.get(0));
 
         IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
-        List<List<ItemStack>> craftingInputs = recipeWrapper.getInputStacks();
-        craftingGridHelper.setInputs(guiItemStacks, craftingInputs, craftingGridRecipe.getWidth(), craftingGridRecipe.getHeight());
+        List<List<Ingredient>> craftingInputs = new ArrayList<>();
+        craftingInputs.add(recipeWrapper.getIngredients());
+
+        craftingGridHelper.setInputs(
+                guiIngredients,
+                craftingInputs,
+                craftingGridRecipe.getWidth(),
+                craftingGridRecipe.getHeight()
+        );
 
         List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
         if (!fluidInputs.isEmpty()) {

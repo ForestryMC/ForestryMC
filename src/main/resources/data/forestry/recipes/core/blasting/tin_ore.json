@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "forestry:resource_ore_tin"
+  },
+  "result": "forestry:ingot_tin",
+  "experience": 0.5,
+  "cookingtime": 200
+}

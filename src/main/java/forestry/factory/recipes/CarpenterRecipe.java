@@ -11,22 +11,36 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonObject;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.ShapedRecipeCustom;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class CarpenterRecipe implements ICarpenterRecipe {
-
+    private final ResourceLocation id;
     private final int packagingTime;
     private final FluidStack liquid;
-    private final ItemStack box;
+    private final Ingredient box;
     private final ShapedRecipeCustom internal;
 
-    public CarpenterRecipe(int packagingTime, FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
+    public CarpenterRecipe(
+            ResourceLocation id,
+            int packagingTime,
+            FluidStack liquid,
+            Ingredient box,
+            ShapedRecipeCustom internal
+    ) {
+        Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
         Preconditions.checkNotNull(box);
         Preconditions.checkNotNull(internal);
+
+        this.id = id;
         this.packagingTime = packagingTime;
         this.liquid = liquid;
         this.box = box;
@@ -39,7 +53,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
     }
 
     @Override
-    public ItemStack getBox() {
+    public Ingredient getBox() {
         return box;
     }
 
@@ -51,5 +65,28 @@ public class CarpenterRecipe implements ICarpenterRecipe {
     @Override
     public IDescriptiveRecipe getCraftingGridRecipe() {
         return internal;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return id;
+    }
+
+    // TODO: Remove ShapedRecipeCustom. We cannot serialize this without ShapedRecipeCustom having a serializer
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CarpenterRecipe> {
+        @Override
+        public CarpenterRecipe read(ResourceLocation recipeId, JsonObject json) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public CarpenterRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void write(PacketBuffer buffer, CarpenterRecipe recipe) {
+            throw new UnsupportedOperationException();
+        }
     }
 }

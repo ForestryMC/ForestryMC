@@ -6,6 +6,7 @@ import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -14,18 +15,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
-    private final List<List<ItemStack>> inputStacks;
+    private final List<Ingredient> ingredients;
 
     public CarpenterRecipeWrapper(ICarpenterRecipe recipe) {
         super(recipe);
 
         IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
-        NonNullList<NonNullList<ItemStack>> inputs = craftingGridRecipe.getRawIngredients();
+        NonNullList<Ingredient> inputs = craftingGridRecipe.getRawIngredients();
 
-        this.inputStacks = new ArrayList<>();
-        for (List<ItemStack> stacks : inputs) {
-            List<ItemStack> copy = new ArrayList<>(stacks);
-            this.inputStacks.add(copy);
+        this.ingredients = new ArrayList<>();
+        for (Ingredient ingredient : inputs) {
+            this.ingredients.add(ingredient);
         }
     }
 
@@ -34,15 +34,13 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
         ICarpenterRecipe recipe = getRecipe();
         IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
-        List<List<ItemStack>> inputStacks = new ArrayList<>();
-        ItemStack box = recipe.getBox();
-        if (!box.isEmpty()) {
-            inputStacks.add(Collections.singletonList(box));
+        List<Ingredient> inputStacks = new ArrayList<>();
+        Ingredient box = recipe.getBox();
+        if (!box.hasNoMatchingItems()) {
+            inputStacks.add(box);
         }
 
-        inputStacks.addAll(getInputStacks());
-
-        ingredients.setInputLists(VanillaTypes.ITEM, inputStacks);
+        ingredients.setInputIngredients(inputStacks);
 
         FluidStack fluidResource = recipe.getFluidResource();
         if (fluidResource != null) {
@@ -53,7 +51,7 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
         ingredients.setOutput(VanillaTypes.ITEM, recipeOutput);
     }
 
-    public List<List<ItemStack>> getInputStacks() {
-        return inputStacks;
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 }
