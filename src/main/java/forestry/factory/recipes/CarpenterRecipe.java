@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 
@@ -22,8 +23,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.core.recipes.ShapedRecipeCustom;
 
 public class CarpenterRecipe implements ICarpenterRecipe {
 
@@ -31,9 +30,9 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	private final int packagingTime;
 	private final FluidStack liquid;
 	private final Ingredient box;
-	private final ShapedRecipeCustom internal;
+	private final ShapedRecipe internal;
 
-	public CarpenterRecipe(ResourceLocation id, int packagingTime, FluidStack liquid, Ingredient box, ShapedRecipeCustom internal) {
+	public CarpenterRecipe(ResourceLocation id, int packagingTime, FluidStack liquid, Ingredient box, ShapedRecipe internal) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(internal);
@@ -61,7 +60,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	public IDescriptiveRecipe getCraftingGridRecipe() {
+	public ShapedRecipe getCraftingGridRecipe() {
 		return internal;
 	}
 

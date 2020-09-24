@@ -21,12 +21,12 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.RecipePair;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -64,7 +64,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	@Nullable
-	public static String[][] matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory CraftingInventory) {
+	public static String[][] matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
 		if (recipe == null) {
 			return null;
 		}
@@ -81,8 +81,8 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 			return null;
 		}
 
-		IDescriptiveRecipe internal = recipe.getCraftingGridRecipe();
-		return RecipeUtil.matches(internal, CraftingInventory);
+		ShapedRecipe internal = recipe.getCraftingGridRecipe();
+		return RecipeUtil.matches(internal, craftingInventory);
 	}
 
 	public static boolean isBox(ItemStack resource) {
@@ -120,7 +120,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		}
 
 		return recipes.stream().filter(recipe -> {
-			ItemStack output = recipe.getCraftingGridRecipe().getOutput();
+			ItemStack output = recipe.getCraftingGridRecipe().getRecipeOutput();
 			return ItemStackUtil.isIdenticalItem(itemStack, output);
 		}).collect(Collectors.toList());
 	}
