@@ -75,7 +75,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		@Override
 		public CarpenterRecipe read(ResourceLocation recipeId, JsonObject json) {
 			int packagingTime = JSONUtils.getInt(json, "time");
-			FluidStack liquid = RecipeSerializers.load(JSONUtils.getJsonObject(json, "liquid"));
+			FluidStack liquid = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid"));
 			Ingredient box = Ingredient.deserialize(json.get("box"));
 			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
 
