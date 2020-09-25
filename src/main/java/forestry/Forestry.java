@@ -60,9 +60,11 @@ import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IHygroregulatorRecipe;
 import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.ISolderRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillRecipe;
 import forestry.core.EventHandlerCore;
+import forestry.core.circuits.CircuitRecipe;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
@@ -331,6 +333,7 @@ public class Forestry {
 			register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
 			register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
 			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
+			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
 		}
 
 		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {

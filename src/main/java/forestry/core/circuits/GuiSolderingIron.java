@@ -24,6 +24,7 @@ import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.farming.FarmDirection;
+import forestry.api.recipes.ISolderRecipe;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
@@ -52,7 +53,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 		for (int i = 0; i < 4; i++) {
 			String description;
 			ItemStack tube = itemInventory.getStackInSlot(i + 2);
-			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
+			ISolderRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
 			} else {

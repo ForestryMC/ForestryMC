@@ -21,10 +21,12 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.circuits.ISolderManager;
+import forestry.api.recipes.IForestryRecipe;
+import forestry.api.recipes.ISolderManager;
+import forestry.api.recipes.ISolderRecipe;
 
 public class SolderManager implements ISolderManager {
-	private static final List<CircuitRecipe> recipes = new ArrayList<>();
+	private static final List<ISolderRecipe> recipes = new ArrayList<>();
 
 	@Override
 	public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
@@ -32,16 +34,12 @@ public class SolderManager implements ISolderManager {
 		Preconditions.checkNotNull(resource, "resource may not be null");
 		Preconditions.checkNotNull(circuit, "circuit may not be null");
 
-		recipes.add(new CircuitRecipe(layout, resource, circuit));
-	}
-
-	public static Collection<CircuitRecipe> getRecipes() {
-		return recipes;
+		recipes.add(new CircuitRecipe(IForestryRecipe.anonymous(), layout, resource, circuit));
 	}
 
 	@Nullable
 	public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
-		CircuitRecipe circuitRecipe = getMatchingRecipe(layout, resource);
+		ISolderRecipe circuitRecipe = getMatchingRecipe(layout, resource);
 		if (circuitRecipe == null) {
 			return null;
 		}
@@ -49,14 +47,29 @@ public class SolderManager implements ISolderManager {
 	}
 
 	@Nullable
-	public static CircuitRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
+	public static ISolderRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
 		if (layout != null) {
-			for (CircuitRecipe recipe : recipes) {
+			for (ISolderRecipe recipe : recipes) {
 				if (recipe.matches(layout, resource)) {
 					return recipe;
 				}
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean addRecipe(ISolderRecipe recipe) {
+		return recipes.add(recipe);
+	}
+
+	@Override
+	public boolean removeRecipe(ISolderRecipe recipe) {
+		return recipes.remove(recipe);
+	}
+
+	@Override
+	public Collection<ISolderRecipe> recipes() {
+		return recipes;
 	}
 }

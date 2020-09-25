@@ -3,12 +3,14 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.api.circuits;
+package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
 
-public interface ISolderManager {
+import forestry.api.circuits.ICircuit;
+import forestry.api.circuits.ICircuitLayout;
+
+public interface ISolderManager extends ICraftingProvider<ISolderRecipe> {
 
 	void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit);
-
 }
