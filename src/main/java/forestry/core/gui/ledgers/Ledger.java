@@ -25,10 +25,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.List;
 
 /**
  * Side ledger for guis
@@ -244,25 +244,25 @@ public abstract class Ledger {
         AbstractGui.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
     }
 
-    protected int drawHeader(MatrixStack transform, ITextComponent string, int x, int y) {
-        return drawShadowText(transform, string, x, y, fontColorHeader);
+    protected int drawHeader(MatrixStack transform, ITextComponent component, int x, int y) {
+        return drawShadowText(transform, component, x, y, fontColorHeader);
     }
 
-    protected int drawSubheader(MatrixStack transform, ITextComponent string, int x, int y) {
-        return drawShadowText(transform, string, x, y, fontColorSubheader);
+    protected int drawSubheader(MatrixStack transform, ITextComponent component, int x, int y) {
+        return drawShadowText(transform, component, x, y, fontColorSubheader);
     }
 
-    protected int drawShadowText(MatrixStack transform, ITextComponent string, int x, int y, int color) {
-        return drawSplitText(transform, string, x, y, maxTextWidth, color, true);
+    protected int drawShadowText(MatrixStack transform, ITextComponent component, int x, int y, int color) {
+        return drawSplitText(transform, component, x, y, maxTextWidth, color, true);
     }
 
-    protected int drawSplitText(MatrixStack transform, ITextComponent string, int x, int y, int width) {
-        return drawSplitText(transform, string, x, y, width, fontColorText, false);
+    protected int drawSplitText(MatrixStack transform, ITextComponent component, int x, int y, int width) {
+        return drawSplitText(transform, component, x, y, width, fontColorText, false);
     }
 
     protected int drawSplitText(
             MatrixStack transform,
-            ITextComponent string,
+            ITextComponent component,
             int x,
             int y,
             int width,
@@ -271,13 +271,24 @@ public abstract class Ledger {
     ) {
         int originalY = y;
         Minecraft minecraft = Minecraft.getInstance();
-        List<ITextProperties> strings = minecraft.fontRenderer.func_238425_b_(string, width);
-        for (ITextProperties obj : strings) {
-            String s = obj.getString();
+        for (ITextProperties textProperties : minecraft.fontRenderer.getCharacterManager()
+                .func_238362_b_(component, width, Style.EMPTY)) {
             if (shadow) {
-                minecraft.fontRenderer.drawStringWithShadow(transform, s, x, y, color);
+                minecraft.fontRenderer.func_243246_a(
+                        transform,
+                        new TranslationTextComponent(textProperties.getString()),
+                        x,
+                        y,
+                        color
+                );
             } else {
-                minecraft.fontRenderer.drawString(transform, s, x, y, color);
+                minecraft.fontRenderer.func_243248_b(
+                        transform,
+                        new TranslationTextComponent(textProperties.getString()),
+                        x,
+                        y,
+                        color
+                );
             }
             y += minecraft.fontRenderer.FONT_HEIGHT;
         }

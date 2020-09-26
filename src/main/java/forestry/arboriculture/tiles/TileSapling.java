@@ -22,11 +22,11 @@ import forestry.core.worldgen.FeatureBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -114,11 +114,20 @@ public class TileSapling extends TileTreeContainer {
         if (generator instanceof FeatureBase) {
             generated = ((FeatureBase) generator).place(world, random, getPos(), false);
         } else {
-            generated = generator.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
+            generated = generator.func_241855_a(
+                    (ISeedReader) world,
+                    ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
+                    random,
+                    getPos(),
+                    IFeatureConfig.NO_FEATURE_CONFIG
+            );
         }
 
         if (generated) {
-            IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, getOwnerHandler().getOwner());
+            IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(
+                    world,
+                    getOwnerHandler().getOwner()
+            );
             breedingTracker.registerBirth(tree);
         }
     }
@@ -130,6 +139,9 @@ public class TileSapling extends TileTreeContainer {
         if (tree == null) {
             return EmptyModelData.INSTANCE;
         }
-        return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
+        return new ModelDataMap.Builder().withInitial(
+                TREE_SPECIES,
+                tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)
+        ).build();
     }
 }

@@ -15,9 +15,10 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileStill;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import java.util.Optional;
 
 public class InventoryStill extends InventoryAdapterTile<TileStill> {
     public static final short SLOT_PRODUCT = 0;
@@ -33,7 +34,7 @@ public class InventoryStill extends InventoryAdapterTile<TileStill> {
         if (slotIndex == SLOT_RESOURCE) {
             return FluidHelper.isFillableEmptyContainer(itemStack);
         } else if (slotIndex == SLOT_CAN) {
-            LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+            Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
             return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
         }
         return false;

@@ -29,7 +29,6 @@ import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelBakerModel implements IBakedModel {
-
     private final boolean isGui3d;
     private boolean isAmbientOcclusion;
     private TextureAtlasSprite particleSprite;
@@ -81,7 +80,7 @@ public class ModelBakerModel implements IBakedModel {
     }
 
     @Override
-    public boolean func_230044_c_() {
+    public boolean isSideLit() {
         return true;
     }
 

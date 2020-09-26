@@ -104,7 +104,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
         window.setMousePosition(mouseX, mouseY);
         this.renderBackground(transform);
         super.render(transform, mouseX, mouseY, partialTicks);
-        func_230459_a_(transform, mouseX, mouseY);
+        renderHoveredTooltip(transform, mouseX, mouseY);
     }
 
     protected abstract void addLedgers();

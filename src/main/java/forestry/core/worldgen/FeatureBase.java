@@ -21,16 +21,9 @@ import net.minecraft.world.gen.feature.structure.StructureManager;
 import java.util.Random;
 
 public abstract class FeatureBase extends Feature<NoFeatureConfig> {
-
     protected FeatureBase() {
         super(NoFeatureConfig.field_236558_a_);
     }
 
-    @Override
-    public boolean func_230362_a_(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        return place(world, rand, pos, false);
-    }
-
     public abstract boolean place(IWorld world, Random rand, BlockPos pos, boolean forced);
-
 }

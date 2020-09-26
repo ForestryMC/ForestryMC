@@ -73,7 +73,7 @@ public class ForestryLootTableProvider implements IDataProvider {
 			validationtracker.func_227530_a_("Missing built-in table: " + resourcelocation);
 		}*/
 
-        map.forEach((location, loot) -> LootTableManager.func_227508_a_(tracker, location, loot));
+        map.forEach((location, loot) -> LootTableManager.validateLootTable(tracker, location, loot));
     }
 
     private static Path getPath(Path path, ResourceLocation id) {

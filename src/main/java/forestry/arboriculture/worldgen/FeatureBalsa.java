@@ -14,35 +14,75 @@ import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.List;
 import java.util.Random;
 
 public class FeatureBalsa extends FeatureTree {
-
     public FeatureBalsa(ITreeGenData tree) {
         super(tree, 6, 6);
     }
 
     @Override
-    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+    public boolean func_241855_a(
+            ISeedReader world,
+            ChunkGenerator generator,
+            Random rand,
+            BlockPos pos,
+            NoFeatureConfig config
+    ) {
+        return place(world, rand, pos, false);
+    }
+
+    @Override
+    protected void generateLeaves(
+            IWorld world,
+            Random rand,
+            TreeBlockTypeLeaf leaf,
+            List<BlockPos> branchEnds,
+            BlockPos startPos
+    ) {
         BlockPos topPos = startPos.add(0, height + 1, 0);
         BlockPos.Mutable leafCenter = new BlockPos.Mutable();
         float leafRadius = (girth - 1.0f) / 2.0f;
 
         FeatureHelper.addBlock(world, leafCenter.setPos(topPos), leaf, FeatureHelper.EnumReplaceMode.AIR);
         leafCenter.move(Direction.DOWN);
-        FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromPos(
+                world,
+                leaf,
+                leafCenter,
+                leafRadius + girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
         leafCenter.move(Direction.DOWN);
 
         if (height > 10) {
-            FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+            FeatureHelper.generateCylinderFromPos(
+                    world,
+                    leaf,
+                    leafCenter,
+                    leafRadius + girth,
+                    1,
+                    FeatureHelper.EnumReplaceMode.SOFT
+            );
             leafCenter.move(Direction.DOWN);
         }
 
         while (leafCenter.getY() > topPos.getY() - 6) {
-            FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+            FeatureHelper.generateCylinderFromPos(
+                    world,
+                    leaf,
+                    leafCenter,
+                    leafRadius + girth,
+                    1,
+                    FeatureHelper.EnumReplaceMode.SOFT
+            );
             leafCenter.move(Direction.DOWN);
         }
     }

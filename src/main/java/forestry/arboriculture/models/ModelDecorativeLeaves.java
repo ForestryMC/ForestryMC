@@ -40,6 +40,11 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
         super(BlockDecorativeLeaves.class);
     }
 
+    @Override
+    public boolean isSideLit() {
+        return false;
+    }
+
     public static class Key {
         public final TreeDefinition definition;
         public final boolean fancy;
@@ -84,7 +89,13 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
     }
 
     @Override
-    protected void bakeBlock(BlockDecorativeLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+    protected void bakeBlock(
+            BlockDecorativeLeaves block,
+            IModelData extraData,
+            Key key,
+            ModelBaker baker,
+            boolean inventory
+    ) {
         TreeDefinition treeDefinition = key.definition;
 
         IGenome genome = treeDefinition.getGenome();
@@ -98,7 +109,9 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
         baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
         // Render overlay for fruit leaves.
-        ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
+        ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS)
+                .getProvider()
+                .getDecorativeSprite();
         if (fruitSpriteLocation != null) {
             TextureAtlasSprite fruitSprite = ResourceUtil.getBlockSprite(fruitSpriteLocation);
             baker.addBlockModel(fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);

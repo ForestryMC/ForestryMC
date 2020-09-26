@@ -12,8 +12,9 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class FakeClimateListener implements IClimateListener {
+import java.util.function.Supplier;
 
+public class FakeClimateListener implements IClimateListener {
     public static final FakeClimateListener INSTANCE = new FakeClimateListener();
 
     private FakeClimateListener() {
@@ -37,7 +38,7 @@ public class FakeClimateListener implements IClimateListener {
 
     @Override
     public Biome getBiome() {
-        return Biomes.PLAINS;
+        return ((Supplier<Biome>) Biomes.PLAINS).get();
     }
 
     @Override

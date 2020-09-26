@@ -40,6 +40,11 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
         super(BlockDefaultLeavesFruit.class);
     }
 
+    @Override
+    public boolean isSideLit() {
+        return false;
+    }
+
     public static class Key {
         public final TreeDefinition definition;
         public final boolean fancy;

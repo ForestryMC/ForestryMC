@@ -9,14 +9,10 @@ import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TreeConfig {
     public static final String CONFIG_CATEGORY_TREE = "trees";
@@ -55,17 +51,23 @@ public class TreeConfig {
     private final float defaultRarity;
     private final Set<Integer> blacklistedDimensions = new HashSet<>();
     private final Set<Integer> whitelistedDimensions = new HashSet<>();
-    private final Set<BiomeDictionary.Type> blacklistedBiomeTypes = new HashSet<>();
+    private final Set<Biome.Category> blacklistedBiomeTypes = new HashSet<>();
     private final Set<Biome> blacklistedBiomes = new HashSet<>();
     private float spawnRarity;
 
     public static void parse(LocalizedConfiguration config) {
         config.setCategoryComment(CONFIG_CATEGORY_TREE, CONFIG_COMMENT);
-        config.setCategoryComment(CONFIG_CATEGORY_TREE + ".global", "All options defined in the global category are used for all trees.");
+        config.setCategoryComment(
+                CONFIG_CATEGORY_TREE + ".global",
+                "All options defined in the global category are used for all trees."
+        );
         GLOBAL.parseConfig(config);
         for (IAllele treeAllele : AlleleUtils.filteredAlleles(TreeChromosomes.SPECIES)) {
             IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) treeAllele;
-            configs.put(treeSpecies.getRegistryName(), new TreeConfig(treeSpecies.getRegistryName(), treeSpecies.getRarity()).parseConfig(config));
+            configs.put(
+                    treeSpecies.getRegistryName(),
+                    new TreeConfig(treeSpecies.getRegistryName(), treeSpecies.getRarity()).parseConfig(config)
+            );
         }
     }
 
@@ -76,16 +78,29 @@ public class TreeConfig {
     }
 
     private TreeConfig parseConfig(LocalizedConfiguration config) {
-        for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new int[0]).getIntList()) {
+        for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new int[0])
+                .getIntList()) {
             blacklistedDimensions.add(dimId);
         }
-        for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new int[0]).getIntList()) {
+
+        for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new int[0])
+                .getIntList()) {
             whitelistedDimensions.add(dimId);
         }
-        for (String typeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "types", new String[0]).getStringList()) {
-            blacklistedBiomeTypes.add(BiomeDictionary.Type.getType(typeName));
+
+        for (String typeName : config.get(
+                CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist",
+                "types",
+                new String[0]
+        ).getStringList()) {
+            blacklistedBiomeTypes.add(Biome.Category.byName(typeName));
         }
-        for (String biomeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "names", new String[0]).getStringList()) {
+
+        for (String biomeName : config.get(
+                CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist",
+                "names",
+                new String[0]
+        ).getStringList()) {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
             if (biome != null) {
                 blacklistedBiomes.add(biome);
@@ -94,7 +109,10 @@ public class TreeConfig {
             }
         }
 
-        spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity).setMinValue(0.0F).setMaxValue(1.0F).getDouble();
+        spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity)
+                .setMinValue(0.0F)
+                .setMaxValue(1.0F)
+                .getDouble();
         return this;
     }
 
@@ -103,6 +121,7 @@ public class TreeConfig {
         if (treeUID == null) {
             treeConfig = GLOBAL;
         }
+
         treeConfig.blacklistedDimensions.add(dimID);
     }
 
@@ -111,6 +130,7 @@ public class TreeConfig {
         if (treeUID == null) {
             treeConfig = GLOBAL;
         }
+
         treeConfig.whitelistedDimensions.add(dimID);
     }
 
@@ -123,6 +143,7 @@ public class TreeConfig {
         if (blacklistedDimensions.isEmpty() || !blacklistedDimensions.contains(dimID)) {
             return whitelistedDimensions.isEmpty() || whitelistedDimensions.contains(dimID);
         }
+
         return false;
     }
 
@@ -135,7 +156,8 @@ public class TreeConfig {
         if (blacklistedBiomes.contains(biome)) {
             return false;
         }
-        return BiomeDictionary.getTypes(biome).stream().noneMatch(blacklistedBiomeTypes::contains);
+
+        return Arrays.stream(Biome.Category.values()).noneMatch(blacklistedBiomeTypes::contains);
     }
 
     public static float getSpawnRarity(@Nullable ResourceLocation treeUID) {

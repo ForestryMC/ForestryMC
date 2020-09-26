@@ -61,7 +61,7 @@ public abstract class ForestryFluid extends FlowingFluid {
     @Override
     protected void beforeReplacingBlock(IWorld world, BlockPos blockPos, BlockState blockState) {
         TileEntity tileEntity = blockState.hasTileEntity() ? world.getTileEntity(blockPos) : null;
-        Block.spawnDrops(blockState, world.getWorld(), blockPos, tileEntity);
+        Block.spawnDrops(blockState, world, blockPos, tileEntity);
     }
 
     @Override
@@ -80,7 +80,13 @@ public abstract class ForestryFluid extends FlowingFluid {
     }
 
     @Override
-    protected boolean canDisplace(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
+    protected boolean canDisplace(
+            FluidState fluidState,
+            IBlockReader blockReader,
+            BlockPos pos,
+            Fluid fluid,
+            Direction direction
+    ) {
         return false;
     }
 

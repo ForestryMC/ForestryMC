@@ -55,7 +55,7 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
         public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
             IBreedingTrackerHandler handler = factories.get(rootUID);
             String filename = handler.getFileName(player);
-            ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(World.field_234918_g_);
+            ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(World.OVERWORLD);
             T tracker = (T) overworld.getSavedData().getOrCreate(() -> (WorldSavedData) handler.createTracker(filename), filename);
             handler.populateTracker(tracker, overworld, player);
             return tracker;

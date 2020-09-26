@@ -66,7 +66,12 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         super.addInformation(itemstack, world, list, flag);
 
         Minecraft minecraft = Minecraft.getInstance();
@@ -79,7 +84,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
             list.add(new TranslationTextComponent("for.gui.currentBiome")
                     .append(new StringTextComponent(": "))
-                    .append(new TranslationTextComponent(currentBiome.getTranslationKey())));
+                    .append(new TranslationTextComponent(currentBiome.toString())));
 
             list.add(new TranslationTextComponent("for.gui.temperature")
                     .append(new StringTextComponent(": "))

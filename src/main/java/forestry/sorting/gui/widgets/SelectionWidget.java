@@ -68,7 +68,7 @@ public class SelectionWidget extends Widget {
         );
         logic.draw(transform);
 
-        manager.minecraft.fontRenderer.func_238422_b_(
+        manager.minecraft.fontRenderer.func_243248_b(
                 transform,
                 new TranslationTextComponent("for.gui.filter.seletion"),
                 startX + xPos + 12,

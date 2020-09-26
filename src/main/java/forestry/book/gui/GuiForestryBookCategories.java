@@ -68,7 +68,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
         );
         ITextComponent about = new TranslationTextComponent("for.gui.book.about");
         fontRenderer.func_238418_a_(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(
                 transform,
                 new TranslationTextComponent("for.gui.book.about.author"),
                 guiLeft + RIGHT_PAGE_START_X,

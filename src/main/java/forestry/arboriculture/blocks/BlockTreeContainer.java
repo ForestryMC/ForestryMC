@@ -23,7 +23,6 @@ import java.util.Random;
 
 //TODO inline?
 public abstract class BlockTreeContainer extends ContainerBlock {
-
     protected BlockTreeContainer(Properties properties) {
         super(properties
                 .tickRandomly()
@@ -33,7 +32,6 @@ public abstract class BlockTreeContainer extends ContainerBlock {
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-
         if (rand.nextFloat() > 0.1) {
             return;
         }

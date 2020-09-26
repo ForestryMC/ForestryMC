@@ -29,6 +29,7 @@ import net.minecraft.world.biome.Biomes;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.function.Supplier;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
     public static final FakeAlvearyController instance = new FakeAlvearyController();
@@ -90,7 +91,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 
     @Override
     public Biome getBiome() {
-        return Biomes.PLAINS;
+        return ((Supplier<Biome>) Biomes.PLAINS).get();
     }
 
     @Override

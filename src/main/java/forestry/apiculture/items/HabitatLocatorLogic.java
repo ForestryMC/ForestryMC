@@ -19,7 +19,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -37,13 +37,22 @@ public class HabitatLocatorLogic {
     private static final Set<Biome> endBiomes = new HashSet<>();
 
     static {
-        waterBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.BEACH));
-        waterBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.OCEAN));
-        waterBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.RIVER));
+        for (Biome biome : ForgeRegistries.BIOMES) {
+            if (biome.getCategory() == Biome.Category.BEACH ||
+                    biome.getCategory() == Biome.Category.OCEAN ||
+                    biome.getCategory() == Biome.Category.RIVER
+            ) {
+                waterBiomes.add(biome);
+            }
 
-        netherBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.NETHER));
+            if (biome.getCategory() == Biome.Category.NETHER) {
+                netherBiomes.add(biome);
+            }
 
-        endBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.END));
+            if (biome.getCategory() == Biome.Category.THEEND) {
+                endBiomes.add(biome);
+            }
+        }
     }
 
     private Set<Biome> targetBiomes = new HashSet<>();
@@ -192,13 +201,13 @@ public class HabitatLocatorLogic {
 
         biomesToSearch.removeAll(waterBiomes);
 
-        if (BiomeDictionary.hasType(currentBiome, BiomeDictionary.Type.NETHER)) {
+        if (Biome.Category.NETHER == currentBiome.getCategory()) {
             biomesToSearch.retainAll(netherBiomes);
         } else {
             biomesToSearch.removeAll(netherBiomes);
         }
 
-        if (BiomeDictionary.hasType(currentBiome, BiomeDictionary.Type.END)) {
+        if (Biome.Category.THEEND == currentBiome.getCategory()) {
             biomesToSearch.retainAll(endBiomes);
         } else {
             biomesToSearch.removeAll(endBiomes);

@@ -26,10 +26,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+import java.util.Optional;
 import java.util.Stack;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventoryInternal {
@@ -75,7 +75,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
         } else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
             return acceptsAsResource(itemStack);
         } else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
-            LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+            Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
             return fluid.map(f -> farmController.getTankManager().canFillFluidType(f)).orElse(false);
         }
         return false;

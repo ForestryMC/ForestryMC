@@ -17,6 +17,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+import java.util.Optional;
+
 public class InventoryGenerator extends InventoryAdapterTile<TileEuGenerator> {
     public static final short SLOT_CAN = 0;
 
@@ -27,7 +29,7 @@ public class InventoryGenerator extends InventoryAdapterTile<TileEuGenerator> {
     @Override
     public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
         if (slotIndex == SLOT_CAN) {
-            LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+            Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
             return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
         }
 

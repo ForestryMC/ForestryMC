@@ -19,21 +19,27 @@ import forestry.core.render.TextureManagerForestry;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
 public class HabitatSlot extends Widget {
-    private final Collection<BiomeDictionary.Type> biomes;
+    private final Collection<Biome.Category> biomes;
     private final String name;
     private final String iconIndex;
     public boolean isActive = false;
 
-    public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<BiomeDictionary.Type> biomes) {
+    public HabitatSlot(
+            WidgetManager widgetManager,
+            int xPos,
+            int yPos,
+            String name,
+            Collection<Biome.Category> biomes
+    ) {
         super(widgetManager, xPos, yPos);
         this.biomes = biomes;
         this.name = name;
@@ -52,7 +58,7 @@ public class HabitatSlot extends Widget {
         return TextureManagerForestry.getInstance().getDefault(iconIndex);
     }
 
-    public void setActive(Collection<BiomeDictionary.Type> biomes) {
+    public void setActive(Collection<Biome.Category> biomes) {
         isActive = !Collections.disjoint(this.biomes, biomes);
     }
 

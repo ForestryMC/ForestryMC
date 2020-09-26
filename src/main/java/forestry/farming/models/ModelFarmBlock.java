@@ -16,7 +16,6 @@ import net.minecraftforge.client.model.data.IModelData;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, BlockFarm> {
-
     public ModelFarmBlock() {
         super(BlockFarm.class);
     }
@@ -40,7 +39,13 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, BlockFarm> {
     }
 
     @Override
-    protected void bakeBlock(BlockFarm blockFarm, IModelData extraData, BlockFarm key, ModelBaker baker, boolean inventory) {
+    protected void bakeBlock(
+            BlockFarm blockFarm,
+            IModelData extraData,
+            BlockFarm key,
+            ModelBaker baker,
+            boolean inventory
+    ) {
         EnumFarmBlockType type = key.getType();
         EnumFarmMaterial material = key.getFarmMaterial();
         TextureAtlasSprite[] textures = material.getSprites();
@@ -54,4 +59,8 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, BlockFarm> {
         baker.setParticleSprite(textures[0]);
     }
 
+    @Override
+    public boolean isSideLit() {
+        return false;
+    }
 }

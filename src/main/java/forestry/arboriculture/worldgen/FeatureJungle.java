@@ -13,7 +13,10 @@ package forestry.arboriculture.worldgen;
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,9 +27,19 @@ import java.util.Set;
  * This is a dummy and needs to be replaced with something proper.
  */
 public class FeatureJungle extends FeatureTreeVanilla {
-
     public FeatureJungle(ITreeGenData tree) {
         super(tree);
+    }
+
+    @Override
+    public boolean func_241855_a(
+            ISeedReader world,
+            ChunkGenerator generator,
+            Random rand,
+            BlockPos pos,
+            NoFeatureConfig config
+    ) {
+        return place(world, rand, pos, false);
     }
 
     @Override
@@ -44,7 +57,18 @@ public class FeatureJungle extends FeatureTreeVanilla {
         if (height > 10) {
             int branchSpawn = 6;
             while (branchSpawn < height - 2) {
-                branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, branchSpawn, 0), girth, 0.5f, 0f, 2, 1, 0.25f));
+                branchCoords.addAll(FeatureHelper.generateBranches(
+                        world,
+                        rand,
+                        wood,
+                        startPos.add(0, branchSpawn, 0),
+                        girth,
+                        0.5f,
+                        0f,
+                        2,
+                        1,
+                        0.25f
+                ));
                 branchSpawn += rand.nextInt(4);
             }
         }
@@ -53,7 +77,13 @@ public class FeatureJungle extends FeatureTreeVanilla {
     }
 
     @Override
-    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+    protected void generateLeaves(
+            IWorld world,
+            Random rand,
+            TreeBlockTypeLeaf leaf,
+            List<BlockPos> branchEnds,
+            BlockPos startPos
+    ) {
         int height = this.height;
         if (girth >= 2) {
             height *= 1.5f;
@@ -66,10 +96,42 @@ public class FeatureJungle extends FeatureTreeVanilla {
         int leafSpawn = height + 1;
         float canopyRadiusMultiplier = height / 7.0f;
 
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 0.5f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn--, 0),
+                girth,
+                girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn--, 0),
+                girth,
+                0.5f * canopyRadiusMultiplier + girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
 
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.9f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1.9f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn--, 0),
+                girth,
+                1.9f * canopyRadiusMultiplier + girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn, 0),
+                girth,
+                1.9f * canopyRadiusMultiplier + girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
     }
 }

@@ -35,19 +35,37 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 
     public ModelSapling() {
         this.modelsBySpecies = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-                .collect(Collectors.toMap(allele -> allele, allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())));
+                .collect(Collectors.toMap(
+                        allele -> allele,
+                        allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())
+                ));
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+    public IBakedModel bake(
+            IModelConfiguration owner,
+            ModelBakery bakery,
+            Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
+            IModelTransform modelTransform,
+            ItemOverrideList overrides,
+            ResourceLocation modelLocation
+    ) {
         ImmutableMap.Builder<IAlleleTreeSpecies, IBakedModel> itemModels = new ImmutableMap.Builder<>();
         ImmutableMap.Builder<IAlleleTreeSpecies, IBakedModel> blockModels = new ImmutableMap.Builder<>();
         for (Map.Entry<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> entry : modelsBySpecies.entrySet()) {
-            IBakedModel blockModel = bakery.getBakedModel(entry.getValue().getFirst(), ModelRotation.X0_Y0, spriteGetter);
+            IBakedModel blockModel = bakery.getBakedModel(
+                    entry.getValue().getFirst(),
+                    ModelRotation.X0_Y0,
+                    spriteGetter
+            );
             if (blockModel != null) {
                 blockModels.put(entry.getKey(), blockModel);
             }
-            IBakedModel itemModel = bakery.getBakedModel(entry.getValue().getSecond(), ModelRotation.X0_Y0, spriteGetter);
+            IBakedModel itemModel = bakery.getBakedModel(
+                    entry.getValue().getSecond(),
+                    ModelRotation.X0_Y0,
+                    spriteGetter
+            );
             if (itemModel != null) {
                 itemModels.put(entry.getKey(), itemModel);
             }
@@ -61,9 +79,15 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+    public Collection<RenderMaterial> getTextures(
+            IModelConfiguration owner,
+            Function<ResourceLocation, IUnbakedModel> modelGetter,
+            Set<Pair<String, String>> missingTextureErrors
+    ) {
         return getDependencies().stream()
-                .flatMap(location -> modelGetter.apply(location).getTextures(modelGetter, missingTextureErrors).stream())
+                .flatMap(location -> modelGetter.apply(location)
+                        .getTextures(modelGetter, missingTextureErrors)
+                        .stream())
                 .collect(Collectors.toSet());
     }
 
@@ -75,7 +99,10 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
         @Nullable
         private ItemOverrideList overrideList;
 
-        public Baked(Map<IAlleleTreeSpecies, IBakedModel> itemModels, Map<IAlleleTreeSpecies, IBakedModel> blockModels) {
+        public Baked(
+                Map<IAlleleTreeSpecies, IBakedModel> itemModels,
+                Map<IAlleleTreeSpecies, IBakedModel> blockModels
+        ) {
             this.itemModels = itemModels;
             this.blockModels = blockModels;
             this.defaultBlock = blockModels.get(TreeDefinition.Oak.getSpecies());
@@ -83,7 +110,12 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
         }
 
         @Override
-        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData extraData) {
+        public List<BakedQuad> getQuads(
+                @Nullable BlockState state,
+                @Nullable Direction side,
+                Random rand,
+                IModelData extraData
+        ) {
             IAlleleTreeSpecies species = extraData.getData(TileSapling.TREE_SPECIES);
             if (species == null) {
                 species = TreeDefinition.Oak.getSpecies();
@@ -107,7 +139,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
         }
 
         @Override
-        public boolean func_230044_c_() {
+        public boolean isSideLit() {
             return false;
         }
 
@@ -133,7 +165,12 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 
             @Nullable
             @Override
-            public IBakedModel func_239290_a_(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+            public IBakedModel getOverrideModel(
+                    IBakedModel model,
+                    ItemStack stack,
+                    @Nullable ClientWorld world,
+                    @Nullable LivingEntity entity
+            ) {
                 IOrganism<ITree> organism = GeneticHelper.getOrganism(stack);
                 if (organism.isEmpty()) {
                     return model;

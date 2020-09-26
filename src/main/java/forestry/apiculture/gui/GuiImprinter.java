@@ -64,7 +64,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
         ITextComponent title = new TranslationTextComponent("for.gui.imprinter");
 
         int offset = (138 - getFontRenderer().getStringWidth(title.getString())) / 2;
-        getFontRenderer().func_238422_b_(
+        getFontRenderer().func_243248_b(
                 transform,
                 title,
                 startX + 8 + offset,
@@ -74,7 +74,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
         IAlleleBeeSpecies primary = itemInventory.getPrimary();
         drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-        getFontRenderer().func_238422_b_(
+        getFontRenderer().func_243248_b(
                 transform,
                 primary.getDisplayName(),
                 startX + 32,
@@ -84,7 +84,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
         IAlleleBeeSpecies secondary = itemInventory.getSecondary();
         drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-        getFontRenderer().func_238422_b_(
+        getFontRenderer().func_243248_b(
                 transform,
                 secondary.getDisplayName(),
                 startX + 32,
@@ -94,7 +94,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
         ITextComponent youCheater = new TranslationTextComponent("for.gui.imprinter.cheater");
         offset = (138 - getFontRenderer().getStringWidth(youCheater.getString())) / 2;
-        getFontRenderer().func_238422_b_(
+        getFontRenderer().func_243248_b(
                 transform,
                 youCheater,
                 startX + 8 + offset,

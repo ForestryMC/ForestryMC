@@ -31,7 +31,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,14 +45,24 @@ public enum HiveDescription implements IHiveDescription {
             postGenFlowers(world, rand, pos, flowerStates);
         }
     },
-    MEADOWS(IHiveRegistry.HiveType.MEADOWS, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
+    MEADOWS(
+            IHiveRegistry.HiveType.MEADOWS,
+            1.0f,
+            BeeDefinition.MEADOWS,
+            HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)
+    ) {
         @Override
         public void postGen(World world, Random rand, BlockPos pos) {
             super.postGen(world, rand, pos);
             postGenFlowers(world, rand, pos, flowerStates);
         }
     },
-    DESERT(IHiveRegistry.HiveType.DESERT, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.SANDSTONE)) {
+    DESERT(
+            IHiveRegistry.HiveType.DESERT,
+            1.0f,
+            BeeDefinition.MODEST,
+            HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SAND, Blocks.SANDSTONE)
+    ) {
         @Override
         public void postGen(World world, Random rand, BlockPos pos) {
             super.postGen(world, rand, pos);
@@ -61,13 +70,23 @@ public enum HiveDescription implements IHiveDescription {
         }
     },
     JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-    END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
+    END(
+            IHiveRegistry.HiveType.END,
+            2.0f,
+            BeeDefinition.ENDED,
+            HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)
+    ) {
         @Override
         public boolean isGoodBiome(Biome biome) {
-            return BiomeDictionary.hasType(biome, BiomeDictionary.Type.END);
+            return Biome.Category.THEEND == biome.getCategory();
         }
     },
-    SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
+    SNOW(
+            IHiveRegistry.HiveType.SNOW,
+            2.0f,
+            BeeDefinition.WINTRY,
+            HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)
+    ) {
         @Override
         public void postGen(World world, Random rand, BlockPos pos) {
             BlockPos posAbove = pos.up();
@@ -78,7 +97,12 @@ public enum HiveDescription implements IHiveDescription {
             postGenFlowers(world, rand, pos, flowerStates);
         }
     },
-    SWAMP(IHiveRegistry.HiveType.SWAMP, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)) {
+    SWAMP(
+            IHiveRegistry.HiveType.SWAMP,
+            2.0f,
+            BeeDefinition.MARSHY,
+            HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS)
+    ) {
         @Override
         public void postGen(World world, Random rand, BlockPos pos) {
             super.postGen(world, rand, pos);
@@ -87,7 +111,13 @@ public enum HiveDescription implements IHiveDescription {
         }
     };
 
-    private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW, Blocks.SAND, Blocks.SANDSTONE);
+    private static final IHiveGen groundGen = HiveManager.genHelper.ground(
+            Blocks.DIRT,
+            Blocks.GRASS,
+            Blocks.SNOW,
+            Blocks.SAND,
+            Blocks.SANDSTONE
+    );
     private static final List<BlockState> flowerStates = new ArrayList<>();
     private static final List<BlockState> mushroomStates = new ArrayList<>();
     private static final List<BlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());

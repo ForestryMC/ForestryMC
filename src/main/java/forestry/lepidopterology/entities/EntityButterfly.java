@@ -73,9 +73,18 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
     /* CONSTANTS */
     public static final int COOLDOWNS = 1500;
 
-    private static final DataParameter<String> DATAWATCHER_ID_SPECIES = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.STRING);
-    private static final DataParameter<Integer> DATAWATCHER_ID_SIZE = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.VARINT);
-    private static final DataParameter<Byte> DATAWATCHER_ID_STATE = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.BYTE);
+    private static final DataParameter<String> DATAWATCHER_ID_SPECIES = EntityDataManager.createKey(
+            EntityButterfly.class,
+            DataSerializers.STRING
+    );
+    private static final DataParameter<Integer> DATAWATCHER_ID_SIZE = EntityDataManager.createKey(
+            EntityButterfly.class,
+            DataSerializers.VARINT
+    );
+    private static final DataParameter<Byte> DATAWATCHER_ID_STATE = EntityDataManager.createKey(
+            EntityButterfly.class,
+            DataSerializers.BYTE
+    );
 
     private static final float DEFAULT_BUTTERFLY_SIZE = 0.75f;
     private static final EnumButterflyState DEFAULT_STATE = EnumButterflyState.FLYING;
@@ -87,7 +96,9 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
     @Nullable
     private Vector3d flightTarget;
     private int exhaustion;
-    private IButterfly contained = ButterflyHelper.getKaryotype().getDefaultTemplate().toIndividual(ButterflyHelper.getRoot());
+    private IButterfly contained = ButterflyHelper.getKaryotype()
+            .getDefaultTemplate()
+            .toIndividual(ButterflyHelper.getRoot());
     @Nullable
     private IIndividual pollen;
 
@@ -117,7 +128,12 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
     //		setHomePosAndDistance(homePos, ModuleLepidopterology.maxDistance);
     //	}
 
-    public static EntityButterfly create(EntityType<EntityButterfly> type, World world, IButterfly butterfly, BlockPos homePos) {
+    public static EntityButterfly create(
+            EntityType<EntityButterfly> type,
+            World world,
+            IButterfly butterfly,
+            BlockPos homePos
+    ) {
         EntityButterfly bf = new EntityButterfly(type, world);
         bf.setDefaults();
         bf.setIndividual(butterfly);
@@ -251,7 +267,10 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
             weight -= 15.0f;
         }
 
-        if (!world.getEntitiesWithinAABB(EntityButterfly.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).isEmpty()) {
+        if (!world.getEntitiesWithinAABB(
+                EntityButterfly.class,
+                new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)
+        ).isEmpty()) {
             weight -= 1.0f;
         }
 
@@ -366,8 +385,13 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
         return contained;
     }
 
-    @Override
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(
+            IWorld worldIn,
+            DifficultyInstance difficultyIn,
+            SpawnReason reason,
+            @Nullable ILivingEntityData spawnDataIn,
+            @Nullable CompoundNBT dataTag
+    ) {
         if (!world.isRemote) {
             setIndividual(contained);
         }
@@ -456,7 +480,8 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
         // Drop pollen if any
         IIndividual pollen = getPollen();
         if (pollen != null) {
-            IRootDefinition<? extends IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
+            IRootDefinition<? extends IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper()
+                    .getSpeciesRoot(pollen);
             if (!definition.isPresent()) {
                 return;
             }

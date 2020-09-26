@@ -48,9 +48,9 @@ public class CropBasicGrowthCraft extends Crop {
         Block block = blockState.getBlock();
         NonNullList<ItemStack> harvest = NonNullList.create();
         //TODO cast
-        LootContext.Builder ctx = new LootContext.Builder((ServerWorld) world)
-                .withParameter(LootParameters.POSITION, pos);
-        harvest.addAll(block.getDrops(blockState, ctx));
+//        LootContext.Builder ctx = new LootContext.Builder((ServerWorld) world)
+//                .withParameter(LootParameters.POSITION, pos);
+//        harvest.addAll(block.getDrops(blockState, ctx));
         if (harvest.size() > 1) {
             harvest.remove(0); //Hops have rope as first drop.
         }

@@ -15,10 +15,7 @@ import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
@@ -55,7 +52,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
     }
 
     @Override
-    public void addFertilityLine(ITextProperties chromosomeName, IChromosomeType chromosome, int texOffset) {
+    public void addFertilityLine(ITextComponent chromosomeName, IChromosomeType chromosome, int texOffset) {
         IGenome genome = getGenome();
         IAllele activeAllele = genome.getActiveAllele(chromosome);
         IAllele inactiveAllele = genome.getInactiveAllele(chromosome);
@@ -63,14 +60,21 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
             if (!(activeAllele instanceof IAlleleValue) || !(inactiveAllele instanceof IAlleleValue)) {
                 return;
             }
-            addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) activeAllele, texOffset), GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) inactiveAllele, texOffset));
+            addLine(
+                    chromosomeName,
+                    GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) activeAllele, texOffset),
+                    GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) inactiveAllele, texOffset)
+            );
         } else {
             boolean active = mode == DatabaseMode.ACTIVE;
             IAllele allele = active ? activeAllele : inactiveAllele;
             if (!(allele instanceof IAlleleValue)) {
                 return;
             }
-            addLine(chromosomeName, GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) allele, texOffset));
+            addLine(
+                    chromosomeName,
+                    GuiElementFactory.INSTANCE.createFertilityInfo((IAlleleValue<Integer>) allele, texOffset)
+            );
         }
     }
 
@@ -88,8 +92,24 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
     }
 
     @Override
-    public void addMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker) {
-        IGuiElement element = GuiElementFactory.INSTANCE.createMutation(x, y, width, height, mutation, species, breedingTracker);
+    public void addMutation(
+            int x,
+            int y,
+            int width,
+            int height,
+            IMutation mutation,
+            IAllele species,
+            IBreedingTracker breedingTracker
+    ) {
+        IGuiElement element = GuiElementFactory.INSTANCE.createMutation(
+                x,
+                y,
+                width,
+                height,
+                mutation,
+                species,
+                breedingTracker
+        );
         if (element == null) {
             return;
         }
@@ -97,8 +117,22 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
     }
 
     @Override
-    public void addMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
-        IGuiElement element = GuiElementFactory.INSTANCE.createMutationResultant(x, y, width, height, mutation, breedingTracker);
+    public void addMutationResultant(
+            int x,
+            int y,
+            int width,
+            int height,
+            IMutation mutation,
+            IBreedingTracker breedingTracker
+    ) {
+        IGuiElement element = GuiElementFactory.INSTANCE.createMutationResultant(
+                x,
+                y,
+                width,
+                height,
+                mutation,
+                breedingTracker
+        );
         if (element == null) {
             return;
         }
@@ -106,12 +140,17 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
     }
 
     @Override
-    public void addLine(ITextProperties firstText, ITextProperties secondText, boolean dominant) {
-        addLine(firstText, secondText, GuiElementFactory.INSTANCE.guiStyle, GuiElementFactory.INSTANCE.getStateStyle(dominant));
+    public void addLine(ITextComponent firstText, ITextComponent secondText, boolean dominant) {
+        addLine(
+                firstText,
+                secondText,
+                GuiElementFactory.INSTANCE.guiStyle,
+                GuiElementFactory.INSTANCE.getStateStyle(dominant)
+        );
     }
 
     @Override
-    public void addLine(ITextProperties leftText, Function<Boolean, ITextProperties> toText, boolean dominant) {
+    public void addLine(ITextComponent leftText, Function<Boolean, ITextComponent> toText, boolean dominant) {
         if (mode == DatabaseMode.BOTH) {
             addLine(leftText, toText.apply(true), toText.apply(false), dominant, dominant);
         } else {
@@ -127,12 +166,22 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 	}*/
 
     @Override
-    public void addLine(ITextProperties leftText, Function<Boolean, ITextProperties> toText, IChromosomeType chromosome) {
+    public void addLine(
+            ITextComponent leftText,
+            Function<Boolean, ITextComponent> toText,
+            IChromosomeType chromosome
+    ) {
         IGenome genome = getGenome();
         IAllele activeAllele = genome.getActiveAllele(chromosome);
         IAllele inactiveAllele = genome.getInactiveAllele(chromosome);
         if (mode == DatabaseMode.BOTH) {
-            addLine(leftText, toText.apply(true), toText.apply(false), activeAllele.isDominant(), inactiveAllele.isDominant());
+            addLine(
+                    leftText,
+                    toText.apply(true),
+                    toText.apply(false),
+                    activeAllele.isDominant(),
+                    inactiveAllele.isDominant()
+            );
         } else {
             boolean active = mode == DatabaseMode.ACTIVE;
             IAllele allele = active ? activeAllele : inactiveAllele;
@@ -140,38 +189,45 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
         }
     }
 
-    public void addLine(ITextProperties firstText, ITextProperties secondText, ITextProperties thirdText, boolean secondDominant, boolean thirdDominant) {
+    public void addLine(
+            ITextComponent firstText,
+            ITextComponent secondText,
+            ITextComponent thirdText,
+            boolean secondDominant,
+            boolean thirdDominant
+    ) {
 
     }
 
     @Override
-    public final void addLine(ITextProperties chromosomeName, IChromosomeType chromosome) {
+    public final void addLine(ITextComponent chromosomeName, IChromosomeType chromosome) {
         addLine(chromosomeName, (allele, b) -> allele.getDisplayName(), chromosome);
     }
 
     @Override
-    public void addLine(ITextProperties firstText, ITextProperties secondText, Style firstStyle, Style secondStyle) {
+    public void addLine(ITextComponent firstText, ITextComponent secondText, Style firstStyle, Style secondStyle) {
         IElementLayout first = addSplitText(width, firstText, firstStyle);
         IElementLayout second = addSplitText(width, secondText, secondStyle);
         addLine(first, second);
     }
 
-    private IElementLayout addSplitText(int width, ITextProperties text, Style style) {
+    private IElementLayout addSplitText(int width, ITextComponent text, Style style) {
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
         IElementLayout vertical = new VerticalLayout(width);
-        for (ITextProperties splitText : fontRenderer.func_238425_b_(text, 70)) {
-            vertical.label(splitText).setStyle(style);
+        for (ITextProperties splitText : fontRenderer.getCharacterManager().func_238362_b_(text, 70, Style.EMPTY)) {
+            vertical.label(new StringTextComponent(splitText.getString())).setStyle(style);
         }
+
         return vertical;
     }
 
-    private void addLine(ITextProperties chromosomeName, IGuiElement right) {
+    private void addLine(ITextComponent chromosomeName, IGuiElement right) {
         int center = width / 2;
         IGuiElement first = addSplitText(center, chromosomeName, GuiElementFactory.INSTANCE.guiStyle);
         addLine(first, right);
     }
 
-    private void addLine(ITextProperties chromosomeName, IGuiElement second, IGuiElement third) {
+    private void addLine(ITextComponent chromosomeName, IGuiElement second, IGuiElement third) {
         int center = width / 2;
         IGuiElement first = addSplitText(center, chromosomeName, GuiElementFactory.INSTANCE.guiStyle);
         addLine(first, second, third);
@@ -202,8 +258,8 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
     @Override
     public <A extends IAllele> void addLine(
-            ITextProperties chromosomeName,
-            BiFunction<A, Boolean, ITextProperties> toText,
+            ITextComponent chromosomeName,
+            BiFunction<A, Boolean, ITextComponent> toText,
             IChromosomeType chromosome
     ) {
         addAlleleRow(chromosomeName, toText, chromosome, null);
@@ -211,8 +267,8 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
     @Override
     public <A extends IAllele> void addLine(
-            ITextProperties chromosomeName,
-            BiFunction<A, Boolean, ITextProperties> toText,
+            ITextComponent chromosomeName,
+            BiFunction<A, Boolean, ITextComponent> toText,
             IChromosomeType chromosome,
             boolean dominant
     ) {
@@ -221,8 +277,8 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 
     @SuppressWarnings("unchecked")
     private <A extends IAllele> void addAlleleRow(
-            ITextProperties chromosomeName,
-            BiFunction<A, Boolean, ITextProperties> toString,
+            ITextComponent chromosomeName,
+            BiFunction<A, Boolean, ITextComponent> toString,
             IChromosomeType chromosome,
             @Nullable Boolean dominant
     ) {
@@ -245,7 +301,11 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
     }
 
     @Override
-    public void addSpeciesLine(ITextProperties firstText, @Nullable ITextProperties secondText, IChromosomeType chromosome) {
+    public void addSpeciesLine(
+            ITextComponent firstText,
+            @Nullable ITextComponent secondText,
+            IChromosomeType chromosome
+    ) {
 		/*IAlleleSpecies primary = individual.getGenome().getPrimary();
 		IAlleleSpecies secondary = individual.getGenome().getSecondary();
 

@@ -14,7 +14,10 @@ import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,9 +25,19 @@ import java.util.Random;
 import java.util.Set;
 
 public class FeatureEbony extends FeatureTree {
-
     public FeatureEbony(ITreeGenData tree) {
         super(tree, 10, 4);
+    }
+
+    @Override
+    public boolean func_241855_a(
+            ISeedReader world,
+            ChunkGenerator generator,
+            Random rand,
+            BlockPos pos,
+            NoFeatureConfig config
+    ) {
+        return place(world, rand, pos, false);
     }
 
     @Override
@@ -58,7 +71,13 @@ public class FeatureEbony extends FeatureTree {
     }
 
     @Override
-    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+    protected void generateLeaves(
+            IWorld world,
+            Random rand,
+            TreeBlockTypeLeaf leaf,
+            List<BlockPos> branchEnds,
+            BlockPos startPos
+    ) {
         for (int times = 0; times < 2 * height; times++) {
             int h = 2 * girth + rand.nextInt(height - girth);
             if (rand.nextBoolean() && h < height / 2) {

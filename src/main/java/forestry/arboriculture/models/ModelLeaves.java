@@ -31,6 +31,11 @@ import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
+    @Override
+    public boolean isSideLit() {
+        return false;
+    }
+
     public static class Key {
         public final TextureAtlasSprite leafSprite;
         @Nullable

@@ -24,7 +24,12 @@ public abstract class AbstractItemModel extends AbstractBakedModel {
 
     protected abstract IBakedModel getOverride(IBakedModel model, ItemStack stack);
 
-    protected IBakedModel getOverride(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+    protected IBakedModel getOverride(
+            IBakedModel model,
+            ItemStack stack,
+            @Nullable ClientWorld world,
+            @Nullable LivingEntity entity
+    ) {
         return getOverride(model, stack);
     }
 
@@ -35,9 +40,15 @@ public abstract class AbstractItemModel extends AbstractBakedModel {
         }
 
         @Override
-        public IBakedModel func_239290_a_(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+        public IBakedModel getOverrideModel(
+                IBakedModel model,
+                ItemStack stack,
+                @Nullable ClientWorld world,
+                @Nullable LivingEntity entity
+        ) {
             IBakedModel overrideModel = getOverride(model, stack, world, entity);
-            return complexOverride() ? overrideModel.getOverrides().func_239290_a_(overrideModel, stack, world, entity) : overrideModel;
+            return complexOverride() ? overrideModel.getOverrides()
+                    .getOverrideModel(overrideModel, stack, world, entity) : overrideModel;
         }
     }
 }

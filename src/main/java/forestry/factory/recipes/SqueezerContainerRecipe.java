@@ -16,11 +16,11 @@ import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 
@@ -72,7 +72,7 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
         if (filledContainer.isEmpty()) {
             return null;
         }
-        LazyOptional<FluidStack> fluidOutput = FluidUtil.getFluidContained(filledContainer);
+        Optional<FluidStack> fluidOutput = FluidUtil.getFluidContained(filledContainer);
 
         return fluidOutput.map(f -> {
             ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);

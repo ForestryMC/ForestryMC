@@ -12,7 +12,6 @@ import net.minecraftforge.client.model.data.IModelData;
 import javax.annotation.Nullable;
 
 public class ModelBlockLayer<K> extends ModelBlockCached<Block, K> {
-
     private final ModelProvider<K> provider;
 
     public ModelBlockLayer(ModelProvider<K> provider) {
@@ -43,6 +42,11 @@ public class ModelBlockLayer<K> extends ModelBlockCached<Block, K> {
 
         // Set the particle sprite
         baker.setParticleSprite(provider.getParticle(key));
+    }
+
+    @Override
+    public boolean isSideLit() {
+        return false;
     }
 
     public interface ModelProvider<K> {

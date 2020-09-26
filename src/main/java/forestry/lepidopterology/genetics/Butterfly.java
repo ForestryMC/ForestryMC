@@ -41,13 +41,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
     private static final Random rand = new Random();
@@ -79,7 +75,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		}
 
 		if (getMate().isPresent()) {
-			list.add(new TranslationTextComponent("for.gui.fecundated").applyTextStyle(TextFormatting.RED));//TODO ITextComponent.toUpperCase(Locale.ENGLISH));
+			list.add(new TranslationTextComponent("for.gui.fecundated").applyTextStyle(TextFormatting.RED));
 		}
 		list.add(genome.getActiveAllele(ButterflyChromosomes.SIZE).getDisplayName().applyTextStyle(TextFormatting.YELLOW));
 		list.add(genome.getActiveAllele(ButterflyChromosomes.SPEED).getDisplayName().applyTextStyle(TextFormatting.DARK_GREEN));
@@ -133,7 +129,15 @@ public class Butterfly extends IndividualLiving implements IButterfly {
         EnumHumidity actualHumidity = nursery.getHumidity();
         EnumHumidity baseHumidity = species.getHumidity();
         EnumTolerance toleranceHumidity = genome.getActiveValue(ButterflyChromosomes.HUMIDITY_TOLERANCE);
-        ClimateUtil.addClimateErrorStates(actualTemperature, actualHumidity, baseTemperature, toleranceTemperature, baseHumidity, toleranceHumidity, errorStates);
+        ClimateUtil.addClimateErrorStates(
+                actualTemperature,
+                actualHumidity,
+                baseTemperature,
+                toleranceTemperature,
+                baseHumidity,
+                toleranceHumidity,
+                errorStates
+        );
 
         return errorStates;
     }
@@ -150,7 +154,15 @@ public class Butterfly extends IndividualLiving implements IButterfly {
         EnumHumidity actualHumidity = nursery.getHumidity();
         EnumHumidity baseHumidity = species.getHumidity();
         EnumTolerance toleranceHumidity = genome.getActiveValue(ButterflyChromosomes.HUMIDITY_TOLERANCE);
-        ClimateUtil.addClimateErrorStates(actualTemperature, actualHumidity, baseTemperature, toleranceTemperature, baseHumidity, toleranceHumidity, errorStates);
+        ClimateUtil.addClimateErrorStates(
+                actualTemperature,
+                actualHumidity,
+                baseTemperature,
+                toleranceTemperature,
+                baseHumidity,
+                toleranceHumidity,
+                errorStates
+        );
 
         return errorStates;
     }
@@ -167,13 +179,13 @@ public class Butterfly extends IndividualLiving implements IButterfly {
             boolean noneMatched = true;
 
             if (species.strictSpawnMatch()) {
-                Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
-                if (types.size() == 1 && species.getSpawnBiomes().containsAll(types)) {
+                Set<Biome.Category> categories = new HashSet<Biome.Category>(Arrays.asList(Biome.Category.values()));
+                if (categories.size() == 1 && species.getSpawnBiomes().containsAll(categories)) {
                     noneMatched = false;
                 }
             } else {
-                for (BiomeDictionary.Type type : species.getSpawnBiomes()) {
-                    if (BiomeDictionary.hasType(biome, type)) {
+                for (Biome.Category category : species.getSpawnBiomes()) {
+                    if (biome.getCategory() == category) {
                         noneMatched = false;
                         break;
                     }
@@ -209,9 +221,13 @@ public class Butterfly extends IndividualLiving implements IButterfly {
         Biome biome = world.getBiome(pos);
         EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, pos);
         EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getDownfall());
-        return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
-                getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getTemperature(), getGenome().getActiveValue(ButterflyChromosomes.TEMPERATURE_TOLERANCE),
-                getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getHumidity(), getGenome().getActiveValue(ButterflyChromosomes.HUMIDITY_TOLERANCE));
+        return AlleleManager.climateHelper.isWithinLimits(biomeTemperature,
+                biomeHumidity,
+                getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getTemperature(),
+                getGenome().getActiveValue(ButterflyChromosomes.TEMPERATURE_TOLERANCE),
+                getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getHumidity(),
+                getGenome().getActiveValue(ButterflyChromosomes.HUMIDITY_TOLERANCE)
+        );
     }
 
     @Override
@@ -247,7 +263,12 @@ public class Butterfly extends IndividualLiving implements IButterfly {
     }
 
     @Nullable
-    private static IChromosome[] mutateSpecies(World world, IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
+    private static IChromosome[] mutateSpecies(
+            World world,
+            IButterflyNursery nursery,
+            IGenome genomeOne,
+            IGenome genomeTwo
+    ) {
 
         IChromosome[] parent1 = genomeOne.getChromosomes();
         IChromosome[] parent2 = genomeTwo.getChromosomes();
@@ -271,7 +292,8 @@ public class Butterfly extends IndividualLiving implements IButterfly {
             genome1 = genomeOne;
         }
 
-        IMutationContainer<IButterfly, IButterflyMutation> container = ButterflyHelper.getRoot().getComponent(ComponentKeys.MUTATIONS);
+        IMutationContainer<IButterfly, IButterflyMutation> container = ButterflyHelper.getRoot()
+                .getComponent(ComponentKeys.MUTATIONS);
         for (IButterflyMutation mutation : container.getMutations(true)) {
             float chance = mutation.getChance(world, nursery, allele0, allele1, genome0, genome1);
             if (chance > rand.nextFloat() * 100) {

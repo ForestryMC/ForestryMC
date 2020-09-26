@@ -32,7 +32,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -127,8 +127,12 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             guiAlyzer.drawRow(
                     transform,
                     new TranslationTextComponent("for.gui.metabolism"),
-                    GenericRatings.rateMetabolism(butterfly.getGenome().getActiveAllele(ButterflyChromosomes.METABOLISM).getValue()),
-                    GenericRatings.rateMetabolism(butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.METABOLISM).getValue()),
+                    GenericRatings.rateMetabolism(butterfly.getGenome()
+                            .getActiveAllele(ButterflyChromosomes.METABOLISM)
+                            .getValue()),
+                    GenericRatings.rateMetabolism(butterfly.getGenome()
+                            .getInactiveAllele(ButterflyChromosomes.METABOLISM)
+                            .getValue()),
                     butterfly,
                     ButterflyChromosomes.METABOLISM
             );
@@ -139,14 +143,18 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
                     transform,
                     butterfly.getGenome().getActiveAllele(ButterflyChromosomes.FERTILITY).getValue(),
                     GuiAlyzer.COLUMN_1,
-                    guiAlyzer.getColorCoding(butterfly.getGenome().getActiveAllele(ButterflyChromosomes.FERTILITY).isDominant()),
+                    guiAlyzer.getColorCoding(butterfly.getGenome()
+                            .getActiveAllele(ButterflyChromosomes.FERTILITY)
+                            .isDominant()),
                     8
             );
             guiAlyzer.drawFertilityInfo(
                     transform,
                     butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.FERTILITY).getValue(),
                     GuiAlyzer.COLUMN_2,
-                    guiAlyzer.getColorCoding(butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.FERTILITY).isDominant()),
+                    guiAlyzer.getColorCoding(butterfly.getGenome()
+                            .getInactiveAllele(ButterflyChromosomes.FERTILITY)
+                            .isDominant()),
                     8
             );
 
@@ -155,8 +163,14 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             guiAlyzer.drawRow(
                     transform,
                     new TranslationTextComponent("for.gui.flowers"),
-                    butterfly.getGenome().getActiveAllele(ButterflyChromosomes.FLOWER_PROVIDER).getProvider().getDescription(),
-                    butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.FLOWER_PROVIDER).getProvider().getDescription(),
+                    butterfly.getGenome()
+                            .getActiveAllele(ButterflyChromosomes.FLOWER_PROVIDER)
+                            .getProvider()
+                            .getDescription(),
+                    butterfly.getGenome()
+                            .getInactiveAllele(ButterflyChromosomes.FLOWER_PROVIDER)
+                            .getProvider()
+                            .getDescription(),
                     butterfly,
                     ButterflyChromosomes.FLOWER_PROVIDER
             );
@@ -199,7 +213,8 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             textLayout.newLine();
             textLayout.newLine();
 
-            guiAlyzer.drawRow(transform,
+            guiAlyzer.drawRow(
+                    transform,
                     new TranslationTextComponent("for.gui.climate"),
                     AlleleManager.climateHelper.toDisplay(
                             butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getTemperature()
@@ -212,8 +227,10 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             );
             textLayout.newLine();
 
-            IAlleleValue<EnumTolerance> tempToleranceActive = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.TEMPERATURE_TOLERANCE);
-            IAlleleValue<EnumTolerance> tempToleranceInactive = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.TEMPERATURE_TOLERANCE);
+            IAlleleValue<EnumTolerance> tempToleranceActive = butterfly.getGenome()
+                    .getActiveAllele(ButterflyChromosomes.TEMPERATURE_TOLERANCE);
+            IAlleleValue<EnumTolerance> tempToleranceInactive = butterfly.getGenome()
+                    .getInactiveAllele(ButterflyChromosomes.TEMPERATURE_TOLERANCE);
             textLayout.drawLine(
                     transform,
                     new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),
@@ -227,15 +244,21 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             guiAlyzer.drawRow(
                     transform,
                     new TranslationTextComponent("for.gui.humidity"),
-                    AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getHumidity()),
-                    AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getHumidity()),
+                    AlleleManager.climateHelper.toDisplay(butterfly.getGenome()
+                            .getActiveAllele(ButterflyChromosomes.SPECIES)
+                            .getHumidity()),
+                    AlleleManager.climateHelper.toDisplay(butterfly.getGenome()
+                            .getActiveAllele(ButterflyChromosomes.SPECIES)
+                            .getHumidity()),
                     butterfly,
                     ButterflyChromosomes.SPECIES
             );
             textLayout.newLine();
 
-            IAlleleValue<EnumTolerance> humidToleranceActive = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.HUMIDITY_TOLERANCE);
-            IAlleleValue<EnumTolerance> humidToleranceInactive = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.HUMIDITY_TOLERANCE);
+            IAlleleValue<EnumTolerance> humidToleranceActive = butterfly.getGenome()
+                    .getActiveAllele(ButterflyChromosomes.HUMIDITY_TOLERANCE);
+            IAlleleValue<EnumTolerance> humidToleranceInactive = butterfly.getGenome()
+                    .getInactiveAllele(ButterflyChromosomes.HUMIDITY_TOLERANCE);
             textLayout.drawLine(
                     transform,
                     new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),
@@ -247,22 +270,28 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             textLayout.newLine();
             textLayout.newLine();
 
-            ITextProperties yes = new TranslationTextComponent("for.yes");
-            ITextProperties no = new TranslationTextComponent("for.no");
+            ITextComponent yes = new TranslationTextComponent("for.yes");
+            ITextComponent no = new TranslationTextComponent("for.no");
 
-            ITextProperties diurnal0, diurnal1, nocturnal0, nocturnal1;
+            ITextComponent diurnal0, diurnal1, nocturnal0, nocturnal1;
             if (butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.NOCTURNAL).getValue()) {
                 nocturnal0 = diurnal0 = yes;
             } else {
-                nocturnal0 = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.NOCTURNAL).getValue() ? yes : no;
+                nocturnal0 = butterfly.getGenome()
+                        .getActiveAllele(ButterflyChromosomes.NOCTURNAL)
+                        .getValue() ? yes : no;
                 diurnal0 = !butterfly.getGenome().getActiveAllele(ButterflyChromosomes.NOCTURNAL).getValue() ? yes : no;
             }
 
             if (butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.NOCTURNAL).getValue()) {
                 nocturnal1 = diurnal1 = yes;
             } else {
-                nocturnal1 = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.NOCTURNAL).getValue() ? yes : no;
-                diurnal1 = !butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.NOCTURNAL).getValue() ? yes : no;
+                nocturnal1 = butterfly.getGenome()
+                        .getInactiveAllele(ButterflyChromosomes.NOCTURNAL)
+                        .getValue() ? yes : no;
+                diurnal1 = !butterfly.getGenome()
+                        .getInactiveAllele(ButterflyChromosomes.NOCTURNAL)
+                        .getValue() ? yes : no;
             }
 
             textLayout.drawLine(transform, new TranslationTextComponent("for.gui.diurnal"), GuiAlyzer.COLUMN_0);
@@ -275,23 +304,43 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             textLayout.drawLine(transform, nocturnal1, GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(false));
             textLayout.newLine();
 
-            ITextProperties primary = StringUtil.readableBoolean(butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER), yes, no);
-            ITextProperties secondary = StringUtil.readableBoolean(
+            ITextComponent primary = StringUtil.readableBoolean(butterfly.getGenome()
+                    .getActiveValue(ButterflyChromosomes.TOLERANT_FLYER), yes, no);
+            ITextComponent secondary = StringUtil.readableBoolean(
                     butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.TOLERANT_FLYER).getValue(),
                     yes,
                     no
             );
 
-            guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.flyer"), primary, secondary, butterfly, ButterflyChromosomes.TOLERANT_FLYER);
+            guiAlyzer.drawRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.flyer"),
+                    primary,
+                    secondary,
+                    butterfly,
+                    ButterflyChromosomes.TOLERANT_FLYER
+            );
             textLayout.newLine();
 
-            primary = StringUtil.readableBoolean(butterfly.getGenome().getActiveValue(ButterflyChromosomes.FIRE_RESIST), yes, no);
+            primary = StringUtil.readableBoolean(
+                    butterfly.getGenome().getActiveValue(ButterflyChromosomes.FIRE_RESIST),
+                    yes,
+                    no
+            );
             secondary = StringUtil.readableBoolean(
                     butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.FIRE_RESIST).getValue(),
                     yes,
-                    no);
+                    no
+            );
 
-            guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.fireresist"), primary, secondary, butterfly, ButterflyChromosomes.FIRE_RESIST);
+            guiAlyzer.drawRow(
+                    transform,
+                    new TranslationTextComponent("for.gui.fireresist"),
+                    primary,
+                    secondary,
+                    butterfly,
+                    ButterflyChromosomes.FIRE_RESIST
+            );
 
             textLayout.endPage();
         }
@@ -313,11 +362,18 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
             textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
-            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.loot.butterfly").appendString(":"), GuiAlyzer.COLUMN_0);
+            textLayout.drawLine(
+                    transform,
+                    new TranslationTextComponent("for.gui.loot.butterfly").appendString(":"),
+                    GuiAlyzer.COLUMN_0
+            );
             textLayout.newLine();
 
             int x = GuiAlyzer.COLUMN_0;
-            for (ItemStack stack : butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getButterflyLoot().getPossibleStacks()) {
+            for (ItemStack stack : butterfly.getGenome()
+                    .getActiveAllele(ButterflyChromosomes.SPECIES)
+                    .getButterflyLoot()
+                    .getPossibleStacks()) {
                 Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(
                         stack,
                         guiAlyzer.getGuiLeft() + x,
@@ -333,11 +389,18 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             textLayout.newLine();
             textLayout.newLine();
 
-            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.loot.caterpillar").appendString(":"), GuiAlyzer.COLUMN_0);
+            textLayout.drawLine(
+                    transform,
+                    new TranslationTextComponent("for.gui.loot.caterpillar").appendString(":"),
+                    GuiAlyzer.COLUMN_0
+            );
             textLayout.newLine();
 
             x = GuiAlyzer.COLUMN_0;
-            for (ItemStack stack : butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getCaterpillarLoot().getPossibleStacks()) {
+            for (ItemStack stack : butterfly.getGenome()
+                    .getActiveAllele(ButterflyChromosomes.SPECIES)
+                    .getCaterpillarLoot()
+                    .getPossibleStacks()) {
                 Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(
                         stack,
                         guiAlyzer.getGuiLeft() + x,
@@ -353,11 +416,18 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
             textLayout.newLine();
             textLayout.newLine();
 
-            textLayout.drawLine(transform, new TranslationTextComponent("for.gui.loot.cocoon").appendString(":"), GuiAlyzer.COLUMN_0);
+            textLayout.drawLine(
+                    transform,
+                    new TranslationTextComponent("for.gui.loot.cocoon").appendString(":"),
+                    GuiAlyzer.COLUMN_0
+            );
             textLayout.newLine();
 
             x = GuiAlyzer.COLUMN_0;
-            for (ItemStack stack : butterfly.getGenome().getActiveAllele(ButterflyChromosomes.COCOON).getCocoonLoot().getPossibleStacks()) {
+            for (ItemStack stack : butterfly.getGenome()
+                    .getActiveAllele(ButterflyChromosomes.COCOON)
+                    .getCocoonLoot()
+                    .getPossibleStacks()) {
                 Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(
                         stack,
                         guiAlyzer.getGuiLeft() + x,

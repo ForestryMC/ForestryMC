@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @OnlyIn(Dist.CLIENT)
 public class HabitatSelectionElement extends ElementGroup {
@@ -75,17 +76,17 @@ public class HabitatSelectionElement extends ElementGroup {
     }
 
     private enum EnumClimate {
-        ICY("habitats/snow", Biomes.SNOWY_TUNDRA),
-        COLD("habitats/taiga", Biomes.TAIGA),
-        HILLS("habitats/hills", Biomes.SWAMP),
-        NORMAL("habitats/plains", Biomes.PLAINS),
-        WARM("habitats/jungle", Biomes.JUNGLE),
-        HOT("habitats/desert", Biomes.DESERT);
+        ICY("habitats/snow", ((Supplier<Biome>) Biomes.SNOWY_TUNDRA).get()),
+        COLD("habitats/taiga", ((Supplier<Biome>) Biomes.TAIGA).get()),
+        HILLS("habitats/hills", ((Supplier<Biome>) Biomes.SWAMP).get()),
+        NORMAL("habitats/plains", ((Supplier<Biome>) Biomes.PLAINS).get()),
+        WARM("habitats/jungle", ((Supplier<Biome>) Biomes.JUNGLE).get()),
+        HOT("habitats/desert", ((Supplier<Biome>) Biomes.DESERT).get());
         private final IClimateState climateState;
         private final String spriteName;
 
         EnumClimate(String spriteName, Biome biome) {
-            climateState = ClimateStateHelper.of(biome.getDefaultTemperature(), biome.getDownfall());
+            climateState = ClimateStateHelper.of(biome.getTemperature(), biome.getDownfall());
             this.spriteName = spriteName;
         }
 

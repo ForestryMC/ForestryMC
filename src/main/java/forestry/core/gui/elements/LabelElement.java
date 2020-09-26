@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.Style;
 
 import javax.annotation.Nullable;
@@ -24,16 +23,16 @@ public class LabelElement extends GuiElement implements ILabelElement {
     public static final int DEFAULT_HEIGHT = FONT_RENDERER.FONT_HEIGHT + 3;
 
     /* Attributes - State */
-    protected ITextProperties component;
+    protected ITextComponent component;
     protected int originalWidth;
     protected boolean fitText;
     protected boolean shadow = false;
 
-    public LabelElement(ITextProperties component) {
+    public LabelElement(ITextComponent component) {
         this(0, 0, -1, DEFAULT_HEIGHT, component, true);
     }
 
-    public LabelElement(int xPos, int yPos, int width, int height, ITextProperties component, boolean fitText) {
+    public LabelElement(int xPos, int yPos, int width, int height, ITextComponent component, boolean fitText) {
         super(xPos, yPos, width, height);
         this.originalWidth = width;
         this.component = component;
@@ -80,12 +79,12 @@ public class LabelElement extends GuiElement implements ILabelElement {
     }
 
     @Override
-    public ITextProperties getValue() {
+    public ITextComponent getValue() {
         return component;
     }
 
     @Override
-    public boolean setValue(ITextProperties value) {
+    public boolean setValue(ITextComponent value) {
         this.component = value;
         calculateWidth();
         return true;
@@ -100,7 +99,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
     }
 
     @Override
-    public Collection<ITextProperties> getLines() {
+    public Collection<ITextComponent> getLines() {
         return Collections.singletonList(component);
     }
 
@@ -113,9 +112,9 @@ public class LabelElement extends GuiElement implements ILabelElement {
     @Override
     public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
         if (shadow) {
-            FONT_RENDERER.func_238407_a_(transform, component, 0, 0, 0);
+            FONT_RENDERER.func_243246_a(transform, component, 0, 0, 0);
         } else {
-            FONT_RENDERER.func_238422_b_(transform, component, 0, 0, 0);
+            FONT_RENDERER.func_243248_b(transform, component, 0, 0, 0);
         }
     }
 

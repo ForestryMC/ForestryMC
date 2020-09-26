@@ -71,7 +71,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, j, i);
         timer.onDraw();
         ITextComponent header = new TranslationTextComponent("for.gui.page").appendString(" " + (pageCurrent + 1) + "/" + pageMax);
-        getFontRenderer().func_238422_b_(
+        getFontRenderer().func_243248_b(
                 transform,
                 header,
                 guiLeft + 95 + textLayout.getCenteredOffset(header, 98),

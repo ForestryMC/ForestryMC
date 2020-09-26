@@ -51,7 +51,7 @@ public class TickHandlerCoreServer {
 
         if (Config.doRetrogen && event.world instanceof ServerWorld) {
             ServerWorld world = (ServerWorld) event.world;
-            RegistryKey<World> dimId = world.func_234923_W_();
+            RegistryKey<World> dimId = world.getDimensionKey();
             if (checkForRetrogen.contains(dimId)) {
                 List<ChunkCoords> chunkList = chunkRegenList.get(dimId);
                 Iterator<ChunkCoords> iterator = chunkList.iterator();
@@ -123,15 +123,14 @@ public class TickHandlerCoreServer {
         public ChunkCoords(IChunk chunk) {
             IWorld world = chunk.getWorldForge();
             if (world == null) {
-                this.dimension = World.field_234918_g_;
+                this.dimension = World.OVERWORLD;
                 this.x = 0;
                 this.z = 0;
             } else {
-                this.dimension = ((World) world).func_234923_W_();
+                this.dimension = ((World) world).getDimensionKey();
                 this.x = chunk.getPos().x;
                 this.z = chunk.getPos().z;
             }
         }
     }
-
 }

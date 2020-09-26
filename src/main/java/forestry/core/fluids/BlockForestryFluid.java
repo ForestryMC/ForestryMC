@@ -41,9 +41,14 @@ public class BlockForestryFluid extends FlowingFluidBlock {
     private final Color color;
 
     public BlockForestryFluid(FeatureFluid feature) {
-        super(feature.fluid(), Block.Properties.create(feature.fluid().getAttributes().getTemperature() > 505 ? Material.LAVA : Material.WATER)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(100.0F).noDrops());
+        super(
+                feature.fluid(),
+                Block.Properties.create(feature.fluid()
+                        .getAttributes()
+                        .getTemperature() > 505 ? Material.LAVA : Material.WATER)
+                        .doesNotBlockMovement()
+                        .hardnessAndResistance(100.0F).noDrops()
+        );
         this.feature = feature;
 
         FluidProperties properties = feature.getProperties();
@@ -64,24 +69,60 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 
             if (i > 0 && i < 8) {
                 if (getFluid().getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
-                    world.playSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
+                    world.playSound(
+                            d0 + 0.5D,
+                            d1 + 0.5D,
+                            d2 + 0.5D,
+                            SoundEvents.BLOCK_WATER_AMBIENT,
+                            SoundCategory.BLOCKS,
+                            rand.nextFloat() * 0.25F + 0.75F,
+                            rand.nextFloat() + 0.5F,
+                            false
+                    );
                 }
             } else if (rand.nextInt(10) == 0) {
-                world.addParticle(ParticleTypes.UNDERWATER, d0 + rand.nextFloat(), d1 + rand.nextFloat(), d2 + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+                world.addParticle(
+                        ParticleTypes.UNDERWATER,
+                        d0 + rand.nextFloat(),
+                        d1 + rand.nextFloat(),
+                        d2 + rand.nextFloat(),
+                        0.0D,
+                        0.0D,
+                        0.0D
+                );
             }
         }
 
-        if (this.material == Material.LAVA && world.getBlockState(pos.up()).getMaterial() == Material.AIR && !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())) {
+        if (this.material == Material.LAVA && world.getBlockState(pos.up())
+                .getMaterial() == Material.AIR && !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())) {
             if (rand.nextInt(100) == 0) {
                 double d8 = d0 + rand.nextFloat();
                 double d4 = d1 + 1;
                 double d6 = d2 + rand.nextFloat();
                 world.addParticle(ParticleTypes.LAVA, d8, d4, d6, 0.0D, 0.0D, 0.0D);
-                world.playSound(d8, d4, d6, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
+                world.playSound(
+                        d8,
+                        d4,
+                        d6,
+                        SoundEvents.BLOCK_LAVA_POP,
+                        SoundCategory.BLOCKS,
+                        0.2F + rand.nextFloat() * 0.2F,
+                        0.9F + rand.nextFloat() * 0.15F,
+                        false
+                );
             }
 
             if (rand.nextInt(200) == 0) {
-                world.playSound(d0, d1, d2, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
+                world.playSound(
+                        d0,
+                        d1,
+                        d2,
+                        SoundEvents.BLOCK_LAVA_AMBIENT,
+                        SoundCategory.BLOCKS,
+                        0.2F + rand.nextFloat() * 0.2F,
+                        0.9F + rand.nextFloat() * 0.15F,
+                        false
+                );
             }
         }
 
@@ -179,7 +220,15 @@ public class BlockForestryFluid extends FlowingFluidBlock {
             float explosionSize = 4F * flammability / 300F;
             if (explosionSize > 1.0 && isNearFire(world, pos.getX(), pos.getY(), pos.getZ())) {
                 world.setBlockState(pos, Blocks.FIRE.getDefaultState());
-                world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, Explosion.Mode.DESTROY);
+                world.createExplosion(
+                        null,
+                        pos.getX(),
+                        pos.getY(),
+                        pos.getZ(),
+                        explosionSize,
+                        true,
+                        Explosion.Mode.DESTROY
+                );
             }
         }
     }
@@ -196,7 +245,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
     private static boolean isNearFire(World world, int x, int y, int z) {
         AxisAlignedBB boundingBox = new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
         // Copied from 'Entity.move', replaces method 'World.isFlammableWithin'
-        return BlockPos.func_239581_a_(boundingBox.shrink(0.001D)).noneMatch((pos) -> {
+        return BlockPos.getAllInBox(boundingBox.shrink(0.001D)).noneMatch((pos) -> {
             BlockState state = world.getBlockState(pos);
             return state.isIn(BlockTags.FIRE) || state.isIn(Blocks.LAVA) || state.isBurning(world, pos);
         });

@@ -13,24 +13,51 @@ package forestry.arboriculture.worldgen;
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.List;
 import java.util.Random;
 
 public class FeaturePoplar extends FeatureTree {
-
     public FeaturePoplar(ITreeGenData tree) {
         super(tree, 8, 3);
     }
 
     @Override
-    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+    public boolean func_241855_a(
+            ISeedReader world,
+            ChunkGenerator generator,
+            Random rand,
+            BlockPos pos,
+            NoFeatureConfig config
+    ) {
+        return place(world, rand, pos, false);
+    }
+
+    @Override
+    protected void generateLeaves(
+            IWorld world,
+            Random rand,
+            TreeBlockTypeLeaf leaf,
+            List<BlockPos> branchEnds,
+            BlockPos startPos
+    ) {
         int leafSpawn = height + 1;
         float leafRadius = (girth - 1.0f) / 2.0f;
 
         while (leafSpawn > girth - 1) {
-            FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+            FeatureHelper.generateCylinderFromTreeStartPos(
+                    world,
+                    leaf,
+                    startPos.add(0, leafSpawn--, 0),
+                    girth,
+                    leafRadius + girth,
+                    1,
+                    FeatureHelper.EnumReplaceMode.SOFT
+            );
         }
     }
 }

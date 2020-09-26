@@ -17,8 +17,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * This enum concerns temperature.
  */
 public enum EnumTemperature {
-    NONE("None", "habitats/ocean", 0x808080), ICY("Icy", "habitats/snow", 0xaafff0), COLD("Cold", "habitats/taiga", 0x72ddf7),
-    NORMAL("Normal", "habitats/plains", 0xffd013), WARM("Warm", "habitats/jungle", 0xfb8a24), HOT("Hot", "habitats/desert", 0xd61439), HELLISH("Hellish", "habitats/nether", 0x81032d);
+    NONE("None", "habitats/ocean", 0x808080), ICY("Icy", "habitats/snow", 0xaafff0), COLD(
+            "Cold",
+            "habitats/taiga",
+            0x72ddf7
+    ),
+    NORMAL("Normal", "habitats/plains", 0xffd013), WARM("Warm", "habitats/jungle", 0xfb8a24), HOT(
+            "Hot",
+            "habitats/desert",
+            0xd61439
+    ), HELLISH("Hellish", "habitats/nether", 0x81032d);
 
     public static EnumTemperature[] VALUES = values();
 
@@ -67,13 +75,15 @@ public enum EnumTemperature {
         if (BiomeHelper.isBiomeHellish(biome)) {
             return HELLISH;
         }
-        return getFromValue(biome.getDefaultTemperature());
+
+        return getFromValue(biome.getTemperature());
     }
 
     public static EnumTemperature getFromBiome(Biome biome, BlockPos pos) {
         if (BiomeHelper.isBiomeHellish(biome)) {
             return HELLISH;
         }
+
         float temperature = biome.getTemperature(pos);
         return getFromValue(temperature);
     }

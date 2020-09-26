@@ -11,7 +11,6 @@
 package forestry.core;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.alleles.AlleleManager;
@@ -66,15 +65,9 @@ import net.minecraft.loot.LootFunctionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
@@ -158,36 +151,34 @@ public class ModuleCore extends BlankForestryModule {
         Proxies.render.initRendering();
 
         for (Biome biome : ForgeRegistries.BIOMES) {
-            if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(
-                    biome,
-                    BiomeDictionary.Type.END
-            )) {
+            if (biome.getCategory() == Biome.Category.NETHER || biome.getCategory() == Biome.Category.THEEND) {
                 continue;
             }
-            biome.addFeature(
-                    GenerationStage.Decoration.UNDERGROUND_ORES,
-                    Feature.ORE.withConfiguration(new OreFeatureConfig(
-                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
-                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(),
-                            36
-                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 56, 0, 184)))
-            );
-            biome.addFeature(
-                    GenerationStage.Decoration.UNDERGROUND_ORES,
-                    Feature.ORE.withConfiguration(new OreFeatureConfig(
-                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
-                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(),
-                            6
-                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 32, 0, 76)))
-            );
-            biome.addFeature(
-                    GenerationStage.Decoration.UNDERGROUND_ORES,
-                    Feature.ORE.withConfiguration(new OreFeatureConfig(
-                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
-                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(),
-                            6
-                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 16, 0, 76)))
-            );
+
+//            biome.addFeature(
+//                    GenerationStage.Decoration.UNDERGROUND_ORES,
+//                    Feature.ORE.withConfiguration(new OreFeatureConfig(
+//                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+//                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(),
+//                            36
+//                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 56, 0, 184)))
+//            );
+//            biome.addFeature(
+//                    GenerationStage.Decoration.UNDERGROUND_ORES,
+//                    Feature.ORE.withConfiguration(new OreFeatureConfig(
+//                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+//                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(),
+//                            6
+//                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 32, 0, 76)))
+//            );
+//            biome.addFeature(
+//                    GenerationStage.Decoration.UNDERGROUND_ORES,
+//                    Feature.ORE.withConfiguration(new OreFeatureConfig(
+//                            OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+//                            CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(),
+//                            6
+//                    )).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 16, 0, 76)))
+//            );
         }
     }
 

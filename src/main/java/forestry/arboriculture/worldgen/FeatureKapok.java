@@ -13,7 +13,10 @@ package forestry.arboriculture.worldgen;
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,9 +24,19 @@ import java.util.Random;
 import java.util.Set;
 
 public class FeatureKapok extends FeatureTree {
-
     public FeatureKapok(ITreeGenData tree) {
         super(tree, 10, 8);
+    }
+
+    @Override
+    public boolean func_241855_a(
+            ISeedReader world,
+            ChunkGenerator generator,
+            Random rand,
+            BlockPos pos,
+            NoFeatureConfig config
+    ) {
+        return place(world, rand, pos, false);
     }
 
     @Override
@@ -35,7 +48,18 @@ public class FeatureKapok extends FeatureTree {
         int leafSpawn = height + 1;
         while (leafSpawn > height - 4) {
             int radius = Math.round(girth * (height - leafSpawn) / 1.5f) + 6;
-            branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, leafSpawn, 0), girth, 0.3f, 0.25f, radius, 6, 1.0f));
+            branchCoords.addAll(FeatureHelper.generateBranches(
+                    world,
+                    rand,
+                    wood,
+                    startPos.add(0, leafSpawn, 0),
+                    girth,
+                    0.3f,
+                    0.25f,
+                    radius,
+                    6,
+                    1.0f
+            ));
             leafSpawn -= 2;
         }
 
@@ -43,16 +67,53 @@ public class FeatureKapok extends FeatureTree {
     }
 
     @Override
-    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+    protected void generateLeaves(
+            IWorld world,
+            Random rand,
+            TreeBlockTypeLeaf leaf,
+            List<BlockPos> branchEnds,
+            BlockPos startPos
+    ) {
         int leafSpawn = height + 1;
 
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn--, 0),
+                girth,
+                girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn--, 0),
+                girth,
+                0.5f + girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
 
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn, 0),
+                girth,
+                1.9f + girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
 
         for (BlockPos branchEnd : branchEnds) {
-            FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd.up(), 2.0f + girth, 2, FeatureHelper.EnumReplaceMode.AIR);
+            FeatureHelper.generateCylinderFromPos(
+                    world,
+                    leaf,
+                    branchEnd.up(),
+                    2.0f + girth,
+                    2,
+                    FeatureHelper.EnumReplaceMode.AIR
+            );
         }
 
         // Add some smaller twigs below for flavour
@@ -63,7 +124,13 @@ public class FeatureKapok extends FeatureTree {
             }
             int x_off = -1 + rand.nextInt(3);
             int y_off = -1 + rand.nextInt(3);
-            FeatureHelper.generateSphere(world, startPos.add(x_off, h, y_off), 1 + rand.nextInt(1), leaf, FeatureHelper.EnumReplaceMode.AIR);
+            FeatureHelper.generateSphere(
+                    world,
+                    startPos.add(x_off, h, y_off),
+                    1 + rand.nextInt(1),
+                    leaf,
+                    FeatureHelper.EnumReplaceMode.AIR
+            );
         }
     }
 }

@@ -37,7 +37,7 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
     @Override
     public void drawInfo(int recipeWidth, int recipeHeight, MatrixStack matrixStack, double mouseX, double mouseY) {
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(
                 matrixStack,
                 circuit.getDisplayName(),
                 (float) (recipeWidth - fontRenderer.getStringWidth(circuit.getDisplayName().getString())) / 2,
@@ -46,7 +46,7 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
         );
 
         ITextComponent soilName = new TranslationTextComponent("for.jei.farming.soil");
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(
                 matrixStack,
                 soilName,
                 18 - (float) (fontRenderer.getStringWidth(soilName.getString())) / 2,
@@ -55,7 +55,7 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
         );
 
         ITextComponent germlingsName = new TranslationTextComponent("for.jei.farming.germlings");
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(
                 matrixStack,
                 germlingsName,
                 (float) (recipeWidth - fontRenderer.getStringWidth(germlingsName.getString())) / 2,
@@ -64,7 +64,7 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
         );
 
         ITextComponent productsName = new TranslationTextComponent("for.jei.farming.products");
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(
                 matrixStack,
                 productsName,
                 126 - (float) (fontRenderer.getStringWidth(productsName.getString())) / 2,

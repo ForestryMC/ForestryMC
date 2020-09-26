@@ -45,19 +45,37 @@ public class ForestryBlockLootTables extends BlockLootTables {
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
             for (BlockDecorativeLeaves leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks()) {
-                this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getDefinition(), DEFAULT_SAPLING_DROP_RATES));
+                this.registerLootTable(
+                        leaves,
+                        (block) -> droppingWithChances(block, leaves.getDefinition(), DEFAULT_SAPLING_DROP_RATES)
+                );
             }
             for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
-                this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getTreeDefinition(), DEFAULT_SAPLING_DROP_RATES));
+                this.registerLootTable(
+                        leaves,
+                        (block) -> droppingWithChances(block, leaves.getTreeDefinition(), DEFAULT_SAPLING_DROP_RATES)
+                );
             }
-            for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> entry : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
-                FeatureBlock<BlockDefaultLeaves, BlockItem> defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.get(entry.getKey());
+            for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> entry : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT
+                    .getFeatureByType()
+                    .entrySet()) {
+                FeatureBlock<BlockDefaultLeaves, BlockItem> defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.get(entry
+                        .getKey());
                 Block defaultLeavesBlock = defaultLeaves.block();
                 Block fruitLeavesBlock = entry.getValue().block();
-                this.registerLootTable(fruitLeavesBlock, (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), DEFAULT_SAPLING_DROP_RATES));
+                this.registerLootTable(
+                        fruitLeavesBlock,
+                        (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), DEFAULT_SAPLING_DROP_RATES)
+                );
             }
         }
-        registerLootTable(CoreBlocks.PEAT, (block) -> new LootTable.Builder().addLootPool(new LootPool.Builder().addEntry(ItemLootEntry.builder(Blocks.DIRT))).addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(ConstantRange.of(2))).addEntry(ItemLootEntry.builder(CoreItems.PEAT.item()))));
+        registerLootTable(
+                CoreBlocks.PEAT,
+                (block) -> new LootTable.Builder().addLootPool(new LootPool.Builder().addEntry(ItemLootEntry.builder(
+                        Blocks.DIRT)))
+                        .addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(ConstantRange.of(2)))
+                                .addEntry(ItemLootEntry.builder(CoreItems.PEAT.item())))
+        );
         registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
         registerDropSelfLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
@@ -120,10 +138,12 @@ public class ForestryBlockLootTables extends BlockLootTables {
     }
 
     public static LootTable.Builder droppingWithChances(Block block, TreeDefinition definition, float... chances) {
-        return droppingWithSilkTouchOrShears(block,
+        return droppingWithSilkTouchOrShears(
+                block,
                 withSurvivesExplosion(block, ItemLootEntry.builder(ArboricultureItems.SAPLING)
                         .acceptFunction(OrganismFunction.fromDefinition(definition)))
-                        .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances)));
+                        .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances))
+        );
     }
 
     public void registerSilkTouch(FeatureBlock featureBlock, Block drop) {
@@ -160,7 +180,7 @@ public class ForestryBlockLootTables extends BlockLootTables {
 
     public void registerEmptyTables(Block... blocks) {
         for (Block block : blocks) {
-            registerLootTable(block, func_218482_a());
+            registerLootTable(block, blockNoDrop());
         }
     }
 }

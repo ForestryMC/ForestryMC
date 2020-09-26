@@ -13,29 +13,80 @@ package forestry.arboriculture.worldgen;
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import java.util.List;
 import java.util.Random;
 
 public class FeatureLarch extends FeatureTree {
-
     public FeatureLarch(ITreeGenData tree) {
         super(tree, 6, 5);
     }
 
     @Override
-    protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+    public boolean func_241855_a(
+            ISeedReader world,
+            ChunkGenerator generator,
+            Random rand,
+            BlockPos pos,
+            NoFeatureConfig config
+    ) {
+        return place(world, rand, pos, false);
+    }
+
+    @Override
+    protected void generateLeaves(
+            IWorld world,
+            Random rand,
+            TreeBlockTypeLeaf leaf,
+            List<BlockPos> branchEnds,
+            BlockPos startPos
+    ) {
         int leafSpawn = height + 1;
 
         float sizeMultiplier = Math.max(height / 8, 1.0f);
 
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-        FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn--, 0),
+                girth,
+                girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
+        FeatureHelper.generateCylinderFromTreeStartPos(
+                world,
+                leaf,
+                startPos.add(0, leafSpawn--, 0),
+                girth,
+                sizeMultiplier + girth,
+                1,
+                FeatureHelper.EnumReplaceMode.SOFT
+        );
 
         while (leafSpawn > 2) {
-            FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2 * sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-            FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, sizeMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+            FeatureHelper.generateCylinderFromTreeStartPos(
+                    world,
+                    leaf,
+                    startPos.add(0, leafSpawn--, 0),
+                    girth,
+                    2 * sizeMultiplier + girth,
+                    1,
+                    FeatureHelper.EnumReplaceMode.SOFT
+            );
+            FeatureHelper.generateCylinderFromTreeStartPos(
+                    world,
+                    leaf,
+                    startPos.add(0, leafSpawn--, 0),
+                    girth,
+                    sizeMultiplier + girth,
+                    1,
+                    FeatureHelper.EnumReplaceMode.SOFT
+            );
         }
     }
 }

@@ -17,9 +17,10 @@ import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.tiles.TileFermenter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import java.util.Optional;
 
 public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
     public static final short SLOT_RESOURCE = 0;
@@ -37,7 +38,7 @@ public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
         if (slotIndex == SLOT_RESOURCE) {
             return FermenterRecipeManager.isResource(itemStack);
         } else if (slotIndex == SLOT_INPUT) {
-            LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+            Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
             return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
         } else if (slotIndex == SLOT_CAN_INPUT) {
             return FluidHelper.isFillableContainerWithRoom(itemStack);

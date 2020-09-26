@@ -13,8 +13,8 @@ package forestry.core.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.util.List;
@@ -55,7 +55,8 @@ public class GuiTextBox extends TextFieldWidget {
     }
 
     public boolean moreLinesAllowed() {
-        return fontRenderer.func_238425_b_(new StringTextComponent(getCursoredText()), width).size() * fontRenderer.FONT_HEIGHT < height;
+        return fontRenderer.trimStringToWidth(new StringTextComponent(getCursoredText()), width)
+                .size() * fontRenderer.FONT_HEIGHT < height;
     }
 
     private String getCursoredText() {
@@ -74,14 +75,21 @@ public class GuiTextBox extends TextFieldWidget {
         return text.substring(0, cursorPos) + "_" + text.substring(cursorPos);
     }
 
-    private void drawScrolledSplitString(MatrixStack transform, ITextComponent text, int startX, int startY, int width, int textColour) {
-        List<ITextProperties> lines = fontRenderer.func_238425_b_(text, width);
+    private void drawScrolledSplitString(
+            MatrixStack transform,
+            ITextComponent text,
+            int startX,
+            int startY,
+            int width,
+            int textColour
+    ) {
+        List<IReorderingProcessor> lines = fontRenderer.trimStringToWidth(text, width);
         maxLines = lines.size();
 
         int count = 0;
         int lineY = startY;
 
-        for (ITextProperties line : lines) {
+        for (IReorderingProcessor line : lines) {
             if (count < lineScroll) {
                 count++;
                 continue;
@@ -89,7 +97,7 @@ public class GuiTextBox extends TextFieldWidget {
                 break;
             }
 
-            fontRenderer.drawString(transform, line.getString(), startX, lineY, textColour);
+            fontRenderer.func_238422_b_(transform, line, startX, lineY, textColour);
             lineY += fontRenderer.FONT_HEIGHT;
 
             count++;

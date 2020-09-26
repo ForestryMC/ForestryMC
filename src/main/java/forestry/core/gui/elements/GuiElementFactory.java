@@ -56,12 +56,12 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-        dominantStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
-        recessiveStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
-        guiStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.screen")));
-        guiTitleStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.title")));
-        databaseTitle = Style.EMPTY.setColor(Color.func_240743_a_(0xcfb53b)).setUnderlined(true);
-        binomial = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
+        dominantStyle = Style.EMPTY.setColor(Color.fromInt(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
+        recessiveStyle = Style.EMPTY.setColor(Color.fromInt(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
+        guiStyle = Style.EMPTY.setColor(Color.fromInt(ColourProperties.INSTANCE.get("gui.screen")));
+        guiTitleStyle = Style.EMPTY.setColor(Color.fromInt(ColourProperties.INSTANCE.get("gui.title")));
+        databaseTitle = Style.EMPTY.setColor(Color.fromInt(0xcfb53b)).setUnderlined(true);
+        binomial = Style.EMPTY.setColor(Color.fromInt(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
     }
 
     @Override

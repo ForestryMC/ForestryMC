@@ -17,7 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class IndexElement extends VerticalLayout {
     //TODO Unicode
-    private static final Style INDEX_STYLE = Style.EMPTY.setColor(Color.func_240743_a_(0x000000));
+    private static final Style INDEX_STYLE = Style.EMPTY.setColor(Color.fromInt(0x000000));
 
     public IndexElement(int xPos, int yPos, IndexEntry[] data) {
         super(xPos, yPos, 108);

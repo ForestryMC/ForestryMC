@@ -36,7 +36,7 @@ public class HintLedger extends Ledger {
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
 
-        int lineCount = fontRenderer.func_238425_b_(hintString, maxTextWidth).size();
+        int lineCount = fontRenderer.trimStringToWidth(hintString, maxTextWidth).size();
         maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
     }
 

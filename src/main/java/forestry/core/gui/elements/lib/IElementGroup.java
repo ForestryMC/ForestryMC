@@ -3,7 +3,7 @@ package forestry.core.gui.elements.lib;
 import forestry.core.gui.elements.LabelElement;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -66,7 +66,7 @@ public interface IElementGroup extends IGuiElement {
 
     Style defaultStyle();
 
-    ILabelElement label(ITextProperties component);
+    ILabelElement label(ITextComponent component);
 
     ILabelElement translated(String key, Object... args);
 
@@ -79,15 +79,23 @@ public interface IElementGroup extends IGuiElement {
     /**
      * Adds a single line of text.
      */
-    ILabelElement label(ITextProperties text, Style style);
+    ILabelElement label(ITextComponent text, Style style);
 
-    ILabelElement label(ITextProperties text, GuiElementAlignment align);
+    ILabelElement label(ITextComponent text, GuiElementAlignment align);
 
-    ILabelElement label(ITextProperties text, GuiElementAlignment align, Style textStyle);
+    ILabelElement label(ITextComponent text, GuiElementAlignment align, Style textStyle);
 
-    ILabelElement label(ITextProperties text, int width, int height, GuiElementAlignment align, Style textStyle);
+    ILabelElement label(ITextComponent text, int width, int height, GuiElementAlignment align, Style textStyle);
 
-    ILabelElement label(ITextProperties text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle);
+    ILabelElement label(
+            ITextComponent text,
+            int x,
+            int y,
+            int width,
+            int height,
+            GuiElementAlignment align,
+            Style textStyle
+    );
 
     /**
      * Adds a text element that splits the text with wordwrap.
@@ -98,7 +106,14 @@ public interface IElementGroup extends IGuiElement {
 
     ITextElement splitText(IFormattableTextComponent text, int width, GuiElementAlignment align, Style textStyle);
 
-    ITextElement splitText(IFormattableTextComponent text, int x, int y, int width, GuiElementAlignment align, Style textStyle);
+    ITextElement splitText(
+            IFormattableTextComponent text,
+            int x,
+            int y,
+            int width,
+            GuiElementAlignment align,
+            Style textStyle
+    );
 
     default IElementLayout vertical(int width) {
         return vertical(0, 0, width);

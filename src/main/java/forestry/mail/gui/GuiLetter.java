@@ -201,7 +201,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
             return;
         }
 
-        minecraft.fontRenderer.func_238422_b_(
+        minecraft.fontRenderer.func_243248_b(
                 transform,
                 new TranslationTextComponent("for.gui.mail.pleasesend"),
                 guiLeft + x,
@@ -211,7 +211,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 
         addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
 
-        minecraft.fontRenderer.func_238422_b_(
+        minecraft.fontRenderer.func_243248_b(
                 transform,
                 new TranslationTextComponent("for.gui.mail.foreveryattached"),
                 guiLeft + x,

@@ -104,6 +104,11 @@ repositories {
     maven {
         url "http://dvs1.progwml6.com/files/maven"
     }
+    maven {
+        // FTB GUI Library
+        name = "LatvianModder maven"
+        url 'https://maven.latmod.com/'
+    }
     /*maven {
         name = "ic2"
         url = "http://maven.ic2.player.to/"
@@ -123,6 +128,8 @@ dependencies {
     /*deobfProvided "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"*/
     compileOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}:api")
 
+    // require FTB GUI Library
+    compile fg.deobf("com.feed_the_beast.mods:ftb-gui-library:${ftb_gui_lib_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}")
     /*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
     deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"

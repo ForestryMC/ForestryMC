@@ -1,7 +1,6 @@
 package forestry.core.gui.elements.lib;
 
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 
 import java.util.Collection;
 
@@ -13,7 +12,7 @@ public interface ITextElement extends IGuiElement {
     /**
      * @return The text this element displays.
      */
-    Collection<ITextProperties> getLines();
+    Collection<ITextComponent> getLines();
 
     ITextElement setText(ITextComponent text);
 }

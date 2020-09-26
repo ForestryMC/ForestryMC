@@ -12,6 +12,7 @@ package forestry.core.genetics;
 
 import forestry.core.utils.StringUtil;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class GenericRatings {
@@ -39,7 +40,7 @@ public class GenericRatings {
                 ? new TranslationTextComponent("for.gui.nocturnal")
                 : new TranslationTextComponent("for.gui.diurnal");
         if (neverSleeps) {
-            active = ITextComponent.func_241827_a_(StringUtil.append(
+            active = new StringTextComponent(StringUtil.append(
                     ", ",
                     active.getString(),
                     naturalNocturnal

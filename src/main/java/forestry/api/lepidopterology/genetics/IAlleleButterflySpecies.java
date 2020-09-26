@@ -9,7 +9,7 @@ import forestry.api.core.ISpriteRegister;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.products.IDynamicProductList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraft.world.biome.Biome;
 
 import java.util.Set;
 
@@ -36,7 +36,7 @@ public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISprite
      *
      * @return EnumSet of biome tags this butterfly species can be spawned in.
      */
-    Set<BiomeDictionary.Type> getSpawnBiomes();
+    Set<Biome.Category> getSpawnBiomes();
 
     /**
      * @return true if a prospective spawn biome must not match a biome tag outside of getSpawnBiomes.

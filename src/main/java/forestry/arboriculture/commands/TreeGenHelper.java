@@ -24,13 +24,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
 
 import java.util.Optional;
 
@@ -68,9 +68,8 @@ public final class TreeGenHelper {
             if (feature instanceof FeatureBase) {
                 return ((FeatureBase) feature).place(world, world.rand, pos, true);
             } else {
-                return feature.func_230362_a_(
-                        (ServerWorld) world,
-                        ((ServerWorld) world).func_241112_a_(),
+                return feature.func_241855_a(
+                        (ISeedReader) world,
                         generator,
                         world.rand,
                         pos,
@@ -91,9 +90,8 @@ public final class TreeGenHelper {
             if (gen instanceof FeatureBase) {
                 return ((FeatureBase) gen).place(world, world.rand, pos, true);
             } else {
-                return gen.func_230362_a_(
-                        (ServerWorld) world,
-                        ((ServerWorld) world).func_241112_a_(),
+                return gen.func_241855_a(
+                        (ISeedReader) world,
                         ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
                         world.rand,
                         pos,

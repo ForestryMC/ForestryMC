@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -38,14 +39,24 @@ public abstract class EntityUtil {
         living.renderYawOffset = living.rotationYaw;
         DifficultyInstance diff = world.getDifficultyForLocation(new BlockPos(x, y, z));
         //TODO - check SpawnReason
-        living.onInitialSpawn(world, diff, SpawnReason.MOB_SUMMONED, null, null);
+        living.onInitialSpawn((ISeedReader) world, diff, SpawnReason.MOB_SUMMONED, null, null);
         world.addEntity(living);
         //TODO - right sound?
         living.playAmbientSound();
         return living;
     }
 
-    public static void registerEntity(ResourceLocation registryName, EntityType type, String ident, int id, int eggForeground, int eggBackground, int trackingRange, int updateFrequency, boolean sendVelocity) {
+    public static void registerEntity(
+            ResourceLocation registryName,
+            EntityType type,
+            String ident,
+            int id,
+            int eggForeground,
+            int eggBackground,
+            int trackingRange,
+            int updateFrequency,
+            boolean sendVelocity
+    ) {
         ForgeRegistries.ENTITIES.register(type);    //TODO
         //		EntityRegistry.registerModEntity(registryName, entityClass, ident, id, ForestryAPI.instance, trackingRange, updateFrequency, sendVelocity);
         Log.debug("Registered entity {} ({}) with id {}.", ident, type.toString(), id);

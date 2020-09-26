@@ -85,7 +85,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -799,7 +798,7 @@ public class ModuleApiculture extends BlankForestryModule {
             int chunkZ,
             boolean hasVillageGenerated
     ) {
-        if (world.func_230315_m_() != DimensionType.func_236019_a_()) {
+        if (!world.getDimensionType().equals(DimensionType.THE_END)) {
             return;
         }
 
@@ -901,7 +900,7 @@ public class ModuleApiculture extends BlankForestryModule {
         @Override
         public boolean isAcceptableFlower(BlockState blockState, World world, BlockPos pos, String flowerType) {
             Biome biomeGenForCoords = world.getBiome(pos);
-            return BiomeDictionary.hasType(biomeGenForCoords, BiomeDictionary.Type.END);
+            return Biome.Category.THEEND == biomeGenForCoords.getCategory();
         }
     }
 }

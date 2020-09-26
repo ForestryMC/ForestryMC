@@ -17,9 +17,10 @@ import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.tiles.TileMoistener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+
+import java.util.Optional;
 
 public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
     public static final short SLOT_STASH_1 = 0;
@@ -45,8 +46,9 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
         }
 
         if (slotIndex == SLOT_PRODUCT) {
-            LazyOptional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
-            return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);    //TODO very common pattern. Create Helper?
+            Optional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
+            return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f))
+                    .orElse(false);    //TODO very common pattern. Create Helper?
         }
 
         return false;

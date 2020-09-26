@@ -29,7 +29,6 @@ import java.util.Random;
 import java.util.Set;
 
 public abstract class FeatureArboriculture extends FeatureBase {
-
     protected static final int minPodHeight = 3;
 
     protected final ITreeGenData tree;
@@ -88,7 +87,13 @@ public abstract class FeatureArboriculture extends FeatureBase {
 
     protected abstract Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
 
-    protected abstract void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos);
+    protected abstract void generateLeaves(
+            IWorld world,
+            Random rand,
+            TreeBlockTypeLeaf leaf,
+            List<BlockPos> branchEnds,
+            BlockPos startPos
+    );
 
     protected abstract void generateExtras(IWorld world, Random rand, BlockPos startPos);
 

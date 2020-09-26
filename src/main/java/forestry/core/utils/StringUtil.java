@@ -12,7 +12,7 @@ package forestry.core.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -39,7 +39,7 @@ public class StringUtil {
         return source + delim + appendix;
     }
 
-    public static ITextProperties readableBoolean(boolean flag, ITextProperties trueStr, ITextProperties falseStr) {
+    public static ITextComponent readableBoolean(boolean flag, ITextComponent trueStr, ITextComponent falseStr) {
         if (flag) {
             return trueStr;
         } else {
@@ -61,13 +61,13 @@ public class StringUtil {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static int getLineHeight(int maxWidth, ITextProperties... strings) {
+    public static int getLineHeight(int maxWidth, ITextComponent... strings) {
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
 
         int lineCount = 0;
-        for (ITextProperties string : strings) {
-            lineCount += fontRenderer.func_238425_b_(string, maxWidth).size();
+        for (ITextComponent string : strings) {
+            lineCount += fontRenderer.trimStringToWidth(string, maxWidth).size();
         }
 
         return lineCount * fontRenderer.FONT_HEIGHT;

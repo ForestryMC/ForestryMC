@@ -37,21 +37,34 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
     @Override
     public boolean fancyGraphicsEnabled() {
-        return Minecraft.getInstance().gameSettings.field_238330_f_ == GraphicsFanciness.FANCY;
+        return Minecraft.getInstance().gameSettings.graphicFanciness == GraphicsFanciness.FANCY;
     }
 
     @Override
     public void registerModels(ModelRegistryEvent event) {
         for (EnumContainerType type : EnumContainerType.values()) {
-            ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_empty", "inventory"));
-            ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_filled", "inventory"));
+            ModelLoader.addSpecialModel(new ModelResourceLocation(
+                    "forestry:" + type.getString() + "_empty",
+                    "inventory"
+            ));
+            ModelLoader.addSpecialModel(new ModelResourceLocation(
+                    "forestry:" + type.getString() + "_filled",
+                    "inventory"
+            ));
         }
-        CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
+        CoreBlocks.BASE.getBlocks()
+                .forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+        ModelLoaderRegistry.registerLoader(
+                new ResourceLocation(Constants.MOD_ID, "fluid_container"),
+                new FluidContainerModel.Loader()
+        );
     }
 
     @Override
-    public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
+    public void setRenderDefaultMachine(
+            MachinePropertiesTesr<? extends TileBase> machineProperties,
+            String baseTexture
+    ) {
         machineProperties.setRenderer(new RenderMachine(baseTexture));
     }
 
@@ -72,7 +85,10 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
     }
 
     @Override
-    public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
+    public void setRenderChest(
+            MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties,
+            String textureName
+    ) {
         machineProperties.setRenderer(new RenderNaturalistChest(textureName));
     }
 

@@ -109,32 +109,32 @@ public class ElementGroup extends GuiElement implements IElementGroup {
     }
 
     @Override
-    public ILabelElement label(ITextProperties text) {
+    public ILabelElement label(ITextComponent text) {
         return label(text, defaultStyle());
     }
 
     @Override
-    public ILabelElement label(ITextProperties text, Style style) {
+    public ILabelElement label(ITextComponent text, Style style) {
         return label(text, GuiElementAlignment.TOP_LEFT, style);
     }
 
     @Override
-    public ILabelElement label(ITextProperties text, GuiElementAlignment align) {
+    public ILabelElement label(ITextComponent text, GuiElementAlignment align) {
         return label(text, align, defaultStyle());
     }
 
     @Override
-    public ILabelElement label(ITextProperties text, GuiElementAlignment align, Style textStyle) {
+    public ILabelElement label(ITextComponent text, GuiElementAlignment align, Style textStyle) {
         return label(text, -1, 12, align, textStyle);
     }
 
     @Override
-    public ILabelElement label(ITextProperties text, int width, int height, GuiElementAlignment align, Style textStyle) {
+    public ILabelElement label(ITextComponent text, int width, int height, GuiElementAlignment align, Style textStyle) {
         return label(text, 0, 0, width, height < 0 ? 12 : height, align, textStyle);
     }
 
     @Override
-    public ILabelElement label(ITextProperties text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
+    public ILabelElement label(ITextComponent text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
         return add(new LabelElement(x, y, width, height, text, true).setStyle(textStyle));
     }
 

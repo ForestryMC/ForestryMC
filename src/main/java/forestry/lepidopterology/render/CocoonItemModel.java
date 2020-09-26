@@ -45,7 +45,14 @@ public class CocoonItemModel extends AbstractItemModel {
     private static class Geometry implements IModelGeometry<CocoonItemModel.Geometry> {
 
         @Override
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+        public IBakedModel bake(
+                IModelConfiguration owner,
+                ModelBakery bakery,
+                Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
+                IModelTransform modelTransform,
+                ItemOverrideList overrides,
+                ResourceLocation modelLocation
+        ) {
             ImmutableMap.Builder<String, ImmutableList<IBakedModel>> bakedModels = new ImmutableMap.Builder<>();
             AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
                 ImmutableList.Builder<IBakedModel> models = new ImmutableList.Builder<>();
@@ -58,7 +65,11 @@ public class CocoonItemModel extends AbstractItemModel {
         }
 
         @Override
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        public Collection<RenderMaterial> getTextures(
+                IModelConfiguration owner,
+                Function<ResourceLocation, IUnbakedModel> modelGetter,
+                Set<Pair<String, String>> missingTextureErrors
+        ) {
             return ImmutableList.of();
         }
     }
@@ -69,7 +80,10 @@ public class CocoonItemModel extends AbstractItemModel {
         }
 
         @Override
-        public CocoonItemModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+        public CocoonItemModel.Geometry read(
+                JsonDeserializationContext deserializationContext,
+                JsonObject modelContents
+        ) {
             return new CocoonItemModel.Geometry();
         }
     }

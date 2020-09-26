@@ -15,7 +15,7 @@ import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import genetics.api.alleles.IAlleleValue;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,7 +38,8 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
     @Override
     public void createElements(IDatabaseElement database, IButterfly butterfly, ItemStack itemStack) {
         IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES);
-        IAlleleButterflySpecies secondarySpecies = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.SPECIES);
+        IAlleleButterflySpecies secondarySpecies = butterfly.getGenome()
+                .getInactiveAllele(ButterflyChromosomes.SPECIES);
 
         database.label(
                 new TranslationTextComponent("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"),
@@ -65,21 +66,29 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
         database.addLine(new TranslationTextComponent("for.gui.flowers"), ButterflyChromosomes.FLOWER_PROVIDER);
         database.addLine(new TranslationTextComponent("for.gui.effect"), ButterflyChromosomes.EFFECT);
 
-        Function<Boolean, ITextProperties> toleranceText = a -> {
+        Function<Boolean, ITextComponent> toleranceText = a -> {
             IAlleleForestrySpecies species = a ? primarySpecies : secondarySpecies;
             return AlleleManager.climateHelper.toDisplay(species.getTemperature());
         };
-        database.addLine(new TranslationTextComponent("for.gui.climate"), toleranceText, ButterflyChromosomes.TEMPERATURE_TOLERANCE);
+        database.addLine(
+                new TranslationTextComponent("for.gui.climate"),
+                toleranceText,
+                ButterflyChromosomes.TEMPERATURE_TOLERANCE
+        );
         database.addToleranceLine(ButterflyChromosomes.TEMPERATURE_TOLERANCE);
 
-        database.addLine(new TranslationTextComponent("for.gui.humidity"), toleranceText, ButterflyChromosomes.HUMIDITY_TOLERANCE);
+        database.addLine(
+                new TranslationTextComponent("for.gui.humidity"),
+                toleranceText,
+                ButterflyChromosomes.HUMIDITY_TOLERANCE
+        );
         database.addToleranceLine(ButterflyChromosomes.HUMIDITY_TOLERANCE);
 
-        ITextProperties yes = new TranslationTextComponent("for.yes");
-        ITextProperties no = new TranslationTextComponent("for.no");
+        ITextComponent yes = new TranslationTextComponent("for.yes");
+        ITextComponent no = new TranslationTextComponent("for.no");
 
         {
-            ITextProperties diurnalFirst, diurnalSecond, nocturnalFirst, nocturnalSecond;
+            ITextComponent diurnalFirst, diurnalSecond, nocturnalFirst, nocturnalSecond;
             if (butterfly.getGenome().getActiveValue(ButterflyChromosomes.NOCTURNAL)) {
                 nocturnalFirst = diurnalFirst = yes;
             } else {
@@ -93,15 +102,31 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
                 diurnalSecond = !secondarySpecies.isNocturnal() ? yes : no;
             }
 
-            database.addLine(new TranslationTextComponent("for.gui.diurnal"), (Boolean a) -> a ? diurnalFirst : diurnalSecond, false);
-            database.addLine(new TranslationTextComponent("for.gui.nocturnal"), (Boolean a) -> a ? nocturnalFirst : nocturnalSecond, false);
+            database.addLine(
+                    new TranslationTextComponent("for.gui.diurnal"),
+                    (Boolean a) -> a ? diurnalFirst : diurnalSecond,
+                    false
+            );
+            database.addLine(
+                    new TranslationTextComponent("for.gui.nocturnal"),
+                    (Boolean a) -> a ? nocturnalFirst : nocturnalSecond,
+                    false
+            );
         }
 
-        Function<Boolean, ITextProperties> flyer = active -> StringUtil.readableBoolean(active ? butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) : butterfly.getGenome().getInactiveValue(ButterflyChromosomes.TOLERANT_FLYER), yes, no);
+        Function<Boolean, ITextComponent> flyer = active -> StringUtil.readableBoolean(active ? butterfly.getGenome()
+                .getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) : butterfly.getGenome()
+                .getInactiveValue(ButterflyChromosomes.TOLERANT_FLYER), yes, no);
         database.addLine(new TranslationTextComponent("for.gui.flyer"), flyer, ButterflyChromosomes.TOLERANT_FLYER);
 
-        Function<Boolean, ITextProperties> fireresist = active -> StringUtil.readableBoolean(active ? butterfly.getGenome().getActiveValue(ButterflyChromosomes.FIRE_RESIST) : butterfly.getGenome().getInactiveValue(ButterflyChromosomes.FIRE_RESIST), yes, no);
-        database.addLine(new TranslationTextComponent("for.gui.fireresist"), fireresist, ButterflyChromosomes.FIRE_RESIST);
+        Function<Boolean, ITextComponent> fireresist = active -> StringUtil.readableBoolean(active ? butterfly.getGenome()
+                .getActiveValue(ButterflyChromosomes.FIRE_RESIST) : butterfly.getGenome()
+                .getInactiveValue(ButterflyChromosomes.FIRE_RESIST), yes, no);
+        database.addLine(
+                new TranslationTextComponent("for.gui.fireresist"),
+                fireresist,
+                ButterflyChromosomes.FIRE_RESIST
+        );
     }
 
     @Override

@@ -6,7 +6,6 @@
 package forestry.api.core;
 
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,7 @@ public class BiomeHelper {
 
     /**
      * Determines if a given Biome is of HELLISH temperature, since it is treated separately from actual temperature values.
-     * Uses the BiomeDictionary.
+     * Uses the Biome.Category.
      *
      * @param biomeGen Biome of the biome in question
      * @return true, if the Biome is a Nether-type biome; false otherwise.
@@ -27,7 +26,7 @@ public class BiomeHelper {
             return isBiomeHellishCache.get(biomeGen);
         }
 
-        boolean isBiomeHellish = BiomeDictionary.hasType(biomeGen, BiomeDictionary.Type.NETHER);
+        boolean isBiomeHellish = Biome.Category.NETHER == biomeGen.getCategory();
         isBiomeHellishCache.put(biomeGen, isBiomeHellish);
         return isBiomeHellish;
     }

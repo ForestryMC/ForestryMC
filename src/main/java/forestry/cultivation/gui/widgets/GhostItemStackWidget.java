@@ -40,7 +40,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
         ITextComponent directionString = getDirectionString();
         if (!directionString.getString().isEmpty()) {
             FontRenderer fontRenderer = manager.minecraft.fontRenderer;
-            fontRenderer.func_238407_a_(
+            fontRenderer.func_243246_a(
                     transform,
                     getDirectionString(),
                     xPos + startX + 5,

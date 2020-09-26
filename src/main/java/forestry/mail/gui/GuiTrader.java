@@ -17,7 +17,6 @@ import forestry.core.render.ColourProperties;
 import forestry.mail.tiles.TileTrader;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiTrader extends GuiForestry<ContainerTrader> {
@@ -32,7 +31,7 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {
-        this.minecraft.fontRenderer.func_238422_b_(
+        this.minecraft.fontRenderer.func_243248_b(
                 transform,
                 tile.getDisplayName(),
                 textLayout.getCenteredOffset(tile.getDisplayName()),
@@ -40,8 +39,8 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
                 ColourProperties.INSTANCE.get("gui.mail.text")
         );
 
-        ITextProperties receive = new TranslationTextComponent("for.gui.mail.receive");
-        this.minecraft.fontRenderer.func_238422_b_(
+        ITextComponent receive = new TranslationTextComponent("for.gui.mail.receive");
+        this.minecraft.fontRenderer.func_243248_b(
                 transform,
                 receive,
                 textLayout.getCenteredOffset(receive, 70) + 51,
@@ -49,8 +48,8 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
                 ColourProperties.INSTANCE.get("gui.mail.text")
         );
 
-        ITextProperties send = new TranslationTextComponent("for.gui.mail.send");
-        this.minecraft.fontRenderer.func_238422_b_(
+        ITextComponent send = new TranslationTextComponent("for.gui.mail.send");
+        this.minecraft.fontRenderer.func_243248_b(
                 transform,
                 send,
                 textLayout.getCenteredOffset(send, 70) + 51,

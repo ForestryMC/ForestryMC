@@ -166,7 +166,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
                 ColourProperties.INSTANCE.get("gui.book")
         );
 
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(
                 transform,
                 new TranslationTextComponent("for.gui.mail.willtrade", tradeInfo.getOwner().getName()),
                 x,
@@ -176,7 +176,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
         addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.getTradegood()));
 
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(
                 transform,
                 new TranslationTextComponent("for.gui.mail.tradefor"),
                 x,

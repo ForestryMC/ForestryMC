@@ -156,7 +156,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
     }
 
     private void drawCenteredString(MatrixStack transform, ITextComponent text, int x, int y) {
-        minecraft.fontRenderer.func_238407_a_(
+        minecraft.fontRenderer.func_243246_a(
                 transform,
                 text,
                 guiLeft + (float) (x - (double) minecraft.fontRenderer.getStringWidth(text.getString()) / 2),

@@ -4,11 +4,11 @@ import forestry.factory.recipes.ISqueezerContainerRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import java.util.Collections;
+import java.util.Optional;
 
 public class SqueezerContainerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerContainerRecipe> {
     private final ItemStack filledContainer;
@@ -27,7 +27,7 @@ public class SqueezerContainerRecipeWrapper extends AbstractSqueezerRecipeWrappe
             ingredients.setOutput(VanillaTypes.ITEM, remnants);
         }
 
-        LazyOptional<FluidStack> fluidContained = FluidUtil.getFluidContained(filledContainer);
+        Optional<FluidStack> fluidContained = FluidUtil.getFluidContained(filledContainer);
         if (fluidContained.isPresent()) {
             ingredients.setOutput(VanillaTypes.FLUID, fluidContained.orElse(null));
         }

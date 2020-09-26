@@ -1,6 +1,9 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[33,)"
 issueTrackerURL="https://github.com/ForestryMC/ForestryMC/issues"
+
+# License
+license="The MIT License (MIT)"
 
 [[mods]]
 	modId="forestry"
@@ -35,6 +38,6 @@ issueTrackerURL="https://github.com/ForestryMC/ForestryMC/issues"
 [[dependencies.forestry]]
 	modId="forge"
     mandatory=true
-    versionRange="[31.0.0,)"
+    versionRange="[33.0.0,)"
     ordering="NONE"
     side="BOTH"

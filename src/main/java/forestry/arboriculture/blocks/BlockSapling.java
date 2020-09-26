@@ -41,11 +41,19 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
     public BlockSapling() {
-        super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
+        super(Block.Properties.create(Material.PLANTS)
+                .doesNotBlockMovement()
+                .hardnessAndResistance(0.0F)
+                .sound(SoundType.PLANT));
     }
 
     @Override
-    public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(
+            BlockState blockState,
+            IBlockReader blockReader,
+            BlockPos pos,
+            ISelectionContext context
+    ) {
         return SHAPE;
     }
 
@@ -73,7 +81,14 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+    public void neighborChanged(
+            BlockState state,
+            World worldIn,
+            BlockPos pos,
+            Block blockIn,
+            BlockPos fromPos,
+            boolean p_220069_6_
+    ) {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
         if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
             dropAsSapling(worldIn, pos);
@@ -83,7 +98,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
     @Override
     public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
-        ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
+        ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.BLOCK_ENTITY).getPos());
         if (!drop.isEmpty()) {
             return Collections.singletonList(drop);
         }
@@ -91,7 +106,13 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+    public ItemStack getPickBlock(
+            BlockState state,
+            RayTraceResult target,
+            IBlockReader world,
+            BlockPos pos,
+            PlayerEntity player
+    ) {
         TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
         if (sapling == null || sapling.getTree() == null) {
             return ItemStack.EMPTY;
@@ -100,7 +121,14 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
     }
 
     @Override
-    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+    public boolean removedByPlayer(
+            BlockState state,
+            World world,
+            BlockPos pos,
+            PlayerEntity player,
+            boolean willHarvest,
+            FluidState fluid
+    ) {
         if (!world.isRemote && canHarvestBlock(state, world, pos, player)) {
             if (!player.isCreative()) {
                 dropAsSapling(world, pos);

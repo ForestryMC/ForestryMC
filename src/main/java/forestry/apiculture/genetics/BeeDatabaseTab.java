@@ -16,7 +16,7 @@ import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import genetics.api.organism.IOrganismType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,14 +57,22 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
         container.addLine(
                 new TranslationTextComponent("for.gui.species"), BeeChromosomes.SPECIES);
 
-        Function<Boolean, ITextProperties> toleranceText = a -> {
+        Function<Boolean, ITextComponent> toleranceText = a -> {
             IAlleleForestrySpecies species = a ? primarySpecies : secondarySpecies;
             return AlleleManager.climateHelper.toDisplay(species.getTemperature());
         };
-        container.addLine(new TranslationTextComponent("for.gui.climate"), toleranceText, BeeChromosomes.TEMPERATURE_TOLERANCE);
+        container.addLine(
+                new TranslationTextComponent("for.gui.climate"),
+                toleranceText,
+                BeeChromosomes.TEMPERATURE_TOLERANCE
+        );
         container.addToleranceLine(BeeChromosomes.TEMPERATURE_TOLERANCE);
 
-        container.addLine(new TranslationTextComponent("for.gui.humidity"), toleranceText, BeeChromosomes.HUMIDITY_TOLERANCE);
+        container.addLine(
+                new TranslationTextComponent("for.gui.humidity"),
+                toleranceText,
+                BeeChromosomes.HUMIDITY_TOLERANCE
+        );
         container.addToleranceLine(BeeChromosomes.HUMIDITY_TOLERANCE);
 
         container.addLine(new TranslationTextComponent("for.gui.lifespan"), BeeChromosomes.LIFESPAN);
@@ -78,10 +86,10 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
         container.addLine(new TranslationTextComponent("for.gui.area"), BeeChromosomes.TERRITORY);
         container.addLine(new TranslationTextComponent("for.gui.effect"), BeeChromosomes.EFFECT);
 
-        ITextProperties yes = new TranslationTextComponent("for.yes");
-        ITextProperties no = new TranslationTextComponent("for.no");
+        ITextComponent yes = new TranslationTextComponent("for.yes");
+        ITextComponent no = new TranslationTextComponent("for.no");
 
-        ITextProperties diurnal, nocturnal;
+        ITextComponent diurnal, nocturnal;
         if (mode == DatabaseMode.ACTIVE) {
             if (bee.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
                 nocturnal = diurnal = yes;
@@ -102,7 +110,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
         container.addLine(new TranslationTextComponent("for.gui.nocturnal"), nocturnal, false);
 
-        Function<Boolean, ITextProperties> flyer = active ->
+        Function<Boolean, ITextComponent> flyer = active ->
                 StringUtil.readableBoolean(
                         active
                                 ? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN)
@@ -112,7 +120,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
                 );
         container.addLine(new TranslationTextComponent("for.gui.flyer"), flyer, BeeChromosomes.TOLERATES_RAIN);
 
-        Function<Boolean, ITextProperties> cave = active ->
+        Function<Boolean, ITextComponent> cave = active ->
                 StringUtil.readableBoolean(
                         active
                                 ? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING)
@@ -128,7 +136,11 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
                 displayTextKey = "for.bees.stock.ignoble";
             }
 
-            container.label(new TranslationTextComponent(displayTextKey), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.binomial);
+            container.label(
+                    new TranslationTextComponent(displayTextKey),
+                    GuiElementAlignment.TOP_CENTER,
+                    GuiElementFactory.INSTANCE.binomial
+            );
         }
     }
 

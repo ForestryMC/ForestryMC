@@ -22,6 +22,7 @@ import genetics.api.individual.IChromosomeValue;
 import genetics.api.individual.IGenome;
 import genetics.api.organism.IOrganismType;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -71,7 +72,7 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
             } else {
                 toolTip.singleLine()
                         .add(speedAllele.getDisplayName())
-                        .text(ITextComponent.func_241827_a_(" "))
+                        .text(new StringTextComponent(" "))
                         .translated("for.gui.worker")
                         .style(TextFormatting.GRAY)
                         .create();
@@ -83,7 +84,7 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
         public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
             toolTip.singleLine()
                     .add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
-                    .text(ITextComponent.func_241827_a_(" "))
+                    .text(new StringTextComponent(" "))
                     .translated("for.gui.life")
                     .style(TextFormatting.GRAY)
                     .create();
@@ -114,9 +115,9 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
             IAlleleValue<EnumTolerance> tempToleranceAllele = getActiveAllele(genome);
             ITextComponent caption = AlleleManager.climateHelper.toDisplay(primary.getTemperature());
             toolTip.singleLine()
-                    .text(ITextComponent.func_241827_a_("T:  "))
+                    .text(new StringTextComponent("T:  "))
                     .add(caption)
-                    .text(ITextComponent.func_241827_a_(" / "))
+                    .text(new StringTextComponent(" / "))
                     .add(tempToleranceAllele.getDisplayName())
                     .style(TextFormatting.GREEN)
                     .create();
@@ -129,9 +130,9 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
             IAlleleValue<EnumTolerance> humidToleranceAllele = getActiveAllele(genome);
             ITextComponent caption = AlleleManager.climateHelper.toDisplay(primary.getHumidity());
             toolTip.singleLine()
-                    .text(ITextComponent.func_241827_a_("H: "))
+                    .text(new StringTextComponent("H: "))
                     .add(caption)
-                    .text(ITextComponent.func_241827_a_(" / "))
+                    .text(new StringTextComponent(" / "))
                     .add(humidToleranceAllele.getDisplayName())
                     .style(TextFormatting.GREEN)
                     .create();

@@ -30,8 +30,8 @@ public class RainmakerRecipeWrapper implements IRecipeCategoryExtension {
     @OnlyIn(Dist.CLIENT)
     public void drawInfo(int recipeWidth, int recipeHeight, MatrixStack matrixStack, double mouseX, double mouseY) {
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-        fontRenderer.func_238422_b_(matrixStack, getEffectString(), 24, 0, Color.darkGray.getRGB());
-        fontRenderer.func_238422_b_(
+        fontRenderer.func_243248_b(matrixStack, getEffectString(), 24, 0, Color.darkGray.getRGB());
+        fontRenderer.func_243248_b(
                 matrixStack,
                 new TranslationTextComponent("for.jei.rainmaker.speed", substrate.getSpeed()),
                 24,
@@ -39,7 +39,7 @@ public class RainmakerRecipeWrapper implements IRecipeCategoryExtension {
                 Color.gray.getRGB()
         );
         if (!substrate.isReverse()) {
-            fontRenderer.func_238422_b_(
+            fontRenderer.func_243248_b(
                     matrixStack,
                     new TranslationTextComponent("for.jei.rainmaker.duration", substrate.getDuration()),
                     24,

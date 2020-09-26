@@ -26,7 +26,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -207,8 +207,10 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
             textLayout.newLine();
 
-            IAlleleValue<EnumTolerance> tempToleranceActive = bee.getGenome().getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
-            IAlleleValue<EnumTolerance> tempToleranceInactive = bee.getGenome().getInactiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
+            IAlleleValue<EnumTolerance> tempToleranceActive = bee.getGenome()
+                    .getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
+            IAlleleValue<EnumTolerance> tempToleranceInactive = bee.getGenome()
+                    .getInactiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
             textLayout.drawLine(
                     transform,
                     new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),
@@ -230,8 +232,10 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
             textLayout.newLine();
 
-            IAlleleValue<EnumTolerance> humidToleranceActive = bee.getGenome().getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
-            IAlleleValue<EnumTolerance> humidToleranceInactive = bee.getGenome().getInactiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
+            IAlleleValue<EnumTolerance> humidToleranceActive = bee.getGenome()
+                    .getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
+            IAlleleValue<EnumTolerance> humidToleranceInactive = bee.getGenome()
+                    .getInactiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
             textLayout.drawLine(
                     transform,
                     new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),
@@ -242,10 +246,10 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
             textLayout.newLine(16);
 
-            ITextProperties yes = new TranslationTextComponent("for.yes");
-            ITextProperties no = new TranslationTextComponent("for.no");
+            ITextComponent yes = new TranslationTextComponent("for.yes");
+            ITextComponent no = new TranslationTextComponent("for.no");
 
-            ITextProperties diurnal0, diurnal1, nocturnal0, nocturnal1;
+            ITextComponent diurnal0, diurnal1, nocturnal0, nocturnal1;
             if (genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
                 nocturnal0 = diurnal0 = yes;
             } else {
@@ -269,12 +273,12 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
             textLayout.drawLine(transform, nocturnal1, GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(false));
             textLayout.newLineCompressed();
 
-            ITextProperties primary = StringUtil.readableBoolean(
+            ITextComponent primary = StringUtil.readableBoolean(
                     genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN),
                     yes,
                     no
             );
-            ITextProperties secondary = StringUtil.readableBoolean(
+            ITextComponent secondary = StringUtil.readableBoolean(
                     genome.getInactiveValue(BeeChromosomes.TOLERATES_RAIN),
                     yes,
                     no

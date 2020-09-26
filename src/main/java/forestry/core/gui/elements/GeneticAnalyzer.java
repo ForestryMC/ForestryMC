@@ -24,18 +24,22 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.List;
 import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, IScrollable {
     /* Textures */
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/analyzer_screen.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "/analyzer_screen.png"
+    );
 
     /* Drawables */
     public static final Drawable SCROLLBAR_BACKGROUND = new Drawable(TEXTURE, 202, 0, 3, 142);
@@ -59,7 +63,13 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
     /* Attributes - State */
     private int selectedSlot = -1;
 
-    public GeneticAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
+    public GeneticAnalyzer(
+            IWindowElement window,
+            int xPos,
+            int yPos,
+            boolean rightBoarder,
+            IGeneticAnalyzerProvider provider
+    ) {
         super(xPos - (rightBoarder ? 6 : 0), yPos, 189 + (rightBoarder ? 6 : 0), 194);
         window.add(this);
         this.provider = provider;
@@ -73,7 +83,13 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
         scrollable.setContent(scrollableContent);
         scrollable.add(scrollableContent);
         //Scrollbar
-        scrollBar = new ScrollBarElement(width - 10 - (rightBoarder ? 6 : 0), 12, SCROLLBAR_BACKGROUND, false, SCROLLBAR_SLIDER);
+        scrollBar = new ScrollBarElement(
+                width - 10 - (rightBoarder ? 6 : 0),
+                12,
+                SCROLLBAR_BACKGROUND,
+                false,
+                SCROLLBAR_SLIDER
+        );
         scrollBar.hide();
         add(scrollBar);
         //Side ItemGroups
@@ -82,9 +98,27 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
         //Selection Bar at the bottom
         itemElement = drawable((getWidth() + 32 - SELECTION_BAR.uWidth) / 2, 162, SELECTION_BAR);
 
-        leftButton = add(new ButtonElement(itemElement.getX() + 30, itemElement.getY() + 9, StandardButtonTextureSets.LEFT_BUTTON, (button) -> subtract()));
-        rightButton = add(new ButtonElement(itemElement.getX() + 64, itemElement.getY() + 9, StandardButtonTextureSets.RIGHT_BUTTON, (button) -> add()));
-        analyzeButton = add(new ButtonElement(itemElement.getX() + 80, itemElement.getY() + 2, ANALYZER_BUTTON, (button) -> NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, provider.getSelectedSlot(selectedSlot)))));
+        leftButton = add(new ButtonElement(
+                itemElement.getX() + 30,
+                itemElement.getY() + 9,
+                StandardButtonTextureSets.LEFT_BUTTON,
+                (button) -> subtract()
+        ));
+        rightButton = add(new ButtonElement(
+                itemElement.getX() + 64,
+                itemElement.getY() + 9,
+                StandardButtonTextureSets.RIGHT_BUTTON,
+                (button) -> add()
+        ));
+        analyzeButton = add(new ButtonElement(
+                itemElement.getX() + 80,
+                itemElement.getY() + 2,
+                ANALYZER_BUTTON,
+                (button) -> NetworkUtil.sendToServer(new PacketGuiSelectRequest(
+                        0,
+                        provider.getSelectedSlot(selectedSlot)
+                ))
+        ));
         add(new AbstractItemElement(itemElement.getX() + 44, itemElement.getY() + 9) {
             @Override
             protected ItemStack getStack() {
@@ -168,9 +202,10 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
         //if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
         //key = "for.gui.database.support";
         //}
-        List<ITextProperties> lines = fontRenderer.func_238425_b_(new TranslationTextComponent(key), scrollable.getWidth());
-        for (ITextProperties text : lines) {
-            scrollableContent.label(text);
+        for (ITextProperties text : fontRenderer.getCharacterManager()
+                .func_238362_b_(new TranslationTextComponent(key), scrollable.getWidth(), Style.EMPTY)
+        ) {
+            scrollableContent.label(new StringTextComponent(text.getString()));
         }
         //Disable the scrollbar
         scrollBar.hide();

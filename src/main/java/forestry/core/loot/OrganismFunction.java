@@ -55,20 +55,23 @@ public class OrganismFunction extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
+    public LootFunctionType getFunctionType() {
         return type;
     }
 
     public static class Serializer extends LootFunction.Serializer<OrganismFunction> {
-
         @Override
-        public void func_230424_a_(JsonObject object, OrganismFunction function, JsonSerializationContext context) {
-            super.func_230424_a_(object, function, context);
+        public void serialize(JsonObject object, OrganismFunction function, JsonSerializationContext context) {
+            super.serialize(object, function, context);
             object.addProperty("speciesUid", function.speciesUid.toString());
         }
 
         @Override
-        public OrganismFunction deserialize(JsonObject object, JsonDeserializationContext jsonDeserializationContext, ILootCondition[] conditions) {
+        public OrganismFunction deserialize(
+                JsonObject object,
+                JsonDeserializationContext jsonDeserializationContext,
+                ILootCondition[] conditions
+        ) {
             String speciesUid = JSONUtils.getString(object, "speciesUid");
             return new OrganismFunction(conditions, new ResourceLocation(speciesUid));
         }

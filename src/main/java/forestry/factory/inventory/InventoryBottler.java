@@ -15,10 +15,11 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.tiles.TileBottler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Optional;
 
 public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
     public static final short SLOT_INPUT_FULL_CONTAINER = 0;
@@ -37,7 +38,7 @@ public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
         if (slotIndex == SLOT_INPUT_EMPTY_CONTAINER) {
             return FluidHelper.isFillableContainerWithRoom(itemStack);
         } else if (slotIndex == SLOT_INPUT_FULL_CONTAINER) {
-            LazyOptional<FluidStack> fluidStack = FluidUtil.getFluidContained(itemStack);
+            Optional<FluidStack> fluidStack = FluidUtil.getFluidContained(itemStack);
             return fluidStack.map(f -> ForgeRegistries.FLUIDS.containsValue(f.getFluid())).orElse(false);
         }
         return false;

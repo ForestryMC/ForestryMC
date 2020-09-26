@@ -5,7 +5,7 @@ import forestry.book.data.TextData;
 import forestry.core.gui.elements.GuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -92,14 +92,14 @@ public class TextDataElement extends GuiElement {
             }
 
             String text = getFormattedString(data);
-            List<ITextProperties> split = fontRenderer.func_238425_b_(new StringTextComponent(text), width);
+            List<IReorderingProcessor> split = fontRenderer.trimStringToWidth(new StringTextComponent(text), width);
             for (int i = 0; i < split.size(); i++) {
-                ITextProperties s = split.get(i);
+                IReorderingProcessor s = split.get(i);
                 int textLength;
                 if (data.shadow) {
-                    textLength = fontRenderer.drawStringWithShadow(transform, s.getString(), x, y, 0);
+                    textLength = fontRenderer.func_238407_a_(transform, s, x, y, 0);
                 } else {
-                    textLength = fontRenderer.drawString(transform, s.getString(), x, y, 0);
+                    textLength = fontRenderer.func_238422_b_(transform, s, x, y, 0);
                 }
 
                 if (i == split.size() - 1) {

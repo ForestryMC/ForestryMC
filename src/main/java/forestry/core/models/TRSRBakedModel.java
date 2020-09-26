@@ -47,15 +47,37 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
         this(original, x, y, z, 0, 0, 0, scale, scale, scale);
     }
 
-    public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
+    public TRSRBakedModel(
+            IBakedModel original,
+            float x,
+            float y,
+            float z,
+            float rotX,
+            float rotY,
+            float rotZ,
+            float scale
+    ) {
         this(original, x, y, z, rotX, rotY, rotZ, scale, scale, scale);
     }
 
-    public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
-        this(original, new TransformationMatrix(new Vector3f(x, y, z),
+    public TRSRBakedModel(
+            IBakedModel original,
+            float x,
+            float y,
+            float z,
+            float rotX,
+            float rotY,
+            float rotZ,
+            float scaleX,
+            float scaleY,
+            float scaleZ
+    ) {
+        this(original, new TransformationMatrix(
+                new Vector3f(x, y, z),
                 null,
                 new Vector3f(scaleX, scaleY, scaleZ),
-                TransformationHelper.quatFromXYZ(new float[]{rotX, rotY, rotZ}, false)));
+                TransformationHelper.quatFromXYZ(new float[]{rotX, rotY, rotZ}, false)
+        ));
     }
 
     public TRSRBakedModel(IBakedModel original, TransformationMatrix transform) {
@@ -75,12 +97,22 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
         this.faceOffset = 4 + Direction.NORTH.getHorizontalIndex() - facing.getHorizontalIndex();
 
         double r = Math.PI * (360 - facing.getOpposite().getHorizontalIndex() * 90) / 180d;
-        this.transformation = new TransformationMatrix(null, null, null, TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)).blockCenterToCorner();
+        this.transformation = new TransformationMatrix(
+                null,
+                null,
+                null,
+                TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)
+        ).blockCenterToCorner();
     }
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData data) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+            Random rand,
+            IModelData data
+    ) {
         // transform quads obtained from parent
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
         if (!this.originalModel.isBuiltInRenderer()) {
@@ -90,7 +122,7 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
                     side = Direction.byHorizontalIndex((side.getHorizontalIndex() + this.faceOffset) % 4);
                 }
                 for (BakedQuad quad : this.originalModel.getQuads(state, side, rand, data)) {
-                    Transformer transformer = new Transformer(this.transformation, quad.func_187508_a());
+                    Transformer transformer = new Transformer(this.transformation, quad.getSprite());
                     quad.pipe(transformer);
                     builder.add(transformer.build());
                 }
@@ -122,8 +154,14 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 
         @Nonnull
         @Override
-        public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
-            IBakedModel baked = this.model.originalModel.getOverrides().func_239290_a_(originalModel, stack, world, entity);
+        public IBakedModel getOverrideModel(
+                IBakedModel originalModel,
+                ItemStack stack,
+                @Nullable ClientWorld world,
+                @Nullable LivingEntity entity
+        ) {
+            IBakedModel baked = this.model.originalModel.getOverrides()
+                    .getOverrideModel(originalModel, stack, world, entity);
             if (baked == null) {
                 baked = originalModel;
             }

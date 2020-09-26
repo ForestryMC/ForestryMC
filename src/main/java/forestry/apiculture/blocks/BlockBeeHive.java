@@ -85,7 +85,7 @@ public class BlockBeeHive extends ContainerBlock {
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        BlockPos pos = builder.assertPresent(LootParameters.POSITION);
+        BlockPos pos = builder.assertPresent(LootParameters.BLOCK_ENTITY).getPos();
         ItemStack tool = builder.assertPresent(LootParameters.TOOL);
         int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
         ServerWorld world = builder.getWorld();

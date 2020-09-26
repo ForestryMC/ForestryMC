@@ -14,8 +14,8 @@ import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
+import net.minecraft.tags.ITagCollection;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagCollection;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
@@ -27,25 +27,31 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
             ItemStack b2 = (ItemStack) b;
             return ItemStackUtil.isCraftingEquivalent(b2, a);
         }
+
         if (b instanceof Item) {
             return a.getItem() == b;
         }
+
         if (b instanceof String) {
             return areEqual(a, new ResourceLocation((String) b));
         }
+
         if (b instanceof ResourceLocation) {
-            TagCollection<Item> collection = ItemTags.getCollection();
+            ITagCollection<Item> collection = ItemTags.getCollection();
             ITag<Item> itemTag = collection.get((ResourceLocation) b);
             if (itemTag == null) {
                 return false;
             }
+
             for (Item item : itemTag.getAllElements()) {
                 if (areEqual(a, item)) {
                     return true;
                 }
             }
+
             return false;
         }
+
         return false;
     }
 
@@ -61,5 +67,4 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
         }
         return ItemStack.EMPTY;
     }
-
 }

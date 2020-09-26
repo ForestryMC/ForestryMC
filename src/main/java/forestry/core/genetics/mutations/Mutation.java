@@ -25,7 +25,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraft.world.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,7 +44,12 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 
     private boolean isSecret = false;
 
-    protected Mutation(IAlleleForestrySpecies firstParent, IAlleleForestrySpecies secondParent, IAllele[] template, int chance) {
+    protected Mutation(
+            IAlleleForestrySpecies firstParent,
+            IAlleleForestrySpecies secondParent,
+            IAllele[] template,
+            int chance
+    ) {
         this.firstParent = firstParent;
         this.secondParent = secondParent;
         this.template = template;
@@ -85,7 +90,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
     }
 
     @Override
-    public Mutation restrictBiomeType(BiomeDictionary.Type... types) {
+    public Mutation restrictBiomeType(Biome.Category... types) {
         IMutationCondition mutationCondition = new MutationConditionBiome(types);
         return addMutationCondition(mutationCondition);
     }
@@ -127,10 +132,26 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
         return this;
     }
 
-    protected float getChance(World world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate) {
+    protected float getChance(
+            World world,
+            BlockPos pos,
+            IAllele firstParent,
+            IAllele secondParent,
+            IGenome firstGenome,
+            IGenome secondGenome,
+            IClimateProvider climate
+    ) {
         float mutationChance = chance;
         for (IMutationCondition mutationCondition : mutationConditions) {
-            mutationChance *= mutationCondition.getChance(world, pos, firstParent, secondParent, firstGenome, secondGenome, climate);
+            mutationChance *= mutationCondition.getChance(
+                    world,
+                    pos,
+                    firstParent,
+                    secondParent,
+                    firstGenome,
+                    secondGenome,
+                    climate
+            );
             if (mutationChance == 0) {
                 return 0;
             }
@@ -165,7 +186,8 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 
     @Override
     public boolean isPartner(IAllele allele) {
-        return firstParent.getRegistryName().equals(allele.getRegistryName()) || secondParent.getRegistryName().equals(allele.getRegistryName());
+        return firstParent.getRegistryName().equals(allele.getRegistryName()) || secondParent.getRegistryName()
+                .equals(allele.getRegistryName());
     }
 
     @Override

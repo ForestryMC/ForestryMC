@@ -87,7 +87,12 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+            @Nonnull Random rand,
+            @Nonnull IModelData extraData
+    ) {
         Preconditions.checkNotNull(state);
         IBakedModel model = getModel(state, extraData);
         return model.getQuads(state, side, rand, extraData);
@@ -117,11 +122,6 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
     public boolean isBuiltInRenderer() {
         return (itemModel != null || blockModel != null) &&
                 (blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
-    }
-
-    @Override
-    public boolean func_230044_c_() {
-        return itemModel != null && itemModel.func_230044_c_();
     }
 
     @Override
@@ -165,7 +165,12 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
         @Nullable
         @Override
-        public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+        public IBakedModel getOverrideModel(
+                IBakedModel originalModel,
+                ItemStack stack,
+                @Nullable ClientWorld world,
+                @Nullable LivingEntity entity
+        ) {
             if (world == null) {
                 world = Minecraft.getInstance().world;
             }
