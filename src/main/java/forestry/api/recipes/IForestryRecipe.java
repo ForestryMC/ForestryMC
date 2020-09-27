@@ -63,7 +63,7 @@ public interface IForestryRecipe extends IRecipe<IInventory> {
     @Deprecated
     @Override
     default boolean isDynamic() {
-        return false;
+        return true;
     }
 
     @Deprecated

@@ -130,7 +130,7 @@ public class FermenterRecipe implements IFermenterRecipe {
             int fermentationValue = JSONUtils.getInt(json, "fermentationValue");
             float modifier = JSONUtils.getFloat(json, "modifier");
             Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(JSONUtils.getString(json, "output")));
-            FluidStack fluidResource = RecipeSerializers.load(JSONUtils.getJsonObject(json, "fluidResource"));
+            FluidStack fluidResource = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "fluidResource"));
 
             return new FermenterRecipe(recipeId, resource, fermentationValue, modifier, output, fluidResource);
         }

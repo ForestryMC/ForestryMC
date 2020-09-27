@@ -36,15 +36,26 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
         super(id, CoreContainers.ESCRITOIRE.containerType(), player.inventory, tile, 34, 153);
 
         // Analyze slot
-        addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile).setStackLimit(1));
+        addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile)
+                .setStackLimit(1));
 
         for (int i = 0; i < InventoryEscritoire.SLOTS_INPUT_COUNT; i++) {
-            addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));
+            addSlot(new SlotFiltered(
+                    this.tile,
+                    InventoryEscritoire.SLOT_INPUT_1 + i,
+                    17,
+                    49 + i * 18
+            ).setBlockedTexture("slots/blocked_2"));
         }
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 2; j++) {
-                addSlot(new SlotOutput(this.tile, InventoryEscritoire.SLOT_RESULTS_1 + i * 2 + j, 177 + j * 18, 85 + i * 18));
+                addSlot(new SlotOutput(
+                        this.tile,
+                        InventoryEscritoire.SLOT_RESULTS_1 + i * 2 + j,
+                        177 + j * 18,
+                        85 + i * 18
+                ));
             }
         }
     }

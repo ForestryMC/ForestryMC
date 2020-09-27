@@ -1,7 +1,7 @@
 {
   "title": "Farm Structure",
   "icon": {
-    "item": "forestry:ffarm"
+    "item": "forestry:farm_plain_brick"
   },
   "content": [
     [
@@ -13,7 +13,7 @@
       {
         "type": "crafting",
         "locations": [
-          "forestry:farm_basic_brick"
+          "forestry:farm_plain_brick"
         ]
       },
       {

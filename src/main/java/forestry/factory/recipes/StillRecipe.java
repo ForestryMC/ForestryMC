@@ -61,8 +61,8 @@ public class StillRecipe implements IStillRecipe {
         @Override
         public StillRecipe read(ResourceLocation recipeId, JsonObject json) {
             int timePerUnit = JSONUtils.getInt(json, "time");
-            FluidStack input = RecipeSerializers.load(JSONUtils.getJsonObject(json, "input"));
-            FluidStack output = RecipeSerializers.load(JSONUtils.getJsonObject(json, "output"));
+            FluidStack input = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "input"));
+            FluidStack output = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "output"));
 
             return new StillRecipe(recipeId, timePerUnit, input, output);
         }

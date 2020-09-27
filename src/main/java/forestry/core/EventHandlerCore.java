@@ -49,13 +49,12 @@ import java.util.Collection;
 import java.util.Set;
 
 public class EventHandlerCore {
-
     public EventHandlerCore() {
     }
 
     //TODO - register event handler
     @SubscribeEvent
-    public void pickupItem(EntityItemPickupEvent event) {
+    public void onPickupItem(EntityItemPickupEvent event) {
         if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
             return;
         }
@@ -69,13 +68,13 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerEntity player = event.getPlayer();
         syncBreedingTrackers(player);
     }
 
     @SubscribeEvent
-    public void playerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+    public void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         PlayerEntity player = event.getPlayer();
         syncBreedingTrackers(player);
     }
@@ -91,13 +90,16 @@ public class EventHandlerCore {
                 continue;
             }
             IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
-            IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+            IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(
+                    player.getEntityWorld(),
+                    player.getGameProfile()
+            );
             breedingTracker.synchToPlayer(player);
         }
     }
 
     @SubscribeEvent
-    public void onDimensionLoad(WorldEvent.Load event) {
+    public void onWorldLoad(WorldEvent.Load event) {
         IWorld world = event.getWorld();
 
         for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
@@ -106,7 +108,7 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void onDimensionSave(WorldEvent.Save event) {
+    public void onWorldSave(WorldEvent.Save event) {
         for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
             handler.onWorldSave(event.getWorld());
         }
@@ -129,19 +131,26 @@ public class EventHandlerCore {
     }
 
     @SubscribeEvent
-    public void loadLootTable(LootTableLoadEvent event) {
+    public void onLootTableLoad(LootTableLoadEvent event) {
         if (!event.getName().getNamespace().equals("minecraft")
-                && !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
+//                && !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)
+        ) {
             return;
         }
 
         Set<String> lootPoolNames = ModuleManager.getLootPoolNames();
 
         for (String lootTableFile : ModuleManager.getLootTableFiles()) {
-            ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getPath() + "/" + lootTableFile);
-            URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() + ".json");
+            ResourceLocation resourceLocation = new ResourceLocation(
+                    Constants.MOD_ID,
+                    event.getName().getPath() + "/" + lootTableFile
+            );
+            URL url = EventHandlerCore.class.getResource(
+                    "/data/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() +
+                    ".json");
             if (url != null) {
-                LootTable forestryChestAdditions = event.getLootTableManager().getLootTableFromLocation(resourceLocation);
+                LootTable forestryChestAdditions = event.getLootTableManager()
+                        .getLootTableFromLocation(resourceLocation);
                 if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
                     for (String poolName : lootPoolNames) {
                         LootPool pool = forestryChestAdditions.getPool(poolName);

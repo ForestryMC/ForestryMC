@@ -1,12 +1,12 @@
 package forestry.factory.recipes.jei.carpenter;
 
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -20,8 +20,8 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
     public CarpenterRecipeWrapper(ICarpenterRecipe recipe) {
         super(recipe);
 
-        IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
-        NonNullList<Ingredient> inputs = craftingGridRecipe.getRawIngredients();
+        ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
+        NonNullList<Ingredient> inputs = craftingGridRecipe.getIngredients();
 
         this.ingredients = new ArrayList<>();
         for (Ingredient ingredient : inputs) {
@@ -32,7 +32,7 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
     @Override
     public void setIngredients(IIngredients ingredients) {
         ICarpenterRecipe recipe = getRecipe();
-        IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
+        ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
         List<Ingredient> inputStacks = new ArrayList<>();
         Ingredient box = recipe.getBox();
@@ -47,7 +47,7 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
             ingredients.setInputs(VanillaTypes.FLUID, Collections.singletonList(fluidResource));
         }
 
-        ItemStack recipeOutput = craftingGridRecipe.getOutput();
+        ItemStack recipeOutput = craftingGridRecipe.getRecipeOutput();
         ingredients.setOutput(VanillaTypes.ITEM, recipeOutput);
     }
 

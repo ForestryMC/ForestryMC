@@ -1,7 +1,6 @@
 package forestry.book.gui.elements;
 
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
@@ -9,6 +8,7 @@ import forestry.core.gui.elements.TankElement;
 import forestry.factory.recipes.CarpenterRecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -59,8 +59,8 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
                 Constants.PROCESSOR_TANK_CAPACITY,
                 CARPENTER_TANK_OVERLAY
         ));
-        IDescriptiveRecipe gridRecipe = recipe.getCraftingGridRecipe();
-        NonNullList<Ingredient> ingredients = gridRecipe.getRawIngredients();
+        ShapedRecipe gridRecipe = recipe.getCraftingGridRecipe();
+        NonNullList<Ingredient> ingredients = gridRecipe.getIngredients();
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 int ingredientIndex = y * 3 + x;
@@ -73,6 +73,6 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
             }
         }
 
-        selectedElement.item(71, 41, gridRecipe.getOutput());
+        selectedElement.item(71, 41, gridRecipe.getRecipeOutput());
     }
 }

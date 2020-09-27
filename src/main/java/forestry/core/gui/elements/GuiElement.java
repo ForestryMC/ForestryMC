@@ -127,7 +127,12 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
             IGuiElement cropRelative = cropElement != null ? cropElement : this;
             int posX = cropRelative.getAbsoluteX();
             int posY = cropRelative.getAbsoluteY();
-            GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
+            GL11.glScissor(
+                    (int) ((posX + cropX) * scaleWidth),
+                    (int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)),
+                    (int) (cropWidth * scaleWidth),
+                    (int) (cropHeight * scaleHeight)
+            );
         }
 
         drawElement(transform, mouseY, mouseX);
@@ -332,7 +337,12 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
     @Override
     public ToolTip getTooltip(int mouseX, int mouseY) {
         ToolTip toolTip = new ToolTip();
-        tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(toolTip, this, mouseX, mouseY));
+        tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(
+                toolTip,
+                this,
+                mouseX,
+                mouseY
+        ));
         return toolTip;
     }
 
@@ -369,7 +379,12 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
         int mouseX = getWindow().getRelativeMouseX(this);
         int mouseY = getWindow().getRelativeMouseY(this);
         ToolTip toolTip = new ToolTip();
-        tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(toolTip, this, mouseX, mouseY));
+        tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(
+                toolTip,
+                this,
+                mouseX,
+                mouseY
+        ));
         return toolTip;
     }
 

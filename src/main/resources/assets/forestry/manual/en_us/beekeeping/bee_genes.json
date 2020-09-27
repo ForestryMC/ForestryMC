@@ -2,7 +2,7 @@
   "title": "Bee Genes",
   "icon": {
     "item": "forestry:bee_larvae_ge",
-    "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.speciesDiligent\",UID0:\"forestry.speciesDiligent\",Slot:0b}]}}"
+    "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.species_diligent\",UID0:\"forestry.species_diligent\",Slot:0b}]}}"
   },
   "content": [
     [

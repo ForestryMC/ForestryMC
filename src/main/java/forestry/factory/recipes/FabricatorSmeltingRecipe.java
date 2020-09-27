@@ -63,7 +63,7 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
         @Override
         public FabricatorSmeltingRecipe read(ResourceLocation recipeId, JsonObject json) {
             Ingredient resource = Ingredient.deserialize(json.get("resource"));
-            FluidStack product = RecipeSerializers.load(JSONUtils.getJsonObject(json, "product"));
+            FluidStack product = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "product"));
             int meltingPoint = JSONUtils.getInt(json, "melting");
 
             return new FabricatorSmeltingRecipe(recipeId, resource, product, meltingPoint);

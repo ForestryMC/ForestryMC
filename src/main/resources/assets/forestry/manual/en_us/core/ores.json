@@ -1,7 +1,7 @@
 {
   "title": "Ores",
   "icon": {
-    "item": "forestry:resources",
+    "item": "forestry:resource_ore_copper",
     "data": 1
   },
   "content": [

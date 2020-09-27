@@ -61,7 +61,8 @@ public class TextureManagerForestry implements ITextureManager {
     }
 
     private static void initDefaultSprites(ISpriteRegistry registry) {
-        String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle",
+        String[] defaultIconNames = new String[]{
+                "habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle",
                 "habitats/mushroom", "habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga",
                 "misc/access.shared", "misc/energy", "misc/hint",
                 "analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer", "analyzer/item",

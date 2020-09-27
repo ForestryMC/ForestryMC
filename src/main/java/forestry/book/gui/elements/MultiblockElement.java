@@ -122,12 +122,20 @@ public class MultiblockElement extends GuiElement {
         final BlockRendererDispatcher blockRender = Minecraft.getInstance().getBlockRendererDispatcher();
         final TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
-        GlStateManager.translatef(xTranslate, yTranslate, Math.max(structureHeight, Math.max(structureWidth, structureLength)));
+        GlStateManager.translatef(
+                xTranslate,
+                yTranslate,
+                Math.max(structureHeight, Math.max(structureWidth, structureLength))
+        );
         GlStateManager.scalef(scale, -scale, 1);
         GlStateManager.rotatef(rotX, 1, 0, 0);
         GlStateManager.rotatef(rotY, 0, 1, 0);
 
-        GlStateManager.translatef((float) structureLength / -2f, (float) structureHeight / -2f, (float) structureWidth / -2f);
+        GlStateManager.translatef(
+                (float) structureLength / -2f,
+                (float) structureHeight / -2f,
+                (float) structureWidth / -2f
+        );
 
         GlStateManager.disableLighting();
 

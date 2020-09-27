@@ -15,6 +15,7 @@ import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
 import forestry.api.recipes.*;
+import forestry.core.EventHandlerCore;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
@@ -102,7 +103,6 @@ import java.io.File;
 //the big TODO - things have to be properly sided now, can't keep just using OnlyIn I think
 @Mod("forestry")
 public class Forestry {
-
     @SuppressWarnings("NullableProblems")
     public static Forestry instance;
 
@@ -138,9 +138,11 @@ public class Forestry {
         modEventBus.addListener(this::processIMCMessages);
         modEventBus.addListener(this::clientStuff);
         modEventBus.addListener(this::gatherData);
-//        modEventBus.register(new EventHandlerCore());
 
-        MinecraftForge.EVENT_BUS.register(this);
+        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        forgeBus.register(this);
+        forgeBus.register(new EventHandlerCore());
+
         Proxies.render = DistExecutor.runForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
         Proxies.common = DistExecutor.runForDist(() -> ProxyClient::new, () -> ProxyCommon::new);
 
@@ -263,10 +265,6 @@ public class Forestry {
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
     public static class RegistryEvents {
-
-        private RegistryEvents() {
-        }
-
         @SubscribeEvent(priority = EventPriority.HIGH)
         public static void createFeatures(RegistryEvent.Register<Block> event) {
             ModuleManager.getModuleHandler().createFeatures();

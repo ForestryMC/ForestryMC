@@ -38,10 +38,20 @@ public class BlockStump extends TorchBlock {
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(
+            BlockState state,
+            World worldIn,
+            BlockPos pos,
+            PlayerEntity playerIn,
+            Hand hand,
+            BlockRayTraceResult hit
+    ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
         if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
-            BlockState activatedState = ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).with(BlockCandle.STATE, BlockCandle.State.ON);
+            BlockState activatedState = ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).with(
+                    BlockCandle.STATE,
+                    BlockCandle.State.ON
+            );
             worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
             TileCandle tc = new TileCandle();
             tc.setColour(16777215); // default to white

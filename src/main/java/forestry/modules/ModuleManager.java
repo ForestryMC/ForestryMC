@@ -241,7 +241,6 @@ public class ModuleManager implements IModuleManager {
                 .forEach(dispatcher::register);
     }
 
-
     public static Set<String> getLootPoolNames() {
         Set<String> lootPoolNames = new HashSet<>();
         for (IForestryModule module : loadedModules) {

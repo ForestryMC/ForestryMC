@@ -48,7 +48,10 @@ import java.util.Locale;
 
 public class BlockAlveary extends BlockStructure {
     private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
-    private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create("type", AlvearyPlainType.class);
+    private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create(
+            "type",
+            AlvearyPlainType.class
+    );
 
     private enum State implements IStringSerializable {
         ON, OFF;
@@ -131,7 +134,14 @@ public class BlockAlveary extends BlockStructure {
 
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            IWorld world,
+            BlockPos pos,
+            BlockPos facingPos
+    ) {
         TileAlveary tile = TileUtil.getTile(world, pos, TileAlveary.class);
         if (tile == null) {
             return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
@@ -189,7 +199,14 @@ public class BlockAlveary extends BlockStructure {
     }
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+    public void neighborChanged(
+            BlockState state,
+            World worldIn,
+            BlockPos pos,
+            Block blockIn,
+            BlockPos fromPos,
+            boolean p_220069_6_
+    ) {
         TileUtil.actOnTile(worldIn, pos, TileAlveary.class, tileAlveary -> {
             // We must check that the slabs on top were not removed
             IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
@@ -201,7 +218,12 @@ public class BlockAlveary extends BlockStructure {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack stack,
+            @Nullable IBlockReader world,
+            List<ITextComponent> tooltip,
+            ITooltipFlag flag
+    ) {
         if (Screen.hasShiftDown()) {
             tooltip.add(new TranslationTextComponent("block.forestry.alveary_tooltip"));
         } else {

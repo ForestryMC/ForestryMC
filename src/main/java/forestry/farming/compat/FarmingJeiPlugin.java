@@ -38,10 +38,10 @@ public class FarmingJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(
-                CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE),
-                FarmingInfoRecipeCategory.UID
-        );
+//        registration.addRecipeCatalyst(
+//                CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE),
+//                FarmingInfoRecipeCategory.UID
+//        );
     }
 
     @Override

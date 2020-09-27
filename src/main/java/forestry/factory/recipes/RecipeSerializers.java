@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.PacketBuffer;
@@ -37,16 +38,39 @@ public class RecipeSerializers {
         return list;
     }
 
-    public static FluidStack load(JsonObject object) {
+    public static FluidStack deserializeFluid(JsonObject object) {
         ResourceLocation fluidName = new ResourceLocation(JSONUtils.getString(object, "fluid"));
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
         FluidStack stack = new FluidStack(fluid, JSONUtils.getInt(object, "amount", 0));
 
-        if (object.has("Tag")) {
+        if (object.has("tag")) {
             stack.setTag((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object.get("tag"))
                     .copy());
         }
 
         return stack;
+    }
+
+    public static JsonObject serializeFluid(FluidStack fluid) {
+        JsonObject object = new JsonObject();
+        object.addProperty("fluid", fluid.getFluid().getRegistryName().toString());
+        object.addProperty("amount", fluid.getAmount());
+
+        if (fluid.hasTag()) {
+            object.add("Tag", Dynamic.convert(NBTDynamicOps.INSTANCE, JsonOps.INSTANCE, fluid.getTag()));
+        }
+
+        return object;
+    }
+
+    public static JsonObject item(ItemStack stack) {
+        JsonObject object = new JsonObject();
+        object.addProperty("item", stack.getItem().getRegistryName().toString());
+
+        if (stack.getCount() > 1) {
+            object.addProperty("count", stack.getCount());
+        }
+
+        return object;
     }
 }

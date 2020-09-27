@@ -74,7 +74,7 @@ public class HygroregulatorRecipe implements IHygroregulatorRecipe {
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<HygroregulatorRecipe> {
         @Override
         public HygroregulatorRecipe read(ResourceLocation recipeId, JsonObject json) {
-            FluidStack liquid = RecipeSerializers.load(JSONUtils.getJsonObject(json, "liquid"));
+            FluidStack liquid = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid"));
             int transferTime = JSONUtils.getInt(json, "time");
             float humidChange = JSONUtils.getFloat(json, "humidChange");
             float tempChange = JSONUtils.getFloat(json, "tempChange");

@@ -35,8 +35,20 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(BookContent.class, new BookContentDeserializer())
             .registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
-            .registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(json, "location")))
-            .registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY))
+            .registerTypeAdapter(
+                    ResourceLocation.class,
+                    (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(
+                            json,
+                            "location"
+                    ))
+            )
+            .registerTypeAdapter(
+                    ItemStack.class,
+                    (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(
+                            json.getAsJsonObject(),
+                            ItemStack.EMPTY
+                    )
+            )
             .registerTypeAdapter(Entries.class, new EntriesDeserializer())
             .create();
     public static final BookLoader INSTANCE = new BookLoader();
@@ -84,7 +96,11 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
             return book;
         }
         book = new ForesterBook();
-        BookCategory[] categories = fromJson(BOOK_LOCATION + "categories.json", BookCategory[].class, new BookCategory[0]);
+        BookCategory[] categories = fromJson(
+                BOOK_LOCATION + "categories.json",
+                BookCategory[].class,
+                new BookCategory[0]
+        );
         if (categories != null) {
             book.addCategories(categories);
             for (BookCategory category : categories) {

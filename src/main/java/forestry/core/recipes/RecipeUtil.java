@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.ItemStackUtil;
@@ -23,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -208,9 +208,9 @@ public abstract class RecipeUtil {
     }
 
     @Nullable
-    public static String[][] matches(IDescriptiveRecipe recipe, IInventory CraftingInventory) {
-        NonNullList<Ingredient> recipeIngredients = recipe.getRawIngredients();
-        NonNullList<String> oreDicts = recipe.getOreDicts();
+    public static String[][] matches(ShapedRecipe recipe, IInventory CraftingInventory) {
+        NonNullList<Ingredient> recipeIngredients = recipe.getIngredients();
+        NonNullList<String> oreDicts = NonNullList.create();
         int width = recipe.getWidth();
         int height = recipe.getHeight();
         return matches(recipeIngredients, oreDicts, width, height, CraftingInventory);

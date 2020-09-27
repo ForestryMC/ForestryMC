@@ -2,7 +2,6 @@ package forestry.factory.recipes.jei.carpenter;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.render.ForestryResource;
@@ -20,6 +19,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -102,7 +102,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
         guiIngredients.set(craftOutputSlot, outputs.get(0));
 
-        IDescriptiveRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
+        ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
         List<List<Ingredient>> craftingInputs = new ArrayList<>();
         craftingInputs.add(recipeWrapper.getIngredients());

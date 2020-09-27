@@ -2,7 +2,7 @@
   {
     "name": "beekeeping",
     "icon": {
-      "item": "forestry:bee_combs"
+      "item": "forestry:bee_comb_honey"
     },
     "modules": [
       "apiculture"
@@ -27,7 +27,7 @@
     "name": "arboriculture",
     "icon": {
       "item": "forestry:sapling",
-      "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.treeCherry\",UID0:\"forestry..treeCherry\",Slot:0b}]}}"
+      "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.tree_cherry\",UID0:\"forestry..tree_cherry\",Slot:0b}]}}"
     },
     "modules": [
       "arboriculture"

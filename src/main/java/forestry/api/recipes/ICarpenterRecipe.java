@@ -8,6 +8,7 @@ package forestry.api.recipes;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -27,7 +28,7 @@ public interface ICarpenterRecipe extends IForestryRecipe {
     /**
      * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
      */
-    IDescriptiveRecipe getCraftingGridRecipe();
+    ShapedRecipe getCraftingGridRecipe();
 
     /**
      * @return the box required for this recipe. return empty stack if there is no required box.

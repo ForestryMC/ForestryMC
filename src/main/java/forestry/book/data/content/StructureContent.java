@@ -57,7 +57,10 @@ public class StructureContent extends BookContent {
         if (resource == null) {
             return;
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                resource.getInputStream(),
+                StandardCharsets.UTF_8
+        ))) {
             structureData = BookLoader.GSON.fromJson(reader, StructureData.class);
         } catch (IOException e) {
             Log.error("Failed to load structure file {}.{}", structureFile, e);
@@ -67,7 +70,13 @@ public class StructureContent extends BookContent {
     }
 
     @Override
-    public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+    public boolean addElements(
+            IElementGroup page,
+            IGuiElementFactory factory,
+            @Nullable BookContent previous,
+            @Nullable IGuiElement previousElement,
+            int pageHeight
+    ) {
         if (structureFile == null) {
             return false;
         }
@@ -80,7 +89,14 @@ public class StructureContent extends BookContent {
         BlockData[] structure = structureData.structure;
 
         if (size.length == 3 && structure.length > 0) {
-            MultiblockElement elementStructure = new MultiblockElement(offset, 0, structureSizeX, structureSizeY, size, structure);
+            MultiblockElement elementStructure = new MultiblockElement(
+                    offset,
+                    0,
+                    structureSizeX,
+                    structureSizeY,
+                    size,
+                    structure
+            );
             page.add(elementStructure);
         }
         return true;

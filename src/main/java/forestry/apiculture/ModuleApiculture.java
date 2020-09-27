@@ -328,12 +328,6 @@ public class ModuleApiculture extends BlankForestryModule {
         }
     }
 
-    @Override
-    public void postInit() {
-        //TODO loottable
-        //		registerDungeonLoot();
-    }
-
     private void initFlowerRegistry() {
         FlowerRegistry flowerRegistry = (FlowerRegistry) FlowerManager.flowerRegistry;
 
@@ -746,11 +740,6 @@ public class ModuleApiculture extends BlankForestryModule {
                 new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
         );
     }
-
-    //TODO - just done by datapacks now?
-    //	private static void registerDungeonLoot() {
-    //		LootTables.register(Constants.VILLAGE_NATURALIST_LOOT_KEY);
-    //	}
 
     @Override
     public void addLootPoolNames(Set<String> lootPoolNames) {

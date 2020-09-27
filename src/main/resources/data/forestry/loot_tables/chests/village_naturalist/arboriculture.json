@@ -16,7 +16,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.treeLime"
+              "speciesUid": "forestry.tree_lime"
             },
             {
               "function": "set_count",
@@ -35,7 +35,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.treeCherry"
+              "speciesUid": "forestry.tree_cherry"
             },
             {
               "function": "set_count",
@@ -54,7 +54,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.treeLarch"
+              "speciesUid": "forestry.tree_larch"
             },
             {
               "function": "set_count",
@@ -73,7 +73,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.treeTeak"
+              "speciesUid": "forestry.tree_teak"
             },
             {
               "function": "set_count",
@@ -89,7 +89,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.treePadauk"
+              "speciesUid": "forestry.tree_padauk"
             },
             {
               "function": "set_count",

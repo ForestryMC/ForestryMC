@@ -1,20 +1,20 @@
 {
   "title": "Stamps",
   "icon": {
-    "item": "forestry:stamps"
+    "item": "forestry:stamp_100n"
   },
   "content": [
     [
       {
         "type": "crafting",
         "locations": [
-          "forestry:stamps_1n",
-          "forestry:stamps_2n",
-          "forestry:stamps_5n",
-          "forestry:stamps_10n",
-          "forestry:stamps_20n",
-          "forestry:stamps_50n",
-          "forestry:stamps_100n"
+          "forestry:stamp_1n",
+          "forestry:stamp_2n",
+          "forestry:stamp_5n",
+          "forestry:stamp_10n",
+          "forestry:stamp_20n",
+          "forestry:stamp_50n",
+          "forestry:stamp_100n"
         ]
       },
       {
