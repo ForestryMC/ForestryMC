@@ -30,7 +30,13 @@ public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
      * @param remnants    Item stack representing the possible remnants from this recipe. May be empty.
      * @param chance      Chance remnants will be produced by a single recipe cycle, from 0 to 100.
      */
-    void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance);
+    void addRecipe(
+            int timePerItem,
+            NonNullList<ItemStack> resources,
+            FluidStack liquid,
+            ItemStack remnants,
+            int chance
+    );
 
     /**
      * Add a recipe to the squeezer.

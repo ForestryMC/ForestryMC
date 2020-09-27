@@ -19,9 +19,11 @@ public class DatabaseHelper {
             return -1;
         }
         if (ascending) {
-            return getItemName(firstStack.itemStack).getString().compareToIgnoreCase(getItemName(secondStack.itemStack).getString());
+            return getItemName(firstStack.itemStack).getString()
+                                                    .compareToIgnoreCase(getItemName(secondStack.itemStack).getString());
         }
-        return getItemName(secondStack.itemStack).getString().compareToIgnoreCase(getItemName(firstStack.itemStack).getString());
+        return getItemName(secondStack.itemStack).getString()
+                                                 .compareToIgnoreCase(getItemName(firstStack.itemStack).getString());
     };
 
     //TODO simplify this?
@@ -51,7 +53,10 @@ public class DatabaseHelper {
             pattern = Pattern.compile(searchText.toLowerCase(Locale.ENGLISH), Pattern.CASE_INSENSITIVE);
         } catch (Throwable ignore) {
             try {
-                pattern = Pattern.compile(Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)), Pattern.CASE_INSENSITIVE);
+                pattern = Pattern.compile(
+                        Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)),
+                        Pattern.CASE_INSENSITIVE
+                );
             } catch (Throwable e) {
                 return;
             }

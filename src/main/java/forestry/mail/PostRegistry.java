@@ -105,7 +105,10 @@ public class PostRegistry implements IPostRegistry {
         }
 
         //TODO again this should be altered to use getOrCreate. At the moment this may supply bad trade stations with no owner. Not sure how this code will handle that
-        TradeStation trade = world.getSavedData().get(() -> new TradeStation(TradeStation.SAVE_NAME + address), TradeStation.SAVE_NAME + address);
+        TradeStation trade = world.getSavedData().get(
+                () -> new TradeStation(TradeStation.SAVE_NAME + address),
+                TradeStation.SAVE_NAME + address
+        );
 
         // Only existing and valid mail orders are returned
         if (trade != null && trade.isValid()) {
@@ -122,7 +125,10 @@ public class PostRegistry implements IPostRegistry {
         TradeStation trade = getTradeStation(world, address);
 
         if (trade == null) {
-            trade = world.getSavedData().getOrCreate(() -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
+            trade = world.getSavedData().getOrCreate(
+                    () -> new TradeStation(owner, address),
+                    TradeStation.SAVE_NAME + address
+            );
             trade.markDirty();
             cachedTradeStations.put(address, trade);
             getPostOffice(world).registerTradeStation(trade);

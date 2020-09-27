@@ -33,7 +33,9 @@ public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
     public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
         if (slotIndex == SLOT_RESOURCE) {
             LazyOptional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(itemStack);
-            return fluidHandler.map(handler -> handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE) > 0).orElse(false);
+            return fluidHandler.map(handler ->
+                    handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE) >
+                    0).orElse(false);
         }
         return false;
     }

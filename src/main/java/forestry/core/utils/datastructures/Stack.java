@@ -61,7 +61,8 @@ public class Stack {
         String[] parts = stackString.split(":+");
 
         if (parts.length != 2 && parts.length != 3) {
-            Log.warning("Stack string (" + stackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
+            Log.warning("Stack string (" + stackString +
+                        ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
             return null;
         }
 
@@ -72,9 +73,11 @@ public class Stack {
             meta = missingMetaValue;
         } else {
             try {
-                meta = parts[2].equals("*") ? 0/*OreDictionary.WILDCARD_VALUE*/ : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
+                meta = parts[2].equals("*") ? 0/*OreDictionary.WILDCARD_VALUE*/
+                                            : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
             } catch (ParseException e) {
-                Log.warning("ItemStack string (" + stackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
+                Log.warning("ItemStack string (" + stackString +
+                            ") has improperly formatted metadata. Suitable metadata are integer values or *.");
                 return null;
             }
         }

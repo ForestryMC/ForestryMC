@@ -111,7 +111,11 @@ public class IndividualRootBuilder<I extends IIndividual> implements IIndividual
             Map<ComponentKey, IRootComponent<I>> components = new HashMap<>();
             componentFactories.forEach((componentKey, factory) -> components.put(componentKey, factory.create(root)));
             components.forEach((componentKey, builder) -> {
-                FMLJavaModLoadingContext.get().getModEventBus().post(new RootBuilderEvents.CreateComponent<>(this, componentKey, builder));
+                FMLJavaModLoadingContext.get().getModEventBus().post(new RootBuilderEvents.CreateComponent<>(
+                        this,
+                        componentKey,
+                        builder
+                ));
                 components.put(componentKey, builder);
             });
             return components;
@@ -128,14 +132,20 @@ public class IndividualRootBuilder<I extends IIndividual> implements IIndividual
     public IIndividualRootBuilder<I> addComponent(ComponentKey key) {
         IRootComponentFactory factory = RootComponentRegistry.INSTANCE.getFactory(key);
         if (factory == null) {
-            throw new IllegalArgumentException(String.format("No component factory was registered for the component key '%s'.", key));
+            throw new IllegalArgumentException(String.format(
+                    "No component factory was registered for the component key '%s'.",
+                    key
+            ));
         }
         componentFactories.put(key, factory);
         return this;
     }
 
     @Override
-    public <C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(ComponentKey key, IRootComponentFactory<I, C> factory) {
+    public <C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(
+            ComponentKey key,
+            IRootComponentFactory<I, C> factory
+    ) {
         componentFactories.put(key, factory);
         return this;
     }
@@ -143,7 +153,10 @@ public class IndividualRootBuilder<I extends IIndividual> implements IIndividual
     @Override
     public <C extends IRootComponent<I>> IIndividualRootBuilder<I> addListener(ComponentKey key, Consumer<C> consumer) {
         if (!componentFactories.containsKey(key)) {
-            throw new IllegalArgumentException(String.format("No component factory was added for the component key '%s'. Please call 'addComponent' before 'addListener'.", key));
+            throw new IllegalArgumentException(String.format(
+                    "No component factory was added for the component key '%s'. Please call 'addComponent' before 'addListener'.",
+                    key
+            ));
         }
         componentListeners.put(key, consumer);
         return this;

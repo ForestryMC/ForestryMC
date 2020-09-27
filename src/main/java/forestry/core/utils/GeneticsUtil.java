@@ -71,10 +71,10 @@ public class GeneticsUtil {
 
     public static ITextComponent getSpeciesName(IOrganismType type, IAlleleForestrySpecies allele) {
         String customKey = getKeyPrefix(allele) +
-                '.' +
-                type.getName() +
-                '.' +
-                allele.getSpeciesIdentifier();
+                           '.' +
+                           type.getName() +
+                           '.' +
+                           allele.getSpeciesIdentifier();
         return ResourceUtil.tryTranslate(customKey, allele::getDisplayName);
     }
 
@@ -127,7 +127,12 @@ public class GeneticsUtil {
      * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
      */
     @Nullable
-    public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, boolean convertVanilla) {
+    public static IPollinatable getOrCreatePollinatable(
+            @Nullable GameProfile owner,
+            World world,
+            final BlockPos pos,
+            boolean convertVanilla
+    ) {
         IPollinatable pollinatable = TileUtil.getTile(world, pos, IPollinatable.class);
         if (pollinatable == null && convertVanilla) {
             Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
@@ -144,7 +149,12 @@ public class GeneticsUtil {
     }
 
     @Nullable
-    public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, IWorld world, BlockPos pos, boolean convertVanilla) {
+    public static IButterflyNursery getOrCreateNursery(
+            @Nullable GameProfile gameProfile,
+            IWorld world,
+            BlockPos pos,
+            boolean convertVanilla
+    ) {
         IButterflyNursery nursery = getNursery(world, pos);
         if (nursery == null && convertVanilla) {
             Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
@@ -240,7 +250,11 @@ public class GeneticsUtil {
         return 1 + getGeneticAdvancement(species, new HashSet<>(), speciesChromosome);
     }
 
-    private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+    private static int getGeneticAdvancement(
+            IAlleleSpecies species,
+            Set<IAlleleSpecies> exclude,
+            IChromosomeType speciesChromosome
+    ) {
         int highest = 0;
         exclude.add(species);
 
@@ -254,8 +268,14 @@ public class GeneticsUtil {
         return 1 + highest;
     }
 
-    private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
-        if (exclude.contains(mutationSpecies) || AlleleUtils.isBlacklisted(mutationSpecies.getRegistryName().toString())) {
+    private static int getHighestAdvancement(
+            IAlleleSpecies mutationSpecies,
+            int highest,
+            Set<IAlleleSpecies> exclude,
+            IChromosomeType speciesChromosome
+    ) {
+        if (exclude.contains(mutationSpecies) || AlleleUtils.isBlacklisted(mutationSpecies.getRegistryName()
+                                                                                          .toString())) {
             return highest;
         }
 

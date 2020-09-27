@@ -285,12 +285,13 @@ public class Bee extends IndividualLiving implements IBee {
 
     private boolean canWorkAtNight(IBeeModifier beeModifier) {
         return genome.getActiveAllele(BeeChromosomes.SPECIES)
-                .isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS) || beeModifier.isSelfLighted();
+                     .isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS) ||
+               beeModifier.isSelfLighted();
     }
 
     private boolean canWorkDuringDay() {
         return !genome.getActiveAllele(BeeChromosomes.SPECIES)
-                .isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS);
+                      .isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS);
     }
 
     private boolean canWorkUnderground(IBeeModifier beeModifier) {
@@ -308,7 +309,8 @@ public class Bee extends IndividualLiving implements IBee {
     }
 
     private boolean isSuitableClimate(EnumTemperature temperature, EnumHumidity humidity) {
-        return AlleleManager.climateHelper.isWithinLimits(temperature,
+        return AlleleManager.climateHelper.isWithinLimits(
+                temperature,
                 humidity,
                 genome.getActiveAllele(BeeChromosomes.SPECIES).getTemperature(),
                 genome.getActiveValue(BeeChromosomes.TEMPERATURE_TOLERANCE),
@@ -336,10 +338,10 @@ public class Bee extends IndividualLiving implements IBee {
         // No info 4 u!
         if (!isAnalyzed) {
             toolTip.singleLine()
-                    .text(new StringTextComponent("<"))
-                    .translated("for.gui.unknown")
-                    .text(new StringTextComponent(">"))
-                    .style(TextFormatting.GRAY).create();
+                   .text(new StringTextComponent("<"))
+                   .translated("for.gui.unknown")
+                   .text(new StringTextComponent(">"))
+                   .style(TextFormatting.GRAY).create();
             return;
         }
 
@@ -348,7 +350,7 @@ public class Bee extends IndividualLiving implements IBee {
         IAlleleBeeSpecies secondary = genome.getInactiveAllele(BeeChromosomes.SPECIES);
         if (!isPureBred(BeeChromosomes.SPECIES)) {
             toolTip.translated("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName())
-                    .style(TextFormatting.BLUE);
+                   .style(TextFormatting.BLUE);
         }
 
         if (generation > 0) {
@@ -366,43 +368,44 @@ public class Bee extends IndividualLiving implements IBee {
         }
 
         toolTip.singleLine()
-                .add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
-                .text(new StringTextComponent(" "))
-                .translated("for.gui.life")
-                .style(TextFormatting.GRAY)
-                .create();
+               .add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
+               .text(new StringTextComponent(" "))
+               .translated("for.gui.life")
+               .style(TextFormatting.GRAY)
+               .create();
 
         IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
 
-        TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." + speedAllele.getLocalisationKey()
-                .replaceAll("(.*)\\.", ""));
+        TranslationTextComponent customSpeed = new TranslationTextComponent(
+                "for.tooltip.worker." + speedAllele.getLocalisationKey()
+                                                   .replaceAll("(.*)\\.", ""));
         if (ResourceUtil.canTranslate(customSpeed)) {
             toolTip.singleLine()
-                    .add(customSpeed)
-                    .style(TextFormatting.GRAY)
-                    .create();
+                   .add(customSpeed)
+                   .style(TextFormatting.GRAY)
+                   .create();
         } else {
             toolTip.singleLine()
-                    .add(speedAllele.getDisplayName())
-                    .text(new StringTextComponent(" "))
-                    .translated("for.gui.worker")
-                    .style(TextFormatting.GRAY)
-                    .create();
+                   .add(speedAllele.getDisplayName())
+                   .text(new StringTextComponent(" "))
+                   .translated("for.gui.worker")
+                   .style(TextFormatting.GRAY)
+                   .create();
         }
 
         IAlleleValue<EnumTolerance> tempToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
         IAlleleValue<EnumTolerance> humidToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
 
         toolTip.singleLine()
-                .text(new StringTextComponent("T: "))
-                .add(AlleleManager.climateHelper.toDisplay(primary.getTemperature()))
-                .text(new StringTextComponent(" / "))
-                .add(tempToleranceAllele.getDisplayName())
-                .style(TextFormatting.GREEN)
-                .create();
+               .text(new StringTextComponent("T: "))
+               .add(AlleleManager.climateHelper.toDisplay(primary.getTemperature()))
+               .text(new StringTextComponent(" / "))
+               .add(tempToleranceAllele.getDisplayName())
+               .style(TextFormatting.GREEN)
+               .create();
         toolTip.singleLine().text(new StringTextComponent("H: "))
-                .add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(new StringTextComponent(" / "))
-                .add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
+               .add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(new StringTextComponent(" / "))
+               .add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
 
 
         toolTip.add(
@@ -490,36 +493,39 @@ public class Bee extends IndividualLiving implements IBee {
 
         // / Primary Products
         primary.getProducts()
-                .addProducts(world,
-                        housing.getCoordinates(),
-                        products,
-                        (product) -> product.getChance() * speed,
-                        world.rand
-                );
+               .addProducts(
+                       world,
+                       housing.getCoordinates(),
+                       products,
+                       (product) -> product.getChance() * speed,
+                       world.rand
+               );
         // / Secondary Products
         secondary.getProducts()
-                .addProducts(world,
-                        housing.getCoordinates(),
-                        products,
-                        (product) -> Math.round(product.getChance() / 2) * speed,
-                        world.rand
-                );
+                 .addProducts(
+                         world,
+                         housing.getCoordinates(),
+                         products,
+                         (product) -> Math.round(product.getChance() / 2) * speed,
+                         world.rand
+                 );
 
         // / Specialty products
         if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
             primary.getSpecialties()
-                    .addProducts(world,
-                            housing.getCoordinates(),
-                            products,
-                            (product) -> product.getChance() * speed,
-                            world.rand
-                    );
+                   .addProducts(
+                           world,
+                           housing.getCoordinates(),
+                           products,
+                           (product) -> product.getChance() * speed,
+                           world.rand
+                   );
         }
 
         BlockPos housingCoordinates = housing.getCoordinates();
         return genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER)
-                .getProvider()
-                .affectProducts(world, this, housingCoordinates, products);
+                     .getProvider()
+                     .affectProducts(world, this, housingCoordinates, products);
     }
 
     /* REPRODUCTION */
@@ -690,8 +696,8 @@ public class Bee extends IndividualLiving implements IBee {
             ICheckPollinatable pitcher = TileUtil.getTile(world, blockPos, ICheckPollinatable.class);
             if (pitcher != null) {
                 if (genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER)
-                        .getProvider()
-                        .isAcceptedPollinatable(world, pitcher)) {
+                          .getProvider()
+                          .isAcceptedPollinatable(world, pitcher)) {
                     pollen = pitcher.getPollen();
                 }
             } else {
@@ -711,10 +717,11 @@ public class Bee extends IndividualLiving implements IBee {
 
         IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
-        int chance = (int) (genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(
-                getGenome(),
-                1f
-        ));
+        int chance = (int) (
+                genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(
+                        getGenome(),
+                        1f
+                ));
 
         World world = housing.getWorldObj();
         Random random = world.rand;
@@ -739,8 +746,8 @@ public class Bee extends IndividualLiving implements IBee {
             }
 
             if (!genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER)
-                    .getProvider()
-                    .isAcceptedPollinatable(world, checkPollinatable)) {
+                       .getProvider()
+                       .isAcceptedPollinatable(world, checkPollinatable)) {
                 continue;
             }
             if (!checkPollinatable.canMateWith(pollen)) {

@@ -22,7 +22,14 @@ import net.minecraft.world.World;
 public class FarmableCocoa extends FarmableAgingCrop {
 
     public FarmableCocoa() {
-        super(new ItemStack(Items.COCOA_BEANS), Blocks.COCOA, new ItemStack(Items.COCOA_BEANS), CocoaBlock.AGE, 2, null);
+        super(
+                new ItemStack(Items.COCOA_BEANS),
+                Blocks.COCOA,
+                new ItemStack(Items.COCOA_BEANS),
+                CocoaBlock.AGE,
+                2,
+                null
+        );
     }
 
     @Override

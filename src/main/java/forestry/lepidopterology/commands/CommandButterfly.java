@@ -27,7 +27,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class CommandButterfly {
     public static ArgumentBuilder<CommandSource, ?> register() {
         return Commands.literal("butterfly")
-                .then(CommandButterflyKill.register());
+                       .then(CommandButterflyKill.register());
     }
 
     public static class CommandButterflyKill {
@@ -38,18 +38,21 @@ public class CommandButterfly {
         public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
             int killCount = 0;
             for (Entity butterfly : context.getSource()
-                    .asPlayer()
-                    .getServerWorld()
-                    .getEntities(LepidopterologyEntities.BUTTERFLY.entityType(), EntityPredicates.IS_ALIVE)) {
+                                           .asPlayer()
+                                           .getServerWorld()
+                                           .getEntities(
+                                                   LepidopterologyEntities.BUTTERFLY.entityType(),
+                                                   EntityPredicates.IS_ALIVE
+                                           )) {
                 butterfly.remove();
                 killCount++;
             }
 
             context.getSource()
-                    .sendFeedback(new TranslationTextComponent(
-                            "for.chat.command.forestry.butterfly.kill.response",
-                            killCount
-                    ), true);
+                   .sendFeedback(new TranslationTextComponent(
+                           "for.chat.command.forestry.butterfly.kill.response",
+                           killCount
+                   ), true);
 
             return killCount;
         }

@@ -22,5 +22,11 @@ public interface IFlowerGrowthRule {
      *
      * @since Forestry 5.5.4
      */
-    boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers);
+    boolean growFlower(
+            IFlowerGrowthHelper helper,
+            String flowerType,
+            ServerWorld world,
+            BlockPos pos,
+            Collection<BlockState> potentialFlowers
+    );
 }

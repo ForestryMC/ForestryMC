@@ -23,6 +23,9 @@ public class ProxyCultivationClient extends ProxyCultivation implements IClientM
 
     @Override
     public void setupClient(FMLClientSetupEvent event) {
-        CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
+        CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(
+                block,
+                RenderType.getCutout()
+        ));
     }
 }

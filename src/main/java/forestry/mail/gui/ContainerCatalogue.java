@@ -140,7 +140,11 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
     }
 
     @Override
-    public void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo) {
+    public void handleLetterInfoUpdate(
+            EnumAddressee type,
+            @Nullable IMailAddress address,
+            @Nullable ITradeStationInfo tradeInfo
+    ) {
         setTradeInfo(tradeInfo);
     }
 

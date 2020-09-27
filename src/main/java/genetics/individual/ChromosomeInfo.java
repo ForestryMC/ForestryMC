@@ -24,7 +24,10 @@ public class ChromosomeInfo {
         return this;
     }
 
-    public void setSpeciesInfo(@Nullable ResourceLocation activeSpeciesUid, @Nullable ResourceLocation inactiveSpeciesUid) {
+    public void setSpeciesInfo(
+            @Nullable ResourceLocation activeSpeciesUid,
+            @Nullable ResourceLocation inactiveSpeciesUid
+    ) {
         this.activeSpeciesUid = activeSpeciesUid;
         this.inactiveSpeciesUid = inactiveSpeciesUid;
     }

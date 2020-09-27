@@ -55,7 +55,14 @@ public class FluidContainerModel extends AbstractItemModel {
         }
 
         @Override
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+        public IBakedModel bake(
+                IModelConfiguration owner,
+                ModelBakery bakery,
+                Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
+                IModelTransform modelTransform,
+                ItemOverrideList overrides,
+                ResourceLocation modelLocation
+        ) {
             return new FluidContainerModel(
                     bakery.getBakedModel(empty, modelTransform, spriteGetter),
                     bakery.getBakedModel(filled, modelTransform, spriteGetter)
@@ -63,7 +70,11 @@ public class FluidContainerModel extends AbstractItemModel {
         }
 
         @Override
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        public Collection<RenderMaterial> getTextures(
+                IModelConfiguration owner,
+                Function<ResourceLocation, IUnbakedModel> modelGetter,
+                Set<Pair<String, String>> missingTextureErrors
+        ) {
             return ImmutableList.of();
         }
     }
@@ -74,7 +85,10 @@ public class FluidContainerModel extends AbstractItemModel {
         }
 
         @Override
-        public FluidContainerModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+        public FluidContainerModel.Geometry read(
+                JsonDeserializationContext deserializationContext,
+                JsonObject modelContents
+        ) {
             String empty = JSONUtils.getString(modelContents, "empty");
             String filled = JSONUtils.getString(modelContents, "filled");
             String type = JSONUtils.getString(modelContents, "type");

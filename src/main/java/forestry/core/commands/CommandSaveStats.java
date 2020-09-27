@@ -60,8 +60,8 @@ public final class CommandSaveStats implements Command<CommandSource> {
             ICommandModeHelper modeHelper
     ) {
         return Commands.literal("save")
-                .then(Commands.argument("player", EntityArgument.player())
-                        .executes(new CommandSaveStats(saveHelper, modeHelper)));
+                       .then(Commands.argument("player", EntityArgument.player())
+                                     .executes(new CommandSaveStats(saveHelper, modeHelper)));
 
     }
 
@@ -121,7 +121,8 @@ public final class CommandSaveStats implements Command<CommandSource> {
         File file = new File(
                 Proxies.common.getForestryRoot(),
                 "config/" + Constants.MOD_ID + "/stats/" + player.getDisplayName()
-                        .getString() + '-' + saveHelper.getFileSuffix() + ".log"
+                                                                 .getString() + '-' + saveHelper.getFileSuffix() +
+                ".log"
         );
         try {
             File folder = file.getParentFile();

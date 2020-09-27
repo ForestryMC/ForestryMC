@@ -19,5 +19,10 @@ public interface IBeeMutationFactory {
      * @param chance     The chance that breeding the two parent bees will result in this mutation
      * @return a new bee mutation.
      */
-    IBeeMutationBuilder createMutation(IAlleleBeeSpecies parentBee0, IAlleleBeeSpecies parentBee1, IAllele[] result, int chance);
+    IBeeMutationBuilder createMutation(
+            IAlleleBeeSpecies parentBee0,
+            IAlleleBeeSpecies parentBee1,
+            IAllele[] result,
+            int chance
+    );
 }

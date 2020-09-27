@@ -47,7 +47,13 @@ public final class ProductList implements IDynamicProductList {
     }
 
     @Override
-    public void addProducts(IBlockReader reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+    public void addProducts(
+            IBlockReader reader,
+            BlockPos pos,
+            NonNullList<ItemStack> stacks,
+            Function<Product, Float> modifier,
+            Random rand
+    ) {
         constantProducts.forEach(product -> {
             if (rand.nextFloat() < modifier.apply(product)) {
                 stacks.add(product.copyStack());

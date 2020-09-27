@@ -60,7 +60,14 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 
             ItemStack dropStack = contained.copy();
             dropStack.setCount(9);
-            ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), 40);
+            ItemStackUtil.dropItemStackAsEntity(
+                    dropStack,
+                    worldIn,
+                    playerIn.getPosX(),
+                    playerIn.getPosY(),
+                    playerIn.getPosZ(),
+                    40
+            );
         }
         return ActionResult.resultSuccess(heldItem);
     }

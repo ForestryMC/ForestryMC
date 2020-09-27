@@ -42,11 +42,14 @@ public class FarmableGE implements IFarmable {
     //TODO would be nice to make this class more granular so windfall and germling checks could be more specific
     public FarmableGE() {
         windfall.addAll(AlleleManager.geneticRegistry.getRegisteredFruitFamilies().values().stream()
-                .map(TreeManager.treeRoot::getFruitProvidersForFruitFamily)
-                .flatMap(Collection::stream)
-                .flatMap(p -> Stream.concat(p.getProducts().getPossibleProducts().stream(), p.getSpecialty().getPossibleProducts().stream()))
-                .map(Product::getItem)
-                .collect(Collectors.toSet()));
+                                                     .map(TreeManager.treeRoot::getFruitProvidersForFruitFamily)
+                                                     .flatMap(Collection::stream)
+                                                     .flatMap(p -> Stream.concat(
+                                                             p.getProducts().getPossibleProducts().stream(),
+                                                             p.getSpecialty().getPossibleProducts().stream()
+                                                     ))
+                                                     .map(Product::getItem)
+                                                     .collect(Collectors.toSet()));
     }
 
     @Override

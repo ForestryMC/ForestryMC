@@ -154,7 +154,9 @@ public class Tree extends Individual implements ITree, IPlantable {
 
     @Override
     public int getResilience() {
-        int base = (int) (getGenome().getActiveValue(TreeChromosomes.FERTILITY) * getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 100);
+        int base = (int) (
+                getGenome().getActiveValue(TreeChromosomes.FERTILITY) *
+                getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 100);
         return (Math.max(base, 1)) * 10;
     }
 
@@ -165,7 +167,13 @@ public class Tree extends Individual implements ITree, IPlantable {
 
     @Override
     public boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
-        return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLeaves(genome, world, owner, pos, rand);
+        return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLeaves(
+                genome,
+                world,
+                owner,
+                pos,
+                rand
+        );
     }
 
     @Override
@@ -189,7 +197,7 @@ public class Tree extends Individual implements ITree, IPlantable {
         IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
         Collection<IFruitFamily> suitable = genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit();
         return suitable.contains(provider.getFamily()) &&
-                provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
+               provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
     }
 
     /* INFORMATION */
@@ -207,7 +215,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 
     @Override
     public boolean isPureBred(IChromosomeType chromosome) {
-        return genome.getActiveAllele(chromosome).getRegistryName().equals(genome.getInactiveAllele(chromosome).getRegistryName());
+        return genome.getActiveAllele(chromosome).getRegistryName().equals(genome.getInactiveAllele(chromosome)
+                                                                                 .getRegistryName());
     }
 
     @Override
@@ -262,7 +271,10 @@ public class Tree extends Individual implements ITree, IPlantable {
 
         if (world.rand.nextFloat() <= chance) {
             if (mate == null) {
-                prod.add(TreeManager.treeRoot.getTree(world, new Genome(TreeManager.treeRoot.getKaryotype(), genome.getChromosomes())));
+                prod.add(TreeManager.treeRoot.getTree(
+                        world,
+                        new Genome(TreeManager.treeRoot.getKaryotype(), genome.getChromosomes())
+                ));
             } else {
                 prod.add(createOffspring(world, mate, playerProfile, pos));
             }
@@ -297,7 +309,13 @@ public class Tree extends Individual implements ITree, IPlantable {
     }
 
     @Nullable
-    private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, BlockPos pos, IGenome genomeOne, IGenome genomeTwo) {
+    private static IChromosome[] mutateSpecies(
+            World world,
+            @Nullable GameProfile playerProfile,
+            BlockPos pos,
+            IGenome genomeOne,
+            IGenome genomeTwo
+    ) {
         IChromosome[] parent1 = genomeOne.getChromosomes();
         IChromosome[] parent2 = genomeTwo.getChromosomes();
 
@@ -357,7 +375,8 @@ public class Tree extends Individual implements ITree, IPlantable {
     /* PRODUCTION */
     @Override
     public boolean canBearFruit() {
-        return genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit().contains(genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getFamily());
+        return genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit().contains(genome.getActiveAllele(
+                TreeChromosomes.FRUITS).getProvider().getFamily());
     }
 
     @Override

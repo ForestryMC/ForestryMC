@@ -13,7 +13,10 @@ public class CreateItems {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCrates.class);
 
     //TODO map of item to crate or similar?
-    public static final FeatureItem<ItemCrated> CRATE = REGISTRY.item(() -> new ItemCrated(ItemStack.EMPTY, null), "crate");
+    public static final FeatureItem<ItemCrated> CRATE = REGISTRY.item(
+            () -> new ItemCrated(ItemStack.EMPTY, null),
+            "crate"
+    );
 
     private CreateItems() {
     }

@@ -39,12 +39,14 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
     public void createElements(IDatabaseElement container, ITree tree, ItemStack itemStack) {
         IAlleleTreeSpecies primarySpecies = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
         IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome()
-                .getInactiveAllele(TreeChromosomes.SPECIES);
+                                                                                        .getInactiveAllele(
+                                                                                                TreeChromosomes.SPECIES);
         Style speciesStyle = GuiElementFactory.INSTANCE.getStateStyle(species.isDominant());
 
-        container.translated("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name")
-                .setStyle(GuiElementFactory.INSTANCE.databaseTitle)
-                .setAlign(GuiElementAlignment.TOP_CENTER);
+        container.translated(
+                "for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name")
+                 .setStyle(GuiElementFactory.INSTANCE.databaseTitle)
+                 .setAlign(GuiElementAlignment.TOP_CENTER);
 
         container.addLine(new TranslationTextComponent("for.gui.species"), TreeChromosomes.SPECIES);
 
@@ -70,8 +72,8 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
         container.addLine(
                 new TranslationTextComponent("for.gui.native"),
                 new TranslationTextComponent("for.gui." + primarySpecies.getPlantType()
-                        .toString()
-                        .toLowerCase(Locale.ENGLISH)),
+                                                                        .toString()
+                                                                        .toLowerCase(Locale.ENGLISH)),
                 species.isDominant()
         );
 
@@ -87,22 +89,23 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
         }
 
         IAlleleFruit fruit = mode == DatabaseMode.ACTIVE ? tree.getGenome()
-                .getActiveAllele(TreeChromosomes.FRUITS) : tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
+                                                               .getActiveAllele(TreeChromosomes.FRUITS)
+                                                         : tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
         Style textStyle = GuiElementFactory.INSTANCE.getStateStyle(tree.getGenome()
-                .getActiveAllele(TreeChromosomes.FRUITS)
-                .isDominant());
+                                                                       .getActiveAllele(TreeChromosomes.FRUITS)
+                                                                       .isDominant());
 
         container.translated("for.gui.fruits")
-                .setStyle(GuiConstants.UNDERLINED_STYLE)
-                .setAlign(GuiElementAlignment.TOP_CENTER);
+                 .setStyle(GuiConstants.UNDERLINED_STYLE)
+                 .setAlign(GuiElementAlignment.TOP_CENTER);
         Style fruitStyle = textStyle;
         String strike = "";
         if (!species.getSuitableFruit().contains(fruit.getProvider().getFamily()) && fruit != AlleleFruits.fruitNone) {
             fruitStyle = fruitStyle.setStrikethrough(true);
         }
         container.label(fruit.getProvider().getDescription())
-                .setStyle(fruitStyle)
-                .setAlign(GuiElementAlignment.TOP_CENTER);
+                 .setStyle(fruitStyle)
+                 .setAlign(GuiElementAlignment.TOP_CENTER);
 
         IFruitFamily family = fruit.getProvider().getFamily();
 
@@ -119,6 +122,7 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
     @Override
     public ItemStack getIconStack() {
-        return TreeDefinition.Cherry.getMemberStack(mode == DatabaseMode.ACTIVE ? EnumGermlingType.SAPLING : EnumGermlingType.POLLEN);
+        return TreeDefinition.Cherry.getMemberStack(
+                mode == DatabaseMode.ACTIVE ? EnumGermlingType.SAPLING : EnumGermlingType.POLLEN);
     }
 }

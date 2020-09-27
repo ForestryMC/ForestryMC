@@ -27,7 +27,9 @@ public class SpeciesDisplayHelper implements ISpeciesDisplayHelper {
     public ItemStack getDisplayStack(IAlleleSpecies species, IOrganismType type) {
         ItemStack stack = iconStacks.get(type, species.getRegistryName().toString());
         if (stack == null) {
-            stack = root.getTypes().createStack(root.templateAsIndividual(root.getTemplates().getTemplate(species.getRegistryName().toString())), type);
+            stack = root.getTypes().createStack(root.templateAsIndividual(root.getTemplates()
+                                                                              .getTemplate(species.getRegistryName()
+                                                                                                  .toString())), type);
             iconStacks.put(type, species.getRegistryName().toString(), stack);
         }
         return stack;

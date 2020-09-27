@@ -44,7 +44,14 @@ public class ContainerFiller {
             if (!tankContents.isEmpty() && tankContents.getAmount() > 0) {
                 if (fillingProgress == 0) {
                     Fluid tankFluid = tankContents.getFluid();
-                    FluidHelper.FillStatus canFill = FluidHelper.fillContainers(fluidTank, inventory, inputSlot, outputSlot, tankFluid, false);
+                    FluidHelper.FillStatus canFill = FluidHelper.fillContainers(
+                            fluidTank,
+                            inventory,
+                            inputSlot,
+                            outputSlot,
+                            tankFluid,
+                            false
+                    );
                     if (canFill == FluidHelper.FillStatus.SUCCESS) {
                         fillingProgress = 1;
                     }
@@ -52,7 +59,14 @@ public class ContainerFiller {
                     fillingProgress++;
                     if (fillingProgress >= fillingTime) {
                         Fluid tankFluid = tankContents.getFluid();
-                        FluidHelper.FillStatus filled = FluidHelper.fillContainers(fluidTank, inventory, inputSlot, outputSlot, tankFluid, true);
+                        FluidHelper.FillStatus filled = FluidHelper.fillContainers(
+                                fluidTank,
+                                inventory,
+                                inputSlot,
+                                outputSlot,
+                                tankFluid,
+                                true
+                        );
                         if (filled == FluidHelper.FillStatus.SUCCESS) {
                             fillingProgress = 0;
                         }

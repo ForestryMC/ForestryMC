@@ -397,7 +397,14 @@ public class Config {
                 32
         );
 
-        String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
+        String[] availableStructures = new String[]{
+                "alveary3x3",
+                "farm3x3",
+                "farm3x4",
+                "farm3x5",
+                "farm4x4",
+                "farm5x5"
+        };
         String[] disabledStructureArray = disabledStructures.toArray(new String[0]);
         disabledStructureArray = configCommon.getStringListLocalized(
                 "structures",

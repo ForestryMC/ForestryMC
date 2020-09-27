@@ -33,7 +33,13 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
         IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
-        drawHealthMeter(transform, guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
+        drawHealthMeter(
+                transform,
+                guiLeft + 20,
+                guiTop + 37,
+                alvearyController.getHealthScaled(46),
+                EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100))
+        );
     }
 
     private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {

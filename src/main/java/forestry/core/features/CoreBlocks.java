@@ -23,12 +23,15 @@ public class CoreBlocks {
             ItemBlockForestry::new,
             "bog_earth"
     );
-    public static final FeatureBlock<Block, ItemBlockForestry> PEAT = REGISTRY.block(() -> new Block(Block.Properties.create(
-            Material.EARTH)
-            .hardnessAndResistance(0.5f)
-            .sound(SoundType.GROUND)
-            .harvestTool(ToolType.SHOVEL)
-            .harvestLevel(0)), "peat");
+    public static final FeatureBlock<Block, ItemBlockForestry> PEAT = REGISTRY.block(
+            () -> new Block(Block.Properties.create(
+                    Material.EARTH)
+                                            .hardnessAndResistance(0.5f)
+                                            .sound(SoundType.GROUND)
+                                            .harvestTool(ToolType.SHOVEL)
+                                            .harvestLevel(0)),
+            "peat"
+    );
     public static final FeatureBlock<BlockHumus, ItemBlockForestry> HUMUS = REGISTRY.block(
             BlockHumus::new,
             ItemBlockForestry::new,

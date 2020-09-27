@@ -12,7 +12,10 @@ public class ForestryBlockModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels() {
-        registerModel("farm", new ModelBuilder().parent("block/cube_all").texture("all", new ResourceLocation("block/stone_bricks")));
+        registerModel(
+                "farm",
+                new ModelBuilder().parent("block/cube_all").texture("all", new ResourceLocation("block/stone_bricks"))
+        );
         for (ForestryFluids fluid : ForestryFluids.values()) {
             Block block = fluid.getFeature().fluidBlock().block();
             registerModel(block, new ModelBuilder().particle(fluid.getFeature().getProperties().resources[0]));

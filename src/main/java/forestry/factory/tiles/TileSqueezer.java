@@ -162,7 +162,12 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
         if (inventory.hasResources()) {
             NonNullList<ItemStack> resources = inventory.getResources();
 
-            if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
+            if (currentRecipe != null && ItemStackUtil.containsSets(
+                    currentRecipe.getResources(),
+                    resources,
+                    true,
+                    false
+            ) > 0) {
                 matchingRecipe = currentRecipe;
             } else {
                 matchingRecipe = SqueezerRecipeManager.findMatchingRecipe(resources);
@@ -195,7 +200,8 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
             hasRecipe = currentRecipe != null;
             if (hasRecipe) {
                 FluidStack resultFluid = currentRecipe.getFluidOutput();
-                canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) == resultFluid.getAmount();
+                canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) ==
+                          resultFluid.getAmount();
 
                 if (!currentRecipe.getRemnants().isEmpty()) {
                     canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);

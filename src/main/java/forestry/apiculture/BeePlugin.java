@@ -42,7 +42,11 @@ public class BeePlugin implements IGeneticPlugin {
 
     @Override
     public void registerClassifications(IClassificationRegistry registry) {
-        IClassification hymnoptera = registry.createAndRegisterClassification(EnumClassLevel.ORDER, "hymnoptera", "Hymnoptera");
+        IClassification hymnoptera = registry.createAndRegisterClassification(
+                EnumClassLevel.ORDER,
+                "hymnoptera",
+                "Hymnoptera"
+        );
         registry.getClassification("class.insecta").addMemberGroup(hymnoptera);
 
         IClassification apidae = registry.createAndRegisterClassification(EnumClassLevel.FAMILY, "apidae", "Apidae");
@@ -81,49 +85,66 @@ public class BeePlugin implements IGeneticPlugin {
                 .addComponent(ComponentKeys.TRANSLATORS)
                 .addComponent(ComponentKeys.MUTATIONS)
                 .addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new)
-                .addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<IBee> builder) -> builder.addPlugin(new IResearchPlugin() {
-                    @Override
-                    public float getResearchSuitability(IAlleleSpecies species, ItemStack itemStack) {
-                        Item item = itemStack.getItem();
-                        if (item instanceof ItemOverlay && ApicultureItems.HONEY_DROPS.itemEqual(item)) {
-                            return 0.5f;
-                        } else if (ApicultureItems.HONEYDEW.itemEqual(item)) {
-                            return 0.7f;
-                            //TODO tag lookup?
-                        } else if (item instanceof ItemHoneyComb) {
-                            return 0.4f;
-                        }
+                .addListener(
+                        ForestryComponentKeys.RESEARCH,
+                        (IResearchHandler<IBee> builder) -> builder.addPlugin(new IResearchPlugin() {
+                            @Override
+                            public float getResearchSuitability(IAlleleSpecies species, ItemStack itemStack) {
+                                Item item = itemStack.getItem();
+                                if (item instanceof ItemOverlay && ApicultureItems.HONEY_DROPS.itemEqual(item)) {
+                                    return 0.5f;
+                                } else if (ApicultureItems.HONEYDEW.itemEqual(item)) {
+                                    return 0.7f;
+                                    //TODO tag lookup?
+                                } else if (item instanceof ItemHoneyComb) {
+                                    return 0.4f;
+                                }
 
-                        IAlleleBeeSpecies beeSpecies = (IAlleleBeeSpecies) species;
-                        for (ItemStack stack : beeSpecies.getProducts().getPossibleStacks()) {
-                            if (stack.isItemEqual(itemStack)) {
-                                return 1.0f;
-                            }
-                        }
-                        for (ItemStack stack : beeSpecies.getSpecialties().getPossibleStacks()) {
-                            if (stack.isItemEqual(itemStack)) {
-                                return 1.0f;
-                            }
-                        }
+                                IAlleleBeeSpecies beeSpecies = (IAlleleBeeSpecies) species;
+                                for (ItemStack stack : beeSpecies.getProducts().getPossibleStacks()) {
+                                    if (stack.isItemEqual(itemStack)) {
+                                        return 1.0f;
+                                    }
+                                }
+                                for (ItemStack stack : beeSpecies.getSpecialties().getPossibleStacks()) {
+                                    if (stack.isItemEqual(itemStack)) {
+                                        return 1.0f;
+                                    }
+                                }
 
-                        return 0.0F;
-                    }
-
-                    @Override
-                    public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-                        IAlleleBeeSpecies beeSpecies = (IAlleleBeeSpecies) species;
-                        NonNullList<ItemStack> bounty = NonNullList.create();
-                        if (bountyLevel > 10) {
-                            for (ItemStack stack : beeSpecies.getSpecialties().getPossibleStacks()) {
-                                bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
+                                return 0.0F;
                             }
-                        }
-                        for (ItemStack stack : beeSpecies.getProducts().getPossibleStacks()) {
-                            bounty.add(ItemStackUtil.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
-                        }
-                        return bounty;
-                    }
-                }))
+
+                            @Override
+                            public NonNullList<ItemStack> getResearchBounty(
+                                    IAlleleSpecies species,
+                                    World world,
+                                    GameProfile researcher,
+                                    IIndividual individual,
+                                    int bountyLevel
+                            ) {
+                                IAlleleBeeSpecies beeSpecies = (IAlleleBeeSpecies) species;
+                                NonNullList<ItemStack> bounty = NonNullList.create();
+                                if (bountyLevel > 10) {
+                                    for (ItemStack stack : beeSpecies.getSpecialties().getPossibleStacks()) {
+                                        bounty.add(ItemStackUtil.copyWithRandomSize(
+                                                stack,
+                                                (int) ((float) bountyLevel / 2),
+                                                world.rand
+                                        ));
+                                    }
+                                }
+                                for (ItemStack stack : beeSpecies.getProducts().getPossibleStacks()) {
+                                    bounty.add(ItemStackUtil.copyWithRandomSize(
+                                            stack,
+                                            (int) ((float) bountyLevel / 2),
+                                            world.rand
+                                    ));
+                                }
+                                return bounty;
+                            }
+                        })
+                )
                 .setDefaultTemplate(BeeHelper::createDefaultTemplate);
     }
 

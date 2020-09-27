@@ -35,7 +35,8 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
             boolean doTransfer
     ) {
         if (doTransfer) {
-            Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
+            Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks()
+                                                                                           .getGuiIngredients();
 
             CraftingInventoryForestry inventory = new CraftingInventoryForestry(container);
 

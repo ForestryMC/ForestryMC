@@ -30,7 +30,13 @@ public interface IDynamicProductList extends IProductList {
      * @param rand     The instance of {@link Random} that should be used. In the most cases this is
      *                 {@link net.minecraft.world.World#rand}.
      */
-    default void addProducts(IBlockReader reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+    default void addProducts(
+            IBlockReader reader,
+            BlockPos pos,
+            NonNullList<ItemStack> stacks,
+            Function<Product, Float> modifier,
+            Random rand
+    ) {
         addProducts(stacks, modifier, rand);
     }
 }

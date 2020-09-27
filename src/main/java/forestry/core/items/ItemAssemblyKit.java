@@ -34,7 +34,13 @@ public class ItemAssemblyKit extends ItemForestry {
         ItemStack heldItem = playerIn.getHeldItem(handIn);
         if (!worldIn.isRemote) {
             heldItem.shrink(1);
-            ItemEntity entity = new ItemEntity(worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), assembled.copy());
+            ItemEntity entity = new ItemEntity(
+                    worldIn,
+                    playerIn.getPosX(),
+                    playerIn.getPosY(),
+                    playerIn.getPosZ(),
+                    assembled.copy()
+            );
             worldIn.addEntity(entity);
         }
         return ActionResult.resultSuccess(heldItem);

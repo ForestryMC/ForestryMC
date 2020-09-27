@@ -405,14 +405,14 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("x", getX())
-                .add("y", getY())
-                .add("w", width)
-                .add("h", height)
-                .add("a", align)
-                .add("v", isVisible())
-                .add("xO", xOffset)
-                .add("yO", yOffset)
-                .toString();
+                          .add("x", getX())
+                          .add("y", getY())
+                          .add("w", width)
+                          .add("h", height)
+                          .add("a", align)
+                          .add("v", isVisible())
+                          .add("xO", xOffset)
+                          .add("yO", yOffset)
+                          .toString();
     }
 }

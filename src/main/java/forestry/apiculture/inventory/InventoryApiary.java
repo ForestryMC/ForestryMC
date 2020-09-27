@@ -46,7 +46,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
     @Override
     public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
         return !SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT) &&
-                super.isItemValidForSlot(slotIndex, itemStack);
+               super.isItemValidForSlot(slotIndex, itemStack);
     }
 
     public Collection<Tuple<IHiveFrame, ItemStack>> getFrames() {

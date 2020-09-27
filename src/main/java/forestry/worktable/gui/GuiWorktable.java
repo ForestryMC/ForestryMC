@@ -43,7 +43,13 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
             int yPos = 20 + y * SPACING;
             for (int x = 0; x < 3; x++) {
                 int xPos = 110 + x * SPACING;
-                MemorizedRecipeSlot memorizedRecipeSlot = new MemorizedRecipeSlot(widgetManager, xPos, yPos, recipeMemory, slot++);
+                MemorizedRecipeSlot memorizedRecipeSlot = new MemorizedRecipeSlot(
+                        widgetManager,
+                        xPos,
+                        yPos,
+                        recipeMemory,
+                        slot++
+                );
                 widgetManager.add(memorizedRecipeSlot);
             }
         }

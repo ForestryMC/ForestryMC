@@ -52,7 +52,13 @@ public class DummyManagers {
         }
 
         @Override
-        public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
+        public void addRecipe(
+                int packagingTime,
+                @Nullable FluidStack liquid,
+                ItemStack box,
+                ItemStack product,
+                Object... materials
+        ) {
 
         }
     }
@@ -85,7 +91,13 @@ public class DummyManagers {
     public static class DummyFermenterManager extends DummyCraftingProvider<IFermenterRecipe> implements IFermenterManager {
 
         @Override
-        public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+        public void addRecipe(
+                ItemStack resource,
+                int fermentationValue,
+                float modifier,
+                FluidStack output,
+                FluidStack liquid
+        ) {
 
         }
 
@@ -95,7 +107,13 @@ public class DummyManagers {
         }
 
         @Override
-        public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+        public void addRecipe(
+                String resource,
+                int fermentationValue,
+                float modifier,
+                FluidStack output,
+                FluidStack liquid
+        ) {
 
         }
 
@@ -116,7 +134,13 @@ public class DummyManagers {
     public static class DummySqueezerManager extends DummyCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
 
         @Override
-        public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
+        public void addRecipe(
+                int timePerItem,
+                NonNullList<ItemStack> resources,
+                FluidStack liquid,
+                ItemStack remnants,
+                int chance
+        ) {
 
         }
 
@@ -136,7 +160,12 @@ public class DummyManagers {
         }
 
         @Override
-        public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
+        public void addContainerRecipe(
+                int timePerItem,
+                ItemStack emptyContainer,
+                @Nullable ItemStack remnants,
+                float chance
+        ) {
 
         }
     }

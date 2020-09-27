@@ -110,7 +110,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
         if (!connectedParts.add(part)) {
             Log.warning("[%s] Controller %s is double-adding part %d @ %s. This is unusual. " +
-                            "If you encounter odd behavior, please tear down the machine and rebuild it.",
+                        "If you encounter odd behavior, please tear down the machine and rebuild it.",
                     world.isRemote() ? "CLIENT" : "SERVER", hashCode(), part.hashCode(), coord
             );
         }
@@ -247,7 +247,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             BlockPos partCoords = part.getCoordinates();
             Log.warning(
                     "[%s] Double-removing part (%d) @ %d, %d, %d, this is unexpected and may cause problems. " +
-                            "If you encounter anomalies, please tear down the reactor and rebuild it.",
+                    "If you encounter anomalies, please tear down the reactor and rebuild it.",
                     world.isRemote() ? "CLIENT" : "SERVER",
                     part.hashCode(),
                     partCoords.getX(),
@@ -358,7 +358,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     public void assimilate(IMultiblockControllerInternal other) {
         BlockPos otherReferenceCoord = other.getReferenceCoord();
         BlockPos referenceCoord = getReferenceCoord();
-        if (otherReferenceCoord != null && referenceCoord != null && referenceCoord.compareTo(otherReferenceCoord) >= 0) {
+        if (otherReferenceCoord != null && referenceCoord != null &&
+            referenceCoord.compareTo(otherReferenceCoord) >= 0) {
             throw new IllegalArgumentException(
                     "The controller with the lowest minimum-coord value must consume the one with the higher coords");
         }
@@ -437,7 +438,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             // If this returns true, the server has changed its internal data.
             // If our chunks are loaded (they should be), we must mark our chunks as dirty.
             if (minimumCoord != null && maximumCoord != null &&
-                    world.isAreaLoaded(minimumCoord, maximumCoord)) {
+                world.isAreaLoaded(minimumCoord, maximumCoord)) {
                 int minChunkX = minimumCoord.getX() >> 4;
                 int minChunkZ = minimumCoord.getZ() >> 4;
                 int maxChunkX = maximumCoord.getX() >> 4;
@@ -619,7 +620,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         if (minimumCoord == null || maximumCoord == null) {
             return false;
         }
-        return x >= minimumCoord.getX() && x <= maximumCoord.getX() && y >= minimumCoord.getY() && y <= maximumCoord.getY() && z >= minimumCoord.getZ() && z <= maximumCoord.getZ();
+        return x >= minimumCoord.getX() && x <= maximumCoord.getX() && y >= minimumCoord.getY() &&
+               y <= maximumCoord.getY() && z >= minimumCoord.getZ() && z <= maximumCoord.getZ();
     }
 
     @Override
@@ -671,7 +673,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
                         otherController.getPartsListString()
                 );
                 throw new IllegalArgumentException("[" + (world.isRemote ? "CLIENT" : "SERVER") + "] " +
-                        "Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
+                                                   "Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
             }
 
         }

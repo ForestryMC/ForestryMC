@@ -17,5 +17,9 @@ import forestry.api.mail.ITradeStationInfo;
 import javax.annotation.Nullable;
 
 public interface ILetterInfoReceiver {
-    void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo);
+    void handleLetterInfoUpdate(
+            EnumAddressee type,
+            @Nullable IMailAddress address,
+            @Nullable ITradeStationInfo tradeInfo
+    );
 }

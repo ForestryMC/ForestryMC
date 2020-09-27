@@ -19,7 +19,12 @@ public class BackpackStowEvent extends BackpackEvent {
 
     public final ItemStack stackToStow;
 
-    public BackpackStowEvent(PlayerEntity player, IBackpackDefinition backpackDefinition, IInventory backpackInventory, ItemStack stackToStow) {
+    public BackpackStowEvent(
+            PlayerEntity player,
+            IBackpackDefinition backpackDefinition,
+            IInventory backpackInventory,
+            ItemStack stackToStow
+    ) {
         super(player, backpackDefinition, backpackInventory);
         this.stackToStow = stackToStow;
     }

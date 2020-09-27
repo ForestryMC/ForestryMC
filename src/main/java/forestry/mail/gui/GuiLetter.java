@@ -107,7 +107,8 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
                 text.advanceLine();
             } else if (scanCode == GLFW.GLFW_KEY_UP) {
                 text.regressLine();
-            } else if (text.moreLinesAllowed() || scanCode == GLFW.GLFW_KEY_DELETE || scanCode == GLFW.GLFW_KEY_BACKSLASH) {
+            } else if (text.moreLinesAllowed() || scanCode == GLFW.GLFW_KEY_DELETE ||
+                       scanCode == GLFW.GLFW_KEY_BACKSLASH) {
                 this.text.keyPressed(key, scanCode, modifiers);
             }
             return true;

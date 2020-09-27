@@ -29,7 +29,12 @@ public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
         // Player inventory
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
-                addSlot(new SlotGeneticFilter(playerInventory, column + row * 9 + 9, xInv + column * 18, yInv + row * 18));
+                addSlot(new SlotGeneticFilter(
+                        playerInventory,
+                        column + row * 9 + 9,
+                        xInv + column * 18,
+                        yInv + row * 18
+                ));
             }
         }
         // Player hotbar

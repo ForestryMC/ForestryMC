@@ -42,12 +42,54 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
     private static final EnumMap<Direction, VoxelShape> SHAPE_FOR_DIRECTIONS = new EnumMap<>(Direction.class);
 
     static {
-        SHAPE_FOR_DIRECTIONS.put(Direction.EAST, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 6, 16, 16), Block.makeCuboidShape(6, 2, 2, 10, 14, 14), Block.makeCuboidShape(10, 4, 4, 16, 12, 12)));
-        SHAPE_FOR_DIRECTIONS.put(Direction.WEST, VoxelShapes.or(Block.makeCuboidShape(0, 4, 4, 6, 12, 12), Block.makeCuboidShape(6, 2, 2, 10, 14, 14), Block.makeCuboidShape(10, 0, 0, 16, 16, 16)));
-        SHAPE_FOR_DIRECTIONS.put(Direction.SOUTH, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 16, 6), Block.makeCuboidShape(2, 2, 6, 14, 14, 10), Block.makeCuboidShape(4, 4, 10, 12, 12, 16)));
-        SHAPE_FOR_DIRECTIONS.put(Direction.NORTH, VoxelShapes.or(Block.makeCuboidShape(4, 4, 0, 12, 12, 6), Block.makeCuboidShape(2, 2, 6, 14, 14, 10), Block.makeCuboidShape(0, 0, 10, 16, 16, 16)));
-        SHAPE_FOR_DIRECTIONS.put(Direction.UP, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 6, 16), Block.makeCuboidShape(2, 6, 2, 14, 10, 14), Block.makeCuboidShape(4, 10, 4, 12, 16, 12)));
-        SHAPE_FOR_DIRECTIONS.put(Direction.DOWN, VoxelShapes.or(Block.makeCuboidShape(0, 10, 0, 16, 16, 16), Block.makeCuboidShape(2, 6, 2, 14, 10, 14), Block.makeCuboidShape(4, 0, 4, 12, 6, 12)));
+        SHAPE_FOR_DIRECTIONS.put(
+                Direction.EAST,
+                VoxelShapes.or(
+                        Block.makeCuboidShape(0, 0, 0, 6, 16, 16),
+                        Block.makeCuboidShape(6, 2, 2, 10, 14, 14),
+                        Block.makeCuboidShape(10, 4, 4, 16, 12, 12)
+                )
+        );
+        SHAPE_FOR_DIRECTIONS.put(
+                Direction.WEST,
+                VoxelShapes.or(
+                        Block.makeCuboidShape(0, 4, 4, 6, 12, 12),
+                        Block.makeCuboidShape(6, 2, 2, 10, 14, 14),
+                        Block.makeCuboidShape(10, 0, 0, 16, 16, 16)
+                )
+        );
+        SHAPE_FOR_DIRECTIONS.put(
+                Direction.SOUTH,
+                VoxelShapes.or(
+                        Block.makeCuboidShape(0, 0, 0, 16, 16, 6),
+                        Block.makeCuboidShape(2, 2, 6, 14, 14, 10),
+                        Block.makeCuboidShape(4, 4, 10, 12, 12, 16)
+                )
+        );
+        SHAPE_FOR_DIRECTIONS.put(
+                Direction.NORTH,
+                VoxelShapes.or(
+                        Block.makeCuboidShape(4, 4, 0, 12, 12, 6),
+                        Block.makeCuboidShape(2, 2, 6, 14, 14, 10),
+                        Block.makeCuboidShape(0, 0, 10, 16, 16, 16)
+                )
+        );
+        SHAPE_FOR_DIRECTIONS.put(
+                Direction.UP,
+                VoxelShapes.or(
+                        Block.makeCuboidShape(0, 0, 0, 16, 6, 16),
+                        Block.makeCuboidShape(2, 6, 2, 14, 10, 14),
+                        Block.makeCuboidShape(4, 10, 4, 12, 16, 12)
+                )
+        );
+        SHAPE_FOR_DIRECTIONS.put(
+                Direction.DOWN,
+                VoxelShapes.or(
+                        Block.makeCuboidShape(0, 10, 0, 16, 16, 16),
+                        Block.makeCuboidShape(2, 6, 2, 14, 10, 14),
+                        Block.makeCuboidShape(4, 0, 4, 12, 6, 12)
+                )
+        );
     }
 
     public BlockEngine(BlockTypeEngine blockType) {
@@ -56,7 +98,8 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
-        if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null && !ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+        if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null &&
+            !ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
             return;
         }
         super.fillItemGroup(group, stacks);

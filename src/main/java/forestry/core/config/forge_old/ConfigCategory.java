@@ -229,7 +229,11 @@ public class ConfigCategory implements Map<String, Property> {
         if (comment != null && !comment.isEmpty()) {
             write(out, pad0, COMMENT_SEPARATOR);
             write(out, pad0, "# ", name);
-            write(out, pad0, "#--------------------------------------------------------------------------------------------------------#");
+            write(
+                    out,
+                    pad0,
+                    "#--------------------------------------------------------------------------------------------------------#"
+            );
             Splitter splitter = Splitter.onPattern("\r?\n");
 
             for (String line : splitter.split(comment)) {

@@ -26,10 +26,10 @@ public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 
     public BlockForestryDoor(EnumForestryWoodType woodType) {
         super(Block.Properties.create(Material.WOOD)
-                .hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-                .sound(SoundType.WOOD)
-                .harvestTool(ToolType.AXE)
-                .harvestLevel(0));
+                              .hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+                              .sound(SoundType.WOOD)
+                              .harvestTool(ToolType.AXE)
+                              .harvestLevel(0));
         this.woodType = woodType;
     }
 

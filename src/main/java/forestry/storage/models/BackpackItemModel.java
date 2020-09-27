@@ -24,7 +24,8 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class BackpackItemModel extends AbstractItemModel {
-    private static ImmutableMap<EnumBackpackType, ImmutableMap<BackpackMode, IBakedModel>> cachedBakedModels = ImmutableMap.of();
+    private static ImmutableMap<EnumBackpackType, ImmutableMap<BackpackMode, IBakedModel>> cachedBakedModels = ImmutableMap
+            .of();
 
     public BackpackItemModel() {
     }
@@ -39,7 +40,14 @@ public class BackpackItemModel extends AbstractItemModel {
     private static class Geometry implements IModelGeometry<BackpackItemModel.Geometry> {
 
         @Override
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+        public IBakedModel bake(
+                IModelConfiguration owner,
+                ModelBakery bakery,
+                Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
+                IModelTransform modelTransform,
+                ItemOverrideList overrides,
+                ResourceLocation modelLocation
+        ) {
             if (cachedBakedModels.isEmpty()) {
                 ImmutableMap.Builder<EnumBackpackType, ImmutableMap<BackpackMode, IBakedModel>> modelBuilder = new ImmutableMap.Builder<>();
                 for (EnumBackpackType backpackType : EnumBackpackType.values()) {
@@ -58,7 +66,11 @@ public class BackpackItemModel extends AbstractItemModel {
         }
 
         @Override
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+        public Collection<RenderMaterial> getTextures(
+                IModelConfiguration owner,
+                Function<ResourceLocation, IUnbakedModel> modelGetter,
+                Set<Pair<String, String>> missingTextureErrors
+        ) {
             return ImmutableList.of();
         }
     }
@@ -73,7 +85,10 @@ public class BackpackItemModel extends AbstractItemModel {
         }
 
         @Override
-        public BackpackItemModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+        public BackpackItemModel.Geometry read(
+                JsonDeserializationContext deserializationContext,
+                JsonObject modelContents
+        ) {
             return new BackpackItemModel.Geometry();
         }
     }

@@ -16,5 +16,10 @@ public interface IAlleleGroupBuilder<V> {
 
     IAlleleGroupBuilder<V> addChromosome(IChromosomeType type, Predicate<V> validator);
 
-    IAlleleGroupBuilder<V> addChromosome(IChromosomeType type, V defaultValue, Predicate<V> validator, Function<V, String> nameSupplier);
+    IAlleleGroupBuilder<V> addChromosome(
+            IChromosomeType type,
+            V defaultValue,
+            Predicate<V> validator,
+            Function<V, String> nameSupplier
+    );
 }

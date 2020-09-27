@@ -79,13 +79,23 @@ public class ItemGroupForestry extends ItemGroup {
                 }
                 break;
             case 2:
-                return BeeManager.beeRoot.getTypes().createStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
+                return BeeManager.beeRoot.getTypes().createStack(
+                        new Bee(BeeDefinition.FOREST.getGenome()),
+                        EnumBeeType.DRONE
+                );
             case 3:
-                return TreeManager.treeRoot.getTypes().createStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
+                return TreeManager.treeRoot.getTypes().createStack(
+                        new Tree(TreeDefinition.Oak.getGenome()),
+                        EnumGermlingType.SAPLING
+                );
             case 4:
-                return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
+                return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone
+                        .getGenome()), EnumFlutterType.BUTTERFLY);
             default:
-                iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizer_compound"));
+                iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(
+                        Constants.MOD_ID,
+                        "fertilizer_compound"
+                ));
                 break;
         }
         if (iconItem == null) {

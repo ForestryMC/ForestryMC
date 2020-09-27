@@ -359,7 +359,7 @@ public class ModuleApiculture extends BlankForestryModule {
                 Blocks.CORNFLOWER,
                 Blocks.WITHER_ROSE,
                 Blocks.LILY_OF_THE_VALLEY,
-        };
+                };
         Block[] pottedStandardFlowers = new Block[]{
                 Blocks.POTTED_POPPY,
                 Blocks.POTTED_BLUE_ORCHID,
@@ -373,7 +373,7 @@ public class ModuleApiculture extends BlankForestryModule {
                 Blocks.POTTED_CORNFLOWER,
                 Blocks.POTTED_LILY_OF_THE_VALLEY,
                 Blocks.POTTED_WITHER_ROSE,
-        };
+                };
 
         // Register plantable plants
         String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};

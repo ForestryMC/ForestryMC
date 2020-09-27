@@ -29,13 +29,19 @@ public class ImageContent extends BookContent<Drawable> {
     }
 
     @Override
-    public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+    public boolean addElements(
+            IElementGroup page,
+            IGuiElementFactory factory,
+            @Nullable BookContent previous,
+            @Nullable IGuiElement previousElement,
+            int pageHeight
+    ) {
         if (data == null) {
             return false;
         }
         if (center) {
             page.pane(page.getWidth(), pageHeight - page.getHeight())
-                    .add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
+                .add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
         } else {
             page.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
         }

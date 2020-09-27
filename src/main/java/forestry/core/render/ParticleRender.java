@@ -71,7 +71,11 @@ public class ParticleRender {
         // At 32+ distance, have no bee particles. Make more particles up close.
         BlockPos playerPosition = Minecraft.getInstance().player.getPosition();
         //TODO - correct?
-        double playerDistanceSq = playerPosition.distanceSq(new Vector3i(particleStart.x, particleStart.y, particleStart.z));
+        double playerDistanceSq = playerPosition.distanceSq(new Vector3i(
+                particleStart.x,
+                particleStart.y,
+                particleStart.z
+        ));
         if (world.rand.nextInt(1024) < playerDistanceSq) {
             return;
         }
@@ -82,7 +86,11 @@ public class ParticleRender {
 
         if (housing instanceof IHiveTile) {
             if (((IHiveTile) housing).isAngry() || randomInt >= 85) {
-                List<LivingEntity> entitiesInRange = AlleleEffect.getEntitiesInRange(genome, housing, LivingEntity.class);
+                List<LivingEntity> entitiesInRange = AlleleEffect.getEntitiesInRange(
+                        genome,
+                        housing,
+                        LivingEntity.class
+                );
                 if (!entitiesInRange.isEmpty()) {
                     LivingEntity entity = entitiesInRange.get(world.rand.nextInt(entitiesInRange.size()));
                     Particle particle = new ParticleBeeTargetEntity(world, particleStart, entity, color);
@@ -114,7 +122,13 @@ public class ParticleRender {
         //		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
     }
 
-    public static void addClimateParticles(World worldIn, BlockPos pos, Random rand, EnumTemperature temperature, EnumHumidity humidity) {
+    public static void addClimateParticles(
+            World worldIn,
+            BlockPos pos,
+            Random rand,
+            EnumTemperature temperature,
+            EnumHumidity humidity
+    ) {
         if (!shouldSpawnParticle(worldIn)) {
             return;
         }
@@ -123,9 +137,11 @@ public class ParticleRender {
                 Direction facing = Direction.Plane.HORIZONTAL.random(rand);
                 int xOffset = facing.getXOffset();
                 int zOffset = facing.getZOffset();
-                double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+                double x = pos.getX() + 0.5 +
+                           (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
                 double y = pos.getY() + (0.75 + rand.nextFloat() * 14.5) / 16.0;
-                double z = pos.getZ() + 0.5 + (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+                double z = pos.getZ() + 0.5 +
+                           (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
                 if (rand.nextBoolean()) {
                     ParticleRender.addEntityClimateParticle(worldIn, x, y, z, temperature.color);
                 } else {
@@ -154,9 +170,11 @@ public class ParticleRender {
                 Direction facing = Direction.Plane.HORIZONTAL.random(rand);
                 int xOffset = facing.getXOffset();
                 int zOffset = facing.getZOffset();
-                double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+                double x = pos.getX() + 0.5 +
+                           (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
                 double y = pos.getY() + (0.75 + rand.nextFloat() * 14.5) / 16.0;
-                double z = pos.getZ() + 0.5 + (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+                double z = pos.getZ() + 0.5 +
+                           (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
                 ParticleRender.addEntityTransformParticle(worldIn, x, y, z);
             }
         }
@@ -189,7 +207,12 @@ public class ParticleRender {
         }
 
         ParticleManager effectRenderer = Minecraft.getInstance().particles;
-        effectRenderer.addEffect(new ParticleSnow(WorldUtils.asClient(world), x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()));
+        effectRenderer.addEffect(new ParticleSnow(
+                WorldUtils.asClient(world),
+                x + world.rand.nextGaussian(),
+                y,
+                z + world.rand.nextGaussian()
+        ));
     }
 
     public static void addEntityIgnitionFX(ClientWorld world, double x, double y, double z) {
@@ -244,7 +267,15 @@ public class ParticleRender {
         double zSpeed = rand.nextFloat() * (float) k;
         ParticleManager effectRenderer = Minecraft.getInstance().particles;
         //TODO particle data
-        Particle particle = effectRenderer.addParticle(RedstoneParticleData.REDSTONE_DUST, xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
+        Particle particle = effectRenderer.addParticle(
+                RedstoneParticleData.REDSTONE_DUST,
+                xPos,
+                yPos,
+                zPos,
+                xSpeed,
+                ySpeed,
+                zSpeed
+        );
         if (particle != null) {
             effectRenderer.addEffect(particle);
         }

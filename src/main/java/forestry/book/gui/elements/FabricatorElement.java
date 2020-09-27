@@ -38,9 +38,9 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
                 0,
                 0,
                 Stream.of(stacks)
-                        .map(FabricatorRecipeManager::getRecipes)
-                        .flatMap(Collection::stream)
-                        .toArray(IFabricatorRecipe[]::new)
+                      .map(FabricatorRecipeManager::getRecipes)
+                      .flatMap(Collection::stream)
+                      .toArray(IFabricatorRecipe[]::new)
         );
     }
 
@@ -81,7 +81,8 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
         }
 
         if (!smeltingInput.isEmpty()) {
-            selectedElement.add(new IngredientElement(1, 6, new CompoundIngredient(smeltingInput) {}));
+            selectedElement.add(new IngredientElement(1, 6, new CompoundIngredient(smeltingInput) {
+            }));
         }
     }
 

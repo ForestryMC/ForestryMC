@@ -32,7 +32,14 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
         this.entity = entity;
     }
 
-    protected ContainerEntity(int windowId, ContainerType<?> type, T entity, PlayerInventory playerInventory, int xInv, int yInv) {
+    protected ContainerEntity(
+            int windowId,
+            ContainerType<?> type,
+            T entity,
+            PlayerInventory playerInventory,
+            int xInv,
+            int yInv
+    ) {
         this(windowId, type, entity);
         addPlayerInventory(playerInventory, xInv, yInv);
     }

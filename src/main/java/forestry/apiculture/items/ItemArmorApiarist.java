@@ -105,7 +105,7 @@ public class ItemArmorApiarist extends ArmorItem {
                 if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
                     return LazyOptional.of(capability::getDefaultInstance);
                 } else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-                        slot == EquipmentSlotType.HEAD) {
+                           slot == EquipmentSlotType.HEAD) {
                     return LazyOptional.of(capability::getDefaultInstance);
                 }
                 return LazyOptional.empty();

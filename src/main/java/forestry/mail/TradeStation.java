@@ -44,7 +44,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
     public static final short SLOT_RECEIVE_BUFFER_COUNT = 15;
     public static final short SLOT_SEND_BUFFER = 30;
     public static final short SLOT_SEND_BUFFER_COUNT = 10;
-    public static final int SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
+    public static final int SLOT_SIZE =
+            SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT +
+            SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
 
     private GameProfile owner;
     private IMailAddress address;
@@ -369,8 +371,8 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
                 ItemStack buffer = inventory.getStackInSlot(i);
 
                 if (!buffer.isEmpty() &&
-                        buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD)) &&
-                        ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
+                    buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD)) &&
+                    ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
 
                     ItemStack decrease = inventory.decrStackSize(i, toRemove);
                     toRemove -= decrease.getCount();

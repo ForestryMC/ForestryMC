@@ -35,9 +35,18 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology implements 
 
     @Override
     public void registerModels(ModelRegistryEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(LepidopterologyEntities.BUTTERFLY.entityType(), ButterflyEntityRenderer::new);
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_ge"), new ButterflyItemModel.Loader());
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "butterfly_cocoon"), new CocoonItemModel.Loader());
+        RenderingRegistry.registerEntityRenderingHandler(
+                LepidopterologyEntities.BUTTERFLY.entityType(),
+                ButterflyEntityRenderer::new
+        );
+        ModelLoaderRegistry.registerLoader(
+                new ResourceLocation(Constants.MOD_ID, "butterfly_ge"),
+                new ButterflyItemModel.Loader()
+        );
+        ModelLoaderRegistry.registerLoader(
+                new ResourceLocation(Constants.MOD_ID, "butterfly_cocoon"),
+                new CocoonItemModel.Loader()
+        );
         AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
             ImmutableList.Builder<IBakedModel> models = new ImmutableList.Builder<>();
             for (int age = 0; age < ItemButterflyGE.MAX_AGE; age++) {

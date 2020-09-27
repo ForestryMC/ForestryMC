@@ -31,10 +31,10 @@ public abstract class ForestryFluid extends FlowingFluid {
     protected FluidAttributes createAttributes() {
         ResourceLocation[] resources = definition.getProperties().resources;
         return FluidAttributes.builder(resources[0], resources[1])
-                .density(definition.getProperties().density)
-                .viscosity(definition.getProperties().viscosity)
-                .temperature(definition.getProperties().temperature)
-                .build(this);
+                              .density(definition.getProperties().density)
+                              .viscosity(definition.getProperties().viscosity)
+                              .temperature(definition.getProperties().temperature)
+                              .build(this);
     }
 
     @Override

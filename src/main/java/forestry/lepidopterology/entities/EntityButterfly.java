@@ -97,8 +97,8 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
     private Vector3d flightTarget;
     private int exhaustion;
     private IButterfly contained = ButterflyHelper.getKaryotype()
-            .getDefaultTemplate()
-            .toIndividual(ButterflyHelper.getRoot());
+                                                  .getDefaultTemplate()
+                                                  .toIndividual(ButterflyHelper.getRoot());
     @Nullable
     private IIndividual pollen;
 
@@ -481,7 +481,8 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
         IIndividual pollen = getPollen();
         if (pollen != null) {
             IRootDefinition<? extends IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper()
-                    .getSpeciesRoot(pollen);
+                                                                                                        .getSpeciesRoot(
+                                                                                                                pollen);
             if (!definition.isPresent()) {
                 return;
             }

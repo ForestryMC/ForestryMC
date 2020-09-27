@@ -37,7 +37,14 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
     private final int duration;
     private final float chance;
 
-    public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration, int throttle, float chance) {
+    public AlleleEffectPotion(
+            String name,
+            boolean isDominant,
+            Effect potion,
+            int duration,
+            int throttle,
+            float chance
+    ) {
         super(name, isDominant, throttle, true, false);
         this.potion = potion;
         this.duration = duration;
@@ -94,7 +101,13 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
             super.doFX(genome, storedData, housing);
         } else {
             Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
-            ParticleRender.addEntityPotionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z, potionFXColor);
+            ParticleRender.addEntityPotionFX(
+                    world,
+                    beeFXCoordinates.x,
+                    beeFXCoordinates.y + 0.5,
+                    beeFXCoordinates.z,
+                    potionFXColor
+            );
         }
         return storedData;
     }

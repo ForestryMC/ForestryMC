@@ -52,7 +52,12 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 
             drawHeader(transform, new TranslationTextComponent("for.gui.energy"), x + 22, y + 8);
 
-            drawSubheader(transform, new TranslationTextComponent("for.gui.currentOutput").appendString(":"), x + 22, y + 20);
+            drawSubheader(
+                    transform,
+                    new TranslationTextComponent("for.gui.currentOutput").appendString(":"),
+                    x + 22,
+                    y + 20
+            );
             drawText(transform, Config.energyDisplayMode.formatRate(tile.getCurrentOutput()), x + 22, y + 32);
 
             drawSubheader(transform, new TranslationTextComponent("for.gui.stored").appendString(":"), x + 22, y + 44);

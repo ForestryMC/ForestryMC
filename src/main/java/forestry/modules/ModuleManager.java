@@ -98,9 +98,9 @@ public class ModuleManager implements IModuleManager {
         Set<IForestryModule> modulesToLoad = new HashSet<>();
 
         ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values()
-                .stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList()));
+                                                                                .stream()
+                                                                                .flatMap(Collection::stream)
+                                                                                .collect(Collectors.toList()));
 
         for (IModuleContainer container : moduleContainers.values()) {
             String containerID = container.getID();
@@ -111,7 +111,7 @@ public class ModuleManager implements IModuleManager {
             config.addCustomCategoryComment(
                     CONFIG_CATEGORY,
                     "Disabling these modules can greatly change how the mod functions.\n"
-                            + "Your mileage may vary, please report any issues."
+                    + "Your mileage may vary, please report any issues."
             );
             IForestryModule coreModule = getModuleCore(containerModules);
             if (coreModule != null) {
@@ -236,9 +236,9 @@ public class ModuleManager implements IModuleManager {
         CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
 
         loadedModules.stream()
-                .map(IForestryModule::register)
-                .filter(Objects::nonNull)
-                .forEach(dispatcher::register);
+                     .map(IForestryModule::register)
+                     .filter(Objects::nonNull)
+                     .forEach(dispatcher::register);
     }
 
     public static Set<String> getLootPoolNames() {

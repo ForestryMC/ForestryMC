@@ -19,7 +19,11 @@ import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.inventory.IInventory;
 
 public abstract class ContainerBeeHelper {
-    public static <T extends IInventory & IFilterSlotDelegate> void addSlots(ContainerForestry container, T inventory, boolean hasFrames) {
+    public static <T extends IInventory & IFilterSlotDelegate> void addSlots(
+            ContainerForestry container,
+            T inventory,
+            boolean hasFrames
+    ) {
         // Queen/Princess
         container.addSlot(new SlotFiltered(inventory, InventoryBeeHousing.SLOT_QUEEN, 29, 39));
 

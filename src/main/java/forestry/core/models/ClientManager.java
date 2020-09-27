@@ -183,7 +183,12 @@ public class ClientManager {
         }
 
         @Override
-        public int getColor(BlockState state, @Nullable IBlockDisplayReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+        public int getColor(
+                BlockState state,
+                @Nullable IBlockDisplayReader worldIn,
+                @Nullable BlockPos pos,
+                int tintIndex
+        ) {
             Block block = state.getBlock();
             if (block instanceof IColoredBlock && worldIn != null && pos != null) {
                 return ((IColoredBlock) block).colorMultiplier(state, worldIn, pos, tintIndex);
@@ -200,7 +205,12 @@ public class ClientManager {
         @Nullable
         private final BlockItem item;
 
-        private BlockModelEntry(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
+        private BlockModelEntry(
+                IBakedModel model,
+                Block block,
+                @Nullable BlockItem item,
+                Collection<BlockState> states
+        ) {
             this.model = model;
             this.block = block;
             this.item = item;

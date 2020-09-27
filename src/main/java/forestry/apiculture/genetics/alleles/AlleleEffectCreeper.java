@@ -85,7 +85,16 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
             }
 
             float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
-            world.playSound(null, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, pitch);
+            world.playSound(
+                    null,
+                    housingCoords.getX(),
+                    housingCoords.getY(),
+                    housingCoords.getZ(),
+                    SoundEvents.ENTITY_GENERIC_EXPLODE,
+                    SoundCategory.BLOCKS,
+                    4.0F,
+                    pitch
+            );
             storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
         }
 
@@ -103,7 +112,15 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
         }
 
         //TODO - check explosion mode right
-        world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
+        world.createExplosion(
+                null,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ(),
+                storedData.getInteger(indexExplosionForce),
+                false,
+                Explosion.Mode.NONE
+        );
     }
 
 }

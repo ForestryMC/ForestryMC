@@ -82,7 +82,7 @@ public class ItemResearchNote extends ItemForestry {
             for (IMutation mutation : container.getCombinations(allele0)) {
                 if (mutation.isPartner(allele1)) {
                     if (result == null
-                            || mutation.getTemplate()[0].getRegistryName().equals(result.getRegistryName())) {
+                        || mutation.getTemplate()[0].getRegistryName().equals(result.getRegistryName())) {
                         encoded = mutation;
                         break;
                     }
@@ -113,22 +113,23 @@ public class ItemResearchNote extends ItemForestry {
                 }
 
                 ITextComponent species1 = encoded.getFirstParent()
-                        .getDisplayName()
-                        .deepCopy()
-                        .mergeStyle(TextFormatting.YELLOW);
+                                                 .getDisplayName()
+                                                 .deepCopy()
+                                                 .mergeStyle(TextFormatting.YELLOW);
                 ITextComponent species2 = encoded.getSecondParent()
-                        .getDisplayName()
-                        .deepCopy()
-                        .mergeStyle(TextFormatting.YELLOW);
+                                                 .getDisplayName()
+                                                 .deepCopy()
+                                                 .mergeStyle(TextFormatting.YELLOW);
                 String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance())
-                        .toString()
-                        .toLowerCase();
-                ITextComponent mutationChance = new TranslationTextComponent("for.researchNote.chance." + mutationChanceKey)
+                                                           .toString()
+                                                           .toLowerCase();
+                ITextComponent mutationChance = new TranslationTextComponent(
+                        "for.researchNote.chance." + mutationChanceKey)
                         .mergeStyle(TextFormatting.DARK_BLUE);
                 ITextComponent speciesResult = encoded.getResultingSpecies()
-                        .getDisplayName()
-                        .deepCopy()
-                        .mergeStyle(TextFormatting.LIGHT_PURPLE);
+                                                      .getDisplayName()
+                                                      .deepCopy()
+                                                      .mergeStyle(TextFormatting.LIGHT_PURPLE);
 
                 tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
                 tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));

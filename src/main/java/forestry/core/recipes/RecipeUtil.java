@@ -192,10 +192,10 @@ public abstract class RecipeUtil {
             World world
     ) {    //TODO - is the stream() needed anymore?
         return world.getRecipeManager()
-                .getRecipes(IRecipeType.CRAFTING, inventory, world)
-                .stream()
-                .filter(recipe -> recipe.matches(inventory, world))
-                .collect(Collectors.toList());
+                    .getRecipes(IRecipeType.CRAFTING, inventory, world)
+                    .stream()
+                    .filter(recipe -> recipe.matches(inventory, world))
+                    .collect(Collectors.toList());
     }
 
     //TODO - smelting needs to be json now?

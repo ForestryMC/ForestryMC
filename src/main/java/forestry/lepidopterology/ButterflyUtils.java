@@ -10,8 +10,20 @@ import net.minecraft.world.World;
 public class ButterflyUtils {
 
     static boolean attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-        MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
-        Log.trace("Spawned a butterfly '{}' at {}/{}/{}.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
+        MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(
+                world,
+                butterfly.copy(),
+                pos.getX(),
+                pos.getY() + 0.1f,
+                pos.getZ()
+        );
+        Log.trace(
+                "Spawned a butterfly '{}' at {}/{}/{}.",
+                butterfly.getDisplayName(),
+                pos.getX(),
+                pos.getY(),
+                pos.getZ()
+        );
         return entityLiving != null;
     }
 

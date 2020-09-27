@@ -88,5 +88,10 @@ public interface IGeneticSaveHandler {
 
     CompoundNBT getIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root);
 
-    void setIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root, CompoundNBT compound);
+    void setIndividualData(
+            ItemStack itemStack,
+            IOrganismType type,
+            IIndividualRoot<IIndividual> root,
+            CompoundNBT compound
+    );
 }

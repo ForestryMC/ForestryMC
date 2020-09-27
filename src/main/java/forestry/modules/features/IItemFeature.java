@@ -18,7 +18,8 @@ public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider
     default I item() {
         I item = getItem();
         if (item == null) {
-            throw new IllegalStateException("Called feature getter method before content creation was called in the pre init.");
+            throw new IllegalStateException(
+                    "Called feature getter method before content creation was called in the pre init.");
         }
         return item;
     }

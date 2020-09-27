@@ -52,7 +52,13 @@ public abstract class ProductListWrapper implements IDynamicProductList, IMutabl
         }
 
         @Override
-        public void addProducts(IBlockReader reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+        public void addProducts(
+                IBlockReader reader,
+                BlockPos pos,
+                NonNullList<ItemStack> stacks,
+                Function<Product, Float> modifier,
+                Random rand
+        ) {
             list.addProducts(reader, pos, stacks, modifier, rand);
         }
 
@@ -91,17 +97,20 @@ public abstract class ProductListWrapper implements IDynamicProductList, IMutabl
 
         @Override
         public Collection<Product> getPossibleProducts() {
-            throw new IllegalStateException("This product list is not baked yet, you can not get any product information from it.");
+            throw new IllegalStateException(
+                    "This product list is not baked yet, you can not get any product information from it.");
         }
 
         @Override
         public Collection<Product> getConstantProducts() {
-            throw new IllegalStateException("This product list is not baked yet, you can not get any product information from it.");
+            throw new IllegalStateException(
+                    "This product list is not baked yet, you can not get any product information from it.");
         }
 
         @Override
         public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
-            throw new IllegalStateException("This product list is not baked yet, you can not get any product information from it.");
+            throw new IllegalStateException(
+                    "This product list is not baked yet, you can not get any product information from it.");
         }
 
         @Override

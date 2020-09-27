@@ -47,19 +47,41 @@ public class GuiUtil {
     }
 
     //TODO hopefully this is client side...
-    public static void drawToolTips(MatrixStack transform, IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
+    public static void drawToolTips(
+            MatrixStack transform,
+            IGuiSizable gui,
+            @Nullable IToolTipProvider provider,
+            ToolTip toolTips,
+            int mouseX,
+            int mouseY
+    ) {
         if (!toolTips.isEmpty()) {
             RenderSystem.pushMatrix();
             if (provider == null || provider.isRelativeToGui()) {
                 RenderSystem.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
             }
             MainWindow window = Minecraft.getInstance().getMainWindow();    //TODO - more resolution stuff to check
-            GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getScaledWidth(), window.getScaledHeight(), -1, gui.getMC().fontRenderer);
+            GuiUtils.drawHoveringText(
+                    transform,
+                    toolTips.getLines(),
+                    mouseX,
+                    mouseY,
+                    window.getScaledWidth(),
+                    window.getScaledHeight(),
+                    -1,
+                    gui.getMC().fontRenderer
+            );
             RenderSystem.popMatrix();
         }
     }
 
-    public static void drawToolTips(MatrixStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
+    public static void drawToolTips(
+            MatrixStack transform,
+            IGuiSizable gui,
+            Collection<?> objects,
+            int mouseX,
+            int mouseY
+    ) {
         for (Object obj : objects) {
             if (!(obj instanceof IToolTipProvider)) {
                 continue;

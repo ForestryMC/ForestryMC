@@ -49,7 +49,9 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
         IAlleleBeeSpecies secondarySpecies = bee.getGenome().getInactiveAllele(BeeChromosomes.SPECIES);
 
         container.label(
-                new TranslationTextComponent("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"),
+                new TranslationTextComponent(
+                        "for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") +
+                        "_species.name"),
                 GuiElementAlignment.TOP_CENTER,
                 GuiElementFactory.INSTANCE.databaseTitle
         );
@@ -113,8 +115,8 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
         Function<Boolean, ITextComponent> flyer = active ->
                 StringUtil.readableBoolean(
                         active
-                                ? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN)
-                                : bee.getGenome().getInactiveValue(BeeChromosomes.TOLERATES_RAIN),
+                        ? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN)
+                        : bee.getGenome().getInactiveValue(BeeChromosomes.TOLERATES_RAIN),
                         yes,
                         no
                 );
@@ -123,8 +125,8 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
         Function<Boolean, ITextComponent> cave = active ->
                 StringUtil.readableBoolean(
                         active
-                                ? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING)
-                                : bee.getGenome().getInactiveValue(BeeChromosomes.CAVE_DWELLING),
+                        ? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING)
+                        : bee.getGenome().getInactiveValue(BeeChromosomes.CAVE_DWELLING),
                         yes,
                         no
                 );
@@ -146,6 +148,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
     @Override
     public ItemStack getIconStack() {
-        return BeeDefinition.MEADOWS.getMemberStack(mode == DatabaseMode.ACTIVE ? EnumBeeType.PRINCESS : EnumBeeType.DRONE);
+        return BeeDefinition.MEADOWS.getMemberStack(
+                mode == DatabaseMode.ACTIVE ? EnumBeeType.PRINCESS : EnumBeeType.DRONE);
     }
 }

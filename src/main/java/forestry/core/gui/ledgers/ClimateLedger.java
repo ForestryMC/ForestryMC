@@ -52,7 +52,8 @@ public class ClimateLedger extends Ledger {
         drawSubheader(transform, new TranslationTextComponent("for.gui.temperature").appendString(":"), x + 22, y + 20);
         drawText(
                 transform,
-                AlleleManager.climateHelper.toDisplay(temperature).getString() + ' ' + StringUtil.floatAsPercent(tile.getExactTemperature()),
+                AlleleManager.climateHelper.toDisplay(temperature).getString() + ' ' +
+                StringUtil.floatAsPercent(tile.getExactTemperature()),
                 x + 22,
                 y + 32
         );

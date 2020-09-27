@@ -37,8 +37,8 @@ public class CheckPollinatableTree implements ICheckPollinatable {
     @Override
     public boolean canMateWith(IIndividual pollen) {
         return pollen instanceof ITree &&
-                !isPollinated() &&
-                (ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
+               !isPollinated() &&
+               (ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
     }
 
     @Override

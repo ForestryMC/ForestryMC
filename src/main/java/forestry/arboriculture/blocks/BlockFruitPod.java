@@ -53,9 +53,9 @@ public class BlockFruitPod extends CocoaBlock {
 
     public BlockFruitPod(IAlleleFruit fruit) {
         super(BlockSapling.Properties.create(Material.PLANTS)
-                .tickRandomly()
-                .hardnessAndResistance(0.2f, 3.0f)
-                .sound(SoundType.WOOD));
+                                     .tickRandomly()
+                                     .hardnessAndResistance(0.2f, 3.0f)
+                                     .sound(SoundType.WOOD));
         this.fruit = fruit;
     }
 
@@ -64,7 +64,13 @@ public class BlockFruitPod extends CocoaBlock {
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+    public ItemStack getPickBlock(
+            BlockState state,
+            RayTraceResult target,
+            IBlockReader world,
+            BlockPos pos,
+            PlayerEntity player
+    ) {
         TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
         if (tile == null) {
             return ItemStack.EMPTY;
@@ -89,7 +95,14 @@ public class BlockFruitPod extends CocoaBlock {
     }
 
     @Override
-    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+    public boolean removedByPlayer(
+            BlockState state,
+            World world,
+            BlockPos pos,
+            PlayerEntity player,
+            boolean willHarvest,
+            FluidState fluid
+    ) {
         if (!world.isRemote) {
             TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
             if (tile != null) {

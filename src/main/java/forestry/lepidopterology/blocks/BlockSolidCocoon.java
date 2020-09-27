@@ -39,13 +39,13 @@ public class BlockSolidCocoon extends Block {
 
     public BlockSolidCocoon() {
         super(Block.Properties.create(MaterialCocoon.INSTANCE)
-                .harvestTool(ItemScoop.SCOOP)
-                .harvestLevel(0)
-                .hardnessAndResistance(0.5F)
-                .tickRandomly()
-                .sound(SoundType.GROUND));
+                              .harvestTool(ItemScoop.SCOOP)
+                              .harvestLevel(0)
+                              .hardnessAndResistance(0.5F)
+                              .tickRandomly()
+                              .sound(SoundType.GROUND));
         setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-                .with(AlleleButterflyCocoon.AGE, 0));
+                            .with(AlleleButterflyCocoon.AGE, 0));
     }
 
     @Override
@@ -89,7 +89,14 @@ public class BlockSolidCocoon extends Block {
     //	}
 
     @Override
-    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+    public boolean removedByPlayer(
+            BlockState state,
+            World world,
+            BlockPos pos,
+            PlayerEntity player,
+            boolean willHarvest,
+            FluidState fluid
+    ) {
         if (canHarvestBlock(state, world, pos, player)) {
             TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
                 NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
@@ -113,7 +120,14 @@ public class BlockSolidCocoon extends Block {
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            IWorld worldIn,
+            BlockPos currentPos,
+            BlockPos facingPos
+    ) {
         if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
             return state;
         }

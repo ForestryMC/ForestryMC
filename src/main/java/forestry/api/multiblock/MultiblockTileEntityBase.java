@@ -39,7 +39,11 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
     }
 
     @Override
-    public abstract void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord);
+    public abstract void onMachineAssembled(
+            IMultiblockController multiblockController,
+            BlockPos minCoord,
+            BlockPos maxCoord
+    );
 
     @Override
     public abstract void onMachineBroken();

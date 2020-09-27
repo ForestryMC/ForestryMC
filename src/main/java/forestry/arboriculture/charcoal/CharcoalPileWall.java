@@ -59,5 +59,4 @@ public class CharcoalPileWall implements ICharcoalPileWall {
         }
         return NonNullList.create();
     }
-
 }

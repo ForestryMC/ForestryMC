@@ -133,12 +133,18 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
             return false;
         }
 
-        IButterfly butterfly = ButterflyManager.butterflyRoot.getTypes().createIndividual(entityItem.getItem()).orElse(null);
+        IButterfly butterfly = ButterflyManager.butterflyRoot.getTypes().createIndividual(entityItem.getItem()).orElse(
+                null);
         if (butterfly == null) {
             return false;
         }
 
-        if (butterfly.canTakeFlight(entityItem.world, entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ())) {
+        if (butterfly.canTakeFlight(
+                entityItem.world,
+                entityItem.getPosX(),
+                entityItem.getPosY(),
+                entityItem.getPosZ()
+        )) {
             return false;
         }
 
@@ -147,7 +153,13 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
         }
 
         EntityUtil.spawnEntity(entityItem.world,
-                EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
+                EntityButterfly.create(
+                        LepidopterologyEntities.BUTTERFLY.entityType(),
+                        entityItem.world,
+                        butterfly,
+                        entityItem.getPosition()
+                ), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ()
+        );
         if (!entityItem.getItem().isEmpty()) {
             entityItem.getItem().shrink(1);
         } else {
@@ -221,7 +233,14 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
         BlockState blockState = world.getBlockState(pos);
         if (type == EnumFlutterType.COCOON) {
-            pos = ButterflyManager.butterflyRoot.plantCocoon(world, pos, flutter, player.getGameProfile(), getAge(stack), true);
+            pos = ButterflyManager.butterflyRoot.plantCocoon(
+                    world,
+                    pos,
+                    flutter,
+                    player.getGameProfile(),
+                    getAge(stack),
+                    true
+            );
             if (pos != BlockPos.ZERO) {
                 PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
                 NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -243,7 +262,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
                 nursery.setCaterpillar(flutter);
 
                 PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK,
-                        PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+                        PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState
+                );
                 NetworkUtil.sendNetworkPacket(packet, pos, world);
 
                 if (!player.isCreative()) {
@@ -304,10 +324,14 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
         IButterfly individual = ButterflyManager.butterflyRoot.getTypes().createIndividual(itemstack).orElse(null);
         String customKey = "for.butterflies.custom." + type.getName() + "."
-                + individual.getGenome().getPrimary().getLocalisationKey().replace("butterflies.species.", "");
+                           + individual.getGenome().getPrimary().getLocalisationKey().replace(
+                "butterflies.species.",
+                ""
+        );
         return ResourceUtil.tryTranslate(customKey, () -> {
             ITextComponent speciesString = individual.getDisplayName();
-            ITextComponent typeString = new TranslationTextComponent("for.butterflies.grammar." + type.getName() + ".type");
+            ITextComponent typeString = new TranslationTextComponent(
+                    "for.butterflies.grammar." + type.getName() + ".type");
             return new TranslationTextComponent("for.butterflies.grammar." + type.getName(), speciesString, typeString);
         });
     }

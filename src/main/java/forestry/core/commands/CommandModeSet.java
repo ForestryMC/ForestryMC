@@ -29,12 +29,12 @@ public final class CommandModeSet implements Command<CommandSource> {
 
     public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
         return Commands.literal("set").requires(PermLevel.ADMIN)
-                .then(Commands.argument("name", StringArgumentType.string())
-                        .suggests((ctx, builder) -> {
-                            Stream.of(modeHelper.getModeNames()).forEach(builder::suggest);
-                            return builder.buildFuture();
-                        })
-                        .executes(new CommandModeSet(modeHelper)));
+                       .then(Commands.argument("name", StringArgumentType.string())
+                                     .suggests((ctx, builder) -> {
+                                         Stream.of(modeHelper.getModeNames()).forEach(builder::suggest);
+                                         return builder.buildFuture();
+                                     })
+                                     .executes(new CommandModeSet(modeHelper)));
 
     }
 

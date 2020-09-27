@@ -13,7 +13,15 @@ import forestry.modules.features.ModFeatureRegistry;
 public class CoreTiles {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCore.class);
 
-    public static final FeatureTileType<TileAnalyzer> ANALYZER = REGISTRY.tile(TileAnalyzer::new, "analyzer", CoreBlocks.BASE.get(BlockTypeCoreTesr.ANALYZER)::collect);
-    public static final FeatureTileType<TileEscritoire> ESCRITOIRE = REGISTRY.tile(TileEscritoire::new, "escritoire", CoreBlocks.BASE.get(BlockTypeCoreTesr.ESCRITOIRE)::collect);
+    public static final FeatureTileType<TileAnalyzer> ANALYZER = REGISTRY.tile(
+            TileAnalyzer::new,
+            "analyzer",
+            CoreBlocks.BASE.get(BlockTypeCoreTesr.ANALYZER)::collect
+    );
+    public static final FeatureTileType<TileEscritoire> ESCRITOIRE = REGISTRY.tile(
+            TileEscritoire::new,
+            "escritoire",
+            CoreBlocks.BASE.get(BlockTypeCoreTesr.ESCRITOIRE)::collect
+    );
 
 }

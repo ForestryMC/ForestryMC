@@ -72,7 +72,10 @@ public enum ForestryFluids {
 
     static {
         for (ForestryFluids fluidDefinition : ForestryFluids.values()) {
-            tagToFluid.put(new ResourceLocation(Constants.MOD_ID, fluidDefinition.feature.getIdentifier()), fluidDefinition);
+            tagToFluid.put(
+                    new ResourceLocation(Constants.MOD_ID, fluidDefinition.feature.getIdentifier()),
+                    fluidDefinition
+            );
         }
     }
 
@@ -89,13 +92,13 @@ public enum ForestryFluids {
 
     ForestryFluids(Color particleColor, int density, int viscosity, int flammability) {
         this.feature = ModFeatureRegistry.get(ModuleFluids.class)
-                .fluid(name().toLowerCase(Locale.ENGLISH))
-                .flammability(flammability)
-                .viscosity(viscosity)
-                .density(density)
-                .temperature(getTemperature())
-                .particleColor(particleColor)
-                .create();
+                                         .fluid(name().toLowerCase(Locale.ENGLISH))
+                                         .flammability(flammability)
+                                         .viscosity(viscosity)
+                                         .density(density)
+                                         .temperature(getTemperature())
+                                         .particleColor(particleColor)
+                                         .create();
         this.tag = new ResourceLocation(Constants.MOD_ID, feature.getIdentifier());
     }
 

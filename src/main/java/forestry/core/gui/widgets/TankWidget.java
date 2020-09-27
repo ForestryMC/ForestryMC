@@ -90,7 +90,9 @@ public class TankWidget extends Widget {
                 ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
                 TextureAtlasSprite fluidStillSprite = null;
                 if (fluidStill != null) {
-                    fluidStillSprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+                    fluidStillSprite = Minecraft.getInstance()
+                                                .getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE)
+                                                .apply(fluidStill);
                 }
                 if (fluidStillSprite == null) {
                     fluidStillSprite = ResourceUtil.getMissingTexture();
@@ -163,7 +165,14 @@ public class TankWidget extends Widget {
         RenderSystem.color4f(red, green, blue, 1.0F);
     }
 
-    private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
+    private static void drawFluidTexture(
+            double xCoord,
+            double yCoord,
+            TextureAtlasSprite textureSprite,
+            int maskTop,
+            int maskRight,
+            double zLevel
+    ) {
         float uMin = textureSprite.getMinU();
         float uMax = textureSprite.getMaxU();
         float vMin = textureSprite.getMinV();

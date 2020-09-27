@@ -45,12 +45,14 @@ public class MutationConditionTimeLimited implements IMutationCondition {
         DayMonth now = new DayMonth();
 
         // If we are equal to start day, return 1.
-        if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == start.day && Calendar.getInstance().get(Calendar.MONTH) + 1 == start.month) {
+        if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == start.day &&
+            Calendar.getInstance().get(Calendar.MONTH) + 1 == start.month) {
             return 1;
         }
 
         // Equal to end date, return 1
-        if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == end.day && Calendar.getInstance().get(Calendar.MONTH) + 1 == end.month) {
+        if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == end.day &&
+            Calendar.getInstance().get(Calendar.MONTH) + 1 == end.month) {
             return 1;
         }
 

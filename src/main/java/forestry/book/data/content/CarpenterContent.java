@@ -24,7 +24,13 @@ public class CarpenterContent extends BookContent<CraftingData> {
     }
 
     @Override
-    public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+    public boolean addElements(
+            IElementGroup page,
+            IGuiElementFactory factory,
+            @Nullable BookContent previous,
+            @Nullable IGuiElement previousElement,
+            int pageHeight
+    ) {
         if (data == null || (data.stack.isEmpty() && data.stacks.length == 0)) {
             return false;
         }

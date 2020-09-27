@@ -54,7 +54,11 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
      * @return Copy of this inventory. Stacks are copies.
      */
     public InventoryAdapter copy() {
-        InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), "TEST_TITLE_PLEASE_IGNORE", inventory.getInventoryStackLimit());
+        InventoryAdapter copy = new InventoryAdapter(
+                inventory.getSizeInventory(),
+                "TEST_TITLE_PLEASE_IGNORE",
+                inventory.getInventoryStackLimit()
+        );
 
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             if (!inventory.getStackInSlot(i).isEmpty()) {

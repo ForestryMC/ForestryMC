@@ -76,7 +76,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
         window.add(new ClimateBarElement(61, 57, transformer, ClimateType.HUMIDITY));
 
         rangeBar = window.add(new ScrollBarElement(10, 17, 12, 58, SCROLLBAR_SLIDER))
-                .setParameters(this, 1, 16, 1);
+                         .setParameters(this, 1, 16, 1);
         rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
             tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range"));
             tooltip.add(new TranslationTextComponent(
@@ -88,15 +88,19 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 
         ElementGroup selectionPage = window.pane(8, 86, 164, 56);
         selectionPage.add(new SpeciesSelectionElement(135, 22, transformer));
-        selectionPage.translated("for.gui.habitat_former.climate.habitats").setAlign(GuiElementAlignment.TOP_CENTER).setLocation(
-                17,
-                3
-        );
+        selectionPage.translated("for.gui.habitat_former.climate.habitats")
+                     .setAlign(GuiElementAlignment.TOP_CENTER)
+                     .setLocation(
+                             17,
+                             3
+                     );
         selectionPage.add(new HabitatSelectionElement(67, 12, transformer));
-        selectionPage.translated("for.gui.habitat_former.climate.temperature").setAlign(GuiElementAlignment.TOP_CENTER).setLocation(
-                -49,
-                5
-        );
+        selectionPage.translated("for.gui.habitat_former.climate.temperature")
+                     .setAlign(GuiElementAlignment.TOP_CENTER)
+                     .setLocation(
+                             -49,
+                             5
+                     );
         selectionPage.drawable(7, 15, TEMPERATURE_FIELD);
         temperatureEdit = selectionPage.add(new TextEditElement(9, 17, 50, 10).setMaxLength(3));
         temperatureEdit.addSelfEventHandler(
@@ -104,10 +108,12 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
                 event -> setClimate(ClimateType.TEMPERATURE, temperatureEdit.getValue())
         );
         selectionPage.drawable(7, 39, HUMIDITY_FIELD);
-        selectionPage.translated("for.gui.habitat_former.climate.humidity").setAlign(GuiElementAlignment.TOP_CENTER).setLocation(
-                -49,
-                30
-        );
+        selectionPage.translated("for.gui.habitat_former.climate.humidity")
+                     .setAlign(GuiElementAlignment.TOP_CENTER)
+                     .setLocation(
+                             -49,
+                             30
+                     );
         humidityEdit = selectionPage.add(new TextEditElement(9, 41, 50, 10).setMaxLength(3));
         humidityEdit.addSelfEventHandler(
                 ElementEvent.LoseFocus.class,
@@ -123,11 +129,12 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
             humidityEdit.setValue(Integer.toString((int) (MathHelper.clamp(target.getHumidity(), 0.0F, 2.0F) * 100)));
         }
         if (temperatureEdit != null && !window.isFocused(temperatureEdit)) {
-            temperatureEdit.setValue(Integer.toString((int) (MathHelper.clamp(
-                    target.getTemperature(),
-                    0.0F,
-                    2.0F
-            ) * 100)));
+            temperatureEdit.setValue(Integer.toString((int) (
+                    MathHelper.clamp(
+                            target.getTemperature(),
+                            0.0F,
+                            2.0F
+                    ) * 100)));
         }
         if (rangeBar.getValue() != transformer.getRange()) {
             updateRange();

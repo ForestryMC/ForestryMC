@@ -56,19 +56,24 @@ public class PreviewHandlerClient {
         if (tickHelper.updateOnInterval(100)) {
             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
             if (stack.isEmpty()
-                    || !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
-                    || !ItemHabitatScreen.isValid(stack, player.world)
-                    || !ItemHabitatScreen.isPreviewModeActive(stack)) {
+                || !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
+                || !ItemHabitatScreen.isValid(stack, player.world)
+                || !ItemHabitatScreen.isPreviewModeActive(stack)) {
                 renderer.clearPreview();
                 return;
             }
             BlockPos currentPos = ItemHabitatScreen.getPosition(stack);
             if (currentPos == null
-                    || player.getDistanceSq(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
+                || player.getDistanceSq(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
                 renderer.clearPreview();
                 return;
             }
-            LazyOptional<IClimateTransformer> transformer = TileUtil.getInterface(world, currentPos, ClimateCapabilities.CLIMATE_TRANSFORMER, null);
+            LazyOptional<IClimateTransformer> transformer = TileUtil.getInterface(
+                    world,
+                    currentPos,
+                    ClimateCapabilities.CLIMATE_TRANSFORMER,
+                    null
+            );
             if (!transformer.isPresent()) {
                 renderer.clearPreview();
                 return;
@@ -157,7 +162,12 @@ public class PreviewHandlerClient {
             RenderSystem.pushMatrix();
             RenderSystem.translated(-playerX, -playerY, -playerZ);
             RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            RenderSystem.blendFuncSeparate(
+                    GlStateManager.SourceFactor.SRC_ALPHA,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                    GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ZERO
+            );
             RenderSystem.lineWidth(6.0F);
             RenderSystem.disableDepthTest();
 

@@ -24,8 +24,8 @@ public class CommandBee {
         ICommandModeHelper modeHelper = new BeeModeHelper();
 
         return Commands.literal("bee")
-                .then(CommandMode.register(modeHelper))
-                .then(CommandSaveStats.register(saveHelper, modeHelper))
-                .then(CommandBeeGive.register());
+                       .then(CommandMode.register(modeHelper))
+                       .then(CommandSaveStats.register(saveHelper, modeHelper))
+                       .then(CommandBeeGive.register());
     }
 }

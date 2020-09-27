@@ -61,7 +61,8 @@ public class AIButterflyMate extends AIButterflyInteract {
                     if (nursery.canNurse(entity.getButterfly())) {
                         nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(entity.world, nursery));
                         //Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
-                        if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getActiveValue(ButterflyChromosomes.FERTILITY)) {
+                        if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getActiveValue(
+                                ButterflyChromosomes.FERTILITY)) {
                             entity.setHealth(0);
                         }
                     }
@@ -109,7 +110,10 @@ public class AIButterflyMate extends AIButterflyInteract {
     @Nullable
     private EntityButterfly getNearbyMate() {
         float f = 8.0F;
-        List<EntityButterfly> nextButterflys = entity.world.getEntitiesWithinAABB(EntityButterfly.class, this.entity.getBoundingBox().expand(f, f, f));
+        List<EntityButterfly> nextButterflys = entity.world.getEntitiesWithinAABB(
+                EntityButterfly.class,
+                this.entity.getBoundingBox().expand(f, f, f)
+        );
         double d0 = Double.MAX_VALUE;
         EntityButterfly nextButterfly = null;
 

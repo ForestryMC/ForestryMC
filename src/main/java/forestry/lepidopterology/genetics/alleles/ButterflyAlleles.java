@@ -20,8 +20,10 @@ public class ButterflyAlleles {
     public static final IAlleleButterflyEffect butterflyNone = new AlleleButterflyEffectNone();
 
     static {
-        cocoonAlleles = Arrays.asList(cocoonDefault = new AlleleButterflyCocoon("default", false),
-                cocoonSilk = new AlleleButterflyCocoon("silk", false));
+        cocoonAlleles = Arrays.asList(
+                cocoonDefault = new AlleleButterflyCocoon("default", false),
+                cocoonSilk = new AlleleButterflyCocoon("silk", false)
+        );
     }
 
     public static void registerAlleles(IAlleleRegistry registry) {

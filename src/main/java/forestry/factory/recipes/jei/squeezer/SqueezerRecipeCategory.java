@@ -20,7 +20,17 @@ import net.minecraft.util.ResourceLocation;
 
 public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSqueezerRecipeWrapper> {
 
-    private static final int[][] INPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
+    private static final int[][] INPUTS = new int[][]{
+            {0, 0},
+            {1, 0},
+            {2, 0},
+            {0, 1},
+            {1, 1},
+            {2, 1},
+            {0, 2},
+            {1, 2},
+            {2, 2}
+    };
 
     private static final int craftOutputSlot = 0;
     private static final int craftInputSlot = 1;
@@ -39,7 +49,8 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
         this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER)
+                                                                                       .block()));
     }
 
     @Override
@@ -63,7 +74,11 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, AbstractSqueezerRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(
+            IRecipeLayout recipeLayout,
+            AbstractSqueezerRecipeWrapper recipeWrapper,
+            IIngredients ingredients
+    ) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 

@@ -145,7 +145,8 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
     }
 
     private void loadCategory(BookCategory category) {
-        ResourceLocation entriesLocation = new ResourceLocation(BOOK_LOCATION + "entries/" + category.getName() + ".json");
+        ResourceLocation entriesLocation = new ResourceLocation(
+                BOOK_LOCATION + "entries/" + category.getName() + ".json");
         List<String> entryNames = new LinkedList<>();
         for (IResource entryResource : ResourceUtil.getResources(entriesLocation)) {
             try (BufferedReader reader = ResourceUtil.createReader(entryResource)) {

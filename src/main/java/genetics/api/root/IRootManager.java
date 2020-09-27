@@ -20,7 +20,10 @@ public interface IRootManager {
      */
     <I extends IIndividual> IIndividualRootBuilder<I> createRoot(String uid);
 
-    <I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(String uid, Class<? extends T> enumClass);
+    <I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(
+            String uid,
+            Class<? extends T> enumClass
+    );
 
     /**
      * Gets an IGeneticDefinitionBuilder

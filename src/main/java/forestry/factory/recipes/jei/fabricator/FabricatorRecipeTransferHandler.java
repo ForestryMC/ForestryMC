@@ -35,7 +35,9 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<C
         if (doTransfer) {
             IInventory craftingInventory = container.getFabricator().getCraftingInventory();
             NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
-            for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks().getGuiIngredients().entrySet()) {
+            for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks()
+                                                                                                      .getGuiIngredients()
+                                                                                                      .entrySet()) {
                 IGuiIngredient<ItemStack> guiIngredient = guiIngredientEntry.getValue();
                 int index = guiIngredientEntry.getKey();
                 if (index >= 3 && guiIngredient.getDisplayedIngredient() != null) {

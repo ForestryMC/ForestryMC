@@ -77,7 +77,8 @@ public class FarmLedger extends Ledger {
         y += 3;
         y += drawText(
                 transform,
-                StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)",
+                StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() +
+                " d)",
                 xBody,
                 y
         );

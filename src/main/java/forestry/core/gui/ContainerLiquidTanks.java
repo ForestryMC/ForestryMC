@@ -25,7 +25,14 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 
     private final ContainerLiquidTanksHelper<T> helper;
 
-    protected ContainerLiquidTanks(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+    protected ContainerLiquidTanks(
+            int windowId,
+            ContainerType<?> type,
+            PlayerInventory playerInventory,
+            T tile,
+            int xInv,
+            int yInv
+    ) {
         super(windowId, type, playerInventory, tile, xInv, yInv);
         this.helper = new ContainerLiquidTanksHelper<>(tile);
     }

@@ -372,7 +372,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
     private void rotateReservoir() {
         ArrayList<Integer> slotsToShift = new ArrayList<>();
-        for (int i = InventoryMoistener.SLOT_RESERVOIR_1; i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
+        for (int i = InventoryMoistener.SLOT_RESERVOIR_1;
+             i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
             if (getStackInSlot(i).isEmpty()) {
                 continue;
             }
@@ -454,8 +455,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
         }
 
         return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
-                .getCount() / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
-                .getMaxStackSize() > percentage;
+                                .getCount() / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
+                                                               .getMaxStackSize() > percentage;
     }
 
     public boolean isProducing() {
@@ -535,7 +536,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             return LazyOptional.of(() -> tankManager)
-                    .cast();    //TODO this shouldn't be created every time this method is called...
+                               .cast();    //TODO this shouldn't be created every time this method is called...
         }
         return super.getCapability(capability, facing);
     }

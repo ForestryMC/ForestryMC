@@ -82,7 +82,10 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
             IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
             this.tokenIndividual = root.templateAsIndividual(template);
             this.tokenStack = root.getTypes()
-                    .createStack(this.tokenIndividual, ((IForestrySpeciesRoot<IIndividual>) root).getIconType());
+                                  .createStack(
+                                          this.tokenIndividual,
+                                          ((IForestrySpeciesRoot<IIndividual>) root).getIconType()
+                                  );
         }
     }
 

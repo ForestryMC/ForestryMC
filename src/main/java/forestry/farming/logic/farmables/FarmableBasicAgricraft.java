@@ -18,7 +18,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class FarmableBasicAgricraft extends FarmableBase {
-    public FarmableBasicAgricraft(ItemStack germling, BlockState plantedState, BlockState matureState, boolean replant) {
+    public FarmableBasicAgricraft(
+            ItemStack germling,
+            BlockState plantedState,
+            BlockState matureState,
+            boolean replant
+    ) {
         super(germling, plantedState, matureState, replant);
     }
 

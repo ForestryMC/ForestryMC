@@ -70,7 +70,12 @@ public interface IAlyzerHelper {
 
     ItemStack getDisplayStack(IAlleleSpecies species);
 
-    void drawSpeciesRow(String caption, IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType, ITextComponent primaryName, ITextComponent secondaryName);
+    void drawSpeciesRow(
+            String caption,
+            IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType,
+            ITextComponent primaryName,
+            ITextComponent secondaryName
+    );
 
     class Column {
         public static final int FIRST = 12;

@@ -19,7 +19,11 @@ public class ComponentKey<C extends IRootComponent> {
         return create(name, componentClass, DefaultStage.CREATION);
     }
 
-    public static <C extends IRootComponent> ComponentKey<C> create(String name, Class<C> componentClass, IStage stage) {
+    public static <C extends IRootComponent> ComponentKey<C> create(
+            String name,
+            Class<C> componentClass,
+            IStage stage
+    ) {
         return new ComponentKey<>(name, componentClass, stage);
     }
 

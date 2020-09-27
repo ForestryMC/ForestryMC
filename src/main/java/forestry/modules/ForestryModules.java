@@ -48,7 +48,10 @@ public class ForestryModules implements IModuleContainer {
     }
 
     @Override
-    public void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules) {
+    public void onConfiguredModules(
+            Collection<IForestryModule> activeModules,
+            Collection<IForestryModule> unloadedModules
+    ) {
         ModuleManager.getModuleHandler().addModules(activeModules, unloadedModules);
     }
 }

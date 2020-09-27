@@ -26,7 +26,12 @@ public abstract class SlotUtil {
         return slotIndex >= start && slotIndex < start + count;
     }
 
-    public static ItemStack slotClickPhantom(SlotForestry slot, int mouseButton, ClickType clickTypeIn, PlayerEntity player) {
+    public static ItemStack slotClickPhantom(
+            SlotForestry slot,
+            int mouseButton,
+            ClickType clickTypeIn,
+            PlayerEntity player
+    ) {
         ItemStack stack = ItemStack.EMPTY;
 
         ItemStack stackSlot = slot.getStack();
@@ -95,7 +100,13 @@ public abstract class SlotUtil {
         return originalStack;
     }
 
-    private static boolean shiftItemStack(List<Slot> inventorySlots, ItemStack stackInSlot, int slotIndex, int numSlots, boolean fromCraftingSlot) {
+    private static boolean shiftItemStack(
+            List<Slot> inventorySlots,
+            ItemStack stackInSlot,
+            int slotIndex,
+            int numSlots,
+            boolean fromCraftingSlot
+    ) {
         if (isInPlayerInventory(slotIndex)) {
             if (shiftToMachineInventory(inventorySlots, stackInSlot, numSlots)) {
                 return true;
@@ -157,13 +168,23 @@ public abstract class SlotUtil {
         slot.putStack(phantomStack);
     }
 
-    private static boolean shiftItemStackToRange(List<Slot> inventorySlots, ItemStack stackToShift, int start, int count) {
+    private static boolean shiftItemStackToRange(
+            List<Slot> inventorySlots,
+            ItemStack stackToShift,
+            int start,
+            int count
+    ) {
         boolean changed = shiftItemStackToRangeMerge(inventorySlots, stackToShift, start, count);
         changed |= shiftItemStackToRangeOpenSlots(inventorySlots, stackToShift, start, count);
         return changed;
     }
 
-    private static boolean shiftItemStackToRangeMerge(List<Slot> inventorySlots, ItemStack stackToShift, int start, int count) {
+    private static boolean shiftItemStackToRangeMerge(
+            List<Slot> inventorySlots,
+            ItemStack stackToShift,
+            int start,
+            int count
+    ) {
         if (!stackToShift.isStackable() || stackToShift.isEmpty()) {
             return false;
         }
@@ -191,7 +212,12 @@ public abstract class SlotUtil {
         return changed;
     }
 
-    private static boolean shiftItemStackToRangeOpenSlots(List<Slot> inventorySlots, ItemStack stackToShift, int start, int count) {
+    private static boolean shiftItemStackToRangeOpenSlots(
+            List<Slot> inventorySlots,
+            ItemStack stackToShift,
+            int start,
+            int count
+    ) {
         if (stackToShift.isEmpty()) {
             return false;
         }
@@ -228,7 +254,12 @@ public abstract class SlotUtil {
         int playerHotbarStart = PLAYER_INVENTORY_SIZE - PLAYER_HOTBAR_SIZE;
 
         // try to merge with existing stacks, hotbar first
-        boolean shifted = shiftItemStackToRangeMerge(inventorySlots, stackInSlot, playerHotbarStart, PLAYER_HOTBAR_SIZE);
+        boolean shifted = shiftItemStackToRangeMerge(
+                inventorySlots,
+                stackInSlot,
+                playerHotbarStart,
+                PLAYER_HOTBAR_SIZE
+        );
         shifted |= shiftItemStackToRangeMerge(inventorySlots, stackInSlot, 0, playerHotbarStart);
 
         // shift to open slots, hotbar first
@@ -259,7 +290,12 @@ public abstract class SlotUtil {
     }
 
     // if mergeOnly = true, don't shift into empty slots.
-    private static boolean shiftToMachineInventory(List<Slot> inventorySlots, ItemStack stackToShift, int numSlots, boolean mergeOnly) {
+    private static boolean shiftToMachineInventory(
+            List<Slot> inventorySlots,
+            ItemStack stackToShift,
+            int numSlots,
+            boolean mergeOnly
+    ) {
         for (int machineIndex = PLAYER_INVENTORY_SIZE; machineIndex < numSlots; machineIndex++) {
             Slot slot = inventorySlots.get(machineIndex);
             if (mergeOnly && slot.getStack().isEmpty()) {

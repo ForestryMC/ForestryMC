@@ -33,7 +33,13 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
     @OnlyIn(Dist.CLIENT)
     private Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super T>> tileRenderer;
 
-    public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, IShapeProvider shape, ResourceLocation particleTexture, boolean isFullCube) {
+    public MachinePropertiesTesr(
+            Supplier<FeatureTileType<? extends T>> teType,
+            String name,
+            IShapeProvider shape,
+            ResourceLocation particleTexture,
+            boolean isFullCube
+    ) {
         super(teType, name, shape);
         this.particleTexture = particleTexture;
         this.isFullCube = isFullCube;

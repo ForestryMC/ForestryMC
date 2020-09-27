@@ -31,7 +31,7 @@ public class AIButterflyRest extends AIButterflyBase {
     public boolean shouldExecute() {
 
         if (entity.getExhaustion() < EntityButterfly.EXHAUSTION_REST
-                && entity.canFly()) {
+            && entity.canFly()) {
             return false;
         }
 

@@ -21,7 +21,11 @@ public class ProductsTab extends DatabaseTab {
 
     @Override
     public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
-        IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
+        IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(
+                x + 4,
+                y,
+                18
+        ).setDistance(2), 90, 0);
         Collection<ItemStack> products = getProducts(individual);
         if (!products.isEmpty()) {
             container.translated("for.gui.beealyzer.produce").setAlign(GuiElementAlignment.TOP_CENTER);

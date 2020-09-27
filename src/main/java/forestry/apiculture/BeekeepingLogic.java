@@ -361,7 +361,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         IBeeRoot root = BeeManager.beeRoot;
         Optional<IOrganismType> droneType = root.getTypes().getType(droneStack);
         Optional<IOrganismType> princessType = root.getTypes().getType(princessStack);
-        if (droneType.filter(type -> type != EnumBeeType.DRONE).isPresent() || princessType.filter(type -> type != EnumBeeType.PRINCESS).isPresent()) {
+        if (droneType.filter(type -> type != EnumBeeType.DRONE).isPresent() || princessType.filter(type -> type !=
+                                                                                                           EnumBeeType.PRINCESS)
+                                                                                           .isPresent()) {
             beeProgress = 0;
             return;
         }
@@ -477,7 +479,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         if (world != null && !world.isRemote) {
             if (housing instanceof Entity) {
                 Entity housingEntity = (Entity) this.housing;
-                NetworkUtil.sendNetworkPacket(new PacketBeeLogicActiveEntity(this.housing, housingEntity), housingEntity.getPosition(), world);
+                NetworkUtil.sendNetworkPacket(
+                        new PacketBeeLogicActiveEntity(this.housing, housingEntity),
+                        housingEntity.getPosition(),
+                        world
+                );
             } else {
                 NetworkUtil.sendNetworkPacket(new PacketBeeLogicActive(housing), housing.getCoordinates(), world);
             }

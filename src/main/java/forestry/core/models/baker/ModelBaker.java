@@ -40,7 +40,8 @@ public final class ModelBaker {
 
     private final List<ModelBakerFace> faces = new ArrayList<>();
 
-    private final ModelBakerModel currentModel = new ModelBakerModel(ClientManager.getInstance().getDefaultBlockState());
+    private final ModelBakerModel currentModel = new ModelBakerModel(ClientManager.getInstance()
+                                                                                  .getDefaultBlockState());
 
     private int colorIndex = -1;
 
@@ -54,7 +55,10 @@ public final class ModelBaker {
     }
 
     public ModelBaker addBlockModel(TextureAtlasSprite texture, int colorIndex) {
-        return addBlockModel(new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
+        return addBlockModel(
+                new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture},
+                colorIndex
+        );
     }
 
     public ModelBaker addFace(Direction facing, TextureAtlasSprite sprite) {
@@ -75,7 +79,17 @@ public final class ModelBaker {
             Direction facing = face.face;
             BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
             BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
-            BakedQuad quad = FACE_BAKERY.bakeQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
+            BakedQuad quad = FACE_BAKERY.bakeQuad(
+                    POS_FROM,
+                    POS_TO,
+                    partFace,
+                    face.spite,
+                    facing,
+                    modelRotation,
+                    null,
+                    true,
+                    FACE_LOCATION
+            );
 
             currentModel.addQuad(facing, quad);
         }

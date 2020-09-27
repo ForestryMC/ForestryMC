@@ -20,7 +20,11 @@ import net.minecraft.util.text.ITextComponent;
 public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlvearyHygroregulator> {
     private final TileAlvearyHygroregulator tile;
 
-    public GuiAlvearyHygroregulator(ContainerAlvearyHygroregulator container, PlayerInventory inventory, ITextComponent title) {
+    public GuiAlvearyHygroregulator(
+            ContainerAlvearyHygroregulator container,
+            PlayerInventory inventory,
+            ITextComponent title
+    ) {
         super(Constants.TEXTURE_PATH_GUI + "/hygroregulator.png", container, inventory, title);
         this.tile = container.getTile();
 

@@ -38,7 +38,13 @@ public class DefaultFarmListener implements IFarmListener {
     }
 
     @Override
-    public void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent) {
+    public void hasScheduledHarvest(
+            Collection<ICrop> harvested,
+            IFarmLogic logic,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    ) {
 
     }
 

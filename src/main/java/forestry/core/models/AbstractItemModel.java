@@ -48,7 +48,8 @@ public abstract class AbstractItemModel extends AbstractBakedModel {
         ) {
             IBakedModel overrideModel = getOverride(model, stack, world, entity);
             return complexOverride() ? overrideModel.getOverrides()
-                    .getOverrideModel(overrideModel, stack, world, entity) : overrideModel;
+                                                    .getOverrideModel(overrideModel, stack, world, entity)
+                                     : overrideModel;
         }
     }
 }

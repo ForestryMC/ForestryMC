@@ -29,7 +29,12 @@ public enum BlockTypeApicultureTesr implements IBlockTypeTesr {
 
     private final IMachinePropertiesTesr<?> machineProperties;
 
-    <T extends TileApiaristChest> BlockTypeApicultureTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String textureName, VoxelShape shape) {
+    <T extends TileApiaristChest> BlockTypeApicultureTesr(
+            Supplier<FeatureTileType<? extends T>> teClass,
+            String name,
+            String textureName,
+            VoxelShape shape
+    ) {
         MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
                 .setParticleTexture(name + ".0")
                 .setNotFullCube()

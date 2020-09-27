@@ -23,7 +23,12 @@ public class ClimateGrowthProvider implements IGrowthProvider {
     private final EnumTolerance temperatureTolerance;
     private final EnumTolerance humidityTolerance;
 
-    public ClimateGrowthProvider(EnumTemperature temperature, EnumTolerance temperatureTolerance, EnumHumidity humidity, EnumTolerance humidityTolerance) {
+    public ClimateGrowthProvider(
+            EnumTemperature temperature,
+            EnumTolerance temperatureTolerance,
+            EnumHumidity humidity,
+            EnumTolerance humidityTolerance
+    ) {
         this.temperature = temperature;
         this.temperatureTolerance = temperatureTolerance;
         this.humidity = humidity;
@@ -53,7 +58,14 @@ public class ClimateGrowthProvider implements IGrowthProvider {
         if (humidity == null) {
             humidity = genome.getActiveAllele(TreeChromosomes.SPECIES).getHumidity();
         }
-        return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity, temperature, temperatureTolerance, humidity, humidityTolerance);
+        return AlleleManager.climateHelper.isWithinLimits(
+                biomeTemperature,
+                biomeHumidity,
+                temperature,
+                temperatureTolerance,
+                humidity,
+                humidityTolerance
+        );
     }
 
 }

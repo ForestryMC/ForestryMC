@@ -60,8 +60,8 @@ import java.util.stream.Collectors;
 public class ButterflyItemModel extends AbstractBakedModel {
     private final ImmutableMap<String, IBakedModel> subModels;
     private final Cache<Pair<String, Float>, IBakedModel> cache = CacheBuilder.newBuilder()
-            .expireAfterAccess(1, TimeUnit.MINUTES)
-            .build();
+                                                                              .expireAfterAccess(1, TimeUnit.MINUTES)
+                                                                              .build();
 
     public ButterflyItemModel(ImmutableMap<String, IBakedModel> subModels) {
         this.subModels = subModels;
@@ -210,12 +210,12 @@ public class ButterflyItemModel extends AbstractBakedModel {
                 Set<Pair<String, String>> missingTextureErrors
         ) {
             return subModels.values()
-                    .stream()
-                    .map((location) -> new RenderMaterial(
-                            PlayerContainer.LOCATION_BLOCKS_TEXTURE,
-                            new ResourceLocation(location)
-                    ))
-                    .collect(Collectors.toSet());
+                            .stream()
+                            .map((location) -> new RenderMaterial(
+                                    PlayerContainer.LOCATION_BLOCKS_TEXTURE,
+                                    new ResourceLocation(location)
+                            ))
+                            .collect(Collectors.toSet());
         }
     }
 

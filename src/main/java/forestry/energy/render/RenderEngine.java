@@ -84,7 +84,8 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
                 new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_higher.png"),
                 new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_high.png"),
                 new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_medium.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),};
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),
+                };
     }
 
     @Override

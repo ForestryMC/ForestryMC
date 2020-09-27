@@ -47,7 +47,13 @@ public class FarmLogicCocoa extends FarmLogicSoil {
         return result;
     }
 
-    protected boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+    protected boolean maintainSoil(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    ) {
         if (!farmHousing.canPlantSoil(isManual)) {
             return false;
         }
@@ -65,7 +71,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
                 }
 
                 if (!isValidPosition(direction, position, pos, layoutExtent)
-                        || !farmHousing.getFarmInventory().hasResources(resources)) {
+                    || !farmHousing.getFarmInventory().hasResources(resources)) {
                     continue;
                 }
 
@@ -79,8 +85,8 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 
                     BlockState state = world.getBlockState(location);
                     if (z == 0 && !world.isAirBlock(location)
-                            || z > 0 && isAcceptedSoil(state)
-                            || !BlockUtil.isBreakableBlock(state, world, pos)) {
+                        || z > 0 && isAcceptedSoil(state)
+                        || !BlockUtil.isBreakableBlock(state, world, pos)) {
                         continue;
                     }
 
@@ -125,7 +131,13 @@ public class FarmLogicCocoa extends FarmLogicSoil {
         return (distance % LAYOUT_POSITIONS.length) == (layoutExtent);
     }
 
-    protected boolean trySetSoil(World world, IFarmHousing farmHousing, BlockPos position, ItemStack resource, BlockState ground) {
+    protected boolean trySetSoil(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos position,
+            ItemStack resource,
+            BlockState ground
+    ) {
         NonNullList<ItemStack> resources = NonNullList.create();
         resources.add(resource);
         if (!farmHousing.getFarmInventory().hasResources(resources)) {
@@ -139,7 +151,13 @@ public class FarmLogicCocoa extends FarmLogicSoil {
     }
 
     @Override
-    public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+    public Collection<ICrop> harvest(
+            World world,
+            IFarmHousing housing,
+            FarmDirection direction,
+            int extent,
+            BlockPos pos
+    ) {
         BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
         Collection<ICrop> crops = getHarvestBlocks(world, position);
         housing.increaseExtent(direction, pos, extent);
@@ -147,12 +165,21 @@ public class FarmLogicCocoa extends FarmLogicSoil {
         return crops;
     }
 
-    private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
+    private boolean tryPlantingCocoa(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos position,
+            FarmDirection farmDirection
+    ) {
         BlockPos.Mutable current = new BlockPos.Mutable();
         BlockState blockState = world.getBlockState(current.setPos(position));
         while (isJungleTreeTrunk(blockState)) {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
-                BlockPos candidate = new BlockPos(current.getX() + direction.getXOffset(), current.getY(), current.getZ() + direction.getZOffset());
+                BlockPos candidate = new BlockPos(
+                        current.getX() + direction.getXOffset(),
+                        current.getY(),
+                        current.getZ() + direction.getZOffset()
+                );
                 if (world.isBlockLoaded(candidate) && world.isAirBlock(candidate)) {
                     return farmHousing.plantGermling(cocoa, world, candidate, farmDirection);
                 }
@@ -211,7 +238,13 @@ public class FarmLogicCocoa extends FarmLogicSoil {
         return crops;
     }
 
-    private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
+    private List<BlockPos> processHarvestBlock(
+            World world,
+            Stack<ICrop> crops,
+            Set<BlockPos> seen,
+            BlockPos start,
+            BlockPos position
+    ) {
         List<BlockPos> candidates = new ArrayList<>();
 
         // Get additional candidates to return

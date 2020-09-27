@@ -161,7 +161,7 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
                 @Nullable LivingEntity entity
         ) {
             IBakedModel baked = this.model.originalModel.getOverrides()
-                    .getOverrideModel(originalModel, stack, world, entity);
+                                                        .getOverrideModel(originalModel, stack, world, entity);
             if (baked == null) {
                 baked = originalModel;
             }

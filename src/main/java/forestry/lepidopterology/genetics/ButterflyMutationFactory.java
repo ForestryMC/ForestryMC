@@ -22,9 +22,15 @@ import genetics.api.root.components.ComponentKeys;
 public class ButterflyMutationFactory implements IButterflyMutationFactory {
 
     @Override
-    public IButterflyMutationBuilder createMutation(IAlleleButterflySpecies parentButterfly0, IAlleleButterflySpecies parentButterfly1, IAllele[] result, int chance) {
+    public IButterflyMutationBuilder createMutation(
+            IAlleleButterflySpecies parentButterfly0,
+            IAlleleButterflySpecies parentButterfly1,
+            IAllele[] result,
+            int chance
+    ) {
         ButterflyMutation butterflyMutation = new ButterflyMutation(parentButterfly0, parentButterfly1, result, chance);
-        IMutationContainer<IButterfly, IMutation> container = ButterflyHelper.getRoot().getComponent(ComponentKeys.MUTATIONS);
+        IMutationContainer<IButterfly, IMutation> container = ButterflyHelper.getRoot()
+                                                                             .getComponent(ComponentKeys.MUTATIONS);
         container.registerMutation(butterflyMutation);
         return butterflyMutation;
     }

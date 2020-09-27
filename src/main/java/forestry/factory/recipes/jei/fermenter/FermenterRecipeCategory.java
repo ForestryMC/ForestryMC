@@ -35,11 +35,22 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
         super(guiHelper.createDrawable(guiTexture, 34, 18, 108, 60), "block.forestry.fermenter");
 
         IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 60, 4, 18);
-        this.progressBar0 = guiHelper.createAnimatedDrawable(progressBarDrawable0, 40, IDrawableAnimated.StartDirection.BOTTOM, false);
+        this.progressBar0 = guiHelper.createAnimatedDrawable(
+                progressBarDrawable0,
+                40,
+                IDrawableAnimated.StartDirection.BOTTOM,
+                false
+        );
         IDrawableStatic progressBarDrawable1 = guiHelper.createDrawable(guiTexture, 176, 78, 4, 18);
-        this.progressBar1 = guiHelper.createAnimatedDrawable(progressBarDrawable1, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
+        this.progressBar1 = guiHelper.createAnimatedDrawable(
+                progressBarDrawable1,
+                80,
+                IDrawableAnimated.StartDirection.BOTTOM,
+                false
+        );
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 192, 0, 16, 58);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER)
+                                                                                       .block()));
     }
 
     @Override
@@ -64,7 +75,11 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, FermenterRecipeWrapper fermenterRecipeWrapper, IIngredients ingredients) {
+    public void setRecipe(
+            IRecipeLayout recipeLayout,
+            FermenterRecipeWrapper fermenterRecipeWrapper,
+            IIngredients ingredients
+    ) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 

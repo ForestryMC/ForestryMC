@@ -48,7 +48,13 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
 
         private boolean spawnAndTransform(ItemEntity entity) {
-            T spawnedEntity = EntityUtil.spawnEntity(entity.world, this.risen, entity.getPosX(), entity.getPosY(), entity.getPosZ());
+            T spawnedEntity = EntityUtil.spawnEntity(
+                    entity.world,
+                    this.risen,
+                    entity.getPosX(),
+                    entity.getPosY(),
+                    entity.getPosZ()
+            );
             if (spawnedEntity != null) {
                 this.risenTransformer.accept(spawnedEntity);
                 return true;
@@ -75,7 +81,11 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
         list.add(new Resurrectable<>(new ItemStack(Items.STRING), EntityType.CAVE_SPIDER));
         list.add(new Resurrectable<>(new ItemStack(Items.SPIDER_EYE), EntityType.CAVE_SPIDER));
         list.add(new Resurrectable<>(new ItemStack(Items.GHAST_TEAR), EntityType.GHAST));
-        list.add(new Resurrectable<>(new ItemStack(Blocks.DRAGON_EGG), EntityType.ENDER_DRAGON, dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)));
+        list.add(new Resurrectable<>(
+                new ItemStack(Blocks.DRAGON_EGG),
+                EntityType.ENDER_DRAGON,
+                dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)
+        ));
         return list;
     }
 

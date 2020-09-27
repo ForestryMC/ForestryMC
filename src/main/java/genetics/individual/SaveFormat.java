@@ -44,7 +44,12 @@ public enum SaveFormat {
 
                 if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
                     IChromosomeType geneType = geneTypes[chromosomeOrdinal];
-                    Chromosome chromosome = Chromosome.create(primaryTemplateIdentifier, secondaryTemplateIdentifier, geneType, chromosomeNBT);
+                    Chromosome chromosome = Chromosome.create(
+                            primaryTemplateIdentifier,
+                            secondaryTemplateIdentifier,
+                            geneType,
+                            chromosomeNBT
+                    );
                     chromosomes[chromosomeOrdinal] = chromosome;
 
                     if (geneType.equals(karyotype.getSpeciesType())) {
@@ -67,7 +72,9 @@ public enum SaveFormat {
             if (chromosomeTag.isEmpty()) {
                 return null;
             }
-            return (active ? Chromosome.getActiveAllele(chromosomeTag) : Chromosome.getInactiveAllele(chromosomeTag)).orElse(null);
+            return (
+                    active ? Chromosome.getActiveAllele(chromosomeTag)
+                           : Chromosome.getInactiveAllele(chromosomeTag)).orElse(null);
         }
 
         @Override
@@ -103,7 +110,12 @@ public enum SaveFormat {
 
                 if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
                     IChromosomeType geneType = geneTypes[chromosomeOrdinal];
-                    Chromosome chromosome = Chromosome.create(primaryTemplateIdentifier, secondaryTemplateIdentifier, geneType, chromosomeNBT);
+                    Chromosome chromosome = Chromosome.create(
+                            primaryTemplateIdentifier,
+                            secondaryTemplateIdentifier,
+                            geneType,
+                            chromosomeNBT
+                    );
                     chromosomes[chromosomeOrdinal] = chromosome;
 
                     if (geneType == karyotype.getSpeciesType()) {
@@ -191,7 +203,13 @@ public enum SaveFormat {
             IChromosomeType geneType = missingChromosome.chromosomeType;
             IKaryotype karyotype = geneType.getRoot().getKaryotype();
             IChromosome[] chromosomes = readTag(karyotype, genomeNBT);
-            IChromosome chromosome = Chromosome.create(missingChromosome.activeSpeciesUid, missingChromosome.inactiveSpeciesUid, geneType, null, null);
+            IChromosome chromosome = Chromosome.create(
+                    missingChromosome.activeSpeciesUid,
+                    missingChromosome.inactiveSpeciesUid,
+                    geneType,
+                    null,
+                    null
+            );
             chromosomes[geneType.getIndex()] = chromosome;
             writeTag(chromosomes, karyotype, genomeNBT);
             return chromosome;

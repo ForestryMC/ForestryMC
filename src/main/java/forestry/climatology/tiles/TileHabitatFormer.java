@@ -146,7 +146,9 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
     }
 
     private void updateTemperature(IErrorLogic errorLogic, IClimateState changedState) {
-        IClimateManipulator manipulator = transformer.createManipulator(ClimateType.TEMPERATURE).setAllowBackwards().build();
+        IClimateManipulator manipulator = transformer.createManipulator(ClimateType.TEMPERATURE)
+                                                     .setAllowBackwards()
+                                                     .build();
         EnergyManager energyManager = getEnergyManager();
         int currentCost = getEnergyCost(changedState);
         if (energyManager.extractEnergy(currentCost, true) > 0) {
@@ -175,7 +177,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
         if (recipe == null) {
             return 0;
         }
-        return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().getAmount());
+        return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() *
+                          recipe.getResource().getAmount());
     }
 
     private int getEnergyCost(IClimateState state) {

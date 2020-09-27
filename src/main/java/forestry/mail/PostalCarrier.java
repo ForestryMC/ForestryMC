@@ -51,7 +51,13 @@ public class PostalCarrier implements IPostalCarrier {
     }
 
     @Override
-    public IPostalState deliverLetter(ServerWorld world, IPostOffice office, IMailAddress recipient, ItemStack letterStack, boolean doDeliver) {
+    public IPostalState deliverLetter(
+            ServerWorld world,
+            IPostOffice office,
+            IMailAddress recipient,
+            ItemStack letterStack,
+            boolean doDeliver
+    ) {
         if (type == EnumAddressee.TRADER) {
             return handleTradeLetter(world, recipient, letterStack, doDeliver);
         } else {
@@ -59,7 +65,12 @@ public class PostalCarrier implements IPostalCarrier {
         }
     }
 
-    private static IPostalState handleTradeLetter(ServerWorld world, IMailAddress recipient, ItemStack letterStack, boolean doLodge) {
+    private static IPostalState handleTradeLetter(
+            ServerWorld world,
+            IMailAddress recipient,
+            ItemStack letterStack,
+            boolean doLodge
+    ) {
         ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
         if (trade == null) {
             return EnumDeliveryState.NO_MAILBOX;

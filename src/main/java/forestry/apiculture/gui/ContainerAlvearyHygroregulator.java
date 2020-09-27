@@ -22,11 +22,19 @@ import net.minecraft.network.PacketBuffer;
 public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks<TileAlvearyHygroregulator> {
 
     public static ContainerAlvearyHygroregulator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileAlvearyHygroregulator tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearyHygroregulator.class);
+        TileAlvearyHygroregulator tile = TileUtil.getTile(
+                inv.player.world,
+                data.readBlockPos(),
+                TileAlvearyHygroregulator.class
+        );
         return new ContainerAlvearyHygroregulator(windowId, inv, tile);    //TODO nullability.
     }
 
-    public ContainerAlvearyHygroregulator(int windowId, PlayerInventory playerInventory, TileAlvearyHygroregulator tile) {
+    public ContainerAlvearyHygroregulator(
+            int windowId,
+            PlayerInventory playerInventory,
+            TileAlvearyHygroregulator tile
+    ) {
         super(windowId, ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(), playerInventory, tile, 8, 84);
 
         this.addSlot(new SlotLiquidIn(tile, InventoryHygroregulator.SLOT_INPUT, 56, 38));

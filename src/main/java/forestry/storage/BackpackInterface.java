@@ -72,7 +72,10 @@ public class BackpackInterface implements IBackpackInterface {
     public Item createBackpack(String backpackUid, EnumBackpackType type) {
         Preconditions.checkNotNull(backpackUid, "backpackUid must not be null");
         Preconditions.checkNotNull(type, "type must not be null");
-        Preconditions.checkArgument(type != EnumBackpackType.NATURALIST, "type must not be NATURALIST. Use createNaturalistBackpack instead.");
+        Preconditions.checkArgument(
+                type != EnumBackpackType.NATURALIST,
+                "type must not be NATURALIST. Use createNaturalistBackpack instead."
+        );
 
         IBackpackDefinition definition = definitions.get(backpackUid);
         if (definition == null) {

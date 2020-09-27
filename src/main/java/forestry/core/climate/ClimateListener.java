@@ -175,9 +175,16 @@ public class ClimateListener implements IClimateListener {
             if (!worldObj.isRemote) {
                 BlockPos coordinates = getCoordinates();
                 if (locationProvider instanceof Entity) {
-                    NetworkUtil.sendNetworkPacket(new PacketClimateListenerUpdateEntity((Entity) locationProvider, cachedState), coordinates, worldObj);
+                    NetworkUtil.sendNetworkPacket(new PacketClimateListenerUpdateEntity(
+                            (Entity) locationProvider,
+                            cachedState
+                    ), coordinates, worldObj);
                 } else {
-                    NetworkUtil.sendNetworkPacket(new PacketClimateListenerUpdate(getCoordinates(), cachedState), coordinates, getWorldObj());
+                    NetworkUtil.sendNetworkPacket(
+                            new PacketClimateListenerUpdate(getCoordinates(), cachedState),
+                            coordinates,
+                            getWorldObj()
+                    );
                 }
             }
             cachedClientState = cachedState;
@@ -190,7 +197,10 @@ public class ClimateListener implements IClimateListener {
         if (!worldObj.isRemote) {
             IClimateState climateState = getState(true, false);
             if (locationProvider instanceof Entity) {
-                NetworkUtil.sendToPlayer(new PacketClimateListenerUpdateEntity((Entity) locationProvider, climateState), player);
+                NetworkUtil.sendToPlayer(
+                        new PacketClimateListenerUpdateEntity((Entity) locationProvider, climateState),
+                        player
+                );
             } else {
                 NetworkUtil.sendToPlayer(new PacketClimateListenerUpdate(getCoordinates(), climateState), player);
             }

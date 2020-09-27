@@ -44,7 +44,10 @@ import net.minecraft.world.biome.Biome;
 import java.util.Optional;
 
 public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
-    private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(MinecartEntityBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
+    private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(
+            MinecartEntityBeeHousingBase.class,
+            GameProfileDataSerializer.INSTANCE
+    );
 
     private static final int beeFXInterval = 4;
     private static final int pollenFXInterval = 50;

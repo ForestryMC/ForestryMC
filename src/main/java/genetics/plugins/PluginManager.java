@@ -35,7 +35,8 @@ public class PluginManager {
     }
 
     public static void create() {
-        ImmutableSortedMap.Builder<IGeneticPlugin, ModContainer> builder = new ImmutableSortedMap.Builder<>(PLUGIN_COMPARATOR);
+        ImmutableSortedMap.Builder<IGeneticPlugin, ModContainer> builder = new ImmutableSortedMap.Builder<>(
+                PLUGIN_COMPARATOR);
         builder.putAll(PluginUtil.getPlugins());
         plugins = builder.build();
         for (IGeneticPlugin plugin : plugins.keySet()) {

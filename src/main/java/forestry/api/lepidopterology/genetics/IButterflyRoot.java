@@ -29,7 +29,14 @@ public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
      */
     MobEntity spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
 
-    BlockPos plantCocoon(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
+    BlockPos plantCocoon(
+            IWorld world,
+            BlockPos pos,
+            IButterfly caterpillar,
+            GameProfile owner,
+            int age,
+            boolean createNursery
+    );
 
     /**
      * @return true if passed item is mated.

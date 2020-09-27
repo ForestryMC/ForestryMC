@@ -24,7 +24,12 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
     @Nullable
     private I item;
 
-    public FeatureBlock(String moduleID, String identifier, Supplier<B> constructorBlock, @Nullable Function<B, I> constructorItem) {
+    public FeatureBlock(
+            String moduleID,
+            String identifier,
+            Supplier<B> constructorBlock,
+            @Nullable Function<B, I> constructorItem
+    ) {
         this.moduleID = moduleID;
         this.identifier = identifier;
         this.constructorBlock = constructorBlock;

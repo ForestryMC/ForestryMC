@@ -62,7 +62,8 @@ public class ItemForestryTool extends ItemForestry {
         }
         if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
             Material material = state.getMaterial();
-            return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
+            return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK
+                   ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
         }
         return super.getDestroySpeed(itemstack, state);
     }
@@ -83,7 +84,8 @@ public class ItemForestryTool extends ItemForestry {
                 BlockState BlockState = world.getBlockState(pos);
                 Block block = BlockState.getBlock();
 
-                if (facing != Direction.DOWN && world.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
+                if (facing != Direction.DOWN && world.getBlockState(pos.up()).getMaterial() == Material.AIR &&
+                    block == Blocks.GRASS) {
                     BlockState BlockState1 = Blocks.GRASS_PATH.getDefaultState();
                     world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
@@ -119,13 +121,25 @@ public class ItemForestryTool extends ItemForestry {
         World world = player.world;
 
         if (!world.isRemote && !remnants.isEmpty()) {
-            ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.getPosX(), player.getPosY(), player.getPosZ());
+            ItemStackUtil.dropItemStackAsEntity(
+                    remnants.copy(),
+                    world,
+                    player.getPosX(),
+                    player.getPosY(),
+                    player.getPosZ()
+            );
         }
     }
 
     //TODO - check the consumer is called how I think it is
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean onBlockDestroyed(
+            ItemStack stack,
+            World worldIn,
+            BlockState state,
+            BlockPos pos,
+            LivingEntity entityLiving
+    ) {
         if (state.getBlockHardness(worldIn, pos) != 0) {
             stack.damageItem(1, entityLiving, this::onBroken);
         }

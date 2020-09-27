@@ -26,9 +26,9 @@ public class BlockResourceOre extends Block {
 
     public BlockResourceOre(EnumResourceType type) {
         super(Block.Properties.create(Material.ROCK)
-                .hardnessAndResistance(3f, 5f)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(1));
+                              .hardnessAndResistance(3f, 5f)
+                              .harvestTool(ToolType.PICKAXE)
+                              .harvestLevel(1));
         this.type = type;
     }
 

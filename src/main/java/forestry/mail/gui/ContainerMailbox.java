@@ -44,7 +44,10 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
     public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
         super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
-        IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.world, playerInventory.player.getGameProfile());
+        IInventory inventory = tile.getOrCreateMailInventory(
+                playerInventory.player.world,
+                playerInventory.player.getGameProfile()
+        );
 
         if (inventory instanceof POBox) {
             this.mailInventory = (POBox) inventory;

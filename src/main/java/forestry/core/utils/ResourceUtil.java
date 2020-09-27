@@ -50,7 +50,10 @@ public class ResourceUtil {
     }
 
     public static ITextComponent tryTranslate(String optionalKey, String defaultKey) {
-        return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
+        return tryTranslate(
+                () -> new TranslationTextComponent(optionalKey),
+                () -> new TranslationTextComponent(defaultKey)
+        );
     }
 
     public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
@@ -66,7 +69,10 @@ public class ResourceUtil {
      *
      * @return The optional component if it can be translated the other component otherwise.
      */
-    public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<ITextComponent> defaultKey) {
+    public static ITextComponent tryTranslate(
+            Supplier<TranslationTextComponent> optionalKey,
+            Supplier<ITextComponent> defaultKey
+    ) {
         TranslationTextComponent component = optionalKey.get();
         if (canTranslate(component)) {
             return component;
@@ -160,8 +166,10 @@ public class ResourceUtil {
     }
 
     private static Reader getReaderForResource(ResourceLocation location) throws IOException {
-        ResourceLocation file = new ResourceLocation(location.getNamespace(),
-                "models/" + location.getPath() + ".json");
+        ResourceLocation file = new ResourceLocation(
+                location.getNamespace(),
+                "models/" + location.getPath() + ".json"
+        );
         IResource iresource = resourceManager().getResource(file);
         return new BufferedReader(new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));
     }

@@ -91,12 +91,13 @@ public class CircuitBoard implements ICircuitBoard {
                 list.addAll(extendedTooltip);
             } else {
                 list.add(new StringTextComponent("<").mergeStyle(TextFormatting.UNDERLINE, TextFormatting.GRAY)
-                        .append(new TranslationTextComponent("for.gui.tooltip.tmi"))
-                        .append(new StringTextComponent(">")));
+                                                     .append(new TranslationTextComponent("for.gui.tooltip.tmi"))
+                                                     .append(new StringTextComponent(">")));
             }
         } else {
             int socketCount = type.getSockets();
-            String localizationKey = "item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
+            String localizationKey =
+                    "item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
             list.add(new TranslationTextComponent(localizationKey, type.getSockets()).mergeStyle(TextFormatting.GRAY));
         }
     }

@@ -82,16 +82,31 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
     @Override
     public void registerModels(ModelRegistryEvent event) {
-        ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "sapling_ge"), SaplingModelLoader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(
+                new ResourceLocation(Constants.MOD_ID, "sapling_ge"),
+                SaplingModelLoader.INSTANCE
+        );
         ArboricultureBlocks.TREE_CHEST.block().clientSetup();
 
         // fruit overlays require CUTOUT_MIPPED, even in Fast graphics
-        ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+        ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(
+                block,
+                RenderType.getCutoutMipped()
+        ));
         RenderTypeLookup.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.getCutoutMipped());
-        ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-        ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+        ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(
+                block,
+                RenderType.getCutoutMipped()
+        ));
+        ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(
+                block,
+                RenderType.getCutoutMipped()
+        ));
         RenderTypeLookup.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.getCutout());
-        ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent()));
+        ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(
+                block,
+                RenderType.getTranslucent()
+        ));
 
         AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
             ModelLoader.addSpecialModel(treeSpecies.getBlockModel());

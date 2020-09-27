@@ -10,7 +10,12 @@ public class NetworkHandler {
     private final EventNetworkChannel channel;
 
     public NetworkHandler() {
-        channel = NetworkRegistry.newEventChannel(PacketHandlerServer.CHANNEL_ID, () -> PacketHandlerServer.VERSION, s -> s.equals(PacketHandlerServer.VERSION), s -> s.equals(PacketHandlerServer.VERSION));
+        channel = NetworkRegistry.newEventChannel(
+                PacketHandlerServer.CHANNEL_ID,
+                () -> PacketHandlerServer.VERSION,
+                s -> s.equals(PacketHandlerServer.VERSION),
+                s -> s.equals(PacketHandlerServer.VERSION)
+        );
     }
 
     public void serverPacketHandler() {

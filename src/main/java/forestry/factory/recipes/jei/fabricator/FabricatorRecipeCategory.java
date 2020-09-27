@@ -44,7 +44,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 
         craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR)
-                .block()));
+                                                                                        .block()));
     }
 
     @Override

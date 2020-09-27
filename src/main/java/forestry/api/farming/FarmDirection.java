@@ -34,7 +34,8 @@ public enum FarmDirection {
             case WEST:
                 return WEST;
             default:
-                throw new IllegalArgumentException("Farm directions can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
+                throw new IllegalArgumentException(
+                        "Farm directions can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
         }
     }
 }

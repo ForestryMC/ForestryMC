@@ -25,5 +25,11 @@ public interface IBookContent {
      * @param pageHeight      The max height of the current page.
      * @return True if you added an element.
      */
-    boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight);
+    boolean addElements(
+            IElementGroup page,
+            IGuiElementFactory factory,
+            @Nullable BookContent previous,
+            @Nullable IGuiElement previousElement,
+            int pageHeight
+    );
 }

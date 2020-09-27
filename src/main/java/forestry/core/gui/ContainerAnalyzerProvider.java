@@ -13,7 +13,14 @@ public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTi
     private final ContainerAnalyzerProviderHelper providerHelper;
 
     //TODO maybe this is the constructor I need?
-    public ContainerAnalyzerProvider(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+    public ContainerAnalyzerProvider(
+            int windowId,
+            ContainerType<?> type,
+            PlayerInventory playerInventory,
+            T tile,
+            int xInv,
+            int yInv
+    ) {
         super(windowId, type, playerInventory, tile, xInv, yInv);
         //TODO maybe analyzer container type can be reused?
 

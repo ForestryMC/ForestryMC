@@ -38,7 +38,7 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
     public boolean isItemValid(ItemStack itemstack) {
         int slotIndex = getSlotIndex();
         return !filterSlotDelegate.isLocked(slotIndex) &&
-                (itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
+               (itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
     }
 
     public SlotFiltered setBlockedTexture(String ident) {

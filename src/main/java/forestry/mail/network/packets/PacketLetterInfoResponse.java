@@ -35,7 +35,11 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
     @Nullable
     public final IMailAddress address;
 
-    public PacketLetterInfoResponse(EnumAddressee type, @Nullable ITradeStationInfo info, @Nullable IMailAddress address) {
+    public PacketLetterInfoResponse(
+            EnumAddressee type,
+            @Nullable ITradeStationInfo info,
+            @Nullable IMailAddress address
+    ) {
         this.type = type;
         if (type == EnumAddressee.TRADER) {
             this.tradeInfo = info;
@@ -95,12 +99,18 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
                 IMailAddress address = null;
 
                 if (type == EnumAddressee.PLAYER) {
-                    GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+                    GameProfile profile = new GameProfile(
+                            new UUID(data.readLong(), data.readLong()),
+                            data.readString()
+                    );
                     address = PostManager.postRegistry.getMailAddress(profile);
                 } else if (type == EnumAddressee.TRADER) {
                     if (data.readBoolean()) {
                         address = PostManager.postRegistry.getMailAddress(data.readString());
-                        GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+                        GameProfile owner = new GameProfile(
+                                new UUID(data.readLong(), data.readLong()),
+                                data.readString()
+                        );
 
                         ItemStack tradegood = data.readItemStack();
                         NonNullList<ItemStack> required = data.readItemStacks();

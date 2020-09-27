@@ -37,15 +37,15 @@ public class GenericRatings {
 
     public static ITextComponent rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
         ITextComponent active = naturalNocturnal
-                ? new TranslationTextComponent("for.gui.nocturnal")
-                : new TranslationTextComponent("for.gui.diurnal");
+                                ? new TranslationTextComponent("for.gui.nocturnal")
+                                : new TranslationTextComponent("for.gui.diurnal");
         if (neverSleeps) {
             active = new StringTextComponent(StringUtil.append(
                     ", ",
                     active.getString(),
                     naturalNocturnal
-                            ? new TranslationTextComponent("for.gui.diurnal").getString()
-                            : new TranslationTextComponent("for.gui.nocturnal").getString()
+                    ? new TranslationTextComponent("for.gui.diurnal").getString()
+                    : new TranslationTextComponent("for.gui.nocturnal").getString()
             ));
         }
 

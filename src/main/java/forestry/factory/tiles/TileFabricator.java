@@ -72,7 +72,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
         craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
         setInternalInventory(new InventoryFabricator(this));
 
-        moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, false).setFilters(FabricatorSmeltingRecipeManager.getRecipeFluids());
+        moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, false).setFilters(
+                FabricatorSmeltingRecipeManager.getRecipeFluids());
 
         tankManager = new TankManager(this, moltenTank);
     }
@@ -204,7 +205,11 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
             FluidStack liquid = myRecipe.getLiquid();
 
             // Remove resources
-            NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+            NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
+                    craftingInventory,
+                    InventoryGhostCrafting.SLOT_CRAFTING_1,
+                    InventoryGhostCrafting.SLOT_CRAFTING_COUNT
+            );
             if (removeFromInventory(crafting, myRecipePair, false)) {
                 FluidStack drained = moltenTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
                 if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
@@ -215,7 +220,10 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
                     if (!getStackInSlot(InventoryFabricator.SLOT_PLAN).isEmpty()) {
                         Item planItem = getStackInSlot(InventoryFabricator.SLOT_PLAN).getItem();
                         if (planItem instanceof ICraftingPlan) {
-                            ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(getStackInSlot(InventoryFabricator.SLOT_PLAN), craftResult);
+                            ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(
+                                    getStackInSlot(InventoryFabricator.SLOT_PLAN),
+                                    craftResult
+                            );
                             setInventorySlotContents(InventoryFabricator.SLOT_PLAN, planUsed);
                         }
                     }
@@ -226,8 +234,16 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
         }
     }
 
-    private boolean removeFromInventory(NonNullList<ItemStack> set, RecipePair<IFabricatorRecipe> recipePair, boolean doRemove) {
-        IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
+    private boolean removeFromInventory(
+            NonNullList<ItemStack> set,
+            RecipePair<IFabricatorRecipe> recipePair,
+            boolean doRemove
+    ) {
+        IInventory inventory = new InventoryMapper(
+                this,
+                InventoryFabricator.SLOT_INVENTORY_1,
+                InventoryFabricator.SLOT_INVENTORY_COUNT
+        );
         return InventoryUtil.removeSets(inventory, 1, set, recipePair.getOreDictEntries(), null, true, false, doRemove);
     }
 
@@ -244,7 +260,11 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
             if (recipe == null) {
                 return false;
             }
-            NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+            NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
+                    craftingInventory,
+                    InventoryGhostCrafting.SLOT_CRAFTING_1,
+                    InventoryGhostCrafting.SLOT_CRAFTING_COUNT
+            );
             hasResources = removeFromInventory(crafting, recipePair, false);
             FluidStack toDrain = recipe.getLiquid();
             FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
@@ -267,7 +287,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
     private int getMeltingPoint() {
         if (!this.getStackInSlot(InventoryFabricator.SLOT_METAL).isEmpty()) {
-            IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(this.getStackInSlot(InventoryFabricator.SLOT_METAL));
+            IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(this.getStackInSlot(
+                    InventoryFabricator.SLOT_METAL));
             if (smelt != null) {
                 return smelt.getMeltingPoint();
             }

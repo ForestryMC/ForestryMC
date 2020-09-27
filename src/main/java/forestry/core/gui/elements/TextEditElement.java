@@ -39,7 +39,11 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
         });
         this.addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
             IWindowElement windowElement = getWindow();
-            this.field.mouseClicked(windowElement.getRelativeMouseX(this), windowElement.getRelativeMouseY(this), event.getButton());
+            this.field.mouseClicked(
+                    windowElement.getRelativeMouseX(this),
+                    windowElement.getRelativeMouseY(this),
+                    event.getButton()
+            );
         });
         //TODO - method protected so maybe AT the field itself?
         this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.setFocused2(true));

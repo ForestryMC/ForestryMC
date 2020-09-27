@@ -167,7 +167,8 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
         IGenome caterpillarGenome = caterpillar.getGenome();
         int caterpillarMatureTime = Math
-                .round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
+                .round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) /
+                       (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
 
         if (maturationTime >= caterpillarMatureTime) {
             if (age < 2) {
@@ -200,9 +201,11 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
     private static void attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
         MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(),
-                pos.getX(), pos.getY() + 0.1f, pos.getZ());
+                pos.getX(), pos.getY() + 0.1f, pos.getZ()
+        );
         Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(),
-                pos.getZ());
+                pos.getZ()
+        );
     }
 
     @Override

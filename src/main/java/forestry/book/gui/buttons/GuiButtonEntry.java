@@ -38,9 +38,9 @@ public class GuiButtonEntry extends Button {
             FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.isHovered = mouseX >= this.x
-                    && mouseY >= this.y
-                    && mouseX < this.x + this.width
-                    && mouseY < this.y + this.height;
+                             && mouseY >= this.y
+                             && mouseX < this.x + this.width
+                             && mouseY < this.y + this.height;
 
             ITextComponent text = getMessage();
             if (isHovered) {

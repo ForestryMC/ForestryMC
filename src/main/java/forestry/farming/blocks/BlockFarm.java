@@ -33,9 +33,9 @@ public class BlockFarm extends BlockStructure {
 
     public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
         super(Block.Properties.create(Material.ROCK)
-                .hardnessAndResistance(1.0f)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(0));
+                              .hardnessAndResistance(1.0f)
+                              .harvestTool(ToolType.PICKAXE)
+                              .harvestLevel(0));
         this.type = type;
         this.farmMaterial = farmMaterial;
     }

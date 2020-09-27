@@ -89,8 +89,17 @@ public class ButterflyPlugin implements IGeneticPlugin {
                         }
 
                         @Override
-                        public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-                            ItemStack serum = ((IIndividualRoot<IIndividual>) species.getRoot()).getTypes().createStack(individual.copy(), EnumFlutterType.SERUM);
+                        public NonNullList<ItemStack> getResearchBounty(
+                                IAlleleSpecies species,
+                                World world,
+                                GameProfile researcher,
+                                IIndividual individual,
+                                int bountyLevel
+                        ) {
+                            ItemStack serum = ((IIndividualRoot<IIndividual>) species.getRoot()).getTypes().createStack(
+                                    individual.copy(),
+                                    EnumFlutterType.SERUM
+                            );
                             NonNullList<ItemStack> bounty = NonNullList.create();
                             bounty.add(serum);
                             return bounty;

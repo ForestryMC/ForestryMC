@@ -34,7 +34,8 @@ public class ApicultureJeiPlugin implements IModPlugin {
 
         ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
             Optional<IIndividual> individual = GeneticHelper.getIndividual(itemStack);
-            return individual.isPresent() ? individual.get().getGenome().getPrimary().getBinomial() : ISubtypeInterpreter.NONE;
+            return individual.isPresent() ? individual.get().getGenome().getPrimary().getBinomial()
+                                          : ISubtypeInterpreter.NONE;
         };
 
         subtypeRegistry.registerSubtypeInterpreter(ApicultureItems.BEE_DRONE.getItem(), beeSubtypeInterpreter);

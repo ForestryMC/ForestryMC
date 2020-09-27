@@ -67,7 +67,8 @@ public abstract class BlockStateProvider implements IDataProvider {
     public abstract void registerStates();
 
     protected Path makePath(ResourceLocation location) {
-        return this.generator.getOutputFolder().resolve("assets/" + location.getNamespace() + "/blockstates/" + location.getPath() + ".json");
+        return this.generator.getOutputFolder().resolve(
+                "assets/" + location.getNamespace() + "/blockstates/" + location.getPath() + ".json");
     }
 
     public void addVariants(Block block, IBuilder builder) {
@@ -105,7 +106,13 @@ public abstract class BlockStateProvider implements IDataProvider {
             return condition((state) -> state.get(property) == value, consumer);
         }
 
-        public <T extends Comparable<T>, V extends Comparable<V>> Builder property(Property<T> property, T value, Property<V> propertyTwo, V valueTwo, Consumer<Variant> consumer) {
+        public <T extends Comparable<T>, V extends Comparable<V>> Builder property(
+                Property<T> property,
+                T value,
+                Property<V> propertyTwo,
+                V valueTwo,
+                Consumer<Variant> consumer
+        ) {
             return condition((state) -> state.get(property) == value && state.get(propertyTwo) == valueTwo, consumer);
         }
 
@@ -244,17 +251,27 @@ public abstract class BlockStateProvider implements IDataProvider {
             return this;
         }
 
-        public <V extends Comparable<V>> MultipartBuilder property(UnaryOperator<Variant> builder, Property<V> property, V... values) {
+        public <V extends Comparable<V>> MultipartBuilder property(
+                UnaryOperator<Variant> builder,
+                Property<V> property,
+                V... values
+        ) {
             return and(builder, new ConditionBuilder().property(property, values));
         }
 
         public MultipartBuilder or(UnaryOperator<Variant> builder, ConditionBuilder condition) {
-            selectors.add(new Selector(new OrCondition(condition.conditions), Collections.singletonList(builder.apply(new Variant()))));
+            selectors.add(new Selector(
+                    new OrCondition(condition.conditions),
+                    Collections.singletonList(builder.apply(new Variant()))
+            ));
             return this;
         }
 
         public MultipartBuilder and(UnaryOperator<Variant> builder, ConditionBuilder condition) {
-            selectors.add(new Selector(new AndCondition(condition.conditions, false), Collections.singletonList(builder.apply(new Variant()))));
+            selectors.add(new Selector(
+                    new AndCondition(condition.conditions, false),
+                    Collections.singletonList(builder.apply(new Variant()))
+            ));
             return this;
         }
 

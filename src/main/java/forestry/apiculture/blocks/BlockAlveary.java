@@ -75,10 +75,10 @@ public class BlockAlveary extends BlockStructure {
 
     public BlockAlveary(BlockAlvearyType type) {
         super(Block.Properties.create(MaterialBeehive.BEEHIVE_ALVEARY)
-                .hardnessAndResistance(1f)
-                .sound(SoundType.WOOD)
-                .harvestTool(ToolType.AXE)
-                .harvestLevel(0)
+                              .hardnessAndResistance(1f)
+                              .sound(SoundType.WOOD)
+                              .harvestTool(ToolType.AXE)
+                              .harvestLevel(0)
         );
         this.type = type;
         BlockState defaultState = this.getStateContainer().getBaseState();
@@ -167,7 +167,7 @@ public class BlockAlveary extends BlockStructure {
                             break;
                         case 2:
                             if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) ||
-                                    blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
+                                blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
                                 state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
                             } else {
                                 state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);

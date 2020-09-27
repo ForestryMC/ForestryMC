@@ -55,7 +55,8 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
                 ((IActivatable) tile).setActive(active);
             } else if (tile instanceof IMultiblockComponent) {
                 IMultiblockComponent component = (IMultiblockComponent) tile;
-                if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
+                if (component.getMultiblockLogic().isConnected() &&
+                    component.getMultiblockLogic().getController() instanceof IActivatable) {
                     ((IActivatable) component.getMultiblockLogic().getController()).setActive(active);
                 }
             }

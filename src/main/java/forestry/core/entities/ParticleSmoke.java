@@ -80,7 +80,15 @@ public class ParticleSmoke extends Particle {
         float f = (float) this.age / (float) this.maxAge;
 
         if (this.rand.nextFloat() > f * 2) {
-            this.world.addParticle(ParticleTypes.LARGE_SMOKE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+            this.world.addParticle(
+                    ParticleTypes.LARGE_SMOKE,
+                    this.posX,
+                    this.posY,
+                    this.posZ,
+                    this.motionX,
+                    this.motionY,
+                    this.motionZ
+            );
         }
 
         this.motionY -= 0.03D;

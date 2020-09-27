@@ -181,7 +181,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
         int columnwidth = textLayout.column2 - textLayout.column1 - 2;
 
         Map<ResourceLocation, ItemStack> iconStacks = ((IForestrySpeciesRoot) chromosome.getRoot()).getAlyzerPlugin()
-                .getIconStacks();
+                                                                                                   .getIconStacks();
 
         GuiUtil.drawItemStack(
                 this,
@@ -375,8 +375,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
         textLayout.drawLine(
                 transform,
                 new TranslationTextComponent("for.gui.alyzer.authority").appendString(": " + individual.getGenome()
-                        .getPrimary()
-                        .getAuthority()),
+                                                                                                       .getPrimary()
+                                                                                                       .getAuthority()),
                 12
         );
         if (AlleleUtils.isBlacklisted(individual.getIdentifier())) {
@@ -468,7 +468,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
             IBreedingTracker breedingTracker
     ) {
         Map<ResourceLocation, ItemStack> iconStacks = ((IForestrySpeciesRoot) combination.getRoot()).getAlyzerPlugin()
-                .getIconStacks();
+                                                                                                    .getIconStacks();
 
         ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getRegistryName());
         widgetManager.add(new ItemStackWidget(widgetManager, x, textLayout.getLineY(), partnerBee));

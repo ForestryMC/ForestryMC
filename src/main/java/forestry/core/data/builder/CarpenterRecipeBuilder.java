@@ -70,9 +70,9 @@ public class CarpenterRecipeBuilder {
         validate(id);
 
         advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-                .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-                .withRewards(AdvancementRewards.Builder.recipe(id))
-                .withRequirementsStrategy(IRequirementsStrategy.OR);
+                          .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
+                          .withRewards(AdvancementRewards.Builder.recipe(id))
+                          .withRequirementsStrategy(IRequirementsStrategy.OR);
         consumer.accept(new Result(
                 id,
                 packagingTime,
@@ -83,11 +83,11 @@ public class CarpenterRecipeBuilder {
                 new ResourceLocation(
                         id.getNamespace(),
                         "recipes/" + recipe.getSerializer()
-                                .read(id, recipe.getRecipeJson())
-                                .getRecipeOutput()
-                                .getItem()
-                                .getGroup()
-                                .getPath() + "/" + id.getPath()
+                                           .read(id, recipe.getRecipeJson())
+                                           .getRecipeOutput()
+                                           .getItem()
+                                           .getGroup()
+                                           .getPath() + "/" + id.getPath()
                 )
         ));
     }

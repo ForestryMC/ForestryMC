@@ -9,7 +9,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class FilterRegistry implements IFilterRegistry {
-    private static final Comparator<IFilterRuleType> FILTER_COMPARATOR = (f, s) -> f.getUID().compareToIgnoreCase(s.getUID());
+    private static final Comparator<IFilterRuleType> FILTER_COMPARATOR = (f, s) -> f.getUID()
+                                                                                    .compareToIgnoreCase(s.getUID());
 
     private final HashMap<String, IFilterRuleType> filterByName = new LinkedHashMap<>();
     private final HashMap<String, Integer> filterIDByName = new LinkedHashMap<>();

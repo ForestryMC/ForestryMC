@@ -19,7 +19,13 @@ import java.util.Set;
 import java.util.Stack;
 
 public class FarmLogicEnder extends FarmLogicHomogeneous {
-    private static final Set<Direction> VALID_DIRECTIONS = ImmutableSet.of(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST);
+    private static final Set<Direction> VALID_DIRECTIONS = ImmutableSet.of(
+            Direction.UP,
+            Direction.NORTH,
+            Direction.SOUTH,
+            Direction.WEST,
+            Direction.EAST
+    );
     private final IFarmable chorusFarmable;
 
     public FarmLogicEnder(IFarmProperties properties, boolean isManual) {
@@ -33,7 +39,13 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
     }
 
     @Override
-    public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
+    public Collection<ICrop> harvest(
+            World world,
+            IFarmHousing farmHousing,
+            FarmDirection direction,
+            int extent,
+            BlockPos pos
+    ) {
         BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
         Collection<ICrop> crops = harvestBlocks(world, position);
         farmHousing.increaseExtent(direction, pos, extent);
@@ -87,7 +99,13 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
     }
 
     @Override
-    protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+    protected boolean maintainSeedlings(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    ) {
         for (int i = 0; i < extent; i++) {
             BlockPos position = translateWithOffset(pos, direction, i);
             BlockState state = world.getBlockState(position);

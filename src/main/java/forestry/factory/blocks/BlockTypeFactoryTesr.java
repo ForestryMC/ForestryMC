@@ -61,7 +61,11 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
         this.machineProperties = machineProperties;
     }
 
-    <T extends TileMill> BlockTypeFactoryTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String renderMillTexture) {
+    <T extends TileMill> BlockTypeFactoryTesr(
+            Supplier<FeatureTileType<? extends T>> teClass,
+            String name,
+            String renderMillTexture
+    ) {
         final VoxelShape pedestal = Block.makeCuboidShape(0D, 0D, 0D, 16, 1, 16);
         final VoxelShape column = Block.makeCuboidShape(5D, 1D, 4D, 11, 16, 12);
         final VoxelShape extension = Block.makeCuboidShape(1D, 8D, 7D, 15, 10, 9);

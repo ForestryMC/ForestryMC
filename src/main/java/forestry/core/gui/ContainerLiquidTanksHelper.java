@@ -64,13 +64,19 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
         fluidCap.ifPresent(fluidHandlerItem -> {
             if (pipette.canPipette(itemstack) && liquidAmount > 0) {
                 if (tank instanceof StandardTank) {
-                    FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+                    FluidStack fillAmount = ((StandardTank) tank).drainInternal(
+                            FluidAttributes.BUCKET_VOLUME,
+                            IFluidHandler.FluidAction.EXECUTE
+                    );
                     int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
                     tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
                     player.inventory.setItemStack(fluidHandlerItem.getContainer());
                     player.updateHeldItem();
                 } else {//TODO: Test if this works
-                    FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+                    FluidStack fillAmount = tank.drain(
+                            FluidAttributes.BUCKET_VOLUME,
+                            IFluidHandler.FluidAction.EXECUTE
+                    );
                     int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
                     tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
                     player.inventory.setItemStack(fluidHandlerItem.getContainer());

@@ -26,7 +26,8 @@ public enum LepidopterologyFilterRule implements IFilterRule {
     PURE_NOCTURNAL(DefaultFilterRuleType.PURE_NOCTURNAL) {
         @Override
         protected boolean isValid(IButterfly butterfly) {
-            return butterfly.getGenome().getActiveValue(ButterflyChromosomes.NOCTURNAL) && butterfly.isPureBred(ButterflyChromosomes.NOCTURNAL);
+            return butterfly.getGenome().getActiveValue(ButterflyChromosomes.NOCTURNAL) && butterfly.isPureBred(
+                    ButterflyChromosomes.NOCTURNAL);
         }
     },
     FLYER(DefaultFilterRuleType.FLYER) {
@@ -38,7 +39,8 @@ public enum LepidopterologyFilterRule implements IFilterRule {
     PURE_FLYER(DefaultFilterRuleType.PURE_FLYER) {
         @Override
         protected boolean isValid(IButterfly butterfly) {
-            return butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) && butterfly.isPureBred(ButterflyChromosomes.TOLERANT_FLYER);
+            return butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) && butterfly.isPureBred(
+                    ButterflyChromosomes.TOLERANT_FLYER);
         }
     };
 

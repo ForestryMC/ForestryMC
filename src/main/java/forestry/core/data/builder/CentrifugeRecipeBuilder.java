@@ -52,9 +52,9 @@ public class CentrifugeRecipeBuilder {
         validate(id);
 
         advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-                .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-                .withRewards(AdvancementRewards.Builder.recipe(id))
-                .withRequirementsStrategy(IRequirementsStrategy.OR);
+                          .withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
+                          .withRewards(AdvancementRewards.Builder.recipe(id))
+                          .withRequirementsStrategy(IRequirementsStrategy.OR);
         consumer.accept(new Result(
                 id,
                 processingTime,

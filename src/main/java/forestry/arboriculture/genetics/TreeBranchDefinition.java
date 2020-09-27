@@ -85,60 +85,125 @@ public enum TreeBranchDefinition implements IBranchDefinition {
         plantae.addMemberGroup(
                 classRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "angiosperms", "Angiosperms",
                         classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "asterids", "Asterids",
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "ericales", "Ericales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "ebenaceae", "Ebenaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "ericales",
+                                        "Ericales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "ebenaceae",
+                                                "Ebenaceae",
                                                 EBONY.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "fabaceae", "Fabaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "fabaceae",
+                                                "Fabaceae",
                                                 ACACIA.getBranch(),
                                                 DALBERGIA.getBranch(),
                                                 MILLETTIA.getBranch(),
                                                 PTEROCARPUS.getBranch()
                                         )
                                 ),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "lamiales", "Lamiales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "bignoniaceae", "Bignoniaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "lamiales",
+                                        "Lamiales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "bignoniaceae",
+                                                "Bignoniaceae",
                                                 TABEBUIA.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lamiaceae", "Lamiaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "lamiaceae",
+                                                "Lamiaceae",
                                                 TECTONA.getBranch()
                                         )
                                 )
                         ),
-                        classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "commelinids", "Commelinids",
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "arecales", "Arecales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "arecaceae", "Arecaceae",
+                        classRegistry.createAndRegisterClassification(
+                                EnumClassLevel.CLASS,
+                                "commelinids",
+                                "Commelinids",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "arecales",
+                                        "Arecales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "arecaceae",
+                                                "Arecaceae",
                                                 PHOENIX.getBranch()
                                         )
                                 )
                         ),
                         classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "rosids", "Rosids",
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "brassicales", "Brassicales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "caricaceae", "Caricaceae")
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "brassicales",
+                                        "Brassicales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "caricaceae",
+                                                "Caricaceae"
+                                        )
                                 ),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "fabales", "Fabales"),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "fagales", "Fagales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "betulaceae", "Betulaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "fabales",
+                                        "Fabales"
+                                ),
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "fagales",
+                                        "Fagales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "betulaceae",
+                                                "Betulaceae",
                                                 BETULA.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "fagaceae", "Fagaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "fagaceae",
+                                                "Fagaceae",
                                                 CASTANEA.getBranch(),
                                                 QUERCUS.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "juglandaceae", "Juglandaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "juglandaceae",
+                                                "Juglandaceae",
                                                 JUGLANS.getBranch()
                                         )
                                 ),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "rosales", "Rosales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "rosaceae", "Rosaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "rosales",
+                                        "Rosales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "rosaceae",
+                                                "Rosaceae",
                                                 PRUNUS.getBranch()
                                         )
                                 ),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "malvales", "Malvales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "dipterocarpaceae", "Dipterocarpaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "malvales",
+                                        "Malvales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "dipterocarpaceae",
+                                                "Dipterocarpaceae",
                                                 MAHOGANY.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "malvaceae", "Malvaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "malvaceae",
+                                                "Malvaceae",
                                                 ADANSONIA.getBranch(),
                                                 CEIBA.getBranch(),
                                                 OCHROMA.getBranch(),
@@ -146,23 +211,49 @@ public enum TreeBranchDefinition implements IBranchDefinition {
                                                 TILIA.getBranch()
                                         )
                                 ),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "laurales", "Laurales"),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "malpighiales", "Malpighiales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "salicaceae", "Salicaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "laurales",
+                                        "Laurales"
+                                ),
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "malpighiales",
+                                        "Malpighiales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "salicaceae",
+                                                "Salicaceae",
                                                 CHLOROCARDIUM.getBranch(),
                                                 POPULUS.getBranch(),
                                                 SALIX.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lauraceae", "Lauraceae")
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "lauraceae",
+                                                "Lauraceae"
+                                        )
                                 ),
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "sapindales", "Sapindales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "rutaceae", "Rutaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "sapindales",
+                                        "Sapindales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "rutaceae",
+                                                "Rutaceae",
                                                 CITRUS.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "sapindaceae", "Sapindaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "sapindaceae",
+                                                "Sapindaceae",
                                                 ACER.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "anacardiaceae", "Anacardiaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "anacardiaceae",
+                                                "Anacardiaceae",
                                                 ASTRONIUM.getBranch()
                                         )
                                 )
@@ -173,19 +264,32 @@ public enum TreeBranchDefinition implements IBranchDefinition {
         plantae.addMemberGroup(
                 classRegistry.createAndRegisterClassification(EnumClassLevel.DIVISION, "pinophyta", "Pinophyta",
                         classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "pinopsida", "Pinopsida",
-                                classRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "pinales", "Pinales",
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "pinaceae", "Pinaceae",
+                                classRegistry.createAndRegisterClassification(
+                                        EnumClassLevel.ORDER,
+                                        "pinales",
+                                        "Pinales",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "pinaceae",
+                                                "Pinaceae",
                                                 PICEA.getBranch(),
                                                 PINUS.getBranch(),
                                                 LARIX.getBranch()
                                         ),
-                                        classRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "cupressaceae", "Cupressaceae",
+                                        classRegistry.createAndRegisterClassification(
+                                                EnumClassLevel.FAMILY,
+                                                "cupressaceae",
+                                                "Cupressaceae",
                                                 SEQUOIA.getBranch(),
                                                 SEQUOIADENDRON.getBranch()
                                         )
                                 )
                         ),
-                        classRegistry.createAndRegisterClassification(EnumClassLevel.CLASS, "magnoliopsida", "Magnoliopsida")
+                        classRegistry.createAndRegisterClassification(
+                                EnumClassLevel.CLASS,
+                                "magnoliopsida",
+                                "Magnoliopsida"
+                        )
                 )
         );
 

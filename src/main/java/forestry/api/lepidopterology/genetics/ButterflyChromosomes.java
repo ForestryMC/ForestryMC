@@ -17,7 +17,8 @@ public class ButterflyChromosomes {
     /**
      * Species of the bee. Alleles here must implement {@link IAlleleButterflySpecies}.
      */
-    public static final IChromosomeAllele<IAlleleButterflySpecies> SPECIES = TYPES.builder().name("species").asAllele(IAlleleButterflySpecies.class);
+    public static final IChromosomeAllele<IAlleleButterflySpecies> SPECIES = TYPES.builder().name("species").asAllele(
+            IAlleleButterflySpecies.class);
     /**
      * Physical size.
      */
@@ -33,7 +34,9 @@ public class ButterflyChromosomes {
     /**
      * Species with a higher metabolism have a higher appetite and may cause more damage to their environment.
      */
-    public static final IChromosomeValue<Integer> METABOLISM = TYPES.builder().name("metabolism").asValue(Integer.class);
+    public static final IChromosomeValue<Integer> METABOLISM = TYPES.builder()
+                                                                    .name("metabolism")
+                                                                    .asValue(Integer.class);
     /**
      * Determines likelyhood of caterpillars and length of caterpillar/pupation phase. Also: Number of max caterpillars after mating?
      */
@@ -41,11 +44,14 @@ public class ButterflyChromosomes {
     /**
      * Not sure yet.
      */
-    public static final IChromosomeValue<EnumTolerance> TEMPERATURE_TOLERANCE = TYPES.builder().name("temperature_tolerance").asValue(EnumTolerance.class);
+    public static final IChromosomeValue<EnumTolerance> TEMPERATURE_TOLERANCE = TYPES.builder().name(
+            "temperature_tolerance").asValue(EnumTolerance.class);
     /**
      * Not sure yet.
      */
-    public static final IChromosomeValue<EnumTolerance> HUMIDITY_TOLERANCE = TYPES.builder().name("humidity_tolerance").asValue(EnumTolerance.class);
+    public static final IChromosomeValue<EnumTolerance> HUMIDITY_TOLERANCE = TYPES.builder()
+                                                                                  .name("humidity_tolerance")
+                                                                                  .asValue(EnumTolerance.class);
     /**
      * Only nocturnal butterflys/moths will fly at night. Allows daylight activity for naturally nocturnal species.
      */
@@ -53,21 +59,28 @@ public class ButterflyChromosomes {
     /**
      * Only tolerant flyers will fly in the rain.
      */
-    public static final IChromosomeValue<Boolean> TOLERANT_FLYER = TYPES.builder().name("tolerant_flyer").asValue(Boolean.class);
+    public static final IChromosomeValue<Boolean> TOLERANT_FLYER = TYPES.builder().name("tolerant_flyer").asValue(
+            Boolean.class);
     /**
      * Fire resistance.
      */
-    public static final IChromosomeValue<Boolean> FIRE_RESIST = TYPES.builder().name("fire_resist").asValue(Boolean.class);
+    public static final IChromosomeValue<Boolean> FIRE_RESIST = TYPES.builder()
+                                                                     .name("fire_resist")
+                                                                     .asValue(Boolean.class);
     /**
      * Required flowers/leaves.
      */
-    public static final IChromosomeAllele<IAlleleFlowers> FLOWER_PROVIDER = TYPES.builder().name("flower_provider").asAllele(IAlleleFlowers.class);
+    public static final IChromosomeAllele<IAlleleFlowers> FLOWER_PROVIDER = TYPES.builder()
+                                                                                 .name("flower_provider")
+                                                                                 .asAllele(IAlleleFlowers.class);
     /**
      * Extra effect to surroundings. (?)
      */
-    public static final IChromosomeAllele<IAlleleButterflyEffect> EFFECT = TYPES.builder().name("effect").asAllele(IAlleleButterflyEffect.class);
+    public static final IChromosomeAllele<IAlleleButterflyEffect> EFFECT = TYPES.builder().name("effect").asAllele(
+            IAlleleButterflyEffect.class);
 
-    public static final IChromosomeAllele<IAlleleButterflyCocoon> COCOON = TYPES.builder().name("cocoon").asAllele(IAlleleButterflyCocoon.class);
+    public static final IChromosomeAllele<IAlleleButterflyCocoon> COCOON = TYPES.builder().name("cocoon").asAllele(
+            IAlleleButterflyCocoon.class);
 
     private ButterflyChromosomes() {
     }

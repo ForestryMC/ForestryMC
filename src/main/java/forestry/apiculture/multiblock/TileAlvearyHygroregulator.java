@@ -76,7 +76,10 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
                 currentRecipe = HygroregulatorManager.findMatchingRecipe(fluid);
 
                 if (currentRecipe != null) {
-                    liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
+                    liquidTank.drainInternal(
+                            currentRecipe.getResource().getAmount(),
+                            IFluidHandler.FluidAction.EXECUTE
+                    );
                     transferTime = currentRecipe.getTransferTime();
                 }
             }

@@ -26,7 +26,8 @@ public enum ApicultureFilterRule implements IFilterRule {
     PURE_NOCTURNAL(DefaultFilterRuleType.PURE_NOCTURNAL) {
         @Override
         protected boolean isValid(IBee bee) {
-            return bee.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS) && bee.isPureBred(BeeChromosomes.NEVER_SLEEPS);
+            return bee.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS) &&
+                   bee.isPureBred(BeeChromosomes.NEVER_SLEEPS);
         }
     },
     FLYER(DefaultFilterRuleType.FLYER) {
@@ -38,7 +39,8 @@ public enum ApicultureFilterRule implements IFilterRule {
     PURE_FLYER((DefaultFilterRuleType.PURE_FLYER)) {
         @Override
         protected boolean isValid(IBee bee) {
-            return bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN) && bee.isPureBred(BeeChromosomes.TOLERATES_RAIN);
+            return bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN) &&
+                   bee.isPureBred(BeeChromosomes.TOLERATES_RAIN);
         }
     },
     CAVE(DefaultFilterRuleType.CAVE) {
@@ -50,7 +52,8 @@ public enum ApicultureFilterRule implements IFilterRule {
     PURE_CAVE(DefaultFilterRuleType.PURE_CAVE) {
         @Override
         protected boolean isValid(IBee bee) {
-            return bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING) && bee.isPureBred(BeeChromosomes.CAVE_DWELLING);
+            return bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING) &&
+                   bee.isPureBred(BeeChromosomes.CAVE_DWELLING);
         }
     };
 

@@ -22,7 +22,12 @@ public class RootContext<I extends IIndividual> implements IRootContext<I> {
     private final Multimap<ComponentKey, Consumer> componentListeners;
     private final Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory;
 
-    public RootContext(IKaryotype karyotype, Collection<IGeneticListener<I>> listeners, Multimap<ComponentKey, Consumer> componentListeners, Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory) {
+    public RootContext(
+            IKaryotype karyotype,
+            Collection<IGeneticListener<I>> listeners,
+            Multimap<ComponentKey, Consumer> componentListeners,
+            Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory
+    ) {
         this.karyotype = karyotype;
         this.listeners = listeners;
         this.componentListeners = componentListeners;

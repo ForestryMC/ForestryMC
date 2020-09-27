@@ -25,7 +25,8 @@ import net.minecraft.item.ItemStack;
 
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
-    private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
+    private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts()
+                                                                                                            .values());
 
     private static final short inputCircuitBoardSlot = 0;
     private static final short finishedCircuitBoardSlot = 1;

@@ -42,8 +42,10 @@ public abstract class Ledger {
     protected final int maxTextWidth;
     protected int maxHeight = 24;
 
-    private static final ResourceLocation ledgerTextureRight = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger.png");
-    private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger_left.png");
+    private static final ResourceLocation ledgerTextureRight = new ForestryResource(
+            Constants.TEXTURE_PATH_GUI + "/ledger.png");
+    private static final ResourceLocation ledgerTextureLeft = new ForestryResource(
+            Constants.TEXTURE_PATH_GUI + "/ledger_left.png");
 
     protected final LedgerManager manager;
 
@@ -163,7 +165,8 @@ public abstract class Ledger {
     }
 
     public boolean intersects(double mouseX, double mouseY) {
-        return mouseX >= currentShiftX && mouseX <= currentShiftX + currentWidth && mouseY >= currentShiftY && mouseY <= currentShiftY + getHeight();
+        return mouseX >= currentShiftX && mouseX <= currentShiftX + currentWidth && mouseY >= currentShiftY &&
+               mouseY <= currentShiftY + getHeight();
     }
 
     public void setFullyOpen() {
@@ -272,7 +275,7 @@ public abstract class Ledger {
         int originalY = y;
         Minecraft minecraft = Minecraft.getInstance();
         for (ITextProperties textProperties : minecraft.fontRenderer.getCharacterManager()
-                .func_238362_b_(component, width, Style.EMPTY)) {
+                                                                    .func_238362_b_(component, width, Style.EMPTY)) {
             if (shadow) {
                 minecraft.fontRenderer.func_243246_a(
                         transform,

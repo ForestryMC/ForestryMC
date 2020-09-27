@@ -28,7 +28,11 @@ public class Organism<I extends IIndividual> implements IOrganism<I> {
     private final IRootDefinition<? extends IIndividualRoot<I>> definition;
     private final Supplier<IOrganismType> typeSupplier;
 
-    public Organism(ItemStack container, IRootDefinition<? extends IIndividualRoot<I>> geneticDefinitionSupplier, Supplier<IOrganismType> typeSupplier) {
+    public Organism(
+            ItemStack container,
+            IRootDefinition<? extends IIndividualRoot<I>> geneticDefinitionSupplier,
+            Supplier<IOrganismType> typeSupplier
+    ) {
         this.container = container;
         this.definition = geneticDefinitionSupplier;
         this.typeSupplier = typeSupplier;

@@ -62,7 +62,9 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
         public Iterator<BlockPos.Mutable> areaIterator;
 
         public FlowerData(IBee queen, IBeeHousing beeHousing) {
-            IFlowerProvider flowerProvider = queen.getGenome().getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider();
+            IFlowerProvider flowerProvider = queen.getGenome()
+                                                  .getActiveAllele(BeeChromosomes.FLOWER_PROVIDER)
+                                                  .getProvider();
             this.flowerType = flowerProvider.getFlowerType();
             this.territory = queen.getGenome().getActiveValue(BeeChromosomes.TERRITORY);
             this.flowerPredicate = FlowerManager.flowerRegistry.createAcceptedFlowerPredicate(flowerType);
@@ -125,7 +127,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
             IGenome genome = queen.getGenome();
             String flowerType = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getFlowerType();
             if (!this.flowerData.flowerType.equals(flowerType)
-                    || !this.flowerData.territory.equals(genome.getActiveValue(BeeChromosomes.TERRITORY))) {
+                || !this.flowerData.territory.equals(genome.getActiveValue(BeeChromosomes.TERRITORY))) {
                 flowerData = new FlowerData(queen, housing);
                 flowerCoords.clear();
                 flowers.clear();
@@ -185,7 +187,11 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 
                 for (int i = 0; i < flowerCount; i++) {
                     int index = i * 3;
-                    BlockPos flowerPos = new BlockPos(flowersList[index], flowersList[index + 1], flowersList[index + 2]);
+                    BlockPos flowerPos = new BlockPos(
+                            flowersList[index],
+                            flowersList[index + 1],
+                            flowersList[index + 2]
+                    );
                     flowerCoords.add(flowerPos);
                 }
                 needsSync = true;

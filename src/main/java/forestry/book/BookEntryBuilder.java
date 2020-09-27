@@ -58,7 +58,15 @@ public class BookEntryBuilder implements IBookEntryBuilder {
 
     @Override
     public IBookEntry build(@Nullable IBookEntry parent) {
-        return new BookEntry(name, stack, loader, entry -> subEntries.stream().map(builder -> builder.build(entry)).toArray(IBookEntry[]::new), content, title, parent);
+        return new BookEntry(
+                name,
+                stack,
+                loader,
+                entry -> subEntries.stream().map(builder -> builder.build(entry)).toArray(IBookEntry[]::new),
+                content,
+                title,
+                parent
+        );
     }
 
     @Override

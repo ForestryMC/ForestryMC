@@ -86,7 +86,14 @@ public class TileMillRainmaker extends TileMill {
     @Override
     public void activate() {
         if (world.isRemote) {
-            world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
+            world.playSound(
+                    null,
+                    getPos(),
+                    SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
+                    SoundCategory.WEATHER,
+                    10000.0F,
+                    0.8F + world.rand.nextFloat() * 0.2F
+            );
 
             float f = getPos().getX() + 0.5F;
             float f1 = getPos().getY() + 0.0F + world.rand.nextFloat() * 6F / 16F;

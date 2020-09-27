@@ -15,7 +15,10 @@ public class BlockAsh extends Block {
     public static final IntegerProperty AMOUNT = IntegerProperty.create("amount", 0, 63);
 
     public BlockAsh() {
-        super(Block.Properties.create(Material.EARTH, MaterialColor.BLACK).sound(SoundType.SAND).harvestTool(ToolType.SHOVEL).harvestLevel(0));
+        super(Block.Properties.create(Material.EARTH, MaterialColor.BLACK)
+                              .sound(SoundType.SAND)
+                              .harvestTool(ToolType.SHOVEL)
+                              .harvestLevel(0));
     }
 
     @Override

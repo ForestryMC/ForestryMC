@@ -52,5 +52,11 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
      * @param product       Crafting result.
      * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
      */
-    void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
+    void addRecipe(
+            int packagingTime,
+            @Nullable FluidStack liquid,
+            ItemStack box,
+            ItemStack product,
+            Object... materials
+    );
 }

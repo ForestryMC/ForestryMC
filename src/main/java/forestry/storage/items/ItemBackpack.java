@@ -76,7 +76,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
     @Override
     protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-        buffer.writeEnum(type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT, ContainerBackpack.Size.values());
+        buffer.writeEnum(
+                type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT,
+                ContainerBackpack.Size.values()
+        );
         buffer.writeItemStack(stack);
     }
 
@@ -105,7 +108,8 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
         // We only do this when shift is clicked
         if (player.isSneaking()) {
             ItemStack heldItem = player.getHeldItem(context.getHand());
-            return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
+            return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace())
+                   ? ActionResultType.PASS : ActionResultType.FAIL;
         }
         return super.onItemUseFirst(stack, context);
     }
@@ -195,7 +199,12 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         super.addInformation(itemstack, world, list, flag);
 
         int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
@@ -205,7 +214,11 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
         if (infoKey != null) {
             list.add(new TranslationTextComponent(infoKey).mergeStyle(TextFormatting.GRAY));
         }
-        list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).mergeStyle(TextFormatting.GRAY));
+        list.add(new TranslationTextComponent(
+                "for.gui.slots",
+                String.valueOf(occupied),
+                String.valueOf(getBackpackSize())
+        ).mergeStyle(TextFormatting.GRAY));
     }
 
     @Override

@@ -90,8 +90,20 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
         IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
         IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
         IResearchHandler<IIndividual> handler = root.getComponent(ForestryComponentKeys.RESEARCH);
-        for (ItemStack itemstack : handler.getResearchBounty(species, world, gameProfile, individual, game.getBountyLevel())) {
-            InventoryUtil.addStack(getInternalInventory(), itemstack, InventoryEscritoire.SLOT_RESULTS_1, InventoryEscritoire.SLOTS_RESULTS_COUNT, true);
+        for (ItemStack itemstack : handler.getResearchBounty(
+                species,
+                world,
+                gameProfile,
+                individual,
+                game.getBountyLevel()
+        )) {
+            InventoryUtil.addStack(
+                    getInternalInventory(),
+                    itemstack,
+                    InventoryEscritoire.SLOT_RESULTS_1,
+                    InventoryEscritoire.SLOTS_RESULTS_COUNT,
+                    true
+            );
         }
     }
 

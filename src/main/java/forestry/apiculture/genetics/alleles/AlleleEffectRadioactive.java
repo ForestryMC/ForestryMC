@@ -81,7 +81,8 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
             }
 
             // Don't destroy ourselves or blocks below us.
-            if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() && posBlock.getY() <= posHousing.getY()) {
+            if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() &&
+                posBlock.getY() <= posHousing.getY()) {
                 continue;
             }
 

@@ -37,7 +37,8 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
                 disabledModuleNames.add(info.name());
             }
 
-            String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(disabledModuleNames);
+            String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(
+                    disabledModuleNames);
             ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
             CrashReportExtender.registerCrashCallable(callable);
         }

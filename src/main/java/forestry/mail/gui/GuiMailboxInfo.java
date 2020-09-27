@@ -78,8 +78,20 @@ public class GuiMailboxInfo extends AbstractGui {
 
         this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 
-        fontRenderer.drawString(transform, Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
-        fontRenderer.drawString(transform, Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
+        fontRenderer.drawString(
+                transform,
+                Integer.toString(poInfo.playerLetters),
+                x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22),
+                y + 5,
+                0xffffff
+        );
+        fontRenderer.drawString(
+                transform,
+                Integer.toString(poInfo.tradeLetters),
+                x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22),
+                y + 5,
+                0xffffff
+        );
     }
 
     protected int getCenteredOffset(String string, int xWidth) {
@@ -97,7 +109,8 @@ public class GuiMailboxInfo extends AbstractGui {
         if (info.hasMail()) {
             if (this.poInfo == null) {
                 playJingle = true;
-            } else if (this.poInfo.playerLetters != info.playerLetters || this.poInfo.tradeLetters != info.tradeLetters) {
+            } else if (this.poInfo.playerLetters != info.playerLetters ||
+                       this.poInfo.tradeLetters != info.tradeLetters) {
                 playJingle = true;
             }
         }

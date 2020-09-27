@@ -328,7 +328,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
     private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
         return tank.canFill() &&
-                tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
+               tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
     }
 
     private static boolean tankCanDrain(StandardTank tank) {
@@ -341,6 +341,6 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
     private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
         return ForestryFluids.areEqual(tank.getFluidType(), fluidStack) &&
-                tankCanDrain(tank);
+               tankCanDrain(tank);
     }
 }

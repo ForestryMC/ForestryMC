@@ -43,7 +43,11 @@ public class MutationElement extends SelectionElement<IMutation> {
             conditionText = String.format("%.0f%%", mutation.getBaseChance());
         }
 
-        selectedElement.label(new StringTextComponent(conditionText)).setStyle(GuiConstants.BLACK_STYLE).setFitText(true).addTooltip(conditions).setXPosition(58);
+        selectedElement.label(new StringTextComponent(conditionText))
+                       .setStyle(GuiConstants.BLACK_STYLE)
+                       .setFitText(true)
+                       .addTooltip(conditions)
+                       .setXPosition(58);
         selectedElement.drawable(62, 6, MUTATION_ARROW).addTooltip(conditions);
         //
         selectedElement.item(1, 1, root.createStack(mutation.getFirstParent(), root.getTypeForMutation(0)));

@@ -72,7 +72,11 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
         }
 
         // Hard limit to 4 cycles / second.
-        if (workCounter < WORK_CYCLES && EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION)) {
+        if (workCounter < WORK_CYCLES && EnergyHelper.consumeEnergyToDoWork(
+                energyManager,
+                WORK_CYCLES,
+                ENERGY_PER_OPERATION
+        )) {
             workCounter++;
         }
 

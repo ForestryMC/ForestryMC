@@ -52,12 +52,18 @@ public abstract class ItemGE extends ItemForestry {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         if (!itemstack.hasTag()) {
             return;
         }
 
-        Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack).filter(IIndividual::isAnalyzed);
+        Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack)
+                                                                .filter(IIndividual::isAnalyzed);
         if (optionalIndividual.isPresent()) {
             IIndividual individual = optionalIndividual.get();
             if (Screen.hasShiftDown()) {

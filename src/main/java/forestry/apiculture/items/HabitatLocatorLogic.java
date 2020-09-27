@@ -39,8 +39,8 @@ public class HabitatLocatorLogic {
     static {
         for (Biome biome : ForgeRegistries.BIOMES) {
             if (biome.getCategory() == Biome.Category.BEACH ||
-                    biome.getCategory() == Biome.Category.OCEAN ||
-                    biome.getCategory() == Biome.Category.RIVER
+                biome.getCategory() == Biome.Category.OCEAN ||
+                biome.getCategory() == Biome.Category.RIVER
             ) {
                 waterBiomes.add(biome);
             }

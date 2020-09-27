@@ -35,7 +35,13 @@ public class ClimateHandlerClient {
             int x = world.rand.nextInt(11) - 5;
             int y = world.rand.nextInt(5) - 1;
             int z = world.rand.nextInt(11) - 5;
-            ParticleRender.addClimateParticles(world, pos.add(x, y, z), world.rand, currentState.getTemperatureEnum(), currentState.getHumidityEnum());
+            ParticleRender.addClimateParticles(
+                    world,
+                    pos.add(x, y, z),
+                    world.rand,
+                    currentState.getTemperatureEnum(),
+                    currentState.getHumidityEnum()
+            );
         }
     }
 }

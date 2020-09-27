@@ -88,7 +88,10 @@ public interface IIndividualRootBuilder<I extends IIndividual> {
      * @param <C>     The type of the component of the key.
      * @param <B>     the type of the component builder that the is associated with the key and created by the factory.
      */
-    <C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(ComponentKey key, IRootComponentFactory<I, C> factory);
+    <C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(
+            ComponentKey key,
+            IRootComponentFactory<I, C> factory
+    );
 
     /**
      * Adds a component listener.

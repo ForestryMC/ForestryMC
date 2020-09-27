@@ -66,15 +66,27 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 
     public static void createClassifications(IClassificationRegistry registry) {
         registry.getClassification("class.insecta").addMemberGroup(
-                registry.createAndRegisterClassification(IClassification.EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera",
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "geometridae", "Geometridae",
+                registry.createAndRegisterClassification(
+                        IClassification.EnumClassLevel.ORDER,
+                        "lepidoptera",
+                        "Lepidoptera",
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "geometridae",
+                                "Geometridae",
                                 OPISTHOGRAPTIS.getBranch(),
                                 CHIASMIA.getBranch()
                         ),
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "saturniidae", "Saturniidae",
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "saturniidae",
+                                "Saturniidae",
                                 ATTACUS.getBranch()
                         ),
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "pieridae", "Pieridae",
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "pieridae",
+                                "Pieridae",
                                 PIERIS.getBranch(),
                                 GONEPTERYX.getBranch(),
                                 ANTHOCHARIS.getBranch(),
@@ -82,7 +94,10 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
                                 PONTIA.getBranch(),
                                 CELASTRINA.getBranch()
                         ),
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae",
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "nymphalidae",
+                                "Nymphalidae",
                                 PARARGE.getBranch(),
                                 POLYGONIA.getBranch(),
                                 MORPHO.getBranch(),
@@ -97,13 +112,27 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
                                 CETHOSIA.getBranch(),
                                 SPEYERIA.getBranch()
                         ),
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae"),
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "papilionidae", "Papilionidae",
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "lycaenidae",
+                                "Lycaenidae"
+                        ),
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "papilionidae",
+                                "Papilionidae",
                                 PAPILIO.getBranch(),
                                 PROTOGRAPHIUM.getBranch()
                         ),
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae"),
-                        registry.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "bombycidae", "Bombycidae",
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "notchidae",
+                                "Notchidae"
+                        ),
+                        registry.createAndRegisterClassification(
+                                IClassification.EnumClassLevel.FAMILY,
+                                "bombycidae",
+                                "Bombycidae",
                                 BOMBYX.getBranch()
                         )
                 )

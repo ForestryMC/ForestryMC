@@ -18,32 +18,32 @@ public class TreeConfig {
     public static final String CONFIG_CATEGORY_TREE = "trees";
     public static final String CONFIG_COMMENT =
             "This config can be used to customise the world generation for all trees that where added by forestry or\n" +
-                    "by an addon mod like extra trees.\n" +
-                    "\n" +
-                    "# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" +
-                    "S:rarity=1.0\n" +
-                    "\n" +
-                    "# Dimension ids can be added to these lists to blacklist or whitelist them. \n" +
-                    "dimensions {\n" +
-                    "\tI:blacklist <\n" +
-                    "\t\t1\n" +
-                    "\t >\n" +
-                    "\tI:whitelist <\n" +
-                    "\t\t-1\n" +
-                    "\t >\n" +
-                    "}\n" +
-                    "\n" +
-                    "# Biome types or registry names can be added to these lists to blacklist them. \n" +
-                    "biomes {\n" +
-                    "\tblacklist {\n" +
-                    "\t\tS:names <\n" +
-                    "\t\t\tminecraft:plains\n" +
-                    "\t\t >\n" +
-                    "\t\tS:types <\n" +
-                    "\t\t\tforest\n" +
-                    "\t\t >\n" +
-                    "\t}\n" +
-                    "}";
+            "by an addon mod like extra trees.\n" +
+            "\n" +
+            "# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" +
+            "S:rarity=1.0\n" +
+            "\n" +
+            "# Dimension ids can be added to these lists to blacklist or whitelist them. \n" +
+            "dimensions {\n" +
+            "\tI:blacklist <\n" +
+            "\t\t1\n" +
+            "\t >\n" +
+            "\tI:whitelist <\n" +
+            "\t\t-1\n" +
+            "\t >\n" +
+            "}\n" +
+            "\n" +
+            "# Biome types or registry names can be added to these lists to blacklist them. \n" +
+            "biomes {\n" +
+            "\tblacklist {\n" +
+            "\t\tS:names <\n" +
+            "\t\t\tminecraft:plains\n" +
+            "\t\t >\n" +
+            "\t\tS:types <\n" +
+            "\t\t\tforest\n" +
+            "\t\t >\n" +
+            "\t}\n" +
+            "}";
     private static final Map<ResourceLocation, TreeConfig> configs = new HashMap<>();
     private static final TreeConfig GLOBAL = new TreeConfig(new ResourceLocation(Constants.MOD_ID, "global"), 1.0F);
 
@@ -79,12 +79,12 @@ public class TreeConfig {
 
     private TreeConfig parseConfig(LocalizedConfiguration config) {
         for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new int[0])
-                .getIntList()) {
+                               .getIntList()) {
             blacklistedDimensions.add(dimId);
         }
 
         for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new int[0])
-                .getIntList()) {
+                               .getIntList()) {
             whitelistedDimensions.add(dimId);
         }
 
@@ -105,14 +105,15 @@ public class TreeConfig {
             if (biome != null) {
                 blacklistedBiomes.add(biome);
             } else {
-                Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName + "'. No biome is registered under the registry name '" + biomeName + "'.");
+                Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName +
+                          "'. No biome is registered under the registry name '" + biomeName + "'.");
             }
         }
 
         spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity)
-                .setMinValue(0.0F)
-                .setMaxValue(1.0F)
-                .getDouble();
+                                    .setMinValue(0.0F)
+                                    .setMaxValue(1.0F)
+                                    .getDouble();
         return this;
     }
 

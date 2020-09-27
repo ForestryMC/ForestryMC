@@ -38,7 +38,13 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
     }
 
     //TODO hack icon in GUI by checking title. Then it isn't needed here.
-    public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
+    public ContainerBeeHousing(
+            int windowId,
+            PlayerInventory player,
+            TileBeeHousingBase tile,
+            boolean hasFrames,
+            GuiBeeHousing.Icon icon
+    ) {
         super(windowId, ApicultureContainers.BEE_HOUSING.containerType(), player, tile, 8, 108);
         ContainerBeeHelper.addSlots(this, tile, hasFrames);
 

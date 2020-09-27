@@ -21,7 +21,8 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRec
     public RainmakerRecipeCategory(IGuiHelper guiHelper) {
         super(guiHelper.createBlankDrawable(150, 30), "block.forestry.rainmaker");
         this.slot = guiHelper.getSlotDrawable();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER)
+                                                                                       .block()));
     }
 
     @Override

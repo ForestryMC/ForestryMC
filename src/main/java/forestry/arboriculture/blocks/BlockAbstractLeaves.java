@@ -49,7 +49,13 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+    public ItemStack getPickBlock(
+            BlockState state,
+            RayTraceResult target,
+            IBlockReader world,
+            BlockPos pos,
+            PlayerEntity player
+    ) {
         ITree tree = getTree(world, pos);
         if (tree == null) {
             return ItemStack.EMPTY;
@@ -61,13 +67,22 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
     //TODO since loot done in loot table I don't know if this works
     @Nonnull
     @Override
-    public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
+    public List<ItemStack> onSheared(
+            @Nullable PlayerEntity player,
+            @Nonnull ItemStack item,
+            World world,
+            BlockPos pos,
+            int fortune
+    ) {
         ITree tree = getTree(world, pos);
         if (tree == null) {
             tree = TreeDefinition.Oak.createIndividual();
         }
 
-        ItemStack decorativeLeaves = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getLeafProvider().getDecorativeLeaves();
+        ItemStack decorativeLeaves = tree.getGenome()
+                                         .getActiveAllele(TreeChromosomes.SPECIES)
+                                         .getLeafProvider()
+                                         .getDecorativeLeaves();
         if (decorativeLeaves.isEmpty()) {
             return Collections.emptyList();
         } else {
@@ -76,7 +91,12 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getCollisionShape(
+            BlockState state,
+            IBlockReader worldIn,
+            BlockPos pos,
+            ISelectionContext context
+    ) {
         ITree tree = getTree(worldIn, pos);
         if (tree != null && TreeDefinition.Willow.getUID().equals(tree.getIdentifier())) {
             return VoxelShapes.empty();
@@ -186,5 +206,12 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
     //			getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
     //		}
     //	}
-    protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
+    protected abstract void getLeafDrop(
+            NonNullList<ItemStack> drops,
+            World world,
+            @Nullable GameProfile playerProfile,
+            BlockPos pos,
+            float saplingModifier,
+            int fortune
+    );
 }

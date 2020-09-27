@@ -23,9 +23,11 @@ public interface IClimateHelper {
      * @param tolHumid    Humidity tolerance to apply.
      * @return true if both temperature and humidity fit the given constraints.
      */
-    boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity,
-                           EnumTemperature baseTemp, EnumTolerance tolTemp,
-                           EnumHumidity baseHumid, EnumTolerance tolHumid);
+    boolean isWithinLimits(
+            EnumTemperature temperature, EnumHumidity humidity,
+            EnumTemperature baseTemp, EnumTolerance tolTemp,
+            EnumHumidity baseHumid, EnumTolerance tolHumid
+    );
 
     boolean isWithinLimits(EnumTemperature temperature, EnumTemperature baseTemp, EnumTolerance tolTemp);
 

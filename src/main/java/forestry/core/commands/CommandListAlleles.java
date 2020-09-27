@@ -40,8 +40,9 @@ public class CommandListAlleles {
             CommandHelpers.sendChatMessage(
                     context.getSource(),
                     type.getName() + ": " + genome.getActiveAllele(type)
-                            .getDisplayName()
-                            .getString() + " " + genome.getInactiveAllele(type).getDisplayName().getString()
+                                                  .getDisplayName()
+                                                  .getString() + " " +
+                    genome.getInactiveAllele(type).getDisplayName().getString()
             );
         }
 

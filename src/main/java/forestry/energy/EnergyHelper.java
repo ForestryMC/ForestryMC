@@ -24,7 +24,11 @@ public class EnergyHelper {
      *
      * @return true if the energy to do work was consumed
      */
-    public static boolean consumeEnergyToDoWork(EnergyManager energyManager, int ticksPerWorkCycle, int energyPerWorkCycle) {
+    public static boolean consumeEnergyToDoWork(
+            EnergyManager energyManager,
+            int ticksPerWorkCycle,
+            int energyPerWorkCycle
+    ) {
         if (energyPerWorkCycle == 0) {
             return true;
         }
@@ -54,7 +58,13 @@ public class EnergyHelper {
      *
      * @return amount sent
      */
-    public static int sendEnergy(EnergyManager energyManager, Direction orientation, @Nullable TileEntity tile, int amount, boolean simulate) {
+    public static int sendEnergy(
+            EnergyManager energyManager,
+            Direction orientation,
+            @Nullable TileEntity tile,
+            int amount,
+            boolean simulate
+    ) {
         int extractable = energyManager.extractEnergy(amount, true);
         if (extractable > 0) {
             Direction side = orientation.getOpposite();
@@ -114,6 +124,6 @@ public class EnergyHelper {
         }
 
         return TeslaHelper.isEnergyReceiver(tile, side) ||
-                MjHelper.isEnergyReceiver(tile, side);
+               MjHelper.isEnergyReceiver(tile, side);
     }
 }

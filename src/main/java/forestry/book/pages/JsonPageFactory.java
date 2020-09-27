@@ -33,7 +33,13 @@ public class JsonPageFactory implements IBookPageFactory {
             VerticalLayout page = new VerticalLayout(108);
             pages.add(page);
             for (BookContent content : contentArray) {
-                if (content.addElements(page, GuiElementFactory.INSTANCE, previous, previousElement, GuiForesterBook.PAGE_HEIGHT - (pages.size() % 2 == 1 ? 13 : 0))) {
+                if (content.addElements(
+                        page,
+                        GuiElementFactory.INSTANCE,
+                        previous,
+                        previousElement,
+                        GuiForesterBook.PAGE_HEIGHT - (pages.size() % 2 == 1 ? 13 : 0)
+                )) {
                     previous = content;
                     previousElement = page.getLastElement();
                     page.layout();

@@ -58,7 +58,16 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
     /**
      * use this instead of {@link HorizontalBlock#HORIZONTAL_FACING} so the blocks rotate in a circle instead of NSWE order.
      */
-    public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN, Direction.UP);
+    public static final EnumProperty<Direction> FACING = EnumProperty.create(
+            "facing",
+            Direction.class,
+            Direction.NORTH,
+            Direction.EAST,
+            Direction.SOUTH,
+            Direction.WEST,
+            Direction.DOWN,
+            Direction.UP
+    );
 
     private final boolean hasTESR;
     private final boolean hasCustom;
@@ -67,7 +76,8 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
     private final ParticleHelper.Callback particleCallback;
 
     public BlockBase(P blockType, Block.Properties properties) {
-        super(properties.setOpaque((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) && !(blockType instanceof IBlockTypeCustom)));
+        super(properties.setOpaque((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) &&
+                                                           !(blockType instanceof IBlockTypeCustom)));
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
 
         this.blockType = blockType;
@@ -138,7 +148,14 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
     /* INTERACTION */
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(
+            BlockState state,
+            World worldIn,
+            BlockPos pos,
+            PlayerEntity playerIn,
+            Hand hand,
+            BlockRayTraceResult hit
+    ) {
         TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
         if (tile == null) {
             return ActionResultType.FAIL;
@@ -226,7 +243,13 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
         if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
             if (target.getType() == RayTraceResult.Type.BLOCK) {
                 BlockRayTraceResult result = (BlockRayTraceResult) target;
-                return ParticleHelper.addBlockHitEffects(world, result.getPos(), result.getFace(), effectRenderer, particleCallback);
+                return ParticleHelper.addBlockHitEffects(
+                        world,
+                        result.getPos(),
+                        result.getFace(),
+                        effectRenderer,
+                        particleCallback
+                );
             }
         }
         return false;

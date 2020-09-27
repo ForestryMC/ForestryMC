@@ -34,7 +34,12 @@ public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
         // Input buffer
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 2; k++) {
-                this.addSlot(new SlotFiltered(tile, InventoryAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18));
+                this.addSlot(new SlotFiltered(
+                        tile,
+                        InventoryAnalyzer.SLOT_INPUT_1 + i * 2 + k,
+                        8 + k * 18,
+                        28 + i * 18
+                ));
             }
         }
 
@@ -47,7 +52,12 @@ public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
         // Output buffer
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 2; k++) {
-                this.addSlot(new SlotOutput(tile, InventoryAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
+                this.addSlot(new SlotOutput(
+                        tile,
+                        InventoryAnalyzer.SLOT_OUTPUT_1 + i * 2 + k,
+                        134 + k * 18,
+                        48 + i * 18
+                ));
             }
         }
     }

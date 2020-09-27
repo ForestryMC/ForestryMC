@@ -37,7 +37,12 @@ public class PacketGuiFilterUpdate extends ForestryPacket implements IForestryPa
         public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
             BlockPos pos = data.readBlockPos();
 
-            LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
+            LazyOptional<IFilterLogic> logic = TileUtil.getInterface(
+                    player.world,
+                    pos,
+                    GeneticCapabilities.FILTER_LOGIC,
+                    null
+            );
             logic.ifPresent(l -> l.readGuiData(data));
         }
     }

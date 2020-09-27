@@ -31,7 +31,11 @@ public class RecipeDataHelper {
         simpleConditionalRecipe(recipe, null, conditions);
     }
 
-    public void simpleConditionalRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, @Nullable ResourceLocation id, ICondition... conditions) {
+    public void simpleConditionalRecipe(
+            Consumer<Consumer<IFinishedRecipe>> recipe,
+            @Nullable ResourceLocation id,
+            ICondition... conditions
+    ) {
         ConditionalRecipe.Builder builder = ConditionalRecipe.builder();
         for (ICondition condition : conditions) {
             builder.addCondition(condition);
@@ -45,8 +49,18 @@ public class RecipeDataHelper {
         builder.build(consumer, id == null ? finishedRecipe.getID() : id);
     }
 
-    public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, @Nullable ResourceLocation id, String... moduleUIDs) {
-        simpleConditionalRecipe(recipe, id, Arrays.stream(moduleUIDs).map(u -> new ModuleEnabledCondition(Constants.MOD_ID, u)).toArray(ICondition[]::new));
+    public void moduleConditionRecipe(
+            Consumer<Consumer<IFinishedRecipe>> recipe,
+            @Nullable ResourceLocation id,
+            String... moduleUIDs
+    ) {
+        simpleConditionalRecipe(
+                recipe,
+                id,
+                Arrays.stream(moduleUIDs)
+                      .map(u -> new ModuleEnabledCondition(Constants.MOD_ID, u))
+                      .toArray(ICondition[]::new)
+        );
     }
 
     public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, String... moduleUIDs) {

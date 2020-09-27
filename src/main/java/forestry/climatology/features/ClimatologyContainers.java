@@ -12,6 +12,9 @@ import forestry.modules.features.ModFeatureRegistry;
 public class ClimatologyContainers {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleClimatology.class);
 
-    public static final FeatureContainerType<ContainerHabitatFormer> HABITAT_FORMER = REGISTRY.container(ContainerHabitatFormer::fromNetwork, "habitat_former");
+    public static final FeatureContainerType<ContainerHabitatFormer> HABITAT_FORMER = REGISTRY.container(
+            ContainerHabitatFormer::fromNetwork,
+            "habitat_former"
+    );
 
 }

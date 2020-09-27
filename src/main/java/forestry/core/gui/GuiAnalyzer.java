@@ -31,7 +31,13 @@ public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
-        drawAnalyzeMeter(transform, guiLeft + 64, guiTop + 30, tile.getProgressScaled(46), EnumTankLevel.rateTankLevel(tile.getProgressScaled(100)));
+        drawAnalyzeMeter(
+                transform,
+                guiLeft + 64,
+                guiTop + 30,
+                tile.getProgressScaled(46),
+                EnumTankLevel.rateTankLevel(tile.getProgressScaled(100))
+        );
     }
 
     private void drawAnalyzeMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {

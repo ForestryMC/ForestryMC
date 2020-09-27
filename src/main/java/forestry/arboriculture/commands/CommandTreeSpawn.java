@@ -21,9 +21,13 @@ import net.minecraftforge.server.command.EnumArgument;
 public final class CommandTreeSpawn {
     public static ArgumentBuilder<CommandSource, ?> register(String name, ITreeSpawner treeSpawner) {
         return Commands.literal(name).requires(PermLevel.ADMIN)
-                .then(Commands.argument("type", EnumArgument.enumArgument(TreeDefinition.class))
-                        .executes(a -> run(treeSpawner, a.getSource(), a.getArgument("type", TreeDefinition.class))))
-                .executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak));
+                       .then(Commands.argument("type", EnumArgument.enumArgument(TreeDefinition.class))
+                                     .executes(a -> run(
+                                             treeSpawner,
+                                             a.getSource(),
+                                             a.getArgument("type", TreeDefinition.class)
+                                     )))
+                       .executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak));
     }
 
     public static int run(

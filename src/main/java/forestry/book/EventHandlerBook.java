@@ -16,7 +16,8 @@ public class EventHandlerBook {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (Config.spawnWithBook) {
             CompoundNBT playerData = event.getPlayer().getPersistentData();    //TODO think this is the right method
-            CompoundNBT data = playerData.contains(PlayerEntity.PERSISTED_NBT_TAG) ? playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG) : new CompoundNBT();
+            CompoundNBT data = playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)
+                               ? playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG) : new CompoundNBT();
 
             if (!data.getBoolean(HAS_BOOK)) {
                 ItemHandlerHelper.giveItemToPlayer(event.getPlayer(), BookItems.BOOK.stack());

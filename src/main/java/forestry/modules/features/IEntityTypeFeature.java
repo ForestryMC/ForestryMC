@@ -28,7 +28,10 @@ public interface IEntityTypeFeature<E extends Entity> extends IModFeature {
         Class<R> superType = registry.getRegistrySuperType();
         if (EntityType.class.isAssignableFrom(superType) && hasEntityType()) {
             registry.register((R) entityType());
-            GlobalEntityTypeAttributes.put((EntityType<? extends LivingEntity>) entityType(), createAttributes().create());
+            GlobalEntityTypeAttributes.put(
+                    (EntityType<? extends LivingEntity>) entityType(),
+                    createAttributes().create()
+            );
         }
     }
 

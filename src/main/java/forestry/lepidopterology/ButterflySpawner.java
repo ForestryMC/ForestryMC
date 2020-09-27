@@ -32,13 +32,19 @@ public class ButterflySpawner implements ILeafTickHandler {
             return false;
         }
 
-        if (rand.nextFloat() >= tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * tree.getGenome().getActiveValue(TreeChromosomes.YIELD)) {
+        if (rand.nextFloat() >= tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) *
+                                tree.getGenome().getActiveValue(TreeChromosomes.YIELD)) {
             return false;
         }
 
-        IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
+        IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates()
+                                                         .get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates()
+                                                                                                         .size()));
         float rarity;
-        if (!ModuleLepidopterology.spawnRaritys.containsKey(spawn.getGenome().getPrimary().getRegistryName().getPath())) {
+        if (!ModuleLepidopterology.spawnRaritys.containsKey(spawn.getGenome()
+                                                                 .getPrimary()
+                                                                 .getRegistryName()
+                                                                 .getPath())) {
             rarity = spawn.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity();
         } else {
             rarity = ModuleLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getRegistryName().getPath());

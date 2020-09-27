@@ -103,7 +103,10 @@ public class ContainerAnalyzerProviderHelper {
                 }
 
                 if (individual.analyze()) {
-                    IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+                    IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(
+                            player.world,
+                            player.getGameProfile()
+                    );
                     breedingTracker.registerSpecies(individual.getGenome().getPrimary());
                     breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 

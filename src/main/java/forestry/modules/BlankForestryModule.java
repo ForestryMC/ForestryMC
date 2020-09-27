@@ -46,7 +46,14 @@ public class BlankForestryModule implements IForestryModule {
     public void addBiomeDecorations(Biome biome) {
     }
 
-    public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+    public void populateChunk(
+            ChunkGenerator chunkGenerator,
+            World world,
+            Random rand,
+            int chunkX,
+            int chunkZ,
+            boolean hasVillageGenerated
+    ) {
     }
 
     public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {

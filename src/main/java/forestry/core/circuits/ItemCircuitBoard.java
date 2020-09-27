@@ -61,7 +61,12 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         super.addInformation(itemstack, world, list, flag);
         ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
         if (circuitboard != null) {
@@ -69,7 +74,11 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
         }
     }
 
-    public static ItemStack createCircuitboard(EnumCircuitBoardType type, @Nullable ICircuitLayout layout, ICircuit[] circuits) {
+    public static ItemStack createCircuitboard(
+            EnumCircuitBoardType type,
+            @Nullable ICircuitLayout layout,
+            ICircuit[] circuits
+    ) {
         CompoundNBT compoundNBT = new CompoundNBT();
         new CircuitBoard(type, layout, circuits).write(compoundNBT);
         ItemStack stack = CoreItems.CIRCUITBOARDS.stack(type, 1);

@@ -38,7 +38,15 @@ public class AddresseeSlot extends Widget {
         if (carrier != null) {
             RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
             TextureManagerForestry.getInstance().bindGuiTextureMap();
-            AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 32, 32, carrier.getSprite());
+            AbstractGui.blit(
+                    transform,
+                    startX + xPos,
+                    startY + yPos,
+                    manager.gui.getBlitOffset(),
+                    32,
+                    32,
+                    carrier.getSprite()
+            );
         }
     }
 

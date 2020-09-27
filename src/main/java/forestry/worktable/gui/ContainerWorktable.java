@@ -44,7 +44,11 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
     private boolean craftMatrixChanged = false;
 
     public static ContainerWorktable fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-        TileWorktable worktable = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileWorktable.class);
+        TileWorktable worktable = TileUtil.getTile(
+                playerInv.player.world,
+                extraData.readBlockPos(),
+                TileWorktable.class
+        );
         return new ContainerWorktable(windowId, playerInv, worktable);    //TODO what to do if Worktable null
     }
 
@@ -57,7 +61,12 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
         // Internal inventory
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(internalInventory, InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+                addSlot(new Slot(
+                        internalInventory,
+                        InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9,
+                        8 + k * 18,
+                        90 + i * 18
+                ));
             }
         }
 
@@ -69,7 +78,15 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
         }
 
         // CraftResult display
-        addSlot(new SlotCrafter(inv.player, craftMatrix, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
+        addSlot(new SlotCrafter(
+                inv.player,
+                craftMatrix,
+                craftingDisplay,
+                tile,
+                InventoryGhostCrafting.SLOT_CRAFTING_RESULT,
+                77,
+                38
+        ));
 
         for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
             onCraftMatrixChanged(tile.getCraftingDisplay(), i);

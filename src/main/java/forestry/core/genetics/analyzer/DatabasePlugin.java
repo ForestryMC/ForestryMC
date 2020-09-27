@@ -15,7 +15,12 @@ public abstract class DatabasePlugin<I extends IIndividual> implements IDatabase
     private final IDatabaseTab productsTab;
     private final IDatabaseTab mutationsTab;
 
-    public DatabasePlugin(IDatabaseTab<I> activeTab, IDatabaseTab<I> inactiveTab, IDatabaseTab productsTab, IDatabaseTab mutationsTab) {
+    public DatabasePlugin(
+            IDatabaseTab<I> activeTab,
+            IDatabaseTab<I> inactiveTab,
+            IDatabaseTab productsTab,
+            IDatabaseTab mutationsTab
+    ) {
         this.activeTab = activeTab;
         this.inactiveTab = inactiveTab;
         this.productsTab = productsTab;

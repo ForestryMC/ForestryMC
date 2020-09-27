@@ -27,33 +27,33 @@ import net.minecraftforge.server.command.EnumArgument;
 public class CommandBeeGive {
     public static LiteralArgumentBuilder<CommandSource> register() {
         return Commands.literal("give").requires(PermLevel.ADMIN)
-                .then(Commands.argument("bee", EnumArgument.enumArgument(BeeDefinition.class))
-                        .then(Commands.argument("type", EnumArgument.enumArgument(EnumBeeType.class))
-                                .then(Commands.argument("player", EntityArgument.player())
-                                        .executes(a -> execute(
-                                                a.getSource(),
-                                                a.getArgument("bee", BeeDefinition.class),
-                                                a.getArgument("type", EnumBeeType.class),
-                                                EntityArgument.getPlayer(a, "player")
-                                        )))
-                                .executes(a -> execute(
-                                        a.getSource(),
-                                        a.getArgument("bee", BeeDefinition.class),
-                                        a.getArgument("type", EnumBeeType.class),
-                                        a.getSource().asPlayer()
-                                )))
-                        .executes(a -> execute(
-                                a.getSource(),
-                                a.getArgument("bee", BeeDefinition.class),
-                                EnumBeeType.QUEEN,
-                                a.getSource().asPlayer()
-                        )))
-                .executes(a -> execute(
-                        a.getSource(),
-                        BeeDefinition.FOREST,
-                        EnumBeeType.QUEEN,
-                        a.getSource().asPlayer()
-                ));
+                       .then(Commands.argument("bee", EnumArgument.enumArgument(BeeDefinition.class))
+                                     .then(Commands.argument("type", EnumArgument.enumArgument(EnumBeeType.class))
+                                                   .then(Commands.argument("player", EntityArgument.player())
+                                                                 .executes(a -> execute(
+                                                                         a.getSource(),
+                                                                         a.getArgument("bee", BeeDefinition.class),
+                                                                         a.getArgument("type", EnumBeeType.class),
+                                                                         EntityArgument.getPlayer(a, "player")
+                                                                 )))
+                                                   .executes(a -> execute(
+                                                           a.getSource(),
+                                                           a.getArgument("bee", BeeDefinition.class),
+                                                           a.getArgument("type", EnumBeeType.class),
+                                                           a.getSource().asPlayer()
+                                                   )))
+                                     .executes(a -> execute(
+                                             a.getSource(),
+                                             a.getArgument("bee", BeeDefinition.class),
+                                             EnumBeeType.QUEEN,
+                                             a.getSource().asPlayer()
+                                     )))
+                       .executes(a -> execute(
+                               a.getSource(),
+                               BeeDefinition.FOREST,
+                               EnumBeeType.QUEEN,
+                               a.getSource().asPlayer()
+                       ));
     }
 
     public static int execute(CommandSource source, BeeDefinition definition, EnumBeeType type, PlayerEntity player) {

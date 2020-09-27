@@ -71,13 +71,15 @@ public class IndividualTranslator<I extends IIndividual> implements IIndividualT
     @Override
     public ItemStack getGeneticEquivalent(BlockState objectToTranslate) {
         Optional<IBlockTranslator<I>> optional = getTranslator(objectToTranslate.getBlock());
-        return optional.map(blockTranslator -> blockTranslator.getGeneticEquivalent(objectToTranslate)).orElse(ItemStack.EMPTY);
+        return optional.map(blockTranslator -> blockTranslator.getGeneticEquivalent(objectToTranslate))
+                       .orElse(ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack getGeneticEquivalent(ItemStack objectToTranslate) {
         Optional<IItemTranslator<I>> optional = getTranslator(objectToTranslate.getItem());
-        return optional.map(itemTranslator -> itemTranslator.getGeneticEquivalent(objectToTranslate)).orElse(ItemStack.EMPTY);
+        return optional.map(itemTranslator -> itemTranslator.getGeneticEquivalent(objectToTranslate))
+                       .orElse(ItemStack.EMPTY);
     }
 
     @Override

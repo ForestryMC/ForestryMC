@@ -16,7 +16,14 @@ public class RenderForestryItem extends ItemStackTileEntityRenderer {
     }
 
     @Override
-    public void func_239207_a_(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack transform, IRenderTypeBuffer buffer, int combinedLight, int packetLight) {
+    public void func_239207_a_(
+            ItemStack itemStack,
+            ItemCameraTransforms.TransformType transformType,
+            MatrixStack transform,
+            IRenderTypeBuffer buffer,
+            int combinedLight,
+            int packetLight
+    ) {
         helper.update(0, transform, buffer, combinedLight, packetLight);
         renderer.renderItem(itemStack, helper);
     }

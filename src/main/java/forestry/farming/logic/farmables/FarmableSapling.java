@@ -56,11 +56,20 @@ public class FarmableSapling implements IFarmable {
     public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
         ItemStack copy = germling.copy();
         player.setHeldItem(Hand.MAIN_HAND, copy);
-        BlockRayTraceResult result = new BlockRayTraceResult(Vector3d.ZERO, Direction.UP, pos.down(), true);    //TODO isInside
+        BlockRayTraceResult result = new BlockRayTraceResult(
+                Vector3d.ZERO,
+                Direction.UP,
+                pos.down(),
+                true
+        );    //TODO isInside
         ActionResultType actionResult = copy.onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, result));
         player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
         if (actionResult == ActionResultType.SUCCESS) {
-            PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.getDefaultState());
+            PacketFXSignal packet = new PacketFXSignal(
+                    PacketFXSignal.SoundFXType.BLOCK_PLACE,
+                    pos,
+                    Blocks.OAK_SAPLING.getDefaultState()
+            );
             NetworkUtil.sendNetworkPacket(packet, pos, world);
             return true;
         }

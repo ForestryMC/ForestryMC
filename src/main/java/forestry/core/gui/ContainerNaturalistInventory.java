@@ -25,8 +25,16 @@ import net.minecraft.network.PacketBuffer;
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
     //TODO more duped code
-    public static ContainerNaturalistInventory fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-        TileNaturalistChest tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileNaturalistChest.class);    //TODO think this is OK for inheritance
+    public static ContainerNaturalistInventory fromNetwork(
+            int windowId,
+            PlayerInventory playerInv,
+            PacketBuffer extraData
+    ) {
+        TileNaturalistChest tile = TileUtil.getTile(
+                playerInv.player.world,
+                extraData.readBlockPos(),
+                TileNaturalistChest.class
+        );    //TODO think this is OK for inheritance
         return new ContainerNaturalistInventory(windowId, playerInv, tile, extraData.readVarInt());
     }
 
@@ -42,7 +50,11 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
     }
 
     //TODO this is hardcoded to max page. So is the maxPage field needed??
-    public static <T extends IInventory & IFilterSlotDelegate> void addInventory(ContainerForestry container, T inventory, int selectedPage) {
+    public static <T extends IInventory & IFilterSlotDelegate> void addInventory(
+            ContainerForestry container,
+            T inventory,
+            int selectedPage
+    ) {
         for (int page = 0; page < 5; page++) {
             for (int x = 0; x < 5; x++) {
                 for (int y = 0; y < 5; y++) {

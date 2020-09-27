@@ -122,7 +122,11 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 
         if (workCounter < ticksPerWorkCycle) {
             int energyPerWorkCycle = getEnergyPerWorkCycle();
-            boolean consumedEnergy = EnergyHelper.consumeEnergyToDoWork(energyManager, ticksPerWorkCycle, energyPerWorkCycle);
+            boolean consumedEnergy = EnergyHelper.consumeEnergyToDoWork(
+                    energyManager,
+                    ticksPerWorkCycle,
+                    energyPerWorkCycle
+            );
             if (consumedEnergy) {
                 errorLogic.setCondition(false, EnumErrorCode.NO_POWER);
                 workCounter++;

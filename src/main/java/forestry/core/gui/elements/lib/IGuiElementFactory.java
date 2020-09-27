@@ -26,7 +26,13 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public interface IGuiElementFactory {
 
-    IGeneticAnalyzer createAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider);
+    IGeneticAnalyzer createAnalyzer(
+            IWindowElement window,
+            int xPos,
+            int yPos,
+            boolean rightBoarder,
+            IGeneticAnalyzerProvider provider
+    );
 
     /* GENETIC*/
 
@@ -44,17 +50,36 @@ public interface IGuiElementFactory {
      * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
      */
     @Nullable
-    IGuiElement createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker);
+    IGuiElement createMutation(
+            int x,
+            int y,
+            int width,
+            int height,
+            IMutation mutation,
+            IAllele species,
+            IBreedingTracker breedingTracker
+    );
 
     /**
      * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
      */
     @Nullable
-    IGuiElement createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker);
+    IGuiElement createMutationResultant(
+            int x,
+            int y,
+            int width,
+            int height,
+            IMutation mutation,
+            IBreedingTracker breedingTracker
+    );
 
     IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset);
 
-    IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, ITextComponent text);
+    IGuiElement createToleranceInfo(
+            IAlleleValue<EnumTolerance> toleranceAllele,
+            IAlleleForestrySpecies species,
+            ITextComponent text
+    );
 
     IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele);
 

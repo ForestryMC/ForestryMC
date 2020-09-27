@@ -38,7 +38,7 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
         );
 
         ApicultureBlocks.BEE_COMB.getBlocks()
-                .forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
+                                 .forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
 
         RenderTypeLookup.setRenderLayer(ApicultureBlocks.CANDLE.getBlock(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ApicultureBlocks.STUMP.getBlock(), RenderType.getCutout());

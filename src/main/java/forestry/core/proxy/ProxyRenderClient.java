@@ -53,7 +53,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
             ));
         }
         CoreBlocks.BASE.getBlocks()
-                .forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+                       .forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
         ModelLoaderRegistry.registerLoader(
                 new ResourceLocation(Constants.MOD_ID, "fluid_container"),
                 new FluidContainerModel.Loader()

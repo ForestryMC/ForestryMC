@@ -34,7 +34,9 @@ public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<Co
         if (doTransfer) {
             IInventory craftingInventory = container.getCarpenter().getCraftingInventory();
             NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
-            for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks().getGuiIngredients().entrySet()) {
+            for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks()
+                                                                                                      .getGuiIngredients()
+                                                                                                      .entrySet()) {
                 IGuiIngredient<ItemStack> guiIngredient = guiIngredientEntry.getValue();
                 if (guiIngredient != null && guiIngredient.getDisplayedIngredient() != null) {
                     int index = guiIngredientEntry.getKey();

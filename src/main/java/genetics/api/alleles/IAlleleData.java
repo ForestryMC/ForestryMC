@@ -45,14 +45,21 @@ public interface IAlleleData<V> extends IAlleleProvider {
     }
 
     default IAlleleValue<V> createAllele() {
-        return new AlleleCategorizedValue<>(ModLoadingContext.get().getActiveContainer().getModId(), getCategory(), getName(), getValue(), isDominant());
+        return new AlleleCategorizedValue<>(
+                ModLoadingContext.get().getActiveContainer().getModId(),
+                getCategory(),
+                getName(),
+                getValue(),
+                isDominant()
+        );
     }
 
     @Override
     default IAllele getAllele() {
         Optional<IAlleleValue<V>> optionalAllele = getAlleleValue();
         if (!optionalAllele.isPresent()) {
-            throw new IllegalStateException("Attempted to get the allele from an allele data that was not registered! Please register the allele data before you use it.");
+            throw new IllegalStateException(
+                    "Attempted to get the allele from an allele data that was not registered! Please register the allele data before you use it.");
         }
         return optionalAllele.get();
     }

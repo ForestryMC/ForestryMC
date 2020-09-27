@@ -65,7 +65,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
     @Override
     public Style getStyle() {
         if (component instanceof IFormattableTextComponent) {
-            return ((IFormattableTextComponent) component).getStyle();
+            return component.getStyle();
         }
         return Style.EMPTY;
     }

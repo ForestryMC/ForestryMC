@@ -45,7 +45,11 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
         //noinspection unchecked
         ((RootDefinition<IIndividualRoot<I>>) this.definition).setRoot(this);
         this.karyotype = context.getKaryotype();
-        this.components = new RootComponentContainer<>(context.createComponents(this), context.getComponentListeners(), context.getListeners());
+        this.components = new RootComponentContainer<>(
+                context.createComponents(this),
+                context.getComponentListeners(),
+                context.getListeners()
+        );
         this.types = components.get(ComponentKeys.TYPES);
         this.templates = components.get(ComponentKeys.TEMPLATES);
         createDefault();
@@ -116,7 +120,10 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
     public IIndividualTranslator<I> getTranslator() {
         Optional<IIndividualTranslator> translator = getComponentSafe(ComponentKeys.TRANSLATORS);
         if (!translator.isPresent()) {
-            throw new IllegalStateException(String.format("No translator component was added to the root with the uid '%s'.", getUID()));
+            throw new IllegalStateException(String.format(
+                    "No translator component was added to the root with the uid '%s'.",
+                    getUID()
+            ));
         }
         return (IIndividualTranslator<I>) translator.get();
     }

@@ -53,10 +53,10 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 
     public BlockForestryLeaves() {
         super(Block.Properties.create(Material.LEAVES)
-                .hardnessAndResistance(0.2f)
-                .sound(SoundType.PLANT)
-                .tickRandomly()
-                .notSolid());
+                              .hardnessAndResistance(0.2f)
+                              .sound(SoundType.PLANT)
+                              .tickRandomly()
+                              .notSolid());
     }
 
     @Override
@@ -94,7 +94,14 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
     }
 
     @Override
-    protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
+    protected void getLeafDrop(
+            NonNullList<ItemStack> drops,
+            World world,
+            @Nullable GameProfile playerProfile,
+            BlockPos pos,
+            float saplingModifier,
+            int fortune
+    ) {
         TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
         if (tile == null) {
             return;
@@ -121,7 +128,14 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(
+            BlockState state,
+            World world,
+            BlockPos pos,
+            PlayerEntity player,
+            Hand hand,
+            BlockRayTraceResult hit
+    ) {
         TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
         if (leaves != null) {
             IButterfly caterpillar = leaves.getCaterpillar();
@@ -129,7 +143,12 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
             ItemStack otherHand = player.getHeldItem(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
             if (heldItem.isEmpty() && otherHand.isEmpty()) {
                 if (leaves.hasFruit() && leaves.getRipeness() >= 0.9F) {
-                    PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
+                    PacketFXSignal packet = new PacketFXSignal(
+                            PacketFXSignal.VisualFXType.BLOCK_BREAK,
+                            PacketFXSignal.SoundFXType.BLOCK_BREAK,
+                            pos,
+                            state
+                    );
                     NetworkUtil.sendNetworkPacket(packet, pos, world);
                     for (ItemStack fruit : leaves.pickFruit(ItemStack.EMPTY)) {
                         ItemHandlerHelper.giveItemToPlayer(player, fruit);
@@ -137,7 +156,10 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
                     return ActionResultType.SUCCESS;
                 }
             } else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-                ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
+                ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(
+                        caterpillar,
+                        EnumFlutterType.CATERPILLAR
+                );
                 ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
                 leaves.setCaterpillar(null);
                 return ActionResultType.SUCCESS;
@@ -170,7 +192,12 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+    public int colorMultiplier(
+            BlockState state,
+            @Nullable IBlockReader worldIn,
+            @Nullable BlockPos pos,
+            int tintIndex
+    ) {
         if (worldIn != null && pos != null) {
             TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
             if (leaves != null) {

@@ -17,14 +17,20 @@ public class CharcoalManager implements ICharcoalManager {
     @Override
     public void registerWall(Block block, int amount) {
         Preconditions.checkNotNull(block, "block must not be null.");
-        Preconditions.checkArgument(amount > (-Config.charcoalAmountBase) && amount < (63 - Config.charcoalAmountBase), "amount must be bigger than -10 and smaller than 64.");
+        Preconditions.checkArgument(
+                amount > (-Config.charcoalAmountBase) && amount < (63 - Config.charcoalAmountBase),
+                "amount must be bigger than -10 and smaller than 64."
+        );
         walls.add(new CharcoalPileWall(block, amount));
     }
 
     @Override
     public void registerWall(BlockState blockState, int amount) {
         Preconditions.checkNotNull(blockState, "block state must not be null.");
-        Preconditions.checkArgument(amount > (-Config.charcoalAmountBase) && amount < (63 - Config.charcoalAmountBase), "amount must be bigger than -10 and smaller than 64.");
+        Preconditions.checkArgument(
+                amount > (-Config.charcoalAmountBase) && amount < (63 - Config.charcoalAmountBase),
+                "amount must be bigger than -10 and smaller than 64."
+        );
         walls.add(new CharcoalPileWall(blockState, amount));
     }
 

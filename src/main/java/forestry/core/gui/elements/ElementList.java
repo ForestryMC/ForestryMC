@@ -27,7 +27,13 @@ public class ElementList<V> extends VerticalLayout {
     @Nullable
     private Predicate<V> validator;
 
-    public ElementList(int xPos, int yPos, int width, BiFunction<V, ElementList, IGuiElement> optionFactory, @Nullable V defaultValue) {
+    public ElementList(
+            int xPos,
+            int yPos,
+            int width,
+            BiFunction<V, ElementList, IGuiElement> optionFactory,
+            @Nullable V defaultValue
+    ) {
         super(xPos, yPos, width);
         this.optionFactory = optionFactory;
         this.defaultValue = defaultValue;

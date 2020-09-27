@@ -15,7 +15,8 @@ import javax.annotation.Nullable;
 
 public class ButterflyManager {
 
-    public static final IRootDefinition<IButterflyRoot> butterflyRootDefinition = GeneticsAPI.apiInstance.getRoot("rootButterflies");
+    public static final IRootDefinition<IButterflyRoot> butterflyRootDefinition = GeneticsAPI.apiInstance.getRoot(
+            "rootButterflies");
 
     /**
      * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies")

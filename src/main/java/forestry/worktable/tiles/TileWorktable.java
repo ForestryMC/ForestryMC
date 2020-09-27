@@ -125,7 +125,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
     @Override
     public boolean canTakeStack(int craftingSlotIndex) {
         return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT ||
-                canCraftCurrentRecipe();
+               canCraftCurrentRecipe();
     }
 
     private boolean canCraftCurrentRecipe() {
@@ -148,7 +148,12 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
         }
 
         NonNullList<ItemStack> inventoryStacks = InventoryUtil.getStacks(this);
-        CraftingInventoryForestry crafting = RecipeUtil.getCraftRecipe(currentRecipe.getCraftMatrix(), inventoryStacks, world, selectedRecipe);
+        CraftingInventoryForestry crafting = RecipeUtil.getCraftRecipe(
+                currentRecipe.getCraftMatrix(),
+                inventoryStacks,
+                world,
+                selectedRecipe
+        );
         if (crafting == null) {
             return false;
         }
@@ -227,7 +232,11 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
     }
 
     public IInventory getCraftingDisplay() {
-        return new InventoryMapper(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+        return new InventoryMapper(
+                craftingDisplay,
+                InventoryGhostCrafting.SLOT_CRAFTING_1,
+                InventoryGhostCrafting.SLOT_CRAFTING_COUNT
+        );
     }
 
     public void clearCraftMatrix() {

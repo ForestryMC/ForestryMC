@@ -87,15 +87,15 @@ public class Butterfly extends IndividualLiving implements IButterfly {
             list.add(new TranslationTextComponent("for.gui.fecundated").mergeStyle(TextFormatting.RED));
         }
         list.add(genome.getActiveAllele(ButterflyChromosomes.SIZE)
-                .getDisplayName().deepCopy()
-                .mergeStyle(TextFormatting.YELLOW));
+                       .getDisplayName().deepCopy()
+                       .mergeStyle(TextFormatting.YELLOW));
         list.add(genome.getActiveAllele(ButterflyChromosomes.SPEED)
-                .getDisplayName().deepCopy()
-                .mergeStyle(TextFormatting.DARK_GREEN));
+                       .getDisplayName().deepCopy()
+                       .mergeStyle(TextFormatting.DARK_GREEN));
         list.add(genome.getActiveAllele(ButterflyChromosomes.LIFESPAN)
-                .getDisplayName().deepCopy()
-                .append(new StringTextComponent(" "))
-                .append(new TranslationTextComponent("for.gui.life")));
+                       .getDisplayName().deepCopy()
+                       .append(new StringTextComponent(" "))
+                       .append(new TranslationTextComponent("for.gui.life")));
 
         IAlleleValue<EnumTolerance> tempTolerance = getGenome().getActiveAllele(ButterflyChromosomes.TEMPERATURE_TOLERANCE);
         list.add(new StringTextComponent("T: ")
@@ -231,12 +231,12 @@ public class Butterfly extends IndividualLiving implements IButterfly {
     @Override
     public boolean canTakeFlight(World world, double x, double y, double z) {
         return canFly(world) &&
-                isAcceptedEnvironment(world, x, y, z);
+               isAcceptedEnvironment(world, x, y, z);
     }
 
     private boolean canFly(World world) {
         return (!world.isRaining() || getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER)) &&
-                isActiveThisTime(world.isDaytime());
+               isActiveThisTime(world.isDaytime());
     }
 
     @Override
@@ -322,7 +322,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
         }
 
         IMutationContainer<IButterfly, IButterflyMutation> container = ButterflyHelper.getRoot()
-                .getComponent(ComponentKeys.MUTATIONS);
+                                                                                      .getComponent(ComponentKeys.MUTATIONS);
         for (IButterflyMutation mutation : container.getMutations(true)) {
             float chance = mutation.getChance(world, nursery, allele0, allele1, genome0, genome1);
             if (chance > rand.nextFloat() * 100) {

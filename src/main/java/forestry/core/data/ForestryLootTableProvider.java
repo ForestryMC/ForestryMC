@@ -28,7 +28,8 @@ public class ForestryLootTableProvider implements IDataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private final DataGenerator dataGenerator;
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables = ImmutableList.of(Pair.of(ForestryBlockLootTables::new, LootParameterSets.BLOCK));
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables = ImmutableList
+            .of(Pair.of(ForestryBlockLootTables::new, LootParameterSets.BLOCK));
 
     public ForestryLootTableProvider(DataGenerator dataGeneratorIn) {
         this.dataGenerator = dataGeneratorIn;
@@ -46,13 +47,18 @@ public class ForestryLootTableProvider implements IDataProvider {
                 throw new IllegalStateException("Duplicate loot table " + location);
             }
         }));
-        ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.GENERIC, (location) -> null, map::get);
+        ValidationTracker validationtracker = new ValidationTracker(
+                LootParameterSets.GENERIC,
+                (location) -> null,
+                map::get
+        );
 
         validate(map, validationtracker);
 
         Multimap<String, String> multimap = validationtracker.getProblems();
         if (!multimap.isEmpty()) {
-            multimap.forEach((location, message) -> Log.warning("Found validation problem in " + location + ": " + message));
+            multimap.forEach((location, message) -> Log.warning(
+                    "Found validation problem in " + location + ": " + message));
             throw new IllegalStateException("Failed to validate loot tables, see logs");
         } else {
             map.forEach((location, table) -> {

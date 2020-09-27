@@ -15,7 +15,12 @@ public class ArmorApiarist implements IArmorApiarist {
     }
 
     @Override
-    public boolean protectEntity(LivingEntity entity, ItemStack armor, @Nullable ResourceLocation cause, boolean doProtect) {
+    public boolean protectEntity(
+            LivingEntity entity,
+            ItemStack armor,
+            @Nullable ResourceLocation cause,
+            boolean doProtect
+    ) {
         return true;
     }
 }

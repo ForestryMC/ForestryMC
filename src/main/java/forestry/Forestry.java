@@ -109,7 +109,7 @@ public class Forestry {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Nullable
-    private File configFolder;
+    private final File configFolder;
 
     public Forestry() {
         instance = this;
@@ -273,10 +273,10 @@ public class Forestry {
         @SubscribeEvent(priority = EventPriority.LOW)
         public static void createObjects(RegistryEvent.Register<Block> event) {
             ModuleManager.getModuleHandler()
-                    .createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
+                         .createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
             ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
             ModuleManager.getModuleHandler()
-                    .createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+                         .createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
         }
 
         @SubscribeEvent(priority = EventPriority.LOWEST)

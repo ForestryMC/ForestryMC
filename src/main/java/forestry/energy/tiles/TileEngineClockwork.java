@@ -53,7 +53,8 @@ public class TileEngineClockwork extends TileEngine {
         if (tension <= 0) {
             tension = WIND_TENSION_BASE;
         } else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
-            tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
+            tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) /
+                       (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
         } else {
             return;
         }

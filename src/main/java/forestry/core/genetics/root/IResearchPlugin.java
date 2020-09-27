@@ -10,7 +10,13 @@ import net.minecraft.world.World;
 public interface IResearchPlugin {
     float getResearchSuitability(IAlleleSpecies species, ItemStack itemstack);
 
-    default NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+    default NonNullList<ItemStack> getResearchBounty(
+            IAlleleSpecies species,
+            World world,
+            GameProfile researcher,
+            IIndividual individual,
+            int bountyLevel
+    ) {
         return NonNullList.create();
     }
 }

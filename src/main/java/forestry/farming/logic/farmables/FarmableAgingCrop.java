@@ -32,23 +32,55 @@ public class FarmableAgingCrop implements IFarmable {
         this(germling, cropBlock, new ItemStack[0], ageProperty, minHarvestAge, null);
     }
 
-    public FarmableAgingCrop(ItemStack germling, Block cropBlock, Property<Integer> ageProperty, int minHarvestAge, @Nullable Integer replantAge) {
+    public FarmableAgingCrop(
+            ItemStack germling,
+            Block cropBlock,
+            Property<Integer> ageProperty,
+            int minHarvestAge,
+            @Nullable Integer replantAge
+    ) {
         this(germling, cropBlock, new ItemStack[0], ageProperty, minHarvestAge, replantAge);
     }
 
-    public FarmableAgingCrop(ItemStack germling, Block cropBlock, ItemStack product, Property<Integer> ageProperty, int minHarvestAge) {
+    public FarmableAgingCrop(
+            ItemStack germling,
+            Block cropBlock,
+            ItemStack product,
+            Property<Integer> ageProperty,
+            int minHarvestAge
+    ) {
         this(germling, cropBlock, new ItemStack[]{product}, ageProperty, minHarvestAge, null);
     }
 
-    public FarmableAgingCrop(ItemStack germling, Block cropBlock, ItemStack product, Property<Integer> ageProperty, int minHarvestAge, @Nullable Integer replantAge) {
+    public FarmableAgingCrop(
+            ItemStack germling,
+            Block cropBlock,
+            ItemStack product,
+            Property<Integer> ageProperty,
+            int minHarvestAge,
+            @Nullable Integer replantAge
+    ) {
         this(germling, cropBlock, new ItemStack[]{product}, ageProperty, minHarvestAge, replantAge);
     }
 
-    public FarmableAgingCrop(ItemStack germling, Block cropBlock, ItemStack[] products, Property<Integer> ageProperty, int minHarvestAge) {
+    public FarmableAgingCrop(
+            ItemStack germling,
+            Block cropBlock,
+            ItemStack[] products,
+            Property<Integer> ageProperty,
+            int minHarvestAge
+    ) {
         this(germling, cropBlock, products, ageProperty, minHarvestAge, null);
     }
 
-    public FarmableAgingCrop(ItemStack germling, Block cropBlock, ItemStack[] products, Property<Integer> ageProperty, int minHarvestAge, @Nullable Integer replantAge) {
+    public FarmableAgingCrop(
+            ItemStack germling,
+            Block cropBlock,
+            ItemStack[] products,
+            Property<Integer> ageProperty,
+            int minHarvestAge,
+            @Nullable Integer replantAge
+    ) {
         Preconditions.checkNotNull(germling);
         Preconditions.checkNotNull(cropBlock);
         Preconditions.checkNotNull(ageProperty);

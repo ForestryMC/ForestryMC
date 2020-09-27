@@ -433,7 +433,8 @@ public abstract class ItemStackUtil {
     }
 
     public static boolean equals(BlockState state, ItemStack stack) {
-        return state.getBlock() == getBlock(stack);// && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
+        return state.getBlock() ==
+               getBlock(stack);// && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
     }
 
     public static boolean equals(Block block, int meta, ItemStack stack) {

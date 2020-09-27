@@ -151,7 +151,11 @@ public class SimpleByteBuf {
     }
 
     @SuppressWarnings("unchecked")
-    private Chromosome readChromosome(IChromosomeType type, @Nullable ResourceLocation activeSpeciesUid, @Nullable ResourceLocation inactiveSpeciesUid) {
+    private Chromosome readChromosome(
+            IChromosomeType type,
+            @Nullable ResourceLocation activeSpeciesUid,
+            @Nullable ResourceLocation inactiveSpeciesUid
+    ) {
         IAllele firstAllele = readAllele();
         IAllele secondAllele = readAllele();
         return Chromosome.create(activeSpeciesUid, inactiveSpeciesUid, type, firstAllele, secondAllele);
@@ -219,7 +223,10 @@ public class SimpleByteBuf {
             } else if (karyotype.getSpeciesType().equals(key)) {
                 Chromosome chromosome = readChromosome(key, info);
 
-                info.setSpeciesInfo(chromosome.getActiveAllele().getRegistryName(), chromosome.getInactiveAllele().getRegistryName());
+                info.setSpeciesInfo(
+                        chromosome.getActiveAllele().getRegistryName(),
+                        chromosome.getInactiveAllele().getRegistryName()
+                );
             } else {
                 readVarInt();
                 readVarInt();

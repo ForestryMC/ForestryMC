@@ -12,6 +12,12 @@ import forestry.storage.gui.ContainerNaturalistBackpack;
 public class BackpackContainers {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleBackpacks.class);
 
-    public static final FeatureContainerType<ContainerBackpack> BACKPACK = REGISTRY.container(ContainerBackpack::fromNetwork, "backpack");
-    public static final FeatureContainerType<ContainerNaturalistBackpack> NATURALIST_BACKPACK = REGISTRY.container(ContainerNaturalistBackpack::fromNetwork, "naturalist_backpack");
+    public static final FeatureContainerType<ContainerBackpack> BACKPACK = REGISTRY.container(
+            ContainerBackpack::fromNetwork,
+            "backpack"
+    );
+    public static final FeatureContainerType<ContainerNaturalistBackpack> NATURALIST_BACKPACK = REGISTRY.container(
+            ContainerNaturalistBackpack::fromNetwork,
+            "naturalist_backpack"
+    );
 }

@@ -28,17 +28,17 @@ public class BeeHelper {
 
     public static IAlleleTemplate createDefaultTemplate(IAlleleTemplateBuilder templateBuilder) {
         return templateBuilder.set(BeeChromosomes.SPEED, EnumAllele.Speed.SLOWEST)
-                .set(BeeChromosomes.SPECIES, BeeDefinition.FOREST.getSpecies())
-                .set(BeeChromosomes.LIFESPAN, EnumAllele.Lifespan.SHORTER)
-                .set(BeeChromosomes.FERTILITY, EnumAllele.Fertility.NORMAL)
-                .set(BeeChromosomes.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE)
-                .set(BeeChromosomes.NEVER_SLEEPS, false)
-                .set(BeeChromosomes.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE)
-                .set(BeeChromosomes.TOLERATES_RAIN, false)
-                .set(BeeChromosomes.CAVE_DWELLING, false)
-                .set(BeeChromosomes.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA)
-                .set(BeeChromosomes.FLOWERING, EnumAllele.Flowering.SLOWEST)
-                .set(BeeChromosomes.TERRITORY, EnumAllele.Territory.AVERAGE)
-                .set(BeeChromosomes.EFFECT, AlleleEffects.effectNone).build();
+                              .set(BeeChromosomes.SPECIES, BeeDefinition.FOREST.getSpecies())
+                              .set(BeeChromosomes.LIFESPAN, EnumAllele.Lifespan.SHORTER)
+                              .set(BeeChromosomes.FERTILITY, EnumAllele.Fertility.NORMAL)
+                              .set(BeeChromosomes.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE)
+                              .set(BeeChromosomes.NEVER_SLEEPS, false)
+                              .set(BeeChromosomes.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE)
+                              .set(BeeChromosomes.TOLERATES_RAIN, false)
+                              .set(BeeChromosomes.CAVE_DWELLING, false)
+                              .set(BeeChromosomes.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA)
+                              .set(BeeChromosomes.FLOWERING, EnumAllele.Flowering.SLOWEST)
+                              .set(BeeChromosomes.TERRITORY, EnumAllele.Territory.AVERAGE)
+                              .set(BeeChromosomes.EFFECT, AlleleEffects.effectNone).build();
     }
 }

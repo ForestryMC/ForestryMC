@@ -79,7 +79,15 @@ public class ParticleIgnition extends Particle {
         float f = (float) this.age / (float) this.maxAge;
 
         if (this.rand.nextFloat() > f * 2) {
-            this.world.addParticle(ParticleTypes.SMOKE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+            this.world.addParticle(
+                    ParticleTypes.SMOKE,
+                    this.posX,
+                    this.posY,
+                    this.posZ,
+                    this.motionX,
+                    this.motionY,
+                    this.motionZ
+            );
         }
 
         this.motionY -= 0.03D;

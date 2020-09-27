@@ -82,14 +82,14 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
         splitItems(inputStacks, 1, soils, Soil::getResource);
         Collection<IFarmableInfo> farmableInfo = properties.getFarmableInfo();
         List<ItemStack> germlings = farmableInfo.stream()
-                .map(IFarmableInfo::getSeedlings)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                                                .map(IFarmableInfo::getSeedlings)
+                                                .flatMap(Collection::stream)
+                                                .collect(Collectors.toList());
         splitItems(inputStacks, 5, germlings, item -> item);
         List<ItemStack> productions = farmableInfo.stream()
-                .map(IFarmableInfo::getProducts)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                                                  .map(IFarmableInfo::getProducts)
+                                                  .flatMap(Collection::stream)
+                                                  .collect(Collectors.toList());
         splitItems(outputStacks, 0, productions, item -> item);
         ingredients.setInputLists(VanillaTypes.ITEM, inputStacks);
         ingredients.setOutputLists(VanillaTypes.ITEM, outputStacks);

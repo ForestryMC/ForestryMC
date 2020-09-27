@@ -47,7 +47,8 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
     private static final short MAX_MATURITY = 2;
     private static final IGenome defaultGenome = TreeManager.treeRoot.getKaryotype().getDefaultGenome();
-    private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleUtils.getAllele(Constants.MOD_ID + ".fruitCocoa").get();
+    private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleUtils.getAllele(
+            Constants.MOD_ID + ".fruitCocoa").get();
 
     private IGenome genome = defaultGenome;
     private IAlleleFruit allele = defaultAllele;

@@ -89,16 +89,16 @@ public class ModFeatureRegistry {
 
     public Collection<IModFeature> getFeatures(FeatureType type) {
         return modules.values().stream()
-                .flatMap((module) -> module.getFeatures(type).stream())
-                .collect(Collectors.toSet());
+                      .flatMap((module) -> module.getFeatures(type).stream())
+                      .collect(Collectors.toSet());
     }
 
     public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
         return Stream.of(FeatureType.values())
-                .filter(filter)
-                .flatMap((type) -> modules.values().stream()
-                        .flatMap((module) -> module.getFeatures(type).stream()))
-                .collect(Collectors.toSet());
+                     .filter(filter)
+                     .flatMap((type) -> modules.values().stream()
+                                               .flatMap((module) -> module.getFeatures(type).stream()))
+                     .collect(Collectors.toSet());
     }
 
     public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {

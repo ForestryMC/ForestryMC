@@ -32,7 +32,13 @@ public class TreekeepingMode implements ITreekeepingMode {
     private final float maturationModifier;
     private final float mutationModifier;
 
-    public TreekeepingMode(String name, float yieldModifier, float sappinessModifier, float maturationModifier, float mutationModifier) {
+    public TreekeepingMode(
+            String name,
+            float yieldModifier,
+            float sappinessModifier,
+            float maturationModifier,
+            float mutationModifier
+    ) {
         this.name = name;
         this.yieldModifier = yieldModifier;
         this.sappinessModifier = sappinessModifier;

@@ -35,7 +35,7 @@ public class ItemBlockWallForestry<B extends Block, W extends Block> extends Ite
         for (Direction direction : context.getNearestLookingDirections()) {
             if (direction != Direction.UP) {
                 BlockState blockstate2 = direction == Direction.DOWN ? this.getBlock()
-                        .getStateForPlacement(context) : blockstate;
+                                                                           .getStateForPlacement(context) : blockstate;
                 if (blockstate2 != null && blockstate2.isValidPosition(iworldreader, blockpos)) {
                     blockstate1 = blockstate2;
                     break;

@@ -37,7 +37,13 @@ public interface IResearchHandler<I extends IIndividual> extends IRootComponent<
     /**
      * @return ItemStacks representing the bounty for this research success.
      */
-    NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile gameProfile, I individual, int bountyLevel);
+    NonNullList<ItemStack> getResearchBounty(
+            IAlleleSpecies species,
+            World world,
+            GameProfile gameProfile,
+            I individual,
+            int bountyLevel
+    );
 
     @Override
     ComponentKey<IResearchHandler> getKey();

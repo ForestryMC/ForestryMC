@@ -88,7 +88,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
     public int getSpeciesCount() {
         if (butterflySpeciesCount < 0) {
             butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES)
-                    .filter(IAlleleButterflySpecies::isCounted).count();
+                                                     .filter(IAlleleButterflySpecies::isCounted).count();
         }
 
         return butterflySpeciesCount;
@@ -106,11 +106,29 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 
     @Override
     public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-        return EntityUtil.spawnEntity(world, EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), world, butterfly, new BlockPos(x, y, z)), x, y, z);
+        return EntityUtil.spawnEntity(
+                world,
+                EntityButterfly.create(
+                        LepidopterologyEntities.BUTTERFLY.entityType(),
+                        world,
+                        butterfly,
+                        new BlockPos(x, y, z)
+                ),
+                x,
+                y,
+                z
+        );
     }
 
     @Override
-    public BlockPos plantCocoon(IWorld world, BlockPos coordinates, @Nullable IButterfly caterpillar, GameProfile owner, int age, boolean createNursery) {
+    public BlockPos plantCocoon(
+            IWorld world,
+            BlockPos coordinates,
+            @Nullable IButterfly caterpillar,
+            GameProfile owner,
+            int age,
+            boolean createNursery
+    ) {
         if (caterpillar == null) {
             return BlockPos.ZERO;
         }
@@ -143,7 +161,13 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
         return pos;
     }
 
-    private BlockPos getValidCocoonPos(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
+    private BlockPos getValidCocoonPos(
+            IWorld world,
+            BlockPos pos,
+            IButterfly caterpillar,
+            GameProfile gameProfile,
+            boolean createNursery
+    ) {
         if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
             return pos.down();
         }
@@ -159,7 +183,13 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
         return BlockPos.ZERO;
     }
 
-    public boolean isPositionValid(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
+    public boolean isPositionValid(
+            IWorld world,
+            BlockPos pos,
+            IButterfly caterpillar,
+            GameProfile gameProfile,
+            boolean createNursery
+    ) {
         BlockState blockState = world.getBlockState(pos);
         if (BlockUtil.canReplace(blockState, world, pos)) {
             BlockPos nurseryPos = pos.up();
@@ -174,7 +204,11 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
         return false;
     }
 
-    private boolean isNurseryValid(@Nullable IButterflyNursery nursery, IButterfly caterpillar, GameProfile gameProfile) {
+    private boolean isNurseryValid(
+            @Nullable IButterflyNursery nursery,
+            IButterfly caterpillar,
+            GameProfile gameProfile
+    ) {
         return nursery != null && nursery.canNurse(caterpillar);
     }
 

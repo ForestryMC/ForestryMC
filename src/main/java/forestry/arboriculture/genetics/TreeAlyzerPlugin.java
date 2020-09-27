@@ -96,9 +96,15 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
             {
                 String customPrimaryTreeKey = "trees.custom.treealyzer." + type.getName() + "."
-                        + tree.getGenome().getPrimary().getLocalisationKey().replace("trees.species.", "");
+                                              + tree.getGenome().getPrimary().getLocalisationKey().replace(
+                        "trees.species.",
+                        ""
+                );
                 String customSecondaryTreeKey = "trees.custom.treealyzer." + type.getName() + "."
-                        + tree.getGenome().getSecondary().getLocalisationKey().replace("trees.species.", "");
+                                                + tree.getGenome().getSecondary().getLocalisationKey().replace(
+                        "trees.species.",
+                        ""
+                );
 
                 guiAlyzer.drawSpeciesRow(
                         transform,
@@ -106,7 +112,8 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
                         tree,
                         TreeChromosomes.SPECIES,
                         I18n.hasKey(customPrimaryTreeKey) ? new TranslationTextComponent(customPrimaryTreeKey) : null,
-                        I18n.hasKey(customSecondaryTreeKey) ? new TranslationTextComponent(customSecondaryTreeKey) : null
+                        I18n.hasKey(customSecondaryTreeKey) ? new TranslationTextComponent(customSecondaryTreeKey)
+                                                            : null
                 );
                 textLayout.newLine();
             }
@@ -239,16 +246,16 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
             textLayout.drawLine(
                     transform,
                     new TranslationTextComponent("for.gui." + primary.getPlantType()
-                            .getName()
-                            .toLowerCase(Locale.ENGLISH)),
+                                                                     .getName()
+                                                                     .toLowerCase(Locale.ENGLISH)),
                     GuiAlyzer.COLUMN_1,
                     speciesDominance0
             );
             textLayout.drawLine(
                     transform,
                     new TranslationTextComponent("for.gui." + secondary.getPlantType()
-                            .getName()
-                            .toLowerCase(Locale.ENGLISH)),
+                                                                       .getName()
+                                                                       .toLowerCase(Locale.ENGLISH)),
                     GuiAlyzer.COLUMN_2,
                     speciesDominance1
             );
@@ -279,11 +286,11 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
             // FRUITS
             int fruitDominance0 = guiAlyzer.getColorCoding(tree.getGenome()
-                    .getActiveAllele(TreeChromosomes.FRUITS)
-                    .isDominant());
+                                                               .getActiveAllele(TreeChromosomes.FRUITS)
+                                                               .isDominant());
             int fruitDominance1 = guiAlyzer.getColorCoding(tree.getGenome()
-                    .getInactiveAllele(TreeChromosomes.FRUITS)
-                    .isDominant());
+                                                               .getInactiveAllele(TreeChromosomes.FRUITS)
+                                                               .isDominant());
 
             textLayout.drawLine(transform, new TranslationTextComponent("for.gui.fruits"), GuiAlyzer.COLUMN_0);
             String strike = "";
@@ -301,7 +308,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
             strike = "";
             IAlleleFruit fruit1 = tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
             if (!secondary.getSuitableFruit()
-                    .contains(fruit1.getProvider().getFamily()) && fruit1 != AlleleFruits.fruitNone) {
+                          .contains(fruit1.getProvider().getFamily()) && fruit1 != AlleleFruits.fruitNone) {
                 strike = TextFormatting.STRIKETHROUGH.toString();
             }
             textLayout.drawLine(
@@ -317,14 +324,14 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
             textLayout.drawLine(transform, new TranslationTextComponent("for.gui.family"), GuiAlyzer.COLUMN_0);
 
             if (primaryFruit.getFamily() != null && !primaryFruit.getFamily()
-                    .getUID()
-                    .equals(EnumFruitFamily.NONE.getUID())) {
+                                                                 .getUID()
+                                                                 .equals(EnumFruitFamily.NONE.getUID())) {
                 textLayout.drawLine(transform, primaryFruit.getFamily().getName(), GuiAlyzer.COLUMN_1, fruitDominance0);
             }
 
             if (secondaryFruit.getFamily() != null && !secondaryFruit.getFamily()
-                    .getUID()
-                    .equals(EnumFruitFamily.NONE.getUID())) {
+                                                                     .getUID()
+                                                                     .equals(EnumFruitFamily.NONE.getUID())) {
                 textLayout.drawLine(
                         transform,
                         secondaryFruit.getFamily().getName(),

@@ -38,8 +38,8 @@ public abstract class TileUtil {
         World world = tile.getWorld();
 
         return !tile.isRemoved() &&
-                getTile(world, pos) == tile &&
-                player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+               getTile(world, pos) == tile &&
+               player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
     }
 
     /**
@@ -81,7 +81,12 @@ public abstract class TileUtil {
      * Performs an {@link ITileGetResult} on a tile if the tile exists.
      */
     @Nullable
-    public static <T, R> R getResultFromTile(IWorldReader world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
+    public static <T, R> R getResultFromTile(
+            IWorldReader world,
+            BlockPos pos,
+            Class<T> tileClass,
+            ITileGetResult<T, R> tileGetResult
+    ) {
         T tile = getTile(world, pos, tileClass);
         if (tile != null) {
             return tileGetResult.getResult(tile);
@@ -128,7 +133,12 @@ public abstract class TileUtil {
         return null;
     }
 
-    public static <T> LazyOptional<T> getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
+    public static <T> LazyOptional<T> getInterface(
+            World world,
+            BlockPos pos,
+            Capability<T> capability,
+            @Nullable Direction facing
+    ) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity == null) {
             return LazyOptional.empty();

@@ -13,7 +13,10 @@ import forestry.modules.features.ModFeatureRegistry;
 public class MailBlocks {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleMail.class);
 
-    public static final FeatureBlockGroup<BlockMail, BlockTypeMail> BASE = REGISTRY.blockGroup(BlockMail::new, BlockTypeMail.VALUES).item(ItemBlockForestry::new).create();
+    public static final FeatureBlockGroup<BlockMail, BlockTypeMail> BASE = REGISTRY.blockGroup(
+            BlockMail::new,
+            BlockTypeMail.VALUES
+    ).item(ItemBlockForestry::new).create();
 
     private MailBlocks() {
     }

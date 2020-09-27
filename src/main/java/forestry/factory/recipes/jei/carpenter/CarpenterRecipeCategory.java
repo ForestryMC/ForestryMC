@@ -51,7 +51,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
         );
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
         this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER)
-                .block()));
+                                                                                       .block()));
     }
 
 

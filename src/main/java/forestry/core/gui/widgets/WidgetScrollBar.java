@@ -40,7 +40,14 @@ public class WidgetScrollBar extends Widget {
         slider = new WidgetSlider(manager, xPos, yPos, sliderTexture);
     }
 
-    public WidgetScrollBar(WidgetManager manager, int xPos, int yPos, Drawable backgroundTexture, boolean hasBorder, Drawable sliderTexture) {
+    public WidgetScrollBar(
+            WidgetManager manager,
+            int xPos,
+            int yPos,
+            Drawable backgroundTexture,
+            boolean hasBorder,
+            Drawable sliderTexture
+    ) {
         super(manager, xPos, yPos);
 
         int offset = hasBorder ? 1 : 0;
@@ -87,7 +94,8 @@ public class WidgetScrollBar extends Widget {
         } else if (value <= minValue) {
             offset = 0;
         } else {
-            offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (height - slider.height));
+            offset = (int) (
+                    ((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (height - slider.height));
         }
         slider.setOffset(0, offset);
         return currentValue;

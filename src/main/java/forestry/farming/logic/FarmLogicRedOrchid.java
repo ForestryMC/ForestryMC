@@ -26,7 +26,13 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
     }
 
     @Override
-    protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+    protected boolean maintainSeedlings(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    ) {
         for (int i = 0; i < extent; i++) {
             BlockPos position = translateWithOffset(pos, direction, i);
             if (!world.isBlockLoaded(position)) {

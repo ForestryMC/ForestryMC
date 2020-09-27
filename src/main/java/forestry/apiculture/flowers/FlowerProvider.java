@@ -58,7 +58,12 @@ public class FlowerProvider implements IFlowerProvider {
     }
 
     @Override
-    public NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products) {
+    public NonNullList<ItemStack> affectProducts(
+            World world,
+            IIndividual individual,
+            BlockPos pos,
+            NonNullList<ItemStack> products
+    ) {
         return products;
     }
 

@@ -106,7 +106,12 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
                     ColourProperties.INSTANCE.get("gui.mail.lettertext")
             );
             textLayout.newLine();
-            textLayout.drawSplitLine(tile.getDisplayName(), 170, 90, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+            textLayout.drawSplitLine(
+                    tile.getDisplayName(),
+                    170,
+                    90,
+                    ColourProperties.INSTANCE.get("gui.mail.lettertext")
+            );
         }
         textLayout.endPage();
     }

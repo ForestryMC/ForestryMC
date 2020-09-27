@@ -110,7 +110,10 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
     @Override
     public void registerPlantableFlower(BlockState blockState, double weight, String... flowerTypes) {
         Preconditions.checkNotNull(blockState);
-        Preconditions.checkArgument(blockState.getBlock() != Blocks.AIR, "Tried to register AIR as a flower. Bad idea.");
+        Preconditions.checkArgument(
+                blockState.getBlock() != Blocks.AIR,
+                "Tried to register AIR as a flower. Bad idea."
+        );
 
         if (weight <= 0.0) {
             weight = 0.0;
@@ -161,16 +164,34 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
         Set<Block> acceptedBlocks = this.acceptableBlocks.get(flowerType);
         Set<ITag<Block>> acceptedBlockTags = this.acceptableBlockTags.get(flowerType);
 
-        return new AcceptedFlowerPredicate(flowerType, acceptableRules, acceptedBlocks, acceptedBlockStates, acceptedBlockTags);
+        return new AcceptedFlowerPredicate(
+                flowerType,
+                acceptableRules,
+                acceptedBlocks,
+                acceptedBlockStates,
+                acceptedBlockTags
+        );
     }
 
-    private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<ITag<Block>> acceptedBlockTags) {
+    private static boolean isAcceptedFlower(
+            BlockState blockState,
+            Set<Block> acceptedBlocks,
+            Set<BlockState> acceptedBlockStates,
+            Set<ITag<Block>> acceptedBlockTags
+    ) {
         Block block = blockState.getBlock();
-        return acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState) || acceptedBlockTags.stream().anyMatch(blockTag -> blockTag.contains(block));
+        return acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState) ||
+               acceptedBlockTags.stream().anyMatch(blockTag -> blockTag.contains(block));
     }
 
     @Override
-    public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<BlockState> potentialFlowers) {
+    public boolean growFlower(
+            String flowerType,
+            World world,
+            IIndividual individual,
+            BlockPos pos,
+            Collection<BlockState> potentialFlowers
+    ) {
         if (!this.growthRules.containsKey(flowerType)) {
             return false;
         }
@@ -219,12 +240,20 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
         registerGrowthRule(new GrowthRuleSnow(), FlowerManager.FlowerTypeSnow);
         registerGrowthRule(new GrowthRuleMycelium(), FlowerManager.FlowerTypeMushrooms);
         registerGrowthRule(new GrowthRuleNone(), FlowerManager.FlowerTypeEnd);
-        registerGrowthRule(new GrowthRuleFertilize(Blocks.MELON_STEM, Blocks.PUMPKIN_STEM), FlowerManager.FlowerTypeGourd);
+        registerGrowthRule(
+                new GrowthRuleFertilize(Blocks.MELON_STEM, Blocks.PUMPKIN_STEM),
+                FlowerManager.FlowerTypeGourd
+        );
         registerGrowthRule(new GrowthRuleFertilize(Blocks.WHEAT), FlowerManager.FlowerTypeWheat);
     }
 
     @Override
-    public boolean plantRandomFlower(String flowerType, World world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+    public boolean plantRandomFlower(
+            String flowerType,
+            World world,
+            BlockPos pos,
+            Collection<BlockState> potentialFlowers
+    ) {
         WeightedCollection<Flower> chances = getFlowerChances(flowerType);
         WeightedCollection<BlockState> potentialChances = new WeightedCollection<>();
 
@@ -247,7 +276,13 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
         private final Set<BlockState> acceptedBlockStates;
         private final Set<ITag<Block>> acceptedBlockTags;
 
-        public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<ITag<Block>> acceptedBlockTags) {
+        public AcceptedFlowerPredicate(
+                String flowerType,
+                Set<IFlowerAcceptableRule> acceptableRules,
+                Set<Block> acceptedBlocks,
+                Set<BlockState> acceptedBlockStates,
+                Set<ITag<Block>> acceptedBlockTags
+        ) {
             this.flowerType = flowerType;
             this.acceptableRules = acceptableRules;
             this.acceptedBlocks = acceptedBlocks;

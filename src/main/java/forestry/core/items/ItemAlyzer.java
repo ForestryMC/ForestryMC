@@ -36,14 +36,20 @@ public class ItemAlyzer extends ItemWithGui {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+    public void addInformation(
+            ItemStack stack,
+            @Nullable World world,
+            List<ITextComponent> tooltip,
+            ITooltipFlag advanced
+    ) {
         super.addInformation(stack, world, tooltip, advanced);
         int charges = 0;
         CompoundNBT compound = stack.getTag();
         if (compound != null) {
             charges = compound.getInt("Charges");
         }
-        tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).mergeStyle(TextFormatting.GOLD));
+        tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).mergeStyle(
+                TextFormatting.GOLD));
     }
 
     @Override

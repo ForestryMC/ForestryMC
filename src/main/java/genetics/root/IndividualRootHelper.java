@@ -25,7 +25,10 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(ItemStack stack, Class<? extends R> rootClass) {
+    public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(
+            ItemStack stack,
+            Class<? extends R> rootClass
+    ) {
         if (stack.isEmpty()) {
             return EmptyRootDefinition.empty();
         }
@@ -51,7 +54,10 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(Class<? extends IIndividual> individualClass, Class<? extends R> rootClass) {
+    public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(
+            Class<? extends IIndividual> individualClass,
+            Class<? extends R> rootClass
+    ) {
         Map<String, IRootDefinition> definitions = GeneticsAPI.apiInstance.getRoots();
         for (IRootDefinition rootDefinition : definitions.values()) {
             if (!rootDefinition.isPresent()) {
@@ -74,7 +80,10 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(IIndividual individual, Class<? extends R> rootClass) {
+    public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(
+            IIndividual individual,
+            Class<? extends R> rootClass
+    ) {
         IIndividualRoot root = individual.getRoot();
         return rootClass.isInstance(root) ? (IRootDefinition<R>) root.getDefinition() : EmptyRootDefinition.empty();
     }

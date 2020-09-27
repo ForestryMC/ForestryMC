@@ -49,7 +49,12 @@ public class PacketItemStackDisplay extends ForestryPacket implements IForestryP
             BlockPos pos = data.readBlockPos();
             ItemStack itemStack = data.readItemStack();
 
-            TileUtil.actOnTile(player.world, pos, IItemStackDisplay.class, tile -> tile.handleItemStackForDisplay(itemStack));
+            TileUtil.actOnTile(
+                    player.world,
+                    pos,
+                    IItemStackDisplay.class,
+                    tile -> tile.handleItemStackForDisplay(itemStack)
+            );
         }
     }
 }

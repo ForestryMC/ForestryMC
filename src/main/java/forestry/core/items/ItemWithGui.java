@@ -46,7 +46,11 @@ public abstract class ItemWithGui extends ItemForestry {
     }
 
     protected void openGui(ServerPlayerEntity player, ItemStack stack) {
-        NetworkHooks.openGui(player, new ContainerProvider(stack), buffer -> writeContainerData(player, stack, new PacketBufferForestry(buffer)));
+        NetworkHooks.openGui(
+                player,
+                new ContainerProvider(stack),
+                buffer -> writeContainerData(player, stack, new PacketBufferForestry(buffer))
+        );
     }
 
     protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
@@ -56,8 +60,8 @@ public abstract class ItemWithGui extends ItemForestry {
     @Override
     public boolean onDroppedByPlayer(ItemStack itemstack, PlayerEntity player) {
         if (!itemstack.isEmpty() &&
-                player instanceof ServerPlayerEntity &&
-                player.openContainer instanceof ContainerItemInventory) {
+            player instanceof ServerPlayerEntity &&
+            player.openContainer instanceof ContainerItemInventory) {
             player.closeScreen();
         }
 

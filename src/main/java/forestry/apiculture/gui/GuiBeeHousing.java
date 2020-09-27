@@ -37,7 +37,16 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 
     //TODO be hacky and use title to get the icon?
     public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + container.getIcon().path, container, inv, container.getDelegate(), 25, 7, 2, 0);
+        super(
+                Constants.TEXTURE_PATH_GUI + container.getIcon().path,
+                container,
+                inv,
+                container.getDelegate(),
+                25,
+                7,
+                2,
+                0
+        );
         this.delegate = container.getDelegate();
         this.ySize = 190;
 
@@ -56,7 +65,13 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
         super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
         bindTexture(textureFile);
-        drawHealthMeter(transform, guiLeft + 20, guiTop + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
+        drawHealthMeter(
+                transform,
+                guiLeft + 20,
+                guiTop + 37,
+                delegate.getHealthScaled(46),
+                EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100))
+        );
     }
 
     @Override

@@ -23,7 +23,10 @@ import java.util.Iterator;
 import java.util.Random;
 
 public final class VectUtil {
-    public static final Comparator<BlockPos> TOP_DOWN_COMPARATOR = (BlockPos a, BlockPos b) -> Integer.compare(b.getY(), a.getY());
+    public static final Comparator<BlockPos> TOP_DOWN_COMPARATOR = (BlockPos a, BlockPos b) -> Integer.compare(
+            b.getY(),
+            a.getY()
+    );
 
     private VectUtil() {
     }
@@ -65,9 +68,22 @@ public final class VectUtil {
         }
     }
 
-    public static Iterator<BlockPos.Mutable> getAllInBoxFromCenterMutable(World world, final BlockPos from, final BlockPos center, final BlockPos to) {
-        final BlockPos minPos = new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()));
-        final BlockPos maxPos = new BlockPos(Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()));
+    public static Iterator<BlockPos.Mutable> getAllInBoxFromCenterMutable(
+            World world,
+            final BlockPos from,
+            final BlockPos center,
+            final BlockPos to
+    ) {
+        final BlockPos minPos = new BlockPos(
+                Math.min(from.getX(), to.getX()),
+                Math.min(from.getY(), to.getY()),
+                Math.min(from.getZ(), to.getZ())
+        );
+        final BlockPos maxPos = new BlockPos(
+                Math.max(from.getX(), to.getX()),
+                Math.max(from.getY(), to.getY()),
+                Math.max(from.getZ(), to.getZ())
+        );
 
         return new MutableBlockPosSpiralIterator(world, center, maxPos, minPos);
     }
@@ -104,7 +120,9 @@ public final class VectUtil {
             do {
                 pos = nextPos();
             }
-            while (pos != null && (pos.getX() > maxPos.getX() || pos.getY() > maxPos.getY() || pos.getZ() > maxPos.getZ() || pos.getX() < minPos.getX() || pos.getY() < minPos.getY() || pos.getZ() < minPos.getZ()));
+            while (pos != null && (
+                    pos.getX() > maxPos.getX() || pos.getY() > maxPos.getY() || pos.getZ() > maxPos.getZ() ||
+                    pos.getX() < minPos.getX() || pos.getY() < minPos.getY() || pos.getZ() < minPos.getZ()));
 
             return pos;
         }
@@ -113,7 +131,10 @@ public final class VectUtil {
         protected BlockPos.Mutable nextPos() {
             if (this.theBlockPos == null) {
                 this.theBlockPos = new BlockPos.Mutable(center.getX(), maxPos.getY(), center.getZ());
-                int y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY());
+                int y = Math.min(
+                        this.maxPos.getY(),
+                        this.world.getHeight(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY()
+                );
                 this.theBlockPos.setY(y);
                 return this.theBlockPos;
             } else if (spiralLayer > maxSpiralLayers) {
@@ -155,7 +176,10 @@ public final class VectUtil {
                     }
 
                     this.theBlockPos.setPos(x, y, z);
-                    y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY());
+                    y = Math.min(
+                            this.maxPos.getY(),
+                            this.world.getHeight(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY()
+                    );
                 }
 
                 return this.theBlockPos.setPos(x, y, z);

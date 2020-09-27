@@ -44,7 +44,10 @@ public class ClimateBarElement extends GuiElement {
             if (Screen.hasControlDown()) {
                 GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
                 IClimateState climateState = former.getClimate();
-                IClimateState newState = climateState.toImmutable().setClimate(type, transformer.getDefault().getTemperature());
+                IClimateState newState = climateState.toImmutable().setClimate(
+                        type,
+                        transformer.getDefault().getTemperature()
+                );
                 former.setClimate(newState);
                 former.sendClimateUpdate();
                 return;
@@ -63,9 +66,18 @@ public class ClimateBarElement extends GuiElement {
             IClimateState targetedState = transformer.getTarget();
             IClimateState state = transformer.getCurrent();
             IClimateState defaultState = transformer.getDefault();
-            tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
-            tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
-            tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
+            tooltip.add(new TranslationTextComponent(
+                    "for.gui.habitat_former.climate.target",
+                    StringUtil.floatAsPercent(targetedState.getClimate(type))
+            ));
+            tooltip.add(new TranslationTextComponent(
+                    "for.gui.habitat_former.climate.value",
+                    StringUtil.floatAsPercent(state.getClimate(type))
+            ));
+            tooltip.add(new TranslationTextComponent(
+                    "for.gui.habitat_former.climate.default",
+                    StringUtil.floatAsPercent(defaultState.getClimate(type))
+            ));
         });
     }
 

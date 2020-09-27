@@ -33,8 +33,8 @@ public class BlockStump extends TorchBlock {
 
     public BlockStump() {
         super(Block.Properties.create(Material.MISCELLANEOUS)
-                .hardnessAndResistance(0.0f)
-                .sound(SoundType.WOOD), ParticleTypes.FLAME);
+                              .hardnessAndResistance(0.0f)
+                              .sound(SoundType.WOOD), ParticleTypes.FLAME);
     }
 
     @Override

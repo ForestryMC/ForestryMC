@@ -37,7 +37,14 @@ public class BeekeepingMode implements IBeekeepingMode {
     private final boolean canFatigue;
     private final IBeeModifier beeModifier;
 
-    public BeekeepingMode(String name, float mutationModifier, float lifespanModifier, float speedModifier, boolean reducesFertility, boolean canFatigue) {
+    public BeekeepingMode(
+            String name,
+            float mutationModifier,
+            float lifespanModifier,
+            float speedModifier,
+            boolean reducesFertility,
+            boolean canFatigue
+    ) {
         this.rand = new Random();
         this.name = name;
         this.reducesFertility = reducesFertility;
@@ -86,7 +93,7 @@ public class BeekeepingMode implements IBeekeepingMode {
         IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
         return queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) &&
-                rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
+               rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
     }
 
     @Override

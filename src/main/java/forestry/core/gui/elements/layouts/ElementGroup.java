@@ -134,7 +134,15 @@ public class ElementGroup extends GuiElement implements IElementGroup {
     }
 
     @Override
-    public ILabelElement label(ITextComponent text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
+    public ILabelElement label(
+            ITextComponent text,
+            int x,
+            int y,
+            int width,
+            int height,
+            GuiElementAlignment align,
+            Style textStyle
+    ) {
         return add(new LabelElement(x, y, width, height, text, true).setStyle(textStyle));
     }
 
@@ -149,12 +157,24 @@ public class ElementGroup extends GuiElement implements IElementGroup {
     }
 
     @Override
-    public ITextElement splitText(IFormattableTextComponent text, int width, GuiElementAlignment align, Style textStyle) {
+    public ITextElement splitText(
+            IFormattableTextComponent text,
+            int width,
+            GuiElementAlignment align,
+            Style textStyle
+    ) {
         return splitText(text, 0, 0, width, align, textStyle);
     }
 
     @Override
-    public ITextElement splitText(IFormattableTextComponent text, int x, int y, int width, GuiElementAlignment align, Style textStyle) {
+    public ITextElement splitText(
+            IFormattableTextComponent text,
+            int x,
+            int y,
+            int width,
+            GuiElementAlignment align,
+            Style textStyle
+    ) {
         return (ITextElement) add(new SplitTextElement(x, y, width, text, textStyle)).setAlign(align);
     }
 

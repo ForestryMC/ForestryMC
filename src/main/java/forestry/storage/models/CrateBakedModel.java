@@ -20,9 +20,12 @@ import java.util.List;
 import java.util.Random;
 
 public class CrateBakedModel extends AbstractBakedModel {
-    private static final float CONTENT_RENDER_OFFSET_X = 1f / 16f; // how far to offset content model from the left edge of the crate model
-    private static final float CONTENT_RENDER_OFFSET_Z = 1f / 512f; // how far to render the content model away from the crate model
-    private static final float CONTENT_RENDER_BLOCK_Z_SCALE = 1f / 16f + CONTENT_RENDER_OFFSET_Z; // how much to scale down blocks so they look flat on the crate model
+    private static final float CONTENT_RENDER_OFFSET_X =
+            1f / 16f; // how far to offset content model from the left edge of the crate model
+    private static final float CONTENT_RENDER_OFFSET_Z =
+            1f / 512f; // how far to render the content model away from the crate model
+    private static final float CONTENT_RENDER_BLOCK_Z_SCALE =
+            1f / 16f + CONTENT_RENDER_OFFSET_Z; // how much to scale down blocks so they look flat on the crate model
 
     private ContentModel contentModel;
 
@@ -77,20 +80,27 @@ public class CrateBakedModel extends AbstractBakedModel {
         public ContentModel bake() {
             IBakedModel bakedModel = ResourceUtil.getModel(content);
             if (bakedModel != null) {
-                IBakedModel guiModel = bakedModel.handlePerspective(ItemCameraTransforms.TransformType.GUI, new MatrixStack());
+                IBakedModel guiModel = bakedModel.handlePerspective(
+                        ItemCameraTransforms.TransformType.GUI,
+                        new MatrixStack()
+                );
                 //TODO: Currently very hacky, find a better way to differentiate between item and block
                 List<BakedQuad> general = guiModel.getQuads(null, null, new Random(0L));
                 if (!general.isEmpty()) {
-                    TransformationMatrix frontTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z),
+                    TransformationMatrix frontTransform = new TransformationMatrix(
+                            new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, CONTENT_RENDER_OFFSET_Z),
                             null,
                             new Vector3f(0.5F, 0.5F, 1F),
-                            null);
+                            null
+                    );
                     TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
                     quads.addAll(frontModel.getQuads(null, null, new Random(0L)));
-                    TransformationMatrix backTransform = new TransformationMatrix(new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
+                    TransformationMatrix backTransform = new TransformationMatrix(
+                            new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, -CONTENT_RENDER_OFFSET_Z),
                             null,
                             new Vector3f(0.5F, 0.5F, 1f),
-                            TransformationHelper.quatFromXYZ(new Vector3f(0, (float) Math.PI, 0), false));
+                            TransformationHelper.quatFromXYZ(new Vector3f(0, (float) Math.PI, 0), false)
+                    );
                     TRSRBakedModel backModel = new TRSRBakedModel(guiModel, backTransform);
                     quads.addAll(backModel.getQuads(null, null, new Random(0L)));
                 } else {
@@ -98,7 +108,8 @@ public class CrateBakedModel extends AbstractBakedModel {
                             new Vector3f(-CONTENT_RENDER_OFFSET_X, 0, 0),
                             null,
                             new Vector3f(0.5F, 0.5F, CONTENT_RENDER_BLOCK_Z_SCALE),
-                            null);
+                            null
+                    );
                     TRSRBakedModel frontModel = new TRSRBakedModel(guiModel, frontTransform);
                     for (Direction direction : Direction.VALUES) {
                         quads.addAll(frontModel.getQuads(null, direction, new Random(0L)));

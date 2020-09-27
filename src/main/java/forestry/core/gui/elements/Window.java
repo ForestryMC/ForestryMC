@@ -171,7 +171,8 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 
     protected void updateWindow() {
         this.setMousedOverElement(this.calculateMousedOverElement());
-        if (this.getFocusedElement() != null && (!this.getFocusedElement().isVisible() || !this.getFocusedElement().isEnabled())) {
+        if (this.getFocusedElement() != null &&
+            (!this.getFocusedElement().isVisible() || !this.getFocusedElement().isEnabled())) {
             this.setFocusedElement(null);
         }
         //|TODO - mousehelper.left down?
@@ -216,7 +217,8 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
                 IGuiElement cropRelative = cropped.getCropElement() != null ? cropped.getCropElement() : this;
                 int posX = cropRelative.getAbsoluteX() - element.getAbsoluteX();
                 int posY = cropRelative.getAbsoluteY() - element.getAbsoluteY();
-                addChildren = mouseX >= posX && mouseY >= posY && mouseX <= posX + cropped.getCropWidth() && mouseY <= posY + cropped.getCropHeight();
+                addChildren = mouseX >= posX && mouseY >= posY && mouseX <= posX + cropped.getCropWidth() &&
+                              mouseY <= posY + cropped.getCropHeight();
             }
             if (addChildren) {
                 ListIterator<IGuiElement> iterator = group.getElements().listIterator(group.getElements().size());
@@ -236,7 +238,16 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
             GlStateManager.pushMatrix();
             //TODO test
             MainWindow window = Minecraft.getInstance().getMainWindow();
-            GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
+            GuiUtils.drawHoveringText(
+                    transform,
+                    lines.getLines(),
+                    mouseX - getX(),
+                    mouseY - getY(),
+                    window.getScaledWidth(),
+                    window.getScaledHeight(),
+                    -1,
+                    getFontRenderer()
+            );
             GlStateManager.popMatrix();
         }
     }

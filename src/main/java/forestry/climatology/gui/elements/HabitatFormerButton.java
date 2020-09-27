@@ -31,7 +31,8 @@ public class HabitatFormerButton extends ButtonElement {
 
     public HabitatFormerButton(int xPos, int yPos, boolean selectionButton, Consumer<Boolean> onClicked) {
         super(xPos, yPos, 22, 22, DISABLED_BUTTON, ENABLED_BUTTON, button -> onClicked.accept(selectionButton));
-        this.iconStack = selectionButton ? CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 1) : CoreItems.GEAR_BRONZE.stack();
+        this.iconStack = selectionButton ? CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 1)
+                                         : CoreItems.GEAR_BRONZE.stack();
     }
 
     @Override

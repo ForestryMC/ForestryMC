@@ -21,15 +21,19 @@ import java.util.Random;
 
 public class BlockHumus extends Block {
     private static final int degradeDelimiter = Config.humusDegradeDelimiter;
-    public static final IntegerProperty DEGRADE = IntegerProperty.create("degrade", 0, degradeDelimiter); // degradation level of humus
+    public static final IntegerProperty DEGRADE = IntegerProperty.create(
+            "degrade",
+            0,
+            degradeDelimiter
+    ); // degradation level of humus
 
     public BlockHumus() {
         super(Block.Properties.create(Material.EARTH)
-                .tickRandomly()
-                .hardnessAndResistance(0.5f)
-                .sound(SoundType.GROUND)
-                .harvestTool(ToolType.SHOVEL)
-                .harvestLevel(0));
+                              .tickRandomly()
+                              .hardnessAndResistance(0.5f)
+                              .sound(SoundType.GROUND)
+                              .harvestTool(ToolType.SHOVEL)
+                              .harvestLevel(0));
 
         setDefaultState(this.getStateContainer().getBaseState().with(DEGRADE, 0));
     }
@@ -88,7 +92,13 @@ public class BlockHumus extends Block {
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
+    public boolean canSustainPlant(
+            BlockState state,
+            IBlockReader world,
+            BlockPos pos,
+            Direction direction,
+            IPlantable plantable
+    ) {
         PlantType plantType = plantable.getPlantType(world, pos);
         return plantType == PlantType.CROP || plantType == PlantType.PLAINS;
     }

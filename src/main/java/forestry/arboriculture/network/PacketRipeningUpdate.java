@@ -45,7 +45,12 @@ public class PacketRipeningUpdate extends ForestryPacket implements IForestryPac
             BlockPos pos = data.readBlockPos();
             int value = data.readVarInt();
 
-            TileUtil.actOnTile(player.world, pos, IRipeningPacketReceiver.class, tile -> tile.fromRipeningPacket(value));
+            TileUtil.actOnTile(
+                    player.world,
+                    pos,
+                    IRipeningPacketReceiver.class,
+                    tile -> tile.fromRipeningPacket(value)
+            );
         }
     }
 }

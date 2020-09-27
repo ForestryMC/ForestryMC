@@ -40,7 +40,11 @@ public class AIButterflyPollinate extends AIButterflyInteract {
             return false;
         }
 
-        if (!entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.FLOWER_PROVIDER).getProvider().isAcceptedPollinatable(entity.world, checkPollinatable)) {
+        if (!entity.getButterfly()
+                   .getGenome()
+                   .getActiveAllele(ButterflyChromosomes.FLOWER_PROVIDER)
+                   .getProvider()
+                   .isAcceptedPollinatable(entity.world, checkPollinatable)) {
             return false;
         }
 
@@ -56,7 +60,12 @@ public class AIButterflyPollinate extends AIButterflyInteract {
                     entity.setPollen(checkPollinatable.getPollen());
                     //					Log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
                 } else if (checkPollinatable.canMateWith(entity.getPollen())) {
-                    IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.world, rest, false);
+                    IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(
+                            null,
+                            entity.world,
+                            rest,
+                            false
+                    );
                     if (realPollinatable != null) {
                         realPollinatable.mateWith(entity.getPollen());
                         //						Log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);

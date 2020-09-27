@@ -30,7 +30,12 @@ public abstract class ForestryEvent extends Event {
     public static class SpeciesDiscovered extends BreedingEvent {
         public final IAlleleSpecies species;
 
-        public SpeciesDiscovered(IRootDefinition root, GameProfile username, IAlleleSpecies species, IBreedingTracker tracker) {
+        public SpeciesDiscovered(
+                IRootDefinition root,
+                GameProfile username,
+                IAlleleSpecies species,
+                IBreedingTracker tracker
+        ) {
             super(root, username, tracker);
             this.species = species;
         }
@@ -39,7 +44,12 @@ public abstract class ForestryEvent extends Event {
     public static class MutationDiscovered extends BreedingEvent {
         public final IMutation allele;
 
-        public MutationDiscovered(IRootDefinition root, GameProfile username, IMutation allele, IBreedingTracker tracker) {
+        public MutationDiscovered(
+                IRootDefinition root,
+                GameProfile username,
+                IMutation allele,
+                IBreedingTracker tracker
+        ) {
             super(root, username, tracker);
             this.allele = allele;
         }

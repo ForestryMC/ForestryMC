@@ -22,13 +22,23 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import java.util.function.Supplier;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
-    LEPICHEST(() -> LepidopterologyTiles.LEPIDOPTERIST_CHEST, "lepi_chest", "lepichest", TileNaturalistChest.CHEST_SHAPE);
+    LEPICHEST(
+            () -> LepidopterologyTiles.LEPIDOPTERIST_CHEST,
+            "lepi_chest",
+            "lepichest",
+            TileNaturalistChest.CHEST_SHAPE
+    );
 
     public static final BlockTypeLepidopterologyTesr[] VALUES = values();
 
     private final IMachinePropertiesTesr<?> machineProperties;
 
-    <T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String renderName, VoxelShape shape) {
+    <T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(
+            Supplier<FeatureTileType<? extends T>> teClass,
+            String name,
+            String renderName,
+            VoxelShape shape
+    ) {
         MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
                 .setParticleTexture(name + ".0")
                 .setNotFullCube()

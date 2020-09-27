@@ -83,9 +83,15 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
             {
                 String customPrimaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." +
-                        bee.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
+                                             bee.getGenome().getPrimary().getLocalisationKey().replace(
+                                                     "bees.species.",
+                                                     ""
+                                             );
                 String customSecondaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." +
-                        bee.getGenome().getSecondary().getLocalisationKey().replace("bees.species.", "");
+                                               bee.getGenome().getSecondary().getLocalisationKey().replace(
+                                                       "bees.species.",
+                                                       ""
+                                               );
 
                 guiAlyzer.drawSpeciesRow(
                         transform,
@@ -208,9 +214,9 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
             textLayout.newLine();
 
             IAlleleValue<EnumTolerance> tempToleranceActive = bee.getGenome()
-                    .getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
+                                                                 .getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
             IAlleleValue<EnumTolerance> tempToleranceInactive = bee.getGenome()
-                    .getInactiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
+                                                                   .getInactiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
             textLayout.drawLine(
                     transform,
                     new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),
@@ -233,9 +239,9 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
             textLayout.newLine();
 
             IAlleleValue<EnumTolerance> humidToleranceActive = bee.getGenome()
-                    .getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
+                                                                  .getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
             IAlleleValue<EnumTolerance> humidToleranceInactive = bee.getGenome()
-                    .getInactiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
+                                                                    .getInactiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
             textLayout.drawLine(
                     transform,
                     new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),

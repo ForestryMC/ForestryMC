@@ -82,7 +82,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -100,7 +100,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -116,7 +116,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -142,7 +142,14 @@ public enum ButterflyDefinition implements IButterflyDefinition {
             template.set(ButterflyChromosomes.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
         }
     },
-    ZebraSwallow(ButterflyBranchDefinition.PROTOGRAPHIUM, "swallowtailZ", "marcellus", new Color(0xeafeff), true, 0.5f) {
+    ZebraSwallow(
+            ButterflyBranchDefinition.PROTOGRAPHIUM,
+            "swallowtailZ",
+            "marcellus",
+            new Color(0xeafeff),
+            true,
+            0.5f
+    ) {
         @Override
         protected void setAlleles(IAlleleTemplateBuilder template) {
             template.set(ButterflyChromosomes.SPEED, EnumAllele.Speed.SLOWER);
@@ -185,7 +192,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -199,7 +206,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -213,7 +220,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -233,7 +240,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -276,7 +283,7 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleButterflySpeciesBuilder species) {
             species.setTemperature(EnumTemperature.WARM)
-                    .setHumidity(EnumHumidity.DAMP);
+                   .setHumidity(EnumHumidity.DAMP);
         }
 
         @Override
@@ -308,25 +315,39 @@ public enum ButterflyDefinition implements IButterflyDefinition {
     @Nullable
     private IGenome genome;
 
-    ButterflyDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor, boolean dominant, float rarity) {
+    ButterflyDefinition(
+            ButterflyBranchDefinition branchDefinition,
+            String speciesName,
+            String binomial,
+            Color serumColor,
+            boolean dominant,
+            float rarity
+    ) {
         this.branch = branchDefinition;
 
         String uid = "lepi_" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name());
         IClassification parent = branch.getBranch().getParent();
-        String unlocalizedName = "for.butterflies.species." + parent.getUID().substring(parent.getLevel().name().toLowerCase(Locale.ENGLISH).length() + 1) + '.' + speciesName;
+        String unlocalizedName = "for.butterflies.species." + parent.getUID().substring(
+                parent.getLevel().name().toLowerCase(Locale.ENGLISH).length() + 1) + '.' + speciesName;
         String unlocalizedDescription = "for.description." + uid;
 
         String texture = "butterflies/" + uid;
 
-        IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies(Constants.MOD_ID, uid, speciesName)
-                .setDescriptionKey(unlocalizedDescription)
-                .setTranslationKey(unlocalizedName)
-                .setTexture(texture)
-                .setDominant(dominant)
-                .setBranch(branchDefinition.getBranch())
-                .setBinomial(binomial)
-                .setSerumColour(serumColor)
-                .setRarity(rarity);
+        IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies(
+                Constants.MOD_ID,
+                uid,
+                speciesName
+        )
+                                                                                         .setDescriptionKey(
+                                                                                                 unlocalizedDescription)
+                                                                                         .setTranslationKey(
+                                                                                                 unlocalizedName)
+                                                                                         .setTexture(texture)
+                                                                                         .setDominant(dominant)
+                                                                                         .setBranch(branchDefinition.getBranch())
+                                                                                         .setBinomial(binomial)
+                                                                                         .setSerumColour(serumColor)
+                                                                                         .setRarity(rarity);
         speciesBuilder.setRarity(rarity);
         setSpeciesProperties(speciesBuilder);
         this.species = speciesBuilder.build();
@@ -373,7 +394,11 @@ public enum ButterflyDefinition implements IButterflyDefinition {
 
     }
 
-    protected final IButterflyMutationBuilder registerMutation(IButterflyDefinition parent1, IButterflyDefinition parent2, int chance) {
+    protected final IButterflyMutationBuilder registerMutation(
+            IButterflyDefinition parent1,
+            IButterflyDefinition parent2,
+            int chance
+    ) {
         IAlleleButterflySpecies species1;
         IAlleleButterflySpecies species2;
 
@@ -393,7 +418,12 @@ public enum ButterflyDefinition implements IButterflyDefinition {
             throw new IllegalArgumentException("Unknown parent type " + parent2);
         }
 
-        return ButterflyManager.butterflyMutationFactory.createMutation(species1, species2, getTemplate().alleles(), chance);
+        return ButterflyManager.butterflyMutationFactory.createMutation(
+                species1,
+                species2,
+                getTemplate().alleles(),
+                chance
+        );
     }
 
     @Override

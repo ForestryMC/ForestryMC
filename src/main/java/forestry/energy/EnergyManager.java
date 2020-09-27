@@ -29,7 +29,11 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
     private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;
 
     public EnergyManager(int maxTransfer, int capacity) {
-        super(EnergyHelper.scaleForDifficulty(capacity), EnergyHelper.scaleForDifficulty(maxTransfer), EnergyHelper.scaleForDifficulty(maxTransfer));
+        super(
+                EnergyHelper.scaleForDifficulty(capacity),
+                EnergyHelper.scaleForDifficulty(maxTransfer),
+                EnergyHelper.scaleForDifficulty(maxTransfer)
+        );
     }
 
     public void setExternalMode(EnergyTransferMode externalMode) {
@@ -100,8 +104,8 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 
     public boolean hasCapability(Capability<?> capability) {
         return Config.enableRF && capability == CapabilityEnergy.ENERGY ||
-                Config.enableTesla && hasTeslaCapability(capability) ||
-                Config.enableMJ && hasMjCapability(capability);
+               Config.enableTesla && hasTeslaCapability(capability) ||
+               Config.enableMJ && hasMjCapability(capability);
     }
 
     private boolean hasTeslaCapability(Capability<?> capability) {

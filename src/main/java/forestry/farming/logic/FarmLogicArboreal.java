@@ -43,7 +43,13 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
     }
 
     @Override
-    public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
+    public Collection<ICrop> harvest(
+            World world,
+            IFarmHousing farmHousing,
+            FarmDirection direction,
+            int extent,
+            BlockPos pos
+    ) {
         BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
         Collection<ICrop> crops = harvestBlocks(world, position);
         farmHousing.increaseExtent(direction, pos, extent);
@@ -67,7 +73,10 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
         while (!knownCropPositions.empty()) {
             BlockPos knownCropPos = knownCropPositions.pop();
-            for (BlockPos mutable : BlockPos.getAllInBoxMutable(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
+            for (BlockPos mutable : BlockPos.getAllInBoxMutable(
+                    knownCropPos.add(-1, -1, -1),
+                    knownCropPos.add(1, 1, 1)
+            )) {
                 if (!world.isBlockLoaded(mutable)) {
                     return crops;
                 }
@@ -105,7 +114,13 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
     }
 
     @Override
-    protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+    protected boolean maintainSeedlings(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    ) {
         for (int i = 0; i < extent; i++) {
             BlockPos position = translateWithOffset(pos, direction, i);
 

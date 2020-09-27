@@ -33,11 +33,12 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 
     public BlockDecorativeLeaves(TreeDefinition definition) {
         super(Properties.create(Material.LEAVES)
-                .hardnessAndResistance(0.2f)
-                .sound(SoundType.PLANT)
-                .notSolid()
-                .setSuffocates(BlockUtil::alwaysTrue)
-                .setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() && !TreeDefinition.Willow.equals(definition))
+                        .hardnessAndResistance(0.2f)
+                        .sound(SoundType.PLANT)
+                        .notSolid()
+                        .setSuffocates(BlockUtil::alwaysTrue)
+                        .setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() &&
+                                                           !TreeDefinition.Willow.equals(definition))
         );
         //		this.setCreativeTab(Tabs.tabArboriculture);
         //		this.setLightOpacity(1);	//TODO block stuff);
@@ -49,7 +50,12 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getCollisionShape(
+            BlockState state,
+            IBlockReader worldIn,
+            BlockPos pos,
+            ISelectionContext context
+    ) {
         if (TreeDefinition.Willow.equals(definition)) {
             return VoxelShapes.empty();
         }
@@ -87,7 +93,12 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+    public int colorMultiplier(
+            BlockState state,
+            @Nullable IBlockReader worldIn,
+            @Nullable BlockPos pos,
+            int tintIndex
+    ) {
         IGenome genome = definition.getGenome();
 
         if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {

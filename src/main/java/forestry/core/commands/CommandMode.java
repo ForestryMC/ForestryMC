@@ -17,7 +17,7 @@ import net.minecraft.command.Commands;
 public class CommandMode {
     public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
         return Commands.literal("mode")
-                .then(CommandModeInfo.register(modeHelper))
-                .then(CommandModeSet.register(modeHelper));
+                       .then(CommandModeInfo.register(modeHelper))
+                       .then(CommandModeSet.register(modeHelper));
     }
 }

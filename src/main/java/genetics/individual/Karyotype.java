@@ -25,7 +25,13 @@ public class Karyotype implements IKaryotype {
     @Nullable
     private IGenome defaultGenome = null;
 
-    public Karyotype(String uid, List<IChromosomeType> chromosomeTypes, IChromosomeType speciesType, BiFunction<IKaryotype, IAllele[], IAlleleTemplateBuilder> templateFactory, Function<IAlleleTemplateBuilder, IAlleleTemplate> defaultTemplateSupplier) {
+    public Karyotype(
+            String uid,
+            List<IChromosomeType> chromosomeTypes,
+            IChromosomeType speciesType,
+            BiFunction<IKaryotype, IAllele[], IAlleleTemplateBuilder> templateFactory,
+            Function<IAlleleTemplateBuilder, IAlleleTemplate> defaultTemplateSupplier
+    ) {
         this.uid = uid;
         this.speciesType = speciesType;
         this.chromosomeTypes = new IChromosomeType[chromosomeTypes.size()];

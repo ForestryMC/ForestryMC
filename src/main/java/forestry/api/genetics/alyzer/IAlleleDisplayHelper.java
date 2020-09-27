@@ -10,5 +10,10 @@ public interface IAlleleDisplayHelper {
         addTooltip(provider, rootUID, info, (organismType) -> true);
     }
 
-    void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
+    void addTooltip(
+            IOrganismTooltipProvider<?> provider,
+            String rootUID,
+            int orderingInfo,
+            Predicate<IOrganismType> typeFilter
+    );
 }

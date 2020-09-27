@@ -37,8 +37,8 @@ import net.minecraft.world.server.ServerWorld;
 public class CommandMail {
     public static ArgumentBuilder<CommandSource, ?> register() {
         return Commands.literal("mail")
-                .then(CommandMailTrades.register())
-                .then(CommandMailVirtualize.register());
+                       .then(CommandMailTrades.register())
+                       .then(CommandMailVirtualize.register());
     }
 
     public static class CommandMailTrades {
@@ -50,8 +50,8 @@ public class CommandMail {
             ServerPlayerEntity player = context.getSource().asPlayer();
             ServerWorld world = (ServerWorld) player.world;
             for (ITradeStation trade : PostManager.postRegistry.getPostOffice(world)
-                    .getActiveTradeStations(world)
-                    .values()) {
+                                                               .getActiveTradeStations(world)
+                                                               .values()) {
                 CommandHelpers.sendChatMessage(context.getSource(), makeTradeListEntry(trade.getTradeInfo()));
             }
 

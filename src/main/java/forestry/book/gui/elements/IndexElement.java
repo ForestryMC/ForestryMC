@@ -7,10 +7,7 @@ import forestry.book.gui.GuiForestryBookPages;
 import forestry.core.gui.elements.LabelElement;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 import forestry.core.gui.elements.lib.events.GuiEvent;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -40,12 +37,13 @@ public class IndexElement extends VerticalLayout {
             });
         }
 
-        //TODO ITextComponent
         @Override
         public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
             boolean mouseOver = isMouseOver();
-            String preFix = mouseOver ? TextFormatting.GOLD + " > " : TextFormatting.DARK_GRAY + "- ";
-            FONT_RENDERER.drawString(transform, preFix + component.getString(), 0, 0, 0);
+            IFormattableTextComponent preFix =
+                    mouseOver ? new StringTextComponent(" > ").mergeStyle(TextFormatting.GOLD)
+                              : new StringTextComponent("- ").mergeStyle(TextFormatting.DARK_GRAY);
+            FONT_RENDERER.func_243248_b(transform, preFix.append(component), 0, 0, 0);
         }
 
         @Override

@@ -32,12 +32,25 @@ public class LepidopterologyJeiPlugin implements IModPlugin {
 
         ISubtypeInterpreter butterflySubtypeInterpreter = itemStack -> {
             Optional<IIndividual> individual = GeneticHelper.getIndividual(itemStack);
-            return individual.isPresent() ? individual.get().getGenome().getPrimary().getBinomial() : ISubtypeInterpreter.NONE;
+            return individual.isPresent() ? individual.get().getGenome().getPrimary().getBinomial()
+                                          : ISubtypeInterpreter.NONE;
         };
 
-        subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.BUTTERFLY_GE.getItem(), butterflySubtypeInterpreter);
-        subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.COCOON_GE.getItem(), butterflySubtypeInterpreter);
-        subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.CATERPILLAR_GE.getItem(), butterflySubtypeInterpreter);
-        subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.SERUM_GE.getItem(), butterflySubtypeInterpreter);
+        subtypeRegistry.registerSubtypeInterpreter(
+                LepidopterologyItems.BUTTERFLY_GE.getItem(),
+                butterflySubtypeInterpreter
+        );
+        subtypeRegistry.registerSubtypeInterpreter(
+                LepidopterologyItems.COCOON_GE.getItem(),
+                butterflySubtypeInterpreter
+        );
+        subtypeRegistry.registerSubtypeInterpreter(
+                LepidopterologyItems.CATERPILLAR_GE.getItem(),
+                butterflySubtypeInterpreter
+        );
+        subtypeRegistry.registerSubtypeInterpreter(
+                LepidopterologyItems.SERUM_GE.getItem(),
+                butterflySubtypeInterpreter
+        );
     }
 }

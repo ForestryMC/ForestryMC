@@ -34,14 +34,25 @@ public class GuiForestryBookPages extends GuiForesterBook {
     private int nextPage = -1;
     private int lastPage = -1;
 
-    public GuiForestryBookPages(IForesterBook book, IBookCategory category, IBookEntry entry, @Nullable IBookEntry parent) {
+    public GuiForestryBookPages(
+            IForesterBook book,
+            IBookCategory category,
+            IBookEntry entry,
+            @Nullable IBookEntry parent
+    ) {
         super(book);
         this.category = category;
         this.entry = entry;
         this.parent = parent;
         leftPage = window.pane(LEFT_PAGE_START_X, LEFT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
         rightPage = window.pane(RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y, PAGE_WIDTH, PAGE_HEIGHT);
-        pages = ImmutableList.copyOf(entry.getPageFactory().load(entry, GuiForesterBook.PAGE_HEIGHT - 13, GuiForesterBook.PAGE_HEIGHT, GuiForesterBook.PAGE_WIDTH));
+        pages = ImmutableList.copyOf(entry.getPageFactory()
+                                          .load(
+                                                  entry,
+                                                  GuiForesterBook.PAGE_HEIGHT - 13,
+                                                  GuiForesterBook.PAGE_HEIGHT,
+                                                  GuiForesterBook.PAGE_WIDTH
+                                          ));
         setPages(0);
     }
 
@@ -87,11 +98,23 @@ public class GuiForestryBookPages extends GuiForesterBook {
     public void init() {
         super.init();
         IBookEntry firstEntry = parent != null ? parent : entry;
-        subButtons.add(addButton(new GuiButtonSubEntry(guiLeft + -24, guiTop + 12, firstEntry, entry, this::actionPerformed)));
+        subButtons.add(addButton(new GuiButtonSubEntry(
+                guiLeft + -24,
+                guiTop + 12,
+                firstEntry,
+                entry,
+                this::actionPerformed
+        )));
         IBookEntry[] subEntries = firstEntry.getSubEntries();
         for (int i = 0; i < subEntries.length; i++) {
             IBookEntry subEntry = subEntries[i];
-            subButtons.add(addButton(new GuiButtonSubEntry(guiLeft + -24, guiTop + 12 + ((i + 1) * 22), subEntry, entry, this::actionPerformed)));
+            subButtons.add(addButton(new GuiButtonSubEntry(
+                    guiLeft + -24,
+                    guiTop + 12 + ((i + 1) * 22),
+                    subEntry,
+                    entry,
+                    this::actionPerformed
+            )));
         }
     }
 
@@ -126,7 +149,12 @@ public class GuiForestryBookPages extends GuiForesterBook {
             }
         } else if (button instanceof GuiButtonSubEntry) {
             GuiButtonSubEntry subEntry = (GuiButtonSubEntry) button;
-            Minecraft.getInstance().displayGuiScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
+            Minecraft.getInstance().displayGuiScreen(new GuiForestryBookPages(
+                    book,
+                    category,
+                    subEntry.subEntry,
+                    parent != null ? parent : entry
+            ));
         } else if (button instanceof GuiButtonBack || pages.isEmpty()) {
             if (lastPage >= 0) {
                 setPages(lastPage);

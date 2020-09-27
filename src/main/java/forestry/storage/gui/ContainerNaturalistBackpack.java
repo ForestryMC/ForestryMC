@@ -24,7 +24,12 @@ import net.minecraft.network.PacketBuffer;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged> implements IGuiSelectable {
 
-    public ContainerNaturalistBackpack(int windowId, PlayerInventory inv, ItemInventoryBackpackPaged inventory, int selectedPage) {
+    public ContainerNaturalistBackpack(
+            int windowId,
+            PlayerInventory inv,
+            ItemInventoryBackpackPaged inventory,
+            int selectedPage
+    ) {
         super(windowId, inventory, inv, 18, 120, BackpackContainers.NATURALIST_BACKPACK.containerType());
 
         ContainerNaturalistInventory.addInventory(this, inventory, selectedPage);
@@ -35,10 +40,20 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInve
         inventory.flipPage(player, (short) primary);
     }
 
-    public static ContainerNaturalistBackpack fromNetwork(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+    public static ContainerNaturalistBackpack fromNetwork(
+            int windowId,
+            PlayerInventory playerInventory,
+            PacketBuffer extraData
+    ) {
         ItemStack parent = extraData.readItemStack();
-        ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) extraData.readItemStack().getItem();    //TODO this is b it ugly
-        ItemInventoryBackpackPaged paged = new ItemInventoryBackpackPaged(playerInventory.player, Constants.SLOTS_BACKPACK_APIARIST, parent, backpack);
+        ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) extraData.readItemStack()
+                                                                            .getItem();    //TODO this is b it ugly
+        ItemInventoryBackpackPaged paged = new ItemInventoryBackpackPaged(
+                playerInventory.player,
+                Constants.SLOTS_BACKPACK_APIARIST,
+                parent,
+                backpack
+        );
         int page = extraData.readVarInt();
         return new ContainerNaturalistBackpack(windowId, playerInventory, paged, page);
     }

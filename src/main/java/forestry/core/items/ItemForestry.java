@@ -58,7 +58,12 @@ public class ItemForestry extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+    public void addInformation(
+            ItemStack stack,
+            @Nullable World world,
+            List<ITextComponent> tooltip,
+            ITooltipFlag advanced
+    ) {
         super.addInformation(stack, world, tooltip, advanced);
         ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
     }

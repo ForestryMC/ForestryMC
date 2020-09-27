@@ -334,7 +334,7 @@ public class ModuleCore extends BlankForestryModule {
     public boolean processIMCMessage(InterModComms.IMCMessage message) {
         if (message.getMethod().equals("blacklist-ores-dimension")) {
             ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier()
-                    .get();    //TODO - how does IMC work
+                                                                  .get();    //TODO - how does IMC work
             for (ResourceLocation dim : dims) {
                 Config.blacklistOreDim(dim);
             }

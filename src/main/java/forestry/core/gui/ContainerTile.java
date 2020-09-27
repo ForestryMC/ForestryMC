@@ -38,7 +38,14 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
     private int previousWorkCounter = 0;
     private int previousTicksPerWorkCycle = 0;
 
-    protected ContainerTile(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+    protected ContainerTile(
+            int windowId,
+            ContainerType<?> type,
+            PlayerInventory playerInventory,
+            T tile,
+            int xInv,
+            int yInv
+    ) {
         super(windowId, type);
         addPlayerInventory(playerInventory, xInv, yInv);
         this.tile = tile;

@@ -39,8 +39,13 @@ public class TickHandlerCoreClient {
                         WorldRenderer renderGlobal = minecraft.worldRenderer;
                         if (renderGlobal != null) {
                             renderGlobal.markBlockRangeForRenderUpdate(
-                                    (int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32,
-                                    (int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
+                                    (int) player.getPosX() - 32,
+                                    (int) player.getPosY() - 32,
+                                    (int) player.getPosZ() - 32,
+                                    (int) player.getPosX() + 32,
+                                    (int) player.getPosY() + 32,
+                                    (int) player.getPosZ() + 32
+                            );
                         }
                     }
                 }

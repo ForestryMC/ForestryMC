@@ -41,18 +41,18 @@ public class BlockGeneticFilter extends BlockForestry {
 
     public BlockGeneticFilter() {    //TODO super resets hardness and resistance
         super(Block.Properties.create(Material.WOOD)
-                        .hardnessAndResistance(0.25f, 3.0f)
-                        .variableOpacity()    //TODO maybe?
+                              .hardnessAndResistance(0.25f, 3.0f)
+                              .variableOpacity()    //TODO maybe?
                 //				setLightOpacity(0);
         );
         //		setCreativeTab(CreativeTabForestry.tabForestry);	TODO done in item
         this.setDefaultState(this.getStateContainer().getBaseState()
-                .with(NORTH, false)
-                .with(EAST, false)
-                .with(SOUTH, false)
-                .with(WEST, false)
-                .with(UP, false)
-                .with(DOWN, false));
+                                 .with(NORTH, false)
+                                 .with(EAST, false)
+                                 .with(SOUTH, false)
+                                 .with(WEST, false)
+                                 .with(UP, false)
+                                 .with(DOWN, false));
     }
 
     //TODO don't know how this works any more
@@ -71,7 +71,14 @@ public class BlockGeneticFilter extends BlockForestry {
     //	}
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType onBlockActivated(
+            BlockState state,
+            World worldIn,
+            BlockPos pos,
+            PlayerEntity playerIn,
+            Hand hand,
+            BlockRayTraceResult rayTraceResult
+    ) {
         TileGeneticFilter tile = TileUtil.getTile(worldIn, pos, TileGeneticFilter.class);
         if (tile != null) {
             if (TileUtil.isUsableByPlayer(playerIn, tile)) {

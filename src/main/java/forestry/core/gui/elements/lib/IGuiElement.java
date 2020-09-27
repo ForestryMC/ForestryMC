@@ -283,14 +283,22 @@ public interface IGuiElement {
     /**
      * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
      */
-    default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> eventHandler) {
+    default <E extends GuiElementEvent> void addEventHandler(
+            Class<? super E> eventClass,
+            GuiEventOrigin origin,
+            IGuiElement relative,
+            Consumer<E> eventHandler
+    ) {
         addEventHandler(new GuiEventHandler<>(eventClass, origin, relative, eventHandler));
     }
 
     /**
      * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
      */
-    default <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
+    default <E extends GuiElementEvent> void addSelfEventHandler(
+            Class<? super E> eventClass,
+            Consumer<E> eventHandler
+    ) {
         addEventHandler(new GuiEventHandler<>(eventClass, GuiEventOrigin.SELF, this, eventHandler));
     }
 

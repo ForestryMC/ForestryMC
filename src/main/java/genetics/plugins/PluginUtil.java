@@ -22,7 +22,8 @@ public class PluginUtil {
     public static Map<IGeneticPlugin, ModContainer> getPlugins() {
         Type annotationType = Type.getType(GeneticPlugin.class);
         List<ModFileScanData> allScanData = ModList.get().getAllScanData();
-        Function<String, Optional<? extends ModContainer>> getContainer = (modId) -> ModList.get().getModContainerById(modId);
+        Function<String, Optional<? extends ModContainer>> getContainer = (modId) -> ModList.get().getModContainerById(
+                modId);
         List<String> pluginClassNames = new ArrayList<>();
         for (ModFileScanData scanData : allScanData) {
             Set<ModFileScanData.AnnotationData> annotations = scanData.getAnnotations();

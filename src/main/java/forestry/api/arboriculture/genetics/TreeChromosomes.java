@@ -19,7 +19,8 @@ public class TreeChromosomes {
      * Determines the following: - WorldGen, including the used wood blocks - {@link IFruitFamily}s supported. Limits which {@link IFruitProvider}
      * will actually yield fruit with this species. - Native {@link PlantType} for this tree. Combines with the PLANT chromosome.
      */
-    public static final IChromosomeAllele<IAlleleTreeSpecies> SPECIES = TYPES.builder().name("species").asAllele(IAlleleTreeSpecies.class);
+    public static final IChromosomeAllele<IAlleleTreeSpecies> SPECIES = TYPES.builder().name("species").asAllele(
+            IAlleleTreeSpecies.class);
     /**
      * A float modifying the height of the tree. Taken into account at worldgen.
      */
@@ -31,7 +32,9 @@ public class TreeChromosomes {
     /**
      * {@link IFruitProvider}, determines if and what fruits are grown on the tree. Limited by the {@link IFruitFamily}s the species supports.
      */
-    public static final IChromosomeAllele<IAlleleFruit> FRUITS = TYPES.builder().name("fruits").asAllele(IAlleleFruit.class);
+    public static final IChromosomeAllele<IAlleleFruit> FRUITS = TYPES.builder()
+                                                                      .name("fruits")
+                                                                      .asAllele(IAlleleFruit.class);
     /**
      * Chance for fruit leaves and/or drops.
      */
@@ -43,11 +46,14 @@ public class TreeChromosomes {
     /**
      * Leaf effect. Unused.
      */
-    public static final IChromosomeAllele<IAlleleLeafEffect> EFFECT = TYPES.builder().name("effect").asAllele(IAlleleLeafEffect.class);
+    public static final IChromosomeAllele<IAlleleLeafEffect> EFFECT = TYPES.builder().name("effect").asAllele(
+            IAlleleLeafEffect.class);
     /**
      * Amount of random ticks which need to elapse before a sapling will grow into a tree.
      */
-    public static final IChromosomeValue<Integer> MATURATION = TYPES.builder().name("maturation").asValue(Integer.class);
+    public static final IChromosomeValue<Integer> MATURATION = TYPES.builder()
+                                                                    .name("maturation")
+                                                                    .asValue(Integer.class);
 
     public static final IChromosomeValue<Integer> GIRTH = TYPES.builder().name("girth").asValue(Integer.class);
     /**

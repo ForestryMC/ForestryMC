@@ -29,7 +29,10 @@ public class RootManager implements IRootManager, IGeneticListenerRegistry {
     }
 
     @Override
-    public <I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(String uid, Class<? extends T> enumClass) {
+    public <I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(
+            String uid,
+            Class<? extends T> enumClass
+    ) {
         T[] types = enumClass.getEnumConstants();
         if (types.length <= 0) {
             throw new IllegalArgumentException("The given enum class must contain at least one enum constant.");

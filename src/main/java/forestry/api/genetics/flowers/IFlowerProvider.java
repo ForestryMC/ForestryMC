@@ -34,5 +34,10 @@ public interface IFlowerProvider {
      *
      * @return Array of itemstacks being the (modified or unmodified) produce.
      */
-    NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products);
+    NonNullList<ItemStack> affectProducts(
+            World world,
+            IIndividual individual,
+            BlockPos pos,
+            NonNullList<ItemStack> products
+    );
 }

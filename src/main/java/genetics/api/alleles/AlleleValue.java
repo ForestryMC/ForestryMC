@@ -34,8 +34,8 @@ public class AlleleValue<V> extends Allele implements IAlleleValue<V> {
         }
         IAlleleValue otherAllele = (IAlleleValue) obj;
         return getRegistryName() != null ?
-                getRegistryName().equals(((IAllele) obj).getRegistryName()) :
-                Objects.equals(value, otherAllele.getValue()) && dominant == otherAllele.isDominant();
+               getRegistryName().equals(((IAllele) obj).getRegistryName()) :
+               Objects.equals(value, otherAllele.getValue()) && dominant == otherAllele.isDominant();
     }
 
     @Override

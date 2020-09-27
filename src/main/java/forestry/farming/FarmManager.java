@@ -145,7 +145,13 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
             }
 
             if (stage == Stage.HARVEST) {
-                Collection<ICrop> harvested = FarmHelper.harvestTargets(world, housing, farmTargets, logic, farmListeners);
+                Collection<ICrop> harvested = FarmHelper.harvestTargets(
+                        world,
+                        housing,
+                        farmTargets,
+                        logic,
+                        farmListeners
+                );
                 farmWorkStatus.didWork = !harvested.isEmpty();
                 if (!harvested.isEmpty()) {
                     pendingCrops.addAll(harvested);
@@ -174,11 +180,17 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
     }
 
 
-    private void cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic, FarmDirection farmSide) {
+    private void cultivateTargets(
+            FarmWorkStatus farmWorkStatus,
+            List<FarmTarget> farmTargets,
+            IFarmLogic logic,
+            FarmDirection farmSide
+    ) {
         World world = housing.getWorldObj();
         if (farmWorkStatus.hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
             final float hydrationModifier = hydrationManager.getHydrationModifier();
-            final int fertilizerConsumption = Math.round(logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
+            final int fertilizerConsumption = Math.round(
+                    logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
             final int liquidConsumption = logic.getProperties().getWaterConsumption(housing, hydrationModifier);
             final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
@@ -230,7 +242,8 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
             }
         }
 
-        final int fertilizerConsumption = Math.round(provider.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
+        final int fertilizerConsumption = Math.round(
+                provider.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
 
         IErrorLogic errorLogic = housing.getErrorLogic();
 

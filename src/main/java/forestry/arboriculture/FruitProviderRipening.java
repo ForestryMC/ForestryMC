@@ -32,7 +32,12 @@ public class FruitProviderRipening extends FruitProviderNone {
     private int diffB;
     private ProductListWrapper products;
 
-    public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, Supplier<ItemStack> product, float modifier) {
+    public FruitProviderRipening(
+            String unlocalizedDescription,
+            IFruitFamily family,
+            Supplier<ItemStack> product,
+            float modifier
+    ) {
         super(unlocalizedDescription, family);
         this.products = ProductListWrapper.create();
         this.products.addProduct(product, modifier);

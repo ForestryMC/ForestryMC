@@ -106,7 +106,11 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         }
     }
 
-    private void syncToPlayer(Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
+    private void syncToPlayer(
+            Collection<String> discoveredSpecies,
+            Collection<String> discoveredMutations,
+            Collection<String> researchedMutations
+    ) {
         if (world != null && username != null && username.getName() != null) {
             PlayerEntity player = world.getPlayerByUuid(username.getId());
             if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
@@ -152,7 +156,12 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         return CompoundNBT;
     }
 
-    private void writeToNBT(CompoundNBT CompoundNBT, Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
+    private void writeToNBT(
+            CompoundNBT CompoundNBT,
+            Collection<String> discoveredSpecies,
+            Collection<String> discoveredMutations,
+            Collection<String> researchedMutations
+    ) {
         if (modeName != null && !modeName.isEmpty()) {
             CompoundNBT.putString(MODE_NAME_KEY, modeName);
         }
@@ -178,7 +187,12 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         }
     }
 
-    private static void writeValuesToNBT(CompoundNBT CompoundNBT, Collection<String> values, String countKey, String key) {
+    private static void writeValuesToNBT(
+            CompoundNBT CompoundNBT,
+            Collection<String> values,
+            String countKey,
+            String key
+    ) {
         final int count = values.size();
         CompoundNBT.putInt(countKey, count);
         Iterator<String> iterator = values.iterator();

@@ -31,7 +31,13 @@ import java.util.Random;
 
 public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
     public BlockHabitatFormer() {
-        super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
+        super(
+                BlockTypeClimatology.HABITAT_FORMER,
+                Block.Properties.create(Material.IRON)
+                                .hardnessAndResistance(1.0f)
+                                .harvestTool(ToolType.AXE)
+                                .harvestLevel(0)
+        );
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -44,7 +50,12 @@ public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implemen
     }
 
     @Override
-    public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+    public int colorMultiplier(
+            BlockState state,
+            @Nullable IBlockReader worldIn,
+            @Nullable BlockPos pos,
+            int tintIndex
+    ) {
         if (worldIn == null || pos == null) {
             return 0x912237;
         }

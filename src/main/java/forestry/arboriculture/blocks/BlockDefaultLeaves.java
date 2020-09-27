@@ -32,10 +32,10 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 
     public BlockDefaultLeaves(TreeDefinition definition) {
         super(Block.Properties.create(Material.LEAVES)
-                .hardnessAndResistance(0.2f)
-                .sound(SoundType.PLANT)
-                .tickRandomly()
-                .notSolid());
+                              .hardnessAndResistance(0.2f)
+                              .sound(SoundType.PLANT)
+                              .tickRandomly()
+                              .notSolid());
         this.definition = definition;
     }
 
@@ -54,7 +54,14 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
     }
 
     @Override
-    protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
+    protected void getLeafDrop(
+            NonNullList<ItemStack> drops,
+            World world,
+            @Nullable GameProfile playerProfile,
+            BlockPos pos,
+            float saplingModifier,
+            int fortune
+    ) {
         ITree tree = getTree(world, pos);
         if (tree == null) {
             return;
@@ -92,7 +99,12 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+    public int colorMultiplier(
+            BlockState state,
+            @Nullable IBlockReader worldIn,
+            @Nullable BlockPos pos,
+            int tintIndex
+    ) {
         TreeDefinition treeDefinition = getTreeDefinition(state);
         if (treeDefinition == null) {
             treeDefinition = TreeDefinition.Oak;

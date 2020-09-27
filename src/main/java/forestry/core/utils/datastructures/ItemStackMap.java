@@ -57,7 +57,8 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 
     @Override
     protected boolean isValidKey(Object key) {
-        return key instanceof ItemStack || key instanceof Item || key instanceof String || key instanceof ResourceLocation;
+        return key instanceof ItemStack || key instanceof Item || key instanceof String ||
+               key instanceof ResourceLocation;
     }
 
     @Override

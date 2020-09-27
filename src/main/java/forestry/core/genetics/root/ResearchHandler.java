@@ -77,7 +77,13 @@ public class ResearchHandler<I extends IIndividual> implements IResearchHandler<
     }
 
     @Override
-    public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile gameProfile, I individual, int bountyLevel) {
+    public NonNullList<ItemStack> getResearchBounty(
+            IAlleleSpecies species,
+            World world,
+            GameProfile gameProfile,
+            I individual,
+            int bountyLevel
+    ) {
         NonNullList<ItemStack> bounty = NonNullList.create();
         if (world.rand.nextFloat() < bountyLevel / 16.0f) {
             IMutationContainer<I, ? extends IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
@@ -98,12 +104,21 @@ public class ResearchHandler<I extends IIndividual> implements IResearchHandler<
                     chosenMutation = allMutations.get(world.rand.nextInt(allMutations.size()));
                 }
 
-                ItemStack researchNote = AlleleManager.geneticRegistry.getMutationNoteStack(gameProfile, chosenMutation);
+                ItemStack researchNote = AlleleManager.geneticRegistry.getMutationNoteStack(
+                        gameProfile,
+                        chosenMutation
+                );
                 bounty.add(researchNote);
             }
         }
 
-        plugins.forEach(plugin -> bounty.addAll(plugin.getResearchBounty(species, world, gameProfile, individual, bountyLevel)));
+        plugins.forEach(plugin -> bounty.addAll(plugin.getResearchBounty(
+                species,
+                world,
+                gameProfile,
+                individual,
+                bountyLevel
+        )));
         return bounty;
     }
 

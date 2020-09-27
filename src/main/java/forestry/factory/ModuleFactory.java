@@ -81,14 +81,23 @@ public class ModuleFactory extends BlankForestryModule {
 
     @Override
     public void setupAPI() {
-        RecipeManagers.carpenterManager = machineEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
-        RecipeManagers.centrifugeManager = machineEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
-        RecipeManagers.fabricatorManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
-        RecipeManagers.fabricatorSmeltingManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
-        RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
-        RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
-        RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
-        RecipeManagers.stillManager = machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
+        RecipeManagers.carpenterManager = machineEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager()
+                                                                                : new DummyManagers.DummyCarpenterManager();
+        RecipeManagers.centrifugeManager = machineEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager()
+                                                                                  : new DummyManagers.DummyCentrifugeManager();
+        RecipeManagers.fabricatorManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager()
+                                                                                  : new DummyManagers.DummyFabricatorManager();
+        RecipeManagers.fabricatorSmeltingManager =
+                machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager()
+                                                       : new DummyManagers.DummyFabricatorSmeltingManager();
+        RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager()
+                                                                                : new DummyManagers.DummyFermenterManager();
+        RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager()
+                                                                                : new DummyManagers.DummyMoistenerManager();
+        RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager()
+                                                                              : new DummyManagers.DummySqueezerManager();
+        RecipeManagers.stillManager =
+                machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
 
         setupFuelManager();
     }
@@ -191,8 +200,9 @@ public class ModuleFactory extends BlankForestryModule {
         FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(
                 biomass,
                 Constants.ENGINE_FUEL_VALUE_BIOMASS,
-                (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting(
-                        "fuel.biomass.biogas")),
+                (int) (
+                        Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting(
+                                "fuel.biomass.biogas")),
                 1
         ));
 
@@ -266,7 +276,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "ingotCopper"}
+                            'X', "ingotCopper"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -277,7 +288,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "ingotTin"}
+                            'X', "ingotTin"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -288,7 +300,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "ingotBronze"}
+                            'X', "ingotBronze"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -299,7 +312,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "ingotIron"}
+                            'X', "ingotIron"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -310,7 +324,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "ingotGold"}
+                            'X', "ingotGold"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -321,7 +336,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "gemDiamond"}
+                            'X', "gemDiamond"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -332,7 +348,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', Blocks.OBSIDIAN}
+                            'X', Blocks.OBSIDIAN
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -343,7 +360,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', Items.BLAZE_POWDER}
+                            'X', Items.BLAZE_POWDER
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -354,7 +372,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "gemEmerald"}
+                            'X', "gemEmerald"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -365,7 +384,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', "gemApatite"}
+                            'X', "gemApatite"
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -376,7 +396,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', "dustRedstone",
-                            'X', new ItemStack(Items.LAPIS_LAZULI)}
+                            'X', new ItemStack(Items.LAPIS_LAZULI)
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -387,7 +408,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', new ItemStack(Items.ENDER_EYE),
-                            'X', new ItemStack(Blocks.END_STONE)}
+                            'X', new ItemStack(Blocks.END_STONE)
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -398,7 +420,8 @@ public class ModuleFactory extends BlankForestryModule {
                             "#X#",
                             "XXX",
                             '#', new ItemStack(Items.REPEATER),
-                            'X', new ItemStack(Blocks.REDSTONE_ORE)}
+                            'X', new ItemStack(Blocks.REDSTONE_ORE)
+                    }
             );
             RecipeManagers.fabricatorManager.addRecipe(
                     ItemStack.EMPTY,
@@ -410,11 +433,28 @@ public class ModuleFactory extends BlankForestryModule {
                             "#E#",
                             '#', OreDictUtil.INGOT_BRONZE,
                             'B', OreDictUtil.SLIMEBALL,
-                            'E', "gemEmerald"}
+                            'E', "gemEmerald"
+                    }
             );
         }
-        String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
-                "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
+        String[] dyes = {
+                "dyeBlack",
+                "dyeRed",
+                "dyeGreen",
+                "dyeBrown",
+                "dyeBlue",
+                "dyePurple",
+                "dyeCyan",
+                "dyeLightGray",
+                "dyeGray",
+                "dyePink",
+                "dyeLime",
+                "dyeYellow",
+                "dyeLightBlue",
+                "dyeMagenta",
+                "dyeOrange",
+                "dyeWhite"
+        };
 
         FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
         FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
@@ -814,7 +854,8 @@ public class ModuleFactory extends BlankForestryModule {
                         " X ",
                         " X ",
                         '#', "ingotBronze",
-                        'X', "stickWood"}
+                        'X', "stickWood"
+                }
         );
 
         RecipeManagers.carpenterManager.addRecipe(20, null, CoreItems.CARTON.stack(), CoreItems.KIT_SHOVEL.stack(),

@@ -24,7 +24,10 @@ public class ProxyRender implements ISidedModuleHandler {
     public void initRendering() {
     }
 
-    public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
+    public void setRenderDefaultMachine(
+            MachinePropertiesTesr<? extends TileBase> machineProperties,
+            String baseTexture
+    ) {
     }
 
     public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
@@ -36,7 +39,10 @@ public class ProxyRender implements ISidedModuleHandler {
     public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
     }
 
-    public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
+    public void setRenderChest(
+            MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties,
+            String textureName
+    ) {
     }
 
     public void registerModels(ModelBakeEvent event) {

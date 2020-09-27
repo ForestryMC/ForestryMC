@@ -31,7 +31,10 @@ public abstract class Individual implements IIndividual {
     public Individual(CompoundNBT compound) {
         IKaryotype karyotype = getRoot().getKaryotype();
         if (compound.contains(NBT_GENOME)) {
-            genome = GeneticsAPI.apiInstance.getGeneticFactory().createGenome(karyotype, compound.getCompound(NBT_GENOME));
+            genome = GeneticsAPI.apiInstance.getGeneticFactory().createGenome(
+                    karyotype,
+                    compound.getCompound(NBT_GENOME)
+            );
         } else {
             genome = karyotype.getDefaultGenome();
         }

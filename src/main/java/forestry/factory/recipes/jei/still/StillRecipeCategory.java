@@ -31,8 +31,14 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 
         IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 74, 4, 18);
-        this.progressBar = guiHelper.createAnimatedDrawable(progressBarDrawable0, 20, IDrawableAnimated.StartDirection.BOTTOM, false);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block()));
+        this.progressBar = guiHelper.createAnimatedDrawable(
+                progressBarDrawable0,
+                20,
+                IDrawableAnimated.StartDirection.BOTTOM,
+                false
+        );
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL)
+                                                                                       .block()));
     }
 
     @Override

@@ -75,7 +75,10 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
     @Override
     protected ModelDefaultLeavesFruit.Key getInventoryKey(ItemStack stack) {
         Block block = Block.getBlockFromItem(stack.getItem());
-        Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "ItemStack must be for default fruit leaves.");
+        Preconditions.checkArgument(
+                block instanceof BlockDefaultLeavesFruit,
+                "ItemStack must be for default fruit leaves."
+        );
         BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
         return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
     }
@@ -83,13 +86,22 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
     @Override
     protected ModelDefaultLeavesFruit.Key getWorldKey(BlockState state, IModelData extraData) {
         Block block = state.getBlock();
-        Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "state must be for default fruit leaves.");
+        Preconditions.checkArgument(
+                block instanceof BlockDefaultLeavesFruit,
+                "state must be for default fruit leaves."
+        );
         BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
         return new ModelDefaultLeavesFruit.Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());
     }
 
     @Override
-    protected void bakeBlock(BlockDefaultLeavesFruit block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+    protected void bakeBlock(
+            BlockDefaultLeavesFruit block,
+            IModelData extraData,
+            Key key,
+            ModelBaker baker,
+            boolean inventory
+    ) {
         TreeDefinition treeDefinition = key.definition;
 
         IGenome genome = treeDefinition.getGenome();
@@ -103,7 +115,9 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
         baker.addBlockModel(leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
         // Render overlay for fruit leaves.
-        ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDecorativeSprite();
+        ResourceLocation fruitSpriteLocation = genome.getActiveAllele(TreeChromosomes.FRUITS)
+                                                     .getProvider()
+                                                     .getDecorativeSprite();
         if (fruitSpriteLocation != null) {
             TextureAtlasSprite fruitSprite = ResourceUtil.getBlockSprite(fruitSpriteLocation);
             baker.addBlockModel(fruitSprite, BlockAbstractLeaves.FRUIT_COLOR_INDEX);

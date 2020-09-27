@@ -28,14 +28,14 @@ public class TreeHelper {
 
     public static IAlleleTemplate createDefaultTemplate(IAlleleTemplateBuilder templateBuilder) {
         return templateBuilder.set(TreeChromosomes.FRUITS, AlleleFruits.fruitNone)
-                .set(TreeChromosomes.SPECIES, TreeDefinition.Oak.getSpecies())
-                .set(TreeChromosomes.HEIGHT, EnumAllele.Height.SMALL)
-                .set(TreeChromosomes.FERTILITY, EnumAllele.Saplings.LOWER)
-                .set(TreeChromosomes.YIELD, EnumAllele.Yield.LOWEST)
-                .set(TreeChromosomes.SAPPINESS, EnumAllele.Sappiness.LOWEST)
-                .set(TreeChromosomes.EFFECT, AlleleLeafEffects.leavesNone)
-                .set(TreeChromosomes.MATURATION, EnumAllele.Maturation.AVERAGE)
-                .set(TreeChromosomes.GIRTH, 1)
-                .set(TreeChromosomes.FIREPROOF, EnumAllele.Fireproof.FALSE).build();
+                              .set(TreeChromosomes.SPECIES, TreeDefinition.Oak.getSpecies())
+                              .set(TreeChromosomes.HEIGHT, EnumAllele.Height.SMALL)
+                              .set(TreeChromosomes.FERTILITY, EnumAllele.Saplings.LOWER)
+                              .set(TreeChromosomes.YIELD, EnumAllele.Yield.LOWEST)
+                              .set(TreeChromosomes.SAPPINESS, EnumAllele.Sappiness.LOWEST)
+                              .set(TreeChromosomes.EFFECT, AlleleLeafEffects.leavesNone)
+                              .set(TreeChromosomes.MATURATION, EnumAllele.Maturation.AVERAGE)
+                              .set(TreeChromosomes.GIRTH, 1)
+                              .set(TreeChromosomes.FIREPROOF, EnumAllele.Fireproof.FALSE).build();
     }
 }

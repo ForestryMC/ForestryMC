@@ -25,6 +25,9 @@ public enum EnumBackpackType implements IStringSerializable {
         if (this == NATURALIST) {
             typeName = NORMAL.getString();
         }
-        return new ModelResourceLocation(Constants.MOD_ID + ":backpacks/" + typeName + "_" + mode.getString(), "inventory");
+        return new ModelResourceLocation(
+                Constants.MOD_ID + ":backpacks/" + typeName + "_" + mode.getString(),
+                "inventory"
+        );
     }
 }

@@ -57,7 +57,13 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
         render(Direction.SOUTH, 0, 0, helper, helper.partialTicks);
     }
 
-    public void render(Direction orientation, float prevLidAngle, float lidAngle, RenderHelper helper, float partialTick) {
+    public void render(
+            Direction orientation,
+            float prevLidAngle,
+            float lidAngle,
+            RenderHelper helper,
+            float partialTick
+    ) {
         helper.push();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         helper.translate(0.5D, 0.5D, 0.5D);

@@ -44,10 +44,10 @@ public class BlockForestryFluid extends FlowingFluidBlock {
         super(
                 feature.fluid(),
                 Block.Properties.create(feature.fluid()
-                        .getAttributes()
-                        .getTemperature() > 505 ? Material.LAVA : Material.WATER)
-                        .doesNotBlockMovement()
-                        .hardnessAndResistance(100.0F).noDrops()
+                                               .getAttributes()
+                                               .getTemperature() > 505 ? Material.LAVA : Material.WATER)
+                                .doesNotBlockMovement()
+                                .hardnessAndResistance(100.0F).noDrops()
         );
         this.feature = feature;
 
@@ -94,7 +94,8 @@ public class BlockForestryFluid extends FlowingFluidBlock {
         }
 
         if (this.material == Material.LAVA && world.getBlockState(pos.up())
-                .getMaterial() == Material.AIR && !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())) {
+                                                   .getMaterial() == Material.AIR &&
+            !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())) {
             if (rand.nextInt(100) == 0) {
                 double d8 = d0 + rand.nextFloat();
                 double d4 = d1 + 1;
@@ -235,11 +236,11 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 
     private static boolean isNeighborFlammable(World world, int x, int y, int z) {
         return isFlammable(world, new BlockPos(x - 1, y, z)) ||
-                isFlammable(world, new BlockPos(x + 1, y, z)) ||
-                isFlammable(world, new BlockPos(x, y, z - 1)) ||
-                isFlammable(world, new BlockPos(x, y, z + 1)) ||
-                isFlammable(world, new BlockPos(x, y - 1, z)) ||
-                isFlammable(world, new BlockPos(x, y + 1, z));
+               isFlammable(world, new BlockPos(x + 1, y, z)) ||
+               isFlammable(world, new BlockPos(x, y, z - 1)) ||
+               isFlammable(world, new BlockPos(x, y, z + 1)) ||
+               isFlammable(world, new BlockPos(x, y - 1, z)) ||
+               isFlammable(world, new BlockPos(x, y + 1, z));
     }
 
     private static boolean isNearFire(World world, int x, int y, int z) {

@@ -50,11 +50,31 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
     private boolean dirty = true;
 
     /* Constructors */
-    public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
+    public GuiAnalyzerProvider(
+            String texture,
+            C container,
+            PlayerInventory inv,
+            ITitled titled,
+            int buttonX,
+            int buttonY,
+            int slots,
+            int firstSlot
+    ) {
         this(texture, container, inv, titled, buttonX, buttonY, 0, false, slots, firstSlot);
     }
 
-    public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
+    public GuiAnalyzerProvider(
+            String texture,
+            C container,
+            PlayerInventory inv,
+            ITitled titled,
+            int buttonX,
+            int buttonY,
+            int screenDistance,
+            boolean hasBorder,
+            int slots,
+            int firstSlot
+    ) {
         super(texture, container, inv, new TranslationTextComponent(titled.getUnlocalizedTitle()));
         this.buttonX = buttonX;
         this.buttonY = buttonY;

@@ -97,7 +97,12 @@ public class ItemLetter extends ItemWithGui {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         super.addInformation(itemstack, world, list, flag);
 
         CompoundNBT compoundNBT = itemstack.getTag();

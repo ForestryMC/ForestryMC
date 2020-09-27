@@ -59,7 +59,13 @@ public abstract class FarmLogic implements IFarmLogic {
     }
 
     @Override
-    public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+    public Collection<ICrop> harvest(
+            World world,
+            IFarmHousing housing,
+            FarmDirection direction,
+            int extent,
+            BlockPos pos
+    ) {
         Stack<ICrop> crops = new Stack<>();
         for (int i = 0; i < extent; i++) {
             BlockPos position = translateWithOffset(pos.up(), direction, i);

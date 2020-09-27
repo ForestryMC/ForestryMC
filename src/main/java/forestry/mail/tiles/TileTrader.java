@@ -133,11 +133,21 @@ public class TileTrader extends TileBase implements IOwnedTile {
         ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
         errorLogic.setCondition(tradeGood.isEmpty(), EnumErrorCode.NO_TRADE);
 
-        boolean hasRequest = hasItemCount(TradeStation.SLOT_EXCHANGE_1, TradeStation.SLOT_EXCHANGE_COUNT, ItemStack.EMPTY, 1);
+        boolean hasRequest = hasItemCount(
+                TradeStation.SLOT_EXCHANGE_1,
+                TradeStation.SLOT_EXCHANGE_COUNT,
+                ItemStack.EMPTY,
+                1
+        );
         errorLogic.setCondition(!hasRequest, EnumErrorCode.NO_TRADE);
 
         if (!tradeGood.isEmpty()) {
-            boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.getCount());
+            boolean hasSupplies = hasItemCount(
+                    TradeStation.SLOT_SEND_BUFFER,
+                    TradeStation.SLOT_SEND_BUFFER_COUNT,
+                    tradeGood,
+                    tradeGood.getCount()
+            );
             errorLogic.setCondition(!hasSupplies, EnumErrorCode.NO_SUPPLIES);
         }
 
@@ -207,7 +217,12 @@ public class TileTrader extends TileBase implements IOwnedTile {
     }
 
     public boolean hasPaperMin(int count) {
-        return hasItemCount(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.PAPER), count);
+        return hasItemCount(
+                TradeStation.SLOT_LETTERS_1,
+                TradeStation.SLOT_LETTERS_COUNT,
+                new ItemStack(Items.PAPER),
+                count
+        );
     }
 
     //	public boolean hasInputBufMin(float percentage) {
@@ -299,7 +314,11 @@ public class TileTrader extends TileBase implements IOwnedTile {
             return super.getInternalInventory();
         }
 
-        return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation((ServerWorld) world, getOwnerHandler().getOwner(), address);
+        return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(
+                (ServerWorld) world,
+                getOwnerHandler().getOwner(),
+                address
+        );
     }
 
     //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)

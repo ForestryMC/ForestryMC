@@ -34,7 +34,14 @@ public class BlockCandleWall extends BlockCandle {
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction direction, BlockState blockState, IWorld world, BlockPos pos, BlockPos blockPos) {
+    public BlockState updatePostPlacement(
+            BlockState state,
+            Direction direction,
+            BlockState blockState,
+            IWorld world,
+            BlockPos pos,
+            BlockPos blockPos
+    ) {
         return Blocks.WALL_TORCH.updatePostPlacement(state, direction, blockState, world, pos, blockPos);
     }
 

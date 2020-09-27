@@ -48,20 +48,43 @@ public class ModuleFluids extends BlankForestryModule {
     @Override
     public void doInit() {
         if (RecipeManagers.squeezerManager != null) {
-            RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAN), CoreItems.INGOT_TIN.stack(), 0.05f);
-            RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE), CoreItems.BEESWAX.stack(), 0.10f);
-            RecipeManagers.squeezerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY), CoreItems.REFRACTORY_WAX.stack(), 0.10f);
+            RecipeManagers.squeezerManager.addContainerRecipe(
+                    10,
+                    FluidsItems.CONTAINERS.stack(EnumContainerType.CAN),
+                    CoreItems.INGOT_TIN.stack(),
+                    0.05f
+            );
+            RecipeManagers.squeezerManager.addContainerRecipe(
+                    10,
+                    FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE),
+                    CoreItems.BEESWAX.stack(),
+                    0.10f
+            );
+            RecipeManagers.squeezerManager.addContainerRecipe(
+                    10,
+                    FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY),
+                    CoreItems.REFRACTORY_WAX.stack(),
+                    0.10f
+            );
         }
 
         FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
         if (!ethanol.isEmpty()) {
-            GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
+            GeneratorFuel ethanolFuel = new GeneratorFuel(
+                    ethanol,
+                    (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")),
+                    4
+            );
             FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
         }
 
         FluidStack biomass = ForestryFluids.BIOMASS.getFluid(1);
         if (!biomass.isEmpty()) {
-            GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
+            GeneratorFuel biomassFuel = new GeneratorFuel(
+                    biomass,
+                    (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")),
+                    1
+            );
             FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
         }
     }

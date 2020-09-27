@@ -57,8 +57,8 @@ public class GuiButtonSubEntry extends Button {
 
     public boolean isMouseOver(int mouseX, int mouseY) {
         return mouseX >= this.x
-                && mouseY >= this.y
-                && mouseX < this.x + this.width
-                && mouseY < this.y + this.height;
+               && mouseY >= this.y
+               && mouseX < this.x + this.width
+               && mouseY < this.y + this.height;
     }
 }

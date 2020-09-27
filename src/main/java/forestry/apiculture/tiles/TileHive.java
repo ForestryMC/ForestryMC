@@ -106,13 +106,20 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
             if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
                 if (calmTime == 0) {
                     if (canWork) {
-                        if (angry && ModuleApiculture.hiveDamageOnAttack && (world.getWorldInfo().getDifficulty() != Difficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful)) {
+                        if (angry && ModuleApiculture.hiveDamageOnAttack && (
+                                world.getWorldInfo().getDifficulty() != Difficulty.PEACEFUL ||
+                                ModuleApiculture.hivesDamageOnPeaceful)) {
                             AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
-                            List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, boundingBox, beeTargetPredicate);
+                            List<LivingEntity> entities = world.getEntitiesWithinAABB(
+                                    LivingEntity.class,
+                                    boundingBox,
+                                    beeTargetPredicate
+                            );
                             if (!entities.isEmpty()) {
                                 Collections.shuffle(entities);
                                 LivingEntity entity = entities.get(0);
-                                if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
+                                if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) &&
+                                    (!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
                                     attack(entity, 2);
                                 }
                             }
@@ -228,7 +235,11 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
         int damage = (int) (attackAmount * maxDamage);
         if (damage > 0) {
             // Entities are not attacked if they wear a full set of apiarist's armor.
-            int count = BeeManager.armorApiaristHelper.wearsItems(entity, new ResourceLocation(damageSourceBeeHive.damageType), true);
+            int count = BeeManager.armorApiaristHelper.wearsItems(
+                    entity,
+                    new ResourceLocation(damageSourceBeeHive.damageType),
+                    true
+            );
             if (entity.world.rand.nextInt(4) >= count) {
                 entity.attackEntityFrom(damageSourceBeeHive, damage);
             }

@@ -145,10 +145,15 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
     }
 
     @Nullable
-    private static IMailAddress getRecipient(MinecraftServer minecraftServer, String recipientName, EnumAddressee type) {
+    private static IMailAddress getRecipient(
+            MinecraftServer minecraftServer,
+            String recipientName,
+            EnumAddressee type
+    ) {
         switch (type) {
             case PLAYER: {
-                GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(recipientName);
+                GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(
+                        recipientName);
                 if (gameProfile == null) {
                     return null;
                 }
@@ -204,7 +209,11 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
     }
 
     @Override
-    public void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo) {
+    public void handleLetterInfoUpdate(
+            EnumAddressee type,
+            @Nullable IMailAddress address,
+            @Nullable ITradeStationInfo tradeInfo
+    ) {
         carrierType = type;
         if (type == EnumAddressee.PLAYER) {
             getLetter().setRecipient(address);

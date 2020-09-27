@@ -33,7 +33,13 @@ public class RenderHelper {
 
     private Vector3f baseRotation = ORIGIN;
 
-    public void update(float partialTicks, MatrixStack transformation, IRenderTypeBuffer buffer, int combinedLight, int packetLight) {
+    public void update(
+            float partialTicks,
+            MatrixStack transformation,
+            IRenderTypeBuffer buffer,
+            int combinedLight,
+            int packetLight
+    ) {
         this.packetLight = packetLight;
         this.combinedLight = combinedLight;
         this.partialTicks = partialTicks;
@@ -60,7 +66,17 @@ public class RenderHelper {
         }
 
         EntityRendererManager renderManager = Minecraft.getInstance().getRenderManager();
-        renderManager.renderEntityStatic(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, transformation, buffer, combinedLight);
+        renderManager.renderEntityStatic(
+                dummyItem,
+                0.0D,
+                0.0D,
+                0.0D,
+                0.0F,
+                0.0F,
+                transformation,
+                buffer,
+                combinedLight
+        );
 
         dummyItem.world = null;
     }

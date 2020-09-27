@@ -17,8 +17,10 @@ public class ClassificationRegistry implements IClassificationRegistry {
     @Override
     public void registerClassification(IClassification branch) {
         if (classificationMap.containsKey(branch.getUID())) {
-            throw new IllegalArgumentException(String.format("Could not add new classification '%s', because the key is already taken by %s.", branch.getUID(),
-                    classificationMap.get(branch.getUID())));
+            throw new IllegalArgumentException(String.format("Could not add new classification '%s', because the key is already taken by %s.",
+                    branch.getUID(),
+                    classificationMap.get(branch.getUID())
+            ));
         }
 
         classificationMap.put(branch.getUID(), branch);
@@ -38,7 +40,12 @@ public class ClassificationRegistry implements IClassificationRegistry {
     }
 
     @Override
-    public IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific, IClassification... members) {
+    public IClassification createAndRegisterClassification(
+            EnumClassLevel level,
+            String uid,
+            String scientific,
+            IClassification... members
+    ) {
         IClassification classification = new Classification(level, uid, scientific);
         for (IClassification member : members) {
             classification.addMemberGroup(member);

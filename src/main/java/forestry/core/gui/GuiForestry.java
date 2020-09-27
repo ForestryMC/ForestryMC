@@ -240,7 +240,13 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
     @Override
     protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int idk) {
-        return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, 0);    //TODO - I have no idea what the last param actually does
+        return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(
+                mouseX,
+                mouseY,
+                guiLeft,
+                guiTop,
+                0
+        );    //TODO - I have no idea what the last param actually does
     }
 
     @Override

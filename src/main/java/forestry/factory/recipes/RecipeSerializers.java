@@ -45,7 +45,7 @@ public class RecipeSerializers {
 
         if (object.has("tag")) {
             stack.setTag((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object.get("tag"))
-                    .copy());
+                                              .copy());
         }
 
         return stack;

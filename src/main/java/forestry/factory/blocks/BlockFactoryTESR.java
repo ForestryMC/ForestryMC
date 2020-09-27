@@ -18,7 +18,7 @@ import net.minecraftforge.common.ToolType;
 public class BlockFactoryTESR extends BlockBase<BlockTypeFactoryTesr> {
     public BlockFactoryTESR(BlockTypeFactoryTesr type) {
         super(type, Block.Properties.create(Material.IRON)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(0));
+                                    .harvestTool(ToolType.PICKAXE)
+                                    .harvestLevel(0));
     }
 }

@@ -15,7 +15,12 @@ public class BottlerRecipeWrapper implements IRecipeCategoryExtension {
     public final ItemStack outputStack;
     public final boolean fillRecipe;
 
-    public BottlerRecipeWrapper(ItemStack inputStack, FluidStack fluid, @Nullable ItemStack outputStack, boolean fillRecipe) {
+    public BottlerRecipeWrapper(
+            ItemStack inputStack,
+            FluidStack fluid,
+            @Nullable ItemStack outputStack,
+            boolean fillRecipe
+    ) {
         this.inputStack = inputStack;
         this.fluid = fluid;
         this.outputStack = outputStack;

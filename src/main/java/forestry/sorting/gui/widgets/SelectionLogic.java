@@ -24,7 +24,8 @@ public class SelectionLogic<S> implements IScrollable {
         this.widget = widget;
         this.provider = provider;
         this.entries = provider.getEntries();
-        this.comparator = (S f, S s) -> provider.getName(f).getString().compareToIgnoreCase(provider.getName(s).getString());
+        this.comparator = (S f, S s) -> provider.getName(f).getString().compareToIgnoreCase(provider.getName(s)
+                                                                                                    .getString());
     }
 
     public boolean isSame(ISelectableProvider provider) {

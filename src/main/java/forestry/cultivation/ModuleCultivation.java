@@ -36,8 +36,10 @@ public class ModuleCultivation extends BlankForestryModule {
 
     @Override
     public Set<ResourceLocation> getDependencyUids() {
-        return ImmutableSet.of(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE),
-                new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING));
+        return ImmutableSet.of(
+                new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE),
+                new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FARMING)
+        );
     }
 
     @Override

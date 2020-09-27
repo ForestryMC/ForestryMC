@@ -88,7 +88,8 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
             ItemStack extracted = itemHandler.extractItem(invIndex, count, true);
             if (!extracted.isEmpty()) {
                 if ((flags & SHIFT) == SHIFT) {
-                    IItemHandler playerInv = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);    //TODO unwrap should be fine
+                    IItemHandler playerInv = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(
+                            null);    //TODO unwrap should be fine
                     //Test if the player has enough space
                     ItemStack remaining = ItemHandlerHelper.insertItem(playerInv, extracted, true);
                     if (remaining.isEmpty()) {

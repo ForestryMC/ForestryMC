@@ -75,8 +75,8 @@ public class CommandModules {
     public static class CommandPluginsInfo {
         public static ArgumentBuilder<CommandSource, ?> register() {
             return Commands.literal("info")
-                    .then(Commands.argument("module", ModuleArgument.modules())
-                            .executes(CommandPluginsInfo::listModuleInfoForSender));
+                           .then(Commands.argument("module", ModuleArgument.modules())
+                                         .executes(CommandPluginsInfo::listModuleInfoForSender));
         }
 
         public static class ModuleArgument implements ArgumentType<IForestryModule> {
@@ -120,9 +120,9 @@ public class CommandModules {
                     SuggestionsBuilder builder
             ) {
                 ModuleManager.getLoadedModules().stream()
-                        .map(module -> module.getClass().getAnnotation(ForestryModule.class))
-                        .filter(Objects::nonNull)
-                        .forEach(info -> builder.suggest(info.moduleID()));
+                             .map(module -> module.getClass().getAnnotation(ForestryModule.class))
+                             .filter(Objects::nonNull)
+                             .forEach(info -> builder.suggest(info.moduleID()));
 
                 return builder.buildFuture();
             }

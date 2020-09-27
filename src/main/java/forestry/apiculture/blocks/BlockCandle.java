@@ -93,8 +93,8 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
     public BlockCandle() {
         super(Block.Properties.from(Blocks.TORCH)
-                .hardnessAndResistance(0.0f)
-                .sound(SoundType.WOOD), ParticleTypes.FLAME);
+                              .hardnessAndResistance(0.0f)
+                              .sound(SoundType.WOOD), ParticleTypes.FLAME);
         setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.OFF));
     }
 

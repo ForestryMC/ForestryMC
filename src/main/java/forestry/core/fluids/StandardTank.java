@@ -161,7 +161,12 @@ public class StandardTank extends FluidTank implements IStreamable {
 
     @Override
     public String toString() {
-        return String.format("Tank: %s, %d/%d", !fluid.isEmpty() ? fluid.getFluid().getRegistryName() : "Empty", getFluidAmount(), getCapacity());
+        return String.format(
+                "Tank: %s, %d/%d",
+                !fluid.isEmpty() ? fluid.getFluid().getRegistryName() : "Empty",
+                getFluidAmount(),
+                getCapacity()
+        );
     }
 
     protected boolean hasFluid() {
@@ -203,7 +208,11 @@ public class StandardTank extends FluidTank implements IStreamable {
             toolTip.add(new TranslationTextComponent(attributes.getTranslationKey(fluidStack)), rarity.color);
             amount = getFluid().getAmount();
         }
-        TranslationTextComponent liquidAmount = new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, getCapacity());
+        TranslationTextComponent liquidAmount = new TranslationTextComponent(
+                "for.gui.tooltip.liquid.amount",
+                amount,
+                getCapacity()
+        );
         toolTip.add(liquidAmount);
     }
 

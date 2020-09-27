@@ -59,7 +59,8 @@ public class AIAvoidPlayers extends Goal {
         }
 
         Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-                player.getPositionVec());
+                player.getPositionVec()
+        );
 
         if (randomTarget == null) {
             return false;
@@ -69,7 +70,12 @@ public class AIAvoidPlayers extends Goal {
             return false;
         }
 
-        path = pathNavigator.getPathToPos(randomTarget.x, randomTarget.y, randomTarget.z, 0);    //TODO what does the 4th param mean?
+        path = pathNavigator.getPathToPos(
+                randomTarget.x,
+                randomTarget.y,
+                randomTarget.z,
+                0
+        );    //TODO what does the 4th param mean?
         return path != null;
     }
 

@@ -69,7 +69,13 @@ public interface IFlowerRegistry {
      *
      * @since Forestry 5.5.4
      */
-    boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<BlockState> potentialFlowers);
+    boolean growFlower(
+            String flowerType,
+            World world,
+            IIndividual individual,
+            BlockPos pos,
+            Collection<BlockState> potentialFlowers
+    );
 
     /**
      * Gets an iterator over the area a bee can travel from its beeHousing.

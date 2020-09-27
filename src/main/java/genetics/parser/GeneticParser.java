@@ -44,9 +44,15 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 
         Multimap<ResourceLocation, CompoundNBT> alleleData = HashMultimap.create();
 
-        for (ResourceLocation location : manager.getAllResourceLocations("genetics/alleles", filename -> filename.endsWith(".json"))) {
+        for (ResourceLocation location : manager.getAllResourceLocations(
+                "genetics/alleles",
+                filename -> filename.endsWith(".json")
+        )) {
             String path = location.getPath();
-            ResourceLocation readableLocation = new ResourceLocation(location.getNamespace(), path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH));
+            ResourceLocation readableLocation = new ResourceLocation(
+                    location.getNamespace(),
+                    path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH)
+            );
             try (IResource resource = manager.getResource(location)) {
                 for (ResourceLocation loading : loadingAlleles) {
                     if (location.getClass() == loading.getClass() && location.equals(loading)) {
@@ -54,7 +60,11 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
                     }
                 }
                 loadingAlleles.addLast(location);
-                JsonObject object = JSONUtils.fromJson(GSON, IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+                JsonObject object = JSONUtils.fromJson(
+                        GSON,
+                        IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8),
+                        JsonObject.class
+                );
                 if (object == null) {
                     //LOGGER.error("Couldn't load allele {} as it's null or empty", readableLocation);
                 } else {
@@ -79,7 +89,8 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
             CompoundNBT compound = new CompoundNBT();
             List<CompoundNBT> compounds = new LinkedList<>(alleleData.get(location));
             if (compounds.size() > 1) {
-                compounds.stream().filter(tag -> tag.getBoolean("replace")).max(Comparator.comparingInt(a -> a.getInt("weight"))).ifPresent(compound::merge);
+                compounds.stream().filter(tag -> tag.getBoolean("replace")).max(Comparator.comparingInt(a -> a.getInt(
+                        "weight"))).ifPresent(compound::merge);
             }
             if (compounds.size() > 1) {
                 compounds.stream().sorted(Comparator.comparingInt(a -> -a.getInt("weight"))).forEach(compound::merge);

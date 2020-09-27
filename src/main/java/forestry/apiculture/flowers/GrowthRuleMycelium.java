@@ -24,9 +24,15 @@ import java.util.Collection;
 public class GrowthRuleMycelium implements IFlowerGrowthRule {
 
     @Override
-    public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+    public boolean growFlower(
+            IFlowerGrowthHelper helper,
+            String flowerType,
+            ServerWorld world,
+            BlockPos pos,
+            Collection<BlockState> potentialFlowers
+    ) {
         return isValidSpot(world, pos) &&
-                helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
+               helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
     }
 
     private boolean isValidSpot(World world, BlockPos pos) {

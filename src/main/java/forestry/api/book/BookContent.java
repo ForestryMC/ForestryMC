@@ -49,5 +49,11 @@ public abstract class BookContent<D> {
      * @param pageHeight      The max height of the current page.
      * @return True if you added an element.
      */
-    public abstract boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight);
+    public abstract boolean addElements(
+            IElementGroup page,
+            IGuiElementFactory factory,
+            @Nullable BookContent previous,
+            @Nullable IGuiElement previousElement,
+            int pageHeight
+    );
 }

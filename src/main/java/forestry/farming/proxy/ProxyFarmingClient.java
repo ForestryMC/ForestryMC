@@ -35,7 +35,10 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
     @Override
     public void setupClient(FMLClientSetupEvent event) {
-        FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+        FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(
+                block,
+                RenderType.getCutoutMipped()
+        ));
     }
 
     @Override

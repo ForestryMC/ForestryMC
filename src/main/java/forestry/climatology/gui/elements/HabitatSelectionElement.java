@@ -109,8 +109,10 @@ public class HabitatSelectionElement extends ElementGroup {
                 former.sendClimateUpdate();
             });
             addTooltip((tooltip, element, mouseX, mouseY) -> {
-                tooltip.add(new StringTextComponent("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
-                tooltip.add(new StringTextComponent("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
+                tooltip.add(new StringTextComponent(
+                        "T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
+                tooltip.add(new StringTextComponent(
+                        "H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
             });
         }
 

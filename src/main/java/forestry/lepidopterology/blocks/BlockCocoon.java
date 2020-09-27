@@ -38,16 +38,23 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Random;
 
 public class BlockCocoon extends Block {
-    public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+    public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(
+            0.3125F,
+            0.3125F,
+            0.3125F,
+            0.6875F,
+            1F,
+            0.6875F
+    );
     private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
 
     public BlockCocoon() {
         super(Block.Properties.create(MaterialCocoon.INSTANCE)
-                .tickRandomly()
-                .sound(SoundType.GROUND));
+                              .tickRandomly()
+                              .sound(SoundType.GROUND));
         //		setCreativeTab(null);
         setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-                .with(AlleleButterflyCocoon.AGE, 0));
+                            .with(AlleleButterflyCocoon.AGE, 0));
     }
 
     @Override
@@ -103,7 +110,14 @@ public class BlockCocoon extends Block {
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updatePostPlacement(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            IWorld worldIn,
+            BlockPos currentPos,
+            BlockPos facingPos
+    ) {
         if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
             return state;
         }
@@ -111,7 +125,13 @@ public class BlockCocoon extends Block {
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+    public ItemStack getPickBlock(
+            BlockState state,
+            RayTraceResult target,
+            IBlockReader world,
+            BlockPos pos,
+            PlayerEntity player
+    ) {
         TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
         if (tile == null) {
             return ItemStack.EMPTY;

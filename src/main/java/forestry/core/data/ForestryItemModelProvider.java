@@ -37,7 +37,11 @@ public class ForestryItemModelProvider extends ModelProvider {
                 .item()
                 .layer(0, new ResourceLocation(Constants.MOD_ID, "item/liquids/jar.bottle"))
                 .layer(1, new ResourceLocation(Constants.MOD_ID, "item/liquids/jar.contents")));
-        registerModel(ArboricultureItems.SAPLING, new ModelBuilder().parent("forge:item/default").loader(new ResourceLocation(Constants.MOD_ID, "sapling_ge")));
+        registerModel(
+                ArboricultureItems.SAPLING,
+                new ModelBuilder().parent("forge:item/default")
+                                  .loader(new ResourceLocation(Constants.MOD_ID, "sapling_ge"))
+        );
         for (FeatureItem<ItemCrated> featureCrated : ModuleCrates.crates) {
             registerModel(featureCrated, new ModelBuilder()
                     .parent(Constants.MOD_ID + ":item/crate-filled")
@@ -46,7 +50,9 @@ public class ForestryItemModelProvider extends ModelProvider {
             );
         }
 
-        for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
+        for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER
+                .getFeatureByTypes()
+                .cellSet()) {
             Block block = cell.getValue().block();
             registerModel(block, new ModelBuilder().parent("forestry:block/" + cell.getRowKey().getString()));
         }

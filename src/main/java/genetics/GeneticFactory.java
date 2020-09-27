@@ -66,12 +66,19 @@ public enum GeneticFactory implements IGeneticFactory {
     }
 
     @Override
-    public <I extends IIndividual> IOrganism<I> createOrganism(ItemStack itemStack, IOrganismType type, IRootDefinition<? extends IIndividualRoot<I>> definition) {
+    public <I extends IIndividual> IOrganism<I> createOrganism(
+            ItemStack itemStack,
+            IOrganismType type,
+            IRootDefinition<? extends IIndividualRoot<I>> definition
+    ) {
         return new Organism<>(itemStack, definition, () -> type);
     }
 
     @Override
-    public <I extends IIndividual> IOrganismHandler<I> createOrganismHandler(IRootDefinition<? extends IIndividualRoot<I>> rootDefinition, Supplier<ItemStack> stack) {
+    public <I extends IIndividual> IOrganismHandler<I> createOrganismHandler(
+            IRootDefinition<? extends IIndividualRoot<I>> rootDefinition,
+            Supplier<ItemStack> stack
+    ) {
         return new OrganismHandler<>(rootDefinition, stack);
     }
 

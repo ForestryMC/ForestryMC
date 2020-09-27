@@ -36,8 +36,8 @@ public class MutationContainer<I extends IIndividual, M extends IMutation> imple
         IAllele secondParent = mutation.getSecondParent();
         IAllele resultSpecies = mutation.getTemplate()[speciesType.getIndex()];
         if (AlleleUtils.isBlacklisted(resultSpecies)
-                || AlleleUtils.isBlacklisted(firstParent)
-                || AlleleUtils.isBlacklisted(secondParent)) {
+            || AlleleUtils.isBlacklisted(firstParent)
+            || AlleleUtils.isBlacklisted(secondParent)) {
             return false;
         }
         mutations.add(mutation);

@@ -21,61 +21,99 @@ public class WoodItemModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels() {
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS
+                .getFeatureByType()
+                .entrySet()) {
             addPlank(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addPlank(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryPlank, BlockItem>> stair : ArboricultureBlocks.PLANKS_VANILLA_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addPlank(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS
+                .getFeatureByType()
+                .entrySet()) {
             addLog(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addLog(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryLog, BlockItem>> stair : ArboricultureBlocks.LOGS_VANILLA_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addLog(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS
+                .getFeatureByType()
+                .entrySet()) {
             addStair(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addStair(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryStairs, BlockItem>> stair : ArboricultureBlocks.STAIRS_VANILLA_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addStair(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS
+                .getFeatureByType()
+                .entrySet()) {
             addSlab(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addSlab(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestrySlab, BlockItem>> stair : ArboricultureBlocks.SLABS_VANILLA_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addSlab(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFence, BlockItem>> stair : ArboricultureBlocks.FENCES.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFence, BlockItem>> stair : ArboricultureBlocks.FENCES
+                .getFeatureByType()
+                .entrySet()) {
             addFence(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFence, BlockItem>> stair : ArboricultureBlocks.FENCES_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFence, BlockItem>> stair : ArboricultureBlocks.FENCES_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addFence(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryFence, BlockItem>> stair : ArboricultureBlocks.FENCES_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryFence, BlockItem>> stair : ArboricultureBlocks.FENCES_VANILLA_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addFence(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES
+                .getFeatureByType()
+                .entrySet()) {
             addFenceGate(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addFenceGate(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES_VANILLA_FIREPROOF.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumVanillaWoodType, FeatureBlock<BlockForestryFenceGate, BlockItem>> stair : ArboricultureBlocks.FENCE_GATES_VANILLA_FIREPROOF
+                .getFeatureByType()
+                .entrySet()) {
             addFenceGate(stair.getValue().item(), stair.getKey());
         }
-        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryDoor, BlockItem>> stair : ArboricultureBlocks.DOORS.getFeatureByType().entrySet()) {
+        for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryDoor, BlockItem>> stair : ArboricultureBlocks.DOORS
+                .getFeatureByType()
+                .entrySet()) {
             addDoor(stair.getValue().item(), stair.getKey());
         }
         //Replaced by the model loader later
@@ -123,14 +161,23 @@ public class WoodItemModelProvider extends ModelProvider {
     }
 
     private void addFence(BlockItem item, IWoodType type) {
-        registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE) + "_inventory")));
+        registerModel(
+                item,
+                new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE) + "_inventory"))
+        );
     }
 
     private void addFenceGate(BlockItem item, IWoodType type) {
-        registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE_GATE))));
+        registerModel(
+                item,
+                new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE_GATE)))
+        );
     }
 
     private void addDoor(BlockItem item, IWoodType type) {
-        registerModel(item, new ModelBuilder().item().layer(0, new ResourceLocation(getLocation(type, WoodBlockKind.DOOR))));
+        registerModel(
+                item,
+                new ModelBuilder().item().layer(0, new ResourceLocation(getLocation(type, WoodBlockKind.DOOR)))
+        );
     }
 }

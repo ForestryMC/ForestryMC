@@ -96,7 +96,11 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
         return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
     }
 
-    public static <T extends Entity> List<T> getEntitiesInRange(IGenome genome, IBeeHousing housing, Class<T> entityClass) {
+    public static <T extends Entity> List<T> getEntitiesInRange(
+            IGenome genome,
+            IBeeHousing housing,
+            Class<T> entityClass
+    ) {
         AxisAlignedBB boundingBox = getBounding(genome, housing);
         return housing.getWorldObj().getEntitiesWithinAABB(entityClass, boundingBox);
     }

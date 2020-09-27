@@ -25,7 +25,8 @@ import javax.annotation.Nullable;
 
 public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 
-    private static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
+    private static final ResourceLocation TEXTURE = new ForestryResource(
+            Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
 
     //renderers
     private final ModelRenderer desk;
@@ -150,7 +151,8 @@ public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
             helper.setRotation(rotation);
             helper.renderModel(TEXTURE, new Vector3f(0.0872665F, 0, 0), desk);
             helper.renderModel(TEXTURE,
-                    standRB, standRF, standLB, standLF, drawers, standLowLF, standLowRB, standLowRF, standLowLB);
+                    standRB, standRF, standLB, standLF, drawers, standLowLF, standLowRB, standLowRF, standLowLB
+            );
         }
         helper.pop();
 

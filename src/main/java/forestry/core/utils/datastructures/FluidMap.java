@@ -38,7 +38,8 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 
     @Override
     protected boolean isValidKey(Object key) {
-        return key instanceof FluidStack || key instanceof Fluid || key instanceof String || key instanceof ResourceLocation;
+        return key instanceof FluidStack || key instanceof Fluid || key instanceof String ||
+               key instanceof ResourceLocation;
     }
 
     @Override

@@ -40,7 +40,13 @@ public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationB
     }
 
     @Override
-    public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IGenome genome0, IGenome genome1) {
+    public float getChance(
+            IBeeHousing housing,
+            IAlleleBeeSpecies allele0,
+            IAlleleBeeSpecies allele1,
+            IGenome genome0,
+            IGenome genome1
+    ) {
         World world = housing.getWorldObj();
         BlockPos housingPos = housing.getCoordinates();
 

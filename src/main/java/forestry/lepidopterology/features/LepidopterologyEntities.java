@@ -15,7 +15,8 @@ public class LepidopterologyEntities {
 
     public static final FeatureEntityType<EntityButterfly> BUTTERFLY = REGISTRY.entity(EntityButterfly::new,
             EntityClassification.CREATURE, "butterfly", (builder) -> builder.size(1.0f, 0.4f),
-            MobEntity::func_233666_p_);
+            MobEntity::func_233666_p_
+    );
 
     private LepidopterologyEntities() {
     }

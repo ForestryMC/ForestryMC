@@ -30,10 +30,10 @@ public class CommandModeInfo implements Command<CommandSource> {
 
     public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
         return Commands.literal("info")
-                .then(Commands.argument("mode", StringArgumentType.word()).suggests((ctx, builder) -> {
-                    Stream.of(modeHelper.getModeNames()).forEach(builder::suggest);
-                    return builder.buildFuture();
-                }).executes(new CommandModeInfo(modeHelper)));
+                       .then(Commands.argument("mode", StringArgumentType.word()).suggests((ctx, builder) -> {
+                           Stream.of(modeHelper.getModeNames()).forEach(builder::suggest);
+                           return builder.buildFuture();
+                       }).executes(new CommandModeInfo(modeHelper)));
 
     }
 

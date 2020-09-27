@@ -50,7 +50,8 @@ public class Configuration {
     private static final String CONFIG_VERSION_MARKER = "~CONFIG_VERSION";
     private static final Pattern CONFIG_START = Pattern.compile("START: \"([^\\\"]+)\"");
     private static final Pattern CONFIG_END = Pattern.compile("END: \"([^\\\"]+)\"");
-    public static final CharMatcher allowedProperties = CharMatcher.javaLetterOrDigit().or(CharMatcher.anyOf(ALLOWED_CHARS));
+    public static final CharMatcher allowedProperties = CharMatcher.javaLetterOrDigit().or(CharMatcher.anyOf(
+            ALLOWED_CHARS));
     private static final Configuration PARENT = null;
 
     File file;
@@ -98,9 +99,14 @@ public class Configuration {
                 load();
             } catch (Throwable e) {
                 File fileBak = new File(file.getAbsolutePath() + "_" +
-                        new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".errored");
-                LogManager.getLogger().fatal("An exception occurred while loading config file {}. This file will be renamed to {} " +
-                        "and a new config file will be generated.", file.getName(), fileBak.getName(), e);
+                                        new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".errored");
+                LogManager.getLogger().fatal(
+                        "An exception occurred while loading config file {}. This file will be renamed to {} " +
+                        "and a new config file will be generated.",
+                        file.getName(),
+                        fileBak.getName(),
+                        e
+                );
 
                 file.renameTo(fileBak);
                 load();
@@ -211,8 +217,10 @@ public class Configuration {
      * @param maxListLength     the maximum length of this array, use -1 for no max length
      * @return a boolean array Property with all settings defined
      */
-    public Property get(String category, String key, boolean[] defaultValues, String comment,
-                        boolean isListLengthFixed, int maxListLength) {
+    public Property get(
+            String category, String key, boolean[] defaultValues, String comment,
+            boolean isListLengthFixed, int maxListLength
+    ) {
         String[] values = new String[defaultValues.length];
         for (int i = 0; i < defaultValues.length; i++) {
             values[i] = Boolean.toString(defaultValues[i]);
@@ -341,8 +349,10 @@ public class Configuration {
      * @param maxListLength     the maximum length of this array, use -1 for no max length
      * @return an integer array Property object with all settings defined
      */
-    public Property get(String category, String key, int[] defaultValues, String comment, int minValue, int maxValue,
-                        boolean isListLengthFixed, int maxListLength) {
+    public Property get(
+            String category, String key, int[] defaultValues, String comment, int minValue, int maxValue,
+            boolean isListLengthFixed, int maxListLength
+    ) {
         String[] values = new String[defaultValues.length];
         for (int i = 0; i < defaultValues.length; i++) {
             values[i] = Integer.toString(defaultValues[i]);
@@ -404,7 +414,14 @@ public class Configuration {
      * @param maxValue     maximum boundary
      * @return a double Property object with the defined comment, minimum and maximum bounds
      */
-    public Property get(String category, String key, double defaultValue, String comment, double minValue, double maxValue) {
+    public Property get(
+            String category,
+            String key,
+            double defaultValue,
+            String comment,
+            double minValue,
+            double maxValue
+    ) {
         Property prop = get(category, key, Double.toString(defaultValue), comment, DOUBLE);
         prop.setDefaultValue(Double.toString(defaultValue));
         prop.setMinValue(minValue);
@@ -455,7 +472,14 @@ public class Configuration {
      * @return a double array Property object with the defined comment, minimum and maximum bounds, isListLengthFixed =
      * false, maxListLength = -1
      */
-    public Property get(String category, String key, double[] defaultValues, String comment, double minValue, double maxValue) {
+    public Property get(
+            String category,
+            String key,
+            double[] defaultValues,
+            String comment,
+            double minValue,
+            double maxValue
+    ) {
         return get(category, key, defaultValues, comment, minValue, maxValue, false, -1);
     }
 
@@ -473,8 +497,10 @@ public class Configuration {
      * @param maxListLength     the maximum length of this array, use -1 for no max length
      * @return a double array Property object with all settings defined
      */
-    public Property get(String category, String key, double[] defaultValues, String comment, double minValue, double maxValue,
-                        boolean isListLengthFixed, int maxListLength) {
+    public Property get(
+            String category, String key, double[] defaultValues, String comment, double minValue, double maxValue,
+            boolean isListLengthFixed, int maxListLength
+    ) {
         String[] values = new String[defaultValues.length];
         for (int i = 0; i < defaultValues.length; i++) {
             values[i] = Double.toString(defaultValues[i]);
@@ -594,7 +620,13 @@ public class Configuration {
      * @param validationPattern a Pattern object for input validation
      * @return a string array Property with the defined validationPattern, isListLengthFixed = false, maxListLength = -1
      */
-    public Property get(String category, String key, String[] defaultValues, String comment, Pattern validationPattern) {
+    public Property get(
+            String category,
+            String key,
+            String[] defaultValues,
+            String comment,
+            Pattern validationPattern
+    ) {
         return get(category, key, defaultValues, comment, false, -1, validationPattern);
     }
 
@@ -611,8 +643,10 @@ public class Configuration {
      * @param validationPattern a Pattern object for input validation
      * @return a string array Property with a comment with all settings defined
      */
-    public Property get(String category, String key, String[] defaultValues, String comment,
-                        boolean isListLengthFixed, int maxListLength, Pattern validationPattern) {
+    public Property get(
+            String category, String key, String[] defaultValues, String comment,
+            boolean isListLengthFixed, int maxListLength, Pattern validationPattern
+    ) {
         Property prop = get(category, key, defaultValues, comment, STRING);
         prop.setIsListLengthFixed(isListLengthFixed);
         prop.setMaxListLength(maxListLength);
@@ -790,7 +824,8 @@ public class Configuration {
                     boolean isFirstNonWhitespaceCharOnLine = true;
 
                     for (int i = 0; i < line.length() && !skip; ++i) {
-                        if (Character.isLetterOrDigit(line.charAt(i)) || ALLOWED_CHARS.indexOf(line.charAt(i)) != -1 || (quoted && line.charAt(i) != '"')) {
+                        if (Character.isLetterOrDigit(line.charAt(i)) || ALLOWED_CHARS.indexOf(line.charAt(i)) != -1 ||
+                            (quoted && line.charAt(i) != '"')) {
                             if (nameStart == -1) {
                                 nameStart = i;
                             }
@@ -850,7 +885,11 @@ public class Configuration {
                                         break;
                                     }
                                     if (currentCat == null) {
-                                        throw new RuntimeException(String.format("Config file corrupt, attempted to close to many categories '%s:%d'", fileName, lineNum));
+                                        throw new RuntimeException(String.format(
+                                                "Config file corrupt, attempted to close to many categories '%s:%d'",
+                                                fileName,
+                                                lineNum
+                                        ));
                                     }
                                     currentCat = currentCat.parent;
                                     break;
@@ -863,7 +902,12 @@ public class Configuration {
                                     name = line.substring(nameStart, nameEnd + 1);
 
                                     if (currentCat == null) {
-                                        throw new RuntimeException(String.format("'%s' has no scope in '%s:%d'", name, fileName, lineNum));
+                                        throw new RuntimeException(String.format(
+                                                "'%s' has no scope in '%s:%d'",
+                                                name,
+                                                fileName,
+                                                lineNum
+                                        ));
                                     }
 
                                     Property prop = new Property(name, line.substring(i + 1), type, true);
@@ -883,13 +927,23 @@ public class Configuration {
                                     break;
 
                                 case '<':
-                                    if ((tmpList != null && i + 1 == line.length()) || (tmpList == null && i + 1 != line.length())) {
-                                        throw new RuntimeException(String.format("Malformed list property \"%s:%d\"", fileName, lineNum));
+                                    if ((tmpList != null && i + 1 == line.length()) ||
+                                        (tmpList == null && i + 1 != line.length())) {
+                                        throw new RuntimeException(String.format(
+                                                "Malformed list property \"%s:%d\"",
+                                                fileName,
+                                                lineNum
+                                        ));
                                     } else if (i + 1 == line.length()) {
                                         name = line.substring(nameStart, nameEnd + 1);
 
                                         if (currentCat == null) {
-                                            throw new RuntimeException(String.format("'%s' has no scope in '%s:%d'", name, fileName, lineNum));
+                                            throw new RuntimeException(String.format(
+                                                    "'%s' has no scope in '%s:%d'",
+                                                    name,
+                                                    fileName,
+                                                    lineNum
+                                            ));
                                         }
 
                                         tmpList = new ArrayList<String>();
@@ -901,11 +955,18 @@ public class Configuration {
 
                                 case '>':
                                     if (tmpList == null) {
-                                        throw new RuntimeException(String.format("Malformed list property \"%s:%d\"", fileName, lineNum));
+                                        throw new RuntimeException(String.format(
+                                                "Malformed list property \"%s:%d\"",
+                                                fileName,
+                                                lineNum
+                                        ));
                                     }
 
                                     if (isFirstNonWhitespaceCharOnLine) {
-                                        currentCat.put(name, new Property(name, tmpList.toArray(new String[tmpList.size()]), type));
+                                        currentCat.put(
+                                                name,
+                                                new Property(name, tmpList.toArray(new String[tmpList.size()]), type)
+                                        );
                                         name = null;
                                         tmpList = null;
                                         type = null;
@@ -933,7 +994,12 @@ public class Configuration {
                                     {
                                         break;
                                     }
-                                    throw new RuntimeException(String.format("Unknown character '%s' in '%s:%d'", line.charAt(i), fileName, lineNum));
+                                    throw new RuntimeException(String.format(
+                                            "Unknown character '%s' in '%s:%d'",
+                                            line.charAt(i),
+                                            fileName,
+                                            lineNum
+                                    ));
                             }
                             isFirstNonWhitespaceCharOnLine = false;
                         }
@@ -1341,7 +1407,14 @@ public class Configuration {
      * @param langKey      A language key used for localization of GUIs
      * @return The value of the new string property.
      */
-    public String getString(String name, String category, String defaultValue, String comment, String langKey, Pattern pattern) {
+    public String getString(
+            String name,
+            String category,
+            String defaultValue,
+            String comment,
+            String langKey,
+            Pattern pattern
+    ) {
         Property prop = this.get(category, name, defaultValue);
         prop.setLanguageKey(langKey);
         prop.setValidationPattern(pattern);
@@ -1374,7 +1447,14 @@ public class Configuration {
      * @param langKey      A language key used for localization of GUIs
      * @return The value of the new string property.
      */
-    public String getString(String name, String category, String defaultValue, String comment, String[] validValues, String langKey) {
+    public String getString(
+            String name,
+            String category,
+            String defaultValue,
+            String comment,
+            String[] validValues,
+            String langKey
+    ) {
         Property prop = this.get(category, name, defaultValue);
         prop.setValidValues(validValues);
         prop.setLanguageKey(langKey);
@@ -1404,7 +1484,13 @@ public class Configuration {
      * @param comment      A brief description what the property does.
      * @return The value of the new string property.
      */
-    public String[] getStringList(String name, String category, String[] defaultValue, String comment, String[] validValues) {
+    public String[] getStringList(
+            String name,
+            String category,
+            String[] defaultValue,
+            String comment,
+            String[] validValues
+    ) {
         return getStringList(name, category, defaultValue, comment, validValues, name);
     }
 
@@ -1417,7 +1503,14 @@ public class Configuration {
      * @param comment      A brief description what the property does.
      * @return The value of the new string property.
      */
-    public String[] getStringList(String name, String category, String[] defaultValue, String comment, String[] validValues, String langKey) {
+    public String[] getStringList(
+            String name,
+            String category,
+            String[] defaultValue,
+            String comment,
+            String[] validValues,
+            String langKey
+    ) {
         Property prop = this.get(category, name, defaultValue);
         prop.setLanguageKey(langKey);
         prop.setValidValues(validValues);
@@ -1482,13 +1575,22 @@ public class Configuration {
      * @param langKey      A language key used for localization of GUIs
      * @return The value of the new integer property.
      */
-    public int getInt(String name, String category, int defaultValue, int minValue, int maxValue, String comment, String langKey) {
+    public int getInt(
+            String name,
+            String category,
+            int defaultValue,
+            int minValue,
+            int maxValue,
+            String comment,
+            String langKey
+    ) {
         Property prop = this.get(category, name, defaultValue);
         prop.setLanguageKey(langKey);
         prop.setComment(comment + " [range: " + minValue + " ~ " + maxValue + ", default: " + defaultValue + "]");
         prop.setMinValue(minValue);
         prop.setMaxValue(maxValue);
-        return prop.getInt(defaultValue) < minValue ? minValue : (prop.getInt(defaultValue) > maxValue ? maxValue : prop.getInt(defaultValue));
+        return prop.getInt(defaultValue) < minValue ? minValue : (
+                prop.getInt(defaultValue) > maxValue ? maxValue : prop.getInt(defaultValue));
     }
 
     /**
@@ -1502,7 +1604,14 @@ public class Configuration {
      * @param comment      A brief description what the property does.
      * @return The value of the new float property.
      */
-    public float getFloat(String name, String category, float defaultValue, float minValue, float maxValue, String comment) {
+    public float getFloat(
+            String name,
+            String category,
+            float defaultValue,
+            float minValue,
+            float maxValue,
+            String comment
+    ) {
         return getFloat(name, category, defaultValue, minValue, maxValue, comment, name);
     }
 
@@ -1518,7 +1627,15 @@ public class Configuration {
      * @param langKey      A language key used for localization of GUIs
      * @return The value of the new float property.
      */
-    public float getFloat(String name, String category, float defaultValue, float minValue, float maxValue, String comment, String langKey) {
+    public float getFloat(
+            String name,
+            String category,
+            float defaultValue,
+            float minValue,
+            float maxValue,
+            String comment,
+            String langKey
+    ) {
         Property prop = this.get(category, name, Float.toString(defaultValue), name);
         prop.setLanguageKey(langKey);
         prop.setComment(comment + " [range: " + minValue + " ~ " + maxValue + ", default: " + defaultValue + "]");

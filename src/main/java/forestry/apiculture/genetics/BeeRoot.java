@@ -67,7 +67,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
     public int getSpeciesCount() {
         if (beeSpeciesCount < 0) {
             beeSpeciesCount = (int) AlleleUtils.filteredStream(BeeChromosomes.SPECIES)
-                    .filter(IAlleleBeeSpecies::isCounted).count();
+                                               .filter(IAlleleBeeSpecies::isCounted).count();
         }
 
         return beeSpeciesCount;

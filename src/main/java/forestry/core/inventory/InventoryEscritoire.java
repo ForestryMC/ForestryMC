@@ -45,13 +45,18 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
             }
             Optional<IIndividual> optional = RootUtils.getIndividual(specimen);
             return optional.filter(individual -> {
-                IResearchHandler handler = ((IResearchHandler) individual.getRoot().getComponent(ForestryComponentKeys.RESEARCH));
-                return handler.getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0;
+                IResearchHandler handler = (
+                        (IResearchHandler) individual.getRoot()
+                                                     .getComponent(ForestryComponentKeys.RESEARCH));
+                return handler.getResearchSuitability(
+                        individual.getGenome().getPrimary(IAlleleForestrySpecies.class),
+                        itemStack
+                ) > 0;
             }).isPresent();
         }
 
         return slotIndex == SLOT_ANALYZE &&
-                (RootUtils.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
+               (RootUtils.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
 
     }
 

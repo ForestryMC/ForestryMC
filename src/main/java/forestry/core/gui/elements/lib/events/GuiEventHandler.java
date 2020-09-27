@@ -22,7 +22,12 @@ public final class GuiEventHandler<E extends GuiElementEvent> implements Consume
         this.handlerAction = handlerAction;
     }
 
-    public GuiEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> handlerAction) {
+    public GuiEventHandler(
+            Class<? super E> eventClass,
+            GuiEventOrigin origin,
+            IGuiElement relative,
+            Consumer<E> handlerAction
+    ) {
         this.origin = origin;
         this.relative = relative;
         this.eventClass = eventClass;

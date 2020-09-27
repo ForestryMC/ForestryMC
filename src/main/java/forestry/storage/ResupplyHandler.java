@@ -50,7 +50,11 @@ public class ResupplyHandler implements IResupplyHandler {
             if (ItemBackpack.getMode(backpack) == BackpackMode.RESUPPLY) {
                 // Load their inventory
                 ItemBackpack backpackItem = (ItemBackpack) backpack.getItem();
-                ItemInventory backpackInventory = new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
+                ItemInventory backpackInventory = new ItemInventoryBackpack(
+                        player,
+                        backpackItem.getBackpackSize(),
+                        backpack
+                );
 
                 Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
                 if (!MinecraftForge.EVENT_BUS.post(event)) {

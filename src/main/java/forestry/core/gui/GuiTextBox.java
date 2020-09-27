@@ -56,7 +56,7 @@ public class GuiTextBox extends TextFieldWidget {
 
     public boolean moreLinesAllowed() {
         return fontRenderer.trimStringToWidth(new StringTextComponent(getCursoredText()), width)
-                .size() * fontRenderer.FONT_HEIGHT < height;
+                           .size() * fontRenderer.FONT_HEIGHT < height;
     }
 
     private String getCursoredText() {

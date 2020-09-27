@@ -35,17 +35,40 @@ public class Chromosome implements IChromosome {
         this.type = type;
     }
 
-    public static Chromosome create(@Nullable ResourceLocation primarySpeciesUid, @Nullable ResourceLocation secondarySpeciesUid, IChromosomeType type, CompoundNBT nbt) {
+    public static Chromosome create(
+            @Nullable ResourceLocation primarySpeciesUid,
+            @Nullable ResourceLocation secondarySpeciesUid,
+            IChromosomeType type,
+            CompoundNBT nbt
+    ) {
         IAllele firstAllele = AlleleUtils.getAlleleOrNull(nbt.getString(ACTIVE_ALLELE_TAG));
         IAllele secondAllele = AlleleUtils.getAlleleOrNull(nbt.getString(INACTIVE_ALLELE_TAG));
         return create(primarySpeciesUid, secondarySpeciesUid, type, firstAllele, secondAllele);
     }
 
-    public static Chromosome create(@Nullable ResourceLocation primaryTemplateIdentifier, @Nullable ResourceLocation secondaryTemplateIdentifier, IChromosomeType type, @Nullable IAllele firstAllele, @Nullable IAllele secondAllele) {
-        return create(getStringOrNull(primaryTemplateIdentifier), getStringOrNull(secondaryTemplateIdentifier), type, firstAllele, secondAllele);
+    public static Chromosome create(
+            @Nullable ResourceLocation primaryTemplateIdentifier,
+            @Nullable ResourceLocation secondaryTemplateIdentifier,
+            IChromosomeType type,
+            @Nullable IAllele firstAllele,
+            @Nullable IAllele secondAllele
+    ) {
+        return create(
+                getStringOrNull(primaryTemplateIdentifier),
+                getStringOrNull(secondaryTemplateIdentifier),
+                type,
+                firstAllele,
+                secondAllele
+        );
     }
 
-    public static Chromosome create(@Nullable String primaryTemplateIdentifier, @Nullable String secondaryTemplateIdentifier, IChromosomeType type, @Nullable IAllele firstAllele, @Nullable IAllele secondAllele) {
+    public static Chromosome create(
+            @Nullable String primaryTemplateIdentifier,
+            @Nullable String secondaryTemplateIdentifier,
+            IChromosomeType type,
+            @Nullable IAllele firstAllele,
+            @Nullable IAllele secondAllele
+    ) {
         firstAllele = validateAllele(primaryTemplateIdentifier, type, firstAllele);
         secondAllele = validateAllele(secondaryTemplateIdentifier, type, secondAllele);
 
@@ -57,7 +80,11 @@ public class Chromosome implements IChromosome {
         return location != null ? location.toString() : null;
     }
 
-    private static IAllele validateAllele(@Nullable String templateIdentifier, IChromosomeType type, @Nullable IAllele allele) {
+    private static IAllele validateAllele(
+            @Nullable String templateIdentifier,
+            IChromosomeType type,
+            @Nullable IAllele allele
+    ) {
         IAlleleRegistry alleleRegistry = ApiInstance.INSTANCE.getAlleleRegistry();
         if (allele == null || !alleleRegistry.isValidAllele(allele, type)) {
             ITemplateContainer container = type.getRoot().getTemplates();

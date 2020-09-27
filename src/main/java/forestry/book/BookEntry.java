@@ -23,7 +23,15 @@ public class BookEntry implements IBookEntry {
     private final BookContent[][] content;
     private final String title;
 
-    BookEntry(String name, ItemStack stack, IBookPageFactory loader, Function<IBookEntry, IBookEntry[]> subEntryFactory, BookContent[][] content, String title, @Nullable IBookEntry parent) {
+    BookEntry(
+            String name,
+            ItemStack stack,
+            IBookPageFactory loader,
+            Function<IBookEntry, IBookEntry[]> subEntryFactory,
+            BookContent[][] content,
+            String title,
+            @Nullable IBookEntry parent
+    ) {
         this.name = name;
         this.stack = stack;
         this.loader = loader;

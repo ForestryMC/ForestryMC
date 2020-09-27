@@ -70,7 +70,11 @@ public class AlleleUtils {
         return callOn(location, IAllele.class, alleleAction, fallback);
     }
 
-    public static <A extends IAllele> void actOn(ResourceLocation location, Class<? extends A> alleleClass, Consumer<A> alleleAction) {
+    public static <A extends IAllele> void actOn(
+            ResourceLocation location,
+            Class<? extends A> alleleClass,
+            Consumer<A> alleleAction
+    ) {
         IAllele allele = getAlleleOrNull(location);
         if (!alleleClass.isInstance(allele)) {
             return;
@@ -80,7 +84,12 @@ public class AlleleUtils {
         alleleAction.accept(castedAllele);
     }
 
-    public static <A extends IAllele, R> R callOn(ResourceLocation location, Class<? extends A> alleleClass, Function<A, R> alleleAction, R fallback) {
+    public static <A extends IAllele, R> R callOn(
+            ResourceLocation location,
+            Class<? extends A> alleleClass,
+            Function<A, R> alleleAction,
+            R fallback
+    ) {
         IAllele allele = getAlleleOrNull(location);
         if (!alleleClass.isInstance(allele)) {
             return fallback;
@@ -116,8 +125,8 @@ public class AlleleUtils {
 
     public static <A extends IAllele> Stream<A> filteredStream(IChromosomeAllele<A> type) {
         return getAllelesByType(type).stream()
-                .filter(allele -> type.getAlleleClass().isInstance(allele))
-                .map(type::castAllele);
+                                     .filter(allele -> type.getAlleleClass().isInstance(allele))
+                                     .map(type::castAllele);
     }
 
     /**

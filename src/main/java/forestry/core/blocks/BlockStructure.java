@@ -46,7 +46,14 @@ public abstract class BlockStructure extends BlockForestry {
     protected long previousMessageTick = 0;
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(
+            BlockState state,
+            World worldIn,
+            BlockPos pos,
+            PlayerEntity playerIn,
+            Hand hand,
+            BlockRayTraceResult hit
+    ) {
         if (playerIn.isSneaking()) { //isSneaking
             return ActionResultType.PASS;
         }
@@ -74,7 +81,10 @@ public abstract class BlockStructure extends BlockForestry {
                     }
                 }
             } else {
-                playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"), Util.DUMMY_UUID);
+                playerIn.sendMessage(
+                        new TranslationTextComponent("for.multiblock.error.notConnected"),
+                        Util.DUMMY_UUID
+                );
                 return ActionResultType.SUCCESS;
             }
         }
@@ -106,7 +116,14 @@ public abstract class BlockStructure extends BlockForestry {
     }
 
     @Override
-    public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+    public void harvestBlock(
+            World world,
+            PlayerEntity player,
+            BlockPos pos,
+            BlockState state,
+            @Nullable TileEntity te,
+            ItemStack stack
+    ) {
         if (world.isRemote) {
             return;
         }

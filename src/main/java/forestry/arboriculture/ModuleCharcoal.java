@@ -35,6 +35,7 @@ public class ModuleCharcoal extends BlankForestryModule {
     }
 
     public static ItemGroup getGroup() {
-        return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
+        return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture
+                                                                        : ItemGroupForestry.tabForestry;
     }
 }

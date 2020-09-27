@@ -10,7 +10,13 @@ import net.minecraft.world.World;
 public class FarmableDoubleCrop extends FarmableBase {
     private final BlockState topMatureState;
 
-    public FarmableDoubleCrop(ItemStack germling, BlockState plantedState, BlockState matureState, BlockState topMatureState, boolean replant) {
+    public FarmableDoubleCrop(
+            ItemStack germling,
+            BlockState plantedState,
+            BlockState matureState,
+            BlockState topMatureState,
+            boolean replant
+    ) {
         super(germling, plantedState, matureState, replant);
         this.topMatureState = topMatureState;
     }

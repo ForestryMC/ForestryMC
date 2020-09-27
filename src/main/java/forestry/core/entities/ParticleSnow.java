@@ -69,13 +69,57 @@ public class ParticleSnow extends Particle {
         return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    private void renderParticle(BufferBuilder buffer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV, float maxV, float scale, float timeStep) {
+    private void renderParticle(
+            BufferBuilder buffer,
+            double x,
+            double y,
+            double z,
+            float rotationX,
+            float rotationXZ,
+            float rotationZ,
+            float rotationYZ,
+            float rotationXY,
+            float minU,
+            float maxU,
+            float minV,
+            float maxV,
+            float scale,
+            float timeStep
+    ) {
         int i = this.getBrightnessForRender(timeStep);
         int j = i >> 16 & 65535;
         int k = i & 65535;
-        buffer.pos(x - rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z - rotationZ * scale - rotationXY * scale).tex(maxU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        buffer.pos(x - rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z - rotationZ * scale + rotationXY * scale).tex(maxU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        buffer.pos(x + rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z + rotationZ * scale + rotationXY * scale).tex(minU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        buffer.pos(x + rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z + rotationZ * scale - rotationXY * scale).tex(minU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        buffer.pos(
+                x - rotationX * scale - rotationYZ * scale,
+                y - rotationXZ * scale,
+                z - rotationZ * scale - rotationXY * scale
+        ).tex(maxU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
+                j,
+                k
+        ).endVertex();
+        buffer.pos(
+                x - rotationX * scale + rotationYZ * scale,
+                y + rotationXZ * scale,
+                z - rotationZ * scale + rotationXY * scale
+        ).tex(maxU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
+                j,
+                k
+        ).endVertex();
+        buffer.pos(
+                x + rotationX * scale + rotationYZ * scale,
+                y + rotationXZ * scale,
+                z + rotationZ * scale + rotationXY * scale
+        ).tex(minU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
+                j,
+                k
+        ).endVertex();
+        buffer.pos(
+                x + rotationX * scale - rotationYZ * scale,
+                y - rotationXZ * scale,
+                z + rotationZ * scale - rotationXY * scale
+        ).tex(minU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
+                j,
+                k
+        ).endVertex();
     }
 }

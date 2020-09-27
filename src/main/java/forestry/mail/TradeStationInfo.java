@@ -25,7 +25,13 @@ public class TradeStationInfo implements ITradeStationInfo {
     private final NonNullList<ItemStack> required;
     private final EnumTradeStationState state;
 
-    public TradeStationInfo(IMailAddress address, GameProfile owner, ItemStack tradegood, NonNullList<ItemStack> required, EnumTradeStationState state) {
+    public TradeStationInfo(
+            IMailAddress address,
+            GameProfile owner,
+            ItemStack tradegood,
+            NonNullList<ItemStack> required,
+            EnumTradeStationState state
+    ) {
         if (address.getType() != EnumAddressee.TRADER) {
             throw new IllegalArgumentException("TradeStation address must be a trader");
         }

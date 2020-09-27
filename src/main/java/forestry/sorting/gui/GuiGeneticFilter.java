@@ -43,12 +43,28 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
                 for (int k = 0; k < 2; k++) {
-                    widgetManager.add(new SpeciesWidget(widgetManager, 44 + 36 + j * 45 + k * 18, 18 + i * 18, Direction.byIndex(i), j, k == 0, this));
+                    widgetManager.add(new SpeciesWidget(
+                            widgetManager,
+                            44 + 36 + j * 45 + k * 18,
+                            18 + i * 18,
+                            Direction.byIndex(i),
+                            j,
+                            k == 0,
+                            this
+                    ));
                 }
             }
         }
 
-        this.scrollBar = new WidgetScrollBar(widgetManager, 157 + 36, 150, 12, 64, new Drawable(new ResourceLocation(Constants.TEXTURE_PATH_GUI + "/container/creative_inventory/tabs.png"), 232, 0, 12, 15));
+        this.scrollBar = new WidgetScrollBar(
+                widgetManager,
+                157 + 36,
+                150,
+                12,
+                64,
+                new Drawable(new ResourceLocation(
+                        Constants.TEXTURE_PATH_GUI + "/container/creative_inventory/tabs.png"), 232, 0, 12, 15)
+        );
         widgetManager.add(this.selection = new SelectionWidget(widgetManager, 0, 134, scrollBar, this));
         widgetManager.add(scrollBar);
         scrollBar.setVisible(false);

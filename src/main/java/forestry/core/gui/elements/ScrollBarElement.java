@@ -48,7 +48,12 @@ public class ScrollBarElement extends ElementGroup {
 
         int offset = hasBorder ? 1 : 0;
 
-        interactionField = new ElementGroup(offset, offset, hasBorder ? width - 2 : width, hasBorder ? height - 2 : height);
+        interactionField = new ElementGroup(
+                offset,
+                offset,
+                hasBorder ? width - 2 : width,
+                hasBorder ? height - 2 : height
+        );
         isScrolling = false;
         wasClicked = false;
         visible = true;
@@ -117,7 +122,9 @@ public class ScrollBarElement extends ElementGroup {
             } else if (value <= minValue) {
                 offset = 0;
             } else {
-                offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getWidth() - slider.width));
+                offset = (int) (
+                        ((float) (currentValue - minValue) / (maxValue - minValue)) *
+                        (float) (interactionField.getWidth() - slider.width));
             }
             slider.setXPosition(offset);
         } else {
@@ -127,7 +134,9 @@ public class ScrollBarElement extends ElementGroup {
             } else if (value <= minValue) {
                 offset = 0;
             } else {
-                offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getHeight() - slider.height));
+                offset = (int) (
+                        ((float) (currentValue - minValue) / (maxValue - minValue)) *
+                        (float) (interactionField.getHeight() - slider.height));
             }
             slider.setYPosition(offset);
         }
@@ -163,7 +172,9 @@ public class ScrollBarElement extends ElementGroup {
         //Clicked on the slider and scrolling
         if (this.isScrolling) {
             int range = maxValue - minValue;
-            float value = (float) (pos - initialMouseClick) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
+            float value = (float) (pos - initialMouseClick) / (float) (
+                    vertical ? (interactionField.getWidth() - slider.width)
+                             : (interactionField.getHeight() - slider.height));
             value *= (float) range;
             if (value < (float) step / 2f) {
                 setValue(minValue);
@@ -179,7 +190,9 @@ public class ScrollBarElement extends ElementGroup {
             }
         } else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
             int range = maxValue - minValue;
-            float value = ((float) pos - (vertical ? slider.width : slider.height) / 2.0F) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
+            float value = ((float) pos - (vertical ? slider.width : slider.height) / 2.0F) / (float) (
+                    vertical ? (interactionField.getWidth() - slider.width)
+                             : (interactionField.getHeight() - slider.height));
             value *= (float) range;
             if (value < (float) step / 2f) {
                 setValue(minValue);

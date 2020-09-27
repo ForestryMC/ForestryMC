@@ -8,10 +8,19 @@ import genetics.api.organism.IOrganismType;
 import java.util.function.Predicate;
 
 public class AlleleDisplayManager {
-    public <I extends IIndividual> void addHandler(IAlleleDisplayHandler<I> handler, String rootUID, IChromosomeType type, Predicate<IOrganismType> typeFilter) {
+    public <I extends IIndividual> void addHandler(
+            IAlleleDisplayHandler<I> handler,
+            String rootUID,
+            IChromosomeType type,
+            Predicate<IOrganismType> typeFilter
+    ) {
     }
 
-    public <I extends IIndividual> void addHandler(IAlleleDisplayHandler<I> handler, String rootUID, IChromosomeType type) {
+    public <I extends IIndividual> void addHandler(
+            IAlleleDisplayHandler<I> handler,
+            String rootUID,
+            IChromosomeType type
+    ) {
         addHandler(handler, rootUID, type, (t) -> true);
     }
 }

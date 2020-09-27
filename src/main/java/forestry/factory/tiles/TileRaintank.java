@@ -47,7 +47,10 @@ import java.io.IOException;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
     private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
-    private static final FluidStack WATER_PER_UPDATE = new FluidStack(Fluids.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
+    private static final FluidStack WATER_PER_UPDATE = new FluidStack(
+            Fluids.WATER,
+            Constants.RAINTANK_AMOUNT_PER_UPDATE
+    );
 
     private final FilteredTank resourceTank;
     private final TankManager tankManager;
@@ -69,7 +72,13 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
         tankManager = new TankManager(this, resourceTank);
 
-        containerFiller = new ContainerFiller(resourceTank, Constants.RAINTANK_FILLING_TIME, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT);
+        containerFiller = new ContainerFiller(
+                resourceTank,
+                Constants.RAINTANK_FILLING_TIME,
+                this,
+                InventoryRaintank.SLOT_RESOURCE,
+                InventoryRaintank.SLOT_PRODUCT
+        );
     }
 
     @Override
@@ -135,7 +144,12 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
         if (!resourceTank.isEmpty()) {
             LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
             if (fluidCap.isPresent()) {
-                return !FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, FluidAttributes.BUCKET_VOLUME / 20, true).isEmpty();
+                return !FluidUtil.tryFluidTransfer(
+                        fluidCap.orElse(null),
+                        tankManager,
+                        FluidAttributes.BUCKET_VOLUME / 20,
+                        true
+                ).isEmpty();
             }
         }
         return false;
@@ -185,7 +199,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
             } else {
                 fluidHandler = tankManager;
             }
-            return LazyOptional.of(() -> fluidHandler).cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
+            return LazyOptional.of(() -> fluidHandler)
+                               .cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
         }
         return super.getCapability(capability, facing);
     }

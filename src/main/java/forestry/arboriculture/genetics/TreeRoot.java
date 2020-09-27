@@ -74,7 +74,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
     public int getSpeciesCount() {
         if (treeSpeciesCount < 0) {
             treeSpeciesCount = (int) AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-                    .filter(IAlleleTreeSpecies::isCounted).count();
+                                                .filter(IAlleleTreeSpecies::isCounted).count();
         }
 
         return treeSpeciesCount;
@@ -287,7 +287,12 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
     @Override
     @Nullable
-    public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual individual) {
+    public IPollinatable tryConvertToPollinatable(
+            @Nullable GameProfile owner,
+            World world,
+            BlockPos pos,
+            IIndividual individual
+    ) {
         Preconditions.checkArgument(individual instanceof ITree, "pollen must be an instance of ITree");
         ITree pollen = (ITree) individual;
         if (pollen.setLeaves(world, owner, pos, world.rand)) {
@@ -302,7 +307,10 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
         if (providersForFamilies.isEmpty()) {
             AlleleUtils.forEach(TreeChromosomes.FRUITS, (fruit) -> {
                 IFruitProvider fruitProvider = fruit.getProvider();
-                Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());
+                Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(
+                        fruitProvider.getFamily(),
+                        k -> new ArrayList<>()
+                );
                 fruitProviders.add(fruitProvider);
             });
         }

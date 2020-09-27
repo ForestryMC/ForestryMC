@@ -42,8 +42,8 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
     public ItemBeeGE(EnumBeeType type) {
         super(type != EnumBeeType.DRONE
-                ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1)
-                : new Item.Properties().group(ItemGroups.tabApiculture));
+              ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1)
+              : new Item.Properties().group(ItemGroups.tabApiculture));
         this.type = type;
     }
 
@@ -70,7 +70,8 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
         }
 
         IBee individual = optionalIndividual.get();
-        String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
+        String customBeeKey = "for.bees.custom." + type.getName() + "." +
+                              individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
 
         return ResourceUtil.tryTranslate(customBeeKey, () -> {
             ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();
@@ -81,7 +82,12 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         if (!itemstack.hasTag()) {
             return;
         }
@@ -94,7 +100,10 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
             IBee individual = optionalIndividual.get();
             if (individual.isNatural()) {
-                list.add(new TranslationTextComponent("for.bees.stock.pristine").mergeStyle(TextFormatting.YELLOW, TextFormatting.ITALIC));
+                list.add(new TranslationTextComponent("for.bees.stock.pristine").mergeStyle(
+                        TextFormatting.YELLOW,
+                        TextFormatting.ITALIC
+                ));
             } else {
                 list.add(new TranslationTextComponent("for.bees.stock.ignoble").mergeStyle(TextFormatting.YELLOW));
             }

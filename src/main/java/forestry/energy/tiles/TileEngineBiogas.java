@@ -102,7 +102,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
         currentOutput = 0;
 
-        if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= FluidAttributes.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
+        if (isRedstoneActivated() &&
+            (fuelTank.getFluidAmount() >= FluidAttributes.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
 
             double heatStage = getHeatLevel();
 
@@ -110,7 +111,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
             if (heatStage > 0.25 && shutdown) {
                 shutdown(false);
             } else if (shutdown) {
-                if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == null) {// TODO fluids FluidRegistry.LAVA) {
+                if (heatingTank.getFluidAmount() > 0 &&
+                    heatingTank.getFluidType() == null) {// TODO fluids FluidRegistry.LAVA) {
                     addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
                     heatingTank.drainInternal(1, IFluidHandler.FluidAction.EXECUTE);
                 }
@@ -124,7 +126,10 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
                     energyManager.generateEnergy(currentOutput);
                     world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
                 } else {
-                    FluidStack fuel = fuelTank.drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+                    FluidStack fuel = fuelTank.drainInternal(
+                            FluidAttributes.BUCKET_VOLUME,
+                            IFluidHandler.FluidAction.EXECUTE
+                    );
                     int burnTime = determineBurnTime(fuel);
                     if (!fuel.isEmpty()) {
                         fuel.setAmount(burnTime);

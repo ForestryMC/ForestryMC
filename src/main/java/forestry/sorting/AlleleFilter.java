@@ -14,7 +14,7 @@ public class AlleleFilter {
 
     public boolean isValid(String activeUID, String inactiveUID) {
         return (this.activeAllele == null || activeUID.equals(this.activeAllele.getRegistryName().toString()))
-                && (this.inactiveAllele == null || inactiveUID.equals(this.inactiveAllele.getRegistryName().toString()));
+               && (this.inactiveAllele == null || inactiveUID.equals(this.inactiveAllele.getRegistryName().toString()));
     }
 
     public boolean isEmpty() {

@@ -68,7 +68,11 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
         if (workingTime > 0) {
             workingTime--;
-            climateControlled.addTemperatureChange(definition.getChangePerTransfer(), definition.getBoundaryDown(), definition.getBoundaryUp());
+            climateControlled.addTemperatureChange(
+                    definition.getChangePerTransfer(),
+                    definition.getBoundaryDown(),
+                    definition.getBoundaryUp()
+            );
         }
 
         setActive(workingTime > 0);

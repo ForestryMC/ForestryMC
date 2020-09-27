@@ -62,20 +62,20 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
             IAllele speedAllele = getActiveAllele(genome);
             TranslationTextComponent customSpeed = new TranslationTextComponent(
                     "for.tooltip.worker." +
-                            speedAllele.getLocalisationKey().replaceAll("(.*)\\.", "")
+                    speedAllele.getLocalisationKey().replaceAll("(.*)\\.", "")
             );
             if (ResourceUtil.canTranslate(customSpeed)) {
                 toolTip.singleLine()
-                        .add(customSpeed)
-                        .style(TextFormatting.GRAY)
-                        .create();
+                       .add(customSpeed)
+                       .style(TextFormatting.GRAY)
+                       .create();
             } else {
                 toolTip.singleLine()
-                        .add(speedAllele.getDisplayName())
-                        .text(new StringTextComponent(" "))
-                        .translated("for.gui.worker")
-                        .style(TextFormatting.GRAY)
-                        .create();
+                       .add(speedAllele.getDisplayName())
+                       .text(new StringTextComponent(" "))
+                       .translated("for.gui.worker")
+                       .style(TextFormatting.GRAY)
+                       .create();
             }
         }
     },
@@ -83,11 +83,11 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
         @Override
         public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
             toolTip.singleLine()
-                    .add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
-                    .text(new StringTextComponent(" "))
-                    .translated("for.gui.life")
-                    .style(TextFormatting.GRAY)
-                    .create();
+                   .add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
+                   .text(new StringTextComponent(" "))
+                   .translated("for.gui.life")
+                   .style(TextFormatting.GRAY)
+                   .create();
         }
     },
     FERTILITY(BeeChromosomes.FERTILITY, -1, "fertility") {
@@ -115,12 +115,12 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
             IAlleleValue<EnumTolerance> tempToleranceAllele = getActiveAllele(genome);
             ITextComponent caption = AlleleManager.climateHelper.toDisplay(primary.getTemperature());
             toolTip.singleLine()
-                    .text(new StringTextComponent("T:  "))
-                    .add(caption)
-                    .text(new StringTextComponent(" / "))
-                    .add(tempToleranceAllele.getDisplayName())
-                    .style(TextFormatting.GREEN)
-                    .create();
+                   .text(new StringTextComponent("T:  "))
+                   .add(caption)
+                   .text(new StringTextComponent(" / "))
+                   .add(tempToleranceAllele.getDisplayName())
+                   .style(TextFormatting.GREEN)
+                   .create();
         }
     },
     HUMIDITY_TOLERANCE(BeeChromosomes.HUMIDITY_TOLERANCE, -1, 3) {
@@ -130,12 +130,12 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
             IAlleleValue<EnumTolerance> humidToleranceAllele = getActiveAllele(genome);
             ITextComponent caption = AlleleManager.climateHelper.toDisplay(primary.getHumidity());
             toolTip.singleLine()
-                    .text(new StringTextComponent("H: "))
-                    .add(caption)
-                    .text(new StringTextComponent(" / "))
-                    .add(humidToleranceAllele.getDisplayName())
-                    .style(TextFormatting.GREEN)
-                    .create();
+                   .text(new StringTextComponent("H: "))
+                   .add(caption)
+                   .text(new StringTextComponent(" / "))
+                   .add(humidToleranceAllele.getDisplayName())
+                   .style(TextFormatting.GREEN)
+                   .create();
         }
     },
     FLOWER_PROVIDER(BeeChromosomes.FLOWER_PROVIDER, -1, 4, "flowers") {

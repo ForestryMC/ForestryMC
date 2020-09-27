@@ -38,17 +38,34 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
         this.machineProperties = machineProperties;
     }
 
-    protected static IMachinePropertiesTesr<?> createEngineProperties(Supplier<FeatureTileType<? extends TileEngine>> teClass, String name, String textureName) {
-        MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr.Builder<>(teClass, name)
+    protected static IMachinePropertiesTesr<?> createEngineProperties(
+            Supplier<FeatureTileType<? extends TileEngine>> teClass,
+            String name,
+            String textureName
+    ) {
+        MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr.Builder<>(
+                teClass,
+                name
+        )
                 .setParticleTexture(textureName + ".0")
                 .setNotFullCube()
                 .create();
-        ModuleEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCK + textureName + "_");
+        ModuleEnergy.proxy.setRenderDefaultEngine(
+                machinePropertiesEngine,
+                Constants.TEXTURE_PATH_BLOCK + textureName + "_"
+        );
         return machinePropertiesEngine;
     }
 
-    protected static IMachinePropertiesTesr<?> createMachineProperties(Supplier<FeatureTileType<? extends TileBase>> teClass, String name, String textureName) {
-        MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr.Builder<>(teClass, name)
+    protected static IMachinePropertiesTesr<?> createMachineProperties(
+            Supplier<FeatureTileType<? extends TileBase>> teClass,
+            String name,
+            String textureName
+    ) {
+        MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr.Builder<>(
+                teClass,
+                name
+        )
                 .setParticleTexture(textureName + ".0")
                 .create();
         Proxies.render.setRenderDefaultMachine(machinePropertiesTesr, Constants.TEXTURE_PATH_BLOCK + textureName + "_");

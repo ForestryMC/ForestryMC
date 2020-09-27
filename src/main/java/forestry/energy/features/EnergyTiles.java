@@ -14,9 +14,21 @@ import forestry.modules.features.ModFeatureRegistry;
 public class EnergyTiles {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleEnergy.class);
 
-    public static final FeatureTileType<TileEngineBiogas> BIOGAS_ENGINE = REGISTRY.tile(TileEngineBiogas::new, "biogas_engine", EnergyBlocks.ENGINES.get(BlockTypeEngine.BIOGAS)::collect);
-    public static final FeatureTileType<TileEngineClockwork> CLOCKWORK_ENGINE = REGISTRY.tile(TileEngineClockwork::new, "clockwork_engine", EnergyBlocks.ENGINES.get(BlockTypeEngine.CLOCKWORK)::collect);
-    public static final FeatureTileType<TileEnginePeat> PEAT_ENGINE = REGISTRY.tile(TileEnginePeat::new, "peat_engine", EnergyBlocks.ENGINES.get(BlockTypeEngine.PEAT)::collect);
+    public static final FeatureTileType<TileEngineBiogas> BIOGAS_ENGINE = REGISTRY.tile(
+            TileEngineBiogas::new,
+            "biogas_engine",
+            EnergyBlocks.ENGINES.get(BlockTypeEngine.BIOGAS)::collect
+    );
+    public static final FeatureTileType<TileEngineClockwork> CLOCKWORK_ENGINE = REGISTRY.tile(
+            TileEngineClockwork::new,
+            "clockwork_engine",
+            EnergyBlocks.ENGINES.get(BlockTypeEngine.CLOCKWORK)::collect
+    );
+    public static final FeatureTileType<TileEnginePeat> PEAT_ENGINE = REGISTRY.tile(
+            TileEnginePeat::new,
+            "peat_engine",
+            EnergyBlocks.ENGINES.get(BlockTypeEngine.PEAT)::collect
+    );
 
     //TODO these need the compat block registry
     //	public final TileEntityType<TileEngine> electricEngine;

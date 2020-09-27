@@ -51,7 +51,13 @@ public class FarmLogicOrchard extends FarmLogic {
     }
 
     @Override
-    public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+    public Collection<ICrop> harvest(
+            World world,
+            IFarmHousing housing,
+            FarmDirection direction,
+            int extent,
+            BlockPos pos
+    ) {
         BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
         Collection<ICrop> crops = getHarvestBlocks(world, position);
         housing.increaseExtent(direction, pos, extent);
@@ -89,7 +95,13 @@ public class FarmLogicOrchard extends FarmLogic {
         return crops;
     }
 
-    private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
+    private List<BlockPos> processHarvestBlock(
+            World world,
+            Stack<ICrop> crops,
+            Set<BlockPos> seen,
+            BlockPos start,
+            BlockPos position
+    ) {
         List<BlockPos> candidates = new ArrayList<>();
 
         // Get additional candidates to return

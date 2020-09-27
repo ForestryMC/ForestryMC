@@ -161,8 +161,13 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
             IForestrySpeciesRoot<IIndividual> root = (IForestrySpeciesRoot<IIndividual>) definition.get();
             for (IIndividual individual : root.getIndividualTemplates()) {
                 IAlleleSpecies species = individual.getGenome().getPrimary();
-                ItemStack itemStack = root.getTypes().createStack(root.templateAsIndividual(root.getTemplates().getTemplate(
-                        species.getRegistryName().toString())), root.getIconType());
+                ItemStack itemStack = root.getTypes().createStack(
+                        root.templateAsIndividual(root.getTemplates()
+                                                      .getTemplate(
+                                                              species.getRegistryName()
+                                                                     .toString())),
+                        root.getIconType()
+                );
                 entries.put(species, itemStack);
             }
         }

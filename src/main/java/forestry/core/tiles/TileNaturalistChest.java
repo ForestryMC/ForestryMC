@@ -95,7 +95,14 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
     }
 
     private void playLidSound(SoundEvent sound) {
-        this.world.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+        this.world.playSound(
+                null,
+                getPos(),
+                sound,
+                SoundCategory.BLOCKS,
+                0.5F,
+                this.world.rand.nextFloat() * 0.1F + 0.9F
+        );
     }
 
     @Override

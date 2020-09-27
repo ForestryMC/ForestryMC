@@ -59,12 +59,20 @@ public class MultiblockUtil {
     }
 
     @Nullable
-    public static <C extends IMultiblockComponent> C getComponent(IBlockReader world, BlockPos pos, Class<C> componentClass) {
+    public static <C extends IMultiblockComponent> C getComponent(
+            IBlockReader world,
+            BlockPos pos,
+            Class<C> componentClass
+    ) {
         return TileUtil.getTile(world, pos, componentClass);
     }
 
     @Nullable
-    public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(IBlockReader world, BlockPos pos, Class<C> componentClass) {
+    public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(
+            IBlockReader world,
+            BlockPos pos,
+            Class<C> componentClass
+    ) {
         C component = getComponent(world, pos, componentClass);
         if (component == null) {
             return null;
@@ -73,7 +81,11 @@ public class MultiblockUtil {
     }
 
     @Nullable
-    public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(IBlockReader world, BlockPos pos, Class<C> componentClass) {
+    public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(
+            IBlockReader world,
+            BlockPos pos,
+            Class<C> componentClass
+    ) {
         L logic = getLogic(world, pos, componentClass);
         if (logic == null || !logic.isConnected()) {
             return null;

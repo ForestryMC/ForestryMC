@@ -91,7 +91,13 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
     }
 
     @Override
-    protected void bakeBlock(BlockDefaultLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+    protected void bakeBlock(
+            BlockDefaultLeaves block,
+            IModelData extraData,
+            Key key,
+            ModelBaker baker,
+            boolean inventory
+    ) {
         TreeDefinition treeDefinition = key.definition;
 
         IGenome genome = treeDefinition.getGenome();

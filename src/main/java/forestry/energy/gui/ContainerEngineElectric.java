@@ -24,7 +24,11 @@ public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectri
 
     //TODO dedupe
     public static ContainerEngineElectric fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-        TileEngineElectric tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineElectric.class);
+        TileEngineElectric tile = TileUtil.getTile(
+                inv.player.world,
+                extraData.readBlockPos(),
+                TileEngineElectric.class
+        );
         return new ContainerEngineElectric(windowId, inv, tile);
     }
 

@@ -44,7 +44,11 @@ public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 
     @Override
     public IOrganismTypes<I> registerType(IOrganismType type, Supplier<ItemStack> stack, boolean defaultType) {
-        return registerType(type, GeneticFactory.INSTANCE.createOrganismHandler(root.getDefinition(), stack), defaultType);
+        return registerType(
+                type,
+                GeneticFactory.INSTANCE.createOrganismHandler(root.getDefinition(), stack),
+                defaultType
+        );
     }
 
     @Override
@@ -98,7 +102,10 @@ public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
                 throw new IllegalStateException(message);
             }
             defaultType = organismTypes.next();
-            Log.debug("No default type was registered for individual root '{}' used first registered type.", root.getUID());
+            Log.debug(
+                    "No default type was registered for individual root '{}' used first registered type.",
+                    root.getUID()
+            );
         }
         return defaultType;
     }

@@ -19,5 +19,10 @@ public interface ITreeMutationFactory {
      * @param chance      The chance that breeding the two parent trees will result in this mutation
      * @return a new tree mutation.
      */
-    ITreeMutationBuilder createMutation(IAlleleTreeSpecies parentTree0, IAlleleTreeSpecies parentTree1, IAllele[] result, int chance);
+    ITreeMutationBuilder createMutation(
+            IAlleleTreeSpecies parentTree0,
+            IAlleleTreeSpecies parentTree1,
+            IAllele[] result,
+            int chance
+    );
 }

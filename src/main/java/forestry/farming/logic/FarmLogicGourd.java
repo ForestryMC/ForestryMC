@@ -26,7 +26,13 @@ public class FarmLogicGourd extends FarmLogicWatered {
     }
 
     @Override
-    protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+    protected boolean maintainCrops(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    ) {
         for (int i = 0; i < extent; i++) {
             BlockPos position = translateWithOffset(pos, direction, i);
             if (!world.isBlockLoaded(position)) {
@@ -35,7 +41,7 @@ public class FarmLogicGourd extends FarmLogicWatered {
 
             BlockState state = world.getBlockState(position);
             if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)
-                    || !isValidPosition(farmHousing, direction, position, CultivationType.CROP)) {
+                || !isValidPosition(farmHousing, direction, position, CultivationType.CROP)) {
                 continue;
             }
 
@@ -59,7 +65,12 @@ public class FarmLogicGourd extends FarmLogicWatered {
     }
 
     @Override
-    protected boolean isValidPosition(IFarmHousing housing, FarmDirection direction, BlockPos position, CultivationType type) {
+    protected boolean isValidPosition(
+            IFarmHousing housing,
+            FarmDirection direction,
+            BlockPos position,
+            CultivationType type
+    ) {
         BlockPos farmLocation = housing.getFarmCorner(direction).offset(direction.getFacing());
         int xVal = farmLocation.getX() & 1;
         int zVal = farmLocation.getZ() & 1;

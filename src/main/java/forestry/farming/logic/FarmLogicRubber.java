@@ -40,7 +40,13 @@ public class FarmLogicRubber extends FarmLogic {
     }
 
     @Override
-    public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
+    public Collection<ICrop> harvest(
+            World world,
+            IFarmHousing farmHousing,
+            FarmDirection direction,
+            int extent,
+            BlockPos pos
+    ) {
         if (!active) {
             return Collections.emptyList();
         }

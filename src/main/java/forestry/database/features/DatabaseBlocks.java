@@ -13,7 +13,8 @@ import forestry.modules.features.ModFeatureRegistry;
 public class DatabaseBlocks {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleDatabase.class);
 
-    public static final FeatureBlock<BlockDatabase, ItemBlockForestry> DATABASE = REGISTRY.block(() -> new BlockDatabase(BlockTypeDatabase.DATABASE), ItemBlockForestry::new, "database");
+    public static final FeatureBlock<BlockDatabase, ItemBlockForestry> DATABASE = REGISTRY.block(() -> new BlockDatabase(
+            BlockTypeDatabase.DATABASE), ItemBlockForestry::new, "database");
 
     private DatabaseBlocks() {
     }

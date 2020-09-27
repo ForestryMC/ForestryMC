@@ -19,7 +19,13 @@ public class CropDestroyDouble extends Crop {
     @Nullable
     protected final BlockState replantState;
 
-    public CropDestroyDouble(World world, BlockState blockState, BlockState blockStateUp, BlockPos position, @Nullable BlockState replantState) {
+    public CropDestroyDouble(
+            World world,
+            BlockState blockState,
+            BlockState blockStateUp,
+            BlockPos position,
+            @Nullable BlockState replantState
+    ) {
         super(world, position);
         this.blockState = blockState;
         this.blockStateUp = blockStateUp;
@@ -39,7 +45,12 @@ public class CropDestroyDouble extends Crop {
         //		block.getDrops(harvested, world, pos, blockState, 0);
         //		blockUp.getDrops(harvested, world, pos.up(), blockStateUp, 0);
         //TODO getDrops. Loot tables?
-        PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+        PacketFXSignal packet = new PacketFXSignal(
+                PacketFXSignal.VisualFXType.BLOCK_BREAK,
+                PacketFXSignal.SoundFXType.BLOCK_BREAK,
+                pos,
+                blockState
+        );
         NetworkUtil.sendNetworkPacket(packet, pos, world);
 
         world.removeBlock(pos.up(), false);

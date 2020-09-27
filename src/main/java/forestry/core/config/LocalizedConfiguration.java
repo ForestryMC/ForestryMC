@@ -93,7 +93,8 @@ public class LocalizedConfiguration extends Configuration {
 
         prop.setValidValues(validValues);
         prop.setLanguageKey(langKey);
-        prop.setComment(comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
+        prop.setComment(
+                comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
         String stringValue = prop.getString();
 
         T enumValue = defaultValue;

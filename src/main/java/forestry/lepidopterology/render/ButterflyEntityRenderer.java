@@ -25,7 +25,14 @@ public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, Butter
 
 
     @Override
-    public void render(EntityButterfly entity, float entityYaw, float partialTickTime, MatrixStack transform, IRenderTypeBuffer buffer, int packedLight) {
+    public void render(
+            EntityButterfly entity,
+            float entityYaw,
+            float partialTickTime,
+            MatrixStack transform,
+            IRenderTypeBuffer buffer,
+            int packedLight
+    ) {
         if (!entity.isRenderable()) {
             return;
         }

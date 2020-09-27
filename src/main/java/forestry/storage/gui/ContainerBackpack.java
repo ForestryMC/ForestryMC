@@ -52,7 +52,14 @@ public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackp
     }
 
     public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
-        super(windowID, new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18, BackpackContainers.BACKPACK.containerType());
+        super(
+                windowID,
+                new ItemInventoryBackpack(player, size.getSize(), parent),
+                player.inventory,
+                8,
+                11 + size.startY + size.rows * 18,
+                BackpackContainers.BACKPACK.containerType()
+        );
         this.size = size;
         // Inventory
         for (int j = 0; j < size.rows; j++) {

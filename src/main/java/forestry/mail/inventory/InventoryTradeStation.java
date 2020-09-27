@@ -33,16 +33,19 @@ public class InventoryTradeStation extends InventoryAdapter {
     public int[] getSlotsForFace(Direction side) {
         List<Integer> slots = new ArrayList<>();
 
-        for (int i = TradeStation.SLOT_LETTERS_1; i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
+        for (int i = TradeStation.SLOT_LETTERS_1;
+             i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
             slots.add(i);
         }
         for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
             slots.add(i);
         }
-        for (int i = TradeStation.SLOT_RECEIVE_BUFFER; i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
+        for (int i = TradeStation.SLOT_RECEIVE_BUFFER;
+             i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
             slots.add(i);
         }
-        for (int i = TradeStation.SLOT_SEND_BUFFER; i < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT; i++) {
+        for (int i = TradeStation.SLOT_SEND_BUFFER;
+             i < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT; i++) {
             slots.add(i);
         }
 

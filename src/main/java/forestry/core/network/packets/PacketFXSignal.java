@@ -89,9 +89,27 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
                 SoundType soundType = block.getSoundType(blockState, world, pos, null);
 
                 if (soundFX == SoundFXType.BLOCK_BREAK) {
-                    world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+                    world.playSound(
+                            pos.getX() + 0.5,
+                            pos.getY() + 0.5,
+                            pos.getZ() + 0.5,
+                            soundType.getBreakSound(),
+                            SoundCategory.BLOCKS,
+                            (soundType.getVolume() + 1.0F) / 2.0F,
+                            soundType.getPitch() * 0.8F,
+                            false
+                    );
                 } else if (soundFX == SoundFXType.BLOCK_PLACE) {
-                    world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+                    world.playSound(
+                            pos.getX() + 0.5,
+                            pos.getY() + 0.5,
+                            pos.getZ() + 0.5,
+                            soundType.getPlaceSound(),
+                            SoundCategory.BLOCKS,
+                            (soundType.getVolume() + 1.0F) / 2.0F,
+                            soundType.getPitch() * 0.8F,
+                            false
+                    );
                 }
             }
         }

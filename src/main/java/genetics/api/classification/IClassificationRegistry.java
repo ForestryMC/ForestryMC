@@ -31,7 +31,12 @@ public interface IClassificationRegistry {
      */
     IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific);
 
-    IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific, IClassification... members);
+    IClassification createAndRegisterClassification(
+            EnumClassLevel level,
+            String uid,
+            String scientific,
+            IClassification... members
+    );
 
     /**
      * Gets a classification.

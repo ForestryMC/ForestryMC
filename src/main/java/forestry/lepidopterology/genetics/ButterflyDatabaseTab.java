@@ -39,10 +39,12 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
     public void createElements(IDatabaseElement database, IButterfly butterfly, ItemStack itemStack) {
         IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES);
         IAlleleButterflySpecies secondarySpecies = butterfly.getGenome()
-                .getInactiveAllele(ButterflyChromosomes.SPECIES);
+                                                            .getInactiveAllele(ButterflyChromosomes.SPECIES);
 
         database.label(
-                new TranslationTextComponent("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"),
+                new TranslationTextComponent(
+                        "for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") +
+                        "_species.name"),
                 GuiElementAlignment.TOP_CENTER,
                 GuiElementFactory.INSTANCE.databaseTitle
         );
@@ -114,14 +116,24 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
             );
         }
 
-        Function<Boolean, ITextComponent> flyer = active -> StringUtil.readableBoolean(active ? butterfly.getGenome()
-                .getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) : butterfly.getGenome()
-                .getInactiveValue(ButterflyChromosomes.TOLERANT_FLYER), yes, no);
+        Function<Boolean, ITextComponent> flyer = active -> StringUtil.readableBoolean(
+                active ? butterfly.getGenome()
+                                  .getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) : butterfly.getGenome()
+                                                                                                  .getInactiveValue(
+                                                                                                          ButterflyChromosomes.TOLERANT_FLYER),
+                yes,
+                no
+        );
         database.addLine(new TranslationTextComponent("for.gui.flyer"), flyer, ButterflyChromosomes.TOLERANT_FLYER);
 
-        Function<Boolean, ITextComponent> fireresist = active -> StringUtil.readableBoolean(active ? butterfly.getGenome()
-                .getActiveValue(ButterflyChromosomes.FIRE_RESIST) : butterfly.getGenome()
-                .getInactiveValue(ButterflyChromosomes.FIRE_RESIST), yes, no);
+        Function<Boolean, ITextComponent> fireresist = active -> StringUtil.readableBoolean(
+                active ? butterfly.getGenome()
+                                  .getActiveValue(ButterflyChromosomes.FIRE_RESIST) : butterfly.getGenome()
+                                                                                               .getInactiveValue(
+                                                                                                       ButterflyChromosomes.FIRE_RESIST),
+                yes,
+                no
+        );
         database.addLine(
                 new TranslationTextComponent("for.gui.fireresist"),
                 fireresist,
@@ -131,6 +143,7 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 
     @Override
     public ItemStack getIconStack() {
-        return ButterflyDefinition.BlueWing.getMemberStack(mode == DatabaseMode.ACTIVE ? EnumFlutterType.BUTTERFLY : EnumFlutterType.CATERPILLAR);
+        return ButterflyDefinition.BlueWing.getMemberStack(
+                mode == DatabaseMode.ACTIVE ? EnumFlutterType.BUTTERFLY : EnumFlutterType.CATERPILLAR);
     }
 }

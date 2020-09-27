@@ -28,7 +28,15 @@ public class ParticleColoredDripParticle extends SpriteTexturedParticle {
      */
     private int bobTimer;
 
-    public ParticleColoredDripParticle(ClientWorld world, double x, double y, double z, float red, float green, float blue) {
+    public ParticleColoredDripParticle(
+            ClientWorld world,
+            double x,
+            double y,
+            double z,
+            float red,
+            float green,
+            float blue
+    ) {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX = this.motionY = this.motionZ = 0.0D;
 

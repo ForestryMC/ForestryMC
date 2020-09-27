@@ -68,7 +68,10 @@ public class ItemFluidContainerForestry extends ItemForestry {
                 }
                 ItemStack itemStack = new ItemStack(this);
                 IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
-                if (fluidHandler.fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidAttributes.BUCKET_VOLUME) {
+                if (fluidHandler.fill(
+                        new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME),
+                        IFluidHandler.FluidAction.EXECUTE
+                ) == FluidAttributes.BUCKET_VOLUME) {
                     ItemStack filled = fluidHandler.getContainer();
                     subItems.add(filled);
                 }
@@ -95,7 +98,8 @@ public class ItemFluidContainerForestry extends ItemForestry {
         if (item instanceof ItemFluidContainerForestry) {
             FluidStack fluid = getContained(stack);
             if (!fluid.isEmpty()) {
-                String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + '.' + fluid.getFluid().getRegistryName();
+                String exactTranslationKey =
+                        Constants.TRANSLATION_KEY_ITEM + type.getString() + '.' + fluid.getFluid().getRegistryName();
                 return ResourceUtil.tryTranslate(exactTranslationKey, () -> {
                     String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + ".grammar";
                     return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
@@ -124,7 +128,16 @@ public class ItemFluidContainerForestry extends ItemForestry {
                 if (!worldIn.isRemote) {
                     FoodStats foodStats = player.getFoodStats();
                     foodStats.addStats(drinkProperties.getHealAmount(), drinkProperties.getSaturationModifier());
-                    worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+                    worldIn.playSound(
+                            null,
+                            player.getPosX(),
+                            player.getPosY(),
+                            player.getPosZ(),
+                            SoundEvents.ENTITY_PLAYER_BURP,
+                            SoundCategory.PLAYERS,
+                            0.5F,
+                            worldIn.rand.nextFloat() * 0.1F + 0.9F
+                    );
                 }
 
                 player.addStat(Stats.ITEM_USED.get(this));
@@ -186,7 +199,13 @@ public class ItemFluidContainerForestry extends ItemForestry {
                 ItemStack singleBucket = heldItem.copy();
                 singleBucket.setCount(1);
 
-                FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, blockTarget.getPos(), blockTarget.getFace());
+                FluidActionResult filledResult = FluidUtil.tryPickUpFluid(
+                        singleBucket,
+                        player,
+                        world,
+                        blockTarget.getPos(),
+                        blockTarget.getFace()
+                );
                 if (filledResult.isSuccess()) {
                     ItemHandlerHelper.giveItemToPlayer(player, filledResult.result);
 

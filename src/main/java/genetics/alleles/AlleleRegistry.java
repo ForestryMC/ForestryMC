@@ -63,8 +63,20 @@ public class AlleleRegistry implements IAlleleRegistry {
     }
 
     @Override
-    public <V> IAlleleValue<V> registerAllele(String category, String valueName, V value, boolean dominant, IChromosomeType... types) {
-        return registerAllele(new AlleleCategorizedValue<>(ModLoadingContext.get().getActiveContainer().getModId(), category, valueName, value, dominant), types);
+    public <V> IAlleleValue<V> registerAllele(
+            String category,
+            String valueName,
+            V value,
+            boolean dominant,
+            IChromosomeType... types
+    ) {
+        return registerAllele(new AlleleCategorizedValue<>(
+                ModLoadingContext.get().getActiveContainer().getModId(),
+                category,
+                valueName,
+                value,
+                dominant
+        ), types);
     }
 
     @Override
@@ -89,7 +101,9 @@ public class AlleleRegistry implements IAlleleRegistry {
         handlers.forEach(h -> h.onAddTypes(allele, types));
         for (IChromosomeType chromosomeType : types) {
             if (!isValidAllele(allele, chromosomeType)) {
-                throw new IllegalArgumentException("Allele (" + allele + ") is not a valid allele for the chromosome type (" + chromosomeType + ").");
+                throw new IllegalArgumentException(
+                        "Allele (" + allele + ") is not a valid allele for the chromosome type (" + chromosomeType +
+                        ").");
             }
             allelesByType.put(chromosomeType, allele);
             typesByAllele.put(allele, chromosomeType);

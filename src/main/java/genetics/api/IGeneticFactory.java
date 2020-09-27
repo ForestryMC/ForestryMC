@@ -91,7 +91,11 @@ public interface IGeneticFactory {
      * @param root      The definition that describes the individual.
      * @return A instance of {@link IOrganism}.
      */
-    <I extends IIndividual> IOrganism<I> createOrganism(ItemStack itemStack, IOrganismType type, IRootDefinition<? extends IIndividualRoot<I>> root);
+    <I extends IIndividual> IOrganism<I> createOrganism(
+            ItemStack itemStack,
+            IOrganismType type,
+            IRootDefinition<? extends IIndividualRoot<I>> root
+    );
 
     /**
      * Creates the default implementation of a {@link IOrganismHandler}.
@@ -101,7 +105,10 @@ public interface IGeneticFactory {
      *                       will be created with {@link IOrganismHandler#createStack(IIndividual)}.
      * @return A instance of {@link IOrganismHandler}.
      */
-    <I extends IIndividual> IOrganismHandler<I> createOrganismHandler(IRootDefinition<? extends IIndividualRoot<I>> rootDefinition, Supplier<ItemStack> stack);
+    <I extends IIndividual> IOrganismHandler<I> createOrganismHandler(
+            IRootDefinition<? extends IIndividualRoot<I>> rootDefinition,
+            Supplier<ItemStack> stack
+    );
 
     <I extends IIndividual> IDisplayHelper createDisplayHelper(IIndividualRoot<I> root);
 

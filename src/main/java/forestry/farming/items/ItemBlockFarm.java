@@ -36,7 +36,12 @@ public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack stack,
+            @Nullable World world,
+            List<ITextComponent> tooltip,
+            ITooltipFlag flag
+    ) {
         if (Screen.hasShiftDown()) {
             tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip").mergeStyle(TextFormatting.GRAY));
 			/*BlockFarm block = getBlock();

@@ -79,10 +79,18 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
         }
         IAlleleForestrySpecies species = getSpecies(itemStack);
 
-        String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace("trees.species.", "");
+        String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace(
+                "trees.species.",
+                ""
+        );
         return ResourceUtil.tryTranslate(customTreeKey, () -> {
-            ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
-            return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
+            ITextComponent typeComponent = new TranslationTextComponent(
+                    "for.trees.grammar." + type.getName() + ".type");
+            return new TranslationTextComponent(
+                    "for.trees.grammar." + type.getName(),
+                    species.getDisplayName(),
+                    typeComponent
+            );
         });
     }
 
@@ -164,7 +172,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
     }
 
 
-    private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
+    private static ActionResult<ItemStack> onItemRightClickPollen(
+            ItemStack itemStackIn,
+            World worldIn,
+            PlayerEntity player,
+            BlockPos pos,
+            ITree tree
+    ) {
         ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
         if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
             return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
@@ -181,7 +195,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
             pollinatable.mateWith(tree);
 
             BlockState blockState = worldIn.getBlockState(pos);
-            PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+            PacketFXSignal packet = new PacketFXSignal(
+                    PacketFXSignal.VisualFXType.BLOCK_BREAK,
+                    PacketFXSignal.SoundFXType.BLOCK_BREAK,
+                    pos,
+                    blockState
+            );
             NetworkUtil.sendNetworkPacket(packet, pos, worldIn);
 
             if (!player.isCreative()) {
@@ -192,7 +211,14 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
     }
 
 
-    private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree, BlockItemUseContext context) {
+    private static ActionResult<ItemStack> onItemRightClickSapling(
+            ItemStack itemStackIn,
+            World worldIn,
+            PlayerEntity player,
+            BlockPos pos,
+            ITree tree,
+            BlockItemUseContext context
+    ) {
         // x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
         BlockState hitBlock = worldIn.getBlockState(pos);
         if (!hitBlock.isReplaceable(context)) {
@@ -218,7 +244,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
         itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
         Optional<ITree> treeOptional = TreeManager.treeRoot.create(itemstack);
         return treeOptional.map(tree -> tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 10)
-                .orElse(1.0f);
+                           .orElse(1.0f);
     }
 
     @Override

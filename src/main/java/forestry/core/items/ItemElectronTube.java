@@ -51,7 +51,12 @@ public class ItemElectronTube extends ItemOverlay {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         super.addInformation(itemstack, world, list, flag);
         Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
         if (!circuits.isEmpty()) {

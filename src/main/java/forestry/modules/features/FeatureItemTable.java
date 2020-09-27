@@ -15,7 +15,10 @@ public class FeatureItemTable<I extends Item, R extends IItemSubtype, C extends 
 
     @Override
     protected FeatureItem<I> createFeature(Builder<I, R, C> builder, R rowType, C columnType) {
-        return builder.registry.item(() -> builder.constructor.apply(rowType, columnType), builder.getIdentifier(rowType, columnType));
+        return builder.registry.item(
+                () -> builder.constructor.apply(rowType, columnType),
+                builder.getIdentifier(rowType, columnType)
+        );
     }
 
     public Collection<I> getBlocks() {

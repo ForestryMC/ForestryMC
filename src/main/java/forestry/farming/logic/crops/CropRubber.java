@@ -77,7 +77,11 @@ public class CropRubber extends CropDestroy {
     }
 
     @Nullable
-    private static <T extends Comparable<T>> BlockState getStateWithValue(BlockState baseState, Property<T> property, String valueString) {
+    private static <T extends Comparable<T>> BlockState getStateWithValue(
+            BlockState baseState,
+            Property<T> property,
+            String valueString
+    ) {
         Optional<T> value = property.parseValue(valueString);
         return value.map(t -> baseState.with(property, t)).orElse(null);
     }
@@ -92,7 +96,12 @@ public class CropRubber extends CropDestroy {
         //		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(harvestBlock, PluginTechReborn.RUBBER_WOOD)) {
         //			harvested.add(PluginTechReborn.sap.copy());
         //		}
-        PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+        PacketFXSignal packet = new PacketFXSignal(
+                PacketFXSignal.VisualFXType.BLOCK_BREAK,
+                PacketFXSignal.SoundFXType.BLOCK_BREAK,
+                pos,
+                blockState
+        );
         NetworkUtil.sendNetworkPacket(packet, pos, world);
 
         world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);

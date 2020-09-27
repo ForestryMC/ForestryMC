@@ -73,8 +73,10 @@ public class ForestryBlockLootTables extends BlockLootTables {
                 CoreBlocks.PEAT,
                 (block) -> new LootTable.Builder().addLootPool(new LootPool.Builder().addEntry(ItemLootEntry.builder(
                         Blocks.DIRT)))
-                        .addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(ConstantRange.of(2)))
-                                .addEntry(ItemLootEntry.builder(CoreItems.PEAT.item())))
+                                                  .addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(
+                                                          ConstantRange.of(2)))
+                                                                                     .addEntry(ItemLootEntry.builder(
+                                                                                             CoreItems.PEAT.item())))
         );
         registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
@@ -141,7 +143,7 @@ public class ForestryBlockLootTables extends BlockLootTables {
         return droppingWithSilkTouchOrShears(
                 block,
                 withSurvivesExplosion(block, ItemLootEntry.builder(ArboricultureItems.SAPLING)
-                        .acceptFunction(OrganismFunction.fromDefinition(definition)))
+                                                          .acceptFunction(OrganismFunction.fromDefinition(definition)))
                         .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances))
         );
     }

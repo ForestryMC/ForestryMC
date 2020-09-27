@@ -15,9 +15,24 @@ import forestry.modules.features.ModFeatureRegistry;
 public class CoreContainers {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCore.class);
 
-    public static final FeatureContainerType<ContainerAlyzer> ALYZER = REGISTRY.container(ContainerAlyzer::fromNetwork, "alyzer");
-    public static final FeatureContainerType<ContainerAnalyzer> ANALYZER = REGISTRY.container(ContainerAnalyzer::fromNetwork, "analyzer");
-    public static final FeatureContainerType<ContainerEscritoire> ESCRITOIRE = REGISTRY.container(ContainerEscritoire::fromNetwork, "escritoire");
-    public static final FeatureContainerType<ContainerNaturalistInventory> NATURALIST_INVENTORY = REGISTRY.container(ContainerNaturalistInventory::fromNetwork, "naturalist_inventory");
-    public static final FeatureContainerType<ContainerSolderingIron> SOLDERING_IRON = REGISTRY.container(ContainerSolderingIron::fromNetwork, "soldering_iron");
+    public static final FeatureContainerType<ContainerAlyzer> ALYZER = REGISTRY.container(
+            ContainerAlyzer::fromNetwork,
+            "alyzer"
+    );
+    public static final FeatureContainerType<ContainerAnalyzer> ANALYZER = REGISTRY.container(
+            ContainerAnalyzer::fromNetwork,
+            "analyzer"
+    );
+    public static final FeatureContainerType<ContainerEscritoire> ESCRITOIRE = REGISTRY.container(
+            ContainerEscritoire::fromNetwork,
+            "escritoire"
+    );
+    public static final FeatureContainerType<ContainerNaturalistInventory> NATURALIST_INVENTORY = REGISTRY.container(
+            ContainerNaturalistInventory::fromNetwork,
+            "naturalist_inventory"
+    );
+    public static final FeatureContainerType<ContainerSolderingIron> SOLDERING_IRON = REGISTRY.container(
+            ContainerSolderingIron::fromNetwork,
+            "soldering_iron"
+    );
 }

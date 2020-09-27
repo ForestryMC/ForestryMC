@@ -59,7 +59,10 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
             }
         }
 
-        PacketImprintSelectionResponse packetResponse = new PacketImprintSelectionResponse(inventory.getPrimaryIndex(), inventory.getSecondaryIndex());
+        PacketImprintSelectionResponse packetResponse = new PacketImprintSelectionResponse(
+                inventory.getPrimaryIndex(),
+                inventory.getSecondaryIndex()
+        );
         NetworkUtil.sendToPlayer(packetResponse, player);
     }
 

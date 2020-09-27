@@ -30,7 +30,11 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
     public void registerStates() {
         for (ForestryFluids fluid : ForestryFluids.values()) {
             Block block = fluid.getFeature().fluidBlock().block();
-            addVariants(block, new Builder().alwaysIgnore(FlowingFluidBlock.LEVEL).always(variant -> variant.model("forestry:block/fluid_" + fluid.getTag().getPath())));
+            addVariants(
+                    block,
+                    new Builder().alwaysIgnore(FlowingFluidBlock.LEVEL)
+                                 .always(variant -> variant.model("forestry:block/fluid_" + fluid.getTag().getPath()))
+            );
         }
         addCocoon(LepidopterologyBlocks.COCOON);
         addCocoon(LepidopterologyBlocks.COCOON_SOLID);
@@ -39,7 +43,9 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
             addVariants(farm, new Builder().always(variant -> variant.model("forestry:block/farm")));
         }
 
-        for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
+        for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER
+                .getFeatureByTypes()
+                .cellSet()) {
             addCultivationBlock(cell.getValue(), cell.getRowKey());
         }
     }
@@ -55,9 +61,25 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
     private void addCocoon(FeatureBlock<? extends Block, BlockItem> feature) {
         BlockState state = feature.defaultState();
         addVariants(feature.block(), new Builder()
-                .property(AlleleButterflyCocoon.AGE, 0, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_early"))
-                .property(AlleleButterflyCocoon.AGE, 1, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_middle"))
-                .property(AlleleButterflyCocoon.AGE, 2, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_late"))
-                .state(state.with(AlleleButterflyCocoon.AGE, 2).with(AlleleButterflyCocoon.COCOON, ButterflyAlleles.cocoonSilk), variant -> variant.model(Constants.MOD_ID + ":block/cocoon_silk_late")));
+                .property(
+                        AlleleButterflyCocoon.AGE,
+                        0,
+                        variant -> variant.model(Constants.MOD_ID + ":block/cocoon_early")
+                )
+                .property(
+                        AlleleButterflyCocoon.AGE,
+                        1,
+                        variant -> variant.model(Constants.MOD_ID + ":block/cocoon_middle")
+                )
+                .property(
+                        AlleleButterflyCocoon.AGE,
+                        2,
+                        variant -> variant.model(Constants.MOD_ID + ":block/cocoon_late")
+                )
+                .state(
+                        state.with(AlleleButterflyCocoon.AGE, 2)
+                             .with(AlleleButterflyCocoon.COCOON, ButterflyAlleles.cocoonSilk),
+                        variant -> variant.model(Constants.MOD_ID + ":block/cocoon_silk_late")
+                ));
     }
 }

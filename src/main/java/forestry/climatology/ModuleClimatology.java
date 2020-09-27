@@ -54,8 +54,16 @@ public class ModuleClimatology extends BlankForestryModule {
         proxy.preInit();
 
         // Capabilities
-        CapabilityManager.INSTANCE.register(IClimateListener.class, new NullStorage<>(), () -> FakeClimateListener.INSTANCE);
-        CapabilityManager.INSTANCE.register(IClimateTransformer.class, new NullStorage<>(), () -> FakeClimateTransformer.INSTANCE);
+        CapabilityManager.INSTANCE.register(
+                IClimateListener.class,
+                new NullStorage<>(),
+                () -> FakeClimateListener.INSTANCE
+        );
+        CapabilityManager.INSTANCE.register(
+                IClimateTransformer.class,
+                new NullStorage<>(),
+                () -> FakeClimateTransformer.INSTANCE
+        );
     }
 
     @Override

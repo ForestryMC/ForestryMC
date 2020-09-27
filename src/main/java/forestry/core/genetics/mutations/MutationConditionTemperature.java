@@ -43,7 +43,8 @@ public class MutationConditionTemperature implements IMutationCondition {
     ) {
         EnumTemperature biomeTemperature = climate.getTemperature();
 
-        if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {
+        if (biomeTemperature.ordinal() < minTemperature.ordinal() ||
+            biomeTemperature.ordinal() > maxTemperature.ordinal()) {
             return 0;
         }
         return 1;

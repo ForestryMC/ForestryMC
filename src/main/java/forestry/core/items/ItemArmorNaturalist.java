@@ -49,7 +49,12 @@ public class ItemArmorNaturalist extends ArmorItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+    public void addInformation(
+            ItemStack stack,
+            @Nullable World world,
+            List<ITextComponent> tooltip,
+            ITooltipFlag advanced
+    ) {
         ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
     }
 
@@ -60,7 +65,7 @@ public class ItemArmorNaturalist extends ArmorItem {
             @Override
             public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
                 if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-                        slot == EquipmentSlotType.HEAD) {
+                    slot == EquipmentSlotType.HEAD) {
                     return LazyOptional.of(capability::getDefaultInstance);
                 }
                 return LazyOptional.empty();

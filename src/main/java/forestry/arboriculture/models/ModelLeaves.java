@@ -56,7 +56,8 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
                 return false;
             } else {
                 Key otherKey = (Key) other;
-                return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite && otherKey.fancy == fancy;
+                return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite &&
+                       otherKey.fancy == fancy;
             }
         }
 
@@ -88,13 +89,21 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
         ResourceLocation leafLocation = TileLeaves.getLeaveSprite(extraData, fancy);
         ResourceLocation fruitLocation = TileLeaves.getFruitSprite(extraData);
 
-        return new Key(ResourceUtil.getBlockSprite(leafLocation),
+        return new Key(
+                ResourceUtil.getBlockSprite(leafLocation),
                 fruitLocation != null ? ResourceUtil.getBlockSprite(fruitLocation) : null,
-                fancy);
+                fancy
+        );
     }
 
     @Override
-    protected void bakeBlock(BlockForestryLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+    protected void bakeBlock(
+            BlockForestryLeaves block,
+            IModelData extraData,
+            Key key,
+            ModelBaker baker,
+            boolean inventory
+    ) {
         // Render the plain leaf block.
         baker.addBlockModel(key.leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 

@@ -259,7 +259,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
         }
 
         IInventoryAdapter inventory = getInternalInventory();
-        return (float) inventory.getStackInSlot(fuelSlot).getCount() / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
+        return (float) inventory.getStackInSlot(fuelSlot).getCount() /
+               (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
     }
 
     // / LOADING AND SAVING

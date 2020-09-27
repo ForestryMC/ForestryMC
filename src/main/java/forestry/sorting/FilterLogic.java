@@ -62,10 +62,16 @@ public class FilterLogic implements IFilterLogic {
                     continue;
                 }
                 if (filter.activeAllele != null) {
-                    data.putString("GenomeFilterS" + i + "-" + j + "-" + 0, filter.activeAllele.getRegistryName().toString());
+                    data.putString(
+                            "GenomeFilterS" + i + "-" + j + "-" + 0,
+                            filter.activeAllele.getRegistryName().toString()
+                    );
                 }
                 if (filter.inactiveAllele != null) {
-                    data.putString("GenomeFilterS" + i + "-" + j + "-" + 1, filter.inactiveAllele.getRegistryName().toString());
+                    data.putString(
+                            "GenomeFilterS" + i + "-" + j + "-" + 1,
+                            filter.inactiveAllele.getRegistryName().toString()
+                    );
                 }
             }
         }
@@ -82,10 +88,12 @@ public class FilterLogic implements IFilterLogic {
             for (int j = 0; j < 3; j++) {
                 AlleleFilter filter = new AlleleFilter();
                 if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 0)) {
-                    filter.activeAllele = AlleleUtils.getAlleleOrNull(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0));
+                    filter.activeAllele = AlleleUtils.getAlleleOrNull(data.getString(
+                            "GenomeFilterS" + i + "-" + j + "-" + 0));
                 }
                 if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 1)) {
-                    filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1));
+                    filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.getString(
+                            "GenomeFilterS" + i + "-" + j + "-" + 1));
                 }
                 genomeFilter[i][j] = filter;
             }
@@ -197,7 +205,11 @@ public class FilterLogic implements IFilterLogic {
                 IGenome genome = ind.getGenome();
                 IAllele active = genome.getPrimary();
                 IAllele inactive = genome.getSecondary();
-                return isValidAllelePair(facing, active.getRegistryName().toString(), inactive.getRegistryName().toString());
+                return isValidAllelePair(
+                        facing,
+                        active.getRegistryName().toString(),
+                        inactive.getRegistryName().toString()
+                );
             }
             return true;
         }
@@ -268,7 +280,13 @@ public class FilterLogic implements IFilterLogic {
 
     @Override
     public void sendToServer(Direction facing, int index, boolean active, @Nullable IAllele allele) {
-        NetworkUtil.sendToServer(new PacketFilterChangeGenome(locatable.getCoordinates(), facing, (short) index, active, allele));
+        NetworkUtil.sendToServer(new PacketFilterChangeGenome(
+                locatable.getCoordinates(),
+                facing,
+                (short) index,
+                active,
+                allele
+        ));
     }
 
     @Override

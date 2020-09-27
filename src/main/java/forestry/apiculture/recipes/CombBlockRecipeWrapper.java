@@ -18,11 +18,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class CombBlockRecipeWrapper implements IRecipeCategoryExtension {
-    private int meta;
+    private final int meta;
     @Nullable
-    private static ItemHoneyComb comb = null;
+    private static final ItemHoneyComb comb = null;
     @Nullable
-    private static List<?> blockHoneyCombs = null;
+    private static final List<?> blockHoneyCombs = null;
 
     public CombBlockRecipeWrapper(int meta) {
         this.meta = meta;

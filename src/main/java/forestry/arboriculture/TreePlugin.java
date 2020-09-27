@@ -94,7 +94,8 @@ public class TreePlugin implements IGeneticPlugin {
 
                         Collection<IFruitFamily> suitableFruit = treeSpecies.getSuitableFruit();
                         for (IFruitFamily fruitFamily : suitableFruit) {
-                            Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
+                            Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(
+                                    fruitFamily);
                             for (IFruitProvider fruitProvider : fruitProviders) {
                                 IProductList products = fruitProvider.getProducts();
                                 for (ItemStack stack : products.getPossibleStacks()) {
@@ -146,11 +147,21 @@ public class TreePlugin implements IGeneticPlugin {
                             builder.registerTranslator(saplingFactory.apply(TreeDefinition.Acacia), Items.ACACIA_LEAVES);
                             builder.registerTranslator(saplingFactory.apply(TreeDefinition.DarkOak), Items.DARK_OAK_LEAVES);
 
-                            for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT.getFeatureByType().entrySet()) {
-                                builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
+                            for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT
+                                    .getFeatureByType()
+                                    .entrySet()) {
+                                builder.registerTranslator(
+                                        blockState -> leaves.getKey().createIndividual(),
+                                        leaves.getValue().block()
+                                );
                             }
-                            for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
-                                builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
+                            for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT
+                                    .getFeatureByType()
+                                    .entrySet()) {
+                                builder.registerTranslator(
+                                        blockState -> leaves.getKey().createIndividual(),
+                                        leaves.getValue().block()
+                                );
                             }
                         }
                 )

@@ -35,10 +35,10 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 
     public ModelSapling() {
         this.modelsBySpecies = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-                .collect(Collectors.toMap(
-                        allele -> allele,
-                        allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())
-                ));
+                                          .collect(Collectors.toMap(
+                                                  allele -> allele,
+                                                  allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())
+                                          ));
     }
 
     @Override
@@ -74,8 +74,10 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
     }
 
     public Collection<ResourceLocation> getDependencies() {
-        return modelsBySpecies.values().stream()
-                .flatMap(pair -> Stream.of(pair.getFirst(), pair.getSecond())).collect(Collectors.toSet());
+        return modelsBySpecies.values()
+                              .stream()
+                              .flatMap(pair -> Stream.of(pair.getFirst(), pair.getSecond()))
+                              .collect(Collectors.toSet());
     }
 
     @Override
@@ -85,10 +87,10 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
             Set<Pair<String, String>> missingTextureErrors
     ) {
         return getDependencies().stream()
-                .flatMap(location -> modelGetter.apply(location)
-                        .getTextures(modelGetter, missingTextureErrors)
-                        .stream())
-                .collect(Collectors.toSet());
+                                .flatMap(location -> modelGetter.apply(location)
+                                                                .getTextures(modelGetter, missingTextureErrors)
+                                                                .stream())
+                                .collect(Collectors.toSet());
     }
 
     public static class Baked implements IBakedModel {

@@ -34,7 +34,11 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 
 
     //TODO writing things to packets here
-    public static ContainerMinecartBeehouse fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+    public static ContainerMinecartBeehouse fromNetwork(
+            int windowId,
+            PlayerInventory playerInv,
+            PacketBuffer extraData
+    ) {
         PacketBufferForestry buf = new PacketBufferForestry(extraData);
         MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.world);    //TODO cast
         PlayerEntity player = playerInv.player;
@@ -43,7 +47,13 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
         return new ContainerMinecartBeehouse(windowId, player.inventory, e, hasFrames, icon);
     }
 
-    public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {
+    public ContainerMinecartBeehouse(
+            int windowId,
+            PlayerInventory player,
+            MinecartEntityBeeHousingBase entity,
+            boolean hasFrames,
+            GuiBeeHousing.Icon icon
+    ) {
         super(windowId, ApicultureContainers.BEEHOUSE_MINECART.containerType(), entity, player, 8, 108);
         providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 

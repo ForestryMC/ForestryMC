@@ -49,10 +49,16 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+    public void addInformation(
+            ItemStack stack,
+            @Nullable World world,
+            List<ITextComponent> tooltip,
+            ITooltipFlag advanced
+    ) {
         super.addInformation(stack, world, tooltip, advanced);
         if (!stack.isDamaged()) {
-            tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).mergeStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).mergeStyle(
+                    TextFormatting.GRAY));
         }
     }
 
@@ -60,13 +66,19 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
     public boolean canHarvestBlock(BlockState state) {
         Block block = state.getBlock();
         return block instanceof LeavesBlock ||
-                state.getMaterial() == Material.LEAVES ||
-                block.isIn(BlockTags.LEAVES) ||
-                super.canHarvestBlock(state);
+               state.getMaterial() == Material.LEAVES ||
+               block.isIn(BlockTags.LEAVES) ||
+               super.canHarvestBlock(state);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean onBlockDestroyed(
+            ItemStack stack,
+            World worldIn,
+            BlockState state,
+            BlockPos pos,
+            LivingEntity entityLiving
+    ) {
         return true;
     }
 

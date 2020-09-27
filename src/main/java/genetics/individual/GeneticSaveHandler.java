@@ -54,7 +54,12 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
      * Quickly gets the species without loading the whole genome. And without creating absent chromosomes.
      */
     @Nullable
-    public IAllele getAlleleDirectly(ItemStack itemStack, IOrganismType type, IChromosomeType chromosomeType, boolean active) {
+    public IAllele getAlleleDirectly(
+            ItemStack itemStack,
+            IOrganismType type,
+            IChromosomeType chromosomeType,
+            boolean active
+    ) {
         CompoundNBT nbtTagCompound = itemStack.getTag();
         if (nbtTagCompound == null || nbtTagCompound.isEmpty()) {
             return null;
@@ -107,13 +112,22 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
 
     @Nullable
     @Override
-    public CompoundNBT getIndividualDataDirectly(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root) {
+    public CompoundNBT getIndividualDataDirectly(
+            ItemStack itemStack,
+            IOrganismType type,
+            IIndividualRoot<IIndividual> root
+    ) {
         IOrganismHandler organismHandler = GeneticHelper.getOrganismHandler(root, type);
         return organismHandler.getIndividualData(itemStack);
     }
 
     @Override
-    public void setIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root, CompoundNBT compound) {
+    public void setIndividualData(
+            ItemStack itemStack,
+            IOrganismType type,
+            IIndividualRoot<IIndividual> root,
+            CompoundNBT compound
+    ) {
         IOrganismHandler organismHandler = GeneticHelper.getOrganismHandler(root, type);
         organismHandler.setIndividualData(itemStack, compound);
     }

@@ -40,23 +40,23 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 
     public Optional<F> findFeature(String typeName) {
         return featureByType.entrySet().stream()
-                .filter(e -> e.getKey().getString().equals(typeName))
-                .findFirst()
-                .flatMap(e -> Optional.of(e.getValue()));
+                            .filter(e -> e.getKey().getString().equals(typeName))
+                            .findFirst()
+                            .flatMap(e -> Optional.of(e.getValue()));
     }
 
     public boolean itemEqual(ItemStack stack) {
         return getFeatures().stream()
-                .filter(f -> f instanceof IItemProvider)
-                .map(f -> (IItemProvider) f)
-                .anyMatch(f -> f.itemEqual(stack));
+                            .filter(f -> f instanceof IItemProvider)
+                            .map(f -> (IItemProvider) f)
+                            .anyMatch(f -> f.itemEqual(stack));
     }
 
     public boolean itemEqual(Item item) {
         return getFeatures().stream()
-                .filter(f -> f instanceof IItemProvider)
-                .map(f -> (IItemProvider) f)
-                .anyMatch(f -> f.itemEqual(item));
+                            .filter(f -> f instanceof IItemProvider)
+                            .map(f -> (IItemProvider) f)
+                            .anyMatch(f -> f.itemEqual(item));
     }
 
     public ItemStack stack(S subType) {
@@ -66,7 +66,8 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
     public ItemStack stack(S subType, int amount) {
         F featureBlock = featureByType.get(subType);
         if (!(featureBlock instanceof IItemProvider)) {
-            throw new IllegalStateException("This feature group has no item registered for the given sub type to create a stack for.");
+            throw new IllegalStateException(
+                    "This feature group has no item registered for the given sub type to create a stack for.");
         }
         return ((IItemProvider) featureBlock).stack(amount);
     }
@@ -74,7 +75,8 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
     public ItemStack stack(S subType, StackOption... options) {
         F featureBlock = featureByType.get(subType);
         if (!(featureBlock instanceof IItemProvider)) {
-            throw new IllegalStateException("This feature group has no item registered for the given sub type to create a stack for.");
+            throw new IllegalStateException(
+                    "This feature group has no item registered for the given sub type to create a stack for.");
         }
         return ((IItemProvider) featureBlock).stack(options);
     }

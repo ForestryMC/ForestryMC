@@ -150,7 +150,7 @@ public class EventHandlerCore {
                     ".json");
             if (url != null) {
                 LootTable forestryChestAdditions = event.getLootTableManager()
-                        .getLootTableFromLocation(resourceLocation);
+                                                        .getLootTableFromLocation(resourceLocation);
                 if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
                     for (String poolName : lootPoolNames) {
                         LootPool pool = forestryChestAdditions.getPool(poolName);

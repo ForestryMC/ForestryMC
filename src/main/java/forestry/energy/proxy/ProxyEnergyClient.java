@@ -21,7 +21,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ProxyEnergyClient extends ProxyEnergy {
     @Override
-    public void setRenderDefaultEngine(MachinePropertiesTesr<? extends TileEngine> machineProperties, String baseTexture) {
+    public void setRenderDefaultEngine(
+            MachinePropertiesTesr<? extends TileEngine> machineProperties,
+            String baseTexture
+    ) {
         machineProperties.setRenderer(new RenderEngine(baseTexture));
     }
 }

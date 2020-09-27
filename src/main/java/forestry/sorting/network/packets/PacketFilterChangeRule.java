@@ -40,7 +40,12 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
             BlockPos pos = data.readBlockPos();
             Direction facing = Direction.byIndex(data.readShort());
             IFilterRuleType rule = AlleleManager.filterRegistry.getRuleOrDefault(data.readShort());
-            LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
+            LazyOptional<IFilterLogic> logic = TileUtil.getInterface(
+                    player.world,
+                    pos,
+                    GeneticCapabilities.FILTER_LOGIC,
+                    null
+            );
             logic.ifPresent(l -> {
                 if (l.setRule(facing, rule)) {
                     l.getNetworkHandler().sendToPlayers(l, player.getServerWorld(), player);

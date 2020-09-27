@@ -91,7 +91,11 @@ public class TileCandle extends TileEntity {
     public void addColour(int colour2) {
         int[] myColour = fromIntColour(this.colour);
         int[] addColour = fromIntColour(colour2);
-        this.colour = toIntColour((addColour[0] + myColour[0]) / 2, (addColour[0] + myColour[0]) / 2, (addColour[2] + myColour[2]) / 2);
+        this.colour = toIntColour(
+                (addColour[0] + myColour[0]) / 2,
+                (addColour[0] + myColour[0]) / 2,
+                (addColour[2] + myColour[2]) / 2
+        );
     }
 
     private static int[] fromIntColour(int value) {

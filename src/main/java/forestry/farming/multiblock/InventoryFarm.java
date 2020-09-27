@@ -45,7 +45,9 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
     public static final int SLOT_CAN = 21;
     public static final int SLOT_CAN_COUNT = 1;
 
-    public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT + SLOT_CAN_COUNT;
+    public static final int SLOT_COUNT =
+            SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT +
+            SLOT_CAN_COUNT;
 
     private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
 

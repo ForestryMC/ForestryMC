@@ -46,7 +46,13 @@ public interface IAlleleRegistry {
      * @param dominant  if true the allele is dominant, otherwise the allele is recessive.
      * @param types     chromosome types for this allele.
      */
-    <V> IAlleleValue<V> registerAllele(String category, String valueName, V value, boolean dominant, IChromosomeType... types);
+    <V> IAlleleValue<V> registerAllele(
+            String category,
+            String valueName,
+            V value,
+            boolean dominant,
+            IChromosomeType... types
+    );
 
     /**
      * Registers an allele.

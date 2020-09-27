@@ -43,7 +43,13 @@ public interface IFarmLogic {
      *                    The positions of the next blocks are having a offset in the given direction.
      * @return True if the logic has cultivated any block.
      */
-    default boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+    default boolean cultivate(
+            World world,
+            IFarmHousing farmHousing,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    ) {
         return false;
     }
 

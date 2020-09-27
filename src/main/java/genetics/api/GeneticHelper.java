@@ -36,7 +36,11 @@ public class GeneticHelper {
     private GeneticHelper() {
     }
 
-    public static <I extends IIndividual> IOrganism<I> createOrganism(ItemStack itemStack, IOrganismType type, IRootDefinition<? extends IIndividualRoot<I>> root) {
+    public static <I extends IIndividual> IOrganism<I> createOrganism(
+            ItemStack itemStack,
+            IOrganismType type,
+            IRootDefinition<? extends IIndividualRoot<I>> root
+    ) {
         IGeneticFactory geneticFactory = GeneticsAPI.apiInstance.getGeneticFactory();
         return geneticFactory.createOrganism(itemStack, type, root);
     }
@@ -59,7 +63,10 @@ public class GeneticHelper {
     public static IOrganismHandler getOrganismHandler(IIndividualRoot<IIndividual> root, IOrganismType type) {
         Optional<IOrganismHandler<IIndividual>> optionalHandler = root.getTypes().getHandler(type);
         if (!optionalHandler.isPresent()) {
-            throw new IllegalArgumentException(String.format("No organism handler was registered for the organism type '%s'", type.getName()));
+            throw new IllegalArgumentException(String.format(
+                    "No organism handler was registered for the organism type '%s'",
+                    type.getName()
+            ));
         }
         return optionalHandler.get();
     }

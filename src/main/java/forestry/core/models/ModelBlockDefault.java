@@ -110,7 +110,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
     @Override
     public boolean isAmbientOcclusion() {
         return (itemModel != null || blockModel != null) &&
-                (blockModel != null ? blockModel.isAmbientOcclusion() : itemModel.isAmbientOcclusion());
+               (blockModel != null ? blockModel.isAmbientOcclusion() : itemModel.isAmbientOcclusion());
     }
 
     @Override
@@ -121,7 +121,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
     @Override
     public boolean isBuiltInRenderer() {
         return (itemModel != null || blockModel != null) &&
-                (blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
+               (blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
     }
 
     @Override

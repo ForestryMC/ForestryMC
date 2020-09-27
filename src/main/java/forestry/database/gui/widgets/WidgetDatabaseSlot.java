@@ -28,7 +28,10 @@ import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class WidgetDatabaseSlot extends Widget {
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_inventory.png");
+    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "/database_inventory.png"
+    );
 
     public static final Drawable SLOT = new Drawable(TEXTURE_LOCATION, 218, 0, 22, 22);
     public static final Drawable SLOT_SELECTED = new Drawable(TEXTURE_LOCATION, 218, 22, 22, 22);
@@ -100,7 +103,8 @@ public class WidgetDatabaseSlot extends Widget {
 
     @Override
     public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-        if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getItemStack().isEmpty()) {
+        if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 ||
+            !manager.minecraft.player.inventory.getItemStack().isEmpty()) {
             return;
         }
         GuiDatabase gui = (GuiDatabase) manager.gui;
@@ -130,9 +134,9 @@ public class WidgetDatabaseSlot extends Widget {
     @Override
     public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
         if (!isMouseOver(mouseX, mouseY)
-                || ignoreMouseUp
-                || eventType != 0 && eventType != 1
-                || manager.minecraft.player.inventory.getItemStack().isEmpty()) {
+            || ignoreMouseUp
+            || eventType != 0 && eventType != 1
+            || manager.minecraft.player.inventory.getItemStack().isEmpty()) {
             ignoreMouseUp = false;
             return false;
         }

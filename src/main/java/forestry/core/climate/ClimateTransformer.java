@@ -213,7 +213,8 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
     }
 
     private static int computeArea(int range, boolean circular) {
-        return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI) : (range * 2 + 1) * (range * 2 + 1);
+        return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI)
+                        : (range * 2 + 1) * (range * 2 + 1);
     }
 
     @Override

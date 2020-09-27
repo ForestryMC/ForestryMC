@@ -27,11 +27,13 @@ import java.util.Set;
 public class ClimateUtil implements IClimateHelper {
 
     @Override
-    public boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity,
-                                  EnumTemperature baseTemp, EnumTolerance tolTemp,
-                                  EnumHumidity baseHumid, EnumTolerance tolHumid) {
+    public boolean isWithinLimits(
+            EnumTemperature temperature, EnumHumidity humidity,
+            EnumTemperature baseTemp, EnumTolerance tolTemp,
+            EnumHumidity baseHumid, EnumTolerance tolHumid
+    ) {
         return getToleratedTemperature(baseTemp, tolTemp).contains(temperature) &&
-                getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
+               getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
     }
 
     @Override
@@ -205,9 +207,11 @@ public class ClimateUtil implements IClimateHelper {
         return new TranslationTextComponent("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
     }
 
-    public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity,
-                                             EnumTemperature baseTemp, EnumTolerance tolTemp,
-                                             EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates) {
+    public static void addClimateErrorStates(
+            EnumTemperature temperature, EnumHumidity humidity,
+            EnumTemperature baseTemp, EnumTolerance tolTemp,
+            EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates
+    ) {
 
         if (!AlleleManager.climateHelper.isWithinLimits(temperature, baseTemp, tolTemp)) {
             if (baseTemp.ordinal() > temperature.ordinal()) {

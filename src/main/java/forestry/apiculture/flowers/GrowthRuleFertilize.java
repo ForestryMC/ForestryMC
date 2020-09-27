@@ -31,7 +31,13 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
     }
 
     @Override
-    public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+    public boolean growFlower(
+            IFlowerGrowthHelper helper,
+            String flowerType,
+            ServerWorld world,
+            BlockPos pos,
+            Collection<BlockState> potentialFlowers
+    ) {
         return growFlower(world, pos);
     }
 

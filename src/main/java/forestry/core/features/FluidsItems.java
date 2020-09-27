@@ -19,7 +19,10 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 @FeatureProvider
 public class FluidsItems {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleFluids.class);
-    public static final FeatureItemGroup<ItemFluidContainerForestry, EnumContainerType> CONTAINERS = REGISTRY.itemGroup(ItemFluidContainerForestry::new, EnumContainerType.values()).create();
+    public static final FeatureItemGroup<ItemFluidContainerForestry, EnumContainerType> CONTAINERS = REGISTRY.itemGroup(
+            ItemFluidContainerForestry::new,
+            EnumContainerType.values()
+    ).create();
 
     public static ItemStack getContainer(EnumContainerType type, ForestryFluids fluid) {
         return getContainer(type, fluid.getFluid());

@@ -42,9 +42,9 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
     public BlockSapling() {
         super(Block.Properties.create(Material.PLANTS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.0F)
-                .sound(SoundType.PLANT));
+                              .doesNotBlockMovement()
+                              .hardnessAndResistance(0.0F)
+                              .sound(SoundType.PLANT));
     }
 
     @Override

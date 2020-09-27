@@ -25,21 +25,36 @@ public class ContainerPlanter extends ContainerLiquidTanks<TilePlanter> {
         // Resources
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                addSlot(new SlotFiltered(tile.getInternalInventory(), InventoryPlanter.SLOT_RESOURCES_1 + j + i * 2, 11 + j * 18, 65 + i * 18));
+                addSlot(new SlotFiltered(
+                        tile.getInternalInventory(),
+                        InventoryPlanter.SLOT_RESOURCES_1 + j + i * 2,
+                        11 + j * 18,
+                        65 + i * 18
+                ));
             }
         }
 
         // Germlings
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                addSlot(new SlotFiltered(tile.getInternalInventory(), InventoryPlanter.SLOT_GERMLINGS_1 + j + i * 2, 71 + j * 18, 65 + i * 18));
+                addSlot(new SlotFiltered(
+                        tile.getInternalInventory(),
+                        InventoryPlanter.SLOT_GERMLINGS_1 + j + i * 2,
+                        71 + j * 18,
+                        65 + i * 18
+                ));
             }
         }
 
         // Production
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                addSlot(new SlotOutput(tile.getInternalInventory(), InventoryPlanter.SLOT_PRODUCTION_1 + j + i * 2, 131 + j * 18, 65 + i * 18));
+                addSlot(new SlotOutput(
+                        tile.getInternalInventory(),
+                        InventoryPlanter.SLOT_PRODUCTION_1 + j + i * 2,
+                        131 + j * 18,
+                        65 + i * 18
+                ));
             }
         }
 

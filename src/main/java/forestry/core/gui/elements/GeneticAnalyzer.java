@@ -203,7 +203,11 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
         //key = "for.gui.database.support";
         //}
         for (ITextProperties text : fontRenderer.getCharacterManager()
-                .func_238362_b_(new TranslationTextComponent(key), scrollable.getWidth(), Style.EMPTY)
+                                                .func_238362_b_(
+                                                        new TranslationTextComponent(key),
+                                                        scrollable.getWidth(),
+                                                        Style.EMPTY
+                                                )
         ) {
             scrollableContent.label(new StringTextComponent(text.getString()));
         }

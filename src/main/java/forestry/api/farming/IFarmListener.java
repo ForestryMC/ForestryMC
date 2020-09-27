@@ -44,7 +44,13 @@ public interface IFarmListener {
     /**
      * Called after the stack of harvested crops has been returned by the farm logic, but before it is added to the farm's pending queue.
      */
-    void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent);
+    void hasScheduledHarvest(
+            Collection<ICrop> harvested,
+            IFarmLogic logic,
+            BlockPos pos,
+            FarmDirection direction,
+            int extent
+    );
 
     /**
      * Can be used to cancel farm task on a per side/{@link IFarmLogic} basis.

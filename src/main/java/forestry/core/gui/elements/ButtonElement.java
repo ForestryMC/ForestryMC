@@ -17,11 +17,28 @@ public class ButtonElement extends GuiElement {
     /* Attributes - State */
     private boolean enabled = true;
 
-    public ButtonElement(int xPos, int yPos, int width, int height, Drawable disabledDrawable, Drawable enabledDrawable, Consumer<ButtonElement> onClicked) {
+    public ButtonElement(
+            int xPos,
+            int yPos,
+            int width,
+            int height,
+            Drawable disabledDrawable,
+            Drawable enabledDrawable,
+            Consumer<ButtonElement> onClicked
+    ) {
         this(xPos, yPos, width, height, disabledDrawable, enabledDrawable, enabledDrawable, onClicked);
     }
 
-    public ButtonElement(int xPos, int yPos, int width, int height, Drawable disabledDrawable, Drawable enabledDrawable, Drawable mouseOverDrawable, Consumer<ButtonElement> onClicked) {
+    public ButtonElement(
+            int xPos,
+            int yPos,
+            int width,
+            int height,
+            Drawable disabledDrawable,
+            Drawable enabledDrawable,
+            Drawable mouseOverDrawable,
+            Consumer<ButtonElement> onClicked
+    ) {
         super(xPos, yPos, width, height);
         this.onClicked = onClicked;
         textures[0] = disabledDrawable;
@@ -40,7 +57,13 @@ public class ButtonElement extends GuiElement {
         super(xPos, yPos, drawable.uWidth, drawable.vHeight);
         this.onClicked = onClicked;
         for (int i = 0; i < 3; i++) {
-            textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
+            textures[i] = new Drawable(
+                    drawable.textureLocation,
+                    drawable.u,
+                    drawable.v + drawable.vHeight * i,
+                    drawable.uWidth,
+                    drawable.vHeight
+            );
         }
         addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
             if (!enabled) {
@@ -55,7 +78,13 @@ public class ButtonElement extends GuiElement {
         super(xPos, yPos, textureSets.getWidth(), textureSets.getHeight());
         this.onClicked = onClicked;
         for (int i = 0; i < 3; i++) {
-            textures[i] = new Drawable(textureSets.getTexture(), textureSets.getX(), textureSets.getY() + textureSets.getHeight() * i, textureSets.getWidth(), textureSets.getHeight());
+            textures[i] = new Drawable(
+                    textureSets.getTexture(),
+                    textureSets.getX(),
+                    textureSets.getY() + textureSets.getHeight() * i,
+                    textureSets.getWidth(),
+                    textureSets.getHeight()
+            );
         }
         addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
             if (!enabled) {

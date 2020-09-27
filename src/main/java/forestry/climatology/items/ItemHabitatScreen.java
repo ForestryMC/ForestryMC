@@ -82,7 +82,9 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
     public static boolean isValid(ItemStack stack, @Nullable World world) {
         BlockPos pos = getPosition(stack);
         int dimension = getDimension(stack);
-        if (pos == null || world == null || dimension == Integer.MAX_VALUE ||/* dimension != world.getDimension().getType().getId() || */!world.isBlockLoaded(pos)) {
+        if (pos == null || world == null ||
+            dimension == Integer.MAX_VALUE ||/* dimension != world.getDimension().getType().getId() || */
+            !world.isBlockLoaded(pos)) {
             return false;
         } else {
             return TileUtil.getTile(world, pos, IClimateHousing.class) != null;
@@ -97,7 +99,8 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
             setPreviewMode(itemStack, !previewModeActive);
 
             if (!world.isRemote) {
-                String text = !previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive";
+                String text =
+                        !previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive";
                 player.sendStatusMessage(new TranslationTextComponent(text), true);
             }
         }
@@ -131,7 +134,11 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
                 state = ClimateRoot.getInstance().getBiomeState(world, pos);
             }
             if (state.isPresent()) {
-                player.sendStatusMessage(new TranslationTextComponent("for.habitat_screen.status.state", TextFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()), TextFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())), true);
+                player.sendStatusMessage(new TranslationTextComponent(
+                        "for.habitat_screen.status.state",
+                        TextFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()),
+                        TextFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())
+                ), true);
             } else {
                 player.sendStatusMessage(new TranslationTextComponent("for.habitat_screen.status.nostate"), true);
             }
@@ -141,18 +148,30 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack stack,
+            @Nullable World world,
+            List<ITextComponent> tooltip,
+            ITooltipFlag flag
+    ) {
         super.addInformation(stack, world, tooltip, flag);
         if (world == null) {
             return;
         }
         boolean previewModeActive = isPreviewModeActive(stack);
-        tooltip.add(new TranslationTextComponent(previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive"));
+        tooltip.add(new TranslationTextComponent(
+                previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive"));
         boolean isValid = isValid(stack, world);
         BlockPos pos = getPosition(stack);
         if (pos != null) {
             int id = 0; //TODO: Fix dimension id
-            ITextComponent state = isValid ? new TranslationTextComponent("for.habitat_screen.state.linked", pos.getX(), pos.getY(), pos.getZ(), id) : new TranslationTextComponent("for.habitat_screen.state.fail");
+            ITextComponent state = isValid ? new TranslationTextComponent(
+                    "for.habitat_screen.state.linked",
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ(),
+                    id
+            ) : new TranslationTextComponent("for.habitat_screen.state.fail");
             tooltip.add(state);
         }
         if (!isValid || pos == null) {
@@ -163,8 +182,14 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
             return;
         }
         IClimateState climateState = housing.getTransformer().getCurrent();
-        tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).mergeStyle(TextFormatting.GOLD));
-        tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).mergeStyle(TextFormatting.BLUE));
+        tooltip.add(new TranslationTextComponent(
+                "for.habitat_screen.temperature",
+                StringUtil.floatAsPercent(climateState.getTemperature())
+        ).mergeStyle(TextFormatting.GOLD));
+        tooltip.add(new TranslationTextComponent(
+                "for.habitat_screen.humidity",
+                StringUtil.floatAsPercent(climateState.getHumidity())
+        ).mergeStyle(TextFormatting.BLUE));
     }
 
     @Override

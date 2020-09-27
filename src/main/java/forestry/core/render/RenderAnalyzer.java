@@ -40,7 +40,7 @@ public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
                 new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_pedestal.png"),
                 new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower1.png"),
                 new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower2.png"),
-        };
+                };
 
         pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);
         pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);

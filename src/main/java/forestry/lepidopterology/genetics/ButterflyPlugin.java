@@ -27,10 +27,12 @@ public class ButterflyPlugin extends DatabasePlugin<IButterfly> {
     protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
     private ButterflyPlugin() {
-        super(new ButterflyDatabaseTab(DatabaseMode.ACTIVE),
+        super(
+                new ButterflyDatabaseTab(DatabaseMode.ACTIVE),
                 new ButterflyDatabaseTab(DatabaseMode.INACTIVE),
                 new ButterflyProductsTab(),
-                new MutationsTab(() -> ButterflyDefinition.Glasswing.getMemberStack(EnumFlutterType.COCOON)));
+                new MutationsTab(() -> ButterflyDefinition.Glasswing.getMemberStack(EnumFlutterType.COCOON))
+        );
         NonNullList<ItemStack> butterflyList = NonNullList.create();
         LepidopterologyItems.BUTTERFLY_GE.item().addCreativeItems(butterflyList, false);
         for (ItemStack butterflyStack : butterflyList) {

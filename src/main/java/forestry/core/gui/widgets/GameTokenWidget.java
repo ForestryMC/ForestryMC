@@ -21,6 +21,7 @@ import forestry.core.tiles.EscritoireGameToken;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
@@ -80,7 +81,7 @@ public class GameTokenWidget extends Widget {
         TextureManagerForestry.getInstance().bindGuiTextureMap();
         for (String ident : getToken().getOverlayIcons()) {
             TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-            manager.gui.blit(
+            AbstractGui.blit(
                     transform,
                     startX + xPos + 3,
                     startY + yPos + 3,

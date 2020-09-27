@@ -36,6 +36,9 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
         percentFormat.setMaximumFractionDigits(2);
         String chanceString = String.valueOf(percentFormat.format(chance));
 
-        tooltips.get(index).add(new TranslationTextComponent("for.jei.chance", chanceString).mergeStyle(TextFormatting.GRAY));
+        tooltips.get(index).add(new TranslationTextComponent(
+                "for.jei.chance",
+                chanceString
+        ).mergeStyle(TextFormatting.GRAY));
     }
 }

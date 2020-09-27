@@ -60,7 +60,15 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
         // Fuel remaining
         int fertilizerRemain = tile.getMultiblockLogic().getController().getStoredFertilizerScaled(16);
         if (fertilizerRemain > 0) {
-            blit(transform, guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
+            blit(
+                    transform,
+                    guiLeft + 81,
+                    guiTop + 94 + 17 - fertilizerRemain,
+                    xSize,
+                    17 - fertilizerRemain,
+                    4,
+                    fertilizerRemain
+            );
         }
     }
 }

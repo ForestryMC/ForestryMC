@@ -95,7 +95,8 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing != null) {
                 SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
-                return LazyOptional.of(() -> sidedInvWrapper).cast();    //TODO - still not sure if I am doing this right
+                return LazyOptional.of(() -> sidedInvWrapper)
+                                   .cast();    //TODO - still not sure if I am doing this right
             } else {
                 InvWrapper invWrapper = new InvWrapper(getInternalInventory());
                 return LazyOptional.of(() -> invWrapper).cast();

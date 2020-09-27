@@ -1,8 +1,6 @@
 package forestry.farming.compat;
 
-import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
-import forestry.core.features.CoreItems;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import mezz.jei.api.IModPlugin;

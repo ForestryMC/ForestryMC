@@ -43,7 +43,11 @@ public final class ClimateStateHelper implements IClimateStateHelper {
     }
 
     public static boolean isNearTarget(IClimateState state, IClimateState target) {
-        return isNearTarget(ClimateType.HUMIDITY, state, target) && isNearTarget(ClimateType.TEMPERATURE, state, target);
+        return isNearTarget(ClimateType.HUMIDITY, state, target) && isNearTarget(
+                ClimateType.TEMPERATURE,
+                state,
+                target
+        );
     }
 
     public static boolean isNearTarget(ClimateType type, IClimateState state, IClimateState target) {

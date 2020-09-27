@@ -57,7 +57,12 @@ public class TreeGrowthHelper {
      * Uses a knownSaplings cache to avoid checking the same saplings multiple times.
      */
     @Nullable
-    private static BlockPos hasSufficientSaplingsAroundSapling(IGenome genome, IWorld world, BlockPos saplingPos, int expectedGirth) {
+    private static BlockPos hasSufficientSaplingsAroundSapling(
+            IGenome genome,
+            IWorld world,
+            BlockPos saplingPos,
+            int expectedGirth
+    ) {
         final int checkSize = (expectedGirth * 2) - 1;
         final int offset = expectedGirth - 1;
         final Map<BlockPos, Boolean> knownSaplings = new HashMap<>(checkSize * checkSize);
@@ -74,7 +79,13 @@ public class TreeGrowthHelper {
         return null;
     }
 
-    private static boolean checkForSaplings(IGenome genome, IWorld world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
+    private static boolean checkForSaplings(
+            IGenome genome,
+            IWorld world,
+            BlockPos startPos,
+            int girth,
+            Map<BlockPos, Boolean> knownSaplings
+    ) {
         for (int x = 0; x < girth; x++) {
             for (int z = 0; z < girth; z++) {
                 BlockPos checkPos = startPos.add(x, 0, z);
@@ -102,6 +113,7 @@ public class TreeGrowthHelper {
         }
 
         ITree tree = sapling.getTree();
-        return tree != null && tree.getGenome().getPrimary().getRegistryName().equals(genome.getPrimary().getRegistryName());
+        return tree != null && tree.getGenome().getPrimary().getRegistryName().equals(genome.getPrimary()
+                                                                                            .getRegistryName());
     }
 }

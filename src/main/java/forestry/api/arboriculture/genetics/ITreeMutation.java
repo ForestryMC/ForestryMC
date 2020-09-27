@@ -23,5 +23,12 @@ public interface ITreeMutation extends IMutation {
      * @return float representing the percent chance for mutation to occur, from 0.0 to 100.0.
      * @since Forestry 4.0
      */
-    float getChance(World world, BlockPos pos, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, IGenome genome0, IGenome genome1);
+    float getChance(
+            World world,
+            BlockPos pos,
+            IAlleleTreeSpecies allele0,
+            IAlleleTreeSpecies allele1,
+            IGenome genome0,
+            IGenome genome1
+    );
 }

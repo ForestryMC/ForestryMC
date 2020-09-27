@@ -42,7 +42,8 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
         @Override
         public boolean test(ItemStack stack) {
             //TODO - tag on seeds?
-            return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT || stack.getItem() == Items.WHEAT_SEEDS;
+            return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT ||
+                   stack.getItem() == Items.WHEAT_SEEDS;
         }
     }
 }

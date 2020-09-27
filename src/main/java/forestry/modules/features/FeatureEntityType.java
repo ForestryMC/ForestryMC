@@ -20,8 +20,14 @@ public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T
     @Nullable
     private EntityType<T> entityType;
 
-    public FeatureEntityType(String moduleID, String identifier, UnaryOperator<EntityType.Builder<T>> consumer, EntityType.IFactory<T> factory, EntityClassification classification,
-                             Supplier<AttributeModifierMap.MutableAttribute> attributes) {
+    public FeatureEntityType(
+            String moduleID,
+            String identifier,
+            UnaryOperator<EntityType.Builder<T>> consumer,
+            EntityType.IFactory<T> factory,
+            EntityClassification classification,
+            Supplier<AttributeModifierMap.MutableAttribute> attributes
+    ) {
         this.moduleID = moduleID;
         this.identifier = identifier;
         this.consumer = consumer;

@@ -52,7 +52,12 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
         super.addInformation(itemstack, world, list, flag);
 
         if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {

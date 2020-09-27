@@ -78,7 +78,10 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
                 continue;
             }
             String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
-            texturesTankLevels.put(tankLevel, new ResourceLocation(Constants.MOD_ID, "textures/block/machine_tank_" + tankLevelString + ".png"));
+            texturesTankLevels.put(
+                    tankLevel,
+                    new ResourceLocation(Constants.MOD_ID, "textures/block/machine_tank_" + tankLevelString + ".png")
+            );
         }
     }
 
@@ -98,7 +101,12 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
         render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, Direction.SOUTH, helper);
     }
 
-    private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, Direction orientation, RenderHelper helper) {
+    private void render(
+            TankRenderInfo resourceTankInfo,
+            TankRenderInfo productTankInfo,
+            Direction orientation,
+            RenderHelper helper
+    ) {
         Vector3f rotation = new Vector3f(0, 0, 0);
 
         switch (orientation) {
@@ -131,7 +139,12 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, RenderHelper helper) {
+    private void renderTank(
+            ModelRenderer tankModel,
+            ResourceLocation textureBase,
+            TankRenderInfo renderInfo,
+            RenderHelper helper
+    ) {
         helper.renderModel(textureBase, tankModel);
 
         ResourceLocation textureResourceTankLevel = texturesTankLevels.get(renderInfo.getLevel());

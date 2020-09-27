@@ -16,7 +16,11 @@ import net.minecraftforge.eventbus.api.Cancelable;
 @Cancelable
 public class BackpackResupplyEvent extends BackpackEvent {
 
-    public BackpackResupplyEvent(PlayerEntity player, IBackpackDefinition backpackDefinition, IInventory backpackInventory) {
+    public BackpackResupplyEvent(
+            PlayerEntity player,
+            IBackpackDefinition backpackDefinition,
+            IInventory backpackInventory
+    ) {
         super(player, backpackDefinition, backpackInventory);
     }
 

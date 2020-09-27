@@ -130,7 +130,14 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
             FluidStack fluidStack = productTank.getFluid();
             if (fluidStack != null) {
-                FluidHelper.fillContainers(tankManager, this, InventoryFermenter.SLOT_CAN_INPUT, InventoryFermenter.SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
+                FluidHelper.fillContainers(
+                        tankManager,
+                        this,
+                        InventoryFermenter.SLOT_CAN_INPUT,
+                        InventoryFermenter.SLOT_CAN_OUTPUT,
+                        fluidStack.getFluid(),
+                        true
+                );
             }
         }
     }
@@ -143,7 +150,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
         int fermented = Math.min(fermentationTime, fuelCurrentFerment);
         int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-        productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), IFluidHandler.FluidAction.EXECUTE);
+        productTank.fillInternal(
+                new FluidStack(currentRecipe.getOutput(), productAmount),
+                IFluidHandler.FluidAction.EXECUTE
+        );
 
         fuelBurnTime--;
         resourceTank.drain(fermented, IFluidHandler.FluidAction.EXECUTE);
@@ -240,7 +250,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
             int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
             Fluid output = currentRecipe.getOutput();
             FluidStack fluidStack = new FluidStack(output, productAmount);
-            hasFluidSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
+            hasFluidSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) ==
+                            fluidStack.getAmount();
         }
 
         IErrorLogic errorLogic = getErrorLogic();

@@ -87,11 +87,41 @@ public class ModuleFarming extends BlankForestryModule {
             registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
         }
 
-        registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-                new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
-                new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
-                new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
-                new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
+        registry.registerFarmables(
+                ForestryFarmIdentifier.CROPS,
+                new FarmableAgingCrop(
+                        new ItemStack(Items.WHEAT_SEEDS),
+                        Blocks.WHEAT,
+                        new ItemStack(Items.WHEAT),
+                        CropsBlock.AGE,
+                        7,
+                        0
+                ),
+                new FarmableAgingCrop(
+                        new ItemStack(Items.POTATO),
+                        Blocks.POTATOES,
+                        new ItemStack(Items.POTATO),
+                        CropsBlock.AGE,
+                        7,
+                        0
+                ),
+                new FarmableAgingCrop(
+                        new ItemStack(Items.CARROT),
+                        Blocks.CARROTS,
+                        new ItemStack(Items.CARROT),
+                        CropsBlock.AGE,
+                        7,
+                        0
+                ),
+                new FarmableAgingCrop(
+                        new ItemStack(Items.BEETROOT_SEEDS),
+                        Blocks.BEETROOTS,
+                        new ItemStack(Items.BEETROOT),
+                        BeetrootBlock.BEETROOT_AGE,
+                        3,
+                        0
+                )
+        );
 
 		/*BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
@@ -99,14 +129,29 @@ public class ModuleFarming extends BlankForestryModule {
 		BlockState plantedRedMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));*/
 
-        registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
-        registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON));
+        registry.registerFarmables(
+                ForestryFarmIdentifier.GOURD,
+                new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN)
+        );
+        registry.registerFarmables(
+                ForestryFarmIdentifier.GOURD,
+                new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON)
+        );
 
-        registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3));
+        registry.registerFarmables(
+                ForestryFarmIdentifier.INFERNAL,
+                new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3)
+        );
 
-        registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3));
+        registry.registerFarmables(
+                ForestryFarmIdentifier.POALES,
+                new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3)
+        );
 
-        registry.registerFarmables(ForestryFarmIdentifier.SUCCULENTES, new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
+        registry.registerFarmables(
+                ForestryFarmIdentifier.SUCCULENTES,
+                new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3)
+        );
 
         registry.registerFarmables(ForestryFarmIdentifier.ENDER, FarmableChorus.INSTANCE);
 

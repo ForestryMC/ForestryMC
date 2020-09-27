@@ -21,7 +21,13 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
     @Nullable
     private final IAllele allele;
 
-    public PacketFilterChangeGenome(BlockPos pos, Direction facing, short index, boolean active, @Nullable IAllele allele) {
+    public PacketFilterChangeGenome(
+            BlockPos pos,
+            Direction facing,
+            short index,
+            boolean active,
+            @Nullable IAllele allele
+    ) {
         this.pos = pos;
         this.facing = facing;
         this.index = index;
@@ -61,7 +67,12 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
             } else {
                 allele = null;
             }
-            LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
+            LazyOptional<IFilterLogic> logic = TileUtil.getInterface(
+                    player.world,
+                    pos,
+                    GeneticCapabilities.FILTER_LOGIC,
+                    null
+            );
             logic.ifPresent(l -> {
                 if (l.setGenomeFilter(facing, index, active, allele)) {
                     l.getNetworkHandler().sendToPlayers(l, player.getServerWorld(), player);

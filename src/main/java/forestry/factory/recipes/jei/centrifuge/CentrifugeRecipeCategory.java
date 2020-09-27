@@ -23,10 +23,20 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeRecipeWrapper> {
-    private static final int[][] OUTPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
+    private static final int[][] OUTPUTS = new int[][]{
+            {0, 0},
+            {1, 0},
+            {2, 0},
+            {0, 1},
+            {1, 1},
+            {2, 1},
+            {0, 2},
+            {1, 2},
+            {2, 2}
+    };
 
     private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = (o1, o2) -> o2.getValue()
-            .compareTo(o1.getValue());
+                                                                                                     .compareTo(o1.getValue());
 
     private static final int inputSlot = 0;
     private static final int outputSlot = 1;

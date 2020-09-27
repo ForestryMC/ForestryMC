@@ -28,7 +28,15 @@ public class Drawable {
         this(textureLocation, u, v, uWidth, vHeight, 256, 256);
     }
 
-    public Drawable(ResourceLocation textureLocation, int u, int v, int uWidth, int vHeight, int textureWidth, int textureHeight) {
+    public Drawable(
+            ResourceLocation textureLocation,
+            int u,
+            int v,
+            int uWidth,
+            int vHeight,
+            int textureWidth,
+            int textureHeight
+    ) {
         this.u = u;
         this.v = v;
         this.uWidth = uWidth;
@@ -50,7 +58,19 @@ public class Drawable {
         RenderSystem.enableAlphaTest();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        AbstractGui.blit(transform, xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+        AbstractGui.blit(
+                transform,
+                xOffset,
+                yOffset,
+                width,
+                height,
+                u,
+                v,
+                uWidth,
+                vHeight,
+                textureWidth,
+                textureHeight
+        );
         RenderSystem.disableAlphaTest();
         //AbstractGui.blit(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
     }

@@ -49,7 +49,12 @@ public class FruitProviderPod extends FruitProviderNone {
 
     private ProductListWrapper products;
 
-    public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack> dropOnMature) {
+    public FruitProviderPod(
+            String unlocalizedDescription,
+            IFruitFamily family,
+            EnumPodType type,
+            Supplier<ItemStack> dropOnMature
+    ) {
         super(unlocalizedDescription, family);
         this.type = type;
         this.products = ProductListWrapper.create();
@@ -85,7 +90,13 @@ public class FruitProviderPod extends FruitProviderNone {
             return BlockUtil.tryPlantCocoaPod(world, pos);
         } else {
             IAlleleFruit activeAllele = genome.getActiveAllele(TreeChromosomes.FRUITS);
-            return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getActiveValue(TreeChromosomes.YIELD), pos);
+            return TreeManager.treeRoot.setFruitBlock(
+                    world,
+                    genome,
+                    activeAllele,
+                    genome.getActiveValue(TreeChromosomes.YIELD),
+                    pos
+            );
         }
     }
 

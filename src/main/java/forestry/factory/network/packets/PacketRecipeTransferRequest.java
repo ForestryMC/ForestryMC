@@ -59,7 +59,11 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
                     index++;
                 }
 
-                NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
+                NetworkUtil.sendNetworkPacket(
+                        new PacketRecipeTransferUpdate(carpenter, craftingInventory),
+                        pos,
+                        player.world
+                );
             } else if (tile instanceof TileFabricator) {
                 TileFabricator fabricator = (TileFabricator) tile;
                 int index = 0;
@@ -68,7 +72,11 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
                     index++;
                 }
 
-                NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
+                NetworkUtil.sendNetworkPacket(
+                        new PacketRecipeTransferUpdate(fabricator, craftingInventory),
+                        pos,
+                        player.world
+                );
             }
         }
     }

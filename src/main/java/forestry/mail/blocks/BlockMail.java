@@ -18,7 +18,7 @@ import net.minecraftforge.common.ToolType;
 public class BlockMail extends BlockBase<BlockTypeMail> {
     public BlockMail(BlockTypeMail blockType) {
         super(blockType, Block.Properties.create(Material.IRON)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(0));
+                                         .harvestTool(ToolType.PICKAXE)
+                                         .harvestLevel(0));
     }
 }

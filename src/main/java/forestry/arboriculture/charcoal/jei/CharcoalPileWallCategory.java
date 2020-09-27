@@ -29,10 +29,20 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
         ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, "textures/gui/jei/recipes.png");
         arrow = helper.createDrawable(resourceLocation, 0, 14, 22, 16);
         IDrawableStatic arrowAnimated = helper.createDrawable(resourceLocation, 22, 14, 22, 16);
-        this.arrowAnimated = helper.createAnimatedDrawable(arrowAnimated, 160, IDrawableAnimated.StartDirection.LEFT, false);
+        this.arrowAnimated = helper.createAnimatedDrawable(
+                arrowAnimated,
+                160,
+                IDrawableAnimated.StartDirection.LEFT,
+                false
+        );
         flame = helper.createDrawable(resourceLocation, 0, 0, 14, 14);
         IDrawableStatic flameAnimated = helper.createDrawable(resourceLocation, 14, 0, 14, 14);
-        this.flameAnimated = helper.createAnimatedDrawable(flameAnimated, 260, IDrawableAnimated.StartDirection.TOP, true);
+        this.flameAnimated = helper.createAnimatedDrawable(
+                flameAnimated,
+                260,
+                IDrawableAnimated.StartDirection.TOP,
+                true
+        );
         this.slot = helper.getSlotDrawable();
         this.icon = helper.createDrawableIngredient(new ItemStack(CharcoalBlocks.CHARCOAL.getBlock()));
     }

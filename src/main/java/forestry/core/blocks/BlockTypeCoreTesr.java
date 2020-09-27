@@ -29,8 +29,14 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 
     private final IMachinePropertiesTesr machineProperties;
 
-    private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Supplier<FeatureTileType<? extends TileAnalyzer>> teClass, String name) {
-        MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
+    private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(
+            Supplier<FeatureTileType<? extends TileAnalyzer>> teClass,
+            String name
+    ) {
+        MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr.Builder<>(
+                teClass,
+                name
+        )
                 .setParticleTexture(name + ".0")
                 .setShape(VoxelShapes::fullCube)
                 .create();
@@ -38,7 +44,10 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
         return machineProperties;
     }
 
-    private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(Supplier<FeatureTileType<? extends TileEscritoire>> teClass, String name) {
+    private static IMachinePropertiesTesr<? extends TileEscritoire> createEscritoireProperties(
+            Supplier<FeatureTileType<? extends TileEscritoire>> teClass,
+            String name
+    ) {
         final VoxelShape desk = Block.makeCuboidShape(0D, 8D, 0D, 16, 16, 16);
         final VoxelShape standRB = Block.makeCuboidShape(13D, 0D, 13D, 15, 10, 15);
         final VoxelShape standRF = Block.makeCuboidShape(13D, 0D, 1D, 15, 10, 3);
@@ -46,7 +55,10 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
         final VoxelShape standLF = Block.makeCuboidShape(1D, 0D, 1D, 3, 10, 3);
         //final VoxelShape drawers = Block.makeCuboidShape(-7.5D, -2D, 4.5D, 15, 5, 3);
 
-        MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
+        MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr.Builder<>(
+                teClass,
+                name
+        )
                 .setParticleTexture(name + ".0")
                 .setShape(() -> VoxelShapes.or(desk, standLB, standLF, standRB, standRF))
                 .create();

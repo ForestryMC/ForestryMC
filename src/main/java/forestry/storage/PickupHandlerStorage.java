@@ -30,7 +30,8 @@ public class PickupHandlerStorage implements IPickupHandler {
         }
 
         // Do not pick up if a backpack is open
-        if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistBackpack) {
+        if (player.openContainer instanceof ContainerBackpack ||
+            player.openContainer instanceof ContainerNaturalistBackpack) {
             return false;
         }
 

@@ -36,7 +36,12 @@ public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
         // Collected Stamps
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlot(new SlotOutput(tile, j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
+                addSlot(new SlotOutput(
+                        tile,
+                        j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1,
+                        8 + j * 18,
+                        46 + i * 18
+                ));
             }
         }
     }

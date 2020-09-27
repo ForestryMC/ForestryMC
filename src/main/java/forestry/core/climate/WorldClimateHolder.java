@@ -26,7 +26,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class WorldClimateHolder extends WorldSavedData implements IWorldClimateHolder {
-    private static final TransformerData DEFAULT_DATA = new TransformerData(0L, ClimateStateHelper.INSTANCE.absent(), 0, false, new long[0]);
+    private static final TransformerData DEFAULT_DATA = new TransformerData(
+            0L,
+            ClimateStateHelper.INSTANCE.absent(),
+            0,
+            false,
+            new long[0]
+    );
 
     static final String NAME = "forestry_climate";
 
@@ -150,7 +156,9 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
         long longPos = position.toLong();
         TransformerData data = transformers.get(longPos);
         if (data != null) {
-            boolean needChunkUpdate = data.range != transformer.getRange() || data.circular != transformer.isCircular() || data.chunks.length == 0;
+            boolean needChunkUpdate =
+                    data.range != transformer.getRange() || data.circular != transformer.isCircular() ||
+                    data.chunks.length == 0;
             boolean needClimateUpdate = !data.climateState.equals(transformer.getCurrent());
             data.climateState = transformer.getCurrent().toImmutable();
             if (needChunkUpdate) {
@@ -164,7 +172,16 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
             }
         } else {
             long[] transformerChunks = updateTransformerChunks(transformer, false);
-            transformers.put(longPos, new TransformerData(longPos, transformer.getCurrent().toImmutable(), transformer.getRange(), transformer.isCircular(), transformerChunks));
+            transformers.put(
+                    longPos,
+                    new TransformerData(
+                            longPos,
+                            transformer.getCurrent().toImmutable(),
+                            transformer.getRange(),
+                            transformer.isCircular(),
+                            transformerChunks
+                    )
+            );
         }
         setDirty(true);
     }
@@ -226,7 +243,8 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
             double distance = Math.round(blockPos.getDistance(pos));
             return range > 0.0F && distance <= range;
         }
-        return MathHelper.abs(blockPos.getX() - pos.getX()) <= range && MathHelper.abs(blockPos.getZ() - pos.getZ()) <= range;
+        return MathHelper.abs(blockPos.getX() - pos.getX()) <= range && MathHelper.abs(blockPos.getZ() - pos.getZ()) <=
+                                                                        range;
     }
 
     @Override
@@ -243,7 +261,8 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
                 transformerCount++;
             }
         }
-        return transformerCount > 0 ? state.multiply(1.0D / transformerCount).toImmutable() : ClimateStateHelper.INSTANCE.absent();
+        return transformerCount > 0 ? state.multiply(1.0D / transformerCount).toImmutable()
+                                    : ClimateStateHelper.INSTANCE.absent();
     }
 
     @Override

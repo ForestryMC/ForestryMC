@@ -14,8 +14,20 @@ import forestry.modules.features.ModFeatureRegistry;
 public class EnergyContainers {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleEnergy.class);
 
-    public static final FeatureContainerType<ContainerEngineElectric> ENGINE_ELECTRIC = REGISTRY.container(ContainerEngineElectric::fromNetwork, "engine_electric");
-    public static final FeatureContainerType<ContainerEngineBiogas> ENGINE_BIOGAS = REGISTRY.container(ContainerEngineBiogas::fromNetwork, "engine_biogas");
-    public static final FeatureContainerType<ContainerEnginePeat> ENGINE_PEAT = REGISTRY.container(ContainerEnginePeat::fromNetwork, "engine_peat");
-    public static final FeatureContainerType<ContainerGenerator> GENERATOR = REGISTRY.container(ContainerGenerator::fromNetwork, "generator");
+    public static final FeatureContainerType<ContainerEngineElectric> ENGINE_ELECTRIC = REGISTRY.container(
+            ContainerEngineElectric::fromNetwork,
+            "engine_electric"
+    );
+    public static final FeatureContainerType<ContainerEngineBiogas> ENGINE_BIOGAS = REGISTRY.container(
+            ContainerEngineBiogas::fromNetwork,
+            "engine_biogas"
+    );
+    public static final FeatureContainerType<ContainerEnginePeat> ENGINE_PEAT = REGISTRY.container(
+            ContainerEnginePeat::fromNetwork,
+            "engine_peat"
+    );
+    public static final FeatureContainerType<ContainerGenerator> GENERATOR = REGISTRY.container(
+            ContainerGenerator::fromNetwork,
+            "generator"
+    );
 }

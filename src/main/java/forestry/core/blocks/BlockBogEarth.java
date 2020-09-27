@@ -38,11 +38,11 @@ public class BlockBogEarth extends Block {
 
     public BlockBogEarth() {
         super(Block.Properties.create(Material.EARTH)
-                .tickRandomly()
-                .hardnessAndResistance(0.5f)
-                .sound(SoundType.GROUND)
-                .harvestTool(ToolType.SHOVEL)
-                .harvestLevel(0));
+                              .tickRandomly()
+                              .hardnessAndResistance(0.5f)
+                              .sound(SoundType.GROUND)
+                              .harvestTool(ToolType.SHOVEL)
+                              .harvestLevel(0));
 
         setDefaultState(this.getStateContainer().getBaseState().with(MATURITY, 0));
     }
@@ -82,7 +82,13 @@ public class BlockBogEarth extends Block {
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
+    public boolean canSustainPlant(
+            BlockState state,
+            IBlockReader world,
+            BlockPos pos,
+            Direction direction,
+            IPlantable plantable
+    ) {
         return false;
     }
 }

@@ -20,7 +20,12 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class ItemInventoryBackpackPaged extends ItemInventoryBackpack implements IPagedInventory {
     private final ItemBackpackNaturalist backpackNaturalist;
 
-    public ItemInventoryBackpackPaged(PlayerEntity player, int size, ItemStack itemstack, ItemBackpackNaturalist backpackNaturalist) {
+    public ItemInventoryBackpackPaged(
+            PlayerEntity player,
+            int size,
+            ItemStack itemstack,
+            ItemBackpackNaturalist backpackNaturalist
+    ) {
         super(player, size, itemstack);
         this.backpackNaturalist = backpackNaturalist;
     }

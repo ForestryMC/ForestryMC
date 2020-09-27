@@ -21,7 +21,13 @@ import java.util.Collection;
 public class GrowthRuleNone implements IFlowerGrowthRule {
 
     @Override
-    public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+    public boolean growFlower(
+            IFlowerGrowthHelper helper,
+            String flowerType,
+            ServerWorld world,
+            BlockPos pos,
+            Collection<BlockState> potentialFlowers
+    ) {
         return true;
     }
 }

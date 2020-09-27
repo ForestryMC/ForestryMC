@@ -66,7 +66,8 @@ public class FeaturePadauk extends FeatureTree {
                     int branchSpawnY = branchSpawn;
 
                     for (int j = 1; j < branchLength + 1; j++) {
-                        if (j == branchLength && rand.nextBoolean()) { //Just adding a bit of variation to the ends for character
+                        if (j == branchLength &&
+                            rand.nextBoolean()) { //Just adding a bit of variation to the ends for character
                             branchSpawnY += 1;
                         }
 

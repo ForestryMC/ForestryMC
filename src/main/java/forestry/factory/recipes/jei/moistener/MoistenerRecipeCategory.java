@@ -36,11 +36,22 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
         super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "block.forestry.moistener");
 
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 91, 29, 55);
-        this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
+        this.arrow = guiHelper.createAnimatedDrawable(
+                arrowDrawable,
+                80,
+                IDrawableAnimated.StartDirection.BOTTOM,
+                false
+        );
         IDrawableStatic progressBar = guiHelper.createDrawable(guiTexture, 176, 74, 16, 15);
-        this.progressBar = guiHelper.createAnimatedDrawable(progressBar, 160, IDrawableAnimated.StartDirection.LEFT, false);
+        this.progressBar = guiHelper.createAnimatedDrawable(
+                progressBar,
+                160,
+                IDrawableAnimated.StartDirection.LEFT,
+                false
+        );
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.MOISTENER).block()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.MOISTENER)
+                                                                                       .block()));
     }
 
     @Override

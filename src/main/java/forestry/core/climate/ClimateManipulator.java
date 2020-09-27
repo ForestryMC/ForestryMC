@@ -22,7 +22,15 @@ public class ClimateManipulator implements IClimateManipulator {
     private final boolean backwards;
     private final ClimateType type;
 
-    private ClimateManipulator(IClimateState targetedState, IClimateState defaultState, IClimateState currentState, BiFunction<ClimateType, IClimateManipulator, Float> changeSupplier, Consumer<IClimateState> onFinish, boolean backwards, ClimateType type) {
+    private ClimateManipulator(
+            IClimateState targetedState,
+            IClimateState defaultState,
+            IClimateState currentState,
+            BiFunction<ClimateType, IClimateManipulator, Float> changeSupplier,
+            Consumer<IClimateState> onFinish,
+            boolean backwards,
+            ClimateType type
+    ) {
         IClimateState current = currentState.isPresent() ? currentState : defaultState;
         this.targetedState = targetedState;
         this.defaultState = defaultState;
@@ -89,10 +97,13 @@ public class ClimateManipulator implements IClimateManipulator {
             return true;
         }
         float change = changeSupplier.apply(type, this);
-        boolean rightDirection = difference.getClimate(type) > 0.0F && change > 0.0F || difference.getClimate(type) < 0.0F && change < 0.0F;
+        boolean rightDirection = difference.getClimate(type) > 0.0F && change > 0.0F ||
+                                 difference.getClimate(type) < 0.0F && change < 0.0F;
         if (!rightDirection) {
             IClimateState diffToDefault = startState.subtract(defaultState);
-            return backwards || (diffToDefault.getClimate(type) > 0.0F && change > 0.0F || diffToDefault.getClimate(type) < 0.0F && change < 0.0F);
+            return backwards || (
+                    diffToDefault.getClimate(type) > 0.0F && change > 0.0F ||
+                    diffToDefault.getClimate(type) < 0.0F && change < 0.0F);
         }
         return true;
     }
@@ -116,12 +127,15 @@ public class ClimateManipulator implements IClimateManipulator {
         float change = changeSupplier.apply(type, this);
         //Create a mutable state that contains the current change.
         IClimateState changeState = ClimateStateHelper.INSTANCE.create(type, change).toMutable();
-        boolean rightDirection = difference.getClimate(type) > 0.0F && change > 0.0F || difference.getClimate(type) < 0.0F && change < 0.0F;
+        boolean rightDirection = difference.getClimate(type) > 0.0F && change > 0.0F ||
+                                 difference.getClimate(type) < 0.0F && change < 0.0F;
         if (!rightDirection) {
             IClimateState diffToDefault = startState.subtract(defaultState);
             //Check if 'bothDirections' is true or if the difference to the default state has the same direction like the change state.
             //The Second one allows to go back to the default state if the current target is above, if the change is negative, or below, if the change is positive, the last targeted state.
-            if (!worked || backwards || (diffToDefault.getClimate(type) > 0.0F && change > 0.0F || diffToDefault.getClimate(type) < 0.0F && change < 0.0F)) {
+            if (!worked || backwards || (
+                    diffToDefault.getClimate(type) > 0.0F && change > 0.0F ||
+                    diffToDefault.getClimate(type) < 0.0F && change < 0.0F)) {
                 //If so negate the current change so we can go back the targeted state.
                 changeState.multiply(-1.0F);
             } else {
@@ -144,7 +158,8 @@ public class ClimateManipulator implements IClimateManipulator {
     }
 
     private static boolean canRound(float diff) {
-        return BigDecimal.valueOf(MathHelper.abs(diff)).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue() <= ClimateStateHelper.CLIMATE_CHANGE;
+        return BigDecimal.valueOf(MathHelper.abs(diff)).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue() <=
+               ClimateStateHelper.CLIMATE_CHANGE;
     }
 
     public static class Builder implements IClimateManipulatorBuilder {
@@ -210,7 +225,15 @@ public class ClimateManipulator implements IClimateManipulator {
             Preconditions.checkNotNull(currentState);
             Preconditions.checkNotNull(changeSupplier);
             Preconditions.checkNotNull(type);
-            return new ClimateManipulator(targetedState, defaultState, currentState, changeSupplier, onFinish, backwards, type);
+            return new ClimateManipulator(
+                    targetedState,
+                    defaultState,
+                    currentState,
+                    changeSupplier,
+                    onFinish,
+                    backwards,
+                    type
+            );
         }
     }
 }

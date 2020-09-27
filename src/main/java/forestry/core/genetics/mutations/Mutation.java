@@ -187,7 +187,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
     @Override
     public boolean isPartner(IAllele allele) {
         return firstParent.getRegistryName().equals(allele.getRegistryName()) || secondParent.getRegistryName()
-                .equals(allele.getRegistryName());
+                                                                                             .equals(allele.getRegistryName());
     }
 
     @Override
@@ -209,9 +209,9 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
     @Override
     public String toString() {
         MoreObjects.ToStringHelper stringHelper = MoreObjects.toStringHelper(this)
-                .add("first", firstParent)
-                .add("second", secondParent)
-                .add("result", template[0]);
+                                                             .add("first", firstParent)
+                                                             .add("second", secondParent)
+                                                             .add("result", template[0]);
         if (!specialConditions.isEmpty()) {
             stringHelper.add("conditions", getSpecialConditions());
         }

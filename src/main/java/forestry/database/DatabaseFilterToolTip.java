@@ -15,7 +15,10 @@ public class DatabaseFilterToolTip extends DatabaseFilter {
 
     @Override
     public boolean test(ItemStack itemStack) {
-        List<ITextComponent> lines = itemStack.getTooltip(Minecraft.getInstance().player, ITooltipFlag.TooltipFlags.NORMAL);
+        List<ITextComponent> lines = itemStack.getTooltip(
+                Minecraft.getInstance().player,
+                ITooltipFlag.TooltipFlags.NORMAL
+        );
         if (lines.size() <= 1) {
             return false;
         }

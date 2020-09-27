@@ -17,8 +17,8 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock {
 
     public BlockDecorativeWoodPile() {
         super(Block.Properties.create(Material.WOOD)
-                .sound(SoundType.WOOD)
-                .hardnessAndResistance(1.5f));
+                              .sound(SoundType.WOOD)
+                              .hardnessAndResistance(1.5f));
         //		setCreativeTab(ModuleCharcoal.getTag());
         //TODO creative tab
     }

@@ -44,7 +44,8 @@ public class ColourProperties implements ISelectiveResourceReloadListener {
     @Override    //TODO - actually be selective
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> pred) {
         try {
-            InputStream defaultFontStream = ColourProperties.class.getResourceAsStream("/config/forestry/colour.properties");
+            InputStream defaultFontStream = ColourProperties.class.getResourceAsStream(
+                    "/config/forestry/colour.properties");
             mappings.load(defaultFontStream);
             defaultMappings.load(defaultFontStream);
 

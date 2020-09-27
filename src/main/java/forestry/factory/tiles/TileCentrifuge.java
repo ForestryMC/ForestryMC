@@ -202,8 +202,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
         }
 
         return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
-                .getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
-                .getMaxStackSize() > percentage;
+                                .getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
+                                                               .getMaxStackSize() > percentage;
     }
 
     @Override

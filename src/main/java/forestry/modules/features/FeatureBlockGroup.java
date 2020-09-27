@@ -20,7 +20,11 @@ public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends
 
     @Override
     protected FeatureBlock<B, BlockItem> createFeature(Builder<B, S> builder, S type) {
-        return builder.registry.block(() -> builder.constructor.apply(type), builder.itemConstructor != null ? (block) -> builder.itemConstructor.apply(block, type) : null, builder.getIdentifier(type));
+        return builder.registry.block(
+                () -> builder.constructor.apply(type),
+                builder.itemConstructor != null ? (block) -> builder.itemConstructor.apply(block, type) : null,
+                builder.getIdentifier(type)
+        );
     }
 
     public Collection<B> getBlocks() {
@@ -28,15 +32,16 @@ public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends
     }
 
     public Collection<BlockItem> getItems() {
-        return featureByType.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(Collectors.toList());
+        return featureByType.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(
+                Collectors.toList());
     }
 
     @Nullable
     public BlockState findState(String typeName) {
         Optional<FeatureBlock> block = featureByType.entrySet().stream()
-                .filter(e -> e.getKey().getString().equals(typeName))
-                .findFirst()
-                .flatMap(e -> Optional.of(e.getValue()));
+                                                    .filter(e -> e.getKey().getString().equals(typeName))
+                                                    .findFirst()
+                                                    .flatMap(e -> Optional.of(e.getValue()));
         return block.map(FeatureBlock::defaultState).orElse(null);
     }
 

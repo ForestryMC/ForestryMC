@@ -74,22 +74,42 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
             getOrCreateBuilder(BlockTags.WOODEN_SLABS).add(ArboricultureBlocks.SLABS_VANILLA_FIREPROOF.blockArray());
 
             getOrCreateBuilder(BlockTags.SAPLINGS).add(ArboricultureBlocks.SAPLING_GE.block());
-            getOrCreateBuilder(BlockTags.LEAVES).add(ArboricultureBlocks.LEAVES.block()).add(ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.blockArray()).add(ArboricultureBlocks.LEAVES_DEFAULT.blockArray()).add(ArboricultureBlocks.LEAVES_DECORATIVE.blockArray());
+            getOrCreateBuilder(BlockTags.LEAVES).add(ArboricultureBlocks.LEAVES.block())
+                                                .add(ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.blockArray())
+                                                .add(ArboricultureBlocks.LEAVES_DEFAULT.blockArray())
+                                                .add(ArboricultureBlocks.LEAVES_DECORATIVE.blockArray());
 
             //getOrCreateBuilder(Tags.Blocks.CHESTS).add(registry.treeChest);
             //getOrCreateBuilder(Tags.Blocks.CHESTS_WOODEN).add(registry.treeChest);
         }
 
-        addToTag(Tags.Blocks.ORES, ForestryTags.Blocks.ORES_COPPER, ForestryTags.Blocks.ORES_TIN, ForestryTags.Blocks.ORES_APATITE);
-        getOrCreateBuilder(ForestryTags.Blocks.ORES_COPPER).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
+        addToTag(
+                Tags.Blocks.ORES,
+                ForestryTags.Blocks.ORES_COPPER,
+                ForestryTags.Blocks.ORES_TIN,
+                ForestryTags.Blocks.ORES_APATITE
+        );
+        getOrCreateBuilder(ForestryTags.Blocks.ORES_COPPER).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER)
+                                                                                       .block());
         getOrCreateBuilder(ForestryTags.Blocks.ORES_TIN).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
-        getOrCreateBuilder(ForestryTags.Blocks.ORES_APATITE).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).block());
+        getOrCreateBuilder(ForestryTags.Blocks.ORES_APATITE).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)
+                                                                                        .block());
 
-        addToTag(Tags.Blocks.STORAGE_BLOCKS, ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Blocks.STORAGE_BLOCKS_TIN);
-        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.APATITE).block());
-        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_TIN).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).block());
-        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).block());
-        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).block());
+        addToTag(
+                Tags.Blocks.STORAGE_BLOCKS,
+                ForestryTags.Blocks.STORAGE_BLOCKS_APATITE,
+                ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE,
+                ForestryTags.Blocks.STORAGE_BLOCKS_COPPER,
+                ForestryTags.Blocks.STORAGE_BLOCKS_TIN
+        );
+        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE).add(CoreBlocks.RESOURCE_STORAGE.get(
+                EnumResourceType.APATITE).block());
+        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_TIN).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN)
+                                                                                                  .block());
+        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER).add(CoreBlocks.RESOURCE_STORAGE.get(
+                EnumResourceType.COPPER).block());
+        getOrCreateBuilder(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).add(CoreBlocks.RESOURCE_STORAGE.get(
+                EnumResourceType.BRONZE).block());
     }
 
     @SafeVarargs

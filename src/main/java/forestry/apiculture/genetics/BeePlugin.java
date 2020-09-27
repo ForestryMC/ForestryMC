@@ -28,10 +28,12 @@ public class BeePlugin extends DatabasePlugin<IBee> {
     protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
     private BeePlugin() {
-        super(new BeeDatabaseTab(DatabaseMode.ACTIVE),
+        super(
+                new BeeDatabaseTab(DatabaseMode.ACTIVE),
                 new BeeDatabaseTab(DatabaseMode.INACTIVE),
                 new ProductsTab(() -> ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY)),
-                new MutationsTab(ApicultureItems.FRAME_IMPREGNATED::stack));
+                new MutationsTab(ApicultureItems.FRAME_IMPREGNATED::stack)
+        );
         NonNullList<ItemStack> beeList = NonNullList.create();
         ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
         for (ItemStack beeStack : beeList) {

@@ -17,7 +17,12 @@ public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T
     private TileEntityType<T> tileType;
     private final Supplier<Collection<? extends Block>> validBlocks;
 
-    public FeatureTileType(String moduleID, String identifier, Supplier<T> constructorTileEntity, Supplier<Collection<? extends Block>> validBlocks) {
+    public FeatureTileType(
+            String moduleID,
+            String identifier,
+            Supplier<T> constructorTileEntity,
+            Supplier<Collection<? extends Block>> validBlocks
+    ) {
         this.moduleID = moduleID;
         this.identifier = identifier;
         this.constructorTileEntity = constructorTileEntity;

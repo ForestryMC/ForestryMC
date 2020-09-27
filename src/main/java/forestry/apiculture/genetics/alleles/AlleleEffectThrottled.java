@@ -21,7 +21,13 @@ public abstract class AlleleEffectThrottled extends AlleleEffect {
     private final int throttle;
     private boolean requiresWorkingQueen = false;
 
-    protected AlleleEffectThrottled(String name, boolean isDominant, int throttle, boolean requiresWorking, boolean isCombinable) {
+    protected AlleleEffectThrottled(
+            String name,
+            boolean isDominant,
+            int throttle,
+            boolean requiresWorking,
+            boolean isCombinable
+    ) {
         super(name, isDominant);
         this.throttle = throttle;
         this.isCombinable = isCombinable;

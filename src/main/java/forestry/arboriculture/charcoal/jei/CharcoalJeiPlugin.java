@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class CharcoalJeiPlugin implements IModPlugin {
     public static final ResourceLocation RECIPE_UID = new ResourceLocation(Constants.MOD_ID, "forestry.charcoal.pile");
+
     @Override
     public ResourceLocation getPluginUid() {
         return RECIPE_UID;
@@ -29,7 +30,7 @@ public class CharcoalJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-//        registration.addRecipes(TreeManager.charcoalManager.getWalls(), getPluginUid());
+        registration.addRecipes(TreeManager.charcoalManager.getWalls(), getPluginUid());
     }
 
     @Override
@@ -50,7 +51,8 @@ public class CharcoalJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         ICharcoalManager charcoalManager = TreeManager.charcoalManager;
-        if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CHARCOAL)) || charcoalManager == null) {
+        if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CHARCOAL)) ||
+            charcoalManager == null) {
             return;
         }
 
