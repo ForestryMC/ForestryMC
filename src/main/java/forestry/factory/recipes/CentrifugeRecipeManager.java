@@ -41,7 +41,7 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 	}
 
 	@Nullable
-	public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
+	public ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return null;
 		}

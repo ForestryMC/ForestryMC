@@ -52,7 +52,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		//TODO json
 	}
 
-	public static RecipePair<ICarpenterRecipe> findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
+	public RecipePair<ICarpenterRecipe> findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
 		for (ICarpenterRecipe recipe : recipes) {
 			String[][] resourceDicts = matches(recipe, liquid, item, CraftingInventory);
 			if (resourceDicts != null) {
@@ -63,7 +63,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	@Nullable
-	public static String[][] matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
+	public String[][] matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
 		if (recipe == null) {
 			return null;
 		}
@@ -84,7 +84,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return RecipeUtil.matches(internal, craftingInventory);
 	}
 
-	public static boolean isBox(ItemStack resource) {
+	public boolean isBox(ItemStack resource) {
 		if (resource.isEmpty()) {
 			return false;
 		}
@@ -104,7 +104,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return recipes.add(recipe);
 	}
 
-	public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
+	public Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -115,7 +115,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		}).collect(Collectors.toList());
 	}
 
-	public static Set<Fluid> getRecipeFluids() {
+	public Set<Fluid> getRecipeFluids() {
 		if (recipeFluids.isEmpty()) {
 			for (ICarpenterRecipe recipe : recipes) {
 				FluidStack fluidStack = recipe.getFluidResource();

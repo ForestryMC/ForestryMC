@@ -41,7 +41,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		//		addRecipe(recipe);
 	}
 
-	public static RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
+	public RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
 		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
 		for (IFabricatorRecipe recipe : recipes) {
@@ -57,7 +57,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		return RecipePair.EMPTY;
 	}
 
-	public static boolean isPlan(ItemStack plan) {
+	public boolean isPlan(ItemStack plan) {
 		for (IFabricatorRecipe recipe : recipes) {
 			if (ItemStackUtil.isIdenticalItem(recipe.getPlan(), plan)) {
 				return true;
@@ -72,7 +72,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		return recipes.add(recipe);
 	}
 
-	public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
+	public Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
 		}

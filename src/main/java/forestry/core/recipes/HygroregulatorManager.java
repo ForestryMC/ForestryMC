@@ -24,7 +24,7 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 	}
 
 	@Nullable
-	public static IHygroregulatorRecipe findMatchingRecipe(FluidStack liquid) {
+	public IHygroregulatorRecipe findMatchingRecipe(FluidStack liquid) {
 		if (liquid.getAmount() <= 0) {
 			return null;
 		}
@@ -42,7 +42,7 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 		return recipes.add(recipe);
 	}
 
-	public static Set<Fluid> getRecipeFluids() {
+	public Set<Fluid> getRecipeFluids() {
 		if (recipeFluids.isEmpty()) {
 			for (IHygroregulatorRecipe recipe : recipes) {
 				FluidStack fluidStack = recipe.getResource();

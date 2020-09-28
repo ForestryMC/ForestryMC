@@ -62,7 +62,7 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 	}
 
 	@Nullable
-	public static ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
+	public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
 		if (!FluidHelper.isDrainableFilledContainer(filledContainer)) {
 			return null;
 		}
@@ -71,7 +71,7 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 	}
 
 	@Nullable
-	public static ISqueezerRecipe findMatchingRecipe(NonNullList<ItemStack> items) {
+	public ISqueezerRecipe findMatchingRecipe(NonNullList<ItemStack> items) {
 		// Find container recipes
 		for (ItemStack itemStack : items) {
 			ISqueezerContainerRecipe containerRecipe = findMatchingContainerRecipe(itemStack);
@@ -92,7 +92,7 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 		return null;
 	}
 
-	public static boolean canUse(ItemStack itemStack) {
+	public boolean canUse(ItemStack itemStack) {
 		for (ISqueezerRecipe recipe : recipes) {
 			for (ItemStack recipeInput : recipe.getResources()) {
 				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, true, false)) {

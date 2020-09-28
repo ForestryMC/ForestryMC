@@ -34,7 +34,7 @@ public class StillRecipeManager implements IStillManager {
 	}
 
 	@Nullable
-	public static IStillRecipe findMatchingRecipe(@Nullable FluidStack item) {
+	public IStillRecipe findMatchingRecipe(@Nullable FluidStack item) {
 		if (item == null) {
 			return null;
 		}
@@ -46,7 +46,7 @@ public class StillRecipeManager implements IStillManager {
 		return null;
 	}
 
-	public static boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
+	public boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
 		if (recipe == null || item == null) {
 			return false;
 		}

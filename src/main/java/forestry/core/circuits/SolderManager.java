@@ -39,7 +39,7 @@ public class SolderManager implements ISolderManager {
 	}
 
 	@Nullable
-	public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
+	public ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
 		ISolderRecipe circuitRecipe = getMatchingRecipe(layout, resource);
 		if (circuitRecipe == null) {
 			return null;
@@ -48,7 +48,7 @@ public class SolderManager implements ISolderManager {
 	}
 
 	@Nullable
-	public static ISolderRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
+	public ISolderRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
 		if (layout != null) {
 			for (ISolderRecipe recipe : recipes) {
 				if (recipe.matches(layout, resource)) {

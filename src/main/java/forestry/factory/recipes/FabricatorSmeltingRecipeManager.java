@@ -31,7 +31,7 @@ import forestry.api.recipes.IForestryRecipe;
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
 
 	@Nullable
-	public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
+	public IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
 		if (resource.isEmpty()) {
 			return null;
 		}
@@ -55,7 +55,7 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 		return recipes.add(recipe);
 	}
 
-	public static Set<Fluid> getRecipeFluids() {
+	public Set<Fluid> getRecipeFluids() {
 		if (recipeFluids.isEmpty()) {
 			for (IFabricatorSmeltingRecipe recipe : recipes) {
 				FluidStack fluidStack = recipe.getProduct();

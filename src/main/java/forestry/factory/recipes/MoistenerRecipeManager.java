@@ -32,7 +32,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 		addRecipe(recipe);
 	}
 
-	public static boolean isResource(ItemStack resource) {
+	public boolean isResource(ItemStack resource) {
 		if (resource.isEmpty()) {
 			return false;
 		}
@@ -47,7 +47,7 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 	}
 
 	@Nullable
-	public static IMoistenerRecipe findMatchingRecipe(ItemStack item) {
+	public IMoistenerRecipe findMatchingRecipe(ItemStack item) {
 		for (IMoistenerRecipe recipe : recipes) {
 			if (recipe.getResource().test(item)) {
 				return recipe;

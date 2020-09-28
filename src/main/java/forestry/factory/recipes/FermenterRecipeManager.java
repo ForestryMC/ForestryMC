@@ -55,7 +55,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 	}
 
 	@Nullable
-	public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
+	public IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
 		if (res.isEmpty()) {
 			return null;
 		}
@@ -67,7 +67,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		return null;
 	}
 
-	public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
+	public boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
 		Ingredient resource = recipe.getResource();
 		if (!resource.test(res)) {
 			return false;
@@ -77,7 +77,7 @@ public class FermenterRecipeManager implements IFermenterManager {
 		return liqu.isFluidEqual(fluid);
 	}
 
-	public static boolean isResource(ItemStack resource) {
+	public boolean isResource(ItemStack resource) {
 		if (resource.isEmpty()) {
 			return false;
 		}
