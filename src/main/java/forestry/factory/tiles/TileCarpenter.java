@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Optional;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,6 +36,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -123,12 +125,11 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		//TODO optional could work quite well here
-		if (CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory) == null) {
-			RecipePair<ICarpenterRecipe> recipePair = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
-			currentRecipe = recipePair.getRecipe();
-			oreDicts = recipePair.getOreDictEntries();
+		if (!RecipeManagers.carpenterManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory)) {
+			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(world.getRecipeManager(), resourceTank.getFluid(), getBoxStack(), craftingInventory);
+			currentRecipe = optional.orElse(null);
 
-			if (!recipePair.isEmpty() && currentRecipe != null) {
+			if (optional.isPresent()) {
 				int recipeTime = currentRecipe.getPackagingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);

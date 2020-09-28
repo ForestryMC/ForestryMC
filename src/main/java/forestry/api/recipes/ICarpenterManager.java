@@ -6,8 +6,11 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -54,4 +57,16 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
+
+	/**
+	 * Finds the matching recipe
+	 *
+	 * @param liquid            Present liquid
+	 * @param item              Present item
+	 * @param CraftingInventory Present inventory
+	 * @return An optional carpenter recipe if any matches
+	 */
+	Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory CraftingInventory);
+
+	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory);
 }

@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,36 +53,37 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		//TODO json
 	}
 
-	public RecipePair<ICarpenterRecipe> findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
-		for (ICarpenterRecipe recipe : recipes) {
-			String[][] resourceDicts = matches(recipe, liquid, item, CraftingInventory);
-			if (resourceDicts != null) {
-				return new RecipePair<>(recipe, resourceDicts);
+	@Override
+	public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
+		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
+			if (matches(recipe, liquid, item, CraftingInventory)) {
+				return Optional.of(recipe);
 			}
 		}
-		return RecipePair.EMPTY;
+
+		return Optional.empty();
 	}
 
-	@Nullable
-	public String[][] matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
+	@Override
+	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
 		if (recipe == null) {
-			return null;
+			return false;
 		}
 
 		FluidStack liquid = recipe.getFluidResource();
 		if (!liquid.isEmpty()) {
 			if (resource.isEmpty() || !resource.containsFluid(liquid)) {
-				return null;
+				return false;
 			}
 		}
 
 		Ingredient box = recipe.getBox();
 		if (!box.hasNoMatchingItems() && !box.test(item)) {
-			return null;
+			return false;
 		}
 
 		ShapedRecipe internal = recipe.getCraftingGridRecipe();
-		return RecipeUtil.matches(internal, craftingInventory);
+		return RecipeUtil.matches(internal, craftingInventory) != null;
 	}
 
 	public boolean isBox(ItemStack resource) {
