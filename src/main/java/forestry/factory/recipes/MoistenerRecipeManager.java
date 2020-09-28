@@ -11,12 +11,15 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
@@ -58,5 +61,10 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 	@Override
 	public boolean addRecipe(IMoistenerRecipe recipe) {
 		return recipes.add(recipe);
+	}
+
+	@Override
+	public Collection<IMoistenerRecipe> getRecipes(RecipeManager manager) {
+		return ICraftingProvider.findRecipes(manager, IMoistenerRecipe.TYPE);
 	}
 }

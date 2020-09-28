@@ -14,12 +14,15 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISolderManager;
 import forestry.api.recipes.ISolderRecipe;
@@ -60,5 +63,10 @@ public class SolderManager implements ISolderManager {
 	@Override
 	public boolean addRecipe(ISolderRecipe recipe) {
 		return recipes.add(recipe);
+	}
+
+	@Override
+	public Collection<ISolderRecipe> getRecipes(RecipeManager manager) {
+		return ICraftingProvider.findRecipes(manager, ISolderRecipe.TYPE);
 	}
 }

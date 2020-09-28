@@ -11,16 +11,19 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
@@ -57,5 +60,10 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 	@Override
 	public boolean addRecipe(ICentrifugeRecipe recipe) {
 		return recipes.add(recipe);
+	}
+
+	@Override
+	public Collection<ICentrifugeRecipe> getRecipes(RecipeManager manager) {
+		return ICraftingProvider.findRecipes(manager, ICentrifugeRecipe.TYPE);
 	}
 }

@@ -11,13 +11,16 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
@@ -63,5 +66,10 @@ public class StillRecipeManager implements IStillManager {
 		recipeFluidOutputs.add(output.getFluid());
 
 		return recipes.add(recipe);
+	}
+
+	@Override
+	public Collection<IStillRecipe> getRecipes(RecipeManager manager) {
+		return ICraftingProvider.findRecipes(manager, IStillRecipe.TYPE);
 	}
 }

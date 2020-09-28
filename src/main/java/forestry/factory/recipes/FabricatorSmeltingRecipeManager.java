@@ -11,6 +11,7 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,9 +19,11 @@ import java.util.Set;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.IForestryRecipe;
@@ -64,5 +67,10 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 			}
 		}
 		return Collections.unmodifiableSet(recipeFluids);
+	}
+
+	@Override
+	public Collection<IFabricatorSmeltingRecipe> getRecipes(RecipeManager manager) {
+		return ICraftingProvider.findRecipes(manager, IFabricatorSmeltingRecipe.TYPE);
 	}
 }

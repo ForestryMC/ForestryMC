@@ -11,9 +11,12 @@
 package forestry.factory;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -43,6 +46,11 @@ public class DummyManagers {
 		@Override
 		public boolean addRecipe(T recipe) {
 			return false;
+		}
+
+		@Override
+		public Collection<T> getRecipes(RecipeManager manager) {
+			return Collections.emptySet();
 		}
 	}
 

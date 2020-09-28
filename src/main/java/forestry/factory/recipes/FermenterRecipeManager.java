@@ -11,6 +11,7 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -19,10 +20,12 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IForestryRecipe;
@@ -100,5 +103,10 @@ public class FermenterRecipeManager implements IFermenterManager {
 		recipeFluidOutputs.add(output);
 
 		return recipes.add(recipe);
+	}
+
+	@Override
+	public Collection<IFermenterRecipe> getRecipes(RecipeManager manager) {
+		return ICraftingProvider.findRecipes(manager, IFermenterRecipe.TYPE);
 	}
 }

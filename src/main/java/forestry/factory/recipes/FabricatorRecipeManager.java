@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.RecipePair;
@@ -81,5 +83,10 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 			ItemStack output = recipe.getRecipeOutput();
 			return ItemStackUtil.isIdenticalItem(itemStack, output);
 		}).collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<IFabricatorRecipe> getRecipes(RecipeManager manager) {
+		return ICraftingProvider.findRecipes(manager, IFabricatorRecipe.TYPE);
 	}
 }
