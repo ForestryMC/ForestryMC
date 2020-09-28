@@ -14,7 +14,6 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -61,15 +60,5 @@ public class SolderManager implements ISolderManager {
 	@Override
 	public boolean addRecipe(ISolderRecipe recipe) {
 		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(ISolderRecipe recipe) {
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Collection<ISolderRecipe> recipes() {
-		return recipes;
 	}
 }

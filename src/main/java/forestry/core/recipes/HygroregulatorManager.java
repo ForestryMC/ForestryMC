@@ -41,11 +41,6 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 		return recipes.add(recipe);
 	}
 
-	@Override
-	public boolean removeRecipe(IHygroregulatorRecipe recipe) {
-		return recipes.remove(recipe);
-	}
-
 	public static Set<Fluid> getRecipeFluids() {
 		if (recipeFluids.isEmpty()) {
 			for (IHygroregulatorRecipe recipe : recipes) {
@@ -54,10 +49,5 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 			}
 		}
 		return Collections.unmodifiableSet(recipeFluids);
-	}
-
-	@Override
-	public Set<IHygroregulatorRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
 	}
 }

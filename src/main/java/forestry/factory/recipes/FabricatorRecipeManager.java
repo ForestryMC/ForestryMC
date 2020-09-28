@@ -72,16 +72,6 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		return recipes.add(recipe);
 	}
 
-	@Override
-	public boolean removeRecipe(IFabricatorRecipe recipe) {
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Set<IFabricatorRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
-	}
-
 	public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();

@@ -11,7 +11,6 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,16 +52,6 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 	@Override
 	public boolean addRecipe(IFabricatorSmeltingRecipe recipe) {
 		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(IFabricatorSmeltingRecipe recipe) {
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Collection<IFabricatorSmeltingRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
 	}
 
 	public static Set<Fluid> getRecipeFluids() {

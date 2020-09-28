@@ -10,11 +10,8 @@
  ******************************************************************************/
 package forestry.factory;
 
-import com.google.common.collect.ImmutableSet;
-
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -46,16 +43,6 @@ public class DummyManagers {
 		@Override
 		public boolean addRecipe(T recipe) {
 			return false;
-		}
-
-		@Override
-		public boolean removeRecipe(T recipe) {
-			return false;
-		}
-
-		@Override
-		public Set<T> recipes() {
-			return ImmutableSet.of();
 		}
 	}
 

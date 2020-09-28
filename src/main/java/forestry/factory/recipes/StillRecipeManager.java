@@ -11,7 +11,6 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,21 +63,5 @@ public class StillRecipeManager implements IStillManager {
 		recipeFluidOutputs.add(output.getFluid());
 
 		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(IStillRecipe recipe) {
-		FluidStack input = recipe.getInput();
-		recipeFluidInputs.remove(input.getFluid());
-
-		FluidStack output = recipe.getOutput();
-		recipeFluidOutputs.remove(output.getFluid());
-
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Set<IStillRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
 	}
 }

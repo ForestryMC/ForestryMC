@@ -11,7 +11,6 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -101,21 +100,5 @@ public class FermenterRecipeManager implements IFermenterManager {
 		recipeFluidOutputs.add(output);
 
 		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(IFermenterRecipe recipe) {
-		FluidStack liquid = recipe.getFluidResource();
-		recipeFluidInputs.remove(liquid.getFluid());
-
-		Fluid output = recipe.getOutput();
-		recipeFluidOutputs.remove(output);
-
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Set<IFermenterRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
 	}
 }

@@ -11,7 +11,6 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -58,15 +57,5 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 	@Override
 	public boolean addRecipe(ICentrifugeRecipe recipe) {
 		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(ICentrifugeRecipe recipe) {
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Set<ICentrifugeRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
 	}
 }

@@ -21,6 +21,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -105,15 +106,6 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return recipes.add(recipe);
 	}
 
-	@Override
-	public boolean removeRecipe(ICarpenterRecipe recipe) {
-		boolean removed = recipes.remove(recipe);
-		if (removed) {
-			recipeFluids.clear();
-		}
-		return removed;
-	}
-
 	public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
@@ -135,10 +127,5 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 			}
 		}
 		return Collections.unmodifiableSet(recipeFluids);
-	}
-
-	@Override
-	public Set<ICarpenterRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
 	}
 }
