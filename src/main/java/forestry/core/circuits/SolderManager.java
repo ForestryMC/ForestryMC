@@ -28,7 +28,6 @@ import forestry.api.recipes.ISolderManager;
 import forestry.api.recipes.ISolderRecipe;
 
 public class SolderManager implements ISolderManager {
-	private static final List<ISolderRecipe> recipes = new ArrayList<>();
 
 	@Override
 	public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {

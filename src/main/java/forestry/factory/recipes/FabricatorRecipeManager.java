@@ -31,8 +31,6 @@ import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
 
-	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
-
 	@Override
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
 		//TODO json

@@ -32,10 +32,6 @@ import forestry.api.recipes.IForestryRecipe;
 
 public class FermenterRecipeManager implements IFermenterManager {
 
-	private static final Set<IFermenterRecipe> recipes = new TreeSet<>();
-	public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
-	public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
-
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
 		IFermenterRecipe recipe = new FermenterRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid);

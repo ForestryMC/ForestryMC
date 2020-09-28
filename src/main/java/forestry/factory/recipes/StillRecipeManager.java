@@ -27,10 +27,6 @@ import forestry.api.recipes.IStillRecipe;
 
 public class StillRecipeManager implements IStillManager {
 
-	private static final Set<IStillRecipe> recipes = new HashSet<>();
-	public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
-	public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
-
 	@Override
 	public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
 		IStillRecipe recipe = new StillRecipe(IForestryRecipe.anonymous(), timePerUnit, input, output);

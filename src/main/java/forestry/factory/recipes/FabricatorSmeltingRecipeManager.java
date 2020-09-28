@@ -29,8 +29,6 @@ import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.IForestryRecipe;
 
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
-	public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
-	private static final Set<Fluid> recipeFluids = new HashSet<>();
 
 	@Nullable
 	public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {

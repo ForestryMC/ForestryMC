@@ -17,8 +17,6 @@ import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.IHygroregulatorRecipe;
 
 public class HygroregulatorManager implements IHygroregulatorManager {
-	private static final Set<IHygroregulatorRecipe> recipes = new HashSet<>();
-	private static final Set<Fluid> recipeFluids = new HashSet<>();
 
 	@Override
 	public void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange) {

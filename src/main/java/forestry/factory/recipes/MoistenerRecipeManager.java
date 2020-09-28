@@ -26,8 +26,6 @@ import forestry.api.recipes.IMoistenerRecipe;
 
 public class MoistenerRecipeManager implements IMoistenerManager {
 
-	private static final Set<IMoistenerRecipe> recipes = new HashSet<>();
-
 	@Override
 	public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
 		IMoistenerRecipe recipe = new MoistenerRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), product, timePerItem);

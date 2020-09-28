@@ -35,9 +35,6 @@ import forestry.core.utils.ItemStackUtil;
 
 public class CarpenterRecipeManager implements ICarpenterManager {
 
-	private static final Set<ICarpenterRecipe> recipes = new HashSet<>();
-	private static final Set<Fluid> recipeFluids = new HashSet<>();
-
 	@Override
 	public void addRecipe(ItemStack box, ItemStack product, Object[] materials) {
 		addRecipe(5, null, box, product, materials);

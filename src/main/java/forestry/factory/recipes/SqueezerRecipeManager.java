@@ -31,9 +31,6 @@ import forestry.core.utils.datastructures.ItemStackMap;
 
 public class SqueezerRecipeManager implements ISqueezerManager {
 
-	private static final Set<ISqueezerRecipe> recipes = new HashSet<>();
-	public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<>();
-
 	@Override
 	public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
 		ISqueezerRecipe recipe = new SqueezerRecipe(IForestryRecipe.anonymous(), timePerItem, resources, liquid, remnants, chance / 100.0f);

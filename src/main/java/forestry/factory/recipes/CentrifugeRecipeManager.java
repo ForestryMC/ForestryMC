@@ -28,8 +28,6 @@ import forestry.api.recipes.IForestryRecipe;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
 
-	private static final Set<ICentrifugeRecipe> recipes = new HashSet<>();
-
 	@Override
 	public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
 		NonNullList<ICentrifugeRecipe.Product> list = NonNullList.create();
