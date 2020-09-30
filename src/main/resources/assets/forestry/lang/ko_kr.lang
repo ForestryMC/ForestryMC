@@ -637,7 +637,7 @@ item.for.capsule.grammar=%s 캡슐
 
 item.for.wax_cast.name=밀랍 주형
 
-item.for.wood_pulp.name=나무 섬유
+item.for.wood_pulp.name=목재 펄프
 item.for.wrench.name=렌치
 item.for.wrench.tooltip=블록을 회전시킵니다.
 
