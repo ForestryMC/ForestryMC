@@ -61,12 +61,12 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	/**
 	 * Finds the matching recipe
 	 *
-	 * @param liquid            Present liquid
-	 * @param item              Present item
-	 * @param CraftingInventory Present inventory
+	 * @param liquid    Present liquid
+	 * @param item      Present item
+	 * @param inventory Present inventory
 	 * @return An optional carpenter recipe if any matches
 	 */
-	Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory CraftingInventory);
+	Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory);
 
 	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory);
 }

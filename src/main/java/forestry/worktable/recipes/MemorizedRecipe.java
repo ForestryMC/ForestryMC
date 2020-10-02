@@ -99,10 +99,10 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		return ItemStack.EMPTY;
 	}
 
-	public ItemStack getCraftingResult(CraftingInventory CraftingInventory, World world) {
+	public ItemStack getCraftingResult(CraftingInventory inventory, World world) {
 		IRecipe selectedRecipe = getSelectedRecipe();
-		if (selectedRecipe != null && selectedRecipe.matches(CraftingInventory, world)) {
-			ItemStack recipeOutput = selectedRecipe.getCraftingResult(CraftingInventory);
+		if (selectedRecipe != null && selectedRecipe.matches(inventory, world)) {
+			ItemStack recipeOutput = selectedRecipe.getCraftingResult(inventory);
 			if (!recipeOutput.isEmpty()) {
 				return recipeOutput;
 			}

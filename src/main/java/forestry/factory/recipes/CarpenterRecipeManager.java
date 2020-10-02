@@ -13,7 +13,6 @@ package forestry.factory.recipes;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,7 +29,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.ICraftingProvider;
-import forestry.core.recipes.RecipePair;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 
@@ -54,9 +52,9 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 	}
 
 	@Override
-	public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory CraftingInventory) {
+	public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
 		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
-			if (matches(recipe, liquid, item, CraftingInventory)) {
+			if (matches(recipe, liquid, item, inventory)) {
 				return Optional.of(recipe);
 			}
 		}

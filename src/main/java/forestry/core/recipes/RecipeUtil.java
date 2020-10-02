@@ -147,26 +147,26 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	public static String[][] matches(ShapedRecipe recipe, IInventory CraftingInventory) {
+	public static String[][] matches(ShapedRecipe recipe, IInventory inventory) {
 		NonNullList<Ingredient> recipeIngredients = recipe.getIngredients();
 		NonNullList<String> oreDicts = NonNullList.create();
 		int width = recipe.getWidth();
 		int height = recipe.getHeight();
-		return matches(recipeIngredients, oreDicts, width, height, CraftingInventory);
+		return matches(recipeIngredients, oreDicts, width, height, inventory);
 	}
 
 	@Nullable
-	public static String[][] matches(NonNullList<Ingredient> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory CraftingInventory) {
-		ItemStack[][] resources = getResources(CraftingInventory);
+	public static String[][] matches(NonNullList<Ingredient> recipeIngredients, NonNullList<String> oreDicts, int width, int height, IInventory inventory) {
+		ItemStack[][] resources = getResources(inventory);
 		return matches(recipeIngredients, oreDicts, width, height, resources);
 	}
 
-	public static ItemStack[][] getResources(IInventory CraftingInventory) {
+	public static ItemStack[][] getResources(IInventory inventory) {
 		ItemStack[][] resources = new ItemStack[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				int k = i + j * 3;
-				resources[i][j] = CraftingInventory.getStackInSlot(k);
+				resources[i][j] = inventory.getStackInSlot(k);
 			}
 		}
 		return resources;

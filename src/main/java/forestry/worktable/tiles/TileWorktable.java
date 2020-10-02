@@ -117,9 +117,9 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
-	public ItemStack getResult(CraftingInventory CraftingInventory, World world) {
+	public ItemStack getResult(CraftingInventory inventory, World world) {
 		if (currentRecipe != null) {
-			return currentRecipe.getCraftingResult(CraftingInventory, world);
+			return currentRecipe.getCraftingResult(inventory, world);
 		}
 		return ItemStack.EMPTY;
 	}
@@ -128,7 +128,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	@Override
 	public boolean canTakeStack(int craftingSlotIndex) {
 		return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT ||
-			canCraftCurrentRecipe();
+				canCraftCurrentRecipe();
 	}
 
 	private boolean canCraftCurrentRecipe() {
