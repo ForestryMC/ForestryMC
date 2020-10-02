@@ -92,6 +92,7 @@ import forestry.storage.features.BackpackItems;
 import forestry.worktable.features.WorktableBlocks;
 
 public class ForestryRecipeProvider extends RecipeProvider {
+
 	public ForestryRecipeProvider(DataGenerator generator) {
 		super(generator);
 	}

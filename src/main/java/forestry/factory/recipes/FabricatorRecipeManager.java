@@ -12,8 +12,6 @@ package forestry.factory.recipes;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;

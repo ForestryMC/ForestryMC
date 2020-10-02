@@ -32,6 +32,7 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.Translator;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
+
 	private final ItemInventorySolderingIron itemInventory;
 
 	public GuiSolderingIron(ContainerSolderingIron container, PlayerInventory inv, ITextComponent title) {

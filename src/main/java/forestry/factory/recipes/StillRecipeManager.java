@@ -12,10 +12,7 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;

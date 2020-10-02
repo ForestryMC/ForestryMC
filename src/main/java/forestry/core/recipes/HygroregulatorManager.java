@@ -3,7 +3,6 @@ package forestry.core.recipes;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.fluid.Fluid;

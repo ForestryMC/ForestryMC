@@ -12,8 +12,6 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;

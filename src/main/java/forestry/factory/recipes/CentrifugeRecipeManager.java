@@ -12,9 +12,7 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -36,7 +34,7 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 			list.add(new ICentrifugeRecipe.Product(entry.getValue(), entry.getKey()));
 		}
 
-		ICentrifugeRecipe recipe = new CentrifugeRecipe(IForestryRecipe.anonymous(), timePerItem, Ingredient.fromStacks(resource), list);
+		ICentrifugeRecipe recipe = new 	CentrifugeRecipe(IForestryRecipe.anonymous(), timePerItem, Ingredient.fromStacks(resource), list);
 		addRecipe(recipe);
 	}
 

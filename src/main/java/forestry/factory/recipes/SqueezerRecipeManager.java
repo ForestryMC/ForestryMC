@@ -12,8 +12,6 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
@@ -27,7 +25,6 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.datastructures.ItemStackMap;
 
 public class SqueezerRecipeManager implements ISqueezerManager {
 

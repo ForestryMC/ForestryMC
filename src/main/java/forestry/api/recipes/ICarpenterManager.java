@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @author SirSengir
  */
 public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
+
 	/**
 	 * Add a shaped recipe to the carpenter.
 	 *

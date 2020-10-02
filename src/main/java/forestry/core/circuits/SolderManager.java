@@ -13,9 +13,7 @@ package forestry.core.circuits;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;

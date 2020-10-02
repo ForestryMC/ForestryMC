@@ -36,6 +36,7 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
+
 	private CraftingInventoryForestry craftMatrix = new CraftingInventoryForestry();
 	private List<IRecipe> recipes = new ArrayList<>();
 	private int selectedRecipe;

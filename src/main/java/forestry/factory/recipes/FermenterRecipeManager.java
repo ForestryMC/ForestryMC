@@ -12,9 +12,6 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;

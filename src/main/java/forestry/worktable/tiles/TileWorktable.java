@@ -49,6 +49,7 @@ import forestry.worktable.recipes.MemorizedRecipe;
 import forestry.worktable.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
+
 	private RecipeMemory recipeMemory;
 	private final InventoryAdapterTile craftingDisplay;
 	@Nullable

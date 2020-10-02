@@ -28,6 +28,7 @@ import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
+
 	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/crafting.png");
 	private static final Drawable FABRICATOR_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 60, 108, 56);
 	private static final Drawable FABRICATOR_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 61, 16, 16);
@@ -59,7 +60,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 					continue;
 				}
 				Ingredient ingredient = ingredients.get(ingredientIndex);
-				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19,ingredient));
+				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19, ingredient));
 			}
 		}
 		ItemStack plan = recipe.getPlan();
@@ -73,7 +74,8 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 			smeltingInput.add(s.getResource());
 		}
 		if (!smeltingInput.isEmpty()) {
-			selectedElement.add(new IngredientElement(1, 6, new CompoundIngredient(smeltingInput) {}));
+			selectedElement.add(new IngredientElement(1, 6, new CompoundIngredient(smeltingInput) {
+			}));
 		}
 	}
 
