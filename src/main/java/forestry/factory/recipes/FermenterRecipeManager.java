@@ -41,14 +41,14 @@ public class FermenterRecipeManager implements IFermenterManager {
 	}
 
 	@Override
-	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(IForestryRecipe.anonymous(), resourceOreName, fermentationValue, modifier, output.getFluid(), liquid);
+	public void addRecipe(int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+		IFermenterRecipe recipe = new FermenterRecipe(IForestryRecipe.anonymous(), fermentationValue, modifier, output.getFluid(), liquid);
 		addRecipe(recipe);
 	}
 
 	@Override
-	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resourceOreName, fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
+	public void addRecipe(int fermentationValue, float modifier, FluidStack output) {
+		addRecipe(fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
 	}
 
 	@Nullable

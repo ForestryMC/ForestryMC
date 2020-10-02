@@ -5,8 +5,6 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -28,12 +26,6 @@ public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenter
 	 * @return ItemStack representing the input resource.
 	 */
 	Ingredient getResource();
-
-	/**
-	 * @return String representing the input resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
-	 */
-	@Nullable
-	String getResourceOreName();
 
 	/**
 	 * @return FluidStack representing the input fluid resource.

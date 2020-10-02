@@ -14,7 +14,9 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
@@ -70,6 +72,16 @@ public class DummyManagers {
 		public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {
 
 		}
+
+		@Override
+		public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
+			return Optional.empty();
+		}
+
+		@Override
+		public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
+			return false;
+		}
 	}
 
 	public static class DummyCentrifugeManager extends DummyCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
@@ -110,12 +122,12 @@ public class DummyManagers {
 		}
 
 		@Override
-		public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+		public void addRecipe(int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
 
 		}
 
 		@Override
-		public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output) {
+		public void addRecipe(int fermentationValue, float modifier, FluidStack output) {
 
 		}
 	}
