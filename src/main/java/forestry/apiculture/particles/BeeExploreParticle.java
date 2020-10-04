@@ -8,24 +8,21 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.entities;
+package forestry.apiculture.particles;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ParticleBeeExplore extends Particle {
+@OnlyIn(Dist.CLIENT)
+public class BeeExploreParticle extends SpriteTexturedParticle {
     private final Vector3d origin;
 
-    public ParticleBeeExplore(ClientWorld world, Vector3d origin, BlockPos destination, int color) {
-        super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-        //		setParticleTexture(ModuleApiculture.getBeeSprite());
-        //TODO - particle texture
+    public BeeExploreParticle(ClientWorld world, Vector3d origin, BlockPos destination, int color) {
+        super(world, origin.getX(), origin.getY(), origin.getZ(), 0.0D, 0.0D, 0.0D);
         this.origin = origin;
 
         this.motionX = (destination.getX() + 0.5 - this.posX) * 0.015;
@@ -37,8 +34,8 @@ public class ParticleBeeExplore extends Particle {
         particleBlue = (color & 255) / 255.0F;
 
         this.setSize(0.1F, 0.1F);
-        //TODO particle scale
-        //		this.particleScale *= 0.2F;
+
+        this.particleScale *= 0.2F;
         this.maxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 
         this.motionX *= 0.9D;
@@ -91,49 +88,6 @@ public class ParticleBeeExplore extends Particle {
         }
     }
 
-    @Override
-    public void renderParticle(IVertexBuilder builder, ActiveRenderInfo renderInfo, float partialTicks) {
-        Vector3d projectedView = renderInfo.getProjectedView();
-        float xPos = (float) (MathHelper.lerp(partialTicks, this.prevPosX, this.posX) - projectedView.getX());
-        float yPos = (float) (MathHelper.lerp(partialTicks, this.prevPosY, this.posY) - projectedView.getY());
-        float zPos = (float) (MathHelper.lerp(partialTicks, this.prevPosZ, this.posZ) - projectedView.getZ());
-    }
-
-    /*@Override
-	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		float minU = 0;
-		float maxU = 1;
-		float minV = 0;
-		float maxV = 1;
-
-		//		if (this.particleTexture != null) {
-		//			minU = particleTexture.getMinU();
-		//			maxU = particleTexture.getMaxU();
-		//			minV = particleTexture.getMinV();
-		//			maxV = particleTexture.getMaxV();
-		//		}
-		//		TODO particle textures
-
-		float f10 = 0.1F * 1;//particleScale;
-		float f11 = (float) (prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
-		float f12 = (float) (prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
-		float f13 = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks - interpPosZ);
-
-		int i = this.getBrightnessForRender(partialTicks);
-		int j = i >> 16 & 65535;
-		int k = i & 65535;
-		buffer.pos(f11 - rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 - rotationYZ * f10 - rotationXZ * f10).tex(maxU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		buffer.pos(f11 - rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 - rotationYZ * f10 + rotationXZ * f10).tex(maxU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		buffer.pos(f11 + rotationX * f10 + rotationXY * f10, f12 + rotationZ * f10, f13 + rotationYZ * f10 + rotationXZ * f10).tex(minU, minV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-		buffer.pos(f11 + rotationX * f10 - rotationXY * f10, f12 - rotationZ * f10, f13 + rotationYZ * f10 - rotationXZ * f10).tex(minU, maxV).color(particleRed, particleGreen, particleBlue, 1.0F).lightmap(j, k).endVertex();
-	}*/
-
-    // avoid calculating lighting for bees, it is too much processing
-    @Override
-    public int getBrightnessForRender(float p_189214_1_) {
-        return 15728880;
-    }
-
     // avoid calculating collisions
     @Override
     public void move(double x, double y, double z) {
@@ -141,13 +95,38 @@ public class ParticleBeeExplore extends Particle {
         this.resetPositionToBB();
     }
 
-    //	@Override
-    //	public int getFXLayer() {
-    //		return 1;
-    //	}
-
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;    //TODO render type
+        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static class Factory implements IParticleFactory<BeeParticleData> {
+        private final IAnimatedSprite spriteSet;
+
+        public Factory(IAnimatedSprite sprite) {
+            this.spriteSet = sprite;
+        }
+
+        @Override
+        public Particle makeParticle(
+                BeeParticleData typeIn,
+                ClientWorld worldIn,
+                double x,
+                double y,
+                double z,
+                double xSpeed,
+                double ySpeed,
+                double zSpeed
+        ) {
+            BeeExploreParticle particle = new BeeExploreParticle(
+                    worldIn,
+                    typeIn.particleStart,
+                    typeIn.direction,
+                    typeIn.color
+            );
+            particle.selectSpriteRandomly(spriteSet);
+            return particle;
+        }
     }
 }

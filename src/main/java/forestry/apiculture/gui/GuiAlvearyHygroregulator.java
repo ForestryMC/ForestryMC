@@ -25,7 +25,7 @@ public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlveary
             PlayerInventory inventory,
             ITextComponent title
     ) {
-        super(Constants.TEXTURE_PATH_GUI + "/hygroregulator.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "hygroregulator.png", container, inventory, title);
         this.tile = container.getTile();
 
         widgetManager.add(new TankWidget(this.widgetManager, 104, 17, 0));

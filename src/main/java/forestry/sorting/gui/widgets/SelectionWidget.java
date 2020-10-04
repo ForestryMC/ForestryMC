@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 public class SelectionWidget extends Widget {
     public static final ResourceLocation TEXTURE = new ResourceLocation(
             Constants.MOD_ID,
-            Constants.TEXTURE_PATH_GUI + "/filter_selection.png"
+            Constants.TEXTURE_PATH_GUI + "filter_selection.png"
     );
     final WidgetScrollBar scrollBar;
     @Nullable

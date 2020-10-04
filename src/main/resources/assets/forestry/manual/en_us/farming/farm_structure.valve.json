@@ -1,8 +1,7 @@
 {
   "title": "Farm Valve (Hydration)",
   "icon": {
-    "item": "forestry:ffarm",
-    "data": 4
+    "item": "forestry:farm_valve_brick"
   },
   "content": [
     [

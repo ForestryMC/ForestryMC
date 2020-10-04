@@ -25,8 +25,8 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
     private final IGuiBeeHousingDelegate delegate;
 
     public enum Icon {
-        APIARY("/apiary.png"),
-        BEE_HOUSE("/alveary.png");
+        APIARY("apiary.png"),
+        BEE_HOUSE("alveary.png");
 
         private final String path;
 

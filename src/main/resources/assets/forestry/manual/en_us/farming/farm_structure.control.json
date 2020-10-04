@@ -1,8 +1,7 @@
 {
   "title": "Farm Control",
   "icon": {
-    "item": "forestry:ffarm",
-    "data": 5
+    "item": "forestry:farm_control_brick"
   },
   "content": [
     [

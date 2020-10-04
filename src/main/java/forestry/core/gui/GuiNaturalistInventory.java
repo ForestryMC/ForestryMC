@@ -53,7 +53,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
             PlayerInventory playerInv,
             ITextComponent name
     ) {
-        super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, playerInv, name);
+        super(Constants.TEXTURE_PATH_GUI + "apiaristinventory.png", container, playerInv, name);
 
         this.speciesRoot = container.tile.getSpeciesRoot();
 

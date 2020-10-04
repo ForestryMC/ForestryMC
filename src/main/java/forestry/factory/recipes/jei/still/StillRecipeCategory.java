@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.still;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -20,7 +20,10 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
     private static final int inputTank = 0;
     private static final int outputTank = 1;
 
-    private static final ResourceLocation guiTexture = new ForestryResource("textures/gui/still.png");
+    private static final ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "still.png"
+    );
 
     private final IDrawable tankOverlay;
     private final IDrawable icon;

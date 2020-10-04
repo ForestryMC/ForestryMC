@@ -22,7 +22,7 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge> {
     private final TileCentrifuge tile;
 
     public GuiCentrifuge(ContainerCentrifuge container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/centrifugesocket2.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "centrifugesocket2.png", container, inventory, title);
         this.tile = container.getTile();
         widgetManager.add(new SocketWidget(this.widgetManager, 79, 37, tile, 0));
     }

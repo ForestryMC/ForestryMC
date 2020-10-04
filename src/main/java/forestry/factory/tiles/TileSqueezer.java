@@ -124,7 +124,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
         sockets.readData(data);
     }
 
-    // / WORKING
+    // WORKING
     @Override
     public void updateServerSide() {
         super.updateServerSide();

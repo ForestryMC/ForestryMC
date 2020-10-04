@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.fermenter;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -24,7 +24,10 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
     private static final int inputTank = 0;
     private static final int outputTank = 1;
 
-    private static final ResourceLocation guiTexture = new ForestryResource("textures/gui/fermenter.png");
+    private static final ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "fermenter.png"
+    );
 
     private final IDrawableAnimated progressBar0;
     private final IDrawableAnimated progressBar1;

@@ -33,7 +33,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
     private final TileEscritoire tile;
 
     public GuiEscritoire(ContainerEscritoire container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", container, inv, title);
+        super(Constants.TEXTURE_PATH_GUI + "escritoire.png", container, inv, title);
 
         this.tile = container.getTile();
         this.xSize = 228;

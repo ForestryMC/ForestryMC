@@ -236,7 +236,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
         }
     }
 
-    // / STATE INFORMATION
+    // STATE INFORMATION
     @Override
     public boolean isBurning() {
         return mayBurn() && burnTime > 0;
@@ -263,7 +263,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
                (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
     }
 
-    // / LOADING AND SAVING
+    // LOADING AND SAVING
     @Override
     public void read(BlockState state, CompoundNBT compoundNBT) {
         super.read(state, compoundNBT);

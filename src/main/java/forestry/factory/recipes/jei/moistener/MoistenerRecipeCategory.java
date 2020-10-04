@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.moistener;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -25,7 +25,10 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
 
     private static final int inputTank = 0;
 
-    private static final ResourceLocation guiTexture = new ForestryResource("textures/gui/moistener.png");
+    private static final ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "moistener.png"
+    );
 
     private final IDrawableAnimated arrow;
     private final IDrawableAnimated progressBar;

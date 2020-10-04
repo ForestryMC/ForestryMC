@@ -2,9 +2,9 @@ package forestry.factory.recipes.jei.fabricator;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryPlain;
 import forestry.factory.features.FactoryBlocks;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
@@ -35,7 +35,10 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 
     private static final int inputTank = 0;
 
-    private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/fabricator.png");
+    private final static ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "fabricator.png"
+    );
     private final ICraftingGridHelper craftingGridHelper;
     private final IDrawable icon;
 

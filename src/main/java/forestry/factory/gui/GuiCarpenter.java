@@ -22,7 +22,7 @@ public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
     private final TileCarpenter tile;
 
     public GuiCarpenter(ContainerCarpenter container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "carpenter.png", container, inventory, title);
 
         this.tile = container.getTile();
         this.ySize = 218;

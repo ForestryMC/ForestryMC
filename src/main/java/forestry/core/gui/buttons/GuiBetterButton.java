@@ -15,7 +15,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.core.tooltips.IToolTipProvider;
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.config.Constants;
-import forestry.core.render.ForestryResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +27,10 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public class GuiBetterButton extends Button implements IToolTipProvider {
 
-    public static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/buttons.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "buttons.png"
+    );
     protected IButtonTextureSet texture;
     @Nullable
     private ToolTip toolTip;

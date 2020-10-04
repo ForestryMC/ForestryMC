@@ -13,6 +13,7 @@ package forestry.mail.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ITradeStationInfo;
+import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.ItemStackWidget;
@@ -42,7 +43,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
     private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
 
     public GuiCatalogue(ContainerCatalogue container, PlayerInventory inv, ITextComponent title) {
-        super(new ResourceLocation("textures/gui/book.png"), container, inv, title);
+        super(new ResourceLocation(Constants.TEXTURE_PATH_GUI + "book.png"), container, inv, title);
         this.xSize = 192;
         this.ySize = 192;
 

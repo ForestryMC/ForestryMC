@@ -25,8 +25,10 @@ import javax.annotation.Nullable;
 
 public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 
-    private static final ResourceLocation TEXTURE = new ForestryResource(
-            Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_BLOCK + "escritoire.png"
+    );
 
     //renderers
     private final ModelRenderer desk;

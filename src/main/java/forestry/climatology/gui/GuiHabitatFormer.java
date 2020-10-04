@@ -46,7 +46,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> implements IScrollable {
     public static final ResourceLocation TEXTURE = new ResourceLocation(
             Constants.MOD_ID,
-            "textures/gui/habitat_former.png"
+            Constants.TEXTURE_PATH_GUI + "habitat_former.png"
     );
     //Drawables
     private static final Drawable TEMPERATURE_FIELD = new Drawable(TEXTURE, 204, 22, 52, 12);
@@ -65,7 +65,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
     private final TextEditElement humidityEdit;
 
     public GuiHabitatFormer(ContainerHabitatFormer container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", container, inv, title);
+        super(Constants.TEXTURE_PATH_GUI + "habitat_former.png", container, inv, title);
         this.tile = container.getTile();
         this.transformer = tile.getTransformer();
         this.ySize = 233;

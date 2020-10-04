@@ -22,7 +22,7 @@ public class GuiStill extends GuiForestryTitled<ContainerStill> {
     private final TileStill tile;
 
     public GuiStill(ContainerStill container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/still.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "still.png", container, inventory, title);
         this.tile = container.getTile();
         widgetManager.add(new TankWidget(this.widgetManager, 35, 15, 0));
         widgetManager.add(new TankWidget(this.widgetManager, 125, 15, 1));

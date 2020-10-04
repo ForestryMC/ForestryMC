@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "apiculture",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "H",
+          "C"
+        ],
+        "key": {
+          "H": {
+            "item": "forestry:bee_house"
+          },
+          "C": {
+            "item": "minecraft:minecart"
+          }
+        },
+        "result": {
+          "item": "forestry:cart_bee_house"
+        }
+      }
+    }
+  ]
+}

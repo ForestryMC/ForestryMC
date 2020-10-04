@@ -40,7 +40,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
     private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
     public GuiImprinter(ContainerImprinter container, PlayerInventory inventoryplayer, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", container, inventoryplayer, title);
+        super(Constants.TEXTURE_PATH_GUI + "imprinter.png", container, inventoryplayer, title);
 
         this.itemInventory = container.getItemInventory();
         this.xSize = 176;

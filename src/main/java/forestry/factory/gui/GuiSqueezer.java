@@ -23,7 +23,7 @@ public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer> {
     private final TileSqueezer tile;
 
     public GuiSqueezer(ContainerSqueezer container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/squeezersocket.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "squeezersocket.png", container, inventory, title);
         this.tile = container.getTile();
         widgetManager.add(new TankWidget(this.widgetManager, 122, 18, 0));
         widgetManager.add(new SocketWidget(this.widgetManager, 75, 20, tile, 0));

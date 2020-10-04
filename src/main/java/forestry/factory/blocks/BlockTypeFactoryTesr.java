@@ -35,7 +35,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
     MOISTENER(() -> FactoryTiles.MOISTENER, "moistener"),
     SQUEEZER(() -> FactoryTiles.SQUEEZER, "squeezer"),
     STILL(() -> FactoryTiles.STILL, "still"),
-    RAINMAKER(() -> FactoryTiles.RAINMAKER, "rainmaker", Constants.TEXTURE_PATH_BLOCK + "/rainmaker_");
+    RAINMAKER(() -> FactoryTiles.RAINMAKER, "rainmaker", Constants.TEXTURE_PATH_BLOCK + "rainmaker_");
 
     public static final BlockTypeFactoryTesr[] VALUES = values();
 
@@ -57,7 +57,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
                     return (direction == Direction.NORTH || direction == Direction.SOUTH) ? ns : ew;
                 })
                 .create();
-        Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCK + "/" + name + "_");
+        Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCK + "" + name + "_");
         this.machineProperties = machineProperties;
     }
 

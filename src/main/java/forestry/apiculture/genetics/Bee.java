@@ -86,11 +86,9 @@ public class Bee extends IndividualLiving implements IBee {
         this(genome, (IGenome) null);
     }
 
-
     public Bee(IGenome genome, IBee mate) {
         this(genome, mate.getGenome());
     }
-
 
     public Bee(IGenome genome, @Nullable IGenome mate) {
         this(genome, mate, true, 0);
@@ -191,8 +189,7 @@ public class Bee extends IndividualLiving implements IBee {
         return effect.doFX(genome, storedData, housing);
     }
 
-    // / INFORMATION
-
+    // INFORMATION
     @Override
     public IBee copy() {
         CompoundNBT compound = new CompoundNBT();
@@ -213,12 +210,12 @@ public class Bee extends IndividualLiving implements IBee {
 
         IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
-        // / Rain needs tolerant flyers
+        // Rain needs tolerant flyers
         if (housing.isRaining() && !canFlyInRain(beeModifier)) {
             errorStates.add(EnumErrorCode.IS_RAINING);
         }
 
-        // / Night or darkness requires nocturnal species
+        // Night or darkness requires nocturnal species
         if (world.isDaytime()) {
             if (!canWorkDuringDay()) {
                 errorStates.add(EnumErrorCode.NOT_NIGHT);
@@ -239,14 +236,14 @@ public class Bee extends IndividualLiving implements IBee {
             }
         }
 
-        // / Check for the sky, except if in hell
+        // Check for the sky, except if in hell
         if (world.getBiome(housing.getCoordinates()).getCategory() != Biome.Category.NETHER) {
             if (!housing.canBlockSeeTheSky() && !canWorkUnderground(beeModifier)) {
                 errorStates.add(EnumErrorCode.NO_SKY);
             }
         }
 
-        // / And finally climate check
+        // And finally climate check
         IAlleleBeeSpecies species = genome.getActiveAllele(BeeChromosomes.SPECIES);
         {
             EnumTemperature actualTemperature = housing.getTemperature();
@@ -436,7 +433,7 @@ public class Bee extends IndividualLiving implements IBee {
         super.age(world, finalModifier);
     }
 
-    // / PRODUCTION
+    // PRODUCTION
     @Override
     public NonNullList<ItemStack> getProduceList() {
         NonNullList<ItemStack> products = NonNullList.create();
@@ -491,7 +488,7 @@ public class Bee extends IndividualLiving implements IBee {
                 1f
         ) * beeModeModifier.getProductionModifier(genome, 1f);
 
-        // / Primary Products
+        // Primary Products
         primary.getProducts()
                .addProducts(
                        world,
@@ -500,7 +497,7 @@ public class Bee extends IndividualLiving implements IBee {
                        (product) -> product.getChance() * speed,
                        world.rand
                );
-        // / Secondary Products
+        // Secondary Products
         secondary.getProducts()
                  .addProducts(
                          world,
@@ -510,7 +507,7 @@ public class Bee extends IndividualLiving implements IBee {
                          world.rand
                  );
 
-        // / Specialty products
+        // Specialty products
         if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
             primary.getSpecialties()
                    .addProducts(

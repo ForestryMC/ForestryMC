@@ -2,9 +2,9 @@ package forestry.factory.recipes.jei.carpenter;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.api.recipes.ICarpenterRecipe;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
@@ -32,7 +32,10 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
     private static final int craftInputSlot = 2;
     private static final int inputTank = 0;
 
-    private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/carpenter.png");
+    private final static ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "carpenter.png"
+    );
     private final ICraftingGridHelper craftingGridHelper;
     private final IDrawableAnimated arrow;
     private final IDrawable tankOverlay;

@@ -13,7 +13,6 @@ package forestry.energy.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
-import forestry.core.render.ForestryResource;
 import forestry.core.render.IForestryRenderer;
 import forestry.core.render.RenderHelper;
 import forestry.core.tiles.TemperatureState;
@@ -77,14 +76,14 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
         extension.rotationPointZ = 8F;
 
         textures = new ResourceLocation[]{
-                new ForestryResource(baseTexture + "base.png"),
-                new ForestryResource(baseTexture + "piston.png"),
-                new ForestryResource(baseTexture + "extension.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_highest.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_higher.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_high.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_medium.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),
+                new ResourceLocation(Constants.MOD_ID, baseTexture + "base.png"),
+                new ResourceLocation(Constants.MOD_ID, baseTexture + "piston.png"),
+                new ResourceLocation(Constants.MOD_ID, baseTexture + "extension.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_highest.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_higher.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_high.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_medium.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_low.png"),
                 };
     }
 

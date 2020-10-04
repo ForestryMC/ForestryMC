@@ -14,7 +14,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.render.ForestryResource;
 import forestry.core.utils.SoundUtil;
 import forestry.mail.POBoxInfo;
 import net.minecraft.client.MainWindow;
@@ -48,7 +47,10 @@ public class GuiMailboxInfo extends AbstractGui {
     @Nullable
     private POBoxInfo poInfo;
     // TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
-    private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
+    private final ResourceLocation textureAlert = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "mailalert.png"
+    );
 
     private GuiMailboxInfo() {
         fontRenderer = Minecraft.getInstance().fontRenderer;

@@ -1,8 +1,7 @@
 {
   "title": "Farm Hatch (Pipe Connectivity)",
   "icon": {
-    "item": "forestry:ffarm",
-    "data": 3
+    "item": "forestry:farm_hatch_brick"
   },
   "content": [
     [

@@ -31,13 +31,13 @@ public class GuiBackpack extends GuiForestry<ContainerBackpack> {
         ContainerBackpack.Size size = container.getSize();
         switch (size) {
             case DEFAULT: {
-                return Constants.TEXTURE_PATH_GUI + "/backpack.png";
+                return Constants.TEXTURE_PATH_GUI + "backpack.png";
             }
             case T2: {
-                return Constants.TEXTURE_PATH_GUI + "/backpack_t2.png";
+                return Constants.TEXTURE_PATH_GUI + "backpack_t2.png";
             }
             default: {
-                return Constants.TEXTURE_PATH_GUI + "/backpack.png";
+                return Constants.TEXTURE_PATH_GUI + "backpack.png";
             }
         }
     }

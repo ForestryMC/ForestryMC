@@ -38,22 +38,23 @@ public class Constants implements IForestryConstants {
     public static final String TRANSLATION_KEY_ITEM = "item.forestry.";
 
     // Textures
-    public static final String TEXTURE_PATH_GUI = "textures/gui";
-    public static final String TEXTURE_PATH_BLOCK = "textures/block";
-    public static final String TEXTURE_PATH_ITEM = "textures/item";
-    public static final String TEXTURE_PATH_ENTITIES = "textures/entity";
+    public static final String TEXTURE_PATH_GUI = "textures/gui/";
+    public static final String TEXTURE_PATH_BLOCK = "textures/block/";
+    public static final String TEXTURE_PATH_ITEM = "textures/item/";
+    public static final String TEXTURE_PATH_ENTITIES = "textures/entity/";
+    public static final String TEXTURE_PATH_PARTICLES = "textures/particles/";
 
-    public static final String TEXTURE_APIARIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "/apiarist_armor_1.png";
-    public static final String TEXTURE_APIARIST_ARMOR_SECONDARY = TEXTURE_PATH_ITEM + "/apiarist_armor_2.png";
-    public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "/naturalist_armor_1.png";
+    public static final String TEXTURE_APIARIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "apiarist_armor_1.png";
+    public static final String TEXTURE_APIARIST_ARMOR_SECONDARY = TEXTURE_PATH_ITEM + "apiarist_armor_2.png";
+    public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "naturalist_armor_1.png";
     public static final String TEXTURE_SKIN_BEEKPEEPER =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "/beekeeper.png";
+            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "beekeeper.png";
     public static final String TEXTURE_SKIN_ZOMBIE_BEEKPEEPER =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "/zombie_beekeeper.png";
+            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "zombie_beekeeper.png";
     public static final String TEXTURE_SKIN_LUMBERJACK =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "/lumberjack.png";
+            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "lumberjack.png";
     public static final String TEXTURE_SKIN_ZOMBIE_LUMBERJACK =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "/zombie_lumberjack.png";
+            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "zombie_lumberjack.png";
 
     // Villagers
     public static final String ID_VILLAGER_APIARIST = Constants.MOD_ID + ":apiarist";

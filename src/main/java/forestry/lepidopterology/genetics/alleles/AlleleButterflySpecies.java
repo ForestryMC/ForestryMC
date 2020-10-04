@@ -71,7 +71,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAl
 
     @Override
     public ResourceLocation getEntityTexture() {
-        return new ResourceLocation(getModID(), Constants.TEXTURE_PATH_ENTITIES + "/" + texture + ".png");
+        return new ResourceLocation(getModID(), Constants.TEXTURE_PATH_ENTITIES + texture + ".png");
     }
 
     @Override

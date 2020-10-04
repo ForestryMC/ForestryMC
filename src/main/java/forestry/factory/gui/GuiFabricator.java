@@ -22,7 +22,7 @@ public class GuiFabricator extends GuiForestryTitled<ContainerFabricator> {
     private final TileFabricator tile;
 
     public GuiFabricator(ContainerFabricator container, PlayerInventory player, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/fabricator.png", container, player, title);
+        super(Constants.TEXTURE_PATH_GUI + "fabricator.png", container, player, title);
 
         this.tile = container.getTile();
         this.ySize = 211;

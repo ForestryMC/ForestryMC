@@ -26,7 +26,7 @@ import java.util.List;
 public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
     public static final ResourceLocation TEXTURE = new ResourceLocation(
             Constants.MOD_ID,
-            Constants.TEXTURE_PATH_GUI + "/almanac/almanac.png"
+            Constants.TEXTURE_PATH_GUI + "almanac/almanac.png"
     );
     static final int LEFT_PAGE_START_X = 16;
     static final int RIGHT_PAGE_START_X = 132;
@@ -43,7 +43,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
     protected final IForesterBook book;
 
     protected GuiForesterBook(IForesterBook book) {
-        super(X_SIZE, Y_SIZE, new StringTextComponent("FORESTER_BOOK_TITLE"));    //TODO localise
+        super(X_SIZE, Y_SIZE, new StringTextComponent("FORESTER_BOOK_TITLE"));
         this.book = book;
         setGuiScreen(this);
     }

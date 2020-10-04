@@ -16,7 +16,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.SessionVars;
 import forestry.core.gui.GuiForestry;
-import forestry.core.render.ForestryResource;
 import forestry.core.render.TextureManagerForestry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -42,10 +41,14 @@ public abstract class Ledger {
     protected final int maxTextWidth;
     protected int maxHeight = 24;
 
-    private static final ResourceLocation ledgerTextureRight = new ForestryResource(
-            Constants.TEXTURE_PATH_GUI + "/ledger.png");
-    private static final ResourceLocation ledgerTextureLeft = new ForestryResource(
-            Constants.TEXTURE_PATH_GUI + "/ledger_left.png");
+    private static final ResourceLocation ledgerTextureRight = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "ledger.png"
+    );
+    private static final ResourceLocation ledgerTextureLeft = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "ledger_left.png"
+    );
 
     protected final LedgerManager manager;
 

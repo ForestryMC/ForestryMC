@@ -8,15 +8,24 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.render;
+package forestry.apiculture.particles;
 
-import forestry.core.config.Constants;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.serialization.Codec;
+import net.minecraft.particles.ParticleType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ForestryResource extends ResourceLocation {
+import javax.annotation.Nonnull;
 
-    public ForestryResource(String path) {
-        super(Constants.MOD_ID, path);
+@OnlyIn(Dist.CLIENT)
+public class BeeParticleType extends ParticleType<BeeParticleData> {
+    public BeeParticleType() {
+        super(false, BeeParticleData.DESERIALIZER);
     }
 
+    @Nonnull
+    @Override
+    public Codec<BeeParticleData> func_230522_e_() {
+        return BeeParticleData.CODEC;
+    }
 }

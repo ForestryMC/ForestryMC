@@ -15,6 +15,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
+import forestry.core.config.Constants;
 import forestry.core.gui.elements.Window;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
@@ -25,7 +26,6 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.ColourProperties;
-import forestry.core.render.ForestryResource;
 import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
 import net.minecraft.client.Minecraft;
@@ -55,7 +55,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
     protected final Window<?> window;
 
     protected GuiForestry(String texture, C container, PlayerInventory inv, ITextComponent title) {
-        this(new ForestryResource(texture), container, inv, title);
+        this(new ResourceLocation(Constants.MOD_ID, texture), container, inv, title);
     }
 
     protected GuiForestry(ResourceLocation texture, C container, PlayerInventory inv, ITextComponent title) {
@@ -167,7 +167,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        // / Handle ledger clicks
+        // Handle ledger clicks
         ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
         widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
         IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();

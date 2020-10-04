@@ -42,7 +42,9 @@ public class StructureInfo {
                 for (int z = 0; z < width; z++) {
                     for (BlockData data : blockData) {
                         if (inside(x, y, z, data.pos, data.endPos)) {
-                            states[y][x][z] = NBTUtil.readBlockState(data.state);
+                            if (data.state != null) {
+                                states[y][x][z] = NBTUtil.readBlockState(data.state);
+                            }
                             break;
                         }
                     }

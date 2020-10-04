@@ -66,7 +66,10 @@ public class HabitatSelectionElement extends ElementGroup {
     public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
         super.drawElement(transform, mouseY, mouseX);
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-        textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+        textureManager.bindTexture(new ResourceLocation(
+                Constants.MOD_ID,
+                Constants.TEXTURE_PATH_GUI + "habitat_former.png"
+        ));
         Optional<ClimateButton> optional = buttons.stream().min(BUTTON_COMPARATOR);
         if (!optional.isPresent()) {
             return;
@@ -120,7 +123,10 @@ public class HabitatSelectionElement extends ElementGroup {
         public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
             RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
             TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-            textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+            textureManager.bindTexture(new ResourceLocation(
+                    Constants.MOD_ID,
+                    Constants.TEXTURE_PATH_GUI + "habitat_former.png"
+            ));
             blit(transform, 0, 0, 204, 46, 20, 20);
             TextureManagerForestry.getInstance().bindGuiTextureMap();
             blit(transform, 2, 2, getBlitOffset(), 16, 16, climate.getSprite());

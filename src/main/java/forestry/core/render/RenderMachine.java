@@ -80,7 +80,10 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
             String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
             texturesTankLevels.put(
                     tankLevel,
-                    new ResourceLocation(Constants.MOD_ID, "textures/block/machine_tank_" + tankLevelString + ".png")
+                    new ResourceLocation(
+                            Constants.MOD_ID,
+                            Constants.TEXTURE_PATH_BLOCK + "machine_tank_" + tankLevelString + ".png"
+                    )
             );
         }
     }

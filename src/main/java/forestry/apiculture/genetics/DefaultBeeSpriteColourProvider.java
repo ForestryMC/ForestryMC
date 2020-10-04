@@ -26,9 +26,11 @@ public class DefaultBeeSpriteColourProvider implements IBeeSpriteColourProvider 
         if (renderPass == 0) {
             return primaryColour;
         }
+
         if (renderPass == 1) {
             return secondaryColour;
         }
+
         return 0xffffff;
     }
 }

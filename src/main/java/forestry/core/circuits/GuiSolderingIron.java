@@ -32,7 +32,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
     private final ItemInventorySolderingIron itemInventory;
 
     public GuiSolderingIron(ContainerSolderingIron container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/solder.png", container, inv, title);
+        super(Constants.TEXTURE_PATH_GUI + "solder.png", container, inv, title);
 
         this.itemInventory = container.getItemInventory();
         this.xSize = 176;

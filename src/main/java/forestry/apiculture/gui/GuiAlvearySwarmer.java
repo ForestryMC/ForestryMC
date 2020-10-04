@@ -20,7 +20,7 @@ public class GuiAlvearySwarmer extends GuiForestryTitled<ContainerAlvearySwarmer
     private final TileAlvearySwarmer tile;
 
     public GuiAlvearySwarmer(ContainerAlvearySwarmer container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/swarmer.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "swarmer.png", container, inventory, title);
         this.tile = container.getTile();
     }
 

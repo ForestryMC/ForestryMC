@@ -30,7 +30,7 @@ public class CharcoalJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(TreeManager.charcoalManager.getWalls(), getPluginUid());
+//        registration.addRecipes(TreeManager.charcoalManager.getWalls(), getPluginUid());
     }
 
     @Override

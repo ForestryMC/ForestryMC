@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class GuiForestryBookCategories extends GuiForesterBook {
     public static final Drawable LOGO = new Drawable(new ResourceLocation(
             Constants.MOD_ID,
-            "textures/gui/almanac/logo.png"
+            Constants.TEXTURE_PATH_GUI + "almanac/logo.png"
     ), 0, 0, 256, 58, 256, 58);
 
     public GuiForestryBookCategories(IForesterBook book) {

@@ -1003,20 +1003,22 @@ public enum BeeDefinition implements IBeeDefinition {
         String name = "for.bees.species." + lowercaseName;
 
         this.branch = branch;
-        IAlleleBeeSpeciesBuilder speciesBuilder = BeeManager.beeFactory.createSpecies(
-                Constants.MOD_ID,
-                species,
-                lowercaseName
-        )
-                                                                       .setDominant(dominant)
-                                                                       .setTranslationKey(name)
-                                                                       .setColour(primary.getRGB(), secondary.getRGB())
-                                                                       .setBranch(branch.getBranch())
-                                                                       .setBinomial(binomial)
-                                                                       .setDescriptionKey(description);
+        IAlleleBeeSpeciesBuilder speciesBuilder = BeeManager.beeFactory
+                .createSpecies(
+                        Constants.MOD_ID,
+                        species,
+                        lowercaseName
+                )
+                .setDominant(dominant)
+                .setTranslationKey(name)
+                .setColour(primary.getRGB(), secondary.getRGB())
+                .setBranch(branch.getBranch())
+                .setBinomial(binomial)
+                .setDescriptionKey(description);
         if (isSecret()) {
             speciesBuilder.setIsSecret();
         }
+
         setSpeciesProperties(speciesBuilder);
         this.species = speciesBuilder.build();
     }

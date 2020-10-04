@@ -29,7 +29,7 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
     private TextFieldWidget addressNameField;
 
     public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/tradername.png", container, inv, title);
+        super(Constants.TEXTURE_PATH_GUI + "tradername.png", container, inv, title);
         this.tile = container.getTile();
         this.xSize = 176;
         this.ySize = 90;

@@ -69,7 +69,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
         //		}
     }
 
-    // / SAVING / LOADING
+    // SAVING / LOADING
     @Override
     public void read(BlockState state, CompoundNBT compoundNBT) {
         super.read(state, compoundNBT);
@@ -118,7 +118,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
     //		super.invalidate();
     //	}
 
-    // / HEAT MANAGEMENT
+    // HEAT MANAGEMENT
     @Override
     public int dissipateHeat() {
         if (heat <= 0) {
@@ -155,7 +155,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
         return gain;
     }
 
-    // / WORK
+    // WORK
     @Override
     public void updateServerSide() {
         IErrorLogic errorLogic = getErrorLogic();

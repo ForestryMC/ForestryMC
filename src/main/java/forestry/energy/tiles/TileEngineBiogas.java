@@ -226,7 +226,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
         return 0;
     }
 
-    // / STATE INFORMATION
+    // STATE INFORMATION
     @Override
     protected boolean isBurning() {
         return mayBurn() && burnTank.getFluidAmount() > 0;

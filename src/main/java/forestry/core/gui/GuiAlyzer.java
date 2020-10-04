@@ -59,7 +59,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
     public GuiAlyzer(ContainerAlyzer container, PlayerInventory playerInv, ITextComponent name) {
         super(
-                Constants.TEXTURE_PATH_GUI + "/portablealyzer.png",
+                Constants.TEXTURE_PATH_GUI + "portablealyzer.png",
                 container,
                 playerInv,
                 new StringTextComponent("GUI_ALYZER_TEST_TITLE")

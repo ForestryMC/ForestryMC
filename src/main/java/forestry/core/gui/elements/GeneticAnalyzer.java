@@ -38,7 +38,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
     /* Textures */
     public static final ResourceLocation TEXTURE = new ResourceLocation(
             Constants.MOD_ID,
-            Constants.TEXTURE_PATH_GUI + "/analyzer_screen.png"
+            Constants.TEXTURE_PATH_GUI + "analyzer_screen.png"
     );
 
     /* Drawables */

@@ -91,7 +91,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
         super.validate();
     }
 
-    // / UPDATING
+    // UPDATING
     @Override
     public final void tick() {
         tickHelper.onTick();
@@ -119,7 +119,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
         return tickHelper.updateOnInterval(tickInterval);
     }
 
-    // / SAVING & LOADING
+    // SAVING & LOADING
     @Override
     public void read(BlockState state, CompoundNBT data) {
         super.read(state, data);
@@ -195,7 +195,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
     //	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
     //	}
 
-    // / REDSTONE INFO
+    // REDSTONE INFO
     protected boolean isRedstoneActivated() {
         return world.getRedstonePowerFromNeighbors(getPos()) > 0;
     }

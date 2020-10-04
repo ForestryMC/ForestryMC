@@ -278,7 +278,7 @@ public class ModuleCore extends BlankForestryModule {
         );
         RecipeUtil.addSmelting(CoreItems.PEAT.stack(), CoreItems.ASH.stack(), 0.0f);
         if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-            // / CARPENTER
+            // CARPENTER
             // Portable ANALYZER
             RecipeManagers.carpenterManager.addRecipe(
                     100,

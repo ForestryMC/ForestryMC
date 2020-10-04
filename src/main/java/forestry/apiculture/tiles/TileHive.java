@@ -146,14 +146,18 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
                     beeGenome = bee.getGenome();
                 }
             }
+
             if (beeGenome == null) {
                 beeGenome = getGenomeFromBlock();
             }
+
             if (beeGenome == null) {
                 beeGenome = BeeDefinition.FOREST.getGenome();
             }
+
             this.containedBee = BeeManager.beeRoot.create(beeGenome);
         }
+
         return this.containedBee;
     }
 
@@ -171,6 +175,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
                 }
             }
         }
+
         return null;
     }
 

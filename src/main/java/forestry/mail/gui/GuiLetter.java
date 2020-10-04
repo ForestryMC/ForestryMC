@@ -50,7 +50,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
     private final ArrayList<Widget> tradeInfoWidgets;
 
     public GuiLetter(ContainerLetter container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/letter.png", container, inv, title);
+        super(Constants.TEXTURE_PATH_GUI + "letter.png", container, inv, title);
         this.minecraft = Minecraft.getInstance(); //not 100% why this is needed, maybe side issues
 
         this.itemInventory = container.getItemInventory();

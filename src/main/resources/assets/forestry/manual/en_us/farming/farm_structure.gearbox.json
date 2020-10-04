@@ -1,8 +1,7 @@
 {
   "title": "Farm Gearbox (Power)",
   "icon": {
-    "item": "forestry:ffarm",
-    "data": 2
+    "item": "forestry:farm_gearbox_brick"
   },
   "content": [
     [

@@ -235,7 +235,7 @@ public class Letter implements ILetter {
         }
     }
 
-    // / IINVENTORY
+    // IINVENTORY
     @Override
     public boolean isEmpty() {
         return inventory.isEmpty();

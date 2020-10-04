@@ -1,10 +1,10 @@
 package forestry.factory.recipes.jei.squeezer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -37,7 +37,10 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
 
     private static final int outputTank = 0;
 
-    private static final ResourceLocation guiTexture = new ForestryResource("textures/gui/squeezersocket.png");
+    private static final ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "squeezersocket.png"
+    );
 
     private final IDrawableAnimated arrow;
     private final IDrawable tankOverlay;

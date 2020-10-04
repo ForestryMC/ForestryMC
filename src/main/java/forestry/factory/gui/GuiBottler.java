@@ -24,7 +24,7 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
     private final TileBottler tile;
 
     public GuiBottler(ContainerBottler container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/bottler.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "bottler.png", container, inventory, title);
         this.tile = container.getTile();
         widgetManager.add(new TankWidget(this.widgetManager, 80, 14, 0));
     }

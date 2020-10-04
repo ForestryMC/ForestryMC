@@ -23,7 +23,7 @@ public class GuiRaintank extends GuiForestryTitled<ContainerRaintank> {
 
     //TODO these all store a tile. Make a superclass to automatically do it.
     public GuiRaintank(ContainerRaintank container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/raintank.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "raintank.png", container, inventory, title);
         this.tile = container.getTile();
         widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
     }

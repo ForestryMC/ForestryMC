@@ -139,7 +139,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
         World world = nursery.getWorldObj();
 
         Set<IErrorState> errorStates = new HashSet<>();
-        // / Night or darkness requires nocturnal species
+        // Night or darkness requires nocturnal species
         boolean isDaytime = world.isDaytime();
         if (!isActiveThisTime(isDaytime)) {
             if (isDaytime) {
@@ -149,7 +149,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
             }
         }
 
-        // / And finally climate check
+        // And finally climate check
         IAlleleButterflySpecies species = genome.getActiveAllele(ButterflyChromosomes.SPECIES);
         EnumTemperature actualTemperature = nursery.getTemperature();
         EnumTemperature baseTemperature = species.getTemperature();
@@ -174,7 +174,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
     public Set<IErrorState> getCanGrow(IButterflyNursery nursery, @Nullable IButterflyCocoon cocoon) {
         Set<IErrorState> errorStates = new HashSet<>();
 
-        // / And finally climate check
+        // And finally climate check
         IAlleleButterflySpecies species = genome.getActiveAllele(ButterflyChromosomes.SPECIES);
         EnumTemperature actualTemperature = nursery.getTemperature();
         EnumTemperature baseTemperature = species.getTemperature();

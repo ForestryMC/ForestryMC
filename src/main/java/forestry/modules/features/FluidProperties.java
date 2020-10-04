@@ -1,7 +1,7 @@
 package forestry.modules.features;
 
+import forestry.core.config.Constants;
 import forestry.core.items.DrinkProperties;
-import forestry.core.render.ForestryResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -30,8 +30,8 @@ public class FluidProperties {
         this.flammability = builder.flammability;
         this.flammable = builder.flammable;
         this.properties = builder.properties;
-        this.resources[0] = new ForestryResource("block/liquid/" + builder.identifier + "_still");
-        this.resources[1] = new ForestryResource("block/liquid/" + builder.identifier + "_flow");
+        this.resources[0] = new ResourceLocation(Constants.MOD_ID, "block/liquid/" + builder.identifier + "_still");
+        this.resources[1] = new ResourceLocation(Constants.MOD_ID, "block/liquid/" + builder.identifier + "_flow");
         if (!resourceExists(resources[1])) {
             this.resources[1] = resources[0];
         }

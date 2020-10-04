@@ -186,7 +186,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
         breedingProgressPercent = data.readVarInt();
     }
 
-    // / IBEEHOUSING
+    // IBEEHOUSING
     @Override
     public Biome getBiome() {
         return world.getBiome(getPos());

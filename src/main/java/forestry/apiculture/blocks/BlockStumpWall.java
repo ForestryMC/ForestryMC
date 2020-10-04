@@ -26,8 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class BlockStumpWall extends WallTorchBlock {
 
     public BlockStumpWall() {
@@ -60,9 +58,5 @@ public class BlockStumpWall extends WallTorchBlock {
         }
 
         return ActionResultType.PASS;
-    }
-
-    @Override
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
     }
 }

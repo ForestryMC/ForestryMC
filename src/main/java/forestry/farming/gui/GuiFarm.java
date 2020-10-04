@@ -25,7 +25,7 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
     private final TileFarm tile;
 
     public GuiFarm(ContainerFarm container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", container, inv, title);
+        super(Constants.TEXTURE_PATH_GUI + "mfarm.png", container, inv, title);
         this.tile = container.getTile();
 
         widgetManager.add(new TankWidget(widgetManager, 15, 19, 0).setOverlayOrigin(216, 18));

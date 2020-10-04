@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.config.Constants;
 import forestry.core.tiles.TileMill;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
@@ -63,13 +64,16 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 
         textures = new ResourceLocation[12];
 
-        textures[Textures.PEDESTAL.ordinal()] = new ForestryResource(baseTexture + "pedestal.png");
-        textures[Textures.EXTENSION.ordinal()] = new ForestryResource(baseTexture + "extension.png");
-        textures[Textures.BLADE_1.ordinal()] = new ForestryResource(baseTexture + "blade1.png");
-        textures[Textures.BLADE_2.ordinal()] = new ForestryResource(baseTexture + "blade2.png");
+        textures[Textures.PEDESTAL.ordinal()] = new ResourceLocation(Constants.MOD_ID, baseTexture + "pedestal.png");
+        textures[Textures.EXTENSION.ordinal()] = new ResourceLocation(Constants.MOD_ID, baseTexture + "extension.png");
+        textures[Textures.BLADE_1.ordinal()] = new ResourceLocation(Constants.MOD_ID, baseTexture + "blade1.png");
+        textures[Textures.BLADE_2.ordinal()] = new ResourceLocation(Constants.MOD_ID, baseTexture + "blade2.png");
 
         for (int i = 0; i < 8; i++) {
-            textures[Textures.CHARGE.ordinal() + i] = new ForestryResource(baseTexture + "column_" + i + ".png");
+            textures[Textures.CHARGE.ordinal() + i] = new ResourceLocation(
+                    Constants.MOD_ID,
+                    baseTexture + "column_" + i + ".png"
+            );
         }
     }
 

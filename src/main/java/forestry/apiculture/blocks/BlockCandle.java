@@ -19,6 +19,7 @@ import forestry.core.utils.RenderUtil;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -40,7 +41,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class BlockCandle extends TorchBlock implements IColoredBlock {
     private static final ImmutableMap<String, Integer> colours;
@@ -87,14 +91,17 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
         lightingItems = new HashSet<>(Arrays.asList(
                 Items.FLINT_AND_STEEL,
                 Items.FLINT,
-                Item.getItemFromBlock(Blocks.TORCH)
+                Item.BLOCK_TO_ITEM.get(Blocks.TORCH)
         ));
     }
 
     public BlockCandle() {
-        super(Block.Properties.from(Blocks.TORCH)
-                              .hardnessAndResistance(0.0f)
-                              .sound(SoundType.WOOD), ParticleTypes.FLAME);
+        super(
+                Block.Properties.from(Blocks.TORCH)
+                                .hardnessAndResistance(0.0f)
+                                .sound(SoundType.WOOD),
+                ParticleTypes.FLAME
+        );
         setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.OFF));
     }
 
@@ -189,20 +196,31 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     }
 
     private static boolean tryDye(ItemStack held, boolean isLit, TileCandle tileCandle) {
-        // Check for dye-able.
-        for (Map.Entry<String, Integer> colour : colours.entrySet()) {
-            String colourName = colour.getKey();
-            for (ItemStack stack : new ItemStack[0]) {// TODO tags OreDictionary.getOres(colourName)) {
-                if (false) {//OreDictionary.itemMatches(stack, held, true)) {
-                    if (isLit) {
-                        tileCandle.setColour(colour.getValue());
-                    } else {
-                        tileCandle.addColour(colour.getValue());
-                    }
-                    return true;
-                }
+        DyeColor color = DyeColor.getColor(held);
+        System.out.println(color);
+        if (color != null) {
+            if (isLit) {
+                tileCandle.setColour(color.getColorValue());
+            } else {
+                tileCandle.addColour(color.getColorValue());
             }
+
+            return true;
         }
+        // Check for dye-able.
+//        for (Map.Entry<String, Integer> colour : colours.entrySet()) {
+//            String colourName = colour.getKey();
+//            for (ItemStack stack : DyeItem::) {// TODO tags OreDictionary.getOres(colourName)) {
+//                if (false) {//OreDictionary.itemMatches(stack, held, true)) {
+//                    if (isLit) {
+//                        tileCandle.setColour(colour.getValue());
+//                    } else {
+//                        tileCandle.addColour(colour.getValue());
+//                    }
+//                    return true;
+//                }
+//            }
+//        }
         return false;
     }
 
@@ -222,10 +240,10 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     }
 
 //    @Override
-//    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+//    public java.util.List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 //        ItemStack dropStack = drop.get();
 //        drop.remove();
-//        List<ItemStack> drops = new ArrayList<>();
+//        java.util.List<ItemStack> drops = new ArrayList<>();
 //
 //        // not harvested, get drops normally
 //        if (dropStack == null) {
@@ -260,7 +278,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
         //int newMeta = tileCandle.isLit() ? 1 : 0;// todo: meta ?
         ItemStack itemStack = new ItemStack(this);
-        if (colour != 0xffffff) {
+        if (colour != DyeColor.WHITE.getColorValue()) {
             // When dropped, tag new item stack with colour. Unless it's white, then do no such thing for maximum stacking.
             CompoundNBT tag = new CompoundNBT();
             tag.putInt(COLOUR_TAG_NAME, colour);
@@ -295,7 +313,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     }
 
     private static int getColourValueFromItemStack(ItemStack itemStack) {
-        int value = 0xffffff; // default to white.
+        int value = DyeColor.WHITE.getColorValue();
         if (itemStack.getTag() != null) {
             CompoundNBT tag = itemStack.getTag();
             if (tag.contains(COLOUR_TAG_NAME)) {
@@ -337,6 +355,6 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
             }
         }
 
-        return 0xffffff;
+        return DyeColor.WHITE.getColorValue();
     }
 }

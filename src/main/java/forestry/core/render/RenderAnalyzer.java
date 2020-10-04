@@ -37,9 +37,9 @@ public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
         int textureHeight = 32;
 
         textures = new ResourceLocation[]{
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_pedestal.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower1.png"),
-                new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower2.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_pedestal.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_tower1.png"),
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_tower2.png"),
                 };
 
         pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);

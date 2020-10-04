@@ -73,7 +73,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
         return this.address;
     }
 
-    // / SAVING & LOADING
+    // SAVING & LOADING
     @Override
     public void read(CompoundNBT compoundNBT) {
         if (compoundNBT.contains("owner")) {

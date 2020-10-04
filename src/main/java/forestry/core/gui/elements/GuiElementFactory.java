@@ -34,7 +34,7 @@ import java.util.function.Predicate;
 public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
     private static final ResourceLocation TEXTURE = new ResourceLocation(
             Constants.MOD_ID,
-            Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png"
+            Constants.TEXTURE_PATH_GUI + "database_mutation_screen.png"
     );
 
     public Style dominantStyle = Style.EMPTY;

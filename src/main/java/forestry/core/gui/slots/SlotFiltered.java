@@ -12,11 +12,14 @@ package forestry.core.gui.slots;
 
 import com.mojang.datafixers.util.Pair;
 import forestry.core.config.Constants;
+import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +30,10 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
     private final IFilterSlotDelegate filterSlotDelegate;
     @Nullable
     private ResourceLocation backgroundTexture = null;
-    private ResourceLocation blockedTexture = new ResourceLocation(Constants.MOD_ID, "slots/blocked");
+    private ResourceLocation blockedTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "slots/blocked"
+    );
 
     public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
         super(inventory, slotIndex, xPos, yPos);
@@ -46,13 +52,17 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
         return this;
     }
 
-    public SlotFiltered setBackgroundTexture(String backgroundTexture) {
-        this.backgroundTexture = new ResourceLocation(Constants.MOD_ID, backgroundTexture);
+    public SlotFiltered setBackgroundTexture(String ident) {
+        backgroundTexture = new ResourceLocation(
+                Constants.MOD_ID,
+                ident
+        );
         return this;
     }
 
     @Nullable
     @Override
+    @OnlyIn(Dist.CLIENT)
     public Pair<ResourceLocation, ResourceLocation> getBackground() {
         ItemStack stack = getStack();
         if (!isItemValid(stack)) {

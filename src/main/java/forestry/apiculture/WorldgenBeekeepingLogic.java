@@ -42,7 +42,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
         this.housing = housing;
     }
 
-    // / SAVING & LOADING
+    // SAVING & LOADING
     @Override
     public void read(CompoundNBT CompoundNBT) {
         setActive(CompoundNBT.getBoolean("Active"));

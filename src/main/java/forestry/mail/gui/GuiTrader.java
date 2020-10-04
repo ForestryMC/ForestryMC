@@ -23,7 +23,7 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
     private final TileTrader tile;
 
     public GuiTrader(ContainerTrader container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/mailtrader2.png", container, inv, title);
+        super(Constants.TEXTURE_PATH_GUI + "mailtrader2.png", container, inv, title);
         this.tile = container.getTile();
         this.xSize = 226;
         this.ySize = 220;

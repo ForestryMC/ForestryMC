@@ -263,7 +263,7 @@ public class ModuleFactory extends BlankForestryModule {
 
     @Override
     public void registerRecipes() {
-        // / FABRICATOR
+        // FABRICATOR
         FluidStack liquidGlass = ForestryFluids.GLASS.getFluid(500);
         if (!liquidGlass.isEmpty()) {
             //TODO json
@@ -474,7 +474,7 @@ public class ModuleFactory extends BlankForestryModule {
             }
         }
 
-        // / SQUEEZER
+        // SQUEEZER
         int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
         int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
         FluidStack appleJuice = ForestryFluids.JUICE.getFluid(appleJuiceAmount);
@@ -607,7 +607,7 @@ public class ModuleFactory extends BlankForestryModule {
             //TODO red sandstone
         }
 
-        // / CARPENTER
+        // CARPENTER
         RecipeManagers.carpenterManager.addRecipe(
                 50,
                 ForestryFluids.SEED_OIL.getFluid(250),
@@ -675,7 +675,7 @@ public class ModuleFactory extends BlankForestryModule {
                 CoreItems.STURDY_CASING
         );
 
-        // / CHIPSETS
+        // CHIPSETS
         ItemStack basicCircuitboard = ItemCircuitBoard.createCircuitboard(
                 EnumCircuitBoardType.BASIC,
                 null,
@@ -889,7 +889,7 @@ public class ModuleFactory extends BlankForestryModule {
         }
         ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
 
-        // / Solder Manager
+        // Solder Manager
         if (layout != null) {
             ChipsetManager.solderManager.addRecipe(
                     layout,

@@ -12,7 +12,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 @FeatureProvider
 public class ApicultureItems {
-    // / BEES
+    // BEES
     public static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleApiculture.class);
 
     public static final FeatureItem<ItemBeeGE> BEE_QUEEN = REGISTRY.item(
@@ -41,7 +41,7 @@ public class ApicultureItems {
     public static final FeatureItemGroup<ItemMinecartBeehousing, ItemMinecartBeehousing.Type> MINECART_BEEHOUSING = REGISTRY
             .itemGroup(ItemMinecartBeehousing::new, "cart", ItemMinecartBeehousing.Type.values());
 
-    // / COMB FRAMES
+    // COMB FRAMES
     public static final FeatureItem<ItemHiveFrame> FRAME_UNTREATED = REGISTRY.item(
             () -> new ItemHiveFrame(80, 0.9f),
             "frame_untreated"
@@ -55,7 +55,7 @@ public class ApicultureItems {
             "frame_proven"
     );
 
-    // / BEE RESOURCES
+    // BEE RESOURCES
     public static final FeatureItemGroup<ItemOverlay, EnumHoneyDrop> HONEY_DROPS = REGISTRY.itemGroup((type) -> new ItemOverlay(
             ItemGroups.tabApiculture,
             type
@@ -91,7 +91,7 @@ public class ApicultureItems {
     //		OreDictionary.registerOre(OreDictUtil.BEE_COMB, beeComb.getWildcard());
     //TODO - tags
 
-    // / APIARIST'S CLOTHES
+    // APIARIST'S CLOTHES
     public static final FeatureItem<ItemArmorApiarist> APIARIST_HELMET = REGISTRY.item(() -> new ItemArmorApiarist(
             EquipmentSlotType.HEAD), "apiarist_helmet");
     public static final FeatureItem<ItemArmorApiarist> APIARIST_CHEST = REGISTRY.item(() -> new ItemArmorApiarist(

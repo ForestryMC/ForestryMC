@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.bottler;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -22,7 +22,10 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
     private static final int outputFull = 3;
     private static final int tankIndex = 0;
 
-    private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/bottler.png");
+    private final static ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "bottler.png"
+    );
 
     private final IDrawable icon;
     private final IDrawable slot;

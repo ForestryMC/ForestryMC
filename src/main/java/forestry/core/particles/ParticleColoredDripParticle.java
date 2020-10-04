@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.entities;
+package forestry.core.particles;
 
 //import net.minecraft.block.BlockLiquid;
 

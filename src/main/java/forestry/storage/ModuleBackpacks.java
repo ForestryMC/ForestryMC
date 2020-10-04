@@ -487,9 +487,9 @@ public class ModuleBackpacks extends BlankForestryModule {
 
     @Override
     public void registerRecipes() {
-        // / CARPENTER
+        // CARPENTER
         if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-            // / BACKPACKS WOVEN
+            // BACKPACKS WOVEN
             addT2BackpackRecipe(BackpackItems.MINER_BACKPACK, BackpackItems.MINER_BACKPACK_T_2);
             addT2BackpackRecipe(BackpackItems.DIGGER_BACKPACK, BackpackItems.DIGGER_BACKPACK_T_2);
             addT2BackpackRecipe(BackpackItems.FORESTER_BACKPACK, BackpackItems.FORESTER_BACKPACK_T_2);

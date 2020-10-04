@@ -38,6 +38,7 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.network.PacketRegistryApiculture;
+import forestry.apiculture.particles.ApicultureParticles;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -51,6 +52,7 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.particles.ParticleSnow;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
@@ -68,7 +70,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -85,12 +86,15 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -101,9 +105,6 @@ public class ModuleApiculture extends BlankForestryModule {
     private static final String CONFIG_CATEGORY = "apiculture";
     private static float secondPrincessChance = 0;
 
-    @OnlyIn(Dist.CLIENT)
-    @Nullable
-    private static TextureAtlasSprite beeSprite;
     @Nullable
     private static HiveRegistry hiveRegistry;
 
@@ -132,15 +133,11 @@ public class ModuleApiculture extends BlankForestryModule {
         return hiveRegistry;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static TextureAtlasSprite getBeeSprite() {
-        Preconditions.checkNotNull(beeSprite, "Bee sprite has not been registered");
-        return beeSprite;
-    }
-
     public ModuleApiculture() {
         proxy = DistExecutor.safeRunForDist(() -> ProxyApicultureClient::new, () -> ProxyApiculture::new);
         ForgeUtils.registerSubscriber(this);
+
+        ApicultureParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     @Override
@@ -439,7 +436,7 @@ public class ModuleApiculture extends BlankForestryModule {
     public void registerRecipes() {
         if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
             ItemStack honeyDrop = ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1);
-            // / SQUEEZER
+            // SQUEEZER
             FluidStack honeyDropFluid = ForestryFluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
             if (!honeyDropFluid.isEmpty()) {
                 RecipeManagers.squeezerManager.addRecipe(
@@ -469,7 +466,7 @@ public class ModuleApiculture extends BlankForestryModule {
             lavaIngredients.add(new ItemStack(Blocks.DIRT));
             RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 1600));
 
-            // / CARPENTER
+            // CARPENTER
             RecipeManagers.carpenterManager.addRecipe(
                     50,
                     ForestryFluids.HONEY.getFluid(500),
@@ -507,7 +504,7 @@ public class ModuleApiculture extends BlankForestryModule {
                     CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1)
             );
 
-            // / CENTRIFUGE
+            // CENTRIFUGE
             // Honey combs
             RecipeManagers.centrifugeManager.addRecipe(
                     20,
@@ -661,7 +658,7 @@ public class ModuleApiculture extends BlankForestryModule {
                     )
             );
 
-            // / FERMENTER
+            // FERMENTER
             FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
             FluidStack honey = ForestryFluids.HONEY.getFluid(1);
             if (!shortMead.isEmpty() && !honey.isEmpty()) {
@@ -776,6 +773,14 @@ public class ModuleApiculture extends BlankForestryModule {
     @Override
     public ISaveEventHandler getSaveEventHandler() {
         return new SaveEventHandlerApiculture();
+    }
+
+    @SubscribeEvent
+    public void registerSprites(TextureStitchEvent.Pre event) {
+        //TODO textures
+        for (int i = 0; i < ParticleSnow.sprites.length; i++) {
+            //			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+        }
     }
 
     @Override

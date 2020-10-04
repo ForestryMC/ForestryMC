@@ -19,7 +19,7 @@ import net.minecraft.util.text.ITextComponent;
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
     public GuiEnginePeat(ContainerEnginePeat container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", container, inventory, container.getTile(), title);
+        super(Constants.TEXTURE_PATH_GUI + "peatengine.png", container, inventory, container.getTile(), title);
     }
 
     @Override

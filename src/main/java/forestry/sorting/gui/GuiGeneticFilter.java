@@ -30,7 +30,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
     private TextFieldWidget searchField;
 
     public GuiGeneticFilter(ContainerGeneticFilter container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/filter.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "filter.png", container, inventory, title);
         ySize = 222;
         xSize = 212;
         this.tile = container.getTile();
@@ -63,7 +63,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
                 12,
                 64,
                 new Drawable(new ResourceLocation(
-                        Constants.TEXTURE_PATH_GUI + "/container/creative_inventory/tabs.png"), 232, 0, 12, 15)
+                        Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png"), 232, 0, 12, 15)
         );
         widgetManager.add(this.selection = new SelectionWidget(widgetManager, 0, 134, scrollBar, this));
         widgetManager.add(scrollBar);

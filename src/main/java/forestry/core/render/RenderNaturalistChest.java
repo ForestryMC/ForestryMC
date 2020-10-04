@@ -39,7 +39,7 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
         this.lock = new ModelRenderer(64, 64, 0, 0);
         this.lock.addBox(7.0F, -1.0F, 15.0F, 2.0F, 4.0F, 1.0F, 0.0F);
         this.lock.rotationPointY = 8.0F;
-        texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/" + textureName + ".png");
+        texture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "" + textureName + ".png");
     }
 
     @Override

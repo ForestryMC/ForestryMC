@@ -23,7 +23,7 @@ public class GuiGenerator extends GuiForestryTitled<ContainerGenerator> {
     private final TileEuGenerator tile;
 
     public GuiGenerator(ContainerGenerator container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/generator.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "generator.png", container, inventory, title);
         widgetManager.add(new TankWidget(this.widgetManager, 49, 17, 0));
         this.tile = container.getTile();
     }

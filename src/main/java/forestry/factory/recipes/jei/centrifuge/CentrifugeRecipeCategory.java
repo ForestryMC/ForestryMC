@@ -2,10 +2,10 @@ package forestry.factory.recipes.jei.centrifuge;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.recipes.jei.ForestryTooltipCallback;
-import forestry.core.render.ForestryResource;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
@@ -41,7 +41,10 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
     private static final int inputSlot = 0;
     private static final int outputSlot = 1;
 
-    private final static ResourceLocation guiTexture = new ForestryResource("textures/gui/centrifugesocket2.png");
+    private final static ResourceLocation guiTexture = new ResourceLocation(
+            Constants.MOD_ID,
+            Constants.TEXTURE_PATH_GUI + "centrifugesocket2.png"
+    );
     private final IDrawableAnimated arrow;
     private final IDrawable icon;
 

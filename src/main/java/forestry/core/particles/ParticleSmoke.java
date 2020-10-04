@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.entities;
+package forestry.core.particles;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
@@ -61,7 +61,7 @@ public class ParticleSmoke extends Particle {
 
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;    //TODO renderType
+        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     /**

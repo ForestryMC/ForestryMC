@@ -153,9 +153,9 @@ public class ModuleCrates extends BlankForestryModule {
 
     @Override
     public void registerRecipes() {
-        // / CARPENTER
+        // CARPENTER
         if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-            // / CRATES
+            // CRATES
             //TODO fluids
             //			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, items.crate.getItemStack(24),
             //				" # ", "# #", " # ", '#', "logWood");

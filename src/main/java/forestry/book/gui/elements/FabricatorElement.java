@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
     private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(
             Constants.MOD_ID,
-            Constants.TEXTURE_PATH_GUI + "/almanac/crafting.png"
+            Constants.TEXTURE_PATH_GUI + "almanac/crafting.png"
     );
     private static final Drawable FABRICATOR_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 60, 108, 56);
     private static final Drawable FABRICATOR_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 61, 16, 16);

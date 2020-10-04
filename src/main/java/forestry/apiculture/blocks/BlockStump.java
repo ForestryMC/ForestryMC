@@ -19,6 +19,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
@@ -27,14 +28,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class BlockStump extends TorchBlock {
 
     public BlockStump() {
-        super(Block.Properties.create(Material.MISCELLANEOUS)
-                              .hardnessAndResistance(0.0f)
-                              .sound(SoundType.WOOD), ParticleTypes.FLAME);
+        super(
+                Block.Properties.create(Material.MISCELLANEOUS)
+                                .hardnessAndResistance(0.0f)
+                                .sound(SoundType.WOOD),
+                ParticleTypes.FLAME
+        );
     }
 
     @Override
@@ -48,22 +50,18 @@ public class BlockStump extends TorchBlock {
     ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
         if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
-            BlockState activatedState = ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).with(
+            BlockState activatedState = ApicultureBlocks.CANDLE.with(
                     BlockCandle.STATE,
                     BlockCandle.State.ON
             );
             worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
             TileCandle tc = new TileCandle();
-            tc.setColour(16777215); // default to white
+            tc.setColour(DyeColor.WHITE.getColorValue());
             tc.setLit(true);
             worldIn.setTileEntity(pos, tc);
             return ActionResultType.SUCCESS;
         }
 
         return ActionResultType.PASS;
-    }
-
-    @Override
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
     }
 }

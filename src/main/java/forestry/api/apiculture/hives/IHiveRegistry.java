@@ -14,14 +14,14 @@ public interface IHiveRegistry {
 
     /* Forestry Hive Names */
     enum HiveType implements IBlockSubtype {
-        FOREST("forestry:forest", "forestry.speciesForest"),
-        MEADOWS("forestry:meadows", "forestry.speciesMeadows"),
-        DESERT("forestry:desert", "forestry.speciesModest"),
-        JUNGLE("forestry:jungle", "forestry.speciesTropical"),
-        END("forestry:end", "forestry.speciesEnded"),
-        SNOW("forestry:snow", "forestry.speciesWintry"),
-        SWAMP("forestry:swamp", "forestry.speciesMarshy"),
-        SWARM("forestry:swarm", "forestry.speciesForest");
+        FOREST("forestry:forest", "forestry:species_forest"),
+        MEADOWS("forestry:meadows", "forestry:species_meadows"),
+        DESERT("forestry:desert", "forestry:species_modest"),
+        JUNGLE("forestry:jungle", "forestry:species_tropical"),
+        END("forestry:end", "forestry:species_ended"),
+        SNOW("forestry:snow", "forestry:species_wintry"),
+        SWAMP("forestry:swamp", "forestry:species_marshy"),
+        SWARM("forestry:swarm", "forestry:species_forest");
 
         public static final HiveType[] VALUES = values();
 

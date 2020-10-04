@@ -26,7 +26,7 @@ public class SlotFilterFacing extends Slot implements ISlotTextured {
     public Pair<ResourceLocation, ResourceLocation> getBackground() {
         return Pair.of(
                 PlayerContainer.LOCATION_BLOCKS_TEXTURE,
-                new ResourceLocation(Constants.MOD_ID, "slots/bee")
+                new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "slots/bee")
         );
     }
 }

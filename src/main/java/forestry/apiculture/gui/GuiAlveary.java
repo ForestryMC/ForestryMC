@@ -23,7 +23,7 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
     private final TileAlveary tile;
 
     public GuiAlveary(ContainerAlveary container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/alveary.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "alveary.png", container, inventory, title);
         this.tile = container.getTile();
         this.ySize = 190;
     }

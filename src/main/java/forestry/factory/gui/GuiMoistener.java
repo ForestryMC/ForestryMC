@@ -22,7 +22,7 @@ public class GuiMoistener extends GuiForestryTitled<ContainerMoistener> {
     private final TileMoistener tile;
 
     public GuiMoistener(ContainerMoistener container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/moistener.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "moistener.png", container, inventory, title);
         this.tile = container.getTile();
         widgetManager.add(new TankWidget(this.widgetManager, 16, 16, 0));
     }

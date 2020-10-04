@@ -18,7 +18,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
     private final TilePlanter tile;
 
     public GuiPlanter(ContainerPlanter container, PlayerInventory playerInventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/planter.png", container, playerInventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "planter.png", container, playerInventory, title);
         this.tile = container.getTile();
         this.xSize = 202;
         this.ySize = 192;

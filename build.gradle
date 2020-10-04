@@ -168,6 +168,8 @@ jar {
     }
 }
 
+jar.finalizedBy('reobfJar')
+
 task apiJar(type: Jar) {
     // TODO: when FG bug is fixed, remove allSource from the api jar.
     // https://github.com/MinecraftForge/ForgeGradle/issues/369

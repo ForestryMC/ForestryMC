@@ -79,7 +79,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         this.beeListener = BeeManager.beeRoot.createBeeHousingListener(housing);
     }
 
-    // / SAVING & LOADING
+    // SAVING & LOADING
     @Override
     public void read(CompoundNBT compoundNBT) {
         beeProgress = compoundNBT.getInt("BreedingTime");
@@ -349,7 +349,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         return health > 0;
     }
 
-    // / BREEDING
+    // BREEDING
     private void tickBreed() {
         beeProgressMax = totalBreedingTime;
 

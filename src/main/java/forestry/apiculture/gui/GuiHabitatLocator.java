@@ -49,7 +49,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
     private int startY;
 
     public GuiHabitatLocator(ContainerHabitatLocator container, PlayerInventory playerInv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/biomefinder.png", container, playerInv, title);
+        super(Constants.TEXTURE_PATH_GUI + "biomefinder.png", container, playerInv, title);
 
         this.itemInventory = container.getItemInventory();
         xSize = 176;

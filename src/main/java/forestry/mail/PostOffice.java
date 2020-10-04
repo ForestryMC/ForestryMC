@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 
-    // / CONSTANTS
+    // CONSTANTS
     public static final String SAVE_NAME = "forestry_mail";
     private final int[] collectedPostage = new int[EnumPostage.values().length];
     private final LinkedHashMap<IMailAddress, ITradeStation> activeTradeStations = new LinkedHashMap<>();
@@ -111,7 +111,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
         activeTradeStations.remove(trade.getAddress());
     }
 
-    // / STAMP MANAGMENT
+    // STAMP MANAGMENT
     @Override
     public ItemStack getAnyStamp(int max) {
         return getAnyStamp(EnumPostage.values(), max);
@@ -137,7 +137,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
         return ItemStack.EMPTY;
     }
 
-    // / DELIVERY
+    // DELIVERY
     @Override
     public IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge) {
         ILetter letter = PostManager.postRegistry.getLetter(itemstack);

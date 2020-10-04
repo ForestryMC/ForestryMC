@@ -11,7 +11,6 @@ import net.minecraft.entity.EntityClassification;
 
 @FeatureProvider
 public class ApicultureEntities {
-
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleApiculture.class);
 
     public static final FeatureEntityType<MinecartEntityApiary> APIARY_MINECART = REGISTRY
@@ -28,7 +27,4 @@ public class ApicultureEntities {
                     "cart_bee_house",
                     (builder) -> builder.size(0.98F, 0.7F)
             );
-
-    private ApicultureEntities() {
-    }
 }

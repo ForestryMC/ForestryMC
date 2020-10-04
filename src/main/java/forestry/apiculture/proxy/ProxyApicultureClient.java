@@ -12,20 +12,17 @@ package forestry.apiculture.proxy;
 
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureEntities;
-import forestry.core.entities.ParticleSnow;
 import forestry.modules.IClientModuleHandler;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class ProxyApicultureClient extends ProxyApiculture implements IClientModuleHandler {
-
     @Override
     public void setupClient(FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(
@@ -42,14 +39,5 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 
         RenderTypeLookup.setRenderLayer(ApicultureBlocks.CANDLE.getBlock(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ApicultureBlocks.STUMP.getBlock(), RenderType.getCutout());
-    }
-
-    @Override
-    public void registerSprites(TextureStitchEvent.Pre event) {
-        //TODO textures
-        for (int i = 0; i < ParticleSnow.sprites.length; i++) {
-            //			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
-        }
-        //		beeSprite = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
     }
 }

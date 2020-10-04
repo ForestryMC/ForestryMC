@@ -22,7 +22,7 @@ public class GuiFermenter extends GuiForestryTitled<ContainerFermenter> {
     private final TileFermenter tile;
 
     public GuiFermenter(ContainerFermenter container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "/fermenter.png", container, inventory, title);
+        super(Constants.TEXTURE_PATH_GUI + "fermenter.png", container, inventory, title);
         this.tile = container.getTile();
         widgetManager.add(new TankWidget(this.widgetManager, 35, 19, 0));
         widgetManager.add(new TankWidget(this.widgetManager, 125, 19, 1));
