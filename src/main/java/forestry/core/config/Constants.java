@@ -47,18 +47,11 @@ public class Constants implements IForestryConstants {
     public static final String TEXTURE_APIARIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "apiarist_armor_1.png";
     public static final String TEXTURE_APIARIST_ARMOR_SECONDARY = TEXTURE_PATH_ITEM + "apiarist_armor_2.png";
     public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "naturalist_armor_1.png";
-    public static final String TEXTURE_SKIN_BEEKPEEPER =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "beekeeper.png";
-    public static final String TEXTURE_SKIN_ZOMBIE_BEEKPEEPER =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "zombie_beekeeper.png";
+
     public static final String TEXTURE_SKIN_LUMBERJACK =
             Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "lumberjack.png";
     public static final String TEXTURE_SKIN_ZOMBIE_LUMBERJACK =
             Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "zombie_lumberjack.png";
-
-    // Villagers
-    public static final String ID_VILLAGER_APIARIST = Constants.MOD_ID + ":apiarist";
-    public static final String ID_VILLAGER_ARBORIST = Constants.MOD_ID + ":arborist";
 
     // Village Loot Key
     public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(
@@ -139,16 +132,6 @@ public class Constants implements IForestryConstants {
     public static final int CARPENTER_CRATING_CYCLES = 5;
     public static final int CARPENTER_UNCRATING_CYCLES = 5;
     public static final int CARPENTER_CRATING_LIQUID_QUANTITY = 100;
-
-    @Override
-    public String getApicultureVillagerID() {
-        return ID_VILLAGER_APIARIST;
-    }
-
-    @Override
-    public String getArboricultureVillagerID() {
-        return ID_VILLAGER_ARBORIST;
-    }
 
     @Override
     public ResourceLocation getVillagerChestLootKey() {

@@ -1,7 +1,7 @@
 package forestry.core.particles;
 
 
-import forestry.core.registration.WrappedDeferredRegister;
+import forestry.api.registration.WrappedDeferredRegister;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;

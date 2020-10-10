@@ -1,4 +1,4 @@
-package forestry.core.registration;
+package forestry.api.registration;
 
 import forestry.core.utils.FieldsAreNonnullByDefault;
 import net.minecraftforge.fml.RegistryObject;

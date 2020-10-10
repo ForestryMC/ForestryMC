@@ -1,6 +1,6 @@
 package forestry.core.particles;
 
-import forestry.core.registration.WrappedRegistryObject;
+import forestry.api.registration.WrappedRegistryObject;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.fml.RegistryObject;

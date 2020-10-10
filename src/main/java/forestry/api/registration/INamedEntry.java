@@ -1,4 +1,4 @@
-package forestry.core.registration;
+package forestry.api.registration;
 
 public interface INamedEntry {
 

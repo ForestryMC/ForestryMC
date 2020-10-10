@@ -14,7 +14,7 @@ import forestry.api.core.ISpriteRegistry;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ApiaristAI;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.villagers.RegisterVillager;
 import forestry.core.config.Constants;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.render.TextureManagerForestry;
@@ -168,9 +168,8 @@ public class EventHandlerCore {
         Entity entity = event.getEntity();
         if ((entity instanceof VillagerEntity)) {
             VillagerEntity villager = (VillagerEntity) entity;
-            //TODO - not sure this is quite right
             VillagerProfession prof = ForgeRegistries.PROFESSIONS.getValue(EntityType.getKey(villager.getType()));
-            if (ModuleApiculture.villagerApiarist != null && prof == ModuleApiculture.villagerApiarist) {
+            if (prof.getRegistryName().equals(RegisterVillager.BEEKEEPER)) {
                 villager.goalSelector.addGoal(6, new ApiaristAI(villager, 0.6));
             }
         }

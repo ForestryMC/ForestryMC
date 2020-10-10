@@ -1,6 +1,5 @@
-package forestry.core.registration;
+package forestry.api.registration;
 
-import forestry.core.registration.WrappedRegistryObject;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

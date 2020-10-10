@@ -42,6 +42,7 @@ import forestry.apiculture.particles.ApicultureParticles;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.trigger.ApicultureTriggers;
+import forestry.apiculture.villagers.RegisterVillager;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
@@ -52,11 +53,11 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.particles.ParticleSnow;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.network.IPacketRegistry;
+import forestry.core.particles.ParticleSnow;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
@@ -70,7 +71,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -123,8 +123,6 @@ public class ModuleApiculture extends BlankForestryModule {
     public static boolean doSelfPollination = true;
 
     public static int maxFlowersSpawnedPerHive = 20;
-    @Nullable
-    public static VillagerProfession villagerApiarist;
 
     public static ProxyApiculture proxy;
 
@@ -138,6 +136,12 @@ public class ModuleApiculture extends BlankForestryModule {
         ForgeUtils.registerSubscriber(this);
 
         ApicultureParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        if (Config.enableVillagers) {
+            RegisterVillager.Registers.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
+            RegisterVillager.Registers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+            MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+        }
     }
 
     @Override
@@ -283,46 +287,6 @@ public class ModuleApiculture extends BlankForestryModule {
         BeeManager.uncommonVillageBees.add(BeeDefinition.FOREST.getRainResist().getGenome());
         BeeManager.uncommonVillageBees.add(BeeDefinition.COMMON.getGenome());
         BeeManager.uncommonVillageBees.add(BeeDefinition.VALIANT.getGenome());
-
-        if (Config.enableVillagers) {
-            // Register villager stuff
-            //TODO - villagers
-            //			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
-            //			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-            //			villagerRegistry.registerVillageCreationHandler(villageHandler);
-            //
-            //			villagerApiarist = new VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
-            //			IForgeRegistry<VillagerProfession> villagerProfessions = ForgeRegistries.PROFESSIONS;
-            //			villagerProfessions.register(villagerApiarist);
-            //
-            //			ItemStack wildcardPrincess = new ItemStack(items.beePrincessGE, 1);
-            //			ItemStack wildcardDrone = new ItemStack(items.beeDroneGE, 1);
-            //			ItemStack apiary = new ItemStack(blocks.apiary);
-            //			ItemStack provenFrames = items.frameProven.getItemStack();
-            //			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
-            //			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
-            //			ItemStack propolis = new ItemStack(items.propolis, 1);
-            //
-            //			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
-            //			apiaristCareer.addTrade(1,
-            //				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.WHEAT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-            //				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.CARROT), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4)),
-            //				new VillagerApiaristTrades.GiveRandomCombsForItems(items.beeComb, new ItemStack(Items.POTATO), new VillagerEntity.PriceInfo(8, 12), new VillagerEntity.PriceInfo(2, 4))
-            //			);
-            //			apiaristCareer.addTrade(2,
-            //				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
-            //				new VillagerTradeLists.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
-            //				new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
-            //			);
-            //			apiaristCareer.addTrade(3,
-            //				new VillagerTradeLists.GiveEmeraldForItems(wildcardPrincess, null),
-            //				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
-            //			);
-            //			apiaristCareer.addTrade(4,
-            //				new VillagerTradeLists.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
-            //				new VillagerTradeLists.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
-            //			);
-        }
     }
 
     private void initFlowerRegistry() {

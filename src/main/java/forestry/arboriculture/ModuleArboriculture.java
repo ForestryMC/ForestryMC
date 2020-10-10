@@ -23,6 +23,7 @@ import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
+import forestry.arboriculture.villagers.RegisterVillager;
 import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
@@ -42,6 +43,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -73,6 +75,12 @@ public class ModuleArboriculture extends BlankForestryModule {
     public ModuleArboriculture() {
         proxy = DistExecutor.safeRunForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
         ForgeUtils.registerSubscriber(this);
+
+        if (Config.enableVillagers) {
+            RegisterVillager.Registers.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
+            RegisterVillager.Registers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+            MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+        }
     }
 
     @Override
@@ -123,31 +131,6 @@ public class ModuleArboriculture extends BlankForestryModule {
     @Override
     public void doInit() {
         TreeDefinition.initTrees();
-
-        if (Config.enableVillagers) {
-            //TODO: villagers
-            //			villagerArborist = new VillagerProfession(Constants.ID_VILLAGER_ARBORIST, Constants.TEXTURE_SKIN_LUMBERJACK, Constants.TEXTURE_SKIN_ZOMBIE_LUMBERJACK);
-            //			ForgeRegistries.VILLAGER_PROFESSIONS.register(villagerArborist);
-            //
-            //			VillagerRegistry.VillagerCareer arboristCareer = new VillagerRegistry.VillagerCareer(villagerArborist, "arborist");
-            //			arboristCareer.addTrade(1,
-            //				new VillagerArboristTrades.GivePlanksForEmeralds(new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(10, 32)),
-            //				new VillagerArboristTrades.GivePollenForEmeralds(new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(1, 3), EnumGermlingType.SAPLING, 4)
-            //			);
-            //			arboristCareer.addTrade(2,
-            //				new VillagerArboristTrades.GivePlanksForEmeralds(new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(10, 32)),
-            //				new VillagerTradeLists.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), items.grafterProven.getItemStack(), new VillagerEntity.PriceInfo(1, 1)),
-            //				new VillagerArboristTrades.GivePollenForEmeralds(new VillagerEntity.PriceInfo(2, 3), new VillagerEntity.PriceInfo(1, 1), EnumGermlingType.POLLEN, 6)
-            //			);
-            //			arboristCareer.addTrade(3,
-            //				new VillagerArboristTrades.GiveLogsForEmeralds(new VillagerEntity.PriceInfo(2, 5), new VillagerEntity.PriceInfo(6, 18)),
-            //				new VillagerArboristTrades.GiveLogsForEmeralds(new VillagerEntity.PriceInfo(2, 5), new VillagerEntity.PriceInfo(6, 18))
-            //			);
-            //			arboristCareer.addTrade(4,
-            //				new VillagerArboristTrades.GivePollenForEmeralds(new VillagerEntity.PriceInfo(5, 20), new VillagerEntity.PriceInfo(1, 1), EnumGermlingType.POLLEN, 10),
-            //				new VillagerArboristTrades.GivePollenForEmeralds(new VillagerEntity.PriceInfo(5, 20), new VillagerEntity.PriceInfo(1, 1), EnumGermlingType.SAPLING, 10)
-            //			);
-        }
 
         File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
 

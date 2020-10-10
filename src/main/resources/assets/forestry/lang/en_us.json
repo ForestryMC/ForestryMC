@@ -725,7 +725,7 @@
   "_comment": "###################",
   "_comment": "APICULTURE",
   "_comment": "###################",
-  "entity.Villager.apiarist": "Apiarist",
+  "entity.minecraft.villager.forestry.beekeeper": "Beekeeper",
   "death.bee.aggressive.player": "%1$s encountered a swarm of bees. %2$s stole his apiarist's suit.",
   "death.bee.aggressive": "%1$s encountered a swarm of bees. That had to sting.",
   "death.bee.hive.player": "%1$s was killed by wild bees. %2$s stole his apiarist's suit.",
