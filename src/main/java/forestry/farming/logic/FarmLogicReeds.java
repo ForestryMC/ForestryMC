@@ -36,7 +36,7 @@ public class FarmLogicReeds extends FarmLogic {
 
 	public FarmLogicReeds(IFarmHousing housing) {
 		super(housing);
-		Collection<IFarmable> farmables = Farmables.farmables.get("farmPoales");
+		Collection<IFarmable> farmables = Farmables.farmables.get(FarmableReference.Poales.get());
 		germlings = farmables.toArray(new IFarmable[farmables.size()]);
 	}
 

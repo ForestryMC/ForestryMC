@@ -26,7 +26,7 @@ import forestry.api.farming.IFarmHousing;
 public class FarmLogicShroom extends FarmLogicArboreal {
 
 	public FarmLogicShroom(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.mycelium), new ItemStack(Blocks.mycelium), Farmables.farmables.get("farmShroom"));
+		super(housing, new ItemStack(Blocks.mycelium), new ItemStack(Blocks.mycelium), Farmables.farmables.get(FarmableReference.Shroom.get()));
 	}
 
 	@Override

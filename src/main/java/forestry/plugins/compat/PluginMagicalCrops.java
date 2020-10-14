@@ -12,6 +12,7 @@ package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -268,7 +269,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{seed}, Fluids.SEEDOIL.getFluid(fluidAmount));
 		}
 		if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
-			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));
+			Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(seed, crop, 7));
 		}
 	}
 
@@ -276,7 +277,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 		ItemStack seed = GameRegistry.findItemStack(MagCrop, middlefix + name + seedSuffix, 1);
 		Block crop = GameRegistry.findBlock(MagCrop, middlefix + name + cropSuffix);
 		if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
-			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));
+			Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(seed, crop, 7));
 		}
 	}
 }

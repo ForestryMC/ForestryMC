@@ -227,29 +227,18 @@ public class PluginFactory extends ForestryPlugin {
 
 		// / FABRICATOR
 		ItemElectronTube electronTube = PluginCore.items.tubes;
-		
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.COPPER, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotCopper"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.TIN, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotTin"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.BRONZE, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotBronze"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.IRON, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotIron"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.GOLD, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotGold"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.DIAMOND, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemDiamond"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.OBSIDIAN, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Blocks.obsidian});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.BLAZE, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Items.blaze_powder});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.EMERALD, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemEmerald"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.APATITE, 4),
-				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemApatite"});
-		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.LAPIS, 4),
-				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', new ItemStack(Items.dye, 1, 4)});
+
+		EnumElectronTube.COPPER.registerTubeRecipe("ingotCopper");
+		EnumElectronTube.BRONZE.registerTubeRecipe("ingotBronze");
+		EnumElectronTube.TIN.registerTubeRecipe("ingotTin");
+		EnumElectronTube.IRON.registerTubeRecipe("ingotIron");
+		EnumElectronTube.GOLD.registerTubeRecipe("ingotGold");
+		EnumElectronTube.DIAMOND.registerTubeRecipe("gemDiamond");
+		EnumElectronTube.OBSIDIAN.registerTubeRecipe(new ItemStack(Blocks.obsidian));
+		EnumElectronTube.BLAZE.registerTubeRecipe(new ItemStack(Items.blaze_powder));
+		EnumElectronTube.EMERALD.registerTubeRecipe("gemEmerald");
+		EnumElectronTube.APATITE.registerTubeRecipe("gemApatite");
+		EnumElectronTube.LAPIS.registerTubeRecipe("gemLapis");
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), electronTube.get(EnumElectronTube.ENDER, 4),
 				new Object[]{" X ", "#X#", "XXX", '#', new ItemStack(Items.ender_eye, 1, 0), 'X', new ItemStack(Blocks.end_stone, 1, 0)});
 

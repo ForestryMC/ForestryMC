@@ -84,6 +84,8 @@ public class ItemOverlay extends ItemForestry {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
+		if (i < 0 || i >= overlays.length)
+			return null;
 		if (j > 0 && overlays[i].getSecondaryColor() != 0) {
 			return secondaryIcon;
 		} else {
@@ -93,7 +95,7 @@ public class ItemOverlay extends ItemForestry {
 
 	@Override
 	public int getRenderPasses(int metadata) {
-		return overlays[metadata].getSecondaryColor() != 0 ? 2 : 1;
+		return metadata < 0 || metadata >= overlays.length ? 0 : overlays[metadata].getSecondaryColor() != 0 ? 2 : 1;
 	}
 
 	@Override
@@ -112,6 +114,8 @@ public class ItemOverlay extends ItemForestry {
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
+		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= overlays.length)
+			return 0;
 		IOverlayInfo overlayInfo = overlays[itemstack.getItemDamage()];
 		if (j == 0 || overlayInfo.getSecondaryColor() == 0) {
 			return overlayInfo.getPrimaryColor();

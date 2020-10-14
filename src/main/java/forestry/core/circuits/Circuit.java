@@ -94,6 +94,7 @@ public abstract class Circuit implements ICircuit {
 	public static ICircuit farmGourdManual;
 	public static ICircuit farmCocoaManual;
 
+	public static ICircuit farmIC2CropsManual;
 	public static ICircuit farmOrchardManual;
 	public static ICircuit farmRubberManual;
 	public static ICircuit farmEnderManaged;

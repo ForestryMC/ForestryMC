@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.Fluids;
+import forestry.core.recipes.RecipeUtil;
+import forestry.plugins.PluginCore;
+import net.minecraft.item.ItemStack;
+
 import java.awt.Color;
 
 public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
@@ -25,7 +31,8 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	EMERALD(new Color(0x00CC41)),
 	APATITE(new Color(0x579CD9)),
 	LAPIS(new Color(0x1c57c6)),
-	ENDER(new Color(0x33adad), new Color(0x255661));
+	ENDER(new Color(0x33adad), new Color(0x255661)),
+	URANIUM(new Color(0xFF00CC41), new Color(0x33adad));
 
 	public static final EnumElectronTube[] VALUES = values();
 
@@ -61,5 +68,19 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	@Override
 	public boolean isSecret() {
 		return false;
+	}
+
+	public void registerTubeRecipe(ItemStack stack) {
+		if (stack != null){
+			for (Object stackOreDict : RecipeUtil.getOreDictRecipeEquivalents(stack)) {
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), PluginCore.items.tubes.get(this, 4),
+						new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', stackOreDict});
+			}
+		}
+	}
+
+	public void registerTubeRecipe(String stack) {
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), PluginCore.items.tubes.get(this, 4),
+				new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', stack});
 	}
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -49,7 +50,7 @@ public class PluginImmersiveEngineering extends ForestryPlugin {
 		int seedAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		if (hempSeed != null && hempCrop != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{hempSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
-			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(hempSeed, hempCrop, 4, hempFiber));
+			Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(hempSeed, hempCrop, 4, hempFiber));
 		}
 	}
 

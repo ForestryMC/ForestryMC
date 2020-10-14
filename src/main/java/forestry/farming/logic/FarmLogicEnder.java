@@ -34,7 +34,7 @@ import forestry.core.utils.vect.VectUtil;
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 	public FarmLogicEnder(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.end_stone), new ItemStack(Blocks.end_stone), Farmables.farmables.get("farmEnder"));
+		super(housing, new ItemStack(Blocks.end_stone), new ItemStack(Blocks.end_stone), Farmables.farmables.get(FarmableReference.Ender.get()));
 	}
 
 	@Override

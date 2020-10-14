@@ -59,7 +59,7 @@ public abstract class RecipeUtil {
 	 * Returns a list containing itemStack if there are no ore dictionary names.
 	 * Used for creating recipes that should accept equivalent itemStacks, based on the ore dictionary.
 	 */
-	public static List getOreDictRecipeEquivalents(ItemStack itemStack) {
+	public static List<?> getOreDictRecipeEquivalents(ItemStack itemStack) {
 		int[] oreDictIds = OreDictionary.getOreIDs(itemStack);
 		List<String> oreDictNames = new ArrayList<>(oreDictIds.length);
 		for (int oreId : oreDictIds) {

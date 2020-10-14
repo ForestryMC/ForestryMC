@@ -12,6 +12,7 @@ package forestry.plugins.compat;
 
 import java.util.ArrayList;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -54,10 +55,10 @@ public class PluginExtraUtilities extends ForestryPlugin {
 		super.doInit();
 
 		Block exUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
-		Farmables.farmables.put("farmEnder", new ArrayList<IFarmable>());
+		Farmables.farmables.put(FarmableReference.Ender.get(), new ArrayList<IFarmable>());
 		if (Config.isExUtilEnderLilyEnabled()) {
 			Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
-			Farmables.farmables.get("farmEnder").add(new FarmableGenericCrop(new ItemStack(exUEnderLilly, 1, 0), exUEnderLilly, 7));
+			Farmables.farmables.get(FarmableReference.Ender.get()).add(new FarmableGenericCrop(new ItemStack(exUEnderLilly, 1, 0), exUEnderLilly, 7));
 		}
 	}
 

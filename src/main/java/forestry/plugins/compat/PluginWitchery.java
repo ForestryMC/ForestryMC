@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -91,8 +92,8 @@ public class PluginWitchery extends ForestryPlugin {
 			Block cropDirectBlock = GameRegistry.findBlock(Witch, cropDirectName + "plant");
 			ItemStack cropDirectStack = GameRegistry.findItemStack(Witch, cropDirectName, 1);
 			if (cropDirectStack != null && cropDirectBlock != null) {
-				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(cropDirectStack, cropDirectBlock, 5));
-				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(cropDirectBlock, 5));
+				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(cropDirectStack, cropDirectBlock, 5));
+				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(cropDirectBlock, 5));
 			}
 		}
 		for (Map.Entry<String, Integer> cropSeedName : cropSeed.entrySet()) {
@@ -100,13 +101,13 @@ public class PluginWitchery extends ForestryPlugin {
 			ItemStack cropSeedStack = GameRegistry.findItemStack(Witch, "seeds" + cropSeedName.getKey(), 1);
 			if (cropSeedStack != null && cropSeedBlock != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{cropSeedStack}, Fluids.SEEDOIL.getFluid(seedamount));
-				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(cropSeedStack, cropSeedBlock, cropSeedName.getValue()));
-				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(cropSeedBlock, cropSeedName.getValue()));
+				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(cropSeedStack, cropSeedBlock, cropSeedName.getValue()));
+				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(cropSeedBlock, cropSeedName.getValue()));
 			}
 
 		}
 		Block artichokeBlock = GameRegistry.findBlock(Witch, "artichoke");
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(artichokeBlock, 4));
+		Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(artichokeBlock, 4));
 
 	}
 }

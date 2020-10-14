@@ -13,6 +13,7 @@ package forestry.plugins.compat;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -110,7 +111,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		}
 
 		if (saplings != null && persimmon != null) {
-			Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(saplings, 15, persimmon));
+			Farmables.farmables.get(FarmableReference.Arboreal.get()).add(new FarmableGenericSapling(saplings, 15, persimmon));
 		}
 
 		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
@@ -118,13 +119,13 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
 			ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
 			if (boPTurnipSeeds != null) {
-				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
+				Farmables.farmables.get(FarmableReference.Vegetables.get()).add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
 				if (PluginManager.Module.FACTORY.isEnabled()) {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
 				}
 			}
 
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(boPTurnip, 7));
+			Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(boPTurnip, 7));
 		}
 	}
 

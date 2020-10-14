@@ -10,34 +10,13 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.init.Items;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 
-public class FarmLogicVegetable extends FarmLogicCrops {
-
-	public FarmLogicVegetable(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get(FarmableReference.Vegetables.get()));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.carrot.getIconFromDamage(0);
-	}
-
-	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Vegetable Farm";
-		} else {
-			return "Managed Vegetable Farm";
-		}
-	}
-
+//TODO: Make special Logic for Crops, maybe a virtual map of references to iterate faster?
+public class FarmLogicIC2Crops extends FarmLogicOrchard {
+    public FarmLogicIC2Crops(IFarmHousing housing) {
+        super(housing);
+        this.farmables = Farmables.farmables.get(FarmableReference.IC2Crops.get());
+    }
 }

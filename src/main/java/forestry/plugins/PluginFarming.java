@@ -16,6 +16,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import forestry.farming.logic.*;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -42,25 +43,6 @@ import forestry.core.utils.Log;
 import forestry.farming.blocks.BlockFarmType;
 import forestry.farming.blocks.BlockRegistryFarming;
 import forestry.farming.circuits.CircuitFarmLogic;
-import forestry.farming.logic.FarmLogicArboreal;
-import forestry.farming.logic.FarmLogicCereal;
-import forestry.farming.logic.FarmLogicCocoa;
-import forestry.farming.logic.FarmLogicGourd;
-import forestry.farming.logic.FarmLogicInfernal;
-import forestry.farming.logic.FarmLogicOrchard;
-import forestry.farming.logic.FarmLogicPeat;
-import forestry.farming.logic.FarmLogicReeds;
-import forestry.farming.logic.FarmLogicShroom;
-import forestry.farming.logic.FarmLogicSucculent;
-import forestry.farming.logic.FarmLogicVegetable;
-import forestry.farming.logic.FarmableBasicFruit;
-import forestry.farming.logic.FarmableGE;
-import forestry.farming.logic.FarmableGenericCrop;
-import forestry.farming.logic.FarmableGenericSapling;
-import forestry.farming.logic.FarmableGourd;
-import forestry.farming.logic.FarmableStacked;
-import forestry.farming.logic.FarmableVanillaMushroom;
-import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.render.EnumFarmBlockTexture;
 import forestry.farming.tiles.TileFarmControl;
@@ -87,42 +69,41 @@ public class PluginFarming extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
-
-		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
+		Farmables.farmables.put(FarmableReference.Arboreal.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Arboreal.get()).add(new FarmableVanillaSapling());
 		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
-			Farmables.farmables.get("farmArboreal").add(new FarmableGE());
+			Farmables.farmables.get(FarmableReference.Arboreal.get()).add(new FarmableGE());
 		}
 		
-		Farmables.farmables.put("farmOrchard", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.wheat, 7));
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.potatoes, 7));
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.carrots, 7));
+		Farmables.farmables.put(FarmableReference.Orchard.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(Blocks.wheat, 7));
+		Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(Blocks.potatoes, 7));
+		Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(Blocks.carrots, 7));
 
-		Farmables.farmables.put("farmShroom", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.brown_mushroom, 0));
-		Farmables.farmables.get("farmShroom").add(new FarmableVanillaMushroom(Blocks.red_mushroom, 0));
+		Farmables.farmables.put(FarmableReference.Shroom.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Shroom.get()).add(new FarmableVanillaMushroom(Blocks.brown_mushroom, 0));
+		Farmables.farmables.get(FarmableReference.Shroom.get()).add(new FarmableVanillaMushroom(Blocks.red_mushroom, 0));
 
-		Farmables.farmables.put("farmWheat", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(new ItemStack(Items.wheat_seeds), Blocks.wheat, 7));
+		Farmables.farmables.put(FarmableReference.Wheat.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(new ItemStack(Items.wheat_seeds), Blocks.wheat, 7));
 
-		Farmables.farmables.put("farmGourd", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmGourd").add(
+		Farmables.farmables.put(FarmableReference.Gourd.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Gourd.get()).add(
 				new FarmableGourd(new ItemStack(Items.pumpkin_seeds), new ItemStack(Blocks.pumpkin_stem), new ItemStack(Blocks.pumpkin)));
-		Farmables.farmables.get("farmGourd").add(new FarmableGourd(new ItemStack(Items.melon_seeds), new ItemStack(Blocks.melon_stem), new ItemStack(Blocks.melon_block)));
+		Farmables.farmables.get(FarmableReference.Gourd.get()).add(new FarmableGourd(new ItemStack(Items.melon_seeds), new ItemStack(Blocks.melon_stem), new ItemStack(Blocks.melon_block)));
 
-		Farmables.farmables.put("farmInfernal", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmInfernal").add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
+		Farmables.farmables.put(FarmableReference.Infernal.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Infernal.get()).add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
 
-		Farmables.farmables.put("farmPoales", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.reeds, 3, 0));
+		Farmables.farmables.put(FarmableReference.Poales.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Poales.get()).add(new FarmableStacked(Blocks.reeds, 3, 0));
 
-		Farmables.farmables.put("farmSucculentes", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.cactus, 3, 0));
+		Farmables.farmables.put(FarmableReference.Succulentes.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Succulentes.get()).add(new FarmableStacked(Blocks.cactus, 3, 0));
 
-		Farmables.farmables.put("farmVegetables", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
+		Farmables.farmables.put(FarmableReference.Vegetables.get(), new ArrayList<>());
+		Farmables.farmables.get(FarmableReference.Vegetables.get()).add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
+		Farmables.farmables.get(FarmableReference.Vegetables.get()).add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
 
 		proxy.initializeRendering();
 
@@ -165,6 +146,9 @@ public class PluginFarming extends ForestryPlugin {
 		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class).setManual();
 
 		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class);
+
+		if (PluginManager.Module.FARMING.isEnabled() && GameRegistry.findBlock("IC2", "blockCrop") != null)
+			Circuit.farmIC2CropsManual = new CircuitFarmLogic("manualIC2Crop", FarmLogicIC2Crops.class).setManual();
 	}
 
 	@Override
@@ -342,5 +326,7 @@ public class PluginFarming extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuit.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1), Circuit.farmCocoaManual);
+
+
 	}
 }
