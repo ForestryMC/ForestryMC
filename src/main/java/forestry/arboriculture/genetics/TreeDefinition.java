@@ -1391,7 +1391,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
             }
             tileLeaves.setTree(new Tree(genome));
 
-            RenderUtil.markForUpdate(pos);
+//            RenderUtil.markForUpdate(pos);
             return true;
         }
     }

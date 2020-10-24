@@ -14,9 +14,10 @@ import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.apiculture.HiveConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nullable;
@@ -49,7 +50,7 @@ public final class Hive {
         return hiveDescription.getGenChance();
     }
 
-    public void postGen(World world, Random rand, BlockPos pos) {
+    public void postGen(ISeedReader world, Random rand, BlockPos pos) {
         hiveDescription.postGen(world, rand, pos);
     }
 
@@ -65,21 +66,21 @@ public final class Hive {
         return hiveDescription.isGoodTemperature(temperature);
     }
 
-    public boolean isValidLocation(World world, BlockPos pos) {
-        //TODO: Find a way to get the dimension type name
-		/*if (!HiveConfig.isDimAllowed(world.func_230315_m_().getRegistryName())) {
-			return false;
-		}*/
+    public boolean isValidLocation(ISeedReader world, BlockPos pos) {
+        if (!HiveConfig.isDimAllowed(world.getWorld().getDimensionKey().getLocation())) {
+            return false;
+        }
+
         return hiveDescription.getHiveGen().isValidLocation(world, pos);
     }
 
-    public boolean canReplace(World world, BlockPos pos) {
+    public boolean canReplace(ISeedReader world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         return hiveDescription.getHiveGen().canReplace(blockState, world, pos);
     }
 
     @Nullable
-    public BlockPos getPosForHive(World world, int x, int z) {
+    public BlockPos getPosForHive(ISeedReader world, int x, int z) {
         return hiveDescription.getHiveGen().getPosForHive(world, x, z);
     }
 

@@ -55,9 +55,11 @@ public class ClimateGrowthProvider implements IGrowthProvider {
         if (temperature == null) {
             temperature = genome.getActiveAllele(TreeChromosomes.SPECIES).getTemperature();
         }
+
         if (humidity == null) {
             humidity = genome.getActiveAllele(TreeChromosomes.SPECIES).getHumidity();
         }
+
         return AlleleManager.climateHelper.isWithinLimits(
                 biomeTemperature,
                 biomeHumidity,
@@ -67,5 +69,4 @@ public class ClimateGrowthProvider implements IGrowthProvider {
                 humidityTolerance
         );
     }
-
 }

@@ -224,34 +224,9 @@ public class CommonModuleHandler {
         });
     }
 
-    public void populateChunk(
-            ChunkGenerator chunkGenerator,
-            World world,
-            Random rand,
-            int chunkX,
-            int chunkZ,
-            boolean hasVillageGenerated
-    ) {
-        for (BlankForestryModule module : modules) {
-            module.populateChunk(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
-        }
-    }
-
     public void addBiomeDecorations(Biome biome) {
         for (BlankForestryModule module : modules) {
             module.addBiomeDecorations(biome);
-        }
-    }
-
-    public void decorateBiome(World world, Random rand, BlockPos pos) {
-        for (BlankForestryModule module : modules) {
-            module.decorateBiome(world, rand, pos);
-        }
-    }
-
-    public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-        for (BlankForestryModule module : modules) {
-            module.populateChunkRetroGen(world, rand, chunkX, chunkZ);
         }
     }
 

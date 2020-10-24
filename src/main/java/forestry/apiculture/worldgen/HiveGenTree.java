@@ -13,13 +13,13 @@ package forestry.apiculture.worldgen;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 
 public class HiveGenTree extends HiveGen {
-
     @Override
-    public boolean isValidLocation(World world, BlockPos pos) {
+    public boolean isValidLocation(ISeedReader world, BlockPos pos) {
         BlockPos posAbove = pos.up();
         BlockState blockStateAbove = world.getBlockState(posAbove);
         if (!isTreeBlock(blockStateAbove, world, posAbove)) {
@@ -33,9 +33,9 @@ public class HiveGenTree extends HiveGen {
     }
 
     @Override
-    public BlockPos getPosForHive(World world, int x, int z) {
+    public BlockPos getPosForHive(ISeedReader world, int x, int z) {
         // get top leaf block
-        final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z)).down();
+        final BlockPos topPos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).down();
         if (topPos.getY() <= 0) {
             return null;
         }
@@ -55,5 +55,4 @@ public class HiveGenTree extends HiveGen {
 
         return pos.toImmutable();
     }
-
 }

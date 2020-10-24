@@ -84,7 +84,7 @@ public class TileSapling extends TileTreeContainer {
             return true;
         }
 
-        Feature generator = tree.getTreeGenerator(world, getPos(), true);
+        Feature generator = tree.getTreeGenerator((ISeedReader) world, getPos(), true);
         if (generator instanceof FeatureArboriculture) {
             FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
             arboricultureGenerator.preGenerate(world, rand, getPos());
@@ -109,7 +109,7 @@ public class TileSapling extends TileTreeContainer {
             return;
         }
 
-        Feature generator = tree.getTreeGenerator(world, getPos(), bonemealed);
+        Feature generator = tree.getTreeGenerator((ISeedReader) world, getPos(), bonemealed);
         final boolean generated;
         if (generator instanceof FeatureBase) {
             generated = ((FeatureBase) generator).place(world, random, getPos(), false);

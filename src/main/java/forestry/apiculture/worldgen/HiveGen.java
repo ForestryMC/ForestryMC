@@ -12,21 +12,18 @@ package forestry.apiculture.worldgen;
 
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.core.utils.BlockUtil;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.ISeedReader;
 
 public abstract class HiveGen implements IHiveGen {
-
-    public static boolean isTreeBlock(BlockState blockState, World world, BlockPos pos) {
-        Block block = blockState.getBlock();
-        //TODO tag?
-        return false;//block.isLeaves(blockState, world, pos) || block.isWood(world, pos);
+    public static boolean isTreeBlock(BlockState blockState, ISeedReader world, BlockPos pos) {
+        return blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.WOOD;
     }
 
     @Override
-    public boolean canReplace(BlockState blockState, World world, BlockPos pos) {
+    public boolean canReplace(BlockState blockState, ISeedReader world, BlockPos pos) {
         return BlockUtil.canReplace(blockState, world, pos);
     }
 }

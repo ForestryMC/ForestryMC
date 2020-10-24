@@ -9,7 +9,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
 
 import java.util.Random;
@@ -47,5 +47,5 @@ public interface IHiveDescription {
      * Called after successful hive generation.
      * world, x, y, z give the location of the new hive.
      **/
-    void postGen(World world, Random rand, BlockPos pos);
+    void postGen(ISeedReader world, Random rand, BlockPos pos);
 }

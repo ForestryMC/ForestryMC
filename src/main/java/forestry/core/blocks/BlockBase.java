@@ -160,9 +160,9 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
         if (tile == null) {
             return ActionResultType.FAIL;
         }
-        if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
-            if (!playerIn.isSneaking()) { //isSneaking
+        if (TileUtil.isUsableByPlayer(playerIn, tile)) {
+            if (!playerIn.isSneaking()) {
                 if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
                     return ActionResultType.SUCCESS;
                 }
@@ -173,6 +173,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
                 tile.openGui(sPlayer, pos);
             }
         }
+
         return ActionResultType.SUCCESS;
     }
 

@@ -16,10 +16,6 @@ class AlvearyMultiblockSizeLimits implements IMultiblockSizeLimits {
 
     public static final AlvearyMultiblockSizeLimits instance = new AlvearyMultiblockSizeLimits();
 
-    private AlvearyMultiblockSizeLimits() {
-
-    }
-
     @Override
     public int getMinimumNumberOfBlocksForAssembledMachine() {
         return 27;

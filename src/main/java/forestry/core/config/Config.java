@@ -71,6 +71,8 @@ public class Config {
     private static float generateBeehivesAmount = 1.0f;
     public static boolean generateBeehivesDebug = false;
     public static boolean logHivePlacement = false;
+    public static boolean logCoconPlacement = false;
+    public static boolean logTreePlacement = false;
     public static boolean enableVillagers = true;
 
     // Retrogen

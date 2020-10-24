@@ -16,6 +16,7 @@ import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IButterfly;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -23,28 +24,25 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class ButterflySpawner implements ILeafTickHandler {
-
     @Override
     public boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed) {
-
-        //TODO hopefully this is right
         if (!world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
             return false;
         }
 
         if (rand.nextFloat() >= tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) *
-                                tree.getGenome().getActiveValue(TreeChromosomes.YIELD)) {
+                                tree.getGenome().getActiveValue(TreeChromosomes.YIELD)
+        ) {
             return false;
         }
 
-        IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates()
-                                                         .get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates()
-                                                                                                         .size()));
+        IButterfly spawn = ButterflyManager.butterflyRoot
+                .getIndividualTemplates()
+                .get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
         float rarity;
-        if (!ModuleLepidopterology.spawnRaritys.containsKey(spawn.getGenome()
-                                                                 .getPrimary()
-                                                                 .getRegistryName()
-                                                                 .getPath())) {
+        if (!ModuleLepidopterology.spawnRaritys
+                .containsKey(spawn.getGenome().getPrimary().getRegistryName().getPath())
+        ) {
             rarity = spawn.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity();
         } else {
             rarity = ModuleLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getRegistryName().getPath());
@@ -54,8 +52,7 @@ public class ButterflySpawner implements ILeafTickHandler {
             return false;
         }
 
-        //TODO needs server world?
-        if (false) {//world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
+        if (ButterflyUtils.countButterfly(world) > ModuleLepidopterology.spawnConstraint) {
             return false;
         }
 
@@ -75,5 +72,4 @@ public class ButterflySpawner implements ILeafTickHandler {
 
         return false;
     }
-
 }

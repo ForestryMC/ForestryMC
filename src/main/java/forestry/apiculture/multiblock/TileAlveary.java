@@ -60,7 +60,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
     @Override
     public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
+        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());
         // Re-render this block on the client
         if (world.isRemote) {
             RenderUtil.markForUpdate(getPos());
@@ -81,7 +81,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
             BlockPos pos = getPos();
             RenderUtil.markForUpdate(pos);
         }
-        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
+        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());
         markDirty();
     }
 

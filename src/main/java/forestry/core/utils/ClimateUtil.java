@@ -28,9 +28,12 @@ public class ClimateUtil implements IClimateHelper {
 
     @Override
     public boolean isWithinLimits(
-            EnumTemperature temperature, EnumHumidity humidity,
-            EnumTemperature baseTemp, EnumTolerance tolTemp,
-            EnumHumidity baseHumid, EnumTolerance tolHumid
+            EnumTemperature temperature,
+            EnumHumidity humidity,
+            EnumTemperature baseTemp,
+            EnumTolerance tolTemp,
+            EnumHumidity baseHumid,
+            EnumTolerance tolHumid
     ) {
         return getToleratedTemperature(baseTemp, tolTemp).contains(temperature) &&
                getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
@@ -52,7 +55,6 @@ public class ClimateUtil implements IClimateHelper {
         tolerated.add(prefered);
 
         switch (tolerance) {
-
             case BOTH_5:
             case BOTH_4:
             case BOTH_3:
@@ -110,7 +112,6 @@ public class ClimateUtil implements IClimateHelper {
         tolerated.add(prefered);
 
         switch (tolerance) {
-
             case BOTH_5:
                 if (prefered.ordinal() + 5 < EnumTemperature.VALUES.length) {
                     tolerated.add(EnumTemperature.VALUES[prefered.ordinal() + 5]);

@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
@@ -79,7 +80,7 @@ public interface ITree extends IIndividual, ITreeGenData {
     @Override
     int getGirth();
 
-    Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed);
+    Feature<NoFeatureConfig> getTreeGenerator(ISeedReader world, BlockPos pos, boolean wasBonemealed);
 
     @Override
     ITree copy();

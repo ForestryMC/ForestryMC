@@ -18,12 +18,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.*;
-//import forestry.arboriculture.worldgen.ITreeBlockType;
-//import forestry.arboriculture.worldgen.TreeBlockType;
-
 
 public class FeatureHelper {
-
     public static boolean addBlock(IWorld world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replaceMode) {
         if (!world.isBlockLoaded(pos)) {
             return false;

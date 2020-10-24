@@ -27,6 +27,8 @@ import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.ResourceUtil;
+import forestry.lepidopterology.ButterflyUtils;
+import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.genetics.ButterflyHelper;
@@ -35,6 +37,7 @@ import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.utils.AlleleUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -148,7 +151,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
             return false;
         }
 
-        if (false) {//TODO entityItem.world.countEntities(EntityButterfly.class) > ModuleLepidopterology.entityConstraint) {
+        if (ButterflyUtils.countButterfly(entityItem.getEntityWorld()) > ModuleLepidopterology.entityConstraint) {
             return false;
         }
 

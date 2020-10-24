@@ -15,7 +15,9 @@ import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.core.commands.SpeciesNotFoundException;
+import forestry.core.config.Config;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.Log;
 import forestry.core.worldgen.FeatureBase;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
@@ -43,7 +45,7 @@ public final class TreeGenHelper {
     ) throws SpeciesNotFoundException {
         IGenome treeGenome = getTreeGenome(treeName);
         ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
-        return tree.getTreeGenerator(player.world, pos, true);
+        return tree.getTreeGenerator((ISeedReader) player.world, pos, true);
     }
 
     public static <FC extends IFeatureConfig> boolean generateTree(
@@ -81,24 +83,25 @@ public final class TreeGenHelper {
         return false;
     }
 
-    public static boolean generateTree(ITree tree, World world, BlockPos pos) {
+    public static boolean generateTree(ITree tree, ISeedReader world, BlockPos pos) {
         Feature<NoFeatureConfig> gen = tree.getTreeGenerator(world, pos, true);
         ChunkGenerator generator = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator();
 
         BlockState blockState = world.getBlockState(pos);
         if (BlockUtil.canPlaceTree(blockState, world, pos)) {
             if (gen instanceof FeatureBase) {
-                return ((FeatureBase) gen).place(world, world.rand, pos, true);
+                return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
             } else {
                 return gen.func_241855_a(
                         (ISeedReader) world,
                         ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
-                        world.rand,
+                        world.getRandom(),
                         pos,
                         IFeatureConfig.NO_FEATURE_CONFIG
                 );
             }
         }
+
         return false;
     }
 

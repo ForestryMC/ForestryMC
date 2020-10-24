@@ -88,7 +88,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
     private static boolean convertToMycelium(World world, BlockState blockState, BlockPos pos) {
         Block block = blockState.getBlock();
-        if (block == Blocks.GRASS || block == Blocks.DIRT && world.canBlockSeeSky(pos)) {
+        if (block == Blocks.GRASS_BLOCK || block == Blocks.DIRT && world.canBlockSeeSky(pos)) {
             world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
             return true;
         }

@@ -17,6 +17,7 @@ import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.arboriculture.features.ArboricultureFeatures;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
 import forestry.arboriculture.genetics.TreeMutationFactory;
@@ -38,16 +39,21 @@ import forestry.modules.ModuleHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import javax.annotation.Nullable;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @ForestryModule(
         containerID = Constants.MOD_ID,
@@ -80,6 +86,12 @@ public class ModuleArboriculture extends BlankForestryModule {
             RegisterVillager.Registers.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
             RegisterVillager.Registers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
             MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+        }
+
+        if (TreeConfig.getSpawnRarity(null) > 0.0F) {
+            IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+            modEventBus.addGenericListener(Feature.class, ArboricultureFeatures::registerFeatures);
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ArboricultureFeatures::onBiomeLoad);
         }
     }
 
@@ -265,13 +277,6 @@ public class ModuleArboriculture extends BlankForestryModule {
     public void getHiddenItems(List<ItemStack> hiddenItems) {
         // sapling itemBlock is different from the normal item
         hiddenItems.add(ArboricultureBlocks.SAPLING_GE.stack());
-    }
-
-    @Override
-    public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-        if (TreeConfig.getSpawnRarity(null) > 0.0F) {
-            //TreeDecorator.decorateTrees(world, rand, chunkX, chunkZ);
-        }
     }
 
 //    @SubscribeEvent

@@ -7,7 +7,9 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.utils.Log;
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -49,8 +51,8 @@ public class TreeConfig {
 
     private final ResourceLocation treeName;
     private final float defaultRarity;
-    private final Set<Integer> blacklistedDimensions = new HashSet<>();
-    private final Set<Integer> whitelistedDimensions = new HashSet<>();
+    private final Set<String> blacklistedDimensions = new HashSet<>();
+    private final Set<String> whitelistedDimensions = new HashSet<>();
     private final Set<Biome.Category> blacklistedBiomeTypes = new HashSet<>();
     private final Set<Biome> blacklistedBiomes = new HashSet<>();
     private float spawnRarity;
@@ -78,14 +80,16 @@ public class TreeConfig {
     }
 
     private TreeConfig parseConfig(LocalizedConfiguration config) {
-        for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new int[0])
-                               .getIntList()) {
-            blacklistedDimensions.add(dimId);
+        for (String dimName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new String[0])
+                               .getStringList()
+        ) {
+            blacklistedDimensions.add(dimName);
         }
 
-        for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new int[0])
-                               .getIntList()) {
-            whitelistedDimensions.add(dimId);
+        for (String dimName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new String[0])
+                               .getStringList()
+        ) {
+            whitelistedDimensions.add(dimName);
         }
 
         for (String typeName : config.get(
@@ -117,32 +121,35 @@ public class TreeConfig {
         return this;
     }
 
-    public static void blacklistTreeDim(@Nullable ResourceLocation treeUID, int dimID) {
+    public static void blacklistTreeDim(@Nullable ResourceLocation treeUID, String dimName) {
         TreeConfig treeConfig = configs.get(treeUID);
         if (treeUID == null) {
             treeConfig = GLOBAL;
         }
 
-        treeConfig.blacklistedDimensions.add(dimID);
+        treeConfig.blacklistedDimensions.add(dimName);
     }
 
-    public static void whitelistTreeDim(@Nullable ResourceLocation treeUID, int dimID) {
+    public static void whitelistTreeDim(@Nullable ResourceLocation treeUID, String dimName) {
         TreeConfig treeConfig = configs.get(treeUID);
         if (treeUID == null) {
             treeConfig = GLOBAL;
         }
 
-        treeConfig.whitelistedDimensions.add(dimID);
+        treeConfig.whitelistedDimensions.add(dimName);
     }
 
-    public static boolean isValidDimension(@Nullable ResourceLocation treeUID, int dimID) {
+    public static boolean isValidDimension(@Nullable ResourceLocation treeUID, RegistryKey<World> dimID) {
         TreeConfig treeConfig = configs.get(treeUID);
-        return treeConfig != null ? treeConfig.isValidDimension(dimID) : GLOBAL.isValidDimension(dimID);
+        return treeConfig != null
+               ? treeConfig.isValidDimension(dimID.getLocation())
+               : GLOBAL.isValidDimension(dimID.getLocation());
     }
 
-    private boolean isValidDimension(int dimID) { //blacklist has priority
-        if (blacklistedDimensions.isEmpty() || !blacklistedDimensions.contains(dimID)) {
-            return whitelistedDimensions.isEmpty() || whitelistedDimensions.contains(dimID);
+    private boolean isValidDimension(ResourceLocation dimID) {
+        //blacklist has priority
+        if (blacklistedDimensions.isEmpty() || !blacklistedDimensions.contains(dimID.toString())) {
+            return whitelistedDimensions.isEmpty() || whitelistedDimensions.contains(dimID.toString());
         }
 
         return false;

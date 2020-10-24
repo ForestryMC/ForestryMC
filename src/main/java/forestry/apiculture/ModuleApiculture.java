@@ -29,6 +29,7 @@ import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureContainers;
+import forestry.apiculture.features.ApicultureFeatures;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.*;
@@ -43,7 +44,6 @@ import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.villagers.RegisterVillager;
-import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
@@ -80,16 +80,17 @@ import net.minecraft.potion.Potions;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.DistExecutor;
@@ -98,7 +99,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import javax.annotation.Nullable;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.apiculture.description", lootTable = "apiculture")
 public class ModuleApiculture extends BlankForestryModule {
@@ -137,10 +141,16 @@ public class ModuleApiculture extends BlankForestryModule {
 
         ApicultureParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         if (Config.enableVillagers) {
-            RegisterVillager.Registers.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
-            RegisterVillager.Registers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+            RegisterVillager.Registers.POINTS_OF_INTEREST.register(modEventBus);
+            RegisterVillager.Registers.PROFESSIONS.register(modEventBus);
             MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+        }
+
+        if (Config.getBeehivesAmount() > 0.0) {
+            modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
+            MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
         }
     }
 
@@ -421,8 +431,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
             lavaIngredients = NonNullList.create();
             lavaIngredients.add(phosphor);
-            //TODO - sand or red sand?
-            lavaIngredients.add(new ItemStack(Blocks.SAND, 1));
+            lavaIngredients.add(new ItemStack(Blocks.RED_SAND, 1));
             RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
 
             lavaIngredients = NonNullList.create();
@@ -744,40 +753,6 @@ public class ModuleApiculture extends BlankForestryModule {
         //TODO textures
         for (int i = 0; i < ParticleSnow.sprites.length; i++) {
             //			ParticleSnow.sprites[i] = event.getMap().registerSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
-        }
-    }
-
-    @Override
-    public void populateChunk(
-            ChunkGenerator chunkGenerator,
-            World world,
-            Random rand,
-            int chunkX,
-            int chunkZ,
-            boolean hasVillageGenerated
-    ) {
-        if (!world.getDimensionType().equals(DimensionType.THE_END)) {
-            return;
-        }
-
-        if (Config.getBeehivesAmount() > 0.0) {
-            HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
-        }
-    }
-
-    @Override
-    public void decorateBiome(World world, Random rand, BlockPos pos) {
-        if (Config.getBeehivesAmount() > 0.0) {
-            int chunkX = pos.getX() >> 4;
-            int chunkZ = pos.getZ() >> 4;
-            HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
-        }
-    }
-
-    @Override
-    public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-        if (Config.getBeehivesAmount() > 0.0) {
-            HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
         }
     }
 

@@ -34,6 +34,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
@@ -113,7 +114,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
     /* GROWTH */
     @Override
-    public Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed) {
+    public Feature<NoFeatureConfig> getTreeGenerator(ISeedReader world, BlockPos pos, boolean wasBonemealed) {
         return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().getTreeFeature(this);
     }
 

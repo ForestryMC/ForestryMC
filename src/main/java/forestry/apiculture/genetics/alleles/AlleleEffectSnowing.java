@@ -20,6 +20,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -51,14 +52,12 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
         Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 
         for (int i = 0; i < 1; i++) {
-
             BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
 
             BlockPos posBlock = randomPos.add(housing.getCoordinates()).add(offset);
 
             // Put snow on the ground
-            if (world.isBlockLoaded(posBlock) &&
-                true) {//TODO solve this world.isSideSolid(posBlock.down(), Direction.UP, false)) {
+            if (world.isBlockLoaded(posBlock) && world.isDirectionSolid(posBlock.down(), null, Direction.UP)) {
                 BlockState state = world.getBlockState(posBlock);
                 Block block = state.getBlock();
 

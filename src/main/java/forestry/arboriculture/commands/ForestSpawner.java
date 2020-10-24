@@ -16,6 +16,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.ISeedReader;
 
 public class ForestSpawner implements ITreeSpawner {
     @Override
@@ -31,7 +32,7 @@ public class ForestSpawner implements ITreeSpawner {
             int spawnZ = z + player.world.rand.nextInt(32) - 16;
             BlockPos pos = new BlockPos(spawnX, y, spawnZ);
 
-            TreeGenHelper.generateTree(tree, player.world, pos);
+            TreeGenHelper.generateTree(tree, (ISeedReader) player.world, pos);
         }
 
         return 1;

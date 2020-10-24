@@ -51,9 +51,10 @@ public class TickHandlerCoreServer {
 
         if (Config.doRetrogen && event.world instanceof ServerWorld) {
             ServerWorld world = (ServerWorld) event.world;
-            RegistryKey<World> dimId = world.getDimensionKey();
-            if (checkForRetrogen.contains(dimId)) {
-                List<ChunkCoords> chunkList = chunkRegenList.get(dimId);
+            RegistryKey<World> dim = world.getDimensionKey();
+            String dimName = dim.getLocation().getNamespace();
+            if (checkForRetrogen.contains(dimName)) {
+                List<ChunkCoords> chunkList = chunkRegenList.get(dim);
                 Iterator<ChunkCoords> iterator = chunkList.iterator();
                 while (iterator.hasNext()) {
                     ChunkCoords coords = iterator.next();
@@ -63,7 +64,7 @@ public class TickHandlerCoreServer {
                         //						worldGenerator.retroGen(random, coords.x, coords.z, world);
                     }
                 }
-                checkForRetrogen.remove(dimId);
+                checkForRetrogen.remove(dimName);
             }
         }
     }

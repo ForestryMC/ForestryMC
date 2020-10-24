@@ -87,22 +87,17 @@ public enum MothDefinition implements IButterflyDefinition {
 
         String texture = "butterflies/" + uid;
 
-        IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies(
-                Constants.MOD_ID,
-                uid,
-                speciesName
-        )
-                                                                                         .setDescriptionKey(
-                                                                                                 unlocalizedDescription)
-                                                                                         .setTranslationKey(
-                                                                                                 unlocalizedName)
-                                                                                         .setTexture(texture)
-                                                                                         .setDominant(dominant)
-                                                                                         .setBranch(branchDefinition.getBranch())
-                                                                                         .setBinomial(binomial)
-                                                                                         .setSerumColour(serumColor)
-                                                                                         .setRarity(rarity)
-                                                                                         .setNocturnal();
+        IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory
+                .createSpecies(Constants.MOD_ID, uid, speciesName)
+                .setDescriptionKey(unlocalizedDescription)
+                .setTranslationKey(unlocalizedName)
+                .setTexture(texture)
+                .setDominant(dominant)
+                .setBranch(branchDefinition.getBranch())
+                .setBinomial(binomial)
+                .setSerumColour(serumColor)
+                .setRarity(rarity)
+                .setNocturnal();
         setSpeciesProperties(speciesBuilder);
         species = speciesBuilder.build();
     }

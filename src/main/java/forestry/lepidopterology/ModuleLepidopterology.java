@@ -28,6 +28,7 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.features.LepidopterologyFeatures;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
 import forestry.lepidopterology.genetics.ButterflyMutationFactory;
@@ -47,11 +48,14 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.io.File;
 import java.util.*;
@@ -77,6 +81,14 @@ public class ModuleLepidopterology extends BlankForestryModule {
     public ModuleLepidopterology() {
         proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
         ForgeUtils.registerSubscriber(this);
+
+        if (generateCocoons) {
+            if (generateCocoonsAmount > 0.0) {
+                IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+                modEventBus.addGenericListener(Feature.class, LepidopterologyFeatures::registerFeatures);
+                MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, LepidopterologyFeatures::onBiomeLoad);
+            }
+        }
     }
 
     @Override
@@ -129,33 +141,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
     public void postInit() {
         File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
         loadConfig(configFile);
-    }
-
-    @Override
-    public void populateChunk(
-            ChunkGenerator chunkGenerator,
-            World world,
-            Random rand,
-            int chunkX,
-            int chunkZ,
-            boolean hasVillageGenerated
-    ) {
-        if (generateCocoons) {
-            if (generateCocoonsAmount > 0.0) {
-                //TODO worldgen
-                //				CocoonDecorator.decorateCocoons(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
-            }
-        }
-    }
-
-    @Override
-    public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-        if (generateCocoons) {
-            if (generateCocoonsAmount > 0.0) {
-                //TODO worldgen
-                //				CocoonDecorator.decorateCocoons(world, rand, chunkX, chunkZ);
-            }
-        }
     }
 
     private static void loadConfig(File configFile) {

@@ -33,6 +33,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.world.ISeedReader;
 
 import javax.annotation.Nullable;
 import java.util.Map.Entry;
@@ -140,7 +141,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
         int x = getPos().getX() + world.rand.nextInt(40 * 2) - 40;
         int z = getPos().getZ() + world.rand.nextInt(40 * 2) - 40;
 
-        if (HiveDecorator.tryGenHive(world, world.rand, x, z, hive)) {
+        if (HiveDecorator.tryGenHive((ISeedReader) world, world.rand, x, z, hive)) {
             pendingSpawns.pop();
         }
     }

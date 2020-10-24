@@ -22,7 +22,6 @@ import java.util.Random;
 import java.util.Set;
 
 public class BlankForestryModule implements IForestryModule {
-
     /**
      * The ForestryModule.moduleID()s of any other modules this module depends on.
      */
@@ -44,22 +43,6 @@ public class BlankForestryModule implements IForestryModule {
     }
 
     public void addBiomeDecorations(Biome biome) {
-    }
-
-    public void populateChunk(
-            ChunkGenerator chunkGenerator,
-            World world,
-            Random rand,
-            int chunkX,
-            int chunkZ,
-            boolean hasVillageGenerated
-    ) {
-    }
-
-    public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-    }
-
-    public void decorateBiome(World world, Random rand, BlockPos pos) {
     }
 
     /**

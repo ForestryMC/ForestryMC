@@ -22,6 +22,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -68,7 +69,7 @@ public class HiveDescriptionSwarmer implements IHiveDescription {
     }
 
     @Override
-    public void postGen(World world, Random rand, BlockPos pos) {
+    public void postGen(ISeedReader world, Random rand, BlockPos pos) {
         TileUtil.actOnTile(world, pos, TileHive.class, tile -> tile.setContained(bees));
     }
 }

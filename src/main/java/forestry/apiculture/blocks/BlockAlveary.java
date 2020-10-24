@@ -132,7 +132,6 @@ public class BlockAlveary extends BlockStructure {
         return true;
     }
 
-
     @Override
     public BlockState updatePostPlacement(
             BlockState state,
@@ -167,7 +166,8 @@ public class BlockAlveary extends BlockStructure {
                             break;
                         case 2:
                             if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) ||
-                                blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
+                                blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)
+                            ) {
                                 state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
                             } else {
                                 state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
@@ -182,10 +182,10 @@ public class BlockAlveary extends BlockStructure {
                 }
             }
         }
+
         RenderUtil.markForUpdate(pos);
         return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
     }
-
 
     private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
         List<Direction> touching = new ArrayList<>();
@@ -205,7 +205,7 @@ public class BlockAlveary extends BlockStructure {
             BlockPos pos,
             Block blockIn,
             BlockPos fromPos,
-            boolean p_220069_6_
+            boolean isMoving
     ) {
         TileUtil.actOnTile(worldIn, pos, TileAlveary.class, tileAlveary -> {
             // We must check that the slabs on top were not removed
