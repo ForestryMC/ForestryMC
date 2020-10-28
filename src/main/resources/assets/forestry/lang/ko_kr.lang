@@ -1072,13 +1072,13 @@ item.for.bee_drone_ge.name=일벌
 item.for.bee_queen_ge.name=여왕벌
 
 tile.for.alveary.tooltip=멀티-블록: 3x3x3으로 쌓고, 3x1x3으로 나무 반블록을 위에 올리세요.
-tile.for.alveary.plain.name=알베어리
-tile.for.alveary.swarmer.name=알베어리 번식기
-tile.for.alveary.fan.name=알베어리 냉각기
-tile.for.alveary.heater.name=알베어리 난로
-tile.for.alveary.hygro.name=알베어리 습도조절기
-tile.for.alveary.stabiliser.name=알베어리 안정기
-tile.for.alveary.sieve.name=알베어리 꽃가루 수집기
+tile.for.alveary.plain.name=겹양봉기
+tile.for.alveary.swarmer.name=겹양봉기 번식기
+tile.for.alveary.fan.name=겹양봉기 냉각기
+tile.for.alveary.heater.name=겹양봉기 난로
+tile.for.alveary.hygro.name=겹양봉기 습도조절기
+tile.for.alveary.stabiliser.name=겹양봉기 안정기
+tile.for.alveary.sieve.name=겹양봉기 꽃가루 수집기
 
 tile.for.apiary.name=양봉기
 tile.for.bee_chest.name=양봉업자의 상자
@@ -1135,10 +1135,10 @@ for.multiblock.error.small.x=이 멀티블록은 너무 작습니다, 최소 %d 
 for.multiblock.error.small.y=이 멀티블록은 너무 작습니다, 최소 %d 블록 길이여야 합니다.
 for.multiblock.error.small.z=이 멀티블록은 너무 작습니다, 최소 %d 블록 높이여야 합니다.
 
-for.multiblock.alveary.error.needSlabs=알베어리 위에 나무 반 블록이 있어야 합니다.
-for.multiblock.alveary.error.needSpace=알베어리는 가장 위층 주변에 벌이 드나들 통로가 있어야 합니다.
-for.multiblock.alveary.error.needPlainOnTop=알베어리 가장 위 층에는 반드시 평범한 알베어리 블록이 있어야 합니다.
-for.multiblock.alveary.error.needPlainInterior=알베어리 내부에는 반드시 평범한 알베어리 블록이 있어야 합니다.
+for.multiblock.alveary.error.needSlabs=겹양봉기 위에 나무 반 블록이 있어야 합니다.
+for.multiblock.alveary.error.needSpace=겹양봉기는 가장 위층 주변에 벌이 드나들 통로가 있어야 합니다.
+for.multiblock.alveary.error.needPlainOnTop=겹양봉기 가장 위 층에는 반드시 평범한 겹양봉기 블록이 있어야 합니다.
+for.multiblock.alveary.error.needPlainInterior=겹양봉기 내부에는 반드시 평범한 겹양봉기 블록이 있어야 합니다.
 
 for.multiblock.farm.error.needPlainBand=농장의 세 번째 층에는 반드시 평범한 농장 블록이 있어야 합니다.
 for.multiblock.farm.error.needPlainInterior=농장 내부에는 반드시 평범한 농장 블록이 있어야 합니다.
