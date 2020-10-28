@@ -597,7 +597,7 @@ item.for.refractory_wax.tooltip=녹는점이 매우 높은 왁스입니다.
 item.for.research_note.name=%s의 노트
 item.for.research_note.tooltip=지식을 습득하기 위해 노트를 들고 우클릭하세요.
 item.for.royal_jelly.name=로열 젤리
-item.for.scoop.name=벌채
+item.for.scoop.name=포충망
 item.for.scoop.tooltip=벌집을 부숴 벌을 얻는 데 사용합니다.
 item.for.soldering_iron.name=인두기
 item.for.soldering_iron.tooltip=회로판에 진공관을 납땜합니다.
@@ -1993,7 +1993,7 @@ for.config.machines.enabled.comment=List of enabled machines. Note that some thi
 for.jei.description.frames=양봉기에 프레임을 넣어 하찮은 혈통의 벌의 유전적 도태 확률을 줄이고 벌들의 생산성을 향상시킵니다.
 for.jei.description.apiarist.suit=양봉업자의 옷은 착용자가 벌들의 해로운 효과를 받는 것을 막아줍니다. 완성된 한 벌은 완벽하게 보호해줍니다.
 for.jei.description.habitat_locator=서식지 추적기는 벌의 가장 가까운 이상적인 서식지를 찾아줍니다. 적당한 장소를 찾으면, 그 장소를 가리킵니다. 현재 위치가 이상적일 경우, 지속적으로 회전합니다.
-for.jei.description.scoop=벌채는 자연 상태에서 찾을 수 있는 벌집을 부수어, 벌집 안의 벌을 수집할 수 있습니다. 또한 나비를 우클릭하는 것으로 나비를 수집할 수 있습니다.
+for.jei.description.scoop=포충망은 자연 상태에서 찾을 수 있는 벌집을 부수어, 벌집 안의 벌을 수집할 수 있습니다. 또한 나비를 우클릭하는 것으로 나비를 수집할 수 있습니다.
 for.jei.description.imprinter=크리에이티브 전용입니다. 어떠한 종류의 혼종 벌이라도 만들 수 있습니다.
 for.jei.description.infuser=벌꿀 술에 꽃가루 뭉치를 주입해 치료용 벌꿀 술을 만들 수 있습니다.
 
