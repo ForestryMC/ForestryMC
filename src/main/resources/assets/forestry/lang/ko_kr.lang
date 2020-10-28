@@ -461,8 +461,8 @@ tile.for.ash_block_3.name=재 블록
 
 item.for.habitat_locator.name=서식지 추적기
 
-item.for.cart.beehouse.name=Minecart with Bee House
-item.for.cart.apiary.name=Minecart with Apiary
+item.for.cart.beehouse.name=벌통 광산 수레
+item.for.cart.apiary.name=양봉기 광산 수레
 
 item.for.bee_combs.cocoa.name=코코아 벌집
 item.for.bee_combs.darkened.name=어둠의 벌집
@@ -598,7 +598,7 @@ item.for.research_note.name=%s의 노트
 item.for.research_note.tooltip=지식을 습득하기 위해 노트를 들고 우클릭하세요.
 item.for.royal_jelly.name=로열 젤리
 item.for.scoop.name=벌채
-item.for.scoop.tooltip=벌통을 부숴 벌을 얻는 데 사용합니다.
+item.for.scoop.tooltip=벌집을 부숴 벌을 얻는 데 사용합니다.
 item.for.soldering_iron.name=인두기
 item.for.soldering_iron.tooltip=회로판에 진공관을 납땜합니다.
 item.for.smoker.name=훈연기
@@ -672,7 +672,7 @@ tile.for.fermenter.name=발효기
 tile.for.moistener.name=보습기
 tile.for.squeezer.name=압착기
 tile.for.still.name=정제기
-tile.for.rainmaker.name=비 생성기
+tile.for.rainmaker.name=강우기
 tile.for.fabricator.name=진공관 제작기
 tile.for.raintank.name=빗물 저장기
 tile.for.worktable.name=제조기
@@ -1082,7 +1082,7 @@ tile.for.alveary.sieve.name=알베어리 꽃가루 수집기
 
 tile.for.apiary.name=양봉기
 tile.for.bee_chest.name=양봉업자의 상자
-tile.for.bee_house.name=비 하우스
+tile.for.bee_house.name=벌통
 
 tile.for.beehives.forest.name=숲 벌집
 tile.for.beehives.meadows.name=초원 벌집
@@ -1142,9 +1142,9 @@ for.multiblock.alveary.error.needPlainInterior=알베어리 내부에는 반드�
 
 for.multiblock.farm.error.needPlainBand=농장의 세 번째 층에는 반드시 평범한 농장 블록이 있어야 합니다.
 for.multiblock.farm.error.needPlainInterior=농장 내부에는 반드시 평범한 농장 블록이 있어야 합니다.
-for.multiblock.farm.error.needGearbox=농장은 일을 하기 위해서 반드시 전기를 입력받는 기어박스 블록이 있어야 합니다.
+for.multiblock.farm.error.needGearbox=농장은 일을 하기 위해서 반드시 전기를 입력받는 동력 전달기가 있어야 합니다.
 
-for.multiblock.alveary.type=알베어리
+for.multiblock.alveary.type=겹양봉기
 for.multiblock.farm.type=농장
 
 ####################
@@ -1246,18 +1246,18 @@ tile.for.charcoal.name=목탄 블록
 for.trees.hybrid=%PRIMARY-%SECONDARY 혼종
 
 for.trees.species.acacia=아카시아
-for.trees.species.appleOak=애플 오크
+for.trees.species.appleOak=사과 참나무
 for.trees.species.balsa=발사
 for.trees.species.blueMahoe=블루 마호
 for.trees.species.bullPine=불 파인
 for.trees.species.coastSequoia=코스트 세콰이어
 for.trees.species.commonWalnut=커먼 호두
-for.trees.species.darkOak=다크 오크
+for.trees.species.darkOak=짙은 참나무
 for.trees.species.datePalm=데이트 팜
-for.trees.species.desertAcacia=데저트 아카시아
+for.trees.species.desertAcacia=사막 아카시아
 for.trees.species.giantSequoia=자이언트 세콰이어
 for.trees.species.grandidierBaobab=그란디디어 바오밥
-for.trees.species.hillCherry=힐 체리
+for.trees.species.hillCherry=언덕 체리
 for.trees.species.jungle=정글
 for.trees.species.kapok=카폭
 for.trees.species.lemon=레몬
@@ -1269,8 +1269,8 @@ for.trees.species.redSpruce=레드 스프루스
 for.trees.species.silverBirch=실버 버치
 for.trees.species.silverLime=실버 라임
 for.trees.species.sipiri=시피리
-for.trees.species.sugarMaple=슈가 메이플
-for.trees.species.sweetChestnut=스위트 체스트넛
+for.trees.species.sugarMaple=설탕단풍
+for.trees.species.sweetChestnut=꿀밤
 for.trees.species.teak=티크
 for.trees.species.wenge=웬지
 for.trees.species.whitePoplar=화이트 포플러
@@ -1298,9 +1298,9 @@ for.door.grammar=%TYPE 문
 
 for.trees.woodType.larch=라치
 for.trees.woodType.teak=티크
-for.trees.woodType.acacia=데저트 아카시아
+for.trees.woodType.acacia=사막 아카시아
 for.trees.woodType.lime=라임
-for.trees.woodType.chestnut=체스트넛
+for.trees.woodType.chestnut=꿀밤
 for.trees.woodType.wenge=웬지
 for.trees.woodType.baobab=바오밥
 for.trees.woodType.sequoia=세콰이어
@@ -1318,7 +1318,7 @@ for.trees.woodType.palm=팜
 for.trees.woodType.papaya=파파야
 for.trees.woodType.pine=파인
 for.trees.woodType.plum=플럼
-for.trees.woodType.maple=메이플
+for.trees.woodType.maple=단풍
 for.trees.woodType.citrus=시트러스
 for.trees.woodType.giganteum=자이언트 세콰이어
 for.trees.woodType.ipe=아이프
@@ -1372,13 +1372,13 @@ for.hints.farmland.desc=부드러운 사암, 벽돌 또는 석재 벽돌로 농�
 for.hints.farmland.tag=경작지를 깔아주세요!
 for.hints.fertilizer.desc=모든 농장은 작동에 비료를 요구합니다. 퇴비나 멀치는 안 됩니다.
 for.hints.fertilizer.tag=비료 필요!
-for.hints.gearbox.desc=농장에 전력을 공급하기 위해서는 기어박스를 사용해야 합니다.
+for.hints.gearbox.desc=농장에 전력을 공급하기 위해서는 동력 전달기를 사용해야 합니다.
 for.hints.gearbox.tag=전력 제공!
 for.hints.hatch.desc=해치는 파이프와 튜브의 절친입니다. 해치를 통해야 자동 배출이 되거든요.
 for.hints.hatch.tag=해치를 열어라!
 for.hints.manualfarms.desc=자동 농장에서 분리된 수동 농장도 있습니다만, 이것들은 경작지를 만들지는 않습니다.
 for.hints.manualfarms.tag=수동 농장!
-for.hints.valve.desc=대부분의 농장은 물을 요구합니다. 밸브를 사용해 자동화하세요.
+for.hints.valve.desc=대부분의 농장은 물을 요구합니다. 수도꼭지를 사용해 자동화하세요.
 for.hints.valve.tag=물 공급!
 
 for.trigger.lowFertilizer=비료 부족
@@ -1388,9 +1388,9 @@ for.trigger.lowSoil=흙 부족
 tile.for.ffarm.tooltip=멀티-블록 : 3x4x3 - 5x4x5
 tile.for.ffarm.material.tooltip=재료 :
 tile.for.ffarm.0.name=농장 블록
-tile.for.ffarm.2.name=농장 기어박스
+tile.for.ffarm.2.name=농장 동력 전달기
 tile.for.ffarm.3.name=농장 해치
-tile.for.ffarm.4.name=농장 밸브
+tile.for.ffarm.4.name=농장 수도꼭지
 tile.for.ffarm.5.name=농장 제어기
 
 tile.for.mushroom.0.name=버섯
@@ -1432,7 +1432,7 @@ for.gui.planter.west=서
 tile.for.greenhouse.deprecated1=이 아이템은 deprecated 되었습니다.
 tile.for.greenhouse.deprecated2=조합대에 올려 자원을 일부 돌려받으십시오.
 tile.for.greenhouse.plain.name=온실 블록
-tile.for.greenhouse.gearbox.name=온실 전력 공급기
+tile.for.greenhouse.gearbox.name=온실 동력 전달기
 tile.for.greenhouse.control.name=온실 제어기
 tile.for.greenhouse.screen.name=온실 스크린
 tile.for.greenhouse.window_up.name=온실 채광창
@@ -1690,7 +1690,7 @@ for.config.performance.hiveLightLevels.comment=Sets the amount of light emitted 
 for.config.performance.backpacks.resupply=Backpack Resupply
 for.config.performance.backpacks.resupply.comment=Enable backpack resupply. You may want to set this to false on busy servers.
 
-for.config.world.generate=World Generation
+for.config.world.generate=세계 유형
 
 for.config.world.generate.retrogen.normal=Retrogen
 for.config.world.generate.retrogen.normal.comment=Creates Forestry world generation in chunks that were created before the mod was added.
