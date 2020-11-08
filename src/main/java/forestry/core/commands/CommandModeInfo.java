@@ -22,6 +22,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
+import genetics.commands.CommandHelpers;
+
 public class CommandModeInfo implements Command<CommandSource> {
 	private final ICommandModeHelper modeHelper;
 

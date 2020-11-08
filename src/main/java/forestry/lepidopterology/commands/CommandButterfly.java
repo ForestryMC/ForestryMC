@@ -21,29 +21,21 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import forestry.core.commands.PermLevel;
+import genetics.commands.PermLevel;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class  CommandButterfly {
-//TODO commands
 	public static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("butterfly")
 				.then(CommandButterflyKill.register());
 	}
 
-	/*public CommandButterfly() {
-		super("butterfly");
-		addAlias("bfly");
-		addChildCommand(new CommandButterflyKill());
-	}*/
-
 	public static class CommandButterflyKill {
         public static ArgumentBuilder<CommandSource, ?> register() {
             return Commands.literal("kill").requires(PermLevel.ADMIN).executes(CommandButterflyKill::execute);
-
         }
 
 		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
@@ -57,6 +49,4 @@ public class  CommandButterfly {
 			return killCount;
 		}
 	}
-
 }
-//

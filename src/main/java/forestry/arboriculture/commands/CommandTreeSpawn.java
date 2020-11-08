@@ -10,26 +10,76 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.util.ResourceLocation;
 
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import net.minecraftforge.server.command.EnumArgument;
-
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.commands.PermLevel;
+import genetics.commands.PermLevel;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IIndividual;
 
 public final class CommandTreeSpawn {
 	public static ArgumentBuilder<CommandSource, ?> register(String name, ITreeSpawner treeSpawner) {
 		return Commands.literal(name).requires(PermLevel.ADMIN)
-				.then(Commands.argument("type", EnumArgument.enumArgument(TreeDefinition.class))
-						.executes(a -> run(treeSpawner, a.getSource(), a.getArgument("type", TreeDefinition.class))))
-				.executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak));
+				.then(Commands.argument("type", TreeArugment.treeArgument())
+						.executes(a -> run(treeSpawner, a.getSource(), a.getArgument("type", ITree.class))))
+				.executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak.createIndividual()));
 	}
 
-	public static int run(ITreeSpawner treeSpawner, CommandSource source, TreeDefinition tree) throws CommandSyntaxException {
-		return treeSpawner.spawn(source, tree.createIndividual(), source.asPlayer());
+	public static int run(ITreeSpawner treeSpawner, CommandSource source, ITree tree) throws CommandSyntaxException {
+		return treeSpawner.spawn(source, tree, source.asPlayer());
+	}
+
+	public static class TreeArugment implements ArgumentType<ITree> {
+
+		public static TreeArugment treeArgument() {
+			return new TreeArugment();
+		}
+
+		@Override
+		public ITree parse(final StringReader reader) throws CommandSyntaxException {
+			ResourceLocation location = ResourceLocation.read(reader);
+
+			return TreeManager.treeRoot.getIndividualTemplates().stream().filter(a -> a.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getRegistryName().equals(location)).findFirst().orElseThrow(() -> new SimpleCommandExceptionType(new LiteralMessage("Invalid Bee Type: " + location)).create());
+		}
+
+		@Override
+		public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
+			return ISuggestionProvider.suggest(TreeManager.treeRoot.getIndividualTemplates().stream()
+					.map(IIndividual::getGenome)
+					.map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
+					.map(IAllele::getRegistryName)
+					.map(ResourceLocation::toString), builder);
+		}
+
+		@Override
+		public Collection<String> getExamples() {
+			return TreeManager.treeRoot.getIndividualTemplates().stream()
+					.map(IIndividual::getGenome)
+					.map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
+					.map(IAllele::getRegistryName)
+					.map(ResourceLocation::toString)
+					.collect(Collectors.toList());
+		}
 	}
 }

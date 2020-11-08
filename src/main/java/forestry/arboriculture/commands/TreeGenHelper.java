@@ -28,7 +28,7 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.core.commands.SpeciesNotFoundException;
+import genetics.commands.SpeciesNotFoundException;
 import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.FeatureBase;
 

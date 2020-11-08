@@ -34,6 +34,8 @@ import forestry.api.modules.IForestryModule;
 import forestry.core.utils.Translator;
 import forestry.modules.ModuleManager;
 
+import genetics.commands.CommandHelpers;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */

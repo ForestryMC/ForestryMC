@@ -104,7 +104,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 		// Init rendering
 		proxy.initializeModels();
 
-		//TODO: Commands
 		// Commands
 		ModuleCore.rootCommand.then(CommandTree.register());
 

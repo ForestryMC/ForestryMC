@@ -41,6 +41,7 @@ import forestry.core.utils.Translator;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAlleleSpecies;
+import genetics.commands.CommandHelpers;
 
 public final class CommandSaveStats implements Command<CommandSource> {
 

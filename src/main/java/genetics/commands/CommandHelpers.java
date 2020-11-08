@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package genetics.commands;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.text.StringTextComponent;

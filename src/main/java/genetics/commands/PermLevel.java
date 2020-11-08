@@ -1,4 +1,4 @@
-package forestry.core.commands;
+package genetics.commands;
 
 import java.util.function.Predicate;
 

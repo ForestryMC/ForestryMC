@@ -239,7 +239,6 @@ public class ModuleManager implements IModuleManager {
 	}
 
 	public static void serverStarting(MinecraftServer server) {
-		//TODO - commands
 		CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
 
 		loadedModules.stream()

@@ -28,8 +28,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.PermLevel;
+import genetics.commands.CommandHelpers;
+import genetics.commands.PermLevel;
 import forestry.core.utils.StringUtil;
 import forestry.mail.MailAddress;
 

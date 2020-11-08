@@ -21,6 +21,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
+import genetics.commands.CommandHelpers;
+import genetics.commands.PermLevel;
+
 public final class CommandModeSet implements Command<CommandSource> {
 	private final ICommandModeHelper modeSetter;
 

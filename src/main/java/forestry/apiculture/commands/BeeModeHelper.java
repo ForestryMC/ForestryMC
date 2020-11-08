@@ -21,7 +21,6 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.core.commands.ICommandModeHelper;
 
 public class BeeModeHelper implements ICommandModeHelper {
-//TODO commands
 	@Override
 	public String[] getModeNames() {
 		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
@@ -59,4 +58,3 @@ public class BeeModeHelper implements ICommandModeHelper {
 	}
 
 }
-//

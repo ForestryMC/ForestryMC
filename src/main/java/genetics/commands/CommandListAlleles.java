@@ -1,8 +1,9 @@
-package forestry.core.commands;
+package genetics.commands;
 
 
 import java.util.Optional;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -40,8 +41,10 @@ public class CommandListAlleles {
 		for (IChromosome chromosome : genome.getChromosomes()) {
 			IChromosomeType type = chromosome.getType();
 
-			CommandHelpers.sendChatMessage(context.getSource(), type.getName() + ": " + genome.getActiveAllele(type).getDisplayName().getString() + " " + genome.getInactiveAllele(type).getDisplayName().getString());
+			CommandHelpers.sendChatMessage(context.getSource(), type.getName() + ": " + I18n.format(genome.getActiveAllele(type).getLocalisationKey()) + " " + I18n.format(genome.getInactiveAllele(type).getLocalisationKey()));
 		}
+
+		GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles().forEach(a -> System.out.println(a.getRegistryName() + ": " + I18n.format(a.getLocalisationKey())));
 
 		return 1;
 	}
