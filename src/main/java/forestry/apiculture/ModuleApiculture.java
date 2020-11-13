@@ -51,8 +51,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 
-import genetics.api.GeneticsAPI;
-
 import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
@@ -67,6 +65,7 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
+import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureItems;
@@ -98,6 +97,7 @@ import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.ISaveEventHandler;
+import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -114,6 +114,8 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
+
+import genetics.api.GeneticsAPI;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.apiculture.description", lootTable = "apiculture")
 public class ModuleApiculture extends BlankForestryModule {
@@ -206,7 +208,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		// Commands
 		//TODO - commands
-		//		ModuleCore.rootCommand.addChildCommand(new CommandBee());
+				ModuleCore.rootCommand.then(CommandBee.register());
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
@@ -681,7 +683,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-		boolean hasVillageGenerated) {
+							  boolean hasVillageGenerated) {
 		//TODO: Fix if dimensions are more integrated into forge
 		/*if (!world.func_230315_m_() != DimensionType..getType().equals(DimensionType.OVERWORLD)) {
 			return;

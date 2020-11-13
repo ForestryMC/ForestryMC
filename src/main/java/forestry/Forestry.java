@@ -47,10 +47,6 @@ import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
-import genetics.api.alleles.IAllele;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
@@ -91,6 +87,9 @@ import forestry.core.utils.ForgeUtils;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
+
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 //import forestry.plugins.ForestryCompatPlugins;
 //import forestry.plugins.PluginBuildCraftFuels;
 //import forestry.plugins.PluginIC2;
@@ -189,7 +188,6 @@ public class Forestry {
 		configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
-
 		String gameMode = Config.gameMode;
 		Preconditions.checkNotNull(gameMode);
 		ForestryAPI.activeMode = new GameMode(gameMode);
