@@ -1,21 +1,23 @@
 package forestry.core.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.factory.recipes.AbstractCraftingProvider;
 
-public class HygroregulatorManager implements IHygroregulatorManager {
+public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregulatorRecipe> implements IHygroregulatorManager {
+
+	public HygroregulatorManager() {
+		super(IHygroregulatorRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange) {
@@ -36,11 +38,6 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 		return null;
 	}
 
-	@Override
-	public boolean addRecipe(IHygroregulatorRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
 	public Set<Fluid> getRecipeFluids() {
 		if (recipeFluids.isEmpty()) {
 			for (IHygroregulatorRecipe recipe : recipes) {
@@ -49,10 +46,5 @@ public class HygroregulatorManager implements IHygroregulatorManager {
 			}
 		}
 		return Collections.unmodifiableSet(recipeFluids);
-	}
-
-	@Override
-	public Collection<IHygroregulatorRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, IHygroregulatorRecipe.TYPE);
 	}
 }

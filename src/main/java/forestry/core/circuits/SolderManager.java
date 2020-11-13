@@ -13,19 +13,21 @@ package forestry.core.circuits;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISolderManager;
 import forestry.api.recipes.ISolderRecipe;
+import forestry.factory.recipes.AbstractCraftingProvider;
 
-public class SolderManager implements ISolderManager {
+public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> implements ISolderManager {
+
+	public SolderManager() {
+		super(ISolderRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
@@ -55,15 +57,5 @@ public class SolderManager implements ISolderManager {
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public boolean addRecipe(ISolderRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public Collection<ISolderRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, ISolderRecipe.TYPE);
 	}
 }

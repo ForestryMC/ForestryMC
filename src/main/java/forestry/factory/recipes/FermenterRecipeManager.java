@@ -11,23 +11,24 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IForestryRecipe;
 
-public class FermenterRecipeManager implements IFermenterManager {
+public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterRecipe> implements IFermenterManager {
+
+	public FermenterRecipeManager() {
+		super(IFermenterRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
@@ -95,11 +96,6 @@ public class FermenterRecipeManager implements IFermenterManager {
 		Fluid output = recipe.getOutput();
 		recipeFluidOutputs.add(output);
 
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public Collection<IFermenterRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, IFermenterRecipe.TYPE);
+		return super.addRecipe(recipe);
 	}
 }

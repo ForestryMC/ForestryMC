@@ -11,20 +11,21 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 
-public class CentrifugeRecipeManager implements ICentrifugeManager {
+public class CentrifugeRecipeManager extends AbstractCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
+
+	public CentrifugeRecipeManager() {
+		super(ICentrifugeRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
@@ -34,7 +35,7 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 			list.add(new ICentrifugeRecipe.Product(entry.getValue(), entry.getKey()));
 		}
 
-		ICentrifugeRecipe recipe = new 	CentrifugeRecipe(IForestryRecipe.anonymous(), timePerItem, Ingredient.fromStacks(resource), list);
+		ICentrifugeRecipe recipe = new CentrifugeRecipe(IForestryRecipe.anonymous(), timePerItem, Ingredient.fromStacks(resource), list);
 		addRecipe(recipe);
 	}
 
@@ -51,15 +52,5 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public boolean addRecipe(ICentrifugeRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public Collection<ICentrifugeRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, ICentrifugeRecipe.TYPE);
 	}
 }

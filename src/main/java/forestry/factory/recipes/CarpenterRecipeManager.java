@@ -28,11 +28,14 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.ICraftingProvider;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class CarpenterRecipeManager implements ICarpenterManager {
+public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
+
+	public CarpenterRecipeManager() {
+		super(ICarpenterRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ItemStack box, ItemStack product, Object[] materials) {
@@ -99,11 +102,6 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 		return false;
 	}
 
-	@Override
-	public boolean addRecipe(ICarpenterRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
 	public Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
@@ -125,10 +123,5 @@ public class CarpenterRecipeManager implements ICarpenterManager {
 			}
 		}
 		return Collections.unmodifiableSet(recipeFluids);
-	}
-
-	@Override
-	public Collection<ICarpenterRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, ICarpenterRecipe.TYPE);
 	}
 }

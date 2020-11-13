@@ -16,18 +16,20 @@ import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.recipes.RecipePair;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class FabricatorRecipeManager implements IFabricatorManager {
+public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
+
+	public FabricatorRecipeManager() {
+		super(IFabricatorRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
@@ -65,11 +67,6 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 		return false;
 	}
 
-	@Override
-	public boolean addRecipe(IFabricatorRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
 	public Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return Collections.emptyList();
@@ -79,10 +76,5 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 			ItemStack output = recipe.getRecipeOutput();
 			return ItemStackUtil.isIdenticalItem(itemStack, output);
 		}).collect(Collectors.toList());
-	}
-
-	@Override
-	public Collection<IFabricatorRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, IFabricatorRecipe.TYPE);
 	}
 }

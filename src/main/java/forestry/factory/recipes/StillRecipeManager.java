@@ -11,18 +11,18 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-
-import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
 
-public class StillRecipeManager implements IStillManager {
+public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> implements IStillManager {
+
+	public StillRecipeManager() {
+		super(IStillRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
@@ -58,11 +58,6 @@ public class StillRecipeManager implements IStillManager {
 		FluidStack output = recipe.getOutput();
 		recipeFluidOutputs.add(output.getFluid());
 
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public Collection<IStillRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, IStillRecipe.TYPE);
+		return super.addRecipe(recipe);
 	}
 }

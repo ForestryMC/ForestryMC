@@ -11,22 +11,23 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
 
-public class SqueezerRecipeManager implements ISqueezerManager {
+public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
+
+	public SqueezerRecipeManager() {
+		super(ISqueezerRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
@@ -99,15 +100,5 @@ public class SqueezerRecipeManager implements ISqueezerManager {
 		}
 
 		return SqueezerRecipeManager.findMatchingContainerRecipe(itemStack) != null;
-	}
-
-	@Override
-	public boolean addRecipe(ISqueezerRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public Collection<ISqueezerRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, ISqueezerRecipe.TYPE);
 	}
 }

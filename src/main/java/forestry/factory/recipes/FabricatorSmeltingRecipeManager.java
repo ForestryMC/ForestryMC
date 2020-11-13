@@ -11,23 +11,24 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.IForestryRecipe;
 
-public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
+public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
+
+	public FabricatorSmeltingRecipeManager() {
+		super(IFabricatorSmeltingRecipe.TYPE);
+	}
 
 	@Nullable
 	public IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
@@ -49,11 +50,6 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 		addRecipe(new FabricatorSmeltingRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), molten, meltingPoint));
 	}
 
-	@Override
-	public boolean addRecipe(IFabricatorSmeltingRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
 	public Set<Fluid> getRecipeFluids() {
 		if (recipeFluids.isEmpty()) {
 			for (IFabricatorSmeltingRecipe recipe : recipes) {
@@ -64,10 +60,5 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
 			}
 		}
 		return Collections.unmodifiableSet(recipeFluids);
-	}
-
-	@Override
-	public Collection<IFabricatorSmeltingRecipe> getRecipes(RecipeManager manager) {
-		return ICraftingProvider.findRecipes(manager, IFabricatorSmeltingRecipe.TYPE);
 	}
 }
