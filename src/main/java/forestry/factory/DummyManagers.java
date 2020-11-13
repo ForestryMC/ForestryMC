@@ -174,5 +174,15 @@ public class DummyManagers {
 		public void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output) {
 
 		}
+
+		@Override
+		public IStillRecipe findMatchingRecipe(RecipeManager manager, FluidStack item) {
+			return null;
+		}
+
+		@Override
+		public boolean matches(IStillRecipe recipe, FluidStack item) {
+			return false;
+		}
 	}
 }

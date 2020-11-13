@@ -12,6 +12,8 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.crafting.RecipeManager;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IForestryRecipe;
@@ -30,12 +32,13 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 		addRecipe(recipe);
 	}
 
+	@Override
 	@Nullable
-	public IStillRecipe findMatchingRecipe(@Nullable FluidStack item) {
+	public IStillRecipe findMatchingRecipe(RecipeManager manager, @Nullable FluidStack item) {
 		if (item == null) {
 			return null;
 		}
-		for (IStillRecipe recipe : recipes) {
+		for (IStillRecipe recipe : getRecipes(manager)) {
 			if (matches(recipe, item)) {
 				return recipe;
 			}
@@ -43,10 +46,12 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 		return null;
 	}
 
+	@Override
 	public boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
 		if (recipe == null || item == null) {
 			return false;
 		}
+
 		return item.containsFluid(recipe.getInput());
 	}
 

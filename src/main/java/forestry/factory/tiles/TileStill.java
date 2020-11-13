@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -140,8 +141,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	private void checkRecipe() {
 		FluidStack recipeLiquid = !bufferedLiquid.isEmpty() ? bufferedLiquid : resourceTank.getFluid();
 
-		if (!StillRecipeManager.matches(currentRecipe, recipeLiquid)) {
-			currentRecipe = StillRecipeManager.findMatchingRecipe(recipeLiquid);
+		if (!RecipeManagers.stillManager.matches(currentRecipe, recipeLiquid)) {
+			currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(world.getRecipeManager(), recipeLiquid);
 
 			int recipeTime = currentRecipe == null ? 0 : currentRecipe.getCyclesPerUnit();
 			setEnergyPerWorkCycle(ENERGY_PER_RECIPE_TIME * recipeTime);
