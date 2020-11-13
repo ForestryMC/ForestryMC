@@ -60,7 +60,6 @@ public class ModuleMail extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		//TODO commands
 		ModuleCore.rootCommand.then(CommandMail.register());
 
 		if (Config.mailAlertEnabled) {

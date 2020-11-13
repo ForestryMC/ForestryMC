@@ -28,22 +28,16 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.ITradeStationInfo;
 import forestry.api.mail.PostManager;
-import genetics.commands.CommandHelpers;
-import genetics.commands.PermLevel;
 import forestry.core.utils.StringUtil;
 import forestry.mail.MailAddress;
+
+import genetics.commands.CommandHelpers;
+import genetics.commands.PermLevel;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandMail {
-//TODO commands
-	/*public CommandMail() {
-		super("mail");
-		addChildCommand(new CommandMailTrades());
-		addChildCommand(new CommandMailVirtualize());
-		addAlias("ml");
-	}*/
 
 	public static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("mail")
@@ -53,10 +47,6 @@ public class CommandMail {
 
 	public static class CommandMailTrades {
 
-		/*public CommandMailTrades() {
-			super("trades");
-			addAlias("tr");
-		}*/
 		public static ArgumentBuilder<CommandSource, ?> register() {
 			return Commands.literal("trades").executes(CommandMailTrades::execute);
 		}
@@ -91,13 +81,6 @@ public class CommandMail {
 	}
 
 	public static class CommandMailVirtualize {
-
-		/*public CommandMailVirtualize() {
-			super("virtualize");
-			addAlias("virt");
-			setPermLevel(PermLevel.ADMIN);
-		}*/
-
 		public static ArgumentBuilder<CommandSource, ?> register() {
 		    return Commands.literal("virtualize").requires(PermLevel.ADMIN).executes(CommandMailVirtualize::execute);
         }

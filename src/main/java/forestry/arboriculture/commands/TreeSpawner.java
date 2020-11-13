@@ -19,7 +19,6 @@ import forestry.api.arboriculture.genetics.ITree;
 import genetics.commands.SpeciesNotFoundException;
 
 public class TreeSpawner implements ITreeSpawner {
-	//TODO commands
 
 	@Override
 	public int spawn(CommandSource source, ITree tree, PlayerEntity player) throws SpeciesNotFoundException {

@@ -120,7 +120,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		//TODO commands
 		ModuleCore.rootCommand.then(CommandButterfly.register());
 
 		MothDefinition.initMoths();
