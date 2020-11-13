@@ -6,8 +6,8 @@
 # CORE
 ####################
 
-death.engine.clockwork.player=%1$s은(는) 늘어난 스프링에 찔려 사망했습니다. 이딴 걸 만든 %2$s은(는) 비난 받아 마땅합니다.
-death.engine.clockwork=%1$s은(는) 늘어난 스프링에 찔려 사망했습니다.
+death.engine.clockwork.player=%1$s은(는) 시계태엽에 찔려 사망했습니다. 이딴 걸 만든 %2$s은(는) 비난 받아 마땅합니다.
+death.engine.clockwork=%1$s은(는) 시계태엽에 찔려 사망했습니다.
 
 for.chat.cannotmemorizeagain=이 정보를 이미 달달 외웠습니다.
 for.chat.memorizednote=당신은 이 정보를 박박 외우고 구겨서 버렸습니다.
@@ -329,7 +329,7 @@ for.gui.worker=- 생산
 
 for.gui.camouflage_spray_can=위장용 스프레이 캔
 
-for.hints.apiaristsuit.desc=양봉업자의 옷을 차려입으면, 당신을 벌의 해로운 효과들로부터 보호해 줄 것입니다.
+for.hints.apiaristsuit.desc=방충복을 차려입으면, 당신을 벌의 해로운 효과들로부터 보호해 줄 것입니다.
 for.hints.apiaristsuit.tag=벌 옷!
 for.hints.beebiomes.desc=벌은 그들의 종에 맞는 생물군계에서만 일합니다. 휴대용 분석기와 서식지 추적기로 찾아보세요.
 for.hints.beebiomes.tag=찾아라 벌들의 왕국!
@@ -377,7 +377,7 @@ for.hints.honeyfood.desc=꿀과 벌의 다양한 부산물들로 다양한 종�
 for.hints.honeyfood.tag=음식을 만들자!
 for.hints.manualpeat.desc=토탄은 토탄 습지에서 자동으로 생산되긴 하지만, 아마도 손으로 직접 캐고 싶을 겁니다.
 for.hints.manualpeat.tag=습지 필요없다!
-for.hints.moistenerproducts.desc=맞는 재료를 주면, 당신의 보습기는 이끼 낀 조약돌과 이끼 낀 석재벽돌을 만들어냅니다.
+for.hints.moistenerproducts.desc=맞는 재료를 주면, 당신의 가습기는 이끼 낀 조약돌과 이끼 낀 석재벽돌을 만들어냅니다.
 for.hints.moistenerproducts.tag=이끼 있기?
 for.hints.nopowerrequired.desc=이 기계는 전력이 필요하지 않습니다.
 for.hints.nopowerrequired.tag=전력 불필요
@@ -461,8 +461,8 @@ tile.for.ash_block_3.name=재 블록
 
 item.for.habitat_locator.name=서식지 추적기
 
-item.for.cart.beehouse.name=Minecart with Bee House
-item.for.cart.apiary.name=Minecart with Apiary
+item.for.cart.beehouse.name=벌통 광산 수레
+item.for.cart.apiary.name=양봉기 광산 수레
 
 item.for.bee_combs.cocoa.name=코코아 벌집
 item.for.bee_combs.darkened.name=어둠의 벌집
@@ -597,8 +597,8 @@ item.for.refractory_wax.tooltip=녹는점이 매우 높은 왁스입니다.
 item.for.research_note.name=%s의 노트
 item.for.research_note.tooltip=지식을 습득하기 위해 노트를 들고 우클릭하세요.
 item.for.royal_jelly.name=로열 젤리
-item.for.scoop.name=벌채
-item.for.scoop.tooltip=벌통을 부숴 벌을 얻는 데 사용합니다.
+item.for.scoop.name=포충망
+item.for.scoop.tooltip=벌집을 부숴 벌을 얻는 데 사용합니다.
 item.for.soldering_iron.name=인두기
 item.for.soldering_iron.tooltip=회로판에 진공관을 납땜합니다.
 item.for.smoker.name=훈연기
@@ -656,7 +656,7 @@ tile.for.database.name=데이터베이스
 
 tile.for.engine_electrical.name=전기 엔진
 tile.for.engine_electrical.tooltip=EU를 RF로 변환합니다.
-tile.for.engine_peat.name=토탄 엔진
+tile.for.engine_peat.name=토탄-연소 엔진
 tile.for.engine_peat.tooltip=토탄을 연료로 RF를 발전합니다.
 tile.for.engine_biogas.name=바이오가스 엔진
 tile.for.engine_biogas.tooltip=유기적 액체와 용암을 연료로 RF를 발전합니다.
@@ -665,16 +665,16 @@ tile.for.engine_generator.tooltip=바이오매스와 에탄올을 연료로 EU�
 tile.for.engine_clockwork.name=시계태엽 엔진
 tile.for.engine_clockwork.tooltip=소량의 RF를 발전합니다. 우클릭으로 태엽을 감습니다.
 
-tile.for.bottler.name=액체 포장기
-tile.for.carpenter.name=목수기
+tile.for.bottler.name=병입기
+tile.for.carpenter.name=목공기
 tile.for.centrifuge.name=원심분리기
 tile.for.fermenter.name=발효기
-tile.for.moistener.name=보습기
+tile.for.moistener.name=가습기
 tile.for.squeezer.name=압착기
-tile.for.still.name=정제기
-tile.for.rainmaker.name=비 생성기
+tile.for.still.name=증류기
+tile.for.rainmaker.name=강우기
 tile.for.fabricator.name=진공관 제작기
-tile.for.raintank.name=빗물 저장기
+tile.for.raintank.name=빗물 탱크
 tile.for.worktable.name=제조기
 
 tile.for.mailbox.name=우체통
@@ -693,7 +693,7 @@ tile.for.resource_storage.bronze.name=청동 블록
 tile.for.ash_brick.name=재 벽돌
 tile.for.ash_stairs.name=재 벽돌 계단
 
-tile.for.humus.name=부식토
+tile.for.humus.name=부엽토
 tile.for.bog_earth.bog_earth.name=축축한 흙
 tile.for.bog_earth.peat.name=토탄
 
@@ -855,9 +855,9 @@ for.errors.no_liquid.help=농장은 강우량, 온도와 습도에 따라 많은
 
 entity.Villager.apiarist=양봉업자
 
-death.bee.aggressive.player=%1$s은(는) 한 떼의 벌을 마주쳤습니다. %2$s이(가) 그의 양봉업자의 옷을 훔쳐서, 죽을 수밖에 없었습니다.
+death.bee.aggressive.player=%1$s은(는) 한 떼의 벌을 마주쳤습니다. %2$s이(가) 그의 방충복을 훔쳐서, 죽을 수밖에 없었습니다.
 death.bee.aggressive=%1$s은(는) 한 떼의 벌을 마주쳤습니다. 유감스럽게도 독침이 있었습니다.
-death.bee.hive.player=%1$s은(는) 야생의 벌에게 죽었습니다. %2$s이(가) 그의 양봉업자의 옷을 훔쳤기 때문입니다.
+death.bee.hive.player=%1$s은(는) 야생의 벌에게 죽었습니다. %2$s이(가) 그의 방충복을 훔쳤기 때문입니다.
 death.bee.hive=%1$s은(는) 야생의 벌에게 죽었습니다. 훈연기를 사용했어야 합니다.
 death.bee.end.player=%1$s은(는) %2$s와(과) 싸우다 어떤 눈치없는 독침에 찔려 생을 마감했습니다.
 death.bee.end=%1$s은(는) 어떤 불친절한 독침에 찔려 생을 마감했습니다.
@@ -950,8 +950,8 @@ for.bees.species.vengeful=벤지풀
 for.bees.species.vindictive=빈딕티브
 for.bees.species.wintry=윈트리
 
-for.bees.stock.ignoble=하찮은 혈통
-for.bees.stock.pristine=고귀한 혈통
+for.bees.stock.ignoble=결함 혈통
+for.bees.stock.pristine=불변 혈통
 
 for.chat.command.forestry.bee.desc=- %s : 양봉 명령어
 for.chat.command.forestry.bee.help=양봉에 관련된 명령어들입니다.
@@ -1072,17 +1072,17 @@ item.for.bee_drone_ge.name=일벌
 item.for.bee_queen_ge.name=여왕벌
 
 tile.for.alveary.tooltip=멀티-블록: 3x3x3으로 쌓고, 3x1x3으로 나무 반블록을 위에 올리세요.
-tile.for.alveary.plain.name=알베어리
-tile.for.alveary.swarmer.name=알베어리 번식기
-tile.for.alveary.fan.name=알베어리 냉각기
-tile.for.alveary.heater.name=알베어리 난로
-tile.for.alveary.hygro.name=알베어리 습도조절기
-tile.for.alveary.stabiliser.name=알베어리 안정기
-tile.for.alveary.sieve.name=알베어리 꽃가루 수집기
+tile.for.alveary.plain.name=겹양봉기
+tile.for.alveary.swarmer.name=겹양봉기 번식기
+tile.for.alveary.fan.name=겹양봉기 냉각기
+tile.for.alveary.heater.name=겹양봉기 난로
+tile.for.alveary.hygro.name=겹양봉기 습도조절기
+tile.for.alveary.stabiliser.name=겹양봉기 안정기
+tile.for.alveary.sieve.name=겹양봉기 꽃가루 수집기
 
 tile.for.apiary.name=양봉기
 tile.for.bee_chest.name=양봉업자의 상자
-tile.for.bee_house.name=비 하우스
+tile.for.bee_house.name=벌통
 
 tile.for.beehives.forest.name=숲 벌집
 tile.for.beehives.meadows.name=초원 벌집
@@ -1103,7 +1103,7 @@ tile.for.stump.name=초 꼭지
 ####################
 # BOOK
 ####################
-item.for.book_forester.name=산림학자의 매뉴얼
+item.for.book_forester.name=산림학자의 설명서
 
 for.gui.book.element.crafting=조합
 for.gui.book.about.title=이 책에 대해
@@ -1135,16 +1135,16 @@ for.multiblock.error.small.x=이 멀티블록은 너무 작습니다, 최소 %d 
 for.multiblock.error.small.y=이 멀티블록은 너무 작습니다, 최소 %d 블록 길이여야 합니다.
 for.multiblock.error.small.z=이 멀티블록은 너무 작습니다, 최소 %d 블록 높이여야 합니다.
 
-for.multiblock.alveary.error.needSlabs=알베어리 위에 나무 반 블록이 있어야 합니다.
-for.multiblock.alveary.error.needSpace=알베어리는 가장 위층 주변에 벌이 드나들 통로가 있어야 합니다.
-for.multiblock.alveary.error.needPlainOnTop=알베어리 가장 위 층에는 반드시 평범한 알베어리 블록이 있어야 합니다.
-for.multiblock.alveary.error.needPlainInterior=알베어리 내부에는 반드시 평범한 알베어리 블록이 있어야 합니다.
+for.multiblock.alveary.error.needSlabs=겹양봉기 위에 나무 반 블록이 있어야 합니다.
+for.multiblock.alveary.error.needSpace=겹양봉기는 가장 위층 주변에 벌이 드나들 통로가 있어야 합니다.
+for.multiblock.alveary.error.needPlainOnTop=겹양봉기 가장 위 층에는 반드시 평범한 겹양봉기 블록이 있어야 합니다.
+for.multiblock.alveary.error.needPlainInterior=겹양봉기 내부에는 반드시 평범한 겹양봉기 블록이 있어야 합니다.
 
 for.multiblock.farm.error.needPlainBand=농장의 세 번째 층에는 반드시 평범한 농장 블록이 있어야 합니다.
 for.multiblock.farm.error.needPlainInterior=농장 내부에는 반드시 평범한 농장 블록이 있어야 합니다.
-for.multiblock.farm.error.needGearbox=농장은 일을 하기 위해서 반드시 전기를 입력받는 기어박스 블록이 있어야 합니다.
+for.multiblock.farm.error.needGearbox=농장은 일을 하기 위해서 반드시 전기를 입력받는 동력 전달기가 있어야 합니다.
 
-for.multiblock.alveary.type=알베어리
+for.multiblock.alveary.type=겹양봉기
 for.multiblock.farm.type=농장
 
 ####################
@@ -1246,18 +1246,18 @@ tile.for.charcoal.name=목탄 블록
 for.trees.hybrid=%PRIMARY-%SECONDARY 혼종
 
 for.trees.species.acacia=아카시아
-for.trees.species.appleOak=애플 오크
+for.trees.species.appleOak=사과 참나무
 for.trees.species.balsa=발사
 for.trees.species.blueMahoe=블루 마호
 for.trees.species.bullPine=불 파인
 for.trees.species.coastSequoia=코스트 세콰이어
 for.trees.species.commonWalnut=커먼 호두
-for.trees.species.darkOak=다크 오크
+for.trees.species.darkOak=짙은 참나무
 for.trees.species.datePalm=데이트 팜
-for.trees.species.desertAcacia=데저트 아카시아
+for.trees.species.desertAcacia=사막 아카시아
 for.trees.species.giantSequoia=자이언트 세콰이어
 for.trees.species.grandidierBaobab=그란디디어 바오밥
-for.trees.species.hillCherry=힐 체리
+for.trees.species.hillCherry=언덕 체리
 for.trees.species.jungle=정글
 for.trees.species.kapok=카폭
 for.trees.species.lemon=레몬
@@ -1269,8 +1269,8 @@ for.trees.species.redSpruce=레드 스프루스
 for.trees.species.silverBirch=실버 버치
 for.trees.species.silverLime=실버 라임
 for.trees.species.sipiri=시피리
-for.trees.species.sugarMaple=슈가 메이플
-for.trees.species.sweetChestnut=스위트 체스트넛
+for.trees.species.sugarMaple=설탕단풍
+for.trees.species.sweetChestnut=꿀밤
 for.trees.species.teak=티크
 for.trees.species.wenge=웬지
 for.trees.species.whitePoplar=화이트 포플러
@@ -1298,9 +1298,9 @@ for.door.grammar=%TYPE 문
 
 for.trees.woodType.larch=라치
 for.trees.woodType.teak=티크
-for.trees.woodType.acacia=데저트 아카시아
+for.trees.woodType.acacia=사막 아카시아
 for.trees.woodType.lime=라임
-for.trees.woodType.chestnut=체스트넛
+for.trees.woodType.chestnut=꿀밤
 for.trees.woodType.wenge=웬지
 for.trees.woodType.baobab=바오밥
 for.trees.woodType.sequoia=세콰이어
@@ -1318,7 +1318,7 @@ for.trees.woodType.palm=팜
 for.trees.woodType.papaya=파파야
 for.trees.woodType.pine=파인
 for.trees.woodType.plum=플럼
-for.trees.woodType.maple=메이플
+for.trees.woodType.maple=단풍
 for.trees.woodType.citrus=시트러스
 for.trees.woodType.giganteum=자이언트 세콰이어
 for.trees.woodType.ipe=아이프
@@ -1372,13 +1372,13 @@ for.hints.farmland.desc=부드러운 사암, 벽돌 또는 석재 벽돌로 농�
 for.hints.farmland.tag=경작지를 깔아주세요!
 for.hints.fertilizer.desc=모든 농장은 작동에 비료를 요구합니다. 퇴비나 멀치는 안 됩니다.
 for.hints.fertilizer.tag=비료 필요!
-for.hints.gearbox.desc=농장에 전력을 공급하기 위해서는 기어박스를 사용해야 합니다.
+for.hints.gearbox.desc=농장에 전력을 공급하기 위해서는 동력 전달기를 사용해야 합니다.
 for.hints.gearbox.tag=전력 제공!
 for.hints.hatch.desc=해치는 파이프와 튜브의 절친입니다. 해치를 통해야 자동 배출이 되거든요.
 for.hints.hatch.tag=해치를 열어라!
 for.hints.manualfarms.desc=자동 농장에서 분리된 수동 농장도 있습니다만, 이것들은 경작지를 만들지는 않습니다.
 for.hints.manualfarms.tag=수동 농장!
-for.hints.valve.desc=대부분의 농장은 물을 요구합니다. 밸브를 사용해 자동화하세요.
+for.hints.valve.desc=대부분의 농장은 물을 요구합니다. 수도꼭지를 사용해 자동화하세요.
 for.hints.valve.tag=물 공급!
 
 for.trigger.lowFertilizer=비료 부족
@@ -1388,9 +1388,9 @@ for.trigger.lowSoil=흙 부족
 tile.for.ffarm.tooltip=멀티-블록 : 3x4x3 - 5x4x5
 tile.for.ffarm.material.tooltip=재료 :
 tile.for.ffarm.0.name=농장 블록
-tile.for.ffarm.2.name=농장 기어박스
+tile.for.ffarm.2.name=농장 동력 전달기
 tile.for.ffarm.3.name=농장 해치
-tile.for.ffarm.4.name=농장 밸브
+tile.for.ffarm.4.name=농장 수도꼭지
 tile.for.ffarm.5.name=농장 제어기
 
 tile.for.mushroom.0.name=버섯
@@ -1432,7 +1432,7 @@ for.gui.planter.west=서
 tile.for.greenhouse.deprecated1=이 아이템은 deprecated 되었습니다.
 tile.for.greenhouse.deprecated2=조합대에 올려 자원을 일부 돌려받으십시오.
 tile.for.greenhouse.plain.name=온실 블록
-tile.for.greenhouse.gearbox.name=온실 전력 공급기
+tile.for.greenhouse.gearbox.name=온실 동력 전달기
 tile.for.greenhouse.control.name=온실 제어기
 tile.for.greenhouse.screen.name=온실 스크린
 tile.for.greenhouse.window_up.name=온실 채광창
@@ -1690,7 +1690,7 @@ for.config.performance.hiveLightLevels.comment=Sets the amount of light emitted 
 for.config.performance.backpacks.resupply=Backpack Resupply
 for.config.performance.backpacks.resupply.comment=Enable backpack resupply. You may want to set this to false on busy servers.
 
-for.config.world.generate=World Generation
+for.config.world.generate=세계 유형
 
 for.config.world.generate.retrogen.normal=Retrogen
 for.config.world.generate.retrogen.normal.comment=Creates Forestry world generation in chunks that were created before the mod was added.
@@ -1782,7 +1782,7 @@ for.config.tweaks.charcoal.amount.base.comment=The base amount that the wood pil
 for.config.tweaks.charcoal.check.range=Wall Check Range
 for.config.tweaks.charcoal.check.range.comment=Sets the amount of blocks that the wood pile will check if it is a valid charcoal pile wall block.
 
-for.config.tweaks.book.spawn=Forester's Manual
+for.config.tweaks.book.spawn=산림학자의 설명서
 for.config.tweaks.book.spawn.comment=Players who enter the world for the first time get a Forester's Manual.
 
 for.config.genetics=Genetics
@@ -1993,14 +1993,14 @@ for.config.machines.enabled.comment=List of enabled machines. Note that some thi
 for.jei.description.frames=양봉기에 프레임을 넣어 하찮은 혈통의 벌의 유전적 도태 확률을 줄이고 벌들의 생산성을 향상시킵니다.
 for.jei.description.apiarist.suit=양봉업자의 옷은 착용자가 벌들의 해로운 효과를 받는 것을 막아줍니다. 완성된 한 벌은 완벽하게 보호해줍니다.
 for.jei.description.habitat_locator=서식지 추적기는 벌의 가장 가까운 이상적인 서식지를 찾아줍니다. 적당한 장소를 찾으면, 그 장소를 가리킵니다. 현재 위치가 이상적일 경우, 지속적으로 회전합니다.
-for.jei.description.scoop=벌채는 자연 상태에서 찾을 수 있는 벌집을 부수어, 벌집 안의 벌을 수집할 수 있습니다. 또한 나비를 우클릭하는 것으로 나비를 수집할 수 있습니다.
+for.jei.description.scoop=포충망은 자연 상태에서 찾을 수 있는 벌집을 부수어, 벌집 안의 벌을 수집할 수 있습니다. 또한 나비를 우클릭하는 것으로 나비를 수집할 수 있습니다.
 for.jei.description.imprinter=크리에이티브 전용입니다. 어떠한 종류의 혼종 벌이라도 만들 수 있습니다.
 for.jei.description.infuser=벌꿀 술에 꽃가루 뭉치를 주입해 치료용 벌꿀 술을 만들 수 있습니다.
 
 for.jei.description.chipsets=인두기를 이용해 회로판에 진공관을 납땜할 수 있습니다. 한번 완성하면, 기계의 회로판 장착 공간에 넣을 수 있습니다. 인두기를 이용해 회로판 장착 공간에서 제거할 수 있습니다.
 for.jei.description.soldering_iron=인두기를 손에 들고 우클릭하는 것으로 납떔 GUI를 열 수 있습니다. 만들고자 하는 회로판을 고르고 회로판에 진공관을 붙일 수 있습니다. 회로판 장착 공간에서 회로판을 분리할 때도 사용할 수 있습니다.
 for.jei.description.thermionic_tubes=인두기를 이용해 회로판에 진공관을 납땜할 수 있습니다. 인두기에 선택된 회로판의 종류에 따라 다양한 역할을 가집니다. 도움말을 통해 확인할 수 있습니다. 한번 납땜되면, 회로판에서 분리할 수 없습니다.
-for.jei.description.humus=작물을 기를 수 있고 물이 필요없는 풍부한 땅입니다. 시간에 따라 모래로 변합니다.
+for.jei.description.humus=작물을 기를 수 있고 물이 필요없는 기름진 땅입니다. 시간에 따라 모래로 변합니다.
 for.jei.description.bog_earth=물 옆에 두면 오랜 시간이 지난 뒤 토탄으로 변합니다.
 for.jei.description.analyzer=휴대용 유전분석기의 블록 버전입니다. 전력과 액체 꿀을 요구합니다.
 for.jei.description.escritoire=별, 나무, 그리고 나비 변이를 연구하기 위한 그림 맞추기 미니게임을 할 수 있습니다. 변이 확률을 높여주는 연구 노트와 다른 부산물들을 얻을 수 있습니다.
