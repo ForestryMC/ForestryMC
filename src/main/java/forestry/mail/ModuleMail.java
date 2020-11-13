@@ -20,9 +20,11 @@ import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ISaveEventHandler;
+import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
+import forestry.mail.commands.CommandMail;
 import forestry.mail.features.MailContainers;
 import forestry.mail.gui.GuiCatalogue;
 import forestry.mail.gui.GuiLetter;
@@ -58,8 +60,7 @@ public class ModuleMail extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		//TODO commands
-		//		ModuleCore.rootCommand.addChildCommand(new CommandMail());
+		ModuleCore.rootCommand.then(CommandMail.register());
 
 		if (Config.mailAlertEnabled) {
 			MinecraftForge.EVENT_BUS.register(new EventHandlerMailAlert());
