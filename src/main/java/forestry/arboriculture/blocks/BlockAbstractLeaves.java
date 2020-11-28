@@ -8,11 +8,15 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -162,50 +166,53 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
      * {@link IToolGrafter}'s drop bonus handling is done here.
      */
     //TODO leaf drop
-    //	@Override
-    //	public final void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-    //		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getActiveItemStack());
-    //		float saplingModifier = 1.0f;
-    //
-    //		ItemStack heldStack = player.inventory.getCurrentItem();
-    //		Item heldItem = heldStack.getItem();
-    //		if (heldItem instanceof IToolGrafter) {
-    //			IToolGrafter grafter = (IToolGrafter) heldItem;
-    //			saplingModifier = grafter.getSaplingModifier(heldStack, world, player, pos);
-    //			heldStack.damageItem(1, player, p -> {});
-    //			if (heldStack.isEmpty()) {
-    //				net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, heldStack, Hand.MAIN_HAND);
-    //			}
-    //		}
-    //
-    //		GameProfile playerProfile = player.getGameProfile();
-    //		NonNullList<ItemStack> drops = NonNullList.create();
-    //		getLeafDrop(drops, world, playerProfile, pos, saplingModifier, fortune);
-    //		this.drops.set(drops);
-    //	}
-    //
-    //	//TODO temp for now, should be done in loot table I think. Probably wrong
-    //	@Override
-    //	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-    //		List<ItemStack> ret = super.getDrops(state, builder);
-    //		World world = builder.getWorld();
-    //		ItemStack tool = builder.get(LootParameters.TOOL);
-    //		Item toolItem = tool.getItem();	//TODO null
-    //		if(toolItem instanceof IToolGrafter) {
-    //			IToolGrafter grafter = (IToolGrafter) toolItem;
-    //		}
-    //		List<ItemStack> ret = this.drops.get();
-    //		this.drops.remove();
-    //		if (ret != null) {
-    //			drops.addAll(ret);
-    //		} else {
-    //			if (!(world instanceof World)) {
-    //				return;
-    //			}
-    //			// leaves not harvested, get drops normally
-    //			getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
-    //		}
-    //	}
+    @Override
+    public final void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getActiveItemStack());
+        float saplingModifier = 1.0f;
+
+        ItemStack heldStack = player.inventory.getCurrentItem();
+        Item heldItem = heldStack.getItem();
+        if (heldItem instanceof IToolGrafter) {
+            IToolGrafter grafter = (IToolGrafter) heldItem;
+            saplingModifier = grafter.getSaplingModifier(heldStack, world, player, pos);
+            heldStack.damageItem(1, player, p -> {
+            });
+            if (heldStack.isEmpty()) {
+                net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, heldStack, Hand.MAIN_HAND);
+            }
+        }
+
+        GameProfile playerProfile = player.getGameProfile();
+        NonNullList<ItemStack> drops = NonNullList.create();
+        getLeafDrop(drops, world, playerProfile, pos, saplingModifier, fortune);
+        this.drops.set(drops);
+    }
+
+    //TODO temp for now, should be done in loot table I think. Probably wrong
+//    @Override
+//    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+//        List<ItemStack> ret = super.getDrops(state, builder);
+//        World world = builder.getWorld();
+//        ItemStack tool = builder.get(LootParameters.TOOL);
+//        Item toolItem = tool.getItem();    //TODO null
+//        if (toolItem instanceof IToolGrafter) {
+//            IToolGrafter grafter = (IToolGrafter) toolItem;
+//        }
+//
+//        List<ItemStack> ret = this.drops.get();
+//        this.drops.remove();
+//        if (ret != null) {
+//            drops.addAll(ret);
+//        } else {
+//            if (!(world instanceof World)) {
+//                return;
+//            }
+//            // leaves not harvested, get drops normally
+//            getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
+//        }
+//    }
+
     protected abstract void getLeafDrop(
             NonNullList<ItemStack> drops,
             World world,

@@ -5,7 +5,12 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
  * Provides an interface to the recipe manager of the hygroregulator and habitatformer.
@@ -19,14 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
  * @author Nedelosk
  */
 public interface IHygroregulatorManager extends ICraftingProvider<IHygroregulatorRecipe> {
+    @Nullable
+    public IHygroregulatorRecipe findMatchingRecipe(RecipeManager manager, FluidStack liquid);
 
-    /**
-     * Add a recipe to the alveary hygroregulator and the habitatformer.
-     *
-     * @param resource     FluidStack containing information on fluid and amount.
-     * @param transferTime The time between the removal of the fluid from the tank and the actual addition to the alveary climate.
-     * @param tempChange   The temperature change that this recipe causes in one work cycle.
-     * @param humidChange  The humidity change that this recipe causes in one work cycle.
-     */
-    void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange);
+    public Set<Fluid> getRecipeFluids(RecipeManager manager);
 }

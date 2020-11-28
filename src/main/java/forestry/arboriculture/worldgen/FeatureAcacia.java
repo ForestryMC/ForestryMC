@@ -30,7 +30,7 @@ public class FeatureAcacia extends FeatureTree {
     }
 
     @Override
-    public boolean func_241855_a(
+    public boolean generate(
             ISeedReader world,
             ChunkGenerator generator,
             Random rand,

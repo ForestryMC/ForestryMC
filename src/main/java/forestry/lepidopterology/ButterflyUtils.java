@@ -4,8 +4,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -114,7 +114,7 @@ public class TileSapling extends TileTreeContainer {
         if (generator instanceof FeatureBase) {
             generated = ((FeatureBase) generator).place(world, random, getPos(), false);
         } else {
-            generated = generator.func_241855_a(
+            generated = generator.generate(
                     (ISeedReader) world,
                     ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
                     random,

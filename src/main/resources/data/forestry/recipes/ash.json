@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "forestry:peat"
+  },
+  "result": "forestry:ash",
+  "experience": 0.0,
+  "cookingtime": 200
+}

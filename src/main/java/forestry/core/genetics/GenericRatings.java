@@ -19,19 +19,19 @@ public class GenericRatings {
 
     public static ITextComponent rateMetabolism(int metabolism) {
         if (metabolism >= 19) {
-            return new TranslationTextComponent("forestry.allele.highest");
+            return new TranslationTextComponent("forestry.allele.metabolism.highest");
         } else if (metabolism >= 16) {
-            return new TranslationTextComponent("forestry.allele.higher");
+            return new TranslationTextComponent("forestry.allele.metabolism.higher");
         } else if (metabolism >= 13) {
-            return new TranslationTextComponent("forestry.allele.high");
+            return new TranslationTextComponent("forestry.allele.metabolism.high");
         } else if (metabolism >= 10) {
-            return new TranslationTextComponent("forestry.allele.average");
+            return new TranslationTextComponent("forestry.allele.metabolism.average");
         } else if (metabolism >= 7) {
-            return new TranslationTextComponent("forestry.allele.slow");
+            return new TranslationTextComponent("forestry.allele.metabolism.slow");
         } else if (metabolism >= 4) {
-            return new TranslationTextComponent("forestry.allele.slower");
+            return new TranslationTextComponent("forestry.allele.metabolism.slower");
         } else {
-            return new TranslationTextComponent("forestry.allele.slowest");
+            return new TranslationTextComponent("forestry.allele.metabolism.slowest");
         }
     }
 

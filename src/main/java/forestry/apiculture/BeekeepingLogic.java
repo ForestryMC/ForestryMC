@@ -173,6 +173,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         ItemStack queenStack = beeInventory.getQueen();
         Optional<IOrganismType> optionalType = BeeManager.beeRoot.getTypes().getType(queenStack);
         if (!optionalType.isPresent()) {
+            beeProgress = 0;
+            setActive(false);
             return false;
         }
 
@@ -361,9 +363,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         IBeeRoot root = BeeManager.beeRoot;
         Optional<IOrganismType> droneType = root.getTypes().getType(droneStack);
         Optional<IOrganismType> princessType = root.getTypes().getType(princessStack);
-        if (droneType.filter(type -> type != EnumBeeType.DRONE).isPresent() || princessType.filter(type -> type !=
-                                                                                                           EnumBeeType.PRINCESS)
-                                                                                           .isPresent()) {
+        if (droneType.filter(type -> type != EnumBeeType.DRONE).isPresent()
+            || princessType.filter(type -> type != EnumBeeType.PRINCESS).isPresent()
+        ) {
             beeProgress = 0;
             return;
         }
@@ -371,6 +373,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
         if (beeProgress < totalBreedingTime) {
             beeProgress++;
         }
+
         if (beeProgress < totalBreedingTime) {
             return;
         }
@@ -412,7 +415,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
             spawn = spawnOffspring(queen, beeHousing);
             beeListener.onQueenDeath();
             beeInventory.getQueen().setCount(0);
-            beeInventory.setQueen(ItemStack.EMPTY);
         } else {
             Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
@@ -420,8 +422,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
             GeneticHelper.setIndividual(convert, queen);
 
             spawn = Collections.singleton(convert);
-            beeInventory.setQueen(ItemStack.EMPTY);
         }
+
+        beeInventory.setQueen(ItemStack.EMPTY);
 
         return spawn;
     }

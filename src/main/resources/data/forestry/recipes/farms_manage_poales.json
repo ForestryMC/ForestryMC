@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:solder",
+        "layout": "forestry.farms.managed",
+        "circuit": "forestry.managedPoales",
+        "resource": {
+          "item": "forestry:electron_tube_tin",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

@@ -11,14 +11,17 @@
 package forestry.core.circuits;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.farming.FarmDirection;
+import forestry.api.recipes.ISolderRecipe;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.render.ColourProperties;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -55,7 +58,11 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
         for (int i = 0; i < 4; i++) {
             ITextComponent description;
             ItemStack tube = itemInventory.getStackInSlot(i + 2);
-            CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
+            ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(
+                    Minecraft.getInstance().world.getRecipeManager(),
+                    layout,
+                    tube
+            );
             if (recipe == null) {
                 description = new StringTextComponent(">")
                         .append(new TranslationTextComponent("for.gui.noeffect"))

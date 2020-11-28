@@ -4,7 +4,10 @@ import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyEffect;
 import forestry.core.features.CoreItems;
+import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.items.EnumCraftingMaterial;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 import genetics.api.alleles.IAlleleRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -30,7 +33,12 @@ public class ButterflyAlleles {
         for (IAlleleButterflyCocoon cocoonAllele : cocoonAlleles) {
             registry.registerAllele(cocoonAllele, ButterflyChromosomes.COCOON);
         }
+
         registry.registerAllele(butterflyNone, ButterflyChromosomes.EFFECT);
+
+        if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+            registry.registerAlleles(EnumAllele.Size.values(), ButterflyChromosomes.SIZE);
+        }
     }
 
     public static void createLoot() {

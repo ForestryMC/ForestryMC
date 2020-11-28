@@ -10,62 +10,22 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.datastructures.ItemStackMap;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
-public class SqueezerRecipeManager implements ISqueezerManager {
+public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
+    private final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<>();
 
-    private static final Set<ISqueezerRecipe> recipes = new HashSet<>();
-    public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<>();
-
-    @Override
-    public void addRecipe(
-            int timePerItem,
-            NonNullList<ItemStack> resources,
-            FluidStack liquid,
-            ItemStack remnants,
-            int chance
-    ) {
-        ISqueezerRecipe recipe = new SqueezerRecipe(
-                IForestryRecipe.anonymous(),
-                timePerItem,
-                resources,
-                liquid,
-                remnants,
-                chance / 100.0f
-        );
-        addRecipe(recipe);
-    }
-
-    @Override
-    public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
-        NonNullList<ItemStack> resourcesList = NonNullList.create();
-        resourcesList.add(resources);
-        addRecipe(timePerItem, resourcesList, liquid, remnants, chance);
-    }
-
-    @Override
-    public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
-        addRecipe(timePerItem, resources, liquid, ItemStack.EMPTY, 0);
-    }
-
-    @Override
-    public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
-        NonNullList<ItemStack> resourcesList = NonNullList.create();
-        resourcesList.add(resources);
-        addRecipe(timePerItem, resourcesList, liquid);
+    public SqueezerRecipeManager() {
+        super(ISqueezerRecipe.TYPE);
     }
 
     @Override
@@ -77,7 +37,7 @@ public class SqueezerRecipeManager implements ISqueezerManager {
     }
 
     @Nullable
-    public static ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
+    public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
         if (!FluidHelper.isDrainableFilledContainer(filledContainer)) {
             return null;
         }
@@ -86,7 +46,7 @@ public class SqueezerRecipeManager implements ISqueezerManager {
     }
 
     @Nullable
-    public static ISqueezerRecipe findMatchingRecipe(NonNullList<ItemStack> items) {
+    public ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items) {
         // Find container recipes
         for (ItemStack itemStack : items) {
             ISqueezerContainerRecipe containerRecipe = findMatchingContainerRecipe(itemStack);
@@ -98,8 +58,8 @@ public class SqueezerRecipeManager implements ISqueezerManager {
             }
         }
 
-        for (ISqueezerRecipe recipe : recipes) {
-            if (ItemStackUtil.containsSets(recipe.getResources(), items, false, false) > 0) {
+        for (ISqueezerRecipe recipe : getRecipes(manager)) {
+            if (ItemStackUtil.containsSets(recipe.getResources(), items, false) > 0) {
                 return recipe;
             }
         }
@@ -107,30 +67,15 @@ public class SqueezerRecipeManager implements ISqueezerManager {
         return null;
     }
 
-    public static boolean canUse(ItemStack itemStack) {
-        for (ISqueezerRecipe recipe : recipes) {
+    public boolean canUse(RecipeManager manager, ItemStack itemStack) {
+        for (ISqueezerRecipe recipe : getRecipes(manager)) {
             for (ItemStack recipeInput : recipe.getResources()) {
-                if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, true, false)) {
+                if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, false)) {
                     return true;
                 }
             }
         }
 
-        return SqueezerRecipeManager.findMatchingContainerRecipe(itemStack) != null;
-    }
-
-    @Override
-    public boolean addRecipe(ISqueezerRecipe recipe) {
-        return recipes.add(recipe);
-    }
-
-    @Override
-    public boolean removeRecipe(ISqueezerRecipe recipe) {
-        return recipes.remove(recipe);
-    }
-
-    @Override
-    public Set<ISqueezerRecipe> recipes() {
-        return Collections.unmodifiableSet(recipes);
+        return findMatchingContainerRecipe(itemStack) != null;
     }
 }

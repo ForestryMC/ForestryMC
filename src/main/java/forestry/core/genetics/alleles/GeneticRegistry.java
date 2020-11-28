@@ -101,11 +101,6 @@ public class GeneticRegistry implements IGeneticRegistry {
             );
         }
 
-        //TODO: Move to LEPIDOPTEROLOGY module
-        if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-            registry.registerAlleles(EnumAllele.Size.values(), ButterflyChromosomes.SIZE);
-        }
-
         for (int i = 1; i <= 10; i++) {
             registry.registerAllele("i", i + "d", i, true,
                     TreeChromosomes.GIRTH,

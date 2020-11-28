@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 5,
+        "liquid": {
+          "fluid": "minecraft:water",
+          "amount": 1000
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "# #",
+            " Y ",
+            "# #"
+          ],
+          "key": {
+            "#": {
+              "tag": "forge:gems/diamond"
+            },
+            "Y": {
+              "item": "forestry:sturdy_machine"
+            }
+          },
+          "result": {
+            "item": "forestry:hardened_machine",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

@@ -22,6 +22,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.modules.ModuleManager;
+import genetics.commands.CommandHelpers;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;

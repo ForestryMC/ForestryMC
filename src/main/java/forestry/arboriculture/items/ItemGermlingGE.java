@@ -79,10 +79,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
         }
         IAlleleForestrySpecies species = getSpecies(itemStack);
 
-        String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace(
-                "trees.species.",
-                ""
-        );
+        String customTreeKey = "for.trees.custom." + type.getName() + "."
+                               + species.getLocalisationKey().replace("trees.species.", "");
         return ResourceUtil.tryTranslate(customTreeKey, () -> {
             ITextComponent typeComponent = new TranslationTextComponent(
                     "for.trees.grammar." + type.getName() + ".type");
@@ -147,7 +145,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 	}*/
 
-
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         BlockRayTraceResult traceResult = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
@@ -166,11 +163,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
                     return onItemRightClickPollen(itemStack, worldIn, playerIn, pos, tree);
                 }
             }
-
         }
+
         return new ActionResult<>(ActionResultType.PASS, itemStack);
     }
-
 
     private static ActionResult<ItemStack> onItemRightClickPollen(
             ItemStack itemStackIn,
@@ -189,9 +185,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
             return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
         }
 
-        if (worldIn.isRemote) {
-            return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
-        } else {
+        if (!worldIn.isRemote) {
             pollinatable.mateWith(tree);
 
             BlockState blockState = worldIn.getBlockState(pos);
@@ -206,10 +200,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
             if (!player.isCreative()) {
                 itemStackIn.shrink(1);
             }
-            return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
         }
-    }
 
+        return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
+    }
 
     private static ActionResult<ItemStack> onItemRightClickSapling(
             ItemStack itemStackIn,

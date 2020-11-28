@@ -17,17 +17,18 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FabricatorRecipeManager implements IFabricatorManager {
-
-    private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
+public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
+    public FabricatorRecipeManager() {
+        super(IFabricatorRecipe.TYPE);
+    }
 
     @Override
     public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
@@ -47,30 +48,33 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 //        addRecipe(recipe);
     }
 
-    public static RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
+    public RecipePair<IFabricatorRecipe> findMatchingRecipe(
+            RecipeManager manager,
+            ItemStack plan,
+            IInventory resources
+    ) {
         ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
-        for (IFabricatorRecipe recipe : recipes) {
+        for (IFabricatorRecipe recipe : getRecipes(manager)) {
             if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
                 continue;
             }
-            String[][] oreDicts = RecipeUtil.matches(
+            Ingredient[][] oreDicts = RecipeUtil.matches(
                     recipe.getIngredients(),
-                    recipe.getOreDicts(),
                     recipe.getWidth(),
                     recipe.getHeight(),
                     gridResources
             );
             if (oreDicts != null) {
-                return new RecipePair<>(recipe, oreDicts);
+//                return new RecipePair<>(recipe, oreDicts);
             }
         }
 
         return RecipePair.EMPTY;
     }
 
-    public static boolean isPlan(ItemStack plan) {
-        for (IFabricatorRecipe recipe : recipes) {
+    public boolean isPlan(RecipeManager manager, ItemStack plan) {
+        for (IFabricatorRecipe recipe : getRecipes(manager)) {
             if (ItemStackUtil.isIdenticalItem(recipe.getPlan(), plan)) {
                 return true;
             }
@@ -79,27 +83,12 @@ public class FabricatorRecipeManager implements IFabricatorManager {
         return false;
     }
 
-    @Override
-    public boolean addRecipe(IFabricatorRecipe recipe) {
-        return recipes.add(recipe);
-    }
-
-    @Override
-    public boolean removeRecipe(IFabricatorRecipe recipe) {
-        return recipes.remove(recipe);
-    }
-
-    @Override
-    public Set<IFabricatorRecipe> recipes() {
-        return Collections.unmodifiableSet(recipes);
-    }
-
-    public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
+    public Collection<IFabricatorRecipe> getRecipes(RecipeManager manager, ItemStack itemStack) {
         if (itemStack.isEmpty()) {
             return Collections.emptyList();
         }
 
-        return recipes.stream().filter(recipe -> {
+        return getRecipes(manager).stream().filter(recipe -> {
             ItemStack output = recipe.getRecipeOutput();
             return ItemStackUtil.isIdenticalItem(itemStack, output);
         }).collect(Collectors.toList());

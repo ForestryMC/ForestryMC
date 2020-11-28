@@ -5,11 +5,15 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.RecipeManager;
+
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
     /**
-     * Add a new recipe to the crafting provider.
+     * Add a new recipe to the crafting provider for all worlds.
      *
      * @return <tt>true</tt> if this collection changed as a result of the call
      * @since Forestry 4.1.0
@@ -17,16 +21,24 @@ public interface ICraftingProvider<T extends IForestryRecipe> {
     boolean addRecipe(T recipe);
 
     /**
-     * Remove a specific recipe from the crafting provider.
+     * Gets a collection of all currently registered recipes which this provider supports
      *
-     * @return <tt>true</tt> if an element was removed as a result of this call
-     * @since Forestry 4.1.0
+     * @param manager The recipe manager to use
+     * @return A collection of recipes
      */
-    boolean removeRecipe(T recipe);
+    Collection<T> getRecipes(RecipeManager manager);
 
     /**
-     * @return an unmodifiable collection of all recipes registered to the crafting provider.
-     * @since Forestry 4.1.0
+     * A utility method to find all recipes in a {@link RecipeManager} of a given {@link IRecipeType type}
+     *
+     * @param manager The recipe manager
+     * @param type    The recipe type object
+     * @param <T>     The recipe type
+     * @return A collection of all recipes of this type in the given {@link RecipeManager}
      */
-    Collection<T> recipes();
+    static <T extends IForestryRecipe> Collection<T> findRecipes(RecipeManager manager, IRecipeType<T> type) {
+        return manager.getRecipes(type).values().stream()
+                      .map(r -> (T) r)
+                      .collect(Collectors.toSet());
+    }
 }

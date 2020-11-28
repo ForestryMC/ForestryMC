@@ -14,13 +14,11 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.core.commands.SpeciesNotFoundException;
-import forestry.core.config.Config;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.Log;
 import forestry.core.worldgen.FeatureBase;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
+import genetics.commands.SpeciesNotFoundException;
 import genetics.utils.AlleleUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -70,7 +68,7 @@ public final class TreeGenHelper {
             if (feature instanceof FeatureBase) {
                 return ((FeatureBase) feature).place(world, world.rand, pos, true);
             } else {
-                return feature.func_241855_a(
+                return feature.generate(
                         (ISeedReader) world,
                         generator,
                         world.rand,
@@ -92,7 +90,7 @@ public final class TreeGenHelper {
             if (gen instanceof FeatureBase) {
                 return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
             } else {
-                return gen.func_241855_a(
+                return gen.generate(
                         (ISeedReader) world,
                         ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
                         world.getRandom(),

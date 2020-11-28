@@ -1,0 +1,25 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:moistener",
+        "time": 5000,
+        "resource": {
+          "item": "minecraft:spruce_leaves"
+        },
+        "product": {
+          "item": "minecraft:podzol",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

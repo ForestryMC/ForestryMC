@@ -45,7 +45,7 @@ public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int messageId, int data) {
-        super.updateProgressBar(messageId, data);
+//        super.updateProgressBar(messageId, data);
 
         tile.getGUINetworkData(messageId, data);
     }

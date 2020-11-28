@@ -5,8 +5,13 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
  * Provides an interface to the recipe manager of the fermenter.
@@ -20,62 +25,12 @@ import net.minecraftforge.fluids.FluidStack;
  * @author SirSengir
  */
 public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
+    @Nullable
+    IFermenterRecipe findMatchingRecipe(RecipeManager manager, ItemStack res, FluidStack fluidStack);
 
-    /**
-     * Add a recipe to the fermenter
-     *
-     * @param resource          ItemStack representing the resource.
-     * @param fermentationValue Value of the given resource, i.e. how much needs
-     *                          to be fermented for the output to be deposited into the product tank.
-     * @param modifier          Modifies the amount of liquid output per work cycle.
-     *                          (water = 1.0f, honey = 1.5f)
-     * @param output            LiquidStack representing output liquid. Amount is
-     *                          determined by fermentationValue*modifier.
-     * @param liquid            LiquidStack representing resource liquid and amount.
-     * @throws NullPointerException if resource, output or liquid is null
-     */
-    void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid);
+    public boolean isResource(RecipeManager manager, ItemStack resource);
 
-    /**
-     * Add a recipe to the fermenter. Defaults to water as input liquid.
-     *
-     * @param resource          ItemStack representing the resource.
-     * @param modifier          Modifies the amount of liquid output per work cycle.
-     *                          (water = 1.0f, honey = 1.5f)
-     * @param fermentationValue Value of the given resource, i.e. how much needs
-     *                          to be fermented for the output to be deposited into the product tank.
-     * @param output            LiquidStack representing output liquid. Amount is
-     *                          determined by fermentationValue*modifier.
-     * @throws NullPointerException if resource, output or liquid is null
-     */
-    void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output);
+    public Set<Fluid> getRecipeFluidInputs(RecipeManager manager);
 
-    /**
-     * Add a recipe to the fermenter
-     *
-     * @param resource          String representing the resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
-     * @param fermentationValue Value of the given resource, i.e. how much needs
-     *                          to be fermented for the output to be deposited into the product tank.
-     * @param modifier          Modifies the amount of liquid output per work cycle.
-     *                          (water = 1.0f, honey = 1.5f)
-     * @param output            LiquidStack representing output liquid. Amount is
-     *                          determined by fermentationValue*modifier.
-     * @param liquid            LiquidStack representing resource liquid and amount.
-     * @throws NullPointerException if resource, output or liquid is null
-     */
-    void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid);
-
-    /**
-     * Add a recipe to the fermenter. Defaults to water as input liquid.
-     *
-     * @param resource          String representing the resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
-     * @param modifier          Modifies the amount of liquid output per work cycle.
-     *                          (water = 1.0f, honey = 1.5f)
-     * @param fermentationValue Value of the given resource, i.e. how much needs
-     *                          to be fermented for the output to be deposited into the product tank.
-     * @param output            LiquidStack representing output liquid. Amount is
-     *                          determined by fermentationValue*modifier.
-     * @throws NullPointerException if resource, output or liquid is null
-     */
-    void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output);
+    public Set<Fluid> getRecipeFluidOutputs(RecipeManager manager);
 }

@@ -41,6 +41,6 @@ public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
 
     @Override
     default IRecipeSerializer<?> getSerializer() {
-        return IFabricatorRecipe.Companion.SERIALIZER;
+        return Companion.SERIALIZER;
     }
 }

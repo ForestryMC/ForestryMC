@@ -6,6 +6,9 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
+
+import javax.annotation.Nullable;
 
 /**
  * Provides an interface to the recipe manager of the moistener.
@@ -18,13 +21,8 @@ import net.minecraft.item.ItemStack;
  * @author SirSengir
  */
 public interface IMoistenerManager extends ICraftingProvider<IMoistenerRecipe> {
+    public boolean isResource(RecipeManager manager, ItemStack resource);
 
-    /**
-     * Add a recipe to the moistener
-     *
-     * @param resource    Item required in resource stack. Will be reduced by one per produced item.
-     * @param product     Item to produce per resource processed.
-     * @param timePerItem Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
-     */
-    void addRecipe(ItemStack resource, ItemStack product, int timePerItem);
+    @Nullable
+    public IMoistenerRecipe findMatchingRecipe(RecipeManager manager, ItemStack item);
 }

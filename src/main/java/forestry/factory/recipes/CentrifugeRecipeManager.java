@@ -12,65 +12,29 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.api.recipes.IForestryRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.crafting.RecipeManager;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
-public class CentrifugeRecipeManager implements ICentrifugeManager {
-
-    private static final Set<ICentrifugeRecipe> recipes = new HashSet<>();
-
-    @Override
-    public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
-        NonNullList<ICentrifugeRecipe.Product> list = NonNullList.create();
-
-        for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
-            list.add(new ICentrifugeRecipe.Product(entry.getValue(), entry.getKey()));
-        }
-
-        ICentrifugeRecipe recipe = new CentrifugeRecipe(
-                IForestryRecipe.anonymous(),
-                timePerItem,
-                Ingredient.fromStacks(resource),
-                list
-        );
-        addRecipe(recipe);
+public class CentrifugeRecipeManager extends AbstractCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
+    public CentrifugeRecipeManager() {
+        super(ICentrifugeRecipe.TYPE);
     }
 
     @Nullable
-    public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
+    public ICentrifugeRecipe findMatchingRecipe(RecipeManager manager, ItemStack itemStack) {
         if (itemStack.isEmpty()) {
             return null;
         }
 
-        for (ICentrifugeRecipe recipe : recipes) {
+        for (ICentrifugeRecipe recipe : getRecipes(manager)) {
             Ingredient recipeInput = recipe.getInput();
             if (recipeInput.test(itemStack)) {
                 return recipe;
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean addRecipe(ICentrifugeRecipe recipe) {
-        return recipes.add(recipe);
-    }
-
-    @Override
-    public boolean removeRecipe(ICentrifugeRecipe recipe) {
-        return recipes.remove(recipe);
-    }
-
-    @Override
-    public Set<ICentrifugeRecipe> recipes() {
-        return Collections.unmodifiableSet(recipes);
     }
 }

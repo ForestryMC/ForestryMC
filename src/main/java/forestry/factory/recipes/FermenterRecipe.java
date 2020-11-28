@@ -23,13 +23,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
-
 public class FermenterRecipe implements IFermenterRecipe {
     private final ResourceLocation id;
     private final Ingredient resource;
-    @Nullable
-    private final String resourceOreName;
     private final int fermentationValue;
     private final float modifier;
     private final Fluid output;
@@ -51,7 +47,6 @@ public class FermenterRecipe implements IFermenterRecipe {
 
         this.id = id;
         this.resource = resource;
-        this.resourceOreName = null;
         this.fermentationValue = fermentationValue;
         this.modifier = modifier;
         this.output = output;
@@ -60,21 +55,17 @@ public class FermenterRecipe implements IFermenterRecipe {
 
     public FermenterRecipe(
             ResourceLocation id,
-            String resourceOreName,
             int fermentationValue,
             float modifier,
             Fluid output,
             FluidStack fluidResource
     ) {
         Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
-        Preconditions.checkNotNull(resourceOreName, "Fermenter Resource cannot be null!");
-        Preconditions.checkArgument(!resourceOreName.isEmpty(), "Fermenter Resource ore name cannot be empty!");
-        Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
-        Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
+        Preconditions.checkNotNull(output, "Fermenter output cannot be null!");
+        Preconditions.checkNotNull(fluidResource, "Fermenter liquid cannot be null!");
 
         this.id = id;
         this.resource = Ingredient.EMPTY;
-        this.resourceOreName = resourceOreName;
         this.fermentationValue = fermentationValue;
         this.modifier = modifier;
         this.output = output;
@@ -85,12 +76,6 @@ public class FermenterRecipe implements IFermenterRecipe {
     @Override
     public Ingredient getResource() {
         return resource;
-    }
-
-    @Nullable
-    @Override
-    public String getResourceOreName() {
-        return resourceOreName;
     }
 
     @Override

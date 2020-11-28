@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 200,
+        "liquid": {
+          "fluid": "minecraft:water",
+          "amount": 1000
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "WXW",
+            "WTW",
+            "WWW"
+          ],
+          "key": {
+            "X": {
+              "tag": "forge:gems/diamond"
+            },
+            "W": {
+              "item": "forestry:woven_silk"
+            },
+            "T": {
+              "item": "forestry:builder_bag"
+            }
+          },
+          "result": {
+            "item": "forestry:builder_bag_woven",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

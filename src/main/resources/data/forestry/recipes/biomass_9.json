@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:fermenter",
+        "resource": {
+          "item": "minecraft:brown_mushroom",
+          "count": 1
+        },
+        "fermentationValue": 50,
+        "modifier":  1.5,
+        "output": "forestry:biomass",
+        "fluidResource": {
+          "fluid": "minecraft:honey",
+          "amount": 1
+        }
+      }
+    }
+  ]
+}

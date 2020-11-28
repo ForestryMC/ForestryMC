@@ -11,7 +11,6 @@
 package forestry.core.gui.slots;
 
 import com.mojang.datafixers.util.Pair;
-import forestry.core.config.Constants;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.IFilterSlotDelegate;
 import net.minecraft.inventory.IInventory;
@@ -30,10 +29,9 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
     private final IFilterSlotDelegate filterSlotDelegate;
     @Nullable
     private ResourceLocation backgroundTexture = null;
-    private ResourceLocation blockedTexture = new ResourceLocation(
-            Constants.MOD_ID,
-            Constants.TEXTURE_PATH_GUI + "slots/blocked" + ".png"
-    );
+    private ResourceLocation blockedTexture = TextureManagerForestry.getInstance()
+                                                                    .getDefault("slots/blocked")
+                                                                    .getName();
 
     public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
         super(inventory, slotIndex, xPos, yPos);
@@ -48,13 +46,12 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
     }
 
     public SlotFiltered setBlockedTexture(String ident) {
-        blockedTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + ident + ".png");
+        blockedTexture = TextureManagerForestry.getInstance().getDefault(ident).getName();
         return this;
     }
 
     public SlotFiltered setBackgroundTexture(String ident) {
-        backgroundTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + ident + ".png"
-        );
+        backgroundTexture = TextureManagerForestry.getInstance().getDefault(ident).getName();
         return this;
     }
 

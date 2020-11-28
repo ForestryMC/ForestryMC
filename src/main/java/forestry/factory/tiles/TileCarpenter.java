@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -21,7 +22,6 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.recipes.RecipePair;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
@@ -30,7 +30,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
-import forestry.factory.recipes.CarpenterRecipeManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -42,6 +41,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -52,6 +53,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Optional;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
     private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -75,13 +77,20 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
     public TileCarpenter() {
         super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
         setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
-        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(CarpenterRecipeManager.getRecipeFluids());
+        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
 
         craftingInventory = new InventoryGhostCrafting<>(this, 10);
         craftPreviewInventory = new CraftResultInventory();
         setInternalInventory(new InventoryCarpenter(this));
 
         tankManager = new TankManager(this, resourceTank);
+    }
+
+    @Override
+    public void setWorldAndPos(World world, BlockPos pos) {
+        super.setWorldAndPos(world, pos);
+
+        resourceTank.setFilters(RecipeManagers.carpenterManager.getRecipeFluids(world.getRecipeManager()));
     }
 
     /* LOADING & SAVING */
@@ -121,21 +130,21 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
         }
 
         //TODO optional could work quite well here
-        if (CarpenterRecipeManager.matches(
+        if (!RecipeManagers.carpenterManager.matches(
                 currentRecipe,
                 resourceTank.getFluid(),
                 getBoxStack(),
                 craftingInventory
-        ) == null) {
-            RecipePair<ICarpenterRecipe> recipePair = CarpenterRecipeManager.findMatchingRecipe(
+        )) {
+            Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(
+                    world.getRecipeManager(),
                     resourceTank.getFluid(),
                     getBoxStack(),
                     craftingInventory
             );
-            currentRecipe = recipePair.getRecipe();
-            oreDicts = recipePair.getOreDictEntries();
+            currentRecipe = optional.orElse(null);
 
-            if (!recipePair.isEmpty() && currentRecipe != null) {
+            if (optional.isPresent()) {
                 int recipeTime = currentRecipe.getPackagingTime();
                 setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
                 setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
@@ -208,6 +217,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
             if (box.isEmpty()) {
                 return false;
             }
+
             if (doRemove) {
                 decrStackSize(InventoryCarpenter.SLOT_BOX, 1);
             }
@@ -223,7 +233,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
                 InventoryCarpenter.SLOT_INVENTORY_1,
                 InventoryCarpenter.SLOT_INVENTORY_COUNT
         );
-        return InventoryUtil.removeSets(inventory, 1, craftingSets, oreDicts, null, true, false, doRemove);
+        return InventoryUtil.removeSets(inventory, 1, craftingSets, null, true, false, doRemove);
     }
 
     /* STATE INFORMATION */

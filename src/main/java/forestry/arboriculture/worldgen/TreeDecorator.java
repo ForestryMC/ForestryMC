@@ -50,7 +50,7 @@ public class TreeDecorator extends Feature<NoFeatureConfig> {
     private static final Map<ResourceLocation, Set<ITree>> biomeCache = new HashMap<>();
 
     @Override
-    public boolean func_241855_a(
+    public boolean generate(
             ISeedReader seedReader,
             ChunkGenerator generator,
             Random rand,

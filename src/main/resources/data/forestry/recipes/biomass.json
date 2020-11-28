@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:squeezer",
+        "time": 8,
+        "resources": [
+          {
+            "item": "forestry:camouflaged_paneling",
+            "count": 1
+          }
+        ],
+        "output": {
+          "fluid": "forestry:biomass",
+          "amount": 150
+        }
+      }
+    }
+  ]
+}

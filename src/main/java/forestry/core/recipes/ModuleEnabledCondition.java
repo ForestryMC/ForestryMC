@@ -21,7 +21,6 @@ import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 public class ModuleEnabledCondition implements ICondition {
-
     private final String container;
     private final String module;
 

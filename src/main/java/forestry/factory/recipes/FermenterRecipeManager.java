@@ -17,6 +17,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -24,81 +25,23 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
-public class FermenterRecipeManager implements IFermenterManager {
-    private static final Set<IFermenterRecipe> recipes = new TreeSet<>();
-    public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
-    public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
+public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterRecipe> implements IFermenterManager {
+    private final Set<Fluid> recipeFluidInputs = new HashSet<>();
+    private final Set<Fluid> recipeFluidOutputs = new HashSet<>();
 
-    @Override
-    public void addRecipe(
-            ItemStack resource,
-            int fermentationValue,
-            float modifier,
-            FluidStack output,
-            FluidStack liquid
-    ) {
-        IFermenterRecipe recipe = new FermenterRecipe(
-                IForestryRecipe.anonymous(),
-                Ingredient.fromStacks(resource),
-                fermentationValue,
-                modifier,
-                output.getFluid(),
-                liquid
-        );
-        addRecipe(recipe);
-    }
-
-    @Override
-    public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-        addRecipe(
-                resource,
-                fermentationValue,
-                modifier,
-                output,
-                new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME)
-        );
-    }
-
-    @Override
-    public void addRecipe(
-            String resourceOreName,
-            int fermentationValue,
-            float modifier,
-            FluidStack output,
-            FluidStack liquid
-    ) {
-        IFermenterRecipe recipe = new FermenterRecipe(
-                IForestryRecipe.anonymous(),
-                resourceOreName,
-                fermentationValue,
-                modifier,
-                output.getFluid(),
-                liquid
-        );
-        addRecipe(recipe);
-    }
-
-    @Override
-    public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output) {
-        addRecipe(
-                resourceOreName,
-                fermentationValue,
-                modifier,
-                output,
-                new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME)
-        );
+    public FermenterRecipeManager() {
+        super(IFermenterRecipe.TYPE);
     }
 
     @Nullable
-    public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
+    public IFermenterRecipe findMatchingRecipe(RecipeManager manager, ItemStack res, FluidStack fluidStack) {
         if (res.isEmpty()) {
             return null;
         }
 
-        for (IFermenterRecipe recipe : recipes) {
-            if (matches(recipe, res, liqu)) {
+        for (IFermenterRecipe recipe : getRecipes(manager)) {
+            if (matches(recipe, res, fluidStack)) {
                 return recipe;
             }
         }
@@ -106,22 +49,22 @@ public class FermenterRecipeManager implements IFermenterManager {
         return null;
     }
 
-    public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
+    public boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack fluidStack) {
         Ingredient resource = recipe.getResource();
         if (!resource.test(res)) {
             return false;
         }
 
         FluidStack fluid = recipe.getFluidResource();
-        return liqu.isFluidEqual(fluid);
+        return fluidStack.isFluidEqual(fluid);
     }
 
-    public static boolean isResource(ItemStack resource) {
+    public boolean isResource(RecipeManager manager, ItemStack resource) {
         if (resource.isEmpty()) {
             return false;
         }
 
-        for (IFermenterRecipe recipe : recipes) {
+        for (IFermenterRecipe recipe : getRecipes(manager)) {
             if (recipe.getResource().test(resource)) {
                 return true;
             }
@@ -137,22 +80,31 @@ public class FermenterRecipeManager implements IFermenterManager {
         Fluid output = recipe.getOutput();
         recipeFluidOutputs.add(output);
 
-        return recipes.add(recipe);
+        return super.addRecipe(recipe);
     }
 
     @Override
-    public boolean removeRecipe(IFermenterRecipe recipe) {
-        FluidStack liquid = recipe.getFluidResource();
-        recipeFluidInputs.remove(liquid.getFluid());
+    public Set<Fluid> getRecipeFluidInputs(RecipeManager manager) {
+        if (recipeFluidInputs.isEmpty()) {
+            for (IFermenterRecipe recipe : getRecipes(manager)) {
+                FluidStack fluidStack = recipe.getFluidResource();
+                if (!fluidStack.isEmpty()) {
+                    recipeFluidInputs.add(fluidStack.getFluid());
+                }
+            }
+        }
 
-        Fluid output = recipe.getOutput();
-        recipeFluidOutputs.remove(output);
-
-        return recipes.remove(recipe);
+        return Collections.unmodifiableSet(recipeFluidInputs);
     }
 
     @Override
-    public Set<IFermenterRecipe> recipes() {
-        return Collections.unmodifiableSet(recipes);
+    public Set<Fluid> getRecipeFluidOutputs(RecipeManager manager) {
+        if (recipeFluidOutputs.isEmpty()) {
+            for (IFermenterRecipe recipe : getRecipes(manager)) {
+                recipeFluidOutputs.add(recipe.getOutput());
+            }
+        }
+
+        return Collections.unmodifiableSet(recipeFluidOutputs);
     }
 }

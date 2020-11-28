@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
-import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.tiles.TileSqueezer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -46,7 +46,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
                 return false;
             }
 
-            return SqueezerRecipeManager.canUse(itemStack);
+            return RecipeManagers.squeezerManager.canUse(tile.getWorld().getRecipeManager(), itemStack);
         }
 
         return false;
@@ -67,7 +67,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 
     public boolean removeResources(NonNullList<ItemStack> stacks) {
         IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
-        return InventoryUtil.removeSets(inventory, 1, stacks, null, false, true, false, true);
+        return InventoryUtil.removeSets(inventory, 1, stacks, null, false, false, true);
     }
 
     public boolean addRemnant(ItemStack remnant, boolean doAdd) {

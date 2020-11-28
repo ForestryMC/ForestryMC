@@ -1,0 +1,25 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:fabricator_smelting",
+        "resource": {
+          "item": "minecraft:red_sand"
+        },
+        "product": {
+          "fluid": "forestry:glass",
+          "amount": 1000
+        },
+        "melting": 3000
+      }
+    }
+  ]
+}

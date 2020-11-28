@@ -184,11 +184,6 @@ public class ModuleFarming extends BlankForestryModule {
     }
 
     @Override
-    public void registerRecipes() {
-        FarmDefinition.registerCircuits();
-    }
-
-    @Override
     public void getHiddenItems(List<ItemStack> hiddenItems) {
         // mushrooms are a workaround for the farm and should not be obtainable
         //		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));

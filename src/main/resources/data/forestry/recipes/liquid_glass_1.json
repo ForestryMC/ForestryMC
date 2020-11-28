@@ -1,0 +1,25 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:fabricator_smelting",
+        "resource": {
+          "tag": "forge:glass_panes"
+        },
+        "product": {
+          "fluid": "forestry:glass",
+          "amount": 375
+        },
+        "melting": 1000
+      }
+    }
+  ]
+}

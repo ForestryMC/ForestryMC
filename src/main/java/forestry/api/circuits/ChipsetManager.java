@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
+import forestry.api.recipes.ISolderManager;
+
 public class ChipsetManager {
 
     public static ISolderManager solderManager;

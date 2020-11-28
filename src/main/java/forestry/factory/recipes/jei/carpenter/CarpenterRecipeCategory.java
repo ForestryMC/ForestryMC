@@ -53,8 +53,9 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
                 false
         );
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER)
-                                                                                       .block()));
+        this.icon = guiHelper.createDrawableIngredient(
+                new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block())
+        );
     }
 
 
@@ -80,7 +81,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, CarpenterRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiIngredientGroup guiIngredients = recipeLayout.getItemStacks();
+        IGuiIngredientGroup guiIngredients = recipeLayout.getIngredientsGroup(VanillaTypes.ITEM);
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
         guiIngredients.init(boxSlot, true, 73, 3);

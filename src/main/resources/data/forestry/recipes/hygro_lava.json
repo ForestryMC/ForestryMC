@@ -1,0 +1,24 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:hygroregulator",
+        "time": 10,
+        "liquid": {
+          "fluid": "minecraft:lava",
+          "amount": 1
+        },
+        "humidChange": -0.01,
+        "tempChange": 0.005
+      }
+    }
+  ]
+}

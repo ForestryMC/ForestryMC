@@ -10,34 +10,28 @@
  ******************************************************************************/
 package forestry.core;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
-import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
-import forestry.core.commands.CommandListAlleles;
 import forestry.core.commands.CommandModules;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreContainers;
 import forestry.core.features.CoreItems;
-import forestry.core.fluids.ForestryFluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
-import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
@@ -46,7 +40,6 @@ import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ForgeUtils;
@@ -54,11 +47,9 @@ import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.command.CommandSource;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootFunctionType;
@@ -72,7 +63,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -135,7 +125,6 @@ public class ModuleCore extends BlankForestryModule {
         MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
         rootCommand.then(CommandModules.register());
-        rootCommand.then(CommandListAlleles.register());
     }
 
     @Nullable
@@ -259,73 +248,6 @@ public class ModuleCore extends BlankForestryModule {
     }
 
     @Override
-    public void registerRecipes() {
-        /* SMELTING RECIPES */
-        RecipeUtil.addSmelting(
-                CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.APATITE, 1),
-                CoreItems.APATITE.stack(),
-                0.5f
-        );
-        RecipeUtil.addSmelting(
-                CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.COPPER, 1),
-                CoreItems.INGOT_COPPER.stack(),
-                0.5f
-        );
-        RecipeUtil.addSmelting(
-                CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.TIN, 1),
-                CoreItems.INGOT_TIN.stack(),
-                0.5f
-        );
-        RecipeUtil.addSmelting(CoreItems.PEAT.stack(), CoreItems.ASH.stack(), 0.0f);
-        if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-            // CARPENTER
-            // Portable ANALYZER
-            RecipeManagers.carpenterManager.addRecipe(
-                    100,
-                    new FluidStack(Fluids.WATER, 2000),
-                    ItemStack.EMPTY,
-                    CoreItems.PORTABLE_ALYZER.stack(),
-                    "X#X",
-                    "X#X",
-                    "RDR",
-                    '#',
-                    OreDictUtil.PANE_GLASS,
-                    'X',
-                    OreDictUtil.INGOT_TIN,
-                    'R',
-                    OreDictUtil.DUST_REDSTONE,
-                    'D',
-                    OreDictUtil.GEM_DIAMOND
-            );
-            // Camouflaged Paneling
-            FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
-            if (!biomass.isEmpty()) {
-                RecipeManagers.squeezerManager.addRecipe(
-                        8,
-                        CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1),
-                        biomass
-                );
-            }
-        }
-        // alternate recipes
-        if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-            RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-                    CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1), 0.15f
-            ));
-        }
-
-        IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
-        if (hygroManager != null) {
-            hygroManager.addRecipe(new FluidStack(Fluids.WATER, 1), 1, -0.005f, 0.01f);
-            hygroManager.addRecipe(new FluidStack(Fluids.LAVA, 1), 10, 0.005f, -0.01f);
-            FluidStack ice = ForestryFluids.ICE.getFluid(1);
-            if (!ice.isEmpty()) {
-                hygroManager.addRecipe(ice, 10, -0.01f, 0.02f);
-            }
-        }
-    }
-
-    @Override
     public IPacketRegistry getPacketRegistry() {
         return new PacketRegistryCore();
     }
@@ -333,8 +255,8 @@ public class ModuleCore extends BlankForestryModule {
     @Override
     public boolean processIMCMessage(InterModComms.IMCMessage message) {
         if (message.getMethod().equals("blacklist-ores-dimension")) {
-            ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier()
-                                                                  .get();    //TODO - how does IMC work
+            //TODO - how does IMC work
+            ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier().get();
             for (ResourceLocation dim : dims) {
                 Config.blacklistOreDim(dim);
             }

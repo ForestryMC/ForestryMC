@@ -20,12 +20,15 @@ import forestry.factory.recipes.jei.fabricator.FabricatorRecipeCategory;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeMaker;
 import forestry.factory.recipes.jei.fabricator.FabricatorRecipeTransferHandler;
 import forestry.factory.recipes.jei.fermenter.FermenterRecipeCategory;
+import forestry.factory.recipes.jei.fermenter.FermenterRecipeMaker;
 import forestry.factory.recipes.jei.moistener.MoistenerRecipeCategory;
 import forestry.factory.recipes.jei.moistener.MoistenerRecipeMaker;
 import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeCategory;
 import forestry.factory.recipes.jei.rainmaker.RainmakerRecipeMaker;
 import forestry.factory.recipes.jei.squeezer.SqueezerRecipeCategory;
 import forestry.factory.recipes.jei.squeezer.SqueezerRecipeMaker;
+import forestry.factory.recipes.jei.still.StillRecipeCategory;
+import forestry.factory.recipes.jei.still.StillRecipeMaker;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import mezz.jei.api.IModPlugin;
@@ -35,8 +38,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -109,9 +114,9 @@ public class FactoryJeiPlugin implements IModPlugin {
             categories.add(new SqueezerRecipeCategory(guiHelper));
         }
 
-//        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
-//            categories.add(new StillRecipeCategory(guiHelper));
-//        }
+        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
+            categories.add(new StillRecipeCategory(guiHelper));
+        }
 
         registry.addRecipeCategories(categories.toArray(new IRecipeCategory[categories.size()]));
     }
@@ -192,12 +197,12 @@ public class FactoryJeiPlugin implements IModPlugin {
             );
         }
 
-//        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
-//            registry.addRecipeCatalyst(
-//                    new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block()),
-//                    ForestryRecipeCategoryUid.STILL
-//            );
-//        }
+        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
+            registry.addRecipeCatalyst(
+                    new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block()),
+                    ForestryRecipeCategoryUid.STILL
+            );
+        }
     }
 
     @Override
@@ -297,14 +302,16 @@ public class FactoryJeiPlugin implements IModPlugin {
             );
         }
 
-//        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
-//            registry.addRecipeClickArea(GuiStill.class,
-//                    73,
-//                    17,
-//                    33,
-//                    57,
-//                    ForestryRecipeCategoryUid.STILL);
-//        }
+        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
+            registry.addRecipeClickArea(
+                    GuiStill.class,
+                    73,
+                    17,
+                    33,
+                    57,
+                    ForestryRecipeCategoryUid.STILL
+            );
+        }
     }
 
     @Override
@@ -312,6 +319,8 @@ public class FactoryJeiPlugin implements IModPlugin {
         if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
             return;
         }
+
+        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
 
 //        if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
 //            registry.addRecipes(
@@ -322,14 +331,14 @@ public class FactoryJeiPlugin implements IModPlugin {
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
             registry.addRecipes(
-                    CarpenterRecipeMaker.getCarpenterRecipes(),
+                    CarpenterRecipeMaker.getCarpenterRecipes(recipeManager),
                     ForestryRecipeCategoryUid.CARPENTER
             );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CENTRIFUGE)) {
             registry.addRecipes(
-                    CentrifugeRecipeMaker.getCentrifugeRecipe(),
+                    CentrifugeRecipeMaker.getCentrifugeRecipe(recipeManager),
                     ForestryRecipeCategoryUid.CENTRIFUGE
             );
         }
@@ -341,16 +350,16 @@ public class FactoryJeiPlugin implements IModPlugin {
             );
         }
 
-//        if (ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
-//            registry.addRecipes(
-//                    FermenterRecipeMaker.getFermenterRecipes(jeiHelpers.getStackHelper()),
-//                    ForestryRecipeCategoryUid.FERMENTER
-//            );
-//        }
+        if (ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
+            registry.addRecipes(
+                    FermenterRecipeMaker.getFermenterRecipes(recipeManager, registry.getJeiHelpers().getStackHelper()),
+                    ForestryRecipeCategoryUid.FERMENTER
+            );
+        }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.MOISTENER)) {
             registry.addRecipes(
-                    MoistenerRecipeMaker.getMoistenerRecipes(),
+                    MoistenerRecipeMaker.getMoistenerRecipes(recipeManager),
                     ForestryRecipeCategoryUid.MOISTENER
             );
         }
@@ -364,7 +373,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 
         if (ModuleFactory.machineEnabled(MachineUIDs.SQUEEZER)) {
             registry.addRecipes(
-                    SqueezerRecipeMaker.getSqueezerRecipes(),
+                    SqueezerRecipeMaker.getSqueezerRecipes(recipeManager),
                     ForestryRecipeCategoryUid.SQUEEZER
             );
             registry.addRecipes(
@@ -373,12 +382,12 @@ public class FactoryJeiPlugin implements IModPlugin {
             );
         }
 
-//        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
-//            registry.addRecipes(
-//                    StillRecipeMaker.getStillRecipes(),
-//                    ForestryRecipeCategoryUid.STILL
-//            );
-//        }
+        if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
+            registry.addRecipes(
+                    StillRecipeMaker.getStillRecipes(recipeManager),
+                    ForestryRecipeCategoryUid.STILL
+            );
+        }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.RAINTANK)) {
             JeiUtil.addDescription(registry, FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.RAINTANK).getBlock());

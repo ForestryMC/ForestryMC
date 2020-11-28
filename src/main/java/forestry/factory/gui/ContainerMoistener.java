@@ -64,7 +64,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
     @Override
     @OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int messageId, int data) {
-        super.updateProgressBar(messageId, data);
+//        super.updateProgressBar(messageId, data);
 
         tile.getGUINetworkData(messageId, data);
     }

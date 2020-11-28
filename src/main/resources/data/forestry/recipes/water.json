@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:squeezer",
+        "time": 10,
+        "resources": [
+          {
+            "item": "minecraft:cactus",
+            "count": 1
+          }
+        ],
+        "output": {
+          "fluid": "minecraft:water",
+          "amount": 500
+        }
+      }
+    }
+  ]
+}

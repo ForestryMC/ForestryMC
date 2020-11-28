@@ -11,7 +11,6 @@ import forestry.core.utils.IMCUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 import forestry.modules.features.FeatureItem;
 import forestry.storage.items.ItemCrated;
 import forestry.storage.proxy.ProxyCrates;
@@ -149,17 +148,6 @@ public class ModuleCrates extends BlankForestryModule {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void registerRecipes() {
-        // CARPENTER
-        if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-            // CRATES
-            //TODO fluids
-            //			RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, items.crate.getItemStack(24),
-            //				" # ", "# #", " # ", '#', "logWood");
-        }
     }
 
     public static void registerCrate(FeatureItem<ItemCrated> crate) {

@@ -10,15 +10,11 @@ import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.fml.InterModComms;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 public class BlankForestryModule implements IForestryModule {

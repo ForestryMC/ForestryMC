@@ -6,8 +6,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
-import forestry.factory.recipes.FabricatorRecipeManager;
-import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -17,7 +15,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
@@ -38,8 +38,8 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
                 0,
                 0,
                 Stream.of(stacks)
-                      .map(FabricatorRecipeManager::getRecipes)
-                      .flatMap(Collection::stream)
+//                      .map(RecipeManagers.fabricatorManager.getRecipes())
+//                      .flatMap(Collection::stream)
                       .toArray(IFabricatorRecipe[]::new)
         );
     }
@@ -88,14 +88,14 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 
     private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
         Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-        for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
-            Fluid fluid = smelting.getProduct().getFluid();
-            if (!smeltingInputs.containsKey(fluid)) {
-                smeltingInputs.put(fluid, new ArrayList<>());
-            }
-
-            smeltingInputs.get(fluid).add(smelting);
-        }
+//        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes()) {
+//            Fluid fluid = smelting.getProduct().getFluid();
+//            if (!smeltingInputs.containsKey(fluid)) {
+//                smeltingInputs.put(fluid, new ArrayList<>());
+//            }
+//
+//            smeltingInputs.get(fluid).add(smelting);
+//        }
 
         return smeltingInputs;
     }

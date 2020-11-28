@@ -14,6 +14,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -30,7 +31,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.inventory.InventoryMoistener;
-import forestry.factory.recipes.MoistenerRecipeManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -233,11 +233,15 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
     }
 
     public void checkRecipe() {
-        IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(
-                InventoryMoistener.SLOT_RESOURCE));
-        if (currentRecipe != sameRec) {
-            currentRecipe = sameRec;
-            resetRecipe();
+        if (this.hasWorld()) {
+            IMoistenerRecipe sameRec = RecipeManagers.moistenerManager.findMatchingRecipe(
+                    this.getWorld().getRecipeManager(),
+                    getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
+            );
+            if (currentRecipe != sameRec) {
+                currentRecipe = sameRec;
+                resetRecipe();
+            }
         }
 
         getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NO_RECIPE);

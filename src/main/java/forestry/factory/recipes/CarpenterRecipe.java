@@ -11,8 +11,10 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import forestry.api.recipes.ICarpenterRecipe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
@@ -76,8 +78,19 @@ public class CarpenterRecipe implements ICarpenterRecipe {
         @Override
         public CarpenterRecipe read(ResourceLocation recipeId, JsonObject json) {
             int packagingTime = JSONUtils.getInt(json, "time");
-            FluidStack liquid = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid"));
-            Ingredient box = Ingredient.deserialize(json.get("box"));
+
+            JsonElement liquidElement = json.get("liquid");
+            FluidStack liquid = FluidStack.EMPTY;
+            if (liquidElement != null) {
+                liquid = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid"));
+            }
+
+            JsonElement boxElement = json.get("box");
+            Ingredient box = Ingredient.fromStacks(ItemStack.EMPTY);
+            if (boxElement != null) {
+                box = Ingredient.deserialize(json.get("box"));
+            }
+
             ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(
                     recipeId,
                     JSONUtils.getJsonObject(json, "recipe")

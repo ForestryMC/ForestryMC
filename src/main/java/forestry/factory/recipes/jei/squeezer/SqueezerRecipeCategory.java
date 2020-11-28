@@ -52,8 +52,9 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
         IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
         this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
         this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER)
-                                                                                       .block()));
+        this.icon = guiHelper.createDrawableIngredient(
+                new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block())
+        );
     }
 
     @Override

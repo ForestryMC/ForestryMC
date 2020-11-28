@@ -40,8 +40,9 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
                 IDrawableAnimated.StartDirection.BOTTOM,
                 false
         );
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL)
-                                                                                       .block()));
+        this.icon = guiHelper.createDrawableIngredient(
+                new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block())
+        );
     }
 
     @Override
@@ -50,8 +51,8 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
     }
 
     @Override
-    public Class getRecipeClass() {
-        return null;
+    public Class<? extends StillRecipeWrapper> getRecipeClass() {
+        return StillRecipeWrapper.class;
     }
 
     @Override

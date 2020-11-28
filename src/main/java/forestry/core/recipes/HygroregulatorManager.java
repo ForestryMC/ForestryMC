@@ -1,9 +1,10 @@
 package forestry.core.recipes;
 
-import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.factory.recipes.AbstractCraftingProvider;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -11,28 +12,20 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HygroregulatorManager implements IHygroregulatorManager {
-    private static final Set<IHygroregulatorRecipe> recipes = new HashSet<>();
-    private static final Set<Fluid> recipeFluids = new HashSet<>();
+public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregulatorRecipe> implements IHygroregulatorManager {
+    private final Set<Fluid> recipeFluids = new HashSet<>();
 
-    @Override
-    public void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange) {
-        addRecipe(new HygroregulatorRecipe(
-                IForestryRecipe.anonymous(),
-                resource,
-                transferTime,
-                humidChange,
-                tempChange
-        ));
+    public HygroregulatorManager() {
+        super(IHygroregulatorRecipe.TYPE);
     }
 
     @Nullable
-    public static IHygroregulatorRecipe findMatchingRecipe(FluidStack liquid) {
+    public IHygroregulatorRecipe findMatchingRecipe(RecipeManager manager, FluidStack liquid) {
         if (liquid.getAmount() <= 0) {
             return null;
         }
 
-        for (IHygroregulatorRecipe recipe : recipes) {
+        for (IHygroregulatorRecipe recipe : getRecipes(manager)) {
             FluidStack resource = recipe.getResource();
             if (resource.isFluidEqual(liquid)) {
                 return recipe;
@@ -42,29 +35,14 @@ public class HygroregulatorManager implements IHygroregulatorManager {
         return null;
     }
 
-    @Override
-    public boolean addRecipe(IHygroregulatorRecipe recipe) {
-        return recipes.add(recipe);
-    }
-
-    @Override
-    public boolean removeRecipe(IHygroregulatorRecipe recipe) {
-        return recipes.remove(recipe);
-    }
-
-    public static Set<Fluid> getRecipeFluids() {
+    public Set<Fluid> getRecipeFluids(RecipeManager manager) {
         if (recipeFluids.isEmpty()) {
-            for (IHygroregulatorRecipe recipe : recipes) {
+            for (IHygroregulatorRecipe recipe : getRecipes(manager)) {
                 FluidStack fluidStack = recipe.getResource();
                 recipeFluids.add(fluidStack.getFluid());
             }
         }
 
         return Collections.unmodifiableSet(recipeFluids);
-    }
-
-    @Override
-    public Set<IHygroregulatorRecipe> recipes() {
-        return Collections.unmodifiableSet(recipes);
     }
 }

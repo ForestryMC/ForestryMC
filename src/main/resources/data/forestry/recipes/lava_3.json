@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:squeezer",
+        "time": 10,
+        "resources": [
+          {
+            "item": "forestry:phosphor",
+            "count": 2
+          },
+          {
+            "item": "minecraft:red_sand",
+            "count": 1
+          }
+        ],
+        "output": {
+          "fluid": "minecraft:lava",
+          "amount": 2000
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:solder",
+        "layout": "forestry.farms.manual",
+        "circuit": "forestry.manualSucculentes",
+        "resource": {
+          "item": "forestry:electron_tube_copper",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

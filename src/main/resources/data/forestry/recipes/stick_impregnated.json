@@ -1,0 +1,39 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 10,
+        "liquid": {
+          "fluid": "forestry:seed_oil",
+          "amount": 100
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "#",
+            "#"
+          ],
+          "key": {
+            "#": {
+              "tag": "minecraft:logs"
+            }
+          },
+          "result": {
+            "item": "forestry:oak_stick",
+            "count": 2
+          }
+        }
+      }
+    }
+  ]
+}

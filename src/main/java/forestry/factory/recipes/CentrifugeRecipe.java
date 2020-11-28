@@ -58,9 +58,10 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
         for (Product entry : this.outputs) {
             float probability = entry.getProbability();
 
+            float test = random.nextFloat();
             if (probability >= 1.0) {
                 products.add(entry.getStack().copy());
-            } else if (random.nextFloat() < probability) {
+            } else if (test < probability) {
                 products.add(entry.getStack().copy());
             }
         }
@@ -86,7 +87,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
             NonNullList<Product> outputs = NonNullList.create();
 
             for (JsonElement element : JSONUtils.getJsonArray(json, "products")) {
-                float chance = JSONUtils.getInt(element.getAsJsonObject(), "chance");
+                float chance = JSONUtils.getFloat(element.getAsJsonObject(), "chance");
                 ItemStack stack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(
                         element.getAsJsonObject(),
                         "item"

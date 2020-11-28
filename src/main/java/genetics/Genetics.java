@@ -1,5 +1,8 @@
 package genetics;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import genetics.commands.CommandListAlleles;
 import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneTemplate;
@@ -11,9 +14,11 @@ import genetics.individual.SaveFormat;
 import genetics.items.GeneTemplate;
 import genetics.plugins.PluginManager;
 import net.minecraft.block.Block;
+import net.minecraft.command.CommandSource;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -24,6 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import javax.annotation.Nullable;
@@ -46,6 +52,7 @@ public class Genetics {
         modBus.addListener(this::setupCommon);
         modBus.addListener(this::loadComplete);
         modBus.register(this);
+        MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -102,5 +109,12 @@ public class Genetics {
         public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
             /* compiled code */
         }
+    }
+
+    public void serverStarting(FMLServerStartingEvent event) {
+        CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommandManager().getDispatcher();
+        LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("genetics");
+        rootCommand.then(CommandListAlleles.register());
+        dispatcher.register(rootCommand);
     }
 }

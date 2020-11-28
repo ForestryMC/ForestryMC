@@ -90,11 +90,23 @@ public class SqueezerRecipe implements ISqueezerRecipe {
             int processingTime = JSONUtils.getInt(json, "time");
             NonNullList<ItemStack> resources = NonNullList.create();
             FluidStack fluidOutput = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "output"));
-            ItemStack remnants = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "remnant"));
-            float remnantsChance = JSONUtils.getFloat(json, "chance");
 
-            for (JsonElement element : JSONUtils.getJsonArray(json, "resources")) {
-                resources.add(ShapedRecipe.deserializeItem(element.getAsJsonObject()));
+            ItemStack remnants = ItemStack.EMPTY;
+            JsonElement remnantsElement = json.get("remnant");
+            if (remnantsElement != null) {
+                remnants = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "remnant"));
+            }
+
+            float remnantsChance = 0;
+            JsonElement chanceElement = json.get("chance");
+            if (chanceElement != null) {
+                remnantsChance = JSONUtils.getFloat(json, "chance");
+            }
+
+            if (json.get("resources") != null) {
+                for (JsonElement element : JSONUtils.getJsonArray(json, "resources")) {
+                    resources.add(ShapedRecipe.deserializeItem(element.getAsJsonObject()));
+                }
             }
 
             return new SqueezerRecipe(recipeId, processingTime, resources, fluidOutput, remnants, remnantsChance);

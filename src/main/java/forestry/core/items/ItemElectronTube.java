@@ -16,9 +16,9 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.ItemGroupForestry;
-import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.utils.ItemTooltipUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemGroup;
@@ -37,7 +37,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class ItemElectronTube extends ItemOverlay {
-
     private final EnumElectronTube type;
 
     public ItemElectronTube(EnumElectronTube type) {
@@ -93,9 +92,16 @@ public class ItemElectronTube extends ItemOverlay {
         Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
         Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
         for (ICircuitLayout circuitLayout : allLayouts) {
-            ICircuit circuit = SolderManager.getCircuit(circuitLayout, itemStack);
-            if (circuit != null) {
-                circuits.put(circuitLayout, circuit);
+            World world = Minecraft.getInstance().world;
+            if (world != null) {
+                ICircuit circuit = ChipsetManager.solderManager.getCircuit(
+                        world.getRecipeManager(),
+                        circuitLayout,
+                        itemStack
+                );
+                if (circuit != null) {
+                    circuits.put(circuitLayout, circuit);
+                }
             }
         }
         return circuits;

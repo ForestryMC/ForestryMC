@@ -215,11 +215,6 @@ public enum FarmDefinition implements IStringSerializable {
         //Default Implementation
     }
 
-    protected void registerCircuits(ICircuitLayout layoutManaged, ICircuitLayout layoutManual) {
-        ChipsetManager.solderManager.addRecipe(layoutManaged, CoreItems.ELECTRON_TUBES.stack(tube, 1), managed);
-        ChipsetManager.solderManager.addRecipe(layoutManual, CoreItems.ELECTRON_TUBES.stack(tube, 1), manual);
-    }
-
     @Override
     public String getString() {
         return name;
@@ -227,19 +222,6 @@ public enum FarmDefinition implements IStringSerializable {
 
     public IFarmProperties getProperties() {
         return properties;
-    }
-
-    public static void registerCircuits() {
-        ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
-        ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
-
-        if (layoutManaged == null || layoutManual == null) {
-            return;
-        }
-
-        for (FarmDefinition definition : values()) {
-            definition.registerCircuits(layoutManaged, layoutManual);
-        }
     }
 
     public static void init() {

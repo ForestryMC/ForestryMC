@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 50,
+        "liquid": {
+          "fluid": "forestry:honey",
+          "amount": 500
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            " J ",
+            "###",
+            "WPW"
+          ],
+          "key": {
+            "J": {
+              "item": "forestry:royal_jelly"
+            },
+            "#": {
+              "tag": "minecraft:planks"
+            },
+            "W": {
+              "item": "forestry:beeswax"
+            },
+            "P": {
+              "item": "forestry:pollen_cluster_normal"
+            }
+          },
+          "result": {
+            "item": "forestry:scented_paneling",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -27,7 +28,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.inventory.InventoryFermenter;
-import forestry.factory.recipes.FermenterRecipeManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -38,6 +38,8 @@ import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -72,13 +74,19 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
         setEnergyPerWorkCycle(4200);
         setInternalInventory(new InventoryFermenter(this));
 
-        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
-        resourceTank.setFilters(FermenterRecipeManager.recipeFluidInputs);
+        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
 
         productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
-        productTank.setFilters(FermenterRecipeManager.recipeFluidOutputs);
 
         tankManager = new TankManager(this, resourceTank, productTank);
+    }
+
+    @Override
+    public void setWorldAndPos(World world, BlockPos pos) {
+        super.setWorldAndPos(world, pos);
+
+        resourceTank.setFilters(RecipeManagers.fermenterManager.getRecipeFluidInputs(world.getRecipeManager()));
+        productTank.setFilters(RecipeManagers.fermenterManager.getRecipeFluidOutputs(world.getRecipeManager()));
     }
 
     @Override
@@ -177,7 +185,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
         FluidStack fluid = resourceTank.getFluid();
 
         if (!fluid.isEmpty()) {
-            currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
+            currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(world.getRecipeManager(), resource, fluid);
         }
 
         fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();

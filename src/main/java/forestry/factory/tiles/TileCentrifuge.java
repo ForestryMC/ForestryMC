@@ -16,6 +16,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.circuits.ISocketable;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -28,7 +29,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
-import forestry.factory.recipes.CentrifugeRecipeManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -156,7 +156,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
     private void checkRecipe() {
         ItemStack resource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE);
-        ICentrifugeRecipe matchingRecipe = CentrifugeRecipeManager.findMatchingRecipe(resource);
+        ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(world.getRecipeManager(), resource);
 
         if (currentRecipe != matchingRecipe) {
             currentRecipe = matchingRecipe;

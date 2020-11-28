@@ -95,7 +95,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
     @Override
     public void removeResources(NonNullList<ItemStack> resources) {
-        InventoryUtil.removeSets(resourcesInventory, 1, resources, null, false, true, false, true);
+        InventoryUtil.removeSets(resourcesInventory, 1, resources, null, false, false, true);
     }
 
     @Override

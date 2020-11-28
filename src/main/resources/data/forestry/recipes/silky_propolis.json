@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:centrifuge",
+        "input": {
+          "item": "forestry:propolis_silky"
+        },
+        "time": 5,
+        "products": [
+          {
+            "item": {
+              "item": "forestry:silk_wisp",
+              "count": 1
+            },
+            "chance": 0.6
+          },
+          {
+            "item": {
+              "item": "forestry:propolis_normal",
+              "count": 1
+            },
+            "chance": 0.1
+          }
+        ]
+      }
+    }
+  ]
+}

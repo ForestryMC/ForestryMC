@@ -11,9 +11,9 @@
 package forestry.factory.inventory;
 
 import forestry.api.fuels.FuelManager;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
-import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.tiles.TileFermenter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -36,7 +36,7 @@ public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
     @Override
     public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
         if (slotIndex == SLOT_RESOURCE) {
-            return FermenterRecipeManager.isResource(itemStack);
+            return RecipeManagers.fermenterManager.isResource(tile.getWorld().getRecipeManager(), itemStack);
         } else if (slotIndex == SLOT_INPUT) {
             Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
             return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);

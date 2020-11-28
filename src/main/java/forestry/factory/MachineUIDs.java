@@ -5,10 +5,6 @@ import com.google.common.collect.Sets;
 import java.util.Set;
 
 public class MachineUIDs {
-
-    private MachineUIDs() {
-    }
-
     public static final String BOTTLER = "bottler";
     public static final String CARPENTER = "carpenter";
     public static final String CENTRIFUGE = "centrifuge";

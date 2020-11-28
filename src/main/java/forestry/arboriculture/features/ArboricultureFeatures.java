@@ -36,6 +36,6 @@ public class ArboricultureFeatures {
     }
 
     public static void onBiomeLoad(BiomeLoadingEvent event) {
-        event.getGeneration().withFeature(GenerationStage.Decoration.RAW_GENERATION, TREE_DECORATOR_CONF);
+        event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, TREE_DECORATOR_CONF);
     }
 }

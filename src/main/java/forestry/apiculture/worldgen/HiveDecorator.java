@@ -20,7 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
@@ -36,7 +35,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(
+    public boolean generate(
             ISeedReader seedReader,
             ChunkGenerator generator,
             Random rand,

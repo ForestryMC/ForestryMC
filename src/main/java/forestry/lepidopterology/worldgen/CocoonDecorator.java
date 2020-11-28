@@ -29,11 +29,13 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Set;
 
 public class CocoonDecorator extends Feature<NoFeatureConfig> {
     public CocoonDecorator() {
@@ -41,7 +43,7 @@ public class CocoonDecorator extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(
+    public boolean generate(
             ISeedReader seedReader,
             ChunkGenerator generator,
             Random rand,
@@ -131,7 +133,7 @@ public class CocoonDecorator extends Feature<NoFeatureConfig> {
         cocoonBlock.onBlockAdded(state, world.getWorld(), pos, cocoonBlock.getDefaultState(), false);
         world.getWorld().markBlockRangeForRenderUpdate(pos, state, cocoonBlock.getDefaultState());
 
-        if (Config.logCoconPlacement) {
+        if (Config.logCocoonPlacement) {
             Log.info("Placed {} at {}", cocoonBlock.toString(), pos.getCoordinatesAsString());
         }
 

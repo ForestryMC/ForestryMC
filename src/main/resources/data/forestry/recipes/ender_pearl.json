@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 100,
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            " # ",
+            "###",
+            " # "
+          ],
+          "key": {
+            "#": {
+              "item": "forestry:pulsating_mesh"
+            }
+          },
+          "result": {
+            "item": "minecraft:ender_pearl",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

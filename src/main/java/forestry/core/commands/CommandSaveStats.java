@@ -21,6 +21,7 @@ import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAlleleSpecies;
+import genetics.commands.CommandHelpers;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;

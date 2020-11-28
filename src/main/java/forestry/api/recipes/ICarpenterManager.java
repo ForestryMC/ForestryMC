@@ -5,11 +5,15 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Provides an interface to the recipe manager of the carpenter.
@@ -25,38 +29,28 @@ import javax.annotation.Nullable;
  */
 public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
     /**
-     * Add a shaped recipe to the carpenter.
+     * Finds the matching recipe
      *
-     * @param box       ItemStack of one item representing the required box (carton, crate) for this recipe. May be null.
-     * @param product   Crafting result.
-     * @param materials Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
+     * @param liquid    Present liquid
+     * @param item      Present item
+     * @param inventory Present inventory
+     * @return An optional carpenter recipe if any matches
      */
-    void addRecipe(ItemStack box, ItemStack product, Object... materials);
-
-    /**
-     * Add a shaped recipe to the carpenter.
-     *
-     * @param packagingTime Number of work cycles required to craft the recipe once.
-     * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
-     * @param product       Crafting result.
-     * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
-     */
-    void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials);
-
-    /**
-     * Add a shaped recipe to the carpenter.
-     *
-     * @param packagingTime Number of work cycles required to craft the recipe once.
-     * @param liquid        Liquid required in carpenter's tank.
-     * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
-     * @param product       Crafting result.
-     * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
-     */
-    void addRecipe(
-            int packagingTime,
-            @Nullable FluidStack liquid,
-            ItemStack box,
-            ItemStack product,
-            Object... materials
+    Optional<ICarpenterRecipe> findMatchingRecipe(
+            RecipeManager recipeManager,
+            FluidStack liquid,
+            ItemStack item,
+            IInventory inventory
     );
+
+    boolean matches(
+            @Nullable ICarpenterRecipe recipe,
+            FluidStack resource,
+            ItemStack item,
+            IInventory craftingInventory
+    );
+
+    public boolean isBox(RecipeManager manager, ItemStack resource);
+
+    public Set<Fluid> getRecipeFluids(RecipeManager manager);
 }

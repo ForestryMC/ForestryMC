@@ -13,6 +13,7 @@ package forestry.factory.tiles;
 import com.google.common.base.Preconditions;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -25,7 +26,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerStill;
 import forestry.factory.inventory.InventoryStill;
-import forestry.factory.recipes.StillRecipeManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,6 +33,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -58,15 +60,21 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
     public TileStill() {
         super(FactoryTiles.STILL.tileType(), 1100, 8000);
         setInternalInventory(new InventoryStill(this));
-        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
-        resourceTank.setFilters(StillRecipeManager.recipeFluidInputs);
+        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
 
         productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
-        productTank.setFilters(StillRecipeManager.recipeFluidOutputs);
 
         tankManager = new TankManager(this, resourceTank, productTank);
 
         bufferedLiquid = FluidStack.EMPTY;
+    }
+
+    @Override
+    public void setWorldAndPos(World world, BlockPos pos) {
+        super.setWorldAndPos(world, pos);
+
+        resourceTank.setFilters(RecipeManagers.stillManager.getRecipeFluidInputs(world.getRecipeManager()));
+        productTank.setFilters(RecipeManagers.stillManager.getRecipeFluidOutputs(world.getRecipeManager()));
     }
 
     @Override
@@ -144,8 +152,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
     private void checkRecipe() {
         FluidStack recipeLiquid = !bufferedLiquid.isEmpty() ? bufferedLiquid : resourceTank.getFluid();
 
-        if (!StillRecipeManager.matches(currentRecipe, recipeLiquid)) {
-            currentRecipe = StillRecipeManager.findMatchingRecipe(recipeLiquid);
+        if (!RecipeManagers.stillManager.matches(currentRecipe, recipeLiquid)) {
+            currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(world.getRecipeManager(), recipeLiquid);
 
             int recipeTime = currentRecipe == null ? 0 : currentRecipe.getCyclesPerUnit();
             setEnergyPerWorkCycle(ENERGY_PER_RECIPE_TIME * recipeTime);
@@ -163,8 +171,10 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
         if (hasRecipe) {
             FluidStack fluidStack = currentRecipe.getOutput();
-            hasTankSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) ==
-                           fluidStack.getAmount();
+            hasTankSpace = productTank.fillInternal(
+                    fluidStack,
+                    IFluidHandler.FluidAction.SIMULATE
+            ) == fluidStack.getAmount();
             if (bufferedLiquid.isEmpty()) {
                 int cycles = currentRecipe.getCyclesPerUnit();
                 FluidStack input = currentRecipe.getInput();

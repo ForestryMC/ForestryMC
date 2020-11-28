@@ -552,7 +552,7 @@ public class EnumAllele {
 
         @Override
         public String getCategory() {
-            return "folerance";
+            return "tolerance";
         }
 
         @Override

@@ -16,6 +16,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
 import forestry.api.recipes.*;
 import forestry.core.EventHandlerCore;
+import forestry.core.circuits.CircuitRecipe;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
@@ -231,7 +232,6 @@ public class Forestry {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            //generator.run();
         }
     }
 
@@ -251,7 +251,7 @@ public class Forestry {
                 reloadableManager.addReloadListener(GuiElementFactory.INSTANCE);
                 reloadableManager.addReloadListener(spriteUploader);
             }
-            //EntriesCategory.registerSearchTree();
+
             ModuleManager.getModuleHandler().runClientInit();
 
         });
@@ -291,7 +291,7 @@ public class Forestry {
         }
 
         @SubscribeEvent
-        public static void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
             IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
             CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
             CraftingHelper.register(
@@ -308,6 +308,7 @@ public class Forestry {
             register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
             register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
             register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
+            register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
         }
 
         private static void register(

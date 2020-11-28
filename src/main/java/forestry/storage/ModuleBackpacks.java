@@ -23,7 +23,6 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.features.CoreItems;
-import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -31,9 +30,7 @@ import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-import forestry.modules.features.FeatureItem;
 import forestry.storage.features.BackpackContainers;
-import forestry.storage.features.BackpackItems;
 import forestry.storage.gui.GuiBackpack;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
@@ -483,31 +480,6 @@ public class ModuleBackpacks extends BlankForestryModule {
     @Override
     public IResupplyHandler getResupplyHandler() {
         return new ResupplyHandler();
-    }
-
-    @Override
-    public void registerRecipes() {
-        // CARPENTER
-        if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-            // BACKPACKS WOVEN
-            addT2BackpackRecipe(BackpackItems.MINER_BACKPACK, BackpackItems.MINER_BACKPACK_T_2);
-            addT2BackpackRecipe(BackpackItems.DIGGER_BACKPACK, BackpackItems.DIGGER_BACKPACK_T_2);
-            addT2BackpackRecipe(BackpackItems.FORESTER_BACKPACK, BackpackItems.FORESTER_BACKPACK_T_2);
-            addT2BackpackRecipe(BackpackItems.HUNTER_BACKPACK, BackpackItems.HUNTER_BACKPACK_T_2);
-            addT2BackpackRecipe(BackpackItems.ADVENTURER_BACKPACK, BackpackItems.ADVENTURER_BACKPACK_T_2);
-            addT2BackpackRecipe(BackpackItems.BUILDER_BACKPACK, BackpackItems.BUILDER_BACKPACK_T_2);
-        }
-    }
-
-    private static void addT2BackpackRecipe(FeatureItem backpackT1, FeatureItem backpackT2) {
-        ItemStack wovenSilk = CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1);
-        //		RecipeManagers.carpenterManager.addRecipe(200, new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(backpackT2),
-        //				"WXW",
-        //				"WTW",
-        //				"WWW",
-        //				'X', "gemDiamond",
-        //				'W', wovenSilk,
-        //				'T', backpackT1);	//TODO fluids
     }
 
     @Override

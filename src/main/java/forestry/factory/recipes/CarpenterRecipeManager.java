@@ -12,103 +12,76 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.recipes.RecipePair;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class CarpenterRecipeManager implements ICarpenterManager {
-    private static final Set<ICarpenterRecipe> recipes = new HashSet<>();
-    private static final Set<Fluid> recipeFluids = new HashSet<>();
+public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
+    private final Set<Fluid> recipeFluids = new HashSet<>();
 
-    @Override
-    public void addRecipe(ItemStack box, ItemStack product, Object[] materials) {
-        addRecipe(5, null, box, product, materials);
+    public CarpenterRecipeManager() {
+        super(ICarpenterRecipe.TYPE);
     }
 
     @Override
-    public void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object[] materials) {
-        addRecipe(packagingTime, null, box, product, materials);
-    }
-
-    @Override
-    public void addRecipe(
-            int packagingTime,
-            @Nullable FluidStack liquid,
-            ItemStack box,
-            ItemStack product,
-            Object[] materials
-    ) {
-//        ICarpenterRecipe recipe = new CarpenterRecipe(
-//                packagingTime,
-//                liquid,
-//                box,
-//                ShapedRecipeCustom.createShapedRecipe(product, materials)
-//        );
-//        addRecipe(recipe);
-        //TODO json
-    }
-
-    public static RecipePair<ICarpenterRecipe> findMatchingRecipe(
+    public Optional<ICarpenterRecipe> findMatchingRecipe(
+            RecipeManager recipeManager,
             FluidStack liquid,
             ItemStack item,
-            IInventory CraftingInventory
+            IInventory inventory
     ) {
-        for (ICarpenterRecipe recipe : recipes) {
-            String[][] resourceDicts = matches(recipe, liquid, item, CraftingInventory);
-            if (resourceDicts != null) {
-                return new RecipePair<>(recipe, resourceDicts);
+        for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
+            if (matches(recipe, liquid, item, inventory)) {
+                return Optional.of(recipe);
             }
         }
 
-        return RecipePair.EMPTY;
+        return Optional.empty();
     }
 
-    @Nullable
-    public static String[][] matches(
+    @Override
+    public boolean matches(
             @Nullable ICarpenterRecipe recipe,
             FluidStack resource,
             ItemStack item,
             IInventory craftingInventory
     ) {
         if (recipe == null) {
-            return null;
+            return false;
         }
 
         FluidStack liquid = recipe.getFluidResource();
         if (!liquid.isEmpty()) {
             if (resource.isEmpty() || !resource.containsFluid(liquid)) {
-                return null;
+                return false;
             }
         }
 
         Ingredient box = recipe.getBox();
         if (!box.hasNoMatchingItems() && !box.test(item)) {
-            return null;
+            return false;
         }
 
         ShapedRecipe internal = recipe.getCraftingGridRecipe();
-        return RecipeUtil.matches(internal, craftingInventory);
+        return RecipeUtil.matches(internal, craftingInventory) != null;
     }
 
-    public static boolean isBox(ItemStack resource) {
+    public boolean isBox(RecipeManager manager, ItemStack resource) {
         if (resource.isEmpty()) {
             return false;
         }
 
-        for (ICarpenterRecipe recipe : recipes) {
+        for (ICarpenterRecipe recipe : getRecipes(manager)) {
             Ingredient box = recipe.getBox();
             if (box.test(resource)) {
                 return true;
@@ -118,35 +91,20 @@ public class CarpenterRecipeManager implements ICarpenterManager {
         return false;
     }
 
-    @Override
-    public boolean addRecipe(ICarpenterRecipe recipe) {
-        return recipes.add(recipe);
-    }
-
-    @Override
-    public boolean removeRecipe(ICarpenterRecipe recipe) {
-        boolean removed = recipes.remove(recipe);
-        if (removed) {
-            recipeFluids.clear();
-        }
-
-        return removed;
-    }
-
-    public static Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
+    public Collection<ICarpenterRecipe> getRecipes(RecipeManager manager, ItemStack itemStack) {
         if (itemStack.isEmpty()) {
             return Collections.emptyList();
         }
 
-        return recipes.stream().filter(recipe -> {
+        return getRecipes(manager).stream().filter(recipe -> {
             ItemStack output = recipe.getCraftingGridRecipe().getRecipeOutput();
             return ItemStackUtil.isIdenticalItem(itemStack, output);
         }).collect(Collectors.toList());
     }
 
-    public static Set<Fluid> getRecipeFluids() {
+    public Set<Fluid> getRecipeFluids(RecipeManager manager) {
         if (recipeFluids.isEmpty()) {
-            for (ICarpenterRecipe recipe : recipes) {
+            for (ICarpenterRecipe recipe : getRecipes(manager)) {
                 FluidStack fluidStack = recipe.getFluidResource();
                 if (!fluidStack.isEmpty()) {
                     recipeFluids.add(fluidStack.getFluid());
@@ -155,10 +113,5 @@ public class CarpenterRecipeManager implements ICarpenterManager {
         }
 
         return Collections.unmodifiableSet(recipeFluids);
-    }
-
-    @Override
-    public Set<ICarpenterRecipe> recipes() {
-        return Collections.unmodifiableSet(recipes);
     }
 }

@@ -1,0 +1,41 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 10,
+        "liquid": {
+          "fluid": "minecraft:water",
+          "amount": 200
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "#X#"
+          ],
+          "key": {
+            "X": {
+              "item": "forestry:silk_wisp"
+            },
+            "#": {
+              "item": "forestry:beeswax"
+            }
+          },
+          "result": {
+            "item": "forestry:candle",
+            "count": 6
+          }
+        }
+      }
+    }
+  ]
+}

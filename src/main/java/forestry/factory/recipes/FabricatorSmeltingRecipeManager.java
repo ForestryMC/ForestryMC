@@ -12,29 +12,30 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.api.recipes.IForestryRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
-    public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
-    private static final Set<Fluid> recipeFluids = new HashSet<>();
+public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
+    private final Set<Fluid> recipeFluids = new HashSet<>();
+
+    public FabricatorSmeltingRecipeManager() {
+        super(IFabricatorSmeltingRecipe.TYPE);
+    }
 
     @Nullable
-    public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
+    public IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource) {
         if (resource.isEmpty()) {
             return null;
         }
 
-        for (IFabricatorSmeltingRecipe smelting : recipes) {
+        for (IFabricatorSmeltingRecipe smelting : getRecipes(manager)) {
             if (smelting.getResource().test(resource)) {
                 return smelting;
             }
@@ -43,34 +44,9 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
         return null;
     }
 
-    @Override
-    public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-        addRecipe(new FabricatorSmeltingRecipe(
-                IForestryRecipe.anonymous(),
-                Ingredient.fromStacks(resource),
-                molten,
-                meltingPoint
-        ));
-    }
-
-    @Override
-    public boolean addRecipe(IFabricatorSmeltingRecipe recipe) {
-        return recipes.add(recipe);
-    }
-
-    @Override
-    public boolean removeRecipe(IFabricatorSmeltingRecipe recipe) {
-        return recipes.remove(recipe);
-    }
-
-    @Override
-    public Collection<IFabricatorSmeltingRecipe> recipes() {
-        return Collections.unmodifiableSet(recipes);
-    }
-
-    public static Set<Fluid> getRecipeFluids() {
+    public Set<Fluid> getRecipeFluids(RecipeManager manager) {
         if (recipeFluids.isEmpty()) {
-            for (IFabricatorSmeltingRecipe recipe : recipes) {
+            for (IFabricatorSmeltingRecipe recipe : getRecipes(manager)) {
                 FluidStack fluidStack = recipe.getProduct();
                 if (!fluidStack.isEmpty()) {
                     recipeFluids.add(fluidStack.getFluid());

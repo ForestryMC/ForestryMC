@@ -71,12 +71,6 @@ public class ModuleMail extends BlankForestryModule {
     }
 
     @Override
-    public void registerRecipes() {
-        // Carpenter
-        //		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(FluidRegistry.WATER, 250), ItemStack.EMPTY, items.letters.getItemStack(), "###", "###", '#', coreItems.woodPulp);
-    }
-
-    @Override
     public ISaveEventHandler getSaveEventHandler() {
         return new SaveEventHandlerMail();
     }

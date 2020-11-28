@@ -30,8 +30,6 @@ public class Constants implements IForestryConstants {
     public static final int FLAG_BLOCK_UPDATE = 1;
     public static final int FLAG_BLOCK_SYNC = 2;
 
-    public static final int FLUID_PER_HONEY_DROP = 100;
-
     public static final int[] SLOTS_NONE = new int[0];
     public static final String[] EMPTY_STRINGS = new String[0];
 
@@ -48,11 +46,6 @@ public class Constants implements IForestryConstants {
     public static final String TEXTURE_APIARIST_ARMOR_SECONDARY = TEXTURE_PATH_ITEM + "apiarist_armor_2.png";
     public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "naturalist_armor_1.png";
 
-    public static final String TEXTURE_SKIN_LUMBERJACK =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "lumberjack.png";
-    public static final String TEXTURE_SKIN_ZOMBIE_LUMBERJACK =
-            Constants.MOD_ID + ":" + TEXTURE_PATH_ENTITIES + "zombie_lumberjack.png";
-
     // Village Loot Key
     public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(
             Constants.MOD_ID,
@@ -60,7 +53,6 @@ public class Constants implements IForestryConstants {
     );
 
     // Item Ids
-
     public static final int SLOTS_BACKPACK_DEFAULT = 15;
     public static final int SLOTS_BACKPACK_WOVEN = 45;
     public static final int SLOTS_BACKPACK_APIARIST = 125;
@@ -115,15 +107,6 @@ public class Constants implements IForestryConstants {
     public static final int MACHINE_MAX_ENERGY = 5000;
 
     public static final int RAINMAKER_RAIN_DURATION_IODINE = 10000;
-
-    public static final int STILL_DESTILLATION_DURATION = 100;
-    public static final int STILL_DESTILLATION_INPUT = 10;
-    public static final int STILL_DESTILLATION_OUTPUT = 3;
-
-    public static final int BOTTLER_FILLING_TIME = 20;
-    public static final int BOTTLER_FUELCAN_VOLUME = 2000;
-
-    public static final float ICE_COOLING_MULTIPLIER = 6f; // multiple of water's cooling value
 
     // Storage
     public static final int RAINTANK_TANK_CAPACITY = 30 * FluidAttributes.BUCKET_VOLUME;

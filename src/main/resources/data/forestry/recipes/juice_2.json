@@ -1,0 +1,33 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:squeezer",
+        "time": 10,
+        "resources": [
+          {
+            "item": "minecraft:carrot",
+            "count": 1
+          }
+        ],
+        "output": {
+          "fluid": "forestry:juice",
+          "amount": 200
+        },
+        "remnant": {
+          "item": "forestry:mulch",
+          "count": 1
+        },
+        "chance": 0.2
+      }
+    }
+  ]
+}

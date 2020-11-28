@@ -71,9 +71,9 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
         container.addLine(
                 new TranslationTextComponent("for.gui.native"),
-                new TranslationTextComponent("for.gui." + primarySpecies.getPlantType()
-                                                                        .toString()
-                                                                        .toLowerCase(Locale.ENGLISH)),
+                new TranslationTextComponent(
+                        "for.gui." + primarySpecies.getPlantType().getName().toLowerCase(Locale.ENGLISH)
+                ),
                 species.isDominant()
         );
 
@@ -88,12 +88,13 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
             container.label(fruitFamily.getName(), GuiElementAlignment.TOP_CENTER, speciesStyle);
         }
 
-        IAlleleFruit fruit = mode == DatabaseMode.ACTIVE ? tree.getGenome()
-                                                               .getActiveAllele(TreeChromosomes.FRUITS)
-                                                         : tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
-        Style textStyle = GuiElementFactory.INSTANCE.getStateStyle(tree.getGenome()
-                                                                       .getActiveAllele(TreeChromosomes.FRUITS)
-                                                                       .isDominant());
+        IAlleleFruit fruit = mode == DatabaseMode.ACTIVE
+                             ? tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS)
+                             : tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
+
+        Style textStyle = GuiElementFactory.INSTANCE.getStateStyle(
+                tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).isDominant()
+        );
 
         container.translated("for.gui.fruits")
                  .setStyle(GuiConstants.UNDERLINED_STYLE)
@@ -117,7 +118,6 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
             );
             container.label(family.getName(), GuiElementAlignment.TOP_CENTER, textStyle);
         }
-
     }
 
     @Override

@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:fermenter",
+        "resource": {
+          "item": "forestry:honeydew",
+          "count": 1
+        },
+        "fermentationValue": 500,
+        "modifier":  1.0,
+        "output": "forestry:short_mead",
+        "fluidResource": {
+          "fluid": "forestry:honey",
+          "amount": 1
+        }
+      }
+    }
+  ]
+}

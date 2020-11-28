@@ -16,6 +16,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.config.Constants;
@@ -31,7 +32,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
-import forestry.factory.recipes.SqueezerRecipeManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -165,12 +165,11 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
             if (currentRecipe != null && ItemStackUtil.containsSets(
                     currentRecipe.getResources(),
                     resources,
-                    true,
                     false
             ) > 0) {
                 matchingRecipe = currentRecipe;
             } else {
-                matchingRecipe = SqueezerRecipeManager.findMatchingRecipe(resources);
+                matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(world.getRecipeManager(), resources);
             }
         }
 

@@ -12,8 +12,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
-import javax.annotation.Nullable;
-
 public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenterRecipe> {
     IRecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
 
@@ -26,12 +24,6 @@ public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenter
      * @return Ingredient representing the input resource.
      */
     Ingredient getResource();
-
-    /**
-     * @return String representing the input resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
-     */
-    @Nullable
-    String getResourceOreName();
 
     /**
      * @return FluidStack representing the input fluid resource.

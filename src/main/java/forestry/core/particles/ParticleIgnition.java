@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.core.particles;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 //TODO particles
 @OnlyIn(Dist.CLIENT)
-public class ParticleIgnition extends Particle {
+public class ParticleIgnition extends SpriteTexturedParticle {
     private final float ignitionParticleScale;
 
     public ParticleIgnition(ClientWorld world, double x, double y, double z) {
@@ -31,11 +29,9 @@ public class ParticleIgnition extends Particle {
         this.motionZ *= 0.8;
         this.motionY = this.rand.nextFloat() * 0.4F + 0.05F;
         this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-        //TODO particle stuff
-        //		this.particleScale *= this.rand.nextFloat() / 2 + 0.3F;
-        this.ignitionParticleScale = 1.0f;//this.particleScale;
+        this.particleScale *= this.rand.nextFloat() / 2 + 0.3F;
+        this.ignitionParticleScale = 1.0f;
         this.maxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
-        //		this.setParticleTextureIndex(49);
     }
 
     @Override
@@ -44,18 +40,6 @@ public class ParticleIgnition extends Particle {
         short short1 = 240;
         int j = i >> 16 & 255;
         return short1 | j << 16;
-    }
-
-	/*@Override
-	public void renderParticle(BufferBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		float f6 = (this.age + partialTicks) / this.maxAge;
-		//		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
-		//		super.renderParticle(buffer, renderInfo, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-	}*/
-
-    @Override
-    public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
-
     }
 
     @Override

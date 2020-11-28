@@ -158,7 +158,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
         Preconditions.checkNotNull(mode);
 
         setBeekeepingMode(world, mode);
-        Log.debug("Set beekeeping mode for a world to " + mode);
+        Log.debug("Set beekeeping mode for a world to " + mode.getName());
 
         return activeBeekeepingMode;
     }

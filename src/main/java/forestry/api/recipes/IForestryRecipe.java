@@ -69,7 +69,7 @@ public interface IForestryRecipe extends IRecipe<IInventory> {
     @Deprecated
     @Override
     default String getGroup() {
-        return "Forestry";
+        return "forestry";
     }
 
     @Deprecated

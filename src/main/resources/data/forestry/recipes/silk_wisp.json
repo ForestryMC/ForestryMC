@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "module": "factory",
+              "container": "forestry",
+              "type": "forestry:module"
+            },
+            {
+              "value": {
+                "module": "apiculture",
+                "container": "forestry",
+                "type": "forestry:module"
+              },
+              "type": "forge:not"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:centrifuge",
+        "input": {
+          "item": "forestry:silk_wisp"
+        },
+        "time": 5,
+        "products": [
+          {
+            "item": {
+              "item": "minecraft:string",
+              "count": 1
+            },
+            "chance": 0.15
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -9,10 +9,6 @@ import net.minecraftforge.fml.DistExecutor;
  * Util methods used at the runtime of the game based around the rendering.
  */
 public class RenderUtil {
-
-    private RenderUtil() {
-    }
-
     public static void markForUpdate(BlockPos pos) {
         DistExecutor.runWhenOn(
                 Dist.CLIENT,

@@ -1,0 +1,40 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 50,
+        "liquid": {
+          "fluid": "forestry:seed_oil",
+          "amount": 250
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "###",
+            "# #",
+            "###"
+          ],
+          "key": {
+            "#": {
+              "tag": "minecraft:logs"
+            }
+          },
+          "result": {
+            "item": "forestry:impregnated_casing",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

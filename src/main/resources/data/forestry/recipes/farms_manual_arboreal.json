@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:solder",
+        "layout": "forestry.farms.manual",
+        "circuit": "forestry.manualArboreal",
+        "resource": {
+          "item": "forestry:electron_tube_gold",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

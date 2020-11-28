@@ -10,14 +10,20 @@
  ******************************************************************************/
 package forestry.factory;
 
-import com.google.common.collect.ImmutableSet;
 import forestry.api.recipes.*;
+import forestry.core.recipes.RecipePair;
+import forestry.factory.recipes.ISqueezerContainerRecipe;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 
 public class DummyManagers {
@@ -29,136 +35,123 @@ public class DummyManagers {
         }
 
         @Override
-        public boolean removeRecipe(T recipe) {
-            return false;
-        }
-
-        @Override
-        public Set<T> recipes() {
-            return ImmutableSet.of();
+        public Collection<T> getRecipes(RecipeManager manager) {
+            return Collections.emptySet();
         }
     }
 
     public static class DummyCarpenterManager extends DummyCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
-
         @Override
-        public void addRecipe(ItemStack box, ItemStack product, Object... materials) {
-
-        }
-
-        @Override
-        public void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials) {
-
-        }
-
-        @Override
-        public void addRecipe(
-                int packagingTime,
-                @Nullable FluidStack liquid,
-                ItemStack box,
-                ItemStack product,
-                Object... materials
+        public Optional<ICarpenterRecipe> findMatchingRecipe(
+                RecipeManager recipeManager,
+                FluidStack liquid,
+                ItemStack item,
+                IInventory inventory
         ) {
+            return Optional.empty();
+        }
 
+        @Override
+        public boolean matches(
+                @Nullable ICarpenterRecipe recipe,
+                FluidStack resource,
+                ItemStack item,
+                IInventory craftingInventory
+        ) {
+            return false;
+        }
+
+        @Override
+        public boolean isBox(RecipeManager manager, ItemStack resource) {
+            return false;
+        }
+
+        @Override
+        public Set<Fluid> getRecipeFluids(RecipeManager manager) {
+            return null;
         }
     }
 
     public static class DummyCentrifugeManager extends DummyCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
-
         @Override
-        public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
-
+        public ICentrifugeRecipe findMatchingRecipe(RecipeManager manager, ItemStack itemStack) {
+            return null;
         }
     }
 
     public static class DummyFabricatorManager extends DummyCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
-
         @Override
         public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
 
         }
 
+        @Override
+        public RecipePair<IFabricatorRecipe> findMatchingRecipe(
+                RecipeManager manager, ItemStack plan, IInventory resources
+        ) {
+            return null;
+        }
+
+        @Override
+        public boolean isPlan(RecipeManager manager, ItemStack plan) {
+            return false;
+        }
+
+        @Override
+        public Collection<IFabricatorRecipe> getRecipes(RecipeManager manager, ItemStack itemStack) {
+            return null;
+        }
     }
 
     public static class DummyFabricatorSmeltingManager extends DummyCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
+        @Nullable
+        @Override
+        public IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource) {
+            return null;
+        }
 
         @Override
-        public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-
+        public Set<Fluid> getRecipeFluids(RecipeManager manager) {
+            return null;
         }
     }
 
     public static class DummyFermenterManager extends DummyCraftingProvider<IFermenterRecipe> implements IFermenterManager {
-
         @Override
-        public void addRecipe(
-                ItemStack resource,
-                int fermentationValue,
-                float modifier,
-                FluidStack output,
-                FluidStack liquid
-        ) {
-
+        public IFermenterRecipe findMatchingRecipe(RecipeManager manager, ItemStack res, FluidStack fluidStack) {
+            return null;
         }
 
         @Override
-        public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-
+        public boolean isResource(RecipeManager manager, ItemStack resource) {
+            return false;
         }
 
         @Override
-        public void addRecipe(
-                String resource,
-                int fermentationValue,
-                float modifier,
-                FluidStack output,
-                FluidStack liquid
-        ) {
-
+        public Set<Fluid> getRecipeFluidInputs(RecipeManager manager) {
+            return null;
         }
 
         @Override
-        public void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output) {
-
+        public Set<Fluid> getRecipeFluidOutputs(RecipeManager manager) {
+            return null;
         }
     }
 
     public static class DummyMoistenerManager extends DummyCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
-
         @Override
-        public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
+        public boolean isResource(RecipeManager manager, ItemStack resource) {
+            return false;
+        }
 
+        @Nullable
+        @Override
+        public IMoistenerRecipe findMatchingRecipe(RecipeManager manager, ItemStack item) {
+            return null;
         }
     }
 
     public static class DummySqueezerManager extends DummyCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
-
-        @Override
-        public void addRecipe(
-                int timePerItem,
-                NonNullList<ItemStack> resources,
-                FluidStack liquid,
-                ItemStack remnants,
-                int chance
-        ) {
-
-        }
-
-        @Override
-        public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
-
-        }
-
-        @Override
-        public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
-
-        }
-
-        @Override
-        public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
-
-        }
-
         @Override
         public void addContainerRecipe(
                 int timePerItem,
@@ -168,13 +161,43 @@ public class DummyManagers {
         ) {
 
         }
+
+        @Override
+        public ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
+            return null;
+        }
+
+        @Override
+        public boolean canUse(RecipeManager manager, ItemStack itemStack) {
+            return false;
+        }
     }
 
     public static class DummyStillManager extends DummyCraftingProvider<IStillRecipe> implements IStillManager {
+        @Override
+        public IStillRecipe findMatchingRecipe(RecipeManager manager, FluidStack item) {
+            return null;
+        }
 
         @Override
-        public void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output) {
+        public boolean matches(IStillRecipe recipe, FluidStack item) {
+            return false;
+        }
 
+        @Override
+        public Set<Fluid> getRecipeFluidInputs(RecipeManager manager) {
+            return null;
+        }
+
+        @Override
+        public Set<Fluid> getRecipeFluidOutputs(RecipeManager manager) {
+            return null;
         }
     }
 }

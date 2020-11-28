@@ -25,7 +25,6 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.TemplateMatcher;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.RenderUtil;
 import forestry.modules.features.FeatureBlockGroup;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleTemplate;
@@ -1322,19 +1321,16 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
         );
         IGermlingModelProvider germlingIconProvider = ModelProviderFactory.create(woodType, uid, leafIconProvider);
 
-        IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(
-                Constants.MOD_ID,
-                uid,
-                speciesName
-        )
-                                                                          .setDescriptionKey(unlocalizedDescription)
-                                                                          .setTranslationKey(unlocalizedName)
-                                                                          .setDominant(dominant)
-                                                                          .setBranch(branch.getBranch())
-                                                                          .setBinomial(binomial)
-                                                                          .setLeafSprite(leafIconProvider)
-                                                                          .setModel(germlingIconProvider)
-                                                                          .setGenerator(this);
+        IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory
+                .createSpecies(Constants.MOD_ID, uid, speciesName)
+                .setDescriptionKey(unlocalizedDescription)
+                .setTranslationKey(unlocalizedName)
+                .setDominant(dominant)
+                .setBranch(branch.getBranch())
+                .setBinomial(binomial)
+                .setLeafSprite(leafIconProvider)
+                .setModel(germlingIconProvider)
+                .setGenerator(this);
         setSpeciesProperties(speciesBuilder);
         this.species = speciesBuilder.build();
         this.woodType = woodType;
@@ -1356,14 +1352,13 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
         BlockState logBlock = TreeManager.woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof);
 
         Direction.Axis axis = facing.getAxis();
-        return world.setBlockState(pos, logBlock.with(RotatedPillarBlock.AXIS, axis), 19);
+        return world.setBlockState(pos, logBlock.with(RotatedPillarBlock.AXIS, axis), 4);
     }
 
     @Override
     public boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
         if (owner != null && new TemplateMatcher(genome).matches()) {
             IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-            BlockState defaultLeaves;
             FeatureBlockGroup<? extends Block, TreeDefinition> leavesGroup;
             if (fruitProvider.isFruitLeaf(genome, world, pos) &&
                 rand.nextFloat() <= fruitProvider.getFruitChance(genome, world, pos)) {
@@ -1371,24 +1366,26 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
             } else {
                 leavesGroup = ArboricultureBlocks.LEAVES_DEFAULT;
             }
-            defaultLeaves = leavesGroup.get(this).defaultState();
-            return world.setBlockState(pos, defaultLeaves, 19);
+
+            BlockState defaultLeaves = leavesGroup.get(this).defaultState();
+            return world.setBlockState(pos, defaultLeaves, 3);
         } else {
             BlockState leaves = ArboricultureBlocks.LEAVES.defaultState();
-            boolean placed = world.setBlockState(pos, leaves, 19);
+            boolean placed = world.setBlockState(pos, leaves, 3);
             if (!placed) {
                 return false;
             }
 
             TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
             if (tileLeaves == null) {
-                world.setBlockState(pos, Blocks.AIR.getDefaultState(), 19);
+                world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
                 return false;
             }
 
             if (owner != null) {
                 tileLeaves.getOwnerHandler().setOwner(owner);
             }
+
             tileLeaves.setTree(new Tree(genome));
 
 //            RenderUtil.markForUpdate(pos);

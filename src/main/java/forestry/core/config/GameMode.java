@@ -52,16 +52,6 @@ public class GameMode implements IGameMode {
     private static final int FERMENTED_CYCLE_FERTILIZER = 56;
     private static final int FERMENTED_CYCLE_COMPOST = 48;
 
-    private static final int FERMENTED_SAPLING = 250;
-    private static final int FERMENTED_CACTI = 50;
-    private static final int FERMENTED_WHEAT = 50;
-    private static final int FERMENTED_CANE = 50;
-    private static final int FERMENTED_MUSHROOM = 50;
-
-    private static final int SQUEEZED_LIQUID_SEED = 10;
-    private static final int SQUEEZED_LIQUID_APPLE = 200;
-    private static final int SQUEEZED_MULCH_APPLE = 20;
-
     public GameMode(String identifier) {
 
         this.identifier = identifier;
@@ -98,17 +88,6 @@ public class GameMode implements IGameMode {
 
         initSettingInt(config, "fermenter.value", "fertilizer", FERMENTED_CYCLE_FERTILIZER);
         initSettingInt(config, "fermenter.value", "compost", FERMENTED_CYCLE_COMPOST);
-
-        initSettingInt(config, "fermenter.yield", "sapling", FERMENTED_SAPLING);
-        initSettingInt(config, "fermenter.yield", "cactus", FERMENTED_CACTI);
-        initSettingInt(config, "fermenter.yield", "wheat", FERMENTED_WHEAT);
-        initSettingInt(config, "fermenter.yield", "cane", FERMENTED_CANE);
-        initSettingInt(config, "fermenter.yield", "mushroom", FERMENTED_MUSHROOM);
-
-        initSettingInt(config, "squeezer.liquid", "seed", SQUEEZED_LIQUID_SEED);
-        initSettingInt(config, "squeezer.liquid", "apple", SQUEEZED_LIQUID_APPLE);
-
-        initSettingInt(config, "squeezer.mulch", "apple", SQUEEZED_MULCH_APPLE);
 
         config.save();
     }

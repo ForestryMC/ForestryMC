@@ -1,0 +1,25 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:moistener",
+        "time": 20000,
+        "resource": {
+          "item": "minecraft:cobblestone"
+        },
+        "product": {
+          "item": "minecraft:mossy_cobblestone",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

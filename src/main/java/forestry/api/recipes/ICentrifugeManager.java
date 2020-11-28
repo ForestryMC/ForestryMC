@@ -6,8 +6,9 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
-import java.util.Map;
+import javax.annotation.Nullable;
 
 /**
  * Provides an interface to the recipe manager of the centrifuge.
@@ -20,15 +21,6 @@ import java.util.Map;
  * @author SirSengir
  */
 public interface ICentrifugeManager extends ICraftingProvider<ICentrifugeRecipe> {
-
-    /**
-     * Add a recipe to the centrifuge
-     *
-     * @param timePerItem Time to centrifugate one item of the given type. Default is 20.
-     * @param input       ItemStack containing information on item id and damage. Stack size will be ignored.
-     * @param products    Specifies the possible products and the chances of them resulting from centrifuging.
-     *                    Chances are from (0.0 to 1.0]
-     */
-    void addRecipe(int timePerItem, ItemStack input, Map<ItemStack, Float> products);
-
+    @Nullable
+    ICentrifugeRecipe findMatchingRecipe(RecipeManager manager, ItemStack itemStack);
 }

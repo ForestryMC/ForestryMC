@@ -98,10 +98,10 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
         return ItemStack.EMPTY;
     }
 
-    public ItemStack getCraftingResult(CraftingInventory CraftingInventory, World world) {
+    public ItemStack getCraftingResult(CraftingInventory inventory, World world) {
         IRecipe selectedRecipe = getSelectedRecipe();
-        if (selectedRecipe != null && selectedRecipe.matches(CraftingInventory, world)) {
-            ItemStack recipeOutput = selectedRecipe.getCraftingResult(CraftingInventory);
+        if (selectedRecipe != null && selectedRecipe.matches(inventory, world)) {
+            ItemStack recipeOutput = selectedRecipe.getCraftingResult(inventory);
             if (!recipeOutput.isEmpty()) {
                 return recipeOutput;
             }
@@ -157,9 +157,12 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
             String recipeKey = recipesNbt.getString(i);
             ResourceLocation key = new ResourceLocation(recipeKey);
             //TODO are we on server or client? Not sure how to access this on server...
-            Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager()
-                                                                                                                   .getRecipes(
-                                                                                                                           IRecipeType.CRAFTING);
+            Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft
+                    .getInstance()
+                    .player
+                    .connection
+                    .getRecipeManager()
+                    .getRecipes(IRecipeType.CRAFTING);
             IRecipe recipe = recipeMap.get(key);
             if (recipe != null) {
                 recipes.add(recipe);
@@ -213,9 +216,12 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
         for (int i = 0; i < recipeCount; i++) {
             String recipeId = data.readString();
             //TODO sidedness issues
-            Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager()
-                                                                                                                   .getRecipes(
-                                                                                                                           IRecipeType.CRAFTING);
+            Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft
+                    .getInstance()
+                    .player
+                    .connection
+                    .getRecipeManager()
+                    .getRecipes(IRecipeType.CRAFTING);
             IRecipe recipe = recipeMap.get(new ResourceLocation(recipeId));
             if (recipe != null) {
                 recipes.add(recipe);

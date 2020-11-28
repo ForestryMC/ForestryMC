@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:centrifuge",
+        "input": {
+          "item": "forestry:bee_comb_honey"
+        },
+        "time": 20,
+        "products": [
+          {
+            "item": {
+              "item": "forestry:beeswax",
+              "count": 1
+            },
+            "chance": 1.0
+          },
+          {
+            "item": {
+              "item": "forestry:honey_drop_honey",
+              "count": 1
+            },
+            "chance": 0.9
+          }
+        ]
+      }
+    }
+  ]
+}

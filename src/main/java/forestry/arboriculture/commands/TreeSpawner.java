@@ -11,7 +11,7 @@
 package forestry.arboriculture.commands;
 
 import forestry.api.arboriculture.genetics.ITree;
-import forestry.core.commands.SpeciesNotFoundException;
+import genetics.commands.SpeciesNotFoundException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;

@@ -1,0 +1,51 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:centrifuge",
+        "input": {
+          "item": "forestry:bee_comb_frozen"
+        },
+        "time": 20,
+        "products": [
+          {
+            "item": {
+              "item": "forestry:beeswax",
+              "count": 1
+            },
+            "chance": 0.8
+          },
+          {
+            "item": {
+              "item": "forestry:honey_drop_honey",
+              "count": 1
+            },
+            "chance": 0.7
+          },
+          {
+            "item": {
+              "item": "minecraft:snowball",
+              "count": 1
+            },
+            "chance": 0.4
+          },
+          {
+            "item": {
+              "item": "forestry:pollen_cluster_crystalline",
+              "count": 1
+            },
+            "chance": 0.2
+          }
+        ]
+      }
+    }
+  ]
+}

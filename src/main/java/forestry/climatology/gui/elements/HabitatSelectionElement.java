@@ -27,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
@@ -37,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 @OnlyIn(Dist.CLIENT)
 public class HabitatSelectionElement extends ElementGroup {
@@ -79,12 +79,12 @@ public class HabitatSelectionElement extends ElementGroup {
     }
 
     private enum EnumClimate {
-        ICY("habitats/snow", ((Supplier<Biome>) Biomes.SNOWY_TUNDRA).get()),
-        COLD("habitats/taiga", ((Supplier<Biome>) Biomes.TAIGA).get()),
-        HILLS("habitats/hills", ((Supplier<Biome>) Biomes.SWAMP).get()),
-        NORMAL("habitats/plains", ((Supplier<Biome>) Biomes.PLAINS).get()),
-        WARM("habitats/jungle", ((Supplier<Biome>) Biomes.JUNGLE).get()),
-        HOT("habitats/desert", ((Supplier<Biome>) Biomes.DESERT).get());
+        ICY("habitats/snow", WorldGenRegistries.BIOME.getOrThrow(Biomes.SNOWY_TUNDRA)),
+        COLD("habitats/taiga", WorldGenRegistries.BIOME.getOrThrow(Biomes.TAIGA)),
+        HILLS("habitats/hills", WorldGenRegistries.BIOME.getOrThrow(Biomes.SWAMP)),
+        NORMAL("habitats/plains", WorldGenRegistries.BIOME.getOrThrow(Biomes.PLAINS)),
+        WARM("habitats/jungle", WorldGenRegistries.BIOME.getOrThrow(Biomes.JUNGLE)),
+        HOT("habitats/desert", WorldGenRegistries.BIOME.getOrThrow(Biomes.DESERT));
         private final IClimateState climateState;
         private final String spriteName;
 

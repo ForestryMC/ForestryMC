@@ -13,6 +13,7 @@ package forestry.apiculture.multiblock;
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
 import forestry.apiculture.inventory.InventoryHygroregulator;
@@ -21,7 +22,6 @@ import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.tiles.ILiquidTankTile;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,6 +30,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -52,9 +54,16 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
         this.inventory = new InventoryHygroregulator(this);
 
-        this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
+        this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
 
         this.tankManager = new TankManager(this, liquidTank);
+    }
+
+    @Override
+    public void setWorldAndPos(World world, BlockPos pos) {
+        super.setWorldAndPos(world, pos);
+
+        liquidTank.setFilters(RecipeManagers.hygroregulatorManager.getRecipeFluids(world.getRecipeManager()));
     }
 
     @Override
@@ -73,7 +82,10 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
         if (transferTime <= 0) {
             FluidStack fluid = liquidTank.getFluid();
             if (!fluid.isEmpty()) {
-                currentRecipe = HygroregulatorManager.findMatchingRecipe(fluid);
+                currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
+                        world.getRecipeManager(),
+                        fluid
+                );
 
                 if (currentRecipe != null) {
                     liquidTank.drainInternal(
@@ -112,7 +124,12 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
         if (compoundNBT.contains("CurrentLiquid")) {
             FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
-            currentRecipe = HygroregulatorManager.findMatchingRecipe(liquid);
+            if (world != null) {
+                currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
+                        world.getRecipeManager(),
+                        liquid
+                );
+            }
         }
     }
 

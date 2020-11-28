@@ -26,7 +26,6 @@ import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -64,21 +63,6 @@ public class ModuleClimatology extends BlankForestryModule {
                 new NullStorage<>(),
                 () -> FakeClimateTransformer.INSTANCE
         );
-    }
-
-    @Override
-    public void registerRecipes() {
-
-        if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-            //						RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, ClimatologyItems.HABITAT_SCREEN.stack(),
-            //							"IPI",
-            //							"IPI",
-            //							"GDG",
-            //							'G', Tags.Items.GEAR_BRONZE,
-            //							'P', OreDictUtil.PANE_GLASS,
-            //							'I', OreDictUtil.INGOT_BRONZE,
-            //							'D', OreDictUtil.GEM_DIAMOND);	//TODO recipes
-        }
     }
 
     @Override

@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:centrifuge",
+        "input": {
+          "item": "forestry:bee_comb_mellow"
+        },
+        "time": 20,
+        "products": [
+          {
+            "item": {
+              "item": "forestry:honeydew",
+              "count": 1
+            },
+            "chance": 0.6
+          },
+          {
+            "item": {
+              "item": "forestry:beeswax",
+              "count": 1
+            },
+            "chance": 0.2
+          },
+          {
+            "item": {
+              "item": "minecraft:quartz",
+              "count": 1
+            },
+            "chance": 0.3
+          }
+        ]
+      }
+    }
+  ]
+}

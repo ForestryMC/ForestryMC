@@ -50,8 +50,10 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
         container.label(
                 new TranslationTextComponent(
-                        "for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") +
-                        "_species.name"),
+                        "for.gui.database.tab."
+                        + (mode == DatabaseMode.ACTIVE ? "active" : "inactive")
+                        + "_species.name"
+                ),
                 GuiElementAlignment.TOP_CENTER,
                 GuiElementFactory.INSTANCE.databaseTitle
         );

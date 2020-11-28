@@ -10,14 +10,10 @@
  ******************************************************************************/
 package forestry.core.recipes;
 
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.ForestryFluids;
 import forestry.core.utils.ItemStackUtil;
 import forestry.worktable.inventory.CraftingInventoryForestry;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
@@ -25,93 +21,12 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class RecipeUtil {
-    // TODO use json recipes
-    public static void addFermenterRecipes(ItemStack resource, int fermentationValue, ForestryFluids output) {
-        if (RecipeManagers.fermenterManager == null) {
-            return;
-        }
-
-        FluidStack outputStack = output.getFluid(1);
-        if (outputStack.isEmpty()) {
-            return;
-        }
-
-        RecipeManagers.fermenterManager.addRecipe(
-                resource,
-                fermentationValue,
-                1.0f,
-                outputStack,
-                new FluidStack(Fluids.WATER, 1)
-        );
-
-        if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(
-                    resource,
-                    fermentationValue,
-                    1.5f,
-                    outputStack,
-                    ForestryFluids.JUICE.getFluid(1)
-            );
-        }
-
-        if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(
-                    resource,
-                    fermentationValue,
-                    1.5f,
-                    outputStack,
-                    ForestryFluids.HONEY.getFluid(1)
-            );
-        }
-    }
-
-    public static void addFermenterRecipes(String resource, int fermentationValue, ForestryFluids output) {
-        if (RecipeManagers.fermenterManager == null) {
-            return;
-        }
-
-        FluidStack outputStack = output.getFluid(1);
-        if (outputStack.isEmpty()) {
-            return;
-        }
-
-        RecipeManagers.fermenterManager.addRecipe(
-                resource,
-                fermentationValue,
-                1.0f,
-                outputStack,
-                new FluidStack(Fluids.WATER, 1)
-        );
-
-        if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(
-                    resource,
-                    fermentationValue,
-                    1.5f,
-                    outputStack,
-                    ForestryFluids.JUICE.getFluid(1)
-            );
-        }
-
-        if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(
-                    resource,
-                    fermentationValue,
-                    1.5f,
-                    outputStack,
-                    ForestryFluids.HONEY.getFluid(1)
-            );
-        }
-    }
-
     @Nullable
     public static CraftingInventoryForestry getCraftRecipe(
             CraftingInventory originalCrafting,
@@ -198,42 +113,31 @@ public abstract class RecipeUtil {
                     .collect(Collectors.toList());
     }
 
-    //TODO - smelting needs to be json now?
-    public static void addSmelting(ItemStack res, Item prod, float xp) {
-        addSmelting(res, new ItemStack(prod), xp);
-    }
-
-    public static void addSmelting(ItemStack res, ItemStack prod, float xp) {
-        //		GameRegistry.addSmelting(res, prod, xp);
-    }
-
     @Nullable
-    public static String[][] matches(ShapedRecipe recipe, IInventory CraftingInventory) {
+    public static Ingredient[][] matches(ShapedRecipe recipe, IInventory inventory) {
         NonNullList<Ingredient> recipeIngredients = recipe.getIngredients();
-        NonNullList<String> oreDicts = NonNullList.create();
         int width = recipe.getWidth();
         int height = recipe.getHeight();
-        return matches(recipeIngredients, oreDicts, width, height, CraftingInventory);
+        return matches(recipeIngredients, width, height, inventory);
     }
 
     @Nullable
-    public static String[][] matches(
+    public static Ingredient[][] matches(
             NonNullList<Ingredient> recipeIngredients,
-            NonNullList<String> oreDicts,
             int width,
             int height,
-            IInventory CraftingInventory
+            IInventory inventory
     ) {
-        ItemStack[][] resources = getResources(CraftingInventory);
-        return matches(recipeIngredients, oreDicts, width, height, resources);
+        ItemStack[][] resources = getResources(inventory);
+        return matches(recipeIngredients, width, height, resources);
     }
 
-    public static ItemStack[][] getResources(IInventory CraftingInventory) {
+    public static ItemStack[][] getResources(IInventory inventory) {
         ItemStack[][] resources = new ItemStack[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 int k = i + j * 3;
-                resources[i][j] = CraftingInventory.getStackInSlot(k);
+                resources[i][j] = inventory.getStackInSlot(k);
             }
         }
 
@@ -241,18 +145,16 @@ public abstract class RecipeUtil {
     }
 
     @Nullable
-    public static String[][] matches(
+    public static Ingredient[][] matches(
             NonNullList<Ingredient> recipeIngredients,
-            NonNullList<String> oreDicts,
             int width,
             int height,
             ItemStack[][] resources
     ) {
         for (int i = 0; i <= 3 - width; i++) {
             for (int j = 0; j <= 3 - height; j++) {
-                String[][] resourceDicts = checkMatch(
+                Ingredient[][] resourceDicts = checkMatch(
                         recipeIngredients,
-                        oreDicts,
                         width,
                         height,
                         resources,
@@ -264,7 +166,7 @@ public abstract class RecipeUtil {
                     return resourceDicts;
                 }
 
-                resourceDicts = checkMatch(recipeIngredients, oreDicts, width, height, resources, i, j, false);
+                resourceDicts = checkMatch(recipeIngredients, width, height, resources, i, j, false);
                 if (resourceDicts != null) {
                     return resourceDicts;
                 }
@@ -275,9 +177,8 @@ public abstract class RecipeUtil {
     }
 
     @Nullable
-    private static String[][] checkMatch(
+    private static Ingredient[][] checkMatch(
             NonNullList<Ingredient> recipeIngredients,
-            NonNullList<String> oreDicts,
             int width,
             int height,
             ItemStack[][] resources,
@@ -285,7 +186,7 @@ public abstract class RecipeUtil {
             int yInGrid,
             boolean mirror
     ) {
-        String[][] resourceDicts = new String[3][3];
+        Ingredient[][] resourceDicts = new Ingredient[3][3];
         for (int k = 0; k < 3; k++) {
             for (int l = 0; l < 3; l++) {
                 ItemStack resource = resources[k][l];
@@ -293,7 +194,6 @@ public abstract class RecipeUtil {
                 int widthIt = k - xInGrid;
                 int heightIt = l - yInGrid;
                 Ingredient recipeIngredient = null;
-                String oreDict = "";
 
                 if (widthIt >= 0 && heightIt >= 0 && widthIt < width && heightIt < height) {
                     int position;
@@ -304,14 +204,13 @@ public abstract class RecipeUtil {
                     }
 
                     recipeIngredient = recipeIngredients.get(position);
-                    oreDict = oreDicts.get(position);
                 }
 
                 if (!checkIngredientMatch(recipeIngredient, resource)) {
                     return null;
                 }
 
-                resourceDicts[k][l] = oreDict;
+                resourceDicts[k][l] = recipeIngredient;
             }
         }
 

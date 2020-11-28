@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:still",
+        "time": 100,
+        "input": {
+          "fluid": "forestry:biomass",
+          "amount": 10
+        },
+        "output": {
+          "fluid": "forestry:bio_ethanol",
+          "amount": 3
+        }
+      }
+    }
+  ]
+}

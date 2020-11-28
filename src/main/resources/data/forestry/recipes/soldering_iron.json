@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 40,
+        "liquid": {
+          "fluid": "minecraft:water",
+          "amount": 1000
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            " # ",
+            "# #",
+            "  B"
+          ],
+          "key": {
+            "#": {
+              "tag": "forge:ingots/iron"
+            },
+            "B": {
+              "tag": "forge:ingots/bronze"
+            }
+          },
+          "result": {
+            "item": "forestry:soldering_iron",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 20,
+        "liquid": {
+          "fluid": "minecraft:water",
+          "amount": 1000
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "R R",
+            "R#R",
+            "R R"
+          ],
+          "key": {
+            "#": {
+              "tag": "forge:ingots/tin"
+            },
+            "R": {
+              "tag": "forge:dusts/redstone"
+            }
+          },
+          "result": {
+            "item": "forestry:circuit_board_basic",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

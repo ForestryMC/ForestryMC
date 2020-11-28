@@ -143,7 +143,9 @@ public class ElementGroup extends GuiElement implements IElementGroup {
             GuiElementAlignment align,
             Style textStyle
     ) {
-        return add(new LabelElement(x, y, width, height, text, true).setStyle(textStyle));
+        return add(
+                (ILabelElement) new LabelElement(x, y, width, height, text, true).setStyle(textStyle).setAlign(align)
+        );
     }
 
     @Override

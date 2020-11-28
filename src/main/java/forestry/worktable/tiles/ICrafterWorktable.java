@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public interface ICrafterWorktable {
-    ItemStack getResult(CraftingInventory CraftingInventory, World world);
+    ItemStack getResult(CraftingInventory inventory, World world);
 
     boolean canTakeStack(int slotIndex);
 

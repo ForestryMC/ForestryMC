@@ -21,7 +21,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -148,38 +147,6 @@ public abstract class ItemStackUtil {
         return condensed;
     }
 
-    public static Pair<NonNullList<ItemStack>, NonNullList<String>> condenseStacks(
-            NonNullList<ItemStack> stacks,
-            NonNullList<String> dicts
-    ) {
-        NonNullList<ItemStack> condensed = NonNullList.create();
-        NonNullList<String> condensedDicts = NonNullList.create();
-
-        for (int i = 0; i < stacks.size(); i++) {
-            ItemStack stack = stacks.get(i);
-            if (stack.isEmpty()) {
-                continue;
-            }
-
-            boolean matched = false;
-            for (ItemStack cached : condensed) {
-                if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
-                    cached.grow(stack.getCount());
-                    matched = true;
-                }
-            }
-
-            if (!matched) {
-                ItemStack cached = stack.copy();
-                condensed.add(cached);
-                condensedDicts.add(dicts.get(i));
-            }
-
-        }
-
-        return Pair.of(condensed, condensedDicts);
-    }
-
     public static boolean containsItemStack(Iterable<ItemStack> list, ItemStack itemStack) {
         for (ItemStack listStack : list) {
             if (isIdenticalItem(listStack, itemStack)) {
@@ -193,7 +160,7 @@ public abstract class ItemStackUtil {
      * Counts how many full sets are contained in the passed stock
      */
     public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock) {
-        return containsSets(set, stock, false, false);
+        return containsSets(set, stock, false);
     }
 
     /**
@@ -202,61 +169,18 @@ public abstract class ItemStackUtil {
     public static int containsSets(
             NonNullList<ItemStack> set,
             NonNullList<ItemStack> stock,
-            boolean oreDictionary,
             boolean craftingTools
     ) {
         int totalSets = 0;
 
-        NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(set);
-        NonNullList<ItemStack> condensedOffered = ItemStackUtil.condenseStacks(stock);
-
-        for (ItemStack req : condensedRequired) {
-
-            int reqCount = 0;
-            for (ItemStack offer : condensedOffered) {
-                if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
-                    int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
-                    reqCount = Math.max(reqCount, stackCount);
-                }
-            }
-
-            if (reqCount == 0) {
-                return 0;
-            } else if (totalSets == 0) {
-                totalSets = reqCount;
-            } else if (totalSets > reqCount) {
-                totalSets = reqCount;
-            }
-        }
-
-        return totalSets;
-    }
-
-    /**
-     * Counts how many full sets are contained in the passed stock
-     */
-    public static int containsSets(
-            NonNullList<ItemStack> set,
-            NonNullList<ItemStack> stock,
-            NonNullList<String> oreDicts,
-            boolean craftingTools
-    ) {
-        int totalSets = 0;
-
-        Pair<NonNullList<ItemStack>, NonNullList<String>> condensedRequired = ItemStackUtil.condenseStacks(
-                set,
-                oreDicts
-        );
-        NonNullList<String> condensedRequiredDicts = condensedRequired.getRight();
-        NonNullList<ItemStack> condensedRequiredStacks = condensedRequired.getLeft();
+        NonNullList<ItemStack> condensedRequiredStacks = ItemStackUtil.condenseStacks(set);
         NonNullList<ItemStack> condensedOfferedStacks = ItemStackUtil.condenseStacks(stock);
 
         for (int y = 0; y < condensedRequiredStacks.size(); y++) {
             ItemStack req = condensedRequiredStacks.get(y);
-            String offerDict = condensedRequiredDicts.get(y);
             int reqCount = 0;
             for (ItemStack offer : condensedOfferedStacks) {
-                if (isCraftingEquivalent(req, offer, offerDict, craftingTools)) {
+                if (isCraftingEquivalent(req, offer, craftingTools)) {
                     int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
                     reqCount = Math.max(reqCount, stackCount);
                 }
@@ -318,47 +242,16 @@ public abstract class ItemStackUtil {
         }
     }
 
-    /**
-     * Compare two item stacks for crafting equivalency.
-     */
-    public static boolean isCraftingEquivalent(
-            ItemStack base,
-            ItemStack comparison,
-            boolean oreDictionary,
-            boolean craftingTools
-    ) {
-        return isCraftingEquivalent(base, comparison, craftingTools);
-    }
+    public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean craftingTools) {
+        if (base.isEmpty() || comparison.isEmpty()) {
+            return false;
+        }
 
-    /**
-     * Compare two item stacks for crafting equivalency.
-     */
-    public static boolean isCraftingEquivalent(
-            ItemStack base,
-            ItemStack comparison,
-            @Nullable String oreDict,
-            boolean craftingTools
-    ) {
-        if (isCraftingEquivalent(base, comparison, craftingTools)) {
+        if (craftingTools && isCraftingToolEquivalent(base, comparison)) {
             return true;
         }
 
-        if (oreDict != null && !oreDict.isEmpty()) {
-            int[] validIds = new int[0];//OreDictionary.getOreIDs(comparison);
-            int validID = 0;//OreDictionary.getOreID(oreDict);
-
-            for (int id : validIds) {
-                if (id == validID) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean craftingTools) {
-        return isCraftingEquivalent(base, comparison, craftingTools);
+        return isCraftingEquivalent(base, comparison);
     }
 
     public static boolean isCraftingToolEquivalent(ItemStack base, ItemStack comparison) {

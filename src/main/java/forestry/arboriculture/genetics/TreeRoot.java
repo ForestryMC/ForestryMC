@@ -227,7 +227,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
         ITreekeepingMode mode = getTreekeepingMode(modeName);
         Preconditions.checkNotNull(mode);
         setTreekeepingMode(world, mode);
-        Log.debug("Set Treekeeping mode for a world to " + mode);
+        Log.debug("Set Treekeeping mode for a world to " + mode.getName());
 
         return activeTreekeepingMode;
     }

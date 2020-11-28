@@ -1,0 +1,50 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "module": "mailer",
+              "container": "forestry",
+              "type": "forestry:module"
+            },
+            {
+              "module": "factory",
+              "container": "forestry",
+              "type": "forestry:module"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 10,
+        "liquid": {
+          "fluid": "minecraft:water",
+          "amount": 250
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "###",
+            "###",
+            " # "
+          ],
+          "key": {
+            "#": {
+              "item": "forestry:wood_pulp"
+            }
+          },
+          "result": {
+            "item": "forestry:letter_empty_fresh",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

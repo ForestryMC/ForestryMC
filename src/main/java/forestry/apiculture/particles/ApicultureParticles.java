@@ -1,8 +1,8 @@
 package forestry.apiculture.particles;
 
+import forestry.api.registration.ParticleTypeDeferredRegister;
+import forestry.api.registration.ParticleTypeRegistryObject;
 import forestry.core.config.Constants;
-import forestry.core.particles.ParticleTypeDeferredRegister;
-import forestry.core.particles.ParticleTypeRegistryObject;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;

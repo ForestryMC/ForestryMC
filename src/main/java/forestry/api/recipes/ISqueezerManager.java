@@ -5,9 +5,12 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import forestry.factory.recipes.ISqueezerContainerRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
 
 /**
  * Provides an interface to the recipe manager of the suqeezer.
@@ -20,53 +23,6 @@ import net.minecraftforge.fluids.FluidStack;
  * @author SirSengir
  */
 public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
-
-    /**
-     * Add a recipe to the squeezer.
-     *
-     * @param timePerItem Number of work cycles required to squeeze one set of resources.
-     * @param resources   Array of item stacks representing the required resources for one process. Stack size will be taken into account.
-     * @param liquid      {@link FluidStack} representing the output of this recipe.
-     * @param remnants    Item stack representing the possible remnants from this recipe. May be empty.
-     * @param chance      Chance remnants will be produced by a single recipe cycle, from 0 to 100.
-     */
-    void addRecipe(
-            int timePerItem,
-            NonNullList<ItemStack> resources,
-            FluidStack liquid,
-            ItemStack remnants,
-            int chance
-    );
-
-    /**
-     * Add a recipe to the squeezer.
-     *
-     * @param timePerItem Number of work cycles required to squeeze one set of resources.
-     * @param resources   item stack representing the required resources for one process. Stack size will be taken into account.
-     * @param liquid      {@link FluidStack} representing the output of this recipe.
-     * @param remnants    Item stack representing the possible remnants from this recipe. May be empty.
-     * @param chance      Chance remnants will be produced by a single recipe cycle, from 0 to 100.
-     */
-    void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance);
-
-    /**
-     * Add a recipe to the squeezer.
-     *
-     * @param timePerItem Number of work cycles required to squeeze one set of resources.
-     * @param resources   Array of item stacks representing the required resources for one process. Stack size will be taken into account.
-     * @param liquid      {@link FluidStack} representing the output of this recipe.
-     */
-    void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid);
-
-    /**
-     * Add a recipe to the squeezer.
-     *
-     * @param timePerItem Number of work cycles required to squeeze one set of resources.
-     * @param resources   item stack representing the required resources for one process. Stack size will be taken into account.
-     * @param liquid      {@link FluidStack} representing the output of this recipe.
-     */
-    void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid);
-
     /**
      * Add a recipe for a fluid container to the squeezer.
      * This will add recipes to get all types of liquids out of this type of fluid container.
@@ -77,4 +33,12 @@ public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
      * @param chance         Chance remnants will be produced by a single recipe cycle, from 0 to 1.
      */
     void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance);
+
+    @Nullable
+    ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items);
+
+    @Nullable
+    public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer);
+
+    public boolean canUse(RecipeManager manager, ItemStack itemStack);
 }
